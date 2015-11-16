@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:paddingBottom="@dimen/activity_padding_bottom"
+    android:paddingLeft="@dimen/activity_padding_left"
+    android:paddingRight="@dimen/activity_padding_right"
+    android:paddingTop="@dimen/activity_padding_top"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".MainActivity"
+    tools:showIn="@layout/app_bar_main"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="30.0dip"
+        android:background="#FFFFFF">
+
+        <TextView
+            android:id="@+id/mainframe_text1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0"
+            android:background="#FFFFFF"
+            android:gravity="center"
+            android:text="今日特卖"
+            android:textColor="@drawable/itemcolor"
+            android:textSize="15.0dip" />
+
+        <TextView
+            android:id="@+id/mainframe_text2"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0"
+            android:background="#FFFFFF"
+            android:gravity="center"
+            android:text="昨日"
+            android:textColor="@drawable/itemcolor"
+            android:textSize="15.0dip" />
+
+        <TextView
+            android:id="@+id/mainframe_text3"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0"
+            android:background="#FFFFFF"
+            android:gravity="center"
+            android:text="潮童"
+            android:textColor="@drawable/itemcolor"
+            android:textSize="15.0dip" />
+
+        <TextView
+            android:id="@+id/mainframe_text4"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0"
+            android:background="#FFFFFF"
+            android:gravity="center"
+            android:text="女装"
+            android:textColor="@drawable/itemcolor"
+            android:textSize="15.0dip" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/cursor"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="matrix"
+        android:src="@drawable/mainframe_underline" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/mainframe_Pager"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="1.0"
+        android:background="#000000"
+        android:flipInterval="30"
+        android:persistentDrawingCache="animation" />
+</LinearLayout>
