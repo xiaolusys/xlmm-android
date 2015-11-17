@@ -7,10 +7,10 @@ public class MainUrl {
 
     public String LOGIN_URL = URL_BASE + "register/customer_login";
     public String TODAY_URL = URL_BASE + "products/promote_today.json";
+    public String TONGKUAN_URL = URL_BASE + "products/modellist/";
 
 
     //public String TODAY_URL = URL_0 + "products/promote_today.json";
-//   public String TODAY_URL = URL_0 + "users.json";
 
 
     public String BROWSE_URL = URL_BASE + "/xueZhang/servlet/AndroidBroSev";
@@ -29,6 +29,16 @@ public class MainUrl {
 
     public String COMMODITY_COLLECTION_URL = URL_BASE + "/xueZhang/servlet/AndroidAddCollectionSev";
 
+
+    public String getTODAY_URL() {
+        return TODAY_URL;
+    }
+
+    public String getTONGKUAN_URL() {
+        return TONGKUAN_URL;
+    }
+
+
     public String getCOMMODITY_COLLECTION_URL() {
         return COMMODITY_COLLECTION_URL;
     }
@@ -41,9 +51,7 @@ public class MainUrl {
         return SETTINGMYINFO_URL;
     }
 
-    public String getTODAY_URL() {
-        return TODAY_URL;
-    }
+
 
     public String getFAVORITE_IMAGE() {
         return FAVORITE_IMAGE;

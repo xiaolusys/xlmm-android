@@ -2,13 +2,12 @@ package so.xiaolu.xiaolu.mainframe;
 
 import so.xiaolu.xiaolu.R;
 import so.xiaolu.xiaolu.mainsetting.MainUrl;
-import so.xiaolu.xiaolu.browse.BrowseCommodityActivity;
 import so.xiaolu.xiaolu.jsonbean.IndexBean;
+import so.xiaolu.xiaolu.UI.tongkuanActivity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -26,18 +25,12 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.io.IOException;
 
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -54,7 +47,6 @@ import com.android.volley.toolbox.ImageLoader.ImageListener;
 
 public class TodayFragment extends Fragment {
     final OkHttpClient client = new OkHttpClient();
-    JSONArray jsonArray;
     MyHandle myHandler;
     View view;
     Context context;
@@ -137,9 +129,6 @@ public class TodayFragment extends Fragment {
             }.getType();
             IndexBean indexBean = gson.fromJson(jsonData, type);
             showMsg(indexBean);
-            List<IndexBean.product> female_list = indexBean.female_list;
-            List<IndexBean.product> child_list = indexBean.child_list;
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -152,11 +141,6 @@ public class TodayFragment extends Fragment {
         msg.sendToTarget();
     }
 
-    class User {
-        private JSONArray json;
-        private Bitmap[] map = new Bitmap[jsonArray.length()];
-
-    }
 
     class MyHandle extends Handler {
 
@@ -164,22 +148,8 @@ public class TodayFragment extends Fragment {
         public void handleMessage(Message msg) {
 
             IndexBean indexBean = (IndexBean) msg.obj;
-            List<IndexBean.product> female_list = indexBean.female_list;
+            final List<IndexBean.product> female_list = indexBean.female_list;
             List<IndexBean.product> child_list = indexBean.child_list;
-            String s = String.valueOf(female_list.size());
-
-            Log.v(TAG, String.valueOf(female_list.size()));
-
-//            for (int i = 0; i < female_list.size(); i++) {
-//                Log.v(TAG, String.valueOf(female_list.get(i).name));
-//
-//            }
-//            User user1=(User) msg.obj;
-//            JSONArray json1=user1.json;
-//            Bitmap[] mapArray=new Bitmap[json1.length()];
-//
-//            mapArray = user1.map;
-
 
             /***************************************/
 
@@ -200,8 +170,8 @@ public class TodayFragment extends Fragment {
 //                libr_gridItem.add(map);
 //
 //            }
-            FraMyAdapter nvadapter = new FraMyAdapter(context, female_list);
-            FraMyAdapter childadapter = new FraMyAdapter(context, child_list);
+            TodayAdapter nvadapter = new TodayAdapter(context, female_list);
+            TodayAdapter childadapter = new TodayAdapter(context, child_list);
 
             nvzhuang_gridview.setAdapter(nvadapter);
             child_gridview.setAdapter(childadapter);
@@ -209,11 +179,9 @@ public class TodayFragment extends Fragment {
 
             nvzhuang_gridview.setOnItemClickListener(new OnItemClickListener() {
                 Bundle bundle = null;
-                JSONObject json;
-                String loc_name;
-                String loc_author;
-                String loc_price;
-                String loc_id;
+                String product_id;
+                String model_id;
+
 
                 @Override
                 public void onItemClick(AdapterView<?> arg0,
@@ -221,44 +189,44 @@ public class TodayFragment extends Fragment {
 
 
                     try {
-                        json = jsonArray.getJSONObject(position);
-                        loc_name = json.getString("name");
-                        loc_author = json.getString("author");
-                        loc_price = json.getString("price");
-                        loc_id = json.getString("id");
-                    } catch (JSONException e) {
+                        product_id = female_list.get(position).id;
+                        model_id = female_list.get(position).model_id;
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
 
 
                     bundle = new Bundle();
-                    bundle.putString("loc_name", loc_name);
-                    bundle.putString("loc_author", loc_author);
-                    bundle.putString("loc_price", loc_price);
-                    bundle.putString("loc_id", loc_id);
-                    Intent intent = new Intent(getActivity(), BrowseCommodityActivity.class);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
+                    bundle.putString("product_id", product_id);
+                    bundle.putString("model_id", model_id);
+                    if(female_list.get(position).product_model.is_single_spec){
+                        Intent intent = new Intent(getActivity(), tongkuanActivity.class);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                    }else{
+                        Intent intent = new Intent(getActivity(), tongkuanActivity.class);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                    }
+
                 }
             });
 
 
         }
-
-
     }
 
     /**************
      * set BaseAdapter
      ********************/
 
-    public class FraMyAdapter extends BaseAdapter {
+    public class TodayAdapter extends BaseAdapter {
         private LayoutInflater inflater;
         private List<IndexBean.product> dataSource;
         private ImageLoader mImageLoader;
         List<HashMap<String, String>> data;
 
-        public FraMyAdapter(Context c, List<IndexBean.product> productList) {
+        public TodayAdapter(Context c, List<IndexBean.product> productList) {
             this.inflater = LayoutInflater.from(c);
             this.dataSource = productList;
             RequestQueue mQueue = Volley.newRequestQueue(context);   //创建一个RequestQueue对象
@@ -267,6 +235,7 @@ public class TodayFragment extends Fragment {
             String productName = null;
             String agentPrice = null;
             String head_img = null;
+
             for (int i = 0; i < dataSource.size(); i++) {
                 HashMap<String, String> map = new HashMap<String, String>();
                 productName = dataSource.get(i).name;
@@ -274,7 +243,8 @@ public class TodayFragment extends Fragment {
                 String[] temp = head_img.split("http://image.xiaolu.so/");
                 if (temp.length > 1){
                     try {
-                        head_img = "http://image.xiaolu.so/" + URLEncoder.encode(temp[1],"utf-8");
+                        head_img = "http://image.xiaolu.so/" + URLEncoder.encode(temp[1],"utf-8") + "?imageMogr2/auto-orient/strip/size-limit/10k/q/85/thumbnail/600x700";
+                        Log.v(TAG,head_img);
                     }catch (UnsupportedEncodingException e){
                         e.printStackTrace();
                     }
@@ -322,9 +292,9 @@ public class TodayFragment extends Fragment {
             holder.agent_price.setText(data.get(position).get("agentPrice").toString());
             String url = "http://image.xiaolu.so/MG-1447492271324-%E9%9F%A9%E7%89%88%E5%81%87%E4%B8%A4%E4%BB%B6%E7%A2%8E%E8%8A%B1%E8%BF%9E%E8%A1%A3%E8%A3%9902.png"; //服务器端尽量不要用中文
 
-            ImageListener listener = ImageLoader.getImageListener(holder.head_img, android.R.drawable.picture_frame, android.R.drawable.picture_frame);//获取一个ImageListener对象
-            //mImageLoader.get(data.get(position).get("headImg").toString(), listener);//调用ImageLoader的get()方法加载网络上的图片
-            mImageLoader.get(url, listener);
+            ImageListener listener = ImageLoader.getImageListener(holder.head_img, R.drawable.default_product, R.drawable.default_product);//获取一个ImageListener对象
+            mImageLoader.get(data.get(position).get("headImg").toString(), listener,600, 700);//调用ImageLoader的get()方法加载网络上的图片
+            //mImageLoader.get(url, listener);
             return convertView;
         }
 
@@ -342,8 +312,10 @@ public class TodayFragment extends Fragment {
         private LruCache<String, Bitmap> mCache;
 
         public BitmapCache() {
-            int maxSize = 10 * 1024 * 1024;
-            mCache = new LruCache<String, Bitmap>(maxSize) {
+            int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+            //int cacheSize = maxMemory / 8;
+            int cacheSize = 10 * 1024 * 1024;
+            mCache = new LruCache<String, Bitmap>(cacheSize) {
                 @Override
                 protected int sizeOf(String key, Bitmap value) {
                     return value.getRowBytes() * value.getHeight();

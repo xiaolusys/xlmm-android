@@ -1,33 +1,12 @@
 package so.xiaolu.xiaolu.browse;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.util.EntityUtils;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import so.xiaolu.xiaolu.R;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -36,14 +15,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
@@ -61,7 +35,6 @@ public class BrowseFragment extends Fragment {
     private HttpClient bro_client;
 
     public BrowseFragment() {
-        // TODO Auto-generated constructor stub
         super();
     }
 
@@ -72,72 +45,7 @@ public class BrowseFragment extends Fragment {
         super.onCreate(savedInstanceState);
         bro_context = getActivity();
         context = getActivity();
-        view = inflater.inflate(R.layout.browse_main_fragment, container, false);
-
-
-        bro_search_text = (EditText) view.findViewById(R.id.bro_search_edit);
-        bro_search_img = (ImageView) view.findViewById(R.id.bro_search_button);
-
-
-        /****************set a search image button************/
-
-        bro_search_img.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View arg0) {
-                bro_search_value = bro_search_text.getText().toString();
-                if (bro_search_value.isEmpty()) {
-                    Toast toast1 = Toast.makeText(getActivity(), "嘛都没写，搜个蛋", Toast.LENGTH_SHORT);
-                    toast1.show();
-                } else {
-                    BrowseButtonMyThread th = new BrowseButtonMyThread(bro_search_value, getActivity(), context);
-                    th.start();
-                    Log.e("wwwwwwwwwwww", "aaaaaaaaaaaaa");
-
-                }
-            }
-        });
-
-        /***********set a android search enter*************/
-        bro_search_text.setOnEditorActionListener(new OnEditorActionListener() {
-
-
-            @Override
-            public boolean onEditorAction(TextView bro_view, int keyCode, KeyEvent event) {
-
-                if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                    bro_search_value = bro_search_text.getText().toString();
-                    if (bro_search_value.isEmpty()) {
-                        Toast toast1 = Toast.makeText(getActivity(), "嘛都没写，搜个蛋", Toast.LENGTH_SHORT);
-                        toast1.show();
-                    } else {
-                        BrowseButtonMyThread th = new BrowseButtonMyThread(bro_search_value, getActivity(), context);
-                        th.start();
-
-//							listviews=(ListView)view.findViewById(R.id.bro_search_list);
-//							broMyAdapter madapter=new broMyAdapter(getActivity());
-//							listviews.setAdapter(madapter);
-//							view.requestLayout();
-
-                        //设置listView响应时间
-
-//							listviews.setOnItemClickListener(new OnItemClickListener() {
-//
-//								@Override
-//								public void onItemClick(AdapterView<?> arg0,
-//										View view, int position, long id) {
-//
-//									Intent intent=new Intent(getActivity(),BrowseCommodityActivity.class);
-//									startActivity(intent);
-//								}
-//
-//							});
-
-                    }
-                }
-                return true;
-            }
-        });
+        view = inflater.inflate(R.layout.yesterday_main_fragment, container, false);
 
 
         return view;
