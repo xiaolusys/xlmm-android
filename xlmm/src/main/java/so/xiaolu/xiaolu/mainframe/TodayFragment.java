@@ -1,6 +1,8 @@
 package so.xiaolu.xiaolu.mainframe;
 
 import so.xiaolu.xiaolu.R;
+import so.xiaolu.xiaolu.adapter.ChilddAdapter;
+import so.xiaolu.xiaolu.adapter.FemaleAdapter;
 import so.xiaolu.xiaolu.mainsetting.MainUrl;
 import so.xiaolu.xiaolu.jsonbean.IndexBean;
 import so.xiaolu.xiaolu.UI.tongkuanActivity;
@@ -23,7 +25,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
-
+import so.xiaolu.xiaolu.customwidget.ScrollGirdView;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -123,7 +125,6 @@ public class TodayFragment extends Fragment {
 //            Log.v(TAG, list.toString());
 //            Log.v(TAG, list.get(0).b1.toString());
             /*使用案例*/
-            Log.v(TAG, jsonData);
             Gson gson = new Gson();
             java.lang.reflect.Type type = new TypeToken<IndexBean>() {
             }.getType();
@@ -149,12 +150,12 @@ public class TodayFragment extends Fragment {
 
             IndexBean indexBean = (IndexBean) msg.obj;
             final List<IndexBean.product> female_list = indexBean.female_list;
-            List<IndexBean.product> child_list = indexBean.child_list;
+            final List<IndexBean.product> child_list = indexBean.child_list;
 
             /***************************************/
 
-            GridView nvzhuang_gridview = (GridView) view.findViewById(R.id.nvzhuang_gridview);
-            GridView child_gridview = (GridView) view.findViewById(R.id.child_gridview);
+            ScrollGirdView nvzhuang_gridview = (ScrollGirdView) view.findViewById(R.id.nvzhuang_gridview);
+            ScrollGirdView child_gridview = (ScrollGirdView) view.findViewById(R.id.child_gridview);
 //            ArrayList<HashMap<String, Object>> libr_gridItem = new ArrayList<HashMap<String, Object>>();
 //            for (int i = 0; i < female_list.size(); i++) {
 //
@@ -170,11 +171,11 @@ public class TodayFragment extends Fragment {
 //                libr_gridItem.add(map);
 //
 //            }
-            TodayAdapter nvadapter = new TodayAdapter(context, female_list);
-            TodayAdapter childadapter = new TodayAdapter(context, child_list);
+            FemaleAdapter nvadapter = new FemaleAdapter(context, nvzhuang_gridview, female_list);
+            //ChilddAdapter childadapter = new ChilddAdapter(context, child_gridview, child_list);
 
             nvzhuang_gridview.setAdapter(nvadapter);
-            child_gridview.setAdapter(childadapter);
+            //child_gridview.setAdapter(childadapter);
 
 
             nvzhuang_gridview.setOnItemClickListener(new OnItemClickListener() {
@@ -216,124 +217,90 @@ public class TodayFragment extends Fragment {
         }
     }
 
-    /**************
-     * set BaseAdapter
-     ********************/
+//    /**************
+//     * set BaseAdapter
+//     ********************/
+//
+//    public class TodayAdapter extends BaseAdapter {
+//        private LayoutInflater inflater;
+//        private List<IndexBean.product> dataSource;
+//        private ImageLoader mImageLoader;
+//        List<HashMap<String, String>> data;
+//
+//        public TodayAdapter(Context c, List<IndexBean.product> productList) {
+//            this.inflater = LayoutInflater.from(c);
+//            this.dataSource = productList;
+//            RequestQueue mQueue = Volley.newRequestQueue(context);   //创建一个RequestQueue对象
+//            mImageLoader = new ImageLoader(mQueue, new BitmapCache());  //创建一个ImageLoader对象
+//            this.data = new ArrayList<HashMap<String, String>>();
+//            String productName = null;
+//            String agentPrice = null;
+//            String head_img = null;
+//
+//            for (int i = 0; i < dataSource.size(); i++) {
+//                HashMap<String, String> map = new HashMap<String, String>();
+//                productName = dataSource.get(i).name;
+//                head_img = dataSource.get(i).head_img;
+//                String[] temp = head_img.split("http://image.xiaolu.so/");
+//                if (temp.length > 1){
+//                    try {
+//                        head_img = "http://image.xiaolu.so/" + URLEncoder.encode(temp[1],"utf-8") + "?imageMogr2/auto-orient/strip/size-limit/10k/q/85/thumbnail/600x700";
+//                    }catch (UnsupportedEncodingException e){
+//                        e.printStackTrace();
+//                    }
+//                }
+//                agentPrice = "价格:￥" + dataSource.get(i).agent_price;
+//                map.put("Name", productName);
+//                map.put("agentPrice", agentPrice);
+//                map.put("headImg", head_img);
+//                data.add(map);
+//            }
+//        }
+//
+//        @Override
+//        public int getCount() {
+//            return dataSource.size();
+//        }
+//
+//        @Override
+//        public Object getItem(int position) {
+//            return position;
+//        }
+//
+//        @Override
+//        public long getItemId(int position) {
+//            return position;
+//        }
+//
+//        @Override
+//        public View getView(int position, View convertView, ViewGroup parent) {
+//
+//            ViewHolder holder;
+//            if (convertView == null) {
+//                convertView = inflater.inflate(R.layout.today_main_fragment_gridview, null);
+//                holder = new ViewHolder();
+//                holder.head_img = (ImageView) convertView.findViewById(R.id.product_gridview_ItemImage);
+//                holder.product_name = (TextView) convertView.findViewById(R.id.product_gridview_ItemText);
+//                holder.agent_price = (TextView) convertView.findViewById(R.id.product_gridview_price);
+//                convertView.setTag(holder);//绑定ViewHolder对象
+//            } else {
+//                holder = (ViewHolder) convertView.getTag();
+//            }
+//
+//
+//            holder.product_name.setText(data.get(position).get("Name").toString());
+//            holder.agent_price.setText(data.get(position).get("agentPrice").toString());
+//            String url = "http://image.xiaolu.so/MG-1447492271324-%E9%9F%A9%E7%89%88%E5%81%87%E4%B8%A4%E4%BB%B6%E7%A2%8E%E8%8A%B1%E8%BF%9E%E8%A1%A3%E8%A3%9902.png"; //服务器端尽量不要用中文
+//
+//            ImageListener listener = ImageLoader.getImageListener(holder.head_img, R.drawable.default_product, R.drawable.default_product);//获取一个ImageListener对象
+//            mImageLoader.get(data.get(position).get("headImg").toString(), listener,600, 700);//调用ImageLoader的get()方法加载网络上的图片
+//            //mImageLoader.get(url, listener);
+//            return convertView;
+//        }
+//
+//    }
 
-    public class TodayAdapter extends BaseAdapter {
-        private LayoutInflater inflater;
-        private List<IndexBean.product> dataSource;
-        private ImageLoader mImageLoader;
-        List<HashMap<String, String>> data;
 
-        public TodayAdapter(Context c, List<IndexBean.product> productList) {
-            this.inflater = LayoutInflater.from(c);
-            this.dataSource = productList;
-            RequestQueue mQueue = Volley.newRequestQueue(context);   //创建一个RequestQueue对象
-            mImageLoader = new ImageLoader(mQueue, new BitmapCache());  //创建一个ImageLoader对象
-            this.data = new ArrayList<HashMap<String, String>>();
-            String productName = null;
-            String agentPrice = null;
-            String head_img = null;
-
-            for (int i = 0; i < dataSource.size(); i++) {
-                HashMap<String, String> map = new HashMap<String, String>();
-                productName = dataSource.get(i).name;
-                head_img = dataSource.get(i).head_img;
-                String[] temp = head_img.split("http://image.xiaolu.so/");
-                if (temp.length > 1){
-                    try {
-                        head_img = "http://image.xiaolu.so/" + URLEncoder.encode(temp[1],"utf-8") + "?imageMogr2/auto-orient/strip/size-limit/10k/q/85/thumbnail/600x700";
-                        Log.v(TAG,head_img);
-                    }catch (UnsupportedEncodingException e){
-                        e.printStackTrace();
-                    }
-                }
-                agentPrice = "价格:￥" + dataSource.get(i).agent_price;
-                map.put("Name", productName);
-                map.put("agentPrice", agentPrice);
-                map.put("headImg", head_img);
-                data.add(map);
-            }
-        }
-
-        @Override
-        public int getCount() {
-            return dataSource.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return position;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-
-            ViewHolder holder;
-            if (convertView == null) {
-                convertView = inflater.inflate(R.layout.today_main_fragment_gridview, null);
-                holder = new ViewHolder();
-                holder.head_img = (ImageView) convertView.findViewById(R.id.product_gridview_ItemImage);
-                holder.product_name = (TextView) convertView.findViewById(R.id.product_gridview_ItemText);
-                holder.agent_price = (TextView) convertView.findViewById(R.id.product_gridview_price);
-                convertView.setTag(holder);//绑定ViewHolder对象
-            } else {
-                holder = (ViewHolder) convertView.getTag();
-            }
-
-
-            holder.product_name.setText(data.get(position).get("Name").toString());
-            holder.agent_price.setText(data.get(position).get("agentPrice").toString());
-            String url = "http://image.xiaolu.so/MG-1447492271324-%E9%9F%A9%E7%89%88%E5%81%87%E4%B8%A4%E4%BB%B6%E7%A2%8E%E8%8A%B1%E8%BF%9E%E8%A1%A3%E8%A3%9902.png"; //服务器端尽量不要用中文
-
-            ImageListener listener = ImageLoader.getImageListener(holder.head_img, R.drawable.default_product, R.drawable.default_product);//获取一个ImageListener对象
-            mImageLoader.get(data.get(position).get("headImg").toString(), listener,600, 700);//调用ImageLoader的get()方法加载网络上的图片
-            //mImageLoader.get(url, listener);
-            return convertView;
-        }
-
-    }
-
-    public class ViewHolder {
-        public ImageView head_img;
-        public TextView product_name;
-        public TextView agent_price;
-        public TextView std_sale_price;
-    }
-    /*
-    * 缓存*/
-    public class BitmapCache implements ImageCache {
-        private LruCache<String, Bitmap> mCache;
-
-        public BitmapCache() {
-            int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-            //int cacheSize = maxMemory / 8;
-            int cacheSize = 10 * 1024 * 1024;
-            mCache = new LruCache<String, Bitmap>(cacheSize) {
-                @Override
-                protected int sizeOf(String key, Bitmap value) {
-                    return value.getRowBytes() * value.getHeight();
-                }
-            };
-        }
-
-        @Override
-        public Bitmap getBitmap(String url) {
-            return mCache.get(url);
-        }
-
-        @Override
-        public void putBitmap(String url, Bitmap bitmap) {
-            mCache.put(url, bitmap);
-        }
-
-    }
 
 
     public String decodeUnicode(String theString) {
