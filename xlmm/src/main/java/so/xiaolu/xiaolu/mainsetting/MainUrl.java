@@ -3,9 +3,15 @@ package so.xiaolu.xiaolu.mainsetting;
 public class MainUrl {
 
     public String URL_BASE = "http://m.xiaolu.so/rest/v1/";
-    public String URL_O = "http://10.0.2.2:8080";
+    public String URL_0 = "http://192.168.1.39:8000/rest/v1/";
 
     public String LOGIN_URL = URL_BASE + "register/customer_login";
+    public String TODAY_URL = URL_BASE + "products/promote_today.json";
+
+
+    //public String TODAY_URL = URL_0 + "products/promote_today.json";
+//   public String TODAY_URL = URL_0 + "users.json";
+
 
     public String BROWSE_URL = URL_BASE + "/xueZhang/servlet/AndroidBroSev";
     public String IMAGE_URL = URL_BASE + "/xueZhang/";
@@ -13,15 +19,8 @@ public class MainUrl {
     public String DETAIL_IAMGE_URL = URL_BASE + "/xueZhang/";
     public String COLLECTION_URL = URL_BASE + "/xueZhang/servlet/AndroidCollectionSev";
 
-//	public String CONTENT_DETAIL=URL_O+"/commodity_detail/abc";
-//	public String DETAIL_IAMGE_URL=URL_O+"/commodity_detail/images/";
-//	public String BROWSE_URL=URL_O+"/brow_test/abc";
-//	public String IMAGE_URL=URL_O+"/brow_test/images/";
-    //public String COLLECTION_URL=URL_O+"/commodity_detail/abc";
-    //public String FAVORITE_URL=URL_O+"/brow_test/abc";
-    //public String FAVORITE_IMAGE=URL_O+"/brow_test/images/";
 
-    public String FAVORITE_URL = URL_BASE + "products/promote_today.json";
+
     public String FAVORITE_IMAGE = URL_BASE + "/xueZhang/";
 
     public String SETTINGMYINFO_URL = URL_BASE + "/xueZhang/servlet/AndroidInfoSev";
@@ -42,8 +41,8 @@ public class MainUrl {
         return SETTINGMYINFO_URL;
     }
 
-    public String getFAVORITE_URL() {
-        return FAVORITE_URL;
+    public String getTODAY_URL() {
+        return TODAY_URL;
     }
 
     public String getFAVORITE_IMAGE() {

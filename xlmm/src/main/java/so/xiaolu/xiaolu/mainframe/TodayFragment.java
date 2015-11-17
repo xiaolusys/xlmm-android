@@ -2,22 +2,19 @@ package so.xiaolu.xiaolu.mainframe;
 
 import so.xiaolu.xiaolu.R;
 import so.xiaolu.xiaolu.mainsetting.MainUrl;
-import so.xiaolu.xiaolu.browse.BrowseFragment;
 import so.xiaolu.xiaolu.browse.BrowseCommodityActivity;
-import so.xiaolu.xiaolu.browse.BrowseButtonMyThread.ViewHolder;
-import so.xiaolu.xiaolu.browse.BrowseButtonMyThread.broMyAdapter;
-import so.xiaolu.xiaolu.browse.BrowseCommodityActivity.User;
-
+import so.xiaolu.xiaolu.jsonbean.IndexBean;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,37 +22,44 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.io.IOException;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.reflect.TypeToken;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Response;
+import com.google.gson.Gson;
+
+
+import com.android.volley.toolbox.ImageLoader.ImageCache;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.ImageLoader.ImageListener;
+
 public class TodayFragment extends Fragment {
+    final OkHttpClient client = new OkHttpClient();
     JSONArray jsonArray;
     MyHandle myHandler;
     View view;
     Context context;
     String TAG = "huangyan";
+
     public TodayFragment() {
         super();
     }
@@ -67,84 +71,47 @@ public class TodayFragment extends Fragment {
         context = getActivity();
         view = inflater.inflate(R.layout.today_main_fragment, container, false);
         myHandler = new MyHandle();
-        Log.v(TAG,"begin");
-        Fav_MyThread th = new Fav_MyThread();
+        Today_MyThread th = new Today_MyThread();
         th.start();
         return view;
     }
 
-
-    public class Fav_MyThread extends Thread {
-
+    /*
+    * 今日特卖
+    * */
+    public class Today_MyThread extends Thread {
         @Override
         public void run() {
             try {
-                Log.e("TAG", "running");
-                DefaultHttpClient client = new DefaultHttpClient();
-                List<NameValuePair> list = new ArrayList<NameValuePair>();
-                NameValuePair pair1 = new BasicNameValuePair("favorite_value", "value");
-                list.add(pair1);
-
-                UrlEncodedFormEntity entity = new UrlEncodedFormEntity(list, "UTF-8");
-
                 MainUrl url = new MainUrl();
-                HttpPost post = new HttpPost(url.getFAVORITE_URL());
-                post.setEntity(entity);
-
-                HttpResponse response = client.execute(post);
-                InputStream isr = response.getEntity().getContent();
-                BufferedReader br = new BufferedReader(new InputStreamReader(isr, "gbk"));
-
-                String line = null;
-                StringBuffer sb = new StringBuffer();
-                while ((line = br.readLine()) != null) {
-                    sb.append(line);
+                Request request = new Request.Builder().url(url.getTODAY_URL()).build();
+                Response response;
+                String showInfoStr = "";
+                try {
+                    response = client.newCall(request).execute();
+                    if (response.isSuccessful()) {
+                        showInfoStr = response.body().string();
+                    } else {
+                        Log.d(TAG, response.toString());
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                Log.e("TAG", sb.toString());
-                jsonArray = new JSONArray(sb.toString());
+                parseIndexFromJson(showInfoStr);
 
 
-                Log.e("TAG", "成功");
+                /* 测试开始*/
+//                IndexBean person = new IndexBean();
+//                IndexBean.female p = new IndexBean.female();
+//                p.id = "25397";
+//                p.url = "http://m.xiaolu.so/rest/v1/products/25397";
+//                p.name = "韩版假两件碎花连衣裙/黑色碎花";
+//                p.outer_id = "819254350011";
+//                List list = new ArrayList();
+//                list.add(p);
+//                person.female_list =list;
+                /* 测试结束*/
 
-                String[] imageurl = new String[jsonArray.length()];
-
-                for (int i = 0; i < jsonArray.length(); i++) {
-
-                    JSONObject json = jsonArray.getJSONObject(i);
-
-                    imageurl[i] = json.getString("imageUrl");
-
-                    Log.d("favorite图片链接", "" + imageurl[i]);
-                }
-
-                Bitmap[] bitmap = new Bitmap[jsonArray.length()];
-
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    Bitmap pic = null;
-
-                    Log.d("favorite图片链接", "" + imageurl[i]);
-
-                    HttpPost get = new HttpPost(url.getFAVORITE_IMAGE() + imageurl[i]);
-                    Log.e("favorite图片发送", "成功2");
-                    HttpClient client1 = new DefaultHttpClient();
-
-
-                    HttpResponse response1 = client1.execute(get);
-                    HttpEntity entity1 = response1.getEntity();
-                    InputStream is = entity1.getContent();
-
-                    pic = BitmapFactory.decodeStream(is);   // 关键是这句代码
-
-                    bitmap[i] = pic;
-
-                }
-
-                User user = new User();
-
-                user.json = jsonArray;
-                user.map = bitmap;
-
-                showMsg(user);
 
             } catch (Exception e) {
                 Log.e("TAG", "error");
@@ -154,11 +121,33 @@ public class TodayFragment extends Fragment {
 
     }
 
-    private void showMsg(User user) {
-        // TODO Auto-generated method stub
-        Message msg = Message.obtain();
+    public void parseIndexFromJson(String jsonData) {
+        try {
+            /*使用案例*/
+//            Gson gson = new Gson();
+//            java.lang.reflect.Type type = new TypeToken<JsonBean>() {}.getType();
+//            JsonBean jsonBean = gson.fromJson(jsonData, type);
+//            List<JsonBean.B> list = jsonBean.b;
+//            Log.v(TAG, list.toString());
+//            Log.v(TAG, list.get(0).b1.toString());
+            /*使用案例*/
+            Log.v(TAG, jsonData);
+            Gson gson = new Gson();
+            java.lang.reflect.Type type = new TypeToken<IndexBean>() {
+            }.getType();
+            IndexBean indexBean = gson.fromJson(jsonData, type);
+            showMsg(indexBean);
+            List<IndexBean.product> female_list = indexBean.female_list;
+            List<IndexBean.product> child_list = indexBean.child_list;
 
-        msg.obj = user;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showMsg(IndexBean indexBean) {
+        Message msg = Message.obtain();
+        msg.obj = indexBean;
         msg.setTarget(myHandler);//把message内容放入，handle
         msg.sendToTarget();
     }
@@ -174,45 +163,51 @@ public class TodayFragment extends Fragment {
         @Override
         public void handleMessage(Message msg) {
 
-            User user1 = (User) msg.obj;
-            JSONArray json1 = user1.json;
-            Bitmap[] mapArray = new Bitmap[json1.length()];
-            mapArray = user1.map;
+            IndexBean indexBean = (IndexBean) msg.obj;
+            List<IndexBean.product> female_list = indexBean.female_list;
+            List<IndexBean.product> child_list = indexBean.child_list;
+            String s = String.valueOf(female_list.size());
+
+            Log.v(TAG, String.valueOf(female_list.size()));
+
+//            for (int i = 0; i < female_list.size(); i++) {
+//                Log.v(TAG, String.valueOf(female_list.get(i).name));
+//
+//            }
+//            User user1=(User) msg.obj;
+//            JSONArray json1=user1.json;
+//            Bitmap[] mapArray=new Bitmap[json1.length()];
+//
+//            mapArray = user1.map;
 
 
             /***************************************/
 
-            GridView fav_gridview = (GridView) view.findViewById(R.id.favorite_gridview);
-            ArrayList<HashMap<String, Object>> libr_gridItem = new ArrayList<HashMap<String, Object>>();
-            for (int i = 0; i < json1.length(); i++) {
+            GridView nvzhuang_gridview = (GridView) view.findViewById(R.id.nvzhuang_gridview);
+            GridView child_gridview = (GridView) view.findViewById(R.id.child_gridview);
+//            ArrayList<HashMap<String, Object>> libr_gridItem = new ArrayList<HashMap<String, Object>>();
+//            for (int i = 0; i < female_list.size(); i++) {
+//
+//                HashMap<String, Object> map = new HashMap<String, Object>();
+//
+//                String name = null;
+//                name = female_list.get(i).name;
+//                map.put("ItemImage", "https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLuEZRxcZp90Kxq7ycrNc81wcAZ004oNFQMBIGVGL75awvTxVh7qGaEE8BoSWP3FSbeeQPMYrS4RBA/0?wx_fmt=png");
+//                map.put("ItemText", female_list.get(i).name);
+//
+//                Log.d("FavoriteImage", "https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLuEZRxcZp90Kxq7ycrNc81wcAZ004oNFQMBIGVGL75awvTxVh7qGaEE8BoSWP3FSbeeQPMYrS4RBA/0?wx_fmt=png");
+//                Log.d("FavoriteText", female_list.get(i).name);
+//                libr_gridItem.add(map);
+//
+//            }
+            FraMyAdapter nvadapter = new FraMyAdapter(context, female_list);
+            FraMyAdapter childadapter = new FraMyAdapter(context, child_list);
 
-                HashMap<String, Object> map = new HashMap<String, Object>();
-                JSONObject jobject;
-                String name = null;
-                try {
-                    jobject = json1.getJSONObject(i);
-                    name = jobject.getString("name");
-                } catch (JSONException e1) {
-                    e1.printStackTrace();
-                }
-
-
-                map.put("ItemImage", mapArray[i]);
-                map.put("ItemText", name);
-
-                Log.d("FavoriteImage", mapArray[i].toString());
-                Log.d("FavoriteText", name.toString().toString());
-                libr_gridItem.add(map);
-
-            }
-            FraMyAdapter madapter = new FraMyAdapter(context, json1, mapArray);
-
-            fav_gridview.setAdapter(madapter);
+            nvzhuang_gridview.setAdapter(nvadapter);
+            child_gridview.setAdapter(childadapter);
 
 
-            fav_gridview.setOnItemClickListener(new OnItemClickListener() {
-
-
+            nvzhuang_gridview.setOnItemClickListener(new OnItemClickListener() {
                 Bundle bundle = null;
                 JSONObject json;
                 String loc_name;
@@ -232,7 +227,6 @@ public class TodayFragment extends Fragment {
                         loc_price = json.getString("price");
                         loc_id = json.getString("id");
                     } catch (JSONException e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
 
@@ -242,7 +236,6 @@ public class TodayFragment extends Fragment {
                     bundle.putString("loc_author", loc_author);
                     bundle.putString("loc_price", loc_price);
                     bundle.putString("loc_id", loc_id);
-                    Log.e("此处跳转", loc_name);
                     Intent intent = new Intent(getActivity(), BrowseCommodityActivity.class);
                     intent.putExtras(bundle);
                     startActivity(intent);
@@ -261,116 +254,179 @@ public class TodayFragment extends Fragment {
 
     public class FraMyAdapter extends BaseAdapter {
         private LayoutInflater inflater;
-        private JSONArray jsonArray;
-        private Bitmap[] bit;
+        private List<IndexBean.product> dataSource;
+        private ImageLoader mImageLoader;
+        List<HashMap<String, String>> data;
 
-        public FraMyAdapter(Context c, JSONArray jsonArray1, Bitmap[] bit1) {
+        public FraMyAdapter(Context c, List<IndexBean.product> productList) {
             this.inflater = LayoutInflater.from(c);
-            this.jsonArray = jsonArray1;
-            this.bit = bit1;
-
+            this.dataSource = productList;
+            RequestQueue mQueue = Volley.newRequestQueue(context);   //创建一个RequestQueue对象
+            mImageLoader = new ImageLoader(mQueue, new BitmapCache());  //创建一个ImageLoader对象
+            this.data = new ArrayList<HashMap<String, String>>();
+            String productName = null;
+            String agentPrice = null;
+            String head_img = null;
+            for (int i = 0; i < dataSource.size(); i++) {
+                HashMap<String, String> map = new HashMap<String, String>();
+                productName = dataSource.get(i).name;
+                head_img = dataSource.get(i).head_img;
+                String[] temp = head_img.split("http://image.xiaolu.so/");
+                if (temp.length > 1){
+                    try {
+                        head_img = "http://image.xiaolu.so/" + URLEncoder.encode(temp[1],"utf-8");
+                    }catch (UnsupportedEncodingException e){
+                        e.printStackTrace();
+                    }
+                }
+                agentPrice = "价格:￥" + dataSource.get(i).agent_price;
+                map.put("Name", productName);
+                map.put("agentPrice", agentPrice);
+                map.put("headImg", head_img);
+                data.add(map);
+            }
         }
 
         @Override
         public int getCount() {
-            // TODO Auto-generated method stub
-            return jsonArray.length();
+            return dataSource.size();
         }
 
         @Override
         public Object getItem(int position) {
             return position;
-            // TODO Auto-generated method stub
-
         }
 
         @Override
         public long getItemId(int position) {
             return position;
-            // TODO Auto-generated method stub
-
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            // TODO Auto-generated method stub
+
             ViewHolder holder;
             if (convertView == null) {
-                convertView = inflater.inflate(R.layout.favorite_main_fragment_gridview, null);
-
+                convertView = inflater.inflate(R.layout.today_main_fragment_gridview, null);
                 holder = new ViewHolder();
-
-                holder.fra_photo = (ImageView) convertView.findViewById(R.id.favorite_gridview_ItemImage);
-                holder.fra_name = (TextView) convertView.findViewById(R.id.favorite_gridview_ItemText);
-                //holder.fra_author=(TextView) convertView.findViewById(R.id.bro_listitem_book_author);
-                holder.fra_price = (TextView) convertView.findViewById(R.id.favorite_gridview_price);
-                //holder.libr_press=(TextView) convertView.findViewById(R.id.libr_listitem_book_press);
-                //holder.libr_date=(TextView) convertView.findViewById(R.id.libr_listitem_book_date);
-                //holder.libr_button_reserve=(Button) convertView.findViewById(R.id.libr_listitem_book_reserve);
+                holder.head_img = (ImageView) convertView.findViewById(R.id.product_gridview_ItemImage);
+                holder.product_name = (TextView) convertView.findViewById(R.id.product_gridview_ItemText);
+                holder.agent_price = (TextView) convertView.findViewById(R.id.product_gridview_price);
                 convertView.setTag(holder);//绑定ViewHolder对象
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
 
-//			String[] from=new String[]{"bookImage","bookName","author","bookPrice"};
-//
-            List<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
 
-            String bookName = null;
-            String bookAuthor = null;
+            holder.product_name.setText(data.get(position).get("Name").toString());
+            holder.agent_price.setText(data.get(position).get("agentPrice").toString());
+            String url = "http://image.xiaolu.so/MG-1447492271324-%E9%9F%A9%E7%89%88%E5%81%87%E4%B8%A4%E4%BB%B6%E7%A2%8E%E8%8A%B1%E8%BF%9E%E8%A1%A3%E8%A3%9902.png"; //服务器端尽量不要用中文
 
-            String bookPrice = null;
-            for (int i = 0; i < jsonArray.length(); i++) {
-
-                HashMap<String, String> map = new HashMap<String, String>();
-
-                try {
-                    JSONObject json = jsonArray.getJSONObject(i);
-
-                    bookName = json.getString("name");
-                    //bookAuthor = "作者:"+json.getString("author");
-
-                    bookPrice = "价格:￥" + json.getString("price");
-
-                    //String imageName = json.getString("image");
-                    //String path = json.getString("image_path");
-
-                    map.put("bookName", bookName);
-                    //map.put("author", bookAuthor);
-                    map.put("bookPrice", bookPrice);
-                    //map.put("bookImage", null);
-
-//					if(ImageCacheUtils.isImageExistedInLocalCache(imageName, BookListActivity.this)){
-//						map.put("bookImage", imageName);
-//					}else{
-//						AsyncBookImage asyncBookImage=new AsyncBookImage(bookName, imageName, path);
-//						bookImages.add(asyncBookImage);
-//					}
-                    data.add(map);
-
-
-                } catch (JSONException e) {
-
-                    e.printStackTrace();
-                }
-            }
-            holder.fra_photo.setImageBitmap(bit[position]);
-            holder.fra_name.setText(data.get(position).get("bookName").toString());
-            // holder.fra_author.setText(data.get(position).get("author").toString());
-            holder.fra_price.setText(data.get(position).get("bookPrice").toString());
+            ImageListener listener = ImageLoader.getImageListener(holder.head_img, android.R.drawable.picture_frame, android.R.drawable.picture_frame);//获取一个ImageListener对象
+            //mImageLoader.get(data.get(position).get("headImg").toString(), listener);//调用ImageLoader的get()方法加载网络上的图片
+            mImageLoader.get(url, listener);
             return convertView;
         }
 
     }
 
     public class ViewHolder {
-        public ImageView fra_photo;
-        public TextView fra_name;
-        public TextView fra_author;
-        public TextView fra_price;
-        //public TextView libr_press;
-        //public TextView libr_date;
-        //public Button libr_button_reserve;
+        public ImageView head_img;
+        public TextView product_name;
+        public TextView agent_price;
+        public TextView std_sale_price;
+    }
+    /*
+    * 缓存*/
+    public class BitmapCache implements ImageCache {
+        private LruCache<String, Bitmap> mCache;
+
+        public BitmapCache() {
+            int maxSize = 10 * 1024 * 1024;
+            mCache = new LruCache<String, Bitmap>(maxSize) {
+                @Override
+                protected int sizeOf(String key, Bitmap value) {
+                    return value.getRowBytes() * value.getHeight();
+                }
+            };
+        }
+
+        @Override
+        public Bitmap getBitmap(String url) {
+            return mCache.get(url);
+        }
+
+        @Override
+        public void putBitmap(String url, Bitmap bitmap) {
+            mCache.put(url, bitmap);
+        }
+
     }
 
+
+    public String decodeUnicode(String theString) {
+        char aChar;
+        int len = theString.length();
+        StringBuffer outBuffer = new StringBuffer(len);
+        for (int x = 0; x < len; ) {
+            aChar = theString.charAt(x++);
+            if (aChar == '\\') {
+                aChar = theString.charAt(x++);
+                if (aChar == 'u') {
+                    // Read the xxxx
+                    int value = 0;
+                    for (int i = 0; i < 4; i++) {
+                        aChar = theString.charAt(x++);
+                        switch (aChar) {
+                            case '0':
+                            case '1':
+                            case '2':
+                            case '3':
+                            case '4':
+                            case '5':
+                            case '6':
+                            case '7':
+                            case '8':
+                            case '9':
+                                value = (value << 4) + aChar - '0';
+                                break;
+                            case 'a':
+                            case 'b':
+                            case 'c':
+                            case 'd':
+                            case 'e':
+                            case 'f':
+                                value = (value << 4) + 10 + aChar - 'a';
+                                break;
+                            case 'A':
+                            case 'B':
+                            case 'C':
+                            case 'D':
+                            case 'E':
+                            case 'F':
+                                value = (value << 4) + 10 + aChar - 'A';
+                                break;
+                            default:
+                                throw new IllegalArgumentException(
+                                        "Malformed   \\uxxxx   encoding.");
+                        }
+
+                    }
+                    outBuffer.append((char) value);
+                } else {
+                    if (aChar == 't')
+                        aChar = '\t';
+                    else if (aChar == 'r')
+                        aChar = '\r';
+                    else if (aChar == 'n')
+                        aChar = '\n';
+                    else if (aChar == 'f')
+                        aChar = '\f';
+                    outBuffer.append(aChar);
+                }
+            } else
+                outBuffer.append(aChar);
+        }
+        return outBuffer.toString();
+    }
 }
