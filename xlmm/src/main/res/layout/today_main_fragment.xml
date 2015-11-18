@@ -3,13 +3,13 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="#f2f2f2"
-    android:scrollbars="vertical">
+    android:scrollbars="vertical"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -31,10 +31,10 @@
                 android:layout_alignParentStart="true"
                 android:layout_marginLeft="50dp"
                 android:layout_marginStart="50dp"
-                android:text="2折起"
+                android:text="@string/nvzhuang_subject1"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#ed145b"
-                android:textSize="20dp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/nvzhuang_subject2"
@@ -42,10 +42,10 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:text="小鹿美美 女装专场"
+                android:text="@string/nvzhuang_subject2"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#272727"
-                android:textSize="16dp" />
+                android:textSize="16sp" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -68,10 +68,10 @@
                 android:layout_alignParentStart="true"
                 android:layout_marginLeft="50dp"
                 android:layout_marginStart="50dp"
-                android:text="2折起"
+                android:text="@string/child_subject1"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#ed145b"
-                android:textSize="20dp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/child_subject2"
@@ -79,10 +79,10 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:text="小鹿美美 童装专场"
+                android:text="@string/child_subject2"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#272727"
-                android:textSize="16dp" />
+                android:textSize="16sp" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -95,8 +95,8 @@
                 android:id="@+id/nvzhuangText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="50px"
-                android:layout_marginTop="50px"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
                 android:text="@string/nvzhuang"
                 android:textColor="@color/white"
                 android:textSize="20dp" />
@@ -116,7 +116,7 @@
         <so.xiaolu.xiaolu.customwidget.ScrollGirdView
             android:id="@+id/nvzhuang_gridview"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:gravity="center"
             android:horizontalSpacing="10dp"
             android:numColumns="2"
@@ -133,8 +133,8 @@
                 android:id="@+id/childText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="50px"
-                android:layout_marginTop="50px"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
                 android:text="@string/child"
                 android:textColor="@color/white"
                 android:textSize="20dp" />
@@ -154,11 +154,12 @@
         <so.xiaolu.xiaolu.customwidget.ScrollGirdView
             android:id="@+id/child_gridview"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:gravity="center"
             android:horizontalSpacing="10dp"
             android:numColumns="2"
             android:stretchMode="columnWidth"
-            android:verticalSpacing="10dp" />
+            android:verticalSpacing="10dp"
+            />
     </LinearLayout>
 </ScrollView>

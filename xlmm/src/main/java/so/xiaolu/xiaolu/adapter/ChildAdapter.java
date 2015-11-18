@@ -16,10 +16,6 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import so.xiaolu.xiaolu.customwidget.ScrollGirdView;
-
-import com.android.volley.toolbox.ImageLoader;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -29,9 +25,8 @@ import java.util.List;
 import so.xiaolu.xiaolu.R;
 import so.xiaolu.xiaolu.jsonbean.IndexBean;
 import so.xiaolu.xiaolu.utils.ImageUtils;
-import so.xiaolu.xiaolu.utils.Images;
 
-public class FemaleAdapter extends BaseAdapter implements OnScrollListener {
+public class ChildAdapter extends BaseAdapter implements OnScrollListener {
     private static final String TAG = "ImageAdapter";
     private Context context;
 //    private String[] items = Images.imageThumbUrls;
@@ -48,7 +43,7 @@ public class FemaleAdapter extends BaseAdapter implements OnScrollListener {
     private int totalSeeItem;
 
     private List<IndexBean.product> dataSource;
-    public FemaleAdapter(Context context, GridView mGridView, List<IndexBean.product> productList) {
+    public ChildAdapter(Context context, GridView mGridView, List<IndexBean.product> productList) {
         this.context = context;
         this.mGridView = mGridView;
         this.dataSource = productList;
@@ -110,6 +105,7 @@ public class FemaleAdapter extends BaseAdapter implements OnScrollListener {
         agent_price.setText(data.get(position).get("agentPrice").toString());
         imgView.setImageResource(R.drawable.default_product);
         imgView.setTag(data.get(position).get("headImg"));
+
         return convertView;
     }
 

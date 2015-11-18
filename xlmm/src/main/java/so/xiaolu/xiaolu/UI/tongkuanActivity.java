@@ -35,8 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import so.xiaolu.xiaolu.R;
-import so.xiaolu.xiaolu.jsonbean.IndexBean;
-import so.xiaolu.xiaolu.jsonbean.productBean;
+import so.xiaolu.xiaolu.jsonbean.ProductBean;
 import so.xiaolu.xiaolu.mainsetting.MainUrl;
 
 public class tongkuanActivity extends AppCompatActivity {
@@ -96,9 +95,9 @@ public class tongkuanActivity extends AppCompatActivity {
         try {
             Log.v(TAG, jsonData);
             Gson gson = new Gson();
-            java.lang.reflect.Type type = new TypeToken<List<productBean>>() {
+            java.lang.reflect.Type type = new TypeToken<List<ProductBean>>() {
             }.getType();
-            List<productBean> products = gson.fromJson(jsonData, type);
+            List<ProductBean> products = gson.fromJson(jsonData, type);
             for (int i = 0; i < products.size(); i++) {
                 Log.d(TAG, products.get(i).toString());
             }
@@ -108,7 +107,7 @@ public class tongkuanActivity extends AppCompatActivity {
         }
     }
 
-    private void showMsg(List<productBean> products) {
+    private void showMsg(List<ProductBean> products) {
         Message msg = Message.obtain();
         msg.obj = products;
         msg.setTarget(myHandler);//把message内容放入，handle
@@ -119,7 +118,7 @@ public class tongkuanActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
 
-            final List<productBean> products = (List<productBean>) msg.obj;
+            final List<ProductBean> products = (List<ProductBean>) msg.obj;
             GridView tongkuan_gridview = (GridView) findViewById(R.id.tongkuan_gridview);
             TongkuanAdapter tongkuanadapter = new TongkuanAdapter(context, products);
             tongkuan_gridview.setAdapter(tongkuanadapter);
@@ -158,11 +157,11 @@ public class tongkuanActivity extends AppCompatActivity {
 
     public class TongkuanAdapter extends BaseAdapter {
         private LayoutInflater inflater;
-        private List<productBean> dataSource;
+        private List<ProductBean> dataSource;
         private ImageLoader mImageLoader;
         List<HashMap<String, String>> data;
 
-        public TongkuanAdapter(Context c, List<productBean> productList) {
+        public TongkuanAdapter(Context c, List<ProductBean> productList) {
             this.inflater = LayoutInflater.from(c);
             this.dataSource = productList;
             RequestQueue mQueue = Volley.newRequestQueue(context);   //创建一个RequestQueue对象

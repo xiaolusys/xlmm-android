@@ -26,7 +26,7 @@
             android:layout_weight="1.0"
             android:background="#FFFFFF"
             android:gravity="center"
-            android:text="今日特卖"
+            android:text="@string/today_title"
             android:textColor="@drawable/itemcolor"
             android:textSize="15.0dip" />
 
@@ -37,7 +37,7 @@
             android:layout_weight="1.0"
             android:background="#FFFFFF"
             android:gravity="center"
-            android:text="昨日"
+            android:text="@string/yesterday_title"
             android:textColor="@drawable/itemcolor"
             android:textSize="15.0dip" />
 
@@ -48,7 +48,7 @@
             android:layout_weight="1.0"
             android:background="#FFFFFF"
             android:gravity="center"
-            android:text="潮童"
+            android:text="@string/child_title"
             android:textColor="@drawable/itemcolor"
             android:textSize="15.0dip" />
 
@@ -59,7 +59,7 @@
             android:layout_weight="1.0"
             android:background="#FFFFFF"
             android:gravity="center"
-            android:text="女装"
+            android:text="@string/woman_title"
             android:textColor="@drawable/itemcolor"
             android:textSize="15.0dip" />
     </LinearLayout>

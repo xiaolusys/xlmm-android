@@ -3,7 +3,7 @@ package so.xiaolu.xiaolu.jsonbean;
 /**
  * Created by root on 15-11-17.
  */
-public class productBean {
+public class ProductBean {
     public String id;
     public String url;
     public String name;

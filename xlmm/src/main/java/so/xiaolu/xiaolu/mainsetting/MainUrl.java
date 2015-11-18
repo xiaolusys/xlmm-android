@@ -6,7 +6,10 @@ public class MainUrl {
     public String URL_0 = "http://192.168.1.39:8000/rest/v1/";
 
     public String LOGIN_URL = URL_BASE + "register/customer_login";
+    //首页网址
     public String TODAY_URL = URL_BASE + "products/promote_today.json";
+    public String TODAY_POSTER_URL = URL_BASE + "posters/today.json";
+
     public String TONGKUAN_URL = URL_BASE + "products/modellist/";
 
 
@@ -32,6 +35,10 @@ public class MainUrl {
 
     public String getTODAY_URL() {
         return TODAY_URL;
+    }
+
+    public String getTODAYPOSTER_URL() {
+        return TODAY_POSTER_URL;
     }
 
     public String getTONGKUAN_URL() {

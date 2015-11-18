@@ -1,51 +1,36 @@
 package so.xiaolu.xiaolu.mainframe;
 
 import so.xiaolu.xiaolu.R;
-import so.xiaolu.xiaolu.adapter.ChilddAdapter;
-import so.xiaolu.xiaolu.adapter.FemaleAdapter;
+import so.xiaolu.xiaolu.adapter.ProductListAdapter;
+import so.xiaolu.xiaolu.asynctask.IndexAsyncTask;
+import so.xiaolu.xiaolu.asynctask.PosterAsyncTask;
 import so.xiaolu.xiaolu.mainsetting.MainUrl;
 import so.xiaolu.xiaolu.jsonbean.IndexBean;
 import so.xiaolu.xiaolu.UI.tongkuanActivity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 import so.xiaolu.xiaolu.customwidget.ScrollGirdView;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashMap;
+
 import java.util.List;
 import java.io.IOException;
 
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Response;
 import com.google.gson.Gson;
-
-
-import com.android.volley.toolbox.ImageLoader.ImageCache;
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.ImageLoader.ImageListener;
 
 public class TodayFragment extends Fragment {
     final OkHttpClient client = new OkHttpClient();
@@ -64,9 +49,14 @@ public class TodayFragment extends Fragment {
         super.onCreate(savedInstanceState);
         context = getActivity();
         view = inflater.inflate(R.layout.today_main_fragment, container, false);
-        myHandler = new MyHandle();
-        Today_MyThread th = new Today_MyThread();
-        th.start();
+//        myHandler = new MyHandle();
+//        Today_MyThread th = new Today_MyThread();
+//        th.start();
+        MainUrl url = new MainUrl();
+        IndexAsyncTask asyncTask = new IndexAsyncTask(view,context, url.getTODAY_URL());
+        PosterAsyncTask posterasyncTask = new PosterAsyncTask(view,context, url.getTODAYPOSTER_URL());
+        asyncTask.execute(1000);
+        posterasyncTask.execute(1000);
         return view;
     }
 
@@ -143,7 +133,7 @@ public class TodayFragment extends Fragment {
     }
 
 
-    class MyHandle extends Handler {
+   public class MyHandle extends Handler {
 
         @Override
         public void handleMessage(Message msg) {
@@ -171,8 +161,8 @@ public class TodayFragment extends Fragment {
 //                libr_gridItem.add(map);
 //
 //            }
-            FemaleAdapter nvadapter = new FemaleAdapter(context, nvzhuang_gridview, female_list);
-            //ChilddAdapter childadapter = new ChilddAdapter(context, child_gridview, child_list);
+            ProductListAdapter nvadapter = new ProductListAdapter(context, nvzhuang_gridview, female_list);
+            //ChildAdapter childadapter = new ChildAdapter(context, child_gridview, child_list);
 
             nvzhuang_gridview.setAdapter(nvadapter);
             //child_gridview.setAdapter(childadapter);

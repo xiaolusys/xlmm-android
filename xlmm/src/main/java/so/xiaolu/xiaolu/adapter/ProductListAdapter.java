@@ -5,6 +5,7 @@ package so.xiaolu.xiaolu.adapter;
  */
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,10 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import so.xiaolu.xiaolu.customwidget.ScrollGirdView;
+
+import com.android.volley.toolbox.ImageLoader;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -25,9 +30,10 @@ import java.util.List;
 import so.xiaolu.xiaolu.R;
 import so.xiaolu.xiaolu.jsonbean.IndexBean;
 import so.xiaolu.xiaolu.utils.ImageUtils;
+import so.xiaolu.xiaolu.utils.Images;
 
-public class ChilddAdapter extends BaseAdapter implements OnScrollListener {
-    private static final String TAG = "ImageAdapter";
+public class ProductListAdapter extends BaseAdapter {
+    private static final String TAG = "huangyan";
     private Context context;
 //    private String[] items = Images.imageThumbUrls;
     List<HashMap<String, String>> data;
@@ -41,14 +47,16 @@ public class ChilddAdapter extends BaseAdapter implements OnScrollListener {
     private int orifirstItem;
 
     private int totalSeeItem;
+    boolean isLastRow = false;
 
     private List<IndexBean.product> dataSource;
-    public ChilddAdapter(Context context, GridView mGridView, List<IndexBean.product> productList) {
+    public ProductListAdapter(Context context, GridView mGridView, List<IndexBean.product> productList) {
         this.context = context;
         this.mGridView = mGridView;
         this.dataSource = productList;
         String productName = null;
         String agentPrice = null;
+        String std_sale_price = null;
         String head_img = null;
         this.data = new ArrayList<HashMap<String, String>>();
         for (int i = 0; i < dataSource.size(); i++) {
@@ -63,15 +71,17 @@ public class ChilddAdapter extends BaseAdapter implements OnScrollListener {
                     e.printStackTrace();
                 }
             }
-            agentPrice = "价格:￥" + dataSource.get(i).agent_price;
-            map.put("Name", productName);
+            agentPrice = "￥ " + dataSource.get(i).agent_price;
+            std_sale_price = "￥ " + dataSource.get(i).std_sale_price;
+            map.put("Name", productName.split("/")[0]);
             map.put("agentPrice", agentPrice);
+            map.put("stdSalePrice", std_sale_price);
             map.put("headImg", head_img);
             data.add(map);
         }
 
-        mGridView.setOnScrollListener(this);
-        isFirstEnter = true;
+
+
 
     }
 
@@ -95,54 +105,27 @@ public class ChilddAdapter extends BaseAdapter implements OnScrollListener {
         ImageView imgView = null;
         TextView product_name = null;
         TextView agent_price = null;
+        TextView stdSalePrice = null;
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.today_main_fragment_gridview, null);
         }
         imgView = (ImageView) convertView.findViewById(R.id.product_gridview_ItemImage);
         product_name = (TextView) convertView.findViewById(R.id.product_gridview_ItemText);
         agent_price = (TextView) convertView.findViewById(R.id.product_gridview_price);
+        stdSalePrice = (TextView) convertView.findViewById(R.id.product_gridview_std_price);
         product_name.setText(data.get(position).get("Name").toString());
         agent_price.setText(data.get(position).get("agentPrice").toString());
+        stdSalePrice.setText(data.get(position).get("stdSalePrice").toString());
+
+        stdSalePrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
         imgView.setImageResource(R.drawable.default_product);
         imgView.setTag(data.get(position).get("headImg"));
 
+        ImageUtils.loadImage(data.get(position).get("headImg"), mGridView);
         return convertView;
     }
 
-    @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        Log.v(TAG, "imagedown--->onScroll");
-        firstSeeItem = firstVisibleItem;
-        totalSeeItem = visibleItemCount;
 
-        if (isFirstEnter && visibleItemCount > 0) {
-            orifirstItem = firstVisibleItem;
-            startLoadImages(firstSeeItem, totalSeeItem);
-            isFirstEnter = false;
-        }
-    }
-
-    @Override
-    public void onScrollStateChanged(AbsListView view, int scrollState) {
-        Log.v(TAG, "imagedown--->onScrollStateChanged");
-        if (orifirstItem != firstSeeItem) {
-            if (scrollState == SCROLL_STATE_IDLE) {
-                startLoadImages(firstSeeItem, totalSeeItem);
-                orifirstItem = firstSeeItem;
-            } else {
-                ImageUtils.cancelAllImageRequests();
-            }
-        }
-
-
-    }
-
-    private void startLoadImages(int first, int total) {
-        Log.v(TAG, "imagedown--->startLoadImages,first-->" + first + ",total-->" + total);
-        for (int i = first; i < first + total; i++) {
-            ImageUtils.loadImage(data.get(i).get("headImg"), mGridView);
-        }
-    }
 
 
     private String fixUrl(String url) {
