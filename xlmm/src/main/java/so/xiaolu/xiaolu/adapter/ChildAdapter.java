@@ -140,7 +140,7 @@ public class ChildAdapter extends BaseAdapter implements OnScrollListener {
     private void startLoadImages(int first, int total) {
         Log.v(TAG, "imagedown--->startLoadImages,first-->" + first + ",total-->" + total);
         for (int i = first; i < first + total; i++) {
-            ImageUtils.loadImage(data.get(i).get("headImg"), mGridView);
+//            ImageUtils.loadImage(data.get(i).get("headImg"), mGridView);
         }
     }
 

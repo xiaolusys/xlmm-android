@@ -1,5 +1,6 @@
 package so.xiaolu.xiaolu.utils;
 
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
 import android.widget.GridView;
@@ -12,13 +13,17 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.ImageLoader.ImageContainer;
 import com.android.volley.toolbox.ImageLoader.ImageListener;
 
+import android.graphics.Bitmap;
+import android.content.res.Resources;
+
 import so.xiaolu.xiaolu.R;
+import so.xiaolu.xiaolu.control.ImageCacheManager;
 
 public class ImageUtils {
     private static final String TAG = "ImageUtils";
 
     public static void loadImage(final String url, final GridView mGridView) {
-
+        //ImageCacheManager.loadImage(url, mimageView, getBitmapFromRes(R.drawable.default_poster), getBitmapFromRes(R.drawable.default_poster));
         ImageLoader imageLoader = VolleyApplication.getInstance().getImageLoader();
         ImageListener listener = new ImageListener() {
             ImageView tmpImg = (ImageView) mGridView.findViewWithTag(url);
@@ -55,16 +60,28 @@ public class ImageUtils {
             //imageLoader.drain(num);
         }
     }
+
     public static void loadPoster(final String url, final ImageView mimageView) {
-        ImageLoader imageLoader = VolleyApplication.getInstance().getImageLoader();
-        ImageListener listener = ImageLoader.getImageListener(mimageView, R.drawable.default_poster, R.drawable.default_poster);
-        imageLoader.get(url, listener);
+
+        ImageCacheManager.loadImage(url, mimageView, getBitmapFromRes(R.drawable.default_poster), getBitmapFromRes(R.drawable.default_poster));
+
+//        ImageLoader imageLoader = VolleyApplication.getInstance().getImageLoader();
+//        ImageListener listener = ImageLoader.getImageListener(mimageView, R.drawable.default_poster, R.drawable.default_poster);
+//        imageLoader.get(url, listener);
     }
 
     public static void loadHead(final String url, final ImageView mimageView) {
-        ImageLoader imageLoader = VolleyApplication.getInstance().getImageLoader();
-        ImageListener listener = ImageLoader.getImageListener(mimageView, R.drawable.default_product, R.drawable.default_product);
-        imageLoader.get(url, listener);
+        ImageCacheManager.loadImage(url, mimageView, getBitmapFromRes(R.drawable.default_product), getBitmapFromRes(R.drawable.default_product));
+
+//        ImageLoader imageLoader = VolleyApplication.getInstance().getImageLoader();
+//        ImageListener listener = ImageLoader.getImageListener(mimageView, R.drawable.default_product, R.drawable.default_product);
+//        imageLoader.get(url, listener);
     }
 
+
+    public static Bitmap getBitmapFromRes(int resId) {
+        Resources res = VolleyApplication.getInstance().getResources();
+        return BitmapFactory.decodeResource(res, resId);
+
+    }
 }

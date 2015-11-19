@@ -103,7 +103,7 @@ public class ImageAdapter extends BaseAdapter implements OnScrollListener {
     private void startLoadImages(int first, int total) {
         Log.v(TAG, "imagedown--->startLoadImages,first-->" + first + ",total-->" + total);
         for (int i = first; i < first + total; i++) {
-            ImageUtils.loadImage(items[i], mGridView);
+            //ImageUtils.loadImage(items[i], mGridView);
         }
     }
 }
