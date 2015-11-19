@@ -36,15 +36,12 @@ import android.graphics.Matrix;
 import android.util.DisplayMetrics;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
-import android.widget.Toast;
 
-import so.xiaolu.xiaolu.browse.BrowseFragment;
 //import com.seu.bigocto.collection.CollectionFragment;
 import so.xiaolu.xiaolu.mainframe.ChildFragment;
 import so.xiaolu.xiaolu.mainframe.TodayFragment;
 import so.xiaolu.xiaolu.mainframe.WomanFragment;
 import so.xiaolu.xiaolu.mainframe.YesterdayFragment;
-import so.xiaolu.xiaolu.mainsetting.SettingFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {

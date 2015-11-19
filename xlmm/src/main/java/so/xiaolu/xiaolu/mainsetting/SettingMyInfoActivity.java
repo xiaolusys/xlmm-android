@@ -18,8 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import so.xiaolu.xiaolu.R;
-import so.xiaolu.xiaolu.browse.BrowseCommodityActivity;
-import so.xiaolu.xiaolu.mainsetting.MainUrl;
+
 
 import android.app.ActionBar;
 import android.app.Activity;
