@@ -55,7 +55,13 @@ public class ImageUtils {
             //imageLoader.drain(num);
         }
     }
-    public static void loadImageView(final String url, final ImageView mimageView) {
+    public static void loadPoster(final String url, final ImageView mimageView) {
+        ImageLoader imageLoader = VolleyApplication.getInstance().getImageLoader();
+        ImageListener listener = ImageLoader.getImageListener(mimageView, R.drawable.default_poster, R.drawable.default_poster);
+        imageLoader.get(url, listener);
+    }
+
+    public static void loadHead(final String url, final ImageView mimageView) {
         ImageLoader imageLoader = VolleyApplication.getInstance().getImageLoader();
         ImageListener listener = ImageLoader.getImageListener(mimageView, R.drawable.default_product, R.drawable.default_product);
         imageLoader.get(url, listener);

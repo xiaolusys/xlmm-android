@@ -26,6 +26,7 @@ dependencies {
     //    compile 'com.google.code.gson:gson:2.3.1'
 //    compile files('libs/okhttputils.jar')
     compile files('libs/gson-2.2.1.jar')
+    compile files('libs/nineoldandroids-2.4.0.jar')
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
     compile 'com.squareup.okhttp:okhttp:2.4.0'

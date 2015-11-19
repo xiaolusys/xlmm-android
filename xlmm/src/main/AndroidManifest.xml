@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="so.xiaolu.xiaolu">
+    package="so.xiaolu.xiaolu" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -10,12 +10,13 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".UI.LoadingActivity"
             android:label="@string/app_name"
-            android:theme="@style/customLoading">
+            android:theme="@style/customLoading" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,14 +26,19 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".UI.tongkuanActivity"
-            android:label="同款"/>
-        <!--<activity-->
-            <!--android:name=".UI.LoadingActivity"-->
-            <!--android:label="同款"/>-->
+            android:label="同款" />
+        <!-- <activity -->
+        <!-- android:name=".UI.LoadingActivity" -->
+        <!-- android:label="同款"/> -->
 
+        <activity
+            android:name=".UI.ProductDetail"
+            android:label="@string/title_activity_product_detail"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>

@@ -35,4 +35,5 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:background">@drawable/loading</item>
     </style>
+
 </resources>

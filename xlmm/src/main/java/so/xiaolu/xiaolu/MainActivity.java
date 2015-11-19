@@ -3,6 +3,7 @@ package so.xiaolu.xiaolu;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -21,6 +22,8 @@ import android.support.v7.widget.Toolbar;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.ImageView;
 import android.view.LayoutInflater;
@@ -37,7 +40,10 @@ import android.widget.Toast;
 
 import so.xiaolu.xiaolu.browse.BrowseFragment;
 //import com.seu.bigocto.collection.CollectionFragment;
+import so.xiaolu.xiaolu.mainframe.ChildFragment;
 import so.xiaolu.xiaolu.mainframe.TodayFragment;
+import so.xiaolu.xiaolu.mainframe.WomanFragment;
+import so.xiaolu.xiaolu.mainframe.YesterdayFragment;
 import so.xiaolu.xiaolu.mainsetting.SettingFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -105,11 +111,14 @@ public class MainActivity extends AppCompatActivity
         LayoutInflater mInfalter = getLayoutInflater();
 
         listViews.add(new TodayFragment());
-        listViews.add(new BrowseFragment());
-        listViews.add(new BrowseFragment());
+        listViews.add(new YesterdayFragment());
+        listViews.add(new WomanFragment());
+//        listViews.add(new BrowseFragment());
 //        listViews.add(new CollectionFragment());
-        listViews.add(new SettingFragment());
+//       listViews.add(new SettingFragment());
+        listViews.add(new ChildFragment());
         mPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(), listViews));
+        mPager.setOffscreenPageLimit(1);
         mPager.setCurrentItem(0);
         mPager.setOnPageChangeListener(new MyOnPageChangeListener());
 
@@ -135,7 +144,6 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public int getCount() {
-            // TODO Auto-generated method stub
             if (fragmentList == null) {
                 return 0;
             } else {
@@ -144,6 +152,29 @@ public class MainActivity extends AppCompatActivity
 
         }
 
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            Log.d("huangyan", "destroyItem");
+            super.destroyItem(container, position, object);
+            //recycleHand();
+        }
+
+        private void recycleHand() {
+            // 先判断是否已经回收
+            System.gc();
+        }
+
+        private void unbindDrawables(View view) {
+            if (view.getBackground() != null) {
+                view.getBackground().setCallback(null);
+            }
+            if (view instanceof ViewGroup && !(view instanceof AdapterView)) {
+                for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+                    unbindDrawables(((ViewGroup) view).getChildAt(i));
+                }
+                ((ViewGroup) view).removeAllViews();
+            }
+        }
     }
 
     /******
@@ -159,7 +190,6 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public void onClick(View v) {
-            // TODO Auto-generated method stub
             mPager.setCurrentItem(index);
         }
 

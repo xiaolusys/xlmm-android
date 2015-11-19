@@ -32,7 +32,7 @@ import so.xiaolu.xiaolu.jsonbean.IndexBean;
  * 首先执行的是onProExecute方法
  * 其次执行doInBackgroup方法
  */
-public class IndexAsyncTask extends AsyncTask<Integer, Integer, String> {
+public class YesterdayAsyncTask extends AsyncTask<Integer, Integer, String> {
     final OkHttpClient client = new OkHttpClient();
     private static final String TAG = "huangyan";
     private String url;
@@ -40,7 +40,7 @@ public class IndexAsyncTask extends AsyncTask<Integer, Integer, String> {
     private Context context;
 
 
-    public IndexAsyncTask(View view, Context context, String url) {
+    public YesterdayAsyncTask(View view, Context context, String url) {
         super();
         this.url = url;
         this.view = view;
@@ -186,11 +186,11 @@ public class IndexAsyncTask extends AsyncTask<Integer, Integer, String> {
                     bundle.putString("product_id", product_id);
                     bundle.putString("model_id", model_id);
                     bundle.putString("name", name.split("/")[0]);
-                    if(female_list.get(position).product_model.is_single_spec){
+                    if (female_list.get(position).product_model.is_single_spec) {
                         Intent intent = new Intent(context, tongkuanActivity.class);
                         intent.putExtras(bundle);
                         context.startActivity(intent);
-                    }else{
+                    } else {
                         Intent intent = new Intent(context, tongkuanActivity.class);
                         intent.putExtras(bundle);
                         context.startActivity(intent);

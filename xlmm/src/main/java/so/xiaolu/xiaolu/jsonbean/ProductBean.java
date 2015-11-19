@@ -1,5 +1,7 @@
 package so.xiaolu.xiaolu.jsonbean;
 
+import java.util.List;
+
 /**
  * Created by root on 15-11-17.
  */
@@ -8,7 +10,7 @@ public class ProductBean {
     public String url;
     public String name;
     public String outer_id;
-//    public Category category;
+    //    public Category category;
     public String pic_path;
     public int remain_num;
     public boolean is_saleout;
@@ -22,8 +24,9 @@ public class ProductBean {
     public String memo;
     public float lowest_price;
     public float product_lowest_price;
-//    public Productmodel product_model;
+    public ProductModelBean product_model;
     public String ware_by;
     public boolean is_verify;
     public String model_id;
+    public List<ProductSkuBean> normal_skus;
 }

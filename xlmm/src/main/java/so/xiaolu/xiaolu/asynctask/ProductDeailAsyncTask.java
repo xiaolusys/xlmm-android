@@ -1,15 +1,18 @@
 package so.xiaolu.xiaolu.asynctask;
 
 /**
- * Created by yann on 15-11-17.
+ * Created by yann on 15-11-18.
+ * 商品详细列表
  */
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -18,13 +21,19 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
+import java.util.List;
 
 import so.xiaolu.xiaolu.R;
-import so.xiaolu.xiaolu.jsonbean.PosterBean;
+import so.xiaolu.xiaolu.UI.tongkuanActivity;
+import so.xiaolu.xiaolu.adapter.ProductListAdapter;
+import so.xiaolu.xiaolu.customwidget.ScrollGirdView;
+import so.xiaolu.xiaolu.jsonbean.IndexBean;
+import so.xiaolu.xiaolu.jsonbean.ProductBean;
+import so.xiaolu.xiaolu.jsonbean.ProductListBean;
 import so.xiaolu.xiaolu.utils.ImageUtils;
 import so.xiaolu.xiaolu.utils.UrlUtils;
 
-public class PosterAsyncTask extends AsyncTask<Integer, Integer, String> {
+public class ProductDeailAsyncTask extends AsyncTask<Integer, Integer, String> {
     final OkHttpClient client = new OkHttpClient();
     private static final String TAG = "huangyan";
     private String url;
@@ -32,7 +41,7 @@ public class PosterAsyncTask extends AsyncTask<Integer, Integer, String> {
     private Context context;
 
 
-    public PosterAsyncTask(View view, Context context, String url) {
+    public ProductDeailAsyncTask(View view, Context context, String url) {
         super();
         this.url = url;
         this.view = view;
@@ -54,17 +63,18 @@ public class PosterAsyncTask extends AsyncTask<Integer, Integer, String> {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return showInfoStr;
     }
 
+
     @Override
     protected void onPostExecute(String result) {
+        Log.d(TAG, result);
         parseIndexFromJson(result);
 
     }
 
-
-    //该方法运行在UI线程当中,并且运行在UI线程当中 可以对UI空间进行设置
     @Override
     protected void onPreExecute() {
 
@@ -85,25 +95,14 @@ public class PosterAsyncTask extends AsyncTask<Integer, Integer, String> {
     public void parseIndexFromJson(String jsonData) {
         try {
             Gson gson = new Gson();
-            java.lang.reflect.Type type = new TypeToken<PosterBean>() {
+            java.lang.reflect.Type type = new TypeToken<ProductBean>() {
             }.getType();
-            PosterBean posterBean = gson.fromJson(jsonData, type);
+            ProductBean productBean = gson.fromJson(jsonData, type);
 
-            ImageView wemposter = (ImageView)view.findViewById(R.id.nvzhuang_poster);
-            TextView wemText1 = (TextView)view.findViewById(R.id.nvzhuang_subject1);
-            TextView wemText2 = (TextView)view.findViewById(R.id.nvzhuang_subject2);
-            wemText1.setText(posterBean.wem_posters.get(0).subject.get(0).toString());
-            wemText2.setText(posterBean.wem_posters.get(0).subject.get(1).toString());
+            ImageView headpic = (ImageView)view.findViewById(R.id.product_pic);
+            ImageUtils.loadHead(UrlUtils.fixHeadPic(productBean.pic_path), headpic);
+            Log.d(TAG,productBean.pic_path);
 
-            ImageView chd_posters = (ImageView)view.findViewById(R.id.child_poster);
-            TextView chdText1 = (TextView)view.findViewById(R.id.child_subject1);
-            TextView chdText2 = (TextView)view.findViewById(R.id.child_subject2);
-            chdText1.setText(posterBean.chd_posters.get(0).subject.get(0).toString());
-            chdText2.setText(posterBean.chd_posters.get(0).subject.get(1).toString());
-
-
-            ImageUtils.loadPoster(UrlUtils.fixPosterUrl(posterBean.wem_posters.get(0).pic_link), wemposter);
-            ImageUtils.loadPoster(UrlUtils.fixPosterUrl(posterBean.chd_posters.get(0).pic_link), chd_posters);
         } catch (Exception e) {
             e.printStackTrace();
         }

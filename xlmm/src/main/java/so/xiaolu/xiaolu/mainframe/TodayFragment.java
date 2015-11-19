@@ -60,9 +60,32 @@ public class TodayFragment extends Fragment {
         return view;
     }
 
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    private void unbindDrawables(View view)
+    {
+        if (view.getBackground() != null)
+        {
+            view.getBackground().setCallback(null);
+        }
+        if (view instanceof ViewGroup && !(view instanceof AdapterView))
+        {
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++)
+            {
+                unbindDrawables(((ViewGroup) view).getChildAt(i));
+            }
+            ((ViewGroup) view).removeAllViews();
+        }
+    }
+
     /*
-    * 今日特卖
-    * */
+        * 今日特卖
+        * */
     public class Today_MyThread extends Thread {
         @Override
         public void run() {
@@ -172,6 +195,7 @@ public class TodayFragment extends Fragment {
                 Bundle bundle = null;
                 String product_id;
                 String model_id;
+                String name;
 
 
                 @Override
@@ -182,6 +206,7 @@ public class TodayFragment extends Fragment {
                     try {
                         product_id = female_list.get(position).id;
                         model_id = female_list.get(position).model_id;
+                        name = female_list.get(position).name;
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -190,6 +215,9 @@ public class TodayFragment extends Fragment {
                     bundle = new Bundle();
                     bundle.putString("product_id", product_id);
                     bundle.putString("model_id", model_id);
+                    Log.d(TAG, product_id);
+                    Log.d(TAG,name);
+                    bundle.putString("name", name.split("/")[0]);
                     if(female_list.get(position).product_model.is_single_spec){
                         Intent intent = new Intent(getActivity(), tongkuanActivity.class);
                         intent.putExtras(bundle);

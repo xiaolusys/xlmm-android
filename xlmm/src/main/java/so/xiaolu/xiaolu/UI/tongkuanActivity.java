@@ -1,15 +1,20 @@
 package so.xiaolu.xiaolu.UI;
 
+import android.app.ActionBar;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Paint;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.LruCache;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -41,8 +46,9 @@ import so.xiaolu.xiaolu.mainsetting.MainUrl;
 public class tongkuanActivity extends AppCompatActivity {
     final OkHttpClient client = new OkHttpClient();
     private String model_id = null;
+    private String name = null;
     tongkuan_Handle myHandler;
-    View view;
+
     Context context;
     String TAG = "huangyan";
 
@@ -50,14 +56,27 @@ public class tongkuanActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tongkuan);
+
         context = getApplicationContext();
         Intent intent = getIntent();
         Bundle data = intent.getExtras();
         model_id = data.getString("model_id");
+        name = data.getString("name");
         Log.d(TAG, model_id);
+        this.setTitle(name);
         myHandler = new tongkuan_Handle();
         tongkuan_Thread th = new tongkuan_Thread();
         th.start();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case 1:
+                this.finish();
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     /*
@@ -140,9 +159,9 @@ public class tongkuanActivity extends AppCompatActivity {
                     bundle = new Bundle();
                     bundle.putString("product_id", product_id);
                     bundle.putString("model_id", model_id);
-//                    Intent intent = new Intent(getActivity(), tongkuanActivity.class);
-//                    intent.putExtras(bundle);
-//                    startActivity(intent);
+                    Intent intent = new Intent(getApplicationContext(), ProductDetail.class);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
                 }
             });
 
@@ -170,6 +189,7 @@ public class tongkuanActivity extends AppCompatActivity {
             String productName = null;
             String agentPrice = null;
             String pic_path = null;
+            String std_sale_price = null;
             for (int i = 0; i < dataSource.size(); i++) {
                 HashMap<String, String> map = new HashMap<String, String>();
                 productName = dataSource.get(i).name;
@@ -182,9 +202,11 @@ public class tongkuanActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-                agentPrice = "价格:￥" + dataSource.get(i).agent_price;
+                agentPrice = "￥" + dataSource.get(i).agent_price;
+                std_sale_price = "￥ " + dataSource.get(i).std_sale_price;
                 map.put("Name", productName);
                 map.put("agentPrice", agentPrice);
+                map.put("stdSalePrice", std_sale_price);
                 map.put("picPath", pic_path);
                 data.add(map);
             }
@@ -215,6 +237,7 @@ public class tongkuanActivity extends AppCompatActivity {
                 holder.head_img = (ImageView) convertView.findViewById(R.id.product_gridview_ItemImage);
                 holder.product_name = (TextView) convertView.findViewById(R.id.product_gridview_ItemText);
                 holder.agent_price = (TextView) convertView.findViewById(R.id.product_gridview_price);
+                holder.std_sale_price = (TextView)convertView.findViewById(R.id.product_gridview_std_price);
                 convertView.setTag(holder);//绑定ViewHolder对象
             } else {
                 holder = (ViewHolder) convertView.getTag();
@@ -222,6 +245,8 @@ public class tongkuanActivity extends AppCompatActivity {
 
             holder.product_name.setText(data.get(position).get("Name").toString());
             holder.agent_price.setText(data.get(position).get("agentPrice").toString());
+            holder.std_sale_price.setText(data.get(position).get("stdSalePrice").toString());
+            holder.std_sale_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
             ImageLoader.ImageListener listener = ImageLoader.getImageListener(holder.head_img, R.drawable.default_product, R.drawable.default_product);//获取一个ImageListener对象
             mImageLoader.get(data.get(position).get("picPath").toString(), listener,600, 700);//调用ImageLoader的get()方法加载网络上的图片
             //mImageLoader.get(url, listener);
