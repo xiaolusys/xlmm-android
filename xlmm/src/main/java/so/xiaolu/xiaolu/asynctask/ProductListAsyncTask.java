@@ -2,7 +2,7 @@ package so.xiaolu.xiaolu.asynctask;
 
 /**
  * Created by yann on 15-11-18.
- * 商品列表
+ * 商品(童装，女装)列表
  */
 
 import android.content.Context;

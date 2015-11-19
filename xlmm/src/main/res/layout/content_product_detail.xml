@@ -15,7 +15,7 @@
             <RelativeLayout
                 android:id="@+id/product_top"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp1600">
+                android:layout_height="@dimen/dp1300">
 
                 <ImageView
                     android:id="@+id/product_pic"
