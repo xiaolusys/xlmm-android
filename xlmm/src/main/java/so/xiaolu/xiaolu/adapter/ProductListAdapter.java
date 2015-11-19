@@ -2,6 +2,7 @@ package so.xiaolu.xiaolu.adapter;
 
 /**
  * Created by yann on 15-11-17.
+ * 商品列表数据适配
  */
 
 import android.content.Context;
@@ -35,21 +36,10 @@ import so.xiaolu.xiaolu.utils.Images;
 public class ProductListAdapter extends BaseAdapter {
     private static final String TAG = "huangyan";
     private Context context;
-//    private String[] items = Images.imageThumbUrls;
     List<HashMap<String, String>> data;
     private GridView mGridView;
-
-    private boolean isFirstEnter;
-
-    private int firstSeeItem;
-
-
-    private int orifirstItem;
-
-    private int totalSeeItem;
-    boolean isLastRow = false;
-
     private List<IndexBean.product> dataSource;
+
     public ProductListAdapter(Context context, GridView mGridView, List<IndexBean.product> productList) {
         this.context = context;
         this.mGridView = mGridView;
@@ -64,10 +54,10 @@ public class ProductListAdapter extends BaseAdapter {
             productName = dataSource.get(i).name;
             head_img = dataSource.get(i).head_img;
             String[] temp = head_img.split("http://image.xiaolu.so/");
-            if (temp.length > 1){
+            if (temp.length > 1) {
                 try {
-                    head_img = "http://image.xiaolu.so/" + URLEncoder.encode(temp[1],"utf-8") + "?imageMogr2/auto-orient/strip/size-limit/10k/q/85/thumbnail/600x700";
-                }catch (UnsupportedEncodingException e){
+                    head_img = "http://image.xiaolu.so/" + URLEncoder.encode(temp[1], "utf-8") + "?imageMogr2/auto-orient/strip/size-limit/10k/q/85/thumbnail/600x700";
+                } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
             }
@@ -79,8 +69,6 @@ public class ProductListAdapter extends BaseAdapter {
             map.put("headImg", head_img);
             data.add(map);
         }
-
-
 
 
     }
@@ -113,31 +101,15 @@ public class ProductListAdapter extends BaseAdapter {
         product_name = (TextView) convertView.findViewById(R.id.product_gridview_ItemText);
         agent_price = (TextView) convertView.findViewById(R.id.product_gridview_price);
         stdSalePrice = (TextView) convertView.findViewById(R.id.product_gridview_std_price);
-        product_name.setText(data.get(position).get("Name").toString());
-        agent_price.setText(data.get(position).get("agentPrice").toString());
-        stdSalePrice.setText(data.get(position).get("stdSalePrice").toString());
+        product_name.setText(data.get(position).get("Name"));
+        agent_price.setText(data.get(position).get("agentPrice"));
+        stdSalePrice.setText(data.get(position).get("stdSalePrice"));
 
         stdSalePrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
         imgView.setImageResource(R.drawable.default_product);
         imgView.setTag(data.get(position).get("headImg"));
-
         ImageUtils.loadImage(data.get(position).get("headImg"), mGridView);
         return convertView;
-    }
-
-
-
-
-    private String fixUrl(String url) {
-        String[] temp = url.split("http://image.xiaolu.so/");
-        if (temp.length > 1) {
-            try {
-                url = "http://image.xiaolu.so/" + URLEncoder.encode(temp[1], "utf-8") + "?imageMogr2/auto-orient/strip/size-limit/10k/q/85/thumbnail/600x700";
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-        }
-        return "http://www.sinaimg.cn/qc/photo_auto/photo/84/35/39698435/39698435_140.jpg";
     }
 }
 

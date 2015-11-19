@@ -2,6 +2,7 @@ package so.xiaolu.xiaolu.asynctask;
 
 /**
  * Created by yann on 15-11-17.
+ * 海报任务
  */
 
 import android.content.Context;
@@ -89,17 +90,17 @@ public class PosterAsyncTask extends AsyncTask<Integer, Integer, String> {
             }.getType();
             PosterBean posterBean = gson.fromJson(jsonData, type);
 
-            ImageView wemposter = (ImageView)view.findViewById(R.id.nvzhuang_poster);
-            TextView wemText1 = (TextView)view.findViewById(R.id.nvzhuang_subject1);
-            TextView wemText2 = (TextView)view.findViewById(R.id.nvzhuang_subject2);
-            wemText1.setText(posterBean.wem_posters.get(0).subject.get(0).toString());
-            wemText2.setText(posterBean.wem_posters.get(0).subject.get(1).toString());
+            ImageView wemposter = (ImageView) view.findViewById(R.id.nvzhuang_poster);   //女装海报
+            TextView wemText1 = (TextView) view.findViewById(R.id.nvzhuang_subject1);   //女装宣传主题1
+            TextView wemText2 = (TextView) view.findViewById(R.id.nvzhuang_subject2);   //女装宣传主题2
+            wemText1.setText(posterBean.wem_posters.get(0).subject.get(0));
+            wemText2.setText(posterBean.wem_posters.get(0).subject.get(1));
 
-            ImageView chd_posters = (ImageView)view.findViewById(R.id.child_poster);
-            TextView chdText1 = (TextView)view.findViewById(R.id.child_subject1);
-            TextView chdText2 = (TextView)view.findViewById(R.id.child_subject2);
-            chdText1.setText(posterBean.chd_posters.get(0).subject.get(0).toString());
-            chdText2.setText(posterBean.chd_posters.get(0).subject.get(1).toString());
+            ImageView chd_posters = (ImageView) view.findViewById(R.id.child_poster);   //童装海报
+            TextView chdText1 = (TextView) view.findViewById(R.id.child_subject1);      //童装宣传主题1
+            TextView chdText2 = (TextView) view.findViewById(R.id.child_subject2);      //童装宣传主题1
+            chdText1.setText(posterBean.chd_posters.get(0).subject.get(0));
+            chdText2.setText(posterBean.chd_posters.get(0).subject.get(1));
 
 
             ImageUtils.loadPoster(UrlUtils.fixPosterUrl(posterBean.wem_posters.get(0).pic_link), wemposter);

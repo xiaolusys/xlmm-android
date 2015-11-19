@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import so.xiaolu.xiaolu.R;
-import so.xiaolu.xiaolu.asynctask.IndexAsyncTask;
 import so.xiaolu.xiaolu.asynctask.PosterAsyncTask;
 import so.xiaolu.xiaolu.asynctask.YesterdayAsyncTask;
 import so.xiaolu.xiaolu.mainsetting.MainUrl;
@@ -16,7 +15,7 @@ import so.xiaolu.xiaolu.mainsetting.MainUrl;
 public class YesterdayFragment extends Fragment {
     View view;
     Context context;
-    String TAG = "huangyan";
+    private static String TAG = "huangyan";
     public YesterdayFragment() {
         super();
     }
@@ -28,9 +27,9 @@ public class YesterdayFragment extends Fragment {
         context = getActivity();
         view = inflater.inflate(R.layout.yesterday_main_fragment, container, false);
         MainUrl url = new MainUrl();
-        YesterdayAsyncTask yesterdayAsyncTask = new YesterdayAsyncTask(view,context, url.getYESTERDAY_URL());
+        YesterdayAsyncTask yesterdayAsyncTask = new YesterdayAsyncTask(view,context, url.getYESTERDAY_URL());  // 昨日主页
         yesterdayAsyncTask.execute(1000);
-        PosterAsyncTask posterasyncTask = new PosterAsyncTask(view,context, url.getYESTERDAY_POSTER_URL());
+        PosterAsyncTask posterasyncTask = new PosterAsyncTask(view,context, url.getYESTERDAY_POSTER_URL()); // 昨日海报
         posterasyncTask.execute(1000);
         return view;
     }

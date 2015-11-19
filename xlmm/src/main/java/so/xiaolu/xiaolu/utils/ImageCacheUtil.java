@@ -26,19 +26,18 @@ import so.xiaolu.xiaolu.libcore.io.DiskLruCache;
  *
  * 包含内存缓存LruCache和磁盘缓存DiskLruCache
  *
- * @author Rabbit_Lee
  *
  */
 public class ImageCacheUtil implements ImageCache {
 
-    private String TAG=ImageCacheUtil.this.getClass().getSimpleName();
+    private String TAG="huangyan";
 
     //缓存类
     private static LruCache<String, Bitmap> mLruCache;
     private static DiskLruCache mDiskLruCache;
 
     //磁盘缓存大小
-    private static final int DISKMAXSIZE = 10 * 1024 * 1024;
+    private static final int DISKMAXSIZE = 20 * 1024 * 1024;
 
     public ImageCacheUtil() {
         // 获取应用可占内存的1/8作为缓存
@@ -52,7 +51,7 @@ public class ImageCacheUtil implements ImageCache {
         };
         try {
             // 获取DiskLruCahce对象
-            mDiskLruCache = DiskLruCache.open(getDiskCacheDir(VolleyApplication.getInstance(), "Rabbit"), getAppVersion(VolleyApplication.getInstance()), 1, DISKMAXSIZE);
+            mDiskLruCache = DiskLruCache.open(getDiskCacheDir(VolleyApplication.getInstance(), "XLMM"), getAppVersion(VolleyApplication.getInstance()), 1, DISKMAXSIZE);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -65,7 +64,6 @@ public class ImageCacheUtil implements ImageCache {
     public Bitmap getBitmap(String url) {
         if (mLruCache.get(url) != null) {
             // 从LruCache缓存中取
-            Log.i(TAG,"从LruCahce获取");
             return mLruCache.get(url);
         } else {
             String key = MD5Util.MD5(url);

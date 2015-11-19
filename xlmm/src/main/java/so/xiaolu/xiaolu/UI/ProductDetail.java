@@ -1,7 +1,6 @@
 package so.xiaolu.xiaolu.UI;
 
 import so.xiaolu.xiaolu.asynctask.ProductDeailAsyncTask;
-import so.xiaolu.xiaolu.asynctask.ProductListAsyncTask;
 import so.xiaolu.xiaolu.customwidget.PullPushLayout;
 import so.xiaolu.xiaolu.customwidget.PullPushLayout.OnTouchEventMoveListenre;
 
@@ -38,7 +37,7 @@ public class ProductDetail extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = (View) inflater.inflate(R.layout.content_product_detail, null, true);
         setContentView(view);
 
@@ -47,7 +46,7 @@ public class ProductDetail extends Activity {
         product_id = data.getString("product_id");
         initView();
         MainUrl url = new MainUrl();
-        ProductDeailAsyncTask productDeailAsyncTask = new ProductDeailAsyncTask(view, getApplicationContext(), url.getPRODUCT_URL()+product_id+"/details.json");
+        ProductDeailAsyncTask productDeailAsyncTask = new ProductDeailAsyncTask(view, getApplicationContext(), url.getPRODUCT_URL() + product_id + "/details.json");
         productDeailAsyncTask.execute(1000);
 
     }
