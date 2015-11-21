@@ -24,32 +24,32 @@ public class ImageUtils {
     private static final String TAG = "ImageUtils";
 
     public static void loadImage(final String url, final GridView mGridView) {
-        ImageCacheManager.loadGirdImage(url, mGridView, getBitmapFromRes(R.drawable.default_product), getBitmapFromRes(R.drawable.default_product));
-//        ImageLoader imageLoader = VolleyApplication.getInstance().getImageLoader();
-//        ImageListener listener = new ImageListener() {
-//            ImageView tmpImg = (ImageView) mGridView.findViewWithTag(url);
-//
-//            @Override
-//            public void onErrorResponse(VolleyError arg0) {
-//                tmpImg.setImageBitmap(null);
-//            }
-//
-//            @Override
-//            public void onResponse(ImageContainer container, boolean arg1) {
-//
-//                if (container != null) {
-//                    tmpImg = (ImageView) mGridView.findViewWithTag(url);
-//                    if (tmpImg != null) {
-//                        if (container.getBitmap() == null) {
-//                            tmpImg.setImageResource(R.drawable.default_product);
-//                        } else {
-//                            tmpImg.setImageBitmap(container.getBitmap());
-//                        }
-//                    }
-//                }
-//            }
-//        };
-//        ImageContainer newContainer = imageLoader.get(url, listener, 600, 700);
+       // ImageCacheManager.loadGirdImage(url, mGridView, getBitmapFromRes(R.drawable.default_product), getBitmapFromRes(R.drawable.default_product));
+        ImageLoader imageLoader = VolleyApplication.getInstance().getImageLoader();
+        ImageListener listener = new ImageListener() {
+            ImageView tmpImg = (ImageView) mGridView.findViewWithTag(url);
+
+            @Override
+            public void onErrorResponse(VolleyError arg0) {
+                tmpImg.setImageBitmap(null);
+            }
+
+            @Override
+            public void onResponse(ImageContainer container, boolean arg1) {
+
+                if (container != null) {
+                    tmpImg = (ImageView) mGridView.findViewWithTag(url);
+                    if (tmpImg != null) {
+                        if (container.getBitmap() == null) {
+                            tmpImg.setImageResource(R.drawable.default_product);
+                        } else {
+                            tmpImg.setImageBitmap(container.getBitmap());
+                        }
+                    }
+                }
+            }
+        };
+        ImageContainer newContainer = imageLoader.get(url, listener, 600, 700);
     }
 
 
