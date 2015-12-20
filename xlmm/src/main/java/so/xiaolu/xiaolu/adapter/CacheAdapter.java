@@ -22,7 +22,7 @@ import so.xiaolu.xiaolu.utils.VolleyApplication;
  * Created by root on 15-11-18.
  */
 public class CacheAdapter extends BaseAdapter {
-    private static final String TAG = "huangyan";
+    private static final String TAG = "CacheAdapter";
     public class Item {
         public String itemImageURL;
         public String itemTitle;

@@ -16,7 +16,7 @@ import android.view.Window;
 import so.xiaolu.xiaolu.R;
 import so.xiaolu.xiaolu.mainsetting.MainUrl;
 
-public class ProductDetail extends Activity {
+public class ProductDetailActivity extends Activity {
 
     private View btnBack;
     private View btnShare;        //标题分享

@@ -33,7 +33,7 @@ import so.xiaolu.xiaolu.utils.GirdUtils;
 
 public class ProductListAsyncTask extends AsyncTask<Integer, Integer, String> {
     final OkHttpClient client = new OkHttpClient();
-    private static final String TAG = "huangyan";
+    private static final String TAG = "ProductListAsyncTask";
     private String url;
     private View view;
     private Context context;

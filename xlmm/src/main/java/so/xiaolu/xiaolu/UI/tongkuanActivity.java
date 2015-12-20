@@ -50,10 +50,11 @@ public class tongkuanActivity extends AppCompatActivity {
     tongkuan_Handle myHandler;
 
     Context context;
-    String TAG = "huangyan";
+    String TAG = "tongkuanActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tongkuan);
 
@@ -159,7 +160,7 @@ public class tongkuanActivity extends AppCompatActivity {
                     bundle = new Bundle();
                     bundle.putString("product_id", product_id);
                     bundle.putString("model_id", model_id);
-                    Intent intent = new Intent(getApplicationContext(), ProductDetail.class);
+                    Intent intent = new Intent(getApplicationContext(), ProductDetailActivity.class);
                     intent.putExtras(bundle);
                     startActivity(intent);
                 }

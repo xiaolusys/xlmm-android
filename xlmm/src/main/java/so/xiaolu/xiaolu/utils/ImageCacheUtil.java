@@ -30,7 +30,7 @@ import so.xiaolu.xiaolu.libcore.io.DiskLruCache;
  */
 public class ImageCacheUtil implements ImageCache {
 
-    private String TAG="huangyan";
+    private String TAG="ImageCacheUtil";
 
     //缓存类
     private static LruCache<String, Bitmap> mLruCache;

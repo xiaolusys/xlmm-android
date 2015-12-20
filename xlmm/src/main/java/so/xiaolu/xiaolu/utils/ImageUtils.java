@@ -5,6 +5,7 @@ package so.xiaolu.xiaolu.utils;
  */
 
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.widget.GridView;
 import android.widget.ImageView;
 
@@ -24,6 +25,7 @@ public class ImageUtils {
     private static final String TAG = "ImageUtils";
 
     public static void loadImage(final String url, final GridView mGridView) {
+        Log.d(TAG,"loadImage "+url);
        // ImageCacheManager.loadGirdImage(url, mGridView, getBitmapFromRes(R.drawable.default_product), getBitmapFromRes(R.drawable.default_product));
         ImageLoader imageLoader = VolleyApplication.getInstance().getImageLoader();
         ImageListener listener = new ImageListener() {
@@ -31,16 +33,21 @@ public class ImageUtils {
 
             @Override
             public void onErrorResponse(VolleyError arg0) {
-                tmpImg.setImageBitmap(null);
+                Log.d(TAG,"loadImage ImageListener onErrorResponse");
+                //tmpImg.setImageBitmap(null);
+                if (tmpImg != null) {
+                    tmpImg.setImageResource(R.drawable.default_product);
+                }
             }
 
             @Override
             public void onResponse(ImageContainer container, boolean arg1) {
-
+                Log.d(TAG,"loadImage ImageListener onResponse");
                 if (container != null) {
                     tmpImg = (ImageView) mGridView.findViewWithTag(url);
                     if (tmpImg != null) {
                         if (container.getBitmap() == null) {
+                            Log.d(TAG,"loadImage ImageListener onErrorResponse getBitmap null");
                             tmpImg.setImageResource(R.drawable.default_product);
                         } else {
                             tmpImg.setImageBitmap(container.getBitmap());
@@ -49,7 +56,8 @@ public class ImageUtils {
                 }
             }
         };
-        ImageContainer newContainer = imageLoader.get(url, listener, 600, 700);
+        //ImageContainer newContainer = imageLoader.get(url, listener, 600, 700);
+        ImageContainer newContainer = imageLoader.get(url, listener);
     }
 
 

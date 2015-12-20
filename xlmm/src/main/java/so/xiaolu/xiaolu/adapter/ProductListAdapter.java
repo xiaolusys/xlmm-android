@@ -34,13 +34,14 @@ import so.xiaolu.xiaolu.utils.ImageUtils;
 import so.xiaolu.xiaolu.utils.Images;
 
 public class ProductListAdapter extends BaseAdapter {
-    private static final String TAG = "huangyan";
+    private static final String TAG = "ProductListAdapter";
     private Context context;
     List<HashMap<String, String>> data;
     private GridView mGridView;
     private List<IndexBean.product> dataSource;
 
     public ProductListAdapter(Context context, GridView mGridView, List<IndexBean.product> productList) {
+        Log.d(TAG," create");
         this.context = context;
         this.mGridView = mGridView;
         this.dataSource = productList;
@@ -49,6 +50,8 @@ public class ProductListAdapter extends BaseAdapter {
         String std_sale_price = null;
         String head_img = null;
         this.data = new ArrayList<HashMap<String, String>>();
+
+        Log.d(TAG,"dataSource.size "+ dataSource.size());
         for (int i = 0; i < dataSource.size(); i++) {
             HashMap<String, String> map = new HashMap<String, String>();
             productName = dataSource.get(i).name;
@@ -56,7 +59,7 @@ public class ProductListAdapter extends BaseAdapter {
             String[] temp = head_img.split("http://image.xiaolu.so/");
             if (temp.length > 1) {
                 try {
-                    head_img = "http://image.xiaolu.so/" + URLEncoder.encode(temp[1], "utf-8") + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/600x800";
+                    head_img = "http://image.xiaolu.so/" + URLEncoder.encode(temp[1], "utf-8") + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
@@ -67,6 +70,7 @@ public class ProductListAdapter extends BaseAdapter {
             map.put("agentPrice", agentPrice);
             map.put("stdSalePrice", std_sale_price);
             map.put("headImg", head_img);
+            Log.d(TAG,"head_img "+ head_img);
             data.add(map);
         }
 
@@ -90,6 +94,7 @@ public class ProductListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        Log.d(TAG,"getView ");
         ImageView imgView = null;
         TextView product_name = null;
         TextView agent_price = null;
@@ -108,6 +113,7 @@ public class ProductListAdapter extends BaseAdapter {
         stdSalePrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
         imgView.setImageResource(R.drawable.default_product);
         imgView.setTag(data.get(position).get("headImg"));
+        Log.d(TAG,"loadImage "+ data.get(position).get("headImg"));
         ImageUtils.loadImage(data.get(position).get("headImg"), mGridView);
         return convertView;
     }

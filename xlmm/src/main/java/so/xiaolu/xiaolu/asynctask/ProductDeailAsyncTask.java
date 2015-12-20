@@ -35,7 +35,7 @@ import so.xiaolu.xiaolu.utils.UrlUtils;
 
 public class ProductDeailAsyncTask extends AsyncTask<Integer, Integer, String> {
     final OkHttpClient client = new OkHttpClient();
-    private static final String TAG = "huangyan";
+    private static final String TAG = "ProductDeailAsyncTask";
     private String url;
     private View view;
     private Context context;

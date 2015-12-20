@@ -3,6 +3,7 @@ package so.xiaolu.xiaolu.utils;
 import java.io.File;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.BasicNetwork;
@@ -18,6 +19,7 @@ public class VolleyApplication extends Application {
     private ImageLoader mImageLoader;
 
     public static VolleyApplication getInstance() {
+        Log.d(TAG,"getInstance " + instance);
         return instance;
     }
 
@@ -26,12 +28,15 @@ public class VolleyApplication extends Application {
     }
 
     public ImageLoader getImageLoader() {
+        Log.d(TAG,"getImageLoader " + mImageLoader);
         return mImageLoader;
     }
 
     @Override
     public void onCreate() {
+        Log.d(TAG,"onCreate");
         super.onCreate();
+        Log.d(TAG,"cacheDir "+this.getCacheDir()+" "+"volley");
         File cacheDir = new File(this.getCacheDir(), "volley");
         mRequestQueue = new RequestQueue(new DiskBasedCache(cacheDir), new BasicNetwork(new HurlStack()), 1);
 

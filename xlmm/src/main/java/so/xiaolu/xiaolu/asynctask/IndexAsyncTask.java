@@ -34,7 +34,7 @@ import so.xiaolu.xiaolu.jsonbean.IndexBean;
  */
 public class IndexAsyncTask extends AsyncTask<Integer, Integer, String> {
     final OkHttpClient client = new OkHttpClient();
-    private static final String TAG = "huangyan";
+    private static final String TAG = "IndexAsyncTask";
     private String url;
     private View view;
     private Context context;
