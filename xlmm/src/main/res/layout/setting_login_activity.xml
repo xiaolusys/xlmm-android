@@ -17,7 +17,7 @@
         android:paddingTop="10sp"
         android:paddingBottom="10sp"
         android:background="@drawable/text_frame"
-        android:hint="请输入用户名">
+        android:hint="请输入手机号">
         </EditText>
 
 	<EditText
@@ -31,7 +31,7 @@
         android:paddingTop="10sp"
         android:paddingBottom="10sp"
         android:background="@drawable/text_frame"
-	    android:hint="请输入密码">
+	    android:hint="请输入登录密码">
 	 </EditText>
 
 
@@ -44,13 +44,13 @@
 	     android:layout_width="fill_parent"
 	     android:layout_height="wrap_content"
          android:background="#FF6600"
-         android:text="登陆"
+         android:text="登录"
 	     >
      </Button>
 	 </LinearLayout>
-	 <TextView
+	 <Button
 	     android:id="@+id/set_register_button"
-	     android:layout_width="wrap_content"
+	     android:layout_width="fill_parent"
 	     android:layout_height="wrap_content"
 	     android:text="注册"
 	     android:textSize="17sp"
