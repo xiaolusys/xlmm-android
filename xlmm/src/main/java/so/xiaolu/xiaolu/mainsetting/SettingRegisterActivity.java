@@ -16,7 +16,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
 import so.xiaolu.xiaolu.R;
-import so.xiaolu.xiaolu.MainActivity;
+import so.xiaolu.xiaolu.UI.MainActivity;
 import so.xiaolu.xiaolu.mainsetting.MainUrl;
 import so.xiaolu.xiaolu.mainsetting.SettingLoginActivity.MyHandler;
 
@@ -175,8 +175,7 @@ public class SettingRegisterActivity extends Activity {
     protected void onStart() {
         // TODO Auto-generated method stub
         super.onStart();
-        ActionBar actionbar = getActionBar();
-        actionbar.setDisplayHomeAsUpEnabled(true);
+
     }
 
     @Override

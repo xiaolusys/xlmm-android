@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 
-import so.xiaolu.xiaolu.MainActivity;
+import so.xiaolu.xiaolu.UI.MainActivity;
 import so.xiaolu.xiaolu.R;
 
 public class LoadingActivity extends Activity {

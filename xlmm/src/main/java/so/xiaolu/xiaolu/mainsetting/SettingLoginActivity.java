@@ -19,7 +19,6 @@ import org.apache.http.message.BasicNameValuePair;
 import android.widget.Toast;
 
 import so.xiaolu.xiaolu.R;
-import so.xiaolu.xiaolu.MainActivity;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -37,6 +36,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import so.xiaolu.xiaolu.UI.MainActivity;
 import so.xiaolu.xiaolu.mainframe.*;
 
 public class SettingLoginActivity extends Activity {
@@ -51,6 +51,7 @@ public class SettingLoginActivity extends Activity {
     EditText login_pass;
     String login_pass_value;
     Button login_button;
+    String TAG = "SettingLoginActivity";
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
@@ -58,6 +59,7 @@ public class SettingLoginActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
+        Log.d(TAG,"onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.setting_login_activity);
         this.setTitle("登录");
@@ -102,8 +104,7 @@ public class SettingLoginActivity extends Activity {
     protected void onStart() {
         // TODO Auto-generated method stub
         super.onStart();
-        ActionBar actionbar = getActionBar();
-        actionbar.setDisplayHomeAsUpEnabled(true);
+
     }
 
     @Override
