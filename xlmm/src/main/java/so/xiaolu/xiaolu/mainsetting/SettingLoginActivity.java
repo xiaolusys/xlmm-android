@@ -16,6 +16,9 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
+import android.content.Context;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 import so.xiaolu.xiaolu.R;
@@ -39,7 +42,7 @@ import android.widget.Toast;
 import so.xiaolu.xiaolu.UI.MainActivity;
 import so.xiaolu.xiaolu.mainframe.*;
 
-public class SettingLoginActivity extends Activity {
+public class SettingLoginActivity extends AppCompatActivity {
 
 
     private HttpClient client;
@@ -62,7 +65,9 @@ public class SettingLoginActivity extends Activity {
         Log.d(TAG,"onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.setting_login_activity);
-        this.setTitle("登录");
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle("登录");
         mShare();
         initView();
         login_button.setOnClickListener(new OnClickListener() {
@@ -70,12 +75,13 @@ public class SettingLoginActivity extends Activity {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
+                Log.d(TAG,"login_button click");
                 mThread thread = new mThread();
                 thread.start();
             }
         });
 
-        TextView set_register = (TextView) findViewById(R.id.set_register_button);
+        Button set_register = (Button) findViewById(R.id.set_register_button);
         set_register.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -152,10 +158,10 @@ public class SettingLoginActivity extends Activity {
                 List<NameValuePair> list = new ArrayList<NameValuePair>();
                 NameValuePair pair1 = new BasicNameValuePair("username", login_name_value);
                 NameValuePair pair2 = new BasicNameValuePair("password", login_pass_value);
-                NameValuePair pair3 = new BasicNameValuePair("flag", "aaa");
+                //NameValuePair pair3 = new BasicNameValuePair("flag", "aaa");
                 list.add(pair1);
                 list.add(pair2);
-                list.add(pair3);
+                //list.add(pair3);
                 UrlEncodedFormEntity entity = new UrlEncodedFormEntity(list, "UTF-8");
 
                 MainUrl url = new MainUrl();
@@ -171,7 +177,7 @@ public class SettingLoginActivity extends Activity {
                             new InputStreamReader(in));
                     String line = null;
                     line = str.readLine();
-                    Log.v("huangyan", line);
+                    Log.d("TAG", line);
                     showMsg(line);
                 }
 
@@ -188,6 +194,8 @@ public class SettingLoginActivity extends Activity {
         public void handleMessage(Message msg) {
             String str = (String) msg.obj;
             Toast.makeText(SettingLoginActivity.this, str, Toast.LENGTH_LONG).show();
+            Log.d("TAG", str);
+
             String value1 = "success";
             if (msg.toString().indexOf(value1) >= 0) {
 
@@ -199,6 +207,8 @@ public class SettingLoginActivity extends Activity {
                 editor.putString("name", login_name_value);
                 editor.putString("password", login_pass_value);
                 editor.commit();
+
+                Log.d("TAG", "login success, return to MainActivity");
                 Intent intent = new Intent(SettingLoginActivity.this, MainActivity.class);
                 startActivity(intent);
             } else {
@@ -207,6 +217,7 @@ public class SettingLoginActivity extends Activity {
                 editor.commit();
                 String value = sharedPreferences.getString("success", "");
                 Toast.makeText(SettingLoginActivity.this, "登陆状态：" + value, Toast.LENGTH_LONG).show();
+                Log.d("TAG", "login failed "+value);
             }
         }
 
@@ -224,7 +235,7 @@ public class SettingLoginActivity extends Activity {
      ***********/
 
     public void mShare() {
-        sharedPreferences = this.getSharedPreferences("login_info", 0);
+        sharedPreferences = getApplicationContext().getSharedPreferences("login_info", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.putString("name", "");
         editor.putString("password", "");
