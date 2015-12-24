@@ -17,6 +17,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
@@ -39,6 +40,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import so.xiaolu.xiaolu.UI.MainActivity;
 import so.xiaolu.xiaolu.mainframe.*;
 
@@ -59,10 +62,11 @@ public class SettingLoginActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
-        Log.d(TAG,"onCreate");
+        Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.setting_login_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -75,7 +79,7 @@ public class SettingLoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                Log.d(TAG,"login_button click");
+                Log.d(TAG, "login_button click");
                 mThread thread = new mThread();
                 thread.start();
             }
@@ -93,6 +97,7 @@ public class SettingLoginActivity extends AppCompatActivity {
             }
 
         });
+
 
     }
 
@@ -121,6 +126,13 @@ public class SettingLoginActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+
     }
 
 
@@ -158,10 +170,8 @@ public class SettingLoginActivity extends AppCompatActivity {
                 List<NameValuePair> list = new ArrayList<NameValuePair>();
                 NameValuePair pair1 = new BasicNameValuePair("username", login_name_value);
                 NameValuePair pair2 = new BasicNameValuePair("password", login_pass_value);
-                //NameValuePair pair3 = new BasicNameValuePair("flag", "aaa");
                 list.add(pair1);
                 list.add(pair2);
-                //list.add(pair3);
                 UrlEncodedFormEntity entity = new UrlEncodedFormEntity(list, "UTF-8");
 
                 MainUrl url = new MainUrl();
@@ -177,12 +187,12 @@ public class SettingLoginActivity extends AppCompatActivity {
                             new InputStreamReader(in));
                     String line = null;
                     line = str.readLine();
-                    Log.d("TAG", line);
+                    Log.d(TAG, line);
                     showMsg(line);
                 }
 
             } catch (Exception e) {
-
+                Log.e(TAG, "post login info error");
             }
         }
     }
@@ -193,34 +203,51 @@ public class SettingLoginActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             String str = (String) msg.obj;
-            Toast.makeText(SettingLoginActivity.this, str, Toast.LENGTH_LONG).show();
-            Log.d("TAG", str);
+            //Toast.makeText(SettingLoginActivity.this, str, Toast.LENGTH_LONG).show();
+            Log.d(TAG, "response " + str);
 
-            String value1 = "success";
-            if (msg.toString().indexOf(value1) >= 0) {
+            if (parseRespResult(str) == 0) {
 
                 //mShare();
                 editor.putString("success", "true");
                 editor.commit();
-                String value = sharedPreferences.getString("success", "");
-                Toast.makeText(SettingLoginActivity.this, "登陆状态：" + value, Toast.LENGTH_LONG).show();
+
+                Toast.makeText(SettingLoginActivity.this, "登陆成功", Toast.LENGTH_LONG).show();
                 editor.putString("name", login_name_value);
                 editor.putString("password", login_pass_value);
                 editor.commit();
 
-                Log.d("TAG", "login success, return to MainActivity");
+                Log.d(TAG, "login success, return to MainActivity");
                 Intent intent = new Intent(SettingLoginActivity.this, MainActivity.class);
                 startActivity(intent);
             } else {
 
                 editor.putString("success", "false");
                 editor.commit();
-                String value = sharedPreferences.getString("success", "");
-                Toast.makeText(SettingLoginActivity.this, "登陆状态：" + value, Toast.LENGTH_LONG).show();
-                Log.d("TAG", "login failed "+value);
+                Toast.makeText(SettingLoginActivity.this, "登陆失败", Toast.LENGTH_LONG).show();
+                Log.d(TAG, "login failed ");
             }
         }
 
+    }
+
+    public class RespData{
+        int returnCode;
+        String result;
+        String nextUrl;
+    }
+
+    private int parseRespResult(String str) {
+
+        try {
+            Gson gson = new Gson();
+            RespData resp =  gson.fromJson(str, RespData.class);
+            return resp.returnCode;
+        } catch (Exception e) {
+            Log.e(TAG, "parseRespMsg error");
+            e.printStackTrace();
+        }
+        return 1;
     }
 
     private void showMsg(String str) {

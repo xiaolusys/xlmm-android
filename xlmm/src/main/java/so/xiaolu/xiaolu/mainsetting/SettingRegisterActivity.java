@@ -46,6 +46,7 @@ public class SettingRegisterActivity extends AppCompatActivity {
     Button re_button;
     String name, password, password2, Email, phone, postalAddress;
     mHandle myHandler = new mHandle();//初始化Handler
+    String TAG = "SettingRegisterActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,7 +138,7 @@ public class SettingRegisterActivity extends AppCompatActivity {
                 list.add(pair4);
                 list.add(pair5);
 
-                Log.e("数据穿入", name);
+                Log.d("数据穿入", name);
 
                 UrlEncodedFormEntity entity = new UrlEncodedFormEntity(list, "UTF-8");
 
@@ -168,7 +169,7 @@ public class SettingRegisterActivity extends AppCompatActivity {
         msg.obj = str;
         msg.setTarget(myHandler);
         msg.sendToTarget();
-        Log.d("aaaaaaaa", str);
+        Log.d(TAG, "showMsg "+str);
 
     }
 
