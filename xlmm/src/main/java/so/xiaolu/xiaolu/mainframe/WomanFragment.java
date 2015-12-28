@@ -17,7 +17,7 @@ import so.xiaolu.xiaolu.mainsetting.MainUrl;
 public class WomanFragment extends Fragment {
     View view;
     Context context;
-    String TAG = "huangyan";
+    String TAG = "WomanFragment";
     public WomanFragment() {
         super();
     }

@@ -40,9 +40,6 @@ public class SettingRegisterActivity extends AppCompatActivity {
     EditText re_name;
     EditText re_password;
     EditText re_password2;
-    EditText re_Email;
-    EditText re_phone;
-    EditText re_postalAdress;
     Button re_button;
     String name, password, password2, Email, phone, postalAddress;
     mHandle myHandler = new mHandle();//初始化Handler
@@ -58,9 +55,6 @@ public class SettingRegisterActivity extends AppCompatActivity {
         re_name = (EditText) findViewById(R.id.set_register_name);
         re_password = (EditText) findViewById(R.id.set_register_password);
         re_password2 = (EditText) findViewById(R.id.set_register_password2);
-        re_Email = (EditText) findViewById(R.id.set_register_address);
-        re_phone = (EditText) findViewById(R.id.set_register_phone);
-        re_postalAdress = (EditText) findViewById(R.id.set_register_postalAddress);
         re_button = (Button) findViewById(R.id.set_register_button);
 
 
@@ -72,9 +66,6 @@ public class SettingRegisterActivity extends AppCompatActivity {
                 name = re_name.getText().toString();
                 password = re_password.getText().toString();
                 password2 = re_password2.getText().toString();
-                Email = re_Email.getText().toString();
-                phone = re_phone.getText().toString();
-                postalAddress = re_postalAdress.getText().toString();
 
                 Log.d("输入内容", name + password + password2 + Email);
                 if (name.isEmpty() || password.isEmpty() || password2.isEmpty() || Email.isEmpty()) {
@@ -120,9 +111,6 @@ public class SettingRegisterActivity extends AppCompatActivity {
                 name = re_name.getText().toString();
                 password = re_password.getText().toString();
                 password2 = re_password2.getText().toString();
-                Email = re_Email.getText().toString();
-                phone = re_phone.getText().toString();
-                postalAddress = re_postalAdress.getText().toString();
 
                 DefaultHttpClient client = new DefaultHttpClient();
                 List<NameValuePair> list = new ArrayList<NameValuePair>();

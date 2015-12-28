@@ -17,7 +17,7 @@
         android:paddingTop="10sp"
         android:paddingBottom="10sp"
         android:background="@drawable/text_frame"
-        android:hint="请输入用户名">
+        android:hint="请输入手机号">
         </EditText>
 
 	<EditText
@@ -48,44 +48,7 @@
 	    android:hint="请再次输入密码">
 	 </EditText>
 	 
-    <EditText
-    	android:id="@+id/set_register_address"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:singleLine="true"
-	    android:paddingLeft="10sp"
-        android:paddingRight="10sp"
-        android:paddingTop="10sp"
-        android:paddingBottom="10sp"
-        android:hint="输入E-mail"
-        android:background="@drawable/text_frame"
-        android:inputType="textEmailAddress" />
 
-    <EditText
-		android:id="@+id/set_register_phone"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:singleLine="true"
-	    android:paddingLeft="10sp"
-        android:paddingRight="10sp"
-        android:paddingTop="10sp"
-        android:paddingBottom="10sp"
-        android:hint="请输入电话号码"
-        android:background="@drawable/text_frame"
-        android:inputType="phone" />
-
-    <EditText
-		android:id="@+id/set_register_postalAddress"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:singleLine="true"
-	    android:paddingLeft="10sp"
-        android:paddingRight="10sp"
-        android:paddingTop="10sp"
-        android:paddingBottom="10sp"
-        android:hint="请输入地址"
-        android:background="@drawable/text_frame"
-        android:inputType="textPostalAddress" />
 
  	 <LinearLayout
 	     android:layout_width="fill_parent"

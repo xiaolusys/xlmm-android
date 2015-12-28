@@ -27,6 +27,9 @@ public class MainUrl {
     //商品详情页
     public String PRODUCT_URL = URL_BASE + "products/";
 
+    //所有订单
+    public String ALL_ORDERS_URL = URL_BASE + "trades/";
+
 
     //下面没有用到
 
@@ -62,7 +65,9 @@ public class MainUrl {
         return PRODUCT_URL;
     }
 
-
+    public String getAllOrdersUrl() {
+        return ALL_ORDERS_URL;
+    }
 
 
     public String SETTINGMYINFO_URL = URL_BASE + "/xueZhang/servlet/AndroidInfoSev";

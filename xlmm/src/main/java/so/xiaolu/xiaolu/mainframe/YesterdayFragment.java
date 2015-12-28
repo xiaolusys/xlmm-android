@@ -15,7 +15,7 @@ import so.xiaolu.xiaolu.mainsetting.MainUrl;
 public class YesterdayFragment extends Fragment {
     View view;
     Context context;
-    private static String TAG = "huangyan";
+    private static String TAG = "YesterdayFragment";
     public YesterdayFragment() {
         super();
     }

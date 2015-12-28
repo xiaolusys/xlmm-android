@@ -15,7 +15,7 @@ import so.xiaolu.xiaolu.mainsetting.MainUrl;
 public class ChildFragment extends Fragment {
     View view;
     Context context;
-    String TAG = "huangyan";
+    String TAG = "ChildFragment";
     public ChildFragment() {
         super();
     }
@@ -27,9 +27,8 @@ public class ChildFragment extends Fragment {
         context = getActivity();
         view = inflater.inflate(R.layout.child_main_fragment, container, false);
         MainUrl url = new MainUrl();
-        Log.d("huangyan","woman");
-        ProductListAsyncTask yesterdayAsyncTask = new ProductListAsyncTask(view,context, url.getCHILD_URL());
-        yesterdayAsyncTask.execute(1000);
+        Log.d("ChildFragment","onCreateView");
+
         return view;
     }
 

@@ -51,7 +51,6 @@ public class SettingAccountActivity extends Activity {
         Log.e("Info 发送", "成功");
 
         sharedata = getSharedPreferences("login_info", 0);
-        sharedata = getSharedPreferences("login_info", 0);
 
         handle = new MyHandle();
 
