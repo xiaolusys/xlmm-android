@@ -32,4 +32,9 @@ public abstract class BaseActivity extends AppCompatActivity {
   protected abstract void initData();//初始化数据
 
   protected abstract void initView();//初始化view
+
+  @Override protected void onDestroy() {
+    super.onDestroy();
+    ButterKnife.unbind(this);
+  }
 }

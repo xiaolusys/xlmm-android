@@ -38,6 +38,7 @@ public class LadyListFragment extends BaseFragment {
           @Override public void onResponse(Response response, LadyListBean data) {
             List<LadyListBean.ResultsEntity> results = data.getResults();
             mLadyListAdapter.update(results);
+            mLadyListAdapter.notifyDataSetChanged();
           }
         });
   }
@@ -64,11 +65,25 @@ public class LadyListFragment extends BaseFragment {
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
       @Override public void onRefresh() {
-        xRecyclerView.postDelayed(new Runnable() {
-          @Override public void run() {
-            xRecyclerView.refreshComplete();
-          }
-        }, 3000);
+        //xRecyclerView.postDelayed(new Runnable() {
+        //  @Override public void run() {
+        //    xRecyclerView.refreshComplete();
+        //  }
+        //}, 3000);
+
+        new OkHttpRequest.Builder().url(XlmmApi.WOMAN_URL)
+            .get(new OkHttpCallback<LadyListBean>() {
+              @Override public void onError(Request request, Exception e) {
+              }
+
+              @Override public void onResponse(Response response, LadyListBean data) {
+                List<LadyListBean.ResultsEntity> results = data.getResults();
+                mLadyListAdapter.updateWithClear(results);
+                mLadyListAdapter.notifyDataSetChanged();
+                xRecyclerView.refreshComplete();
+              }
+            });
+
       }
 
       @Override public void onLoadMore() {

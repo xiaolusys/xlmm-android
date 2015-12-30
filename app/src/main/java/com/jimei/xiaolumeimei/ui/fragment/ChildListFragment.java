@@ -41,6 +41,7 @@ public class ChildListFragment extends BaseFragment {
             List<ChildListBean.ResultsEntity> results = data.getResults();
             //Log.i("xlmm", results.toString());
             mChildListAdapter.update(results);
+            mChildListAdapter.notifyDataSetChanged();
           }
         });
   }
@@ -65,11 +66,22 @@ public class ChildListFragment extends BaseFragment {
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
       @Override public void onRefresh() {
-        xRecyclerView.postDelayed(new Runnable() {
-          @Override public void run() {
-            xRecyclerView.refreshComplete();
-          }
-        }, 3000);
+        new OkHttpRequest.Builder().url(XlmmApi.CHILD_URL)
+            .get(new OkHttpCallback<ChildListBean>() {
+              @Override public void onError(Request request, Exception e) {
+
+              }
+
+              @Override public void onResponse(Response response, ChildListBean data) {
+                List<ChildListBean.ResultsEntity> results = data.getResults();
+                //Log.i("xlmm", results.toString());
+                mChildListAdapter.updateWithClear(results);
+                mChildListAdapter.notifyDataSetChanged();
+                xRecyclerView.refreshComplete();
+              }
+            });
+
+
       }
 
       @Override public void onLoadMore() {

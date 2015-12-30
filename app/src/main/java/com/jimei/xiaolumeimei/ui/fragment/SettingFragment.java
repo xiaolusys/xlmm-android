@@ -1,4 +1,4 @@
-package com.jimei.xiaolumeimei.ui.activity;
+package com.jimei.xiaolumeimei.ui.fragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +17,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.ui.activity.SettingAccountActivity;
+import com.jimei.xiaolumeimei.ui.activity.SettingContactActivity;
+import com.jimei.xiaolumeimei.ui.activity.SettingLoginActivity;
+import com.jimei.xiaolumeimei.ui.activity.SettingMyInfoActivity;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

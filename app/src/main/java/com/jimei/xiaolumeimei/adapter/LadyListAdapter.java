@@ -9,9 +9,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.target.SizeReadyCallback;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.model.LadyListBean;
-import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,7 +84,21 @@ public class LadyListAdapter extends RecyclerView.Adapter<LadyListAdapter.LadyLi
     holder.childlistAgentPrice.setText("¥" + resultsEntity.getAgentPrice());
     holder.childlistStdsalePrice.setText("/" + resultsEntity.getStdSalePrice());
 
-    Picasso.with(mContext).load(headImg).into(holder.childlistImage);
+    holder.card.setTag(new Object());
+    Glide.with(mContext)
+        .load(headImg)
+        .diskCacheStrategy(DiskCacheStrategy.ALL)
+        .centerCrop()
+        .into(holder.childlistImage)
+        .getSize(new SizeReadyCallback() {
+          @Override public void onSizeReady(int width, int height) {
+            if (!holder.card.isShown()) holder.card.setVisibility(View.VISIBLE);
+          }
+        });
+  }
+
+  @Override public void onViewRecycled(LadyListVH holder) {
+    super.onViewRecycled(holder);
   }
 
   @Override public int getItemCount() {
@@ -96,6 +112,7 @@ public class LadyListAdapter extends RecyclerView.Adapter<LadyListAdapter.LadyLi
   static class LadyListVH extends RecyclerView.ViewHolder
       implements View.OnClickListener {
     //int id = R.layout.item_childlist;
+    View card;
     @Bind(R.id.childlist_image) ImageView childlistImage;
     @Bind(R.id.childlist_name) TextView childlistName;
     @Bind(R.id.childlist_agent_price) TextView childlistAgentPrice;
@@ -104,6 +121,7 @@ public class LadyListAdapter extends RecyclerView.Adapter<LadyListAdapter.LadyLi
 
     public LadyListVH(View itemView) {
       super(itemView);
+      card = itemView;
       ButterKnife.bind(this, itemView);
       itemView.setOnClickListener(this);
     }
