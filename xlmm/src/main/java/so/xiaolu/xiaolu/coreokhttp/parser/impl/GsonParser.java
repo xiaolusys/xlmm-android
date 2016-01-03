@@ -1,5 +1,7 @@
 package so.xiaolu.xiaolu.coreokhttp.parser.impl;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.squareup.okhttp.Response;
 
@@ -25,6 +27,7 @@ public class GsonParser<T> implements Parser<T> {
         try {
             Gson gson=new Gson();
             String str=response.body().string();
+            Log.d("parse","coreokhttp parse "+str);
             T t=gson.fromJson(str,mClass);
             return t;
         } catch (IOException e) {

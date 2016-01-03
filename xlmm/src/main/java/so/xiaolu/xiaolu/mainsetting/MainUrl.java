@@ -28,7 +28,7 @@ public class MainUrl {
     public String PRODUCT_URL = URL_BASE + "products/";
 
     //所有订单
-    public String ALL_ORDERS_URL = URL_BASE + "trades/";
+    public String ALL_ORDERS_URL = URL_BASE + "trades";
 
 
     //下面没有用到

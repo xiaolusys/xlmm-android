@@ -3,6 +3,7 @@ package so.xiaolu.xiaolu.coreokhttp.callback;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -72,13 +73,16 @@ public class Callback<T> implements com.squareup.okhttp.Callback {
 
     @Override
     public void onResponse(Response response) throws IOException {
+        //Log.d("coreokhttp callback","onResponse msg: " +response.body().string());
         if (response.isSuccessful()) {
+            Log.d("coreokhttp callback"," onResponse success");
             T parseResult = mParser.parse(response);
             Message message=Message.obtain();
             message.what=CALLBACK_SUCCESSFUL;
             message.obj=parseResult;
             mHandler.sendMessage(message);
         } else {
+            Log.d("coreokhttp callback"," onResponse fail");
             Message message=Message.obtain();
             message.what=CALLBACK_FAILED;
             mHandler.sendMessage(message);
