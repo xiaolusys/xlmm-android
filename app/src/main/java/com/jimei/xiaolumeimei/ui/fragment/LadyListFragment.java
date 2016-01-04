@@ -13,6 +13,7 @@ import com.jimei.xiaolumeimei.okhttp.request.OkHttpRequest;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
+import com.victor.loading.rotate.RotateLoading;
 import java.util.List;
 
 /**
@@ -24,26 +25,32 @@ public class LadyListFragment extends BaseFragment {
 
   private XRecyclerView xRecyclerView;
   private LadyListAdapter mLadyListAdapter;
+  private RotateLoading loading;
 
   @Override protected int provideContentViewId() {
     return R.layout.ladylist_fragment;
   }
 
   @Override protected void initData() {
+    loading.start();
+
     new OkHttpRequest.Builder().url(XlmmApi.WOMAN_URL)
         .get(new OkHttpCallback<LadyListBean>() {
           @Override public void onError(Request request, Exception e) {
+            loading.stop();
           }
 
           @Override public void onResponse(Response response, LadyListBean data) {
             List<LadyListBean.ResultsEntity> results = data.getResults();
             mLadyListAdapter.update(results);
             mLadyListAdapter.notifyDataSetChanged();
+            loading.stop();
           }
         });
   }
 
   @Override protected void initViews() {
+    loading = (RotateLoading) view.findViewById(R.id.loading);
     initRecyclerView();
   }
 
@@ -83,7 +90,6 @@ public class LadyListFragment extends BaseFragment {
                 xRecyclerView.refreshComplete();
               }
             });
-
       }
 
       @Override public void onLoadMore() {

@@ -1,6 +1,8 @@
 package com.jimei.xiaolumeimei.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.SizeReadyCallback;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.model.LadyListBean;
+import com.jimei.xiaolumeimei.ui.activity.TongkuanActicity;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,9 +89,22 @@ public class LadyListAdapter extends RecyclerView.Adapter<LadyListAdapter.LadyLi
     holder.childlistAgentPrice.setText("¥" + resultsEntity.getAgentPrice());
     holder.childlistStdsalePrice.setText("/" + resultsEntity.getStdSalePrice());
 
+    String[] temp = headImg.split("http://image.xiaolu.so/");
+    String head_img = "";
+    if (temp.length > 1) {
+      try {
+        head_img += "http://image.xiaolu.so/"
+            + URLEncoder.encode(temp[1], "utf-8")
+            + "?imageMogr2/auto-orient/strip/size-limit/10k/q/85/thumbnail/600x700";
+      } catch (UnsupportedEncodingException e) {
+        e.printStackTrace();
+      }
+    }
+
+
     holder.card.setTag(new Object());
     Glide.with(mContext)
-        .load(headImg)
+        .load(head_img)
         .diskCacheStrategy(DiskCacheStrategy.ALL)
         .centerCrop()
         .into(holder.childlistImage)
@@ -95,6 +113,38 @@ public class LadyListAdapter extends RecyclerView.Adapter<LadyListAdapter.LadyLi
             if (!holder.card.isShown()) holder.card.setVisibility(View.VISIBLE);
           }
         });
+
+    holder.card.setOnClickListener(v -> {
+
+      int product_id = 0;
+      int model_id = 0;
+      String name = null;
+      Bundle bundle;
+
+      try {
+        product_id = mList.get(position).getProductModel().getId();
+        model_id = mList.get(position).getModelId();
+        name = mList.get(position).getProductModel().getName();
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+
+      bundle = new Bundle();
+      bundle.putInt("product_id", product_id);
+      bundle.putInt("model_id", model_id);
+      if (name != null) {
+        bundle.putString("name", name.split("/")[0]);
+      }
+      if (mList.get(position).getProductModel().isIsSingleSpec()) {
+        Intent intent = new Intent(mContext, TongkuanActicity.class);
+        intent.putExtras(bundle);
+        mContext.startActivity(intent);
+      } else {
+        Intent intent = new Intent(mContext, TongkuanActicity.class);
+        intent.putExtras(bundle);
+        mContext.startActivity(intent);
+      }
+    });
   }
 
   @Override public void onViewRecycled(LadyListVH holder) {

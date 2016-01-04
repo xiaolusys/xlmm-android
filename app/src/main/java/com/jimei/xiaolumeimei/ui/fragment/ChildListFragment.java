@@ -13,6 +13,7 @@ import com.jimei.xiaolumeimei.okhttp.request.OkHttpRequest;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
+import com.victor.loading.rotate.RotateLoading;
 import java.util.List;
 
 /**
@@ -24,17 +25,18 @@ public class ChildListFragment extends BaseFragment {
 
   private XRecyclerView xRecyclerView;
   private ChildListAdapter mChildListAdapter;
+  private RotateLoading loading;
 
   @Override protected int provideContentViewId() {
     return R.layout.childlist_fragment;
   }
 
   @Override protected void initData() {
-
+loading.start();
     new OkHttpRequest.Builder().url(XlmmApi.CHILD_URL)
         .get(new OkHttpCallback<ChildListBean>() {
           @Override public void onError(Request request, Exception e) {
-
+          loading.stop();
           }
 
           @Override public void onResponse(Response response, ChildListBean data) {
@@ -42,11 +44,14 @@ public class ChildListFragment extends BaseFragment {
             //Log.i("xlmm", results.toString());
             mChildListAdapter.update(results);
             mChildListAdapter.notifyDataSetChanged();
+            loading.stop();
+
           }
         });
   }
 
   @Override protected void initViews() {
+    loading = (RotateLoading) view.findViewById(R.id.loading);
     initRecyclerView();
   }
 

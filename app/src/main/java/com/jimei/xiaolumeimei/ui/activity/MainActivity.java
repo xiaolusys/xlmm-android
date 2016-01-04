@@ -7,7 +7,7 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -34,7 +34,7 @@ public class MainActivity extends BaseActivity
   List<String> titles;
   private SharedPreferences sharedPreferences;
 
-  @Override protected int provideContendtViewId() {
+  @Override protected int provideContentViewId() {
     return R.layout.activity_main;
   }
 
@@ -60,7 +60,7 @@ public class MainActivity extends BaseActivity
         new MainTabAdapter(getSupportFragmentManager(), fragments, titles);
     mViewPager.setAdapter(mAdapter);
     mTabLayout.setupWithViewPager(mViewPager);
-    mTabLayout.setTabsFromPagerAdapter(mAdapter);
+    //mTabLayout.setTabsFromPagerAdapter(mAdapter);
     mTabLayout.setTabMode(TabLayout.MODE_FIXED);
   }
 
@@ -136,7 +136,7 @@ public class MainActivity extends BaseActivity
     }
   }
 
-  class MainTabAdapter extends FragmentStatePagerAdapter {
+  class MainTabAdapter extends FragmentPagerAdapter {
     private List<Fragment> listFragment;
     private List<String> listTitle;
 

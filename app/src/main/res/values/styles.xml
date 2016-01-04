@@ -20,6 +20,14 @@
         <item name="android:textColorPrimary">@color/primary_text</item>
     </style>
 
+    <style name="AppTheme.TransparentActivity" parent="AppTheme.Base">
+        <!--<item name="android:windowBackground">@android:color/transparent</item>-->
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+    <style name="AppTheme.NoTransparentActivity" parent="AppTheme.Base">
+        <item name="android:windowIsTranslucent">false</item>
+    </style>
 
     <!-- 设置标题栏样式 -->
     <style name="GANKActionBarStyle" parent="Widget.AppCompat.Light.ActionBar">
@@ -36,4 +44,11 @@
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <style name="SwipeBackLayout">
+        <item name="edge_size">50dip</item>
+        <item name="shadow_left">@drawable/shadow_left</item>
+        <item name="shadow_right">@drawable/shadow_right</item>
+        <item name="shadow_bottom">@drawable/shadow_bottom</item>
+    </style>
 </resources>

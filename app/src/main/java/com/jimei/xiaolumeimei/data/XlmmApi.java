@@ -11,7 +11,7 @@ public class XlmmApi {
   //注册链接
   public static final String LOGIN_URL = URL_BASE + "register/customer_login";
   //首页网址(商品、海报)
-  public static final String TODAY_URL = URL_BASE + "products/promote_today_paging.json";
+  public static final String TODAY_URL = URL_BASE + "products/promote_today_paging";
   public static final String TODAY_POSTER_URL = URL_BASE + "posters/today.json";
 
   //昨日特卖(商品、海报)

@@ -3,7 +3,9 @@ package com.jimei.xiaolumeimei;
 import android.app.Application;
 import com.jimei.xiaolumeimei.okhttp.OkHttpClientManager;
 import com.squareup.okhttp.OkHttpClient;
+import com.zhy.autolayout.config.AutoLayoutConifg;
 import java.util.concurrent.TimeUnit;
+import me.drakeet.library.CrashWoodpecker;
 
 /**
  * Created by ye.xu on 15/12/29.
@@ -15,6 +17,8 @@ public class XlmmApp extends Application {
   @Override public void onCreate() {
     super.onCreate();
     initOkHttpClient();
+    AutoLayoutConifg.getInstance().useDeviceSize();
+    CrashWoodpecker.fly().to(this);
   }
 
   //初始化OkHttpClient
