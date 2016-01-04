@@ -4,4 +4,5 @@
   <string name="navigation_drawer_open">打开</string>
   <string name="navigation_drawer_close">关闭</string>
   <string name="today_new">今日上新</string>
+  <string name="login">登录</string>
 </resources>

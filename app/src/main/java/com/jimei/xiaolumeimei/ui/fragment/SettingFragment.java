@@ -19,7 +19,7 @@ import android.widget.Toast;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.ui.activity.SettingAccountActivity;
 import com.jimei.xiaolumeimei.ui.activity.SettingContactActivity;
-import com.jimei.xiaolumeimei.ui.activity.SettingLoginActivity;
+import com.jimei.xiaolumeimei.ui.activity.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.SettingMyInfoActivity;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -154,7 +154,7 @@ public class SettingFragment extends Fragment implements OnClickListener {
 
                 Toast toast = Toast.makeText(getActivity(), "欢迎学弟学妹", Toast.LENGTH_SHORT);
                 toast.show();
-                Intent intent = new Intent(getActivity(), SettingLoginActivity.class);
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
                 startActivity(intent);
                 break;
             }

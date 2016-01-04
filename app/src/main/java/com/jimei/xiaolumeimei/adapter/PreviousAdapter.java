@@ -33,7 +33,6 @@ public class PreviousAdapter extends RecyclerView.Adapter<PreviousAdapter.Previo
 
   public PreviousAdapter(Context context) {
     this.mContext = context;
-
     mList = new ArrayList<>();
   }
 

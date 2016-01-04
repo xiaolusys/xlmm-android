@@ -6,73 +6,65 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import butterknife.Bind;
 import com.google.gson.Gson;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.okhttp.callback.OkHttpCallback;
 import com.jimei.xiaolumeimei.okhttp.request.OkHttpRequest;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
-public class SettingLoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseSwipeBackCompatActivity {
 
-  EditText login_name;
   String login_name_value;
-  EditText login_pass;
   String login_pass_value;
-  Button login_button;
-  String TAG = "SettingLoginActivity";
+
+  @Bind(R.id.set_login_name) EditText login_name;
+  @Bind(R.id.set_login_password) EditText login_pass;
+  @Bind(R.id.set_login_button) Button login_button;
+  @Bind(R.id.set_register_button) Button set_register;
+
+  @Bind(R.id.toolbar) Toolbar toolbar;
+
+  String TAG = "LoginActivity";
+
   private MyHandler myHandler = new MyHandler();//初始化Handler
   private SharedPreferences sharedPreferences;
   private SharedPreferences.Editor editor;
 
-  @Override protected void onCreate(Bundle savedInstanceState) {
-    // TODO Auto-generated method stub
-    Log.d(TAG, "onCreate");
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.setting_login_activity);
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-    setSupportActionBar(toolbar);
-    toolbar.setTitle("登录");
+  @Override protected void initData() {
     mShare();
-    initView();
-    login_button.setOnClickListener(new OnClickListener() {
+    login_name_value = login_name.getText().toString();
+    login_pass_value = login_pass.getText().toString();
 
-      @Override public void onClick(View v) {
-        // TODO Auto-generated method stub
-        Log.d(TAG, "login_button click");
-        mThread thread = new mThread();
-        thread.start();
-      }
+
+    login_button.setOnClickListener(
+        v -> new OkHttpRequest.Builder().url(XlmmApi.LOGIN_URL)
+            .addParams("username", login_name_value)
+            .addParams("password", login_pass_value)
+            .post(new OkHttpCallback<RespData>() {
+              @Override public void onError(Request request, Exception e) {
+
+              }
+
+              @Override public void onResponse(Response response, RespData data) {
+
+              }
+            }));
+
+    set_register.setOnClickListener(v-> {
+      Intent intent =
+          new Intent(LoginActivity.this, SettingRegisterActivity.class);
+      startActivity(intent);
     });
-
-    Button set_register = (Button) findViewById(R.id.set_register_button);
-    set_register.setOnClickListener(new OnClickListener() {
-
-      @Override public void onClick(View arg0) {
-        // TODO Auto-generated method stub
-        Intent intent =
-            new Intent(SettingLoginActivity.this, SettingRegisterActivity.class);
-        startActivity(intent);
-      }
-    });
-  }
-
-  public void initView() {
-    login_name = (EditText) findViewById(R.id.set_login_name);
-
-    login_pass = (EditText) findViewById(R.id.set_login_password);
-
-    login_button = (Button) findViewById(R.id.set_login_button);
   }
 
   @Override protected void onStart() {
@@ -87,6 +79,27 @@ public class SettingLoginActivity extends AppCompatActivity {
       return true;
     }
     return super.onOptionsItemSelected(item);
+  }
+
+  @Override protected void getBundleExtras(Bundle extras) {
+
+  }
+
+  @Override protected int getContentViewLayoutID() {
+    return R.layout.setting_login_activity;
+  }
+
+  @Override protected void initViews() {
+    toolbar.setTitle("");
+    setSupportActionBar(toolbar);
+  }
+
+  @Override protected boolean toggleOverridePendingTransition() {
+    return false;
+  }
+
+  @Override protected TransitionMode getOverridePendingTransitionMode() {
+    return null;
   }
 
   @Override public void onStop() {
@@ -154,8 +167,7 @@ public class SettingLoginActivity extends AppCompatActivity {
 
     public void run() {
       try {
-        login_name_value = login_name.getText().toString();
-        login_pass_value = login_pass.getText().toString();
+
         //DefaultHttpClient client = new DefaultHttpClient();
         //List<NameValuePair> list = new ArrayList<NameValuePair>();
         //NameValuePair pair1 = new BasicNameValuePair("username", login_name_value);
@@ -181,18 +193,6 @@ public class SettingLoginActivity extends AppCompatActivity {
         //    showMsg(line);
         //}
 
-        new OkHttpRequest.Builder().url(XlmmApi.LOGIN_URL)
-            .addParams("username", login_name_value)
-            .addParams("password", login_pass_value)
-            .post(new OkHttpCallback() {
-              @Override public void onError(Request request, Exception e) {
-
-              }
-
-              @Override public void onResponse(Response response, Object data) {
-
-              }
-            });
       } catch (Exception e) {
         Log.e(TAG, "post login info error");
       }
@@ -204,7 +204,7 @@ public class SettingLoginActivity extends AppCompatActivity {
 
     @Override public void handleMessage(Message msg) {
       String str = (String) msg.obj;
-      //Toast.makeText(SettingLoginActivity.this, str, Toast.LENGTH_LONG).show();
+      //Toast.makeText(LoginActivity.this, str, Toast.LENGTH_LONG).show();
       Log.d(TAG, "response " + str);
 
       if (parseRespResult(str) == 0) {
@@ -213,19 +213,19 @@ public class SettingLoginActivity extends AppCompatActivity {
         editor.putString("success", "true");
         editor.commit();
 
-        Toast.makeText(SettingLoginActivity.this, "登陆成功", Toast.LENGTH_LONG).show();
+        Toast.makeText(LoginActivity.this, "登陆成功", Toast.LENGTH_LONG).show();
         editor.putString("name", login_name_value);
         editor.putString("password", login_pass_value);
         editor.commit();
 
         Log.d(TAG, "login success, return to MainActivity");
-        Intent intent = new Intent(SettingLoginActivity.this, MainActivity.class);
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
       } else {
 
         editor.putString("success", "false");
         editor.commit();
-        Toast.makeText(SettingLoginActivity.this, "登陆失败", Toast.LENGTH_LONG).show();
+        Toast.makeText(LoginActivity.this, "登陆失败", Toast.LENGTH_LONG).show();
         Log.d(TAG, "login failed ");
       }
     }

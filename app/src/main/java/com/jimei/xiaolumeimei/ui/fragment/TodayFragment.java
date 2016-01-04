@@ -150,7 +150,7 @@ public class TodayFragment extends BaseFragment {
         XlmmApi.TODAY_URL + "?page=" + page + "&page_size=" + page_size)
         .get(new OkHttpCallback<ProductListBean>() {
           @Override public void onError(Request request, Exception e) {
-            //Log.i("xlmm", e.getMessage());
+            Log.i("xlmm", e.getMessage());
           }
 
           @Override public void onResponse(Response response, ProductListBean data) {

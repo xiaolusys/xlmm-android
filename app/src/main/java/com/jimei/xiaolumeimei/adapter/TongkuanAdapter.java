@@ -88,6 +88,13 @@ public class TongkuanAdapter extends RecyclerView.Adapter<TongkuanAdapter.Tongku
         .getSize((width, height) -> {
           if (!holder.card.isShown()) holder.card.setVisibility(View.VISIBLE);
         });
+
+
+    holder.card.setOnClickListener(v -> {
+
+
+
+    });
   }
 
   @Override public int getItemCount() {
