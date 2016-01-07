@@ -117,11 +117,11 @@ public class PreviousAdapter extends RecyclerView.Adapter<PreviousAdapter.Previo
         bundle.putString("name", name.split("/")[0]);
       }
       if (product_model.is_single_spec) {
-        Intent intent = new Intent(mContext, TongkuanActicity.class);
+        Intent intent = new Intent(mContext, ProductDetailActvity.class);
         intent.putExtras(bundle);
         mContext.startActivity(intent);
       } else {
-        Intent intent = new Intent(mContext, ProductDetailActvity.class);
+        Intent intent = new Intent(mContext, TongkuanActicity.class);
         intent.putExtras(bundle);
         mContext.startActivity(intent);
       }
