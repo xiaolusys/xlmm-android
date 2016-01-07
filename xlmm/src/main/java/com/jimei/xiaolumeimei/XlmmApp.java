@@ -13,23 +13,10 @@ import java.util.concurrent.TimeUnit;
  */
 public class XlmmApp extends Application {
 
-  //public static boolean isLogin;
-  //
-  //public void isLogin() {
-  //  SharedPreferences mSharedPreferences =
-  //      getSharedPreferences("login_info", MODE_PRIVATE);
-  //  isLogin = mSharedPreferences.getBoolean("success", false);
-  //  Log.i("loginTest", isLogin + "");
-  //}
-
   @Override public void onCreate() {
     super.onCreate();
     initOkHttpClient();
     AutoLayoutConifg.getInstance().useDeviceSize();
-    //isLogin();
-
-
-    //CrashWoodpecker.fly().to(this);
   }
 
   //初始化OkHttpClient

@@ -57,7 +57,7 @@ public class ProductDetailSingleBean {
   @SerializedName("head_img") private String mHeadImg;
   @SerializedName("is_saleopen") private boolean mIsSaleopen;
   @SerializedName("is_newgood") private boolean mIsNewgood;
-  @SerializedName("std_sale_price") private int mStdSalePrice;
+  @SerializedName("std_sale_price") private double mStdSalePrice;
   @SerializedName("agent_price") private int mAgentPrice;
   @SerializedName("sale_time") private String mSaleTime;
   @SerializedName("offshelf_time") private Object mOffshelfTime;
@@ -241,7 +241,7 @@ public class ProductDetailSingleBean {
     return mIsNewgood;
   }
 
-  public int getStdSalePrice() {
+  public double getStdSalePrice() {
     return mStdSalePrice;
   }
 
