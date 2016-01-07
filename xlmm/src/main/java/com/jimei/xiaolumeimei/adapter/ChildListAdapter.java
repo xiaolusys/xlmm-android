@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.model.ChildListBean;
-import com.jimei.xiaolumeimei.ui.activity.ProductDetailActvity;
+import com.jimei.xiaolumeimei.ui.activity.ProductDetailSingleActvity;
 import com.jimei.xiaolumeimei.ui.activity.TongkuanActicity;
 import com.zhy.autolayout.utils.AutoUtils;
 import java.io.UnsupportedEncodingException;
@@ -119,7 +119,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Chil
 
     holder.card.setOnClickListener(v -> {
 
-      int product_id = 0;
+      String product_id = null;
       int model_id = 0;
       String name = null;
       Bundle bundle;
@@ -133,13 +133,13 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Chil
       }
 
       bundle = new Bundle();
-      bundle.putInt("product_id", product_id);
+      bundle.putString("product_id", product_id);
       bundle.putInt("model_id", model_id);
       if (name != null) {
         bundle.putString("name", name.split("/")[0]);
       }
       if (mList.get(position).getProductModel().isIsSingleSpec()) {
-        Intent intent = new Intent(mContext, ProductDetailActvity.class);
+        Intent intent = new Intent(mContext, ProductDetailSingleActvity.class);
         intent.putExtras(bundle);
         mContext.startActivity(intent);
       } else {

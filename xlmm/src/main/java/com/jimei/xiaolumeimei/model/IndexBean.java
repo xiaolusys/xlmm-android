@@ -19,7 +19,7 @@ public class IndexBean implements Serializable {
   }
 
   public static class product {
-    public int id;
+    public String id;
     public String url;
     public String name;
     public String outer_id;
@@ -42,7 +42,7 @@ public class IndexBean implements Serializable {
     public boolean is_verify;
     public int model_id;
 
-    public int getId() {
+    public String getId() {
       return id;
     }
 

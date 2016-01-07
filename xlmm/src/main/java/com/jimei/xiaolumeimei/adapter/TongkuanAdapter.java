@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.model.ProductBean;
-import com.jimei.xiaolumeimei.ui.activity.ProductDetailActvity;
+import com.jimei.xiaolumeimei.ui.activity.ProductDetailMutilActvity;
 import com.zhy.autolayout.utils.AutoUtils;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -107,7 +108,8 @@ public class TongkuanAdapter extends RecyclerView.Adapter<TongkuanAdapter.Tongku
       }
       bundle = new Bundle();
       bundle.putString("product_id", product_id);
-      Intent intent = new Intent(mContext, ProductDetailActvity.class);
+      Log.i("laopo jiaowo lai xunshan", product_id);
+      Intent intent = new Intent(mContext, ProductDetailMutilActvity.class);
       intent.putExtras(bundle);
       mContext.startActivity(intent);
     });

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.model.ProductListBean;
-import com.jimei.xiaolumeimei.ui.activity.ProductDetailActvity;
+import com.jimei.xiaolumeimei.ui.activity.ProductDetailSingleActvity;
 import com.jimei.xiaolumeimei.ui.activity.TongkuanActicity;
 import com.zhy.autolayout.utils.AutoUtils;
 import java.io.UnsupportedEncodingException;
@@ -102,13 +103,14 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.TodayVH> {
 
     holder.card.setOnClickListener(v -> {
 
-      int product_id = 0;
+      String product_id = null;
       int model_id = 0;
       String name = null;
       Bundle bundle;
 
       try {
         product_id = mList.get(position).getProductModel().getId();
+        Log.i("dawang jiaowo lai xunshan", product_id);
         model_id = mList.get(position).getModelId();
         name = mList.get(position).getProductModel().getName();
       } catch (Exception e) {
@@ -116,13 +118,13 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.TodayVH> {
       }
 
       bundle = new Bundle();
-      bundle.putInt("product_id", product_id);
+      bundle.putString("product_id", product_id);
       bundle.putInt("model_id", model_id);
       if (name != null) {
         bundle.putString("name", name.split("/")[0]);
       }
       if (mList.get(position).getProductModel().isIsSingleSpec()) {
-        Intent intent = new Intent(mContext, ProductDetailActvity.class);
+        Intent intent = new Intent(mContext, ProductDetailSingleActvity.class);
         intent.putExtras(bundle);
         mContext.startActivity(intent);
       } else {

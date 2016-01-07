@@ -8,33 +8,34 @@ import java.util.List;
  *
  * Copyright 2015年 上海己美. All rights reserved.
  */
-public class ProductDetailBean {
+public class ProductDetailSingleBean {
 
   /**
-   * id : 23092
-   * url : http://api.xiaolumeimei.com/rest/v1/products/23092
-   * name : 麻花针织百搭打底裤/深灰色
-   * outer_id : 821267560013
-   * category : {"cid":21,"parent_cid":8,"name":"下装","status":"normal","sort_order":100}
-   * pic_path : http://image.xiaolu.so/MG-1451984167745-麻花针织百搭打底裤04.jpg
-   * remain_num : 100
+   * id : 4124
+   * url : http://api.xiaolumeimei.com/rest/v1/products/4124.json
+   * name : 韩版五角星圆领防晒衫-白色
+   * outer_id : 8020333301
+   * category : {"cid":5,"parent_cid":4,"name":"童装","status":"normal","sort_order":50}
+   * pic_path : https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLs3DID6OmflBW9SDFBHYZhZPJ5nva4C3d6brNftWxic89b7mHIkZVdlHlm41vbicZHoSlkvAYqZThmg/0?wx_fmt=jpeg
+   * remain_num : 7
    * is_saleout : false
-   * head_img : http://image.xiaolu.so/MG-1451984152449-麻花针织百搭打底裤01.jpg
-   * is_saleopen : true
-   * is_newgood : true
+   * head_img : https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLs3DID6OmflBW9SDFBHYZhZPJ5nva4C3d6brNftWxic89b7mHIkZVdlHlm41vbicZHoSlkvAYqZThmg/0?wx_fmt=jpeg
+   * is_saleopen : false
+   * is_newgood : false
    * std_sale_price : 199
-   * agent_price : 39.9
-   * sale_time : 2016-01-06
+   * agent_price : 39
+   * sale_time : 2015-05-22
    * offshelf_time : null
    * memo :
-   * lowest_price : 39.9
-   * product_lowest_price : 39.9
-   * product_model : {"id":3901,"name":"麻花针织百搭打底裤","head_imgs":["http://image.xiaolu.so/MG-1451984152449-麻花针织百搭打底裤01.jpg"],"content_imgs":["http://image.xiaolu.so/MG-1451984189097-麻花针织百搭打底裤08.jpg"],"is_single_spec":false,"is_sale_out":false,"buy_limit":false,"per_limit":5}
-   * ware_by : 2
-   * is_verify : true
-   * model_id : 3901
-   * normal_skus : [{"id":90509,"outer_id":"1","name":"均码","remain_num":100,"size_of_sku":{"free_num":"NO","result":{"裤腰":"44-100","臀围":"50-114","裤长":"91"}},"is_saleout":false,"std_sale_price":199,"agent_price":39.9}]
-   * details : {"head_imgs":["http://image.xiaolu.so/MG-1451984167745-麻花针织百搭打底裤04.jpg"],"content_imgs":[],"mama_discount":100,"is_recommend":false,"buy_limit":false,"per_limit":5,"mama_rebeta":0,"material":"针织","wash_instructions":"最高手洗温度为30度，翻面洗涤，减少摩擦，避免起球。使用中性洗涤剂， 平铺晾干，勿暴晒、熨烫。","note":"麻花针织，修身高弹，纯色显瘦。","color":"黑色,浅灰色,深灰色,墨绿色,咖啡色,酒红色"}
+   * lowest_price : 39
+   * product_lowest_price : 39
+   * product_model : null
+   * ware_by : 1
+   * is_verify : false
+   * model_id : null
+   * watermark_op :
+   * normal_skus : [{"id":17070,"outer_id":"1","name":"100","remain_num":1,"size_of_sku":{"free_num":1,"result":"None"},"is_saleout":false,"std_sale_price":199,"agent_price":39},{"id":17071,"outer_id":"2","name":"110","remain_num":0,"size_of_sku":{"free_num":0,"result":"None"},"is_saleout":true,"std_sale_price":199,"agent_price":39},{"id":17072,"outer_id":"3","name":"120","remain_num":1,"size_of_sku":{"free_num":1,"result":"None"},"is_saleout":false,"std_sale_price":199,"agent_price":39},{"id":17073,"outer_id":"4","name":"130","remain_num":3,"size_of_sku":{"free_num":3,"result":"None"},"is_saleout":false,"std_sale_price":199,"agent_price":39},{"id":17074,"outer_id":"5","name":"140","remain_num":2,"size_of_sku":{"free_num":2,"result":"None"},"is_saleout":false,"std_sale_price":199,"agent_price":39}]
+   * details : {"head_imgs":["https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLs3DID6OmflBW9SDFBHYZhZPJ5nva4C3d6brNftWxic89b7mHIkZVdlHlm41vbicZHoSlkvAYqZThmg/0?wx_fmt=jpeg","https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLs3DID6OmflBW9SDFBHYZhZp7brxz5BX3tT7CoAgWJzvzU3bNE2tA2fuP61aic4ASgksL3CSWXHMfA/0?wx_fmt=jpeg"],"content_imgs":["https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLs3DID6OmflBW9SDFBHYZhZDQE1gLLohPSrFFke1FXPDHnUaDhtLRB3l3fwzoBTD1Vu3YSibhnW8gw/0?wx_fmt=jpeg","https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLs3DID6OmflBW9SDFBHYZhZlj6crf7zZ62x3sCTsKfVSFBlD5ia51dmKAVSkJZBhJDyJVCHzOqPGNA/0?wx_fmt=jpeg","https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLs3DID6OmflBW9SDFBHYZhZNEWYjKBSaqGoGgNFv04T6PDFkrRpr83ibxDkTAMrjWNTglZ4WXBSThw/0?wx_fmt=jpeg","https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLs3DID6OmflBW9SDFBHYZhZpdym8gKSDGozZHB62PEUEgiacZ68HPicayxFdcfakewdhAkLjRFctbibg/0?wx_fmt=jpeg"],"mama_discount":100,"is_recommend":false,"buy_limit":false,"per_limit":5,"mama_rebeta":0,"material":null,"wash_instructions":null,"note":null,"color":null}
    */
 
   @SerializedName("id") private int mId;
@@ -42,11 +43,11 @@ public class ProductDetailBean {
   @SerializedName("name") private String mName;
   @SerializedName("outer_id") private String mOuterId;
   /**
-   * cid : 21
-   * parent_cid : 8
-   * name : 下装
+   * cid : 5
+   * parent_cid : 4
+   * name : 童装
    * status : normal
-   * sort_order : 100
+   * sort_order : 50
    */
 
   @SerializedName("category") private CategoryEntity mCategory;
@@ -57,51 +58,41 @@ public class ProductDetailBean {
   @SerializedName("is_saleopen") private boolean mIsSaleopen;
   @SerializedName("is_newgood") private boolean mIsNewgood;
   @SerializedName("std_sale_price") private int mStdSalePrice;
-  @SerializedName("agent_price") private double mAgentPrice;
+  @SerializedName("agent_price") private int mAgentPrice;
   @SerializedName("sale_time") private String mSaleTime;
   @SerializedName("offshelf_time") private Object mOffshelfTime;
   @SerializedName("memo") private String mMemo;
-  @SerializedName("lowest_price") private double mLowestPrice;
-  @SerializedName("product_lowest_price") private double mProductLowestPrice;
-  /**
-   * id : 3901
-   * name : 麻花针织百搭打底裤
-   * head_imgs : ["http://image.xiaolu.so/MG-1451984152449-麻花针织百搭打底裤01.jpg"]
-   * content_imgs : ["http://image.xiaolu.so/MG-1451984189097-麻花针织百搭打底裤08.jpg"]
-   * is_single_spec : false
-   * is_sale_out : false
-   * buy_limit : false
-   * per_limit : 5
-   */
-
-  @SerializedName("product_model") private ProductModelEntity mProductModel;
+  @SerializedName("lowest_price") private int mLowestPrice;
+  @SerializedName("product_lowest_price") private int mProductLowestPrice;
+  @SerializedName("product_model") private Object mProductModel;
   @SerializedName("ware_by") private int mWareBy;
   @SerializedName("is_verify") private boolean mIsVerify;
-  @SerializedName("model_id") private int mModelId;
+  @SerializedName("model_id") private Object mModelId;
+  @SerializedName("watermark_op") private String mWatermarkOp;
   /**
-   * head_imgs : ["http://image.xiaolu.so/MG-1451984167745-麻花针织百搭打底裤04.jpg"]
-   * content_imgs : []
+   * head_imgs : ["https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLs3DID6OmflBW9SDFBHYZhZPJ5nva4C3d6brNftWxic89b7mHIkZVdlHlm41vbicZHoSlkvAYqZThmg/0?wx_fmt=jpeg","https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLs3DID6OmflBW9SDFBHYZhZp7brxz5BX3tT7CoAgWJzvzU3bNE2tA2fuP61aic4ASgksL3CSWXHMfA/0?wx_fmt=jpeg"]
+   * content_imgs : ["https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLs3DID6OmflBW9SDFBHYZhZDQE1gLLohPSrFFke1FXPDHnUaDhtLRB3l3fwzoBTD1Vu3YSibhnW8gw/0?wx_fmt=jpeg","https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLs3DID6OmflBW9SDFBHYZhZlj6crf7zZ62x3sCTsKfVSFBlD5ia51dmKAVSkJZBhJDyJVCHzOqPGNA/0?wx_fmt=jpeg","https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLs3DID6OmflBW9SDFBHYZhZNEWYjKBSaqGoGgNFv04T6PDFkrRpr83ibxDkTAMrjWNTglZ4WXBSThw/0?wx_fmt=jpeg","https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLs3DID6OmflBW9SDFBHYZhZpdym8gKSDGozZHB62PEUEgiacZ68HPicayxFdcfakewdhAkLjRFctbibg/0?wx_fmt=jpeg"]
    * mama_discount : 100
    * is_recommend : false
    * buy_limit : false
    * per_limit : 5
    * mama_rebeta : 0
-   * material : 针织
-   * wash_instructions : 最高手洗温度为30度，翻面洗涤，减少摩擦，避免起球。使用中性洗涤剂， 平铺晾干，勿暴晒、熨烫。
-   * note : 麻花针织，修身高弹，纯色显瘦。
-   * color : 黑色,浅灰色,深灰色,墨绿色,咖啡色,酒红色
+   * material : null
+   * wash_instructions : null
+   * note : null
+   * color : null
    */
 
   @SerializedName("details") private DetailsEntity mDetails;
   /**
-   * id : 90509
+   * id : 17070
    * outer_id : 1
-   * name : 均码
-   * remain_num : 100
-   * size_of_sku : {"free_num":"NO","result":{"裤腰":"44-100","臀围":"50-114","裤长":"91"}}
+   * name : 100
+   * remain_num : 1
+   * size_of_sku : {"free_num":1,"result":"None"}
    * is_saleout : false
    * std_sale_price : 199
-   * agent_price : 39.9
+   * agent_price : 39
    */
 
   @SerializedName("normal_skus") private List<NormalSkusEntity> mNormalSkus;
@@ -154,7 +145,7 @@ public class ProductDetailBean {
     this.mStdSalePrice = stdSalePrice;
   }
 
-  public void setAgentPrice(double agentPrice) {
+  public void setAgentPrice(int agentPrice) {
     this.mAgentPrice = agentPrice;
   }
 
@@ -170,15 +161,15 @@ public class ProductDetailBean {
     this.mMemo = memo;
   }
 
-  public void setLowestPrice(double lowestPrice) {
+  public void setLowestPrice(int lowestPrice) {
     this.mLowestPrice = lowestPrice;
   }
 
-  public void setProductLowestPrice(double productLowestPrice) {
+  public void setProductLowestPrice(int productLowestPrice) {
     this.mProductLowestPrice = productLowestPrice;
   }
 
-  public void setProductModel(ProductModelEntity productModel) {
+  public void setProductModel(Object productModel) {
     this.mProductModel = productModel;
   }
 
@@ -190,8 +181,12 @@ public class ProductDetailBean {
     this.mIsVerify = isVerify;
   }
 
-  public void setModelId(int modelId) {
+  public void setModelId(Object modelId) {
     this.mModelId = modelId;
+  }
+
+  public void setWatermarkOp(String watermarkOp) {
+    this.mWatermarkOp = watermarkOp;
   }
 
   public void setDetails(DetailsEntity details) {
@@ -250,7 +245,7 @@ public class ProductDetailBean {
     return mStdSalePrice;
   }
 
-  public double getAgentPrice() {
+  public int getAgentPrice() {
     return mAgentPrice;
   }
 
@@ -266,15 +261,15 @@ public class ProductDetailBean {
     return mMemo;
   }
 
-  public double getLowestPrice() {
+  public int getLowestPrice() {
     return mLowestPrice;
   }
 
-  public double getProductLowestPrice() {
+  public int getProductLowestPrice() {
     return mProductLowestPrice;
   }
 
-  public ProductModelEntity getProductModel() {
+  public Object getProductModel() {
     return mProductModel;
   }
 
@@ -286,8 +281,12 @@ public class ProductDetailBean {
     return mIsVerify;
   }
 
-  public int getModelId() {
+  public Object getModelId() {
     return mModelId;
+  }
+
+  public String getWatermarkOp() {
+    return mWatermarkOp;
   }
 
   public DetailsEntity getDetails() {
@@ -346,91 +345,16 @@ public class ProductDetailBean {
     }
   }
 
-  public static class ProductModelEntity {
-    @SerializedName("id") private int mId;
-    @SerializedName("name") private String mName;
-    @SerializedName("is_single_spec") private boolean mIsSingleSpec;
-    @SerializedName("is_sale_out") private boolean mIsSaleOut;
-    @SerializedName("buy_limit") private boolean mBuyLimit;
-    @SerializedName("per_limit") private int mPerLimit;
-    @SerializedName("head_imgs") private List<String> mHeadImgs;
-    @SerializedName("content_imgs") private List<String> mContentImgs;
-
-    public void setId(int id) {
-      this.mId = id;
-    }
-
-    public void setName(String name) {
-      this.mName = name;
-    }
-
-    public void setIsSingleSpec(boolean isSingleSpec) {
-      this.mIsSingleSpec = isSingleSpec;
-    }
-
-    public void setIsSaleOut(boolean isSaleOut) {
-      this.mIsSaleOut = isSaleOut;
-    }
-
-    public void setBuyLimit(boolean buyLimit) {
-      this.mBuyLimit = buyLimit;
-    }
-
-    public void setPerLimit(int perLimit) {
-      this.mPerLimit = perLimit;
-    }
-
-    public void setHeadImgs(List<String> headImgs) {
-      this.mHeadImgs = headImgs;
-    }
-
-    public void setContentImgs(List<String> contentImgs) {
-      this.mContentImgs = contentImgs;
-    }
-
-    public int getId() {
-      return mId;
-    }
-
-    public String getName() {
-      return mName;
-    }
-
-    public boolean isIsSingleSpec() {
-      return mIsSingleSpec;
-    }
-
-    public boolean isIsSaleOut() {
-      return mIsSaleOut;
-    }
-
-    public boolean isBuyLimit() {
-      return mBuyLimit;
-    }
-
-    public int getPerLimit() {
-      return mPerLimit;
-    }
-
-    public List<String> getHeadImgs() {
-      return mHeadImgs;
-    }
-
-    public List<String> getContentImgs() {
-      return mContentImgs;
-    }
-  }
-
   public static class DetailsEntity {
     @SerializedName("mama_discount") private int mMamaDiscount;
     @SerializedName("is_recommend") private boolean mIsRecommend;
     @SerializedName("buy_limit") private boolean mBuyLimit;
     @SerializedName("per_limit") private int mPerLimit;
     @SerializedName("mama_rebeta") private int mMamaRebeta;
-    @SerializedName("material") private String mMaterial;
-    @SerializedName("wash_instructions") private String mWashInstructions;
-    @SerializedName("note") private String mNote;
-    @SerializedName("color") private String mColor;
+    @SerializedName("material") private Object mMaterial;
+    @SerializedName("wash_instructions") private Object mWashInstructions;
+    @SerializedName("note") private Object mNote;
+    @SerializedName("color") private Object mColor;
     @SerializedName("head_imgs") private List<String> mHeadImgs;
     @SerializedName("content_imgs") private List<String> mContentImgs;
 
@@ -454,19 +378,19 @@ public class ProductDetailBean {
       this.mMamaRebeta = mamaRebeta;
     }
 
-    public void setMaterial(String material) {
+    public void setMaterial(Object material) {
       this.mMaterial = material;
     }
 
-    public void setWashInstructions(String washInstructions) {
+    public void setWashInstructions(Object washInstructions) {
       this.mWashInstructions = washInstructions;
     }
 
-    public void setNote(String note) {
+    public void setNote(Object note) {
       this.mNote = note;
     }
 
-    public void setColor(String color) {
+    public void setColor(Object color) {
       this.mColor = color;
     }
 
@@ -498,19 +422,19 @@ public class ProductDetailBean {
       return mMamaRebeta;
     }
 
-    public String getMaterial() {
+    public Object getMaterial() {
       return mMaterial;
     }
 
-    public String getWashInstructions() {
+    public Object getWashInstructions() {
       return mWashInstructions;
     }
 
-    public String getNote() {
+    public Object getNote() {
       return mNote;
     }
 
-    public String getColor() {
+    public Object getColor() {
       return mColor;
     }
 
@@ -529,14 +453,14 @@ public class ProductDetailBean {
     @SerializedName("name") private String mName;
     @SerializedName("remain_num") private int mRemainNum;
     /**
-     * free_num : NO
-     * result : {"裤腰":"44-100","臀围":"50-114","裤长":"91"}
+     * free_num : 1
+     * result : None
      */
 
     @SerializedName("size_of_sku") private SizeOfSkuEntity mSizeOfSku;
     @SerializedName("is_saleout") private boolean mIsSaleout;
     @SerializedName("std_sale_price") private int mStdSalePrice;
-    @SerializedName("agent_price") private double mAgentPrice;
+    @SerializedName("agent_price") private int mAgentPrice;
 
     public void setId(int id) {
       this.mId = id;
@@ -566,7 +490,7 @@ public class ProductDetailBean {
       this.mStdSalePrice = stdSalePrice;
     }
 
-    public void setAgentPrice(double agentPrice) {
+    public void setAgentPrice(int agentPrice) {
       this.mAgentPrice = agentPrice;
     }
 
@@ -598,64 +522,28 @@ public class ProductDetailBean {
       return mStdSalePrice;
     }
 
-    public double getAgentPrice() {
+    public int getAgentPrice() {
       return mAgentPrice;
     }
 
     public static class SizeOfSkuEntity {
-      @SerializedName("free_num") private String mFreeNum;
-      /**
-       * 裤腰 : 44-100
-       * 臀围 : 50-114
-       * 裤长 : 91
-       */
+      @SerializedName("free_num") private int mFreeNum;
+      @SerializedName("result") private String mResult;
 
-      @SerializedName("result") private ResultEntity mResult;
-
-      public void setFreeNum(String freeNum) {
+      public void setFreeNum(int freeNum) {
         this.mFreeNum = freeNum;
       }
 
-      public void setResult(ResultEntity result) {
+      public void setResult(String result) {
         this.mResult = result;
       }
 
-      public String getFreeNum() {
+      public int getFreeNum() {
         return mFreeNum;
       }
 
-      public ResultEntity getResult() {
+      public String getResult() {
         return mResult;
-      }
-
-      public static class ResultEntity {
-        @SerializedName("裤腰") private String m裤腰;
-        @SerializedName("臀围") private String m臀围;
-        @SerializedName("裤长") private String m裤长;
-
-        public void set裤腰(String 裤腰) {
-          this.m裤腰 = 裤腰;
-        }
-
-        public void set臀围(String 臀围) {
-          this.m臀围 = 臀围;
-        }
-
-        public void set裤长(String 裤长) {
-          this.m裤长 = 裤长;
-        }
-
-        public String get裤腰() {
-          return m裤腰;
-        }
-
-        public String get臀围() {
-          return m臀围;
-        }
-
-        public String get裤长() {
-          return m裤长;
-        }
       }
     }
   }

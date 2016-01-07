@@ -350,7 +350,7 @@ public class LadyListBean {
     }
 
     public static class ProductModelEntity {
-      @SerializedName("id") private int mId;
+      @SerializedName("id") private String mId;
       @SerializedName("name") private String mName;
       @SerializedName("is_single_spec") private boolean mIsSingleSpec;
       @SerializedName("is_sale_out") private boolean mIsSaleOut;
@@ -359,7 +359,7 @@ public class LadyListBean {
       @SerializedName("head_imgs") private List<String> mHeadImgs;
       @SerializedName("content_imgs") private List<String> mContentImgs;
 
-      public void setId(int id) {
+      public void setId(String id) {
         this.mId = id;
       }
 
@@ -391,7 +391,7 @@ public class LadyListBean {
         this.mContentImgs = contentImgs;
       }
 
-      public int getId() {
+      public String getId() {
         return mId;
       }
 

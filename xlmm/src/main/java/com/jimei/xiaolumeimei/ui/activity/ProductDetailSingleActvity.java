@@ -16,7 +16,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmApi;
-import com.jimei.xiaolumeimei.model.ProductDetailBean;
+import com.jimei.xiaolumeimei.model.ProductDetailSingleBean;
 import com.jimei.xiaolumeimei.okhttp.callback.OkHttpCallback;
 import com.jimei.xiaolumeimei.okhttp.request.OkHttpRequest;
 import com.jimei.xiaolumeimei.utils.DensityUtils;
@@ -31,7 +31,7 @@ import java.util.List;
  *
  * Copyright 2015年 上海己美. All rights reserved.
  */
-public class ProductDetailActvity extends BaseSwipeBackCompatActivity {
+public class ProductDetailSingleActvity extends BaseSwipeBackCompatActivity {
 
   @Bind(R.id.titleImage) ImageView titleImage;
   //@Bind(R.id.toolbar) Toolbar toolbar;
@@ -49,14 +49,16 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity {
 
   @Override protected void initData() {
     new OkHttpRequest.Builder().url(XlmmApi.PRODUCT_URL + productId + "/details")
-        .get(new OkHttpCallback<ProductDetailBean>() {
+        .get(new OkHttpCallback<ProductDetailSingleBean>() {
           @Override public void onError(Request request, Exception e) {
             Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
+            Log.i("什么错误啊", e.getMessage());
+
           }
 
-          @Override public void onResponse(Response response, ProductDetailBean data) {
+          @Override public void onResponse(Response response, ProductDetailSingleBean data) {
             String headImg = data.getPicPath();
-            List<String> contentImgs = data.getProductModel().getContentImgs();
+            List<String> contentImgs = data.getDetails().getContentImgs();
             Log.i("ProductDetailActivity", contentImgs.get(0));
             Log.i("ProductDetailActivity", headImg);
             Glide.with(mContext)
@@ -68,7 +70,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity {
             Glide.with(mContext)
                 .load(contentImgs.get(0))
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .override(DisplayUtils.getScreenW(ProductDetailActvity.this),
+                .override(DisplayUtils.getScreenW(ProductDetailSingleActvity.this),
                     DensityUtils.dip2px(getApplicationContext(), 2500))
                 .centerCrop()
                 .into(imageDetail);
