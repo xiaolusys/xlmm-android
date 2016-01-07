@@ -17,6 +17,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.model.IndexBean;
 import com.jimei.xiaolumeimei.ui.activity.ProductDetailActvity;
 import com.jimei.xiaolumeimei.ui.activity.TongkuanActicity;
+import com.zhy.autolayout.utils.AutoUtils;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -55,6 +56,7 @@ public class PreviousAdapter extends RecyclerView.Adapter<PreviousAdapter.Previo
 
     view = LayoutInflater.from(parent.getContext())
         .inflate(R.layout.item_todaylist, parent, false);
+    AutoUtils.autoSize(view);
     return new PreviousVH(view);
   }
 
@@ -66,7 +68,7 @@ public class PreviousAdapter extends RecyclerView.Adapter<PreviousAdapter.Previo
     holder.childlistName.setText(product_model.getName());
 
     holder.childlistAgentPrice.setText("¥" + products.getAgent_price());
-    holder.childlistStdsalePrice.setText("/" + products.getStd_sale_price());
+    holder.childlistStdsalePrice.setText("/¥" + products.getStd_sale_price());
 
     String headImg = products.getHead_img();
 

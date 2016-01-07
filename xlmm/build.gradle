@@ -63,8 +63,6 @@ dependencies {
 
   compile 'com.zhy:flowlayout-lib:1.0.0'
 
-  compile 'com.zhy:okhttputils:2.0.2'
-
   //兼容到 5.0以下的material desigh dialog效果
   compile('com.github.afollestad.material-dialogs:commons:0.8.5.3@aar') {
     transitive = true

@@ -17,6 +17,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.model.ChildListBean;
 import com.jimei.xiaolumeimei.ui.activity.ProductDetailActvity;
 import com.jimei.xiaolumeimei.ui.activity.TongkuanActicity;
+import com.zhy.autolayout.utils.AutoUtils;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -71,7 +72,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Chil
 
     View view = LayoutInflater.from(parent.getContext())
         .inflate(R.layout.item_childlist, parent, false);
-
+    AutoUtils.autoSize(view);
     return new ChildListVH(view);
   }
 
@@ -91,7 +92,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Chil
     holder.childlistName.setText(productModel.getName());
 
     holder.childlistAgentPrice.setText("¥" + resultsEntity.getAgentPrice());
-    holder.childlistStdsalePrice.setText("/" + resultsEntity.getStdSalePrice());
+    holder.childlistStdsalePrice.setText("/¥" + resultsEntity.getStdSalePrice());
 
     String[] temp = headImg.split("http://image.xiaolu.so/");
     String head_img = "";

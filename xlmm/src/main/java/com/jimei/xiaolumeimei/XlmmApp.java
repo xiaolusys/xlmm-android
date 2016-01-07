@@ -1,10 +1,7 @@
 package com.jimei.xiaolumeimei;
 
 import android.app.Application;
-import android.content.SharedPreferences;
-import android.util.Log;
 import com.jimei.xiaolumeimei.okhttp.OkHttpClientManager;
-import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.squareup.okhttp.OkHttpClient;
 import com.zhy.autolayout.config.AutoLayoutConifg;
 import java.util.concurrent.TimeUnit;
@@ -16,26 +13,22 @@ import java.util.concurrent.TimeUnit;
  */
 public class XlmmApp extends Application {
 
-  public static boolean isLogin;
-
-  public void isLogin() {
-    SharedPreferences mSharedPreferences =
-        getSharedPreferences("login_info", MODE_PRIVATE);
-    isLogin = mSharedPreferences.getBoolean("success", false);
-    Log.i("loginTest", isLogin + "");
-  }
+  //public static boolean isLogin;
+  //
+  //public void isLogin() {
+  //  SharedPreferences mSharedPreferences =
+  //      getSharedPreferences("login_info", MODE_PRIVATE);
+  //  isLogin = mSharedPreferences.getBoolean("success", false);
+  //  Log.i("loginTest", isLogin + "");
+  //}
 
   @Override public void onCreate() {
     super.onCreate();
     initOkHttpClient();
     AutoLayoutConifg.getInstance().useDeviceSize();
-    isLogin();
+    //isLogin();
 
-    if (isLogin) {
-      String[] loginInfo = LoginUtils.getLoginInfo(getApplicationContext());
 
-      LoginUtils.doLogin(getApplicationContext(), loginInfo[0], loginInfo[1]);
-    }
     //CrashWoodpecker.fly().to(this);
   }
 

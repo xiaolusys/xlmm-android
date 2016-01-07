@@ -57,15 +57,6 @@ public class SettingAccountActivity extends Activity {
       // TODO Auto-generated method stub
       try {
 
-        //DefaultHttpClient client = new DefaultHttpClient();
-        //List<NameValuePair> list = new ArrayList<NameValuePair>();
-        //NameValuePair pair1 = new BasicNameValuePair("name", login_name_data);
-        //NameValuePair pair2 = new BasicNameValuePair("password", login_password_data);
-        //list.add(pair1);
-        //list.add(pair2);
-        //
-        //UrlEncodedFormEntity entity = new UrlEncodedFormEntity(list, "UTF-8");
-
         new OkHttpRequest.Builder().url(XlmmApi.SETTINGMYINFO_URL)
             .addParams("name", login_name_data)
             .addParams("password", login_password_data)
@@ -78,26 +69,6 @@ public class SettingAccountActivity extends Activity {
 
               }
             });
-
-        //MainUrl url = new MainUrl();
-        //
-        //Log.e("Info 发送", url.getSETTINGMYINFO_URL());
-        //HttpPost post = new HttpPost(url.getSETTINGMYINFO_URL());
-        //post.setEntity(entity);
-        //
-        //HttpResponse response = client.execute(post);
-        //InputStream isr = response.getEntity().getContent();
-        //BufferedReader br = new BufferedReader(new InputStreamReader(isr, "gbk"));
-        //
-        //String line = null;
-        //StringBuffer sb = new StringBuffer();
-        //while ((line = br.readLine()) != null) {
-        //    sb.append(line);
-        //}
-        //
-        //jsonArray = new JSONArray(sb.toString());
-        //
-        //Log.d("个人信息jsonArray", jsonArray.toString());
 
         showMeg(jsonArray);
       } catch (Exception e) {

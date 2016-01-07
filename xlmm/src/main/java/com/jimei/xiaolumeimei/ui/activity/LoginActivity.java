@@ -20,6 +20,7 @@ import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.model.UserBean;
 import com.jimei.xiaolumeimei.okhttp.callback.OkHttpCallback;
 import com.jimei.xiaolumeimei.okhttp.request.OkHttpRequest;
+import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
@@ -28,7 +29,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
   String login_name_value;//登录名
   String login_pass_value;//登录密码
 
-  boolean isLogin;//判断是否登录
+  //boolean isLogin;//判断是否登录
   @Bind(R.id.set_login_name) EditText nameEditText;
   @Bind(R.id.set_login_password) EditText passEditText;
   @Bind(R.id.set_login_button) Button login_button;
@@ -87,9 +88,9 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
   @Override public void onClick(View v) {
     switch (v.getId()) {
       case R.id.set_login_button:
-        MaterialDialog dialog =
-            new MaterialDialog.Builder(this).content("正在登录onon").theme(Theme.DARK)
-                .build();
+        MaterialDialog dialog = new MaterialDialog.Builder(this).content("正在登录......")
+            .theme(Theme.LIGHT)
+            .build();
 
         login_name_value = nameEditText.getText().toString().trim();
         login_pass_value = passEditText.getText().toString().trim();
@@ -115,7 +116,8 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                 Log.i(TAG, data.toString());
                 if (data.getCode() == 0 && data.getResult().equals("login")) {
 
-                  saveLoginInfo(true);
+                  LoginUtils.saveLoginInfo(true, getApplicationContext(),
+                      login_name_value, login_pass_value);
 
                   Toast.makeText(mContext, "登录成功", Toast.LENGTH_SHORT).show();
                   Intent intent = new Intent(mContext, MainActivity.class);
@@ -124,7 +126,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                   finish();
                 } else {
 
-                  saveLoginInfo(false);
+                  LoginUtils.saveLoginInfo(false, getApplicationContext(), "", "");
 
                   dialog.dismiss();
                   Toast.makeText(mContext, "用户名或者密码错误,请检查", Toast.LENGTH_SHORT).show();
@@ -140,16 +142,6 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
 
         break;
     }
-  }
-
-  //保存登录信息
-  private void saveLoginInfo(boolean isSuccess) {
-
-    editor = sharedPreferences.edit();
-    editor.putString("name", login_name_value);
-    editor.putString("password", login_pass_value);
-    editor.putBoolean("success", isSuccess);
-    editor.apply();
   }
 }
 

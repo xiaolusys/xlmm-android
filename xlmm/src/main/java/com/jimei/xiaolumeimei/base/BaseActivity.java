@@ -1,9 +1,8 @@
 package com.jimei.xiaolumeimei.base;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import butterknife.ButterKnife;
+import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.zhy.autolayout.AutoLayoutActivity;
 
 /**
@@ -13,9 +12,6 @@ import com.zhy.autolayout.AutoLayoutActivity;
  */
 public abstract class BaseActivity extends AutoLayoutActivity {
 
-  private SharedPreferences sharedPreferences;
-
-
   abstract protected int provideContentViewId();
 
   @Override protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +20,11 @@ public abstract class BaseActivity extends AutoLayoutActivity {
     setContentView(provideContentViewId());
     ButterKnife.bind(this);
 
+    String[] loginInfo = LoginUtils.getLoginInfo(getApplicationContext());
+    boolean b = Boolean.parseBoolean(loginInfo[2]);
+    if (b) {
+      LoginUtils.doLogin(loginInfo[0], loginInfo[1]);
+    }
 
     if (savedInstanceState == null) {
       initView();
@@ -43,13 +44,5 @@ public abstract class BaseActivity extends AutoLayoutActivity {
   @Override protected void onDestroy() {
     super.onDestroy();
     ButterKnife.unbind(this);
-  }
-
-  public boolean IsLogined() {
-
-    sharedPreferences =
-        getApplicationContext().getSharedPreferences("login_info", Context.MODE_PRIVATE);
-
-    return sharedPreferences.getBoolean("success", false);
   }
 }

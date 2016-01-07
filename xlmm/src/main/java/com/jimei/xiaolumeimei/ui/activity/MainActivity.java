@@ -20,6 +20,7 @@ import com.jimei.xiaolumeimei.ui.fragment.ChildListFragment;
 import com.jimei.xiaolumeimei.ui.fragment.LadyListFragment;
 import com.jimei.xiaolumeimei.ui.fragment.PreviousFragment;
 import com.jimei.xiaolumeimei.ui.fragment.TodayFragment;
+import com.jimei.xiaolumeimei.utils.LoginUtils;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,7 +99,10 @@ public class MainActivity extends BaseActivity
 
     int id = item.getItemId();
 
-    if (!IsLogined()) {
+    String[] loginInfo = LoginUtils.getLoginInfo(getApplicationContext());
+    boolean b = Boolean.parseBoolean(loginInfo[2]);
+
+    if (!b) {
             /*未登录进入登录界面*/
       startActivity(new Intent(MainActivity.this, LoginActivity.class));
     } else {
@@ -134,8 +138,6 @@ public class MainActivity extends BaseActivity
       super.onBackPressed();
     }
   }
-
-
 
   class MainTabAdapter extends FragmentPagerAdapter {
     private List<Fragment> listFragment;

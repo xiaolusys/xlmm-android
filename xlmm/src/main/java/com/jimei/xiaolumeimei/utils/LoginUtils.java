@@ -2,7 +2,7 @@ package com.jimei.xiaolumeimei.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.widget.Toast;
+import android.util.Log;
 import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.model.UserBean;
 import com.jimei.xiaolumeimei.okhttp.callback.OkHttpCallback;
@@ -31,7 +31,7 @@ public class LoginUtils {
   }
 
   //登录
-  public static void doLogin(Context context, String name, String password) {
+  public static void doLogin(String name, String password) {
     new OkHttpRequest.Builder().url(XlmmApi.LOGIN_URL)
         .addParams("username", name)
         .addParams("password", password)
@@ -43,11 +43,10 @@ public class LoginUtils {
 
           @Override public void onResponse(Response response, UserBean data) {
             if (data.getCode() == 0 && data.getResult().equals("login")) {
-              Toast.makeText(context, "登录成功", Toast.LENGTH_SHORT).show();
-              saveLoginInfo(true, context, name, password);
+              //Toast.makeText(context, "登录成功", Toast.LENGTH_SHORT).show();
+              Log.i("Login", "登录成功");
             } else {
 
-              saveLoginInfo(false, context, name, password);
             }
           }
         });
@@ -60,7 +59,8 @@ public class LoginUtils {
 
     String username = sharedPreferences.getString("username", "");
     String password = sharedPreferences.getString("password", "");
+    boolean success = sharedPreferences.getBoolean("success", false);
 
-    return new String[] { username, password };
+    return new String[] { username, password, success + "" };
   }
 }

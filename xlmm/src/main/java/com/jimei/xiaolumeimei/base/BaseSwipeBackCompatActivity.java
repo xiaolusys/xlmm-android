@@ -22,7 +22,7 @@ import com.jimei.xiaolumeimei.swipeback.SwipeBackActivityBase;
 import com.jimei.xiaolumeimei.swipeback.SwipeBackActivityHelper;
 import com.jimei.xiaolumeimei.swipeback.SwipeBackLayout;
 import com.jimei.xiaolumeimei.swipeback.Utils;
-
+import com.jimei.xiaolumeimei.utils.LoginUtils;
 
 public abstract class BaseSwipeBackCompatActivity extends BaseAppCompatActivity
     implements SwipeBackActivityBase {
@@ -32,6 +32,12 @@ public abstract class BaseSwipeBackCompatActivity extends BaseAppCompatActivity
     super.onCreate(savedInstanceState);
     mHelper = new SwipeBackActivityHelper(this);
     mHelper.onActivityCreate();
+
+    String[] loginInfo = LoginUtils.getLoginInfo(getApplicationContext());
+    boolean b = Boolean.parseBoolean(loginInfo[2]);
+    if (b) {
+      LoginUtils.doLogin(loginInfo[0], loginInfo[1]);
+    }
   }
 
   @Override protected void onPostCreate(Bundle savedInstanceState) {

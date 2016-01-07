@@ -16,6 +16,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.model.ProductBean;
 import com.jimei.xiaolumeimei.ui.activity.ProductDetailActvity;
+import com.zhy.autolayout.utils.AutoUtils;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -55,6 +56,7 @@ public class TongkuanAdapter extends RecyclerView.Adapter<TongkuanAdapter.Tongku
 
     view = LayoutInflater.from(parent.getContext())
         .inflate(R.layout.item_todaylist, parent, false);
+    AutoUtils.autoSize(view);
     return new TongkuanVH(view);
   }
 
@@ -64,7 +66,7 @@ public class TongkuanAdapter extends RecyclerView.Adapter<TongkuanAdapter.Tongku
     holder.childlistName.setText(productBean.name);
 
     holder.childlistAgentPrice.setText("¥" + productBean.agent_price);
-    holder.childlistStdsalePrice.setText("/" + productBean.std_sale_price);
+    holder.childlistStdsalePrice.setText("/¥" + productBean.std_sale_price);
 
     String headImg = productBean.pic_path;
 
