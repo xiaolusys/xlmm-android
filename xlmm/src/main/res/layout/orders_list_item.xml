@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical" >
 
-	<LinearLayout
+	<RelativeLayout
 		android:layout_width="fill_parent"
 		android:layout_weight="1"
 		android:layout_height="wrap_content"
@@ -14,18 +14,20 @@
 			android:layout_width="wrap_content"
 			android:layout_height="match_parent"
 			android:text="@string/productprice"
-			android:textSize="12sp" />
+			android:textSize="15sp" />
 
 		<TextView
 			android:id="@+id/tx_order_state"
 			android:layout_width="wrap_content"
 			android:layout_height="match_parent"
-			android:layout_toRightOf="@+id/tx_order_actual_payment"
-			android:layout_marginLeft="20dp"
-			android:text="交易关闭" />
-	</LinearLayout>
+			android:text="交易关闭"
+			android:textSize="15sp"
+			android:layout_alignParentTop="true"
+			android:layout_alignParentRight="true"
+			android:layout_alignParentEnd="true" />
+	</RelativeLayout>
 
-	<ListView
+	<so.xiaolu.xiaolu.customwidget.NestedListView
 		android:id="@+id/goods_listview"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"

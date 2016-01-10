@@ -49,6 +49,7 @@ import so.xiaolu.xiaolu.mainframe.TodayFragment;
 import so.xiaolu.xiaolu.mainframe.WomanFragment;
 import so.xiaolu.xiaolu.mainframe.YesterdayFragment;
 import so.xiaolu.xiaolu.mainsetting.SettingLoginActivity;
+import so.xiaolu.xiaolu.orders.AllOrdersActivity;
 import so.xiaolu.xiaolu.trade.TradeCommodityActivity;
 
 public class MainActivity extends AppCompatActivity
@@ -342,6 +343,7 @@ public class MainActivity extends AppCompatActivity
             } else if (id == R.id.nav_returned) {
 
             } else if (id == R.id.nav_orders) {
+                startActivity(new Intent(MainActivity.this, AllOrdersActivity.class));
 
             } else if (id == R.id.nav_setting) {
 
@@ -363,21 +365,7 @@ public class MainActivity extends AppCompatActivity
 
     public boolean IsLogined() {
         boolean bLoginState = false;
-        /*
-        Cursor c= TableManager.getInstance(MainActivity.this).skiptofirst("UserDetail");
 
-        try {
-            if (c != null && c.getInt(2) == 1) {
-                bLoginState = true;
-            }
-            else {
-                bLoginState = false;
-            }
-        }
-        catch (Exception e) {
-            Log.d(TAG,"query login state fail.");
-            bLoginState = false;
-        }*/
         try {
             sharedPreferences = getApplicationContext().getSharedPreferences("login_info", Context.MODE_PRIVATE);
             if (sharedPreferences.getString("success", "") == "true") {
@@ -393,7 +381,7 @@ public class MainActivity extends AppCompatActivity
         }
         Log.d(TAG,"query login state "+bLoginState);
 
-        return bLoginState;
-        //return true;
+        //return bLoginState;
+        return true;
     }
 }
