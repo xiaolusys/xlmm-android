@@ -41,8 +41,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.squareup.okhttp.FormEncodingBuilder;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
 
 import so.xiaolu.xiaolu.UI.MainActivity;
+import so.xiaolu.xiaolu.jsonbean.AllOrdersBean;
 import so.xiaolu.xiaolu.mainframe.*;
 
 public class SettingLoginActivity extends AppCompatActivity {
@@ -82,6 +87,7 @@ public class SettingLoginActivity extends AppCompatActivity {
                 Log.d(TAG, "login_button click");
                 mThread thread = new mThread();
                 thread.start();
+                //post_login_info();
             }
         });
 
@@ -134,31 +140,6 @@ public class SettingLoginActivity extends AppCompatActivity {
 
 
     }
-
-
-//		/*******************/
-//		mShare();
-//		String name=sharedPreferences.getString("name", "");
-//		String password=sharedPreferences.getString("password","");
-//		login_name_value=login_name.getText().toString();
-//		login_pass_value=login_pass.getText().toString();
-//
-//		if(login_name_value.equals(name)&&login_pass_value.equals(password)){
-//
-//			//editor.putString("success", "true");
-//			//editor.commit();
-//			Toast toast1=Toast.makeText(this,"登陆成功"+sharedPreferences.getString("name",""), Toast.LENGTH_SHORT);
-//			toast1.show();
-//			editor.putString("success", "true");
-//			editor.commit();
-//			Intent intent=new Intent(this, MainFrameActivity.class);
-//			startActivity(intent);
-//
-//		}else{
-//			Toast toast=Toast.makeText(this, "用户名或密码错误", Toast.LENGTH_SHORT);
-//			toast.show();
-//		}
-
 
     public class mThread extends Thread {
 
