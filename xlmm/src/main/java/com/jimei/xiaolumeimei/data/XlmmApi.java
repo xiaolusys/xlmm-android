@@ -12,11 +12,11 @@ public class XlmmApi {
   public static final String LOGIN_URL = URL_BASE + "register/customer_login";
   //首页网址(商品、海报)
   public static final String TODAY_URL = URL_BASE + "products/promote_today_paging";
-  public static final String TODAY_POSTER_URL = URL_BASE + "posters/today.json";
+  public static final String TODAY_POSTER_URL = URL_BASE + "posters/today";
 
   //昨日特卖(商品、海报)
   public static final String YESTERDAY_URL = URL_BASE + "products/promote_previous.json";
-  public static final String YESTERDAY_POSTER_URL = URL_BASE + "posters/previous.json";
+  public static final String YESTERDAY_POSTER_URL = URL_BASE + "posters/previous";
 
   // 女装链接
   public static final String WOMAN_URL = URL_BASE + "products/ladylist";
@@ -34,4 +34,32 @@ public class XlmmApi {
 
   public static final String SETTINGREGISTER_URL =
       URL_BASE + "/xueZhang/servlet/AndroidRegisterSev";
+
+  public static class WRAPPER {
+    public static final String STATUS = "status";
+    public static final String INFO = "info";
+    public static final String DATA = "data";
+  }
+
+  public static class CODE {
+    public static final int SUCCEED = 0;
+
+    public static final int ANALYSIS_ERROR = -1;
+    public static final int NET_INVALID = -2;
+
+
+    public static final int SMS_ERROR = 1;
+    public static final int RONG_ERROR = 2;
+    public static final int QINIU_ERROR = 3;
+    public static final int PARAMS_ERROR = 9;
+    public static final int PARAMS_INVALID = 10;
+
+    public static final int SERVER_ERROR = 100;
+
+    public static final int LOGIN_INVALID= 400;
+    public static final int PERMISSION_DENIED = 401;
+
+    public static final int USER_INVALID = 1001;
+
+  }
 }

@@ -17,10 +17,11 @@ import com.afollestad.materialdialogs.Theme;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmApi;
-import com.jimei.xiaolumeimei.model.UserBean;
+import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.okhttp.callback.OkHttpCallback;
 import com.jimei.xiaolumeimei.okhttp.request.OkHttpRequest;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
+import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
@@ -109,11 +110,16 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
               }
 
               @Override public void onError(Request request, Exception e) {
-
               }
 
               @Override public void onResponse(Response response, UserBean data) {
                 Log.i(TAG, data.toString());
+                Headers headers = response.headers();
+                //String s = headers.get("asaa");
+                //Log.i("我来测试的", s);
+                for (int i = 0; i < headers.size(); i++) {
+                  Log.i("我来测试的", headers.name(i) + ": " + headers.value(i));
+                }
                 if (data.getCode() == 0 && data.getResult().equals("login")) {
 
                   LoginUtils.saveLoginInfo(true, getApplicationContext(),

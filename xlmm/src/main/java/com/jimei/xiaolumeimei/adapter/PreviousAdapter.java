@@ -14,7 +14,7 @@ import butterknife.ButterKnife;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.model.IndexBean;
+import com.jimei.xiaolumeimei.entities.IndexBean;
 import com.jimei.xiaolumeimei.ui.activity.ProductDetailSingleActvity;
 import com.jimei.xiaolumeimei.ui.activity.TongkuanActicity;
 import com.zhy.autolayout.utils.AutoUtils;

@@ -15,7 +15,7 @@ import butterknife.ButterKnife;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.model.ProductBean;
+import com.jimei.xiaolumeimei.entities.ProductBean;
 import com.jimei.xiaolumeimei.ui.activity.ProductDetailMutilActvity;
 import com.zhy.autolayout.utils.AutoUtils;
 import java.io.UnsupportedEncodingException;
@@ -106,6 +106,7 @@ public class TongkuanAdapter extends RecyclerView.Adapter<TongkuanAdapter.Tongku
       } catch (Exception e) {
         e.printStackTrace();
       }
+
       bundle = new Bundle();
       bundle.putString("product_id", product_id);
       Log.i("laopo jiaowo lai xunshan", product_id);

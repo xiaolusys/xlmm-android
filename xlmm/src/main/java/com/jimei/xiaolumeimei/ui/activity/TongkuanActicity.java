@@ -10,7 +10,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.TongkuanAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmApi;
-import com.jimei.xiaolumeimei.model.ProductBean;
+import com.jimei.xiaolumeimei.entities.ProductBean;
 import com.jimei.xiaolumeimei.okhttp.callback.OkHttpCallback;
 import com.jimei.xiaolumeimei.okhttp.request.OkHttpRequest;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;

@@ -14,7 +14,7 @@ import butterknife.ButterKnife;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.model.ChildListBean;
+import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.ui.activity.ProductDetailSingleActvity;
 import com.jimei.xiaolumeimei.ui.activity.TongkuanActicity;
 import com.zhy.autolayout.utils.AutoUtils;
@@ -125,7 +125,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Chil
       Bundle bundle;
 
       try {
-        product_id = mList.get(position).getProductModel().getId();
+        product_id = mList.get(position).getId();
         model_id = mList.get(position).getModelId();
         name = mList.get(position).getProductModel().getName();
       } catch (Exception e) {

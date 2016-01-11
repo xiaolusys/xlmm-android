@@ -15,7 +15,7 @@ import butterknife.ButterKnife;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.model.ProductListBean;
+import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.ui.activity.ProductDetailSingleActvity;
 import com.jimei.xiaolumeimei.ui.activity.TongkuanActicity;
 import com.zhy.autolayout.utils.AutoUtils;
@@ -109,7 +109,7 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.TodayVH> {
       Bundle bundle;
 
       try {
-        product_id = mList.get(position).getProductModel().getId();
+        product_id = mList.get(position).getId();
         Log.i("dawang jiaowo lai xunshan", product_id);
         model_id = mList.get(position).getModelId();
         name = mList.get(position).getProductModel().getName();

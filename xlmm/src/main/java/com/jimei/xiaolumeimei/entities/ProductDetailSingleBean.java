@@ -1,4 +1,4 @@
-package com.jimei.xiaolumeimei.model;
+package com.jimei.xiaolumeimei.entities;
 
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
@@ -58,12 +58,12 @@ public class ProductDetailSingleBean {
   @SerializedName("is_saleopen") private boolean mIsSaleopen;
   @SerializedName("is_newgood") private boolean mIsNewgood;
   @SerializedName("std_sale_price") private double mStdSalePrice;
-  @SerializedName("agent_price") private int mAgentPrice;
+  @SerializedName("agent_price") private double mAgentPrice;
   @SerializedName("sale_time") private String mSaleTime;
   @SerializedName("offshelf_time") private Object mOffshelfTime;
   @SerializedName("memo") private String mMemo;
-  @SerializedName("lowest_price") private int mLowestPrice;
-  @SerializedName("product_lowest_price") private int mProductLowestPrice;
+  @SerializedName("lowest_price") private double mLowestPrice;
+  @SerializedName("product_lowest_price") private double mProductLowestPrice;
   @SerializedName("product_model") private Object mProductModel;
   @SerializedName("ware_by") private int mWareBy;
   @SerializedName("is_verify") private boolean mIsVerify;
@@ -245,7 +245,7 @@ public class ProductDetailSingleBean {
     return mStdSalePrice;
   }
 
-  public int getAgentPrice() {
+  public double getAgentPrice() {
     return mAgentPrice;
   }
 
@@ -261,11 +261,11 @@ public class ProductDetailSingleBean {
     return mMemo;
   }
 
-  public int getLowestPrice() {
+  public double getLowestPrice() {
     return mLowestPrice;
   }
 
-  public int getProductLowestPrice() {
+  public double getProductLowestPrice() {
     return mProductLowestPrice;
   }
 
@@ -459,8 +459,8 @@ public class ProductDetailSingleBean {
 
     @SerializedName("size_of_sku") private SizeOfSkuEntity mSizeOfSku;
     @SerializedName("is_saleout") private boolean mIsSaleout;
-    @SerializedName("std_sale_price") private int mStdSalePrice;
-    @SerializedName("agent_price") private int mAgentPrice;
+    @SerializedName("std_sale_price") private double mStdSalePrice;
+    @SerializedName("agent_price") private double mAgentPrice;
 
     public void setId(int id) {
       this.mId = id;
@@ -518,11 +518,11 @@ public class ProductDetailSingleBean {
       return mIsSaleout;
     }
 
-    public int getStdSalePrice() {
+    public double getStdSalePrice() {
       return mStdSalePrice;
     }
 
-    public int getAgentPrice() {
+    public double getAgentPrice() {
       return mAgentPrice;
     }
 

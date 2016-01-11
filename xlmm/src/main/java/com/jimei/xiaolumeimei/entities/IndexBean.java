@@ -1,4 +1,4 @@
-package com.jimei.xiaolumeimei.model;
+package com.jimei.xiaolumeimei.entities;
 
 import java.io.Serializable;
 import java.util.List;

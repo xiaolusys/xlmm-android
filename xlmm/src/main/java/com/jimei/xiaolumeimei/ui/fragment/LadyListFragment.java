@@ -6,15 +6,13 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.LadyListAdapter;
 import com.jimei.xiaolumeimei.base.BaseFragment;
-import com.jimei.xiaolumeimei.data.XlmmApi;
-import com.jimei.xiaolumeimei.model.LadyListBean;
-import com.jimei.xiaolumeimei.okhttp.callback.OkHttpCallback;
-import com.jimei.xiaolumeimei.okhttp.request.OkHttpRequest;
+import com.jimei.xiaolumeimei.entities.LadyListBean;
+import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
+import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.victor.loading.rotate.RotateLoading;
 import java.util.List;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 15/12/29.
@@ -23,6 +21,7 @@ import java.util.List;
  */
 public class LadyListFragment extends BaseFragment {
 
+  ProductModel model = new ProductModel();
   private XRecyclerView xRecyclerView;
   private LadyListAdapter mLadyListAdapter;
   private RotateLoading loading;
@@ -34,16 +33,21 @@ public class LadyListFragment extends BaseFragment {
   @Override protected void initData() {
     loading.start();
 
-    new OkHttpRequest.Builder().url(XlmmApi.WOMAN_URL)
-        .get(new OkHttpCallback<LadyListBean>() {
-          @Override public void onError(Request request, Exception e) {
+    model.getLadyList()
+        .subscribeOn(Schedulers.newThread())
+        .subscribe(new ServiceResponse<LadyListBean>() {
+          @Override public void onNext(LadyListBean ladyListBean) {
+            List<LadyListBean.ResultsEntity> results = ladyListBean.getResults();
+            mLadyListAdapter.update(results);
+          }
+
+          @Override public void onError(Throwable e) {
+            super.onError(e);
             loading.stop();
           }
 
-          @Override public void onResponse(Response response, LadyListBean data) {
-            List<LadyListBean.ResultsEntity> results = data.getResults();
-            mLadyListAdapter.update(results);
-            mLadyListAdapter.notifyDataSetChanged();
+          @Override public void onCompleted() {
+            super.onCompleted();
             loading.stop();
           }
         });
@@ -72,21 +76,21 @@ public class LadyListFragment extends BaseFragment {
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
       @Override public void onRefresh() {
-        //xRecyclerView.postDelayed(new Runnable() {
-        //  @Override public void run() {
-        //    xRecyclerView.refreshComplete();
-        //  }
-        //}, 3000);
-
-        new OkHttpRequest.Builder().url(XlmmApi.WOMAN_URL)
-            .get(new OkHttpCallback<LadyListBean>() {
-              @Override public void onError(Request request, Exception e) {
+        model.getLadyList()
+            .subscribeOn(Schedulers.newThread())
+            .subscribe(new ServiceResponse<LadyListBean>() {
+              @Override public void onNext(LadyListBean ladyListBean) {
+                List<LadyListBean.ResultsEntity> results = ladyListBean.getResults();
+                mLadyListAdapter.updateWithClear(results);
               }
 
-              @Override public void onResponse(Response response, LadyListBean data) {
-                List<LadyListBean.ResultsEntity> results = data.getResults();
-                mLadyListAdapter.updateWithClear(results);
-                mLadyListAdapter.notifyDataSetChanged();
+              @Override public void onError(Throwable e) {
+                super.onError(e);
+                xRecyclerView.refreshComplete();
+              }
+
+              @Override public void onCompleted() {
+                super.onCompleted();
                 xRecyclerView.refreshComplete();
               }
             });

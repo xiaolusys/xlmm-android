@@ -16,7 +16,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmApi;
-import com.jimei.xiaolumeimei.model.ProductDetailMutilBean;
+import com.jimei.xiaolumeimei.entities.ProductDetailMutilBean;
 import com.jimei.xiaolumeimei.okhttp.callback.OkHttpCallback;
 import com.jimei.xiaolumeimei.okhttp.request.OkHttpRequest;
 import com.jimei.xiaolumeimei.utils.DensityUtils;
@@ -53,10 +53,10 @@ public class ProductDetailMutilActvity extends BaseSwipeBackCompatActivity {
           @Override public void onError(Request request, Exception e) {
             Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
             Log.i("什么错误啊", e.getMessage());
-
           }
 
-          @Override public void onResponse(Response response, ProductDetailMutilBean data) {
+          @Override
+          public void onResponse(Response response, ProductDetailMutilBean data) {
             String headImg = data.getPicPath();
             List<String> contentImgs = data.getProductModel().getContentImgs();
             Log.i("ProductDetailActivity", contentImgs.get(0));
@@ -92,21 +92,23 @@ public class ProductDetailMutilActvity extends BaseSwipeBackCompatActivity {
     Window window = getWindow();
     //4.4版本及以上
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-      window.setFlags(
-          WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+      window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
           WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
     }
     //5.0版本及以上
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
       window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
           | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-      window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-          | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-          | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+      window.getDecorView()
+          .setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+              | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+              | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
       window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
       window.setStatusBarColor(Color.TRANSPARENT);
       window.setNavigationBarColor(Color.TRANSPARENT);
-  }}
+    }
+  }
+
   @Override protected boolean toggleOverridePendingTransition() {
     return false;
   }

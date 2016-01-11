@@ -15,15 +15,19 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.TodayAdapter;
 import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.data.XlmmApi;
-import com.jimei.xiaolumeimei.model.PostBean;
-import com.jimei.xiaolumeimei.model.ProductListBean;
+import com.jimei.xiaolumeimei.entities.PostBean;
+import com.jimei.xiaolumeimei.entities.ProductListBean;
+import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.okhttp.callback.OkHttpCallback;
 import com.jimei.xiaolumeimei.okhttp.request.OkHttpRequest;
+import com.jimei.xiaolumeimei.widget.CountdownView;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
+import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 import com.victor.loading.rotate.RotateLoading;
 import java.util.List;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 15/12/29.
@@ -32,6 +36,7 @@ import java.util.List;
  */
 public class TodayFragment extends BaseFragment {
   int page_size = 10;
+  ProductModel model = new ProductModel();
   private XRecyclerView xRecyclerView;
   private TodayAdapter mTodayAdapter;
   private View head;
@@ -47,17 +52,22 @@ public class TodayFragment extends BaseFragment {
 
   @Override protected void initData() {
     loading.start();
-    new OkHttpRequest.Builder().url(XlmmApi.TODAY_URL + "?page=1&page_size=" + page_size)
-        .get(new OkHttpCallback<ProductListBean>() {
-          @Override public void onError(Request request, Exception e) {
-            Toast.makeText(activity, e.getMessage(), Toast.LENGTH_SHORT).show();
+    model.getTodayList(1, 10)
+        .subscribeOn(Schedulers.newThread())
+        .subscribe(new ServiceResponse<ProductListBean>() {
+          @Override public void onNext(ProductListBean productListBean) {
+            List<ProductListBean.ResultsEntity> results = productListBean.getResults();
+            totalPages = productListBean.getCount() / page_size + 1;
+            mTodayAdapter.update(results);
           }
 
-          @Override public void onResponse(Response response, ProductListBean data) {
-            List<ProductListBean.ResultsEntity> list = data.getResults();
-            totalPages = data.getCount() / page_size + 1;
-            mTodayAdapter.update(list);
-            mTodayAdapter.notifyDataSetChanged();
+          //@Override public void onError(Throwable e) {
+          //  super.onError(e);
+          //  loading.stop();
+          //}
+
+          @Override public void onCompleted() {
+            super.onCompleted();
             loading.stop();
           }
         });
@@ -83,6 +93,9 @@ public class TodayFragment extends BaseFragment {
 
     post1 = (ImageView) head.findViewById(R.id.post_1);
     post2 = (ImageView) head.findViewById(R.id.post_2);
+
+    CountdownView countdownView = (CountdownView) head.findViewById(R.id.countTime);
+    countdownView.start(10000000);
 
     xRecyclerView.addHeaderView(head);
 
@@ -116,18 +129,22 @@ public class TodayFragment extends BaseFragment {
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
       @Override public void onRefresh() {
-        new OkHttpRequest.Builder().url(
-            XlmmApi.TODAY_URL + "?page=1&page_size=" + page * page_size)
-            .get(new OkHttpCallback<ProductListBean>() {
-              @Override public void onError(Request request, Exception e) {
-
+        model.getTodayList(1, page * page_size)
+            .subscribeOn(Schedulers.newThread())
+            .subscribe(new ServiceResponse<ProductListBean>() {
+              @Override public void onNext(ProductListBean productListBean) {
+                List<ProductListBean.ResultsEntity> results =
+                    productListBean.getResults();
+                mTodayAdapter.updateWithClear(results);
               }
 
-              @Override public void onResponse(Response response, ProductListBean data) {
-                List<ProductListBean.ResultsEntity> list = data.getResults();
+              @Override public void onError(Throwable e) {
+                super.onError(e);
+                xRecyclerView.refreshComplete();
+              }
 
-                mTodayAdapter.updateWithClear(list);
-                mTodayAdapter.notifyDataSetChanged();
+              @Override public void onCompleted() {
+                super.onCompleted();
                 xRecyclerView.refreshComplete();
               }
             });
@@ -148,18 +165,22 @@ public class TodayFragment extends BaseFragment {
   }
 
   private void loadMoreData(int page, int page_size) {
-    new OkHttpRequest.Builder().url(
-        XlmmApi.TODAY_URL + "?page=" + page + "&page_size=" + page_size)
-        .get(new OkHttpCallback<ProductListBean>() {
-          @Override public void onError(Request request, Exception e) {
-            Log.i("xlmm", e.getMessage());
+
+    model.getTodayList(page, page_size)
+        .subscribeOn(Schedulers.newThread())
+        .subscribe(new ServiceResponse<ProductListBean>() {
+          @Override public void onNext(ProductListBean productListBean) {
+            List<ProductListBean.ResultsEntity> results = productListBean.getResults();
+            mTodayAdapter.update(results);
           }
 
-          @Override public void onResponse(Response response, ProductListBean data) {
-            List<ProductListBean.ResultsEntity> list = data.getResults();
+          @Override public void onError(Throwable e) {
+            super.onError(e);
+            xRecyclerView.loadMoreComplete();
+          }
 
-            mTodayAdapter.update(list);
-            mTodayAdapter.notifyDataSetChanged();
+          @Override public void onCompleted() {
+            super.onCompleted();
             xRecyclerView.loadMoreComplete();
           }
         });

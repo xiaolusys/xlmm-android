@@ -1,4 +1,4 @@
-package com.jimei.xiaolumeimei.model;
+package com.jimei.xiaolumeimei.entities;
 
 import com.google.gson.annotations.SerializedName;
 

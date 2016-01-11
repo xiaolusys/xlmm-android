@@ -1,4 +1,4 @@
-package com.jimei.xiaolumeimei.model;
+package com.jimei.xiaolumeimei.entities;
 
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
@@ -80,7 +80,7 @@ public class ProductListBean {
   }
 
   public static class ResultsEntity {
-    @SerializedName("id") private int mId;
+    @SerializedName("id") private String mId;
     @SerializedName("url") private String mUrl;
     @SerializedName("name") private String mName;
     @SerializedName("outer_id") private String mOuterId;
@@ -122,7 +122,7 @@ public class ProductListBean {
     @SerializedName("is_verify") private boolean mIsVerify;
     @SerializedName("model_id") private int mModelId;
 
-    public void setId(int id) {
+    public void setId(String id) {
       this.mId = id;
     }
 
@@ -210,7 +210,7 @@ public class ProductListBean {
       this.mModelId = modelId;
     }
 
-    public int getId() {
+    public String getId() {
       return mId;
     }
 

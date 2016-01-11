@@ -16,7 +16,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmApi;
-import com.jimei.xiaolumeimei.model.ProductDetailSingleBean;
+import com.jimei.xiaolumeimei.entities.ProductDetailSingleBean;
 import com.jimei.xiaolumeimei.okhttp.callback.OkHttpCallback;
 import com.jimei.xiaolumeimei.okhttp.request.OkHttpRequest;
 import com.jimei.xiaolumeimei.utils.DensityUtils;
@@ -80,7 +80,7 @@ public class ProductDetailSingleActvity extends BaseSwipeBackCompatActivity {
 
   @Override protected void getBundleExtras(Bundle extras) {
     productId = extras.getString("product_id");
-    //Log.i("ProductDetailActivity", productId);
+    Log.i("ProductSingle", productId);
   }
 
   @Override protected int getContentViewLayoutID() {

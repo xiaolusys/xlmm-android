@@ -15,10 +15,11 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.PreviousAdapter;
 import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.data.XlmmApi;
-import com.jimei.xiaolumeimei.model.IndexBean;
-import com.jimei.xiaolumeimei.model.PostBean;
+import com.jimei.xiaolumeimei.entities.IndexBean;
+import com.jimei.xiaolumeimei.entities.PostBean;
 import com.jimei.xiaolumeimei.okhttp.callback.OkHttpCallback;
 import com.jimei.xiaolumeimei.okhttp.request.OkHttpRequest;
+import com.jimei.xiaolumeimei.widget.CountdownView;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -89,6 +90,8 @@ public class PreviousFragment extends BaseFragment {
     post1 = (ImageView) head.findViewById(R.id.post_1);
     post2 = (ImageView) head.findViewById(R.id.post_2);
 
+    CountdownView countdownView = (CountdownView) head.findViewById(R.id.countTime);
+
     xRecyclerView.addHeaderView(head);
 
     new OkHttpRequest.Builder().url(XlmmApi.YESTERDAY_POSTER_URL)
@@ -115,7 +118,7 @@ public class PreviousFragment extends BaseFragment {
                 .into(post2);
           }
         });
-
+    countdownView.start(9955550000l);
     mPreviousAdapter = new PreviousAdapter(getActivity());
     xRecyclerView.setAdapter(mPreviousAdapter);
 

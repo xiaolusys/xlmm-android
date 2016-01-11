@@ -1,4 +1,4 @@
-package com.jimei.xiaolumeimei.model;
+package com.jimei.xiaolumeimei.entities;
 
 /**
  * Created by itxuye(www.itxuye.com) on 15/12/29.
