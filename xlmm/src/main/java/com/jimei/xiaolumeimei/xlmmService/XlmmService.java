@@ -4,12 +4,15 @@ import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.entities.LadyListBean;
 import com.jimei.xiaolumeimei.entities.PostBean;
+import com.jimei.xiaolumeimei.entities.ProductBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
-import com.jimei.xiaolumeimei.entities.User;
+import com.jimei.xiaolumeimei.entities.UserBean;
+import java.util.List;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
 import retrofit.http.POST;
+import retrofit.http.Path;
 import retrofit.http.Query;
 import rx.Observable;
 
@@ -23,8 +26,8 @@ public interface XlmmService {
   //@formatter:off
 
   @FormUrlEncoded @POST("register/customer_login")
-  Observable<User> login(
-      @Field("username") String name,
+  Observable<UserBean> login(
+      @Field("username") String username,
       @Field("password") String password);
 
   //童装列表
@@ -52,5 +55,13 @@ public interface XlmmService {
   //昨日列表
   @GET(XlmmApi.YESTERDAY_URL)
   Observable<ProductListBean> getYestDayList();
+
+  //同款列表
+  @GET(XlmmApi.TONGKUAN_URL+"{model_id}")
+  Observable<List<ProductBean>> getTongKuanList(
+      @Path("model_id")int model_id);
+
+  //获取待支付订单
+  @GET(XlmmApi.)
 
 }

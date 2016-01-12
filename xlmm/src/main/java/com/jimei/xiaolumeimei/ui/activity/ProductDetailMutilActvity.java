@@ -9,7 +9,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 import butterknife.Bind;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -51,8 +50,8 @@ public class ProductDetailMutilActvity extends BaseSwipeBackCompatActivity {
     new OkHttpRequest.Builder().url(XlmmApi.PRODUCT_URL + productId + "/details")
         .get(new OkHttpCallback<ProductDetailMutilBean>() {
           @Override public void onError(Request request, Exception e) {
-            Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
-            Log.i("什么错误啊", e.getMessage());
+            //Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
+            //Log.i("什么错误啊", e.getMessage());
           }
 
           @Override

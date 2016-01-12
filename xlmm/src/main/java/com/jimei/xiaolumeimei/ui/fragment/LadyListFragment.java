@@ -40,15 +40,9 @@ public class LadyListFragment extends BaseFragment {
             List<LadyListBean.ResultsEntity> results = ladyListBean.getResults();
             mLadyListAdapter.update(results);
           }
-
-          @Override public void onError(Throwable e) {
-            super.onError(e);
-            loading.stop();
-          }
-
           @Override public void onCompleted() {
             super.onCompleted();
-            loading.stop();
+           loading.post(loading::stop);
           }
         });
   }
@@ -84,14 +78,9 @@ public class LadyListFragment extends BaseFragment {
                 mLadyListAdapter.updateWithClear(results);
               }
 
-              @Override public void onError(Throwable e) {
-                super.onError(e);
-                xRecyclerView.refreshComplete();
-              }
-
               @Override public void onCompleted() {
                 super.onCompleted();
-                xRecyclerView.refreshComplete();
+                xRecyclerView.post(xRecyclerView::refreshComplete);
               }
             });
       }

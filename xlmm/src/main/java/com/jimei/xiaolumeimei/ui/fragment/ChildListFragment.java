@@ -42,14 +42,9 @@ public class ChildListFragment extends BaseFragment {
             mChildListAdapter.update(results);
           }
 
-          @Override public void onError(Throwable e) {
-            super.onError(e);
-            loading.stop();
-          }
-
           @Override public void onCompleted() {
             super.onCompleted();
-            loading.stop();
+            loading.post(loading::stop);
           }
         });
   }
@@ -86,14 +81,9 @@ public class ChildListFragment extends BaseFragment {
                 mChildListAdapter.updateWithClear(results);
               }
 
-              @Override public void onError(Throwable e) {
-                super.onError(e);
-                xRecyclerView.refreshComplete();
-              }
-
               @Override public void onCompleted() {
                 super.onCompleted();
-                xRecyclerView.refreshComplete();
+                xRecyclerView.post(xRecyclerView::refreshComplete);
               }
             });
       }

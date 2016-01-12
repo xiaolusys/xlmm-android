@@ -61,14 +61,9 @@ public class TodayFragment extends BaseFragment {
             mTodayAdapter.update(results);
           }
 
-          //@Override public void onError(Throwable e) {
-          //  super.onError(e);
-          //  loading.stop();
-          //}
-
           @Override public void onCompleted() {
             super.onCompleted();
-            loading.stop();
+            loading.post(loading::stop);
           }
         });
   }
@@ -138,14 +133,9 @@ public class TodayFragment extends BaseFragment {
                 mTodayAdapter.updateWithClear(results);
               }
 
-              @Override public void onError(Throwable e) {
-                super.onError(e);
-                xRecyclerView.refreshComplete();
-              }
-
               @Override public void onCompleted() {
                 super.onCompleted();
-                xRecyclerView.refreshComplete();
+                xRecyclerView.post(xRecyclerView::refreshComplete);
               }
             });
       }
@@ -174,14 +164,9 @@ public class TodayFragment extends BaseFragment {
             mTodayAdapter.update(results);
           }
 
-          @Override public void onError(Throwable e) {
-            super.onError(e);
-            xRecyclerView.loadMoreComplete();
-          }
-
           @Override public void onCompleted() {
             super.onCompleted();
-            xRecyclerView.loadMoreComplete();
+            xRecyclerView.post(xRecyclerView::loadMoreComplete);
           }
         });
   }

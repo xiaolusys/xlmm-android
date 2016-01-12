@@ -1,29 +1,26 @@
-package com.jimei.xiaolumeimei.ui.activity;
+package com.jimei.xiaolumeimei.ui.user;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import butterknife.Bind;
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.afollestad.materialdialogs.Theme;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.entities.UserBean;
-import com.jimei.xiaolumeimei.okhttp.callback.OkHttpCallback;
-import com.jimei.xiaolumeimei.okhttp.request.OkHttpRequest;
+import com.jimei.xiaolumeimei.model.UserModel;
+import com.jimei.xiaolumeimei.ui.activity.MainActivity;
+import com.jimei.xiaolumeimei.ui.activity.SettingRegisterActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
-import com.squareup.okhttp.Headers;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
+import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jude.utils.JUtils;
+import rx.schedulers.Schedulers;
 
 public class LoginActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener {
@@ -35,7 +32,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.set_login_password) EditText passEditText;
   @Bind(R.id.set_login_button) Button login_button;
   @Bind(R.id.set_register_button) Button set_register;
-
+  UserModel model = new UserModel();
   @Bind(R.id.toolbar) Toolbar toolbar;
 
   String TAG = "LoginActivity";
@@ -89,38 +86,24 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
   @Override public void onClick(View v) {
     switch (v.getId()) {
       case R.id.set_login_button:
-        MaterialDialog dialog = new MaterialDialog.Builder(this).content("正在登录......")
-            .theme(Theme.LIGHT)
-            .build();
 
         login_name_value = nameEditText.getText().toString().trim();
         login_pass_value = passEditText.getText().toString().trim();
-        new OkHttpRequest.Builder().url(XlmmApi.LOGIN_URL)
-            .addParams("username", login_name_value)
-            .addParams("password", login_pass_value)
-            .post(new OkHttpCallback<UserBean>() {
 
-              @Override public void onBefore(Request request) {
-                super.onBefore(request);
-                dialog.show();
-              }
+        if (login_name_value.length() != 11) {
+          JUtils.Toast("请输入正确手机号");
+          return;
+        }
+        if (login_pass_value.length() < 6 || login_pass_value.length() > 12) {
+          JUtils.Toast("请输入6-12位密码");
+          return;
+        }
 
-              @Override public void onProgress(float progress) {
-                super.onProgress(progress);
-              }
-
-              @Override public void onError(Request request, Exception e) {
-              }
-
-              @Override public void onResponse(Response response, UserBean data) {
-                Log.i(TAG, data.toString());
-                Headers headers = response.headers();
-                //String s = headers.get("asaa");
-                //Log.i("我来测试的", s);
-                for (int i = 0; i < headers.size(); i++) {
-                  Log.i("我来测试的", headers.name(i) + ": " + headers.value(i));
-                }
-                if (data.getCode() == 0 && data.getResult().equals("login")) {
+        model.login(login_name_value, login_pass_value)
+            .subscribeOn(Schedulers.newThread())
+            .subscribe(new ServiceResponse<UserBean>() {
+              @Override public void onNext(UserBean user) {
+                if (user.getCode() == 0 && user.getResult().equals("login")) {
 
                   LoginUtils.saveLoginInfo(true, getApplicationContext(),
                       login_name_value, login_pass_value);
@@ -128,18 +111,23 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                   Toast.makeText(mContext, "登录成功", Toast.LENGTH_SHORT).show();
                   Intent intent = new Intent(mContext, MainActivity.class);
                   startActivity(intent);
-                  dialog.dismiss();
                   finish();
                 } else {
 
                   LoginUtils.saveLoginInfo(false, getApplicationContext(), "", "");
 
-                  dialog.dismiss();
                   Toast.makeText(mContext, "用户名或者密码错误,请检查", Toast.LENGTH_SHORT).show();
                 }
               }
-            });
 
+              @Override public void onError(Throwable e) {
+                super.onError(e);
+              }
+
+              @Override public void onCompleted() {
+                super.onCompleted();
+              }
+            });
         break;
       case R.id.set_register_button:
         Intent intent = new Intent(mContext, SettingRegisterActivity.class);

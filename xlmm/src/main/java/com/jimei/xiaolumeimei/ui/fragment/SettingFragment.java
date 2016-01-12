@@ -19,7 +19,7 @@ import android.widget.Toast;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.ui.activity.SettingAccountActivity;
 import com.jimei.xiaolumeimei.ui.activity.SettingContactActivity;
-import com.jimei.xiaolumeimei.ui.activity.LoginActivity;
+import com.jimei.xiaolumeimei.ui.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.SettingMyInfoActivity;
 import java.util.ArrayList;
 import java.util.HashMap;

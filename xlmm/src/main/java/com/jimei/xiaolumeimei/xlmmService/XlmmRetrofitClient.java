@@ -1,10 +1,8 @@
 package com.jimei.xiaolumeimei.xlmmService;
 
-import com.jimei.xiaolumeimei.okhttp.OkHttpClientManager;
 import com.squareup.okhttp.OkHttpClient;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
-import java.util.concurrent.TimeUnit;
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 import retrofit.RxJavaCallAdapterFactory;
@@ -30,16 +28,18 @@ public class XlmmRetrofitClient {
   }
 
   private static Retrofit createAdapter() {
-    OkHttpClient httpClient = OkHttpClientManager.getInstance().getOkHttpClient();
-    httpClient.setConnectTimeout(10 * 1000, TimeUnit.MILLISECONDS);
-    httpClient.setWriteTimeout(30 * 1000, TimeUnit.MILLISECONDS);
-    httpClient.setWriteTimeout(30 * 1000, TimeUnit.MILLISECONDS);
-    httpClient.setCookieHandler(new CookieManager(null, CookiePolicy.ACCEPT_ALL));
+
+    OkHttpClient client = new OkHttpClient(); //create OKHTTPClient
+    //create a cookieManager so your client can be cookie persistant
+    CookieManager cookieManager = new CookieManager();
+    cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+    client.setCookieHandler(cookieManager);
+
 
     return new Retrofit.Builder().baseUrl("http://api.xiaolumeimei.com/rest/v1/")
         .addConverterFactory(GsonConverterFactory.create())
         .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-        .client(httpClient)
+        .client(client)
         .build();
   }
 }

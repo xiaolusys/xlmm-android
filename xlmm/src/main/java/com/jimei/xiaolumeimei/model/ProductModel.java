@@ -2,9 +2,12 @@ package com.jimei.xiaolumeimei.model;
 
 import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.entities.LadyListBean;
+import com.jimei.xiaolumeimei.entities.PostBean;
+import com.jimei.xiaolumeimei.entities.ProductBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
+import java.util.List;
 import rx.Observable;
 
 /**
@@ -35,6 +38,30 @@ public class ProductModel {
 
     return XlmmRetrofitClient.getService()
         .getLadyList()
+        .compose(new DefaultTransform<>());
+  }
+
+  //得到同款数据列表
+  public Observable<List<ProductBean>> getTongkuanList(int model_id) {
+
+    return XlmmRetrofitClient.getService()
+        .getTongKuanList(model_id)
+        .compose(new DefaultTransform<>());
+  }
+
+  //得到今日海报数据列表
+  public Observable<PostBean> getTodayPost() {
+
+    return XlmmRetrofitClient.getService()
+        .getTodayPost()
+        .compose(new DefaultTransform<>());
+  }
+
+  //得到昨日海报数据列表
+  public Observable<PostBean> getYestdayPost() {
+
+    return XlmmRetrofitClient.getService()
+        .getYestDayPost()
         .compose(new DefaultTransform<>());
   }
 }

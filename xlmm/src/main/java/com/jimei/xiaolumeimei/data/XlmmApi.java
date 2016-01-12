@@ -29,6 +29,8 @@ public class XlmmApi {
   //商品详情页
   public static final String PRODUCT_URL = URL_BASE + "products/";
 
+  //获取待支付订单
+  public static  final String WAITPAY_URL = URL_BASE+"";
   public static final String SETTINGMYINFO_URL =
       URL_BASE + "/xueZhang/servlet/AndroidInfoSev";
 

@@ -20,6 +20,7 @@ import com.jimei.xiaolumeimei.ui.fragment.ChildListFragment;
 import com.jimei.xiaolumeimei.ui.fragment.LadyListFragment;
 import com.jimei.xiaolumeimei.ui.fragment.PreviousFragment;
 import com.jimei.xiaolumeimei.ui.fragment.TodayFragment;
+import com.jimei.xiaolumeimei.ui.user.LoginActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import java.util.ArrayList;
 import java.util.List;

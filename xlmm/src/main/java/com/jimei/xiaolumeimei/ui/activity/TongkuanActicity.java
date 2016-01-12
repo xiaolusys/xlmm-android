@@ -9,15 +9,13 @@ import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.TongkuanAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.entities.ProductBean;
-import com.jimei.xiaolumeimei.okhttp.callback.OkHttpCallback;
-import com.jimei.xiaolumeimei.okhttp.request.OkHttpRequest;
+import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
+import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.victor.loading.rotate.RotateLoading;
 import java.util.List;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 15/12/29.
@@ -30,6 +28,7 @@ public class TongkuanActicity extends BaseSwipeBackCompatActivity {
   @Bind(R.id.tool_bar) Toolbar toolbar;
   @Bind(R.id.tongkuan_recyclerview) RecyclerView recyclerView;
   @Bind(R.id.loading) RotateLoading loading;
+  ProductModel model = new ProductModel();
   private TongkuanAdapter mTongkuanAdapter;
   private int model_id;
   private String name = null;
@@ -40,15 +39,20 @@ public class TongkuanActicity extends BaseSwipeBackCompatActivity {
 
   @Override protected void initData() {
     loading.start();
-    new OkHttpRequest.Builder().url(XlmmApi.TONGKUAN_URL + model_id)
-        .get(new OkHttpCallback<List<ProductBean>>() {
-          @Override public void onError(Request request, Exception e) {
-            //Toast.makeText(activity, e.getMessage(), Toast.LENGTH_SHORT).show();
+    model.getTongkuanList(model_id)
+        .subscribeOn(Schedulers.newThread())
+        .subscribe(new ServiceResponse<List<ProductBean>>() {
+          @Override public void onNext(List<ProductBean> productBeans) {
+            mTongkuanAdapter.update(productBeans);
           }
 
-          @Override public void onResponse(Response response, List<ProductBean> data) {
-            mTongkuanAdapter.update(data);
-            mTongkuanAdapter.notifyDataSetChanged();
+          @Override public void onError(Throwable e) {
+            super.onError(e);
+            loading.stop();
+          }
+
+          @Override public void onCompleted() {
+            super.onCompleted();
             loading.stop();
           }
         });
