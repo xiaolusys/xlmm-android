@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.xlmmService;
 
 import com.jimei.xiaolumeimei.data.XlmmApi;
+import com.jimei.xiaolumeimei.entities.AllOdersBean;
 import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.entities.LadyListBean;
 import com.jimei.xiaolumeimei.entities.PostBean;
@@ -62,6 +63,7 @@ public interface XlmmService {
       @Path("model_id")int model_id);
 
   //获取待支付订单
-  @GET(XlmmApi.)
+  @GET(XlmmApi.ALL_ORDERS_URL)
+  Observable<AllOdersBean> getAllOdersList();
 
 }

@@ -32,7 +32,7 @@
       </intent-filter>
     </activity>
     <activity android:name=".ui.activity.MainActivity"/>
-    <activity android:name=".ui.user.LoginActivity"
+    <activity android:name=".ui.activity.user.LoginActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
     <activity android:name=".ui.activity.SettingAccountActivity"
@@ -52,6 +52,9 @@
         android:theme="@style/AppTheme.TransparentActivity"
         android:name=".ui.activity.ProductDetailMutilActvity"/>
     <activity android:name=".ui.activity.ProductDetailSingleActvity"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
+    <activity android:name=".ui.activity.trade.AlloderActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
   </application>

@@ -1,4 +1,4 @@
-package com.jimei.xiaolumeimei.ui.user;
+package com.jimei.xiaolumeimei.ui.activity.user;
 
 import android.content.Context;
 import android.content.Intent;

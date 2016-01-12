@@ -16,11 +16,12 @@ import android.view.MenuItem;
 import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseActivity;
+import com.jimei.xiaolumeimei.ui.activity.trade.AlloderActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.fragment.ChildListFragment;
 import com.jimei.xiaolumeimei.ui.fragment.LadyListFragment;
 import com.jimei.xiaolumeimei.ui.fragment.PreviousFragment;
 import com.jimei.xiaolumeimei.ui.fragment.TodayFragment;
-import com.jimei.xiaolumeimei.ui.user.LoginActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import java.util.ArrayList;
 import java.util.List;
@@ -114,7 +115,7 @@ public class MainActivity extends BaseActivity
       } else if (id == R.id.nav_returned) {
 
       } else if (id == R.id.nav_orders) {
-
+        startActivity(new Intent(MainActivity.this, AlloderActivity.class));
       } else if (id == R.id.nav_setting) {
 
       } else if (id == R.id.nav_complain) {

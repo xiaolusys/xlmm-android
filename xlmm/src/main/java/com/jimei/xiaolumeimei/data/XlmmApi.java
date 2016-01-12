@@ -29,6 +29,9 @@ public class XlmmApi {
   //商品详情页
   public static final String PRODUCT_URL = URL_BASE + "products/";
 
+  //所有订单
+  public static final String ALL_ORDERS_URL = URL_BASE + "trades";
+
   //获取待支付订单
   public static  final String WAITPAY_URL = URL_BASE+"";
   public static final String SETTINGMYINFO_URL =

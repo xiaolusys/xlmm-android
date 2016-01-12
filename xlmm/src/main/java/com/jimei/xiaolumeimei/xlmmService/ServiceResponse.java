@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.exception.ServiceException;
-import com.jimei.xiaolumeimei.ui.user.LoginActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jude.utils.JActivityManager;
 import com.jude.utils.JUtils;
 import rx.Observer;
