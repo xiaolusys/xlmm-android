@@ -3,6 +3,7 @@ package com.jimei.xiaolumeimei;
 import android.app.Application;
 import android.content.Context;
 import com.jimei.xiaolumeimei.okhttp.OkHttpClientManager;
+import com.jimei.xiaolumeimei.okhttp.PersistentCookieStore;
 import com.squareup.okhttp.OkHttpClient;
 import com.zhy.autolayout.config.AutoLayoutConifg;
 import java.net.CookieManager;
@@ -39,6 +40,8 @@ public class XlmmApp extends Application {
     httpClient.setConnectTimeout(10 * 1000, TimeUnit.MILLISECONDS);
     httpClient.setWriteTimeout(30 * 1000, TimeUnit.MILLISECONDS);
     httpClient.setWriteTimeout(30 * 1000, TimeUnit.MILLISECONDS);
-    httpClient.setCookieHandler(new CookieManager(null, CookiePolicy.ACCEPT_ALL));
+    httpClient.setCookieHandler(
+        new CookieManager(new PersistentCookieStore(getApplicationContext()),
+            CookiePolicy.ACCEPT_ALL));
   }
 }
