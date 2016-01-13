@@ -16,7 +16,6 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.MainActivity;
-import com.jimei.xiaolumeimei.ui.activity.SettingRegisterActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
@@ -91,12 +90,19 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
         login_pass_value = passEditText.getText().toString().trim();
 
         if (login_name_value.length() != 11) {
+          login_button.setClickable(false);
           JUtils.Toast("请输入正确手机号");
           return;
+        } else {
+          login_button.setClickable(true);
         }
+
         if (login_pass_value.length() < 6 || login_pass_value.length() > 12) {
+          login_button.setClickable(false);
           JUtils.Toast("请输入6-12位密码");
           return;
+        } else {
+          login_button.setClickable(true);
         }
 
         model.login(login_name_value, login_pass_value)
@@ -120,17 +126,13 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                 }
               }
 
-              @Override public void onError(Throwable e) {
-                super.onError(e);
-              }
-
               @Override public void onCompleted() {
                 super.onCompleted();
               }
             });
         break;
       case R.id.set_register_button:
-        Intent intent = new Intent(mContext, SettingRegisterActivity.class);
+        Intent intent = new Intent(mContext, RegisterActivity.class);
         startActivity(intent);
         finish();
 

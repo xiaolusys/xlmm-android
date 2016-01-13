@@ -8,45 +8,16 @@ import java.util.List;
  *
  * Copyright 2015年 上海己美. All rights reserved.
  */
-public class ProductDetailMutilBean {
-
-  /**
-   * id : 22860
-   * url : http://m.xiaolumeimei.com/rest/v1/products/22860.json
-   * name : 时尚休闲两件套/墨绿+灰
-   * outer_id : 822274010021
-   * category : {"cid":22,"parent_cid":8,"name":"套装","status":"normal","sort_order":100}
-   * pic_path : http://image.xiaolu.so/MG-1449719333426-3.png
-   * remain_num : 250
-   * is_saleout : false
-   * head_img : http://image.xiaolu.so/MG-1449719329844-主图.png
-   * is_saleopen : true
-   * is_newgood : true
-   * std_sale_price : 449
-   * agent_price : 89.9
-   * sale_time : 2016-01-07
-   * offshelf_time : null
-   * memo :
-   * lowest_price : 89.9
-   * product_lowest_price : 89.9
-   * product_model : {"id":3827,"name":"时尚休闲两件套","head_imgs":["http://image.xiaolu.so/MG-1449719329844-主图.png"],"content_imgs":["http://image.xiaolu.so/MG-1451986117663-826新内容页童装_01.png","http://image.xiaolu.so/MG-1451986124296-826新内容页童装_02.png","http://image.xiaolu.so/MG-1451986131117-826新内容页童装_03.png"],"is_single_spec":false,"is_sale_out":false,"buy_limit":false,"per_limit":5}
-   * ware_by : 2
-   * is_verify : false
-   * model_id : 3827
-   * watermark_op :
-   * normal_skus : [{"id":89467,"outer_id":"1","name":"S","remain_num":50,"size_of_sku":{"free_num":"NO","result":{"肩宽":"36","胸围":"92","袖长":"57","腰围":"64","衣长":"62","裤腰":"90","裤长":"96"}},"is_saleout":false,"std_sale_price":449,"agent_price":89.9},{"id":89468,"outer_id":"2","name":"M","remain_num":50,"size_of_sku":{"free_num":"NO","result":{"肩宽":"37","胸围":"96","袖长":"58","腰围":"68","衣长":"63","裤腰":"94","裤长":"97"}},"is_saleout":false,"std_sale_price":449,"agent_price":89.9},{"id":89469,"outer_id":"3","name":"L","remain_num":50,"size_of_sku":{"free_num":"NO","result":{"肩宽":"38","胸围":"100","袖长":"59","腰围":"72","衣长":"64","裤腰":"98","裤长":"98"}},"is_saleout":false,"std_sale_price":449,"agent_price":89.9},{"id":89470,"outer_id":"4","name":"XL","remain_num":50,"size_of_sku":{"free_num":"NO","result":{"肩宽":"39","胸围":"104","袖长":"60","腰围":"76","衣长":"65","裤腰":"102","裤长":"99"}},"is_saleout":false,"std_sale_price":449,"agent_price":89.9},{"id":89471,"outer_id":"5","name":"XXL","remain_num":50,"size_of_sku":{"free_num":"NO","result":{"肩宽":"40","胸围":"108","袖长":"61","腰围":"80","衣长":"66","裤腰":"106","裤长":"100"}},"is_saleout":false,"std_sale_price":449,"agent_price":89.9}]
-   * details : {"head_imgs":["http://image.xiaolu.so/MG-1449719333426-3.png"],"content_imgs":["https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLuRiakAVib8CCvEPdYiazodMFmnm3ib6B0DJLIPyiaqs5uuCnJcfNiaDWtx5wdvONteZXUfsuze8eRoGwOw/0?wx_fmt=png","https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLuRiakAVib8CCvEPdYiazodMFmlgtMBJAd1Ft9mVczDJtBU8icx1L9OW7pOYcsEdZA66mriakcQiabbRX6Q/0?wx_fmt=png","https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLuRiakAVib8CCvEPdYiazodMFmiardPZhMDr8Ln7ddFvqvdvRUXicBlw20gLxX8sf5ZmUjw8QrCnlz0aMQ/0?wx_fmt=png","https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLuRiakAVib8CCvEPdYiazodMFmENDUGA8piaaOz7h1dNSfnpZOCPynW6V2Yj6dBASDaB7lkOxiautibr9Rg/0?wx_fmt=png"],"mama_discount":100,"is_recommend":false,"buy_limit":false,"per_limit":5,"mama_rebeta":0,"material":"棉混纺","wash_instructions":"洗涤时请深色、浅色衣物分开洗涤。最高洗涤温度不要超过40度，
-   * 不可漂白。 有涂层、印花表面不能进行熨烫，会导致表面剥落。不可干洗，悬挂晾干。","note":"袖口、领口、衣摆采用螺纹针织松紧法，长袖圆领套头式，松紧裤腰，方便实用的斜插袋，时尚个性的字母印花。","color":"墨绿+灰,白+黑,黑+酒红,黄绿+藏青"}
-   */
+public class ProductDetailBean {
 
   @SerializedName("id") private int mId;
   @SerializedName("url") private String mUrl;
   @SerializedName("name") private String mName;
   @SerializedName("outer_id") private String mOuterId;
   /**
-   * cid : 22
+   * cid : 18
    * parent_cid : 8
-   * name : 套装
+   * name : 外套
    * status : normal
    * sort_order : 100
    */
@@ -58,7 +29,7 @@ public class ProductDetailMutilBean {
   @SerializedName("head_img") private String mHeadImg;
   @SerializedName("is_saleopen") private boolean mIsSaleopen;
   @SerializedName("is_newgood") private boolean mIsNewgood;
-  @SerializedName("std_sale_price") private double mStdSalePrice;
+  @SerializedName("std_sale_price") private int mStdSalePrice;
   @SerializedName("agent_price") private double mAgentPrice;
   @SerializedName("sale_time") private String mSaleTime;
   @SerializedName("offshelf_time") private Object mOffshelfTime;
@@ -66,10 +37,10 @@ public class ProductDetailMutilBean {
   @SerializedName("lowest_price") private double mLowestPrice;
   @SerializedName("product_lowest_price") private double mProductLowestPrice;
   /**
-   * id : 3827
-   * name : 时尚休闲两件套
-   * head_imgs : ["http://image.xiaolu.so/MG-1449719329844-主图.png"]
-   * content_imgs : ["http://image.xiaolu.so/MG-1451986117663-826新内容页童装_01.png","http://image.xiaolu.so/MG-1451986124296-826新内容页童装_02.png","http://image.xiaolu.so/MG-1451986131117-826新内容页童装_03.png"]
+   * id : 4397
+   * name : 六粒扣中长款针织外套
+   * head_imgs : ["http://image.xiaolu.so/MG-1452585002171-1.jpg"]
+   * content_imgs : ["http://image.xiaolu.so/MG-1452509854473-827新内容页bbb_01.jpg","http://image.xiaolu.so/MG-1452509859635-827新内容页bbb_02.jpg","http://image.xiaolu.so/MG-1452509863681-827新内容页bbb_03.jpg"]
    * is_single_spec : false
    * is_sale_out : false
    * buy_limit : false
@@ -82,29 +53,29 @@ public class ProductDetailMutilBean {
   @SerializedName("model_id") private int mModelId;
   @SerializedName("watermark_op") private String mWatermarkOp;
   /**
-   * head_imgs : ["http://image.xiaolu.so/MG-1449719333426-3.png"]
-   * content_imgs : ["https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLuRiakAVib8CCvEPdYiazodMFmnm3ib6B0DJLIPyiaqs5uuCnJcfNiaDWtx5wdvONteZXUfsuze8eRoGwOw/0?wx_fmt=png","https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLuRiakAVib8CCvEPdYiazodMFmlgtMBJAd1Ft9mVczDJtBU8icx1L9OW7pOYcsEdZA66mriakcQiabbRX6Q/0?wx_fmt=png","https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLuRiakAVib8CCvEPdYiazodMFmiardPZhMDr8Ln7ddFvqvdvRUXicBlw20gLxX8sf5ZmUjw8QrCnlz0aMQ/0?wx_fmt=png","https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLuRiakAVib8CCvEPdYiazodMFmENDUGA8piaaOz7h1dNSfnpZOCPynW6V2Yj6dBASDaB7lkOxiautibr9Rg/0?wx_fmt=png"]
+   * head_imgs : ["http://image.xiaolu.so/MG-1452509571614-2.jpg"]
+   * content_imgs : []
    * mama_discount : 100
    * is_recommend : false
    * buy_limit : false
    * per_limit : 5
    * mama_rebeta : 0
-   * material : 棉混纺
-   * wash_instructions : 洗涤时请深色、浅色衣物分开洗涤。最高洗涤温度不要超过40度， 不可漂白。 有涂层、印花表面不能进行熨烫，会导致表面剥落。不可干洗，悬挂晾干。
-   * note : 袖口、领口、衣摆采用螺纹针织松紧法，长袖圆领套头式，松紧裤腰，方便实用的斜插袋，时尚个性的字母印花。
-   * color : 墨绿+灰,白+黑,黑+酒红,黄绿+藏青
+   * material : 针织混纺
+   * wash_instructions : 最高手洗温度为30度，翻面洗涤，减少摩擦，避免起球。使用中性洗涤剂， 平铺晾干，勿暴晒、熨烫。
+   * note : 时尚六粒扣设计，常规袖，修身显瘦。
+   * color : 黑色,粉色,米色,黄色,酒红色
    */
 
   @SerializedName("details") private DetailsEntity mDetails;
   /**
-   * id : 89467
+   * id : 96343
    * outer_id : 1
-   * name : S
-   * remain_num : 50
-   * size_of_sku : {"free_num":"NO","result":{"肩宽":"36","胸围":"92","袖长":"57","腰围":"64","衣长":"62","裤腰":"90","裤长":"96"}}
+   * name : 均码
+   * remain_num : 100
+   * size_of_sku : {"free_num":"NO","result":{"肩宽":"37","胸围":"92","袖长":"55","衣长":"75"}}
    * is_saleout : false
-   * std_sale_price : 449
-   * agent_price : 89.9
+   * std_sale_price : 349
+   * agent_price : 69.9
    */
 
   @SerializedName("normal_skus") private List<NormalSkusEntity> mNormalSkus;
@@ -197,7 +168,7 @@ public class ProductDetailMutilBean {
     this.mIsNewgood = isNewgood;
   }
 
-  public double getStdSalePrice() {
+  public int getStdSalePrice() {
     return mStdSalePrice;
   }
 
@@ -443,7 +414,7 @@ public class ProductDetailMutilBean {
     @SerializedName("note") private String mNote;
     @SerializedName("color") private String mColor;
     @SerializedName("head_imgs") private List<String> mHeadImgs;
-    @SerializedName("content_imgs") private List<String> mContentImgs;
+    @SerializedName("content_imgs") private List<?> mContentImgs;
 
     public int getMamaDiscount() {
       return mMamaDiscount;
@@ -525,11 +496,11 @@ public class ProductDetailMutilBean {
       this.mHeadImgs = headImgs;
     }
 
-    public List<String> getContentImgs() {
+    public List<?> getContentImgs() {
       return mContentImgs;
     }
 
-    public void setContentImgs(List<String> contentImgs) {
+    public void setContentImgs(List<?> contentImgs) {
       this.mContentImgs = contentImgs;
     }
   }
@@ -541,7 +512,7 @@ public class ProductDetailMutilBean {
     @SerializedName("remain_num") private int mRemainNum;
     /**
      * free_num : NO
-     * result : {"肩宽":"36","胸围":"92","袖长":"57","腰围":"64","衣长":"62","裤腰":"90","裤长":"96"}
+     * result : {"肩宽":"37","胸围":"92","袖长":"55","衣长":"75"}
      */
 
     @SerializedName("size_of_sku") private SizeOfSkuEntity mSizeOfSku;
@@ -616,16 +587,13 @@ public class ProductDetailMutilBean {
     public static class SizeOfSkuEntity {
       @SerializedName("free_num") private String mFreeNum;
       /**
-       * 肩宽 : 36
+       * 肩宽 : 37
        * 胸围 : 92
-       * 袖长 : 57
-       * 腰围 : 64
-       * 衣长 : 62
-       * 裤腰 : 90
-       * 裤长 : 96
+       * 袖长 : 55
+       * 衣长 : 75
        */
 
-      @SerializedName("result") private ResultEntity mResult;
+      //@SerializedName("result") private ResultEntity mResult;
 
       public String getFreeNum() {
         return mFreeNum;
@@ -635,79 +603,52 @@ public class ProductDetailMutilBean {
         this.mFreeNum = freeNum;
       }
 
-      public ResultEntity getResult() {
-        return mResult;
-      }
+      //public ResultEntity getResult() {
+      //  return mResult;
+      //}
+      //
+      //public void setResult(ResultEntity result) {
+      //  this.mResult = result;
+      //}
 
-      public void setResult(ResultEntity result) {
-        this.mResult = result;
-      }
-
-      public static class ResultEntity {
-        @SerializedName("肩宽") private String m肩宽;
-        @SerializedName("胸围") private String m胸围;
-        @SerializedName("袖长") private String m袖长;
-        @SerializedName("腰围") private String m腰围;
-        @SerializedName("衣长") private String m衣长;
-        @SerializedName("裤腰") private String m裤腰;
-        @SerializedName("裤长") private String m裤长;
-
-        public String get肩宽() {
-          return m肩宽;
-        }
-
-        public void set肩宽(String 肩宽) {
-          this.m肩宽 = 肩宽;
-        }
-
-        public String get胸围() {
-          return m胸围;
-        }
-
-        public void set胸围(String 胸围) {
-          this.m胸围 = 胸围;
-        }
-
-        public String get袖长() {
-          return m袖长;
-        }
-
-        public void set袖长(String 袖长) {
-          this.m袖长 = 袖长;
-        }
-
-        public String get腰围() {
-          return m腰围;
-        }
-
-        public void set腰围(String 腰围) {
-          this.m腰围 = 腰围;
-        }
-
-        public String get衣长() {
-          return m衣长;
-        }
-
-        public void set衣长(String 衣长) {
-          this.m衣长 = 衣长;
-        }
-
-        public String get裤腰() {
-          return m裤腰;
-        }
-
-        public void set裤腰(String 裤腰) {
-          this.m裤腰 = 裤腰;
-        }
-
-        public String get裤长() {
-          return m裤长;
-        }
-
-        public void set裤长(String 裤长) {
-          this.m裤长 = 裤长;
-        }
-      }
+      //public static class ResultEntity {
+      //  @SerializedName("肩宽") private String m肩宽;
+      //  @SerializedName("胸围") private String m胸围;
+      //  @SerializedName("袖长") private String m袖长;
+      //  @SerializedName("衣长") private String m衣长;
+      //
+      //  public String get肩宽() {
+      //    return m肩宽;
+      //  }
+      //
+      //  public void set肩宽(String 肩宽) {
+      //    this.m肩宽 = 肩宽;
+      //  }
+      //
+      //  public String get胸围() {
+      //    return m胸围;
+      //  }
+      //
+      //  public void set胸围(String 胸围) {
+      //    this.m胸围 = 胸围;
+      //  }
+      //
+      //  public String get袖长() {
+      //    return m袖长;
+      //  }
+      //
+      //  public void set袖长(String 袖长) {
+      //    this.m袖长 = 袖长;
+      //  }
+      //
+      //  public String get衣长() {
+      //    return m衣长;
+      //  }
+      //
+      //  public void set衣长(String 衣长) {
+      //    this.m衣长 = 衣长;
+      //  }
+      //}
     }
   }
 }

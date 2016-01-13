@@ -3,9 +3,11 @@ package com.jimei.xiaolumeimei.xlmmService;
 import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.entities.AllOdersBean;
 import com.jimei.xiaolumeimei.entities.ChildListBean;
+import com.jimei.xiaolumeimei.entities.IndexBean;
 import com.jimei.xiaolumeimei.entities.LadyListBean;
 import com.jimei.xiaolumeimei.entities.PostBean;
 import com.jimei.xiaolumeimei.entities.ProductBean;
+import com.jimei.xiaolumeimei.entities.ProductDetailBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import java.util.List;
@@ -55,7 +57,7 @@ public interface XlmmService {
 
   //昨日列表
   @GET(XlmmApi.YESTERDAY_URL)
-  Observable<ProductListBean> getYestDayList();
+  Observable<IndexBean> getYestDayList();
 
   //同款列表
   @GET(XlmmApi.TONGKUAN_URL+"{model_id}")
@@ -65,5 +67,12 @@ public interface XlmmService {
   //获取待支付订单
   @GET(XlmmApi.ALL_ORDERS_URL)
   Observable<AllOdersBean> getAllOdersList();
+
+
+  //获得商品详情页面数据
+  @GET(XlmmApi.PRODUCT_URL+"{id}/details")
+  Observable<ProductDetailBean> getProductDetails(
+      @Path("id")String id);
+
 
 }

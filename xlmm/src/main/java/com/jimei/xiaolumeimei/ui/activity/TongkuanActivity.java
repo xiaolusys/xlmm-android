@@ -22,7 +22,7 @@ import rx.schedulers.Schedulers;
  *
  * Copyright 2015年 上海己美. All rights reserved.
  */
-public class TongkuanActicity extends BaseSwipeBackCompatActivity {
+public class TongkuanActivity extends BaseSwipeBackCompatActivity {
 
   String TAG = "tongkuanActivity";
   @Bind(R.id.tool_bar) Toolbar toolbar;
@@ -46,14 +46,9 @@ public class TongkuanActicity extends BaseSwipeBackCompatActivity {
             mTongkuanAdapter.update(productBeans);
           }
 
-          @Override public void onError(Throwable e) {
-            super.onError(e);
-            loading.stop();
-          }
-
           @Override public void onCompleted() {
             super.onCompleted();
-            loading.stop();
+            loading.post(loading::stop);
           }
         });
   }

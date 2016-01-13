@@ -1,7 +1,6 @@
 package com.jimei.xiaolumeimei.ui.fragment;
 
 import android.support.v7.widget.GridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,17 +13,12 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.TodayAdapter;
 import com.jimei.xiaolumeimei.base.BaseFragment;
-import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.entities.PostBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
-import com.jimei.xiaolumeimei.okhttp.callback.OkHttpCallback;
-import com.jimei.xiaolumeimei.okhttp.request.OkHttpRequest;
 import com.jimei.xiaolumeimei.widget.CountdownView;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 import com.victor.loading.rotate.RotateLoading;
 import java.util.List;
 import rx.schedulers.Schedulers;
@@ -57,7 +51,7 @@ public class TodayFragment extends BaseFragment {
         .subscribe(new ServiceResponse<ProductListBean>() {
           @Override public void onNext(ProductListBean productListBean) {
             List<ProductListBean.ResultsEntity> results = productListBean.getResults();
-            totalPages = productListBean.getCount() / page_size + 1;
+            totalPages = productListBean.getCount() / page_size;
             mTodayAdapter.update(results);
           }
 
@@ -94,28 +88,26 @@ public class TodayFragment extends BaseFragment {
 
     xRecyclerView.addHeaderView(head);
 
-    new OkHttpRequest.Builder().url(XlmmApi.TODAY_POSTER_URL)
-        .get(new OkHttpCallback<PostBean>() {
-          @Override public void onError(Request request, Exception e) {
-            Log.i("xlmm", e.getMessage());
-          }
+    model.getTodayPost()
+        .subscribeOn(Schedulers.newThread())
+        .subscribe(new ServiceResponse<PostBean>() {
+          @Override public void onNext(PostBean postBean) {
+            String picLink = postBean.getWem_posters().get(0).pic_link;
+            String picLink1 = postBean.getChd_posters().get(0).pic_link;
 
-          @Override public void onResponse(Response response, PostBean data) {
-            String picLink = data.getWem_posters().get(0).pic_link;
-            String picLink1 = data.getChd_posters().get(0).pic_link;
-            Glide.with(getActivity())
+            post1.post(() -> Glide.with(getActivity())
                 .load(picLink)
                 .placeholder(R.drawable.header)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .centerCrop()
-                .into(post1);
+                .into(post1));
 
-            Glide.with(getActivity())
+            post2.post(() -> Glide.with(getActivity())
                 .load(picLink1)
                 .placeholder(R.drawable.header)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .centerCrop()
-                .into(post2);
+                .into(post2));
           }
         });
 
@@ -145,10 +137,8 @@ public class TodayFragment extends BaseFragment {
           loadMoreData(page, 10);
           page++;
         } else {
-          xRecyclerView.post(() -> {
-            Toast.makeText(activity, "没有更多数据啦", Toast.LENGTH_SHORT).show();
-            xRecyclerView.loadMoreComplete();
-          });
+          Toast.makeText(activity, "没有更多了拉,去购物吧", Toast.LENGTH_SHORT).show();
+          xRecyclerView.post(xRecyclerView::loadMoreComplete);
         }
       }
     });
@@ -169,6 +159,10 @@ public class TodayFragment extends BaseFragment {
             xRecyclerView.post(xRecyclerView::loadMoreComplete);
           }
         });
+  }
+
+  @Override public void onDestroy() {
+    super.onDestroy();
   }
 }
 

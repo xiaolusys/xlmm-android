@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.net.HttpCookie;
 
 /**
- * Created by itxuye(www.itxuye.com) on 15/12/29.
+ * Created by itxuye(www.itxuye.com) on 2016/1/12.
  *
  * Copyright 2015年 上海己美. All rights reserved.
  */

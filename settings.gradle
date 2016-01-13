@@ -1,1 +1,1 @@
-include ':xlmm', ':beam'
+include ':xlmm', ':beam', ':library'

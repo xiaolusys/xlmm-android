@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+  <android.support.design.widget.AppBarLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:theme="@style/AppTheme.AppBarOverlay">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:popupTheme="@style/AppTheme.PopupOverlay">
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerInParent="true"
+          android:layout_gravity="center"
+          android:text="@string/register"
+          android:textColor="@android:color/white"
+          android:textSize="24sp"
+          android:textStyle="bold"/>
+    </android.support.v7.widget.Toolbar>
+
+  </android.support.design.widget.AppBarLayout>
+
+  <EditText
+      android:id="@+id/register_name"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:singleLine="true"
+      android:paddingLeft="10sp"
+      android:paddingRight="10sp"
+      android:paddingTop="10sp"
+      android:paddingBottom="10sp"
+      android:background="@drawable/text_frame"
+      android:hint="请输入手机号">
+  </EditText>
+
+  <LinearLayout
+      android:weightSum="3"
+      android:layout_width="match_parent"
+      android:orientation="horizontal"
+      android:layout_height="wrap_content">
+    <EditText
+        android:layout_weight="2.5"
+        android:id="@+id/register_password"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:singleLine="true"
+        android:paddingLeft="10sp"
+        android:paddingRight="10sp"
+        android:paddingTop="10sp"
+        android:paddingBottom="10sp"
+        android:background="@drawable/text_frame"
+        android:hint="请输入短信验证码"/>
+    <Button
+        android:layout_weight="0.5"
+        android:text="获取验证码"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+  </LinearLayout>
+
+  <Button
+      android:id="@+id/register_button"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:background="#FF6600"
+      android:text="注册"
+      >
+  </Button>
+
+</LinearLayout>

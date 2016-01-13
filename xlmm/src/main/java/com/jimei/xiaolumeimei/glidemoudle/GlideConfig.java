@@ -18,7 +18,8 @@ public class GlideConfig implements GlideModule {
     builder.setDecodeFormat(DecodeFormat.PREFER_ARGB_8888);
   }
 
+  //替换网络层为okhttp
   @Override public void registerComponents(Context context, Glide glide) {
-
+    //glide.register(GlideUrl.class, InputStream.class, new OkHttpUrlLoader.Factory());
   }
 }

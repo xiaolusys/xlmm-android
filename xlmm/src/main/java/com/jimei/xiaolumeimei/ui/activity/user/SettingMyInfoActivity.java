@@ -1,4 +1,4 @@
-package com.jimei.xiaolumeimei.ui.activity;
+package com.jimei.xiaolumeimei.ui.activity.user;
 
 import android.app.ActionBar;
 import android.app.Activity;

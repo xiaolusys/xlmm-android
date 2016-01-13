@@ -15,8 +15,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.IndexBean;
-import com.jimei.xiaolumeimei.ui.activity.ProductDetailSingleActvity;
-import com.jimei.xiaolumeimei.ui.activity.TongkuanActicity;
+import com.jimei.xiaolumeimei.ui.activity.ProductDetailActvity;
+import com.jimei.xiaolumeimei.ui.activity.TongkuanActivity;
 import com.zhy.autolayout.utils.AutoUtils;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -119,11 +119,11 @@ public class PreviousAdapter extends RecyclerView.Adapter<PreviousAdapter.Previo
         bundle.putString("name", name.split("/")[0]);
       }
       if (product_model.is_single_spec) {
-        Intent intent = new Intent(mContext, ProductDetailSingleActvity.class);
+        Intent intent = new Intent(mContext, ProductDetailActvity.class);
         intent.putExtras(bundle);
         mContext.startActivity(intent);
       } else {
-        Intent intent = new Intent(mContext, TongkuanActicity.class);
+        Intent intent = new Intent(mContext, TongkuanActivity.class);
         intent.putExtras(bundle);
         mContext.startActivity(intent);
       }
