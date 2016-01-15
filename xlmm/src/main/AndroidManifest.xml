@@ -5,9 +5,9 @@
   <uses-permission android:name="android.permission.INTERNET"/>
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
-  <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-  <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+  <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
   <application
       android:name=".XlmmApp"
@@ -27,17 +27,17 @@
         />
     <meta-data
         android:name="com.bumptech.glide.integration.okhttp.OkHttpGlideModule"
-        android:value="GlideModule" />
+        android:value="GlideModule"/>
     <activity
         android:theme="@style/AppTheme.TransparentActivity"
-        android:name=".ui.activity.SplashActivity">
+        android:name=".ui.activity.main.SplashActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
 
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
-    <activity android:name=".ui.activity.MainActivity"/>
+    <activity android:name=".ui.activity.main.MainActivity"/>
     <activity android:name=".ui.activity.user.LoginActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
@@ -51,13 +51,19 @@
         android:theme="@style/AppTheme.TransparentActivity"/>
     <activity android:name=".ui.activity.SettingContactActivity"
         android:theme="@style/AppTheme.TransparentActivity"/>
-    <activity android:name=".ui.activity.TongkuanActivity"
+    <activity android:name=".ui.activity.product.TongkuanActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
     <activity
         android:theme="@style/AppTheme.TransparentActivity"
-        android:name=".ui.activity.ProductDetailActvity"/>
+        android:name=".ui.activity.product.ProductDetailActvity"/>
     <activity android:name=".ui.activity.trade.AlloderActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
+    <activity android:name=".ui.activity.trade.CartActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
+    <activity android:name=".ui.activity.trade.CartsPayInfoActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
 
@@ -66,25 +72,26 @@
         android:name="com.pingplusplus.android.PaymentActivity"
         android:configChanges="orientation|screenSize"
         android:launchMode="singleTop"
-        android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
     <!-- 微信支付 sdk ，也是 Ping++ sdk 调用入口 -->
     <activity-alias
         android:name=".wxapi.WXPayEntryActivity"
         android:exported="true"
-        android:targetActivity="com.pingplusplus.android.PaymentActivity" />
+        android:targetActivity="com.pingplusplus.android.PaymentActivity"/>
     <!-- 支付宝 sdk -->
     <activity
         android:name="com.alipay.sdk.app.H5PayActivity"
         android:configChanges="orientation|keyboardHidden|navigation"
         android:exported="false"
-        android:screenOrientation="behind" >
+        android:screenOrientation="behind">
     </activity>
     <activity
         android:name="com.alipay.sdk.auth.AuthActivity"
         android:configChanges="orientation|keyboardHidden|navigation"
         android:exported="false"
-        android:screenOrientation="behind" >
+        android:screenOrientation="behind">
     </activity>
+
 
   </application>
 

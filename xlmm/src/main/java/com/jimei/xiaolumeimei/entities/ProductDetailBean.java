@@ -4,13 +4,13 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 /**
- * Created by itxuye(www.itxuye.com) on 15/12/29.
+ * Created by 优尼世界 on 15/12/29.
  *
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class ProductDetailBean {
 
-  @SerializedName("id") private int mId;
+  @SerializedName("id") private String mId;
   @SerializedName("url") private String mUrl;
   @SerializedName("name") private String mName;
   @SerializedName("outer_id") private String mOuterId;
@@ -80,11 +80,11 @@ public class ProductDetailBean {
 
   @SerializedName("normal_skus") private List<NormalSkusEntity> mNormalSkus;
 
-  public int getId() {
+  public String getId() {
     return mId;
   }
 
-  public void setId(int id) {
+  public void setId(String id) {
     this.mId = id;
   }
 
@@ -414,7 +414,7 @@ public class ProductDetailBean {
     @SerializedName("note") private String mNote;
     @SerializedName("color") private String mColor;
     @SerializedName("head_imgs") private List<String> mHeadImgs;
-    @SerializedName("content_imgs") private List<?> mContentImgs;
+    @SerializedName("content_imgs") private List<String> mContentImgs;
 
     public int getMamaDiscount() {
       return mMamaDiscount;
@@ -496,17 +496,17 @@ public class ProductDetailBean {
       this.mHeadImgs = headImgs;
     }
 
-    public List<?> getContentImgs() {
+    public List<String> getContentImgs() {
       return mContentImgs;
     }
 
-    public void setContentImgs(List<?> contentImgs) {
+    public void setContentImgs(List<String> contentImgs) {
       this.mContentImgs = contentImgs;
     }
   }
 
   public static class NormalSkusEntity {
-    @SerializedName("id") private int mId;
+    @SerializedName("id") private String mId;
     @SerializedName("outer_id") private String mOuterId;
     @SerializedName("name") private String mName;
     @SerializedName("remain_num") private int mRemainNum;
@@ -520,11 +520,11 @@ public class ProductDetailBean {
     @SerializedName("std_sale_price") private int mStdSalePrice;
     @SerializedName("agent_price") private double mAgentPrice;
 
-    public int getId() {
+    public String getId() {
       return mId;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
       this.mId = id;
     }
 

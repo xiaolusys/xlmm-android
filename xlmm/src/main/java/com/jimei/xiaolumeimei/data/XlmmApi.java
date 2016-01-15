@@ -1,7 +1,7 @@
 package com.jimei.xiaolumeimei.data;
 
 /**
- * Created by itxuye(www.itxuye.com) on 15/12/29.
+ * Created by 优尼世界 on 15/12/29.
  *
  * Copyright 2015年 上海己美. All rights reserved.
  */
@@ -31,6 +31,9 @@ public class XlmmApi {
 
   //所有订单
   public static final String ALL_ORDERS_URL = URL_BASE + "trades";
+
+  //所有订单
+  public static final String CARTS_URL = URL_BASE + "carts";
 
   //获取待支付订单
   public static  final String WAITPAY_URL = URL_BASE+"";

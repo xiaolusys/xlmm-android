@@ -1,4 +1,4 @@
-package com.jimei.xiaolumeimei.ui.activity;
+package com.jimei.xiaolumeimei.ui.activity.main;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -15,7 +15,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * Created by itxuye(www.itxuye.com) on 15/12/29.
+ * Created by 优尼世界 on 15/12/29.
  * <p/>
  * Copyright 2015年 上海己美. All rights reserved.
  */
@@ -32,8 +32,7 @@ public class SplashActivity extends Activity {//loading 页面
     Window window = getWindow();
     //4.4版本及以上
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-      window.setFlags(
-          WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+      window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
           WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
     }
     //5.0版本及以上
@@ -56,7 +55,5 @@ public class SplashActivity extends Activity {//loading 页面
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
       }
     }, 2000);
-
-
   }
 }

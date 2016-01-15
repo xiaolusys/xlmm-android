@@ -15,7 +15,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.model.UserModel;
-import com.jimei.xiaolumeimei.ui.activity.MainActivity;
+import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
@@ -89,21 +89,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
         login_name_value = nameEditText.getText().toString().trim();
         login_pass_value = passEditText.getText().toString().trim();
 
-        if (login_name_value.length() != 11) {
-          login_button.setClickable(false);
-          JUtils.Toast("请输入正确手机号");
-          return;
-        } else {
-          login_button.setClickable(true);
-        }
-
-        if (login_pass_value.length() < 6 || login_pass_value.length() > 12) {
-          login_button.setClickable(false);
-          JUtils.Toast("请输入6-12位密码");
-          return;
-        } else {
-          login_button.setClickable(true);
-        }
+        checkInput(login_name_value, login_pass_value);
 
         model.login(login_name_value, login_pass_value)
             .subscribeOn(Schedulers.newThread())
@@ -137,6 +123,16 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
         finish();
 
         break;
+    }
+  }
+
+  private void checkInput(String name, String pass) {
+    if (name.length() != 11) {
+      JUtils.Toast("请输入正确手机号");
+      return;
+    } else if (pass.length() < 6 || pass.length() > 12) {
+      JUtils.Toast("请输入6-12位密码");
+      return;
     }
   }
 }

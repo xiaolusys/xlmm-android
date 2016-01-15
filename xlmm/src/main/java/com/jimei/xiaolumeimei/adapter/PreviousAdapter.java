@@ -15,8 +15,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.IndexBean;
-import com.jimei.xiaolumeimei.ui.activity.ProductDetailActvity;
-import com.jimei.xiaolumeimei.ui.activity.TongkuanActivity;
+import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActvity;
+import com.jimei.xiaolumeimei.ui.activity.product.TongkuanActivity;
 import com.zhy.autolayout.utils.AutoUtils;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by itxuye(www.itxuye.com) on 15/12/31.
+ * Created by 优尼世界 on 15/12/31.
  * <p>
  * Copyright 2015年 上海己美. All rights reserved.
  */

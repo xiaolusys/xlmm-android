@@ -1,4 +1,4 @@
-package com.jimei.xiaolumeimei.ui.activity;
+package com.jimei.xiaolumeimei.ui.activity.product;
 
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;

@@ -1,12 +1,13 @@
 package com.jimei.xiaolumeimei.model;
 
 import com.jimei.xiaolumeimei.entities.AllOdersBean;
+import com.jimei.xiaolumeimei.entities.PayReturnBean;
 import com.jimei.xiaolumeimei.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 import rx.Observable;
 
 /**
- * Created by itxuye(www.itxuye.com) on 15/12/29.
+ * Created by 优尼世界 on 15/12/29.
  *
  * Copyright 2015年 上海己美. All rights reserved.
  */
@@ -16,6 +17,16 @@ public class TradeModel {
   public Observable<AllOdersBean> getAlloderBean() {
     return XlmmRetrofitClient.getService()
         .getAllOdersList()
+        .compose(new DefaultTransform<>());
+  }
+
+  //创建订单
+  public Observable<PayReturnBean> shoppingcart_create(String cart_ids, String addr_id,
+      String channel, String payment, String post_fee, String discount_fee,
+      String total_fee, String uuid) {
+    return XlmmRetrofitClient.getService()
+        .shoppingcart_create(cart_ids, addr_id, channel, payment, post_fee, discount_fee,
+            total_fee, uuid)
         .compose(new DefaultTransform<>());
   }
 }

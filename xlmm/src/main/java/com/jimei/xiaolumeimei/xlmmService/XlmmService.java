@@ -1,10 +1,14 @@
 package com.jimei.xiaolumeimei.xlmmService;
 
 import com.jimei.xiaolumeimei.data.XlmmApi;
+import com.jimei.xiaolumeimei.entities.AddCartsBean;
 import com.jimei.xiaolumeimei.entities.AllOdersBean;
+import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
+import com.jimei.xiaolumeimei.entities.CartsinfoBean;
 import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.entities.IndexBean;
 import com.jimei.xiaolumeimei.entities.LadyListBean;
+import com.jimei.xiaolumeimei.entities.PayReturnBean;
 import com.jimei.xiaolumeimei.entities.PostBean;
 import com.jimei.xiaolumeimei.entities.ProductBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
@@ -20,7 +24,7 @@ import retrofit.http.Query;
 import rx.Observable;
 
 /**
- * Created by itxuye(www.itxuye.com) on 15/12/29.
+ * Created by 优尼世界 on 15/12/29.
  *
  * Copyright 2015年 上海己美. All rights reserved.
  */
@@ -28,7 +32,8 @@ public interface XlmmService {
 
   //@formatter:off
 
-  @FormUrlEncoded @POST("register/customer_login")
+  @FormUrlEncoded
+  @POST("register/customer_login")
   Observable<UserBean> login(
       @Field("username") String username,
       @Field("password") String password);
@@ -74,5 +79,41 @@ public interface XlmmService {
   Observable<ProductDetailBean> getProductDetails(
       @Path("id")String id);
 
+
+  //添加购物车
+  @FormUrlEncoded
+  @POST("carts")
+  Observable<AddCartsBean> addCarts(
+
+      @Field("item_id") String itemId,
+      @Field("sku_id")  String skuId
+  );
+
+
+  //添加购物车
+
+  @GET("carts")
+  Observable<List<CartsinfoBean>> getCartsList();
+
+    //获取购物信息列表
+  @GET("carts/carts_payinfo")
+  Observable<CartsPayinfoBean> getCartsPayInfoList(
+      @Query("cart_ids") String cart_ids);
+
+
+  //创建订单接口
+
+  @FormUrlEncoded
+  @POST("trades/shoppingcart_create")
+  Observable<PayReturnBean> shoppingcart_create(
+      @Field("cart_ids")     String cart_ids,
+      @Field("addr_id")      String addr_id,
+      @Field("channel")      String channel,
+      @Field("payment")      String payment,
+      @Field("post_fee")     String post_fee,
+      @Field("discount_fee") String discount_fee,
+      @Field("total_fee")    String total_fee,
+      @Field("uuid")         String uuid
+  );
 
 }

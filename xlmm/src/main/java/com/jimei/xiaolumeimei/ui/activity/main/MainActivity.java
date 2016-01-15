@@ -1,7 +1,7 @@
-package com.jimei.xiaolumeimei.ui.activity;
+package com.jimei.xiaolumeimei.ui.activity.main;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -13,10 +13,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AlloderActivity;
+import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.fragment.ChildListFragment;
 import com.jimei.xiaolumeimei.ui.fragment.LadyListFragment;
@@ -27,21 +29,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends BaseActivity
-    implements NavigationView.OnNavigationItemSelectedListener {
+    implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
   @Bind(R.id.tab_layout) TabLayout mTabLayout;
   @Bind(R.id.view_pager) ViewPager mViewPager;
   @Bind(R.id.tool_bar) Toolbar toolbar;
+  @Bind(R.id.fab) FloatingActionButton carts;
   List<Fragment> fragments;
   List<String> titles;
-  private SharedPreferences sharedPreferences;
 
   @Override protected int provideContentViewId() {
     return R.layout.activity_main;
   }
 
   @Override protected void setListener() {
-
+    carts.setOnClickListener(this);
   }
 
   @Override protected void initData() {
@@ -139,6 +141,10 @@ public class MainActivity extends BaseActivity
     } else {
       super.onBackPressed();
     }
+  }
+
+  @Override public void onClick(View v) {
+    startActivity(new Intent(MainActivity.this, CartActivity.class));
   }
 
   class MainTabAdapter extends FragmentPagerAdapter {

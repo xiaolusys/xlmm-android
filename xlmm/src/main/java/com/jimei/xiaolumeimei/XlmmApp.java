@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import com.jimei.xiaolumeimei.okhttp.OkHttpClientManager;
 import com.jimei.xiaolumeimei.okhttp.PersistentCookieStore;
+import com.jude.utils.JUtils;
 import com.squareup.okhttp.OkHttpClient;
 import com.zhy.autolayout.config.AutoLayoutConifg;
 import java.net.CookieManager;
@@ -28,6 +29,8 @@ public class XlmmApp extends Application {
     mContext = this;
 
     initOkHttpClient();
+    JUtils.initialize(this);
+    JUtils.setDebug(true, "xlmm");
     //CrashWoodpecker.fly(false).to(this);
     AutoLayoutConifg.getInstance().useDeviceSize();
     //CustomActivityOnCrash.install(this);
@@ -35,7 +38,6 @@ public class XlmmApp extends Application {
 
   //初始化OkHttpClient
   private void initOkHttpClient() {
-
     OkHttpClient httpClient = OkHttpClientManager.getInstance().getOkHttpClient();
     httpClient.setConnectTimeout(10 * 1000, TimeUnit.MILLISECONDS);
     httpClient.setWriteTimeout(30 * 1000, TimeUnit.MILLISECONDS);
