@@ -28,7 +28,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity {
 
   @Override protected void initData() {
     model.getCartsList()
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
           @Override public void onNext(List<CartsinfoBean> cartsinfoBeans) {
             if (cartsinfoBeans != null) {

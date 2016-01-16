@@ -8,6 +8,7 @@ package com.jimei.xiaolumeimei.data;
 public class XlmmApi {
 
   public static final String URL_BASE = "http://api.xiaolumeimei.com/rest/v1/";
+  //public static final String URL_BASE1 = "http://192.168.1.31:9000/rest/v1/";
   //注册链接
   public static final String LOGIN_URL = URL_BASE + "register/customer_login";
   //首页网址(商品、海报)

@@ -62,7 +62,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
   @Override protected void initData() {
 
     model.getProductDetails(productId)
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ProductDetailBean>() {
 
           @Override public void onNext(ProductDetailBean productDetailBean) {

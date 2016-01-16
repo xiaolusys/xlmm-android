@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 public class XlmmApp extends Application {
 
   private static Context mContext;
+  public static OkHttpClient client;
 
   public static Context getInstance() {
     return mContext;
@@ -28,7 +29,7 @@ public class XlmmApp extends Application {
     super.onCreate();
     mContext = this;
 
-    initOkHttpClient();
+    client = initOkHttpClient();
     JUtils.initialize(this);
     JUtils.setDebug(true, "xlmm");
     //CrashWoodpecker.fly(false).to(this);
@@ -37,7 +38,10 @@ public class XlmmApp extends Application {
   }
 
   //初始化OkHttpClient
-  private void initOkHttpClient() {
+  private OkHttpClient initOkHttpClient() {
+
+    //okhttp3.OkHttpClient okHttpClient = OkHttpUtils.getInstance().getOkHttpClient();
+
     OkHttpClient httpClient = OkHttpClientManager.getInstance().getOkHttpClient();
     httpClient.setConnectTimeout(10 * 1000, TimeUnit.MILLISECONDS);
     httpClient.setWriteTimeout(30 * 1000, TimeUnit.MILLISECONDS);
@@ -45,5 +49,6 @@ public class XlmmApp extends Application {
     httpClient.setCookieHandler(
         new CookieManager(new PersistentCookieStore(getApplicationContext()),
             CookiePolicy.ACCEPT_ALL));
+    return httpClient;
   }
 }

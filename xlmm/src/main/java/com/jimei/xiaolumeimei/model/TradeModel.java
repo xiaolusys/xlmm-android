@@ -1,9 +1,9 @@
 package com.jimei.xiaolumeimei.model;
 
 import com.jimei.xiaolumeimei.entities.AllOdersBean;
-import com.jimei.xiaolumeimei.entities.PayReturnBean;
 import com.jimei.xiaolumeimei.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
+import com.squareup.okhttp.ResponseBody;
 import rx.Observable;
 
 /**
@@ -21,7 +21,7 @@ public class TradeModel {
   }
 
   //创建订单
-  public Observable<PayReturnBean> shoppingcart_create(String cart_ids, String addr_id,
+  public Observable<ResponseBody> shoppingcart_create(String cart_ids, String addr_id,
       String channel, String payment, String post_fee, String discount_fee,
       String total_fee, String uuid) {
     return XlmmRetrofitClient.getService()

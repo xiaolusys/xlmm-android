@@ -40,7 +40,7 @@ public class TongkuanActivity extends BaseSwipeBackCompatActivity {
   @Override protected void initData() {
     loading.start();
     model.getTongkuanList(model_id)
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<List<ProductBean>>() {
           @Override public void onNext(List<ProductBean> productBeans) {
             mTongkuanAdapter.update(productBeans);

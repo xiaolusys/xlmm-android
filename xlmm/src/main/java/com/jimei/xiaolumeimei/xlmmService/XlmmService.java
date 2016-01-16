@@ -8,12 +8,12 @@ import com.jimei.xiaolumeimei.entities.CartsinfoBean;
 import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.entities.IndexBean;
 import com.jimei.xiaolumeimei.entities.LadyListBean;
-import com.jimei.xiaolumeimei.entities.PayReturnBean;
 import com.jimei.xiaolumeimei.entities.PostBean;
 import com.jimei.xiaolumeimei.entities.ProductBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
+import com.squareup.okhttp.ResponseBody;
 import java.util.List;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
@@ -90,7 +90,7 @@ public interface XlmmService {
   );
 
 
-  //添加购物车
+  //获取购物车信息
 
   @GET("carts")
   Observable<List<CartsinfoBean>> getCartsList();
@@ -105,7 +105,7 @@ public interface XlmmService {
 
   @FormUrlEncoded
   @POST("trades/shoppingcart_create")
-  Observable<PayReturnBean> shoppingcart_create(
+  Observable<ResponseBody> shoppingcart_create(
       @Field("cart_ids")     String cart_ids,
       @Field("addr_id")      String addr_id,
       @Field("channel")      String channel,
