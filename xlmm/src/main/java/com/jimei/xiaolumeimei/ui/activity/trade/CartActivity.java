@@ -65,16 +65,18 @@ public class CartActivity extends BaseSwipeBackCompatActivity {
   public void confirmCarts(View view) {
     Intent intent = new Intent(CartActivity.this, CartsPayInfoActivity.class);
     StringBuilder sb = new StringBuilder();
-    for (int i = 0; i < ids.size(); i++) {
-      sb.append(ids.get(i)).append(",");
+    if (ids.size() > 0) {
+      for (int i = 0; i < ids.size(); i++) {
+        sb.append(ids.get(i)).append(",");
+      }
+      String str = new String(sb);
+
+      String s = str.substring(0, str.length() - 1);
+
+      intent.putExtra("ids", s);
+      JUtils.Toast(s);
+
+      startActivity(intent);
     }
-    String str = new String(sb);
-
-    String s = str.substring(0, str.length() - 1);
-
-    intent.putExtra("ids", s);
-    JUtils.Toast(s);
-
-    startActivity(intent);
   }
 }

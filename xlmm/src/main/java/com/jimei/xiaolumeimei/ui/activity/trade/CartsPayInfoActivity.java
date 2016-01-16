@@ -130,7 +130,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         tradeModel.shoppingcart_create(cart_ids, addr_id, "alipay", payment, post_fee,
             discount_fee, total_fee, uuid)
             .subscribeOn(Schedulers.io())
-            .subscribe(new ServiceResponse<ResponseBody>(){
+            .subscribe(new ServiceResponse<ResponseBody>() {
               @Override public void onNext(ResponseBody responseBody) {
                 super.onNext(responseBody);
                 try {
@@ -143,8 +143,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                   intent.setComponent(componentName);
                   intent.putExtra(PaymentActivity.EXTRA_CHARGE, string);
                   startActivityForResult(intent, REQUEST_CODE_PAYMENT);
-
-
                 } catch (IOException e) {
                   e.printStackTrace();
                 }
@@ -190,7 +188,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         tradeModel.shoppingcart_create(cart_ids, addr_id, "wx", payment, post_fee,
             discount_fee, total_fee, uuid)
             .subscribeOn(Schedulers.io())
-            .subscribe(new ServiceResponse<ResponseBody>(){
+            .subscribe(new ServiceResponse<ResponseBody>() {
               @Override public void onNext(ResponseBody responseBody) {
                 super.onNext(responseBody);
                 try {
@@ -203,8 +201,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                   intent.setComponent(componentName);
                   intent.putExtra(PaymentActivity.EXTRA_CHARGE, string);
                   startActivityForResult(intent, REQUEST_CODE_PAYMENT);
-
-
                 } catch (IOException e) {
                   e.printStackTrace();
                 }
