@@ -30,6 +30,8 @@ public class XlmmApi {
   public static final String PRODUCT_URL = URL_BASE + "products/";
   //所有订单
   public static final String ALL_ORDERS_URL = URL_BASE + "trades/";
+  //所有退货
+  public static final String ALL_REFUNDS_URL = URL_BASE + "refunds/";
 
   public static final String SETTINGMYINFO_URL =
       URL_BASE + "/xueZhang/servlet/AndroidInfoSev";

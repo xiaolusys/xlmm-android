@@ -43,7 +43,6 @@ import android.view.animation.TranslateAnimation;
 
 //import com.seu.bigocto.collection.CollectionFragment;
 import so.xiaolu.xiaolu.R;
-import so.xiaolu.xiaolu.db.TableManager;
 import so.xiaolu.xiaolu.mainframe.ChildFragment;
 import so.xiaolu.xiaolu.mainframe.TodayFragment;
 import so.xiaolu.xiaolu.mainframe.WomanFragment;

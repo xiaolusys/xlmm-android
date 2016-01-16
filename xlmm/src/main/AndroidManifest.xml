@@ -65,6 +65,18 @@
             android:label="@string/title_activity_orderdetail"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
+
+        <activity
+            android:name=".orders.RefundsActivity"
+            android:label="@string/title_activity_refunds"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+
+        <activity
+            android:name=".orders.RefundDetailActivity"
+            android:label="@string/title_activity_refunddetail"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>

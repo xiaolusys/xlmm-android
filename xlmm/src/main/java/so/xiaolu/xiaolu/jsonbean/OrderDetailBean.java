@@ -13,7 +13,7 @@ import java.util.List;
  */
 
 public class OrderDetailBean implements Parcelable {
-	public OrderBaseInfo order_base_info;
+	public AllOrdersBean.OrderBaseInfo order_base_info;
 	public ArrayList<Goods> goods_list;
 
 	/**
@@ -42,7 +42,7 @@ public class OrderDetailBean implements Parcelable {
 	private void readFromParcel(Parcel in) {
 
 		/** 对象 读出 */
-		order_base_info = in.readParcelable(OrderBaseInfo.class.getClassLoader());
+		order_base_info = in.readParcelable(AllOrdersBean.OrderBaseInfo.class.getClassLoader());
 		/** list 读出 */
 		goods_list = in.readArrayList(Goods.class.getClassLoader());
 
@@ -58,11 +58,11 @@ public class OrderDetailBean implements Parcelable {
 		}
 	};
 
-	public OrderBaseInfo getOrder_info() {
+	public AllOrdersBean.OrderBaseInfo getOrder_info() {
 		return order_base_info;
 	}
 
-	public void setOrder_info(OrderBaseInfo bean) {
+	public void setOrder_info(AllOrdersBean.OrderBaseInfo bean) {
 		this.order_base_info = bean;
 	}
 
@@ -74,7 +74,7 @@ public class OrderDetailBean implements Parcelable {
 		this.goods_list = listBeans;
 	}
 
-
+/*
 	public static class OrderBaseInfo implements Parcelable {
 		public int tid;
 		public String buyer_nick;
@@ -98,9 +98,6 @@ public class OrderDetailBean implements Parcelable {
 		public String receiver_mobile;
 		public String receiver_phone;
 
-		/**
-		 * 默认构造方法
-		 */
 		public OrderBaseInfo() {
 			// TODO Auto-generated constructor stub
 		}
@@ -141,9 +138,7 @@ public class OrderDetailBean implements Parcelable {
 
 		private void readFromParcel(Parcel in) {
 
-			/** int 读出 */
 			tid = in.readInt();
-			/** stirng 读出 */
 			buyer_nick = in.readString();
 			  buyer_id = in.readInt();
 			  ringchannel = in.readInt();
@@ -346,7 +341,7 @@ public class OrderDetailBean implements Parcelable {
 		}
 
 	}
-
+*/
 
 
 	public static class Goods implements Parcelable{

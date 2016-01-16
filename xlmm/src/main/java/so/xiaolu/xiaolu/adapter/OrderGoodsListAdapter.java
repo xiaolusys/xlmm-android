@@ -41,7 +41,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
 
     private List<OrderDetailBean.Goods> dataSource;
 
-    public OrderGoodsListAdapter(Context context, List<OrderDetailBean.Goods> goodsList, int position) {
+    public OrderGoodsListAdapter(Context context, List<OrderDetailBean.Goods> goodsList) {
         Log.d(TAG," create");
         this.context = context;
         this.dataSource = goodsList;
