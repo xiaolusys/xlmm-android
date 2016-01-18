@@ -110,11 +110,8 @@ public class OrderGoodsListAdapter extends BaseAdapter {
         tx_good_num.setText(data.get(position).get("num"));
 
         String headImg = data.get(position).get("img_url");
-
         String[] temp = headImg.split("http://image.xiaolu.so/");
-
         String head_img = "";
-
         if (temp.length > 1) {
             try {
                 head_img = "http://image.xiaolu.so/"

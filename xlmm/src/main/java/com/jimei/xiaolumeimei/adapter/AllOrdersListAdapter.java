@@ -100,7 +100,7 @@ public class AllOrdersListAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(context).inflate(R.layout.orders_list_item, null);
         }
 
-        final int order_id = mList.get(position).getOrders().get(0).getId();
+        final int order_id = mList.get(position).getId();
 
         tx_payment = (TextView) convertView.findViewById(R.id.tx_order_actual_payment);
         tx_order_sate = (TextView) convertView.findViewById(R.id.tx_order_state);

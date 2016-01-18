@@ -68,8 +68,42 @@ public class AllRefundsListAdapter extends BaseAdapter {
 
 
         }
+    }
+
+    public AllRefundsListAdapter(Context context) {
+        data_refund_list = new ArrayList<AllRefundsBean.ResultsEntity>();
+        this.data = new ArrayList<HashMap<String, String>>();
+        this.context = context;
+    }
+
+    public void updateWithClear(List<AllRefundsBean.ResultsEntity> list) {
+        data_refund_list.clear();
+        data_refund_list.addAll(list);
+        notifyDataSetChanged();
+    }
+
+    public void update(List<AllRefundsBean.ResultsEntity> list) {
+
+        float refund_fee = 0;
+        int refund_State = 0;
+        String refund_no = "";
+
+        Log.d(TAG,"dataSource.size "+ data_refund_list.size());
+        for (int i = 0; i < data_refund_list.size(); i++) {
+            HashMap<String, String> map = new HashMap<String, String>();
+            refund_no = data_refund_list.get(i).getRefund_no();
+            refund_State = data_refund_list.get(i).getStatus();
+            refund_fee = (float)data_refund_list.get(i).getRefund_fee();
+
+            map.put("refund_no", (refund_no) );
+            map.put("refund_State", Integer.toString(refund_State) );
+            map.put("refund_fee", Float.toString(refund_fee) );
+            data.add(map);
 
 
+        }
+        data_refund_list.addAll(list);
+        notifyDataSetChanged();
     }
 
     @Override

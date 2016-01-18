@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.model;
 
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
+import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
@@ -31,9 +32,17 @@ public class TradeModel {
         .compose(new DefaultTransform<>());
   }
 
+  //得到某个订单详细数据列表
   public Observable<OrderDetailBean> getOrderDetailBean(int order_id){
     return XlmmRetrofitClient.getService()
             .getOrderDetail(order_id)
+            .compose(new DefaultTransform<>());
+  }
+
+  //得到全部退货单数据列表
+  public Observable<AllRefundsBean> getRefundsBean() {
+    return XlmmRetrofitClient.getService()
+            .getAllRedundsList()
             .compose(new DefaultTransform<>());
   }
 }
