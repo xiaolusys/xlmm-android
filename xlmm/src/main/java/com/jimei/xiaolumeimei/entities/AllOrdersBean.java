@@ -8,10 +8,10 @@ import java.util.List;
  *
  * Copyright 2015年 上海己美. All rights reserved.
  */
-public class AllOdersBean {
+public class AllOrdersBean {
 
   @Override public String toString() {
-    return "AllOdersBean{" +
+    return "AllOrdersBean{" +
         "mCount=" + mCount +
         ", mNext='" + mNext + '\'' +
         ", mPrevious=" + mPrevious +

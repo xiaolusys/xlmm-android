@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.model;
 
-import com.jimei.xiaolumeimei.entities.AllOdersBean;
+import com.jimei.xiaolumeimei.entities.AllOrdersBean;
+import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 import com.squareup.okhttp.ResponseBody;
@@ -14,7 +15,7 @@ import rx.Observable;
 public class TradeModel {
 
   //得到全部订单数据列表
-  public Observable<AllOdersBean> getAlloderBean() {
+  public Observable<AllOrdersBean> getAlloderBean() {
     return XlmmRetrofitClient.getService()
         .getAllOdersList()
         .compose(new DefaultTransform<>());
@@ -28,5 +29,11 @@ public class TradeModel {
         .shoppingcart_create(cart_ids, addr_id, channel, payment, post_fee, discount_fee,
             total_fee, uuid)
         .compose(new DefaultTransform<>());
+  }
+
+  public Observable<OrderDetailBean> getOrderDetailBean(int order_id){
+    return XlmmRetrofitClient.getService()
+            .getOrderDetail(order_id)
+            .compose(new DefaultTransform<>());
   }
 }

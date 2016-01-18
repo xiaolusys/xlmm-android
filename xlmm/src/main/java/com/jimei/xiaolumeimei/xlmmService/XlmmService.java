@@ -2,12 +2,13 @@ package com.jimei.xiaolumeimei.xlmmService;
 
 import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.entities.AddCartsBean;
-import com.jimei.xiaolumeimei.entities.AllOdersBean;
+import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.CartsinfoBean;
 import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.entities.IndexBean;
 import com.jimei.xiaolumeimei.entities.LadyListBean;
+import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.PostBean;
 import com.jimei.xiaolumeimei.entities.ProductBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
@@ -69,9 +70,9 @@ public interface XlmmService {
   Observable<List<ProductBean>> getTongKuanList(
       @Path("model_id")int model_id);
 
-  //获取待支付订单
+  //获取所有订单
   @GET(XlmmApi.ALL_ORDERS_URL)
-  Observable<AllOdersBean> getAllOdersList();
+  Observable<AllOrdersBean> getAllOdersList();
 
 
   //获得商品详情页面数据
@@ -115,5 +116,10 @@ public interface XlmmService {
       @Field("total_fee")    String total_fee,
       @Field("uuid")         String uuid
   );
+
+  //获得订单数据
+  @GET(XlmmApi.ALL_ORDERS_URL+"{pk}/details.json")
+  Observable<OrderDetailBean> getOrderDetail(
+          @Path("pk")int order_id);
 
 }
