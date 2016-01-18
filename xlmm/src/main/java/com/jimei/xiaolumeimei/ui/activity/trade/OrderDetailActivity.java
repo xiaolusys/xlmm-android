@@ -43,10 +43,12 @@ import com.jimei.xiaolumeimei.data.XlmmApi;
 
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 
+import butterknife.Bind;
 import rx.schedulers.Schedulers;
 
 public class OrderDetailActivity extends BaseSwipeBackCompatActivity {
     String TAG = "OrderDetailActivity";
+    @Bind(R.id.toolbar) Toolbar toolbar;
     int order_id = 0;
     TradeModel model = new TradeModel();
 
@@ -62,7 +64,8 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity {
     }
 
     @Override protected void initViews() {
-
+        toolbar.setTitle("订单详情");
+        setSupportActionBar(toolbar);
     }
     //从server端获得所有订单数据，可能要查询几次
     @Override protected void initData() {

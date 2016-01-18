@@ -100,6 +100,8 @@ public class AllOrdersListAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(context).inflate(R.layout.orders_list_item, null);
         }
 
+        final int order_id = mList.get(position).getOrders().get(0).getId();
+
         tx_payment = (TextView) convertView.findViewById(R.id.tx_order_actual_payment);
         tx_order_sate = (TextView) convertView.findViewById(R.id.tx_order_state);
 
@@ -118,8 +120,8 @@ public class AllOrdersListAdapter extends BaseAdapter {
                 Log.d(TAG, "onItemClick "+arg2 + " " + arg3);
                 Intent intent = new Intent(context, OrderDetailActivity.class);
 
-                //intent.putExtra("orderinfo", order_detail_info);
-                intent.putExtra("goodnum",arg2);
+                intent.putExtra("orderinfo", order_id);
+                Log.d(TAG,"transfer orderid  "+order_id+" to OrderDetailActivity");
                 context.startActivity(intent);
             }
 

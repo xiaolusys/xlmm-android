@@ -15,7 +15,10 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -42,11 +45,13 @@ import com.jimei.xiaolumeimei.adapter.AllOrdersListAdapter;
 import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 
+import butterknife.Bind;
 import rx.schedulers.Schedulers;
 
 
 public class AllOrdersActivity extends BaseSwipeBackCompatActivity {
     String TAG = "AllOrdersActivity";
+    @Bind(R.id.toolbar) Toolbar toolbar;
     TradeModel model = new TradeModel();
     AllOrdersBean all_orders_info = new AllOrdersBean();
     private AllOrdersListAdapter mAllOrderAdapter;
@@ -63,6 +68,9 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity {
     }
 
     @Override protected void initViews() {
+        toolbar.setTitle("所有订单");
+        setSupportActionBar(toolbar);
+
     //config allorders list adaptor
         ListView all_orders_listview = (ListView) findViewById(R.id.all_orders_listview);
 
@@ -76,8 +84,13 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity {
                 .subscribe(new ServiceResponse<AllOrdersBean>() {
                     @Override public void onNext(AllOrdersBean allOrdersBean) {
                         List<AllOrdersBean.ResultsEntity> results = allOrdersBean.getResults();
-
-                        mAllOrderAdapter.update(results);
+                        if (0 == results.size()){
+                            fillEmptyInfo();
+                        }
+                        else
+                        {
+                            mAllOrderAdapter.update(results);
+                        }
 
                         Log.i(TAG, allOrdersBean.toString());
                     }
@@ -92,5 +105,12 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity {
         return null;
     }
 
-
+    private void fillEmptyInfo(){
+        TextView  tx_empty_info = new TextView(this);
+        LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        tx_empty_info.setLayoutParams(lp);
+        tx_empty_info.setText("亲，你还没有任何订单，快去抢购吧！");
+        LinearLayout rlayout = (LinearLayout) findViewById(R.id.llayout_allorders);
+        rlayout.addView(tx_empty_info);
+    }
 }
