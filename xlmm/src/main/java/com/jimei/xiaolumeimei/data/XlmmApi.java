@@ -31,7 +31,7 @@ public class XlmmApi {
   public static final String PRODUCT_URL = URL_BASE + "products/";
 
   //所有订单
-  public static final String ALL_ORDERS_URL = URL_BASE + "trades";
+  public static final String ALL_ORDERS_URL = URL_BASE + "trades/";
 
   //所有订单
   public static final String CARTS_URL = URL_BASE + "carts";
