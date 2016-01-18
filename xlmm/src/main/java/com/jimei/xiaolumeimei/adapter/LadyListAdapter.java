@@ -96,7 +96,7 @@ public class LadyListAdapter extends RecyclerView.Adapter<LadyListAdapter.LadyLi
       try {
         head_img += "http://image.xiaolu.so/"
             + URLEncoder.encode(temp[1], "utf-8")
-            + "?imageMogr2/auto-orient/strip/size-limit/10k/q/85/thumbnail/600x700";
+            + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
       } catch (UnsupportedEncodingException e) {
         e.printStackTrace();
       }
