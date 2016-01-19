@@ -1,6 +1,8 @@
 package com.jimei.xiaolumeimei.xlmmService;
 
 import com.jimei.xiaolumeimei.XlmmApp;
+import com.jimei.xiaolumeimei.data.XlmmApi;
+
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 import retrofit.RxJavaCallAdapterFactory;
@@ -47,7 +49,7 @@ public class XlmmRetrofitClient {
     //    new CookieManager(new PersistentCookieStore(getApplicationContext()),
     //        CookiePolicy.ACCEPT_ALL));
 
-    return new Retrofit.Builder().baseUrl("http://api.xiaolumeimei.com/rest/v1/")
+    return new Retrofit.Builder().baseUrl(XlmmApi.URL_BASE)
         .addConverterFactory(GsonConverterFactory.create())
         .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
         .client(XlmmApp.client)

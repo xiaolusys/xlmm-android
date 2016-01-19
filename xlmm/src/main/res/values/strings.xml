@@ -13,4 +13,6 @@
     <string name="title_activity_orderdetail">订单详情</string>
     <string name="title_activity_refunds">退款退货</string>
     <string name="title_activity_refunddetail">退货（款）详情</string>
+  <string name="title_activity_waitpay">待支付</string>
+  <string name="title_activity_waitsend">待收货</string>
 </resources>

@@ -49,8 +49,8 @@ import butterknife.Bind;
 import rx.schedulers.Schedulers;
 
 
-public class AllOrdersActivity extends BaseSwipeBackCompatActivity {
-    String TAG = "AllOrdersActivity";
+public class WaitPayOrdersActivity extends BaseSwipeBackCompatActivity {
+    String TAG = "WaitPayOrdersActivity";
     @Bind(R.id.toolbar) Toolbar toolbar;
     TradeModel model = new TradeModel();
     AllOrdersBean all_orders_info = new AllOrdersBean();
@@ -66,11 +66,11 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity {
     }
 
     @Override protected int getContentViewLayoutID() {
-        return R.layout.activity_allorders;
+        return R.layout.activity_waitpayorders;
     }
 
     @Override protected void initViews() {
-        toolbar.setTitle("所有订单");
+        toolbar.setTitle("待支付订单");
         setSupportActionBar(toolbar);
 
         rlayout = (LinearLayout) findViewById(R.id.llayout_allorders);

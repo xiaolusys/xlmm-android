@@ -56,7 +56,7 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity {
     @Bind(R.id.toolbar) Toolbar toolbar;
     TradeModel model = new TradeModel();
     LinearLayout rlayout;
-    TextView tx_empty_info = new TextView(this);
+    TextView tx_empty_info;
     private AllRefundsListAdapter mAllRefundsAdapter;
 
     @Override protected void setListener() {
@@ -75,6 +75,7 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity {
         setSupportActionBar(toolbar);
         rlayout = (LinearLayout) findViewById(R.id.llayout_allrefunds);
 
+        tx_empty_info = new TextView(mContext);
         //config allorders list adaptor
         ListView all_refunds_listview = (ListView) findViewById(R.id.all_refunds_listview);
 
@@ -89,10 +90,12 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity {
                     @Override public void onNext(AllRefundsBean allRefundsBean) {
                         List<AllRefundsBean.ResultsEntity> results = allRefundsBean.getResults();
                         if (0 == results.size()){
+                            Log.d(TAG," NO redunds data");
                             fillEmptyInfo();
                         }
                         else
                         {
+                            Log.d(TAG," redunds data num " + results.size());
                             tx_empty_info.setVisibility(View.GONE);
                             mAllRefundsAdapter.update(results);
                         }

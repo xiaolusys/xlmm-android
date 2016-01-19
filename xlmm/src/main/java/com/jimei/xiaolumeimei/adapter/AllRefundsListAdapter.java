@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.NestedListView;
 
 import java.io.UnsupportedEncodingException;
@@ -44,32 +45,6 @@ public class AllRefundsListAdapter extends BaseAdapter {
 
     private List<AllRefundsBean.ResultsEntity> data_refund_list;
 
-    public AllRefundsListAdapter(Context context, List<AllRefundsBean.ResultsEntity> allRefundBeanList) {
-        Log.d(TAG," create");
-        this.context = context;
-        this.data_refund_list = allRefundBeanList;
-        float refund_fee = 0;
-        int refund_State = 0;
-        String refund_no = "";
-
-        this.data = new ArrayList<HashMap<String, String>>();
-
-        Log.d(TAG,"dataSource.size "+ data_refund_list.size());
-        for (int i = 0; i < data_refund_list.size(); i++) {
-            HashMap<String, String> map = new HashMap<String, String>();
-            refund_no = data_refund_list.get(i).getRefund_no();
-            refund_State = data_refund_list.get(i).getStatus();
-            refund_fee = (float)data_refund_list.get(i).getRefund_fee();
-
-            map.put("refund_no", (refund_no) );
-            map.put("refund_State", Integer.toString(refund_State) );
-            map.put("refund_fee", Float.toString(refund_fee) );
-            data.add(map);
-
-
-        }
-    }
-
     public AllRefundsListAdapter(Context context) {
         data_refund_list = new ArrayList<AllRefundsBean.ResultsEntity>();
         this.data = new ArrayList<HashMap<String, String>>();
@@ -87,13 +62,32 @@ public class AllRefundsListAdapter extends BaseAdapter {
         float refund_fee = 0;
         int refund_State = 0;
         String refund_no = "";
+        String img_url = "";
+        String title = "";
+        float std_sale_price = 0;
+        float agent_price = 0;
+        String model_id = "";
+        int num = 0;
 
-        Log.d(TAG,"dataSource.size "+ data_refund_list.size());
-        for (int i = 0; i < data_refund_list.size(); i++) {
+        Log.d(TAG,"dataSource.size "+ list.size());
+        for (int i = 0; i < list.size(); i++) {
             HashMap<String, String> map = new HashMap<String, String>();
-            refund_no = data_refund_list.get(i).getRefund_no();
-            refund_State = data_refund_list.get(i).getStatus();
-            refund_fee = (float)data_refund_list.get(i).getRefund_fee();
+            refund_no = list.get(i).getRefund_no();
+            refund_State = list.get(i).getStatus();
+            refund_fee = (float)list.get(i).getRefund_fee();
+            img_url = list.get(i).getPic_path();
+            title = list.get(i).getTitle();
+            std_sale_price = (float)list.get(i).getTotal_fee();
+            agent_price = (float)list.get(i).getPayment();
+            model_id = list.get(i).getSku_name();
+            num = list.get(i).getRefund_num();
+
+            map.put("img_url", img_url );
+            map.put("title", title );
+            map.put("std_sale_price", Float.toString(std_sale_price) );
+            map.put("agent_price", Float.toString(agent_price) );
+            map.put("model_id", model_id );
+            map.put("num", Integer.toString(num) );
 
             map.put("refund_no", (refund_no) );
             map.put("refund_State", Integer.toString(refund_State) );
@@ -137,7 +131,17 @@ public class AllRefundsListAdapter extends BaseAdapter {
         tx_refund_state.setText("退款状态："+data.get(position).get("refund_State"));
         tx_refundfee.setText(data.get(position).get("refund_fee"));
 
+        ImageView img_goods = (ImageView) convertView.findViewById(R.id.img_good);;
+        TextView tx_good_name = (TextView) convertView.findViewById(R.id.tx_good_name);
+        TextView tx_good_price = (TextView) convertView.findViewById(R.id.tx_good_price);
+        TextView tx_good_size = (TextView) convertView.findViewById(R.id.tx_good_size);
+        TextView tx_good_num = (TextView) convertView.findViewById(R.id.tx_good_num);
 
+        ViewUtils.loadImgToImgView(context, img_goods, data.get(position).get("pic") );
+        tx_good_name.setText(data.get(position).get("title") );
+        tx_good_price.setText(data.get(position).get("agent_price"));
+        tx_good_size.setText(data.get(position).get("model_id"));
+        tx_good_num.setText(data.get(position).get("num"));
 
         return convertView;
     }

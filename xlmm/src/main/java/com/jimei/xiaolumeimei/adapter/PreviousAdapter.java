@@ -65,17 +65,18 @@ public class PreviousAdapter extends RecyclerView.Adapter<PreviousAdapter.Previo
 
     IndexBean.Productmodel product_model = products.getProduct_model();
 
-    holder.childlistName.setText(product_model.getName());
-
-    holder.childlistAgentPrice.setText("¥" + products.getAgent_price());
-    holder.childlistStdsalePrice.setText("/¥" + products.getStd_sale_price());
+    try {
+      holder.childlistName.setText(product_model.getName());
+      holder.childlistAgentPrice.setText("¥" + products.getAgent_price());
+      holder.childlistStdsalePrice.setText("/¥" + products.getStd_sale_price());
+    }
+    catch (Exception e){
+      e.printStackTrace();
+    }
 
     String headImg = products.getHead_img();
-
     String[] temp = headImg.split("http://image.xiaolu.so/");
-
     String head_img = "";
-
     if (temp.length > 1) {
       try {
         head_img = "http://image.xiaolu.so/"

@@ -64,10 +64,13 @@ public class TongkuanAdapter extends RecyclerView.Adapter<TongkuanAdapter.Tongku
   @Override public void onBindViewHolder(TongkuanVH holder, int position) {
     ProductBean productBean = mList.get(position);
 
-    holder.childlistName.setText(productBean.name);
-
-    holder.childlistAgentPrice.setText("¥" + productBean.agent_price);
-    holder.childlistStdsalePrice.setText("/¥" + productBean.std_sale_price);
+    try {
+      holder.childlistName.setText(productBean.name);
+      holder.childlistAgentPrice.setText("¥" + productBean.agent_price);
+      holder.childlistStdsalePrice.setText("/¥" + productBean.std_sale_price);
+    }catch (Exception e){
+      e.printStackTrace();
+    }
 
     String headImg = productBean.pic_path;
 

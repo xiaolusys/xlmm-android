@@ -24,13 +24,21 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.jimei.xiaolumeimei.R;
+
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -216,5 +224,27 @@ public final class ViewUtils {
   public static boolean isTablet(Context context) {
     return (context.getResources().getConfiguration().screenLayout
         & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+  }
+
+  public static void loadImgToImgView(Context context, ImageView img, String picPath){
+    String headImg = picPath;
+    String[] temp = headImg.split("http://image.xiaolu.so/");
+    String head_img = "";
+    if (temp.length > 1) {
+      try {
+        head_img = "http://image.xiaolu.so/"
+                + URLEncoder.encode(temp[1], "utf-8")
+                + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
+      } catch (UnsupportedEncodingException e) {
+        e.printStackTrace();
+      }
+    }
+
+    Glide.with(context)
+            .load(head_img)
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .placeholder(R.drawable.parceholder)
+            .centerCrop()
+            .into(img);
   }
 }

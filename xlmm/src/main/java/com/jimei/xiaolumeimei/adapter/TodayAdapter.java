@@ -68,10 +68,13 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.TodayVH> {
     ProductListBean.ResultsEntity.ProductModelEntity productModel =
         products.getProductModel();
 
-    holder.childlistName.setText(productModel.getName());
-
-    holder.childlistAgentPrice.setText("¥" + products.getAgentPrice());
-    holder.childlistStdsalePrice.setText("/¥" + products.getStdSalePrice());
+    try {
+      holder.childlistName.setText(productModel.getName());
+      holder.childlistAgentPrice.setText("¥" + products.getAgentPrice());
+      holder.childlistStdsalePrice.setText("/¥" + products.getStdSalePrice());
+    }catch (Exception e){
+      e.printStackTrace();
+    }
 
     String headImg = products.getHeadImg();
 
