@@ -125,14 +125,19 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.TodayVH> {
       if (name != null) {
         bundle.putString("name", name.split("/")[0]);
       }
-      if (mList.get(position).getProductModel().isIsSingleSpec()) {
-        Intent intent = new Intent(mContext, ProductDetailActvity.class);
-        intent.putExtras(bundle);
-        mContext.startActivity(intent);
-      } else {
-        Intent intent = new Intent(mContext, TongkuanActivity.class);
-        intent.putExtras(bundle);
-        mContext.startActivity(intent);
+
+      try {
+        if (mList.get(position).getProductModel().isIsSingleSpec()) {
+          Intent intent = new Intent(mContext, ProductDetailActvity.class);
+          intent.putExtras(bundle);
+          mContext.startActivity(intent);
+        } else {
+          Intent intent = new Intent(mContext, TongkuanActivity.class);
+          intent.putExtras(bundle);
+          mContext.startActivity(intent);
+        }
+      } catch (Exception e) {
+        e.printStackTrace();
       }
     });
   }

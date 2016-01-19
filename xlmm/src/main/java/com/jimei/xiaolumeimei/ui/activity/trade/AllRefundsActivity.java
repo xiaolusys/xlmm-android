@@ -81,6 +81,22 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity {
 
         mAllRefundsAdapter = new AllRefundsListAdapter(this);
         all_refunds_listview.setAdapter(mAllRefundsAdapter);
+        all_refunds_listview.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+                                    long arg3) {
+                // TODO Auto-generated method stub
+                Log.d(TAG, "onItemClick "+arg2 + " " + arg3);
+                int order_id = mAllRefundsAdapter.getOrderId(arg2);
+                Intent intent = new Intent(AllRefundsActivity.this, RefundDetailActivity.class);
+
+                intent.putExtra("orderinfo", order_id);
+                Log.d(TAG,"transfer orderid  "+order_id+" to OrderDetailActivity");
+                startActivity(intent);
+            }
+
+        });
     }
     //从server端获得所有订单数据，可能要查询几次
     @Override protected void initData() {

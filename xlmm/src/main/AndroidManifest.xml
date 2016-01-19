@@ -116,6 +116,18 @@
             android:theme="@style/AppTheme.TransparentActivity"
              >
         </activity>
+    <activity
+        android:name=".ui.activity.trade.WaitPayOrdersActivity"
+        android:label="@string/title_activity_waitpay"
+        android:theme="@style/AppTheme.TransparentActivity"
+        >
+    </activity>
+    <activity
+        android:name=".ui.activity.trade.WaitSendOrdersActivity"
+        android:label="@string/title_activity_waitsend"
+        android:theme="@style/AppTheme.TransparentActivity"
+        >
+    </activity>
   </application>
 
 </manifest>
