@@ -38,7 +38,7 @@ import java.util.Set;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by itxuye(www.itxuye.com) on 15/12/29.
+ * Created by 优尼世界 on 15/12/29.
  *
  * Copyright 2015年 上海己美. All rights reserved.
  */
@@ -57,6 +57,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
   private LayoutInflater mInflater;
   private String item_id;
   private String sku_id;
+  private TextView bianhao, caizhi, color, beizhu;
 
   @Override protected void setListener() {
 
@@ -70,6 +71,15 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
 
           @Override public void onNext(ProductDetailBean productDetailBean) {
             //String headImg = productDetailBean.getPicPath();
+
+            bianhao.setText(productDetailBean.getName());
+
+            caizhi.setText(productDetailBean.getDetails().getMaterial());
+
+            color.setText(productDetailBean.getDetails().getColor());
+
+            beizhu.setText(productDetailBean.getDetails().getNote());
+
             List<String> contentImgs =
                 productDetailBean.getProductModel().getContentImgs();
 
@@ -186,6 +196,11 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
 
     tagFlowLayout =
         (TagFlowLayout) scrollView.getPullRootView().findViewById(R.id.id_flowlayout);
+
+    bianhao = (TextView) scrollView.getPullRootView().findViewById(R.id.shangpinbianhao);
+    caizhi = (TextView) scrollView.getPullRootView().findViewById(R.id.shagpincaizhi);
+    color = (TextView) scrollView.getPullRootView().findViewById(R.id.kexuanyanse);
+    beizhu = (TextView) scrollView.getPullRootView().findViewById(R.id.shangpinnbeizhu);
 
     DisplayMetrics localDisplayMetrics = new DisplayMetrics();
     getWindowManager().getDefaultDisplay().getMetrics(localDisplayMetrics);
