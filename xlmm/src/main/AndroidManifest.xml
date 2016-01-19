@@ -57,9 +57,7 @@
     <activity
         android:theme="@style/AppTheme.TransparentActivity"
         android:name=".ui.activity.product.ProductDetailActvity"/>
-    <activity android:name=".ui.activity.trade.AlloderActivity"
-        android:theme="@style/AppTheme.TransparentActivity"
-        />
+
     <activity android:name=".ui.activity.trade.CartActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
@@ -94,24 +92,28 @@
         <activity
             android:name=".ui.activity.trade.AllOrdersActivity"
             android:label="@string/title_activity_allorders"
+            android:theme="@style/AppTheme.TransparentActivity"
              >
         </activity>
 
         <activity
             android:name=".ui.activity.trade.OrderDetailActivity"
             android:label="@string/title_activity_orderdetail"
+            android:theme="@style/AppTheme.TransparentActivity"
              >
         </activity>
 
         <activity
-            android:name=".ui.activity.trade.RefundsActivity"
+            android:name=".ui.activity.trade.AllRefundsActivity"
             android:label="@string/title_activity_refunds"
+            android:theme="@style/AppTheme.TransparentActivity"
              >
         </activity>
 
         <activity
             android:name=".ui.activity.trade.RefundDetailActivity"
             android:label="@string/title_activity_refunddetail"
+            android:theme="@style/AppTheme.TransparentActivity"
              >
         </activity>
   </application>

@@ -33,6 +33,8 @@ public class XlmmApi {
   //所有订单
   public static final String ALL_ORDERS_URL = URL_BASE + "trades";
 
+  //所有退货订单
+  public static final String ALL_REFUNDS_URL = URL_BASE + "refunds/";
   //所有订单
   public static final String CARTS_URL = URL_BASE + "carts";
 

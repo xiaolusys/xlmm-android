@@ -55,6 +55,8 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity {
     TradeModel model = new TradeModel();
     AllOrdersBean all_orders_info = new AllOrdersBean();
     private AllOrdersListAdapter mAllOrderAdapter;
+    LinearLayout rlayout;
+    TextView  tx_empty_info = new TextView(this);
 
     @Override protected void setListener() {
 
@@ -70,6 +72,8 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity {
     @Override protected void initViews() {
         toolbar.setTitle("所有订单");
         setSupportActionBar(toolbar);
+
+        rlayout = (LinearLayout) findViewById(R.id.llayout_allorders);
 
     //config allorders list adaptor
         ListView all_orders_listview = (ListView) findViewById(R.id.all_orders_listview);
@@ -89,6 +93,7 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity {
                         }
                         else
                         {
+                            tx_empty_info.setVisibility(View.GONE);
                             mAllOrderAdapter.update(results);
                         }
 
@@ -106,11 +111,11 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity {
     }
 
     private void fillEmptyInfo(){
-        TextView  tx_empty_info = new TextView(this);
+
         LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         tx_empty_info.setLayoutParams(lp);
         tx_empty_info.setText("亲，你还没有任何订单，快去抢购吧！");
-        LinearLayout rlayout = (LinearLayout) findViewById(R.id.llayout_allorders);
+
         rlayout.addView(tx_empty_info);
     }
 }

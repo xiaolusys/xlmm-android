@@ -14,10 +14,16 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.entities.AllOrdersBean;
+import com.jimei.xiaolumeimei.model.TradeModel;
+import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
@@ -40,68 +46,78 @@ import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.RefundDetailBean;
 
+import butterknife.Bind;
+import rx.schedulers.Schedulers;
 
-public class AllRefundsActivity extends AppCompatActivity {
-    String TAG = "RefundsActivity";
+
+public class AllRefundsActivity extends BaseSwipeBackCompatActivity {
+    String TAG = "AllRefundsActivity";
     AllRefundsBean all_refunds_info = new AllRefundsBean();
+    @Bind(R.id.toolbar) Toolbar toolbar;
+    TradeModel model = new TradeModel();
+    LinearLayout rlayout;
+    TextView tx_empty_info = new TextView(this);
+    private AllRefundsListAdapter mAllRefundsAdapter;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
-        Log.d(TAG,"onCreate");
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_allorders);
-        this.setTitle("退款退货");
+    @Override protected void setListener() {
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    }
+    @Override protected void getBundleExtras(Bundle extras) {
+
+    }
+
+    @Override protected int getContentViewLayoutID() {
+        return R.layout.activity_allrefunds;
+    }
+
+    @Override protected void initViews() {
+        toolbar.setTitle("退款退货");
         setSupportActionBar(toolbar);
-
-        //get all orders info from server
-
+        rlayout = (LinearLayout) findViewById(R.id.llayout_allrefunds);
 
         //config allorders list adaptor
         ListView all_refunds_listview = (ListView) findViewById(R.id.all_refunds_listview);
 
-        AllRefundsListAdapter all_refunds_adapter = new AllRefundsListAdapter(this, all_refunds_info.getResults());
-        all_refunds_listview.setAdapter(all_refunds_adapter);
-        all_refunds_listview.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        mAllRefundsAdapter = new AllRefundsListAdapter(this);
+        all_refunds_listview.setAdapter(mAllRefundsAdapter);
+    }
+    //从server端获得所有订单数据，可能要查询几次
+    @Override protected void initData() {
+        model.getRefundsBean()
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(new ServiceResponse<AllRefundsBean>() {
+                    @Override public void onNext(AllRefundsBean allRefundsBean) {
+                        List<AllRefundsBean.ResultsEntity> results = allRefundsBean.getResults();
+                        if (0 == results.size()){
+                            fillEmptyInfo();
+                        }
+                        else
+                        {
+                            tx_empty_info.setVisibility(View.GONE);
+                            mAllRefundsAdapter.update(results);
+                        }
 
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-                                    long arg3) {
-                // TODO Auto-generated method stub
-                Log.d(TAG, "onItemClick "+arg2 + " " + arg3);
-                Intent intent = new Intent(AllRefundsActivity.this, RefundDetailActivity.class);
-                //intent.putExtra("refunddetail", one_refund_detail);
-                startActivity(intent);
-            }
-
-        });
+                        Log.i(TAG, allRefundsBean.toString());
+                    }
+                });
     }
 
-
-
-    @Override
-    protected void onStart() {
-        // TODO Auto-generated method stub
-        super.onStart();
-
+    @Override protected boolean toggleOverridePendingTransition() {
+        return false;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // TODO Auto-generated method stub
-        if (item.getItemId() == android.R.id.home) {
-            Log.d(TAG,"nav back");
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+    @Override protected TransitionMode getOverridePendingTransitionMode() {
+        return null;
     }
 
-    //从server端获得所有refund订单数据，可能要查询几次
+    private void fillEmptyInfo(){
 
+        LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        tx_empty_info.setLayoutParams(lp);
+        tx_empty_info.setText("亲，你还没有任何退货单！");
 
+        rlayout.addView(tx_empty_info);
+    }
 
 
 }

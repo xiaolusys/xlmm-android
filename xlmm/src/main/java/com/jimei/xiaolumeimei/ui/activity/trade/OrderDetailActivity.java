@@ -19,6 +19,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
@@ -31,6 +33,8 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -108,12 +112,32 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity {
 
         //没有订单创建时间?
         TextView tx_order_crttime = (TextView) findViewById(R.id.tx_order_crttime);
-        tx_order_crttime.setText("时间：" + orderDetailBean.getPay_time());
+        tx_order_crttime.setText("时间：" + orderDetailBean.getCreated());
         TextView tx_order_crtstate = (TextView) findViewById(R.id.tx_order_crtstate);
         tx_order_crtstate.setText("订单创建成功" );
 
-        ImageView img_good = (ImageView) findViewById(R.id.img_good);
         if(1 == orderDetailBean.getOrders().size()) {
+            ImageView img_good = (ImageView) findViewById(R.id.img_good);
+            String headImg = orderDetailBean.getOrders().get(0).getPic_path();
+            String[] temp = headImg.split("http://image.xiaolu.so/");
+            String head_img = "";
+            if (temp.length > 1) {
+                try {
+                    head_img = "http://image.xiaolu.so/"
+                            + URLEncoder.encode(temp[1], "utf-8")
+                            + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            Glide.with(this)
+                    .load(head_img)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .placeholder(R.drawable.parceholder)
+                    .centerCrop()
+                    .into(img_good);
+
             TextView tx_good_name = (TextView) findViewById(R.id.tx_good_name);
             tx_good_name.setText(orderDetailBean.getOrders().get(0).getTitle());
             TextView tx_good_price = (TextView) findViewById(R.id.tx_good_price);

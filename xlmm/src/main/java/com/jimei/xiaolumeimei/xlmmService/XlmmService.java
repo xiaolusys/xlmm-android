@@ -3,6 +3,7 @@ package com.jimei.xiaolumeimei.xlmmService;
 import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.entities.AddCartsBean;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
+import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.CartsinfoBean;
 import com.jimei.xiaolumeimei.entities.ChildListBean;
@@ -118,8 +119,13 @@ public interface XlmmService {
   );
 
   //获得订单数据
-  @GET(XlmmApi.ALL_ORDERS_URL+"{pk}/details.json")
+  @GET(XlmmApi.ALL_ORDERS_URL+"/{pk}/details")
   Observable<OrderDetailBean> getOrderDetail(
           @Path("pk")int order_id);
+
+  //获取所有退货订单
+  @GET(XlmmApi.ALL_REFUNDS_URL)
+  Observable<AllRefundsBean> getAllRedundsList();
+
 
 }

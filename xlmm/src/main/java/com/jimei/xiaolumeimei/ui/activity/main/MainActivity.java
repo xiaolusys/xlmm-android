@@ -18,6 +18,7 @@ import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllOrdersActivity;
+import com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.fragment.ChildListFragment;
@@ -115,7 +116,7 @@ public class MainActivity extends BaseActivity
       } else if (id == R.id.nav_tobereceived) {
 
       } else if (id == R.id.nav_returned) {
-
+        startActivity(new Intent(MainActivity.this, AllRefundsActivity.class));
       } else if (id == R.id.nav_orders) {
         startActivity(new Intent(MainActivity.this, AllOrdersActivity.class));
       } else if (id == R.id.nav_setting) {
