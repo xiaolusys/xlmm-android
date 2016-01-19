@@ -4,6 +4,9 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <ImageView android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:src="@drawable/zhengpin"
+        />
   <com.jimei.xiaolumeimei.widget.TagFlowLayout
       android:id="@+id/id_flowlayout"
       app:max_select="1"
@@ -13,7 +16,7 @@
   </com.jimei.xiaolumeimei.widget.TagFlowLayout>
   <ImageView
       android:layout_width="match_parent"
-      android:id="@+id/image_details"
+      android:id="@+id/image_details_product"
       android:layout_height="match_parent"
       />
 </LinearLayout>

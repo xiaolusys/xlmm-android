@@ -19,5 +19,12 @@ public class UserModel {
   }
 
 
+  public Observable<UserBean> register(String name, String password) {
+    return XlmmRetrofitClient.getService()
+        .login(name, password)
+        .compose(new DefaultTransform<>());
+  }
+
+
 
 }

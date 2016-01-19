@@ -116,6 +116,14 @@
             android:theme="@style/AppTheme.TransparentActivity"
              >
         </activity>
+
+    <activity android:name=".ui.activity.user.SettingActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
+
+    <activity android:name=".ui.activity.user.AddressActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
   </application>
 
 </manifest>

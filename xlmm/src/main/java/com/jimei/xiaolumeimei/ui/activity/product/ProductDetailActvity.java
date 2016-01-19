@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -29,6 +30,8 @@ import com.jimei.xiaolumeimei.widget.TagAdapter;
 import com.jimei.xiaolumeimei.widget.TagFlowLayout;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -66,21 +69,56 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
         .subscribe(new ServiceResponse<ProductDetailBean>() {
 
           @Override public void onNext(ProductDetailBean productDetailBean) {
-            String headImg = productDetailBean.getPicPath();
+            //String headImg = productDetailBean.getPicPath();
             List<String> contentImgs =
                 productDetailBean.getProductModel().getContentImgs();
 
+            String headImg2 = productDetailBean.getPicPath();
+
+            String[] temp = headImg2.split("http://image.xiaolu.so/");
+
+            String head_img3 = "";
+
+            if (temp.length > 1) {
+              try {
+                head_img3 = "http://image.xiaolu.so/"
+                    + URLEncoder.encode(temp[1], "utf-8")
+                    + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/100";
+              } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+              }
+            }
+
+            Log.i("detaiImage", contentImgs.get(0));
             List<String> contentImgs1 = productDetailBean.getDetails().getContentImgs();
 
+            final String finalHead_img1 = head_img3;
             titleImage.post(() -> Glide.with(mContext)
-                .load(headImg)
+                .load(finalHead_img1)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .centerCrop()
                 .into(titleImage));
 
+            String headImg1 = contentImgs.get(0);
+
+            String[] temp1 = headImg1.split("http://image.xiaolu.so/");
+
+            String head_img = "";
+
+            if (temp1.length > 1) {
+              try {
+                head_img = "http://image.xiaolu.so/"
+                    + URLEncoder.encode(temp1[1], "utf-8")
+                    + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
+              } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+              }
+            }
+
             //if (contentImgs != null) {
+            final String finalHead_img = head_img;
             detailImage.post(() -> Glide.with(mContext)
-                .load(contentImgs.get(0))
+                .load(finalHead_img)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .centerCrop()
                 .into(detailImage));
@@ -143,9 +181,8 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
       //window.setNavigationBarColor(Color.TRANSPARENT);
     }
 
-    scrollView = (PullToZoomScrollViewEx) findViewById(R.id.pulltoZoomScrollView);
     detailImage =
-        (ImageView) scrollView.getPullRootView().findViewById(R.id.image_details);
+        (ImageView) scrollView.getPullRootView().findViewById(R.id.image_details_product);
 
     tagFlowLayout =
         (TagFlowLayout) scrollView.getPullRootView().findViewById(R.id.id_flowlayout);
@@ -170,13 +207,11 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
   }
 
   private void loadViewForCode() {
-    PullToZoomScrollViewEx scrollView =
-        (PullToZoomScrollViewEx) findViewById(R.id.pulltoZoomScrollView);
+    scrollView = (PullToZoomScrollViewEx) findViewById(R.id.pulltoZoomScrollView);
     View headView =
         LayoutInflater.from(this).inflate(R.layout.productdetail_head_image, null, false);
     View zoomView =
         LayoutInflater.from(this).inflate(R.layout.productdetail_zoom_image, null, false);
-    //View zoomView = LayoutInflater.from(this).inflate(R.layout.profile_zoom_view, null, false);
     View contentView =
         LayoutInflater.from(this).inflate(R.layout.pull_zoom_contentview, null, false);
     scrollView.setHeaderView(headView);
@@ -220,7 +255,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
 
   @Override public boolean onTagClick(View view, int position, FlowLayout parent) {
     sku_id = normalSkus.get(position).getId();
-    JUtils.Toast(sku_id + "   ,...." + item_id);
+    //JUtils.Toast(sku_id + "   ,...." + item_id);
     return true;
   }
 }

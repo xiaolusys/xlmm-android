@@ -1,29 +1,34 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.widget.Button;
+import android.widget.EditText;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 
 /**
- * Created by itxuye(www.itxuye.com) on 2016/01/18.
+ * Created by itxuye(www.itxuye.com) on 2016/01/19.
  *
  * Copyright 2015年 上海己美. All rights reserved.
  */
-public class SettingActivity extends BaseSwipeBackCompatActivity {
+public class AddAddressActivity extends BaseSwipeBackCompatActivity
+    implements View.OnClickListener {
+
   @Bind(R.id.toolbar) Toolbar toolbar;
-  @Bind(R.id.container_setting) FrameLayout containerSetting;
-  private SettingFragment settingFragment;
+  @Bind(R.id.name) EditText name;
+  @Bind(R.id.mobile) EditText mobile;
+  @Bind(R.id.address) EditText address;
+  @Bind(R.id.clear_address) EditText clearAddress;
+  @Bind(R.id.switch_button) SwitchCompat switchButton;
+  @Bind(R.id.save) Button save;
 
   @Override protected void setListener() {
-
+    save.setOnClickListener(this);
   }
 
   @Override protected void initData() {
@@ -35,14 +40,11 @@ public class SettingActivity extends BaseSwipeBackCompatActivity {
   }
 
   @Override protected int getContentViewLayoutID() {
-    return R.layout.setting_activity;
+    return R.layout.addaddress_activity;
   }
 
   @Override protected void initViews() {
-    settingFragment = new SettingFragment();
-    getFragmentManager().beginTransaction()
-        .replace(R.id.container_setting, settingFragment)
-        .commit();
+
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
@@ -55,19 +57,10 @@ public class SettingActivity extends BaseSwipeBackCompatActivity {
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    // TODO: add setContentView(...) invocation
     ButterKnife.bind(this);
   }
 
-  public static class SettingFragment extends PreferenceFragment {
+  @Override public void onClick(View v) {
 
-    private View view;
-
-    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
-        Bundle savedInstanceState) {
-      view = super.onCreateView(inflater, container, savedInstanceState);
-      addPreferencesFromResource(R.xml.setting);
-      return view;
-    }
   }
 }

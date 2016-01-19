@@ -1,4 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+  <Preference
+      android:layout="@layout/preference_list_item"
+      android:key="账户昵称"
+      android:title="账户昵称"
+      android:summary="xuye">
+  </Preference>
+  <Preference
+      android:layout="@layout/preference_list_item"
+      android:key="绑定手机"
+      android:title="绑定手机"
+      android:summary="xuye">
+  </Preference>
+  <Preference
+      android:layout="@layout/preference_list_item"
+      android:key="修改密码"
+      android:title="修改密码"
+      android:summary="xuye">
+  </Preference>
+  <Preference
+      android:layout="@layout/preference_list_item"
+      android:key="地址管理"
+      android:title="地址管理"
+      android:summary="xuye">
+    <intent
+        android:action="android.intent.action.MAIN"
+        android:targetPackage="com.jimei.xiaolumeimei"
+        android:targetClass="com.jimei.xiaolumeimei.ui.activity.user.AddressActivity"/>
+  </Preference>
+
+  <Preference
+      android:layout="@layout/preference_list_item"
+      android:key="清理缓存"
+      android:title="清理缓存"
+      android:summary="xuye">
+  </Preference>
+  <Preference
+      android:layout="@layout/preference_list_item"
+      android:key="关于小鹿美美"
+      android:title="关于小鹿美美"
+      android:summary="xuye">
+  </Preference>
 
 </PreferenceScreen>

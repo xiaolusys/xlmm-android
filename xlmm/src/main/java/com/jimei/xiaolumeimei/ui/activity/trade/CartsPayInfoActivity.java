@@ -5,13 +5,19 @@ import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.adapter.CartsPayInfoAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.entities.AddressBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
+import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -19,6 +25,7 @@ import com.jude.utils.JUtils;
 import com.pingplusplus.android.PaymentActivity;
 import com.squareup.okhttp.ResponseBody;
 import java.io.IOException;
+import java.util.List;
 import rx.schedulers.Schedulers;
 
 /**
@@ -32,8 +39,12 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   private static final int REQUEST_CODE_PAYMENT = 1;
   CartsModel model = new CartsModel();
   TradeModel tradeModel = new TradeModel();
+  AddressModel addressModel = new AddressModel();
+  CartsPayInfoAdapter mAdapter;
+
   @Bind(R.id.alipay) Button alipy;
   @Bind(R.id.wx) Button wx;
+  @Bind(R.id.payinfo_recyclerview) RecyclerView payinfoRecyclerview;
   private String ids;
   private String cart_ids;
   private String addr_id;
@@ -56,7 +67,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             super.onNext(cartsPayinfoBean);
             JUtils.Log("ITXUYE", cartsPayinfoBean.toString());
             cart_ids = cartsPayinfoBean.getCartIds();
-            addr_id = "96491";
             channel = "alipay";
             payment = cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
                 - cartsPayinfoBean.getDiscountFee() + "";
@@ -64,6 +74,19 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             discount_fee = cartsPayinfoBean.getDiscountFee() + "";
             total_fee = cartsPayinfoBean.getTotalFee() + "";
             uuid = cartsPayinfoBean.getUuid();
+          }
+        });
+
+    addressModel.getAddressList()
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<List<AddressBean>>() {
+          @Override public void onNext(List<AddressBean> list) {
+            super.onNext(list);
+            if (list != null) {
+              AddressBean addressBean = list.get(0);
+
+              addr_id = addressBean.getId();
+            }
           }
         });
   }
@@ -78,6 +101,11 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
+    payinfoRecyclerview.setLayoutManager(new LinearLayoutManager(this));
+
+    mAdapter = new CartsPayInfoAdapter(this);
+    payinfoRecyclerview.setAdapter(mAdapter);
+
     alipy.setOnClickListener(this);
     wx.setOnClickListener(this);
   }
@@ -94,38 +122,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
     switch (v.getId()) {
       case R.id.alipay:
-
-        //new OkHttpRequest.Builder().url(XlmmApi.URL_BASE + "trades/shoppingcart_create")
-        //    .addParams("cart_ids", cart_ids)
-        //    .addParams("addr_id", addr_id)
-        //    .addParams("channel", "alipay")
-        //    .addParams("payment", payment)
-        //    .addParams("post_fee", post_fee)
-        //    .addParams("discount_fee", discount_fee)
-        //    .addParams("total_fee", total_fee)
-        //    .addParams("uuid", uuid)
-        //    .post(new OkHttpCallback() {
-        //      @Override public void onError(Request request, Exception e) {
-        //
-        //      }
-        //
-        //      @Override public void onResponse(Response response, Object data) {
-        //        try {
-        //          String string = response.body().string();
-        //          Log.i("charge", string);
-        //          Intent intent = new Intent();
-        //          String packageName = getPackageName();
-        //          ComponentName componentName = new ComponentName(packageName,
-        //              packageName + ".wxapi.WXPayEntryActivity");
-        //          intent.setComponent(componentName);
-        //          intent.putExtra(PaymentActivity.EXTRA_CHARGE, string);
-        //
-        //          startActivityForResult(intent, REQUEST_CODE_PAYMENT);
-        //        } catch (IOException e) {
-        //          e.printStackTrace();
-        //        }
-        //      }
-        //    });
 
         tradeModel.shoppingcart_create(cart_ids, addr_id, "alipay", payment, post_fee,
             discount_fee, total_fee, uuid)
@@ -152,38 +148,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         break;
 
       case R.id.wx:
-
-        //new OkHttpRequest.Builder().url(XlmmApi.URL_BASE + "trades/shoppingcart_create")
-        //    .addParams("cart_ids", cart_ids)
-        //    .addParams("addr_id", addr_id)
-        //    .addParams("channel", "wx")
-        //    .addParams("payment", payment)
-        //    .addParams("post_fee", post_fee)
-        //    .addParams("discount_fee", discount_fee)
-        //    .addParams("total_fee", total_fee)
-        //    .addParams("uuid", uuid)
-        //    .post(new OkHttpCallback() {
-        //      @Override public void onError(Request request, Exception e) {
-        //
-        //      }
-        //
-        //      @Override public void onResponse(Response response, Object data) {
-        //        try {
-        //          String string = response.body().string();
-        //          Log.i("charge", string);
-        //          Intent intent = new Intent();
-        //          String packageName = getPackageName();
-        //          ComponentName componentName = new ComponentName(packageName,
-        //              packageName + ".wxapi.WXPayEntryActivity");
-        //          intent.setComponent(componentName);
-        //          intent.putExtra(PaymentActivity.EXTRA_CHARGE, string);
-        //
-        //          startActivityForResult(intent, REQUEST_CODE_PAYMENT);
-        //        } catch (IOException e) {
-        //          e.printStackTrace();
-        //        }
-        //      }
-        //    });
 
         tradeModel.shoppingcart_create(cart_ids, addr_id, "wx", payment, post_fee,
             discount_fee, total_fee, uuid)
@@ -245,5 +209,11 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     builder.setTitle("提示");
     builder.setPositiveButton("OK", null);
     builder.create().show();
+  }
+
+  @Override protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    // TODO: add setContentView(...) invocation
+    ButterKnife.bind(this);
   }
 }

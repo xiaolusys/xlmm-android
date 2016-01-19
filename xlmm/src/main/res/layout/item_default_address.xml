@@ -1,7 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+    android:padding="8dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+  <TextView
+      android:text="默认地址"
+      android:id="@+id/address_defalut"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      />
+  <TextView
+      android:layout_marginLeft="16dp"
+      android:layout_toRightOf="@id/address_defalut"
+      android:text="anasjkd"
+      android:layout_width="wrap_content"
+      android:id="@+id/receiver_name"
+      android:layout_height="wrap_content"/>
 
-</LinearLayout>
+  <TextView
+      android:layout_marginLeft="16dp"
+      android:layout_toRightOf="@id/receiver_name"
+      android:text="anasjkd"
+      android:layout_width="wrap_content"
+      android:id="@+id/receiver_mobile"
+      android:layout_height="wrap_content"/>
+    <TextView
+        android:text="naksdaskdakd"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/receiver_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+</RelativeLayout>

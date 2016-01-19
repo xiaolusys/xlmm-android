@@ -2,11 +2,18 @@ package com.jimei.xiaolumeimei.ui.activity.trade;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.adapter.CartsAdapetr;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CartsinfoBean;
 import com.jimei.xiaolumeimei.model.CartsModel;
+import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import java.util.ArrayList;
@@ -21,6 +28,9 @@ import rx.schedulers.Schedulers;
 public class CartActivity extends BaseSwipeBackCompatActivity {
   CartsModel model = new CartsModel();
   List<String> ids = new ArrayList<>();
+  @Bind(R.id.carts_recyclerview) RecyclerView cartsRecyclerview;
+  @Bind(R.id.confirm_trade) Button confirmTrade;
+  private CartsAdapetr mCartsAdapetr;
 
   @Override protected void setListener() {
 
@@ -31,9 +41,12 @@ public class CartActivity extends BaseSwipeBackCompatActivity {
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
           @Override public void onNext(List<CartsinfoBean> cartsinfoBeans) {
-            if (cartsinfoBeans != null) {
-              for (int i = 0; i < cartsinfoBeans.size(); i++) {
 
+            if (cartsinfoBeans != null) {
+
+              mCartsAdapetr.update(cartsinfoBeans);
+
+              for (int i = 0; i < cartsinfoBeans.size(); i++) {
                 ids.add(cartsinfoBeans.get(i).getId());
                 JUtils.Log("ITXUYE", cartsinfoBeans.toString());
               }
@@ -51,7 +64,12 @@ public class CartActivity extends BaseSwipeBackCompatActivity {
   }
 
   @Override protected void initViews() {
+    cartsRecyclerview.setLayoutManager(new LinearLayoutManager(this));
 
+    cartsRecyclerview.addItemDecoration(new SpaceItemDecoration(1));
+    mCartsAdapetr = new CartsAdapetr(this);
+
+    cartsRecyclerview.setAdapter(mCartsAdapetr);
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
@@ -78,5 +96,10 @@ public class CartActivity extends BaseSwipeBackCompatActivity {
 
       startActivity(intent);
     }
+  }
+
+  @Override protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    ButterKnife.bind(this);
   }
 }
