@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -95,6 +96,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
             .subscribeOn(Schedulers.newThread())
             .subscribe(new ServiceResponse<UserBean>() {
               @Override public void onNext(UserBean user) {
+                Log.d(TAG, "user.getCode() "+user.getCode()+", user.getResult() " +user.getResult());
                 if (user.getCode() == 0 && user.getResult().equals("login")) {
 
                   LoginUtils.saveLoginInfo(true, getApplicationContext(),
