@@ -120,7 +120,6 @@ public class AllOrdersListAdapter extends BaseAdapter {
                     // TODO Auto-generated method stub
                     Log.d(TAG, "onItemClick " + arg2 + " " + arg3);
                     Intent intent = new Intent(context, OrderDetailActivity.class);
-
                     intent.putExtra("orderinfo", order_id);
                     Log.d(TAG, "transfer orderid  " + order_id + " to OrderDetailActivity");
                     context.startActivity(intent);
@@ -156,7 +155,10 @@ public class AllOrdersListAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View view, int position)
                 {
-
+                    Intent intent = new Intent(context, OrderDetailActivity.class);
+                    intent.putExtra("orderinfo", order_id);
+                    Log.d(TAG, "transfer orderid  " + order_id + " to OrderDetailActivity");
+                    context.startActivity(intent);
                 }
             });
             //设置适配器
@@ -167,7 +169,7 @@ public class AllOrdersListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    void fillPicPath(List<String> mDatas, List<AllOrdersBean.ResultsEntity.OrdersEntity> good_list){
+    public static void fillPicPath(List<String> mDatas, List<AllOrdersBean.ResultsEntity.OrdersEntity> good_list){
         for (int i = 0; i < good_list.size(); i++) {
             mDatas.add(good_list.get(i).getPicPath());
         }

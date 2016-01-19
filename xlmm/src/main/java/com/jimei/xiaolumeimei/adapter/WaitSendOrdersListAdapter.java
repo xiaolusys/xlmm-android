@@ -18,10 +18,12 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
+import com.jimei.xiaolumeimei.widget.MyHorizontalScrollView;
 import com.jimei.xiaolumeimei.widget.NestedListView;
 
 import java.io.UnsupportedEncodingException;
@@ -34,7 +36,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.ui.activity.trade.OrderDetailActivity;
 
 public class WaitSendOrdersListAdapter extends BaseAdapter {
-    private static final String TAG = "WaitRecvOrdersListAdapter";
+    private static final String TAG = "WaitRecvOrdersAdapter";
     private Context context;
     List<HashMap<String, String>> data;
     private List<AllOrdersBean.ResultsEntity> mList;
@@ -108,24 +110,64 @@ public class WaitSendOrdersListAdapter extends BaseAdapter {
         tx_payment.setText("实付金额"+data.get(position).get("payment"));
         tx_order_sate.setText("交易状态"+data.get(position).get("orderState"));
 
-        NestedListView goods_listview = (NestedListView) convertView.findViewById(R.id.goods_listview);
-        OrderGoodsListAdapter goods_adapter = new OrderGoodsListAdapter(context, mList.get(position).getOrders());
-        goods_listview.setAdapter(goods_adapter);
-        goods_listview.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        LinearLayout llayout = (LinearLayout) convertView.findViewById(R.id.llayout_order_item);
+        if(1 == mList.get(position).getOrders().size()) {
+            NestedListView goods_listview = (NestedListView) convertView.findViewById(R.id.goods_listview);
+            OrderGoodsListAdapter goods_adapter = new OrderGoodsListAdapter(context, mList.get(position).getOrders());
+            goods_listview.setAdapter(goods_adapter);
+            goods_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-                                    long arg3) {
-                // TODO Auto-generated method stub
-                Log.d(TAG, "onItemClick "+arg2 + " " + arg3);
-                Intent intent = new Intent(context, OrderDetailActivity.class);
+                @Override
+                public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+                                        long arg3) {
+                    // TODO Auto-generated method stub
+                    Log.d(TAG, "onItemClick " + arg2 + " " + arg3);
+                    Intent intent = new Intent(context, OrderDetailActivity.class);
 
-                intent.putExtra("orderinfo", order_id);
-                Log.d(TAG,"transfer orderid  "+order_id+" to OrderDetailActivity");
-                context.startActivity(intent);
-            }
+                    intent.putExtra("orderinfo", order_id);
+                    Log.d(TAG, "transfer orderid  " + order_id + " to OrderDetailActivity");
+                    context.startActivity(intent);
+                }
 
-        });
+            });
+            llayout.addView(goods_listview);
+        }
+        else{
+            List<String> mDatas = new ArrayList<String>();
+            AllOrdersListAdapter.fillPicPath(mDatas, mList.get(position).getOrders());
+            Log.d(TAG, "goodsnum " + mList.get(position).getOrders().size() + " " + mDatas.size());
+
+            LayoutInflater inflater = LayoutInflater.from(context);
+            MyHorizontalScrollView mHorizontalScrollView  = (MyHorizontalScrollView)inflater.inflate(R.layout.hscrollview_gallery, null);
+            HorizontalScrollViewAdapter mAdapter = new HorizontalScrollViewAdapter(context, mDatas);
+            //添加滚动回调
+            mHorizontalScrollView
+                    .setCurrentImageChangeListener(new MyHorizontalScrollView.CurrentImageChangeListener()
+                    {
+                        @Override
+                        public void onCurrentImgChanged(int position,
+                                                        View viewIndicator)
+                        {
+
+                        }
+                    });
+            //添加点击回调
+            mHorizontalScrollView.setOnItemClickListener(new MyHorizontalScrollView.OnItemClickListener()
+            {
+
+                @Override
+                public void onClick(View view, int position)
+                {
+                    Intent intent = new Intent(context, OrderDetailActivity.class);
+                    intent.putExtra("orderinfo", order_id);
+                    Log.d(TAG, "transfer orderid  " + order_id + " to OrderDetailActivity");
+                    context.startActivity(intent);
+                }
+            });
+            //设置适配器
+            mHorizontalScrollView.initDatas(mAdapter);
+            llayout.addView(mHorizontalScrollView);
+        }
 
         return convertView;
     }
