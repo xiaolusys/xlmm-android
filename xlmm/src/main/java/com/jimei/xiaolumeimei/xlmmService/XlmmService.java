@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.xlmmService;
 
 import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.entities.AddCartsBean;
+import com.jimei.xiaolumeimei.entities.AddressBean;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
@@ -14,6 +15,7 @@ import com.jimei.xiaolumeimei.entities.PostBean;
 import com.jimei.xiaolumeimei.entities.ProductBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
+import com.jimei.xiaolumeimei.entities.RegisterBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.squareup.okhttp.ResponseBody;
 import java.util.List;
@@ -126,6 +128,41 @@ public interface XlmmService {
   //获取所有退货订单
   @GET(XlmmApi.ALL_REFUNDS_URL)
   Observable<AllRefundsBean> getAllRedundsList();
+
+
+    //获取注册验证码
+  @FormUrlEncoded
+  @POST("register")
+  Observable<RegisterBean> getCheckCode(
+
+     @Field("vmobile") String vmobile
+  );
+
+    //获取注册验证码
+  @FormUrlEncoded
+  @POST("check_code_user")
+  Observable<RegisterBean> check_code_user(
+     @Field("username") String username,
+     @Field("valid_code") String valid_code
+  );
+
+
+    //创建新的地址
+  @FormUrlEncoded
+  @POST("address/create_address")
+  Observable<ResponseBody> create_address(
+     @Field("receiver_state")       String receiver_state,
+     @Field("receiver_city")        String valid_code,
+     @Field("receiver_district")    String receiver_district,
+     @Field("receiver_address")     String receiver_address,
+     @Field("receiver_name")        String receiver_name,
+     @Field("receiver_mobile")      String receiver_mobile
+  );
+
+
+  //获取地址列表
+  @GET("address")
+  Observable<List<AddressBean>> getAddressList();
 
 
 }

@@ -23,6 +23,7 @@ import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.WaitPayOrdersActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.WaitSendOrdersActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.SettingActivity;
 import com.jimei.xiaolumeimei.ui.fragment.ChildListFragment;
 import com.jimei.xiaolumeimei.ui.fragment.LadyListFragment;
 import com.jimei.xiaolumeimei.ui.fragment.PreviousFragment;
@@ -122,7 +123,7 @@ public class MainActivity extends BaseActivity
       } else if (id == R.id.nav_orders) {
         startActivity(new Intent(MainActivity.this, AllOrdersActivity.class));
       } else if (id == R.id.nav_setting) {
-
+        startActivity(new Intent(MainActivity.this, SettingActivity.class));
       } else if (id == R.id.nav_complain) {
 
         //Log.d(TAG, "start complain activity ");
