@@ -14,6 +14,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.CartsinfoBean;
 import com.zhy.autolayout.utils.AutoUtils;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,8 +58,25 @@ public class CartsAdapetr extends RecyclerView.Adapter<CartsAdapetr.CartsVH> {
 
     holder.title.setText(cartsinfoBean.getTitle());
     holder.skuName.setText(cartsinfoBean.getSkuName());
+
+    String headImg = cartsinfoBean.getPicPath();
+
+    String[] temp = headImg.split("http://image.xiaolu.so/");
+
+    String head_img = "";
+
+    if (temp.length > 1) {
+      try {
+        head_img = "http://image.xiaolu.so/"
+            + URLEncoder.encode(temp[1], "utf-8")
+            + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
+      } catch (UnsupportedEncodingException e) {
+        e.printStackTrace();
+      }
+    }
+
     Glide.with(mContext)
-        .load(cartsinfoBean.getPicPath())
+        .load(head_img)
         .diskCacheStrategy(DiskCacheStrategy.ALL)
         .placeholder(R.drawable.parceholder)
         .centerCrop()
