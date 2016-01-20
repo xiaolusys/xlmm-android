@@ -78,4 +78,11 @@ public class UserModel {
                 .compose(new DefaultTransform<>());
     }
 
+    //获取修改密码时验证码
+    public Observable<RegisterBean> getChgPasswordCheckCode(String vmobile) {
+        return XlmmRetrofitClient.getService()
+                .getChgPasswordCheckCode(vmobile)
+                .compose(new DefaultTransform<>());
+    }
+
 }
