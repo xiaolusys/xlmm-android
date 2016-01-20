@@ -22,12 +22,13 @@ public class AddressModel {
   }
 
   //创建新的地址
-  public Observable<ResponseBody> create_address(String receiver_state, String valid_code,
+  public Observable<ResponseBody> create_address(String receiver_state,String
+      receiver_city,
       String receiver_district, String receiver_address, String receiver_name,
       String receiver_mobile) {
 
     return XlmmRetrofitClient.getService()
-        .create_address(receiver_state, valid_code, receiver_district, receiver_address,
+        .create_address(receiver_state,receiver_city, receiver_district, receiver_address,
             receiver_name, receiver_mobile)
         .compose(new DefaultTransform<>());
   }

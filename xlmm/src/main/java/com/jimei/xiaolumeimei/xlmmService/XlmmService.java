@@ -152,7 +152,7 @@ public interface XlmmService {
   @POST("address/create_address")
   Observable<ResponseBody> create_address(
      @Field("receiver_state")       String receiver_state,
-     @Field("receiver_city")        String valid_code,
+     @Field("receiver_city")        String receiver_city,
      @Field("receiver_district")    String receiver_district,
      @Field("receiver_address")     String receiver_address,
      @Field("receiver_name")        String receiver_name,
