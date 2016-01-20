@@ -95,12 +95,14 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
         popupWindow.setAnimationStyle(R.style.popWindow_animation);
         // 点击弹出泡泡窗口
         popupWindow.showAtLocation(parent, Gravity.BOTTOM, 0, 0);
-        cityPicker.setOnSelectingListener(selected -> {
-          if (selected) {
-            address.setText(cityPicker.getCity_string());
-            receiver_state = cityPicker.getCity_receiver_state();
-            receiver_district = cityPicker.getCity_receiver_district();
-            receiver_city = cityPicker.getCity_receiver_city();
+        cityPicker.setOnSelectingListener(new CityPicker.OnSelectingListener() {
+          @Override public void selected(boolean selected) {
+            if (selected) {
+              address.setText(cityPicker.getCity_string());
+              receiver_state = cityPicker.getCity_receiver_state();
+              receiver_district = cityPicker.getCity_receiver_district();
+              receiver_city = cityPicker.getCity_receiver_city();
+            }
           }
         });
         break;
