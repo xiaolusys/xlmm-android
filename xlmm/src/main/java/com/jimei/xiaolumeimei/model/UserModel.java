@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.model;
 
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
+import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.entities.RegisterBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
@@ -84,5 +85,12 @@ public class UserModel {
                 .getChgPasswordCheckCode(vmobile)
                 .compose(new DefaultTransform<>());
     }
+
+  public Observable<LogOutBean> customer_logout() {
+
+    return XlmmRetrofitClient.getService()
+        .customer_logout()
+        .compose(new DefaultTransform<>());
+  }
 
 }

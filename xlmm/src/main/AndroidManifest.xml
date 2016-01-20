@@ -149,6 +149,18 @@
         android:theme="@style/AppTheme.TransparentActivity"
         />
 
+      <activity android:name=".ui.activity.user.CouponActivity"
+          android:theme="@style/AppTheme.TransparentActivity"
+          />
+
+      <activity android:name=".ui.activity.user.MembershipPointActivity"
+          android:theme="@style/AppTheme.TransparentActivity"
+          />
+
+      <activity android:name=".ui.activity.main.CompanyInfoActvity"
+          android:theme="@style/AppTheme.TransparentActivity"
+          />
+
   </application>
 
 </manifest>

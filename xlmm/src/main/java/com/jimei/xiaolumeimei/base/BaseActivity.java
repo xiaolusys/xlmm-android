@@ -3,8 +3,6 @@ package com.jimei.xiaolumeimei.base;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import butterknife.ButterKnife;
-import rx.internal.operators.OperatorOnErrorResumeNextViaFunction;
-
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.zhy.autolayout.AutoLayoutActivity;
 

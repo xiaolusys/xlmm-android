@@ -48,6 +48,10 @@
       android:key="关于小鹿美美"
       android:title="关于小鹿美美"
       android:summary="xuye">
+    <intent
+        android:action="android.intent.action.MAIN"
+        android:targetPackage="com.jimei.xiaolumeimei"
+        android:targetClass="com.jimei.xiaolumeimei.ui.activity.user.CompanyInfoActivity"/>
   </Preference>
 
 </PreferenceScreen>

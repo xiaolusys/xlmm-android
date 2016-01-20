@@ -11,6 +11,7 @@ import com.jimei.xiaolumeimei.entities.CartsinfoBean;
 import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.entities.IndexBean;
 import com.jimei.xiaolumeimei.entities.LadyListBean;
+import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.PostBean;
 import com.jimei.xiaolumeimei.entities.ProductBean;
@@ -204,5 +205,10 @@ public interface XlmmService {
     Observable<RegisterBean> getChgPasswordCheckCode(
             @Field("vmobile") String vmobile
     );
+
+
+
+  @POST("users/customer_logout")
+  Observable<LogOutBean> customer_logout();
 
 }

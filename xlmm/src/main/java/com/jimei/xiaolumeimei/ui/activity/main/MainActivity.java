@@ -15,8 +15,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import butterknife.Bind;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseActivity;
+import com.jimei.xiaolumeimei.entities.LogOutBean;
+import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllOrdersActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
@@ -29,8 +32,11 @@ import com.jimei.xiaolumeimei.ui.fragment.LadyListFragment;
 import com.jimei.xiaolumeimei.ui.fragment.PreviousFragment;
 import com.jimei.xiaolumeimei.ui.fragment.TodayFragment;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
+import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jude.utils.JUtils;
 import java.util.ArrayList;
 import java.util.List;
+import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseActivity
     implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
@@ -41,6 +47,7 @@ public class MainActivity extends BaseActivity
   @Bind(R.id.fab) FloatingActionButton carts;
   List<Fragment> fragments;
   List<String> titles;
+  UserModel model = new UserModel();
 
   @Override protected int provideContentViewId() {
     return R.layout.activity_main;
@@ -128,7 +135,33 @@ public class MainActivity extends BaseActivity
         startActivity(new Intent(MainActivity.this, ComplainActvity.class));
         //Log.d(TAG, "start complain activity ");
       } else if (id == R.id.nav_login) {
+        new MaterialDialog.Builder(MainActivity.this).
+            title("注销登录").
+            content("您确定要退出登录吗？").
+            positiveText("注销").
+            negativeText("取消").
+            callback(new MaterialDialog.ButtonCallback() {
+              @Override public void onPositive(MaterialDialog dialog) {
+                LoginUtils.delLoginInfo(getApplicationContext());
+                model.customer_logout()
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(new ServiceResponse<LogOutBean>() {
+                      @Override public void onNext(LogOutBean responseBody) {
+                        super.onNext(responseBody);
 
+                        if (responseBody.getCode() == 0) {
+                          JUtils.Toast("退出成功");
+                        }
+                      }
+                    });
+
+                dialog.dismiss();
+              }
+
+              @Override public void onNegative(MaterialDialog dialog) {
+                dialog.dismiss();
+              }
+            }).show();
       }
     }
 
