@@ -17,6 +17,7 @@
     <style name="AppTheme" parent="AppTheme.Base">
         <item name="actionBarStyle">@style/GANKActionBarStyle</item>
         <!--actionbar text color-->
+        <item name="android:listDivider">@drawable/list_divider</item>
         <item name="android:textColorPrimary">@color/primary_text</item>
     </style>
 
@@ -51,4 +52,10 @@
         <item name="shadow_right">@drawable/shadow_right</item>
         <item name="shadow_bottom">@drawable/shadow_bottom</item>
     </style>
+
+    <style name="popWindow_animation">
+        <item name="android:windowEnterAnimation">@anim/popwindow_enter</item>
+        <item name="android:windowExitAnimation">@anim/popwindow_exit</item>
+    </style>
+
 </resources>
