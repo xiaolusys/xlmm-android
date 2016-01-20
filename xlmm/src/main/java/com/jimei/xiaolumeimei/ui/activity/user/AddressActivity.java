@@ -84,7 +84,7 @@ public class AddressActivity extends BaseSwipeBackCompatActivity
       case R.id.addAdress:
 
         startActivity(new Intent(AddressActivity.this, AddAddressActivity.class));
-
+        AddressActivity.this.finish();
         break;
     }
   }

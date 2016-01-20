@@ -87,6 +87,14 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
               addr_id = addressBean.getId();
             }
+
+          }
+
+          @Override public void onError(Throwable e) {
+            super.onError(e);
+
+            JUtils.Toast("还未设置默认地址，前往设置地址");
+
           }
         });
   }

@@ -1,9 +1,9 @@
 package com.jimei.xiaolumeimei.model;
 
 import com.jimei.xiaolumeimei.entities.AddressBean;
+import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
-import com.squareup.okhttp.ResponseBody;
 import java.util.List;
 import rx.Observable;
 
@@ -22,7 +22,7 @@ public class AddressModel {
   }
 
   //创建新的地址
-  public Observable<ResponseBody> create_address(String receiver_state,String
+  public Observable<AddressResultBean> create_address(String receiver_state,String
       receiver_city,
       String receiver_district, String receiver_address, String receiver_name,
       String receiver_mobile) {
