@@ -89,10 +89,13 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Chil
 
     String headImg = resultsEntity.getHeadImg();
 
-    holder.childlistName.setText(productModel.getName());
-
-    holder.childlistAgentPrice.setText("¥" + resultsEntity.getAgentPrice());
-    holder.childlistStdsalePrice.setText("/¥" + resultsEntity.getStdSalePrice());
+    try{
+      holder.childlistName.setText(productModel.getName());
+      holder.childlistAgentPrice.setText("¥" + resultsEntity.getAgentPrice());
+      holder.childlistStdsalePrice.setText("/¥" + resultsEntity.getStdSalePrice());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
 
     String[] temp = headImg.split("http://image.xiaolu.so/");
     String head_img = "";

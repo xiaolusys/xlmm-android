@@ -228,6 +228,8 @@ public final class ViewUtils {
 
   public static void loadImgToImgView(Context context, ImageView img, String picPath){
     String headImg = picPath;
+    if(null == picPath)
+      return;
     String[] temp = headImg.split("http://image.xiaolu.so/");
     String head_img = "";
     if (temp.length > 1) {
