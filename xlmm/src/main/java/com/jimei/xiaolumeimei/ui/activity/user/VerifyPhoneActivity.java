@@ -6,6 +6,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
@@ -44,8 +46,11 @@ public class VerifyPhoneActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
-    toolbar.setTitle("请验证手机");
+    TextView tx_title = (TextView)findViewById(R.id.tx_title);
+    tx_title.setText("请验证手机");
     setSupportActionBar(toolbar);
+
+    register_button.setText("下一步");
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
