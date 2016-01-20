@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.ui.activity.user;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,7 +18,7 @@ import rx.schedulers.Schedulers;
 
 public class VerifyPhoneActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener {
-
+  @Bind(R.id.toolbar)  Toolbar toolbar;
   @Bind(R.id.register_name) EditText editTextMobile;
   @Bind(R.id.register_password) EditText editTextInvalid_code;
   @Bind(R.id.register_button) Button register_button;
@@ -43,7 +44,8 @@ public class VerifyPhoneActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
-
+    toolbar.setTitle("请验证手机");
+    setSupportActionBar(toolbar);
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
