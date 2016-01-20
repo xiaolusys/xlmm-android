@@ -144,7 +144,7 @@ public interface XlmmService {
 
     //注册
   @FormUrlEncoded
-  @POST("check_vcode")
+  @POST("register/check_vcode")
   Observable<RegisterBean> check_code_user(
      @Field("mobile") String username,
      @Field("vcode") String valid_code
