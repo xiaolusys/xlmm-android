@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.model;
 
 import com.jimei.xiaolumeimei.entities.UserBean;
+import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 import rx.Observable;
@@ -26,5 +27,17 @@ public class UserModel {
   }
 
 
+  //得到用户信息
+  public Observable<UserInfoBean> getUserInfo() {
+    return XlmmRetrofitClient.getService()
+            .getUserInfo()
+            .compose(new DefaultTransform<>());
+  }
 
+  //设置昵称
+  public Observable<UserBean> setNickname(String nickname) {
+    return XlmmRetrofitClient.getService()
+            .setNickname( nickname)
+            .compose(new DefaultTransform<>());
+  }
 }

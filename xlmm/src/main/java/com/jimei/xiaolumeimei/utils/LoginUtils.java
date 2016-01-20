@@ -1,12 +1,15 @@
 package com.jimei.xiaolumeimei.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.okhttp.callback.OkHttpCallback;
 import com.jimei.xiaolumeimei.okhttp.request.OkHttpRequest;
+import com.jimei.xiaolumeimei.ui.activity.trade.OrderDetailActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
@@ -16,7 +19,7 @@ import com.squareup.okhttp.Response;
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class LoginUtils {
-
+  static String TAG = "LoginUtils";
   static SharedPreferences sharedPreferences;
   static SharedPreferences.Editor editor;
 
@@ -62,5 +65,28 @@ public class LoginUtils {
     boolean success = sharedPreferences.getBoolean("success", false);
 
     return new String[] { username, password, success + "" };
+  }
+
+  //获取用户登录状态
+  public static boolean checkLoginState(Context context) {
+
+    sharedPreferences = context.getSharedPreferences("login_info", Context.MODE_PRIVATE);
+
+    boolean success = sharedPreferences.getBoolean("success", false);
+
+    return success;
+  }
+
+  //获取用户登录状态
+  public static void login(Context context) {
+    if(checkLoginState(context)){
+      return;
+    }
+    else{
+      //需要跳转到登录界面
+      Intent intent = new Intent(context, LoginActivity.class);
+      Log.d(TAG, "have not logined, "   + "jump to LoginActivity");
+      context.startActivity(intent);
+    }
   }
 }
