@@ -70,10 +70,11 @@ public class SettingNicknameActivity extends BaseSwipeBackCompatActivity impleme
         nick_name_value = nameEditText.getText().toString().trim();
           Log.d(TAG, "nick_name_value " + nick_name_value);
         if(checkInput(nick_name_value)) {
-            userinfo.getResults().get(0).setNick(nick_name_value);
-            Log.d(TAG, "userinfo nick_name_value " + userinfo.getResults().get(0).getNick());
-          setNickname();
-
+            if(null != userinfo) {
+                userinfo.getResults().get(0).setNick(nick_name_value);
+                Log.d(TAG, "userinfo nick_name_value " + userinfo.getResults().get(0).getNick());
+                setNickname();
+            }
         }
         else{
           Toast.makeText(mContext, "昵称长度或者字符错误,请检查", Toast.LENGTH_SHORT).show();
@@ -123,21 +124,14 @@ public class SettingNicknameActivity extends BaseSwipeBackCompatActivity impleme
   }
 
   private void getUserInfo(){
-    model.getUserInfo()
-            .subscribeOn(Schedulers.newThread())
-            .subscribe(new ServiceResponse<UserInfoBean>() {
-              @Override
-              public void onNext(UserInfoBean user) {
-                Log.d(TAG, "user origin nick " + user.getResults().get(0).getNick() );
-                  userinfo = user;
-                nameEditText.setText(user.getResults().get(0).getNick());
-                  userid = user.getResults().get(0).getId();
-              }
-
-              @Override
-              public void onCompleted() {
-                super.onCompleted();
-              }
-            });
+      userinfo = LoginUtils.getUserInfo();
+      if(null != userinfo) {
+          nameEditText.setText(userinfo.getResults().get(0).getNick());
+          userid = userinfo.getResults().get(0).getId();
+          Log.d(TAG, userinfo.getResults().get(0).getNick()+ " " + userid);
+      }
+      else{
+          Log.e(TAG, "get userinfo failed. ");
+      }
   }
 }

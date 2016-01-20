@@ -40,6 +40,9 @@ public class XlmmApi {
   //用户信息
   public static final String USERINFO_URL = URL_BASE + "users";
 
+  //用户信息
+  public static final String CHANGE_USER_PASSWORD_URL = URL_BASE + "register/change_user_pwd";
+
   //获取待支付订单
   public static  final String WAITPAY_URL = URL_BASE+"";
   public static final String SETTINGMYINFO_URL =
