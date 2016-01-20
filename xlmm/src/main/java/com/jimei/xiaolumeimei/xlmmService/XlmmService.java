@@ -136,12 +136,11 @@ public interface XlmmService {
     //获取注册验证码
   @FormUrlEncoded
   @POST("register")
-  Observable<RegisterBean> getCheckCode(
-
+  Observable<RegisterBean> getRegisterCheckCode(
      @Field("vmobile") String vmobile
   );
 
-    //获取注册验证码
+    //注册
   @FormUrlEncoded
   @POST("check_code_user")
   Observable<RegisterBean> check_code_user(
@@ -175,4 +174,11 @@ public interface XlmmService {
   @PATCH(XlmmApi.USERINFO_URL+"/{id}")
   Observable<UserBean> setNickname(
           @Path("id")String id);
+
+
+  //投诉建议
+  @FormUrlEncoded
+  @POST("complain")
+  Observable<AddressResultBean> complain(
+          @Field("com_content")String com_content );
 }

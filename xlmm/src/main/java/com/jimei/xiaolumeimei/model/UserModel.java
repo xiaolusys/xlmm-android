@@ -1,5 +1,7 @@
 package com.jimei.xiaolumeimei.model;
 
+import com.jimei.xiaolumeimei.entities.AddressResultBean;
+import com.jimei.xiaolumeimei.entities.RegisterBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.rx.DefaultTransform;
@@ -37,7 +39,33 @@ public class UserModel {
   //设置昵称
   public Observable<UserBean> setNickname(String nickname) {
     return XlmmRetrofitClient.getService()
-            .setNickname( nickname)
+            .setNickname(nickname)
             .compose(new DefaultTransform<>());
   }
+
+
+  //投诉建议
+  public Observable<AddressResultBean> complain(String com_content) {
+    return XlmmRetrofitClient.getService()
+            .complain(com_content)
+            .compose(new DefaultTransform<>());
+  }
+
+
+  //获取注册验证码
+  public Observable<RegisterBean> getRegisterCheckCode(String vmobile) {
+    return XlmmRetrofitClient.getService()
+        .getRegisterCheckCode(vmobile)
+        .compose(new DefaultTransform<>());
+  }
+
+  //获取注册验证码
+  public Observable<RegisterBean> check_code_user(String username,String valid_code) {
+    return XlmmRetrofitClient.getService()
+        .check_code_user(username,valid_code)
+        .compose(new DefaultTransform<>());
+  }
+
+
+
 }

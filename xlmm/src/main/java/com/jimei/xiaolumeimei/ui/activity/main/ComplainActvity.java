@@ -9,6 +9,11 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.entities.AddressResultBean;
+import com.jimei.xiaolumeimei.model.UserModel;
+import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jude.utils.JUtils;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/01/19.
@@ -20,9 +25,10 @@ public class ComplainActvity extends BaseSwipeBackCompatActivity
   @Bind(R.id.tijiao) Button confirm;
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.complain_text) EditText complainText;
+  UserModel model = new UserModel();
 
   @Override protected void setListener() {
-confirm.setOnClickListener(this);
+    confirm.setOnClickListener(this);
   }
 
   @Override protected void initData() {
@@ -60,8 +66,17 @@ confirm.setOnClickListener(this);
     if (v.getId() == R.id.tijiao) {
       String text = complainText.getText().toString().trim();
 
+      model.complain(text)
+          .subscribeOn(Schedulers.io())
+          .subscribe(new ServiceResponse<AddressResultBean>() {
+            @Override public void onNext(AddressResultBean responseBody) {
+              super.onNext(responseBody);
 
-
+              if (responseBody.isRet()) {
+                JUtils.Toast("您的建议已提交，我们会尽快处理,谢谢");
+              }
+            }
+          });
     }
   }
 }

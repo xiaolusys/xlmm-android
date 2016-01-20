@@ -20,6 +20,7 @@ import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.TradeModel;
+import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.pingplusplus.android.PaymentActivity;
@@ -65,6 +66,9 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         .subscribe(new ServiceResponse<CartsPayinfoBean>() {
           @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
             super.onNext(cartsPayinfoBean);
+
+            mAdapter.update(cartsPayinfoBean.getCartList());
+
             JUtils.Log("ITXUYE", cartsPayinfoBean.toString());
             cart_ids = cartsPayinfoBean.getCartIds();
             channel = "alipay";
@@ -87,14 +91,12 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
               addr_id = addressBean.getId();
             }
-
           }
 
           @Override public void onError(Throwable e) {
             super.onError(e);
 
             JUtils.Toast("还未设置默认地址，前往设置地址");
-
           }
         });
   }
@@ -110,7 +112,8 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void initViews() {
     payinfoRecyclerview.setLayoutManager(new LinearLayoutManager(this));
-
+    payinfoRecyclerview.addItemDecoration(
+        new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
     mAdapter = new CartsPayInfoAdapter(this);
     payinfoRecyclerview.setAdapter(mAdapter);
 

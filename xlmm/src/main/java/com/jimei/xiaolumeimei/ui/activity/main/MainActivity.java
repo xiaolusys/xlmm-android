@@ -113,7 +113,6 @@ public class MainActivity extends BaseActivity
     if (!b) {
             /*未登录进入登录界面*/
       startActivity(new Intent(MainActivity.this, LoginActivity.class));
-
     } else {
       if (id == R.id.nav_tobepaid) {
         startActivity(new Intent(MainActivity.this, WaitPayOrdersActivity.class));
@@ -126,10 +125,9 @@ public class MainActivity extends BaseActivity
       } else if (id == R.id.nav_setting) {
         startActivity(new Intent(MainActivity.this, SettingActivity.class));
       } else if (id == R.id.nav_complain) {
-        new Intent(MainActivity.this,ComplainActvity.class);
+        startActivity(new Intent(MainActivity.this, ComplainActvity.class));
         //Log.d(TAG, "start complain activity ");
       } else if (id == R.id.nav_login) {
-
 
       }
     }
