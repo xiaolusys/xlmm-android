@@ -74,15 +74,15 @@ public class VerifyPhoneActivity extends BaseSwipeBackCompatActivity
       case R.id.getCheckCode:
         mobile = editTextMobile.getText().toString().trim();
         checkInput();
-        model.getRegisterCheckCode(mobile)
+        model.getChgPasswordCheckCode(mobile)
             .subscribeOn(Schedulers.io())
             .subscribe(new ServiceResponse<RegisterBean>() {
               @Override public void onNext(RegisterBean registerBean) {
                 super.onNext(registerBean);
                 String result = registerBean.getResult();
                 if (result.equals("0")) {
-                  JUtils.Toast("已经注册过该手机号");
-                } else if (result.equals("7")) {
+                  JUtils.Toast("验证码获取成功");
+                } else if (result.equals("5")) {
                   return;
                 }
               }
