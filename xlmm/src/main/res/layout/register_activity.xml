@@ -71,8 +71,9 @@
   </LinearLayout>
 
   <Button
+      android:layout_gravity="center_horizontal"
       android:id="@+id/register_button"
-      android:layout_width="0dp"
+      android:layout_width="270dp"
       android:layout_height="wrap_content"
       android:background="#FF6600"
       android:text="注册"
