@@ -4,6 +4,8 @@ import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
+import com.squareup.okhttp.ResponseBody;
+
 import rx.Observable;
 
 /**
@@ -35,9 +37,9 @@ public class UserModel {
   }
 
   //设置昵称
-  public Observable<UserBean> setNickname(String nickname) {
+  public Observable<ResponseBody> setNickname(int userid, UserInfoBean userinfo) {
     return XlmmRetrofitClient.getService()
-            .setNickname( nickname)
+            .setNickname(userid, userinfo)
             .compose(new DefaultTransform<>());
   }
 }

@@ -21,6 +21,8 @@ import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.squareup.okhttp.ResponseBody;
 import java.util.List;
+
+import retrofit.http.Body;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
@@ -173,6 +175,7 @@ public interface XlmmService {
 
   //设置用户昵称
   @PATCH(XlmmApi.USERINFO_URL+"/{id}")
-  Observable<UserBean> setNickname(
-          @Path("id")String id);
+  Observable<ResponseBody> setNickname(
+          @Path("id")int id,
+          @Body UserInfoBean userinfo);
 }
