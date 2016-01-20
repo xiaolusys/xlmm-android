@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import com.jimei.xiaolumeimei.okhttp.OkHttpClientManager;
 import com.jimei.xiaolumeimei.okhttp.PersistentCookieStore;
+import com.jimei.xiaolumeimei.utils.LoginUtils;
+import com.jimei.xiaolumeimei.utils.NetWorkUtil;
 import com.jude.utils.JUtils;
 import com.squareup.okhttp.OkHttpClient;
 import com.zhy.autolayout.config.AutoLayoutConifg;
@@ -35,6 +37,13 @@ public class XlmmApp extends Application {
     //CrashWoodpecker.fly(false).to(this);
     AutoLayoutConifg.getInstance().useDeviceSize();
     //CustomActivityOnCrash.install(this);
+
+    //获取用户信息失败，说明要重新登陆
+    if(NetWorkUtil.isNetWorkConnected(this)){
+      if(null == LoginUtils.getUserInfo()){
+        LoginUtils.delLoginInfo(this);
+      }
+    }
   }
 
   //初始化OkHttpClient

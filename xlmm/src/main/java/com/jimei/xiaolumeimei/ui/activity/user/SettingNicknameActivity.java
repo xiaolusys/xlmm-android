@@ -19,6 +19,7 @@ import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import com.squareup.okhttp.ResponseBody;
 
 import butterknife.Bind;
 import rx.schedulers.Schedulers;
@@ -29,14 +30,16 @@ public class SettingNicknameActivity extends BaseSwipeBackCompatActivity impleme
   @Bind(R.id.set_nick_name)  EditText nameEditText;
   @Bind(R.id.set_save_button)  Button save_button;
   UserModel model = new UserModel();
+  UserInfoBean userinfo;
   String nick_name_value;
+  int userid;
 
   @Override protected void setListener() {
     save_button.setOnClickListener(this);
   }
 
   @Override protected void initData() {
-
+      getUserInfo();
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -65,10 +68,13 @@ public class SettingNicknameActivity extends BaseSwipeBackCompatActivity impleme
       case R.id.set_save_button:
 
         nick_name_value = nameEditText.getText().toString().trim();
-
+          Log.d(TAG, "nick_name_value " + nick_name_value);
         if(checkInput(nick_name_value)) {
-          setNickname();
-
+            if(null != userinfo) {
+                userinfo.getResults().get(0).setNick(nick_name_value);
+                Log.d(TAG, "userinfo nick_name_value " + userinfo.getResults().get(0).getNick());
+                setNickname();
+            }
         }
         else{
           Toast.makeText(mContext, "昵称长度或者字符错误,请检查", Toast.LENGTH_SHORT).show();
@@ -87,21 +93,27 @@ public class SettingNicknameActivity extends BaseSwipeBackCompatActivity impleme
   }
 
   private void setNickname(){
-    model.setNickname(nick_name_value)
+    model.setNickname(userid, userinfo)
             .subscribeOn(Schedulers.newThread())
-            .subscribe(new ServiceResponse<UserBean>() {
+            .subscribe(new ServiceResponse<ResponseBody>() {
               @Override
-              public void onNext(UserBean user) {
-                Log.d(TAG, "user.getCode() " + user.getCode() + ", user.getResult() " + user.getResult());
-                if (user.getCode() == 0) {
+              public void onNext(ResponseBody user) {
+                //Log.d(TAG, "user.getCode() " + user.getCode() + ", user.getResult() " + user.getResult());
+                  try {
+                      Log.d(TAG, "user.getCode() " + user.string());
+                  }
+                  catch (Exception e){
+                      e.printStackTrace();
+                  }
+                  //if (user.getCode() == 0) {
                   Toast.makeText(mContext, "修改成功", Toast.LENGTH_SHORT).show();
                   Intent intent = new Intent(mContext, SettingActivity.class);
                   startActivity(intent);
                   finish();
-                } else {
+               // } else {
 
-                  Toast.makeText(mContext, "修改失败", Toast.LENGTH_SHORT).show();
-                }
+                //  Toast.makeText(mContext, "修改失败", Toast.LENGTH_SHORT).show();
+               // }
               }
 
               @Override
@@ -112,19 +124,14 @@ public class SettingNicknameActivity extends BaseSwipeBackCompatActivity impleme
   }
 
   private void getUserInfo(){
-    model.getUserInfo()
-            .subscribeOn(Schedulers.newThread())
-            .subscribe(new ServiceResponse<UserInfoBean>() {
-              @Override
-              public void onNext(UserInfoBean user) {
-                Log.d(TAG, "user origin nick " + user.getResults().get(0).getNick() );
-                nameEditText.setText(user.getResults().get(0).getNick());
-              }
-
-              @Override
-              public void onCompleted() {
-                super.onCompleted();
-              }
-            });
+      userinfo = LoginUtils.getUserInfo();
+      if(null != userinfo) {
+          nameEditText.setText(userinfo.getResults().get(0).getNick());
+          userid = userinfo.getResults().get(0).getId();
+          Log.d(TAG, userinfo.getResults().get(0).getNick()+ " " + userid);
+      }
+      else{
+          Log.e(TAG, "get userinfo failed. ");
+      }
   }
 }

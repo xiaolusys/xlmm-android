@@ -6,6 +6,8 @@ import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
+import com.squareup.okhttp.ResponseBody;
+
 import rx.Observable;
 
 /**
@@ -37,8 +39,9 @@ public class UserModel {
   }
 
   //设置昵称
-  public Observable<UserBean> setNickname(String nickname) {
+  public Observable<ResponseBody> setNickname(int userid, UserInfoBean userinfo) {
     return XlmmRetrofitClient.getService()
+<<<<<<< HEAD
             .setNickname(nickname)
             .compose(new DefaultTransform<>());
   }
@@ -68,4 +71,16 @@ public class UserModel {
 
 
 
+=======
+            .setNickname(userid, userinfo)
+            .compose(new DefaultTransform<>());
+  }
+
+    //设置密码
+    public Observable<UserBean> changePassword(String username, String valid_code, String password1, String password2) {
+        return XlmmRetrofitClient.getService()
+                .changePassword(username, valid_code, password1, password2)
+                .compose(new DefaultTransform<>());
+    }
+>>>>>>> ad95242de73bbb65dd79a4281da622206b459264
 }

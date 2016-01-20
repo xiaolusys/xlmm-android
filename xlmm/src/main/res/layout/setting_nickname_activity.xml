@@ -33,7 +33,6 @@
   <include layout="@layout/common_gap" />
 
   <EditText
-      android:layout_marginTop="8dp"
       android:id="@+id/set_nick_name"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -49,7 +48,6 @@
   <include layout="@layout/common_gap" />
 
   <TextView
-      android:layout_marginTop="8dp"
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
       android:singleLine="true"

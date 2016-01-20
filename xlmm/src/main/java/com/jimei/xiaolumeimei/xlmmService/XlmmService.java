@@ -21,6 +21,8 @@ import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.squareup.okhttp.ResponseBody;
 import java.util.List;
+
+import retrofit.http.Body;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
@@ -172,6 +174,7 @@ public interface XlmmService {
 
   //设置用户昵称
   @PATCH(XlmmApi.USERINFO_URL+"/{id}")
+<<<<<<< HEAD
   Observable<UserBean> setNickname(
           @Path("id")String id);
 
@@ -181,4 +184,20 @@ public interface XlmmService {
   @POST("complain")
   Observable<AddressResultBean> complain(
           @Field("com_content")String com_content );
+=======
+  Observable<ResponseBody> setNickname(
+          @Path("id")int id,
+          @Body UserInfoBean userinfo);
+
+    //修改用户密码
+    @FormUrlEncoded
+    @POST(XlmmApi.CHANGE_USER_PASSWORD_URL)
+    Observable<UserBean> changePassword(
+
+            @Field("username") String username,
+            @Field("valid_code")  String valid_code,
+            @Field("password1")  String password1,
+            @Field("password2")  String password2
+    );
+>>>>>>> ad95242de73bbb65dd79a4281da622206b459264
 }
