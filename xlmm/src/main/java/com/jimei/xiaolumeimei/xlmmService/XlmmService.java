@@ -172,11 +172,7 @@ public interface XlmmService {
   @GET(XlmmApi.USERINFO_URL)
   Observable<UserInfoBean> getUserInfo();
 
-  //设置用户昵称
-  @PATCH(XlmmApi.USERINFO_URL+"/{id}")
-<<<<<<< HEAD
-  Observable<UserBean> setNickname(
-          @Path("id")String id);
+
 
 
   //投诉建议
@@ -184,7 +180,9 @@ public interface XlmmService {
   @POST("complain")
   Observable<AddressResultBean> complain(
           @Field("com_content")String com_content );
-=======
+
+    //设置用户昵称
+    @PATCH(XlmmApi.USERINFO_URL+"/{id}")
   Observable<ResponseBody> setNickname(
           @Path("id")int id,
           @Body UserInfoBean userinfo);
@@ -199,5 +197,5 @@ public interface XlmmService {
             @Field("password1")  String password1,
             @Field("password2")  String password2
     );
->>>>>>> ad95242de73bbb65dd79a4281da622206b459264
+
 }
