@@ -5,6 +5,10 @@
       android:key="账户昵称"
       android:title="账户昵称"
       android:summary="xuye">
+    <intent
+        android:action="android.intent.action.MAIN"
+        android:targetPackage="com.jimei.xiaolumeimei"
+        android:targetClass="com.jimei.xiaolumeimei.ui.activity.user.SettingNicknameActivity"/>
   </Preference>
   <Preference
       android:layout="@layout/preference_list_item"
@@ -17,6 +21,10 @@
       android:key="修改密码"
       android:title="修改密码"
       android:summary="xuye">
+    <intent
+        android:action="android.intent.action.MAIN"
+        android:targetPackage="com.jimei.xiaolumeimei"
+        android:targetClass="com.jimei.xiaolumeimei.ui.activity.user.SettingPasswordActivity"/>
   </Preference>
   <Preference
       android:layout="@layout/preference_list_item"

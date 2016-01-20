@@ -32,10 +32,6 @@
 
   <include layout="@layout/common_gap" />
 
-<android.support.design.widget.TextInputLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    >
   <EditText
       android:layout_marginTop="8dp"
       android:id="@+id/set_nick_name"
@@ -48,7 +44,7 @@
       android:paddingBottom="10sp"
       android:background="@drawable/text_frame"
       android:hint="请输入新昵称"/>
-</android.support.design.widget.TextInputLayout>
+
 
   <include layout="@layout/common_gap" />
 
