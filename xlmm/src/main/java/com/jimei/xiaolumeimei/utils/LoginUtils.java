@@ -43,7 +43,8 @@ public class LoginUtils {
     sharedPreferences = context.getSharedPreferences("login_info", Context.MODE_PRIVATE);
     editor = sharedPreferences.edit();
     editor.clear();
-
+      editor.apply();
+      Log.d(TAG, "clear logininfo "  );
   }
 
   //登录
