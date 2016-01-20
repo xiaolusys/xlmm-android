@@ -6,12 +6,17 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.entities.UserBean;
+import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.okhttp.callback.OkHttpCallback;
 import com.jimei.xiaolumeimei.okhttp.request.OkHttpRequest;
 import com.jimei.xiaolumeimei.ui.activity.trade.OrderDetailActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
+import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
+
+import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 15/12/29.
@@ -22,6 +27,7 @@ public class LoginUtils {
   static String TAG = "LoginUtils";
   static SharedPreferences sharedPreferences;
   static SharedPreferences.Editor editor;
+  static UserInfoBean userinfo;
 
   public static void saveLoginInfo(boolean isSuccess, Context context, String username,
       String password) {
@@ -31,6 +37,13 @@ public class LoginUtils {
     editor.putString("password", password);
     editor.putBoolean("success", isSuccess);
     editor.apply();
+  }
+
+  public static void delLoginInfo(Context context) {
+    sharedPreferences = context.getSharedPreferences("login_info", Context.MODE_PRIVATE);
+    editor = sharedPreferences.edit();
+    editor.clear();
+
   }
 
   //登录
@@ -88,5 +101,31 @@ public class LoginUtils {
       Log.d(TAG, "have not logined, "   + "jump to LoginActivity");
       context.startActivity(intent);
     }
+  }
+
+  public static UserInfoBean getUserInfo(){
+
+    UserModel model = new UserModel();
+    model.getUserInfo()
+            .subscribeOn(Schedulers.newThread())
+            .subscribe(new ServiceResponse<UserInfoBean>() {
+              @Override
+              public void onNext(UserInfoBean user) {
+                userinfo = user;
+              }
+
+              @Override
+              public void onCompleted() {
+                super.onCompleted();
+              }
+
+              @Override
+              public void onError(Throwable e) {
+                userinfo = null;
+                super.onError(e);
+              }
+            });
+
+    return userinfo;
   }
 }
