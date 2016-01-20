@@ -10,12 +10,10 @@ import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.okhttp.callback.OkHttpCallback;
 import com.jimei.xiaolumeimei.okhttp.request.OkHttpRequest;
-import com.jimei.xiaolumeimei.ui.activity.trade.OrderDetailActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
-
 import rx.schedulers.Schedulers;
 
 /**
@@ -43,7 +41,7 @@ public class LoginUtils {
     sharedPreferences = context.getSharedPreferences("login_info", Context.MODE_PRIVATE);
     editor = sharedPreferences.edit();
     editor.clear();
-
+    editor.apply();
   }
 
   //登录
