@@ -30,13 +30,15 @@
 
   </android.support.design.widget.AppBarLayout>
 
+  <include layout="@layout/common_gap" />
+
 <android.support.design.widget.TextInputLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     >
   <EditText
       android:layout_marginTop="8dp"
-      android:id="@+id/set_login_name"
+      android:id="@+id/set_nick_name"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:singleLine="true"
@@ -45,69 +47,39 @@
       android:paddingTop="10sp"
       android:paddingBottom="10sp"
       android:background="@drawable/text_frame"
-      android:hint="请输入手机号"/>
+      android:hint="请输入新昵称"/>
 </android.support.design.widget.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-  <EditText
+  <include layout="@layout/common_gap" />
+
+  <TextView
       android:layout_marginTop="8dp"
-      android:id="@+id/set_login_password"
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
-      android:inputType="textPassword"
       android:singleLine="true"
       android:paddingLeft="10sp"
       android:paddingRight="10sp"
       android:paddingTop="10sp"
       android:paddingBottom="10sp"
       android:background="@drawable/text_frame"
-      android:hint="请输入登录密码"/>
-</android.support.design.widget.TextInputLayout>
+      android:text="4-20个字符，可由中英文、数字、“-”组成"/>
+
+  <include layout="@layout/common_gap" />
 
   <Button
-      android:gravity="center"
       android:layout_marginTop="8dp"
       android:background="@drawable/forget_pass"
-      android:id="@+id/set_forget_button"
-      android:layout_width="wrap_content"
+      android:id="@+id/set_save_button"
+      android:layout_width="260dp"
       android:layout_height="wrap_content"
       android:layout_marginRight="8dp"
-      android:text="忘记密码"
+      android:text="保存"
       android:textColor="@color/book_loading_book"
       android:textSize="16sp"
-      android:layout_gravity="right|center_vertical"/>
-
-  <LinearLayout
-      android:orientation="vertical"
       android:gravity="center"
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content"
-      android:paddingTop="20sp">
-    <Button
-        android:clickable="true"
-        android:textColor="@color/white"
-        android:background="@drawable/shape_login"
-        android:id="@+id/set_login_button"
-        android:layout_width="320dp"
-        android:layout_height="wrap_content"
-        android:text="登录"
-        />
+      android:layout_gravity="center" />
 
-    <Button
-        android:clickable="true"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/shape_res"
-        android:textColor="@color/colorPrimary"
-        android:id="@+id/set_register_button"
-        android:layout_width="320dp"
-        android:layout_height="wrap_content"
-        android:text="注册"
-        />
 
-  </LinearLayout>
 
 
 </LinearLayout>

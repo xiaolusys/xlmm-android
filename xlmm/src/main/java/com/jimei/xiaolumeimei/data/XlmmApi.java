@@ -35,8 +35,10 @@ public class XlmmApi {
 
   //所有退货订单
   public static final String ALL_REFUNDS_URL = URL_BASE + "refunds";
-  //所有订单
+  //购物车
   public static final String CARTS_URL = URL_BASE + "carts";
+  //用户信息
+  public static final String USERINFO_URL = URL_BASE + "users";
 
   //获取待支付订单
   public static  final String WAITPAY_URL = URL_BASE+"";
