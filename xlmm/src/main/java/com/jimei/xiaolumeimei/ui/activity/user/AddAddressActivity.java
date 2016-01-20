@@ -1,5 +1,6 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
+import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.SwitchCompat;
@@ -13,14 +14,14 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import com.google.gson.annotations.SerializedName;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.widget.citypicker.CityPicker;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
-import com.squareup.okhttp.ResponseBody;
-import java.io.IOException;
 import rx.schedulers.Schedulers;
 
 /**
@@ -114,20 +115,17 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
         model.create_address(receiver_state, receiver_city, receiver_district,
             receiver_address, receiver_name, receiver_mobile)
             .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<ResponseBody>() {
-          @Override public void onNext(ResponseBody responseBody) {
-            super.onNext(responseBody);
-            try {
-              JUtils.Log("Address",responseBody.string());
+            .subscribe(new ServiceResponse<AddressResultBean>() {
+              @Override public void onNext(AddressResultBean addressResultBean) {
+                super.onNext(addressResultBean);
 
-
-            } catch (IOException e) {
-              e.printStackTrace();
-
-            }
-          }
-        });
-
+                if (addressResultBean.isRet()) {
+                  startActivity(
+                      new Intent(AddAddressActivity.this, AddressActivity.class));
+                  AddAddressActivity.this.finish();
+                }
+              }
+            });
 
         break;
     }
@@ -136,7 +134,7 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
   private void checkkInput() {
     if (receiver_mobile.length() != 11) {
       JUtils.Toast("请输入正确的手机号");
-      return ;
+      return;
     }
 
     //if (receiver_address == null || receiver_name == null || receiver_mobile == null) {
@@ -157,15 +155,20 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
     cityPicker = (CityPicker) view.findViewById(R.id.city_picker);
   }
 
-  class Result{
-    String ret;
+  class Result {
 
-    public String getRet() {
-      return ret;
+    /**
+     * ret : true
+     */
+
+    @SerializedName("ret") private boolean mRet;
+
+    public boolean isRet() {
+      return mRet;
     }
 
-    public void setRet(String ret) {
-      this.ret = ret;
+    public void setRet(boolean ret) {
+      this.mRet = ret;
     }
   }
 }

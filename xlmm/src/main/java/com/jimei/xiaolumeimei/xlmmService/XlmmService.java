@@ -3,6 +3,7 @@ package com.jimei.xiaolumeimei.xlmmService;
 import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.entities.AddCartsBean;
 import com.jimei.xiaolumeimei.entities.AddressBean;
+import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
@@ -152,7 +153,7 @@ public interface XlmmService {
     //创建新的地址
   @FormUrlEncoded
   @POST("address/create_address")
-  Observable<ResponseBody> create_address(
+  Observable<AddressResultBean> create_address(
      @Field("receiver_state")       String receiver_state,
      @Field("receiver_city")        String receiver_city,
      @Field("receiver_district")    String receiver_district,
