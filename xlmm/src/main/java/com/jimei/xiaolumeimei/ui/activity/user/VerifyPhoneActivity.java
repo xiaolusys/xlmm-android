@@ -48,6 +48,7 @@ public class VerifyPhoneActivity extends BaseSwipeBackCompatActivity
   @Override protected void initViews() {
     TextView tx_title = (TextView)findViewById(R.id.tx_title);
     tx_title.setText("请验证手机");
+      toolbar.setTitle("");
     setSupportActionBar(toolbar);
 
     register_button.setText("下一步");
@@ -102,7 +103,7 @@ public class VerifyPhoneActivity extends BaseSwipeBackCompatActivity
               @Override public void onNext(RegisterBean registerBean) {
                 super.onNext(registerBean);
                 String result = registerBean.getResult();
-                if (result.equals("7")) {
+                if (result.equals("0")) {
                   Intent intent =
                       new Intent(VerifyPhoneActivity.this, SettingPasswordActivity.class);
                   Bundle bundle = new Bundle();
