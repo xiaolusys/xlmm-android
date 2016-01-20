@@ -14,6 +14,7 @@ import com.jimei.xiaolumeimei.adapter.AddressAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AddressBean;
 import com.jimei.xiaolumeimei.model.AddressModel;
+import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import java.util.List;
 import rx.schedulers.Schedulers;
@@ -29,8 +30,8 @@ public class AddressActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.address_recyclerView) RecyclerView addressRecyclerView;
   @Bind(R.id.addAdress) Button addAdress;
-  private AddressAdapter adapter;
   AddressModel model = new AddressModel();
+  private AddressAdapter adapter;
 
   @Override protected void setListener() {
     addAdress.setOnClickListener(this);
@@ -58,6 +59,8 @@ public class AddressActivity extends BaseSwipeBackCompatActivity
   @Override protected void initViews() {
 
     addressRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    addressRecyclerView.addItemDecoration(
+        new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
     adapter = new AddressAdapter(this);
     addressRecyclerView.setAdapter(adapter);
   }
@@ -80,10 +83,9 @@ public class AddressActivity extends BaseSwipeBackCompatActivity
     switch (v.getId()) {
       case R.id.addAdress:
 
-        new Intent(AddressActivity.this,AddAddressActivity.class);
+        startActivity(new Intent(AddressActivity.this, AddAddressActivity.class));
 
         break;
-
     }
   }
 }
