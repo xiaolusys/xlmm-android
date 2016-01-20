@@ -1,9 +1,9 @@
-package com.jimei.xiaolumeimei.ui.activity;
+package com.jimei.xiaolumeimei.ui.activity.user;
 
 import android.os.Bundle;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 
-public class SettingBillActivity extends BaseSwipeBackCompatActivity {
+public class SettingPasswordActivity extends BaseSwipeBackCompatActivity {
 
   @Override protected void setListener() {
 

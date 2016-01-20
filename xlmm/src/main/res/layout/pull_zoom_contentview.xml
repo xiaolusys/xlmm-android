@@ -4,9 +4,13 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <ImageView android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:src="@drawable/zhengpin"
-        />
+  <ImageView
+      android:layout_marginTop="8dp"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:src="@drawable/zhengpin"
+      />
+
   <com.jimei.xiaolumeimei.widget.TagFlowLayout
       android:id="@+id/id_flowlayout"
       app:max_select="1"
@@ -14,9 +18,79 @@
       android:layout_height="wrap_content"
       android:padding="20dp">
   </com.jimei.xiaolumeimei.widget.TagFlowLayout>
+
+  <LinearLayout
+      android:orientation="horizontal"
+      android:layout_marginTop="16dp"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+    <TextView
+        android:layout_width="wrap_content"
+        android:text="商品编号"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/shangpinbianhao"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+  </LinearLayout>
+
+  <LinearLayout
+      android:orientation="horizontal"
+      android:layout_marginTop="16dp"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+    <TextView
+        android:layout_width="wrap_content"
+        android:text="商品材质"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/shagpincaizhi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+  </LinearLayout>
+
+  <LinearLayout
+      android:orientation="horizontal"
+      android:layout_marginTop="16dp"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+    <TextView
+        android:layout_width="wrap_content"
+        android:text="可选颜色"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/kexuanyanse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+  </LinearLayout>
+  <LinearLayout
+      android:orientation="horizontal"
+      android:layout_marginTop="16dp"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+    <TextView
+        android:layout_width="wrap_content"
+        android:text="商品备注"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/shangpinnbeizhu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+  </LinearLayout>
+  <ImageView
+      android:layout_gravity="center"
+      android:src="@drawable/sku"
+      android:layout_width="548px"
+    android:layout_height="122px"/>
+
   <ImageView
       android:layout_width="match_parent"
       android:id="@+id/image_details_product"
-      android:layout_height="match_parent"
+      android:layout_height="2000dp"
       />
 </LinearLayout>

@@ -20,6 +20,8 @@ import com.jimei.xiaolumeimei.base.BaseActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllOrdersActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
+import com.jimei.xiaolumeimei.ui.activity.trade.WaitPayOrdersActivity;
+import com.jimei.xiaolumeimei.ui.activity.trade.WaitSendOrdersActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.SettingActivity;
 import com.jimei.xiaolumeimei.ui.fragment.ChildListFragment;
@@ -113,9 +115,9 @@ public class MainActivity extends BaseActivity
       startActivity(new Intent(MainActivity.this, LoginActivity.class));
     } else {
       if (id == R.id.nav_tobepaid) {
-        // Handle the camera action
+        startActivity(new Intent(MainActivity.this, WaitPayOrdersActivity.class));
       } else if (id == R.id.nav_tobereceived) {
-
+        startActivity(new Intent(MainActivity.this, WaitSendOrdersActivity.class));
       } else if (id == R.id.nav_returned) {
         startActivity(new Intent(MainActivity.this, AllRefundsActivity.class));
       } else if (id == R.id.nav_orders) {
