@@ -178,4 +178,15 @@ public interface XlmmService {
   Observable<ResponseBody> setNickname(
           @Path("id")int id,
           @Body UserInfoBean userinfo);
+
+    //修改用户密码
+    @FormUrlEncoded
+    @POST(XlmmApi.CHANGE_USER_PASSWORD_URL)
+    Observable<UserBean> changePassword(
+
+            @Field("username") String username,
+            @Field("valid_code")  String valid_code,
+            @Field("password1")  String password1,
+            @Field("password2")  String password2
+    );
 }

@@ -42,4 +42,11 @@ public class UserModel {
             .setNickname(userid, userinfo)
             .compose(new DefaultTransform<>());
   }
+
+    //设置密码
+    public Observable<UserBean> changePassword(String username, String valid_code, String password1, String password2) {
+        return XlmmRetrofitClient.getService()
+                .changePassword(username, valid_code, password1, password2)
+                .compose(new DefaultTransform<>());
+    }
 }
