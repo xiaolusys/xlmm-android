@@ -38,13 +38,7 @@ public class UserModel {
             .compose(new DefaultTransform<>());
   }
 
-  //设置昵称
-  public Observable<ResponseBody> setNickname(int userid, UserInfoBean userinfo) {
-    return XlmmRetrofitClient.getService()
-<<<<<<< HEAD
-            .setNickname(nickname)
-            .compose(new DefaultTransform<>());
-  }
+
 
 
   //投诉建议
@@ -65,13 +59,14 @@ public class UserModel {
   //获取注册验证码
   public Observable<RegisterBean> check_code_user(String username,String valid_code) {
     return XlmmRetrofitClient.getService()
-        .check_code_user(username,valid_code)
+        .check_code_user(username, valid_code)
         .compose(new DefaultTransform<>());
   }
 
 
-
-=======
+  //设置昵称
+  public Observable<ResponseBody> setNickname(int userid, UserInfoBean userinfo) {
+    return XlmmRetrofitClient.getService()
             .setNickname(userid, userinfo)
             .compose(new DefaultTransform<>());
   }
@@ -82,5 +77,5 @@ public class UserModel {
                 .changePassword(username, valid_code, password1, password2)
                 .compose(new DefaultTransform<>());
     }
->>>>>>> ad95242de73bbb65dd79a4281da622206b459264
+
 }
