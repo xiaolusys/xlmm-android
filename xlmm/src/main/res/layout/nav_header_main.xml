@@ -15,7 +15,7 @@
       android:layout_height="40dp"
       android:paddingTop="@dimen/nav_header_vertical_spacing"
       android:src="@drawable/personal_iamge"
-      android:id="@+id/imageView"
+      android:id="@+id/imguser"
       android:layout_weight="0.61"
       android:layout_gravity="center_horizontal"/>
 
