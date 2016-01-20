@@ -30,9 +30,9 @@ public class SettingNicknameActivity extends BaseSwipeBackCompatActivity impleme
   @Bind(R.id.set_nick_name)  EditText nameEditText;
   @Bind(R.id.set_save_button)  Button save_button;
   UserModel model = new UserModel();
-    UserInfoBean userinfo;
+  UserInfoBean userinfo;
   String nick_name_value;
-    int userid;
+  int userid;
 
   @Override protected void setListener() {
     save_button.setOnClickListener(this);
