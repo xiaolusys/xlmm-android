@@ -145,6 +145,10 @@
         android:theme="@style/AppTheme.TransparentActivity"
         />
 
+    <activity android:name=".ui.activity.user.VerifyPhoneActvity"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
+
   </application>
 
 </manifest>

@@ -24,7 +24,7 @@
     <intent
         android:action="android.intent.action.MAIN"
         android:targetPackage="com.jimei.xiaolumeimei"
-        android:targetClass="com.jimei.xiaolumeimei.ui.activity.user.RegisterActivity"/>
+        android:targetClass="com.jimei.xiaolumeimei.ui.activity.user.VerifyPhoneActivity"/>
   </Preference>
   <Preference
       android:layout="@layout/preference_list_item"
