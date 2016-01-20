@@ -198,4 +198,11 @@ public interface XlmmService {
             @Field("password2")  String password2
     );
 
+    //获取修改密码时验证码
+    @FormUrlEncoded
+    @POST("register/change_pwd_code")
+    Observable<RegisterBean> getChgPasswordCheckCode(
+            @Field("vmobile") String vmobile
+    );
+
 }
