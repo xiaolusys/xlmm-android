@@ -26,19 +26,22 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="180dp"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
 
       <TextView android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:paddingTop="@dimen/nav_header_vertical_spacing"
           android:text="0"
-          android:id="@+id/tvScore"/>
+          android:id="@+id/tvScore"
+          android:layout_gravity="center" />
 
-      <TextView android:layout_width="wrap_content"
+      <ImageView android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:paddingTop="@dimen/nav_header_vertical_spacing"
-          android:text="积分"
-          android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+          android:src="@drawable/personal_iamge"
+          android:id="@+id/imgPoint"
+          android:layout_gravity="center" />
     </LinearLayout>
     <LinearLayout
         android:orientation="vertical"
@@ -50,13 +53,15 @@
           android:layout_height="wrap_content"
           android:paddingTop="@dimen/nav_header_vertical_spacing"
           android:text="0"
-          android:id="@+id/tvDiscount"/>
+          android:id="@+id/tvDiscount"
+          android:layout_gravity="center" />
 
-      <TextView android:layout_width="wrap_content"
+      <ImageView android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:paddingTop="@dimen/nav_header_vertical_spacing"
-          android:text="优惠券"
-          android:id="@+id/textView"/>
+          android:src="@drawable/personal_iamge"
+          android:id="@+id/imgCoupon"
+          android:layout_gravity="center" />
 
 
     </LinearLayout>
