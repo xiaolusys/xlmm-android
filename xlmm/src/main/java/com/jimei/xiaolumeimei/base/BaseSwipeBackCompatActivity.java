@@ -16,6 +16,7 @@
 
 package com.jimei.xiaolumeimei.base;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 import com.jimei.xiaolumeimei.swipeback.SwipeBackActivityBase;
@@ -62,5 +63,11 @@ public abstract class BaseSwipeBackCompatActivity extends BaseAppCompatActivity
   @Override public void scrollToFinishActivity() {
     Utils.convertActivityToTranslucent(this);
     getSwipeBackLayout().scrollToFinishActivity();
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
   }
 }
