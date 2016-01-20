@@ -37,6 +37,7 @@ public class LoginUtils {
     editor.putString("password", password);
     editor.putBoolean("success", isSuccess);
     editor.apply();
+      Log.d(TAG, "save logininfo "  );
   }
 
   public static void delLoginInfo(Context context) {
@@ -113,6 +114,7 @@ public class LoginUtils {
               @Override
               public void onNext(UserInfoBean user) {
                 userinfo = user;
+                  Log.d(TAG, "userinfo:, "   + userinfo.toString());
               }
 
               @Override
