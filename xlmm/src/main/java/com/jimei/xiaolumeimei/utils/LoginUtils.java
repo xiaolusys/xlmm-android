@@ -122,6 +122,7 @@ public class LoginUtils {
               @Override
               public void onError(Throwable e) {
                 userinfo = null;
+                Log.e(TAG, "error:, "   + e.toString());
                 super.onError(e);
               }
             });
