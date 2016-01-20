@@ -41,16 +41,9 @@
     <activity android:name=".ui.activity.user.LoginActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
-    <activity android:name=".ui.activity.user.SettingAccountActivity"
-        android:theme="@style/AppTheme.TransparentActivity"/>
-    <activity android:name=".ui.activity.user.SettingMyInfoActivity"
-        android:theme="@style/AppTheme.TransparentActivity"/>
     <activity android:name=".ui.activity.user.RegisterActivity"
         android:theme="@style/AppTheme.TransparentActivity"/>
-    <activity android:name=".ui.activity.SettingBillActivity"
-        android:theme="@style/AppTheme.TransparentActivity"/>
-    <activity android:name=".ui.activity.SettingContactActivity"
-        android:theme="@style/AppTheme.TransparentActivity"/>
+
     <activity android:name=".ui.activity.product.TongkuanActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
@@ -135,9 +128,16 @@
         />
 
     <activity android:name=".ui.activity.user.AddressActivity"
+      android:theme="@style/AppTheme.TransparentActivity"
+      />
+    <activity android:name=".ui.activity.user.AddAddressActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
-    <activity android:name=".ui.activity.user.AddAddressActivity"
+
+    <activity android:name=".ui.activity.user.SettingNicknameActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
+    <activity android:name=".ui.activity.user.SettingPasswordActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
   </application>

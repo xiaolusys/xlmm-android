@@ -17,11 +17,13 @@ import com.jimei.xiaolumeimei.entities.ProductDetailBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.entities.RegisterBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
+import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.squareup.okhttp.ResponseBody;
 import java.util.List;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
+import retrofit.http.PATCH;
 import retrofit.http.POST;
 import retrofit.http.Path;
 import retrofit.http.Query;
@@ -152,7 +154,7 @@ public interface XlmmService {
   @POST("address/create_address")
   Observable<ResponseBody> create_address(
      @Field("receiver_state")       String receiver_state,
-     @Field("receiver_city")        String valid_code,
+     @Field("receiver_city")        String receiver_city,
      @Field("receiver_district")    String receiver_district,
      @Field("receiver_address")     String receiver_address,
      @Field("receiver_name")        String receiver_name,
@@ -164,5 +166,12 @@ public interface XlmmService {
   @GET("address")
   Observable<List<AddressBean>> getAddressList();
 
+  //获取用户信息
+  @GET(XlmmApi.USERINFO_URL)
+  Observable<UserInfoBean> getUserInfo();
 
+  //设置用户昵称
+  @PATCH(XlmmApi.USERINFO_URL+"/{id}")
+  Observable<UserBean> setNickname(
+          @Path("id")String id);
 }

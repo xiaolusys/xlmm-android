@@ -15,7 +15,13 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.widget.citypicker.CityPicker;
+import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jude.utils.JUtils;
+import com.squareup.okhttp.ResponseBody;
+import java.io.IOException;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/01/19.
@@ -25,6 +31,7 @@ import com.jimei.xiaolumeimei.widget.citypicker.CityPicker;
 public class AddAddressActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener {
 
+  AddressModel model = new AddressModel();
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.name) EditText name;
   @Bind(R.id.mobile) EditText mobile;
@@ -98,8 +105,44 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
         break;
       case R.id.save:
 
+        receiver_name = name.getText().toString().trim();
+        receiver_address = address.getText().toString().trim();
+        receiver_mobile = mobile.getText().toString().trim();
+
+        checkkInput();
+
+        model.create_address(receiver_state, receiver_city, receiver_district,
+            receiver_address, receiver_name, receiver_mobile)
+            .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<ResponseBody>() {
+          @Override public void onNext(ResponseBody responseBody) {
+            super.onNext(responseBody);
+            try {
+              JUtils.Log("Address",responseBody.string());
+
+
+            } catch (IOException e) {
+              e.printStackTrace();
+
+            }
+          }
+        });
+
+
         break;
     }
+  }
+
+  private void checkkInput() {
+    if (receiver_mobile.length() != 11) {
+      JUtils.Toast("请输入正确的手机号");
+      return ;
+    }
+
+    //if (receiver_address == null || receiver_name == null || receiver_mobile == null) {
+    //  JUtils.Toast();
+    //
+    //}
   }
 
   private void initPopupWindow() {
@@ -112,5 +155,17 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
     popupWindow.setBackgroundDrawable(new BitmapDrawable());
     popupWindow.setOutsideTouchable(true);
     cityPicker = (CityPicker) view.findViewById(R.id.city_picker);
+  }
+
+  class Result{
+    String ret;
+
+    public String getRet() {
+      return ret;
+    }
+
+    public void setRet(String ret) {
+      this.ret = ret;
+    }
   }
 }
