@@ -1,7 +1,10 @@
 package com.jimei.xiaolumeimei.base;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import butterknife.ButterKnife;
+import rx.internal.operators.OperatorOnErrorResumeNextViaFunction;
+
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.zhy.autolayout.AutoLayoutActivity;
 
@@ -44,5 +47,11 @@ public abstract class BaseActivity extends AutoLayoutActivity {
   @Override protected void onDestroy() {
     super.onDestroy();
     ButterKnife.unbind(this);
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
   }
 }
