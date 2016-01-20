@@ -14,6 +14,9 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+
 import butterknife.Bind;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
@@ -25,7 +28,9 @@ import com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.WaitPayOrdersActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.WaitSendOrdersActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.CouponActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.MembershipPointActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.SettingActivity;
 import com.jimei.xiaolumeimei.ui.fragment.ChildListFragment;
 import com.jimei.xiaolumeimei.ui.fragment.LadyListFragment;
@@ -45,6 +50,9 @@ public class MainActivity extends BaseActivity
   @Bind(R.id.view_pager) ViewPager mViewPager;
   @Bind(R.id.tool_bar) Toolbar toolbar;
   @Bind(R.id.fab) FloatingActionButton carts;
+  ImageView imgPoint;
+  ImageView imgCoupon;
+  ImageView imgUser;
   List<Fragment> fragments;
   List<String> titles;
   UserModel model = new UserModel();
@@ -108,6 +116,36 @@ public class MainActivity extends BaseActivity
 
     NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
     navigationView.setNavigationItemSelectedListener(this);
+
+    View llayout =  navigationView.getHeaderView(0);
+    imgPoint = (ImageView) llayout.findViewById(R.id.imgPoint);
+    imgPoint.setOnClickListener(new View.OnClickListener(){
+      @Override
+      public void onClick(View v) {
+        Intent intent = new Intent(MainActivity.this, MembershipPointActivity.class);
+        startActivity(intent);
+      }
+    });
+
+    imgCoupon = (ImageView) llayout.findViewById(R.id.imgCoupon);
+    imgCoupon.setOnClickListener(new View.OnClickListener(){
+      @Override
+      public void onClick(View v) {
+        Intent intent = new Intent(MainActivity.this, CouponActivity.class);
+        startActivity(intent);
+      }
+    });
+
+    imgUser = (ImageView) llayout.findViewById(R.id.imgUser);
+    imgUser.setOnClickListener(new View.OnClickListener(){
+      @Override
+      public void onClick(View v) {
+        if(LoginUtils.checkLoginState(MainActivity.this)){
+          Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+          startActivity(intent);
+        }
+      }
+    });
   }
 
   @Override public boolean onNavigationItemSelected(MenuItem item) {

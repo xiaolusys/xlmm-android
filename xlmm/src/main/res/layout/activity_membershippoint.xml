@@ -23,6 +23,13 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/nav_header_vertical_spacing"
+        android:text="0"
+        android:id="@+id/tvPoint"
+        android:layout_gravity="center" />
+
     <ListView
         android:id="@+id/all_orders_listview"
         android:layout_width="fill_parent"
