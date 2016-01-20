@@ -128,9 +128,16 @@
         />
 
     <activity android:name=".ui.activity.user.AddressActivity"
+      android:theme="@style/AppTheme.TransparentActivity"
+      />
+    <activity android:name=".ui.activity.user.AddAddressActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
-    <activity android:name=".ui.activity.user.AddAddressActivity"
+
+    <activity android:name=".ui.activity.user.SettingNicknameActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
+    <activity android:name=".ui.activity.user.SettingPasswordActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
   </application>
