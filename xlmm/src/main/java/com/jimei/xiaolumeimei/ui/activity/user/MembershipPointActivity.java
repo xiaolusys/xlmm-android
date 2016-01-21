@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.jimei.xiaolumeimei.adapter.MembershipPointListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.MembershipPointBean;
+import com.jimei.xiaolumeimei.entities.PointLogBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import java.util.List;
@@ -28,6 +29,7 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity {
     UserModel model = new UserModel();
     MembershipPointBean all_point_info = new MembershipPointBean();
     private MembershipPointListAdapter mPointAdapter;
+    TextView  tx_point;
     LinearLayout rlayout;
     TextView  tx_empty_info;
 
@@ -53,6 +55,8 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity {
 
         mPointAdapter = new MembershipPointListAdapter(this);
         all_orders_listview.setAdapter(mPointAdapter);
+
+        tx_point = (TextView) findViewById(R.id.tv_Point);
     }
     //从server端获得所有订单数据，可能要查询几次
     @Override protected void initData() {
@@ -61,6 +65,19 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity {
                 .subscribe(new ServiceResponse<MembershipPointBean>() {
                     @Override public void onNext(MembershipPointBean pointBean) {
                         List<MembershipPointBean.ResultsEntity> results = pointBean.getResults();
+                        if (0 != results.size())
+                        {
+                            tx_point.setText(results.get(0).getIntegral_value());
+                            Log.i(TAG, "" + results.get(0).getIntegral_value());
+                        }
+                    }
+                });
+
+        model.getPointLogBean()
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(new ServiceResponse<PointLogBean>() {
+                    @Override public void onNext(PointLogBean pointLogBean) {
+                        List<PointLogBean.ResultsEntity> results = pointLogBean.getResults();
                         if (0 == results.size()){
                             fillEmptyInfo();
                         }
@@ -70,7 +87,7 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity {
                             mPointAdapter.update(results);
                         }
 
-                        Log.i(TAG, pointBean.toString());
+                        Log.i(TAG, pointLogBean.toString());
                     }
                 });
     }

@@ -46,6 +46,9 @@ public class XlmmApi {
   //用户积分
   public static final String MEMBERSHIPPOINT_URL = URL_BASE + "integral";
 
+  //用户积分记录
+  public static final String MEMBERSHIPPOINTLOG_URL = URL_BASE + "integrallog";
+
   //用户优惠券
   public static final String COUPON_URL = URL_BASE + "usercoupons";
 

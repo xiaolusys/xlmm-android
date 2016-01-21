@@ -3,7 +3,14 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-	android:id="@+id/llayout_order_item">
+	android:id="@+id/llayout_point_item">
+
+	<TextView
+		android:id="@+id/tx_point_logtime"
+		android:layout_width="wrap_content"
+		android:layout_height="match_parent"
+		android:text=""
+		android:textSize="15sp" />
 
 	<RelativeLayout
 		android:layout_width="fill_parent"
@@ -11,17 +18,17 @@
 		android:layout_height="wrap_content"
 		android:orientation="horizontal" >
 		<TextView
-			android:id="@+id/tx_order_actual_payment"
+			android:id="@+id/tx_point_info"
 			android:layout_width="wrap_content"
 			android:layout_height="match_parent"
-			android:text="@string/productprice"
+			android:text="购物订单完成奖励积分"
 			android:textSize="15sp" />
 
 		<TextView
-			android:id="@+id/tx_order_state"
+			android:id="@+id/tx_point_value"
 			android:layout_width="wrap_content"
 			android:layout_height="match_parent"
-			android:text="交易关闭"
+			android:text="+100分"
 			android:textSize="15sp"
 			android:layout_alignParentTop="true"
 			android:layout_alignParentRight="true"

@@ -23,6 +23,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
+import com.jimei.xiaolumeimei.entities.CouponBean;
 import com.jimei.xiaolumeimei.widget.MyHorizontalScrollView;
 import com.jimei.xiaolumeimei.widget.NestedListView;
 
@@ -39,33 +40,47 @@ public class CouponListAdapter extends BaseAdapter {
     private static final String TAG = "CouponListAdapter";
     private Context context;
     List<HashMap<String, String>> data;
-    private List<AllOrdersBean.ResultsEntity> mList;
+    private List<CouponBean.ResultsEntity> mList;
 
     public CouponListAdapter(Context context) {
-        mList = new ArrayList<AllOrdersBean.ResultsEntity>();
+        mList = new ArrayList<CouponBean.ResultsEntity>();
         this.data = new ArrayList<HashMap<String, String>>();
         this.context = context;
     }
 
-    public void updateWithClear(List<AllOrdersBean.ResultsEntity> list) {
+    public void updateWithClear(List<CouponBean.ResultsEntity> list) {
         mList.clear();
         mList.addAll(list);
         notifyDataSetChanged();
     }
 
-    public void update(List<AllOrdersBean.ResultsEntity> list) {
-        float payment = 0;
-        int orderState = 0;
+    public void update(List<CouponBean.ResultsEntity> list) {
+        float coupon_value = 0;
+        String usestate = "";
+        String crttime = "";
+        String deadline = "";
+        String usescope = "";
+        String coupon_no= "";
 
         Log.d(TAG,"dataSource.size "+ list.size());
         for (int i = 0; i < list.size(); i++) {
             HashMap<String, String> map = new HashMap<String, String>();
-            payment = (float)list.get(i).getPayment();
-            orderState = list.get(i).getStatus();
+            coupon_value = (float)list.get(i).getCoupon_value();
+            if(1 == list.get(i).getCoupon_type()){
+                usestate = "满99使用";
+            }
+            crttime = list.get(i).getCreated();
+            deadline = list.get(i).getDeadline();
+            if(1 == list.get(i).getCoupon_type()){
+                usescope = "全场通用";
+            }
+            coupon_no = list.get(i).getCoupon_no();
 
-
-            map.put("payment", Float.toString(payment) );
-            map.put("orderState", Integer.toString(orderState) );
+            map.put("coupon_value", Float.toString(coupon_value) );
+            map.put("usestate", usestate);
+            map.put("crttime", crttime);
+            map.put("deadline", deadline);
+            map.put("coupon_no", coupon_no);
 
             data.add(map);
         }
@@ -92,87 +107,27 @@ public class CouponListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         Log.d(TAG,"getView ");
 
-        TextView tx_payment = null;
-        TextView tx_order_sate = null;
-
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.orders_list_item, null);
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_coupon, null);
         }
 
-        final int order_id = mList.get(position).getId();
+        TextView tv_coupon_value = (TextView) convertView.findViewById(R.id.tv_coupon_value);
+        TextView tv_coupon_info = (TextView) convertView.findViewById(R.id.tv_coupon_info);
+        TextView tv_coupon_crttime = (TextView) convertView.findViewById(R.id.tv_coupon_crttime);
+        TextView tv_coupon_deadline = (TextView) convertView.findViewById(R.id.tv_coupon_deadline);
+        TextView tv_coupon_type = (TextView) convertView.findViewById(R.id.tv_coupon_type);
+        TextView tv_coupon_no = (TextView) convertView.findViewById(R.id.tv_coupon_no);
 
-        tx_payment = (TextView) convertView.findViewById(R.id.tx_order_actual_payment);
-        tx_order_sate = (TextView) convertView.findViewById(R.id.tx_order_state);
-
-        tx_payment.setText("实付金额"+data.get(position).get("payment"));
-        tx_order_sate.setText("交易状态"+data.get(position).get("orderState"));
-
-        LinearLayout llayout = (LinearLayout) convertView.findViewById(R.id.llayout_order_item);
-        if(1 == mList.get(position).getOrders().size()) {
-            NestedListView goods_listview = new NestedListView(context);
-            OrderGoodsListAdapter goods_adapter = new OrderGoodsListAdapter(context, mList.get(position).getOrders());
-            goods_listview.setAdapter(goods_adapter);
-            goods_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                @Override
-                public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-                                        long arg3) {
-                    // TODO Auto-generated method stub
-                    Log.d(TAG, "onItemClick " + arg2 + " " + arg3);
-                    Intent intent = new Intent(context, OrderDetailActivity.class);
-                    intent.putExtra("orderinfo", order_id);
-                    Log.d(TAG, "transfer orderid  " + order_id + " to OrderDetailActivity");
-                    context.startActivity(intent);
-                }
-
-            });
-
-            llayout.addView(goods_listview);
-        }
-        else{
-            List<String> mDatas = new ArrayList<String>();
-            fillPicPath(mDatas, mList.get(position).getOrders());
-            Log.d(TAG, "goodsnum " + mList.get(position).getOrders().size() + " " + mDatas.size());
-
-            LayoutInflater inflater = LayoutInflater.from(context);
-            MyHorizontalScrollView mHorizontalScrollView  = (MyHorizontalScrollView)inflater.inflate(R.layout.hscrollview_gallery, null);
-            HorizontalScrollViewAdapter mAdapter = new HorizontalScrollViewAdapter(context, mDatas);
-            //添加滚动回调
-            mHorizontalScrollView
-                    .setCurrentImageChangeListener(new MyHorizontalScrollView.CurrentImageChangeListener()
-                    {
-                        @Override
-                        public void onCurrentImgChanged(int position,
-                                                        View viewIndicator)
-                        {
-
-                        }
-                    });
-            //添加点击回调
-            mHorizontalScrollView.setOnItemClickListener(new MyHorizontalScrollView.OnItemClickListener()
-            {
-
-                @Override
-                public void onClick(View view, int position)
-                {
-                    Intent intent = new Intent(context, OrderDetailActivity.class);
-                    intent.putExtra("orderinfo", order_id);
-                    Log.d(TAG, "transfer orderid  " + order_id + " to OrderDetailActivity");
-                    context.startActivity(intent);
-                }
-            });
-            //设置适配器
-            mHorizontalScrollView.initDatas(mAdapter);
-            llayout.addView(mHorizontalScrollView);
-        }
+        tv_coupon_value.setText("￥"+data.get(position).get("coupon_value"));
+        tv_coupon_info.setText(data.get(position).get("usestate"));
+        tv_coupon_crttime.setText("使用期限"+data.get(position).get("crttime"));
+        tv_coupon_deadline.setText("至"+data.get(position).get("deadline"));
+        tv_coupon_type.setText("使用范围"+data.get(position).get("usescope"));
+        tv_coupon_no.setText("优惠编码"+data.get(position).get("coupon_no"));
 
         return convertView;
     }
 
-    public static void fillPicPath(List<String> mDatas, List<AllOrdersBean.ResultsEntity.OrdersEntity> good_list){
-        for (int i = 0; i < good_list.size(); i++) {
-            mDatas.add(good_list.get(i).getPicPath());
-        }
-    }
+
 }
 

@@ -16,6 +16,7 @@ import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.entities.MembershipPointBean;
 import com.jimei.xiaolumeimei.entities.NicknameBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
+import com.jimei.xiaolumeimei.entities.PointLogBean;
 import com.jimei.xiaolumeimei.entities.PostBean;
 import com.jimei.xiaolumeimei.entities.ProductBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
@@ -215,6 +216,10 @@ public interface XlmmService {
     //获取用户积分信息
     @GET(XlmmApi.MEMBERSHIPPOINT_URL)
     Observable<MembershipPointBean> getMembershipPointBean();
+
+    //获取用户积分记录信息
+    @GET(XlmmApi.MEMBERSHIPPOINTLOG_URL)
+    Observable<PointLogBean> getPointLogBean();
 
     //获取用户优惠券信息
     @GET(XlmmApi.COUPON_URL)

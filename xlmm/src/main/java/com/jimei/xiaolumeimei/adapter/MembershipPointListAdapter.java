@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.MembershipPointBean;
+import com.jimei.xiaolumeimei.entities.PointLogBean;
 import com.jimei.xiaolumeimei.widget.MyHorizontalScrollView;
 import com.jimei.xiaolumeimei.widget.NestedListView;
 
@@ -37,36 +38,38 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.ui.activity.trade.OrderDetailActivity;
 
 public class MembershipPointListAdapter extends BaseAdapter {
-    private static final String TAG = "MembershipPointListAdapter";
+    private static final String TAG = "PointListAdapter";
     private Context context;
     List<HashMap<String, String>> data;
-    private List<MembershipPointBean.ResultsEntity> mList;
+    private List<PointLogBean.ResultsEntity> mList;
 
     public MembershipPointListAdapter(Context context) {
-        mList = new ArrayList<MembershipPointBean.ResultsEntity>();
+        mList = new ArrayList<PointLogBean.ResultsEntity>();
         this.data = new ArrayList<HashMap<String, String>>();
         this.context = context;
     }
 
-    public void updateWithClear(List<MembershipPointBean.ResultsEntity> list) {
+    public void updateWithClear(List<PointLogBean.ResultsEntity> list) {
         mList.clear();
         mList.addAll(list);
         notifyDataSetChanged();
     }
 
-    public void update(List<MembershipPointBean.ResultsEntity> list) {
-        float payment = 0;
-        int orderState = 0;
+    public void update(List<PointLogBean.ResultsEntity> list) {
+        String time = "";
+        String info = "";
+        int pointvalue = 0;
 
         Log.d(TAG,"dataSource.size "+ list.size());
         for (int i = 0; i < list.size(); i++) {
             HashMap<String, String> map = new HashMap<String, String>();
             //payment = (float)list.get(i).getPayment();
-            //orderState = list.get(i).getStatus();
+            pointvalue = list.get(i).getLog_value();
 
 
-            map.put("payment", Float.toString(payment) );
-            map.put("orderState", Integer.toString(orderState) );
+            map.put("logtime", (time) );
+            map.put("info", (info) );
+            map.put("pointvalue", Integer.toString(pointvalue) );
 
             data.add(map);
         }
@@ -93,30 +96,26 @@ public class MembershipPointListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         Log.d(TAG,"getView ");
 
-        TextView tx_payment = null;
-        TextView tx_order_sate = null;
+        TextView tx_time = null;
+        TextView tx_pointinfo= null;
+        TextView tx_pointvalue= null;
 
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.item_membership_point, null);
         }
 
-        final int order_id = mList.get(position).getId();
+        tx_time = (TextView) convertView.findViewById(R.id.tx_point_logtime);
+        tx_pointinfo = (TextView) convertView.findViewById(R.id.tx_point_info);
+        tx_pointvalue = (TextView) convertView.findViewById(R.id.tx_point_value);
 
-        tx_payment = (TextView) convertView.findViewById(R.id.tx_order_actual_payment);
-        tx_order_sate = (TextView) convertView.findViewById(R.id.tx_order_state);
-
-        tx_payment.setText("实付金额"+data.get(position).get("payment"));
-        tx_order_sate.setText("交易状态"+data.get(position).get("orderState"));
-
+        tx_time.setText(data.get(position).get("logtime"));
+        tx_pointinfo.setText(data.get(position).get("info"));
+        tx_pointvalue.setText("+"+data.get(position).get("pointvalue")+"分");
 
 
         return convertView;
     }
 
-    public static void fillPicPath(List<String> mDatas, List<AllOrdersBean.ResultsEntity.OrdersEntity> good_list){
-        for (int i = 0; i < good_list.size(); i++) {
-            mDatas.add(good_list.get(i).getPicPath());
-        }
-    }
+
 }
 

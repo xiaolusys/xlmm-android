@@ -5,6 +5,7 @@ import com.jimei.xiaolumeimei.entities.CouponBean;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.entities.MembershipPointBean;
 import com.jimei.xiaolumeimei.entities.NicknameBean;
+import com.jimei.xiaolumeimei.entities.PointLogBean;
 import com.jimei.xiaolumeimei.entities.RegisterBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
@@ -100,6 +101,13 @@ public class UserModel {
   public Observable<MembershipPointBean> getMembershipPointBean() {
     return XlmmRetrofitClient.getService()
             .getMembershipPointBean()
+            .compose(new DefaultTransform<>());
+  }
+
+  //得到用户积分记录信息
+  public Observable<PointLogBean> getPointLogBean() {
+    return XlmmRetrofitClient.getService()
+            .getPointLogBean()
             .compose(new DefaultTransform<>());
   }
 
