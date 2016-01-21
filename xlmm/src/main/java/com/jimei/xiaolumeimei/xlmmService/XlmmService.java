@@ -12,6 +12,7 @@ import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.entities.IndexBean;
 import com.jimei.xiaolumeimei.entities.LadyListBean;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
+import com.jimei.xiaolumeimei.entities.NicknameBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.PostBean;
 import com.jimei.xiaolumeimei.entities.ProductBean;
@@ -184,9 +185,9 @@ public interface XlmmService {
 
     //设置用户昵称
     @PATCH(XlmmApi.USERINFO_URL+"/{id}")
-  Observable<ResponseBody> setNickname(
+  Observable<UserBean> setNickname(
           @Path("id")int id,
-          @Body UserInfoBean userinfo);
+          @Body NicknameBean nickname);
 
     //修改用户密码
     @FormUrlEncoded

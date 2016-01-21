@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.model;
 
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
+import com.jimei.xiaolumeimei.entities.NicknameBean;
 import com.jimei.xiaolumeimei.entities.RegisterBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
@@ -66,9 +67,9 @@ public class UserModel {
 
 
   //设置昵称
-  public Observable<ResponseBody> setNickname(int userid, UserInfoBean userinfo) {
+  public Observable<UserBean> setNickname(int userid, NicknameBean nickname) {
     return XlmmRetrofitClient.getService()
-            .setNickname(userid, userinfo)
+            .setNickname(userid, nickname)
             .compose(new DefaultTransform<>());
   }
 
