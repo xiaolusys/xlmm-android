@@ -71,6 +71,7 @@ public class DataClearManager {
   }
 
   public static void cleanApplicationData(Context context) {
+    Log.d("DataClear",newsCacheurl);
     cleanApplicationData(context, newsCacheurl);
   }
 
