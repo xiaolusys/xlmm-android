@@ -1,7 +1,11 @@
 package com.jimei.xiaolumeimei.model;
 
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
+import com.jimei.xiaolumeimei.entities.CouponBean;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
+import com.jimei.xiaolumeimei.entities.MembershipPointBean;
+import com.jimei.xiaolumeimei.entities.NicknameBean;
+import com.jimei.xiaolumeimei.entities.PointLogBean;
 import com.jimei.xiaolumeimei.entities.RegisterBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
@@ -66,9 +70,9 @@ public class UserModel {
 
 
   //设置昵称
-  public Observable<ResponseBody> setNickname(int userid, UserInfoBean userinfo) {
+  public Observable<UserBean> setNickname(int userid, NicknameBean nickname) {
     return XlmmRetrofitClient.getService()
-            .setNickname(userid, userinfo)
+            .setNickname(userid, nickname)
             .compose(new DefaultTransform<>());
   }
 
@@ -91,6 +95,27 @@ public class UserModel {
     return XlmmRetrofitClient.getService()
         .customer_logout()
         .compose(new DefaultTransform<>());
+  }
+
+  //得到用户积分信息
+  public Observable<MembershipPointBean> getMembershipPointBean() {
+    return XlmmRetrofitClient.getService()
+            .getMembershipPointBean()
+            .compose(new DefaultTransform<>());
+  }
+
+  //得到用户积分记录信息
+  public Observable<PointLogBean> getPointLogBean() {
+    return XlmmRetrofitClient.getService()
+            .getPointLogBean()
+            .compose(new DefaultTransform<>());
+  }
+
+  //得到用户优惠券信息
+  public Observable<CouponBean> getCouponBean() {
+    return XlmmRetrofitClient.getService()
+            .getCouponBean()
+            .compose(new DefaultTransform<>());
   }
 
 }

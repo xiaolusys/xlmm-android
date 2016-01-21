@@ -40,8 +40,17 @@ public class XlmmApi {
   //用户信息
   public static final String USERINFO_URL = URL_BASE + "users";
 
-  //用户信息
+  //用户修改密码
   public static final String CHANGE_USER_PASSWORD_URL = URL_BASE + "register/change_user_pwd";
+
+  //用户积分
+  public static final String MEMBERSHIPPOINT_URL = URL_BASE + "integral";
+
+  //用户积分记录
+  public static final String MEMBERSHIPPOINTLOG_URL = URL_BASE + "integrallog";
+
+  //用户优惠券
+  public static final String COUPON_URL = URL_BASE + "usercoupons";
 
   //获取待支付订单
   public static  final String WAITPAY_URL = URL_BASE+"";

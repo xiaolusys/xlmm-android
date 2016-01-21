@@ -7,11 +7,21 @@ import java.util.List;
  */
 public class UserInfoBean {
 
+    @Override
+    public String toString() {
+        return "UserInfoBean{" +
+                "count=" + count +
+                ", next=" + next +
+                ", previous=" + previous +
+                ", results=" + results +
+                '}';
+    }
+
     /**
      * count : 1
      * next : null
      * previous : null
-     * results : [{"id":33,"url":"http://192.168.1.31:9000/rest/v1/users/33","user_id":"125","username":"lei.wu","nick":"lei.wu","mobile":"13739234100","email":" ","phone":" ","status":1,"created":"2016-01-19T11:04:02","modified":"2016-01-19T11:04:02","xiaolumm":null,"has_usable_password":true}]
+     * results : [{"id":33,"url":"http://192.168.1.31:9000/rest/v1/users/33","user_id":"125","username":"lei.wu","nick":"lei.wu","mobile":"13739234100","email":" ","phone":" ","status":1,"created":"2016-01-19T11:04:02","modified":"2016-01-20T19:27:37","xiaolumm":null,"has_usable_password":true}]
      */
 
     private int count;
@@ -28,7 +38,7 @@ public class UserInfoBean {
      * phone :
      * status : 1
      * created : 2016-01-19T11:04:02
-     * modified : 2016-01-19T11:04:02
+     * modified : 2016-01-20T19:27:37
      * xiaolumm : null
      * has_usable_password : true
      */
@@ -68,6 +78,25 @@ public class UserInfoBean {
     }
 
     public static class ResultsEntity {
+        @Override
+        public String toString() {
+            return "ResultsEntity{" +
+                    "id=" + id +
+                    ", url='" + url + '\'' +
+                    ", user_id='" + user_id + '\'' +
+                    ", username='" + username + '\'' +
+                    ", nick='" + nick + '\'' +
+                    ", mobile='" + mobile + '\'' +
+                    ", email='" + email + '\'' +
+                    ", phone='" + phone + '\'' +
+                    ", status=" + status +
+                    ", created='" + created + '\'' +
+                    ", modified='" + modified + '\'' +
+                    ", xiaolumm=" + xiaolumm +
+                    ", has_usable_password=" + has_usable_password +
+                    '}';
+        }
+
         private int id;
         private String url;
         private String user_id;

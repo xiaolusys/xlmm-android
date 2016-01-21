@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/productdetail_coordinatorlayout"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent">
 
   <com.ecloud.pulltozoomview.PullToZoomScrollViewEx
@@ -10,12 +11,36 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       />
-  <ImageView
-      android:layout_alignParentRight="true"
-      android:layout_alignParentBottom="true"
-      android:src="@drawable/shopping"
-      android:id="@+id/shopping_image"
-      android:layout_width="559px"
-      android:layout_height="78px"
-      />
+
+    <LinearLayout android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content">
+        <cn.iwgang.countdownview.CountdownView
+            android:id="@+id/cv_countdownView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            app:isShowMinute="true"
+            app:isShowSecond="true"
+            app:isShowMillisecond="false"
+            app:suffixGravity="center"
+            app:suffixTextColor="#000000"
+            app:suffixTextSize="20sp"
+            app:timeTextColor="#FFFFFF"
+            app:timeTextSize="20sp"
+            app:isHideTimeBackground="false"
+            app:timeBgColor="@color/colorAccent"
+            app:isShowTimeBgDivisionLine="false" />
+        <ImageView
+            android:layout_gravity="end"
+            android:src="@drawable/shopping"
+            android:id="@+id/shopping_image"
+            android:layout_width="559px"
+            android:layout_height="78px"
+            />
+    </LinearLayout>
+
 </RelativeLayout>

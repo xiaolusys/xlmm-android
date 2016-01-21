@@ -68,7 +68,6 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
       defaultVH.receiverName.setText(addressBean.getReceiverName());
     } else if (holder instanceof AddressVH) {
 
-
       AddressVH addressVH = (AddressVH) holder;
 
       AddressBean addressBean = mList.get(position);
@@ -82,7 +81,6 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
           + ""
           + addressBean.getReceiverAddress());
       addressVH.receiverName.setText(addressBean.getReceiverName());
-
     }
   }
 

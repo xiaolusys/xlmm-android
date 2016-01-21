@@ -83,8 +83,6 @@ public class TodayFragment extends BaseFragment {
     post1 = (ImageView) head.findViewById(R.id.post_1);
     post2 = (ImageView) head.findViewById(R.id.post_2);
 
-    CountdownView countdownView = (CountdownView) head.findViewById(R.id.countTime);
-    countdownView.start(10000000);
 
     xRecyclerView.addHeaderView(head);
 
@@ -113,6 +111,15 @@ public class TodayFragment extends BaseFragment {
 
     mTodayAdapter = new TodayAdapter(getActivity());
     xRecyclerView.setAdapter(mTodayAdapter);
+
+
+    CountdownView countdownView = (CountdownView) head.findViewById(R.id.countTime);
+
+    long time = System.currentTimeMillis();
+
+    countdownView.start(10000000);
+
+
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
       @Override public void onRefresh() {

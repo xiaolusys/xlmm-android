@@ -1,15 +1,6 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
-import android.app.ActionBar;
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -19,32 +10,15 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.jimei.xiaolumeimei.adapter.AllOrdersListAdapter;
+import com.jimei.xiaolumeimei.adapter.MembershipPointListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.model.TradeModel;
-import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
+import com.jimei.xiaolumeimei.entities.MembershipPointBean;
+import com.jimei.xiaolumeimei.entities.PointLogBean;
+import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.squareup.okhttp.Call;
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
-
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.AllOrdersListAdapter;
-import com.jimei.xiaolumeimei.data.XlmmApi;
-import com.jimei.xiaolumeimei.entities.AllOrdersBean;
-
 import butterknife.Bind;
 import rx.schedulers.Schedulers;
 
@@ -52,9 +26,10 @@ import rx.schedulers.Schedulers;
 public class MembershipPointActivity extends BaseSwipeBackCompatActivity {
     String TAG = "MembershipPointActivity";
     @Bind(R.id.toolbar) Toolbar toolbar;
-    TradeModel model = new TradeModel();
-    AllOrdersBean all_orders_info = new AllOrdersBean();
-    private AllOrdersListAdapter mAllOrderAdapter;
+    UserModel model = new UserModel();
+    MembershipPointBean all_point_info = new MembershipPointBean();
+    private MembershipPointListAdapter mPointAdapter;
+    TextView  tx_point;
     LinearLayout rlayout;
     TextView  tx_empty_info;
 
@@ -73,31 +48,46 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity {
         toolbar.setTitle("所有订单");
         setSupportActionBar(toolbar);
 
-        rlayout = (LinearLayout) findViewById(R.id.llayout_allorders);
+        rlayout = (LinearLayout) findViewById(R.id.llayout_point);
         tx_empty_info = new TextView(mContext);
-    //config allorders list adaptor
-        ListView all_orders_listview = (ListView) findViewById(R.id.all_orders_listview);
 
-        mAllOrderAdapter = new AllOrdersListAdapter(this);
-        all_orders_listview.setAdapter(mAllOrderAdapter);
+        ListView all_orders_listview = (ListView) findViewById(R.id.all_points_listview);
+
+        mPointAdapter = new MembershipPointListAdapter(this);
+        all_orders_listview.setAdapter(mPointAdapter);
+
+        tx_point = (TextView) findViewById(R.id.tv_Point);
     }
     //从server端获得所有订单数据，可能要查询几次
     @Override protected void initData() {
-        model.getAlloderBean()
+        model.getMembershipPointBean()
                 .subscribeOn(Schedulers.newThread())
-                .subscribe(new ServiceResponse<AllOrdersBean>() {
-                    @Override public void onNext(AllOrdersBean allOrdersBean) {
-                        List<AllOrdersBean.ResultsEntity> results = allOrdersBean.getResults();
+                .subscribe(new ServiceResponse<MembershipPointBean>() {
+                    @Override public void onNext(MembershipPointBean pointBean) {
+                        List<MembershipPointBean.ResultsEntity> results = pointBean.getResults();
+                        if (0 != results.size())
+                        {
+                            tx_point.setText(results.get(0).getIntegral_value());
+                            Log.i(TAG, "" + results.get(0).getIntegral_value());
+                        }
+                    }
+                });
+
+        model.getPointLogBean()
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(new ServiceResponse<PointLogBean>() {
+                    @Override public void onNext(PointLogBean pointLogBean) {
+                        List<PointLogBean.ResultsEntity> results = pointLogBean.getResults();
                         if (0 == results.size()){
                             fillEmptyInfo();
                         }
                         else
                         {
                             tx_empty_info.setVisibility(View.GONE);
-                            mAllOrderAdapter.update(results);
+                            mPointAdapter.update(results);
                         }
 
-                        Log.i(TAG, allOrdersBean.toString());
+                        Log.i(TAG, pointLogBean.toString());
                     }
                 });
     }

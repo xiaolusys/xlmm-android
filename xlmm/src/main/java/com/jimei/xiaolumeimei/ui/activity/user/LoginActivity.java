@@ -16,7 +16,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.model.UserModel;
-import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
+import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
@@ -61,7 +61,6 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
-
   }
 
   @Override protected int getContentViewLayoutID() {
@@ -96,16 +95,29 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
             .subscribeOn(Schedulers.newThread())
             .subscribe(new ServiceResponse<UserBean>() {
               @Override public void onNext(UserBean user) {
-                Log.d(TAG, "user.getCode() "+user.getCode()+", user.getResult() " +user.getResult());
+                Log.d(TAG, "user.getCode() "
+                    + user.getCode()
+                    + ", user.getResult() "
+                    + user.getResult());
                 if (user.getCode() == 0 && user.getResult().equals("login")) {
 
                   LoginUtils.saveLoginInfo(true, getApplicationContext(),
                       login_name_value, login_pass_value);
 
                   Toast.makeText(mContext, "登录成功", Toast.LENGTH_SHORT).show();
-                  Intent intent = new Intent(mContext, MainActivity.class);
-                  startActivity(intent);
-                  finish();
+
+                  String login = getIntent().getExtras().getString("login");
+
+                  assert login != null;
+                  if (login.equals("cart")) {
+                    Intent intent = new Intent(mContext, CartActivity.class);
+                    startActivity(intent);
+                    finish();
+                  } else if (login.equals("product")) {
+                    finish();
+                  } else if (login.equals("main")) {
+                    finish();
+                  }
                 } else {
 
                   LoginUtils.saveLoginInfo(false, getApplicationContext(), "", "");

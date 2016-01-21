@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.Bind;
+import cn.iwgang.countdownview.CountdownView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ecloud.pulltozoomview.PullToZoomScrollViewEx;
@@ -48,6 +49,8 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
 
   ProductModel model = new ProductModel();
   @Bind(R.id.shopping_image) ImageView shopping_imageView;
+  @Bind(R.id.cv_countdownView) CountdownView countdownView;
+
   List<ProductDetailBean.NormalSkusEntity> normalSkus = new ArrayList<>();
   CartsModel cartsModel = new CartsModel();
   private ImageView titleImage, detailImage;
@@ -244,7 +247,13 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
         String[] loginInfo = LoginUtils.getLoginInfo(getApplicationContext());
         boolean b = Boolean.parseBoolean(loginInfo[2]);
         if (!b) {
-          startActivity(new Intent(ProductDetailActvity.this, LoginActivity.class));
+
+          Intent intent = new Intent(ProductDetailActvity.this, LoginActivity.class);
+          Bundle bundle = new Bundle();
+          bundle.putString("login", "product");
+          intent.putExtras(bundle);
+          startActivity(intent);
+          //startActivity(new Intent(ProductDetailActvity.this, LoginActivity.class));
         } else if (sku_id == null) {
           JUtils.Toast("请选择尺码");
         } else {
@@ -258,6 +267,8 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
                   JUtils.Log("成功加入购物车");
                 }
               });
+
+          countdownView.start(1200000l);
         }
 
         break;

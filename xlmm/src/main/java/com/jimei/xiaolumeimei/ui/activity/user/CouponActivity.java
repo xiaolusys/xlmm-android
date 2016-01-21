@@ -53,7 +53,6 @@ public class CouponActivity extends BaseSwipeBackCompatActivity {
     String TAG = "CouponActivity";
     @Bind(R.id.toolbar) Toolbar toolbar;
     TradeModel model = new TradeModel();
-    AllOrdersBean all_orders_info = new AllOrdersBean();
     private AllOrdersListAdapter mAllOrderAdapter;
     LinearLayout rlayout;
     TextView  tx_empty_info;
