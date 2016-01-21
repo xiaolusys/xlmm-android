@@ -112,9 +112,16 @@ public class UserModel {
   }
 
   //得到用户优惠券信息
-  public Observable<CouponBean> getCouponBean() {
+  public Observable<CouponBean> getUnusedCouponBean() {
     return XlmmRetrofitClient.getService()
-            .getCouponBean()
+            .getUnusedCouponBean()
+            .compose(new DefaultTransform<>());
+  }
+
+  //得到用户过期优惠券信息
+  public Observable<CouponBean> getPastCouponBean() {
+    return XlmmRetrofitClient.getService()
+            .getPastCouponBean()
             .compose(new DefaultTransform<>());
   }
 

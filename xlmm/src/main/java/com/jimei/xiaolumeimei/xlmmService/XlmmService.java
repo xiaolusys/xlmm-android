@@ -221,7 +221,11 @@ public interface XlmmService {
     @GET(XlmmApi.MEMBERSHIPPOINTLOG_URL)
     Observable<PointLogBean> getPointLogBean();
 
-    //获取用户优惠券信息
+    //获取用户未使用优惠券信息
     @GET(XlmmApi.COUPON_URL)
-    Observable<CouponBean> getCouponBean();
+    Observable<CouponBean> getUnusedCouponBean();
+
+    //获取用户过期优惠券信息
+    @GET(XlmmApi.COUPON_URL+"/list_past_coupon")
+    Observable<CouponBean> getPastCouponBean();
 }

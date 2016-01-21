@@ -23,8 +23,11 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.jimei.xiaolumeimei.adapter.AllOrdersListAdapter;
+import com.jimei.xiaolumeimei.adapter.CouponListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.entities.CouponBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
+import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.squareup.okhttp.Call;
@@ -52,10 +55,12 @@ import rx.schedulers.Schedulers;
 public class CouponActivity extends BaseSwipeBackCompatActivity {
     String TAG = "CouponActivity";
     @Bind(R.id.toolbar) Toolbar toolbar;
-    TradeModel model = new TradeModel();
-    private AllOrdersListAdapter mAllOrderAdapter;
+    UserModel model = new UserModel();
+    private CouponListAdapter mCouponAdapter;
+    private CouponListAdapter mPastCouponAdapter;
     LinearLayout rlayout;
     TextView  tx_empty_info;
+    int unused_num = 0;
 
     @Override protected void setListener() {
 
@@ -69,34 +74,55 @@ public class CouponActivity extends BaseSwipeBackCompatActivity {
     }
 
     @Override protected void initViews() {
-        toolbar.setTitle("所有订单");
+        toolbar.setTitle("优惠券");
         setSupportActionBar(toolbar);
 
-        rlayout = (LinearLayout) findViewById(R.id.llayout_allorders);
+        rlayout = (LinearLayout) findViewById(R.id.llayout_coupon);
         tx_empty_info = new TextView(mContext);
-    //config allorders list adaptor
-        ListView all_orders_listview = (ListView) findViewById(R.id.all_orders_listview);
 
-        mAllOrderAdapter = new AllOrdersListAdapter(this);
-        all_orders_listview.setAdapter(mAllOrderAdapter);
+        ListView lv_unused_coupon = (ListView) findViewById(R.id.lv_unused_coupon);
+        mCouponAdapter = new CouponListAdapter(this);
+        lv_unused_coupon.setAdapter(mCouponAdapter);
+
+        ListView lv_timeout_coupon = (ListView) findViewById(R.id.lv_timeout_coupon);
+        mPastCouponAdapter = new CouponListAdapter(this);
+        lv_timeout_coupon.setAdapter(mPastCouponAdapter);
     }
     //从server端获得所有订单数据，可能要查询几次
     @Override protected void initData() {
-        model.getAlloderBean()
+        model.getUnusedCouponBean()
                 .subscribeOn(Schedulers.newThread())
-                .subscribe(new ServiceResponse<AllOrdersBean>() {
-                    @Override public void onNext(AllOrdersBean allOrdersBean) {
-                        List<AllOrdersBean.ResultsEntity> results = allOrdersBean.getResults();
+                .subscribe(new ServiceResponse<CouponBean>() {
+                    @Override public void onNext(CouponBean couponBean) {
+                        List<CouponBean.ResultsEntity> results = couponBean.getResults();
+                        unused_num = results.size();
+                        if (0 != results.size())
+                        {
+                            tx_empty_info.setVisibility(View.GONE);
+                            mCouponAdapter.update(results);
+                        }
+
+                        Log.i(TAG, couponBean.toString());
+                    }
+                });
+
+        model.getPastCouponBean()
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(new ServiceResponse<CouponBean>() {
+                    @Override public void onNext(CouponBean couponBean) {
+                        List<CouponBean.ResultsEntity> results = couponBean.getResults();
                         if (0 == results.size()){
-                            fillEmptyInfo();
+                            if(0 == unused_num) {
+                                fillEmptyInfo();
+                            }
                         }
                         else
                         {
                             tx_empty_info.setVisibility(View.GONE);
-                            mAllOrderAdapter.update(results);
+                            mPastCouponAdapter.update(results);
                         }
 
-                        Log.i(TAG, allOrdersBean.toString());
+                        Log.i(TAG, couponBean.toString());
                     }
                 });
     }
