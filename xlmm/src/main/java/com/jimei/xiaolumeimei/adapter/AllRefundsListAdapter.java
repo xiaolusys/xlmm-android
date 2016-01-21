@@ -60,7 +60,7 @@ public class AllRefundsListAdapter extends BaseAdapter {
     public void update(List<AllRefundsBean.ResultsEntity> list) {
 
         float refund_fee = 0;
-        int refund_State = 0;
+        String refund_State = "";
         String refund_no = "";
         String img_url = "";
         String title = "";
@@ -73,7 +73,7 @@ public class AllRefundsListAdapter extends BaseAdapter {
         for (int i = 0; i < list.size(); i++) {
             HashMap<String, String> map = new HashMap<String, String>();
             refund_no = list.get(i).getRefund_no();
-            refund_State = list.get(i).getStatus();
+            refund_State = list.get(i).getStatus_display();
             refund_fee = (float)list.get(i).getRefund_fee();
             img_url = list.get(i).getPic_path();
             title = list.get(i).getTitle();
@@ -90,7 +90,7 @@ public class AllRefundsListAdapter extends BaseAdapter {
             map.put("num", Integer.toString(num) );
 
             map.put("refund_no", (refund_no) );
-            map.put("refund_State", Integer.toString(refund_State) );
+            map.put("refund_State", refund_State );
             map.put("refund_fee", Float.toString(refund_fee) );
             data.add(map);
 
@@ -127,8 +127,8 @@ public class AllRefundsListAdapter extends BaseAdapter {
         TextView tx_refund_state = (TextView) convertView.findViewById(R.id.tx_refund_state);
         TextView tx_refundfee = (TextView) convertView.findViewById(R.id.tx_refundfee);
 
-        tx_refundno.setText("退款编号："+data.get(position).get("refund_no"));
-        tx_refund_state.setText("退款状态："+data.get(position).get("refund_State"));
+        tx_refundno.setText("订单编号："+data.get(position).get("refund_no"));
+        tx_refund_state.setText(data.get(position).get("refund_State"));
         tx_refundfee.setText(data.get(position).get("refund_fee"));
 
         ImageView img_goods = (ImageView) convertView.findViewById(R.id.img_good);;

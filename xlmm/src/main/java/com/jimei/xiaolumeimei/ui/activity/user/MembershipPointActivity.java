@@ -27,7 +27,6 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity {
     String TAG = "MembershipPointActivity";
     @Bind(R.id.toolbar) Toolbar toolbar;
     UserModel model = new UserModel();
-    MembershipPointBean all_point_info = new MembershipPointBean();
     private MembershipPointListAdapter mPointAdapter;
     TextView  tx_point;
     LinearLayout rlayout;

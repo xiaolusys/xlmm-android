@@ -39,9 +39,9 @@
 
   <Preference
       android:layout="@layout/preference_list_item"
-      android:key="清理缓存"
+      android:key="@string/clear_cache"
       android:title="清理缓存"
-      android:summary="xuye">
+      android:summary="0kb">
   </Preference>
   <Preference
       android:layout="@layout/preference_list_item"

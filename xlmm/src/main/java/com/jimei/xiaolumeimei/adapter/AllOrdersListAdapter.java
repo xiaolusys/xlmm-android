@@ -55,17 +55,17 @@ public class AllOrdersListAdapter extends BaseAdapter {
 
     public void update(List<AllOrdersBean.ResultsEntity> list) {
         float payment = 0;
-        int orderState = 0;
+        String orderState = "";
 
         Log.d(TAG,"dataSource.size "+ list.size());
         for (int i = 0; i < list.size(); i++) {
             HashMap<String, String> map = new HashMap<String, String>();
             payment = (float)list.get(i).getPayment();
-            orderState = list.get(i).getStatus();
+            orderState = list.get(i).getStatusDisplay();
 
 
             map.put("payment", Float.toString(payment) );
-            map.put("orderState", Integer.toString(orderState) );
+            map.put("orderState", orderState );
 
             data.add(map);
         }
@@ -104,8 +104,8 @@ public class AllOrdersListAdapter extends BaseAdapter {
         tx_payment = (TextView) convertView.findViewById(R.id.tx_order_actual_payment);
         tx_order_sate = (TextView) convertView.findViewById(R.id.tx_order_state);
 
-        tx_payment.setText("实付金额"+data.get(position).get("payment"));
-        tx_order_sate.setText("交易状态"+data.get(position).get("orderState"));
+        tx_payment.setText("实付金额￥"+data.get(position).get("payment"));
+        tx_order_sate.setText(data.get(position).get("orderState"));
 
         LinearLayout llayout = (LinearLayout) convertView.findViewById(R.id.llayout_order_item);
         if(1 == mList.get(position).getOrders().size()) {
