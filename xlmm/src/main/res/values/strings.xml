@@ -15,4 +15,6 @@
     <string name="title_activity_refunddetail">退货（款）详情</string>
   <string name="title_activity_waitpay">待支付</string>
   <string name="title_activity_waitsend">待收货</string>
+  <string name="clear_cache">清理缓存</string>
+  <string name="update_cache">缓存已经清理</string>
 </resources>
