@@ -364,7 +364,7 @@ public class AllOrdersBean {
       return mReceiverPhone;
     }
 
-    public List<OrdersEntity> getOrders() {
+    public List<AllOrdersBean.ResultsEntity.OrdersEntity> getOrders() {
       return mOrders;
     }
 

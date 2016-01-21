@@ -32,15 +32,15 @@ public class OrderGoodsListAdapter extends BaseAdapter {
     private Context context;
     List<HashMap<String, String>> data;
 
-    private List<OrderDetailBean.OrdersEntity> dataSource;
+    private List<AllOrdersBean.ResultsEntity.OrdersEntity> dataSource;
 
     public OrderGoodsListAdapter(Context context) {
-        dataSource = new ArrayList<OrderDetailBean.OrdersEntity>();
+        dataSource = new ArrayList<AllOrdersBean.ResultsEntity.OrdersEntity>();
         this.data = new ArrayList<HashMap<String, String>>();
         this.context = context;
     }
 
-    public OrderGoodsListAdapter(Context context, List<OrderDetailBean.OrdersEntity> goodsList) {
+    public OrderGoodsListAdapter(Context context, List<AllOrdersBean.ResultsEntity.OrdersEntity> goodsList) {
         Log.d(TAG," create");
         this.context = context;
         this.dataSource = goodsList;
@@ -56,11 +56,11 @@ public class OrderGoodsListAdapter extends BaseAdapter {
         Log.d(TAG,"dataSource.size "+ dataSource.size());
         for (int i = 0; i < dataSource.size(); i++) {
             HashMap<String, String> map = new HashMap<String, String>();
-            img_url = dataSource.get(i).getPic_path();
+            img_url = dataSource.get(i).getPicPath();
             title = dataSource.get(i).getTitle();
-            std_sale_price = (float)dataSource.get(i).getTotal_fee();
+            std_sale_price = (float)dataSource.get(i).getTotalFee();
             agent_price = (float)dataSource.get(i).getPayment();
-            model_id = dataSource.get(i).getSku_name();
+            model_id = dataSource.get(i).getSkuName();
             num = dataSource.get(i).getNum();
 
             map.put("img_url", img_url );
@@ -76,13 +76,13 @@ public class OrderGoodsListAdapter extends BaseAdapter {
 
     }
 
-    public void updateWithClear(List<OrderDetailBean.OrdersEntity> list) {
+    public void updateWithClear(List<AllOrdersBean.ResultsEntity.OrdersEntity> list) {
         dataSource.clear();
         dataSource.addAll(list);
         notifyDataSetChanged();
     }
 
-    public void update(List<OrderDetailBean.OrdersEntity> list) {
+    public void update(List<AllOrdersBean.ResultsEntity.OrdersEntity> list) {
         String img_url = "";
         String title = "";
         float std_sale_price = 0;
@@ -93,11 +93,11 @@ public class OrderGoodsListAdapter extends BaseAdapter {
         Log.d(TAG,"list.size "+ list.size());
         for (int i = 0; i < list.size(); i++) {
             HashMap<String, String> map = new HashMap<String, String>();
-            img_url = list.get(i).getPic_path();
+            img_url = list.get(i).getPicPath();
             title = list.get(i).getTitle();
-            std_sale_price = (float)list.get(i).getTotal_fee();
+            std_sale_price = (float)list.get(i).getTotalFee();
             agent_price = (float)list.get(i).getPayment();
-            model_id = list.get(i).getSku_name();
+            model_id = list.get(i).getSkuName();
             num = list.get(i).getNum();
 
             map.put("img_url", img_url );
