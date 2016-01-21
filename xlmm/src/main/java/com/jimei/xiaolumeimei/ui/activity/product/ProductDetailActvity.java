@@ -244,7 +244,13 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
         String[] loginInfo = LoginUtils.getLoginInfo(getApplicationContext());
         boolean b = Boolean.parseBoolean(loginInfo[2]);
         if (!b) {
-          startActivity(new Intent(ProductDetailActvity.this, LoginActivity.class));
+
+          Intent intent = new Intent(ProductDetailActvity.this, LoginActivity.class);
+          Bundle bundle = new Bundle();
+          bundle.putString("login", "product");
+          intent.putExtras(bundle);
+          startActivity(intent);
+          //startActivity(new Intent(ProductDetailActvity.this, LoginActivity.class));
         } else if (sku_id == null) {
           JUtils.Toast("请选择尺码");
         } else {

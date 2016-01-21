@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.ui.activity.main;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -15,8 +16,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-
 import butterknife.Bind;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
@@ -117,30 +116,27 @@ public class MainActivity extends BaseActivity
     NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
     navigationView.setNavigationItemSelectedListener(this);
 
-    View llayout =  navigationView.getHeaderView(0);
+    View llayout = navigationView.getHeaderView(0);
     imgPoint = (ImageView) llayout.findViewById(R.id.imgPoint);
-    imgPoint.setOnClickListener(new View.OnClickListener(){
-      @Override
-      public void onClick(View v) {
+    imgPoint.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
         Intent intent = new Intent(MainActivity.this, MembershipPointActivity.class);
         startActivity(intent);
       }
     });
 
     imgCoupon = (ImageView) llayout.findViewById(R.id.imgCoupon);
-    imgCoupon.setOnClickListener(new View.OnClickListener(){
-      @Override
-      public void onClick(View v) {
+    imgCoupon.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
         Intent intent = new Intent(MainActivity.this, CouponActivity.class);
         startActivity(intent);
       }
     });
 
     imgUser = (ImageView) llayout.findViewById(R.id.imgUser);
-    imgUser.setOnClickListener(new View.OnClickListener(){
-      @Override
-      public void onClick(View v) {
-        if(LoginUtils.checkLoginState(MainActivity.this)){
+    imgUser.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        if (LoginUtils.checkLoginState(MainActivity.this)) {
           Intent intent = new Intent(MainActivity.this, LoginActivity.class);
           startActivity(intent);
         }
@@ -157,7 +153,13 @@ public class MainActivity extends BaseActivity
 
     if (!b) {
             /*未登录进入登录界面*/
-      startActivity(new Intent(MainActivity.this, LoginActivity.class));
+
+      Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+      Bundle bundle = new Bundle();
+      bundle.putString("login", "main");
+      intent.putExtras(bundle);
+      startActivity(intent);
+      //startActivity(new Intent(MainActivity.this, LoginActivity.class));
     } else {
       if (id == R.id.nav_tobepaid) {
         startActivity(new Intent(MainActivity.this, WaitPayOrdersActivity.class));
@@ -218,7 +220,15 @@ public class MainActivity extends BaseActivity
   }
 
   @Override public void onClick(View v) {
-    startActivity(new Intent(MainActivity.this, CartActivity.class));
+    if (LoginUtils.checkLoginState(getApplicationContext())) {
+      startActivity(new Intent(MainActivity.this, CartActivity.class));
+    } else {
+      Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+      Bundle bundle = new Bundle();
+      bundle.putString("login", "cart");
+      intent.putExtras(bundle);
+      startActivity(intent);
+    }
   }
 
   class MainTabAdapter extends FragmentPagerAdapter {
