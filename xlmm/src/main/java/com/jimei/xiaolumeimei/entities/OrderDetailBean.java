@@ -87,7 +87,7 @@ public class OrderDetailBean  {
      * kill_title : false
      */
 
-    private List<OrdersEntity> orders;
+    private List<AllOrdersBean.ResultsEntity.OrdersEntity> orders;
 
     public void setId(int id) {
         this.id = id;
@@ -197,7 +197,7 @@ public class OrderDetailBean  {
         this.receiver_phone = receiver_phone;
     }
 
-    public void setOrders(List<OrdersEntity> orders) {
+    public void setOrders(List<AllOrdersBean.ResultsEntity.OrdersEntity> orders) {
         this.orders = orders;
     }
 
@@ -309,11 +309,11 @@ public class OrderDetailBean  {
         return receiver_phone;
     }
 
-    public List<OrdersEntity> getOrders() {
+    public List<AllOrdersBean.ResultsEntity.OrdersEntity> getOrders() {
         return orders;
     }
 
-    public static class OrdersEntity {
+    /*public static class OrdersEntity {
         private int id;
         private String oid;
         private String item_id;
@@ -476,5 +476,5 @@ public class OrderDetailBean  {
         public boolean isKill_title() {
             return kill_title;
         }
-    }
+    }*/
 }
