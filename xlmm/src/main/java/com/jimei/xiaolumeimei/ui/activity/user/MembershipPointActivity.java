@@ -45,7 +45,7 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity {
     }
 
     @Override protected void initViews() {
-        toolbar.setTitle("所有订单");
+        toolbar.setTitle("我的积分");
         setSupportActionBar(toolbar);
 
         rlayout = (LinearLayout) findViewById(R.id.llayout_point);
