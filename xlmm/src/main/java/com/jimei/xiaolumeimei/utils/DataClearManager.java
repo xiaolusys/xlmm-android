@@ -66,6 +66,7 @@ public class DataClearManager {
     cleanExternalCache(context);
     //cleanSharedPreference(context);
     for (String filePath : filepath) {
+      Log.d("DataClear", "filePath "+filePath);
       cleanCustomCache(filePath);
     }
   }
