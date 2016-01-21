@@ -24,6 +24,7 @@ import com.jimei.xiaolumeimei.swipeback.SwipeBackActivityHelper;
 import com.jimei.xiaolumeimei.swipeback.SwipeBackLayout;
 import com.jimei.xiaolumeimei.swipeback.Utils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
+import com.umeng.analytics.MobclickAgent;
 
 public abstract class BaseSwipeBackCompatActivity extends BaseAppCompatActivity
     implements SwipeBackActivityBase {
@@ -69,5 +70,13 @@ public abstract class BaseSwipeBackCompatActivity extends BaseAppCompatActivity
   protected void onResume() {
     super.onResume();
     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    MobclickAgent.onResume(this);
+
+  }
+
+  @Override protected void onPause() {
+    super.onPause();
+    MobclickAgent.onPause(this);
+
   }
 }

@@ -4,6 +4,7 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
+import com.umeng.analytics.MobclickAgent;
 import com.zhy.autolayout.AutoLayoutActivity;
 
 /**
@@ -51,5 +52,11 @@ public abstract class BaseActivity extends AutoLayoutActivity {
   protected void onResume() {
     super.onResume();
     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    MobclickAgent.onResume(this);
+  }
+
+  @Override protected void onPause() {
+    super.onPause();
+    MobclickAgent.onPause(this);
   }
 }

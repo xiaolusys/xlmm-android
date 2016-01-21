@@ -28,8 +28,15 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.Signature;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.net.Uri;
+import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
+import android.view.View;
+import android.widget.TextView;
+import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileFilter;
@@ -55,6 +62,20 @@ public final class AppUtils {
   private static final String TAG = "AppUtils";
   private final static X500Principal DEBUG_DN =
       new X500Principal("CN=Android Debug,O=Android,C=US");
+
+  public static void showSnackBar(View view,int id) {
+    Resources resources  = XlmmApp.getInstance().getResources();
+    Snackbar sb = Snackbar.make(view, resources.getString(id), Snackbar.LENGTH_SHORT);
+    setSnackbarMessageTextColor(sb);
+    sb.getView().setBackgroundColor(resources.getColor( R.color.white));
+    sb.show();
+  }
+
+  public static void setSnackbarMessageTextColor(Snackbar snackbar) {
+    View view = snackbar.getView();
+    ((TextView) view.findViewById(R.id.snackbar_text)).setTextColor(
+        Color.parseColor("#448AFF"));
+  }
 
   /**
    * Don't let anyone instantiate this class.
