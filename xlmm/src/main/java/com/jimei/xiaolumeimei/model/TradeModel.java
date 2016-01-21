@@ -47,5 +47,18 @@ public class TradeModel {
             .compose(new DefaultTransform<>());
   }
 
+  //得到全部待支付订单数据列表
+  public Observable<AllOrdersBean> getWaitPayOrdersBean() {
+    return XlmmRetrofitClient.getService()
+            .getWaitPayOrdersBean()
+            .compose(new DefaultTransform<>());
+  }
+
+  //得到全部待发货订单数据列表
+  public Observable<AllOrdersBean> getWaitSendOrdersBean() {
+    return XlmmRetrofitClient.getService()
+            .getWaitSendOrdersBean()
+            .compose(new DefaultTransform<>());
+  }
 
 }

@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.jimei.xiaolumeimei.adapter.AllOrdersListAdapter;
+import com.jimei.xiaolumeimei.adapter.WaitPayOrdersListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
@@ -54,7 +55,7 @@ public class WaitPayOrdersActivity extends BaseSwipeBackCompatActivity {
     @Bind(R.id.toolbar) Toolbar toolbar;
     TradeModel model = new TradeModel();
     AllOrdersBean all_orders_info = new AllOrdersBean();
-    private AllOrdersListAdapter mAllOrderAdapter;
+    private WaitPayOrdersListAdapter mAllOrderAdapter;
     LinearLayout rlayout;
     TextView  tx_empty_info;
 
@@ -78,12 +79,12 @@ public class WaitPayOrdersActivity extends BaseSwipeBackCompatActivity {
     //config allorders list adaptor
         ListView all_orders_listview = (ListView) findViewById(R.id.all_orders_listview);
 
-        mAllOrderAdapter = new AllOrdersListAdapter(this);
+        mAllOrderAdapter = new WaitPayOrdersListAdapter(this);
         all_orders_listview.setAdapter(mAllOrderAdapter);
     }
     //从server端获得所有订单数据，可能要查询几次
     @Override protected void initData() {
-        model.getAlloderBean()
+        model.getWaitPayOrdersBean()
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(new ServiceResponse<AllOrdersBean>() {
                     @Override public void onNext(AllOrdersBean allOrdersBean) {

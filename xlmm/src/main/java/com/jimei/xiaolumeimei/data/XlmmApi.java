@@ -8,7 +8,9 @@ package com.jimei.xiaolumeimei.data;
 public class XlmmApi {
 
   public static final String URL_BASE = "http://api.xiaolumeimei.com/rest/v1/";
+  //public static final String URL_BASE = "http://192.168.1.102:8000/rest/v1/";
   //public static final String URL_BASE = "http://192.168.1.31:9000/rest/v1/";
+
   //注册链接
   public static final String LOGIN_URL = URL_BASE + "register/customer_login";
   //首页网址(商品、海报)
@@ -53,7 +55,12 @@ public class XlmmApi {
   public static final String COUPON_URL = URL_BASE + "usercoupons";
 
   //获取待支付订单
-  public static  final String WAITPAY_URL = URL_BASE+"";
+  public static  final String WAITPAY_URL = URL_BASE+"/waitpay";
+
+  //获取待发货订单
+  public static  final String WAITSEND_URL = URL_BASE+"/waitsend";
+
+
   public static final String SETTINGMYINFO_URL =
       URL_BASE + "/xueZhang/servlet/AndroidInfoSev";
 
