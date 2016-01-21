@@ -167,7 +167,7 @@
           android:theme="@style/AppTheme.TransparentActivity"
           />
 
-      <activity android:name=".ui.activity.main.CompanyInfoActvity"
+      <activity android:name=".ui.activity.main.CompanyInfoActivity"
           android:theme="@style/AppTheme.TransparentActivity"
           />
 
