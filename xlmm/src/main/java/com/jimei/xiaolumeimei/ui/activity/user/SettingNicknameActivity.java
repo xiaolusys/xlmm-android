@@ -15,7 +15,6 @@ import com.jimei.xiaolumeimei.entities.NicknameBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.model.UserModel;
-import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 
@@ -24,12 +23,9 @@ import rx.schedulers.Schedulers;
 
 public class SettingNicknameActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener {
     String TAG = "SettingNicknameActivity";
-    @Bind(R.id.toolbar)
-    Toolbar toolbar;
-    @Bind(R.id.set_nick_name)
-    EditText nameEditText;
-    @Bind(R.id.set_save_button)
-    Button save_button;
+    @Bind(R.id.toolbar)    Toolbar toolbar;
+    @Bind(R.id.set_nick_name)    EditText nameEditText;
+    @Bind(R.id.set_save_button)    Button save_button;
     UserModel model = new UserModel();
     UserInfoBean userinfo;
     NicknameBean nicknameBean = new NicknameBean();
@@ -129,13 +125,33 @@ public class SettingNicknameActivity extends BaseSwipeBackCompatActivity impleme
     }
 
     private void getUserInfo() {
-        userinfo = LoginUtils.getUserInfo();
-        if (null != userinfo) {
-            nameEditText.setText(userinfo.getResults().get(0).getNick());
-            userid = userinfo.getResults().get(0).getId();
-            Log.d(TAG, userinfo.getResults().get(0).getNick() + " " + userid);
-        } else {
-            Log.e(TAG, "get userinfo failed. ");
-        }
+        UserModel model = new UserModel();
+        model.getUserInfo()
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(new ServiceResponse<UserInfoBean>() {
+                    @Override
+                    public void onNext(UserInfoBean user) {
+                        userinfo = user;
+                        Log.d(TAG, "getUserInfo:, "   + userinfo.getResults().get(0).toString());
+
+                        nameEditText.setText(userinfo.getResults().get(0).getNick());
+                        userid = userinfo.getResults().get(0).getId();
+                        Log.d(TAG, "getUserInfo nick "+userinfo.getResults().get(0).getNick() + " userid " + userid);
+
+                    }
+
+                    @Override
+                    public void onCompleted() {
+                        super.onCompleted();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                        Log.e(TAG, "error:, "   + e.toString());
+                        super.onError(e);
+                    }
+                });
+
     }
 }

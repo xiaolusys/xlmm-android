@@ -104,31 +104,4 @@ public class LoginUtils {
     }
   }
 
-  public static UserInfoBean getUserInfo(){
-
-    UserModel model = new UserModel();
-    model.getUserInfo()
-            .subscribeOn(Schedulers.newThread())
-            .subscribe(new ServiceResponse<UserInfoBean>() {
-              @Override
-              public void onNext(UserInfoBean user) {
-                userinfo = user;
-                  Log.d(TAG, "userinfo:, "   + userinfo.toString());
-              }
-
-              @Override
-              public void onCompleted() {
-                super.onCompleted();
-              }
-
-              @Override
-              public void onError(Throwable e) {
-                userinfo = null;
-                Log.e(TAG, "error:, "   + e.toString());
-                super.onError(e);
-              }
-            });
-
-    return userinfo;
-  }
 }

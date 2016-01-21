@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+	android:id="@+id/llayout_order_item">
+
+	<RelativeLayout
+		android:layout_width="fill_parent"
+		android:layout_weight="1"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal" >
+		<TextView
+			android:id="@+id/tx_order_actual_payment"
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:text="@string/productprice"
+			android:textSize="15sp" />
+
+		<TextView
+			android:id="@+id/tx_order_state"
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:text="交易关闭"
+			android:textSize="15sp"
+			android:layout_alignParentTop="true"
+			android:layout_alignParentRight="true"
+			android:layout_alignParentEnd="true" />
+	</RelativeLayout>
+
+</LinearLayout>
