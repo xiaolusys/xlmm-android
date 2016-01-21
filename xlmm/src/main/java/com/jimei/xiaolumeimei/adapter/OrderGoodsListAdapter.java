@@ -19,6 +19,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
+import com.jimei.xiaolumeimei.utils.ViewUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -31,9 +32,15 @@ public class OrderGoodsListAdapter extends BaseAdapter {
     private Context context;
     List<HashMap<String, String>> data;
 
-    private List<AllOrdersBean.ResultsEntity.OrdersEntity> dataSource;
+    private List<OrderDetailBean.OrdersEntity> dataSource;
 
-    public OrderGoodsListAdapter(Context context, List<AllOrdersBean.ResultsEntity.OrdersEntity> goodsList) {
+    public OrderGoodsListAdapter(Context context) {
+        dataSource = new ArrayList<OrderDetailBean.OrdersEntity>();
+        this.data = new ArrayList<HashMap<String, String>>();
+        this.context = context;
+    }
+
+    public OrderGoodsListAdapter(Context context, List<OrderDetailBean.OrdersEntity> goodsList) {
         Log.d(TAG," create");
         this.context = context;
         this.dataSource = goodsList;
@@ -49,11 +56,11 @@ public class OrderGoodsListAdapter extends BaseAdapter {
         Log.d(TAG,"dataSource.size "+ dataSource.size());
         for (int i = 0; i < dataSource.size(); i++) {
             HashMap<String, String> map = new HashMap<String, String>();
-            img_url = dataSource.get(i).getPicPath();
+            img_url = dataSource.get(i).getPic_path();
             title = dataSource.get(i).getTitle();
-            std_sale_price = (float)dataSource.get(i).getTotalFee();
+            std_sale_price = (float)dataSource.get(i).getTotal_fee();
             agent_price = (float)dataSource.get(i).getPayment();
-            model_id = dataSource.get(i).getSkuName();
+            model_id = dataSource.get(i).getSku_name();
             num = dataSource.get(i).getNum();
 
             map.put("img_url", img_url );
@@ -67,6 +74,44 @@ public class OrderGoodsListAdapter extends BaseAdapter {
         }
 
 
+    }
+
+    public void updateWithClear(List<OrderDetailBean.OrdersEntity> list) {
+        dataSource.clear();
+        dataSource.addAll(list);
+        notifyDataSetChanged();
+    }
+
+    public void update(List<OrderDetailBean.OrdersEntity> list) {
+        String img_url = "";
+        String title = "";
+        float std_sale_price = 0;
+        float agent_price = 0;
+        String model_id = "";
+        int num = 0;
+
+        Log.d(TAG,"list.size "+ list.size());
+        for (int i = 0; i < list.size(); i++) {
+            HashMap<String, String> map = new HashMap<String, String>();
+            img_url = list.get(i).getPic_path();
+            title = list.get(i).getTitle();
+            std_sale_price = (float)list.get(i).getTotal_fee();
+            agent_price = (float)list.get(i).getPayment();
+            model_id = list.get(i).getSku_name();
+            num = list.get(i).getNum();
+
+            map.put("img_url", img_url );
+            map.put("title", title );
+            map.put("std_sale_price", Float.toString(std_sale_price) );
+            map.put("agent_price", Float.toString(agent_price) );
+            map.put("model_id", model_id );
+            map.put("num", Integer.toString(num) );
+
+            data.add(map);
+        }
+
+        dataSource.addAll(list);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -109,25 +154,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
         tx_good_size.setText(data.get(position).get("model_id"));
         tx_good_num.setText(data.get(position).get("num"));
 
-        String headImg = data.get(position).get("img_url");
-        String[] temp = headImg.split("http://image.xiaolu.so/");
-        String head_img = "";
-        if (temp.length > 1) {
-            try {
-                head_img = "http://image.xiaolu.so/"
-                        + URLEncoder.encode(temp[1], "utf-8")
-                        + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-        }
-
-        Glide.with(context)
-                .load(head_img)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .placeholder(R.drawable.parceholder)
-                .centerCrop()
-                .into(img_goods);
+        ViewUtils.loadImgToImgView(context, img_goods, data.get(position).get("img_url") );
 
         return convertView;
     }
