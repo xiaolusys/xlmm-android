@@ -117,6 +117,14 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                     finish();
                   } else if (login.equals("main")) {
                     finish();
+                  }else if(login.equals("point")){
+                    Intent intent = new Intent(mContext, MembershipPointActivity.class);
+                    startActivity(intent);
+                    finish();
+                  }else if(login.equals("coupon")){
+                    Intent intent = new Intent(mContext, CouponActivity.class);
+                    startActivity(intent);
+                    finish();
                   }
                 } else {
 
