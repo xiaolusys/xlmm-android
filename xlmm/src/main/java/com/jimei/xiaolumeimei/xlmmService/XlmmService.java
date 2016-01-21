@@ -136,6 +136,14 @@ public interface XlmmService {
     Observable<OrderDetailBean> getOrderDetail(
             @Path("pk") int order_id);
 
+    //获取所有待支付订单
+    @GET(XlmmApi.ALL_REFUNDS_URL)
+    Observable<AllOrdersBean> getWaitPayOrdersBean();
+
+    //获取所有待发货订单
+    @GET(XlmmApi.ALL_REFUNDS_URL)
+    Observable<AllOrdersBean> getWaitSendOrdersBean();
+
     //获取所有退货订单
     @GET(XlmmApi.ALL_REFUNDS_URL)
     Observable<AllRefundsBean> getAllRedundsList();
