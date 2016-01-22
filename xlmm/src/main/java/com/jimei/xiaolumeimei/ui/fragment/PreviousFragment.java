@@ -85,62 +85,81 @@ public class PreviousFragment extends BaseFragment {
     post1 = (ImageView) head.findViewById(R.id.post_1);
     post2 = (ImageView) head.findViewById(R.id.post_2);
 
-
     xRecyclerView.addHeaderView(head);
 
     model.getYestdayPost()
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<PostBean>() {
-          @Override public void onNext(PostBean postBean) {
+                     @Override public void onNext(PostBean postBean) {
+                       try {
+                         String picLink = postBean.getWem_posters().get(0).pic_link;
+                         String picLink1 = postBean.getChd_posters().get(0).pic_link;
 
-            String picLink = postBean.getWem_posters().get(0).pic_link;
-            String picLink1 = postBean.getChd_posters().get(0).pic_link;
+                         post1.post(() -> Glide.with(getActivity())
+                             .load(picLink)
+                             .placeholder(R.drawable.header)
+                             .diskCacheStrategy(DiskCacheStrategy.ALL)
+                             .centerCrop()
+                             .into(post1));
 
-            post1.post(() -> Glide.with(getActivity())
-                .load(picLink)
-                .placeholder(R.drawable.header)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .centerCrop()
-                .into(post1));
+                         post2.post(() -> Glide.with(getActivity())
+                             .load(picLink1)
+                             .placeholder(R.drawable.header)
+                             .diskCacheStrategy(DiskCacheStrategy.ALL)
+                             .centerCrop()
+                             .into(post2));
+                       } catch (NullPointerException ex) {
+                         ex.printStackTrace();
+                       }
+                     }
+                   }
 
-            post2.post(() -> Glide.with(getActivity())
-                .load(picLink1)
-                .placeholder(R.drawable.header)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .centerCrop()
-                .into(post2));
-          }
-        });
+        );
 
-    mPreviousAdapter = new PreviousAdapter(getActivity());
+    mPreviousAdapter = new
+
+        PreviousAdapter(getActivity()
+
+    );
     xRecyclerView.setAdapter(mPreviousAdapter);
 
-    xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
-      @Override public void onRefresh() {
-        model.getPreviousList()
-            .subscribeOn(Schedulers.newThread())
-            .subscribe(new ServiceResponse<IndexBean>() {
-              @Override public void onNext(IndexBean indexBean) {
-                List<IndexBean.product> child_list = indexBean.getChild_list();
-                List<IndexBean.product> female_list = indexBean.getFemale_list();
-                List<IndexBean.product> list = new ArrayList<>();
-                list.addAll(child_list);
-                list.addAll(female_list);
-                mPreviousAdapter.updateWithClear(list);
-                mPreviousAdapter.notifyDataSetChanged();
-              }
+    xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener()
 
-              @Override public void onCompleted() {
-                super.onCompleted();
-                xRecyclerView.post(xRecyclerView::refreshComplete);
-              }
-            });
-      }
+                                     {
+                                       @Override public void onRefresh() {
+                                         model.getPreviousList()
+                                             .subscribeOn(Schedulers.newThread())
+                                             .subscribe(new ServiceResponse<IndexBean>() {
+                                                   @Override public void onNext(
+                                                       IndexBean indexBean) {
+                                                     List<IndexBean.product> child_list =
+                                                         indexBean.getChild_list();
+                                                     List<IndexBean.product> female_list =
+                                                         indexBean.getFemale_list();
+                                                     List<IndexBean.product> list =
+                                                         new ArrayList<>();
+                                                     list.addAll(child_list);
+                                                     list.addAll(female_list);
+                                                     mPreviousAdapter.updateWithClear(
+                                                         list);
+                                                     mPreviousAdapter.notifyDataSetChanged();
+                                                   }
 
-      @Override public void onLoadMore() {
+                                                   @Override public void onCompleted() {
+                                                     super.onCompleted();
+                                                     xRecyclerView.post(
+                                                         xRecyclerView::refreshComplete);
+                                                   }
+                                                 });
+                                       }
 
-        xRecyclerView.postDelayed(xRecyclerView::loadMoreComplete, 1000);
-      }
-    });
+                                       @Override public void onLoadMore() {
+
+                                         xRecyclerView.postDelayed(
+                                             xRecyclerView::loadMoreComplete, 1000);
+                                       }
+                                     }
+
+    );
   }
 }
