@@ -40,7 +40,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="18dp"
 			android:text="使用期限"
-			android:textSize="8sp"
+			android:textSize="6sp"
 			android:gravity="bottom" />
 
 		<TextView
@@ -48,7 +48,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="18dp"
 			android:text="至"
-			android:textSize="8sp"
+			android:textSize="6sp"
 			android:layout_alignParentTop="true"
 			android:layout_alignParentRight="true"
 			android:layout_alignParentEnd="true"
@@ -64,7 +64,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="match_parent"
 			android:text="使用范围"
-			android:textSize="8sp"
+			android:textSize="6sp"
 			android:gravity="bottom" />
 
 		<TextView
@@ -72,7 +72,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="match_parent"
 			android:text="优惠编码"
-			android:textSize="8sp"
+			android:textSize="6sp"
 			android:layout_alignParentTop="true"
 			android:layout_alignParentRight="true"
 			android:layout_alignParentEnd="true"
