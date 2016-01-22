@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -23,6 +24,8 @@ import com.google.gson.Gson;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
+import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.MembershipPointActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
@@ -50,17 +53,15 @@ import butterknife.Bind;
 import rx.schedulers.Schedulers;
 
 
-public class AllRefundsActivity extends BaseSwipeBackCompatActivity {
+public class AllRefundsActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener{
     String TAG = "AllRefundsActivity";
-    AllRefundsBean all_refunds_info = new AllRefundsBean();
-    @Bind(R.id.toolbar) Toolbar toolbar;
+
+    @Bind(R.id.btn_jump) Button btn_jump;
     TradeModel model = new TradeModel();
-    LinearLayout rlayout;
-    TextView tx_empty_info;
     private AllRefundsListAdapter mAllRefundsAdapter;
 
     @Override protected void setListener() {
-
+        btn_jump.setOnClickListener(this);
     }
     @Override protected void getBundleExtras(Bundle extras) {
 
@@ -71,15 +72,10 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity {
     }
 
     @Override protected void initViews() {
-        toolbar.setTitle("退款退货");
-        setSupportActionBar(toolbar);
-        rlayout = (LinearLayout) findViewById(R.id.llayout_allrefunds);
-
-        tx_empty_info = new TextView(mContext);
         //config allorders list adaptor
         ListView all_refunds_listview = (ListView) findViewById(R.id.all_refunds_listview);
-
         mAllRefundsAdapter = new AllRefundsListAdapter(this);
+        all_refunds_listview.setEmptyView(findViewById(R.id.rlayout_order_empty));
         all_refunds_listview.setAdapter(mAllRefundsAdapter);
         all_refunds_listview.setOnItemClickListener(new AdapterView.OnItemClickListener(){
 
@@ -97,6 +93,10 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity {
             }
 
         });
+
+        TextView tx_info = (TextView) findViewById(R.id.tx_info);
+        tx_info.setText("亲，您暂时还没有退货（款）订单哦~快去看看吧！");
+
     }
     //从server端获得所有订单数据，可能要查询几次
     @Override protected void initData() {
@@ -107,12 +107,11 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity {
                         List<AllRefundsBean.ResultsEntity> results = allRefundsBean.getResults();
                         if (0 == results.size()){
                             Log.d(TAG," NO redunds data");
-                            fillEmptyInfo();
                         }
                         else
                         {
                             Log.d(TAG," redunds data num " + results.size());
-                            tx_empty_info.setVisibility(View.GONE);
+
                             mAllRefundsAdapter.update(results);
                         }
 
@@ -129,14 +128,15 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity {
         return null;
     }
 
-    private void fillEmptyInfo(){
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_jump:
+                Intent intent = new Intent(AllRefundsActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+                break;
 
-        LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-        tx_empty_info.setLayoutParams(lp);
-        tx_empty_info.setText("亲，你还没有任何退货单！");
-
-        rlayout.addView(tx_empty_info);
+        }
     }
-
-
 }
