@@ -68,7 +68,10 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity impleme
                         if (0 != results.size())
                         {
                             tx_point.setText(results.get(0).getIntegral_value());
-                            Log.i(TAG, "points " + results.get(0).getIntegral_value());
+                            Log.d(TAG, "point " + results.get(0).getIntegral_value());
+                        }
+                        else{
+                            Log.d(TAG, "point record not exist. ");
                         }
                     }
                 });
@@ -79,11 +82,11 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity impleme
                     @Override public void onNext(PointLogBean pointLogBean) {
                         List<PointLogBean.ResultsEntity> results = pointLogBean.getResults();
                         if (0 == results.size()){
-                            Log.i(TAG, "pointlog 0 " );
+                            Log.d(TAG, "pointlog 0 " );
                         }
                         else
                         {
-                            Log.i(TAG, "points " + results.get(0).toString());
+                            Log.d(TAG, "pointlog " + results.get(0).toString());
                             mPointAdapter.update(results);
                         }
 

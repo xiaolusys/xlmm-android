@@ -7,6 +7,16 @@ import java.util.List;
  */
 public class PointLogBean {
 
+    @Override
+    public String toString() {
+        return "PointLogBean{" +
+                "count=" + count +
+                ", next=" + next +
+                ", previous=" + previous +
+                ", results=" + results +
+                '}';
+    }
+
     /**
      * count : 0
      * next : null
