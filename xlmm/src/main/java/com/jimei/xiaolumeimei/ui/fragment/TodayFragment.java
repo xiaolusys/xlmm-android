@@ -82,35 +82,38 @@ public class TodayFragment extends BaseFragment {
     post1 = (ImageView) head.findViewById(R.id.post_1);
     post2 = (ImageView) head.findViewById(R.id.post_2);
 
-
     xRecyclerView.addHeaderView(head);
 
     model.getTodayPost()
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<PostBean>() {
           @Override public void onNext(PostBean postBean) {
-            String picLink = postBean.getWem_posters().get(0).pic_link;
-            String picLink1 = postBean.getChd_posters().get(0).pic_link;
+            if (postBean != null
+                && (postBean.getWem_posters() != null)
+                && (postBean.getChd_posters() != null)) {
 
-            post1.post(() -> Glide.with(getActivity())
-                .load(picLink)
-                .placeholder(R.drawable.header)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .centerCrop()
-                .into(post1));
+              String picLink = postBean.getWem_posters().get(0).pic_link;
+              String picLink1 = postBean.getChd_posters().get(0).pic_link;
 
-            post2.post(() -> Glide.with(getActivity())
-                .load(picLink1)
-                .placeholder(R.drawable.header)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .centerCrop()
-                .into(post2));
+              post1.post(() -> Glide.with(getActivity())
+                  .load(picLink)
+                  .placeholder(R.drawable.header)
+                  .diskCacheStrategy(DiskCacheStrategy.ALL)
+                  .centerCrop()
+                  .into(post1));
+
+              post2.post(() -> Glide.with(getActivity())
+                  .load(picLink1)
+                  .placeholder(R.drawable.header)
+                  .diskCacheStrategy(DiskCacheStrategy.ALL)
+                  .centerCrop()
+                  .into(post2));
+            }
           }
         });
 
     mTodayAdapter = new TodayAdapter(getActivity());
     xRecyclerView.setAdapter(mTodayAdapter);
-
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
       @Override public void onRefresh() {
