@@ -3,7 +3,7 @@ package com.jimei.xiaolumeimei;
 import android.app.Application;
 import android.content.Context;
 import android.util.Log;
-
+import cn.sharesdk.framework.ShareSDK;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.okhttp.OkHttpClientManager;
@@ -17,7 +17,6 @@ import com.zhy.autolayout.config.AutoLayoutConifg;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.util.concurrent.TimeUnit;
-
 import rx.schedulers.Schedulers;
 
 /**
@@ -42,6 +41,7 @@ public class XlmmApp extends Application {
     JUtils.initialize(this);
     JUtils.setDebug(true, "xlmm");
     //CrashWoodpecker.fly(false).to(this);
+    ShareSDK.initSDK(this);
     AutoLayoutConifg.getInstance().useDeviceSize();
     //CustomActivityOnCrash.install(this);
 
