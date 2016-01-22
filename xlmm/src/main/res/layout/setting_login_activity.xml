@@ -122,12 +122,14 @@
       android:layout_height="wrap_content">
     <ImageView
         android:layout_marginLeft="200px"
-        android:id="@+id/weixin"
+        android:id="@+id/wx_login"
         android:layout_width="78px"
         android:src="@drawable/weichat"
         android:layout_height="78px"
         />
-    <ImageView android:layout_width="78px"
+    <ImageView
+        android:id="@+id/sms_login"
+        android:layout_width="78px"
         android:layout_height="78px"
         android:src="@drawable/sms"
         android:layout_marginLeft="180px"

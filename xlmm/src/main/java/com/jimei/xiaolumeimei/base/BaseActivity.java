@@ -3,7 +3,6 @@ package com.jimei.xiaolumeimei.base;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import butterknife.ButterKnife;
-import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.zhy.autolayout.AutoLayoutActivity;
 
@@ -22,11 +21,6 @@ public abstract class BaseActivity extends AutoLayoutActivity {
     setContentView(provideContentViewId());
     ButterKnife.bind(this);
 
-    String[] loginInfo = LoginUtils.getLoginInfo(getApplicationContext());
-    boolean b = Boolean.parseBoolean(loginInfo[2]);
-    if (b) {
-      LoginUtils.doLogin(loginInfo[0], loginInfo[1]);
-    }
 
     if (savedInstanceState == null) {
       initView();

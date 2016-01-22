@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.RegisterBean;
@@ -58,12 +57,6 @@ public class RegisterActivity extends BaseSwipeBackCompatActivity
 
   @Override protected TransitionMode getOverridePendingTransitionMode() {
     return null;
-  }
-
-  @Override protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    // TODO: add setContentView(...) invocation
-    ButterKnife.bind(this);
   }
 
   public void checkInput() {

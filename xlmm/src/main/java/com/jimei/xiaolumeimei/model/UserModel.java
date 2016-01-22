@@ -11,8 +11,6 @@ import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
-import com.squareup.okhttp.ResponseBody;
-
 import rx.Observable;
 
 /**
@@ -123,6 +121,21 @@ public class UserModel {
     return XlmmRetrofitClient.getService()
             .getPastCouponBean()
             .compose(new DefaultTransform<>());
+  }
+
+  //获取短信登录验证码
+  public Observable<RegisterBean> getSmsCheckCode(String mobile) {
+    return XlmmRetrofitClient.getService()
+        .getSmsCheckCode(mobile)
+        .compose(new DefaultTransform<>());
+  }
+
+
+  //短信登录
+  public Observable<RegisterBean> smsLogin(String mobile,String code) {
+    return XlmmRetrofitClient.getService()
+        .smsLogin(mobile,code)
+        .compose(new DefaultTransform<>());
   }
 
 }

@@ -170,10 +170,8 @@ public class MainActivity extends BaseActivity
 
     int id = item.getItemId();
 
-    String[] loginInfo = LoginUtils.getLoginInfo(getApplicationContext());
-    boolean b = Boolean.parseBoolean(loginInfo[2]);
 
-    if (!b) {
+    if (!LoginUtils.checkLoginState(getApplicationContext())) {
             /*未登录进入登录界面*/
 
       Intent intent = new Intent(MainActivity.this, LoginActivity.class);
