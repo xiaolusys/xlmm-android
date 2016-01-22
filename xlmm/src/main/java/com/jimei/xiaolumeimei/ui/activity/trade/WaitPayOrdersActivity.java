@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -26,6 +27,7 @@ import com.jimei.xiaolumeimei.adapter.AllOrdersListAdapter;
 import com.jimei.xiaolumeimei.adapter.WaitPayOrdersListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.model.TradeModel;
+import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.squareup.okhttp.Call;
@@ -50,17 +52,15 @@ import butterknife.Bind;
 import rx.schedulers.Schedulers;
 
 
-public class WaitPayOrdersActivity extends BaseSwipeBackCompatActivity {
+public class WaitPayOrdersActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener{
     String TAG = "WaitPayOrdersActivity";
-    @Bind(R.id.toolbar) Toolbar toolbar;
+
+    @Bind(R.id.btn_jump)    Button btn_jump;
     TradeModel model = new TradeModel();
-    AllOrdersBean all_orders_info = new AllOrdersBean();
     private WaitPayOrdersListAdapter mAllOrderAdapter;
-    LinearLayout rlayout;
-    TextView  tx_empty_info;
 
     @Override protected void setListener() {
-
+        btn_jump.setOnClickListener(this);
     }
     @Override protected void getBundleExtras(Bundle extras) {
 
@@ -71,16 +71,14 @@ public class WaitPayOrdersActivity extends BaseSwipeBackCompatActivity {
     }
 
     @Override protected void initViews() {
-        toolbar.setTitle("待支付订单");
-        setSupportActionBar(toolbar);
 
-        rlayout = (LinearLayout) findViewById(R.id.llayout_allorders);
-        tx_empty_info = new TextView(mContext);
-    //config allorders list adaptor
         ListView all_orders_listview = (ListView) findViewById(R.id.all_orders_listview);
 
         mAllOrderAdapter = new WaitPayOrdersListAdapter(this);
         all_orders_listview.setAdapter(mAllOrderAdapter);
+
+        TextView tx_info = (TextView) findViewById(R.id.tx_info);
+        tx_info.setText("亲，您暂时还没有待支付订单哦~快去看看吧！");
     }
     //从server端获得所有订单数据，可能要查询几次
     @Override protected void initData() {
@@ -90,11 +88,10 @@ public class WaitPayOrdersActivity extends BaseSwipeBackCompatActivity {
                     @Override public void onNext(AllOrdersBean allOrdersBean) {
                         List<AllOrdersBean.ResultsEntity> results = allOrdersBean.getResults();
                         if (0 == results.size()){
-                            fillEmptyInfo();
+
                         }
                         else
                         {
-                            tx_empty_info.setVisibility(View.GONE);
                             mAllOrderAdapter.update(results);
                         }
 
@@ -111,12 +108,14 @@ public class WaitPayOrdersActivity extends BaseSwipeBackCompatActivity {
         return null;
     }
 
-    private void fillEmptyInfo(){
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_jump:
+                Intent intent = new Intent(WaitPayOrdersActivity.this, MainActivity.class);
+                startActivity(intent);
+                break;
 
-        LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-        tx_empty_info.setLayoutParams(lp);
-        tx_empty_info.setText("亲，你还没有任何订单，快去抢购吧！");
-
-        rlayout.addView(tx_empty_info);
+        }
     }
 }
