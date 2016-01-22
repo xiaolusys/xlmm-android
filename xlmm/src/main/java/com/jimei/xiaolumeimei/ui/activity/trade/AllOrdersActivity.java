@@ -111,6 +111,7 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity implements Vi
             case R.id.btn_jump:
                 Intent intent = new Intent(AllOrdersActivity.this, MainActivity.class);
                 startActivity(intent);
+                finish();
                 break;
 
         }

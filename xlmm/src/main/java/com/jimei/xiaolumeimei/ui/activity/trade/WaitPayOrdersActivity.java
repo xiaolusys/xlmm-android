@@ -114,6 +114,7 @@ public class WaitPayOrdersActivity extends BaseSwipeBackCompatActivity implement
             case R.id.btn_jump:
                 Intent intent = new Intent(WaitPayOrdersActivity.this, MainActivity.class);
                 startActivity(intent);
+                finish();
                 break;
 
         }

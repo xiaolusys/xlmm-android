@@ -115,6 +115,7 @@ public class WaitSendOrdersActivity extends BaseSwipeBackCompatActivity implemen
             case R.id.btn_jump:
                 Intent intent = new Intent(WaitSendOrdersActivity.this, MainActivity.class);
                 startActivity(intent);
+                finish();
                 break;
 
         }

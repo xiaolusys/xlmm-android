@@ -134,6 +134,7 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity implements V
             case R.id.btn_jump:
                 Intent intent = new Intent(AllRefundsActivity.this, MainActivity.class);
                 startActivity(intent);
+                finish();
                 break;
 
         }
