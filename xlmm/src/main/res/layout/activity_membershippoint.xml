@@ -19,7 +19,18 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="#fdb916"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            app:popupTheme="@style/AppTheme.PopupOverlay" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:text="我的积分"
+                android:textColor="@android:color/white"
+                android:textSize="24sp"
+                android:textStyle="bold"/>
+        </android.support.v7.widget.Toolbar>>
 
     </android.support.design.widget.AppBarLayout>
 
@@ -37,10 +48,16 @@
         android:text="我的积分"
         android:layout_gravity="center" />
 
-    <ListView
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <ListView
         android:id="@+id/all_points_listview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" >
-    </ListView>
+        </ListView>
+        <include layout="@layout/orders_emptyinfo" />
+    </FrameLayout>
 
 </LinearLayout>

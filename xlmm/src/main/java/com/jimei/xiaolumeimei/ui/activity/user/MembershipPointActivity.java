@@ -1,11 +1,13 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -16,6 +18,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.MembershipPointBean;
 import com.jimei.xiaolumeimei.entities.PointLogBean;
 import com.jimei.xiaolumeimei.model.UserModel;
+import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import java.util.List;
 import com.jimei.xiaolumeimei.R;
@@ -23,17 +26,16 @@ import butterknife.Bind;
 import rx.schedulers.Schedulers;
 
 
-public class MembershipPointActivity extends BaseSwipeBackCompatActivity {
+public class MembershipPointActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener{
     String TAG = "MembershipPointActivity";
-    @Bind(R.id.toolbar) Toolbar toolbar;
+
+    @Bind(R.id.btn_jump)    Button btn_jump;
     UserModel model = new UserModel();
     private MembershipPointListAdapter mPointAdapter;
     TextView  tx_point;
-    LinearLayout rlayout;
-    TextView  tx_empty_info;
 
     @Override protected void setListener() {
-
+        btn_jump.setOnClickListener(this);
     }
     @Override protected void getBundleExtras(Bundle extras) {
 
@@ -44,18 +46,17 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity {
     }
 
     @Override protected void initViews() {
-        toolbar.setTitle("我的积分");
-        setSupportActionBar(toolbar);
-
-        rlayout = (LinearLayout) findViewById(R.id.llayout_point);
-        tx_empty_info = new TextView(mContext);
-
         ListView all_orders_listview = (ListView) findViewById(R.id.all_points_listview);
-
+        all_orders_listview.setEmptyView(findViewById(R.id.rlayout_order_empty));
         mPointAdapter = new MembershipPointListAdapter(this);
         all_orders_listview.setAdapter(mPointAdapter);
 
         tx_point = (TextView) findViewById(R.id.tv_Point);
+
+        TextView tx_info = (TextView) findViewById(R.id.tx_info);
+        tx_info.setText("亲，您暂时还没有积分记录哦~");
+        TextView tx_info2 = (TextView) findViewById(R.id.tx2);
+        tx_info.setText("快去下单赚取积分吧~");
     }
     //从server端获得所有订单数据，可能要查询几次
     @Override protected void initData() {
@@ -78,11 +79,10 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity {
                     @Override public void onNext(PointLogBean pointLogBean) {
                         List<PointLogBean.ResultsEntity> results = pointLogBean.getResults();
                         if (0 == results.size()){
-                            fillEmptyInfo();
+
                         }
                         else
                         {
-                            tx_empty_info.setVisibility(View.GONE);
                             mPointAdapter.update(results);
                         }
 
@@ -99,12 +99,15 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity {
         return null;
     }
 
-    private void fillEmptyInfo(){
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_jump:
+                Intent intent = new Intent(MembershipPointActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+                break;
 
-        LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-        tx_empty_info.setLayoutParams(lp);
-        tx_empty_info.setText("亲，你还没有任何订单，快去抢购吧！");
-
-        rlayout.addView(tx_empty_info);
+        }
     }
 }

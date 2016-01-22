@@ -73,7 +73,7 @@ public class WaitPayOrdersActivity extends BaseSwipeBackCompatActivity implement
     @Override protected void initViews() {
 
         ListView all_orders_listview = (ListView) findViewById(R.id.all_orders_listview);
-
+        all_orders_listview.setEmptyView(findViewById(R.id.rlayout_order_empty));
         mAllOrderAdapter = new WaitPayOrdersListAdapter(this);
         all_orders_listview.setAdapter(mAllOrderAdapter);
 

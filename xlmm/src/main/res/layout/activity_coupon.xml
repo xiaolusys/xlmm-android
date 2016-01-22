@@ -19,34 +19,28 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="#fdb916"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            app:popupTheme="@style/AppTheme.PopupOverlay" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:text="优惠券"
+                android:textColor="@android:color/white"
+                android:textSize="24sp"
+                android:textStyle="bold"/>
+        </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
 
-    <TextView android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="可用优惠券"
-        android:layout_gravity="left"
-         />
-
-    <ListView
-        android:id="@+id/lv_unused_coupon"
+    <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" >
-    </ListView>
 
-    <TextView android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="可过期优惠券"
-        android:layout_gravity="left"
-        />
+        <include layout="@layout/frame_coupon" />
 
-    <ListView
-        android:id="@+id/lv_timeout_coupon"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
-    </ListView>
+        <include layout="@layout/orders_emptyinfo" />
+    </FrameLayout>
 
 </LinearLayout>
