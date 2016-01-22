@@ -56,7 +56,7 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity impleme
         TextView tx_info = (TextView) findViewById(R.id.tx_info);
         tx_info.setText("亲，您暂时还没有积分记录哦~");
         TextView tx_info2 = (TextView) findViewById(R.id.tx2);
-        tx_info.setText("快去下单赚取积分吧~");
+        tx_info2.setText("快去下单赚取积分吧~");
     }
     //从server端获得所有订单数据，可能要查询几次
     @Override protected void initData() {
@@ -68,7 +68,7 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity impleme
                         if (0 != results.size())
                         {
                             tx_point.setText(results.get(0).getIntegral_value());
-                            Log.i(TAG, "" + results.get(0).getIntegral_value());
+                            Log.i(TAG, "points " + results.get(0).getIntegral_value());
                         }
                     }
                 });
@@ -79,14 +79,14 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity impleme
                     @Override public void onNext(PointLogBean pointLogBean) {
                         List<PointLogBean.ResultsEntity> results = pointLogBean.getResults();
                         if (0 == results.size()){
-
+                            Log.i(TAG, "pointlog 0 " );
                         }
                         else
                         {
+                            Log.i(TAG, "points " + results.get(0).toString());
                             mPointAdapter.update(results);
                         }
 
-                        Log.i(TAG, pointLogBean.toString());
                     }
                 });
     }
