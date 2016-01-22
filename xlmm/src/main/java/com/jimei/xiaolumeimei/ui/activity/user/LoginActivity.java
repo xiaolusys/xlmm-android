@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.Bind;
@@ -38,6 +39,8 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
   UserModel model = new UserModel();
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.forgetTextView) TextView forGetTextView;
+  @Bind(R.id.wx_login) ImageView wx;
+  @Bind(R.id.sms_login) ImageView sms;
 
   String TAG = "LoginActivity";
 
@@ -50,6 +53,9 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
     set_register.setOnClickListener(this);
 
     toolbar.setOnClickListener(this);
+
+    wx.setOnClickListener(this);
+    sms.setOnClickListener(this);
   }
 
   @Override protected void initData() {
@@ -157,7 +163,16 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
 
       case R.id.toolbar:
         finish();
+        break;
 
+      case R.id.wx_login:
+        //startActivity(new Intent(LoginActivity.this,));
+        //finish();
+        break;
+
+      case R.id.sms_login:
+        startActivity(new Intent(LoginActivity.this, SmsLoginActivity.class));
+        finish();
         break;
     }
   }

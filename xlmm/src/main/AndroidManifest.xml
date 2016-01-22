@@ -170,6 +170,12 @@
       <activity android:name=".ui.activity.main.CompanyInfoActivity"
           android:theme="@style/AppTheme.TransparentActivity"
           />
+      <activity android:name=".ui.activity.user.FindPassActivty"
+          android:theme="@style/AppTheme.TransparentActivity"
+          />
+      <activity android:name=".ui.activity.user.SmsLoginActivity"
+          android:theme="@style/AppTheme.TransparentActivity"
+          />
 
   </application>
 
