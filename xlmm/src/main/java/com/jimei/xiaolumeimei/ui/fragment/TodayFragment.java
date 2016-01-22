@@ -88,9 +88,7 @@ public class TodayFragment extends BaseFragment {
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<PostBean>() {
           @Override public void onNext(PostBean postBean) {
-            if (postBean != null
-                && (postBean.getWem_posters() != null)
-                && (postBean.getChd_posters() != null)) {
+            try {
 
               String picLink = postBean.getWem_posters().get(0).pic_link;
               String picLink1 = postBean.getChd_posters().get(0).pic_link;
@@ -108,6 +106,9 @@ public class TodayFragment extends BaseFragment {
                   .diskCacheStrategy(DiskCacheStrategy.ALL)
                   .centerCrop()
                   .into(post2));
+            } catch (NullPointerException ex) {
+              ex.printStackTrace();
+
             }
           }
         });
