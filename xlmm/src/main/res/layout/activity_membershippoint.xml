@@ -48,6 +48,8 @@
         android:text="我的积分"
         android:layout_gravity="center" />
 
+    <include layout="@layout/common_gap"/>
+
     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" >

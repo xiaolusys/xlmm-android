@@ -23,7 +23,7 @@
     <TextView android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="可过期优惠券"
+        android:text="已过期优惠券"
         android:layout_gravity="left"
         />
 

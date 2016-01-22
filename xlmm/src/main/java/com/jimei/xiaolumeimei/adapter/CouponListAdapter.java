@@ -66,20 +66,23 @@ public class CouponListAdapter extends BaseAdapter {
         for (int i = 0; i < list.size(); i++) {
             HashMap<String, String> map = new HashMap<String, String>();
             coupon_value = (float)list.get(i).getCoupon_value();
-            if(1 == list.get(i).getCoupon_type()){
-                usestate = "满99使用";
+            if(0 == list.get(i).getUse_fee()){
+                usestate = "开单优惠券";
+            }
+            else{
+                usestate = "满"+list.get(i).getUse_fee()+"使用";
             }
             crttime = list.get(i).getCreated();
             deadline = list.get(i).getDeadline();
-            if(1 == list.get(i).getCoupon_type()){
-                usescope = "全场通用";
-            }
+            usescope = "全场通用";
+
             coupon_no = list.get(i).getCoupon_no();
 
             map.put("coupon_value", Float.toString(coupon_value) );
             map.put("usestate", usestate);
             map.put("crttime", crttime);
             map.put("deadline", deadline);
+            map.put("usescope", usescope);
             map.put("coupon_no", coupon_no);
 
             data.add(map);
