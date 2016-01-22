@@ -17,4 +17,5 @@
   <string name="title_activity_waitsend">待收货</string>
   <string name="clear_cache">清理缓存</string>
   <string name="update_cache">缓存已经清理</string>
+  <string name="next">下一步</string>
 </resources>

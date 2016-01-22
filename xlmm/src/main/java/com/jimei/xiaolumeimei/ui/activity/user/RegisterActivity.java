@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.ui.activity.user;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,6 +12,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.RegisterBean;
 import com.jimei.xiaolumeimei.model.UserModel;
+import com.jimei.xiaolumeimei.widget.ClearEditText;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import rx.schedulers.Schedulers;
@@ -18,9 +20,10 @@ import rx.schedulers.Schedulers;
 public class RegisterActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener {
 
-  @Bind(R.id.register_name) EditText editTextMobile;
+  @Bind(R.id.register_name) ClearEditText editTextMobile;
   @Bind(R.id.register_password) EditText editTextInvalid_code;
   @Bind(R.id.register_button) Button register_button;
+  @Bind(R.id.toolbar) Toolbar toolbar;
   UserModel model = new UserModel();
   @Bind(R.id.getCheckCode) Button getCheckCode;
   private String mobile, invalid_code;
@@ -43,7 +46,10 @@ public class RegisterActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
-
+    toolbar.setTitle("");
+    setSupportActionBar(toolbar);
+    toolbar.setNavigationIcon(R.drawable.back);
+    toolbar.setOnClickListener(this);
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
@@ -105,10 +111,14 @@ public class RegisterActivity extends BaseSwipeBackCompatActivity
                   intent.putExtras(bundle);
                   startActivity(intent);
                   finish();
-
                 }
               }
             });
+        break;
+
+      case R.id.toolbar:
+        finish();
+
         break;
     }
   }

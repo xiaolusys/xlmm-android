@@ -93,4 +93,15 @@
     <attr name="isEnable" format="boolean"/>
   </declare-styleable>
 
+  <declare-styleable name="ClearEditText">
+    <!-- 清除按钮的图标 -->
+    <attr name="iconClear" format="reference"/>
+  </declare-styleable>
+
+  <declare-styleable name="PasswordEditText">
+    <attr name="iconShow" format="integer" />
+    <attr name="iconHide" format="integer" />
+  </declare-styleable>
+
+
 </resources>

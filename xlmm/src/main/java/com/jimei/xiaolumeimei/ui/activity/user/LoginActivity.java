@@ -3,13 +3,14 @@ package com.jimei.xiaolumeimei.ui.activity.user;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
@@ -18,6 +19,8 @@ import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
+import com.jimei.xiaolumeimei.widget.ClearEditText;
+import com.jimei.xiaolumeimei.widget.PasswordEditText;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import rx.schedulers.Schedulers;
@@ -28,12 +31,13 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
   String login_pass_value;//登录密码
 
   //boolean isLogin;//判断是否登录
-  @Bind(R.id.set_login_name) EditText nameEditText;
-  @Bind(R.id.set_login_password) EditText passEditText;
+  @Bind(R.id.set_login_name) ClearEditText nameEditText;
+  @Bind(R.id.set_login_password) PasswordEditText passEditText;
   @Bind(R.id.set_login_button) Button login_button;
   @Bind(R.id.set_register_button) Button set_register;
   UserModel model = new UserModel();
   @Bind(R.id.toolbar) Toolbar toolbar;
+  @Bind(R.id.forgetTextView) TextView forGetTextView;
 
   String TAG = "LoginActivity";
 
@@ -44,6 +48,8 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
     login_button.setOnClickListener(this);
 
     set_register.setOnClickListener(this);
+
+    toolbar.setOnClickListener(this);
   }
 
   @Override protected void initData() {
@@ -70,6 +76,9 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
   @Override protected void initViews() {
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
+    toolbar.setNavigationIcon(R.drawable.back);
+
+    forGetTextView.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
@@ -117,11 +126,11 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                     finish();
                   } else if (login.equals("main")) {
                     finish();
-                  }else if(login.equals("point")){
+                  } else if (login.equals("point")) {
                     Intent intent = new Intent(mContext, MembershipPointActivity.class);
                     startActivity(intent);
                     finish();
-                  }else if(login.equals("coupon")){
+                  } else if (login.equals("coupon")) {
                     Intent intent = new Intent(mContext, CouponActivity.class);
                     startActivity(intent);
                     finish();
@@ -142,6 +151,11 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
       case R.id.set_register_button:
         Intent intent = new Intent(mContext, RegisterActivity.class);
         startActivity(intent);
+        finish();
+
+        break;
+
+      case R.id.toolbar:
         finish();
 
         break;

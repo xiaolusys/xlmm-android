@@ -15,7 +15,6 @@ import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.entities.IndexBean;
 import com.jimei.xiaolumeimei.entities.PostBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
-import com.jimei.xiaolumeimei.widget.CountdownView;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.victor.loading.rotate.RotateLoading;
@@ -86,7 +85,6 @@ public class PreviousFragment extends BaseFragment {
     post1 = (ImageView) head.findViewById(R.id.post_1);
     post2 = (ImageView) head.findViewById(R.id.post_2);
 
-    CountdownView countdownView = (CountdownView) head.findViewById(R.id.countTime);
 
     xRecyclerView.addHeaderView(head);
 
@@ -114,7 +112,6 @@ public class PreviousFragment extends BaseFragment {
           }
         });
 
-    countdownView.start(9955550000l);
     mPreviousAdapter = new PreviousAdapter(getActivity());
     xRecyclerView.setAdapter(mPreviousAdapter);
 

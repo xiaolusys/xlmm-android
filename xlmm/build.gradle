@@ -1,15 +1,15 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 
-def releaseTime() {
-  return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
-}
-
-def keyStore = file('../xlmm/xlmm.jks')
-
-
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
+//def releaseTime() {
+//  return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
+//}
+//
+//def keyStore = file('../xlmm/xlmm.jks')
+//
+//
+//Properties properties = new Properties()
+//properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
 
 
@@ -45,109 +45,107 @@ android {
     sourceCompatibility JavaVersion.VERSION_1_8
     targetCompatibility JavaVersion.VERSION_1_8
   }
-
-  //签名配置
-  signingConfigs {
-    debug {
-      storeFile file('../xlmm/xlmm.jks')
-      storePassword 'xlmmxlmm'
-      keyAlias 'xlmm'
-      keyPassword 'xlmmxlmm'
-      println("====== signingConfigs.debug ======")
-    }
-    release {
-      storeFile file("../xlmm/xlmm.jks")
-      storePassword 'xlmmxlmm'
-      keyAlias 'xlmm'
-      keyPassword 'xlmmxlmm'
-      println("====== signingConfigs.release ======")
-      println("properties.getProperty(\"storePassword\") = " + properties.getProperty(
-          "storePassword"))
-      println(
-          "properties.getProperty(\"keyAlias\") = " + properties.getProperty("keyAlias"))
-      println("properties.getProperty(\"keyPassword\") = " + properties.getProperty(
-          "keyPassword"))
-    }
-  }
-
-  buildTypes {
-    debug {
-      println("====== buildTypes.debug ======")
-      signingConfig signingConfigs.debug
-    }
-    release {
-
-      release {
-        minifyEnabled false
-        proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-      }
-
-      println("====== buildTypes.release ======")
-      //      开启或者关闭 混淆 。
-      minifyEnabled false
-      shrinkResources true
-      proguardFiles file('proguard-rules.pro')
-      if (keyStore.exists()) {
-        println("xlmm -> buildTypes -> release: using jks key")
-        signingConfig signingConfigs.release
-      } else {
-        println("xlmm -> buildTypes -> release: using default key")
-      }
-      applicationVariants.all { variant ->
-        variant.outputs.each { output ->
-          def outputFile = output.outputFile
-          if (outputFile != null && outputFile.name.endsWith('.apk')) {
-            // Xlmm_版本_yyyy-MM-dd_渠道.apk
-            def fileName = "Xlmm_v${defaultConfig.versionName}_${releaseTime()}_${variant.productFlavors[0].name}.apk"
-            println("====== buildTypes.output ======")
-            println("AppName: " + fileName)
-            output.outputFile = new File(outputFile.parent, fileName)
-          } else {
-          }
-
-
-
-        }
-      }
-    }
-  }
-
-//   渠道Flavors
-      productFlavors {
-        Fir {
-          manifestPlaceholders = [CHANNEL_NAME: "Fir",
-                                  UMENG_APPKEY: "569f78a667e58ee15300094b"
-          ]
-        }
-
-        wandoujia {
-          manifestPlaceholders = [CHANNEL_NAME: "wandoujia",
-                                  UMENG_APPKEY: "569f78a667e58ee15300094b"
-          ]
-        }
-        xiaomi {
-          manifestPlaceholders = [CHANNEL_NAME: "xiaomi",
-                                  UMENG_APPKEY: "569f78a667e58ee15300094b"
-          ]
-        }
-        huawei {
-          manifestPlaceholders = [CHANNEL_NAME: "huawei",
-                                  UMENG_APPKEY: "569f78a667e58ee15300094b"
-          ]
-        }
-        flyme  {
-          manifestPlaceholders = [CHANNEL_NAME: "flyme",
-                                  UMENG_APPKEY: "569f78a667e58ee15300094b"
-          ]
-        }
-
-        qihu360{
-          manifestPlaceholders = [CHANNEL_NAME: "qihu360",
-                                  UMENG_APPKEY: "569f78a667e58ee15300094b"
-          ]
-        }
-
-      }
+//
+//  //签名配置
+//  signingConfigs {
+//    debug {
+//      storeFile file('../xlmm/xlmm.jks')
+//      storePassword 'xlmmxlmm'
+//      keyAlias 'xlmm'
+//      keyPassword 'xlmmxlmm'
+//      println("====== signingConfigs.debug ======")
+//    }
+//    release {
+//      storeFile file("../xlmm/xlmm.jks")
+//      storePassword 'xlmmxlmm'
+//      keyAlias 'xlmm'
+//      keyPassword 'xlmmxlmm'
+//      println("====== signingConfigs.release ======")
+//      println("properties.getProperty(\"storePassword\") = " + properties.getProperty(
+//          "storePassword"))
+//      println(
+//          "properties.getProperty(\"keyAlias\") = " + properties.getProperty("keyAlias"))
+//      println("properties.getProperty(\"keyPassword\") = " + properties.getProperty(
+//          "keyPassword"))
+//    }
+//  }
+//
+//  buildTypes {
+//    debug {
+//      println("====== buildTypes.debug ======")
+//      signingConfig signingConfigs.debug
+//    }
+//    release {
+//
+//      release {
+//        minifyEnabled false
+//        proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//      }
+//
+//      println("====== buildTypes.release ======")
+//      //      开启或者关闭 混淆 。
+//      minifyEnabled false
+//      shrinkResources false
+//      proguardFiles file('proguard-rules.pro')
+//      if (keyStore.exists()) {
+//        println("xlmm -> buildTypes -> release: using jks key")
+//        signingConfig signingConfigs.release
+//      } else {
+//        println("xlmm -> buildTypes -> release: using default key")
+//      }
+//      applicationVariants.all { variant ->
+//        variant.outputs.each { output ->
+//          def outputFile = output.outputFile
+//          if (outputFile != null && outputFile.name.endsWith('.apk')) {
+//            // Xlmm_版本_yyyy-MM-dd_渠道.apk
+//            def fileName = "Xlmm_v${defaultConfig.versionName}_${releaseTime()}_${variant.productFlavors[0].name}.apk"
+//            println("====== buildTypes.output ======")
+//            println("AppName: " + fileName)
+//            output.outputFile = new File(outputFile.parent, fileName)
+//          } else {
+//          }
+//
+//        }
+//      }
+//    }
+//  }
+//
+////   渠道Flavors
+//      productFlavors {
+//        Fir {
+//          manifestPlaceholders = [CHANNEL_NAME: "Fir",
+//                                  UMENG_APPKEY: "569f78a667e58ee15300094b"
+//          ]
+//        }
+//
+//        wandoujia {
+//          manifestPlaceholders = [CHANNEL_NAME: "wandoujia",
+//                                  UMENG_APPKEY: "569f78a667e58ee15300094b"
+//          ]
+//        }
+//        xiaomi {
+//          manifestPlaceholders = [CHANNEL_NAME: "xiaomi",
+//                                  UMENG_APPKEY: "569f78a667e58ee15300094b"
+//          ]
+//        }
+//        huawei {
+//          manifestPlaceholders = [CHANNEL_NAME: "huawei",
+//                                  UMENG_APPKEY: "569f78a667e58ee15300094b"
+//          ]
+//        }
+//        flyme  {
+//          manifestPlaceholders = [CHANNEL_NAME: "flyme",
+//                                  UMENG_APPKEY: "569f78a667e58ee15300094b"
+//          ]
+//        }
+//
+//        qihu360{
+//          manifestPlaceholders = [CHANNEL_NAME: "qihu360",
+//                                  UMENG_APPKEY: "569f78a667e58ee15300094b"
+//          ]
+//        }
+//
+//      }
 
 }
 
