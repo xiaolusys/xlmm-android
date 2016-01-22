@@ -47,7 +47,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
         String img_url = "";
         String title = "";
         float std_sale_price = 0;
-        float agent_price = 0;
+        float pay_price = 0;
         String model_id = "";
         int num = 0;
 
@@ -59,14 +59,14 @@ public class OrderGoodsListAdapter extends BaseAdapter {
             img_url = dataSource.get(i).getPicPath();
             title = dataSource.get(i).getTitle();
             std_sale_price = (float)dataSource.get(i).getTotalFee();
-            agent_price = (float)dataSource.get(i).getPayment();
+            pay_price = (float)dataSource.get(i).getPayment();
             model_id = dataSource.get(i).getSkuName();
             num = dataSource.get(i).getNum();
 
             map.put("img_url", img_url );
             map.put("title", title );
             map.put("std_sale_price", Float.toString(std_sale_price) );
-            map.put("agent_price", Float.toString(agent_price) );
+            map.put("pay_price", Float.toString(pay_price) );
             map.put("model_id", model_id );
             map.put("num", Integer.toString(num) );
 
@@ -103,7 +103,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
             map.put("img_url", img_url );
             map.put("title", title );
             map.put("std_sale_price", Float.toString(std_sale_price) );
-            map.put("agent_price", Float.toString(agent_price) );
+            map.put("pay_price", Float.toString(agent_price) );
             map.put("model_id", model_id );
             map.put("num", Integer.toString(num) );
 
@@ -150,7 +150,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
         tx_good_num = (TextView) convertView.findViewById(R.id.tx_good_num);
 
         tx_good_name.setText(data.get(position).get("title") );
-        tx_good_price.setText(data.get(position).get("agent_price"));
+        tx_good_price.setText("￥"+data.get(position).get("pay_price"));
         tx_good_size.setText(data.get(position).get("model_id"));
         tx_good_num.setText(data.get(position).get("num"));
 

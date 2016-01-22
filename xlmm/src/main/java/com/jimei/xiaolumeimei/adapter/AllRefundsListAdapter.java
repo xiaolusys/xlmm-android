@@ -65,7 +65,7 @@ public class AllRefundsListAdapter extends BaseAdapter {
         String img_url = "";
         String title = "";
         float std_sale_price = 0;
-        float agent_price = 0;
+        float pay_price = 0;
         String model_id = "";
         int num = 0;
 
@@ -78,14 +78,14 @@ public class AllRefundsListAdapter extends BaseAdapter {
             img_url = list.get(i).getPic_path();
             title = list.get(i).getTitle();
             std_sale_price = (float)list.get(i).getTotal_fee();
-            agent_price = (float)list.get(i).getPayment();
+            pay_price = (float)list.get(i).getPayment();
             model_id = list.get(i).getSku_name();
             num = list.get(i).getRefund_num();
 
             map.put("img_url", img_url );
             map.put("title", title );
             map.put("std_sale_price", Float.toString(std_sale_price) );
-            map.put("agent_price", Float.toString(agent_price) );
+            map.put("pay_price", Float.toString(pay_price) );
             map.put("model_id", model_id );
             map.put("num", Integer.toString(num) );
 
@@ -129,7 +129,7 @@ public class AllRefundsListAdapter extends BaseAdapter {
 
         tx_refundno.setText("订单编号："+data.get(position).get("refund_no"));
         tx_refund_state.setText(data.get(position).get("refund_State"));
-        tx_refundfee.setText(data.get(position).get("refund_fee"));
+        tx_refundfee.setText("￥"+data.get(position).get("refund_fee"));
 
         ImageView img_goods = (ImageView) convertView.findViewById(R.id.img_good);;
         TextView tx_good_name = (TextView) convertView.findViewById(R.id.tx_good_name);
@@ -139,7 +139,7 @@ public class AllRefundsListAdapter extends BaseAdapter {
 
         ViewUtils.loadImgToImgView(context, img_goods, data.get(position).get("img_url") );
         tx_good_name.setText(data.get(position).get("title") );
-        tx_good_price.setText(data.get(position).get("agent_price"));
+        tx_good_price.setText("￥"+data.get(position).get("pay_price"));
         tx_good_size.setText(data.get(position).get("model_id"));
         tx_good_num.setText(data.get(position).get("num"));
 
