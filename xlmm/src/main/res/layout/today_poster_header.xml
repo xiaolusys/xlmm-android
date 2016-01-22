@@ -33,7 +33,7 @@
         android:textColor="@color/white"
         android:textSize="20dp"/>
 
-    <com.jimei.xiaolumeimei.widget.CountdownView
+    <cn.iwgang.countdownview.CountdownView
         android:id="@+id/countTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
