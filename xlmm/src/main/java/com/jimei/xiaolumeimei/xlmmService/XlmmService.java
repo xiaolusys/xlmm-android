@@ -25,9 +25,7 @@ import com.jimei.xiaolumeimei.entities.RegisterBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.squareup.okhttp.ResponseBody;
-
 import java.util.List;
-
 import retrofit.http.Body;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
@@ -45,7 +43,7 @@ import rx.Observable;
  */
 public interface XlmmService {
 
-    //@formatter:off
+  //@formatter:off
 
     @FormUrlEncoded
     @POST("register/customer_login")
@@ -236,4 +234,22 @@ public interface XlmmService {
     //获取用户过期优惠券信息
     @GET(XlmmApi.COUPON_URL+"/list_past_coupon")
     Observable<CouponBean> getPastCouponBean();
+
+    //获取短信登录验证码
+    @FormUrlEncoded
+    @POST("register/send_code")
+    Observable<RegisterBean> getSmsCheckCode(
+            @Field("mobile") String mobile
+    );
+
+
+  //短信登录
+    @FormUrlEncoded
+    @POST("register/sms_login")
+    Observable<RegisterBean> smsLogin(
+            @Field("mobile") String username,
+            @Field("sms_code") String valid_code
+    );
+
+
 }

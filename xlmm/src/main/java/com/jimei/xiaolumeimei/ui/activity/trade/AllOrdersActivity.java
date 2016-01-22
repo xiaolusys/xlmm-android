@@ -53,8 +53,8 @@ import rx.schedulers.Schedulers;
 
 public class AllOrdersActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener{
     String TAG = "AllOrdersActivity";
-    @Bind(R.id.btn_jump)
-    Button btn_jump;
+    @Bind(R.id.btn_jump)    Button btn_jump;
+    @Bind(R.id.all_orders_listview)    ListView all_orders_listview;
     TradeModel model = new TradeModel();
     private AllOrdersListAdapter mAllOrderAdapter;
 
@@ -70,8 +70,8 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity implements Vi
     }
 
     @Override protected void initViews() {
-        ListView all_orders_listview = (ListView) findViewById(R.id.all_orders_listview);
-        all_orders_listview.setEmptyView(findViewById(R.id.rlayout_order_empty));
+        //ListView all_orders_listview = (ListView) findViewById(R.id.all_orders_listview);
+
         mAllOrderAdapter = new AllOrdersListAdapter(this);
         all_orders_listview.setAdapter(mAllOrderAdapter);
 
@@ -87,6 +87,7 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity implements Vi
                         List<AllOrdersBean.ResultsEntity> results = allOrdersBean.getResults();
                         if (0 == results.size()){
                             Log.i(TAG, "results.size()=0");
+                            all_orders_listview.setEmptyView(findViewById(R.id.rlayout_order_empty));
                         }
                         else
                         {

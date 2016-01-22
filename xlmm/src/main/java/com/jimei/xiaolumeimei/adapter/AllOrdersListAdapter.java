@@ -7,7 +7,6 @@ package com.jimei.xiaolumeimei.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Paint;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,19 +15,18 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
-import android.widget.ImageView;
+import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
+import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.widget.MyHorizontalScrollView;
 import com.jimei.xiaolumeimei.widget.NestedListView;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -55,17 +53,22 @@ public class AllOrdersListAdapter extends BaseAdapter {
 
     public void update(List<AllOrdersBean.ResultsEntity> list) {
         float payment = 0;
+        int state = 0;
         String orderState = "";
+        String crtTime = "";
 
         Log.d(TAG,"dataSource.size "+ list.size());
         for (int i = 0; i < list.size(); i++) {
             HashMap<String, String> map = new HashMap<String, String>();
             payment = (float)list.get(i).getPayment();
             orderState = list.get(i).getStatusDisplay();
-
+            state = list.get(i).getStatus();
+            crtTime = list.get(i).getCreated();
 
             map.put("payment", Float.toString(payment) );
             map.put("orderState", orderState );
+            map.put("state", Integer.toString(state) );
+            map.put("crtTime", crtTime );
 
             data.add(map);
         }
@@ -107,6 +110,10 @@ public class AllOrdersListAdapter extends BaseAdapter {
         tx_payment.setText("实付金额￥"+data.get(position).get("payment"));
         tx_order_sate.setText(data.get(position).get("orderState"));
 
+        showTimeAndBtn(Integer.getInteger(data.get(position).get("state")), data.get(position).get("crtTime"),
+                convertView, order_id);
+
+        //这个地方比较奇葩，只有1个商品时显示商品详细信息，多余1个商品时只显示商品图片
         LinearLayout llayout = (LinearLayout) convertView.findViewById(R.id.llayout_order_item);
         if(1 == mList.get(position).getOrders().size()) {
             NestedListView goods_listview = new NestedListView(context);
@@ -173,6 +180,66 @@ public class AllOrdersListAdapter extends BaseAdapter {
         for (int i = 0; i < good_list.size(); i++) {
             mDatas.add(good_list.get(i).getPicPath());
         }
+    }
+
+    private void showTimeAndBtn(int state, String crtTime,View convertView, int order_id){
+        Button btn_order_proc = (Button) convertView.findViewById(R.id.btn_order_proc);
+        btn_order_proc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, OrderDetailActivity.class);
+                intent.putExtra("orderinfo", order_id);
+                Log.d(TAG, "btn click,transfer orderid  " + order_id + " to OrderDetailActivity");
+                context.startActivity(intent);
+            }
+        });
+
+        if(XlmmConst.ORDER_STATE_WAITPAY == state) {
+            TextView tx_order_left_paytime = (TextView) convertView.findViewById(R.id.tx_order_left_paytime);
+            cn.iwgang.countdownview.CountdownView cv_lefttime = (cn.iwgang.countdownview.CountdownView) convertView.findViewById(R.id.cv_lefttime);
+
+            tx_order_left_paytime.setVisibility(View.VISIBLE);
+            cv_lefttime.setVisibility(View.VISIBLE);
+            cv_lefttime.start(calcLeftTime(crtTime));
+            btn_order_proc.setVisibility(View.VISIBLE);
+            btn_order_proc.setText("立即支付");
+
+        }
+        else if(XlmmConst.ORDER_STATE_PAYED == state){
+            btn_order_proc.setVisibility(View.VISIBLE);
+            btn_order_proc.setText("申请退款");
+        }
+        else if(XlmmConst.ORDER_STATE_SENDED == state){
+            btn_order_proc.setVisibility(View.VISIBLE);
+            btn_order_proc.setText("确认收货");
+        }
+        else if((XlmmConst.ORDER_STATE_TRADE_SUCCESS == state) || (XlmmConst.ORDER_STATE_CONFIRM_RECEIVE == state)){
+            btn_order_proc.setVisibility(View.VISIBLE);
+            btn_order_proc.setText("退货退款");
+        }
+    }
+
+    private long calcLeftTime(String crtTime){
+        long left = 0;
+        Date now = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-ddTHH-mm-ss");
+        try {
+            Date crtdate = format.parse(crtTime);
+
+            if(crtdate.getTime() + 20*60*1000-now.getTime() > 0)
+            {
+                left = crtdate.getTime() + 20*60*1000-now.getTime();
+            }
+
+        }
+        catch (Exception e){
+            Log.e(TAG, "left time get failed ");
+            e.printStackTrace();
+        }
+
+        Log.d(TAG, "left time  "+left);
+
+        return left;
     }
 }
 

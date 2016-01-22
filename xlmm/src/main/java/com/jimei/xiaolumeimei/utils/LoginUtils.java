@@ -7,14 +7,11 @@ import android.util.Log;
 import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
-import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.okhttp.callback.OkHttpCallback;
 import com.jimei.xiaolumeimei.okhttp.request.OkHttpRequest;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 15/12/29.
@@ -36,6 +33,14 @@ public class LoginUtils {
     editor.putBoolean("success", isSuccess);
     editor.apply();
       Log.d(TAG, "save logininfo "  );
+  }
+
+  public static void saveLoginSuccess(boolean isSuccess, Context context) {
+    sharedPreferences = context.getSharedPreferences("login_info", Context.MODE_PRIVATE);
+    editor = sharedPreferences.edit();
+    editor.putBoolean("success", isSuccess);
+    editor.apply();
+      Log.d(TAG, "save logininfo success"  );
   }
 
   public static void delLoginInfo(Context context) {

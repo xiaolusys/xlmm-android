@@ -30,15 +30,13 @@
 
   </android.support.design.widget.AppBarLayout>
 
-<android.support.design.widget.TextInputLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    >
-  <EditText
+
+  <com.jimei.xiaolumeimei.widget.ClearEditText
+      app:iconClear="@drawable/clear_text"
       android:layout_marginTop="8dp"
       android:id="@+id/set_login_name"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
+      android:layout_height="110px"
       android:singleLine="true"
       android:paddingLeft="10sp"
       android:paddingRight="10sp"
@@ -46,17 +44,14 @@
       android:paddingBottom="10sp"
       android:background="@drawable/text_frame"
       android:hint="请输入手机号"/>
-</android.support.design.widget.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-  <EditText
+
+  >
+  <com.jimei.xiaolumeimei.widget.PasswordEditText
       android:layout_marginTop="8dp"
       android:id="@+id/set_login_password"
       android:layout_width="fill_parent"
-      android:layout_height="wrap_content"
+      android:layout_height="110px"
       android:inputType="textPassword"
       android:singleLine="true"
       android:paddingLeft="10sp"
@@ -65,13 +60,11 @@
       android:paddingBottom="10sp"
       android:background="@drawable/text_frame"
       android:hint="请输入登录密码"/>
-</android.support.design.widget.TextInputLayout>
 
-  <Button
+  <TextView
       android:gravity="center"
-      android:layout_marginTop="8dp"
-      android:background="@drawable/forget_pass"
-      android:id="@+id/set_forget_button"
+      android:layout_marginTop="16dp"
+      android:id="@+id/forgetTextView"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginRight="8dp"
@@ -81,6 +74,7 @@
       android:layout_gravity="right|center_vertical"/>
 
   <LinearLayout
+      android:layout_marginTop="50px"
       android:orientation="vertical"
       android:gravity="center"
       android:layout_width="fill_parent"
@@ -91,8 +85,8 @@
         android:textColor="@color/white"
         android:background="@drawable/shape_login"
         android:id="@+id/set_login_button"
-        android:layout_width="320dp"
-        android:layout_height="wrap_content"
+        android:layout_width="656px"
+        android:layout_height="90px"
         android:text="登录"
         />
 
@@ -102,11 +96,44 @@
         android:background="@drawable/shape_res"
         android:textColor="@color/colorPrimary"
         android:id="@+id/set_register_button"
-        android:layout_width="320dp"
-        android:layout_height="wrap_content"
+        android:layout_width="656px"
+        android:layout_height="90px"
         android:text="注册"
         />
 
+  </LinearLayout>
+
+  <TextView
+      android:textSize="12sp"
+      android:text="第三方登录"
+      android:layout_marginRight="294px"
+      android:layout_marginLeft="300px"
+      android:layout_marginTop="150px"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      />
+  <View android:layout_width="match_parent"
+      android:background="@color/c8c8c8"
+      android:layout_height="1dp"
+      />
+  <LinearLayout android:layout_width="match_parent"
+      android:orientation="horizontal"
+      android:layout_marginTop="52px"
+      android:layout_height="wrap_content">
+    <ImageView
+        android:layout_marginLeft="200px"
+        android:id="@+id/wx_login"
+        android:layout_width="78px"
+        android:src="@drawable/weichat"
+        android:layout_height="78px"
+        />
+    <ImageView
+        android:id="@+id/sms_login"
+        android:layout_width="78px"
+        android:layout_height="78px"
+        android:src="@drawable/sms"
+        android:layout_marginLeft="180px"
+        />
   </LinearLayout>
 
 

@@ -1,15 +1,15 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 
-def releaseTime() {
-  return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
-}
-
-def keyStore = file('../xlmm/xlmm.jks')
-
-
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
+//def releaseTime() {
+//  return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
+//}
+//
+//def keyStore = file('../xlmm/xlmm.jks')
+//
+//
+//Properties properties = new Properties()
+//properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
 
 
@@ -45,109 +45,107 @@ android {
     sourceCompatibility JavaVersion.VERSION_1_8
     targetCompatibility JavaVersion.VERSION_1_8
   }
-
-  //签名配置
-  signingConfigs {
-    debug {
-      storeFile file('../xlmm/xlmm.jks')
-      storePassword 'xlmmxlmm'
-      keyAlias 'xlmm'
-      keyPassword 'xlmmxlmm'
-      println("====== signingConfigs.debug ======")
-    }
-    release {
-      storeFile file("../xlmm/xlmm.jks")
-      storePassword 'xlmmxlmm'
-      keyAlias 'xlmm'
-      keyPassword 'xlmmxlmm'
-      println("====== signingConfigs.release ======")
-      println("properties.getProperty(\"storePassword\") = " + properties.getProperty(
-          "storePassword"))
-      println(
-          "properties.getProperty(\"keyAlias\") = " + properties.getProperty("keyAlias"))
-      println("properties.getProperty(\"keyPassword\") = " + properties.getProperty(
-          "keyPassword"))
-    }
-  }
-
-  buildTypes {
-    debug {
-      println("====== buildTypes.debug ======")
-      signingConfig signingConfigs.debug
-    }
-    release {
-
-      release {
-        minifyEnabled false
-        proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-      }
-
-      println("====== buildTypes.release ======")
-      //      开启或者关闭 混淆 。
-      minifyEnabled false
-      shrinkResources true
-      proguardFiles file('proguard-rules.pro')
-      if (keyStore.exists()) {
-        println("xlmm -> buildTypes -> release: using jks key")
-        signingConfig signingConfigs.release
-      } else {
-        println("xlmm -> buildTypes -> release: using default key")
-      }
-      applicationVariants.all { variant ->
-        variant.outputs.each { output ->
-          def outputFile = output.outputFile
-          if (outputFile != null && outputFile.name.endsWith('.apk')) {
-            // Xlmm_版本_yyyy-MM-dd_渠道.apk
-            def fileName = "Xlmm_v${defaultConfig.versionName}_${releaseTime()}_${variant.productFlavors[0].name}.apk"
-            println("====== buildTypes.output ======")
-            println("AppName: " + fileName)
-            output.outputFile = new File(outputFile.parent, fileName)
-          } else {
-          }
-
-
-
-        }
-      }
-    }
-  }
-
-//   渠道Flavors
-      productFlavors {
-        Fir {
-          manifestPlaceholders = [CHANNEL_NAME: "Fir",
-                                  UMENG_APPKEY: "569f78a667e58ee15300094b"
-          ]
-        }
-
-        wandoujia {
-          manifestPlaceholders = [CHANNEL_NAME: "wandoujia",
-                                  UMENG_APPKEY: "569f78a667e58ee15300094b"
-          ]
-        }
-        xiaomi {
-          manifestPlaceholders = [CHANNEL_NAME: "xiaomi",
-                                  UMENG_APPKEY: "569f78a667e58ee15300094b"
-          ]
-        }
-        huawei {
-          manifestPlaceholders = [CHANNEL_NAME: "huawei",
-                                  UMENG_APPKEY: "569f78a667e58ee15300094b"
-          ]
-        }
-        flyme  {
-          manifestPlaceholders = [CHANNEL_NAME: "flyme",
-                                  UMENG_APPKEY: "569f78a667e58ee15300094b"
-          ]
-        }
-
-        qihu360{
-          manifestPlaceholders = [CHANNEL_NAME: "qihu360",
-                                  UMENG_APPKEY: "569f78a667e58ee15300094b"
-          ]
-        }
-
-      }
+//
+//  //签名配置
+//  signingConfigs {
+//    debug {
+//      storeFile file('../xlmm/xlmm.jks')
+//      storePassword 'xlmmxlmm'
+//      keyAlias 'xlmm'
+//      keyPassword 'xlmmxlmm'
+//      println("====== signingConfigs.debug ======")
+//    }
+//    release {
+//      storeFile file("../xlmm/xlmm.jks")
+//      storePassword 'xlmmxlmm'
+//      keyAlias 'xlmm'
+//      keyPassword 'xlmmxlmm'
+//      println("====== signingConfigs.release ======")
+//      println("properties.getProperty(\"storePassword\") = " + properties.getProperty(
+//          "storePassword"))
+//      println(
+//          "properties.getProperty(\"keyAlias\") = " + properties.getProperty("keyAlias"))
+//      println("properties.getProperty(\"keyPassword\") = " + properties.getProperty(
+//          "keyPassword"))
+//    }
+//  }
+//
+//  buildTypes {
+//    debug {
+//      println("====== buildTypes.debug ======")
+//      signingConfig signingConfigs.debug
+//    }
+//    release {
+//
+//      release {
+//        minifyEnabled false
+//        proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//      }
+//
+//      println("====== buildTypes.release ======")
+//      //      开启或者关闭 混淆 。
+//      minifyEnabled false
+//      shrinkResources false
+//      proguardFiles file('proguard-rules.pro')
+//      if (keyStore.exists()) {
+//        println("xlmm -> buildTypes -> release: using jks key")
+//        signingConfig signingConfigs.release
+//      } else {
+//        println("xlmm -> buildTypes -> release: using default key")
+//      }
+//      applicationVariants.all { variant ->
+//        variant.outputs.each { output ->
+//          def outputFile = output.outputFile
+//          if (outputFile != null && outputFile.name.endsWith('.apk')) {
+//            // Xlmm_版本_yyyy-MM-dd_渠道.apk
+//            def fileName = "Xlmm_v${defaultConfig.versionName}_${releaseTime()}_${variant.productFlavors[0].name}.apk"
+//            println("====== buildTypes.output ======")
+//            println("AppName: " + fileName)
+//            output.outputFile = new File(outputFile.parent, fileName)
+//          } else {
+//          }
+//
+//        }
+//      }
+//    }
+//  }
+//
+////   渠道Flavors
+//      productFlavors {
+//        Fir {
+//          manifestPlaceholders = [CHANNEL_NAME: "Fir",
+//                                  UMENG_APPKEY: "569f78a667e58ee15300094b"
+//          ]
+//        }
+//
+//        wandoujia {
+//          manifestPlaceholders = [CHANNEL_NAME: "wandoujia",
+//                                  UMENG_APPKEY: "569f78a667e58ee15300094b"
+//          ]
+//        }
+//        xiaomi {
+//          manifestPlaceholders = [CHANNEL_NAME: "xiaomi",
+//                                  UMENG_APPKEY: "569f78a667e58ee15300094b"
+//          ]
+//        }
+//        huawei {
+//          manifestPlaceholders = [CHANNEL_NAME: "huawei",
+//                                  UMENG_APPKEY: "569f78a667e58ee15300094b"
+//          ]
+//        }
+//        flyme  {
+//          manifestPlaceholders = [CHANNEL_NAME: "flyme",
+//                                  UMENG_APPKEY: "569f78a667e58ee15300094b"
+//          ]
+//        }
+//
+//        qihu360{
+//          manifestPlaceholders = [CHANNEL_NAME: "qihu360",
+//                                  UMENG_APPKEY: "569f78a667e58ee15300094b"
+//          ]
+//        }
+//
+//      }
 
 }
 
@@ -175,9 +173,9 @@ dependencies {
   compile 'com.squareup.retrofit:adapter-rxjava:2.0.0-beta2'
   //   compile 'io.reactivex:rxjava:1.0.16'
   compile 'com.victor:lib:1.0.1'
-//  //debug模式  捕捉异常
-//  debugCompile 'me.drakeet.library:crashwoodpecker:0.9.81'
-//  releaseCompile 'me.drakeet.library:crashwoodpecker-do-nothing:0.9.7'
+  //  //debug模式  捕捉异常
+  //  debugCompile 'me.drakeet.library:crashwoodpecker:0.9.81'
+  //  releaseCompile 'me.drakeet.library:crashwoodpecker-do-nothing:0.9.7'
   //兼容到 5.0以下的material desigh dialog效果
   compile('com.github.afollestad.material-dialogs:commons:0.8.5.3@aar') {
     transitive = true
@@ -194,4 +192,10 @@ dependencies {
   compile files('libs/UPPayPluginEx.jar')
   //友盟统计
   compile 'com.umeng.analytics:analytics:latest.integration'
+  compile files('libs/ShareSDK-Core-2.4.0.jar')
+  compile files('libs/ShareSDK-Wechat-2.4.0.jar')
+  compile files('libs/ShareSDK-Wechat-Core-2.4.0.jar')
+  compile files('libs/ShareSDK-Wechat-Moments-2.4.0.jar')
+  compile files('libs/MobTools.jar')
+  compile files('libs/MobCommons.jar')
 }

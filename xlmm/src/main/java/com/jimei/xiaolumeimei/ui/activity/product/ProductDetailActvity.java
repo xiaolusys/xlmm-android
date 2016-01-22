@@ -244,9 +244,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
     switch (v.getId()) {
       case R.id.shopping_image:
 
-        String[] loginInfo = LoginUtils.getLoginInfo(getApplicationContext());
-        boolean b = Boolean.parseBoolean(loginInfo[2]);
-        if (!b) {
+        if (!LoginUtils.checkLoginState(getApplicationContext())) {
 
           Intent intent = new Intent(ProductDetailActvity.this, LoginActivity.class);
           Bundle bundle = new Bundle();

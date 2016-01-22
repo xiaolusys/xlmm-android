@@ -16,7 +16,6 @@ import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.entities.PostBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
-import com.jimei.xiaolumeimei.widget.CountdownView;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.victor.loading.rotate.RotateLoading;
@@ -111,14 +110,6 @@ public class TodayFragment extends BaseFragment {
 
     mTodayAdapter = new TodayAdapter(getActivity());
     xRecyclerView.setAdapter(mTodayAdapter);
-
-
-    CountdownView countdownView = (CountdownView) head.findViewById(R.id.countTime);
-
-    long time = System.currentTimeMillis();
-
-    countdownView.start(10000000);
-
 
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
