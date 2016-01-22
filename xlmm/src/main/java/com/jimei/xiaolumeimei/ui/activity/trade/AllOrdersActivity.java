@@ -85,9 +85,10 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity implements Vi
                 .subscribe(new ServiceResponse<AllOrdersBean>() {
                     @Override public void onNext(AllOrdersBean allOrdersBean) {
                         List<AllOrdersBean.ResultsEntity> results = allOrdersBean.getResults();
+                        all_orders_listview.setEmptyView(findViewById(R.id.rlayout_order_empty));
                         if (0 == results.size()){
                             Log.i(TAG, "results.size()=0");
-                            all_orders_listview.setEmptyView(findViewById(R.id.rlayout_order_empty));
+
                         }
                         else
                         {

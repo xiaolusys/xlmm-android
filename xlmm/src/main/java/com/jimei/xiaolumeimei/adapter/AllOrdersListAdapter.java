@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.Exchanger;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.ui.activity.trade.OrderDetailActivity;
@@ -97,12 +98,84 @@ public class AllOrdersListAdapter extends BaseAdapter {
 
         TextView tx_payment = null;
         TextView tx_order_sate = null;
+        ViewHolder holder = null;
+        final int order_id = mList.get(position).getId();
+
 
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.orders_list_item, null);
+            //这个地方比较奇葩，只有1个商品时显示商品详细信息，多余1个商品时只显示商品图片
+            LinearLayout llayout = (LinearLayout) convertView.findViewById(R.id.llayout_order_item);
+
+            holder = new ViewHolder();
+
+            if(1 == mList.get(position).getOrders().size()) {
+                NestedListView goods_listview = new NestedListView(context);
+                OrderGoodsListAdapter goods_adapter = new OrderGoodsListAdapter(context, mList.get(position).getOrders());
+                goods_listview.setAdapter(goods_adapter);
+                goods_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                    @Override
+                    public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+                                            long arg3) {
+                        // TODO Auto-generated method stub
+                        Log.d(TAG, "onItemClick " + arg2 + " " + arg3);
+                        Intent intent = new Intent(context, OrderDetailActivity.class);
+                        intent.putExtra("orderinfo", order_id);
+                        Log.d(TAG, "transfer orderid  " + order_id + " to OrderDetailActivity");
+                        context.startActivity(intent);
+                    }
+
+                });
+                holder.goods_listview = goods_listview;
+                llayout.addView(holder.goods_listview);
+            }
+            else{
+                List<String> mDatas = new ArrayList<String>();
+                fillPicPath(mDatas, mList.get(position).getOrders());
+                Log.d(TAG, "goodsnum " + mList.get(position).getOrders().size() + " " + mDatas.size());
+
+                LayoutInflater inflater = LayoutInflater.from(context);
+                MyHorizontalScrollView mHorizontalScrollView  = (MyHorizontalScrollView)inflater.inflate(R.layout.hscrollview_gallery, null);
+                HorizontalScrollViewAdapter mAdapter = new HorizontalScrollViewAdapter(context, mDatas);
+                //添加滚动回调
+                mHorizontalScrollView
+                        .setCurrentImageChangeListener(new MyHorizontalScrollView.CurrentImageChangeListener()
+                        {
+                            @Override
+                            public void onCurrentImgChanged(int position,
+                                                            View viewIndicator)
+                            {
+
+                            }
+                        });
+                //添加点击回调
+                mHorizontalScrollView.setOnItemClickListener(new MyHorizontalScrollView.OnItemClickListener()
+                {
+
+                    @Override
+                    public void onClick(View view, int position)
+                    {
+                        Intent intent = new Intent(context, OrderDetailActivity.class);
+                        intent.putExtra("orderinfo", order_id);
+                        Log.d(TAG, "transfer orderid  " + order_id + " to OrderDetailActivity");
+                        context.startActivity(intent);
+                    }
+                });
+                //设置适配器
+                mHorizontalScrollView.initDatas(mAdapter);
+                holder.mHorizontalScrollView = mHorizontalScrollView;
+                llayout.addView(mHorizontalScrollView);
+            }
+
+
+            convertView.setTag(holder);
+        }
+        else {
+            holder = (ViewHolder)convertView.getTag();
         }
 
-        final int order_id = mList.get(position).getId();
+
 
         tx_payment = (TextView) convertView.findViewById(R.id.tx_order_actual_payment);
         tx_order_sate = (TextView) convertView.findViewById(R.id.tx_order_state);
@@ -110,68 +183,15 @@ public class AllOrdersListAdapter extends BaseAdapter {
         tx_payment.setText("实付金额￥"+data.get(position).get("payment"));
         tx_order_sate.setText(data.get(position).get("orderState"));
 
-        showTimeAndBtn(Integer.getInteger(data.get(position).get("state")), data.get(position).get("crtTime"),
-                convertView, order_id);
-
-        //这个地方比较奇葩，只有1个商品时显示商品详细信息，多余1个商品时只显示商品图片
-        LinearLayout llayout = (LinearLayout) convertView.findViewById(R.id.llayout_order_item);
-        if(1 == mList.get(position).getOrders().size()) {
-            NestedListView goods_listview = new NestedListView(context);
-            OrderGoodsListAdapter goods_adapter = new OrderGoodsListAdapter(context, mList.get(position).getOrders());
-            goods_listview.setAdapter(goods_adapter);
-            goods_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                @Override
-                public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-                                        long arg3) {
-                    // TODO Auto-generated method stub
-                    Log.d(TAG, "onItemClick " + arg2 + " " + arg3);
-                    Intent intent = new Intent(context, OrderDetailActivity.class);
-                    intent.putExtra("orderinfo", order_id);
-                    Log.d(TAG, "transfer orderid  " + order_id + " to OrderDetailActivity");
-                    context.startActivity(intent);
-                }
-
-            });
-
-            llayout.addView(goods_listview);
+        try {
+            showTimeAndBtn(Integer.parseInt(data.get(position).get("state")), data.get(position).get("crtTime"),
+                    convertView, order_id);
         }
-        else{
-            List<String> mDatas = new ArrayList<String>();
-            fillPicPath(mDatas, mList.get(position).getOrders());
-            Log.d(TAG, "goodsnum " + mList.get(position).getOrders().size() + " " + mDatas.size());
-
-            LayoutInflater inflater = LayoutInflater.from(context);
-            MyHorizontalScrollView mHorizontalScrollView  = (MyHorizontalScrollView)inflater.inflate(R.layout.hscrollview_gallery, null);
-            HorizontalScrollViewAdapter mAdapter = new HorizontalScrollViewAdapter(context, mDatas);
-            //添加滚动回调
-            mHorizontalScrollView
-                    .setCurrentImageChangeListener(new MyHorizontalScrollView.CurrentImageChangeListener()
-                    {
-                        @Override
-                        public void onCurrentImgChanged(int position,
-                                                        View viewIndicator)
-                        {
-
-                        }
-                    });
-            //添加点击回调
-            mHorizontalScrollView.setOnItemClickListener(new MyHorizontalScrollView.OnItemClickListener()
-            {
-
-                @Override
-                public void onClick(View view, int position)
-                {
-                    Intent intent = new Intent(context, OrderDetailActivity.class);
-                    intent.putExtra("orderinfo", order_id);
-                    Log.d(TAG, "transfer orderid  " + order_id + " to OrderDetailActivity");
-                    context.startActivity(intent);
-                }
-            });
-            //设置适配器
-            mHorizontalScrollView.initDatas(mAdapter);
-            llayout.addView(mHorizontalScrollView);
+        catch (Exception e){
+            Log.e(TAG, "showTimeAndBtn failed  ");
+            e.printStackTrace();
         }
+
 
         return convertView;
     }
@@ -240,6 +260,11 @@ public class AllOrdersListAdapter extends BaseAdapter {
         Log.d(TAG, "left time  "+left);
 
         return left;
+    }
+
+    public static class ViewHolder{
+        public NestedListView goods_listview ;
+        MyHorizontalScrollView mHorizontalScrollView;
     }
 }
 
