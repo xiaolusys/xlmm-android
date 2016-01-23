@@ -51,34 +51,8 @@ public class OrderGoodsListAdapter extends BaseAdapter {
         Log.d(TAG," create");
         this.context = context;
         this.dataSource = goodsList;
-        String img_url = "";
-        String title = "";
-        float std_sale_price = 0;
-        float pay_price = 0;
-        String model_id = "";
-        int num = 0;
-
         this.data = new ArrayList<HashMap<String, String>>();
-
-        Log.d(TAG,"dataSource.size "+ dataSource.size());
-        for (int i = 0; i < dataSource.size(); i++) {
-            HashMap<String, String> map = new HashMap<String, String>();
-            img_url = dataSource.get(i).getPicPath();
-            title = dataSource.get(i).getTitle();
-            std_sale_price = (float)dataSource.get(i).getTotalFee();
-            pay_price = (float)dataSource.get(i).getPayment();
-            model_id = dataSource.get(i).getSkuName();
-            num = dataSource.get(i).getNum();
-
-            map.put("img_url", img_url );
-            map.put("title", title );
-            map.put("std_sale_price", Float.toString(std_sale_price) );
-            map.put("pay_price", Float.toString(pay_price) );
-            map.put("model_id", model_id );
-            map.put("num", Integer.toString(num) );
-
-            data.add(map);
-        }
+        saveData(goodsList);
 
 
     }
@@ -90,41 +64,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
     }
 
     public void update(List<AllOrdersBean.ResultsEntity.OrdersEntity> list) {
-        int id = 0;
-        String img_url = "";
-        String title = "";
-        float std_sale_price = 0;
-        float agent_price = 0;
-        String model_id = "";
-        int num = 0;
-        int state = 0;
-        int refund_state = 0;
-
-        Log.d(TAG,"list.size "+ list.size());
-        for (int i = 0; i < list.size(); i++) {
-            HashMap<String, String> map = new HashMap<String, String>();
-            id = list.get(i).getId();
-            img_url = list.get(i).getPicPath();
-            title = list.get(i).getTitle();
-            std_sale_price = (float)list.get(i).getTotalFee();
-            agent_price = (float)list.get(i).getPayment();
-            model_id = list.get(i).getSkuName();
-            num = list.get(i).getNum();
-            state = list.get(i).getStatus();
-            refund_state = list.get(i).getRefundStatus();
-
-            map.put("id", Integer.toString(id) );
-            map.put("img_url", img_url );
-            map.put("title", title );
-            map.put("std_sale_price", Float.toString(std_sale_price) );
-            map.put("pay_price", Float.toString(agent_price) );
-            map.put("model_id", model_id );
-            map.put("num", Integer.toString(num) );
-            map.put("state", Integer.toString(state) );
-            map.put("refund_state", Integer.toString(refund_state) );
-
-            data.add(map);
-        }
+        saveData(list);
 
         dataSource.addAll(list);
         notifyDataSetChanged();
@@ -249,6 +189,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                     @Override
                     public void onClick(View v) {
                         //enter apply refund
+                        Log.d(TAG, "enter apply refund ");
                     }
                 });
                 break;
@@ -258,6 +199,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                     @Override
                     public void onClick(View v) {
                         //confirm receive goods
+                        Log.d(TAG, "confirm receive goods ");
                         receive_goods(id);
                     }
                 });
@@ -271,6 +213,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                             @Override
                             public void onClick(View v) {
                                 //enter apply return goods
+                                Log.d(TAG, "enter apply return goods ");
                             }
                         });
                         break;
@@ -286,10 +229,50 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(new ServiceResponse<UserBean>() {
                     @Override public void onNext(UserBean userBean) {
-                        Log.i(TAG, "returncode "+userBean.getCode());
+                        Log.d(TAG, "returncode "+userBean.getCode());
 
                     }
                 });
+    }
+
+    public void saveData(List<AllOrdersBean.ResultsEntity.OrdersEntity> list) {
+        int id = 0;
+        String img_url = "";
+        String title = "";
+        float std_sale_price = 0;
+        float agent_price = 0;
+        String model_id = "";
+        int num = 0;
+        int state = 0;
+        int refund_state = 0;
+
+        Log.d(TAG,"list.size "+ list.size());
+        for (int i = 0; i < list.size(); i++) {
+            HashMap<String, String> map = new HashMap<String, String>();
+            id = list.get(i).getId();
+            img_url = list.get(i).getPicPath();
+            title = list.get(i).getTitle();
+            std_sale_price = (float)list.get(i).getTotalFee();
+            agent_price = (float)list.get(i).getPayment();
+            model_id = list.get(i).getSkuName();
+            num = list.get(i).getNum();
+            state = list.get(i).getStatus();
+            refund_state = list.get(i).getRefundStatus();
+
+            map.put("id", Integer.toString(id) );
+            map.put("img_url", img_url );
+            map.put("title", title );
+            map.put("std_sale_price", Float.toString(std_sale_price) );
+            map.put("pay_price", Float.toString(agent_price) );
+            map.put("model_id", model_id );
+            map.put("num", Integer.toString(num) );
+            map.put("state", Integer.toString(state) );
+            map.put("refund_state", Integer.toString(refund_state) );
+
+            data.add(map);
+        }
+
+
     }
 }
 
