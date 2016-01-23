@@ -251,11 +251,31 @@ public interface XlmmService {
             @Field("sms_code") String valid_code
     );
 
+
+  //购物车增加一件
+    @POST("carts/{id}/plus_product_carts")
+    Observable<ResponseBody> plus_product_carts(
+          @Path("id")String id
+    );
+
+  //购物车删除一件
+    @POST("carts/{id}/minus_product_carts")
+    Observable<ResponseBody> minus_product_carts(
+          @Path("id")String id
+    );
+
+  //删除一列
+    @POST("carts/{id}/delete_carts")
+    Observable<ResponseBody> delete_carts(
+          @Path("id")String id
+    );
+
     //设置用户昵称
     @FormUrlEncoded
     @POST("order/{id}/confirm_sign")
     Observable<UserBean> receiveGoods(
             @Path("id") int id);
+
 
     //获得详细退款单数据
     @GET(XlmmApi.ALL_REFUNDS_URL + "/{pk}")

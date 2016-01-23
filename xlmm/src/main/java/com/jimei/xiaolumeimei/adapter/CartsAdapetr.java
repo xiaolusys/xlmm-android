@@ -6,18 +6,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.CartsinfoBean;
+import com.jimei.xiaolumeimei.model.CartsModel;
+import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jude.utils.JUtils;
+import com.squareup.okhttp.ResponseBody;
 import com.zhy.autolayout.utils.AutoUtils;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/01/19.
@@ -25,7 +34,7 @@ import java.util.List;
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class CartsAdapetr extends RecyclerView.Adapter<CartsAdapetr.CartsVH> {
-
+  CartsModel model = new CartsModel();
   private List<CartsinfoBean> mList;
   private Context mContext;
 
@@ -34,8 +43,7 @@ public class CartsAdapetr extends RecyclerView.Adapter<CartsAdapetr.CartsVH> {
     mList = new ArrayList<>();
   }
 
-  @Override
-  public CartsVH onCreateViewHolder(ViewGroup parent, int viewType) {
+  @Override public CartsVH onCreateViewHolder(ViewGroup parent, int viewType) {
 
     View view;
 
@@ -43,7 +51,6 @@ public class CartsAdapetr extends RecyclerView.Adapter<CartsAdapetr.CartsVH> {
         .inflate(R.layout.item_carts, parent, false);
     AutoUtils.autoSize(view);
     return new CartsVH(view);
-
   }
 
   public void update(List<CartsinfoBean> list) {
@@ -52,13 +59,22 @@ public class CartsAdapetr extends RecyclerView.Adapter<CartsAdapetr.CartsVH> {
     notifyDataSetChanged();
   }
 
+  public void updateWithClear(List<CartsinfoBean> list) {
+    mList.clear();
+    mList.addAll(list);
+    notifyDataSetChanged();
+  }
+
   @Override public void onBindViewHolder(final CartsVH holder, int position) {
 
     CartsinfoBean cartsinfoBean = mList.get(position);
-
+    int num = Integer.parseInt(cartsinfoBean.getNum());
     holder.title.setText(cartsinfoBean.getTitle());
-    holder.skuName.setText(cartsinfoBean.getSkuName());
-
+    holder.skuName.setText("尺码:" + cartsinfoBean.getSkuName());
+    //holder.color.setText(cartsinfoBean.get);
+    holder.price1.setText("¥" + cartsinfoBean.getPrice() + "");
+    holder.price2.setText("/¥" + cartsinfoBean.getStdSalePrice() + "");
+    holder.count.setText(num + "");
     String headImg = cartsinfoBean.getPicPath();
 
     String[] temp = headImg.split("http://image.xiaolu.so/");
@@ -77,11 +93,71 @@ public class CartsAdapetr extends RecyclerView.Adapter<CartsAdapetr.CartsVH> {
 
     Glide.with(mContext)
         .load(head_img)
+        .bitmapTransform(new RoundedCornersTransformation(mContext, 10, 0))
         .diskCacheStrategy(DiskCacheStrategy.ALL)
         .placeholder(R.drawable.parceholder)
         .centerCrop()
-        .override(120,120)
         .into(holder.cartImage);
+
+    holder.add.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+
+        model.plus_product_carts(cartsinfoBean.getId())
+            .subscribeOn(Schedulers.io())
+            .subscribe(new ServiceResponse<ResponseBody>() {
+              @Override public void onNext(ResponseBody responseBody) {
+                super.onNext(responseBody);
+                try {
+                  String s = responseBody.string();
+                  JUtils.Log("CartsAdapter", s);
+                  //holder.count.setText(num + "");
+                  updateWithClear(mList);
+                  notifyDataSetChanged();
+                } catch (IOException e) {
+                  e.printStackTrace();
+                }
+              }
+            });
+      }
+    });
+
+    holder.delete.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        if (num > 1) {
+
+          model.minus_product_carts(cartsinfoBean.getId())
+              .subscribeOn(Schedulers.io())
+              .subscribe(new ServiceResponse<ResponseBody>() {
+                @Override public void onNext(ResponseBody responseBody) {
+                  super.onNext(responseBody);
+                }
+              });
+        } else {
+          new MaterialDialog.Builder(mContext).
+              title("删除商品").
+              content("您确定要删除吗？").
+              positiveText("确定").
+              negativeText("取消").
+              callback(new MaterialDialog.ButtonCallback() {
+                @Override public void onPositive(MaterialDialog dialog) {
+                  model.delete_carts(cartsinfoBean.getId())
+                      .subscribeOn(Schedulers.io())
+                      .subscribe(new ServiceResponse<ResponseBody>() {
+                        @Override public void onNext(ResponseBody responseBody) {
+                          super.onNext(responseBody);
+                          notifyDataSetChanged();
+                        }
+                      });
+                  dialog.dismiss();
+                }
+
+                @Override public void onNegative(MaterialDialog dialog) {
+                  dialog.dismiss();
+                }
+              }).show();
+        }
+      }
+    });
   }
 
   @Override public int getItemCount() {
@@ -93,6 +169,13 @@ public class CartsAdapetr extends RecyclerView.Adapter<CartsAdapetr.CartsVH> {
     @Bind(R.id.cart_image) ImageView cartImage;
     @Bind(R.id.title) TextView title;
     @Bind(R.id.sku_name) TextView skuName;
+    //@Bind(R.id.color) TextView color;
+    @Bind(R.id.price1) TextView price1;
+    @Bind(R.id.price2) TextView price2;
+    @Bind(R.id.ll) LinearLayout ll;
+    @Bind(R.id.delete) TextView delete;
+    @Bind(R.id.count) TextView count;
+    @Bind(R.id.add) TextView add;
 
     public CartsVH(View itemView) {
       super(itemView);
