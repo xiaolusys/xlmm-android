@@ -168,6 +168,10 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
       case R.id.wx_login:
         //startActivity(new Intent(LoginActivity.this,));
         //finish();
+
+
+
+
         break;
 
       case R.id.sms_login:

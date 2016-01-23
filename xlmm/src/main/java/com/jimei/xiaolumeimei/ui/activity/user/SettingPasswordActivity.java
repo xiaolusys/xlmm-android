@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,20 +35,8 @@ public class SettingPasswordActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void setListener() {
     commit_button.setOnClickListener(this);
-    etPassword2.setOnTouchListener(new View.OnTouchListener() {
-      @Override public boolean onTouch(View v, MotionEvent event) {
-        if (event.getX() > (etPassword2.getRight() - etPassword2.getCompoundDrawables()[2]
-            .getBounds()
-            .width())) {
-          isShow = false;
-        }
-
-        return false;
-      }
-
-    });
-
     toolbar.setOnClickListener(this);
+
   }
 
   @Override protected void initData() {
