@@ -7,13 +7,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.CartsAdapetr;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CartsinfoBean;
 import com.jimei.xiaolumeimei.model.CartsModel;
-import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
+import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import java.util.ArrayList;
@@ -25,15 +24,16 @@ import rx.schedulers.Schedulers;
  *
  * Copyright 2015年 上海己美. All rights reserved.
  */
-public class CartActivity extends BaseSwipeBackCompatActivity {
+public class CartActivity extends BaseSwipeBackCompatActivity
+    implements View.OnClickListener {
   CartsModel model = new CartsModel();
   List<String> ids = new ArrayList<>();
   @Bind(R.id.carts_recyclerview) RecyclerView cartsRecyclerview;
-  @Bind(R.id.confirm_trade) Button confirmTrade;
+  @Bind(R.id.confirm) Button confirmTrade;
   private CartsAdapetr mCartsAdapetr;
 
   @Override protected void setListener() {
-
+    confirmTrade.setOnClickListener(this);
   }
 
   @Override protected void initData() {
@@ -66,7 +66,8 @@ public class CartActivity extends BaseSwipeBackCompatActivity {
   @Override protected void initViews() {
     cartsRecyclerview.setLayoutManager(new LinearLayoutManager(this));
 
-    cartsRecyclerview.addItemDecoration(new SpaceItemDecoration(1));
+    cartsRecyclerview.addItemDecoration(
+        new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
     mCartsAdapetr = new CartsAdapetr(this);
 
     cartsRecyclerview.setAdapter(mCartsAdapetr);
@@ -80,26 +81,26 @@ public class CartActivity extends BaseSwipeBackCompatActivity {
     return null;
   }
 
-  public void confirmCarts(View view) {
-    Intent intent = new Intent(CartActivity.this, CartsPayInfoActivity.class);
-    StringBuilder sb = new StringBuilder();
-    if (ids.size() > 0) {
-      for (int i = 0; i < ids.size(); i++) {
-        sb.append(ids.get(i)).append(",");
-      }
-      String str = new String(sb);
+  @Override public void onClick(View v) {
+    switch (v.getId()) {
+      case R.id.confirm:
+        Intent intent = new Intent(CartActivity.this, CartsPayInfoActivity.class);
+        StringBuilder sb = new StringBuilder();
+        if (ids.size() > 0) {
+          for (int i = 0; i < ids.size(); i++) {
+            sb.append(ids.get(i)).append(",");
+          }
+          String str = new String(sb);
 
-      String s = str.substring(0, str.length() - 1);
+          String s = str.substring(0, str.length() - 1);
 
-      intent.putExtra("ids", s);
-      JUtils.Toast(s);
+          intent.putExtra("ids", s);
+          JUtils.Log("CartActivity", s);
 
-      startActivity(intent);
+          startActivity(intent);
+        }
+
+        break;
     }
-  }
-
-  @Override protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    ButterKnife.bind(this);
   }
 }

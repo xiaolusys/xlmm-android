@@ -130,27 +130,26 @@ public class PreviousFragment extends BaseFragment {
                                          model.getPreviousList()
                                              .subscribeOn(Schedulers.newThread())
                                              .subscribe(new ServiceResponse<IndexBean>() {
-                                                   @Override public void onNext(
-                                                       IndexBean indexBean) {
-                                                     List<IndexBean.product> child_list =
-                                                         indexBean.getChild_list();
-                                                     List<IndexBean.product> female_list =
-                                                         indexBean.getFemale_list();
-                                                     List<IndexBean.product> list =
-                                                         new ArrayList<>();
-                                                     list.addAll(child_list);
-                                                     list.addAll(female_list);
-                                                     mPreviousAdapter.updateWithClear(
-                                                         list);
-                                                     mPreviousAdapter.notifyDataSetChanged();
-                                                   }
+                                               @Override
+                                               public void onNext(IndexBean indexBean) {
+                                                 List<IndexBean.product> child_list =
+                                                     indexBean.getChild_list();
+                                                 List<IndexBean.product> female_list =
+                                                     indexBean.getFemale_list();
+                                                 List<IndexBean.product> list =
+                                                     new ArrayList<>();
+                                                 list.addAll(child_list);
+                                                 list.addAll(female_list);
+                                                 mPreviousAdapter.updateWithClear(list);
+                                                 mPreviousAdapter.notifyDataSetChanged();
+                                               }
 
-                                                   @Override public void onCompleted() {
-                                                     super.onCompleted();
-                                                     xRecyclerView.post(
-                                                         xRecyclerView::refreshComplete);
-                                                   }
-                                                 });
+                                               @Override public void onCompleted() {
+                                                 super.onCompleted();
+                                                 xRecyclerView.post(
+                                                     xRecyclerView::refreshComplete);
+                                               }
+                                             });
                                        }
 
                                        @Override public void onLoadMore() {

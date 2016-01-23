@@ -5,6 +5,7 @@ import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.CartsinfoBean;
 import com.jimei.xiaolumeimei.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
+import com.squareup.okhttp.ResponseBody;
 import java.util.List;
 import rx.Observable;
 
@@ -34,6 +35,27 @@ public class CartsModel {
   public Observable<CartsPayinfoBean> getCartsInfoList(String cart_ids) {
     return XlmmRetrofitClient.getService()
         .getCartsPayInfoList(cart_ids)
+        .compose(new DefaultTransform<>());
+  }
+
+  //增加一件
+  public Observable<ResponseBody> plus_product_carts(String id) {
+    return XlmmRetrofitClient.getService()
+        .plus_product_carts(id)
+        .compose(new DefaultTransform<>());
+  }
+
+  //删除一件
+  public Observable<ResponseBody> minus_product_carts(String id) {
+    return XlmmRetrofitClient.getService()
+        .minus_product_carts(id)
+        .compose(new DefaultTransform<>());
+  }
+
+  //删除一列
+  public Observable<ResponseBody> delete_carts(String id) {
+    return XlmmRetrofitClient.getService()
+        .delete_carts(id)
         .compose(new DefaultTransform<>());
   }
 }

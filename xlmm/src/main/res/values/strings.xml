@@ -18,4 +18,6 @@
   <string name="clear_cache">清理缓存</string>
   <string name="update_cache">缓存已经清理</string>
   <string name="next">下一步</string>
+  <string name="delete">一</string>
+  <string name="add">十</string>
 </resources>
