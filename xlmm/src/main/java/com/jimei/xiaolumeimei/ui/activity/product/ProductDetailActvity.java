@@ -106,11 +106,15 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
             List<String> contentImgs1 = productDetailBean.getDetails().getContentImgs();
 
             final String finalHead_img1 = head_img3;
-            titleImage.post(() -> Glide.with(mContext)
-                .load(finalHead_img1)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .centerCrop()
-                .into(titleImage));
+            titleImage.post(new Runnable() {
+              @Override public void run() {
+                Glide.with(mContext)
+                    .load(finalHead_img1)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .centerCrop()
+                    .into(titleImage);
+              }
+            });
 
             String headImg1 = contentImgs.get(0);
 
@@ -130,11 +134,15 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
 
             //if (contentImgs != null) {
             final String finalHead_img = head_img;
-            detailImage.post(() -> Glide.with(mContext)
-                .load(finalHead_img)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .centerCrop()
-                .into(detailImage));
+            detailImage.post(new Runnable() {
+              @Override public void run() {
+                Glide.with(mContext)
+                    .load(finalHead_img)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .centerCrop()
+                    .into(detailImage);
+              }
+            });
             //} else {
             //  detailImage.post(() -> Glide.with(mContext)
             //      .load(contentImgs1.get(0))
@@ -262,7 +270,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
               .subscribe(new ServiceResponse<AddCartsBean>() {
                 @Override public void onNext(AddCartsBean addCartsBean) {
                   super.onNext(addCartsBean);
-                  JUtils.Log("成功加入购物车");
+                  JUtils.Toast("成功加入购物车");
                 }
               });
 

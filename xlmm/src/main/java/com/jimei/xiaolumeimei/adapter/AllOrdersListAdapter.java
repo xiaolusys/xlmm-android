@@ -102,8 +102,7 @@ public class AllOrdersListAdapter extends BaseAdapter {
     if (convertView == null) {
       convertView = LayoutInflater.from(context).inflate(R.layout.orders_list_item, null);
       //这个地方比较奇葩，只有1个商品时显示商品详细信息，多余1个商品时只显示商品图片
-      LinearLayout llayout =
-          (LinearLayout) convertView.findViewById(R.id.llayout_order_item);
+      LinearLayout llayout = (LinearLayout) convertView.findViewById(R.id.llayout_order_item);
 
       holder = new ViewHolder();
 
@@ -132,7 +131,7 @@ public class AllOrdersListAdapter extends BaseAdapter {
         tx_good_name.setText(mList.get(position).getOrders().get(0).getTitle());
         tx_good_price.setText("￥" + mList.get(position).getOrders().get(0).getPayment());
         tx_good_size.setText(mList.get(position).getOrders().get(0).getSkuName());
-        tx_good_num.setText(mList.get(position).getOrders().get(0).getNum());
+        tx_good_num.setText(Integer.toString(mList.get(position).getOrders().get(0).getNum()));
 
         ViewUtils.loadImgToImgView(context, img_goods, data.get(position).get("img_url"));
 
@@ -141,8 +140,7 @@ public class AllOrdersListAdapter extends BaseAdapter {
       } else {
         List<String> mDatas = new ArrayList<String>();
         fillPicPath(mDatas, mList.get(position).getOrders());
-        Log.d(TAG,
-            "goodsnum " + mList.get(position).getOrders().size() + " " + mDatas.size());
+        Log.d(TAG, "goodsnum " + mList.get(position).getOrders().size() + " " + mDatas.size());
 
         LayoutInflater inflater = LayoutInflater.from(context);
         MyHorizontalScrollView mHorizontalScrollView =
@@ -203,65 +201,63 @@ public class AllOrdersListAdapter extends BaseAdapter {
     }
   }
 
-  private void showTimeAndBtn(int state, String crtTime, View convertView, int order_id) {
-    Button btn_order_proc = (Button) convertView.findViewById(R.id.btn_order_proc);
-    btn_order_proc.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        Intent intent = new Intent(context, OrderDetailActivity.class);
-        intent.putExtra("orderinfo", order_id);
-        Log.d(TAG, "btn click,transfer orderid  " + order_id + " to OrderDetailActivity");
-        context.startActivity(intent);
+    private void showTimeAndBtn ( int state, String crtTime, View convertView,
+    int order_id){
+      Button btn_order_proc = (Button) convertView.findViewById(R.id.btn_order_proc);
+      btn_order_proc.setOnClickListener(new View.OnClickListener() {
+        @Override public void onClick(View v) {
+          Intent intent = new Intent(context, OrderDetailActivity.class);
+          intent.putExtra("orderinfo", order_id);
+          Log.d(TAG, "btn click,transfer orderid  " + order_id + " to OrderDetailActivity");
+          context.startActivity(intent);
+        }
+      });
+
+      if (XlmmConst.ORDER_STATE_WAITPAY == state) {
+        TextView tx_order_left_paytime = (TextView) convertView.findViewById(R.id.tx_order_left_paytime);
+        cn.iwgang.countdownview.CountdownView cv_lefttime =
+            (cn.iwgang.countdownview.CountdownView) convertView.findViewById(R.id.cv_lefttime);
+
+        tx_order_left_paytime.setVisibility(View.VISIBLE);
+        cv_lefttime.setVisibility(View.VISIBLE);
+        cv_lefttime.start(calcLeftTime(crtTime));
+        btn_order_proc.setVisibility(View.VISIBLE);
+        btn_order_proc.setText("立即支付");
+      } else if (XlmmConst.ORDER_STATE_PAYED == state) {
+        btn_order_proc.setVisibility(View.VISIBLE);
+        btn_order_proc.setText("申请退款");
+      } else if (XlmmConst.ORDER_STATE_SENDED == state) {
+        btn_order_proc.setVisibility(View.VISIBLE);
+        btn_order_proc.setText("确认收货");
+      } else if ((XlmmConst.ORDER_STATE_TRADE_SUCCESS == state) || (XlmmConst.ORDER_STATE_CONFIRM_RECEIVE == state)) {
+        btn_order_proc.setVisibility(View.VISIBLE);
+        btn_order_proc.setText("退货退款");
       }
-    });
-
-    if (XlmmConst.ORDER_STATE_WAITPAY == state) {
-      TextView tx_order_left_paytime =
-          (TextView) convertView.findViewById(R.id.tx_order_left_paytime);
-      cn.iwgang.countdownview.CountdownView cv_lefttime =
-          (cn.iwgang.countdownview.CountdownView) convertView.findViewById(
-              R.id.cv_lefttime);
-
-      tx_order_left_paytime.setVisibility(View.VISIBLE);
-      cv_lefttime.setVisibility(View.VISIBLE);
-      cv_lefttime.start(calcLeftTime(crtTime));
-      btn_order_proc.setVisibility(View.VISIBLE);
-      btn_order_proc.setText("立即支付");
-    } else if (XlmmConst.ORDER_STATE_PAYED == state) {
-      btn_order_proc.setVisibility(View.VISIBLE);
-      btn_order_proc.setText("申请退款");
-    } else if (XlmmConst.ORDER_STATE_SENDED == state) {
-      btn_order_proc.setVisibility(View.VISIBLE);
-      btn_order_proc.setText("确认收货");
-    } else if ((XlmmConst.ORDER_STATE_TRADE_SUCCESS == state)
-        || (XlmmConst.ORDER_STATE_CONFIRM_RECEIVE == state)) {
-      btn_order_proc.setVisibility(View.VISIBLE);
-      btn_order_proc.setText("退货退款");
-    }
-  }
-
-  private long calcLeftTime(String crtTime) {
-    long left = 0;
-    Date now = new Date();
-    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-ddTHH-mm-ss");
-    try {
-      Date crtdate = format.parse(crtTime);
-
-      if (crtdate.getTime() + 20 * 60 * 1000 - now.getTime() > 0) {
-        left = crtdate.getTime() + 20 * 60 * 1000 - now.getTime();
-      }
-    } catch (Exception e) {
-      Log.e(TAG, "left time get failed ");
-      e.printStackTrace();
     }
 
-    Log.d(TAG, "left time  " + left);
+    private long calcLeftTime (String crtTime){
+      long left = 0;
+      Date now = new Date();
+      SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-ddTHH-mm-ss");
+      try {
+        Date crtdate = format.parse(crtTime);
 
-    return left;
-  }
+        if (crtdate.getTime() + 20 * 60 * 1000 - now.getTime() > 0) {
+          left = crtdate.getTime() + 20 * 60 * 1000 - now.getTime();
+        }
+      } catch (Exception e) {
+        Log.e(TAG, "left time get failed ");
+        e.printStackTrace();
+      }
 
-  public static class ViewHolder {
-    public LinearLayout goods_listview;
-    MyHorizontalScrollView mHorizontalScrollView;
-  }
-}
+      Log.d(TAG, "left time  " + left);
+
+      return left;
+    }
+
+    public static class ViewHolder {
+      public LinearLayout goods_listview;
+      MyHorizontalScrollView mHorizontalScrollView;
+    }
+    }
 
