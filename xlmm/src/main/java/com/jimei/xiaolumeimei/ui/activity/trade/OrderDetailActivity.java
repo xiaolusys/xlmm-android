@@ -14,8 +14,11 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,8 +27,10 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.jimei.xiaolumeimei.adapter.OrderGoodsListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
+import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
@@ -51,15 +56,16 @@ import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import butterknife.Bind;
 import rx.schedulers.Schedulers;
 
-public class OrderDetailActivity extends BaseSwipeBackCompatActivity {
+public class OrderDetailActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener{
     String TAG = "OrderDetailActivity";
     @Bind(R.id.toolbar) Toolbar toolbar;
+    @Bind(R.id.btn_order_proc) Button btn_proc;
     private OrderGoodsListAdapter mGoodsAdapter;
     int order_id = 0;
     TradeModel model = new TradeModel();
 
     @Override protected void setListener() {
-
+        btn_proc.setOnClickListener(this);
     }
     @Override protected void getBundleExtras(Bundle extras) {
 
@@ -86,6 +92,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity {
                     @Override public void onNext(OrderDetailBean orderDetailBean) {
 
                         fillDataToView(orderDetailBean);
+                        showProcBtn(orderDetailBean);
                         Log.i(TAG, orderDetailBean.toString());
                     }
                 });
@@ -135,5 +142,42 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity {
 
         TextView tx_order_payment = (TextView) findViewById(R.id.tx_order_payment);
         tx_order_payment.setText("总金额 ￥" + orderDetailBean.getPayment());
+    }
+
+    private void showProcBtn(OrderDetailBean orderDetailBean){
+        try {
+            int state = orderDetailBean.getOrders().get(0).getStatus();
+            switch (state){
+                case XlmmConst.ORDER_STATE_WAITPAY:
+                {
+                    Log.d(TAG,"wait pay lefttime show");
+                    RelativeLayout rlayout_order_lefttime = (RelativeLayout) findViewById(R.id.rlayout_order_lefttime);
+                    rlayout_order_lefttime.setVisibility(View.VISIBLE);
+                    LinearLayout llayout_order_lefttime = (LinearLayout) findViewById(R.id.llayout_order_lefttime);
+                    llayout_order_lefttime.setVisibility(View.VISIBLE);
+                    Button btn_order_cancel = (Button) findViewById(R.id.btn_order_cancel);
+                    btn_order_cancel.setVisibility(View.VISIBLE);
+                    break;
+                }
+                case XlmmConst.ORDER_STATE_PAYED:
+                {
+                    break;
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_order_proc:
+                //Intent intent = new Intent(OrderDetailActivity.this, MainActivity.class);
+                //startActivity(intent);
+                finish();
+                break;
+
+        }
     }
 }

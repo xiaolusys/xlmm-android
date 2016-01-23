@@ -251,6 +251,7 @@ public interface XlmmService {
             @Field("sms_code") String valid_code
     );
 
+
   //购物车增加一件
     @POST("carts/{id}/plus_product_carts")
     Observable<ResponseBody> plus_product_carts(
@@ -269,4 +270,15 @@ public interface XlmmService {
           @Path("id")String id
     );
 
+    //设置用户昵称
+    @FormUrlEncoded
+    @POST("order/{id}/confirm_sign")
+    Observable<UserBean> receiveGoods(
+            @Path("id") int id);
+
+
+    //获得详细退款单数据
+    @GET(XlmmApi.ALL_REFUNDS_URL + "/{pk}")
+    Observable<AllRefundsBean.ResultsEntity> getRefundDetailBean(
+            @Path("pk") int order_id);
 }

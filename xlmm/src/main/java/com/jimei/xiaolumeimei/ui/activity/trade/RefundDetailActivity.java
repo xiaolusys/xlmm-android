@@ -1,96 +1,110 @@
 package com.jimei.xiaolumeimei.ui.activity.trade;
 
-import android.app.ActionBar;
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.squareup.okhttp.Call;
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.entities.AllRefundsBean;
+import com.jimei.xiaolumeimei.model.TradeModel;
+import com.jimei.xiaolumeimei.utils.ViewUtils;
+import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.AllOrdersListAdapter;
-import com.jimei.xiaolumeimei.adapter.OrderGoodsListAdapter;
-import com.jimei.xiaolumeimei.widget.NestedListView;
-import com.jimei.xiaolumeimei.data.XlmmApi;
 
-import com.jimei.xiaolumeimei.entities.AllRefundsBean;
-import com.jimei.xiaolumeimei.entities.RefundDetailBean;
+import butterknife.Bind;
+import rx.schedulers.Schedulers;
 
-public class RefundDetailActivity extends AppCompatActivity {
+public class RefundDetailActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener{
     String TAG = "RefundDetailActivity";
 
-    RefundDetailBean refund_detail = new RefundDetailBean();
+    @Bind(R.id.toolbar) Toolbar toolbar;
+    int order_id = 0;
+    TradeModel model = new TradeModel();
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
-        Log.d(TAG,"onCreate");
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_refund_detail);
-        this.setTitle("退货（款）详情");
+    @Override protected void setListener() {
+        toolbar.setOnClickListener(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    }
+    @Override protected void getBundleExtras(Bundle extras) {
+
+    }
+
+    @Override protected int getContentViewLayoutID() {
+        return R.layout.activity_refund_detail;
+    }
+
+    @Override protected void initViews() {
+        toolbar.setTitle("");
         setSupportActionBar(toolbar);
-        refund_detail = getIntent().getExtras().getParcelable("refunddetail");
-        initView();
+        toolbar.setNavigationIcon(R.drawable.back);
+
+
+    }
+    //从server端获得所有订单数据，可能要查询几次
+    @Override protected void initData() {
+        order_id = getIntent().getExtras().getInt("orderinfo");
+        model.getRefundDetailBean(order_id)
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(new ServiceResponse<AllRefundsBean.ResultsEntity>() {
+                    @Override public void onNext(AllRefundsBean.ResultsEntity refundDetailBean) {
+                        fillDataToView(refundDetailBean);
+                        Log.i(TAG, refundDetailBean.toString());
+                    }
+                });
+    }
+
+    @Override protected boolean toggleOverridePendingTransition() {
+        return false;
+    }
+
+    @Override protected TransitionMode getOverridePendingTransitionMode() {
+        return null;
     }
 
 
 
-    @Override
-    protected void onStart() {
-        // TODO Auto-generated method stub
-        super.onStart();
 
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // TODO Auto-generated method stub
-        if (item.getItemId() == android.R.id.home) {
-            Log.d(TAG,"nav back");
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+    private void fillDataToView(AllRefundsBean.ResultsEntity refundDetailBean){
+        TextView tx_order_id = (TextView) findViewById(R.id.tx_refund_no);
+        tx_order_id.setText("订单编号" + refundDetailBean.getRefund_no());
 
-    private void initView(){
-
+        TextView tx_refund_state = (TextView) findViewById(R.id.tx_refund_state);
+        tx_refund_state.setText(refundDetailBean.getStatus_display());
 
         ImageView img_good = (ImageView) findViewById(R.id.img_good);
+        ViewUtils.loadImgToImgView(this,img_good, refundDetailBean.getPic_path());
 
-        NestedListView goods_listview = (NestedListView) findViewById(R.id.goods_listview);
-       // OrderGoodsListAdapter goods_adapter = new OrderGoodsListAdapter(this, refund_detail);
-       // goods_listview.setAdapter(goods_adapter);
+        TextView tx_good_name = (TextView) findViewById(R.id.tx_good_name);
+        tx_good_name.setText(refundDetailBean.getTitle());
+        TextView tx_good_price = (TextView) findViewById(R.id.tx_good_price);
+        tx_good_price.setText("￥"+ refundDetailBean.getTotal_fee());
 
+        TextView tx_good_size = (TextView) findViewById(R.id.tx_good_size);
+        tx_good_size.setText("尺码："+refundDetailBean.getSku_name());
+        TextView tx_good_num = (TextView) findViewById(R.id.tx_good_num);
+        tx_good_num.setText("×"+ refundDetailBean.getRefund_num());
 
+        TextView tx_refund_num = (TextView) findViewById(R.id.tx_refund_num);
+        tx_refund_num.setText(refundDetailBean.getRefund_num());
 
+        TextView tx_refundfee = (TextView) findViewById(R.id.tx_refundfee);
+        tx_refundfee.setText("￥" + refundDetailBean.getRefund_fee());
+
+        TextView tx_refund_reason = (TextView) findViewById(R.id.tx_refund_reason);
+        tx_refund_reason.setText(refundDetailBean.getReason());
+    }
+
+    @Override public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.toolbar:
+                finish();
+                break;
+
+        }
     }
 }
