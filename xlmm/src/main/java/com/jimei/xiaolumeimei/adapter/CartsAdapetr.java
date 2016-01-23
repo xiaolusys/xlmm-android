@@ -34,6 +34,7 @@ import rx.schedulers.Schedulers;
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class CartsAdapetr extends RecyclerView.Adapter<CartsAdapetr.CartsVH> {
+  public double total_price;
   CartsModel model = new CartsModel();
   private List<CartsinfoBean> mList;
   private Context mContext;
@@ -68,13 +69,15 @@ public class CartsAdapetr extends RecyclerView.Adapter<CartsAdapetr.CartsVH> {
   @Override public void onBindViewHolder(final CartsVH holder, int position) {
 
     CartsinfoBean cartsinfoBean = mList.get(position);
-    int num = Integer.parseInt(cartsinfoBean.getNum());
     holder.title.setText(cartsinfoBean.getTitle());
     holder.skuName.setText("尺码:" + cartsinfoBean.getSkuName());
     //holder.color.setText(cartsinfoBean.get);
     holder.price1.setText("¥" + cartsinfoBean.getPrice() + "");
     holder.price2.setText("/¥" + cartsinfoBean.getStdSalePrice() + "");
-    holder.count.setText(num + "");
+    holder.count.setText(cartsinfoBean.getNum() + "");
+
+    total_price =
+        (cartsinfoBean.getTotalFee()) * (Double.parseDouble(cartsinfoBean.getNum()));
     String headImg = cartsinfoBean.getPicPath();
 
     String[] temp = headImg.split("http://image.xiaolu.so/");
@@ -110,9 +113,17 @@ public class CartsAdapetr extends RecyclerView.Adapter<CartsAdapetr.CartsVH> {
                 try {
                   String s = responseBody.string();
                   JUtils.Log("CartsAdapter", s);
-                  //holder.count.setText(num + "");
-                  updateWithClear(mList);
-                  notifyDataSetChanged();
+                  model.getCartsList()
+                      .subscribeOn(Schedulers.io())
+                      .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
+                        @Override public void onNext(List<CartsinfoBean> list) {
+                          super.onNext(list);
+                          mList = list;
+                          notifyItemChanged(position);
+                        }
+                      });
+
+                  //holder.count.setText(cartsinfoBean.getNum() + "");
                 } catch (IOException e) {
                   e.printStackTrace();
                 }
@@ -123,13 +134,23 @@ public class CartsAdapetr extends RecyclerView.Adapter<CartsAdapetr.CartsVH> {
 
     holder.delete.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
-        if (num > 1) {
+        if (Integer.parseInt(cartsinfoBean.getNum()) > 1) {
 
           model.minus_product_carts(cartsinfoBean.getId())
               .subscribeOn(Schedulers.io())
               .subscribe(new ServiceResponse<ResponseBody>() {
                 @Override public void onNext(ResponseBody responseBody) {
                   super.onNext(responseBody);
+
+                  model.getCartsList()
+                      .subscribeOn(Schedulers.io())
+                      .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
+                        @Override public void onNext(List<CartsinfoBean> list) {
+                          super.onNext(list);
+                          mList = list;
+                          notifyItemChanged(position);
+                        }
+                      });
                 }
               });
         } else {
@@ -145,7 +166,7 @@ public class CartsAdapetr extends RecyclerView.Adapter<CartsAdapetr.CartsVH> {
                       .subscribe(new ServiceResponse<ResponseBody>() {
                         @Override public void onNext(ResponseBody responseBody) {
                           super.onNext(responseBody);
-                          notifyDataSetChanged();
+                          removeAt(position);
                         }
                       });
                   dialog.dismiss();
@@ -162,6 +183,13 @@ public class CartsAdapetr extends RecyclerView.Adapter<CartsAdapetr.CartsVH> {
 
   @Override public int getItemCount() {
     return mList.size();
+  }
+
+  //删除某一项
+  public void removeAt(int position) {
+    mList.remove(position);
+    notifyItemRemoved(position);
+    notifyItemRangeChanged(position, mList.size());
   }
 
   static class CartsVH extends RecyclerView.ViewHolder {

@@ -6,7 +6,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.CartsAdapetr;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -30,6 +32,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
   List<String> ids = new ArrayList<>();
   @Bind(R.id.carts_recyclerview) RecyclerView cartsRecyclerview;
   @Bind(R.id.confirm) Button confirmTrade;
+  @Bind(R.id.total_price) TextView totalPrice;
   private CartsAdapetr mCartsAdapetr;
 
   @Override protected void setListener() {
@@ -45,9 +48,15 @@ public class CartActivity extends BaseSwipeBackCompatActivity
             if (cartsinfoBeans != null) {
 
               mCartsAdapetr.update(cartsinfoBeans);
-
+              //double total_price = 0;
               for (int i = 0; i < cartsinfoBeans.size(); i++) {
                 ids.add(cartsinfoBeans.get(i).getId());
+                CartsinfoBean cartsinfoBean = cartsinfoBeans.get(i);
+
+                //total_price = (cartsinfoBean.getTotalFee()) * (Double.parseDouble(
+                //    cartsinfoBean.getNum()));
+                totalPrice.setText(mCartsAdapetr.total_price+"");
+
                 JUtils.Log("ITXUYE", cartsinfoBeans.toString());
               }
             }
@@ -102,5 +111,11 @@ public class CartActivity extends BaseSwipeBackCompatActivity
 
         break;
     }
+  }
+
+  @Override protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    // TODO: add setContentView(...) invocation
+    ButterKnife.bind(this);
   }
 }
