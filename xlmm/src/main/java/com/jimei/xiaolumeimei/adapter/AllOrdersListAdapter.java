@@ -16,11 +16,13 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
+import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.MyHorizontalScrollView;
 import com.jimei.xiaolumeimei.widget.NestedListView;
 
@@ -110,16 +112,14 @@ public class AllOrdersListAdapter extends BaseAdapter {
             holder = new ViewHolder();
 
             if(1 == mList.get(position).getOrders().size()) {
-                NestedListView goods_listview = new NestedListView(context);
-                OrderGoodsListAdapter goods_adapter = new OrderGoodsListAdapter(context, mList.get(position).getOrders());
-                goods_listview.setAdapter(goods_adapter);
-                goods_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                LayoutInflater inflater = LayoutInflater.from(context);
+                LinearLayout ll_one_order  = (LinearLayout)inflater.inflate(R.layout.one_order_item, null);
+                ll_one_order.setOnClickListener(new View.OnClickListener() {
 
                     @Override
-                    public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-                                            long arg3) {
+                    public void onClick(View v) {
                         // TODO Auto-generated method stub
-                        Log.d(TAG, "onItemClick " + arg2 + " " + arg3);
+                        Log.d(TAG, "onClick " );
                         Intent intent = new Intent(context, OrderDetailActivity.class);
                         intent.putExtra("orderinfo", order_id);
                         Log.d(TAG, "transfer orderid  " + order_id + " to OrderDetailActivity");
@@ -127,7 +127,21 @@ public class AllOrdersListAdapter extends BaseAdapter {
                     }
 
                 });
-                holder.goods_listview = goods_listview;
+
+                ImageView img_goods = (ImageView) ll_one_order.findViewById(R.id.img_good);
+                TextView tx_good_name = (TextView) ll_one_order.findViewById(R.id.tx_good_name);
+                TextView tx_good_price = (TextView) ll_one_order.findViewById(R.id.tx_good_price);
+                TextView tx_good_size = (TextView) ll_one_order.findViewById(R.id.tx_good_size);
+                TextView tx_good_num = (TextView) ll_one_order.findViewById(R.id.tx_good_num);
+
+                tx_good_name.setText(mList.get(position).getOrders().get(0).getTitle() );
+                tx_good_price.setText("￥"+mList.get(position).getOrders().get(0).getPayment());
+                tx_good_size.setText(mList.get(position).getOrders().get(0).getSkuName());
+                tx_good_num.setText(mList.get(position).getOrders().get(0).getNum());
+
+                ViewUtils.loadImgToImgView(context, img_goods, data.get(position).get("img_url") );
+
+                holder.goods_listview = ll_one_order;
                 llayout.addView(holder.goods_listview);
             }
             else{
@@ -263,7 +277,7 @@ public class AllOrdersListAdapter extends BaseAdapter {
     }
 
     public static class ViewHolder{
-        public NestedListView goods_listview ;
+        public LinearLayout goods_listview ;
         MyHorizontalScrollView mHorizontalScrollView;
     }
 }
