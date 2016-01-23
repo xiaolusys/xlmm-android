@@ -176,6 +176,18 @@
       <activity android:name=".ui.activity.user.SmsLoginActivity"
           android:theme="@style/AppTheme.TransparentActivity"
           />
+    <activity android:name=".ui.activity.trade.ApplyRefundActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
+    <activity android:name=".ui.activity.trade.ApplyReturnGoodsActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
+    <activity android:name=".ui.activity.trade.ChooseLogisticsCompanyActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
+    <activity android:name=".ui.activity.trade.WriteLogisticsInfoActivty"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
 
     <activity
         android:name="com.mob.tools.MobUIShell"
