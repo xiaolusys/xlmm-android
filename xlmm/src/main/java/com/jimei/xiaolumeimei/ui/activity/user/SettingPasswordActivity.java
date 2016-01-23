@@ -48,6 +48,8 @@ public class SettingPasswordActivity extends BaseSwipeBackCompatActivity
       }
 
     });
+
+    toolbar.setOnClickListener(this);
   }
 
   @Override protected void initData() {
@@ -96,6 +98,10 @@ public class SettingPasswordActivity extends BaseSwipeBackCompatActivity
           JUtils.Toast("请选择是否同意条款");
         }
 
+        break;
+
+      case R.id.toolbar:
+        finish();
         break;
     }
   }

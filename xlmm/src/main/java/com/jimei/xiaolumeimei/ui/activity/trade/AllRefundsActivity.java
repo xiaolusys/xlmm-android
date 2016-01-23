@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.ui.activity.trade;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -29,11 +30,14 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity implements V
     String TAG = "AllRefundsActivity";
 
     @Bind(R.id.btn_jump) Button btn_jump;
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
     TradeModel model = new TradeModel();
     private AllRefundsListAdapter mAllRefundsAdapter;
 
     @Override protected void setListener() {
         btn_jump.setOnClickListener(this);
+        toolbar.setOnClickListener(this);
     }
     @Override protected void getBundleExtras(Bundle extras) {
 
@@ -44,6 +48,9 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity implements V
     }
 
     @Override protected void initViews() {
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.back);
         //config allorders list adaptor
         ListView all_refunds_listview = (ListView) findViewById(R.id.all_refunds_listview);
         mAllRefundsAdapter = new AllRefundsListAdapter(this);
@@ -108,7 +115,9 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity implements V
                 startActivity(intent);
                 finish();
                 break;
-
+            case R.id.toolbar:
+                finish();
+                break;
         }
     }
 }

@@ -56,6 +56,8 @@ import rx.schedulers.Schedulers;
 
 public class CouponActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener{
     String TAG = "CouponActivity";
+
+    @Bind(R.id.toolbar) Toolbar toolbar;
     @Bind(R.id.btn_jump)    Button btn_jump;
     @Bind(R.id.rlayout_order_empty)    RelativeLayout rl_empty;
     UserModel model = new UserModel();
@@ -65,6 +67,7 @@ public class CouponActivity extends BaseSwipeBackCompatActivity implements View.
 
     @Override protected void setListener() {
         btn_jump.setOnClickListener(this);
+        toolbar.setOnClickListener(this);
     }
     @Override protected void getBundleExtras(Bundle extras) {
 
@@ -75,6 +78,9 @@ public class CouponActivity extends BaseSwipeBackCompatActivity implements View.
     }
 
     @Override protected void initViews() {
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.back);
 
         ListView lv_unused_coupon = (ListView) findViewById(R.id.lv_unused_coupon);
         mCouponAdapter = new CouponListAdapter(this);
@@ -142,7 +148,9 @@ public class CouponActivity extends BaseSwipeBackCompatActivity implements View.
                 startActivity(intent);
                 finish();
                 break;
-
+            case R.id.toolbar:
+                finish();
+                break;
         }
     }
 }

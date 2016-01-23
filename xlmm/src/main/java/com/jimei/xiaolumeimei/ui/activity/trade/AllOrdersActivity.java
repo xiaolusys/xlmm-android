@@ -55,11 +55,14 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity implements Vi
     String TAG = "AllOrdersActivity";
     @Bind(R.id.btn_jump)    Button btn_jump;
     @Bind(R.id.all_orders_listview)    ListView all_orders_listview;
+    @Bind(R.id.toolbar) Toolbar toolbar;
+
     TradeModel model = new TradeModel();
     private AllOrdersListAdapter mAllOrderAdapter;
 
     @Override protected void setListener() {
         btn_jump.setOnClickListener(this);
+        toolbar.setOnClickListener(this);
     }
     @Override protected void getBundleExtras(Bundle extras) {
 
@@ -70,6 +73,9 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity implements Vi
     }
 
     @Override protected void initViews() {
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.back);
         //ListView all_orders_listview = (ListView) findViewById(R.id.all_orders_listview);
 
         mAllOrderAdapter = new AllOrdersListAdapter(this);
@@ -113,6 +119,9 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity implements Vi
             case R.id.btn_jump:
                 Intent intent = new Intent(AllOrdersActivity.this, MainActivity.class);
                 startActivity(intent);
+                finish();
+                break;
+            case R.id.toolbar:
                 finish();
                 break;
 

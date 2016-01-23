@@ -29,6 +29,7 @@ import rx.schedulers.Schedulers;
 public class MembershipPointActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener{
     String TAG = "MembershipPointActivity";
 
+    @Bind(R.id.toolbar) Toolbar toolbar;
     @Bind(R.id.btn_jump)    Button btn_jump;
     UserModel model = new UserModel();
     private MembershipPointListAdapter mPointAdapter;
@@ -36,6 +37,7 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity impleme
 
     @Override protected void setListener() {
         btn_jump.setOnClickListener(this);
+        toolbar.setOnClickListener(this);
     }
     @Override protected void getBundleExtras(Bundle extras) {
 
@@ -46,6 +48,10 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity impleme
     }
 
     @Override protected void initViews() {
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.back);
+
         ListView all_orders_listview = (ListView) findViewById(R.id.all_points_listview);
         all_orders_listview.setEmptyView(findViewById(R.id.rlayout_order_empty));
         mPointAdapter = new MembershipPointListAdapter(this);
@@ -110,7 +116,9 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity impleme
                 startActivity(intent);
                 finish();
                 break;
-
+            case R.id.toolbar:
+                finish();
+                break;
         }
     }
 }

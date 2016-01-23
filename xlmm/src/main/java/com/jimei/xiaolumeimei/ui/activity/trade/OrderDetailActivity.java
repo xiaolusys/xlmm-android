@@ -66,6 +66,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity implements 
 
     @Override protected void setListener() {
         btn_proc.setOnClickListener(this);
+        toolbar.setOnClickListener(this);
     }
     @Override protected void getBundleExtras(Bundle extras) {
 
@@ -76,8 +77,9 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity implements 
     }
 
     @Override protected void initViews() {
-        toolbar.setTitle("订单详情");
+        toolbar.setTitle("");
         setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.back);
 
         ListView lv_goods = (ListView) findViewById(R.id.lv_goods);
         mGoodsAdapter = new OrderGoodsListAdapter(this);
@@ -177,7 +179,9 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity implements 
                 //startActivity(intent);
                 finish();
                 break;
-
+            case R.id.toolbar:
+                finish();
+                break;
         }
     }
 }

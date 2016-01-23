@@ -56,11 +56,13 @@ public class WaitPayOrdersActivity extends BaseSwipeBackCompatActivity implement
     String TAG = "WaitPayOrdersActivity";
 
     @Bind(R.id.btn_jump)    Button btn_jump;
+    @Bind(R.id.toolbar) Toolbar toolbar;
     TradeModel model = new TradeModel();
     private WaitPayOrdersListAdapter mAllOrderAdapter;
 
     @Override protected void setListener() {
         btn_jump.setOnClickListener(this);
+        toolbar.setOnClickListener(this);
     }
     @Override protected void getBundleExtras(Bundle extras) {
 
@@ -71,6 +73,9 @@ public class WaitPayOrdersActivity extends BaseSwipeBackCompatActivity implement
     }
 
     @Override protected void initViews() {
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.back);
 
         ListView all_orders_listview = (ListView) findViewById(R.id.all_orders_listview);
         all_orders_listview.setEmptyView(findViewById(R.id.rlayout_order_empty));
@@ -116,7 +121,9 @@ public class WaitPayOrdersActivity extends BaseSwipeBackCompatActivity implement
                 startActivity(intent);
                 finish();
                 break;
-
+            case R.id.toolbar:
+                finish();
+                break;
         }
     }
 }
