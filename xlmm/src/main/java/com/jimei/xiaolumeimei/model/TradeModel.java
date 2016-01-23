@@ -3,7 +3,7 @@ package com.jimei.xiaolumeimei.model;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
-import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 import com.squareup.okhttp.ResponseBody;
@@ -61,4 +61,17 @@ public class TradeModel {
             .compose(new DefaultTransform<>());
   }
 
+  //确认收货
+  public Observable<UserBean> receiveGoods(int id) {
+    return XlmmRetrofitClient.getService()
+            .receiveGoods(id)
+            .compose(new DefaultTransform<>());
+  }
+
+    //得到退货单详细数据
+    public Observable<AllRefundsBean.ResultsEntity> getRefundDetailBean(int order_id) {
+        return XlmmRetrofitClient.getService()
+                .getRefundDetailBean(order_id)
+                .compose(new DefaultTransform<>());
+    }
 }

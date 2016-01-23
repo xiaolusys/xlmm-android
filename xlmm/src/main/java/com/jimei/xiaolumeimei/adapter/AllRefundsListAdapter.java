@@ -6,37 +6,22 @@ package com.jimei.xiaolumeimei.adapter;
  */
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Paint;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jimei.xiaolumeimei.utils.ViewUtils;
-import com.jimei.xiaolumeimei.widget.NestedListView;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
-import com.jimei.xiaolumeimei.entities.OrderDetailBean;
-import com.jimei.xiaolumeimei.entities.RefundDetailBean;
-import com.jimei.xiaolumeimei.ui.activity.trade.OrderDetailActivity;
-import com.jimei.xiaolumeimei.ui.activity.trade.RefundDetailActivity;
 
 public class AllRefundsListAdapter extends BaseAdapter {
     private static final String TAG = "AllRefundsListAdapter";
@@ -147,7 +132,7 @@ public class AllRefundsListAdapter extends BaseAdapter {
     }
 
     public int getOrderId(int position){
-        return data_refund_list.get(position).getOrder_id();
+        return data_refund_list.get(position).getId();
     }
 }
 

@@ -251,5 +251,14 @@ public interface XlmmService {
             @Field("sms_code") String valid_code
     );
 
+    //设置用户昵称
+    @FormUrlEncoded
+    @POST("order/{id}/confirm_sign")
+    Observable<UserBean> receiveGoods(
+            @Path("id") int id);
 
+    //获得详细退款单数据
+    @GET(XlmmApi.ALL_REFUNDS_URL + "/{pk}")
+    Observable<AllRefundsBean.ResultsEntity> getRefundDetailBean(
+            @Path("pk") int order_id);
 }
