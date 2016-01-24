@@ -1,5 +1,7 @@
 package com.jimei.xiaolumeimei.entities;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
@@ -368,7 +370,73 @@ public class AllOrdersBean {
       return mOrders;
     }
 
-    public static class OrdersEntity {
+    public static class OrdersEntity implements Parcelable {
+      public OrdersEntity() {
+        // TODO Auto-generated constructor stub
+      }
+
+      public OrdersEntity(Parcel in) {
+        readFromParcel(in);
+      }
+      @Override
+      public int describeContents() {
+        return 0;
+      }
+
+      @Override
+      public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(mId);
+        dest.writeString(mOid);
+        dest.writeString(mItemId);
+        dest.writeString(mSkuId);
+        dest.writeInt(mNum);
+        dest.writeString(mOuterId);
+        dest.writeDouble(mTotalFee);
+        dest.writeDouble(mPayment);
+        dest.writeDouble(mDiscountFee);
+        dest.writeString(mSkuName);
+        dest.writeString(mPicPath);
+        dest.writeInt(mStatus);
+        dest.writeString(mStatusDisplay);
+        dest.writeInt(mRefundStatus);
+        dest.writeString(mRefundStatusDisplay);
+        dest.writeInt(0);
+        dest.writeInt(mKillTitle ? 1 : 0);
+
+
+      }
+
+      private void readFromParcel(Parcel in) {
+
+        mId = in.readInt();
+        mOid = in.readString();
+        mItemId = in.readString();
+        mSkuId = in.readString();
+        mNum = in.readInt();
+        mOuterId = in.readString();
+        mTotalFee = in.readDouble();
+        mPayment = in.readDouble();
+        mDiscountFee = in.readDouble();
+        mSkuName = in.readString();
+        mPicPath = in.readString();
+        mStatus = in.readInt();
+        mStatusDisplay = in.readString();
+        mRefundStatus = in.readInt();
+        mRefundStatusDisplay = in.readString();
+        mRefundId = null;
+        mKillTitle= (in.readInt() == 1) ? true : false;
+
+      }
+
+      public static final Parcelable.Creator<OrdersEntity> CREATOR = new Parcelable.Creator<OrdersEntity>() {
+        public OrdersEntity createFromParcel(Parcel in) {
+          return new OrdersEntity(in);
+        }
+
+        public OrdersEntity[] newArray(int size) {
+          return new OrdersEntity[size];
+        }
+      };
 
       @Override public String toString() {
         return "OrdersEntity{" +
@@ -402,7 +470,7 @@ public class AllOrdersBean {
       @SerializedName("outer_id") private String mOuterId;
       @SerializedName("total_fee") private double mTotalFee;
       @SerializedName("payment") private double mPayment;
-      @SerializedName("discount_fee") private int mDiscountFee;
+      @SerializedName("discount_fee") private double mDiscountFee;
       @SerializedName("sku_name") private String mSkuName;
       @SerializedName("pic_path") private String mPicPath;
       @SerializedName("status") private int mStatus;
@@ -448,7 +516,7 @@ public class AllOrdersBean {
         this.mPayment = payment;
       }
 
-      public void setDiscountFee(int discountFee) {
+      public void setDiscountFee(double discountFee) {
         this.mDiscountFee = discountFee;
       }
 
@@ -520,7 +588,7 @@ public class AllOrdersBean {
         return mPayment;
       }
 
-      public int getDiscountFee() {
+      public double getDiscountFee() {
         return mDiscountFee;
       }
 

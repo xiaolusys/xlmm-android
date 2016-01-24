@@ -20,4 +20,7 @@
   <string name="next">下一步</string>
   <string name="delete">一</string>
   <string name="add">十</string>
+  <string-array name="spingarr">
+    <item>请选择退款原因</item>
+  </string-array>
 </resources>

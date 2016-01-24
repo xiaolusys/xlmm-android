@@ -74,4 +74,12 @@ public class TradeModel {
                 .getRefundDetailBean(order_id)
                 .compose(new DefaultTransform<>());
     }
+
+  //创建退货单数据
+  public Observable<ResponseBody> refund_create(int goods_id, String reason, int num,
+      double sum_price, String description, String proof_pic) {
+    return XlmmRetrofitClient.getService()
+        .refund_create(goods_id, reason, num, sum_price, description, proof_pic)
+        .compose(new DefaultTransform<>());
+  }
 }
