@@ -86,24 +86,7 @@ public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity 
     }
     //从server端获得所有订单数据，可能要查询几次
     @Override protected void initData() {
-        model.getAlloderBean()
-                .subscribeOn(Schedulers.newThread())
-                .subscribe(new ServiceResponse<AllOrdersBean>() {
-                    @Override public void onNext(AllOrdersBean allOrdersBean) {
-                        List<AllOrdersBean.ResultsEntity> results = allOrdersBean.getResults();
-                        all_orders_listview.setEmptyView(findViewById(R.id.rlayout_order_empty));
-                        if (0 == results.size()){
-                            Log.i(TAG, "results.size()=0");
 
-                        }
-                        else
-                        {
-                            mAllOrderAdapter.update(results);
-                        }
-
-                        Log.i(TAG, allOrdersBean.toString());
-                    }
-                });
     }
 
     @Override protected boolean toggleOverridePendingTransition() {

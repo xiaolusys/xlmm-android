@@ -71,7 +71,7 @@
             />
 
         <TextView
-            android:id="@+id/tx_order_postfee"
+            android:id="@+id/tx_refund_num"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
@@ -101,7 +101,7 @@
             />
 
         <TextView
-            android:id="@+id/tx_order_totalfee"
+            android:id="@+id/tx_refundfee"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
