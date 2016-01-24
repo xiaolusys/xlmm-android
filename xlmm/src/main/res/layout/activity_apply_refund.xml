@@ -55,9 +55,8 @@
       <include layout="@layout/common_gap"/>
 
       <RelativeLayout
-          android:layout_width="fill_parent"
-          android:layout_height="32dp"
-          android:layout_weight="1"
+          android:layout_width="match_parent"
+          android:layout_height="92px"
           android:orientation="horizontal"
           >
         <TextView
@@ -77,32 +76,24 @@
             android:textColor="@color/colorPrimary"
             android:background="@drawable/shape_deleteoradd"
             android:text="@string/delete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/add"
-            android:layout_toLeftOf="@+id/tx_refund_num"
-            android:layout_toStartOf="@+id/tx_refund_num"
-            android:layout_marginRight="10px"
+            android:layout_width="48px"
+            android:layout_height="48px"
             android:layout_marginTop="5px"
+            android:layout_marginLeft="543px"
             android:layout_centerVertical="true"
-            android:layout_alignBottom="@id/tx_refund_num"
             />
 
         <TextView
             android:id="@+id/tx_refund_num"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="48px"
+            android:layout_height="wrap_content"
             android:text="1"
             android:textSize="15sp"
             android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="false"
-            android:layout_marginRight="10px"
-            android:layout_marginEnd="29dp"
-            android:layout_marginTop="5px"
-            android:layout_marginLeft="10px"
             android:gravity="center"
-            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/delete"
+            android:layout_alignBottom="@id/delete"
+            android:layout_marginTop="15px"
             />
         <TextView
             android:id="@+id/add"
@@ -111,14 +102,11 @@
             android:textColor="@color/colorPrimary"
             android:background="@drawable/shape_deleteoradd"
             android:text="@string/add"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="false"
-            android:layout_marginLeft="10px"
+            android:layout_width="48px"
+            android:layout_height="48px"
             android:layout_marginTop="5px"
-            android:layout_alignBottom="@id/tx_refund_num"
+            android:layout_toRightOf="@id/tx_refund_num"
+            android:layout_alignBottom="@id/delete"
             />
       </RelativeLayout>
 

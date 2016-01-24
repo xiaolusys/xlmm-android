@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -77,6 +78,8 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
+    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
     toolbar.setNavigationIcon(R.drawable.back);
