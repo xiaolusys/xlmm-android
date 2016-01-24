@@ -5,6 +5,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -33,9 +35,9 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.tx_good_num) TextView tx_good_num;
   @Bind(R.id.tx_refund_num) TextView tx_refund_num;
   @Bind(R.id.tx_refundfee) TextView tx_refundfee;
-  @Bind(R.id.tx_refund_reason) TextView tx_refund_reason;
+  @Bind(R.id.et_refund_info) EditText et_refund_info;
   @Bind(R.id.sp_refund_reason) Spinner sp_refund_reason;
-  @Bind(R.id.btn_commit) Spinner btn_commit;
+  @Bind(R.id.btn_commit) Button btn_commit;
 
   AllOrdersBean.ResultsEntity.OrdersEntity goods_info;
   TradeModel model = new TradeModel();
@@ -110,6 +112,7 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
         finish();
         break;
       case R.id.btn_commit:
+        desc = et_refund_info.getText().toString().trim();
         commit_apply();
         finish();
         break;
