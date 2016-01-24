@@ -33,7 +33,9 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.tx_good_price) TextView tx_good_price;
   @Bind(R.id.tx_good_size) TextView tx_good_size;
   @Bind(R.id.tx_good_num) TextView tx_good_num;
+  @Bind(R.id.delete) TextView delete;
   @Bind(R.id.tx_refund_num) TextView tx_refund_num;
+  @Bind(R.id.add) TextView add;
   @Bind(R.id.tx_refundfee) TextView tx_refundfee;
   @Bind(R.id.et_refund_info) EditText et_refund_info;
   @Bind(R.id.sp_refund_reason) Spinner sp_refund_reason;
@@ -50,6 +52,8 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
   @Override protected void setListener() {
     toolbar.setOnClickListener(this);
     btn_commit.setOnClickListener(this);
+    add.setOnClickListener(this);
+    delete.setOnClickListener(this);
     sp_refund_reason.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
       @Override
       public void onItemSelected(AdapterView<?> parent, View view,
@@ -76,6 +80,20 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
     toolbar.setNavigationIcon(R.drawable.back);
+
+    add.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        num++;
+        tx_refund_num.setText(Integer.toString(num));
+      }
+    });
+
+    delete.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        num--;
+        tx_refund_num.setText(Integer.toString(num));
+      }
+    });
   }
 
   //从server端获得所有订单数据，可能要查询几次
@@ -101,8 +119,9 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
     tx_good_size.setText("尺码：" + goods.getSkuName());
     tx_good_num.setText("×" + goods.getPayment());
 
-    tx_refund_num.setText(goods.getNum());
-    tx_refundfee.setText("￥" + goods.getPayment());
+    num = goods.getNum();
+    tx_refund_num.setText(Integer.toString(num));
+    tx_refundfee.setText("￥" + apply_fee);
 
   }
 
