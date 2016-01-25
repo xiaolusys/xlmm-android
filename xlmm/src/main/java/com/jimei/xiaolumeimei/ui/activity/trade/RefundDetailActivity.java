@@ -169,6 +169,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
 
     //TextView tx_refund_reason = (TextView) findViewById(R.id.tx_refund_reason);
     tx_refund_reason.setText(refundDetailBean.getReason());
+
   }
 
   @Override public void onClick(View v) {
