@@ -1,8 +1,13 @@
 package com.jimei.xiaolumeimei.ui.activity.product;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PointF;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -11,6 +16,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -30,6 +37,7 @@ import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.widget.FlowLayout;
 import com.jimei.xiaolumeimei.widget.TagAdapter;
 import com.jimei.xiaolumeimei.widget.TagFlowLayout;
+import com.jimei.xiaolumeimei.widget.anim.BezierEvaluator;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import java.io.UnsupportedEncodingException;
@@ -49,10 +57,12 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
     TagFlowLayout.OnTagClickListener {
 
   ProductModel model = new ProductModel();
-  @Bind(R.id.shopping_image) ImageView shopping_imageView;
-
+  @Bind(R.id.shopping_button) Button button_shop;
+  @Bind(R.id.dot_cart) FrameLayout frameLayout;
   List<ProductDetailBean.NormalSkusEntity> normalSkus = new ArrayList<>();
   CartsModel cartsModel = new CartsModel();
+  boolean isSelect;
+  private PointF startP, endP, baseP;
   private ImageView titleImage, detailImage;
   private PullToZoomScrollViewEx scrollView;
   private TagFlowLayout tagFlowLayout;
@@ -60,7 +70,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
   private LayoutInflater mInflater;
   private String item_id;
   private String sku_id;
-  private TextView bianhao, caizhi, color, beizhu, look_chima, name, price1, price2;
+  private TextView bianhao, caizhi, color, beizhu, look_chima, name, price1, price2,xidi;
   private CountdownView countdownView;
 
   @Override protected void setListener() {
@@ -85,8 +95,8 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
             beizhu.setText(productDetailBean.getDetails().getNote());
 
             name.setText(productDetailBean.getName());
-            price1.setText("¥"+productDetailBean.getAgentPrice());
-            price2.setText("/¥"+productDetailBean.getStdSalePrice());
+            price1.setText("¥" + productDetailBean.getAgentPrice());
+            price2.setText("/¥" + productDetailBean.getStdSalePrice());
 
             countdownView.start(2000000l);
 
@@ -220,6 +230,9 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
     color = (TextView) scrollView.getPullRootView().findViewById(R.id.kexuanyanse);
     beizhu = (TextView) scrollView.getPullRootView().findViewById(R.id.shangpinnbeizhu);
     look_chima = (TextView) scrollView.getPullRootView().findViewById(R.id.look_chima);
+    xidi = (TextView) scrollView.getPullRootView().findViewById(R.id.look_xidi);
+
+
     name = (TextView) scrollView.getPullRootView().findViewById(R.id.name);
     price1 = (TextView) scrollView.getPullRootView().findViewById(R.id.price1);
     price2 = (TextView) scrollView.getPullRootView().findViewById(R.id.price2);
@@ -234,10 +247,13 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
         (int) (19.0F * (mScreenWidth / 16.0F)));
     scrollView.setHeaderLayoutParams(localObject);
 
-    shopping_imageView.setOnClickListener(this);
+    button_shop.setOnClickListener(this);
 
     look_chima.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
+    xidi.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
+
     look_chima.setOnClickListener(this);
+    xidi.setOnClickListener(this);
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
@@ -266,7 +282,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
 
   @Override public void onClick(View v) {
     switch (v.getId()) {
-      case R.id.shopping_image:
+      case R.id.shopping_button:
 
         if (!LoginUtils.checkLoginState(getApplicationContext())) {
 
@@ -286,7 +302,63 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
               .subscribe(new ServiceResponse<AddCartsBean>() {
                 @Override public void onNext(AddCartsBean addCartsBean) {
                   super.onNext(addCartsBean);
-                  JUtils.Toast("成功加入购物车");
+
+                  int[] location = new int[2];
+                  if (endP == null) {
+                    frameLayout.getLocationOnScreen(location);
+                    baseP = new PointF(location[0], location[1]);
+                    endP = new PointF();
+                    endP.x = 0;
+                    endP.y = frameLayout.getMeasuredHeight();
+                  }
+
+                  final int viewW, viewH;
+                  viewW = v.getMeasuredWidth();
+                  viewH = v.getMeasuredHeight();
+                  v.getLocationOnScreen(location);
+                  startP = new PointF(location[0] - baseP.x, location[1] - baseP.y);
+
+                  final View animView =
+                      getLayoutInflater().inflate(R.layout.item_cart, frameLayout, false);
+                  ValueAnimator valueAnimator =
+                      ValueAnimator.ofObject(new BezierEvaluator(), startP, endP);
+                  valueAnimator.addUpdateListener(
+                      new ValueAnimator.AnimatorUpdateListener() {
+                        @Override public void onAnimationUpdate(ValueAnimator animation) {
+                          PointF pointF = (PointF) animation.getAnimatedValue();
+                          animView.setX(pointF.x);
+                          animView.setY(pointF.y);
+                        }
+                      });
+                  valueAnimator.addListener(new Animator.AnimatorListener() {
+                    public void onAnimationStart(Animator animation) {
+                      frameLayout.addView(animView);
+                    }
+
+                    public void onAnimationEnd(Animator animation) {
+                      frameLayout.removeView(animView);
+                      animView.destroyDrawingCache();
+                    }
+
+                    public void onAnimationCancel(Animator animation) {
+                    }
+
+                    public void onAnimationRepeat(Animator animation) {
+                    }
+                  });
+
+                  AnimatorSet animatorSet = new AnimatorSet();
+                  animatorSet.playTogether(
+                      ObjectAnimator.ofFloat(animView, "scaleX", 0.3f, 1f),
+                      ObjectAnimator.ofFloat(animView, "scaleY", 0.3f, 1f),
+                      valueAnimator);
+                  animatorSet.setDuration(1300);
+                  animatorSet.start();
+
+
+
+
+                  //JUtils.Toast("成功加入购物车");
                 }
               });
 
@@ -300,11 +372,21 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
         startActivity(new Intent(ProductDetailActvity.this, SizeActivity.class));
 
         break;
+
+      case R.id.look_xidi:
+
+        startActivity(new Intent(ProductDetailActvity.this, XidiShuoMing.class));
+
+        break;
     }
   }
 
   @Override public void onSelected(Set<Integer> selectPosSet) {
-
+    if (selectPosSet.isEmpty()) {
+      isSelect = false;
+    } else {
+      isSelect = true;
+    }
   }
 
   @Override public boolean onTagClick(View view, int position, FlowLayout parent) {

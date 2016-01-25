@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/productdetail_coordinatorlayout"
     android:layout_width="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent">
 
   <com.ecloud.pulltozoomview.PullToZoomScrollViewEx
@@ -11,36 +11,70 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       />
+  <LinearLayout
+      android:layout_alignParentBottom="true"
+      android:padding="8dp"
+      android:layout_width="match_parent"
+      android:orientation="horizontal"
+      android:background="@color/white"
+      android:layout_height="140px">
+    <com.jimei.xiaolumeimei.widget.badgelib.BadgeFrameLayout
+        android:id="@+id/badge_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
 
-    <LinearLayout android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_height="wrap_content">
-        <cn.iwgang.countdownview.CountdownView
-            android:id="@+id/cv_countdownView"
-            android:layout_width="wrap_content"
+      <RelativeLayout
+          android:background="@drawable/shape_cart"
+          android:id="@+id/rv_cart"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content">
+        <LinearLayout android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
-            app:isShowMinute="true"
-            app:isShowSecond="true"
-            app:isShowMillisecond="false"
-            app:suffixGravity="center"
-            app:suffixTextColor="#000000"
-            app:suffixTextSize="20sp"
-            app:timeTextColor="#FFFFFF"
-            app:timeTextSize="20sp"
-            app:isHideTimeBackground="false"
-            app:timeBgColor="@color/colorAccent"
-            app:isShowTimeBgDivisionLine="false" />
-        <ImageView
-            android:layout_gravity="end"
-            android:src="@drawable/shopping"
-            android:id="@+id/shopping_image"
-            android:layout_width="559px"
-            android:layout_height="78px"
-            />
-    </LinearLayout>
+            android:background="@drawable/shape_cart"
+            >
+          <ImageView
+              android:id="@+id/text_1"
+              android:src="@drawable/cart2"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              />
 
+          <cn.iwgang.countdownview.CountdownView
+              android:id="@+id/cv_countdownViewTest3"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="20dp"
+              app:isShowMinute="true"
+              app:isShowSecond="true"
+              app:isShowMillisecond="true"
+              app:suffixGravity="center"
+              app:suffixTextColor="@color/colorPrimary"
+              app:suffixTextSize="12sp"
+              app:timeTextColor="@color/colorPrimary"
+              app:timeTextSize="14sp"/>
+
+
+        </LinearLayout>
+
+        <Button
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="100px"
+            android:layout_height="100px"
+            android:textColor="@color/white"
+            android:text="加入购物车"
+            android:layout_gravity="end"
+            android:background="@drawable/shape_common"
+            android:id="@+id/shopping_button"
+            android:layout_width="458px"
+
+            />
+      </RelativeLayout>
+    </com.jimei.xiaolumeimei.widget.badgelib.BadgeFrameLayout>
+  </LinearLayout>
+
+  <FrameLayout
+      android:id="@+id/dot_cart"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"/>
 </RelativeLayout>
