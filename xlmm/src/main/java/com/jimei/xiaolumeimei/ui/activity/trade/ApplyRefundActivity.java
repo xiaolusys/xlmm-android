@@ -43,7 +43,7 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.add) TextView add;
   @Bind(R.id.tx_refundfee) TextView tx_refundfee;
   @Bind(R.id.et_refund_info) EditText et_refund_info;
-  @Bind(R.id.et_refund_reason) ClearEditText et_refund_reason;
+  @Bind(R.id.et_refund_reason) EditText et_refund_reason;
   @Bind(R.id.btn_commit) Button btn_commit;
 
   AllOrdersBean.ResultsEntity.OrdersEntity goods_info;
