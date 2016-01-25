@@ -142,7 +142,9 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
         finish();
         break;
       case R.id.et_refund_info:
+        Log.i(TAG,"et_refund_info ");
         et_refund_info.setCursorVisible(true);
+        et_refund_info.requestFocus();
         break;
     }
   }
@@ -160,20 +162,19 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
 
   private void chooseReason(){
     new AlertDialog.Builder(this).setTitle("")
-          .setItems(slect_reason, new DialogInterface.OnClickListener()
-          {
+          .setItems(slect_reason, new DialogInterface.OnClickListener(){
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
             /*
             * ad变量用final关键字定义，因为在隐式实现的Runnable接口 的run()方法中 需要访问final变量。
              */
-              Log.d(TAG,
-                  "你选择的是：" + which + ": " + slect_reason[which]);
+              Log.d(TAG, "你选择的是：" + which + ": " + slect_reason[which]);
               reason = slect_reason[which];
               et_refund_reason.setText(reason);
+              dialog.dismiss();
             }
           })
-          .setNegativeButton("确定", null).show();
+          .setNegativeButton("取消", null).show();
   }
 }
