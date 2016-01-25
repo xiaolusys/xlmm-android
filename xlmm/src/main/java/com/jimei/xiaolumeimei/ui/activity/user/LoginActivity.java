@@ -170,8 +170,6 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
         //finish();
 
 
-
-
         break;
 
       case R.id.sms_login:

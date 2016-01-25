@@ -65,7 +65,12 @@ public class TongkuanAdapter extends RecyclerView.Adapter<TongkuanAdapter.Tongku
     ProductBean productBean = mList.get(position);
 
     try {
-      holder.childlistName.setText(productBean.name);
+      if (productBean.name.length() <= 9) {
+        holder.childlistName.setText(productBean.name);
+      } else {
+        holder.childlistName.setText(productBean.name.substring(0,8)+"...");
+      }
+
       holder.childlistAgentPrice.setText("¥" + productBean.agent_price);
       holder.childlistStdsalePrice.setText("/¥" + productBean.std_sale_price);
     }catch (Exception e){

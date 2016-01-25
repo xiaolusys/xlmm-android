@@ -66,7 +66,12 @@ public class PreviousAdapter extends RecyclerView.Adapter<PreviousAdapter.Previo
     IndexBean.Productmodel product_model = products.getProduct_model();
 
     try {
-      holder.childlistName.setText(product_model.getName());
+      if (product_model.getName().length() <= 9) {
+        holder.childlistName.setText(product_model.getName());
+      } else {
+        holder.childlistName.setText(product_model.getName().substring(0,8)+"...");
+      }
+
       holder.childlistAgentPrice.setText("¥" + products.getAgent_price());
       holder.childlistStdsalePrice.setText("/¥" + products.getStd_sale_price());
     }

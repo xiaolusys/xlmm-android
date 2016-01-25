@@ -85,7 +85,12 @@ public class LadyListAdapter extends RecyclerView.Adapter<LadyListAdapter.LadyLi
 
     String headImg = resultsEntity.getHeadImg();
 
-    holder.childlistName.setText(productModel.getName());
+    if (productModel.getName().length() <= 9) {
+      holder.childlistName.setText(productModel.getName());
+    } else {
+      holder.childlistName.setText(productModel.getName().substring(0,8)+"...");
+    }
+
 
     holder.childlistAgentPrice.setText("¥" + resultsEntity.getAgentPrice());
     holder.childlistStdsalePrice.setText("/¥" + resultsEntity.getStdSalePrice());
