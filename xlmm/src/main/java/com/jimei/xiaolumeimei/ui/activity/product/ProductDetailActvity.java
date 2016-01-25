@@ -38,6 +38,7 @@ import com.jimei.xiaolumeimei.widget.FlowLayout;
 import com.jimei.xiaolumeimei.widget.TagAdapter;
 import com.jimei.xiaolumeimei.widget.TagFlowLayout;
 import com.jimei.xiaolumeimei.widget.anim.BezierEvaluator;
+import com.jimei.xiaolumeimei.widget.badgelib.BadgeView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import java.io.UnsupportedEncodingException;
@@ -59,6 +60,8 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
   ProductModel model = new ProductModel();
   @Bind(R.id.shopping_button) Button button_shop;
   @Bind(R.id.dot_cart) FrameLayout frameLayout;
+  //@Bind(R.id.badge_layout) BadgeManager manager;
+  int num = 0;
   List<ProductDetailBean.NormalSkusEntity> normalSkus = new ArrayList<>();
   CartsModel cartsModel = new CartsModel();
   boolean isSelect;
@@ -70,8 +73,9 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
   private LayoutInflater mInflater;
   private String item_id;
   private String sku_id;
-  private TextView bianhao, caizhi, color, beizhu, look_chima, name, price1, price2,xidi;
+  private TextView bianhao, caizhi, color, beizhu, look_chima, name, price1, price2, xidi;
   private CountdownView countdownView;
+  private BadgeView badge;
 
   @Override protected void setListener() {
 
@@ -200,6 +204,13 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
+    //manager.createFigureBadge(R.id.text_1, FigureStyle.class).setFigure(num).show();
+
+    View target = findViewById(R.id.rv_cart);
+    badge = new BadgeView(this);
+    badge.setTargetView(target);
+
+
     loadViewForCode();
     mInflater = LayoutInflater.from(this);
     Window window = getWindow();
@@ -231,7 +242,6 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
     beizhu = (TextView) scrollView.getPullRootView().findViewById(R.id.shangpinnbeizhu);
     look_chima = (TextView) scrollView.getPullRootView().findViewById(R.id.look_chima);
     xidi = (TextView) scrollView.getPullRootView().findViewById(R.id.look_xidi);
-
 
     name = (TextView) scrollView.getPullRootView().findViewById(R.id.name);
     price1 = (TextView) scrollView.getPullRootView().findViewById(R.id.price1);
@@ -302,7 +312,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
               .subscribe(new ServiceResponse<AddCartsBean>() {
                 @Override public void onNext(AddCartsBean addCartsBean) {
                   super.onNext(addCartsBean);
-
+                  num++;
                   int[] location = new int[2];
                   if (endP == null) {
                     frameLayout.getLocationOnScreen(location);
@@ -350,14 +360,14 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
                   AnimatorSet animatorSet = new AnimatorSet();
                   animatorSet.playTogether(
                       ObjectAnimator.ofFloat(animView, "scaleX", 0.3f, 1f),
-                      ObjectAnimator.ofFloat(animView, "scaleY", 0.3f, 1f),
-                      valueAnimator);
+                      ObjectAnimator.ofFloat(animView, "scaleY", 0.3f, 1f), valueAnimator);
                   animatorSet.setDuration(1300);
                   animatorSet.start();
 
-
-
-
+                  badge.setBadgeCount(num);
+                  //manager.findBadge(R.id.text_1)
+                  //    .setFigure(num)
+                  //    .show();
                   //JUtils.Toast("成功加入购物车");
                 }
               });
