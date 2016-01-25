@@ -158,15 +158,15 @@
             android:id="@+id/textView"
             />
 
-        <Spinner
+        <com.jimei.xiaolumeimei.widget.ClearEditText
             android:layout_width="wrap_content"
             android:layout_height="70px"
-            android:id="@+id/sp_refund_reason"
+            android:id="@+id/et_refund_reason"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/textView"
             android:layout_marginTop="10px"
-            android:entries="@array/spingarr"
+            android:drawableRight="@drawable/iconfont_downgrey"
             />
 
         <EditText

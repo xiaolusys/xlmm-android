@@ -5,6 +5,7 @@ package com.jimei.xiaolumeimei.adapter;
  * 商品订单数据适配
  */
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -39,18 +40,18 @@ import rx.schedulers.Schedulers;
 
 public class OrderGoodsListAdapter extends BaseAdapter {
   private static final String TAG = "OrderGoodsListAdapter";
-  private Context context;
+  private Activity context;
   List<HashMap<String, String>> data;
 
   private List<AllOrdersBean.ResultsEntity.OrdersEntity> dataSource;
 
-  public OrderGoodsListAdapter(Context context) {
+  public OrderGoodsListAdapter(Activity context) {
     dataSource = new ArrayList<AllOrdersBean.ResultsEntity.OrdersEntity>();
     this.data = new ArrayList<HashMap<String, String>>();
     this.context = context;
   }
 
-  public OrderGoodsListAdapter(Context context,
+  public OrderGoodsListAdapter(Activity context,
       List<AllOrdersBean.ResultsEntity.OrdersEntity> goodsList) {
     Log.d(TAG, " create");
     this.context = context;
@@ -192,6 +193,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
             Log.d(TAG,
                 "transfer good  " + goods_info.getId() + " to " + "ApplyRefundActivity");
             context.startActivity(intent);
+            ((Activity)context).finish();
           }
         });
         break;

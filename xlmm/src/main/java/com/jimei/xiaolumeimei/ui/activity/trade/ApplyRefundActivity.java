@@ -1,6 +1,8 @@
 package com.jimei.xiaolumeimei.ui.activity.trade;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +18,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
+import com.jimei.xiaolumeimei.widget.ClearEditText;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 
 import com.jimei.xiaolumeimei.R;
@@ -27,6 +30,7 @@ import rx.schedulers.Schedulers;
 public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener {
   String TAG = "ApplyRefundActivity";
+  String slect_reason[]  = new String[] { "七天无理由退换", "未收到货" };
 
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.img_good) ImageView img_good;
@@ -39,7 +43,7 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.add) TextView add;
   @Bind(R.id.tx_refundfee) TextView tx_refundfee;
   @Bind(R.id.et_refund_info) EditText et_refund_info;
-  @Bind(R.id.sp_refund_reason) Spinner sp_refund_reason;
+  @Bind(R.id.et_refund_reason) ClearEditText et_refund_reason;
   @Bind(R.id.btn_commit) Button btn_commit;
 
   AllOrdersBean.ResultsEntity.OrdersEntity goods_info;
@@ -55,18 +59,7 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
     btn_commit.setOnClickListener(this);
     add.setOnClickListener(this);
     delete.setOnClickListener(this);
-    sp_refund_reason.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-      @Override
-      public void onItemSelected(AdapterView<?> parent, View view,
-          int position, long id) {
-        String str=parent.getItemAtPosition(position).toString();
-        Log.d(TAG, "write reason");
-      }
-      @Override
-      public void onNothingSelected(AdapterView<?> parent) {
-        // TODO Auto-generated method stub
-      }
-    });
+    et_refund_reason.setOnClickListener(this);
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -138,6 +131,9 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
         commit_apply();
         finish();
         break;
+      case R.id.tx_refund_reason:
+        chooseReason();
+        break;
     }
   }
 
@@ -150,5 +146,24 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
             Log.i(TAG,"commit_apply "+ resp.toString());
           }
         });
+  }
+
+  private void chooseReason(){
+    new AlertDialog.Builder(this).setTitle("")
+          .setItems(slect_reason, new DialogInterface.OnClickListener()
+          {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            /*
+            * ad变量用final关键字定义，因为在隐式实现的Runnable接口 的run()方法中 需要访问final变量。
+             */
+              Log.d(TAG,
+                  "你选择的是：" + which + ": " + slect_reason[which]);
+              reason = slect_reason[which];
+              et_refund_reason.setText(reason);
+            }
+          })
+          .setNegativeButton("确定", null).show();
   }
 }
