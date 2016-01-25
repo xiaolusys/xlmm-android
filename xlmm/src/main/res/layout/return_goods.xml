@@ -6,12 +6,7 @@
     >
 
 
-  <com.jimei.xiaolumeimei.widget.NestedListView
-      android:id="@+id/goods_listview"
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content"
-      android:gravity="center"
-      />
+  <include layout="@layout/one_order_item"/>
 
   <include layout="@layout/common_gap"/>
 
