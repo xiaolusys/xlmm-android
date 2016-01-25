@@ -78,6 +78,31 @@
       </RelativeLayout>
 
       <include layout="@layout/common_gap"/>
+      <Button
+          android:id="@+id/btn_return_addr"
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:text="退货地址信息"
+          android:textSize="15sp"
+          android:layout_gravity="right"
+          />
+      <include layout="@layout/common_gap"/>
+      <EditText
+          android:layout_width="match_parent"
+          android:layout_height="70px"
+          android:text="请选择物流信息"
+          android:textSize="15sp"
+          android:id="@+id/et_logistics_info"
+          android:layout_marginLeft="10px"
+          android:layout_marginRight="10px"
+          android:layout_below="@+id/textView"
+          android:layout_marginTop="10px"
+          android:drawableRight="@drawable/iconfont_downgrey"
+          android:background="@drawable/text_frame"
+          android:focusable="false"
+          android:cursorVisible="false"
+          />
+      <include layout="@layout/common_gap"/>
 
       <include layout="@layout/refund_goods" />
     </LinearLayout>
