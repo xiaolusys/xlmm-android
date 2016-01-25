@@ -158,27 +158,35 @@
             android:id="@+id/textView"
             />
 
-        <com.jimei.xiaolumeimei.widget.ClearEditText
-            android:layout_width="wrap_content"
+        <EditText
+            android:layout_width="match_parent"
             android:layout_height="70px"
+            android:text="请选择退款原因"
+            android:textSize="15sp"
             android:id="@+id/et_refund_reason"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
+            android:layout_marginLeft="10px"
+            android:layout_marginRight="10px"
             android:layout_below="@+id/textView"
             android:layout_marginTop="10px"
             android:drawableRight="@drawable/iconfont_downgrey"
+            android:background="@drawable/text_frame"
+            android:focusable="false"
+            android:cursorVisible="false"
             />
 
         <EditText
             android:id="@+id/et_refund_info"
             android:layout_width="match_parent"
             android:layout_height="140px"
-            android:text="七天无理由退货"
+            android:text="请输入退款说明"
             android:textSize="15sp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
+            android:layout_below="@+id/et_refund_reason"
+            android:layout_marginLeft="10px"
+            android:layout_marginRight="10px"
             android:layout_marginTop="10px"
+            android:background="@drawable/text_frame"
+            android:focusable="false"
+            android:cursorVisible="false"
             />
 
       </RelativeLayout>
