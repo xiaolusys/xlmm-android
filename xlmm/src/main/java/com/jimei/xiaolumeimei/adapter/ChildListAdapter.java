@@ -90,7 +90,12 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Chil
     String headImg = resultsEntity.getHeadImg();
 
     try{
-      holder.childlistName.setText(productModel.getName());
+      if (productModel.getName().length() <= 9) {
+        holder.childlistName.setText(productModel.getName());
+      } else {
+        holder.childlistName.setText(productModel.getName().substring(0,8)+"...");
+      }
+
       holder.childlistAgentPrice.setText("¥" + resultsEntity.getAgentPrice());
       holder.childlistStdsalePrice.setText("/¥" + resultsEntity.getStdSalePrice());
     } catch (Exception e) {

@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.ui.activity.product;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -49,7 +50,6 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
 
   ProductModel model = new ProductModel();
   @Bind(R.id.shopping_image) ImageView shopping_imageView;
-  @Bind(R.id.cv_countdownView) CountdownView countdownView;
 
   List<ProductDetailBean.NormalSkusEntity> normalSkus = new ArrayList<>();
   CartsModel cartsModel = new CartsModel();
@@ -60,7 +60,8 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
   private LayoutInflater mInflater;
   private String item_id;
   private String sku_id;
-  private TextView bianhao, caizhi, color, beizhu;
+  private TextView bianhao, caizhi, color, beizhu, look_chima, name, price1, price2;
+  private CountdownView countdownView;
 
   @Override protected void setListener() {
 
@@ -83,6 +84,12 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
 
             beizhu.setText(productDetailBean.getDetails().getNote());
 
+            name.setText(productDetailBean.getName());
+            price1.setText("¥"+productDetailBean.getAgentPrice());
+            price2.setText("/¥"+productDetailBean.getStdSalePrice());
+
+            countdownView.start(2000000l);
+
             List<String> contentImgs =
                 productDetailBean.getProductModel().getContentImgs();
 
@@ -96,7 +103,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
               try {
                 head_img3 = "http://image.xiaolu.so/"
                     + URLEncoder.encode(temp[1], "utf-8")
-                    + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/100";
+                    + "?imageMogr2/format/jpg/size-limit/50k/thumbnail/289/quality/110";
               } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
               }
@@ -212,16 +219,25 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
     caizhi = (TextView) scrollView.getPullRootView().findViewById(R.id.shagpincaizhi);
     color = (TextView) scrollView.getPullRootView().findViewById(R.id.kexuanyanse);
     beizhu = (TextView) scrollView.getPullRootView().findViewById(R.id.shangpinnbeizhu);
+    look_chima = (TextView) scrollView.getPullRootView().findViewById(R.id.look_chima);
+    name = (TextView) scrollView.getPullRootView().findViewById(R.id.name);
+    price1 = (TextView) scrollView.getPullRootView().findViewById(R.id.price1);
+    price2 = (TextView) scrollView.getPullRootView().findViewById(R.id.price2);
+    countdownView =
+        (CountdownView) scrollView.getPullRootView().findViewById(R.id.cv_countdownView);
 
     DisplayMetrics localDisplayMetrics = new DisplayMetrics();
     getWindowManager().getDefaultDisplay().getMetrics(localDisplayMetrics);
     int mScreenHeight = localDisplayMetrics.heightPixels;
     int mScreenWidth = localDisplayMetrics.widthPixels;
     LinearLayout.LayoutParams localObject = new LinearLayout.LayoutParams(mScreenWidth,
-        (int) (9.0F * (mScreenWidth / 16.0F)));
+        (int) (19.0F * (mScreenWidth / 16.0F)));
     scrollView.setHeaderLayoutParams(localObject);
 
     shopping_imageView.setOnClickListener(this);
+
+    look_chima.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
+    look_chima.setOnClickListener(this);
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
@@ -276,6 +292,12 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
 
           countdownView.start(1200000l);
         }
+
+        break;
+
+      case R.id.look_chima:
+
+        startActivity(new Intent(ProductDetailActvity.this, SizeActivity.class));
 
         break;
     }

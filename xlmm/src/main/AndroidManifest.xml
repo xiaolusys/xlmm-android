@@ -19,7 +19,7 @@
 
     <meta-data android:name="design_width" android:value="720">
     </meta-data>
-    <meta-data android:name="design_height" android:value="1134">
+    <meta-data android:name="design_height" android:value="1230">
     </meta-data>
 
     <!--//友盟统计相关-->
@@ -186,6 +186,9 @@
         android:theme="@style/AppTheme.TransparentActivity"
         />
     <activity android:name=".ui.activity.trade.WriteLogisticsInfoActivty"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
+    <activity android:name=".ui.activity.product.SizeActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
 

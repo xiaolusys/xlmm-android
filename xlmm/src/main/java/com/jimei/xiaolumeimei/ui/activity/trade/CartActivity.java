@@ -8,13 +8,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.CartsAdapetr;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CartsinfoBean;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
+import com.jimei.xiaolumeimei.widget.headerandfooterrecyclerview.HeaderAndFooterRecyclerViewAdapter;
+import com.jimei.xiaolumeimei.widget.headerandfooterrecyclerview.RecyclerViewUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.confirm) Button confirmTrade;
   @Bind(R.id.total_price) TextView totalPrice;
   private CartsAdapetr mCartsAdapetr;
+  private HeaderAndFooterRecyclerViewAdapter mHeaderAndFooterRecyclerViewAdapter;
 
   @Override protected void setListener() {
     confirmTrade.setOnClickListener(this);
@@ -45,8 +47,9 @@ public class CartActivity extends BaseSwipeBackCompatActivity
         .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
           @Override public void onNext(List<CartsinfoBean> cartsinfoBeans) {
 
-            if (cartsinfoBeans != null) {
-
+            if ((cartsinfoBeans != null) && (cartsinfoBeans.size() > 0)) {
+              View view = getLayoutInflater().inflate(R.layout.footer, null);
+              RecyclerViewUtils.setFooterView(cartsRecyclerview, view);
               mCartsAdapetr.update(cartsinfoBeans);
               //double total_price = 0;
               for (int i = 0; i < cartsinfoBeans.size(); i++) {
@@ -55,10 +58,12 @@ public class CartActivity extends BaseSwipeBackCompatActivity
 
                 //total_price = (cartsinfoBean.getTotalFee()) * (Double.parseDouble(
                 //    cartsinfoBean.getNum()));
-                totalPrice.setText(mCartsAdapetr.total_price+"");
+                totalPrice.setText(mCartsAdapetr.total_price + "");
 
                 JUtils.Log("ITXUYE", cartsinfoBeans.toString());
               }
+            } else {
+              RecyclerViewUtils.removeFooterView(cartsRecyclerview);
             }
           }
         });
@@ -78,8 +83,9 @@ public class CartActivity extends BaseSwipeBackCompatActivity
     cartsRecyclerview.addItemDecoration(
         new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
     mCartsAdapetr = new CartsAdapetr(this);
-
-    cartsRecyclerview.setAdapter(mCartsAdapetr);
+    mHeaderAndFooterRecyclerViewAdapter =
+        new HeaderAndFooterRecyclerViewAdapter(mCartsAdapetr);
+    cartsRecyclerview.setAdapter(mHeaderAndFooterRecyclerViewAdapter);
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
@@ -113,9 +119,4 @@ public class CartActivity extends BaseSwipeBackCompatActivity
     }
   }
 
-  @Override protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    // TODO: add setContentView(...) invocation
-    ButterKnife.bind(this);
-  }
 }

@@ -69,7 +69,13 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.TodayVH> {
         products.getProductModel();
 
     try {
-      holder.childlistName.setText(productModel.getName());
+
+      if (productModel.getName().length() <= 9) {
+        holder.childlistName.setText(productModel.getName());
+      } else {
+        holder.childlistName.setText(productModel.getName().substring(0,8)+"...");
+      }
+
       holder.childlistAgentPrice.setText("¥" + products.getAgentPrice());
       holder.childlistStdsalePrice.setText("/¥" + products.getStdSalePrice());
     }catch (Exception e){
