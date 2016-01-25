@@ -84,6 +84,15 @@ public class AllRefundsBean {
         return results;
     }
 
+    @Override public String toString() {
+        return "AllRefundsBean{" +
+            "count=" + count +
+            ", next=" + next +
+            ", previous=" + previous +
+            ", results=" + results +
+            '}';
+    }
+
     public static class ResultsEntity {
         private int id;
         private String url;
@@ -363,6 +372,42 @@ public class AllRefundsBean {
 
         public String getStatus_display() {
             return status_display;
+        }
+
+        @Override public String toString() {
+            return "ResultsEntity{" +
+                "id=" + id +
+                ", url='" + url + '\'' +
+                ", refund_no='" + refund_no + '\'' +
+                ", trade_id=" + trade_id +
+                ", order_id=" + order_id +
+                ", buyer_id=" + buyer_id +
+                ", item_id=" + item_id +
+                ", title='" + title + '\'' +
+                ", sku_id=" + sku_id +
+                ", sku_name='" + sku_name + '\'' +
+                ", refund_num=" + refund_num +
+                ", buyer_nick='" + buyer_nick + '\'' +
+                ", mobile='" + mobile + '\'' +
+                ", phone='" + phone + '\'' +
+                ", proof_pic=" + proof_pic +
+                ", total_fee=" + total_fee +
+                ", payment=" + payment +
+                ", created='" + created + '\'' +
+                ", modified='" + modified + '\'' +
+                ", company_name='" + company_name + '\'' +
+                ", sid='" + sid + '\'' +
+                ", reason='" + reason + '\'' +
+                ", pic_path='" + pic_path + '\'' +
+                ", desc='" + desc + '\'' +
+                ", feedback='" + feedback + '\'' +
+                ", has_good_return=" + has_good_return +
+                ", has_good_change=" + has_good_change +
+                ", good_status=" + good_status +
+                ", status=" + status +
+                ", refund_fee=" + refund_fee +
+                ", status_display='" + status_display + '\'' +
+                '}';
         }
     }
 /*

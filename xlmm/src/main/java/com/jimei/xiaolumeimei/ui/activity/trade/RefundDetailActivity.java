@@ -65,6 +65,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
 
   @Override protected int getContentViewLayoutID() {
     refund_state = getIntent().getExtras().getInt("refund_state");
+    Log.d(TAG, "refund_state " + refund_state);
     if (refund_state == XlmmConst.REFUND_STATE_SELLER_AGREED) {
       return R.layout.activity_refund_detail3;
     }
@@ -106,12 +107,15 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
 
 
     goods_id = getIntent().getExtras().getInt("goods_id");
+    Log.d(TAG, "goods_id " + goods_id);
+
     model.getRefundDetailBean(goods_id)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<AllRefundsBean.ResultsEntity>() {
           @Override public void onNext(AllRefundsBean.ResultsEntity refundDetailBean) {
             fillDataToView(refundDetailBean);
             Log.i(TAG, refundDetailBean.toString());
+            Log.i(TAG, "status "+refundDetailBean.getStatus());
             if ((refund_state == XlmmConst.REFUND_STATE_SELLER_AGREED)
             || (refund_state == XlmmConst.REFUND_STATE_BUYER_APPLY)){
               List<String> mDatas = new ArrayList<String>();
@@ -137,6 +141,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
   }
 
   private void fillDataToView(AllRefundsBean.ResultsEntity refundDetailBean) {
+
     //TextView tx_order_id = (TextView) findViewById(R.id.tx_refund_no);
     tx_order_id.setText("订单编号" + refundDetailBean.getRefund_no());
 
