@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.ui.activity.trade;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -65,8 +66,10 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
     et_refund_reason.setOnTouchListener(new View.OnTouchListener(){
       public boolean onTouch(View v, MotionEvent event){
         //et_refund_reason.setInputType(InputType.TYPE_NULL); //关闭软键盘
-        Log.d(TAG, "choose reason");
-        chooseReason();
+        if(MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
+          Log.d(TAG, "choose reason");
+          chooseReason();
+        }
         return false;
       }
     });
@@ -86,20 +89,6 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
     toolbar.setNavigationIcon(R.drawable.back);
-
-    add.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        num++;
-        tx_refund_num.setText(Integer.toString(num));
-      }
-    });
-
-    delete.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        num--;
-        tx_refund_num.setText(Integer.toString(num));
-      }
-    });
   }
 
   //从server端获得所有订单数据，可能要查询几次
@@ -145,6 +134,16 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
         Log.i(TAG,"et_refund_info ");
         et_refund_info.setCursorVisible(true);
         et_refund_info.requestFocus();
+        break;
+      case R.id.add:
+        Log.i(TAG,"add ");
+        num++;
+        tx_refund_num.setText(Integer.toString(num));
+        break;
+      case R.id.delete:
+        Log.i(TAG,"delete ");
+        num--;
+        tx_refund_num.setText(Integer.toString(num));
         break;
     }
   }
