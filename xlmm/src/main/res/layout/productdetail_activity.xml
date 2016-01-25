@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/productdetail_coordinatorlayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -17,60 +16,59 @@
       android:layout_width="match_parent"
       android:orientation="horizontal"
       android:background="@color/white"
-      android:layout_height="140px">
-    <com.jimei.xiaolumeimei.widget.badgelib.BadgeFrameLayout
-        android:id="@+id/badge_layout"
-        android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+    <!--<com.jimei.xiaolumeimei.widget.badgelib.BadgeFrameLayout-->
+    <!--android:id="@+id/badge_layout"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!-->-->
+    <RelativeLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         >
-
       <RelativeLayout
-          android:background="@drawable/shape_cart"
           android:id="@+id/rv_cart"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content">
-        <LinearLayout android:layout_width="wrap_content"
+          android:layout_width="200px"
+          android:layout_height="100px"
+          android:background="@drawable/shape_cart"
+          >
+        <ImageView
+        android:layout_centerInParent="true"
+            android:id="@+id/text_1"
+            android:src="@drawable/cart2"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/shape_cart"
-            >
-          <ImageView
-              android:id="@+id/text_1"
-              android:src="@drawable/cart2"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              />
-
-          <cn.iwgang.countdownview.CountdownView
-              android:id="@+id/cv_countdownViewTest3"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginTop="20dp"
-              app:isShowMinute="true"
-              app:isShowSecond="true"
-              app:isShowMillisecond="true"
-              app:suffixGravity="center"
-              app:suffixTextColor="@color/colorPrimary"
-              app:suffixTextSize="12sp"
-              app:timeTextColor="@color/colorPrimary"
-              app:timeTextSize="14sp"/>
-
-
-        </LinearLayout>
-
-        <Button
-            android:layout_alignParentRight="true"
-            android:layout_marginLeft="100px"
-            android:layout_height="100px"
-            android:textColor="@color/white"
-            android:text="加入购物车"
-            android:layout_gravity="end"
-            android:background="@drawable/shape_common"
-            android:id="@+id/shopping_button"
-            android:layout_width="458px"
-
             />
+
+        <!--<cn.iwgang.countdownview.CountdownView-->
+        <!--android:visibility="invisible"-->
+        <!--android:id="@+id/cv_countdownViewTest3"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="20dp"-->
+        <!--app:isShowMinute="true"-->
+        <!--app:isShowSecond="true"-->
+        <!--app:isShowMillisecond="true"-->
+        <!--app:suffixGravity="center"-->
+        <!--app:suffixTextColor="@color/colorPrimary"-->
+        <!--app:suffixTextSize="12sp"-->
+        <!--app:timeTextColor="@color/colorPrimary"-->
+        <!--app:timeTextSize="14sp"/>-->
       </RelativeLayout>
-    </com.jimei.xiaolumeimei.widget.badgelib.BadgeFrameLayout>
+
+      <Button
+          android:layout_alignParentRight="true"
+          android:layout_marginLeft="100px"
+          android:layout_height="100px"
+          android:textColor="@color/white"
+          android:text="加入购物车"
+          android:layout_gravity="end"
+          android:background="@drawable/shape_common"
+          android:id="@+id/shopping_button"
+          android:layout_width="458px"
+          />
+    </RelativeLayout>
+    <!--</com.jimei.xiaolumeimei.widget.badgelib.BadgeFrameLayout>-->
   </LinearLayout>
 
   <FrameLayout
