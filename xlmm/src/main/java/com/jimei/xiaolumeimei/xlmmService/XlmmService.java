@@ -281,4 +281,18 @@ public interface XlmmService {
     @GET(XlmmApi.ALL_REFUNDS_URL + "/{pk}")
     Observable<AllRefundsBean.ResultsEntity> getRefundDetailBean(
             @Path("pk") int order_id);
+
+    //创建退款单接口
+
+    @FormUrlEncoded
+    @POST("refunds")
+    Observable<ResponseBody> refund_create(
+        @Field("id") int goods_id,
+        @Field("reason") String reason,
+        @Field("num") int num,
+        @Field("sum_price") double sum_price,
+        @Field("description") String description,
+        @Field("proof_pic") String proof_pic
+
+    );
 }

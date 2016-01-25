@@ -5,6 +5,7 @@ package com.jimei.xiaolumeimei.adapter;
  * 商品订单数据适配
  */
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,12 +26,12 @@ import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 
 public class AllRefundsListAdapter extends BaseAdapter {
     private static final String TAG = "AllRefundsListAdapter";
-    private Context context;
+    private Activity context;
     List<HashMap<String, String>> data;
 
     private List<AllRefundsBean.ResultsEntity> data_refund_list;
 
-    public AllRefundsListAdapter(Context context) {
+    public AllRefundsListAdapter(Activity context) {
         data_refund_list = new ArrayList<AllRefundsBean.ResultsEntity>();
         this.data = new ArrayList<HashMap<String, String>>();
         this.context = context;

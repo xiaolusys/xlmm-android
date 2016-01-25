@@ -5,6 +5,7 @@ package com.jimei.xiaolumeimei.adapter;
  * 商品订单数据适配
  */
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -38,11 +39,11 @@ import com.jimei.xiaolumeimei.ui.activity.trade.OrderDetailActivity;
 
 public class AllOrdersListAdapter extends BaseAdapter {
   private static final String TAG = "AllOrdersListAdapter";
-  private Context context;
+  private Activity context;
   List<HashMap<String, String>> data;
   private List<AllOrdersBean.ResultsEntity> mList;
 
-  public AllOrdersListAdapter(Context context) {
+  public AllOrdersListAdapter(Activity context) {
     mList = new ArrayList<AllOrdersBean.ResultsEntity>();
     this.data = new ArrayList<HashMap<String, String>>();
     this.context = context;
