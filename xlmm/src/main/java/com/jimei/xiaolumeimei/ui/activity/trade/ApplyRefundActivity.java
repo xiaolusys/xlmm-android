@@ -112,7 +112,7 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
     tx_good_price.setText("￥" + goods.getTotalFee());
 
     tx_good_size.setText("尺码：" + goods.getSkuName());
-    tx_good_num.setText("×" + goods.getPayment());
+    tx_good_num.setText("×" + goods.getNum());
 
     num = goods.getNum();
     tx_refund_num.setText(Integer.toString(num));
@@ -137,12 +137,16 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
         break;
       case R.id.add:
         Log.i(TAG,"add ");
-        num++;
+        if(goods_info.getNum() > num) {
+          num++;
+        }
         tx_refund_num.setText(Integer.toString(num));
         break;
       case R.id.delete:
         Log.i(TAG,"delete ");
-        num--;
+        if(num > 1) {
+          num--;
+        }
         tx_refund_num.setText(Integer.toString(num));
         break;
     }

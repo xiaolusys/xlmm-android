@@ -132,8 +132,11 @@ public class AllRefundsListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public int getOrderId(int position){
+    public int getGoodsId(int position){
         return data_refund_list.get(position).getId();
+    }
+    public int getRefundStatus(int position){
+        return data_refund_list.get(position).getStatus();
     }
 }
 

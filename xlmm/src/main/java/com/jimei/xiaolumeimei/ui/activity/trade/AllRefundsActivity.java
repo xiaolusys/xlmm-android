@@ -63,11 +63,13 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity implements V
                                     long arg3) {
                 // TODO Auto-generated method stub
                 Log.d(TAG, "onItemClick "+arg2 + " " + arg3);
-                int order_id = mAllRefundsAdapter.getOrderId(arg2);
+                int goods_id = mAllRefundsAdapter.getGoodsId(arg2);
+                int refund_state = mAllRefundsAdapter.getRefundStatus(arg2);
                 Intent intent = new Intent(AllRefundsActivity.this, RefundDetailActivity.class);
 
-                intent.putExtra("orderinfo", order_id);
-                Log.d(TAG,"transfer orderid  "+order_id+" to OrderDetailActivity");
+                intent.putExtra("goods_id", goods_id);
+                intent.putExtra("refund_state", refund_state);
+                Log.d(TAG,"transfer goods_id  "+goods_id+" to RefundDetailActivity");
                 startActivity(intent);
             }
 
