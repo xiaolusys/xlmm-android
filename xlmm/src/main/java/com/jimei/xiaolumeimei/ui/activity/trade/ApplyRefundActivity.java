@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import butterknife.OnTouch;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
@@ -59,7 +61,15 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
     btn_commit.setOnClickListener(this);
     add.setOnClickListener(this);
     delete.setOnClickListener(this);
-    et_refund_reason.setOnClickListener(this);
+    et_refund_info.setOnClickListener(this);
+    et_refund_reason.setOnTouchListener(new View.OnTouchListener(){
+      public boolean onTouch(View v, MotionEvent event){
+        //et_refund_reason.setInputType(InputType.TYPE_NULL); //关闭软键盘
+        Log.d(TAG, "choose reason");
+        chooseReason();
+        return false;
+      }
+    });
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -131,8 +141,8 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
         commit_apply();
         finish();
         break;
-      case R.id.tx_refund_reason:
-        chooseReason();
+      case R.id.et_refund_info:
+        et_refund_info.setCursorVisible(true);
         break;
     }
   }
