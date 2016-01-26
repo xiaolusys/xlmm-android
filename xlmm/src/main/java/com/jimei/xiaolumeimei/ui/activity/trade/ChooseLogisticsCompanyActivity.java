@@ -8,11 +8,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -30,13 +32,7 @@ import com.jimei.xiaolumeimei.data.LogisticsCompanyInfo;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.widget.SideBar;
-import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.squareup.okhttp.Call;
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -46,9 +42,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.AllOrdersListAdapter;
-import com.jimei.xiaolumeimei.data.XlmmApi;
-import com.jimei.xiaolumeimei.entities.AllOrdersBean;
+
 
 import butterknife.Bind;
 import rx.schedulers.Schedulers;
@@ -56,7 +50,7 @@ import rx.schedulers.Schedulers;
 public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener {
   String TAG = "ChooseLogisticsCompanyActivity";
-  @Bind(R.id.btn_jump) Button btn_jump;
+
   @Bind(R.id.lv_logistics_company) ListView lv_logistics_company;
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.sideBar) SideBar sideBar;
@@ -71,8 +65,9 @@ public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
   final List<LogisticsCompanyInfo> company_list = new ArrayList<LogisticsCompanyInfo>();
 
   @Override protected void setListener() {
-    btn_jump.setOnClickListener(this);
+
     toolbar.setOnClickListener(this);
+
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -128,6 +123,8 @@ public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
         break;
     }
   }
+
+
 
   private void fillCompanyInfo() {
 

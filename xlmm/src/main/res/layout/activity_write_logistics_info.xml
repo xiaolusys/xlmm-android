@@ -31,8 +31,8 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <com.jimei.xiaolumeimei.widget.ClearEditText
-        android:id="@+id/register_name"
+    <EditText
+        android:id="@+id/et_logistics_company"
         android:layout_width="match_parent"
         android:layout_height="110px"
         android:singleLine="true"
@@ -42,29 +42,23 @@
         android:paddingBottom="10sp"
         android:background="@drawable/text_frame"
         android:hint="请输入物流公司">
-    </com.jimei.xiaolumeimei.widget.ClearEditText>
+    </EditText>
 
-    <LinearLayout
-        android:background="@color/white"
-        android:weightSum="3"
+
+    <EditText
+
+        android:id="@+id/et_logistics_number"
         android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:layout_height="wrap_content">
-        <EditText
-            android:layout_weight="2.5"
-            android:id="@+id/register_password"
-            android:layout_width="0dp"
-            android:layout_height="110px"
-            android:inputType="textPassword"
-            android:singleLine="true"
-            android:paddingLeft="10sp"
-            android:paddingRight="10sp"
-            android:paddingTop="10sp"
-            android:paddingBottom="10sp"
-            android:background="@drawable/text_frame"
-            android:hint="请输入快递单号"/>
+        android:layout_height="110px"
+        android:singleLine="true"
+        android:paddingLeft="10sp"
+        android:paddingRight="10sp"
+        android:paddingTop="10sp"
+        android:paddingBottom="10sp"
+        android:background="@drawable/text_frame"
+        android:hint="请输入快递单号"/>
 
-    </LinearLayout>
+
 
     <Button
         android:textColor="@color/white"

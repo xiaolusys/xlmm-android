@@ -180,13 +180,13 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
   }
 
   private void checkInput(String name, String pass) {
-    if (name.length() != 11) {
+    /*if (name.length() != 11) {
       JUtils.Toast("请输入正确手机号");
       return;
     } else if (pass.length() < 6 || pass.length() > 12) {
       JUtils.Toast("请输入6-12位密码");
       return;
-    }
+    }*/
   }
 }
 

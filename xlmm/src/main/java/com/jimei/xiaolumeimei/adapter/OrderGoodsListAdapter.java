@@ -97,10 +97,9 @@ public class OrderGoodsListAdapter extends BaseAdapter {
     int refund_state = Integer.parseInt(data.get(position).get("refund_state"));
 
     if (convertView == null) {
-      if ((state == XlmmConst.ORDER_STATE_PAYED) || (state
-          == XlmmConst.ORDER_STATE_SENDED)
-          //|| (state == XlmmConst.ORDER_STATE_CONFIRM_RECEIVE)
-          || (state == XlmmConst.ORDER_STATE_TRADE_SUCCESS)) {
+      if ((state == XlmmConst.ORDER_STATE_PAYED)
+              || (state == XlmmConst.ORDER_STATE_SENDED)
+          || (state == XlmmConst.ORDER_STATE_CONFIRM_RECEIVE)) {
         convertView = LayoutInflater.from(context)
             .inflate(R.layout.item_order_detail_include_proc, null);
         setBtnInfo(convertView, state, refund_state);
@@ -129,6 +128,9 @@ public class OrderGoodsListAdapter extends BaseAdapter {
   }
 
   private void setBtnInfo(View convertView, int state, int refund_state) {
+    Log.d(TAG, " setBtnInfo" +state +" "+ refund_state);
+
+
     Button btn = (Button) convertView.findViewById(R.id.btn_order_proc);
     switch (state) {
       case XlmmConst.ORDER_STATE_PAYED: {
@@ -139,8 +141,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
         btn.setText("确认收货");
         break;
       }
-      //case XlmmConst.ORDER_STATE_CONFIRM_RECEIVE:
-      case XlmmConst.ORDER_STATE_TRADE_SUCCESS: {
+      case XlmmConst.ORDER_STATE_CONFIRM_RECEIVE: {
         switch (refund_state) {
           case XlmmConst.REFUND_STATE_NO_REFUND: {
             btn.setText("退货退款");
@@ -209,7 +210,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
         break;
       }
 
-      case XlmmConst.ORDER_STATE_TRADE_SUCCESS: {
+      case XlmmConst.ORDER_STATE_CONFIRM_RECEIVE: {
         switch (refund_state) {
           case XlmmConst.REFUND_STATE_NO_REFUND: {
             btn.setOnClickListener(new View.OnClickListener() {
