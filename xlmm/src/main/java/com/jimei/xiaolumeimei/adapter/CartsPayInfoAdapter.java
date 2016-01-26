@@ -1,19 +1,12 @@
 package com.jimei.xiaolumeimei.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.base.CommonAbsListviewBaseAdapter;
+import com.jimei.xiaolumeimei.base.CommonViewHolder;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
-import com.zhy.autolayout.utils.AutoUtils;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -25,45 +18,29 @@ import java.util.List;
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class CartsPayInfoAdapter
-    extends RecyclerView.Adapter<CartsPayInfoAdapter.CartsPayInfoVH> {
-
-  private List<CartsPayinfoBean.CartListEntity> mList;
-  private Context mContext;
-
-  public CartsPayInfoAdapter(Context mContext) {
-    this.mContext = mContext;
+    extends CommonAbsListviewBaseAdapter<CartsPayinfoBean.CartListEntity> {
+  public CartsPayInfoAdapter(Context context,
+      List<CartsPayinfoBean.CartListEntity> list) {
+    super(context, list);
     mList = new ArrayList<>();
   }
 
   public void update(List<CartsPayinfoBean.CartListEntity> list) {
-
     mList.addAll(list);
     notifyDataSetChanged();
   }
 
-  @Override public CartsPayInfoVH onCreateViewHolder(ViewGroup parent, int viewType) {
+  @Override public View getView(int position, View convertView, ViewGroup parent) {
 
-    View view;
+    CommonViewHolder holder =
+        CommonViewHolder.get(mContext, convertView, parent, R.layout.item_carts_pay,
+            position);
 
-    view = LayoutInflater.from(parent.getContext())
-        .inflate(R.layout.item_carts_pay, parent, false);
-    AutoUtils.autoSize(view);
-    return new CartsPayInfoVH(view);
-  }
-
-  @Override public void onBindViewHolder(CartsPayInfoVH holder, int position) {
     CartsPayinfoBean.CartListEntity cartListEntity = mList.get(position);
-    //List<CartsPayinfoBean.CartListEntity> cartList = cartsPayinfoBean.getCartList();
-
-    holder.title.setText(cartListEntity.getTitle());
-    holder.skuName.setText(cartListEntity.getSkuName());
 
     String headImg = cartListEntity.getPicPath();
-
     String[] temp = headImg.split("http://image.xiaolu.so/");
-
     String head_img = "";
-
     if (temp.length > 1) {
       try {
         head_img = "http://image.xiaolu.so/"
@@ -74,28 +51,84 @@ public class CartsPayInfoAdapter
       }
     }
 
-    Glide.with(mContext)
-        .load(head_img)
-        .diskCacheStrategy(DiskCacheStrategy.ALL)
-        .placeholder(R.drawable.parceholder)
-        .centerCrop()
-        .override(120, 120)
-        .into(holder.cartImage);
+    holder.setText(R.id.title, cartListEntity.getTitle());
+
+    holder.setText(R.id.sku_name, cartListEntity.getSkuName());
+
+    holder.setImageFromUrl(R.id.cart_image, head_img);
+
+    return holder.getConvertView();
   }
 
-  @Override public int getItemCount() {
-    return mList.size();
-  }
-
-  static class CartsPayInfoVH extends RecyclerView.ViewHolder {
-    int id = R.layout.item_carts_pay;
-    @Bind(R.id.cart_image) ImageView cartImage;
-    @Bind(R.id.title) TextView title;
-    @Bind(R.id.sku_name) TextView skuName;
-
-    public CartsPayInfoVH(View itemView) {
-      super(itemView);
-      ButterKnife.bind(this, itemView);
-    }
-  }
+  //private List<CartsPayinfoBean.CartListEntity> mList;
+  //private Context mContext;
+  //
+  //public CartsPayInfoAdapter(Context mContext) {
+  //  this.mContext = mContext;
+  //  mList = new ArrayList<>();
+  //}
+  //
+  //public void update(List<CartsPayinfoBean.CartListEntity> list) {
+  //
+  //  mList.addAll(list);
+  //  notifyDataSetChanged();
+  //}
+  //
+  //@Override public CartsPayInfoVH onCreateViewHolder(ViewGroup parent, int viewType) {
+  //
+  //  View view;
+  //
+  //  view = LayoutInflater.from(parent.getContext())
+  //      .inflate(R.layout.item_carts_pay, parent, false);
+  //  AutoUtils.autoSize(view);
+  //  return new CartsPayInfoVH(view);
+  //}
+  //
+  //@Override public void onBindViewHolder(CartsPayInfoVH holder, int position) {
+  //  CartsPayinfoBean.CartListEntity cartListEntity = mList.get(position);
+  //  //List<CartsPayinfoBean.CartListEntity> cartList = cartsPayinfoBean.getCartList();
+  //
+  //  holder.title.setText(cartListEntity.getTitle());
+  //  holder.skuName.setText(cartListEntity.getSkuName());
+  //
+  //  String headImg = cartListEntity.getPicPath();
+  //
+  //  String[] temp = headImg.split("http://image.xiaolu.so/");
+  //
+  //  String head_img = "";
+  //
+  //  if (temp.length > 1) {
+  //    try {
+  //      head_img = "http://image.xiaolu.so/"
+  //          + URLEncoder.encode(temp[1], "utf-8")
+  //          + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
+  //    } catch (UnsupportedEncodingException e) {
+  //      e.printStackTrace();
+  //    }
+  //  }
+  //
+  //  Glide.with(mContext)
+  //      .load(head_img)
+  //      .diskCacheStrategy(DiskCacheStrategy.ALL)
+  //      .placeholder(R.drawable.parceholder)
+  //      .centerCrop()
+  //      .override(120, 120)
+  //      .into(holder.cartImage);
+  //}
+  //
+  //@Override public int getItemCount() {
+  //  return mList.size();
+  //}
+  //
+  //static class CartsPayInfoVH extends RecyclerView.ViewHolder {
+  //  int id = R.layout.item_carts_pay;
+  //  @Bind(R.id.cart_image) ImageView cartImage;
+  //  @Bind(R.id.title) TextView title;
+  //  @Bind(R.id.sku_name) TextView skuName;
+  //
+  //  public CartsPayInfoVH(View itemView) {
+  //    super(itemView);
+  //    ButterKnife.bind(this, itemView);
+  //  }
+  //}
 }

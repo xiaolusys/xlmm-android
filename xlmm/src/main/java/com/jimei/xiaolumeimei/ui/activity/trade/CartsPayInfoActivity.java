@@ -5,13 +5,14 @@ import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.design.widget.AppBarLayout;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.CartsPayInfoAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -20,12 +21,15 @@ import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.TradeModel;
-import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
+import com.jimei.xiaolumeimei.ui.activity.user.AddAddressActivity;
+import com.jimei.xiaolumeimei.widget.NestedListView;
+import com.jimei.xiaolumeimei.widget.SmoothCheckBox;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.pingplusplus.android.PaymentActivity;
 import com.squareup.okhttp.ResponseBody;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import rx.schedulers.Schedulers;
 
@@ -35,7 +39,7 @@ import rx.schedulers.Schedulers;
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
-    implements View.OnClickListener {
+    implements View.OnClickListener, SmoothCheckBox.OnCheckedChangeListener {
 
   private static final int REQUEST_CODE_PAYMENT = 1;
   CartsModel model = new CartsModel();
@@ -43,9 +47,22 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   AddressModel addressModel = new AddressModel();
   CartsPayInfoAdapter mAdapter;
 
-  @Bind(R.id.alipay) Button alipy;
-  @Bind(R.id.wx) Button wx;
-  @Bind(R.id.payinfo_recyclerview) RecyclerView payinfoRecyclerview;
+  @Bind(R.id.toolbar) Toolbar toolbar;
+  @Bind(R.id.app_bar_layout) AppBarLayout appBarLayout;
+  @Bind(R.id.name) TextView name;
+  @Bind(R.id.phone) TextView phone;
+  @Bind(R.id.address_details) TextView addressDetails;
+  @Bind(R.id.choose_address) TextView chooseAddress;
+  @Bind(R.id.adress) RelativeLayout adress;
+  @Bind(R.id.payinfo_listview) NestedListView payinfoListview;
+  @Bind(R.id.total_price) TextView totalPrice;
+  @Bind(R.id.jiehsneg) TextView jiehsneg;
+  @Bind(R.id.confirm) Button confirm;
+  @Bind(R.id.alipay) SmoothCheckBox alipay;
+  @Bind(R.id.wx) SmoothCheckBox wx;
+  List<CartsPayinfoBean.CartListEntity> list;
+  private boolean isAlipay, isWx;
+  //@Bind(R.id.payinfo_recyclerview) RecyclerView payinfoRecyclerview;
   private String ids;
   private String cart_ids;
   private String addr_id;
@@ -57,27 +74,36 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   private String uuid;
 
   @Override protected void setListener() {
-
+    adress.setOnClickListener(this);
+    confirm.setOnClickListener(this);
+    alipay.setOnCheckedChangeListener(this);
+    wx.setOnCheckedChangeListener(this);
   }
 
   @Override protected void initData() {
+
+    list = new ArrayList<>();
     model.getCartsInfoList(ids)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<CartsPayinfoBean>() {
           @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
             super.onNext(cartsPayinfoBean);
+            if (cartsPayinfoBean != null) {
+              mAdapter.update(cartsPayinfoBean.getCartList());
+              //
+              //JUtils.Log("ITXUYE", cartsPayinfoBean.toString());
+              cart_ids = cartsPayinfoBean.getCartIds();
+              channel = "alipay";
+              payment = cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
+                  - cartsPayinfoBean.getDiscountFee() + "";
+              post_fee = cartsPayinfoBean.getPostFee() + "";
+              discount_fee = cartsPayinfoBean.getDiscountFee() + "";
+              total_fee = cartsPayinfoBean.getTotalFee() + "";
+              uuid = cartsPayinfoBean.getUuid();
 
-            mAdapter.update(cartsPayinfoBean.getCartList());
-
-            JUtils.Log("ITXUYE", cartsPayinfoBean.toString());
-            cart_ids = cartsPayinfoBean.getCartIds();
-            channel = "alipay";
-            payment = cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
-                - cartsPayinfoBean.getDiscountFee() + "";
-            post_fee = cartsPayinfoBean.getPostFee() + "";
-            discount_fee = cartsPayinfoBean.getDiscountFee() + "";
-            total_fee = cartsPayinfoBean.getTotalFee() + "";
-            uuid = cartsPayinfoBean.getUuid();
+              totalPrice.setText(total_fee);
+              jiehsneg.setText(discount_fee);
+            }
           }
         });
 
@@ -87,16 +113,31 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
           @Override public void onNext(List<AddressBean> list) {
             super.onNext(list);
             if (list != null) {
+              chooseAddress.setVisibility(View.INVISIBLE);
               AddressBean addressBean = list.get(0);
 
               addr_id = addressBean.getId();
+              name.setText(addressBean.getReceiverName());
+              phone.setText(addressBean.getReceiverMobile());
+
+              addressDetails.setText(addressBean.getReceiverState()
+                  + addressBean.getReceiverCity()
+                  + addressBean.getReceiverDistrict()
+                  + addressBean.getReceiverAddress());
+            } else {
+              chooseAddress.setVisibility(View.VISIBLE);
+              name.setVisibility(View.INVISIBLE);
+              phone.setVisibility(View.INVISIBLE);
+              addressDetails.setVisibility(View.INVISIBLE);
             }
           }
 
           @Override public void onError(Throwable e) {
             super.onError(e);
-
-            JUtils.Toast("还未设置默认地址，前往设置地址");
+            chooseAddress.setVisibility(View.VISIBLE);
+            name.setVisibility(View.INVISIBLE);
+            phone.setVisibility(View.INVISIBLE);
+            addressDetails.setVisibility(View.INVISIBLE);
           }
         });
   }
@@ -111,14 +152,14 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
-    payinfoRecyclerview.setLayoutManager(new LinearLayoutManager(this));
-    payinfoRecyclerview.addItemDecoration(
-        new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
-    mAdapter = new CartsPayInfoAdapter(this);
-    payinfoRecyclerview.setAdapter(mAdapter);
+    //payinfoRecyclerview.setLayoutManager(new LinearLayoutManager(this));
+    //payinfoRecyclerview.addItemDecoration(
+    //    new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+    //mAdapter = new CartsPayInfoAdapter(this);
+    //payinfoRecyclerview.setAdapter(mAdapter);
 
-    alipy.setOnClickListener(this);
-    wx.setOnClickListener(this);
+    mAdapter = new CartsPayInfoAdapter(this, list);
+    payinfoListview.setAdapter(mAdapter);
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
@@ -132,55 +173,60 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   @Override public void onClick(View v) {
 
     switch (v.getId()) {
-      case R.id.alipay:
-
-        tradeModel.shoppingcart_create(cart_ids, addr_id, "alipay", payment, post_fee,
-            discount_fee, total_fee, uuid)
-            .subscribeOn(Schedulers.io())
-            .subscribe(new ServiceResponse<ResponseBody>() {
-              @Override public void onNext(ResponseBody responseBody) {
-                super.onNext(responseBody);
-                try {
-                  String string = responseBody.string();
-                  Log.i("charge", string);
-                  Intent intent = new Intent();
-                  String packageName = getPackageName();
-                  ComponentName componentName = new ComponentName(packageName,
-                      packageName + ".wxapi.WXPayEntryActivity");
-                  intent.setComponent(componentName);
-                  intent.putExtra(PaymentActivity.EXTRA_CHARGE, string);
-                  startActivityForResult(intent, REQUEST_CODE_PAYMENT);
-                } catch (IOException e) {
-                  e.printStackTrace();
-                }
-              }
-            });
-
+      case R.id.adress:
+        startActivity(new Intent(CartsPayInfoActivity.this, AddAddressActivity.class));
         break;
 
-      case R.id.wx:
+      case R.id.confirm:
+        if (isAlipay && isWx) {
+          JUtils.Toast("请选择其中一种支付方式");
+          return;
+        } else if (isWx) {
 
-        tradeModel.shoppingcart_create(cart_ids, addr_id, "wx", payment, post_fee,
-            discount_fee, total_fee, uuid)
-            .subscribeOn(Schedulers.io())
-            .subscribe(new ServiceResponse<ResponseBody>() {
-              @Override public void onNext(ResponseBody responseBody) {
-                super.onNext(responseBody);
-                try {
-                  String string = responseBody.string();
-                  Log.i("charge", string);
-                  Intent intent = new Intent();
-                  String packageName = getPackageName();
-                  ComponentName componentName = new ComponentName(packageName,
-                      packageName + ".wxapi.WXPayEntryActivity");
-                  intent.setComponent(componentName);
-                  intent.putExtra(PaymentActivity.EXTRA_CHARGE, string);
-                  startActivityForResult(intent, REQUEST_CODE_PAYMENT);
-                } catch (IOException e) {
-                  e.printStackTrace();
+          tradeModel.shoppingcart_create(cart_ids, addr_id, "wx", payment, post_fee,
+              discount_fee, total_fee, uuid)
+              .subscribeOn(Schedulers.io())
+              .subscribe(new ServiceResponse<ResponseBody>() {
+                @Override public void onNext(ResponseBody responseBody) {
+                  super.onNext(responseBody);
+                  try {
+                    String string = responseBody.string();
+                    Log.i("charge", string);
+                    Intent intent = new Intent();
+                    String packageName = getPackageName();
+                    ComponentName componentName = new ComponentName(packageName,
+                        packageName + ".wxapi.WXPayEntryActivity");
+                    intent.setComponent(componentName);
+                    intent.putExtra(PaymentActivity.EXTRA_CHARGE, string);
+                    startActivityForResult(intent, REQUEST_CODE_PAYMENT);
+                  } catch (IOException e) {
+                    e.printStackTrace();
+                  }
                 }
-              }
-            });
+              });
+        } else if (isAlipay) {
+          tradeModel.shoppingcart_create(cart_ids, addr_id, "alipay", payment, post_fee,
+              discount_fee, total_fee, uuid)
+              .subscribeOn(Schedulers.io())
+              .subscribe(new ServiceResponse<ResponseBody>() {
+                @Override public void onNext(ResponseBody responseBody) {
+                  super.onNext(responseBody);
+                  try {
+                    String string = responseBody.string();
+                    Log.i("charge", string);
+                    Intent intent = new Intent();
+                    String packageName = getPackageName();
+                    ComponentName componentName = new ComponentName(packageName,
+                        packageName + ".wxapi.WXPayEntryActivity");
+                    intent.setComponent(componentName);
+                    intent.putExtra(PaymentActivity.EXTRA_CHARGE, string);
+                    startActivityForResult(intent, REQUEST_CODE_PAYMENT);
+                  } catch (IOException e) {
+                    e.printStackTrace();
+                  }
+                }
+              });
+        }
 
         break;
     }
@@ -222,9 +268,21 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     builder.create().show();
   }
 
-  @Override protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    // TODO: add setContentView(...) invocation
-    ButterKnife.bind(this);
+  @Override public void onCheckedChanged(SmoothCheckBox checkBox, boolean isChecked) {
+    switch (checkBox.getId()) {
+      case R.id.alipay:
+        isAlipay = true;
+        isWx = false;
+        //alipay.setChecked(true);
+        //wx.setChecked(false);
+        break;
+
+      case R.id.wx:
+        isAlipay = false;
+        isWx = true;
+        //alipay.setChecked(false);
+        //wx.setChecked(true);
+        break;
+    }
   }
 }
