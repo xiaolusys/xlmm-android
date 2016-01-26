@@ -52,7 +52,7 @@
       <RelativeLayout
           android:layout_width="fill_parent"
           android:layout_height="32dp"
-          android:layout_weight="1"
+          android:padding="4dp"
           android:orientation="horizontal"
           >
         <TextView
@@ -98,7 +98,8 @@
           android:layout_marginRight="10px"
           android:layout_below="@+id/textView"
           android:layout_marginTop="10px"
-          android:drawableRight="@drawable/iconfont_downgrey"
+          android:padding="4dp"
+          android:drawableRight="@drawable/ic_downarrow"
           android:background="@drawable/text_frame"
           android:focusable="false"
           android:cursorVisible="false"
