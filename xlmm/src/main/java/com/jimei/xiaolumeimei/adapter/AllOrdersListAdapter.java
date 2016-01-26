@@ -6,47 +6,45 @@ package com.jimei.xiaolumeimei.adapter;
  */
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
+import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
+import com.jimei.xiaolumeimei.ui.activity.trade.OrderDetailActivity;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.MyHorizontalScrollView;
-import com.jimei.xiaolumeimei.widget.NestedListView;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.Exchanger;
-
-import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.ui.activity.trade.OrderDetailActivity;
 
 public class AllOrdersListAdapter extends BaseAdapter {
   private static final String TAG = "AllOrdersListAdapter";
-  private Activity context;
   List<HashMap<String, String>> data;
+  private Activity context;
   private List<AllOrdersBean.ResultsEntity> mList;
 
   public AllOrdersListAdapter(Activity context) {
     mList = new ArrayList<AllOrdersBean.ResultsEntity>();
     this.data = new ArrayList<HashMap<String, String>>();
     this.context = context;
+  }
+
+  public static void fillPicPath(List<String> mDatas,
+      List<AllOrdersBean.ResultsEntity.OrdersEntity> good_list) {
+    for (int i = 0; i < good_list.size(); i++) {
+      mDatas.add(good_list.get(i).getPicPath());
+    }
   }
 
   public void updateWithClear(List<AllOrdersBean.ResultsEntity> list) {
@@ -61,6 +59,8 @@ public class AllOrdersListAdapter extends BaseAdapter {
     String orderState = "";
     String crtTime = "";
 
+    String picpath;
+
     Log.d(TAG, "dataSource.size " + list.size());
     for (int i = 0; i < list.size(); i++) {
       HashMap<String, String> map = new HashMap<String, String>();
@@ -69,10 +69,13 @@ public class AllOrdersListAdapter extends BaseAdapter {
       state = list.get(i).getStatus();
       crtTime = list.get(i).getCreated();
 
+      picpath = list.get(i).getOrderPic();
+
       map.put("payment", Float.toString(payment));
       map.put("orderState", orderState);
       map.put("state", Integer.toString(state));
       map.put("crtTime", crtTime);
+      map.put("img_url", picpath);
 
       data.add(map);
     }
@@ -191,18 +194,11 @@ public class AllOrdersListAdapter extends BaseAdapter {
       showTimeAndBtn(Integer.parseInt(data.get(position).get("state")),
           data.get(position).get("crtTime"), convertView, order_id);
     } catch (Exception e) {
-      Log.e(TAG, "showTimeAndBtn failed  ");
+      Log.e(TAG, "showTimeAndBtn failed");
       e.printStackTrace();
     }
 
     return convertView;
-  }
-
-  public static void fillPicPath(List<String> mDatas,
-      List<AllOrdersBean.ResultsEntity.OrdersEntity> good_list) {
-    for (int i = 0; i < good_list.size(); i++) {
-      mDatas.add(good_list.get(i).getPicPath());
-    }
   }
 
   private void showTimeAndBtn(int state, String crtTime, View convertView, int order_id) {
