@@ -4,7 +4,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -237,7 +239,7 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
     } else if (requestCode == CameraUtils.CAMERA_PICTURE)
     {
       // Do some task
-      Image_Selecting_Task(data);
+      Image_Photo_Task(data);
     }
   }
 
@@ -248,32 +250,7 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
       CameraUtils.uri = data.getData();
       if (CameraUtils.uri != null)
       {
-        // User had pick an image.
-        Cursor cursor = getContentResolver().query(CameraUtils.uri, new String[]
-            { android.provider.MediaStore.Images.ImageColumns.DATA }, null, null, null);
-        cursor.moveToFirst();
-        // Link to the image
-        final String imageFilePath = cursor.getString(0);
-
-        //Assign string path to File
-        CameraUtils.Default_DIR = new File(imageFilePath);
-
-        // Create new dir MY_IMAGES_DIR if not created and copy image into that dir and store that image path in valid_photo
-        CameraUtils.Create_MY_IMAGES_DIR();
-
-        // Copy your image
-        CameraUtils.copyFile(CameraUtils.Default_DIR, CameraUtils.MY_IMG_DIR);
-
-        // Get new image path and decode it
-        Bitmap b = CameraUtils.decodeFile(CameraUtils.Paste_Target_Location);
-
-        // use new copied path and use anywhere
-        String valid_photo = CameraUtils.Paste_Target_Location.toString();
-        b = Bitmap.createScaledBitmap(b, 150, 150, true);
-
-        //set your selected image in image view
-        img_proof_pic.setImageBitmap(b);
-        cursor.close();
+        read_img_from_uri();
 
       } else
       {
@@ -286,5 +263,66 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
       Log.e("onActivityResult", "" + e);
 
     }
+  }
+
+  public void Image_Photo_Task(Intent data)
+  {
+    try
+    {
+      Bundle bundle = data.getExtras();
+      Bitmap bitmap = (Bitmap) bundle.get("data");// 获取相机返回的数据，并转换为Bitmap图片格式
+
+      CameraUtils.uri = data.getData();
+      if (CameraUtils.uri == null){
+        Log.d("onActivityResult", "return uri null, get image again.");
+        CameraUtils.uri  = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, null,null));
+      }
+      if (CameraUtils.uri != null)
+      {
+        read_img_from_uri();
+
+      } else
+      {
+
+        Toast toast = Toast.makeText(this, "对不起，照相机返回照片失败。", Toast.LENGTH_LONG);
+        toast.show();
+      }
+    } catch (Exception e)
+    {
+      // you get this when you will not select any single image
+      Log.e("onActivityResult", "" + e);
+
+    }
+  }
+
+  public void read_img_from_uri()
+  {
+    // User had pick an image.
+    Cursor cursor = getContentResolver().query(CameraUtils.uri, new String[]
+            { android.provider.MediaStore.Images.ImageColumns.DATA }, null, null, null);
+    cursor.moveToFirst();
+    // Link to the image
+    final String imageFilePath = cursor.getString(0);
+
+    //Assign string path to File
+    CameraUtils.Default_DIR = new File(imageFilePath);
+
+    // Create new dir MY_IMAGES_DIR if not created and copy image into that dir and store that image path in valid_photo
+    CameraUtils.Create_MY_IMAGES_DIR();
+
+    // Copy your image
+    CameraUtils.copyFile(CameraUtils.Default_DIR, CameraUtils.MY_IMG_DIR);
+
+    // Get new image path and decode it
+    Bitmap b = CameraUtils.decodeFile(CameraUtils.Paste_Target_Location);
+
+    // use new copied path and use anywhere
+    String valid_photo = CameraUtils.Paste_Target_Location.toString();
+    b = Bitmap.createScaledBitmap(b, 150, 150, true);
+
+    //set your selected image in image view
+    img_proof_pic.setImageBitmap(b);
+    cursor.close();
+
   }
 }
