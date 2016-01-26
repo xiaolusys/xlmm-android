@@ -38,7 +38,7 @@ import rx.schedulers.Schedulers;
 public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener{
 
     String TAG = "ApplyReturnGoodsActivity";
-  String slect_reason[]  = new String[] { "七天无理由退换", "未收到货" };
+  String slect_reason[]  = new String[] {  "未收到货","商品质量问题","收到商品不符", "收到商品破损","商品错发/漏发","其他原因"};
 
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.img_good) ImageView img_good;
@@ -202,7 +202,7 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
 
     AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(this);
     myAlertDialog.setTitle("照片选择");
-    myAlertDialog.setMessage("选择照片模式");
+    //myAlertDialog.setMessage("选择照片模式");
 
     myAlertDialog.setPositiveButton("相册", new DialogInterface.OnClickListener(){
       public void onClick(DialogInterface arg0, int arg1)
