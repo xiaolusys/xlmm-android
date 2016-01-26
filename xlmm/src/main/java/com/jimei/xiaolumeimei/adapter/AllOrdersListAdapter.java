@@ -135,9 +135,9 @@ public class AllOrdersListAdapter extends BaseAdapter {
 
         tx_good_name.setText(mList.get(position).getOrders().get(0).getTitle());
         tx_good_price.setText("￥" + mList.get(position).getOrders().get(0).getPayment());
-        tx_good_size.setText(mList.get(position).getOrders().get(0).getSkuName());
+        tx_good_size.setText("尺码:" + mList.get(position).getOrders().get(0).getSkuName());
         tx_good_num.setText(
-            Integer.toString(mList.get(position).getOrders().get(0).getNum()));
+            "X" + Integer.toString(mList.get(position).getOrders().get(0).getNum()));
 
         ViewUtils.loadImgToImgView(context, img_goods, data.get(position).get("img_url"));
 
@@ -178,7 +178,6 @@ public class AllOrdersListAdapter extends BaseAdapter {
         llayout.addView(mHorizontalScrollView);
         holder.mHorizontalScrollView = mHorizontalScrollView;
       }
-
       convertView.setTag(holder);
     } else {
       holder = (ViewHolder) convertView.getTag();
@@ -187,7 +186,7 @@ public class AllOrdersListAdapter extends BaseAdapter {
     tx_payment = (TextView) convertView.findViewById(R.id.tx_order_actual_payment);
     tx_order_sate = (TextView) convertView.findViewById(R.id.tx_order_state);
 
-    tx_payment.setText("实付金额￥" + data.get(position).get("payment"));
+    tx_payment.setText("￥" + data.get(position).get("payment"));
     tx_order_sate.setText(data.get(position).get("orderState"));
 
     try {

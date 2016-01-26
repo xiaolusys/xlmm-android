@@ -31,11 +31,8 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.jimei.xiaolumeimei.R;
-
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.net.URLEncoder;
@@ -245,8 +242,8 @@ public final class ViewUtils {
     Glide.with(context)
             .load(head_img)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
-            .placeholder(R.drawable.parceholder)
-            .centerCrop()
+            //.placeholder(R.drawable.parceholder)
+             .centerCrop()
             .into(img);
   }
 }
