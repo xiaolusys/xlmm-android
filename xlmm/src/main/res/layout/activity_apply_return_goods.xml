@@ -1,193 +1,272 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/AppTheme.AppBarOverlay"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.jimei.xiaolumeimei.ui.activity.trade.RefundDetailActivity">
+    style="@style/AppTheme.AppBarOverlay"
+    >
 
-    <android.support.design.widget.AppBarLayout
+  <android.support.design.widget.AppBarLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:id="@+id/app_bar_layout"
+      android:theme="@style/AppTheme.AppBarOverlay"
+      >
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_height="?attr/actionBarSize"
+        android:background="#fdb916"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        >
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="#fdb916"
-            app:popupTheme="@style/AppTheme.PopupOverlay" >
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerInParent="true"
+          android:layout_gravity="center"
+          android:text="退款（货）详情"
+          android:textColor="@android:color/white"
+          android:textSize="24sp"
+          android:textStyle="bold"
+          />
+    </android.support.v7.widget.Toolbar>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center"
-                android:text="退款（货）详情"
-                android:textColor="@android:color/white"
-                android:textSize="24sp"
-                android:textStyle="bold"/>
-        </android.support.v7.widget.Toolbar>
+  </android.support.design.widget.AppBarLayout>
 
-    </android.support.design.widget.AppBarLayout>
+  <ScrollView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@+id/app_bar_layout"
+      >
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
 
-        <LinearLayout
-            android:layout_width="match_parent"
+      <RelativeLayout
+          android:layout_width="fill_parent"
+          android:layout_height="32dp"
+          android:orientation="horizontal"
+          >
+        <TextView
+            android:id="@+id/tx_order_id"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="vertical" >
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:text="订单编号："
+            android:textSize="15sp"
+            />
 
-            <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_weight="1"
-                android:layout_height="32dp"
-                android:orientation="horizontal" >
-                <TextView
-                    android:id="@+id/tx_order_id"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="订单编号："
-                    android:textSize="15sp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
+        <TextView
+            android:id="@+id/tx_order_state"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:text="退款成功"
+            android:textSize="15sp"
+            />
+      </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/tx_order_state"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="退款成功"
-                    android:textSize="15sp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true" />
+      <include layout="@layout/common_gap"/>
+
+      <include layout="@layout/one_order_item"/>
+
+      <include layout="@layout/common_gap"/>
+
+      <RelativeLayout
+          android:layout_width="fill_parent"
+          android:layout_height="32dp"
+          android:layout_weight="1"
+          android:orientation="horizontal"
+          >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:text="申请数量："
+            android:textSize="15sp"
+            />
+
+        <TextView
+            android:id="@+id/tx_order_postfee"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:text="1"
+            android:textSize="15sp"
+            />
+      </RelativeLayout>
+
+      <include layout="@layout/common_gap"/>
+
+      <RelativeLayout
+          android:layout_width="fill_parent"
+          android:layout_height="32dp"
+          android:layout_weight="1"
+          android:orientation="horizontal"
+          >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:text="可退金额："
+            android:textSize="15sp"
+            />
+
+        <TextView
+            android:id="@+id/tx_order_totalfee"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:text="￥120"
+            android:textSize="15sp"
+            />
+      </RelativeLayout>
+
+
+      <include layout="@layout/common_gap"/>
+
+      <RelativeLayout
+          android:layout_width="fill_parent"
+          android:layout_height="352px"
+          android:orientation="vertical"
+          >
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="57px"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:text="退货原因"
+            android:textSize="15sp"
+            />
+
+        <EditText
+            android:id="@+id/et_refund_reason"
+            android:layout_width="match_parent"
+            android:layout_height="70px"
+            android:layout_below="@+id/textView"
+            android:layout_marginLeft="10px"
+            android:layout_marginRight="10px"
+            android:layout_marginTop="10px"
+            android:background="@drawable/text_frame"
+            android:cursorVisible="false"
+            android:drawableRight="@drawable/iconfont_downgrey"
+            android:focusable="false"
+            android:text="请选择退货原因"
+            android:textSize="15sp"
+            />
+
+        <EditText
+            android:id="@+id/et_refund_info"
+            android:layout_width="match_parent"
+            android:layout_height="140px"
+            android:layout_below="@+id/et_refund_reason"
+            android:layout_marginLeft="10px"
+            android:layout_marginRight="10px"
+            android:layout_marginTop="10px"
+            android:background="@drawable/text_frame"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:text="请输入退货说明"
+            android:textSize="15sp"
+            />
+
+      </RelativeLayout>
+
+      <RelativeLayout
+          android:layout_width="fill_parent"
+          android:layout_height="160px"
+          android:orientation="vertical"
+          >
+        <TextView
+            android:id="@+id/tv_upload"
+            android:layout_width="wrap_content"
+            android:layout_height="40px"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:text="上传凭证"
+            android:textSize="15sp"
+            />
+
+        <RelativeLayout
+            android:id="@+id/rl_proof_pic"
+            android:layout_width="match_parent"
+            android:layout_height="120px"
+            android:layout_below="@+id/tv_upload"
+            >
+
+          <ImageButton
+              android:layout_width="120px"
+              android:layout_height="120px"
+              android:id="@+id/imgbtn_camera_pic"
+              android:src="@drawable/ic_photo_camera_black_48dp"
+              />
+
+          <RelativeLayout
+              android:id="@+id/rl_proof_pic1"
+              android:layout_width="120px"
+              android:layout_height="match_parent"
+              android:layout_toRightOf="@+id/imgbtn_camera_pic"
+              >
+              <include layout="@layout/proof_pic" />
             </RelativeLayout>
 
-            <include layout="@layout/common_gap" />
+          <RelativeLayout
+              android:id="@+id/rl_proof_pic2"
+              android:layout_width="120px"
+              android:layout_height="match_parent"
+              android:layout_toRightOf="@+id/rl_proof_pic1"
+              >
+            <include layout="@layout/proof_pic" />
+          </RelativeLayout>
 
-            <com.jimei.xiaolumeimei.widget.NestedListView
-                android:id="@+id/goods_listview"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                />
+          <RelativeLayout
+              android:id="@+id/rl_proof_pic3"
+              android:layout_width="120px"
+              android:layout_height="match_parent"
+              android:layout_toRightOf="@+id/rl_proof_pic2"
+              >
+            <include layout="@layout/proof_pic" />
+          </RelativeLayout>
 
-            <include layout="@layout/common_gap" />
+        </RelativeLayout>
+      </RelativeLayout>
 
-            <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_weight="1"
-                android:layout_height="32dp"
-                android:orientation="horizontal" >
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="申请数量："
-                    android:textSize="15sp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
-
-                <TextView
-                    android:id="@+id/tx_order_postfee"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="1"
-                    android:textSize="15sp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true" />
-            </RelativeLayout>
-
-            <include layout="@layout/common_gap" />
-
-            <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_weight="1"
-                android:layout_height="32dp"
-                android:orientation="horizontal" >
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="可退金额："
-                    android:textSize="15sp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
-
-                <TextView
-                    android:id="@+id/tx_order_totalfee"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="￥120"
-                    android:textSize="15sp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_weight="1"
-                android:layout_height="32dp"
-                android:orientation="horizontal" >
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="退款原因："
-                    android:textSize="15sp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
-
-                <TextView
-                    android:id="@+id/tx_order_discountfee"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="七天无理由退货"
-                    android:textSize="15sp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true" />
-            </RelativeLayout>
-
-            <include layout="@layout/common_gap" />
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_weight="1"
-                android:layout_height="64dp"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:id="@+id/tx_order_crttime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="时间：2016年1月6日 退款成功"
-                    android:textSize="15sp"
-                    />
-
-                <TextView
-                    android:id="@+id/tx_order_crtstate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="时间：2016年1月3日  申请退款"
-                    android:textSize="15sp"
-                    />
-
-            </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
+    </LinearLayout>
+  </ScrollView>
 
 
+  <Button
+      android:id="@+id/btn_commit"
+      android:layout_width="690px"
+      android:layout_height="80px"
+      android:layout_alignParentBottom="true"
+      android:layout_centerHorizontal="true"
+      android:layout_marginBottom="10px"
+      android:text="提交申请"
+      android:textSize="15sp"
+      />
 
 
-
-</LinearLayout>
+</RelativeLayout>

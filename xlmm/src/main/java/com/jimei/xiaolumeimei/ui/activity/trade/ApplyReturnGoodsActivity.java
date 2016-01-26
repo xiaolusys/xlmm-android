@@ -1,6 +1,9 @@
 package com.jimei.xiaolumeimei.ui.activity.trade;
 
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AlertDialog;
@@ -11,13 +14,17 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import android.widget.Toast;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
+import com.jimei.xiaolumeimei.utils.CameraUtils;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 
@@ -25,6 +32,7 @@ import com.jimei.xiaolumeimei.R;
 
 import butterknife.Bind;
 import com.squareup.okhttp.ResponseBody;
+import java.io.File;
 import rx.schedulers.Schedulers;
 
 public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener{
@@ -44,8 +52,11 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
   @Bind(R.id.tx_refundfee) TextView tx_refundfee;
   @Bind(R.id.et_refund_info) EditText et_refund_info;
   @Bind(R.id.et_refund_reason) EditText et_refund_reason;
+  @Bind(R.id.imgbtn_camera_pic) ImageButton imgbtn_camera_pic;
   @Bind(R.id.btn_commit) Button btn_commit;
+  @Bind(R.id.rl_proof_pic1) RelativeLayout rl_proof_pic1;
 
+  ImageView img_proof_pic;
   AllOrdersBean.ResultsEntity.OrdersEntity goods_info;
   TradeModel model = new TradeModel();
   String reason = "";
@@ -57,6 +68,7 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
   @Override protected void setListener() {
     toolbar.setOnClickListener(this);
     btn_commit.setOnClickListener(this);
+    imgbtn_camera_pic.setOnClickListener(this);
     add.setOnClickListener(this);
     delete.setOnClickListener(this);
     et_refund_info.setOnClickListener(this);
@@ -86,6 +98,8 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
     toolbar.setNavigationIcon(R.drawable.back);
+
+    img_proof_pic = (ImageView)rl_proof_pic1.findViewById(R.id.img_proof_pic);
   }
 
   //从server端获得所有订单数据，可能要查询几次
@@ -146,6 +160,11 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
         }
         tx_refund_num.setText(Integer.toString(num));
         break;
+
+      case R.id.imgbtn_camera_pic:
+        Log.i(TAG,"camera ");
+        Image_Picker_Dialog();
+        break;
     }
   }
 
@@ -176,5 +195,96 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
             }
           })
           .setNegativeButton("取消", null).show();
+  }
+
+  public void Image_Picker_Dialog()
+  {
+
+    AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(this);
+    myAlertDialog.setTitle("照片选择");
+    myAlertDialog.setMessage("选择照片模式");
+
+    myAlertDialog.setPositiveButton("相册", new DialogInterface.OnClickListener(){
+      public void onClick(DialogInterface arg0, int arg1)
+      {
+        CameraUtils.pictureActionIntent = new Intent(Intent.ACTION_GET_CONTENT, null);
+        CameraUtils.pictureActionIntent.setType("image/*");
+        CameraUtils.pictureActionIntent.putExtra("return-data", true);
+        startActivityForResult(CameraUtils.pictureActionIntent, CameraUtils.GALLERY_PICTURE);
+      }
+    });
+
+    myAlertDialog.setNegativeButton("照相机", new DialogInterface.OnClickListener(){
+      public void onClick(DialogInterface arg0, int arg1)
+      {
+        CameraUtils.pictureActionIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(CameraUtils.pictureActionIntent, CameraUtils.CAMERA_PICTURE);
+      }
+    });
+    myAlertDialog.show();
+
+  }
+
+  // After the selection of image you will retun on the main activity with bitmap image
+  protected void onActivityResult(int requestCode, int resultCode, Intent data)
+  {
+    super.onActivityResult(requestCode, resultCode, data);
+    if (requestCode == CameraUtils.GALLERY_PICTURE)
+    {
+      // data contains result
+      // Do some task
+      Image_Selecting_Task(data);
+    } else if (requestCode == CameraUtils.CAMERA_PICTURE)
+    {
+      // Do some task
+      Image_Selecting_Task(data);
+    }
+  }
+
+  public void Image_Selecting_Task(Intent data)
+  {
+    try
+    {
+      CameraUtils.uri = data.getData();
+      if (CameraUtils.uri != null)
+      {
+        // User had pick an image.
+        Cursor cursor = getContentResolver().query(CameraUtils.uri, new String[]
+            { android.provider.MediaStore.Images.ImageColumns.DATA }, null, null, null);
+        cursor.moveToFirst();
+        // Link to the image
+        final String imageFilePath = cursor.getString(0);
+
+        //Assign string path to File
+        CameraUtils.Default_DIR = new File(imageFilePath);
+
+        // Create new dir MY_IMAGES_DIR if not created and copy image into that dir and store that image path in valid_photo
+        CameraUtils.Create_MY_IMAGES_DIR();
+
+        // Copy your image
+        CameraUtils.copyFile(CameraUtils.Default_DIR, CameraUtils.MY_IMG_DIR);
+
+        // Get new image path and decode it
+        Bitmap b = CameraUtils.decodeFile(CameraUtils.Paste_Target_Location);
+
+        // use new copied path and use anywhere
+        String valid_photo = CameraUtils.Paste_Target_Location.toString();
+        b = Bitmap.createScaledBitmap(b, 150, 150, true);
+
+        //set your selected image in image view
+        img_proof_pic.setImageBitmap(b);
+        cursor.close();
+
+      } else
+      {
+        Toast toast = Toast.makeText(this, "对不起，您还没有选择任何照片。", Toast.LENGTH_LONG);
+        toast.show();
+      }
+    } catch (Exception e)
+    {
+      // you get this when you will not select any single image
+      Log.e("onActivityResult", "" + e);
+
+    }
   }
 }
