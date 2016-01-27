@@ -201,7 +201,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"/>
       </RelativeLayout>
-
+      <include layout="@layout/common_gap"/>
       <RelativeLayout
           android:background="@color/white"
           android:padding="8dp"
@@ -228,7 +228,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"/>
       </RelativeLayout>
-
+      <include layout="@layout/common_gap"/>
       <RelativeLayout
           android:background="@color/white"
           android:padding="8dp"
@@ -270,8 +270,6 @@
             android:text="总金额:"
             android:textSize="13sp"
             android:layout_gravity="right"/>
-
-
         <TextView
             android:textColor="@color/colorPrimary"
             android:layout_alignParentRight="true"
@@ -282,10 +280,10 @@
             android:textSize="13sp"
             android:layout_gravity="right"/>
       </RelativeLayout>
+      <include layout="@layout/common_gap"/>
 
-
-        <include
-            layout="@layout/orders_pay_lefttime"/>
+      <include
+          layout="@layout/orders_pay_lefttime"/>
 
     </LinearLayout>
 
