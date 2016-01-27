@@ -55,7 +55,7 @@ public class CartsPayInfoAdapter
 
     holder.setText(R.id.sku_name, cartListEntity.getSkuName());
 
-    holder.setImageFromUrl(R.id.cart_image, head_img);
+    holder.setImageFromUrl(mContext,R.id.cart_image, head_img);
 
     return holder.getConvertView();
   }

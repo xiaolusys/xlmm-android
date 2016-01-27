@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.glidemoudle.GlideRoundTransform;
 
 /**
  * Author  : itxuye(itxuye@gmail.com)|(http://itxuye.com)
@@ -82,14 +82,14 @@ public class CommonViewHolder {
   /*
   Picasso加载图片，网络访问推荐okHttp
    */
-  public CommonViewHolder setImageFromUrl(int viewId, String url) {
+  public CommonViewHolder setImageFromUrl(Context context, int viewId, String url) {
     ImageView imageView = findViewById(viewId);
     //@formatter:off
         Glide.with(mContext)
             .load(url)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
-            .placeholder(R.drawable.parceholder)
             .centerCrop()
+            .transform(new GlideRoundTransform(context))
             .into(imageView);
 
 
