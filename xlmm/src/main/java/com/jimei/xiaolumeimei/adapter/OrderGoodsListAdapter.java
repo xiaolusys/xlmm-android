@@ -108,9 +108,9 @@ public class OrderGoodsListAdapter extends BaseAdapter {
     tx_good_num = (TextView) convertView.findViewById(R.id.tx_good_num);
 
     tx_good_name.setText(data.get(position).get("title"));
-    tx_good_price.setText("￥" + data.get(position).get("pay_price"));
+    tx_good_price.setText("¥" + data.get(position).get("pay_price"));
     tx_good_size.setText(data.get(position).get("model_id"));
-    tx_good_num.setText("X" + data.get(position).get("num"));
+    tx_good_num.setText("x" + data.get(position).get("num"));
 
     ViewUtils.loadImgToImgView(context, img_goods, data.get(position).get("img_url"));
     Log.d(TAG, " img_url " + data.get(position).get("img_url"));

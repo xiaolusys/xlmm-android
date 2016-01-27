@@ -134,7 +134,7 @@ public class AllOrdersListAdapter extends BaseAdapter {
         TextView tx_good_num = (TextView) ll_one_order.findViewById(R.id.tx_good_num);
 
         tx_good_name.setText(mList.get(position).getOrders().get(0).getTitle());
-        tx_good_price.setText("￥" + mList.get(position).getOrders().get(0).getPayment());
+        tx_good_price.setText("¥" + mList.get(position).getOrders().get(0).getPayment());
         tx_good_size.setText("尺码:" + mList.get(position).getOrders().get(0).getSkuName());
         tx_good_num.setText(
             "x" + Integer.toString(mList.get(position).getOrders().get(0).getNum()));
@@ -186,7 +186,7 @@ public class AllOrdersListAdapter extends BaseAdapter {
     tx_payment = (TextView) convertView.findViewById(R.id.tx_order_actual_payment);
     tx_order_sate = (TextView) convertView.findViewById(R.id.tx_order_state);
 
-    tx_payment.setText("￥" + data.get(position).get("payment"));
+    tx_payment.setText("¥" + data.get(position).get("payment"));
     tx_order_sate.setText(data.get(position).get("orderState"));
 
     try {

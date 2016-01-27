@@ -111,7 +111,7 @@ public class AllRefundsListAdapter extends BaseAdapter {
 
     tx_refundno.setText("订单编号：" + data.get(position).get("refund_no"));
     tx_refund_state.setText(data.get(position).get("refund_State"));
-    tx_refundfee.setText("￥" + data.get(position).get("refund_fee"));
+    tx_refundfee.setText("¥" + data.get(position).get("refund_fee"));
 
     ImageView img_goods = (ImageView) convertView.findViewById(R.id.img_good);
     ;
@@ -122,7 +122,7 @@ public class AllRefundsListAdapter extends BaseAdapter {
 
     ViewUtils.loadImgToImgView(context, img_goods, data.get(position).get("img_url"));
     tx_good_name.setText(data.get(position).get("title"));
-    tx_good_price.setText("￥" + data.get(position).get("pay_price"));
+    tx_good_price.setText("¥" + data.get(position).get("pay_price"));
     tx_good_size.setText(data.get(position).get("model_id"));
     tx_good_num.setText(data.get(position).get("num"));
 

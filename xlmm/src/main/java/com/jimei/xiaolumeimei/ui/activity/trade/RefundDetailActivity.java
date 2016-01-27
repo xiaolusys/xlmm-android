@@ -154,18 +154,18 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     //TextView tx_good_name = (TextView) findViewById(R.id.tx_good_name);
     tx_good_name.setText(refundDetailBean.getTitle());
     //TextView tx_good_price = (TextView) findViewById(R.id.tx_good_price);
-    tx_good_price.setText("￥" + refundDetailBean.getTotal_fee());
+    tx_good_price.setText("¥" + refundDetailBean.getTotal_fee());
 
     //TextView tx_good_size = (TextView) findViewById(R.id.tx_good_size);
     tx_good_size.setText("尺码：" + refundDetailBean.getSku_name());
     //TextView tx_good_num = (TextView) findViewById(R.id.tx_good_num);
-    tx_good_num.setText("×" + refundDetailBean.getRefund_num());
+    tx_good_num.setText("x" + refundDetailBean.getRefund_num());
 
     //TextView tx_refund_num = (TextView) findViewById(R.id.tx_refund_num);
     tx_refund_num.setText(refundDetailBean.getRefund_num());
 
     //TextView tx_refundfee = (TextView) findViewById(R.id.tx_refundfee);
-    tx_refundfee.setText("￥" + refundDetailBean.getRefund_fee());
+    tx_refundfee.setText("¥" + refundDetailBean.getRefund_fee());
 
     //TextView tx_refund_reason = (TextView) findViewById(R.id.tx_refund_reason);
     tx_refund_reason.setText(refundDetailBean.getReason());

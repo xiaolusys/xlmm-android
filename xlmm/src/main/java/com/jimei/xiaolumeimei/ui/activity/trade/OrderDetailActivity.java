@@ -96,16 +96,16 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     mGoodsAdapter.update(orderDetailBean.getOrders());
 
     TextView tx_order_totalfee = (TextView) findViewById(R.id.tx_order_totalfee);
-    tx_order_totalfee.setText("￥" + orderDetailBean.getTotal_fee());
+    tx_order_totalfee.setText("¥" + orderDetailBean.getTotal_fee());
 
     TextView tx_order_discountfee = (TextView) findViewById(R.id.tx_order_discountfee);
-    tx_order_discountfee.setText("￥" + orderDetailBean.getDiscount_fee());
+    tx_order_discountfee.setText("¥" + orderDetailBean.getDiscount_fee());
 
     TextView tx_order_postfee = (TextView) findViewById(R.id.tx_order_postfee);
-    tx_order_postfee.setText("￥" + orderDetailBean.getPost_fee());
+    tx_order_postfee.setText("¥" + orderDetailBean.getPost_fee());
 
     TextView tx_order_payment = (TextView) findViewById(R.id.tx_order_payment);
-    tx_order_payment.setText("￥" + orderDetailBean.getPayment());
+    tx_order_payment.setText("¥" + orderDetailBean.getPayment());
   }
 
   private void showProcBtn(OrderDetailBean orderDetailBean) {
