@@ -3,21 +3,21 @@
 
   <group android:checkableBehavior="single" android:id="@+id/group_1">
 
-    <item android:id="@+id/nav_tobepaid" android:icon="@android:drawable/ic_menu_camera"
+    <item android:id="@+id/nav_tobepaid" android:icon="@drawable/ic_menu_waitpay"
         android:title="待支付"/>
     <item android:id="@+id/nav_tobereceived"
-        android:icon="@android:drawable/ic_menu_gallery"
+        android:icon="@drawable/ic_menu_car"
         android:title="待收货"/>
     <item android:id="@+id/nav_returned"
-        android:icon="@android:drawable/ic_menu_slideshow"
+        android:icon="@drawable/ic_menu_refund"
         android:title="退换货"/>
-    <item android:id="@+id/nav_orders" android:icon="@android:drawable/ic_menu_manage"
+    <item android:id="@+id/nav_orders" android:icon="@drawable/ic_menu_order"
         android:title="全部订单"/>
   </group>
 
-  <item android:id="@+id/nav_setting" android:icon="@android:drawable/ic_menu_share"
+  <item android:id="@+id/nav_setting" android:icon="@drawable/ic_menu_setting"
       android:title="设置"/>
-  <item android:id="@+id/nav_complain" android:icon="@android:drawable/ic_menu_send"
+  <item android:id="@+id/nav_complain" android:icon="@drawable/ic_menu_complain"
       android:title="投诉建议"/>
 
 

@@ -123,6 +123,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
     tx_good_num.setText(data.get(position).get("num"));
 
     ViewUtils.loadImgToImgView(context, img_goods, data.get(position).get("img_url"));
+    Log.d(TAG, " img_url " +data.get(position).get("img_url"));
 
     return convertView;
   }
@@ -267,6 +268,8 @@ public class OrderGoodsListAdapter extends BaseAdapter {
       num = list.get(i).getNum();
       state = list.get(i).getStatus();
       refund_state = list.get(i).getRefundStatus();
+
+      Log.d(TAG, "pic path " + img_url);
 
       map.put("goods_id", Integer.toString(goods_id));
       map.put("img_url", img_url);
