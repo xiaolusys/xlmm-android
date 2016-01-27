@@ -38,24 +38,27 @@ public class CartsPayInfoAdapter
 
     CartsPayinfoBean.CartListEntity cartListEntity = mList.get(position);
 
-    String headImg = cartListEntity.getPicPath();
-    String[] temp = headImg.split("http://image.xiaolu.so/");
-    String head_img = "";
-    if (temp.length > 1) {
-      try {
-        head_img = "http://image.xiaolu.so/"
-            + URLEncoder.encode(temp[1], "utf-8")
-            + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
-      } catch (UnsupportedEncodingException e) {
-        e.printStackTrace();
+    String picPath = cartListEntity.getPicPath();
+    if (picPath.startsWith("https://mmbiz.qlogo.cn")) {
+      holder.setImageFromUrl(mContext, R.id.cart_image, picPath);
+    } else {
+      String[] temp = picPath.split("http://image.xiaolu.so/");
+      String head_img = "";
+      if (temp.length > 1) {
+        try {
+          head_img = "http://image.xiaolu.so/"
+              + URLEncoder.encode(temp[1], "utf-8")
+              + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
+          holder.setImageFromUrl(mContext, R.id.cart_image, head_img);
+        } catch (UnsupportedEncodingException e) {
+          e.printStackTrace();
+        }
       }
     }
 
     holder.setText(R.id.title, cartListEntity.getTitle());
 
     holder.setText(R.id.sku_name, cartListEntity.getSkuName());
-
-    holder.setImageFromUrl(mContext,R.id.cart_image, head_img);
 
     return holder.getConvertView();
   }

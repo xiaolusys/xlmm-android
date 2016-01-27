@@ -11,15 +11,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.IndexBean;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActvity;
 import com.jimei.xiaolumeimei.ui.activity.product.TongkuanActivity;
+import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.zhy.autolayout.utils.AutoUtils;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,39 +66,39 @@ public class PreviousAdapter extends RecyclerView.Adapter<PreviousAdapter.Previo
       if (product_model.getName().length() <= 9) {
         holder.childlistName.setText(product_model.getName());
       } else {
-        holder.childlistName.setText(product_model.getName().substring(0,8)+"...");
+        holder.childlistName.setText(product_model.getName().substring(0, 8) + "...");
       }
 
       holder.childlistAgentPrice.setText("¥" + products.getAgent_price());
       holder.childlistStdsalePrice.setText("/¥" + products.getStd_sale_price());
-    }
-    catch (Exception e){
+    } catch (Exception e) {
       e.printStackTrace();
     }
 
     String headImg = products.getHead_img();
-    String[] temp = headImg.split("http://image.xiaolu.so/");
-    String head_img = "";
-    if (temp.length > 1) {
-      try {
-        head_img = "http://image.xiaolu.so/"
-            + URLEncoder.encode(temp[1], "utf-8")
-            + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
-      } catch (UnsupportedEncodingException e) {
-        e.printStackTrace();
-      }
-    }
+    //String[] temp = headImg.split("http://image.xiaolu.so/");
+    //String head_img = "";
+    //if (temp.length > 1) {
+    //  try {
+    //    head_img = "http://image.xiaolu.so/"
+    //        + URLEncoder.encode(temp[1], "utf-8")
+    //        + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
+    //  } catch (UnsupportedEncodingException e) {
+    //    e.printStackTrace();
+    //  }
+    //}
 
     holder.card.setTag(new Object());
-    Glide.with(mContext)
-        .load(head_img)
-        .diskCacheStrategy(DiskCacheStrategy.ALL)
-        .placeholder(R.drawable.parceholder)
-        .centerCrop()
-        .into(holder.childlistImage)
-        .getSize((width, height) -> {
-          if (!holder.card.isShown()) holder.card.setVisibility(View.VISIBLE);
-        });
+    //Glide.with(mContext)
+    //    .load(head_img)
+    //    .diskCacheStrategy(DiskCacheStrategy.ALL)
+    //    .placeholder(R.drawable.parceholder)
+    //    .centerCrop()
+    //    .into(holder.childlistImage)
+    //    .getSize((width, height) -> {
+    //      if (!holder.card.isShown()) holder.card.setVisibility(View.VISIBLE);
+    //    });
+    ViewUtils.loadImgToImgViewWithPlaceholder(mContext, holder.childlistImage, headImg);
 
     holder.card.setOnClickListener(v -> {
 

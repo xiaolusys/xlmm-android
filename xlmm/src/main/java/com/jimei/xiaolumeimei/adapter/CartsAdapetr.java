@@ -11,19 +11,15 @@ import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.CartsinfoBean;
-import com.jimei.xiaolumeimei.glidemoudle.GlideRoundTransform;
 import com.jimei.xiaolumeimei.model.CartsModel;
+import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.squareup.okhttp.ResponseBody;
 import com.zhy.autolayout.utils.AutoUtils;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import rx.schedulers.Schedulers;
@@ -80,27 +76,28 @@ public class CartsAdapetr extends RecyclerView.Adapter<CartsAdapetr.CartsVH> {
         (cartsinfoBean.getTotalFee()) * (Double.parseDouble(cartsinfoBean.getNum()));
     String headImg = cartsinfoBean.getPicPath();
 
-    String[] temp = headImg.split("http://image.xiaolu.so/");
-
-    String head_img = "";
-
-    if (temp.length > 1) {
-      try {
-        head_img = "http://image.xiaolu.so/"
-            + URLEncoder.encode(temp[1], "utf-8")
-            + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
-      } catch (UnsupportedEncodingException e) {
-        e.printStackTrace();
-      }
-    }
-
-    Glide.with(mContext)
-        .load(head_img)
-        .diskCacheStrategy(DiskCacheStrategy.ALL)
-        .placeholder(R.drawable.parceholder)
-        .centerCrop()
-        .bitmapTransform(new GlideRoundTransform(mContext, 8))
-        .into(holder.cartImage);
+    //String[] temp = headImg.split("http://image.xiaolu.so/");
+    //
+    //String head_img = "";
+    //
+    //if (temp.length > 1) {
+    //  try {
+    //    head_img = "http://image.xiaolu.so/"
+    //        + URLEncoder.encode(temp[1], "utf-8")
+    //        + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
+    //  } catch (UnsupportedEncodingException e) {
+    //    e.printStackTrace();
+    //  }
+    //}
+    //
+    //Glide.with(mContext)
+    //    .load(head_img)
+    //    .diskCacheStrategy(DiskCacheStrategy.ALL)
+    //    .placeholder(R.drawable.parceholder)
+    //    .centerCrop()
+    //    .bitmapTransform(new GlideRoundTransform(mContext, 8))
+    //    .into(holder.cartImage);
+    ViewUtils.loadImgToImgView(mContext, holder.cartImage, headImg);
 
     holder.add.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {

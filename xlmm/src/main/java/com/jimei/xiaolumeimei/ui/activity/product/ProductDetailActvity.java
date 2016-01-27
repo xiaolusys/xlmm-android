@@ -11,7 +11,6 @@ import android.graphics.PointF;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -109,61 +108,129 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
 
             String headImg2 = productDetailBean.getPicPath();
 
-            String[] temp = headImg2.split("http://image.xiaolu.so/");
+            //String[] temp = headImg2.split("http://image.xiaolu.so/");
+            //
+            //String head_img3 = "";
+            //
+            //if (temp.length > 1) {
+            //  try {
+            //    head_img3 = "http://image.xiaolu.so/"
+            //        + URLEncoder.encode(temp[1], "utf-8")
+            //        + "?imageMogr2/format/jpg/size-limit/50k/thumbnail/289/quality/110";
+            //  } catch (UnsupportedEncodingException e) {
+            //    e.printStackTrace();
+            //  }
+            //}
+            //
+            //Log.i("detaiImage", contentImgs.get(0));
+            //List<String> contentImgs1 = productDetailBean.getDetails().getContentImgs();
+            //
+            //final String finalHead_img1 = head_img3;
+            //titleImage.post(new Runnable() {
+            //  @Override public void run() {
+            //    Glide.with(mContext)
+            //        .load(finalHead_img1)
+            //        .diskCacheStrategy(DiskCacheStrategy.ALL)
+            //        .centerCrop()
+            //        .into(titleImage);
+            //  }
+            //});
 
-            String head_img3 = "";
-
-            if (temp.length > 1) {
-              try {
-                head_img3 = "http://image.xiaolu.so/"
-                    + URLEncoder.encode(temp[1], "utf-8")
-                    + "?imageMogr2/format/jpg/size-limit/50k/thumbnail/289/quality/110";
-              } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+            if (headImg2.startsWith("https://mmbiz.qlogo.cn")) {
+              titleImage.post(new Runnable() {
+                @Override public void run() {
+                  Glide.with(mContext)
+                      .load(headImg2)
+                      .diskCacheStrategy(DiskCacheStrategy.ALL)
+                      .centerCrop()
+                      .into(titleImage);
+                }
+              });
+            } else {
+              String[] temp = headImg2.split("http://image.xiaolu.so/");
+              String head_img = "";
+              if (temp.length > 1) {
+                try {
+                  head_img = "http://image.xiaolu.so/"
+                      + URLEncoder.encode(temp[1], "utf-8")
+                      + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/100";
+                  final String finalHead_img = head_img;
+                  titleImage.post(new Runnable() {
+                    @Override public void run() {
+                      Glide.with(mContext)
+                          .load(finalHead_img)
+                          .diskCacheStrategy(DiskCacheStrategy.ALL)
+                          .centerCrop()
+                          .into(titleImage);
+                    }
+                  });
+                } catch (UnsupportedEncodingException e) {
+                  e.printStackTrace();
+                }
               }
             }
-
-            Log.i("detaiImage", contentImgs.get(0));
-            List<String> contentImgs1 = productDetailBean.getDetails().getContentImgs();
-
-            final String finalHead_img1 = head_img3;
-            titleImage.post(new Runnable() {
-              @Override public void run() {
-                Glide.with(mContext)
-                    .load(finalHead_img1)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .centerCrop()
-                    .into(titleImage);
-              }
-            });
 
             String headImg1 = contentImgs.get(0);
 
-            String[] temp1 = headImg1.split("http://image.xiaolu.so/");
-
-            String head_img = "";
-
-            if (temp1.length > 1) {
-              try {
-                head_img = "http://image.xiaolu.so/"
-                    + URLEncoder.encode(temp1[1], "utf-8")
-                    + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
-              } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+            if (headImg1.startsWith("https://mmbiz.qlogo.cn")) {
+              titleImage.post(new Runnable() {
+                @Override public void run() {
+                  Glide.with(mContext)
+                      .load(headImg1)
+                      .diskCacheStrategy(DiskCacheStrategy.ALL)
+                      .centerCrop()
+                      .into(detailImage);
+                }
+              });
+            } else {
+              String[] temp = headImg1.split("http://image.xiaolu.so/");
+              String head_img = "";
+              if (temp.length > 1) {
+                try {
+                  head_img = "http://image.xiaolu.so/"
+                      + URLEncoder.encode(temp[1], "utf-8")
+                      + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/100";
+                  final String finalHead_img = head_img;
+                  titleImage.post(new Runnable() {
+                    @Override public void run() {
+                      Glide.with(mContext)
+                          .load(finalHead_img)
+                          .diskCacheStrategy(DiskCacheStrategy.ALL)
+                          .centerCrop()
+                          .into(detailImage);
+                    }
+                  });
+                } catch (UnsupportedEncodingException e) {
+                  e.printStackTrace();
+                }
               }
             }
 
-            //if (contentImgs != null) {
-            final String finalHead_img = head_img;
-            detailImage.post(new Runnable() {
-              @Override public void run() {
-                Glide.with(mContext)
-                    .load(finalHead_img)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .centerCrop()
-                    .into(detailImage);
-              }
-            });
+            //String[] temp1 = headImg1.split("http://image.xiaolu.so/");
+            //
+            //String head_img = "";
+            //
+            //if (temp1.length > 1) {
+            //  try {
+            //    head_img = "http://image.xiaolu.so/"
+            //        + URLEncoder.encode(temp1[1], "utf-8")
+            //        + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
+            //  } catch (UnsupportedEncodingException e) {
+            //    e.printStackTrace();
+            //  }
+            //}
+            //
+            ////if (contentImgs != null) {
+            //final String finalHead_img = head_img;
+            //detailImage.post(new Runnable() {
+            //  @Override public void run() {
+            //    Glide.with(mContext)
+            //        .load(finalHead_img)
+            //        .diskCacheStrategy(DiskCacheStrategy.ALL)
+            //        .centerCrop()
+            //        .into(detailImage);
+            //  }
+            //});
             //} else {
             //  detailImage.post(() -> Glide.with(mContext)
             //      .load(contentImgs1.get(0))
@@ -209,7 +276,6 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
     View target = findViewById(R.id.rv_cart);
     badge = new BadgeView(this);
     badge.setTargetView(target);
-
 
     loadViewForCode();
     mInflater = LayoutInflater.from(this);
@@ -360,7 +426,8 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
                   AnimatorSet animatorSet = new AnimatorSet();
                   animatorSet.playTogether(
                       ObjectAnimator.ofFloat(animView, "scaleX", 0.3f, 1f),
-                      ObjectAnimator.ofFloat(animView, "scaleY", 0.3f, 1f), valueAnimator);
+                      ObjectAnimator.ofFloat(animView, "scaleY", 0.3f, 1f),
+                      valueAnimator);
                   animatorSet.setDuration(1300);
                   animatorSet.start();
 
