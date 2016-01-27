@@ -76,7 +76,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
 
   private void fillDataToView(OrderDetailBean orderDetailBean) {
     TextView tx_order_id = (TextView) findViewById(R.id.tx_order_id);
-    tx_order_id.setText("订单编号" + orderDetailBean.getTid());
+    tx_order_id.setText("订单编号 " + orderDetailBean.getTid());
 
     TextView tx_order_state = (TextView) findViewById(R.id.tx_order_state);
     tx_order_state.setText(orderDetailBean.getStatus_display());
