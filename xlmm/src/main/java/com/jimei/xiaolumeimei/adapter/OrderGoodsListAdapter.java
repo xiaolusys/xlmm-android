@@ -6,7 +6,6 @@ package com.jimei.xiaolumeimei.adapter;
  */
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,33 +15,24 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
-import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.ui.activity.trade.ApplyRefundActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.ApplyReturnGoodsActivity;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import rx.schedulers.Schedulers;
 
 public class OrderGoodsListAdapter extends BaseAdapter {
   private static final String TAG = "OrderGoodsListAdapter";
-  private Activity context;
   List<HashMap<String, String>> data;
-
+  private Activity context;
   private List<AllOrdersBean.ResultsEntity.OrdersEntity> dataSource;
 
   public OrderGoodsListAdapter(Activity context) {
@@ -97,9 +87,9 @@ public class OrderGoodsListAdapter extends BaseAdapter {
     int refund_state = Integer.parseInt(data.get(position).get("refund_state"));
 
     if (convertView == null) {
-      if ((state == XlmmConst.ORDER_STATE_PAYED)
-              || (state == XlmmConst.ORDER_STATE_SENDED)
-          || (state == XlmmConst.ORDER_STATE_CONFIRM_RECEIVE)) {
+      if ((state == XlmmConst.ORDER_STATE_PAYED) || (state
+          == XlmmConst.ORDER_STATE_SENDED) || (state
+          == XlmmConst.ORDER_STATE_CONFIRM_RECEIVE)) {
         convertView = LayoutInflater.from(context)
             .inflate(R.layout.item_order_detail_include_proc, null);
         setBtnInfo(convertView, state, refund_state);
@@ -120,17 +110,16 @@ public class OrderGoodsListAdapter extends BaseAdapter {
     tx_good_name.setText(data.get(position).get("title"));
     tx_good_price.setText("￥" + data.get(position).get("pay_price"));
     tx_good_size.setText(data.get(position).get("model_id"));
-    tx_good_num.setText(data.get(position).get("num"));
+    tx_good_num.setText("X" + data.get(position).get("num"));
 
     ViewUtils.loadImgToImgView(context, img_goods, data.get(position).get("img_url"));
-    Log.d(TAG, " img_url " +data.get(position).get("img_url"));
+    Log.d(TAG, " img_url " + data.get(position).get("img_url"));
 
     return convertView;
   }
 
   private void setBtnInfo(View convertView, int state, int refund_state) {
-    Log.d(TAG, " setBtnInfo" +state +" "+ refund_state);
-
+    Log.d(TAG, " setBtnInfo" + state + " " + refund_state);
 
     Button btn = (Button) convertView.findViewById(R.id.btn_order_proc);
     switch (state) {
@@ -195,7 +184,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
             Log.d(TAG,
                 "transfer good  " + goods_info.getId() + " to " + "ApplyRefundActivity");
             context.startActivity(intent);
-            ((Activity)context).finish();
+            ((Activity) context).finish();
           }
         });
         break;
