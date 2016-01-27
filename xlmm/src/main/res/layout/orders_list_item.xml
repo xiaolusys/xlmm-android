@@ -62,11 +62,10 @@
         app:suffixTextSize="12sp"
         app:timeTextColor="#FFFFFF"
         app:timeTextSize="12sp"
-
-
         app:isShowTimeBgDivisionLine="false"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
+        android:visibility="invisible"
         />
 
     <TextView
