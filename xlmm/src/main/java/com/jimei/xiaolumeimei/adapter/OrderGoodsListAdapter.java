@@ -107,7 +107,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
     tx_good_size = (TextView) convertView.findViewById(R.id.tx_good_size);
     tx_good_num = (TextView) convertView.findViewById(R.id.tx_good_num);
 
-    tx_good_name.setText(data.get(position).get("title"));
+    tx_good_name.setText(data.get(position).get("title").substring(0, 8) + "...");
     tx_good_price.setText("¥" + data.get(position).get("pay_price"));
     tx_good_size.setText(data.get(position).get("model_id"));
     tx_good_num.setText("x" + data.get(position).get("num"));

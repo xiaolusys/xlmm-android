@@ -18,6 +18,8 @@
 		android:layout_width="48dp"
 		android:layout_height="wrap_content"
 		android:text="申请退款"
+		android:textColor="@color/colorAccent"
+		android:background="@drawable/text_frame"
 		android:textSize="10sp"
         android:gravity="center"
 		android:layout_gravity="center" />

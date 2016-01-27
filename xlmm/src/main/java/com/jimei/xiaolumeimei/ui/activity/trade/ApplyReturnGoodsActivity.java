@@ -146,6 +146,8 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
       case R.id.et_refund_info:
         Log.i(TAG,"et_refund_info ");
         et_refund_info.setCursorVisible(true);
+        et_refund_info.setFocusable(true);
+        et_refund_info.setFocusableInTouchMode(true);
         et_refund_info.requestFocus();
         break;
       case R.id.add:

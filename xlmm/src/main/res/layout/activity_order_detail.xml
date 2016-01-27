@@ -64,6 +64,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="待付款"
+            android:textColorHighlight="@color/colorAccent"
             android:textSize="15sp"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
@@ -163,15 +164,7 @@
           android:layout_width="fill_parent"
           android:layout_height="fill_parent">
       </com.jimei.xiaolumeimei.widget.NestedListView>
-      <include layout="@layout/common_gap"/>
-      <TextView
-          android:layout_margin="4dp"
-          android:id="@+id/tx_order_curstate"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="订单创建成功"
-          android:textSize="13sp"
-          android:layout_gravity="end"/>
+
 
       <include layout="@layout/common_gap"/>
 
