@@ -38,13 +38,18 @@ import com.jimei.xiaolumeimei.widget.TagAdapter;
 import com.jimei.xiaolumeimei.widget.TagFlowLayout;
 import com.jimei.xiaolumeimei.widget.anim.BezierEvaluator;
 import com.jimei.xiaolumeimei.widget.badgelib.BadgeView;
+import com.jimei.xiaolumeimei.widget.largeimage_lib.LongImageView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.Callback;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import okhttp3.Call;
 import rx.schedulers.Schedulers;
 
 /**
@@ -65,7 +70,8 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
   CartsModel cartsModel = new CartsModel();
   boolean isSelect;
   private PointF startP, endP, baseP;
-  private ImageView titleImage, detailImage;
+  private ImageView titleImage;
+  private LongImageView detailImage;
   private PullToZoomScrollViewEx scrollView;
   private TagFlowLayout tagFlowLayout;
   private String productId;
@@ -175,11 +181,32 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
             if (headImg1.startsWith("https://mmbiz.qlogo.cn")) {
               titleImage.post(new Runnable() {
                 @Override public void run() {
-                  Glide.with(mContext)
-                      .load(headImg1)
-                      .diskCacheStrategy(DiskCacheStrategy.ALL)
-                      .centerCrop()
-                      .into(detailImage);
+                  OkHttpUtils.get().url(headImg1).build().execute(new Callback() {
+                    @Override
+                    public Object parseNetworkResponse(okhttp3.Response response)
+                        throws Exception {
+
+                      InputStream inputStream = response.body().byteStream();
+                      detailImage.setImage(inputStream);
+
+                      return null;
+                    }
+
+                    @Override public void onError(Call call, Exception e) {
+
+                    }
+
+                    @Override public void onResponse(Object response) {
+
+                    }
+                  });
+
+                  //Glide.with(mContext)
+                  //    .load(headImg1)
+                  //    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                  //    .centerCrop()
+                  //    .into(detailImage);
+
                 }
               });
             } else {
@@ -187,17 +214,41 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
               String head_img = "";
               if (temp.length > 1) {
                 try {
-                  head_img = "http://image.xiaolu.so/"
-                      + URLEncoder.encode(temp[1], "utf-8")
-                      + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/100";
+                  head_img =
+                      "http://image.xiaolu.so/" + URLEncoder.encode(temp[1], "utf-8");
+                  //+ "?imageMogr2/format/jpg/size-limit/230k/thumbnail/289/quality"
+                  //+ "/300";
                   final String finalHead_img = head_img;
                   titleImage.post(new Runnable() {
                     @Override public void run() {
-                      Glide.with(mContext)
-                          .load(finalHead_img)
-                          .diskCacheStrategy(DiskCacheStrategy.ALL)
-                          .centerCrop()
-                          .into(detailImage);
+                      //Glide.with(mContext)
+                      //    .load(finalHead_img)
+                      //    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                      //    .centerCrop()
+                      //    .into(detailImage);
+
+
+                      OkHttpUtils.get()
+                          .url(finalHead_img)
+                          .build()
+                          .execute(new Callback() {
+                            @Override
+                            public Object parseNetworkResponse(okhttp3.Response response)
+                                throws Exception {
+                              InputStream inputStream = response.body().byteStream();
+                              detailImage.setImage(inputStream);
+
+                              return null;
+                            }
+
+                            @Override public void onError(Call call, Exception e) {
+
+                            }
+
+                            @Override public void onResponse(Object response) {
+
+                            }
+                          });
                     }
                   });
                 } catch (UnsupportedEncodingException e) {
@@ -296,8 +347,8 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
       //window.setNavigationBarColor(Color.TRANSPARENT);
     }
 
-    detailImage =
-        (ImageView) scrollView.getPullRootView().findViewById(R.id.image_details_product);
+    detailImage = (LongImageView) scrollView.getPullRootView()
+        .findViewById(R.id.image_details_product);
 
     tagFlowLayout =
         (TagFlowLayout) scrollView.getPullRootView().findViewById(R.id.id_flowlayout);
