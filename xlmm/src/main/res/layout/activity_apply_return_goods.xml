@@ -41,6 +41,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_below="@+id/app_bar_layout"
+      android:padding="4dp"
       >
 
     <LinearLayout
@@ -51,7 +52,7 @@
 
       <RelativeLayout
           android:layout_width="fill_parent"
-          android:layout_height="32dp"
+          android:layout_height="wrap_content"
           android:orientation="horizontal"
           >
         <TextView
@@ -97,6 +98,7 @@
             android:layout_alignParentTop="true"
             android:text="申请数量："
             android:textSize="15sp"
+            android:gravity="center"
             />
 
         <TextView
@@ -106,8 +108,8 @@
             android:textColor="@color/colorPrimary"
             android:background="@drawable/shape_deleteoradd"
             android:text="@string/delete"
-            android:layout_width="48px"
-            android:layout_height="48px"
+            android:layout_width="38px"
+            android:layout_height="38px"
             android:layout_marginTop="5px"
             android:layout_marginLeft="543px"
             android:layout_centerVertical="true"
@@ -132,8 +134,8 @@
             android:textColor="@color/colorPrimary"
             android:background="@drawable/shape_deleteoradd"
             android:text="@string/add"
-            android:layout_width="48px"
-            android:layout_height="48px"
+            android:layout_width="38px"
+            android:layout_height="38px"
             android:layout_marginTop="5px"
             android:layout_toRightOf="@id/tx_refund_num"
             android:layout_alignBottom="@id/delete"
@@ -156,6 +158,7 @@
             android:layout_alignParentTop="true"
             android:text="可退金额："
             android:textSize="15sp"
+            android:gravity="center"
             />
 
         <TextView
@@ -167,6 +170,7 @@
             android:layout_alignParentTop="true"
             android:text="￥120"
             android:textSize="15sp"
+            android:gravity="center"
             />
       </RelativeLayout>
 
@@ -187,6 +191,7 @@
             android:layout_alignParentTop="true"
             android:text="退货原因"
             android:textSize="15sp"
+            android:gravity="center"
             />
 
         <EditText
@@ -199,7 +204,7 @@
             android:layout_marginTop="10px"
             android:background="@drawable/text_frame"
             android:cursorVisible="false"
-            android:drawableRight="@drawable/iconfont_downgrey"
+            android:drawableRight="@drawable/ic_downarrow"
             android:focusable="false"
             android:text="请选择退货原因"
             android:textSize="15sp"
@@ -218,6 +223,7 @@
             android:focusable="false"
             android:text="请输入退货说明"
             android:textSize="15sp"
+            android:gravity="top"
             />
 
       </RelativeLayout>
@@ -294,7 +300,9 @@
       android:layout_centerHorizontal="true"
       android:layout_marginBottom="10px"
       android:text="提交申请"
+      android:textColor="@color/white"
       android:textSize="15sp"
+      android:background="@drawable/shape_common"
       />
 
 

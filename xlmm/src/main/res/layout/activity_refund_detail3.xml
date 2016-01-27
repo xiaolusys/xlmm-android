@@ -64,6 +64,7 @@
             android:layout_alignParentTop="true"
             android:text="订单编号："
             android:textSize="15sp"
+            android:gravity="center"
             />
 
         <TextView
@@ -74,7 +75,9 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:text="退款成功"
+            android:textColor="@color/colorAccent"
             android:textSize="15sp"
+            android:gravity="center"
             />
       </RelativeLayout>
 
@@ -82,15 +85,18 @@
       <Button
           android:id="@+id/btn_return_addr"
           android:layout_width="wrap_content"
-          android:layout_height="match_parent"
+          android:layout_height="wrap_content"
           android:text="退货地址信息"
           android:textSize="15sp"
+          android:textColor="@color/colorAccent"
+          android:background="@drawable/text_frame"
           android:layout_gravity="right"
+          android:layout_margin="4dp"
           />
       <include layout="@layout/common_gap"/>
       <EditText
           android:layout_width="match_parent"
-          android:layout_height="70px"
+          android:layout_height="wrap_content"
           android:text="请选择物流信息"
           android:textSize="15sp"
           android:id="@+id/et_logistics_info"
