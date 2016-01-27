@@ -20,7 +20,7 @@
         android:layout_marginLeft="237px"
         android:layout_marginTop="150px"
         android:clickable="true"
-        android:src="@drawable/personal_iamge" />
+        android:src="@drawable/img_head" />
 
     <TextView
         android:id="@+id/tvNickname"

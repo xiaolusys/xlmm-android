@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ import com.google.gson.Gson;
 import com.jimei.xiaolumeimei.adapter.AllOrdersListAdapter;
 import com.jimei.xiaolumeimei.adapter.CouponListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.CouponBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.model.UserModel;
@@ -57,9 +59,11 @@ import rx.schedulers.Schedulers;
 public class CouponActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener{
     String TAG = "CouponActivity";
 
+
     @Bind(R.id.toolbar) Toolbar toolbar;
     @Bind(R.id.btn_jump)    Button btn_jump;
     @Bind(R.id.rlayout_order_empty)    RelativeLayout rl_empty;
+    @Bind(R.id.sv_frame_coupon) ScrollView sv_frame_coupon;
     UserModel model = new UserModel();
     private CouponListAdapter mCouponAdapter;
     private CouponListAdapter mPastCouponAdapter;
@@ -104,7 +108,7 @@ public class CouponActivity extends BaseSwipeBackCompatActivity implements View.
                         if (0 != results.size())
                         {
                             rl_empty.setVisibility(View.INVISIBLE);
-                            mCouponAdapter.update(results);
+                            mCouponAdapter.update(results, XlmmConst.UNUSED_COUPON);
                         }
 
                         Log.i(TAG, couponBean.toString());
@@ -118,13 +122,14 @@ public class CouponActivity extends BaseSwipeBackCompatActivity implements View.
                         List<CouponBean.ResultsEntity> results = couponBean.getResults();
                         if (0 == results.size()){
                             if(0 == unused_num) {
-
+                                sv_frame_coupon.setVisibility(View.INVISIBLE);
+                                rl_empty.setVisibility(View.VISIBLE);
                             }
                         }
                         else
                         {
                             rl_empty.setVisibility(View.INVISIBLE);
-                            mPastCouponAdapter.update(results);
+                            mPastCouponAdapter.update(results, XlmmConst.PAST_COUPON);
                         }
 
                         Log.i(TAG, couponBean.toString());

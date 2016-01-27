@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -31,6 +32,8 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity impleme
 
     @Bind(R.id.toolbar) Toolbar toolbar;
     @Bind(R.id.btn_jump)    Button btn_jump;
+    @Bind(R.id.rlayout_order_empty) RelativeLayout rlayout_order_empty;
+
     UserModel model = new UserModel();
     private MembershipPointListAdapter mPointAdapter;
     TextView  tx_point;
@@ -53,7 +56,7 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity impleme
         toolbar.setNavigationIcon(R.drawable.back);
 
         ListView all_orders_listview = (ListView) findViewById(R.id.all_points_listview);
-        all_orders_listview.setEmptyView(findViewById(R.id.rlayout_order_empty));
+
         mPointAdapter = new MembershipPointListAdapter(this);
         all_orders_listview.setAdapter(mPointAdapter);
 
@@ -63,6 +66,9 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity impleme
         tx_info.setText("亲，您暂时还没有积分记录哦~");
         TextView tx_info2 = (TextView) findViewById(R.id.tx2);
         tx_info2.setText("快去下单赚取积分吧~");
+
+        ImageView imageView2 = (ImageView) findViewById(R.id.imageView2);
+        imageView2.setImageResource(R.drawable.img_emptypoint);
     }
     //从server端获得所有订单数据，可能要查询几次
     @Override protected void initData() {
@@ -89,6 +95,7 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity impleme
                         List<PointLogBean.ResultsEntity> results = pointLogBean.getResults();
                         if (0 == results.size()){
                             Log.d(TAG, "pointlog 0 " );
+                            rlayout_order_empty.setVisibility(View.VISIBLE);
                         }
                         else
                         {

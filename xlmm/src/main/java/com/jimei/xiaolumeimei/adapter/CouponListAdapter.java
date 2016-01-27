@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.CouponBean;
 import com.jimei.xiaolumeimei.widget.MyHorizontalScrollView;
@@ -54,7 +55,7 @@ public class CouponListAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    public void update(List<CouponBean.ResultsEntity> list) {
+    public void update(List<CouponBean.ResultsEntity> list, int coupon_type) {
         float coupon_value = 0;
         String usestate = "";
         String crttime = "";
@@ -78,6 +79,7 @@ public class CouponListAdapter extends BaseAdapter {
 
             coupon_no = list.get(i).getCoupon_no();
 
+            map.put("coupon_type", Integer.toString(coupon_type) );
             map.put("coupon_value", Float.toString(coupon_value) );
             map.put("usestate", usestate);
             map.put("crttime", crttime);
@@ -112,6 +114,12 @@ public class CouponListAdapter extends BaseAdapter {
 
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.item_coupon, null);
+            if(Integer.parseInt(data.get(position).get("coupon_type")) == XlmmConst.UNUSED_COUPON) {
+                convertView.setBackgroundResource(R.drawable.bg_img_coupon);
+            }
+            else if(Integer.parseInt(data.get(position).get("coupon_type")) == XlmmConst.PAST_COUPON){
+                convertView.setBackgroundResource(R.drawable.bg_img_pastcoupon);
+            }
         }
 
         TextView tv_coupon_value = (TextView) convertView.findViewById(R.id.tv_coupon_value);

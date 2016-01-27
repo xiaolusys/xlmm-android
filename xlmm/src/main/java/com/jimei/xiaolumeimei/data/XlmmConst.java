@@ -22,4 +22,8 @@ public class XlmmConst {
     public static  final int REFUND_STATE_WAIT_RETURN_FEE = 6;
     public static  final int REFUND_STATE_REFUND_CLOSE = 1;
     public static  final int REFUND_STATE_REFUND_SUCCESS = 7;
+
+    public static final int UNUSED_COUPON = 0;
+    public static final int PAST_COUPON = 1;
+    public static final int USED_COUPON = 2;
 }
