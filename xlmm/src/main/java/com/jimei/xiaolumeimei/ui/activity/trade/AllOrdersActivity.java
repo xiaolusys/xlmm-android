@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
@@ -25,6 +26,7 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.btn_jump) Button btn_jump;
   @Bind(R.id.all_orders_listview) ListView all_orders_listview;
   @Bind(R.id.toolbar) Toolbar toolbar;
+  @Bind(R.id.rlayout_order_empty) RelativeLayout rl_empty;
 
   TradeModel model = new TradeModel();
   private AllOrdersListAdapter mAllOrderAdapter;
@@ -62,9 +64,10 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity
         .subscribe(new ServiceResponse<AllOrdersBean>() {
           @Override public void onNext(AllOrdersBean allOrdersBean) {
             List<AllOrdersBean.ResultsEntity> results = allOrdersBean.getResults();
-            all_orders_listview.setEmptyView(findViewById(R.id.rlayout_order_empty));
+
             if (0 == results.size()) {
               Log.i(TAG, "results.size()=0");
+              rl_empty.setVisibility(View.INVISIBLE);
             } else {
               mAllOrderAdapter.update(results);
             }
