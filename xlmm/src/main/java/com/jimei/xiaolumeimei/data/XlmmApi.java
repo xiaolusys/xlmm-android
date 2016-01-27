@@ -56,10 +56,10 @@ public class XlmmApi {
   public static final String COUPON_URL = URL_BASE + "usercoupons";
 
   //获取待支付订单
-  public static  final String WAITPAY_URL = URL_BASE+"/waitpay";
+  public static  final String WAITPAY_URL = URL_BASE+"trades/waitpay";
 
   //获取待发货订单
-  public static  final String WAITSEND_URL = URL_BASE+"/waitsend";
+  public static  final String WAITSEND_URL = URL_BASE+"trades/waitsend";
 
 
   public static final String SETTINGMYINFO_URL =
