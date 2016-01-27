@@ -137,7 +137,7 @@ public class AllOrdersListAdapter extends BaseAdapter {
         tx_good_price.setText("￥" + mList.get(position).getOrders().get(0).getPayment());
         tx_good_size.setText("尺码:" + mList.get(position).getOrders().get(0).getSkuName());
         tx_good_num.setText(
-            "X" + Integer.toString(mList.get(position).getOrders().get(0).getNum()));
+            "x" + Integer.toString(mList.get(position).getOrders().get(0).getNum()));
 
         ViewUtils.loadImgToImgView(context, img_goods, data.get(position).get("img_url"));
 

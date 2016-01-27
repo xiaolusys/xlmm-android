@@ -98,6 +98,14 @@ public class SettingNicknameActivity extends BaseSwipeBackCompatActivity impleme
             JUtils.Toast("请输入4-20位昵称");
             return false;
         }
+        for(int i = 0; i< name.length(); i++){
+            if(true == Character.isLetter( name.charAt(i))
+                    && true == Character.isDigit(name.charAt(i))
+                    && '-' !=  name.charAt(i)){
+                JUtils.Toast("字符不符合规范,只能是字母、数字、-字符.");
+                return false;
+            }
+        }
 
         return true;
     }
