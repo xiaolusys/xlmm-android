@@ -111,6 +111,8 @@ public class SettingActivity extends BaseSwipeBackCompatActivity {
 
       setNickname = findPreference(getResources().getString(R.string.set_nick));
       bindPhone = findPreference(getResources().getString(R.string.bind_phone));
+      setNickname.setSummary(nickName);
+      bindPhone.setSummary(mobile);
 
       return view;
     }
@@ -118,8 +120,7 @@ public class SettingActivity extends BaseSwipeBackCompatActivity {
     void updateCache() {
       clearCache.setSummary(
           DataClearManager.getApplicationDataSize(XlmmApp.getInstance()));
-      setNickname.setSummary(nickName);
-      bindPhone.setSummary(mobile);
+
     }
 
     @Override public boolean onPreferenceClick(Preference preference) {
