@@ -76,7 +76,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
 
   private void fillDataToView(OrderDetailBean orderDetailBean) {
     TextView tx_order_id = (TextView) findViewById(R.id.tx_order_id);
-    tx_order_id.setText("订单编号" + orderDetailBean.getTid());
+    tx_order_id.setText("订单编号 " + orderDetailBean.getTid());
 
     TextView tx_order_state = (TextView) findViewById(R.id.tx_order_state);
     tx_order_state.setText(orderDetailBean.getStatus_display());
@@ -89,7 +89,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
 
     //没有订单创建时间?
     TextView tx_order_crttime = (TextView) findViewById(R.id.tx_order_crttime);
-    tx_order_crttime.setText("时间：" + orderDetailBean.getCreated());
+    tx_order_crttime.setText(" " + orderDetailBean.getCreated());
     TextView tx_order_crtstate = (TextView) findViewById(R.id.tx_order_crtstate);
     tx_order_crtstate.setText("订单创建成功");
 
@@ -105,7 +105,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     tx_order_postfee.setText("￥" + orderDetailBean.getPost_fee());
 
     TextView tx_order_payment = (TextView) findViewById(R.id.tx_order_payment);
-    tx_order_payment.setText("总金额 ￥" + orderDetailBean.getPayment());
+    tx_order_payment.setText("￥" + orderDetailBean.getPayment());
   }
 
   private void showProcBtn(OrderDetailBean orderDetailBean) {

@@ -8,227 +8,286 @@
     android:orientation="vertical"
     tools:context="com.jimei.xiaolumeimei.ui.activity.trade.OrderDetailActivity">
 
-    <android.support.design.widget.AppBarLayout
+  <android.support.design.widget.AppBarLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:theme="@style/AppTheme.AppBarOverlay">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_height="?attr/actionBarSize"
+        android:background="#fdb916"
+        app:popupTheme="@style/AppTheme.PopupOverlay">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="#fdb916"
-            app:popupTheme="@style/AppTheme.PopupOverlay">
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerInParent="true"
+          android:layout_gravity="center"
+          android:text="订单详情"
+          android:textColor="@android:color/white"
+          android:textSize="24sp"
+          android:textStyle="bold"/>
+    </android.support.v7.widget.Toolbar>
 
+  </android.support.design.widget.AppBarLayout>
+
+  <ScrollView
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical">
+
+      <RelativeLayout
+          android:background="@color/white"
+          android:padding="4dp"
+          android:layout_width="fill_parent"
+          android:layout_height="32dp"
+          android:orientation="horizontal">
+        <TextView
+            android:id="@+id/tx_order_id"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="订单编号："
+            android:textSize="15sp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
+
+        <TextView
+            android:textColor="@color/colorPrimary"
+            android:id="@+id/tx_order_state"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="待付款"
+            android:textSize="15sp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
+      </RelativeLayout>
+
+      <include layout="@layout/common_gap"/>
+
+      <RelativeLayout
+          android:clickable="true"
+          android:id="@+id/adress"
+          android:padding="8dp"
+          android:layout_width="match_parent"
+          android:background="@color/white"
+          android:layout_height="145px">
+        <ImageView android:layout_width="wrap_content"
+            android:layout_centerVertical="true"
+            android:id="@+id/image_location"
+            android:layout_height="wrap_content"
+            android:src="@drawable/location"
+            />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center"
-            android:text="订单详情"
-            android:textColor="@android:color/white"
-            android:textSize="24sp"
-            android:textStyle="bold"/>
-        </android.support.v7.widget.Toolbar>
+            android:id="@+id/tx_custom_name"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@id/image_location"
+            android:text="xiaolumama"
+            />
 
-    </android.support.design.widget.AppBarLayout>
+        <TextView
+            android:id="@+id/tx_custom_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@id/image_location"
+            android:text="上海杨浦区内环十八街东西瓜区测试地址"
+            android:layout_alignParentBottom="true"
+            />
+        <TextView
+            android:visibility="invisible"
+            android:id="@+id/choose_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@id/image_location"
+            android:text="填写收货地址"
+            android:layout_alignBottom="@id/image_location"
+            />
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" >
+      </RelativeLayout>
 
-            <RelativeLayout
-                android:padding="4dp"
-                android:layout_width="fill_parent"
-                android:layout_height="32dp"
-                android:orientation="horizontal" >
-                <TextView
-                    android:id="@+id/tx_order_id"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="订单编号："
-                    android:textSize="15sp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
+      <include layout="@layout/common_gap"/>
 
-                <TextView
-                    android:id="@+id/tx_order_state"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="待付款"
-                    android:textSize="15sp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true" />
-            </RelativeLayout>
+      <RelativeLayout
+          android:background="@color/white"
+          android:padding="8dp"
+          android:layout_width="fill_parent"
+          android:layout_height="64dp"
+          android:orientation="vertical">
+        <ImageView
+            android:id="@+id/image_slice"
+            android:layout_width="wrap_content"
+            android:src="@drawable/slice"
+            android:layout_height="wrap_content"
 
-            <include layout="@layout/common_gap" />
+            />
+        <TextView
+            android:layout_toRightOf="@id/image_slice"
+            android:id="@+id/tx_order_crttime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="时间：2016年1月6日"
+            android:textSize="15sp"
+            />
 
-            <LinearLayout
-                android:padding="8dp"
-                android:layout_width="fill_parent"
-                android:layout_height="64dp"
-                android:orientation="vertical" >
+        <TextView
+            android:layout_toRightOf="@id/image_slice"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/tx_order_crtstate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="订单创建成功"
+            android:textSize="15sp"
+            />
+        <ImageView
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/common_icon_right_arrow"/>
+      </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/tx_custom_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="姓名："
-                    android:textSize="15sp"
-                     />
+      <include layout="@layout/common_gap"/>
+      <com.jimei.xiaolumeimei.widget.NestedListView
+          android:id="@+id/lv_goods"
+          android:layout_width="fill_parent"
+          android:layout_height="fill_parent">
+      </com.jimei.xiaolumeimei.widget.NestedListView>
+      <include layout="@layout/common_gap"/>
+      <TextView
+          android:layout_margin="4dp"
+          android:id="@+id/tx_order_curstate"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="订单创建成功"
+          android:textSize="13sp"
+          android:layout_gravity="end"/>
 
-                <TextView
-                    android:id="@+id/tx_custom_address"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="地址："
-                    android:textSize="15sp"
-                     />
+      <include layout="@layout/common_gap"/>
 
-            </LinearLayout>
+      <RelativeLayout
+          android:background="@color/white"
+          android:padding="8dp"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="商品金额："
+            android:textSize="15sp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
 
-            <include layout="@layout/common_gap" />
+        <TextView
+            android:textColor="@color/colorPrimary"
+            android:id="@+id/tx_order_totalfee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="￥49"
+            android:textSize="15sp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
+      </RelativeLayout>
+      <include layout="@layout/common_gap"/>
+      <RelativeLayout
+          android:background="@color/white"
+          android:padding="8dp"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="优惠券："
+            android:textSize="15sp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
 
-            <LinearLayout
-                android:padding="8dp"
-                android:layout_width="fill_parent"
-                android:layout_height="64dp"
-                android:orientation="vertical" >
+        <TextView
+            android:textColor="@color/colorPrimary"
+            android:id="@+id/tx_order_discountfee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="￥0"
+            android:textSize="15sp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
+      </RelativeLayout>
+      <include layout="@layout/common_gap"/>
+      <RelativeLayout
+          android:background="@color/white"
+          android:padding="8dp"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="运费："
+            android:textSize="15sp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
 
-                <TextView
-                    android:id="@+id/tx_order_crttime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="时间：2016年1月6日"
-                    android:textSize="15sp"
-                    />
+        <TextView
+            android:textColor="@color/colorPrimary"
+            android:id="@+id/tx_order_postfee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="￥5"
+            android:textSize="15sp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
+      </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/tx_order_crtstate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="订单创建成功"
-                    android:textSize="15sp"
-                    />
+      <include layout="@layout/common_gap"/>
+      <RelativeLayout
+          android:padding="4dp"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content">
+        <TextView
 
-            </LinearLayout>
+            android:layout_toLeftOf="@+id/tx_order_payment"
+            android:id="@+id/tv_momey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="总金额:"
+            android:textSize="13sp"
+            android:layout_gravity="right"/>
+        <TextView
+            android:textColor="@color/colorPrimary"
+            android:layout_alignParentRight="true"
+            android:id="@+id/tx_order_payment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="总金额￥"
+            android:textSize="13sp"
+            android:layout_gravity="right"/>
+      </RelativeLayout>
+      <include layout="@layout/common_gap"/>
 
-            <include layout="@layout/common_gap" />
-            <com.jimei.xiaolumeimei.widget.NestedListView
-                android:id="@+id/lv_goods"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent" >
-            </com.jimei.xiaolumeimei.widget.NestedListView>
+      <include
+          layout="@layout/orders_pay_lefttime"/>
 
-            <TextView
-                android:layout_margin="4dp"
-                android:id="@+id/tx_order_curstate"
-                android:layout_width="wrap_content"
-                android:layout_height="16dp"
-                android:text="订单创建成功"
-                android:textSize="15sp"
-                android:layout_gravity="end" />
+    </LinearLayout>
 
-            <include layout="@layout/common_gap" />
+  </ScrollView>
 
-            <RelativeLayout
-                android:padding="8dp"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" >
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="商品金额："
-                    android:textSize="15sp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
-
-                <TextView
-                    android:id="@+id/tx_order_totalfee"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="￥49"
-                    android:textSize="15sp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:padding="8dp"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" >
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="优惠券："
-                    android:textSize="15sp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
-
-                <TextView
-                    android:id="@+id/tx_order_discountfee"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="￥0"
-                    android:textSize="15sp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:padding="8dp"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" >
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="运费："
-                    android:textSize="15sp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
-
-                <TextView
-                    android:id="@+id/tx_order_postfee"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="￥5"
-                    android:textSize="15sp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true" />
-            </RelativeLayout>
-
-            <include layout="@layout/common_gap" />
-
-            <TextView
-                android:layout_margin="4dp"
-                android:id="@+id/tx_order_payment"
-                android:layout_width="wrap_content"
-                android:layout_height="16dp"
-                android:text="总金额￥"
-                android:textSize="15sp"
-                android:layout_gravity="right" />
-        </LinearLayout>
-    </ScrollView>
-
-    <include layout="@layout/orders_pay_lefttime" />
 
 </LinearLayout>
