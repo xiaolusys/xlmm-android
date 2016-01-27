@@ -13,29 +13,35 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
     android:weightSum="1">
 
-    <ImageView
-        android:id="@+id/imgUser"
-        android:layout_width="116px"
-        android:layout_height="116px"
-        android:layout_marginLeft="237px"
-        android:layout_marginTop="150px"
-        android:clickable="true"
-        android:src="@drawable/img_head" />
-
-    <TextView
-        android:id="@+id/tvNickname"
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="34px"
-        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100px"
         android:layout_marginLeft="237px"
-        android:layout_marginTop="10px"
-        android:text="小鹿妈妈"
-        android:layout_below="@+id/imgUser" />
+        android:id="@+id/rl_head">
+
+        <ImageView
+            android:id="@+id/imgUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:src="@drawable/img_head" />
+
+        <TextView
+            android:id="@+id/tvNickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="10px"
+            android:text="小鹿妈妈"
+            android:layout_below="@+id/imgUser" />
+    </RelativeLayout>>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="321px"
+        android:layout_marginTop="50px"
+        android:layout_below="@+id/rl_head"
         android:orientation="horizontal">
 
         <RelativeLayout
@@ -46,8 +52,8 @@
 
             <ImageView
                 android:id="@+id/imgPoint"
-                android:layout_width="73px"
-                android:layout_height="34px"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="80px"
                 android:clickable="true"
                 android:src="@drawable/ic_point" />
@@ -69,8 +75,8 @@
 
             <ImageView
                 android:id="@+id/imgCoupon"
-                android:layout_width="96px"
-                android:layout_height="34px"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="80px"
                 android:clickable="true"
                 android:src="@drawable/ic_coupon" />
