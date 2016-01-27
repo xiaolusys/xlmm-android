@@ -4,7 +4,7 @@
       android:layout="@layout/preference_list_item"
       android:key="账户昵称"
       android:title="账户昵称"
-      android:summary="xuye">
+      android:summary="">
     <intent
         android:action="android.intent.action.MAIN"
         android:targetPackage="com.jimei.xiaolumeimei"
@@ -14,13 +14,13 @@
       android:layout="@layout/preference_list_item"
       android:key="绑定手机"
       android:title="绑定手机"
-      android:summary="xuye">
+      android:summary="">
   </Preference>
   <Preference
       android:layout="@layout/preference_list_item"
       android:key="修改密码"
       android:title="修改密码"
-      android:summary="xuye">
+      android:summary="">
     <intent
         android:action="android.intent.action.MAIN"
         android:targetPackage="com.jimei.xiaolumeimei"
@@ -30,7 +30,7 @@
       android:layout="@layout/preference_list_item"
       android:key="地址管理"
       android:title="地址管理"
-      android:summary="xuye">
+      android:summary="">
     <intent
         android:action="android.intent.action.MAIN"
         android:targetPackage="com.jimei.xiaolumeimei"
@@ -47,7 +47,7 @@
       android:layout="@layout/preference_list_item"
       android:key="关于小鹿美美"
       android:title="关于小鹿美美"
-      android:summary="xuye">
+      android:summary="">
     <intent
         android:action="android.intent.action.MAIN"
         android:targetPackage="com.jimei.xiaolumeimei"

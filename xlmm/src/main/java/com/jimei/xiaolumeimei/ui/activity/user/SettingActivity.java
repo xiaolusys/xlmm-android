@@ -4,17 +4,23 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.schedulers.Schedulers;
+
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.utils.AppUtils;
 import com.jimei.xiaolumeimei.utils.DataClearManager;
+import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/01/18.
@@ -22,16 +28,45 @@ import com.jimei.xiaolumeimei.utils.DataClearManager;
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class SettingActivity extends BaseSwipeBackCompatActivity {
+  String TAG = "SettingActivity";
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.container_setting) FrameLayout containerSetting;
   private SettingFragment settingFragment;
+  UserInfoBean userinfo;
+  static String nickName;
+  static String mobile;
 
   @Override protected void setListener() {
 
   }
 
   @Override protected void initData() {
+    UserModel model = new UserModel();
+    model.getUserInfo()
+            .subscribeOn(Schedulers.newThread())
+            .subscribe(new ServiceResponse<UserInfoBean>() {
+              @Override
+              public void onNext(UserInfoBean user) {
+                userinfo = user;
+                Log.d(TAG, "getUserInfo:, "   + userinfo.getResults().get(0).toString());
+                nickName = userinfo.getResults().get(0).getNick();
+                mobile = userinfo.getResults().get(0).getMobile();
+                Log.d(TAG, "getUserInfo nick "+userinfo.getResults().get(0).getNick() + " phone " + userinfo.getResults().get(0).getMobile() );
 
+              }
+
+              @Override
+              public void onCompleted() {
+                super.onCompleted();
+              }
+
+              @Override
+              public void onError(Throwable e) {
+
+                Log.e(TAG, "error:, "   + e.toString());
+                super.onError(e);
+              }
+            });
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -62,6 +97,8 @@ public class SettingActivity extends BaseSwipeBackCompatActivity {
 
     private View view;
     private Preference clearCache;
+    private Preference setNickname;
+    private Preference bindPhone;
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
@@ -71,12 +108,18 @@ public class SettingActivity extends BaseSwipeBackCompatActivity {
       clearCache = findPreference(getResources().getString(R.string.clear_cache));
       clearCache.setOnPreferenceClickListener(this);
       updateCache();
+
+      setNickname = findPreference(getResources().getString(R.string.set_nick));
+      bindPhone = findPreference(getResources().getString(R.string.bind_phone));
+
       return view;
     }
 
     void updateCache() {
       clearCache.setSummary(
           DataClearManager.getApplicationDataSize(XlmmApp.getInstance()));
+      setNickname.setSummary(nickName);
+      bindPhone.setSummary(mobile);
     }
 
     @Override public boolean onPreferenceClick(Preference preference) {
