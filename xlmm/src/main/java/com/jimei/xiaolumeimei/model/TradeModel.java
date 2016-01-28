@@ -35,12 +35,9 @@ public class TradeModel {
   }
 
   //立即支付订单
-  public Observable<ResponseBody> shoppingcart_paynow(PayRightNowInfo payInfo) {
+  public Observable<ResponseBody> shoppingcart_paynow(int order_id) {
     return XlmmRetrofitClient.getService()
-            .shoppingcart_paynow(payInfo.getItem_id(), payInfo.getSku_id(), payInfo.getNum(),
-                payInfo.getAddr_id(), payInfo.getChannel(),
-                payInfo.getPayment(),  payInfo.getPost_fee(),
-                payInfo.getDiscount_fee(), payInfo.getTotal_fee(), payInfo.getUuid())
+            .shoppingcart_paynow(order_id)
             .compose(new DefaultTransform<>());
   }
 

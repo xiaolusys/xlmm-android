@@ -1,5 +1,9 @@
 package com.jimei.xiaolumeimei.ui.activity.trade;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.ComponentName;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -9,24 +13,40 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.OrderGoodsListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.data.PayRightNowInfo;
 import com.jimei.xiaolumeimei.data.XlmmConst;
+import com.jimei.xiaolumeimei.entities.AddressBean;
+import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
+import com.jimei.xiaolumeimei.model.AddressModel;
+import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.pingplusplus.android.PaymentActivity;
+import com.squareup.okhttp.ResponseBody;
+import java.io.IOException;
+import java.util.List;
 import rx.schedulers.Schedulers;
 
 public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener {
   String TAG = "OrderDetailActivity";
+  private static final int REQUEST_CODE_PAYMENT = 1;
+
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.btn_order_proc) Button btn_proc;
+  @Bind(R.id.rlayout_order_lefttime) RelativeLayout rlayout_order_lefttime;
+
   int order_id = 0;
-  TradeModel model = new TradeModel();
+  OrderDetailBean orderDetail;
+  TradeModel tradeModel = new TradeModel();
   private OrderGoodsListAdapter mGoodsAdapter;
+  PayRightNowInfo pay_info = new PayRightNowInfo();
 
   @Override protected void setListener() {
     btn_proc.setOnClickListener(this);
@@ -54,13 +74,15 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
   //从server端获得所有订单数据，可能要查询几次
   @Override protected void initData() {
     order_id = getIntent().getExtras().getInt("orderinfo");
-    model.getOrderDetailBean(order_id)
+    tradeModel.getOrderDetailBean(order_id)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<OrderDetailBean>() {
           @Override public void onNext(OrderDetailBean orderDetailBean) {
 
+            orderDetail = orderDetailBean;
             fillDataToView(orderDetailBean);
             showProcBtn(orderDetailBean);
+
             Log.i(TAG, orderDetailBean.toString());
           }
         });
@@ -114,8 +136,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
       switch (state) {
         case XlmmConst.ORDER_STATE_WAITPAY: {
           Log.d(TAG, "wait pay lefttime show");
-          RelativeLayout rlayout_order_lefttime =
-              (RelativeLayout) findViewById(R.id.rlayout_order_lefttime);
+
           rlayout_order_lefttime.setVisibility(View.VISIBLE);
           LinearLayout llayout_order_lefttime =
               (LinearLayout) findViewById(R.id.llayout_order_lefttime);
@@ -136,13 +157,77 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
   @Override public void onClick(View v) {
     switch (v.getId()) {
       case R.id.btn_order_proc:
-        //Intent intent = new Intent(OrderDetailActivity.this, MainActivity.class);
-        //startActivity(intent);
+        if(orderDetail.getStatus() == XlmmConst.ORDER_STATE_WAITPAY){
+          payNow();
+
+        }
         finish();
         break;
       case R.id.toolbar:
         finish();
         break;
     }
+  }
+
+
+
+  private void payNow(){
+    tradeModel.shoppingcart_paynow(order_id)
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<ResponseBody>() {
+          @Override public void onNext(ResponseBody responseBody) {
+            super.onNext(responseBody);
+            try {
+              String string = responseBody.string();
+              Log.i("charge", string);
+              Intent intent = new Intent();
+              String packageName = getPackageName();
+              ComponentName componentName = new ComponentName(packageName,
+                  packageName + ".wxapi.WXPayEntryActivity");
+              intent.setComponent(componentName);
+              intent.putExtra(PaymentActivity.EXTRA_CHARGE, string);
+              startActivityForResult(intent, REQUEST_CODE_PAYMENT);
+            } catch (IOException e) {
+              e.printStackTrace();
+            }
+          }
+        });
+
+  }
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    //支付页面返回处理
+    if (requestCode == REQUEST_CODE_PAYMENT) {
+      if (resultCode == Activity.RESULT_OK) {
+        String result = data.getExtras().getString("pay_result");
+            /* 处理返回值
+             * "success" - payment succeed
+             * "fail"    - payment failed
+             * "cancel"  - user canceld
+             * "invalid" - payment plugin not installed
+             *
+             */
+        String errorMsg = data.getExtras().getString("error_msg"); // 错误信息
+        String extraMsg = data.getExtras().getString("extra_msg"); // 错误信息
+        showMsg(result, errorMsg, extraMsg);
+        //JUtils.Toast(result + "" + errorMsg + "" + extraMsg);
+      }
+    }
+  }
+
+  public void showMsg(String title, String msg1, String msg2) {
+    String str = title;
+    if (null != msg1 && msg1.length() != 0) {
+      str += "\n" + msg1;
+    }
+    if (null != msg2 && msg2.length() != 0) {
+      str += "\n" + msg2;
+    }
+    AlertDialog.Builder builder = new AlertDialog.Builder(OrderDetailActivity.this);
+    builder.setMessage(str);
+    builder.setTitle("提示");
+    builder.setPositiveButton("OK", null);
+    builder.create().show();
   }
 }

@@ -7,13 +7,13 @@ public class PayRightNowInfo {
   int item_id;
   int sku_id;
   int num;
-  int addr_id;
-  int channel;
+  String addr_id;
+  String channel;
   double payment;
   double post_fee;
   double discount_fee;
   double total_fee;
-  int uuid;
+  String uuid;
 
   public int getItem_id() {
     return item_id;
@@ -27,11 +27,11 @@ public class PayRightNowInfo {
     return num;
   }
 
-  public int getAddr_id() {
+  public String getAddr_id() {
     return addr_id;
   }
 
-  public int getChannel() {
+  public String getChannel() {
     return channel;
   }
 
@@ -51,7 +51,7 @@ public class PayRightNowInfo {
     return total_fee;
   }
 
-  public int getUuid() {
+  public String getUuid() {
     return uuid;
   }
 
@@ -67,11 +67,11 @@ public class PayRightNowInfo {
     this.num = num;
   }
 
-  public void setAddr_id(int addr_id) {
+  public void setAddr_id(String addr_id) {
     this.addr_id = addr_id;
   }
 
-  public void setChannel(int channel) {
+  public void setChannel(String channel) {
     this.channel = channel;
   }
 
@@ -91,7 +91,7 @@ public class PayRightNowInfo {
     this.total_fee = total_fee;
   }
 
-  public void setUuid(int uuid) {
+  public void setUuid(String uuid) {
     this.uuid = uuid;
   }
 }

@@ -133,18 +133,10 @@ public interface XlmmService {
     //立即支付订单接口
 
     @FormUrlEncoded
-    @POST("trades/buynow_create")
+    @POST("trades/{pk}/charge")
     Observable<ResponseBody> shoppingcart_paynow(
-            @Field("item_id") int item_id,
-            @Field("sku_id") int sku_id,
-            @Field("num") int num,
-            @Field("addr_id") int addr_id,
-            @Field("channel") int channel,
-            @Field("payment") double payment,
-            @Field("post_fee") double post_fee,
-            @Field("discount_fee") double discount_fee,
-            @Field("total_fee") double total_fee,
-            @Field("uuid") int uuid
+        @Path("pk") int order_id
+
     );
 
     //获得订单数据
