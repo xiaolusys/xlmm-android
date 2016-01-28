@@ -162,7 +162,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
           payNow();
 
         }
-        finish();
+
         break;
       case R.id.toolbar:
         finish();
