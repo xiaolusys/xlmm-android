@@ -6,6 +6,7 @@ import com.jimei.xiaolumeimei.entities.AddressBean;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
+import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.CartsinfoBean;
 import com.jimei.xiaolumeimei.entities.ChildListBean;
@@ -295,4 +296,9 @@ public interface XlmmService {
         @Field("proof_pic") String proof_pic
 
     );
+
+  @GET("carts/show_carts_num")
+  Observable<CartsNumResultBean> show_carts_num(
+
+  );
 }

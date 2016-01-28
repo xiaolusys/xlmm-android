@@ -90,8 +90,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             super.onNext(cartsPayinfoBean);
             if (cartsPayinfoBean != null) {
               mAdapter.update(cartsPayinfoBean.getCartList());
-              //
-              //JUtils.Log("ITXUYE", cartsPayinfoBean.toString());
               cart_ids = cartsPayinfoBean.getCartIds();
               channel = "alipay";
               payment = cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()

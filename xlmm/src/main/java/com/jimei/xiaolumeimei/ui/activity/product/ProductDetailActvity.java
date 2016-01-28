@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
 import cn.iwgang.countdownview.CountdownView;
@@ -31,9 +32,11 @@ import com.ecloud.pulltozoomview.PullToZoomScrollViewEx;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AddCartsBean;
+import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.ProductModel;
+import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.utils.DisplayUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
@@ -66,7 +69,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
   ProductModel model = new ProductModel();
   @Bind(R.id.shopping_button) Button button_shop;
   @Bind(R.id.dot_cart) FrameLayout frameLayout;
-  //@Bind(R.id.badge_layout) BadgeManager manager;
+  @Bind(R.id.rv_cart) RelativeLayout rv_cart;
   int num = 0;
   List<ProductDetailBean.NormalSkusEntity> normalSkus = new ArrayList<>();
   CartsModel cartsModel = new CartsModel();
@@ -86,7 +89,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
   private List<String> list = new ArrayList<>();
 
   @Override protected void setListener() {
-
+    rv_cart.setOnClickListener(this);
   }
 
   @Override protected void initData() {
@@ -137,17 +140,21 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
                     }
 
                     @Override public void onResponse(Bitmap response) {
+                      if (response != null) {
+                        try {
+                          int width = DisplayUtils.getScreenW(ProductDetailActvity.this);
 
-                      int width = DisplayUtils.getScreenW(ProductDetailActvity.this);
+                          int nh = (int) (response.getHeight() * (420.0
+                              / response.getWidth()));
+                          Bitmap scaled =
+                              Bitmap.createScaledBitmap(response, 480, nh, true);
 
-                      int nh =
-                          (int) (response.getHeight() * (420.0 / response.getWidth()));
-                      Bitmap scaled = Bitmap.createScaledBitmap(response,
-                          480, nh,
-                          true);
-
-                      viewList.get(finalI).setImage(ImageSource.bitmap(scaled));
-                      longimageview_content.addView(viewList.get(finalI1));
+                          viewList.get(finalI).setImage(ImageSource.bitmap(scaled));
+                          longimageview_content.addView(viewList.get(finalI1));
+                        } catch (Exception e) {
+                          e.printStackTrace();
+                        }
+                      }
                     }
                   });
             }
@@ -327,6 +334,12 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
           cartsModel.addCarts(item_id, sku_id)
               .subscribeOn(Schedulers.newThread())
               .subscribe(new ServiceResponse<AddCartsBean>() {
+
+                @Override public void onError(Throwable e) {
+                  super.onError(e);
+                  JUtils.Toast("商品库存不足,选择其它看看吧");
+                }
+
                 @Override public void onNext(AddCartsBean addCartsBean) {
                   super.onNext(addCartsBean);
 
@@ -403,6 +416,12 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
             new Intent(ProductDetailActvity.this, WashingIntrductionActivity.class));
 
         break;
+
+      case R.id.rv_cart:
+
+        startActivity(new Intent(ProductDetailActvity.this, CartActivity.class));
+
+        break;
     }
   }
 
@@ -418,5 +437,22 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
     sku_id = normalSkus.get(position).getId();
     //JUtils.Toast(sku_id + "   ,...." + item_id);
     return true;
+  }
+
+  @Override protected void onResume() {
+    super.onResume();
+
+    //显示购物车数量
+    cartsModel.show_carts_num()
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<CartsNumResultBean>() {
+          @Override public void onNext(CartsNumResultBean cartsNumResultBean) {
+            super.onNext(cartsNumResultBean);
+            if (cartsNumResultBean != null) {
+              num = cartsNumResultBean.getResult();
+              badge.setBadgeCount(num);
+            }
+          }
+        });
   }
 }

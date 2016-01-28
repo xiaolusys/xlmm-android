@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.model;
 
 import com.jimei.xiaolumeimei.entities.AddCartsBean;
+import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.CartsinfoBean;
 import com.jimei.xiaolumeimei.rx.DefaultTransform;
@@ -56,6 +57,13 @@ public class CartsModel {
   public Observable<ResponseBody> delete_carts(String id) {
     return XlmmRetrofitClient.getService()
         .delete_carts(id)
+        .compose(new DefaultTransform<>());
+  }
+
+  //显示购物车数量
+  public Observable<CartsNumResultBean> show_carts_num() {
+    return XlmmRetrofitClient.getService()
+        .show_carts_num()
         .compose(new DefaultTransform<>());
   }
 }
