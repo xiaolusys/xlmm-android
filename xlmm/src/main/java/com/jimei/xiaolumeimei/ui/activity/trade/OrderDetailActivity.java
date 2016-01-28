@@ -212,10 +212,10 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
              */
         String errorMsg = data.getExtras().getString("error_msg"); // 错误信息
         String extraMsg = data.getExtras().getString("extra_msg"); // 错误信息
-        if(result == "cancel") {
+        if(result.equals( "cancel")) {
           //wexin alipay already showmsg
         }
-        else if(result == "success"){
+        else if(result.equals( "success")){
           JUtils.Toast("支付成功！");
           finish();
         }
@@ -236,10 +236,10 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
       str += "\n" + msg2;
     }
     Log.i(TAG, "charge result" + str);
-    if(title == "fail"){
+    if(title.equals( "fail")){
       str ="支付失败，请重试！";
     }
-    else if(title == "invalid"){
+    else if(title.equals( "invalid")){
       str ="支付失败，支付软件未安装完整！";
     }
 
