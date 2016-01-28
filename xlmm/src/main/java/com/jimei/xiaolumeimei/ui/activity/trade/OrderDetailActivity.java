@@ -83,7 +83,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
             fillDataToView(orderDetailBean);
             showProcBtn(orderDetailBean);
 
-            Log.i(TAG, orderDetailBean.toString());
+            Log.i(TAG,"order_id "+order_id + " " + orderDetailBean.toString());
           }
         });
   }
@@ -158,6 +158,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     switch (v.getId()) {
       case R.id.btn_order_proc:
         if(orderDetail.getStatus() == XlmmConst.ORDER_STATE_WAITPAY){
+          Log.i(TAG, "onClick paynow");
           payNow();
 
         }

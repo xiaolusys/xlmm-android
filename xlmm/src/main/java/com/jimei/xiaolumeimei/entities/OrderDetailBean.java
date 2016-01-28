@@ -477,4 +477,37 @@ public class OrderDetailBean  {
             return kill_title;
         }
     }*/
+
+    @Override public String toString() {
+        return "OrderDetailBean{" +
+            "id=" + id +
+            ", url='" + url + '\'' +
+            ", tid='" + tid + '\'' +
+            ", buyer_nick='" + buyer_nick + '\'' +
+            ", buyer_id=" + buyer_id +
+            ", channel='" + channel + '\'' +
+            ", payment=" + payment +
+            ", post_fee=" + post_fee +
+            ", total_fee=" + total_fee +
+            ", discount_fee=" + discount_fee +
+            ", status=" + status +
+            ", status_display='" + status_display + '\'' +
+            ", order_pic='" + order_pic + '\'' +
+            ", buyer_message='" + buyer_message + '\'' +
+            ", trade_type=" + trade_type +
+            ", created='" + created + '\'' +
+            ", pay_time=" + pay_time +
+            ", consign_time=" + consign_time +
+            ", out_sid='" + out_sid + '\'' +
+            ", logistics_company=" + logistics_company +
+            ", receiver_name='" + receiver_name + '\'' +
+            ", receiver_state='" + receiver_state + '\'' +
+            ", receiver_city='" + receiver_city + '\'' +
+            ", receiver_district='" + receiver_district + '\'' +
+            ", receiver_address='" + receiver_address + '\'' +
+            ", receiver_mobile='" + receiver_mobile + '\'' +
+            ", receiver_phone='" + receiver_phone + '\'' +
+            ", orders=" + orders +
+            '}';
+    }
 }
