@@ -67,7 +67,7 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity
 
             if (0 == results.size()) {
               Log.i(TAG, "results.size()=0");
-              rl_empty.setVisibility(View.INVISIBLE);
+              rl_empty.setVisibility(View.VISIBLE);
             } else {
               mAllOrderAdapter.update(results);
             }

@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jimei.xiaolumeimei.adapter.WaitSendOrdersListAdapter;
@@ -28,6 +29,8 @@ public class WaitSendOrdersActivity extends BaseSwipeBackCompatActivity implemen
     String TAG = "WaitSendOrdersActivity";
     @Bind(R.id.btn_jump)    Button btn_jump;
     @Bind(R.id.toolbar) Toolbar toolbar;
+    @Bind(R.id.rlayout_order_empty) RelativeLayout rl_empty;
+
     TradeModel model = new TradeModel();
     private WaitSendOrdersListAdapter mAllOrderAdapter;
 
@@ -50,7 +53,7 @@ public class WaitSendOrdersActivity extends BaseSwipeBackCompatActivity implemen
         toolbar.setNavigationIcon(R.drawable.back);
 
         ListView all_orders_listview = (ListView) findViewById(R.id.all_orders_listview);
-        all_orders_listview.setEmptyView(findViewById(R.id.rlayout_order_empty));
+
         mAllOrderAdapter = new WaitSendOrdersListAdapter(this);
         all_orders_listview.setAdapter(mAllOrderAdapter);
 
@@ -65,7 +68,7 @@ public class WaitSendOrdersActivity extends BaseSwipeBackCompatActivity implemen
                     @Override public void onNext(AllOrdersBean allOrdersBean) {
                         List<AllOrdersBean.ResultsEntity> results = allOrdersBean.getResults();
                         if (0 == results.size()){
-
+                            rl_empty.setVisibility(View.VISIBLE);
                         }
                         else
                         {

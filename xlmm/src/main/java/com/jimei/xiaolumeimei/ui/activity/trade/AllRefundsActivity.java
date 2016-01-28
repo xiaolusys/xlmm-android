@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -30,8 +31,9 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity implements V
     String TAG = "AllRefundsActivity";
 
     @Bind(R.id.btn_jump) Button btn_jump;
-    @Bind(R.id.toolbar)
-    Toolbar toolbar;
+    @Bind(R.id.toolbar) Toolbar toolbar;
+    @Bind(R.id.rlayout_order_empty) RelativeLayout rl_empty;
+
     TradeModel model = new TradeModel();
     private AllRefundsListAdapter mAllRefundsAdapter;
 
@@ -54,7 +56,7 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity implements V
         //config allorders list adaptor
         ListView all_refunds_listview = (ListView) findViewById(R.id.all_refunds_listview);
         mAllRefundsAdapter = new AllRefundsListAdapter(this);
-        all_refunds_listview.setEmptyView(findViewById(R.id.rlayout_order_empty));
+
         all_refunds_listview.setAdapter(mAllRefundsAdapter);
         all_refunds_listview.setOnItemClickListener(new AdapterView.OnItemClickListener(){
 
@@ -88,6 +90,7 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity implements V
                         List<AllRefundsBean.ResultsEntity> results = allRefundsBean.getResults();
                         if (0 == results.size()){
                             Log.d(TAG," NO redunds data");
+                            rl_empty.setVisibility(View.VISIBLE);
                         }
                         else
                         {
