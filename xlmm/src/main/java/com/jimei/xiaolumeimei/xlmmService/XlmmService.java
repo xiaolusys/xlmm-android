@@ -132,7 +132,6 @@ public interface XlmmService {
 
     //立即支付订单接口
 
-    @FormUrlEncoded
     @POST("trades/{pk}/charge")
     Observable<ResponseBody> shoppingcart_paynow(
         @Path("pk") int order_id
