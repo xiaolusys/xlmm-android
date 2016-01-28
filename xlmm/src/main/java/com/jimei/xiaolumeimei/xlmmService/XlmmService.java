@@ -130,6 +130,23 @@ public interface XlmmService {
             @Field("uuid") String uuid
     );
 
+    //立即支付订单接口
+
+    @FormUrlEncoded
+    @POST("trades/buynow_create")
+    Observable<ResponseBody> shoppingcart_paynow(
+            @Field("item_id") String item_id,
+            @Field("sku_id") String sku_id,
+            @Field("num") String num,
+            @Field("addr_id") String addr_id,
+            @Field("channel") String channel,
+            @Field("payment") String payment,
+            @Field("post_fee") String post_fee,
+            @Field("discount_fee") String discount_fee,
+            @Field("total_fee") String total_fee,
+            @Field("uuid") String uuid
+    );
+
     //获得订单数据
     @GET(XlmmApi.ALL_ORDERS_URL + "/{pk}/details")
     Observable<OrderDetailBean> getOrderDetail(

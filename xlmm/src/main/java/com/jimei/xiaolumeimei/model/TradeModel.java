@@ -1,5 +1,6 @@
 package com.jimei.xiaolumeimei.model;
 
+import com.jimei.xiaolumeimei.data.PayRightNowInfo;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
@@ -31,6 +32,14 @@ public class TradeModel {
         .shoppingcart_create(cart_ids, addr_id, channel, payment, post_fee, discount_fee,
             total_fee, uuid)
         .compose(new DefaultTransform<>());
+  }
+
+  //立即支付订单
+  public Observable<ResponseBody> shoppingcart_paynow(PayRightNowInfo payInfo) {
+    return XlmmRetrofitClient.getService()
+            .shoppingcart_paynow(payInfo., addr_id, channel, payment, post_fee, discount_fee,
+                    total_fee, uuid)
+            .compose(new DefaultTransform<>());
   }
 
   //得到某个订单详细数据列表
