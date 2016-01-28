@@ -27,6 +27,7 @@ import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jude.utils.JUtils;
 import com.pingplusplus.android.PaymentActivity;
 import com.squareup.okhttp.ResponseBody;
 import java.io.IOException;
@@ -211,8 +212,17 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
              */
         String errorMsg = data.getExtras().getString("error_msg"); // 错误信息
         String extraMsg = data.getExtras().getString("extra_msg"); // 错误信息
-        showMsg(result, errorMsg, extraMsg);
-        //JUtils.Toast(result + "" + errorMsg + "" + extraMsg);
+        if(result == "cancel") {
+          //wexin alipay already showmsg
+        }
+        else if(result == "success"){
+          JUtils.Toast("支付成功！");
+          finish();
+        }
+        else{
+          showMsg(result, errorMsg, extraMsg);
+        }
+
       }
     }
   }
@@ -225,6 +235,14 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     if (null != msg2 && msg2.length() != 0) {
       str += "\n" + msg2;
     }
+    Log.i(TAG, "charge result" + str);
+    if(title == "fail"){
+      str ="支付失败，请重试！";
+    }
+    else if(title == "invalid"){
+      str ="支付失败，支付软件未安装完整！";
+    }
+
     AlertDialog.Builder builder = new AlertDialog.Builder(OrderDetailActivity.this);
     builder.setMessage(str);
     builder.setTitle("提示");
