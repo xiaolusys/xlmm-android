@@ -57,15 +57,16 @@
   <Button
       android:id="@+id/btn_order_cancel"
       android:layout_width="wrap_content"
-      android:layout_height="match_parent"
+      android:layout_height="wrap_content"
       android:text="取消订单"
       android:textColor="@color/colorAccent"
       android:textSize="10sp"
       android:gravity="center"
+      android:background="@drawable/text_frame"
       android:layout_alignParentTop="true"
       android:layout_toLeftOf="@+id/btn_order_proc"
       android:layout_toStartOf="@+id/btn_order_proc"
-      android:visibility="invisible"/>
+      />
 
   <Button
       android:id="@+id/btn_order_proc"
@@ -75,6 +76,7 @@
       android:textColor="@color/white"
       android:textSize="10sp"
       android:gravity="center"
+      android:layout_marginLeft="8dp"
       android:background="@drawable/shape_common"
       android:layout_alignParentTop="true"
       android:layout_alignParentRight="true"

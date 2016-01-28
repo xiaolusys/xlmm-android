@@ -275,12 +275,12 @@
       </RelativeLayout>
       <include layout="@layout/common_gap"/>
 
-      <include
-          layout="@layout/orders_pay_lefttime"/>
+
 
     </LinearLayout>
 
   </ScrollView>
 
-
+  <include
+      layout="@layout/orders_pay_lefttime"/>
 </LinearLayout>

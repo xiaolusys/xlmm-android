@@ -108,9 +108,9 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
   }
 
   private void showProcBtn(OrderDetailBean orderDetailBean) {
-    Log.d(TAG, "state " + orderDetailBean.getOrders().get(0).getStatus());
+    Log.d(TAG, "state " + orderDetailBean.getStatus());
     try {
-      int state = orderDetailBean.getOrders().get(0).getStatus();
+      int state = orderDetailBean.getStatus();
       switch (state) {
         case XlmmConst.ORDER_STATE_WAITPAY: {
           Log.d(TAG, "wait pay lefttime show");
