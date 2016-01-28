@@ -154,37 +154,44 @@
           android:background="@color/white"
           android:padding="8dp"
           android:layout_width="match_parent"
-          android:layout_height="88px">
+          android:layout_height="176px">
         <TextView
+            android:id="@+id/tv_alipay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="支付宝"
             />
-        <com.jimei.xiaolumeimei.widget.SmoothCheckBox
-            android:id="@+id/alipay"
-            android:layout_alignParentRight="true"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            app:color_checked="@color/colorPrimary"
-            />
-      </RelativeLayout>
-      <include layout="@layout/common_gap"/>
-      <RelativeLayout
-          android:background="@color/white"
-          android:padding="8dp"
-          android:layout_width="match_parent"
-          android:layout_height="88px">
-        <TextView android:layout_width="wrap_content"
+        <View
+            android:layout_centerVertical="true"
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:background="@color/greytow" />
+        <TextView
+            android:layout_alignParentBottom="true"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="微信"
             />
-        <com.jimei.xiaolumeimei.widget.SmoothCheckBox
-            android:id="@+id/wx"
-            android:layout_alignParentRight="true"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            app:color_checked="@color/colorPrimary"
-            />
+
+        <RadioGroup
+            android:id="@+id/pay_rg"
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+          android:layout_alignParentRight="true"
+            android:layout_height="wrap_content"
+            >
+          <android.support.v7.widget.AppCompatRadioButton
+              android:id="@+id/alipay"
+              android:layout_width="wrap_content"
+              android:shadowColor="@color/colorPrimary"
+              android:layout_height="wrap_content"/>
+          <android.support.v7.widget.AppCompatRadioButton
+              android:id="@+id/wx"
+              android:layout_marginTop="8dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"/>
+        </RadioGroup>
+
       </RelativeLayout>
       <include layout="@layout/common_gap"/>
       <LinearLayout
@@ -193,5 +200,50 @@
     </LinearLayout>
   </ScrollView>
   <include layout="@layout/include_cartpayinfo_lin"/>
+  <RelativeLayout
+      android:visibility="invisible"
+      android:id="@+id/empty_content"
+      app:layout_behavior="@string/appbar_scrolling_view_behavior"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="#cccccc"
 
+      >
+    <ImageView
+        android:layout_marginBottom="24dp"
+        android:layout_above="@+id/tv2"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/cart"
+        />
+
+    <TextView
+        android:id="@+id/tv2"
+        android:textColor="@color/black"
+        android:layout_above="@+id/tv1"
+        android:layout_marginBottom="16dp"
+        android:layout_width="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_height="wrap_content"
+        android:text="您的购物车空空如也~快去装满它吧"/>
+
+    <TextView
+        android:id="@+id/tv1"
+        android:layout_width="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_height="wrap_content"
+        android:text="快去挑选几件喜欢的宝贝吧~"/>
+    <Button
+        android:id="@+id/go_main"
+        android:layout_marginTop="24dp"
+        android:textColor="@color/white"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/tv1"
+        android:layout_width="650px"
+        android:background="@drawable/shape_common"
+        android:layout_height="wrap_content"
+        android:text="随便逛逛"
+        />
+  </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

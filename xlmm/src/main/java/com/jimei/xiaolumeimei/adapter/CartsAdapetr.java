@@ -72,10 +72,7 @@ public class CartsAdapetr extends RecyclerView.Adapter<CartsAdapetr.CartsVH> {
     holder.price2.setText("/¥" + cartsinfoBean.getStdSalePrice() + "");
     holder.count.setText(cartsinfoBean.getNum() + "");
 
-    total_price =
-        (cartsinfoBean.getTotalFee()) * (Double.parseDouble(cartsinfoBean.getNum()));
     String headImg = cartsinfoBean.getPicPath();
-
 
     ViewUtils.loadImgToImgView(mContext, holder.cartImage, headImg);
 
@@ -96,6 +93,14 @@ public class CartsAdapetr extends RecyclerView.Adapter<CartsAdapetr.CartsVH> {
                         @Override public void onNext(List<CartsinfoBean> list) {
                           super.onNext(list);
                           mList = list;
+
+                          for (int i = 0; i < list.size(); i++) {
+
+                            total_price =
+                                (list.get(i).getTotalFee()) * (Double.parseDouble(
+                                    list.get(i).getNum()));
+                          }
+
                           notifyItemChanged(position);
                         }
                       });
@@ -125,6 +130,14 @@ public class CartsAdapetr extends RecyclerView.Adapter<CartsAdapetr.CartsVH> {
                         @Override public void onNext(List<CartsinfoBean> list) {
                           super.onNext(list);
                           mList = list;
+
+                          for (int i = 0; i < list.size(); i++) {
+
+                            total_price =
+                                (list.get(i).getTotalFee()) * (Double.parseDouble(
+                                    list.get(i).getNum()));
+                          }
+
                           notifyItemChanged(position);
                         }
                       });

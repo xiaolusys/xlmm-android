@@ -46,38 +46,34 @@ public class CartActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initData() {
-    model.getCartsList()
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
-          @Override public void onNext(List<CartsinfoBean> cartsinfoBeans) {
-
-            if ((cartsinfoBeans != null) && (cartsinfoBeans.size() > 0)) {
-              View view = getLayoutInflater().inflate(R.layout.footer, null);
-              RecyclerViewUtils.setFooterView(cartsRecyclerview, view);
-              mCartsAdapetr.update(cartsinfoBeans);
-              //double total_price = 0;
-              for (int i = 0; i < cartsinfoBeans.size(); i++) {
-                ids.add(cartsinfoBeans.get(i).getId());
-                CartsinfoBean cartsinfoBean = cartsinfoBeans.get(i);
-
-                //total_price = (cartsinfoBean.getTotalFee()) * (Double.parseDouble(
-                //    cartsinfoBean.getNum()));
-                totalPrice.setText(mCartsAdapetr.total_price + "");
-
-                JUtils.Log("ITXUYE", cartsinfoBeans.toString());
-              }
-            } else {
-              RecyclerViewUtils.removeFooterView(cartsRecyclerview);
-              emptyContent.setVisibility(View.VISIBLE);
-              goMain.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                  startActivity(new Intent(CartActivity.this, MainActivity.class));
-                  finish();
-                }
-              });
-            }
-          }
-        });
+    //model.getCartsList()
+    //    .subscribeOn(Schedulers.io())
+    //    .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
+    //      @Override public void onNext(List<CartsinfoBean> cartsinfoBeans) {
+    //
+    //        if ((cartsinfoBeans != null) && (cartsinfoBeans.size() > 0)) {
+    //          View view = getLayoutInflater().inflate(R.layout.footer, null);
+    //          RecyclerViewUtils.setFooterView(cartsRecyclerview, view);
+    //          mCartsAdapetr.update(cartsinfoBeans);
+    //          //double total_price = 0;
+    //          for (int i = 0; i < cartsinfoBeans.size(); i++) {
+    //            ids.add(cartsinfoBeans.get(i).getId());
+    //            JUtils.Log("ITXUYE", cartsinfoBeans.toString());
+    //          }
+    //        } else {
+    //          RecyclerViewUtils.removeFooterView(cartsRecyclerview);
+    //          emptyContent.setVisibility(View.VISIBLE);
+    //          goMain.setOnClickListener(new View.OnClickListener() {
+    //            @Override public void onClick(View v) {
+    //              startActivity(new Intent(CartActivity.this, MainActivity.class));
+    //              finish();
+    //            }
+    //          });
+    //        }
+    //      }
+    //    });
+    //
+    //totalPrice.setText(mCartsAdapetr.total_price + "");
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -128,5 +124,37 @@ public class CartActivity extends BaseSwipeBackCompatActivity
 
         break;
     }
+  }
+
+  @Override protected void onResume() {
+    super.onResume();
+    model.getCartsList()
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
+          @Override public void onNext(List<CartsinfoBean> cartsinfoBeans) {
+
+            if ((cartsinfoBeans != null) && (cartsinfoBeans.size() > 0)) {
+              View view = getLayoutInflater().inflate(R.layout.footer, null);
+              RecyclerViewUtils.setFooterView(cartsRecyclerview, view);
+              mCartsAdapetr.update(cartsinfoBeans);
+              //double total_price = 0;
+              for (int i = 0; i < cartsinfoBeans.size(); i++) {
+                ids.add(cartsinfoBeans.get(i).getId());
+                JUtils.Log("ITXUYE", cartsinfoBeans.toString());
+              }
+            } else {
+              RecyclerViewUtils.removeFooterView(cartsRecyclerview);
+              emptyContent.setVisibility(View.VISIBLE);
+              goMain.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                  startActivity(new Intent(CartActivity.this, MainActivity.class));
+                  finish();
+                }
+              });
+            }
+          }
+        });
+
+    totalPrice.setText(mCartsAdapetr.total_price + "");
   }
 }

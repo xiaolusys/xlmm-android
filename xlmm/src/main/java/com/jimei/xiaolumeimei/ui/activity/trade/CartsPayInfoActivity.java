@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
@@ -21,9 +22,9 @@ import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.TradeModel;
+import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.AddAddressActivity;
 import com.jimei.xiaolumeimei.widget.NestedListView;
-import com.jimei.xiaolumeimei.widget.SmoothCheckBox;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.pingplusplus.android.PaymentActivity;
@@ -39,7 +40,7 @@ import rx.schedulers.Schedulers;
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
-    implements View.OnClickListener, SmoothCheckBox.OnCheckedChangeListener {
+    implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
   private static final int REQUEST_CODE_PAYMENT = 1;
   CartsModel model = new CartsModel();
@@ -59,11 +60,11 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.total_price_all) TextView totalPrice_all;
   @Bind(R.id.jiehsneg) TextView jiehsneg;
   @Bind(R.id.confirm) Button confirm;
-  @Bind(R.id.alipay) SmoothCheckBox alipay;
-  @Bind(R.id.wx) SmoothCheckBox wx;
+  @Bind(R.id.pay_rg) RadioGroup rg_pay;
   @Bind(R.id.post_fee) TextView tv_postfee;
   List<CartsPayinfoBean.CartListEntity> list;
-
+  @Bind(R.id.go_main) Button goMain;
+  @Bind(R.id.empty_content) RelativeLayout emptyContent;
   private boolean isAlipay, isWx;
   //@Bind(R.id.payinfo_recyclerview) RecyclerView payinfoRecyclerview;
   private String ids;
@@ -79,69 +80,77 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   @Override protected void setListener() {
     adress.setOnClickListener(this);
     confirm.setOnClickListener(this);
-    alipay.setOnCheckedChangeListener(this);
-    wx.setOnCheckedChangeListener(this);
+    rg_pay.setOnCheckedChangeListener(this);
   }
 
   @Override protected void initData() {
 
-    list = new ArrayList<>();
-    model.getCartsInfoList(ids)
-        .subscribeOn(Schedulers.newThread())
-        .subscribe(new ServiceResponse<CartsPayinfoBean>() {
-          @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
-            super.onNext(cartsPayinfoBean);
-            if (cartsPayinfoBean != null) {
-              mAdapter.update(cartsPayinfoBean.getCartList());
-              cart_ids = cartsPayinfoBean.getCartIds();
-              channel = "alipay";
-              payment = cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
-                  - cartsPayinfoBean.getDiscountFee() + "";
-              post_fee = cartsPayinfoBean.getPostFee() + "";
-              discount_fee = cartsPayinfoBean.getDiscountFee() + "";
-              total_fee = cartsPayinfoBean.getTotalFee() + "";
-              uuid = cartsPayinfoBean.getUuid();
-              totalPrice.setText("¥" + payment);
-              tv_postfee.setText("¥" + post_fee);
-              totalPrice_all.setText("合计: ¥" + cartsPayinfoBean.getTotalFee() + "");
-              jiehsneg.setText("已节省" + cartsPayinfoBean.getDiscountFee() + "");
-            }
-          }
-        });
-
-    addressModel.getAddressList()
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<List<AddressBean>>() {
-          @Override public void onNext(List<AddressBean> list) {
-            super.onNext(list);
-            if (list != null) {
-              chooseAddress.setVisibility(View.INVISIBLE);
-              AddressBean addressBean = list.get(0);
-
-              addr_id = addressBean.getId();
-              name.setText(addressBean.getReceiverName());
-              phone.setText(addressBean.getReceiverMobile());
-
-              addressDetails.setText(addressBean.getReceiverState()
-                  + addressBean.getReceiverCity()
-                  + addressBean.getReceiverDistrict()
-                  + addressBean.getReceiverAddress());
-            } else {
-              chooseAddress.setVisibility(View.VISIBLE);
-              name.setVisibility(View.INVISIBLE);
-              phone.setVisibility(View.INVISIBLE);
-              addressDetails.setVisibility(View.INVISIBLE);
-            }
-          }
-
-          @Override public void onError(Throwable e) {
-            super.onError(e);
-            chooseAddress.setVisibility(View.VISIBLE);
-            name.setVisibility(View.INVISIBLE);
-            phone.setVisibility(View.INVISIBLE);
-            addressDetails.setVisibility(View.INVISIBLE);
-          }
-        });
+    //list = new ArrayList<>();
+    //model.getCartsInfoList(ids)
+    //    .subscribeOn(Schedulers.newThread())
+    //    .subscribe(new ServiceResponse<CartsPayinfoBean>() {
+    //      @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
+    //        super.onNext(cartsPayinfoBean);
+    //        if (cartsPayinfoBean != null) {
+    //          mAdapter.update(cartsPayinfoBean.getCartList());
+    //          cart_ids = cartsPayinfoBean.getCartIds();
+    //          channel = "alipay";
+    //          payment = cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
+    //              - cartsPayinfoBean.getDiscountFee() + "";
+    //          post_fee = cartsPayinfoBean.getPostFee() + "";
+    //          discount_fee = cartsPayinfoBean.getDiscountFee() + "";
+    //          total_fee = cartsPayinfoBean.getTotalFee() + "";
+    //          uuid = cartsPayinfoBean.getUuid();
+    //          totalPrice.setText("¥" + payment);
+    //          tv_postfee.setText("¥" + post_fee);
+    //          totalPrice_all.setText("合计: ¥" + cartsPayinfoBean.getTotalFee() + "");
+    //          jiehsneg.setText("已节省" + cartsPayinfoBean.getDiscountFee() + "");
+    //        } else {
+    //          emptyContent.setVisibility(View.VISIBLE);
+    //          goMain.setOnClickListener(new View.OnClickListener() {
+    //            @Override public void onClick(View v) {
+    //              startActivity(
+    //                  new Intent(CartsPayInfoActivity.this, MainActivity.class));
+    //              finish();
+    //            }
+    //          });
+    //        }
+    //      }
+    //    });
+    //
+    //addressModel.getAddressList()
+    //    .subscribeOn(Schedulers.io())
+    //    .subscribe(new ServiceResponse<List<AddressBean>>() {
+    //      @Override public void onNext(List<AddressBean> list) {
+    //        super.onNext(list);
+    //        if (list != null) {
+    //          chooseAddress.setVisibility(View.INVISIBLE);
+    //          AddressBean addressBean = list.get(0);
+    //
+    //          addr_id = addressBean.getId();
+    //          name.setText(addressBean.getReceiverName());
+    //          phone.setText(addressBean.getReceiverMobile());
+    //
+    //          addressDetails.setText(addressBean.getReceiverState()
+    //              + addressBean.getReceiverCity()
+    //              + addressBean.getReceiverDistrict()
+    //              + addressBean.getReceiverAddress());
+    //        } else {
+    //          chooseAddress.setVisibility(View.VISIBLE);
+    //          name.setVisibility(View.INVISIBLE);
+    //          phone.setVisibility(View.INVISIBLE);
+    //          addressDetails.setVisibility(View.INVISIBLE);
+    //        }
+    //      }
+    //
+    //      @Override public void onError(Throwable e) {
+    //        super.onError(e);
+    //        chooseAddress.setVisibility(View.VISIBLE);
+    //        name.setVisibility(View.INVISIBLE);
+    //        phone.setVisibility(View.INVISIBLE);
+    //        addressDetails.setVisibility(View.INVISIBLE);
+    //      }
+    //    });
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -180,10 +189,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         break;
 
       case R.id.confirm:
-        if (isAlipay && isWx) {
-          JUtils.Toast("请选择其中一种支付方式");
-          return;
-        } else if (isWx) {
+        if (isWx) {
 
           tradeModel.shoppingcart_create(cart_ids, addr_id, "wx", payment, post_fee,
               discount_fee, total_fee, uuid)
@@ -270,21 +276,85 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     builder.create().show();
   }
 
-  @Override public void onCheckedChanged(SmoothCheckBox checkBox, boolean isChecked) {
-    switch (checkBox.getId()) {
-      case R.id.alipay:
-        isAlipay = true;
-        isWx = false;
-        //alipay.setChecked(true);
-        //wx.setChecked(false);
-        break;
-
-      case R.id.wx:
-        isAlipay = false;
-        isWx = true;
-        //alipay.setChecked(false);
-        //wx.setChecked(true);
-        break;
+  @Override public void onCheckedChanged(RadioGroup group, int checkedId) {
+    if (checkedId == R.id.alipay) {
+      isAlipay = true;
+      isWx = false;
+    } else if (checkedId == R.id.wx) {
+      isWx = true;
+      isAlipay = false;
     }
+  }
+
+  @Override protected void onResume() {
+
+    super.onResume();
+
+    list = new ArrayList<>();
+    model.getCartsInfoList(ids)
+        .subscribeOn(Schedulers.newThread())
+        .subscribe(new ServiceResponse<CartsPayinfoBean>() {
+          @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
+            super.onNext(cartsPayinfoBean);
+            if (cartsPayinfoBean != null) {
+              mAdapter.update(cartsPayinfoBean.getCartList());
+              cart_ids = cartsPayinfoBean.getCartIds();
+              channel = "alipay";
+              payment = cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
+                  - cartsPayinfoBean.getDiscountFee() + "";
+              post_fee = cartsPayinfoBean.getPostFee() + "";
+              discount_fee = cartsPayinfoBean.getDiscountFee() + "";
+              total_fee = cartsPayinfoBean.getTotalFee() + "";
+              uuid = cartsPayinfoBean.getUuid();
+              totalPrice.setText("¥" + payment);
+              tv_postfee.setText("¥" + post_fee);
+              totalPrice_all.setText("合计: ¥" + cartsPayinfoBean.getTotalFee() + "");
+              jiehsneg.setText("已节省" + cartsPayinfoBean.getDiscountFee() + "");
+            } else {
+              emptyContent.setVisibility(View.VISIBLE);
+              goMain.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                  startActivity(
+                      new Intent(CartsPayInfoActivity.this, MainActivity.class));
+                  finish();
+                }
+              });
+            }
+          }
+        });
+
+    addressModel.getAddressList()
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<List<AddressBean>>() {
+          @Override public void onNext(List<AddressBean> list) {
+            super.onNext(list);
+            if (list != null) {
+              chooseAddress.setVisibility(View.INVISIBLE);
+              AddressBean addressBean = list.get(0);
+
+              addr_id = addressBean.getId();
+              name.setText(addressBean.getReceiverName());
+              phone.setText(addressBean.getReceiverMobile());
+
+              addressDetails.setText(addressBean.getReceiverState()
+                  + addressBean.getReceiverCity()
+                  + addressBean.getReceiverDistrict()
+                  + addressBean.getReceiverAddress());
+            } else {
+              chooseAddress.setVisibility(View.VISIBLE);
+              name.setVisibility(View.INVISIBLE);
+              phone.setVisibility(View.INVISIBLE);
+              addressDetails.setVisibility(View.INVISIBLE);
+            }
+          }
+
+          @Override public void onError(Throwable e) {
+            super.onError(e);
+            chooseAddress.setVisibility(View.VISIBLE);
+            name.setVisibility(View.INVISIBLE);
+            phone.setVisibility(View.INVISIBLE);
+            addressDetails.setVisibility(View.INVISIBLE);
+          }
+        });
   }
 }
