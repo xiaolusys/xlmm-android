@@ -96,7 +96,7 @@ public class AllOrdersListAdapter extends BaseAdapter {
   }
 
   @Override public View getView(int position, View convertView, ViewGroup parent) {
-    Log.d(TAG, "getView ");
+    Log.d(TAG, "getView "+position +" "+mList.get(position).getOrders().size());
 
     TextView tx_payment = null;
     TextView tx_order_sate = null;
@@ -133,7 +133,12 @@ public class AllOrdersListAdapter extends BaseAdapter {
         TextView tx_good_size = (TextView) ll_one_order.findViewById(R.id.tx_good_size);
         TextView tx_good_num = (TextView) ll_one_order.findViewById(R.id.tx_good_num);
 
-        tx_good_name.setText(mList.get(position).getOrders().get(0).getTitle().substring(0, 10) + "...");
+        if(mList.get(position).getOrders().get(0).getTitle().length() >= 11) {
+          tx_good_name.setText(mList.get(position).getOrders().get(0).getTitle().substring(0, 10) + "...");
+        }
+        else {
+          tx_good_name.setText(mList.get(position).getOrders().get(0).getTitle());
+        }
         tx_good_price.setText("¥" + mList.get(position).getOrders().get(0).getPayment());
         tx_good_size.setText("尺码:" + mList.get(position).getOrders().get(0).getSkuName());
         tx_good_num.setText(
@@ -183,14 +188,13 @@ public class AllOrdersListAdapter extends BaseAdapter {
       holder = (ViewHolder) convertView.getTag();
     }
 
-    tx_payment = (TextView) convertView.findViewById(R.id.tx_order_actual_payment);
     tx_order_sate = (TextView) convertView.findViewById(R.id.tx_order_state);
 
-    tx_payment.setText("¥" + data.get(position).get("payment"));
+    Log.d(TAG, "payment  "+data.get(position).get("payment") + " " + data.get(position).get("orderState"));
     tx_order_sate.setText(data.get(position).get("orderState"));
 
     try {
-      showTimeAndBtn(Integer.parseInt(data.get(position).get("state")),
+      showTime(Integer.parseInt(data.get(position).get("state")),
           data.get(position).get("crtTime"), convertView, order_id);
     } catch (Exception e) {
       Log.e(TAG, "showTimeAndBtn failed");
@@ -200,49 +204,31 @@ public class AllOrdersListAdapter extends BaseAdapter {
     return convertView;
   }
 
-  private void showTimeAndBtn(int state, String crtTime, View convertView, int order_id) {
-    Button btn_order_proc = (Button) convertView.findViewById(R.id.btn_order_proc);
-    btn_order_proc.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        Intent intent = new Intent(context, OrderDetailActivity.class);
-        intent.putExtra("orderinfo", order_id);
-        Log.d(TAG, "btn click,transfer orderid  " + order_id + " to OrderDetailActivity");
-        context.startActivity(intent);
-      }
-    });
+  private void showTime(int state, String crtTime, View convertView, int order_id) {
+
 
     if (XlmmConst.ORDER_STATE_WAITPAY == state) {
       TextView tx_order_left_paytime =
-          (TextView) convertView.findViewById(R.id.tx_order_left_paytime);
+              (TextView) convertView.findViewById(R.id.tx_order_left_paytime);
       cn.iwgang.countdownview.CountdownView cv_lefttime =
-          (cn.iwgang.countdownview.CountdownView) convertView.findViewById(
-              R.id.cv_lefttime);
+              (cn.iwgang.countdownview.CountdownView) convertView.findViewById(
+                      R.id.cv_lefttime);
 
       tx_order_left_paytime.setVisibility(View.VISIBLE);
       cv_lefttime.setVisibility(View.VISIBLE);
       cv_lefttime.start(calcLeftTime(crtTime));
-      btn_order_proc.setVisibility(View.VISIBLE);
-      btn_order_proc.setText("立即支付");
-    } else if (XlmmConst.ORDER_STATE_PAYED == state) {
-      btn_order_proc.setVisibility(View.VISIBLE);
-      btn_order_proc.setText("申请退款");
-    } else if (XlmmConst.ORDER_STATE_SENDED == state) {
-      btn_order_proc.setVisibility(View.VISIBLE);
-      btn_order_proc.setText("确认收货");
-    } else if ((XlmmConst.ORDER_STATE_TRADE_SUCCESS == state)
-        || (XlmmConst.ORDER_STATE_CONFIRM_RECEIVE == state)) {
-      btn_order_proc.setVisibility(View.VISIBLE);
-      btn_order_proc.setText("退货退款");
+
     }
   }
 
   private long calcLeftTime(String crtTime) {
     long left = 0;
     Date now = new Date();
-    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-ddTHH-mm-ss");
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     try {
+      crtTime = crtTime.replace("T"," ");
       Date crtdate = format.parse(crtTime);
-
+      Log.d(TAG, " crtdate  " + crtdate.getTime() + "now "+now.getTime());
       if (crtdate.getTime() + 20 * 60 * 1000 - now.getTime() > 0) {
         left = crtdate.getTime() + 20 * 60 * 1000 - now.getTime();
       }

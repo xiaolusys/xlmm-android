@@ -41,7 +41,7 @@
         <ListView
             android:id="@+id/all_orders_listview"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="fill_parent" >
         </ListView>
         <include layout="@layout/orders_emptyinfo" />
     </FrameLayout>

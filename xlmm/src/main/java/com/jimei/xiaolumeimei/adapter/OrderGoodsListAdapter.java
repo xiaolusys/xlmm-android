@@ -76,7 +76,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
   }
 
   @Override public View getView(int position, View convertView, ViewGroup parent) {
-    Log.d(TAG, "getView ");
+    Log.d(TAG, "getView "+ position);
 
     ImageView img_goods = null;
     TextView tx_good_name = null;
@@ -107,7 +107,12 @@ public class OrderGoodsListAdapter extends BaseAdapter {
     tx_good_size = (TextView) convertView.findViewById(R.id.tx_good_size);
     tx_good_num = (TextView) convertView.findViewById(R.id.tx_good_num);
 
-    tx_good_name.setText(data.get(position).get("title").substring(0, 8) + "...");
+    if(data.get(position).get("title").length() >=9) {
+      tx_good_name.setText(data.get(position).get("title").substring(0, 8) + "...");
+    }
+    else{
+      tx_good_name.setText(data.get(position).get("title"));
+    }
     tx_good_price.setText("¥" + data.get(position).get("pay_price"));
     tx_good_size.setText(data.get(position).get("model_id"));
     tx_good_num.setText("x" + data.get(position).get("num"));
@@ -258,7 +263,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
       state = list.get(i).getStatus();
       refund_state = list.get(i).getRefundStatus();
 
-      Log.d(TAG, "pic path " + img_url);
+      Log.d(TAG, "pic path " + img_url + " title " + title);
 
       map.put("goods_id", Integer.toString(goods_id));
       map.put("img_url", img_url);

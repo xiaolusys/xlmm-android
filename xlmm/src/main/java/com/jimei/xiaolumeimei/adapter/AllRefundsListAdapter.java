@@ -121,7 +121,12 @@ public class AllRefundsListAdapter extends BaseAdapter {
     TextView tx_good_num = (TextView) convertView.findViewById(R.id.tx_good_num);
 
     ViewUtils.loadImgToImgView(context, img_goods, data.get(position).get("img_url"));
-    tx_good_name.setText(data.get(position).get("title").substring(0, 8) + "...");
+    if(data.get(position).get("title").length() >= 9) {
+      tx_good_name.setText(data.get(position).get("title").substring(0, 8) + "...");
+    }
+    else{
+      tx_good_name.setText(data.get(position).get("title"));
+    }
     tx_good_price.setText("¥" + data.get(position).get("pay_price"));
     tx_good_size.setText(data.get(position).get("model_id"));
     tx_good_num.setText(data.get(position).get("num"));

@@ -87,7 +87,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     TextView tx_custom_address = (TextView) findViewById(R.id.tx_custom_address);
     tx_custom_address.setText("地址：" + orderDetailBean.getReceiver_address());
 
-    //没有订单创建时间?
     TextView tx_order_crttime = (TextView) findViewById(R.id.tx_order_crttime);
     tx_order_crttime.setText(" " + orderDetailBean.getCreated());
     TextView tx_order_crtstate = (TextView) findViewById(R.id.tx_order_crtstate);
@@ -109,6 +108,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
   }
 
   private void showProcBtn(OrderDetailBean orderDetailBean) {
+    Log.d(TAG, "state " + orderDetailBean.getOrders().get(0).getStatus());
     try {
       int state = orderDetailBean.getOrders().get(0).getStatus();
       switch (state) {
