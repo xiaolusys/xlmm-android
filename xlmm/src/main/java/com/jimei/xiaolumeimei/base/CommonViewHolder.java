@@ -12,7 +12,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
-import com.jimei.xiaolumeimei.glidemoudle.GlideRoundTransform;
 
 /**
  * Author  : itxuye(itxuye@gmail.com)|(http://itxuye.com)
@@ -92,7 +91,6 @@ public class CommonViewHolder {
             .load(url)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .centerCrop()
-            .transform(new GlideRoundTransform(context))
             .into(imageView);
 
 

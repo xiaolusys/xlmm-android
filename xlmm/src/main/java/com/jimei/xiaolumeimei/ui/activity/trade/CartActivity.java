@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
@@ -13,6 +14,7 @@ import com.jimei.xiaolumeimei.adapter.CartsAdapetr;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CartsinfoBean;
 import com.jimei.xiaolumeimei.model.CartsModel;
+import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.widget.headerandfooterrecyclerview.HeaderAndFooterRecyclerViewAdapter;
 import com.jimei.xiaolumeimei.widget.headerandfooterrecyclerview.RecyclerViewUtils;
@@ -34,6 +36,8 @@ public class CartActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.carts_recyclerview) RecyclerView cartsRecyclerview;
   @Bind(R.id.confirm) Button confirmTrade;
   @Bind(R.id.total_price) TextView totalPrice;
+  @Bind(R.id.go_main) Button goMain;
+  @Bind(R.id.empty_content) RelativeLayout emptyContent;
   private CartsAdapetr mCartsAdapetr;
   private HeaderAndFooterRecyclerViewAdapter mHeaderAndFooterRecyclerViewAdapter;
 
@@ -64,6 +68,13 @@ public class CartActivity extends BaseSwipeBackCompatActivity
               }
             } else {
               RecyclerViewUtils.removeFooterView(cartsRecyclerview);
+              emptyContent.setVisibility(View.VISIBLE);
+              goMain.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                  startActivity(new Intent(CartActivity.this, MainActivity.class));
+                  finish();
+                }
+              });
             }
           }
         });
@@ -118,5 +129,4 @@ public class CartActivity extends BaseSwipeBackCompatActivity
         break;
     }
   }
-
 }

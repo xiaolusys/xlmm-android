@@ -56,11 +56,14 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.adress) RelativeLayout adress;
   @Bind(R.id.payinfo_listview) NestedListView payinfoListview;
   @Bind(R.id.total_price) TextView totalPrice;
+  @Bind(R.id.total_price_all) TextView totalPrice_all;
   @Bind(R.id.jiehsneg) TextView jiehsneg;
   @Bind(R.id.confirm) Button confirm;
   @Bind(R.id.alipay) SmoothCheckBox alipay;
   @Bind(R.id.wx) SmoothCheckBox wx;
+  @Bind(R.id.post_fee) TextView tv_postfee;
   List<CartsPayinfoBean.CartListEntity> list;
+
   private boolean isAlipay, isWx;
   //@Bind(R.id.payinfo_recyclerview) RecyclerView payinfoRecyclerview;
   private String ids;
@@ -98,9 +101,10 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
               discount_fee = cartsPayinfoBean.getDiscountFee() + "";
               total_fee = cartsPayinfoBean.getTotalFee() + "";
               uuid = cartsPayinfoBean.getUuid();
-
-              totalPrice.setText(total_fee);
-              jiehsneg.setText(discount_fee);
+              totalPrice.setText("¥" + payment);
+              tv_postfee.setText("¥" + post_fee);
+              totalPrice_all.setText("合计: ¥" + cartsPayinfoBean.getTotalFee() + "");
+              jiehsneg.setText("已节省" + cartsPayinfoBean.getDiscountFee() + "");
             }
           }
         });

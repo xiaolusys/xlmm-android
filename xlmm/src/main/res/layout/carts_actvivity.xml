@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:fitsSystemWindows="true"
     android:layout_height="match_parent">
+
   <android.support.design.widget.AppBarLayout
       android:id="@id/app_bar_layout"
       android:layout_width="match_parent"
@@ -40,4 +41,50 @@
 
   </android.support.v7.widget.RecyclerView>
   <include layout="@layout/include_carts_lin"/>
+  <RelativeLayout
+      android:visibility="invisible"
+      android:id="@+id/empty_content"
+      app:layout_behavior="@string/appbar_scrolling_view_behavior"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="#cccccc"
+
+      >
+    <ImageView
+        android:layout_marginBottom="24dp"
+        android:layout_above="@+id/tv2"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/cart"
+        />
+
+    <TextView
+        android:id="@+id/tv2"
+        android:textColor="@color/black"
+        android:layout_above="@+id/tv1"
+        android:layout_marginBottom="16dp"
+        android:layout_width="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_height="wrap_content"
+        android:text="您的购物车空空如也~快去装满它吧"/>
+
+    <TextView
+        android:id="@+id/tv1"
+        android:layout_width="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_height="wrap_content"
+        android:text="快去挑选几件喜欢的宝贝吧~"/>
+    <Button
+        android:id="@+id/go_main"
+        android:layout_marginTop="24dp"
+        android:textColor="@color/white"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/tv1"
+        android:layout_width="650px"
+        android:background="@drawable/shape_common"
+        android:layout_height="wrap_content"
+        android:text="随便逛逛"
+        />
+  </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

@@ -99,6 +99,7 @@
           android:id="@+id/payinfo_listview"
           android:layout_width="match_parent"
           android:layout_marginTop="16dp"
+          android:layout_marginBottom="16dp"
           android:layout_height="match_parent">
 
       </com.jimei.xiaolumeimei.widget.NestedListView>
@@ -123,11 +124,13 @@
           android:orientation="horizontal"
           android:layout_height="88px">
         <TextView
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="运费"
             />
         <TextView
+            android:id="@+id/post_fee"
             android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -137,7 +140,9 @@
       </RelativeLayout>
 
       <TextView
+          android:id="@+id/total_price_all"
           android:layout_marginTop="8dp"
+          android:layout_marginBottom="8dp"
           android:layout_gravity="end"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"

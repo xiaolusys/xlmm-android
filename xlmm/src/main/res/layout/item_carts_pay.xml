@@ -1,35 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
     android:padding="8dp"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-  ssss<ImageView
+    android:background="@color/white"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+  <ImageView
       android:layout_width="100dp"
       android:id="@+id/cart_image"
       android:layout_height="100dp"
       />
-  <LinearLayout android:layout_width="wrap_content"
-      android:orientation="vertical"
-      android:layout_toRightOf="@id/cart_image"
-      android:layout_height="wrap_content">
-    <TextView
-        android:id="@+id/title"
+  <LinearLayout
+      android:layout_width="fill_parent"
+      android:layout_weight="1"
+      android:layout_height="match_parent"
+      android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="bottom">
+      <TextView
+          android:id="@+id/title"
+          android:text="多功能防风外出被/红色"
+          android:layout_marginLeft="8dp"
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:textSize="15sp"/>
+      <TextView
+          android:id="@+id/price_tv"
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:text="@string/productprice"
+          android:textSize="15sp"
+          android:layout_alignParentRight="true"
+          android:layout_alignParentEnd="true"
+          />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+      <TextView
+          android:textColor="@color/C8C8C8"
+          android:layout_marginLeft="8dp"
+          android:id="@+id/tx_good_size"
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:text="尺码：XL"
+          android:textSize="15sp"
+          android:gravity="bottom"
+          />
 
-        android:text="多功能防风外出被/红色"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    <TextView android:layout_width="wrap_content"
-        android:id="@+id/sku_name"
-        android:text="均码"
-
-        android:layout_toRightOf="@id/cart_image"
-        android:layout_height="wrap_content"
-        />
-    <TextView android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="99.9/239"
-        />
+      <TextView android:layout_width="wrap_content"
+          android:layout_alignParentRight="true"
+          android:text="x2"
+          android:textColor="@color/C8C8C8"
+          android:layout_alignParentBottom="true"
+          android:layout_height="wrap_content"
+          android:id="@+id/tv_num"
+          />
+    </RelativeLayout>
   </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>
