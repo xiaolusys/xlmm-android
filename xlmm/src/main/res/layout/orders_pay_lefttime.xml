@@ -4,6 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="60dp"
     android:id="@+id/rlayout_order_lefttime"
+    android:background="#ffffff"
     android:layout_gravity="bottom"
     android:visibility="invisible"
     android:padding="4dp"
