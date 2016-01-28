@@ -193,7 +193,7 @@
         android:theme="@style/AppTheme.TransparentActivity"
         />
 
-    <activity android:name=".ui.activity.product.XidiShuoMing"
+    <activity android:name=".ui.activity.product.WashingIntrductionActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
 

@@ -40,20 +40,6 @@
             android:layout_height="wrap_content"
             />
 
-        <!--<cn.iwgang.countdownview.CountdownView-->
-        <!--android:visibility="invisible"-->
-        <!--android:id="@+id/cv_countdownViewTest3"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginTop="20dp"-->
-        <!--app:isShowMinute="true"-->
-        <!--app:isShowSecond="true"-->
-        <!--app:isShowMillisecond="true"-->
-        <!--app:suffixGravity="center"-->
-        <!--app:suffixTextColor="@color/colorPrimary"-->
-        <!--app:suffixTextSize="12sp"-->
-        <!--app:timeTextColor="@color/colorPrimary"-->
-        <!--app:timeTextSize="14sp"/>-->
       </RelativeLayout>
 
       <Button
