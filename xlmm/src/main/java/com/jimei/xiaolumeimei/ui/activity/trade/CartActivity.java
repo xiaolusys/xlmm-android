@@ -24,8 +24,9 @@ import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
-import com.jimei.xiaolumeimei.widget.headerandfooterrecyclerview.HeaderAndFooterRecyclerViewAdapter;
-import com.jimei.xiaolumeimei.widget.headerandfooterrecyclerview.RecyclerViewUtils;
+import com.jimei.xiaolumeimei.widget.recyclerviewmanager.RefreshRecyclerView;
+import com.jimei.xiaolumeimei.widget.recyclerviewmanager.manager.RecyclerMode;
+import com.jimei.xiaolumeimei.widget.recyclerviewmanager.manager.RecyclerViewManager;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.squareup.okhttp.ResponseBody;
@@ -44,19 +45,18 @@ public class CartActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener {
   CartsModel model = new CartsModel();
   List<String> ids = new ArrayList<>();
-  @Bind(R.id.carts_recyclerview) RecyclerView cartsRecyclerview;
+  @Bind(R.id.carts_recyclerview) RefreshRecyclerView cartsRecyclerview;
   @Bind(R.id.confirm) Button confirmTrade;
   @Bind(R.id.total_price) TextView totalPrice;
-  private TextView totalPrice_all_1;
-  private  TextView extra_price_a;
   @Bind(R.id.go_main) Button goMain;
   @Bind(R.id.empty_content) RelativeLayout emptyContent;
+  private TextView totalPrice_all_1;
+  private TextView extra_price_a, haicha;
   private CartsAdapetr mCartsAdapetr;
-  private HeaderAndFooterRecyclerViewAdapter mHeaderAndFooterRecyclerViewAdapter;
   private double total_price;
   private List<CartsinfoBean> mList;
   private double extra_price;
- private View view;
+  private View view;
 
   @Override protected void setListener() {
     confirmTrade.setOnClickListener(this);
@@ -70,7 +70,6 @@ public class CartActivity extends BaseSwipeBackCompatActivity
 
             if ((cartsinfoBeans != null) && (cartsinfoBeans.size() > 0)) {
 
-              RecyclerViewUtils.setFooterView(cartsRecyclerview, view);
               mCartsAdapetr.update(cartsinfoBeans);
               for (int i = 0; i < cartsinfoBeans.size(); i++) {
                 ids.add(cartsinfoBeans.get(i).getId());
@@ -94,9 +93,9 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                         totalPrice_all_1.setText("总金额¥" + total_price);
                         if (total_price < 150) {
                           extra_price = 150 - total_price;
-                          extra_price_a.setText(extra_price + "");
+                          extra_price_a.setText("还差" + extra_price + "元");
                         } else {
-                          extra_price_a.setText(0 + "");
+                          haicha.setVisibility(View.INVISIBLE);
                         }
                       }
                     }
@@ -129,16 +128,21 @@ public class CartActivity extends BaseSwipeBackCompatActivity
 
     totalPrice_all_1 = (TextView) view.findViewById(R.id.total_price_all_1);
     extra_price_a = (TextView) view.findViewById(R.id.extra_price_a);
+    haicha = (TextView) view.findViewById(R.id.haicha);
 
-
-    cartsRecyclerview.setLayoutManager(new LinearLayoutManager(this));
-
+    //cartsRecyclerview.setLayoutManager(new LinearLayoutManager(this));
+    //
     cartsRecyclerview.addItemDecoration(
         new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
     mCartsAdapetr = new CartsAdapetr();
-    mHeaderAndFooterRecyclerViewAdapter =
-        new HeaderAndFooterRecyclerViewAdapter(mCartsAdapetr);
-    cartsRecyclerview.setAdapter(mHeaderAndFooterRecyclerViewAdapter);
+    //mHeaderAndFooterRecyclerViewAdapter =
+    //    new HeaderAndFooterRecyclerViewAdapter(mCartsAdapetr);
+    //cartsRecyclerview.setAdapter(mHeaderAndFooterRecyclerViewAdapter);
+
+    RecyclerViewManager.with(mCartsAdapetr, new LinearLayoutManager(this))
+        .setMode(RecyclerMode.NONE)
+        //.addFooterView(view)
+        .into(cartsRecyclerview, this);
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
@@ -207,6 +211,10 @@ public class CartActivity extends BaseSwipeBackCompatActivity
 
     @Override public void onBindViewHolder(final CartsVH holder, int position) {
 
+      if (mList == null || mList.size() == 0) {
+        return;
+      }
+
       CartsinfoBean cartsinfoBean = mList.get(position);
       holder.title.setText(cartsinfoBean.getTitle());
       holder.skuName.setText("尺码:" + cartsinfoBean.getSkuName());
@@ -257,9 +265,9 @@ public class CartActivity extends BaseSwipeBackCompatActivity
 
                                       if (total_price < 150) {
                                         extra_price = 150 - total_price;
-                                        extra_price_a.setText(extra_price+"");
-                                      }else {
-                                        extra_price_a.setText(0 + "");
+                                        extra_price_a.setText("还差" + extra_price + "元");
+                                      } else {
+                                        haicha.setVisibility(View.INVISIBLE);
                                       }
                                     }
                                   }
@@ -278,57 +286,145 @@ public class CartActivity extends BaseSwipeBackCompatActivity
         }
       });
 
-      holder.delete.setOnClickListener(new View.OnClickListener() {
-        @Override public void onClick(View v) {
-          if (Integer.parseInt(cartsinfoBean.getNum()) > 1) {
+      if (mList.size() == 1) {
+        holder.delete.setOnClickListener(new View.OnClickListener() {
+          @Override public void onClick(View v) {
+            if (Integer.parseInt(cartsinfoBean.getNum()) > 1) {
 
-            model.minus_product_carts(cartsinfoBean.getId())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<ResponseBody>() {
-                  @Override public void onNext(ResponseBody responseBody) {
-                    super.onNext(responseBody);
+              model.minus_product_carts(cartsinfoBean.getId())
+                  .subscribeOn(Schedulers.io())
+                  .subscribe(new ServiceResponse<ResponseBody>() {
+                    @Override public void onNext(ResponseBody responseBody) {
+                      super.onNext(responseBody);
 
-                    model.getCartsList()
-                        .subscribeOn(Schedulers.io())
-                        .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
-                          @Override public void onNext(List<CartsinfoBean> list) {
-                            super.onNext(list);
-                            mList = list;
+                      model.getCartsList()
+                          .subscribeOn(Schedulers.io())
+                          .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
+                            @Override public void onNext(List<CartsinfoBean> list) {
+                              super.onNext(list);
+                              mList = list;
 
-                            StringBuilder sb = new StringBuilder();
-                            String s = null;
-                            if (ids.size() > 0) {
-                              s = apendString(sb);
-                            }
+                              StringBuilder sb = new StringBuilder();
+                              String s = null;
+                              if (ids.size() > 0) {
+                                s = apendString(sb);
+                              }
 
-                            model.getCartsInfoList(s)
-                                .subscribeOn(Schedulers.newThread())
-                                .subscribe(new ServiceResponse<CartsPayinfoBean>() {
-                                  @Override
-                                  public void onNext(CartsPayinfoBean cartsPayinfoBean) {
-                                    super.onNext(cartsPayinfoBean);
-                                    if (cartsPayinfoBean != null) {
+                              model.getCartsInfoList(s)
+                                  .subscribeOn(Schedulers.newThread())
+                                  .subscribe(new ServiceResponse<CartsPayinfoBean>() {
+                                    @Override public void onNext(
+                                        CartsPayinfoBean cartsPayinfoBean) {
+                                      super.onNext(cartsPayinfoBean);
+                                      if (cartsPayinfoBean != null) {
 
-                                      total_price = cartsPayinfoBean.getTotalFee();
-                                      totalPrice.setText("¥" + total_price);
-                                      totalPrice_all_1.setText("总金额¥" + total_price);
+                                        total_price = cartsPayinfoBean.getTotalFee();
 
-                                      if (total_price < 150) {
-                                        extra_price = 150 - total_price;
-                                        extra_price_a.setText(extra_price+"");
-                                      }else {
-                                        extra_price_a.setText(0 + "");
+                                        totalPrice.setText("¥" + total_price);
+                                        totalPrice_all_1.setText("总金额¥" + total_price);
+
+                                        if (total_price < 150) {
+                                          extra_price = 150 - total_price;
+                                          extra_price_a.setText("还差" + extra_price + "元");
+                                        } else {
+                                          haicha.setVisibility(View.INVISIBLE);
+                                        }
                                       }
                                     }
-                                  }
-                                });
+                                  });
 
-                            notifyItemChanged(position);
-                          }
-                        });
-                  }
-                });
-          } else {
+                              notifyItemChanged(position);
+                            }
+                          });
+                    }
+                  });
+            } else {
+              new MaterialDialog.Builder(CartActivity.this).
+                  title("删除商品").
+                  content("您确定要删除吗？").
+                  positiveText("确定").
+                  negativeText("取消").
+                  callback(new MaterialDialog.ButtonCallback() {
+                    @Override public void onPositive(MaterialDialog dialog) {
+                      model.delete_carts(cartsinfoBean.getId())
+                          .subscribeOn(Schedulers.io())
+                          .subscribe(new ServiceResponse<ResponseBody>() {
+                            @Override public void onNext(ResponseBody responseBody) {
+                              super.onNext(responseBody);
+                              removeAt(position);
+                            }
+                          });
+                      dialog.dismiss();
+
+                      startActivity(new Intent(CartActivity.this, CartActivity.class));
+                      finish();
+                    }
+
+                    @Override public void onNegative(MaterialDialog dialog) {
+                      dialog.dismiss();
+                    }
+                  }).show();
+            }
+          }
+        });
+      } else {
+        holder.delete.setOnClickListener(new View.OnClickListener() {
+          @Override public void onClick(View v) {
+            if (Integer.parseInt(cartsinfoBean.getNum()) > 1) {
+
+              model.minus_product_carts(cartsinfoBean.getId())
+                  .subscribeOn(Schedulers.io())
+                  .subscribe(new ServiceResponse<ResponseBody>() {
+                    @Override public void onNext(ResponseBody responseBody) {
+                      super.onNext(responseBody);
+
+                      model.getCartsList()
+                          .subscribeOn(Schedulers.io())
+                          .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
+                            @Override public void onNext(List<CartsinfoBean> list) {
+                              super.onNext(list);
+                              mList = list;
+
+                              StringBuilder sb = new StringBuilder();
+                              String s = null;
+                              if (ids.size() > 0) {
+                                s = apendString(sb);
+                              }
+
+                              model.getCartsInfoList(s)
+                                  .subscribeOn(Schedulers.newThread())
+                                  .subscribe(new ServiceResponse<CartsPayinfoBean>() {
+                                    @Override public void onNext(
+                                        CartsPayinfoBean cartsPayinfoBean) {
+                                      super.onNext(cartsPayinfoBean);
+                                      if (cartsPayinfoBean != null) {
+
+                                        total_price = cartsPayinfoBean.getTotalFee();
+
+                                        totalPrice.setText("¥" + total_price);
+                                        totalPrice_all_1.setText("总金额¥" + total_price);
+
+                                        if (total_price < 150) {
+                                          extra_price = 150 - total_price;
+                                          extra_price_a.setText("还差" + extra_price + "元");
+                                        } else {
+                                          haicha.setVisibility(View.INVISIBLE);
+                                        }
+                                      }
+                                    }
+                                  });
+
+                              notifyItemChanged(position);
+                            }
+                          });
+                    }
+                  });
+            } else {
+              oneDelete();
+            }
+          }
+
+          private void oneDelete() {
             new MaterialDialog.Builder(CartActivity.this).
                 title("删除商品").
                 content("您确定要删除吗？").
@@ -345,9 +441,6 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                           }
                         });
                     dialog.dismiss();
-
-                    startActivity(new Intent(CartActivity.this, CartActivity.class));
-                    finish();
                   }
 
                   @Override public void onNegative(MaterialDialog dialog) {
@@ -355,19 +448,19 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                   }
                 }).show();
           }
-        }
-      });
+        });
+      }
     }
 
     @Override public int getItemCount() {
-      return mList.size();
+      return mList == null ? 0 : mList.size();
     }
 
     //删除某一项
     public void removeAt(int position) {
       mList.remove(position);
       notifyItemRemoved(position);
-      notifyItemRangeChanged(position, mList.size());
+      notifyItemRangeChanged(position + 1, mList.size());
     }
 
     class CartsVH extends RecyclerView.ViewHolder {

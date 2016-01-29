@@ -130,6 +130,21 @@ public interface XlmmService {
             @Field("uuid") String uuid
     );
 
+  //使用优惠券
+    @FormUrlEncoded
+    @POST("trades/shoppingcart_create")
+    Observable<ResponseBody> shoppingcart_create_with_coupon(
+            @Field("cart_ids") String cart_ids,
+            @Field("addr_id") String addr_id,
+            @Field("channel") String channel,
+            @Field("payment") String payment,
+            @Field("post_fee") String post_fee,
+            @Field("discount_fee") String discount_fee,
+            @Field("total_fee") String total_fee,
+            @Field("uuid") String uuid,
+            @Field("coupon_id") String coupon_id
+    );
+
     //立即支付订单接口
 
     @POST("trades/{pk}/charge")

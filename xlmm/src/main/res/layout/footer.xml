@@ -1,22 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:padding="8dp"
+    android:padding="4dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
   <TextView
+      android:layout_margin="8dp"
       android:id="@+id/total_price_all_1"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="总金额108"
+      android:text=""
       />
 
-  <LinearLayout android:layout_width="wrap_content"
+  <LinearLayout
+      android:padding="4dp"
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_alignParentRight="true"
+      android:layout_toLeftOf="@+id/privilege"
       android:orientation="horizontal"
       >
-    <TextView android:layout_width="wrap_content"
-        android:text="还差"
+    <TextView
+        android:id="@+id/haicha"
+        android:layout_width="wrap_content"
+        android:text=""
         android:layout_height="wrap_content"
 
         />
@@ -28,8 +33,17 @@
     <TextView android:layout_width="wrap_content"
 
         android:layout_height="wrap_content"
-        android:text="元可以使用优惠券"/>
+        android:text="可以使用优惠券"/>
 
   </LinearLayout>
+  <ImageView
+      android:layout_marginTop="4dp"
+      android:id="@+id/privilege"
+
+      android:layout_width="wrap_content"
+      android:src="@drawable/privilege"
+      android:layout_height="wrap_content"
+      android:layout_alignParentRight="true"
+      />
 
 </RelativeLayout>

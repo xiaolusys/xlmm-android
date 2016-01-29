@@ -1,7 +1,6 @@
 package com.jimei.xiaolumeimei.ui.fragment;
 
 import android.support.v7.widget.GridLayoutManager;
-import android.widget.TextView;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
@@ -26,7 +25,7 @@ public class ChildListFragment extends BaseFragment {
   private XRecyclerView xRecyclerView;
   private ChildListAdapter mChildListAdapter;
   private RotateLoading loading;
-  private TextView mNormal, mOrder;
+  //private TextView mNormal, mOrder;
 
   @Override protected int provideContentViewId() {
     return R.layout.childlist_fragment;
@@ -50,8 +49,8 @@ public class ChildListFragment extends BaseFragment {
   }
 
   @Override protected void initViews() {
-    mNormal = (TextView) view.findViewById(R.id.normal);
-    mOrder = (TextView) view.findViewById(R.id.order);
+    //mNormal = (TextView) view.findViewById(R.id.normal);
+    //mOrder = (TextView) view.findViewById(R.id.order);
 
     loading = (RotateLoading) view.findViewById(R.id.loading);
     initRecyclerView();

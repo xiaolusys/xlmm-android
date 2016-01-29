@@ -1,6 +1,5 @@
 package com.jimei.xiaolumeimei.model;
 
-import com.jimei.xiaolumeimei.data.PayRightNowInfo;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
@@ -34,54 +33,64 @@ public class TradeModel {
         .compose(new DefaultTransform<>());
   }
 
+  //创建订单,使用优惠券
+  public Observable<ResponseBody> shoppingcart_create_with_coupon(String cart_ids,
+      String addr_id, String channel, String payment, String post_fee,
+      String discount_fee, String total_fee, String uuid, String coupon_id) {
+    return XlmmRetrofitClient.getService()
+        .shoppingcart_create_with_coupon(cart_ids, addr_id, channel, payment, post_fee,
+            discount_fee, total_fee, uuid, coupon_id)
+        .compose(new DefaultTransform<>());
+  }
+
   //立即支付订单
   public Observable<ResponseBody> shoppingcart_paynow(int order_id) {
     return XlmmRetrofitClient.getService()
-            .shoppingcart_paynow(order_id)
-            .compose(new DefaultTransform<>());
+        .shoppingcart_paynow(order_id)
+        .compose(new DefaultTransform<>());
   }
 
   //得到某个订单详细数据列表
-  public Observable<OrderDetailBean> getOrderDetailBean(int order_id){
+  public Observable<OrderDetailBean> getOrderDetailBean(int order_id) {
     return XlmmRetrofitClient.getService()
-            .getOrderDetail(order_id)
-            .compose(new DefaultTransform<>());
+        .getOrderDetail(order_id)
+        .compose(new DefaultTransform<>());
   }
 
   //得到全部退货单数据列表
   public Observable<AllRefundsBean> getRefundsBean() {
     return XlmmRetrofitClient.getService()
-            .getAllRedundsList()
-            .compose(new DefaultTransform<>());
+        .getAllRedundsList()
+        .compose(new DefaultTransform<>());
   }
 
   //得到全部待支付订单数据列表
   public Observable<AllOrdersBean> getWaitPayOrdersBean() {
     return XlmmRetrofitClient.getService()
-            .getWaitPayOrdersBean()
-            .compose(new DefaultTransform<>());
+        .getWaitPayOrdersBean()
+        .compose(new DefaultTransform<>());
   }
 
   //得到全部待发货订单数据列表
   public Observable<AllOrdersBean> getWaitSendOrdersBean() {
     return XlmmRetrofitClient.getService()
-            .getWaitSendOrdersBean()
-            .compose(new DefaultTransform<>());
+        .getWaitSendOrdersBean()
+        .compose(new DefaultTransform<>());
   }
 
   //确认收货
   public Observable<UserBean> receiveGoods(int id) {
     return XlmmRetrofitClient.getService()
-            .receiveGoods(id)
-            .compose(new DefaultTransform<>());
+        .receiveGoods(id)
+        .compose(new DefaultTransform<>());
   }
 
-    //得到退货单详细数据
-    public Observable<AllRefundsBean.ResultsEntity> getRefundDetailBean(int order_id) {
-        return XlmmRetrofitClient.getService()
-                .getRefundDetailBean(order_id)
-                .compose(new DefaultTransform<>());
-    }
+  //得到退货单详细数据
+  public Observable<AllRefundsBean.ResultsEntity> getRefundDetailBean(int order_id) {
+    return XlmmRetrofitClient.getService()
+        .getRefundDetailBean(order_id)
+        .compose(new DefaultTransform<>());
+  }
 
   //创建退货单数据
   public Observable<ResponseBody> refund_create(int goods_id, String reason, int num,
