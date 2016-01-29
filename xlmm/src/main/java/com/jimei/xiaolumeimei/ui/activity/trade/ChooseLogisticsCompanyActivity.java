@@ -91,7 +91,7 @@ public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
       @Override
       public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,long arg3) {
         // TODO Auto-generated method stub
-
+          Log.d(TAG,"onItemClick "+ arg2 + " "+company_list.get(arg2).getName());
           Intent intent = new Intent(ChooseLogisticsCompanyActivity.this,
               WriteLogisticsInfoActivty.class);
           intent.putExtra("company", company_list.get(arg2).getName());

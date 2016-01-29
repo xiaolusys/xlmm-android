@@ -47,6 +47,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.tx_refund_num) TextView tx_refund_num;
   @Bind(R.id.tx_refundfee) TextView tx_refundfee;
   @Bind(R.id.tx_refund_reason) TextView tx_refund_reason;
+  @Bind(R.id.tx_order_crttime) TextView tx_order_crttime;
 
   Button btn_return_addr;
   EditText et_logistics_info;
@@ -168,6 +169,8 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
 
     //TextView tx_refund_reason = (TextView) findViewById(R.id.tx_refund_reason);
     tx_refund_reason.setText(refundDetailBean.getReason());
+
+    tx_order_crttime.setText(refundDetailBean.getCreated());
 
   }
 
