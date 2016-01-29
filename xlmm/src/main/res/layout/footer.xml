@@ -4,12 +4,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
   <TextView
+      android:id="@+id/total_price_all_1"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text="总金额108"
       />
+
+  <LinearLayout android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentRight="true"
+      android:orientation="horizontal"
+      >
     <TextView android:layout_width="wrap_content"
-        android:layout_alignParentRight="true"
+        android:text="还差"
         android:layout_height="wrap_content"
-        android:text="还差X元可以使用优惠券"/>
+
+        />
+    <TextView android:layout_width="wrap_content"
+        android:text=""
+        android:layout_height="wrap_content"
+        android:id="@+id/extra_price_a"
+        />
+    <TextView android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+        android:text="元可以使用优惠券"/>
+
+  </LinearLayout>
+
 </RelativeLayout>
