@@ -205,6 +205,10 @@ public interface XlmmService {
     @GET("address")
     Observable<List<AddressBean>> getAddressList();
 
+    //获取某一个地址
+    @GET("address")
+    Observable<AddressBean> getOneAddressList();
+
     //获取用户信息
     @GET(XlmmApi.USERINFO_URL)
     Observable<UserInfoBean> getUserInfo();

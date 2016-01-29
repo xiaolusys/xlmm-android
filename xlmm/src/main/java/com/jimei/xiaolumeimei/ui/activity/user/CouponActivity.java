@@ -11,7 +11,8 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
+import butterknife.Bind;
+import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.CouponListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
@@ -19,131 +20,124 @@ import com.jimei.xiaolumeimei.entities.CouponBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import com.jimei.xiaolumeimei.R;
-
-import butterknife.Bind;
 import rx.schedulers.Schedulers;
 
+public class CouponActivity extends BaseSwipeBackCompatActivity
+    implements View.OnClickListener, AdapterView.OnItemClickListener {
+  String TAG = "CouponActivity";
 
-public class CouponActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener,
-    AdapterView.OnItemClickListener {
-    String TAG = "CouponActivity";
+  @Bind(R.id.toolbar) Toolbar toolbar;
+  @Bind(R.id.btn_jump) Button btn_jump;
+  @Bind(R.id.rlayout_order_empty) RelativeLayout rl_empty;
+  @Bind(R.id.sv_frame_coupon) ScrollView sv_frame_coupon;
+  UserModel model = new UserModel();
+  int unused_num = 0;
+  List<CouponBean.ResultsEntity> list = new ArrayList<>();
+  private CouponListAdapter mCouponAdapter;
+  private CouponListAdapter mPastCouponAdapter;
+  private ListView lv_unused_coupon;
 
+  @Override protected void setListener() {
+    btn_jump.setOnClickListener(this);
+    toolbar.setOnClickListener(this);
+    lv_unused_coupon.setOnItemClickListener(this);
+  }
 
-    @Bind(R.id.toolbar) Toolbar toolbar;
-    @Bind(R.id.btn_jump)    Button btn_jump;
-    @Bind(R.id.rlayout_order_empty)    RelativeLayout rl_empty;
-    @Bind(R.id.sv_frame_coupon) ScrollView sv_frame_coupon;
-    UserModel model = new UserModel();
-    private CouponListAdapter mCouponAdapter;
-    private CouponListAdapter mPastCouponAdapter;
-    int unused_num = 0;
-    private ListView lv_unused_coupon;
-    List<CouponBean.ResultsEntity> list = new ArrayList<>();
+  @Override protected void getBundleExtras(Bundle extras) {
 
+  }
 
-    @Override protected void setListener() {
-        btn_jump.setOnClickListener(this);
-        toolbar.setOnClickListener(this);
-        lv_unused_coupon.setOnItemClickListener(this);
+  @Override protected int getContentViewLayoutID() {
+    return R.layout.activity_coupon;
+  }
+
+  @Override protected void initViews() {
+    toolbar.setTitle("");
+    setSupportActionBar(toolbar);
+    toolbar.setNavigationIcon(R.drawable.back);
+
+    lv_unused_coupon = (ListView) findViewById(R.id.lv_unused_coupon);
+    mCouponAdapter = new CouponListAdapter(this);
+    lv_unused_coupon.setAdapter(mCouponAdapter);
+
+    ListView lv_timeout_coupon = (ListView) findViewById(R.id.lv_timeout_coupon);
+    mPastCouponAdapter = new CouponListAdapter(this);
+    lv_timeout_coupon.setAdapter(mPastCouponAdapter);
+
+    TextView tx_info = (TextView) findViewById(R.id.tx_info);
+    tx_info.setText("亲，您暂时还没有优惠券哦~快去看看吧！");
+  }
+
+  //从server端获得所有订单数据，可能要查询几次
+  @Override protected void initData() {
+    model.getUnusedCouponBean()
+        .subscribeOn(Schedulers.newThread())
+        .subscribe(new ServiceResponse<CouponBean>() {
+          @Override public void onNext(CouponBean couponBean) {
+            List<CouponBean.ResultsEntity> results = couponBean.getResults();
+            list.addAll(results);
+            unused_num = results.size();
+            if (0 != results.size()) {
+              rl_empty.setVisibility(View.INVISIBLE);
+              mCouponAdapter.update(results, XlmmConst.UNUSED_COUPON);
+            }
+
+            Log.i(TAG, couponBean.toString());
+          }
+        });
+
+    model.getPastCouponBean()
+        .subscribeOn(Schedulers.newThread())
+        .subscribe(new ServiceResponse<CouponBean>() {
+          @Override public void onNext(CouponBean couponBean) {
+            List<CouponBean.ResultsEntity> results = couponBean.getResults();
+            if (0 == results.size()) {
+              if (0 == unused_num) {
+                sv_frame_coupon.setVisibility(View.INVISIBLE);
+                rl_empty.setVisibility(View.VISIBLE);
+              }
+            } else {
+              rl_empty.setVisibility(View.INVISIBLE);
+              mPastCouponAdapter.update(results, XlmmConst.PAST_COUPON);
+            }
+
+            Log.i(TAG, couponBean.toString());
+          }
+        });
+  }
+
+  @Override protected boolean toggleOverridePendingTransition() {
+    return false;
+  }
+
+  @Override protected TransitionMode getOverridePendingTransitionMode() {
+    return null;
+  }
+
+  @Override public void onClick(View v) {
+    switch (v.getId()) {
+      case R.id.btn_jump:
+        Intent intent = new Intent(CouponActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+        break;
+      case R.id.toolbar:
+        finish();
+        break;
     }
-    @Override protected void getBundleExtras(Bundle extras) {
+  }
 
-    }
-
-    @Override protected int getContentViewLayoutID() {
-        return R.layout.activity_coupon;
-    }
-
-    @Override protected void initViews() {
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.back);
-
-         lv_unused_coupon = (ListView) findViewById(R.id.lv_unused_coupon);
-        mCouponAdapter = new CouponListAdapter(this);
-        lv_unused_coupon.setAdapter(mCouponAdapter);
-
-        ListView lv_timeout_coupon = (ListView) findViewById(R.id.lv_timeout_coupon);
-        mPastCouponAdapter = new CouponListAdapter(this);
-        lv_timeout_coupon.setAdapter(mPastCouponAdapter);
-
-        TextView tx_info = (TextView) findViewById(R.id.tx_info);
-        tx_info.setText("亲，您暂时还没有优惠券哦~快去看看吧！");
-    }
-    //从server端获得所有订单数据，可能要查询几次
-    @Override protected void initData() {
-        model.getUnusedCouponBean()
-                .subscribeOn(Schedulers.newThread())
-                .subscribe(new ServiceResponse<CouponBean>() {
-                  @Override public void onNext(CouponBean couponBean) {
-                    List<CouponBean.ResultsEntity> results = couponBean.getResults();
-                    list.addAll(results);
-                    unused_num = results.size();
-                    if (0 != results.size()) {
-                      rl_empty.setVisibility(View.INVISIBLE);
-                      mCouponAdapter.update(results, XlmmConst.UNUSED_COUPON);
-                    }
-
-                    Log.i(TAG, couponBean.toString());
-                  }
-                });
-
-        model.getPastCouponBean()
-                .subscribeOn(Schedulers.newThread())
-                .subscribe(new ServiceResponse<CouponBean>() {
-                  @Override public void onNext(CouponBean couponBean) {
-                    List<CouponBean.ResultsEntity> results = couponBean.getResults();
-                    if (0 == results.size()) {
-                      if (0 == unused_num) {
-                        sv_frame_coupon.setVisibility(View.INVISIBLE);
-                        rl_empty.setVisibility(View.VISIBLE);
-                      }
-                    } else {
-                      rl_empty.setVisibility(View.INVISIBLE);
-                      mPastCouponAdapter.update(results, XlmmConst.PAST_COUPON);
-                    }
-
-                    Log.i(TAG, couponBean.toString());
-                  }
-                });
-    }
-
-    @Override protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_jump:
-                Intent intent = new Intent(CouponActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-                break;
-            case R.id.toolbar:
-                finish();
-                break;
-        }
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-      CouponBean.ResultsEntity resultsEntity = list.get(position);
-      int coupon_id = resultsEntity.getId();
-      double coupon_value = resultsEntity.getCoupon_value();
-      Intent intent = new Intent();
-      intent.putExtra("coupon_id", coupon_id);
-      intent.putExtra("coupon_price", coupon_value);
-      setResult(RESULT_OK, intent);
-      finish();
-    }
+  @Override
+  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    CouponBean.ResultsEntity resultsEntity = list.get(position);
+    int coupon_id = resultsEntity.getId();
+    double coupon_value = resultsEntity.getCoupon_value();
+    Intent intent = new Intent();
+    intent.putExtra("coupon_id", coupon_id);
+    intent.putExtra("coupon_price", coupon_value);
+    setResult(RESULT_OK, intent);
+    finish();
+  }
 }

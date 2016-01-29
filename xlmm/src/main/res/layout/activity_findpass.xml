@@ -61,7 +61,7 @@
             android:paddingRight="10sp"
             android:paddingTop="10sp"
             android:paddingBottom="10sp"
-            android:background="@drawable/text_frame"
+            android:background="@null"
             android:hint="请输入短信验证码"/>
         <Button
 

@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.AddressBean;
+import com.jimei.xiaolumeimei.ui.activity.user.ChanggeAddressActivity;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,6 +68,13 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
           + ""
           + addressBean.getReceiverAddress());
       defaultVH.receiverName.setText(addressBean.getReceiverName());
+
+      ((AddressDefaultVH) holder).card.setOnClickListener(new View.OnClickListener() {
+        @Override public void onClick(View v) {
+
+        }
+      });
+
     } else if (holder instanceof AddressVH) {
 
       AddressVH addressVH = (AddressVH) holder;
@@ -81,6 +90,13 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
           + ""
           + addressBean.getReceiverAddress());
       addressVH.receiverName.setText(addressBean.getReceiverName());
+
+      ((AddressVH) holder).card.setOnClickListener(new View.OnClickListener() {
+        @Override public void onClick(View v) {
+          Intent intent = new Intent(context, ChanggeAddressActivity.class);
+        }
+      });
+
     }
   }
 
@@ -99,26 +115,28 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
   }
 
   static class AddressDefaultVH extends RecyclerView.ViewHolder {
-    int id = R.layout.item_default_address;
     @Bind(R.id.address_defalut) TextView addressDefalut;
     @Bind(R.id.receiver_name) TextView receiverName;
     @Bind(R.id.receiver_mobile) TextView receiverMobile;
     @Bind(R.id.receiver_address) TextView receiverAddress;
 
+    View card;
+
     public AddressDefaultVH(View itemView) {
       super(itemView);
+      card = itemView;
       ButterKnife.bind(this, itemView);
     }
   }
 
   static class AddressVH extends RecyclerView.ViewHolder {
-    int id = R.layout.item_add;
     @Bind(R.id.receiver_name) TextView receiverName;
     @Bind(R.id.receiver_mobile) TextView receiverMobile;
     @Bind(R.id.receiver_address) TextView receiverAddress;
-
+    View card;
     public AddressVH(View itemView) {
       super(itemView);
+      card = itemView;
       ButterKnife.bind(this, itemView);
     }
   }

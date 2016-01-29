@@ -8,7 +8,7 @@
   <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
   <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-  <uses-permission android:name="android.permission.CAMERA" />
+  <uses-permission android:name="android.permission.CAMERA"/>
 
   <application
       android:name=".XlmmApp"
@@ -68,6 +68,9 @@
     <activity android:name=".ui.activity.trade.CartsPayInfoActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
+    <activity android:name=".ui.activity.user.ChanggeAddressActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
 
     <!-- Ping++ sdk -->
     <activity
@@ -93,33 +96,33 @@
         android:exported="false"
         android:screenOrientation="behind">
     </activity>
-        <activity
-            android:name=".ui.activity.trade.AllOrdersActivity"
-            android:label="@string/title_activity_allorders"
-            android:theme="@style/AppTheme.TransparentActivity"
-             >
-        </activity>
+    <activity
+        android:name=".ui.activity.trade.AllOrdersActivity"
+        android:label="@string/title_activity_allorders"
+        android:theme="@style/AppTheme.TransparentActivity"
+        >
+    </activity>
 
-        <activity
-            android:name=".ui.activity.trade.OrderDetailActivity"
-            android:label="@string/title_activity_orderdetail"
-            android:theme="@style/AppTheme.TransparentActivity"
-             >
-        </activity>
+    <activity
+        android:name=".ui.activity.trade.OrderDetailActivity"
+        android:label="@string/title_activity_orderdetail"
+        android:theme="@style/AppTheme.TransparentActivity"
+        >
+    </activity>
 
-        <activity
-            android:name=".ui.activity.trade.AllRefundsActivity"
-            android:label="@string/title_activity_refunds"
-            android:theme="@style/AppTheme.TransparentActivity"
-             >
-        </activity>
+    <activity
+        android:name=".ui.activity.trade.AllRefundsActivity"
+        android:label="@string/title_activity_refunds"
+        android:theme="@style/AppTheme.TransparentActivity"
+        >
+    </activity>
 
-        <activity
-            android:name=".ui.activity.trade.RefundDetailActivity"
-            android:label="@string/title_activity_refunddetail"
-            android:theme="@style/AppTheme.TransparentActivity"
-             >
-        </activity>
+    <activity
+        android:name=".ui.activity.trade.RefundDetailActivity"
+        android:label="@string/title_activity_refunddetail"
+        android:theme="@style/AppTheme.TransparentActivity"
+        >
+    </activity>
     <activity
         android:name=".ui.activity.trade.WaitPayOrdersActivity"
         android:label="@string/title_activity_waitsend"
@@ -139,8 +142,8 @@
         />
 
     <activity android:name=".ui.activity.user.AddressActivity"
-      android:theme="@style/AppTheme.TransparentActivity"
-      />
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
     <activity android:name=".ui.activity.user.AddAddressActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
@@ -160,23 +163,23 @@
         android:theme="@style/AppTheme.TransparentActivity"
         />
 
-      <activity android:name=".ui.activity.user.CouponActivity"
-          android:theme="@style/AppTheme.TransparentActivity"
-          />
+    <activity android:name=".ui.activity.user.CouponActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
 
-      <activity android:name=".ui.activity.user.MembershipPointActivity"
-          android:theme="@style/AppTheme.TransparentActivity"
-          />
+    <activity android:name=".ui.activity.user.MembershipPointActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
 
-      <activity android:name=".ui.activity.main.CompanyInfoActivity"
-          android:theme="@style/AppTheme.TransparentActivity"
-          />
-      <activity android:name=".ui.activity.user.FindPassActivty"
-          android:theme="@style/AppTheme.TransparentActivity"
-          />
-      <activity android:name=".ui.activity.user.SmsLoginActivity"
-          android:theme="@style/AppTheme.TransparentActivity"
-          />
+    <activity android:name=".ui.activity.main.CompanyInfoActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
+    <activity android:name=".ui.activity.user.FindPassActivty"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
+    <activity android:name=".ui.activity.user.SmsLoginActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
     <activity android:name=".ui.activity.trade.ApplyRefundActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         android:windowSoftInputMode="adjustPan"
@@ -210,7 +213,7 @@
         android:theme="@android:style/Theme.Translucent.NoTitleBar"
         android:configChanges="keyboardHidden|orientation|screenSize"
         android:exported="true"
-        android:screenOrientation="portrait" />
+        android:screenOrientation="portrait"/>
 
   </application>
 

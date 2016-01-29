@@ -14,7 +14,6 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import com.google.gson.annotations.SerializedName;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
@@ -155,22 +154,5 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
     popupWindow.setBackgroundDrawable(new BitmapDrawable());
     popupWindow.setOutsideTouchable(true);
     cityPicker = (CityPicker) view.findViewById(R.id.city_picker);
-  }
-
-  class Result {
-
-    /**
-     * ret : true
-     */
-
-    @SerializedName("ret") private boolean mRet;
-
-    public boolean isRet() {
-      return mRet;
-    }
-
-    public void setRet(boolean ret) {
-      this.mRet = ret;
-    }
   }
 }

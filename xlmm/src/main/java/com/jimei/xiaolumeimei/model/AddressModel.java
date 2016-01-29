@@ -21,6 +21,13 @@ public class AddressModel {
         .compose(new DefaultTransform<>());
   }
 
+  //获取某个地址
+  public Observable<AddressBean> getOneAddressList() {
+    return XlmmRetrofitClient.getService()
+        .getOneAddressList()
+        .compose(new DefaultTransform<>());
+  }
+
   //创建新的地址
   public Observable<AddressResultBean> create_address(String receiver_state,String
       receiver_city,
