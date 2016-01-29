@@ -207,6 +207,7 @@
             android:focusable="false"
             android:text="请选择退货原因"
             android:textSize="15sp"
+            android:paddingRight="4dp"
             />
 
         <EditText

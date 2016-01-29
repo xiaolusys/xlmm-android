@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import android.widget.Toast;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
@@ -82,6 +83,7 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
   String proof_pic="";
   String uptoken;
   File tmpPic[] = new File[3];
+  String uploadPic[] = new String[3];
   int picNum = 0;
 
   @Override protected void setListener() {
@@ -94,9 +96,11 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
       @Override public void onClick(View v) {
         Log.d(TAG, "delete pic 1");
         tmpPic[0]=null;
+        uploadPic[0]=null;
         if(picNum >= 1){
           for(char i = 1; i< picNum;i++){
             tmpPic[i-1]=tmpPic[i];
+            uploadPic[i-1]=uploadPic[i];
           }
           picNum--;
         }
@@ -107,9 +111,11 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
       @Override public void onClick(View v) {
         Log.d(TAG, "delete pic 2");
         tmpPic[1]=null;
+        uploadPic[1]=null;
         if(picNum >= 2){
           for(char i = 2; i< picNum;i++){
             tmpPic[i-1]=tmpPic[i];
+            uploadPic[i-1]=uploadPic[i];
           }
           picNum--;
         }
@@ -119,9 +125,11 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
       @Override public void onClick(View v) {
         Log.d(TAG, "delete pic 3");
         tmpPic[2]=null;
+        uploadPic[2]=null;
         if(picNum >= 3){
           for(char i = 3; i< picNum;i++){
             tmpPic[i-1]=tmpPic[i];
+            uploadPic[i-1]=uploadPic[i];
           }
           picNum--;
         }
@@ -202,9 +210,16 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
         break;
       case R.id.btn_commit:
         desc = et_refund_info.getText().toString().trim();
-
+        for(int i=0; i< picNum;i++) {
+          if(uploadPic[i] != null) {
+            if(i != picNum -1)
+              proof_pic += XlmmApi.QINIU_UPLOAD_URL_BASE + uploadPic[i] + ",";
+            else
+              proof_pic += XlmmApi.QINIU_UPLOAD_URL_BASE + uploadPic[i];
+          }
+        }
+        Log.i(TAG,"desc:  "+desc + " proof_pic: "+proof_pic);
         commit_apply();
-        finish();
         break;
       case R.id.et_refund_info:
         Log.i(TAG,"et_refund_info ");
@@ -242,6 +257,8 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
           @Override public void onNext(ResponseBody resp) {
 
             Log.i(TAG,"commit_apply "+ resp.toString());
+            finish();
+
           }
         });
   }
@@ -310,10 +327,12 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
 
     if(picNum <= 2) {
       tmpPic[picNum] = b;
+      uploadPic[picNum] = b.getName();
       picNum++;
     }
     else {
       tmpPic[picNum - 1] = b;
+      uploadPic[picNum - 1] = b.getName();
     }
 
     showPic();
@@ -424,7 +443,7 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
         // 重用 uploadManager。一般地，只需要创建一个 uploadManager 对象
     UploadManager uploadManager = new UploadManager();
     File data = file;
-    String key = "100.jpg";
+    String key = file.getName();
     String token = uptoken;
     uploadManager.put(data, key, token,
         new UpCompletionHandler() {
@@ -432,6 +451,7 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
           public void complete(String key, ResponseInfo info, JSONObject res) {
             //  res 包含hash、key等信息，具体字段取决于上传策略的设置。
             Log.i("qiniu", "complete key=" +key + ", " + "info ="+info + ", " + "res "+res);
+
           }
         },
             new UploadOptions(null, null, false,

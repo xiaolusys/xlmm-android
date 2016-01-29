@@ -127,28 +127,62 @@ public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
 
 
   private void fillCompanyInfo() {
-
+    company_list.add(new LogisticsCompanyInfo("A", "安信达快递"));
+    company_list.add(new LogisticsCompanyInfo("C", "超联物流"));
+    company_list.add(new LogisticsCompanyInfo("D", "大田快运"));
+    company_list.add(new LogisticsCompanyInfo("D", "德邦快递"));
+    company_list.add(new LogisticsCompanyInfo("D", "DHL快递"));
     company_list.add(new LogisticsCompanyInfo("D", "迪邦宅急送"));
+    company_list.add(new LogisticsCompanyInfo("F", "飞达急便速递"));
+    company_list.add(new LogisticsCompanyInfo("F", "飞鸿快递"));
+    company_list.add(new LogisticsCompanyInfo("F", "飞马快递"));
+    company_list.add(new LogisticsCompanyInfo("F", "飞天达快递"));
+    company_list.add(new LogisticsCompanyInfo("F", "飞扬快递"));
+    company_list.add(new LogisticsCompanyInfo("G", "国鑫快递"));
     company_list.add(new LogisticsCompanyInfo("H", "华运通物流"));
+    company_list.add(new LogisticsCompanyInfo("H", "华宇物流"));
     company_list.add(new LogisticsCompanyInfo("H", "汇通快递"));
+    company_list.add(new LogisticsCompanyInfo("J", "佳吉快运"));
+    company_list.add(new LogisticsCompanyInfo("J", "佳加物流"));
+    company_list.add(new LogisticsCompanyInfo("J", "捷安快递"));
+    company_list.add(new LogisticsCompanyInfo("J", "捷森物流"));
+    company_list.add(new LogisticsCompanyInfo("J", "京广快递"));
+    company_list.add(new LogisticsCompanyInfo("K", "快捷顺速递"));
+    company_list.add(new LogisticsCompanyInfo("K", "快马运输"));
+    company_list.add(new LogisticsCompanyInfo("L", "联邦快递"));
     company_list.add(new LogisticsCompanyInfo("L", "联通快递"));
+    company_list.add(new LogisticsCompanyInfo("L", "联邮速递"));
+    company_list.add(new LogisticsCompanyInfo("Q", "勤诚快递"));
+    company_list.add(new LogisticsCompanyInfo("Q", "奇速快递"));
+    company_list.add(new LogisticsCompanyInfo("Q", "驱达国际快递"));
+    company_list.add(new LogisticsCompanyInfo("Q", "全一快运"));
     company_list.add(new LogisticsCompanyInfo("S", "申通快递"));
     company_list.add(new LogisticsCompanyInfo("S", "顺丰快递"));
     company_list.add(new LogisticsCompanyInfo("S", "顺风快递"));
+    company_list.add(new LogisticsCompanyInfo("T", "天天快递"));
+    company_list.add(new LogisticsCompanyInfo("U", "UPS快递"));
+    company_list.add(new LogisticsCompanyInfo("W", "闻达快递"));
+    company_list.add(new LogisticsCompanyInfo("X", "小红马快递"));
+    company_list.add(new LogisticsCompanyInfo("X", "星辉快递"));
     company_list.add(new LogisticsCompanyInfo("Y", "亚风快递"));
+    company_list.add(new LogisticsCompanyInfo("Y", "阳光快递"));
     company_list.add(new LogisticsCompanyInfo("Y", "壹时通物流"));
     company_list.add(new LogisticsCompanyInfo("Y", "一通快递"));
     company_list.add(new LogisticsCompanyInfo("Y", "一统快递"));
-    company_list.add(new LogisticsCompanyInfo("Y", "邮政"));
+    company_list.add(new LogisticsCompanyInfo("Y", "邮政EMS"));
+    company_list.add(new LogisticsCompanyInfo("Y", "远顺物流"));
     company_list.add(new LogisticsCompanyInfo("Y", "圆通速递"));
+    company_list.add(new LogisticsCompanyInfo("Y", "越丰物流"));
+    company_list.add(new LogisticsCompanyInfo("Y", "韵达货运"));
     company_list.add(new LogisticsCompanyInfo("Z", "宅急送快递"));
+    company_list.add(new LogisticsCompanyInfo("Z", "泽龙物流"));
+    company_list.add(new LogisticsCompanyInfo("Z", "中邦速递"));
+    company_list.add(new LogisticsCompanyInfo("Z", "中诚快递"));
+    company_list.add(new LogisticsCompanyInfo("Z", "中国速递"));
+    company_list.add(new LogisticsCompanyInfo("Z", "中铁快运"));
     company_list.add(new LogisticsCompanyInfo("Z", "中通速递"));
-         /*大田快运：www.dtw.com.cn  18． 联邦快递：:www.fedex.com  19． 联邮速递：www.upex-cn.com  20．
-        快马运输：www.fast111.com  21． 华宇物流：www.hoau.net  22． 天天快递：www.ttkdex.com  23． 阳光快递：www.sdyg.b2b.cn  24． 勤诚快递：www.qc-dds.net
+    company_list.add(new LogisticsCompanyInfo("Z", "中外运"));
+    company_list.add(new LogisticsCompanyInfo("Z", "中驿快递"));
 
-        25． DHL快递：www.cn.dhl.com  26． UPS快递：www.ups.com  27． 中外运：www.sinoair.com  28． 中铁快运：www.cre.cn   29． 中诚快递：http://www.zoc.net.cn  30． 中国速递：www.dgpost.com.cn  31． 中邦速递：www.szzbsd.com  32． 中驿快递：www.zykd.com  33． 飞马快递：www.horse-ex.com  34． 飞鸿快递：www.feihong.org  35． 飞扬快递：www.feihong.org  36． 飞天达快递：www.98933.net  37． 韵达货运：www.yundaex.com  38． 闻达快递：www.wendaexpress.com  39． 驱达国际快递：www.fardar.com  40． 安信达快递：www.anxinda.com  41． 飞达急便速递：www.ping-chi.com  42． 小红马快递：www.ponyex.com.cn  43． 远顺物流：www.ysfreight.com  44． 快捷顺速递：www.szkjs.com/new  45． 奇速快递：www.shseis.net  46． 捷安快递：www.htky365.com  47． 星辉快递：www.samvay.com  48． 国鑫快递：www.uppollo.com  49． 京广快递：www.kke.com.hk
-
-        50． 越丰物流：www.yfexpress.com.hk  51． 捷森物流：wwww.js56.b2b.cn  52． 泽龙物流：www.zelong.b2b.cn  53． 超联物流：www.sul.cn  54． 全一快运：www.apex100.comt  55． 佳吉快运：www.jiaji.com  56． 佳加物流：www.sh56.cn
-    */
   }
 }

@@ -175,6 +175,7 @@
             android:background="@drawable/text_frame"
             android:focusable="false"
             android:cursorVisible="false"
+            android:paddingRight="4dp"
             />
 
         <EditText
