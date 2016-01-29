@@ -36,7 +36,9 @@ import com.jimei.xiaolumeimei.R;
 import butterknife.Bind;
 import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.UpCompletionHandler;
+import com.qiniu.android.storage.UpProgressHandler;
 import com.qiniu.android.storage.UploadManager;
+import com.qiniu.android.storage.UploadOptions;
 import com.squareup.okhttp.ResponseBody;
 import java.io.File;
 import org.json.JSONObject;
@@ -61,9 +63,9 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
   @Bind(R.id.et_refund_reason) EditText et_refund_reason;
   @Bind(R.id.imgbtn_camera_pic) ImageButton imgbtn_camera_pic;
   @Bind(R.id.btn_commit) Button btn_commit;
-  @Bind(R.id.rl_proof_pic1) ImageView rl_proof_pic1;
-  @Bind(R.id.rl_proof_pic2) ImageView rl_proof_pic2;
-  @Bind(R.id.rl_proof_pic3) ImageView rl_proof_pic3;
+  @Bind(R.id.rl_proof_pic1) RelativeLayout rl_proof_pic1;
+  @Bind(R.id.rl_proof_pic2) RelativeLayout rl_proof_pic2;
+  @Bind(R.id.rl_proof_pic3) RelativeLayout rl_proof_pic3;
 
   ImageView img_proof_pic1;
   ImageView img_proof_pic2;
@@ -80,7 +82,7 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
   String proof_pic="";
   String uptoken;
   File tmpPic[] = new File[3];
-  char picNum = 0;
+  int picNum = 0;
 
   @Override protected void setListener() {
     toolbar.setOnClickListener(this);
@@ -422,36 +424,45 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
         // 重用 uploadManager。一般地，只需要创建一个 uploadManager 对象
     UploadManager uploadManager = new UploadManager();
     File data = file;
-    String key = null;
+    String key = "100.jpg";
     String token = uptoken;
     uploadManager.put(data, key, token,
         new UpCompletionHandler() {
           @Override
           public void complete(String key, ResponseInfo info, JSONObject res) {
             //  res 包含hash、key等信息，具体字段取决于上传策略的设置。
-            Log.i("qiniu", key + ",\r\n " + info + ",\r\n " + res);
+            Log.i("qiniu", "complete key=" +key + ", " + "info ="+info + ", " + "res "+res);
           }
-        }, null);
+        },
+            new UploadOptions(null, null, false,
+                    new UpProgressHandler(){
+                      public void progress(String key, double percent){
+                        Log.i("qiniu", "percent key=" +key + ": " + percent);
+                      }
+                    }, null));
   }
 
   private void showPic(){
     Log.i(TAG, "showPic picNum " +picNum );
-    for(char i = 0; i < picNum; i++) {
+    for(int i = 0; i < picNum; i++) {
       Bitmap b = CameraUtils.decodeFile(tmpPic[i]);
       b = Bitmap.createScaledBitmap(b, 150, 150, true);
       if(i == 0) {
         img_proof_pic1.setImageBitmap(b);
+        rl_proof_pic1.setVisibility(View.VISIBLE);
       }
       else if(i == 1){
         img_proof_pic2.setImageBitmap(b);
+        rl_proof_pic2.setVisibility(View.VISIBLE);
       }
       else if(i == 2){
         img_proof_pic3.setImageBitmap(b);
+        rl_proof_pic3.setVisibility(View.VISIBLE);
       }
     }
 
     if(picNum < 3){
-      for(char i = picNum; i < 3; i++) {
+      for(int i = picNum; i < 3; i++) {
         if(i == 0) {
           rl_proof_pic1.setVisibility(View.INVISIBLE);
         }
