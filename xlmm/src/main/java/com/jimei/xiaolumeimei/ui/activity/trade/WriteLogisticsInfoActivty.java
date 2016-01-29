@@ -102,7 +102,7 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity imple
     {
       // data contains result
       company = getIntent().getExtras().getString("company");
-
+      et_logistics_company.setText(company);
     }
   }
 

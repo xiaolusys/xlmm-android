@@ -199,6 +199,7 @@
 
     </LinearLayout>
   </ScrollView>
+
   <Button
       android:layout_width="690px"
       android:layout_height="80px"
@@ -206,11 +207,10 @@
       android:textColor="@color/white"
       android:textSize="15sp"
       android:id="@+id/btn_commit"
-      android:layout_marginBottom="147dp"
+      android:layout_marginBottom="10dp"
       android:layout_alignParentBottom="true"
       android:layout_centerHorizontal="true"
       android:background="@color/colorAccent"
       />
-
 
 </RelativeLayout>
