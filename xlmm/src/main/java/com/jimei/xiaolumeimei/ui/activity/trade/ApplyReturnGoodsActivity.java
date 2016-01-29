@@ -251,6 +251,8 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
   }
 
   private void commit_apply(){
+    Log.i(TAG,"commit_apply "+ goods_info.getId() + " " + reason + " "+ num + " "+ apply_fee
+          + " " + desc + " "+ proof_pic);
     model.refund_create(goods_info.getId(), reason, num, apply_fee, desc, proof_pic)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<ResponseBody>() {
