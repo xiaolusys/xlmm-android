@@ -94,7 +94,7 @@ public class TradeModel {
   }
 
   //创建退货单数据
-  public Observable<ResponseBody> refund_create(int goods_id, String reason, int num,
+  public Observable<ResponseBody> refund_create(int goods_id, int reason, int num,
       double sum_price, String description, String proof_pic) {
     return XlmmRetrofitClient.getService()
         .refund_create(goods_id, reason, num, sum_price, description, proof_pic)
@@ -109,7 +109,7 @@ public class TradeModel {
   }
 
   //修改退货单数据
-  public Observable<ResponseBody> update_refund_info(int goods_id, String reason, int num,
+  public Observable<ResponseBody> update_refund_info(int goods_id, int reason, int num,
       double sum_price, String description, String proof_pic) {
     return XlmmRetrofitClient.getService()
         .update_refund_info(goods_id, 1,reason, num, sum_price, description)

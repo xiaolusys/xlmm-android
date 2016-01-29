@@ -313,7 +313,7 @@ public interface XlmmService {
     @POST("refunds")
     Observable<ResponseBody> refund_create(
         @Field("id") int goods_id,
-        @Field("reason") String reason,
+        @Field("reason") int reason,
         @Field("num") int num,
         @Field("sum_price") double sum_price,
         @Field("description") String description,
@@ -327,7 +327,7 @@ public interface XlmmService {
   Observable<ResponseBody> update_refund_info(
       @Field("id") int goods_id,
       @Field("modify") int type,
-      @Field("reason") String reason,
+      @Field("reason") int reason,
       @Field("num") int num,
       @Field("sum_price") double sum_price,
       @Field("description") String description
