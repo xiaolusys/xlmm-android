@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmApi;
+import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
@@ -35,6 +36,7 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jimei.xiaolumeimei.R;
 
 import butterknife.Bind;
+import com.jude.utils.JUtils;
 import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UpProgressHandler;
@@ -48,7 +50,10 @@ import rx.schedulers.Schedulers;
 public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener{
 
     String TAG = "ApplyReturnGoodsActivity";
-  String slect_reason[]  = new String[] {  "未收到货","商品质量问题","收到商品不符", "收到商品破损","商品错发/漏发","其他原因"};
+  String slect_reason[]  = new String[] { "七天无理由退换货","发票问题","与描述不符", "未收到货","发错货/漏发",
+      "开线/脱色/脱毛/有色差/有虫洞",
+      "错拍",
+      "其他原因"};
 
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.img_good) ImageView img_good;
@@ -218,8 +223,12 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
               proof_pic += XlmmApi.QINIU_UPLOAD_URL_BASE + uploadPic[i];
           }
         }
-        Log.i(TAG,"desc:  "+desc + " proof_pic: "+proof_pic);
-        commit_apply();
+        if(reason.equals("")){
+          JUtils.Toast("请选择退货原因！");
+        }
+        else {
+          commit_apply();
+        }
         break;
       case R.id.et_refund_info:
         Log.i(TAG,"et_refund_info ");
@@ -251,7 +260,9 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
   }
 
   private void commit_apply(){
-    model.refund_create(goods_info.getId(), reason, num, apply_fee, desc, proof_pic)
+    Log.i(TAG,"commit_apply "+ goods_info.getId() + " " + reason + " "+ num + " "+ apply_fee
+          + " " + desc + " "+ proof_pic);
+    model.refund_create(goods_info.getId(), XlmmConst.get_reason_num(reason), num, apply_fee, desc, proof_pic)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<ResponseBody>() {
           @Override public void onNext(ResponseBody resp) {
@@ -495,4 +506,5 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
       }
     }
   }
+
 }

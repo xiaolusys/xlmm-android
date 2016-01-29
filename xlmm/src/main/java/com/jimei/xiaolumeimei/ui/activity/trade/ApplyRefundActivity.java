@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import butterknife.OnTouch;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
@@ -27,13 +28,14 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jimei.xiaolumeimei.R;
 
 import butterknife.Bind;
+import com.jude.utils.JUtils;
 import com.squareup.okhttp.ResponseBody;
 import rx.schedulers.Schedulers;
 
 public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener {
   String TAG = "ApplyRefundActivity";
-  String slect_reason[]  = new String[] { "七天无理由退换", "未收到货" };
+  String slect_reason[]  = new String[] { "七天无理由退换", "缺货","错拍","没有发货","与描述不符" ,"其他"};
 
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.img_good) ImageView img_good;
@@ -130,8 +132,13 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
         break;
       case R.id.btn_commit:
         desc = et_refund_info.getText().toString().trim();
-        commit_apply();
-        finish();
+        if(reason.equals("")){
+          JUtils.Toast("请选择退货原因！");
+        }
+        else {
+          commit_apply();
+        }
+
         break;
       case R.id.et_refund_info:
         Log.i(TAG,"et_refund_info ");
@@ -159,12 +166,15 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
   }
 
   private void commit_apply(){
-    model.refund_create(goods_info.getId(), reason, num, apply_fee, desc, proof_pic)
+    model.refund_create(goods_info.getId(), XlmmConst.get_reason_num(reason), num,
+        apply_fee, desc,
+        proof_pic)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<ResponseBody>() {
           @Override public void onNext(ResponseBody resp) {
 
             Log.i(TAG,"commit_apply "+ resp.toString());
+            finish();
           }
         });
   }
