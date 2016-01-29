@@ -32,7 +32,6 @@
           android:text="物流公司"
           android:textColor="@android:color/white"
           android:textSize="24sp"
-          android:textStyle="bold"
           />
 
     </android.support.v7.widget.Toolbar>

@@ -85,72 +85,72 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void initData() {
 
-    //list = new ArrayList<>();
-    //model.getCartsInfoList(ids)
-    //    .subscribeOn(Schedulers.newThread())
-    //    .subscribe(new ServiceResponse<CartsPayinfoBean>() {
-    //      @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
-    //        super.onNext(cartsPayinfoBean);
-    //        if (cartsPayinfoBean != null) {
-    //          mAdapter.update(cartsPayinfoBean.getCartList());
-    //          cart_ids = cartsPayinfoBean.getCartIds();
-    //          channel = "alipay";
-    //          payment = cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
-    //              - cartsPayinfoBean.getDiscountFee() + "";
-    //          post_fee = cartsPayinfoBean.getPostFee() + "";
-    //          discount_fee = cartsPayinfoBean.getDiscountFee() + "";
-    //          total_fee = cartsPayinfoBean.getTotalFee() + "";
-    //          uuid = cartsPayinfoBean.getUuid();
-    //          totalPrice.setText("¥" + payment);
-    //          tv_postfee.setText("¥" + post_fee);
-    //          totalPrice_all.setText("合计: ¥" + cartsPayinfoBean.getTotalFee() + "");
-    //          jiehsneg.setText("已节省" + cartsPayinfoBean.getDiscountFee() + "");
-    //        } else {
-    //          emptyContent.setVisibility(View.VISIBLE);
-    //          goMain.setOnClickListener(new View.OnClickListener() {
-    //            @Override public void onClick(View v) {
-    //              startActivity(
-    //                  new Intent(CartsPayInfoActivity.this, MainActivity.class));
-    //              finish();
-    //            }
-    //          });
-    //        }
-    //      }
-    //    });
-    //
-    //addressModel.getAddressList()
-    //    .subscribeOn(Schedulers.io())
-    //    .subscribe(new ServiceResponse<List<AddressBean>>() {
-    //      @Override public void onNext(List<AddressBean> list) {
-    //        super.onNext(list);
-    //        if (list != null) {
-    //          chooseAddress.setVisibility(View.INVISIBLE);
-    //          AddressBean addressBean = list.get(0);
-    //
-    //          addr_id = addressBean.getId();
-    //          name.setText(addressBean.getReceiverName());
-    //          phone.setText(addressBean.getReceiverMobile());
-    //
-    //          addressDetails.setText(addressBean.getReceiverState()
-    //              + addressBean.getReceiverCity()
-    //              + addressBean.getReceiverDistrict()
-    //              + addressBean.getReceiverAddress());
-    //        } else {
-    //          chooseAddress.setVisibility(View.VISIBLE);
-    //          name.setVisibility(View.INVISIBLE);
-    //          phone.setVisibility(View.INVISIBLE);
-    //          addressDetails.setVisibility(View.INVISIBLE);
-    //        }
-    //      }
-    //
-    //      @Override public void onError(Throwable e) {
-    //        super.onError(e);
-    //        chooseAddress.setVisibility(View.VISIBLE);
-    //        name.setVisibility(View.INVISIBLE);
-    //        phone.setVisibility(View.INVISIBLE);
-    //        addressDetails.setVisibility(View.INVISIBLE);
-    //      }
-    //    });
+    list = new ArrayList<>();
+    model.getCartsInfoList(ids)
+        .subscribeOn(Schedulers.newThread())
+        .subscribe(new ServiceResponse<CartsPayinfoBean>() {
+          @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
+            super.onNext(cartsPayinfoBean);
+            if (cartsPayinfoBean != null) {
+              mAdapter.update(cartsPayinfoBean.getCartList());
+              cart_ids = cartsPayinfoBean.getCartIds();
+              channel = "alipay";
+              payment = cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
+                  - cartsPayinfoBean.getDiscountFee() + "";
+              post_fee = cartsPayinfoBean.getPostFee() + "";
+              discount_fee = cartsPayinfoBean.getDiscountFee() + "";
+              total_fee = cartsPayinfoBean.getTotalFee() + "";
+              uuid = cartsPayinfoBean.getUuid();
+              totalPrice.setText("¥" + payment);
+              tv_postfee.setText("¥" + post_fee);
+              totalPrice_all.setText("合计: ¥" + cartsPayinfoBean.getTotalFee() + "");
+              jiehsneg.setText("已节省" + cartsPayinfoBean.getDiscountFee() + "");
+            } else {
+              emptyContent.setVisibility(View.VISIBLE);
+              goMain.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                  startActivity(
+                      new Intent(CartsPayInfoActivity.this, MainActivity.class));
+                  finish();
+                }
+              });
+            }
+          }
+        });
+
+    addressModel.getAddressList()
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<List<AddressBean>>() {
+          @Override public void onNext(List<AddressBean> list) {
+            super.onNext(list);
+            if (list != null) {
+              chooseAddress.setVisibility(View.INVISIBLE);
+              AddressBean addressBean = list.get(0);
+
+              addr_id = addressBean.getId();
+              name.setText(addressBean.getReceiverName());
+              phone.setText(addressBean.getReceiverMobile());
+
+              addressDetails.setText(addressBean.getReceiverState()
+                  + addressBean.getReceiverCity()
+                  + addressBean.getReceiverDistrict()
+                  + addressBean.getReceiverAddress());
+            } else {
+              chooseAddress.setVisibility(View.VISIBLE);
+              name.setVisibility(View.INVISIBLE);
+              phone.setVisibility(View.INVISIBLE);
+              addressDetails.setVisibility(View.INVISIBLE);
+            }
+          }
+
+          @Override public void onError(Throwable e) {
+            super.onError(e);
+            chooseAddress.setVisibility(View.VISIBLE);
+            name.setVisibility(View.INVISIBLE);
+            phone.setVisibility(View.INVISIBLE);
+            addressDetails.setVisibility(View.INVISIBLE);
+          }
+        });
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -163,11 +163,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
-    //payinfoRecyclerview.setLayoutManager(new LinearLayoutManager(this));
-    //payinfoRecyclerview.addItemDecoration(
-    //    new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
-    //mAdapter = new CartsPayInfoAdapter(this);
-    //payinfoRecyclerview.setAdapter(mAdapter);
 
     mAdapter = new CartsPayInfoAdapter(this, list);
     payinfoListview.setAdapter(mAdapter);
@@ -290,71 +285,5 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
     super.onResume();
 
-    list = new ArrayList<>();
-    model.getCartsInfoList(ids)
-        .subscribeOn(Schedulers.newThread())
-        .subscribe(new ServiceResponse<CartsPayinfoBean>() {
-          @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
-            super.onNext(cartsPayinfoBean);
-            if (cartsPayinfoBean != null) {
-              mAdapter.update(cartsPayinfoBean.getCartList());
-              cart_ids = cartsPayinfoBean.getCartIds();
-              channel = "alipay";
-              payment = cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
-                  - cartsPayinfoBean.getDiscountFee() + "";
-              post_fee = cartsPayinfoBean.getPostFee() + "";
-              discount_fee = cartsPayinfoBean.getDiscountFee() + "";
-              total_fee = cartsPayinfoBean.getTotalFee() + "";
-              uuid = cartsPayinfoBean.getUuid();
-              totalPrice.setText("¥" + payment);
-              tv_postfee.setText("¥" + post_fee);
-              totalPrice_all.setText("合计: ¥" + cartsPayinfoBean.getTotalFee() + "");
-              jiehsneg.setText("已节省" + cartsPayinfoBean.getDiscountFee() + "");
-            } else {
-              emptyContent.setVisibility(View.VISIBLE);
-              goMain.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                  startActivity(
-                      new Intent(CartsPayInfoActivity.this, MainActivity.class));
-                  finish();
-                }
-              });
-            }
-          }
-        });
-
-    addressModel.getAddressList()
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<List<AddressBean>>() {
-          @Override public void onNext(List<AddressBean> list) {
-            super.onNext(list);
-            if (list != null) {
-              chooseAddress.setVisibility(View.INVISIBLE);
-              AddressBean addressBean = list.get(0);
-
-              addr_id = addressBean.getId();
-              name.setText(addressBean.getReceiverName());
-              phone.setText(addressBean.getReceiverMobile());
-
-              addressDetails.setText(addressBean.getReceiverState()
-                  + addressBean.getReceiverCity()
-                  + addressBean.getReceiverDistrict()
-                  + addressBean.getReceiverAddress());
-            } else {
-              chooseAddress.setVisibility(View.VISIBLE);
-              name.setVisibility(View.INVISIBLE);
-              phone.setVisibility(View.INVISIBLE);
-              addressDetails.setVisibility(View.INVISIBLE);
-            }
-          }
-
-          @Override public void onError(Throwable e) {
-            super.onError(e);
-            chooseAddress.setVisibility(View.VISIBLE);
-            name.setVisibility(View.INVISIBLE);
-            phone.setVisibility(View.INVISIBLE);
-            addressDetails.setVisibility(View.INVISIBLE);
-          }
-        });
   }
 }
