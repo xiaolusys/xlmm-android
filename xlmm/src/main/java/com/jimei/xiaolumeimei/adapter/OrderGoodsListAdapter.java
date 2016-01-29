@@ -92,7 +92,8 @@ public class OrderGoodsListAdapter extends BaseAdapter {
           == XlmmConst.ORDER_STATE_CONFIRM_RECEIVE)) {
         convertView = LayoutInflater.from(context)
             .inflate(R.layout.item_order_detail_include_proc, null);
-        setBtnInfo(convertView, state, refund_state);
+        setBtnInfo(convertView, state, refund_state, Boolean.parseBoolean(data.get
+            (position).get("kill_title")));
         setBtnListener(convertView, state, refund_state,
             Integer.parseInt(data.get(position).get("goods_id")),
             dataSource.get(position));
@@ -123,13 +124,17 @@ public class OrderGoodsListAdapter extends BaseAdapter {
     return convertView;
   }
 
-  private void setBtnInfo(View convertView, int state, int refund_state) {
+  private void setBtnInfo(View convertView, int state, int refund_state, boolean kill_title) {
     Log.d(TAG, " setBtnInfo" + state + " " + refund_state);
 
     Button btn = (Button) convertView.findViewById(R.id.btn_order_proc);
     switch (state) {
       case XlmmConst.ORDER_STATE_PAYED: {
-        btn.setText("申请退款");
+        if (kill_title) {
+          btn.setVisibility(View.INVISIBLE);
+        } else {
+          btn.setText("申请退款");
+        }
         break;
       }
       case XlmmConst.ORDER_STATE_SENDED: {
@@ -139,7 +144,11 @@ public class OrderGoodsListAdapter extends BaseAdapter {
       case XlmmConst.ORDER_STATE_CONFIRM_RECEIVE: {
         switch (refund_state) {
           case XlmmConst.REFUND_STATE_NO_REFUND: {
-            btn.setText("退货退款");
+            if (kill_title) {
+              btn.setVisibility(View.INVISIBLE);
+            } else {
+              btn.setText("退货退款");
+            }
             break;
           }
           case XlmmConst.REFUND_STATE_BUYER_APPLY: {
@@ -249,6 +258,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
     int num = 0;
     int state = 0;
     int refund_state = 0;
+    boolean kill_title = false;
 
     Log.d(TAG, "list.size " + list.size());
     for (int i = 0; i < list.size(); i++) {
@@ -262,6 +272,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
       num = list.get(i).getNum();
       state = list.get(i).getStatus();
       refund_state = list.get(i).getRefundStatus();
+      kill_title = list.get(i).isKillTitle();
 
       Log.d(TAG, "pic path " + img_url + " title " + title);
 
@@ -274,6 +285,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
       map.put("num", Integer.toString(num));
       map.put("state", Integer.toString(state));
       map.put("refund_state", Integer.toString(refund_state));
+      map.put("kill_title", Boolean.toString(kill_title));
 
       data.add(map);
     }

@@ -173,7 +173,7 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
         .subscribe(new ServiceResponse<ResponseBody>() {
           @Override public void onNext(ResponseBody resp) {
 
-            Log.i(TAG,"commit_apply "+ resp.toString());
+            Log.i(TAG,"commit_apply success "+ resp.toString());
             finish();
           }
         });
