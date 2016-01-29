@@ -87,6 +87,18 @@ public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
     fillCompanyInfo();
     mCompanyAdapter = new MyAdapter(this, company_list);
     lv_logistics_company.setAdapter(mCompanyAdapter);
+    lv_logistics_company.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+      @Override
+      public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,long arg3) {
+        // TODO Auto-generated method stub
+
+          Intent intent = new Intent(ChooseLogisticsCompanyActivity.this,
+              WriteLogisticsInfoActivty.class);
+          intent.putExtra("company", company_list.get(arg2).getName());
+          setResult(1, intent);
+          finish();
+      }
+    });
   }
 
   //从server端获得所有订单数据，可能要查询几次

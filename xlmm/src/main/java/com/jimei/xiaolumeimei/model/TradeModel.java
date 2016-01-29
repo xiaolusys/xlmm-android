@@ -98,4 +98,20 @@ public class TradeModel {
         .getQiniuToken()
         .compose(new DefaultTransform<>());
   }
+
+  //修改退货单数据
+  public Observable<ResponseBody> update_refund_info(int goods_id, String reason, int num,
+      double sum_price, String description, String proof_pic) {
+    return XlmmRetrofitClient.getService()
+        .update_refund_info(goods_id, 1,reason, num, sum_price, description)
+        .compose(new DefaultTransform<>());
+  }
+
+  //填写退货物流信息
+  public Observable<ResponseBody> commit_logistics_info(int goods_id, String company,
+       String logistics_number) {
+    return XlmmRetrofitClient.getService()
+        .commit_logistics_info(goods_id,2, company, logistics_number)
+        .compose(new DefaultTransform<>());
+  }
 }

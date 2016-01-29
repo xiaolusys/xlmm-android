@@ -7,11 +7,16 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.model.TradeModel;
+import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.squareup.okhttp.ResponseBody;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/01/22.
@@ -25,14 +30,21 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity imple
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.et_logistics_company) EditText et_logistics_company;
   @Bind(R.id.et_logistics_number) EditText et_logistics_number;
+  @Bind(R.id.btn_commit) Button btn_commit;
 
+  String company;
+  String logistics_number;
+  int goods_id;
+  TradeModel model = new TradeModel();
 
   @Override protected void setListener() {
     toolbar.setOnClickListener(this);
+    btn_commit.setOnClickListener(this);
   }
 
   @Override protected void initData() {
-
+    goods_id = getIntent().getExtras().getInt("goods_id");
+    Log.d(TAG, "goods_id " + goods_id);
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -56,7 +68,7 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity imple
           Intent intent = new Intent(WriteLogisticsInfoActivty.this, ChooseLogisticsCompanyActivity.class);
 
           Log.d(TAG," to ChooseLogisticsCompanyActivity");
-          startActivity(intent);
+          startActivityForResult(intent, 1);
         }
         return false;
       }
@@ -76,7 +88,34 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity imple
       case R.id.toolbar:
         finish();
         break;
+      case R.id.btn_commit:
+        commit_logistics_info();
+        break;
+    }
+  }
+
+  protected void onActivityResult(int requestCode, int resultCode, Intent data)
+  {
+
+    super.onActivityResult(requestCode, resultCode, data);
+    if (requestCode == 1)
+    {
+      // data contains result
+      company = getIntent().getExtras().getString("company");
 
     }
+  }
+
+  private  void commit_logistics_info(){
+    model.commit_logistics_info(goods_id, company,et_logistics_number.getText().toString
+        ().trim() )
+        .subscribeOn(Schedulers.newThread())
+        .subscribe(new ServiceResponse<ResponseBody>() {
+          @Override public void onNext(ResponseBody resp) {
+
+            Log.i(TAG,"commit_logistics_info "+ resp.toString());
+            finish();
+          }
+        });
   }
 }

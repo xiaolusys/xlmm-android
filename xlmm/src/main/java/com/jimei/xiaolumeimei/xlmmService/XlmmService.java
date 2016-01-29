@@ -306,6 +306,28 @@ public interface XlmmService {
 
     );
 
+  //修改退款单
+  @FormUrlEncoded
+  @POST("refunds")
+  Observable<ResponseBody> update_refund_info(
+      @Field("id") int goods_id,
+      @Field("modify") int type,
+      @Field("reason") String reason,
+      @Field("num") int num,
+      @Field("sum_price") double sum_price,
+      @Field("description") String description
+  );
+
+  //添加退款物流信息
+  @FormUrlEncoded
+  @POST("refunds")
+  Observable<ResponseBody> commit_logistics_info(
+      @Field("id") int goods_id,
+      @Field("modify") int type,
+      @Field("company") String company,
+      @Field("sid") String sid
+  );
+
   @GET("carts/show_carts_num")
   Observable<CartsNumResultBean> show_carts_num(
   );

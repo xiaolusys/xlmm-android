@@ -82,6 +82,9 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     setSupportActionBar(toolbar);
     toolbar.setNavigationIcon(R.drawable.back);
 
+    goods_id = getIntent().getExtras().getInt("goods_id");
+    Log.d(TAG, "goods_id " + goods_id);
+
     if (refund_state == XlmmConst.REFUND_STATE_SELLER_AGREED) {
       et_logistics_info = (EditText)findViewById(R.id.et_logistics_info);
       et_logistics_info.setOnTouchListener(new View.OnTouchListener(){
@@ -90,7 +93,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
           if(MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
             Log.d(TAG, "write logistics");
             Intent intent = new Intent(RefundDetailActivity.this, WriteLogisticsInfoActivty.class);
-
+            intent.putExtra("goods_id", goods_id);
             Log.d(TAG," to WriteLogisticsInfoActivty");
             startActivity(intent);
           }
@@ -104,10 +107,6 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
 
   //从server端获得所有订单数据，可能要查询几次
   @Override protected void initData() {
-
-
-    goods_id = getIntent().getExtras().getInt("goods_id");
-    Log.d(TAG, "goods_id " + goods_id);
 
     model.getRefundDetailBean(goods_id)
         .subscribeOn(Schedulers.newThread())
