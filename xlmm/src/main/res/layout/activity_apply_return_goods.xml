@@ -263,7 +263,7 @@
               android:layout_width="120px"
               android:layout_height="match_parent"
               android:layout_toRightOf="@+id/imgbtn_camera_pic"
-              >
+              android:visibility="invisible">
               <include layout="@layout/proof_pic" />
             </RelativeLayout>
 
@@ -272,7 +272,7 @@
               android:layout_width="120px"
               android:layout_height="match_parent"
               android:layout_toRightOf="@+id/rl_proof_pic1"
-              >
+              android:visibility="invisible">
             <include layout="@layout/proof_pic" />
           </RelativeLayout>
 
@@ -281,7 +281,7 @@
               android:layout_width="120px"
               android:layout_height="match_parent"
               android:layout_toRightOf="@+id/rl_proof_pic2"
-              >
+              android:visibility="invisible">
             <include layout="@layout/proof_pic" />
           </RelativeLayout>
 

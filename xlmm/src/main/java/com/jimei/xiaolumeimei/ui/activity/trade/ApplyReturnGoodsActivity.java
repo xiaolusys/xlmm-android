@@ -34,8 +34,12 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jimei.xiaolumeimei.R;
 
 import butterknife.Bind;
+import com.qiniu.android.http.ResponseInfo;
+import com.qiniu.android.storage.UpCompletionHandler;
+import com.qiniu.android.storage.UploadManager;
 import com.squareup.okhttp.ResponseBody;
 import java.io.File;
+import org.json.JSONObject;
 import rx.schedulers.Schedulers;
 
 public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener{
@@ -57,9 +61,16 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
   @Bind(R.id.et_refund_reason) EditText et_refund_reason;
   @Bind(R.id.imgbtn_camera_pic) ImageButton imgbtn_camera_pic;
   @Bind(R.id.btn_commit) Button btn_commit;
-  @Bind(R.id.rl_proof_pic1) RelativeLayout rl_proof_pic1;
+  @Bind(R.id.rl_proof_pic1) ImageView rl_proof_pic1;
+  @Bind(R.id.rl_proof_pic2) ImageView rl_proof_pic2;
+  @Bind(R.id.rl_proof_pic3) ImageView rl_proof_pic3;
 
-  ImageView img_proof_pic;
+  ImageView img_proof_pic1;
+  ImageView img_proof_pic2;
+  ImageView img_proof_pic3;
+  ImageView img_delete1;
+  ImageView img_delete2;
+  ImageView img_delete3;
   AllOrdersBean.ResultsEntity.OrdersEntity goods_info;
   TradeModel model = new TradeModel();
   String reason = "";
@@ -67,6 +78,9 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
   double apply_fee = 0;
   String desc = "";
   String proof_pic="";
+  String uptoken;
+  File tmpPic[] = new File[3];
+  char picNum = 0;
 
   @Override protected void setListener() {
     toolbar.setOnClickListener(this);
@@ -74,6 +88,44 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
     imgbtn_camera_pic.setOnClickListener(this);
     add.setOnClickListener(this);
     delete.setOnClickListener(this);
+    img_delete1.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        Log.d(TAG, "delete pic 1");
+        tmpPic[0]=null;
+        if(picNum >= 1){
+          for(char i = 1; i< picNum;i++){
+            tmpPic[i-1]=tmpPic[i];
+          }
+          picNum--;
+        }
+        showPic();
+      }
+    });
+    img_delete2.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        Log.d(TAG, "delete pic 2");
+        tmpPic[1]=null;
+        if(picNum >= 2){
+          for(char i = 2; i< picNum;i++){
+            tmpPic[i-1]=tmpPic[i];
+          }
+          picNum--;
+        }
+      }
+    });
+    img_delete3.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        Log.d(TAG, "delete pic 3");
+        tmpPic[2]=null;
+        if(picNum >= 3){
+          for(char i = 3; i< picNum;i++){
+            tmpPic[i-1]=tmpPic[i];
+          }
+          picNum--;
+        }
+      }
+    });
+
     et_refund_info.setOnClickListener(this);
     et_refund_reason.setOnTouchListener(new View.OnTouchListener(){
       public boolean onTouch(View v, MotionEvent event){
@@ -102,7 +154,13 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
     setSupportActionBar(toolbar);
     toolbar.setNavigationIcon(R.drawable.back);
 
-    img_proof_pic = (ImageView)rl_proof_pic1.findViewById(R.id.img_proof_pic);
+    img_proof_pic1 = (ImageView)rl_proof_pic1.findViewById(R.id.img_proof_pic);
+    img_proof_pic2 = (ImageView)rl_proof_pic2.findViewById(R.id.img_proof_pic);
+    img_proof_pic3 = (ImageView)rl_proof_pic3.findViewById(R.id.img_proof_pic);
+
+    img_delete1 = (ImageView)rl_proof_pic1.findViewById(R.id.img_delete);
+    img_delete2 = (ImageView)rl_proof_pic2.findViewById(R.id.img_delete);
+    img_delete3 = (ImageView)rl_proof_pic3.findViewById(R.id.img_delete);
   }
 
   //从server端获得所有订单数据，可能要查询几次
@@ -142,6 +200,7 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
         break;
       case R.id.btn_commit:
         desc = et_refund_info.getText().toString().trim();
+
         commit_apply();
         finish();
         break;
@@ -234,27 +293,40 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
   // After the selection of image you will retun on the main activity with bitmap image
   protected void onActivityResult(int requestCode, int resultCode, Intent data)
   {
+    File b = null;
     super.onActivityResult(requestCode, resultCode, data);
     if (requestCode == CameraUtils.GALLERY_PICTURE)
     {
       // data contains result
       // Do some task
-      Image_Selecting_Task(data);
+      b = Image_Selecting_Task(data);
     } else if (requestCode == CameraUtils.CAMERA_PICTURE)
     {
       // Do some task
-      Image_Photo_Task(data);
+      b = Image_Photo_Task(data);
     }
+
+    if(picNum <= 2) {
+      tmpPic[picNum] = b;
+      picNum++;
+    }
+    else {
+      tmpPic[picNum - 1] = b;
+    }
+
+    showPic();
+    uploadFile(b);
   }
 
-  public void Image_Selecting_Task(Intent data)
+  public File Image_Selecting_Task(Intent data)
   {
+    File b = null;
     try
     {
       CameraUtils.uri = data.getData();
       if (CameraUtils.uri != null)
       {
-        read_img_from_uri();
+        b = read_img_from_uri();
 
       } else
       {
@@ -267,10 +339,12 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
       Log.e("onActivityResult", "" + e);
 
     }
+    return b;
   }
 
-  public void Image_Photo_Task(Intent data)
+  public File Image_Photo_Task(Intent data)
   {
+    File b = null;
     try
     {
       Bundle bundle = data.getExtras();
@@ -283,7 +357,7 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
       }
       if (CameraUtils.uri != null)
       {
-        img_proof_pic.setImageBitmap(read_img_from_uri());
+        b = read_img_from_uri();
 
       } else
       {
@@ -297,9 +371,10 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
       Log.e("onActivityResult", "" + e);
 
     }
+    return b;
   }
 
-  public Bitmap read_img_from_uri()
+  public File read_img_from_uri()
   {
     // User had pick an image.
     Cursor cursor = getContentResolver().query(CameraUtils.uri, new String[]
@@ -318,17 +393,17 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
     CameraUtils.copyFile(CameraUtils.Default_DIR, CameraUtils.MY_IMG_DIR);
 
     // Get new image path and decode it
-    Bitmap b = CameraUtils.decodeFile(CameraUtils.Paste_Target_Location);
+    //Bitmap b = CameraUtils.decodeFile(CameraUtils.Paste_Target_Location);
 
     // use new copied path and use anywhere
-    String valid_photo = CameraUtils.Paste_Target_Location.toString();
-    b = Bitmap.createScaledBitmap(b, 150, 150, true);
+    //String valid_photo = CameraUtils.Paste_Target_Location.toString();
+    //b = Bitmap.createScaledBitmap(b, 150, 150, true);
 
     //set your selected image in image view
     //img_proof_pic.setImageBitmap(b);
     cursor.close();
 
-    return b;
+    return CameraUtils.Paste_Target_Location;
   }
 
   private void getQiniuToken(){
@@ -336,9 +411,57 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<QiniuTokenBean>() {
           @Override public void onNext(QiniuTokenBean resp) {
-
+            uptoken = resp.getUptoken();
             Log.i(TAG,"getQiniuToken "+ resp.toString());
           }
         });
+  }
+
+  private void uploadFile(File file){
+    Log.i(TAG, "qiniu uploadFile");
+        // 重用 uploadManager。一般地，只需要创建一个 uploadManager 对象
+    UploadManager uploadManager = new UploadManager();
+    File data = file;
+    String key = null;
+    String token = uptoken;
+    uploadManager.put(data, key, token,
+        new UpCompletionHandler() {
+          @Override
+          public void complete(String key, ResponseInfo info, JSONObject res) {
+            //  res 包含hash、key等信息，具体字段取决于上传策略的设置。
+            Log.i("qiniu", key + ",\r\n " + info + ",\r\n " + res);
+          }
+        }, null);
+  }
+
+  private void showPic(){
+    Log.i(TAG, "showPic picNum " +picNum );
+    for(char i = 0; i < picNum; i++) {
+      Bitmap b = CameraUtils.decodeFile(tmpPic[i]);
+      b = Bitmap.createScaledBitmap(b, 150, 150, true);
+      if(i == 0) {
+        img_proof_pic1.setImageBitmap(b);
+      }
+      else if(i == 1){
+        img_proof_pic2.setImageBitmap(b);
+      }
+      else if(i == 2){
+        img_proof_pic3.setImageBitmap(b);
+      }
+    }
+
+    if(picNum < 3){
+      for(char i = picNum; i < 3; i++) {
+        if(i == 0) {
+          rl_proof_pic1.setVisibility(View.INVISIBLE);
+        }
+        else if(i == 1){
+          rl_proof_pic2.setVisibility(View.INVISIBLE);
+        }
+        else if(i == 2){
+          rl_proof_pic3.setVisibility(View.INVISIBLE);
+        }
+      }
+    }
   }
 }
