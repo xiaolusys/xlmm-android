@@ -61,6 +61,7 @@ public class XlmmApi {
   //获取待发货订单
   public static  final String WAITSEND_URL = URL_BASE+"trades/waitsend";
 
+  public static  final String QINIU_UPLOAD_URL_BASE = "http://7xkyoy.com2.z0.glb.qiniucdn.com/";
 
   public static final String SETTINGMYINFO_URL =
       URL_BASE + "/xueZhang/servlet/AndroidInfoSev";
