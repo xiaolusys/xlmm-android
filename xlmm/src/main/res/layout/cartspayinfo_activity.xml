@@ -104,18 +104,35 @@
 
       </com.jimei.xiaolumeimei.widget.NestedListView>
       <include layout="@layout/common_gap"/>
-      <LinearLayout
+      <RelativeLayout
+          android:id="@+id/coupon_layout"
           android:padding="8dp"
           android:background="@color/white"
           android:layout_width="match_parent"
-          android:orientation="horizontal"
           android:layout_height="88px">
         <TextView android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="可用优惠券"
             />
 
-      </LinearLayout>
+        <TextView
+            android:layout_marginRight="8dp"
+            android:layout_toLeftOf="@+id/common_icon_right_arrow"
+            android:id="@+id/tv_coupon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+        <ImageView
+            android:id="@+id/common_icon_right_arrow"
+            android:src="@mipmap/common_icon_right_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+
+            />
+
+      </RelativeLayout>
       <include layout="@layout/common_gap"/>
       <RelativeLayout
           android:padding="8dp"
@@ -165,7 +182,7 @@
             android:layout_centerVertical="true"
             android:layout_width="match_parent"
             android:layout_height="1dip"
-            android:background="@color/greytow" />
+            android:background="@color/greytow"/>
         <TextView
             android:layout_alignParentBottom="true"
             android:layout_width="wrap_content"
@@ -177,13 +194,12 @@
             android:id="@+id/pay_rg"
             android:layout_width="wrap_content"
             android:orientation="vertical"
-          android:layout_alignParentRight="true"
+            android:layout_alignParentRight="true"
             android:layout_height="wrap_content"
             >
           <android.support.v7.widget.AppCompatRadioButton
               android:id="@+id/alipay"
               android:layout_width="wrap_content"
-              android:shadowColor="@color/colorPrimary"
               android:layout_height="wrap_content"/>
           <android.support.v7.widget.AppCompatRadioButton
               android:id="@+id/wx"

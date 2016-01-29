@@ -24,6 +24,7 @@ import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.AddAddressActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.CouponActivity;
 import com.jimei.xiaolumeimei.widget.NestedListView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
@@ -43,6 +44,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
   private static final int REQUEST_CODE_PAYMENT = 1;
+  private static final int REQUEST_CODE_COUPONT = 2;
   CartsModel model = new CartsModel();
   TradeModel tradeModel = new TradeModel();
   AddressModel addressModel = new AddressModel();
@@ -62,6 +64,8 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.confirm) Button confirm;
   @Bind(R.id.pay_rg) RadioGroup rg_pay;
   @Bind(R.id.post_fee) TextView tv_postfee;
+  @Bind(R.id.coupon_layout) RelativeLayout coupon_layout;
+  @Bind(R.id.tv_coupon) TextView tv_coupon;
   List<CartsPayinfoBean.CartListEntity> list;
   @Bind(R.id.go_main) Button goMain;
   @Bind(R.id.empty_content) RelativeLayout emptyContent;
@@ -76,6 +80,9 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   private String discount_fee;
   private String total_fee;
   private String uuid;
+  private String coupon_id;
+  private boolean isCoupon;
+  private double coupon_price;
 
   @Override protected void setListener() {
     adress.setOnClickListener(this);
@@ -103,8 +110,16 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
               uuid = cartsPayinfoBean.getUuid();
               totalPrice.setText("¥" + payment);
               tv_postfee.setText("¥" + post_fee);
+
               totalPrice_all.setText("合计: ¥" + cartsPayinfoBean.getTotalFee() + "");
               jiehsneg.setText("已节省" + cartsPayinfoBean.getDiscountFee() + "");
+
+              if (Double.parseDouble(total_fee) < 150) {
+                coupon_layout.setOnClickListener(null);
+                tv_coupon.setText("无可用优惠券");
+              } else {
+                coupon_layout.setOnClickListener(CartsPayInfoActivity.this);
+              }
             } else {
               emptyContent.setVisibility(View.VISIBLE);
               goMain.setOnClickListener(new View.OnClickListener() {
@@ -184,55 +199,76 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         break;
 
       case R.id.confirm:
-        if (isWx) {
-
-          tradeModel.shoppingcart_create(cart_ids, addr_id, "wx", payment, post_fee,
-              discount_fee, total_fee, uuid)
-              .subscribeOn(Schedulers.io())
-              .subscribe(new ServiceResponse<ResponseBody>() {
-                @Override public void onNext(ResponseBody responseBody) {
-                  super.onNext(responseBody);
-                  try {
-                    String string = responseBody.string();
-                    Log.i("charge", string);
-                    Intent intent = new Intent();
-                    String packageName = getPackageName();
-                    ComponentName componentName = new ComponentName(packageName,
-                        packageName + ".wxapi.WXPayEntryActivity");
-                    intent.setComponent(componentName);
-                    intent.putExtra(PaymentActivity.EXTRA_CHARGE, string);
-                    startActivityForResult(intent, REQUEST_CODE_PAYMENT);
-                  } catch (IOException e) {
-                    e.printStackTrace();
-                  }
-                }
-              });
-        } else if (isAlipay) {
-          tradeModel.shoppingcart_create(cart_ids, addr_id, "alipay", payment, post_fee,
-              discount_fee, total_fee, uuid)
-              .subscribeOn(Schedulers.io())
-              .subscribe(new ServiceResponse<ResponseBody>() {
-                @Override public void onNext(ResponseBody responseBody) {
-                  super.onNext(responseBody);
-                  try {
-                    String string = responseBody.string();
-                    Log.i("charge", string);
-                    Intent intent = new Intent();
-                    String packageName = getPackageName();
-                    ComponentName componentName = new ComponentName(packageName,
-                        packageName + ".wxapi.WXPayEntryActivity");
-                    intent.setComponent(componentName);
-                    intent.putExtra(PaymentActivity.EXTRA_CHARGE, string);
-                    startActivityForResult(intent, REQUEST_CODE_PAYMENT);
-                  } catch (IOException e) {
-                    e.printStackTrace();
-                  }
-                }
-              });
+        if (isCoupon) {
+          if (isWx) {
+            payWithCoupon("wx");
+          } else if (isAlipay) {
+            payWithCoupon("alipay");
+          }
+        } else {
+          if (isAlipay) {
+            payWithNoCoupon("alipay");
+          } else if (isWx) {
+            payWithNoCoupon("wx");
+          }
         }
 
         break;
+
+      case R.id.coupon_layout:
+
+        Intent intent = new Intent(CartsPayInfoActivity.this, CouponActivity.class);
+        startActivityForResult(intent, REQUEST_CODE_COUPONT);
+        break;
     }
+  }
+
+  private void payWithNoCoupon(String pay_method) {
+    tradeModel.shoppingcart_create(cart_ids, addr_id, pay_method, payment, post_fee,
+        discount_fee, total_fee, uuid)
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<ResponseBody>() {
+          @Override public void onNext(ResponseBody responseBody) {
+            super.onNext(responseBody);
+            try {
+              String string = responseBody.string();
+              Log.i("charge", string);
+              Intent intent = new Intent();
+              String packageName = getPackageName();
+              ComponentName componentName = new ComponentName(packageName,
+                  packageName + ".wxapi.WXPayEntryActivity");
+              intent.setComponent(componentName);
+              intent.putExtra(PaymentActivity.EXTRA_CHARGE, string);
+              startActivityForResult(intent, REQUEST_CODE_PAYMENT);
+            } catch (IOException e) {
+              e.printStackTrace();
+            }
+          }
+        });
+  }
+
+  private void payWithCoupon(String pay_method) {
+    tradeModel.shoppingcart_create_with_coupon(cart_ids, addr_id, pay_method, payment,
+        post_fee, discount_fee, total_fee, uuid, coupon_id)
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<ResponseBody>() {
+          @Override public void onNext(ResponseBody responseBody) {
+            super.onNext(responseBody);
+            try {
+              String string = responseBody.string();
+              Log.i("charge", string);
+              Intent intent = new Intent();
+              String packageName = getPackageName();
+              ComponentName componentName = new ComponentName(packageName,
+                  packageName + ".wxapi.WXPayEntryActivity");
+              intent.setComponent(componentName);
+              intent.putExtra(PaymentActivity.EXTRA_CHARGE, string);
+              startActivityForResult(intent, REQUEST_CODE_PAYMENT);
+            } catch (IOException e) {
+              e.printStackTrace();
+            }
+          }
+        });
   }
 
   @Override
@@ -252,6 +288,15 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         String extraMsg = data.getExtras().getString("extra_msg"); // 错误信息
         showMsg(result, errorMsg, extraMsg);
         //JUtils.Toast(result + "" + errorMsg + "" + extraMsg);
+      }
+    }
+    if (requestCode == REQUEST_CODE_COUPONT) {
+      if (resultCode == Activity.RESULT_OK) {
+        isCoupon = true;
+        coupon_id = data.getStringExtra("coupon_id");
+        coupon_price = data.getDoubleExtra("coupon_price", 0);
+      } else {
+        isCoupon = false;
       }
     }
   }
@@ -284,6 +329,5 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   @Override protected void onResume() {
 
     super.onResume();
-
   }
 }

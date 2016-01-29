@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -19,6 +20,7 @@ import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.jimei.xiaolumeimei.R;
@@ -27,7 +29,8 @@ import butterknife.Bind;
 import rx.schedulers.Schedulers;
 
 
-public class CouponActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener{
+public class CouponActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener,
+    AdapterView.OnItemClickListener {
     String TAG = "CouponActivity";
 
 
@@ -39,10 +42,14 @@ public class CouponActivity extends BaseSwipeBackCompatActivity implements View.
     private CouponListAdapter mCouponAdapter;
     private CouponListAdapter mPastCouponAdapter;
     int unused_num = 0;
+    private ListView lv_unused_coupon;
+    List<CouponBean.ResultsEntity> list = new ArrayList<>();
+
 
     @Override protected void setListener() {
         btn_jump.setOnClickListener(this);
         toolbar.setOnClickListener(this);
+        lv_unused_coupon.setOnItemClickListener(this);
     }
     @Override protected void getBundleExtras(Bundle extras) {
 
@@ -57,7 +64,7 @@ public class CouponActivity extends BaseSwipeBackCompatActivity implements View.
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.back);
 
-        ListView lv_unused_coupon = (ListView) findViewById(R.id.lv_unused_coupon);
+         lv_unused_coupon = (ListView) findViewById(R.id.lv_unused_coupon);
         mCouponAdapter = new CouponListAdapter(this);
         lv_unused_coupon.setAdapter(mCouponAdapter);
 
@@ -73,38 +80,36 @@ public class CouponActivity extends BaseSwipeBackCompatActivity implements View.
         model.getUnusedCouponBean()
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(new ServiceResponse<CouponBean>() {
-                    @Override public void onNext(CouponBean couponBean) {
-                        List<CouponBean.ResultsEntity> results = couponBean.getResults();
-                        unused_num = results.size();
-                        if (0 != results.size())
-                        {
-                            rl_empty.setVisibility(View.INVISIBLE);
-                            mCouponAdapter.update(results, XlmmConst.UNUSED_COUPON);
-                        }
-
-                        Log.i(TAG, couponBean.toString());
+                  @Override public void onNext(CouponBean couponBean) {
+                    List<CouponBean.ResultsEntity> results = couponBean.getResults();
+                    list.addAll(results);
+                    unused_num = results.size();
+                    if (0 != results.size()) {
+                      rl_empty.setVisibility(View.INVISIBLE);
+                      mCouponAdapter.update(results, XlmmConst.UNUSED_COUPON);
                     }
+
+                    Log.i(TAG, couponBean.toString());
+                  }
                 });
 
         model.getPastCouponBean()
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(new ServiceResponse<CouponBean>() {
-                    @Override public void onNext(CouponBean couponBean) {
-                        List<CouponBean.ResultsEntity> results = couponBean.getResults();
-                        if (0 == results.size()){
-                            if(0 == unused_num) {
-                                sv_frame_coupon.setVisibility(View.INVISIBLE);
-                                rl_empty.setVisibility(View.VISIBLE);
-                            }
-                        }
-                        else
-                        {
-                            rl_empty.setVisibility(View.INVISIBLE);
-                            mPastCouponAdapter.update(results, XlmmConst.PAST_COUPON);
-                        }
-
-                        Log.i(TAG, couponBean.toString());
+                  @Override public void onNext(CouponBean couponBean) {
+                    List<CouponBean.ResultsEntity> results = couponBean.getResults();
+                    if (0 == results.size()) {
+                      if (0 == unused_num) {
+                        sv_frame_coupon.setVisibility(View.INVISIBLE);
+                        rl_empty.setVisibility(View.VISIBLE);
+                      }
+                    } else {
+                      rl_empty.setVisibility(View.INVISIBLE);
+                      mPastCouponAdapter.update(results, XlmmConst.PAST_COUPON);
                     }
+
+                    Log.i(TAG, couponBean.toString());
+                  }
                 });
     }
 
@@ -128,5 +133,17 @@ public class CouponActivity extends BaseSwipeBackCompatActivity implements View.
                 finish();
                 break;
         }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+      CouponBean.ResultsEntity resultsEntity = list.get(position);
+      int coupon_id = resultsEntity.getId();
+      double coupon_value = resultsEntity.getCoupon_value();
+      Intent intent = new Intent();
+      intent.putExtra("coupon_id", coupon_id);
+      intent.putExtra("coupon_price", coupon_value);
+      setResult(RESULT_OK, intent);
+      finish();
     }
 }

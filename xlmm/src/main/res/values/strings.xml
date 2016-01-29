@@ -31,4 +31,8 @@
     我们售后收到及时为您处理。
   </string>
   <string name="xidi">洗涤说明</string>
+
+  <string name="loading">正在加载…</string>
+  <string name="refreshing">正在刷新…</string>
+  <string name="complete">刷新完成</string>
 </resources>

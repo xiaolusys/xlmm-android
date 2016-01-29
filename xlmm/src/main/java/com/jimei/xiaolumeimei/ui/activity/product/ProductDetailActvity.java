@@ -392,7 +392,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
                       ObjectAnimator.ofFloat(animView, "scaleX", 0.3f, 1f),
                       ObjectAnimator.ofFloat(animView, "scaleY", 0.3f, 1f),
                       valueAnimator);
-                  animatorSet.setDuration(1200);
+                  animatorSet.setDuration(1000);
                   animatorSet.start();
                   num++;
                   badge.setBadgeCount(num);
