@@ -109,6 +109,9 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity imple
   }
 
   private  void commit_logistics_info(){
+    Log.i(TAG,"commit_logistics_info goods_id  "+ goods_id + " "+company +" "
+        + ""+et_logistics_number.getText().toString
+        ().trim());
     model.commit_logistics_info(goods_id, company,et_logistics_number.getText().toString
         ().trim() )
         .subscribeOn(Schedulers.newThread())

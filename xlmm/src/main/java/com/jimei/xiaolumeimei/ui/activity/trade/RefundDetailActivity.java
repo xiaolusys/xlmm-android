@@ -54,6 +54,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
   MyHorizontalScrollView mHorizontalScrollView;
   int goods_id = 0;
   int refund_state = 0;
+  AllRefundsBean.ResultsEntity refundDetail;
   TradeModel model = new TradeModel();
 
   @Override protected void setListener() {
@@ -94,7 +95,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
           if(MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
             Log.d(TAG, "write logistics");
             Intent intent = new Intent(RefundDetailActivity.this, WriteLogisticsInfoActivty.class);
-            intent.putExtra("goods_id", goods_id);
+            intent.putExtra("goods_id", refundDetail.getOrder_id());
             Log.d(TAG," to WriteLogisticsInfoActivty");
             startActivity(intent);
           }
@@ -113,6 +114,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<AllRefundsBean.ResultsEntity>() {
           @Override public void onNext(AllRefundsBean.ResultsEntity refundDetailBean) {
+            refundDetail = refundDetailBean;
             fillDataToView(refundDetailBean);
             Log.i(TAG, refundDetailBean.toString());
             Log.i(TAG, "status "+refundDetailBean.getStatus());
