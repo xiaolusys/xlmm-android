@@ -100,8 +100,10 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity imple
     super.onActivityResult(requestCode, resultCode, data);
     if (requestCode == 1)
     {
+
       // data contains result
-      company = getIntent().getExtras().getString("company");
+      company = data.getExtras().getString("company");
+      Log.d(TAG,"onActivityResult company" + company);
       et_logistics_company.setText(company);
     }
   }
