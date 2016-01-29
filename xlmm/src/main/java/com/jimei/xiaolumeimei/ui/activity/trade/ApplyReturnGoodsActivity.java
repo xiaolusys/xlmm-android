@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
+import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.utils.CameraUtils;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
@@ -108,6 +109,7 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
   @Override protected void initData() {
     goods_info = getIntent().getExtras().getParcelable("goods_info");
     fillDataToView(goods_info);
+    getQiniuToken();
   }
 
     @Override protected boolean toggleOverridePendingTransition() {
@@ -281,7 +283,7 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
       }
       if (CameraUtils.uri != null)
       {
-        read_img_from_uri();
+        img_proof_pic.setImageBitmap(read_img_from_uri());
 
       } else
       {
@@ -297,7 +299,7 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
     }
   }
 
-  public void read_img_from_uri()
+  public Bitmap read_img_from_uri()
   {
     // User had pick an image.
     Cursor cursor = getContentResolver().query(CameraUtils.uri, new String[]
@@ -323,8 +325,20 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
     b = Bitmap.createScaledBitmap(b, 150, 150, true);
 
     //set your selected image in image view
-    img_proof_pic.setImageBitmap(b);
+    //img_proof_pic.setImageBitmap(b);
     cursor.close();
 
+    return b;
+  }
+
+  private void getQiniuToken(){
+    model.getQiniuToken()
+        .subscribeOn(Schedulers.newThread())
+        .subscribe(new ServiceResponse<QiniuTokenBean>() {
+          @Override public void onNext(QiniuTokenBean resp) {
+
+            Log.i(TAG,"getQiniuToken "+ resp.toString());
+          }
+        });
   }
 }

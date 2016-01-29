@@ -22,6 +22,7 @@ import com.jimei.xiaolumeimei.entities.PostBean;
 import com.jimei.xiaolumeimei.entities.ProductBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
+import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
 import com.jimei.xiaolumeimei.entities.RegisterBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
@@ -307,6 +308,9 @@ public interface XlmmService {
 
   @GET("carts/show_carts_num")
   Observable<CartsNumResultBean> show_carts_num(
+  );
 
+  @GET("refunds/qiniu_token")
+  Observable<QiniuTokenBean> getQiniuToken(
   );
 }
