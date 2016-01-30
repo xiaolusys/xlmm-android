@@ -17,6 +17,8 @@ import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jude.utils.JUtils;
+
 import java.util.List;
 import rx.schedulers.Schedulers;
 
@@ -57,8 +59,12 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity
     tx_info.setText("亲，您暂时还没有订单哦~快去看看吧！");
   }
 
-  //从server端获得所有订单数据，可能要查询几次
   @Override protected void initData() {
+
+  }
+
+  //从server端获得所有订单数据，可能要查询几次
+  private void initOrderData() {
     model.getAlloderBean()
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<AllOrdersBean>() {
@@ -66,7 +72,7 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity
             List<AllOrdersBean.ResultsEntity> results = allOrdersBean.getResults();
 
             if (0 == results.size()) {
-              Log.i(TAG, "results.size()=0");
+              JUtils.Log(TAG, "results.size()=0");
               rl_empty.setVisibility(View.VISIBLE);
             } else {
               mAllOrderAdapter.update(results);
@@ -96,5 +102,12 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity
         finish();
         break;
     }
+  }
+
+  @Override
+  protected void onResume() {
+    JUtils.Log(TAG, "onResume init orderdata");
+    super.onResume();
+    initOrderData();
   }
 }

@@ -62,6 +62,7 @@ public class AllOrdersListAdapter extends BaseAdapter {
     String picpath;
 
     Log.d(TAG, "dataSource.size " + list.size());
+    data.clear();
     for (int i = 0; i < list.size(); i++) {
       HashMap<String, String> map = new HashMap<String, String>();
       payment = (float) list.get(i).getPayment();
@@ -79,6 +80,7 @@ public class AllOrdersListAdapter extends BaseAdapter {
 
       data.add(map);
     }
+    mList.clear();
     mList.addAll(list);
     notifyDataSetChanged();
   }
@@ -226,6 +228,7 @@ public class AllOrdersListAdapter extends BaseAdapter {
         Log.d(TAG, "onClick ");
         Intent intent = new Intent(context, OrderDetailActivity.class);
         intent.putExtra("orderinfo", order_id);
+        intent.putExtra("source", "AllOrders");
         Log.d(TAG, "LinearLayout transfer orderid  " + order_id + " to OrderDetailActivity");
         context.startActivity(intent);
       }
@@ -281,6 +284,7 @@ public class AllOrdersListAdapter extends BaseAdapter {
               @Override public void onClick(View view, int position) {
                 Intent intent = new Intent(context, OrderDetailActivity.class);
                 intent.putExtra("orderinfo", order_id);
+                intent.putExtra("source", "AllOrders");
                 Log.d(TAG, "mHorizontalScrollView transfer orderid  " + order_id + " to OrderDetailActivity");
                 context.startActivity(intent);
               }

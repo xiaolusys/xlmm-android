@@ -20,6 +20,7 @@ import java.util.List;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
+import com.jude.utils.JUtils;
 
 import butterknife.Bind;
 import rx.schedulers.Schedulers;
@@ -60,8 +61,12 @@ public class WaitSendOrdersActivity extends BaseSwipeBackCompatActivity implemen
         TextView tx_info = (TextView) findViewById(R.id.tx_info);
         tx_info.setText("亲，您暂时还没有待收货订单哦~快去看看吧！");
     }
-    //从server端获得所有订单数据，可能要查询几次
+
     @Override protected void initData() {
+
+    }
+    //从server端获得所有订单数据，可能要查询几次
+    private  void initOrderData() {
         model.getWaitSendOrdersBean()
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(new ServiceResponse<AllOrdersBean>() {
@@ -101,5 +106,12 @@ public class WaitSendOrdersActivity extends BaseSwipeBackCompatActivity implemen
                 break;
 
         }
+    }
+
+    @Override
+    protected void onResume() {
+        JUtils.Log(TAG,"'onresume init orderdata");
+        super.onResume();
+        initOrderData();
     }
 }

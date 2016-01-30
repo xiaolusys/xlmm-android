@@ -54,6 +54,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
   TradeModel tradeModel = new TradeModel();
   private OrderGoodsListAdapter mGoodsAdapter;
   PayRightNowInfo pay_info = new PayRightNowInfo();
+  String source;
 
   @Override protected void setListener() {
     btn_proc.setOnClickListener(this);
@@ -82,6 +83,8 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
   //从server端获得所有订单数据，可能要查询几次
   @Override protected void initData() {
     order_id = getIntent().getExtras().getInt("orderinfo");
+    source = getIntent().getExtras().getString("source");
+
     tradeModel.getOrderDetailBean(order_id)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<OrderDetailBean>() {
@@ -263,7 +266,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                 super.onNext(responseBody);
                 try {
 
-                  startActivity(new Intent(OrderDetailActivity.this, AllOrdersActivity.class));
                   finish();
                 } catch (Exception e) {
                   e.printStackTrace();
