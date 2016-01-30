@@ -292,6 +292,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         }
         else if(result.equals( "success")){
           JUtils.Toast("支付成功！");
+          startActivity(new Intent(CartsPayInfoActivity.this, MainActivity.class));
           finish();
         }
         else {
