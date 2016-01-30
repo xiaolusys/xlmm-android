@@ -31,6 +31,7 @@ import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.squareup.okhttp.ResponseBody;
 import java.util.List;
 import retrofit.http.Body;
+import retrofit.http.DELETE;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
@@ -310,6 +311,11 @@ public interface XlmmService {
     //获得详细退款单数据
     @GET( "refunds/{pk}")
     Observable<AllRefundsBean.ResultsEntity> getRefundDetailBean(
+            @Path("pk") int order_id);
+
+    //删除退款单数据
+    @DELETE( "refunds/{pk}")
+    Observable<ResponseBody> delRefund(
             @Path("pk") int order_id);
 
     //创建退款单接口

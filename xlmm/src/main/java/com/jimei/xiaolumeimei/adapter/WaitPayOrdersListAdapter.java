@@ -174,13 +174,7 @@ public class WaitPayOrdersListAdapter extends BaseAdapter {
     Log.d(TAG, "payment  "+data.get(position).get("payment") + " " + data.get(position).get("orderState"));
     tx_order_sate.setText(data.get(position).get("orderState"));
 
-    try {
-      showTime(Integer.parseInt(data.get(position).get("state")),
-          data.get(position).get("crtTime"), convertView, order_id);
-    } catch (Exception e) {
-      Log.e(TAG, "showTimeAndBtn failed");
-      e.printStackTrace();
-    }
+
 
     return convertView;
   }

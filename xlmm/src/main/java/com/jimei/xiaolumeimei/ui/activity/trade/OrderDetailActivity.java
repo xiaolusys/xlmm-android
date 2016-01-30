@@ -46,6 +46,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
 
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.btn_order_proc) Button btn_proc;
+  @Bind(R.id.btn_order_cancel) Button btn_order_cancel;
   @Bind(R.id.rlayout_order_lefttime) RelativeLayout rlayout_order_lefttime;
 
   int order_id = 0;
@@ -56,6 +57,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void setListener() {
     btn_proc.setOnClickListener(this);
+    btn_order_cancel.setOnClickListener(this);
     toolbar.setOnClickListener(this);
   }
 
@@ -151,16 +153,24 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
           cn.iwgang.countdownview.CountdownView cv_lefttime =
                   (cn.iwgang.countdownview.CountdownView) findViewById(
                           R.id.cv_lefttime);
-          cv_lefttime.start(calcLeftTime(orderDetailBean.getCreated()));
-          cv_lefttime.setOnCountdownEndListener(new CountdownView.OnCountdownEndListener() {
-            @Override
-            public void onEnd(CountdownView cv){
-              JUtils.Log(TAG,"timeout");
-              btn_proc.setClickable(false);
-              btn_proc.setBackgroundColor(Color.parseColor("#f3f3f4"));
-            }
 
-          });
+          if(calcLeftTime(orderDetailBean.getCreated()) > 0) {
+            cv_lefttime.start(calcLeftTime(orderDetailBean.getCreated()));
+            cv_lefttime.setOnCountdownEndListener(new CountdownView.OnCountdownEndListener() {
+              @Override
+              public void onEnd(CountdownView cv) {
+                JUtils.Log(TAG, "timeout");
+                btn_proc.setClickable(false);
+                btn_proc.setBackgroundColor(Color.parseColor("#f3f3f4"));
+              }
+
+            });
+          }
+          else {
+            JUtils.Log(TAG, "left time 0");
+            btn_proc.setClickable(false);
+            btn_proc.setBackgroundColor(Color.parseColor("#f3f3f4"));
+          }
 
           Button btn_order_cancel = (Button) findViewById(R.id.btn_order_cancel);
           btn_order_cancel.setVisibility(View.VISIBLE);
@@ -200,11 +210,16 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     switch (v.getId()) {
       case R.id.btn_order_proc:
         if(orderDetail.getStatus() == XlmmConst.ORDER_STATE_WAITPAY){
-          Log.i(TAG, "onClick paynow");
+          JUtils.Log(TAG, "onClick paynow");
           payNow();
 
         }
 
+        break;
+
+      case R.id.btn_order_cancel:
+        JUtils.Log(TAG, "onClick cancel");
+        cancel_order();
         break;
       case R.id.toolbar:
         finish();
@@ -230,11 +245,43 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
               intent.setComponent(componentName);
               intent.putExtra(PaymentActivity.EXTRA_CHARGE, charge);
               startActivityForResult(intent, REQUEST_CODE_PAYMENT);
+              finish();
             } catch (IOException e) {
               e.printStackTrace();
             }
           }
         });
+
+  }
+
+  private void cancel_order(){
+    JUtils.Log(TAG,"cancel_order " + order_id);
+    tradeModel.delRefund(order_id)
+            .subscribeOn(Schedulers.io())
+            .subscribe(new ServiceResponse<ResponseBody>() {
+              @Override public void onNext(ResponseBody responseBody) {
+                super.onNext(responseBody);
+                try {
+
+
+                  finish();
+                } catch (Exception e) {
+                  e.printStackTrace();
+                }
+              }
+
+              @Override
+              public void onCompleted() {
+                super.onCompleted();
+              }
+
+              @Override
+              public void onError(Throwable e) {
+
+                Log.e(TAG, "delRefund error:, "   + e.toString());
+                super.onError(e);
+              }
+            });
 
   }
 
