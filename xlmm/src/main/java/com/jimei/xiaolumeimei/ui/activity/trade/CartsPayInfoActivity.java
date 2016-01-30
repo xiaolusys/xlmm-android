@@ -42,6 +42,7 @@ import rx.schedulers.Schedulers;
  */
 public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
+  String TAG = "CartsPayInfoActivity";
 
   private static final int REQUEST_CODE_PAYMENT = 1;
   private static final int REQUEST_CODE_COUPONT = 2;
@@ -286,8 +287,17 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
              */
         String errorMsg = data.getExtras().getString("error_msg"); // 错误信息
         String extraMsg = data.getExtras().getString("extra_msg"); // 错误信息
-        showMsg(result, errorMsg, extraMsg);
-        //JUtils.Toast(result + "" + errorMsg + "" + extraMsg);
+        if(result.equals( "cancel")) {
+          //wexin alipay already showmsg
+        }
+        else if(result.equals( "success")){
+          JUtils.Toast("支付成功！");
+          finish();
+        }
+        else {
+          showMsg(result, errorMsg, extraMsg);
+          //JUtils.Toast(result + "" + errorMsg + "" + extraMsg);
+        }
       }
     }
     if (requestCode == REQUEST_CODE_COUPONT) {
@@ -309,6 +319,14 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     if (null != msg2 && msg2.length() != 0) {
       str += "\n" + msg2;
     }
+    JUtils.Log(TAG, "charge result" + str);
+    if(title.equals( "fail")){
+      str ="支付失败，请重试！";
+    }
+    else if(title.equals( "invalid")){
+      str ="支付失败，支付软件未安装完整！";
+    }
+
     AlertDialog.Builder builder = new AlertDialog.Builder(CartsPayInfoActivity.this);
     builder.setMessage(str);
     builder.setTitle("提示");
