@@ -159,8 +159,6 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
                   });
             }
 
-            //JUtils.Log("ImageViewAdapter", longimageview_list.getMeasuredHeight() + "");
-
             String headImg2 = productDetailBean.getPicPath();
 
             if (headImg2.startsWith("https://mmbiz.qlogo.cn")) {
@@ -352,9 +350,9 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
                     endP.y = frameLayout.getMeasuredHeight();
                   }
 
-                  final int viewW, viewH;
-                  viewW = v.getMeasuredWidth();
-                  viewH = v.getMeasuredHeight();
+                  //final int viewW, viewH;
+                  //viewW = v.getMeasuredWidth();
+                  //viewH = v.getMeasuredHeight();
                   v.getLocationOnScreen(location);
                   startP = new PointF(location[0] - baseP.x, location[1] - baseP.y);
 
