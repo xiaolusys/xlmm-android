@@ -59,54 +59,85 @@ public class RegisterActivity extends BaseSwipeBackCompatActivity
     return null;
   }
 
-  public void checkInput() {
-    if (mobile.length() != 11) {
-      JUtils.Toast("请输入正确的手机号");
-      return;
+  public boolean checkMobileInput(String mobile) {
+
+    if (mobile == null || mobile.trim().trim().equals("")) {
+      JUtils.Toast("请输入手机号");
+    } else {
+      if (mobile.length() != 11) {
+        JUtils.Toast("请输入正确的手机号");
+      } else {
+        return true;
+      }
     }
+
+    return false;
+  }
+
+  public boolean checkInput(String mobile, String checkcode) {
+
+    if (mobile == null || mobile.trim().trim().equals("")) {
+      JUtils.Toast("请输入手机号");
+    } else {
+      if (mobile.length() != 11) {
+        JUtils.Toast("请输入正确的手机号");
+      } else if (checkcode == null || checkcode.trim().trim().equals("")) {
+        JUtils.Toast("验证码不能为空");
+      } else {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   @Override public void onClick(View v) {
     switch (v.getId()) {
       case R.id.getCheckCode:
         mobile = editTextMobile.getText().toString().trim();
-        checkInput();
-        model.getRegisterCheckCode(mobile)
-            .subscribeOn(Schedulers.io())
-            .subscribe(new ServiceResponse<RegisterBean>() {
-              @Override public void onNext(RegisterBean registerBean) {
-                super.onNext(registerBean);
-                String result = registerBean.getResult();
-                if (result.equals("0")) {
-                  JUtils.Toast("已经注册过该手机号");
-                } else if (result.equals("OK")) {
-                  JUtils.Toast("获取验证码成功");
+        if (checkMobileInput(mobile)) {
+          model.getRegisterCheckCode(mobile)
+              .subscribeOn(Schedulers.io())
+              .subscribe(new ServiceResponse<RegisterBean>() {
+                @Override public void onNext(RegisterBean registerBean) {
+                  super.onNext(registerBean);
+                  String result = registerBean.getResult();
+                  if (result.equals("0")) {
+                    JUtils.Toast("已经注册过该手机号");
+                  } else if (result.equals("OK")) {
+                    JUtils.Toast("获取验证码成功");
+                  }
                 }
-              }
-            });
+              });
+        }
+
         break;
       case R.id.register_button:
         mobile = editTextMobile.getText().toString().trim();
         invalid_code = editTextInvalid_code.getText().toString().trim();
-        model.check_code_user(mobile, invalid_code)
-            .subscribeOn(Schedulers.io())
-            .subscribe(new ServiceResponse<RegisterBean>() {
-              @Override public void onNext(RegisterBean registerBean) {
-                super.onNext(registerBean);
-                String result = registerBean.getResult();
-                if (result.equals("0")) {
-                  Intent intent =
-                      new Intent(RegisterActivity.this, SettingPasswordActivity.class);
-                  Bundle bundle = new Bundle();
-                  bundle.putString("username", mobile);
-                  bundle.putString("valid_code", invalid_code);
 
-                  intent.putExtras(bundle);
-                  startActivity(intent);
-                  finish();
+        if (checkInput(mobile, invalid_code)) {
+          model.check_code_user(mobile, invalid_code)
+              .subscribeOn(Schedulers.io())
+              .subscribe(new ServiceResponse<RegisterBean>() {
+                @Override public void onNext(RegisterBean registerBean) {
+                  super.onNext(registerBean);
+                  String result = registerBean.getResult();
+                  if (result.equals("0")) {
+                    Intent intent =
+                        new Intent(RegisterActivity.this, SettingPasswordActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("username", mobile);
+                    bundle.putString("valid_code", invalid_code);
+
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                    finish();
+                  }
                 }
-              }
-            });
+              });
+        }
+
         break;
 
       case R.id.toolbar:

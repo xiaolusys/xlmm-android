@@ -104,55 +104,55 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
         login_name_value = nameEditText.getText().toString().trim();
         login_pass_value = passEditText.getText().toString().trim();
 
-        checkInput(login_name_value, login_pass_value);
+        if (checkInput(login_name_value, login_pass_value)) {
+          model.login(login_name_value, login_pass_value)
+              .subscribeOn(Schedulers.newThread())
+              .subscribe(new ServiceResponse<UserBean>() {
+                @Override public void onNext(UserBean user) {
+                  Log.d(TAG, "user.getCode() "
+                      + user.getCode()
+                      + ", user.getResult() "
+                      + user.getResult());
+                  if (user.getCode() == 0 && user.getResult().equals("login")) {
 
-        model.login(login_name_value, login_pass_value)
-            .subscribeOn(Schedulers.newThread())
-            .subscribe(new ServiceResponse<UserBean>() {
-              @Override public void onNext(UserBean user) {
-                Log.d(TAG, "user.getCode() "
-                    + user.getCode()
-                    + ", user.getResult() "
-                    + user.getResult());
-                if (user.getCode() == 0 && user.getResult().equals("login")) {
+                    LoginUtils.saveLoginInfo(true, getApplicationContext(),
+                        login_name_value, login_pass_value);
 
-                  LoginUtils.saveLoginInfo(true, getApplicationContext(),
-                      login_name_value, login_pass_value);
+                    Toast.makeText(mContext, "登录成功", Toast.LENGTH_SHORT).show();
 
-                  Toast.makeText(mContext, "登录成功", Toast.LENGTH_SHORT).show();
+                    String login = getIntent().getExtras().getString("login");
 
-                  String login = getIntent().getExtras().getString("login");
+                    assert login != null;
+                    if (login.equals("cart")) {
+                      Intent intent = new Intent(mContext, CartActivity.class);
+                      startActivity(intent);
+                      finish();
+                    } else if (login.equals("product")) {
+                      finish();
+                    } else if (login.equals("main")) {
+                      finish();
+                    } else if (login.equals("point")) {
+                      Intent intent = new Intent(mContext, MembershipPointActivity.class);
+                      startActivity(intent);
+                      finish();
+                    } else if (login.equals("coupon")) {
+                      Intent intent = new Intent(mContext, CouponActivity.class);
+                      startActivity(intent);
+                      finish();
+                    }
+                  } else {
 
-                  assert login != null;
-                  if (login.equals("cart")) {
-                    Intent intent = new Intent(mContext, CartActivity.class);
-                    startActivity(intent);
-                    finish();
-                  } else if (login.equals("product")) {
-                    finish();
-                  } else if (login.equals("main")) {
-                    finish();
-                  } else if (login.equals("point")) {
-                    Intent intent = new Intent(mContext, MembershipPointActivity.class);
-                    startActivity(intent);
-                    finish();
-                  } else if (login.equals("coupon")) {
-                    Intent intent = new Intent(mContext, CouponActivity.class);
-                    startActivity(intent);
-                    finish();
+                    LoginUtils.saveLoginInfo(false, getApplicationContext(), "", "");
+
+                    Toast.makeText(mContext, "用户名或者密码错误,请检查", Toast.LENGTH_SHORT).show();
                   }
-                } else {
-
-                  LoginUtils.saveLoginInfo(false, getApplicationContext(), "", "");
-
-                  Toast.makeText(mContext, "用户名或者密码错误,请检查", Toast.LENGTH_SHORT).show();
                 }
-              }
 
-              @Override public void onCompleted() {
-                super.onCompleted();
-              }
-            });
+                @Override public void onCompleted() {
+                  super.onCompleted();
+                }
+              });
+        }
         break;
       case R.id.set_register_button:
         Intent intent = new Intent(mContext, RegisterActivity.class);
@@ -169,7 +169,6 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
         //startActivity(new Intent(LoginActivity.this,));
         //finish();
 
-
         break;
 
       case R.id.sms_login:
@@ -179,14 +178,21 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
     }
   }
 
-  private void checkInput(String name, String pass) {
-    /*if (name.length() != 11) {
-      JUtils.Toast("请输入正确手机号");
-      return;
-    } else if (pass.length() < 6 || pass.length() > 12) {
-      JUtils.Toast("请输入6-12位密码");
-      return;
-    }*/
+  public boolean checkInput(String mobile, String password) {
+
+    if (mobile == null || mobile.trim().trim().equals("")) {
+      JUtils.Toast("请输入手机号");
+    } else {
+      if (mobile.length() != 11) {
+        JUtils.Toast("请输入正确的手机号");
+      } else if (password == null || password.trim().trim().equals("")) {
+        JUtils.Toast("密码不能为空");
+      } else {
+        return true;
+      }
+    }
+
+    return false;
   }
 }
 

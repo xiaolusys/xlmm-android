@@ -7,10 +7,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.entities.RegisterBean;
+import com.jimei.xiaolumeimei.entities.SmsLoginBean;
+import com.jimei.xiaolumeimei.entities.SmsLoginUserBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.widget.ClearEditText;
@@ -68,56 +68,54 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
     return null;
   }
 
-  @Override protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    // TODO: add setContentView(...) invocation
-    ButterKnife.bind(this);
-  }
-
   @Override public void onClick(View v) {
     switch (v.getId()) {
       case R.id.getCheckCode:
         mobile = registerName.getText().toString().trim();
-        checkInput();
-        model.getSmsCheckCode(mobile)
-            .subscribeOn(Schedulers.io())
-            .subscribe(new ServiceResponse<RegisterBean>() {
-              @Override public void onNext(RegisterBean registerBean) {
-                super.onNext(registerBean);
-                String result = registerBean.getResult();
-                if (result.equals("0")) {
-                  JUtils.Toast("获取成功");
-                } else if (result.equals("2")) {
-                  JUtils.Toast("手机号码不合法");
-                  return;
+        if (checkMobileInput(mobile)) {
+          model.getSmsCheckCode(mobile)
+              .subscribeOn(Schedulers.io())
+              .subscribe(new ServiceResponse<SmsLoginBean>() {
+                @Override public void onNext(SmsLoginBean registerBean) {
+                  super.onNext(registerBean);
+                  int code = registerBean.getCode();
+                  if (0 == code) {
+                    JUtils.Toast("获取成功");
+                  } else if (2 == code) {
+                    JUtils.Toast("手机号码不合法");
+                  }
                 }
-              }
-            });
+              });
+        }
+
         break;
       case R.id.confirm:
+
         mobile = registerName.getText().toString().trim();
         invalid_code = checkcode.getText().toString().trim();
-        model.smsLogin(mobile, invalid_code)
-            .subscribeOn(Schedulers.io())
-            .subscribe(new ServiceResponse<RegisterBean>() {
-              @Override public void onNext(RegisterBean registerBean) {
-                super.onNext(registerBean);
-                String result = registerBean.getResult();
-                if (result.equals("0")) {
-                  LoginUtils.saveLoginSuccess(true, getApplicationContext());
-                  JUtils.Toast("登录成功");
-                  finish();
-                } else if (result.equals("1")) {
-                  LoginUtils.saveLoginSuccess(false, getApplicationContext());
-                  JUtils.Toast("登录验证失败");
-                  return;
-                } else if (result.equals("3")) {
-                  LoginUtils.saveLoginSuccess(false, getApplicationContext());
-                  JUtils.Toast("验证码有误;");
-                  return;
+        if (checkInput(mobile, invalid_code)) {
+          model.smsLogin(mobile, invalid_code)
+              .subscribeOn(Schedulers.io())
+              .subscribe(new ServiceResponse<SmsLoginUserBean>() {
+                @Override public void onNext(SmsLoginUserBean registerBean) {
+                  super.onNext(registerBean);
+                  int code = registerBean.getCode();
+
+                  if (code == 0) {
+                    LoginUtils.saveLoginSuccess(true, getApplicationContext());
+                    JUtils.Toast("登录成功");
+                    finish();
+                  } else if (code == 1) {
+                    LoginUtils.saveLoginSuccess(false, getApplicationContext());
+                    JUtils.Toast("登录验证失败,请重新尝试");
+                  } else if (code == 3) {
+                    LoginUtils.saveLoginSuccess(false, getApplicationContext());
+                    JUtils.Toast("验证码有误");
+                  }
                 }
-              }
-            });
+              });
+        }
+
         break;
 
       case R.id.toolbar:
@@ -127,10 +125,35 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
     }
   }
 
-  public void checkInput() {
-    if (mobile.length() != 11) {
-      JUtils.Toast("请输入正确的手机号");
-      return;
+  public boolean checkMobileInput(String mobile) {
+
+    if (mobile == null || mobile.trim().trim().equals("")) {
+      JUtils.Toast("请输入手机号");
+    } else {
+      if (mobile.length() != 11) {
+        JUtils.Toast("请输入正确的手机号");
+      } else {
+        return true;
+      }
     }
+
+    return false;
+  }
+
+  public boolean checkInput(String mobile, String checkcode) {
+
+    if (mobile == null || mobile.trim().trim().equals("")) {
+      JUtils.Toast("请输入手机号");
+    } else {
+      if (mobile.length() != 11) {
+        JUtils.Toast("请输入正确的手机号");
+      } else if (checkcode == null || checkcode.trim().trim().equals("")) {
+        JUtils.Toast("验证码不能为空");
+      } else {
+        return true;
+      }
+    }
+
+    return false;
   }
 }

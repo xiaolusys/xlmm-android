@@ -279,6 +279,33 @@ public final class ViewUtils {
     }
   }
 
+  public static void loadImgToImgViewPost(Context context, ImageView img,
+      String picPath) {
+    if (null == picPath) return;
+    if (picPath.startsWith("https://mmbiz.qlogo.cn")) {
+      Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
+          //.placeholder(R.drawable.parceholder)
+          .centerCrop().into(img);
+    } else {
+      String[] temp = picPath.split("http://image.xiaolu.so/");
+      String head_img = "";
+      if (temp.length > 1) {
+        try {
+          head_img = "http://image.xiaolu.so/" + URLEncoder.encode(temp[1], "utf-8");
+        } catch (UnsupportedEncodingException e) {
+          e.printStackTrace();
+        }
+      }
+
+      Glide.with(context)
+          .load(head_img)
+          .diskCacheStrategy(DiskCacheStrategy.ALL)
+          .placeholder(R.drawable.header)
+          .centerCrop()
+          .into(img);
+    }
+  }
+
   public static void loadImgToImgViewWithPlaceholderTransform(Context context,
       ImageView img, String picPath) {
     if (null == picPath) return;

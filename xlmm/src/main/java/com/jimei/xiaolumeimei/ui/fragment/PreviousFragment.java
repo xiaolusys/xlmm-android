@@ -5,8 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
@@ -15,6 +13,7 @@ import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.entities.IndexBean;
 import com.jimei.xiaolumeimei.entities.PostBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
+import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.victor.loading.rotate.RotateLoading;
@@ -51,8 +50,8 @@ public class PreviousFragment extends BaseFragment {
             List<IndexBean.product> child_list = indexBean.getChild_list();
             List<IndexBean.product> female_list = indexBean.getFemale_list();
             List<IndexBean.product> list = new ArrayList<>();
-            list.addAll(child_list);
             list.addAll(female_list);
+            list.addAll(child_list);
             mPreviousAdapter.update(list);
             mPreviousAdapter.notifyDataSetChanged();
           }
@@ -95,19 +94,20 @@ public class PreviousFragment extends BaseFragment {
                          String picLink = postBean.getWem_posters().get(0).pic_link;
                          String picLink1 = postBean.getChd_posters().get(0).pic_link;
 
-                         post1.post(() -> Glide.with(getActivity())
-                             .load(picLink)
-                             .placeholder(R.drawable.header)
-                             .diskCacheStrategy(DiskCacheStrategy.ALL)
-                             .centerCrop()
-                             .into(post1));
+                         post1.post(new Runnable() {
+                           @Override public void run() {
 
-                         post2.post(() -> Glide.with(getActivity())
-                             .load(picLink1)
-                             .placeholder(R.drawable.header)
-                             .diskCacheStrategy(DiskCacheStrategy.ALL)
-                             .centerCrop()
-                             .into(post2));
+                             ViewUtils.loadImgToImgViewPost(getActivity(), post1,
+                                 picLink);
+                           }
+                         });
+
+                         post2.post(new Runnable() {
+                           @Override public void run() {
+                             ViewUtils.loadImgToImgViewPost(getActivity(), post2,
+                                 picLink1);
+                           }
+                         });
                        } catch (NullPointerException ex) {
                          ex.printStackTrace();
                        }
@@ -123,41 +123,39 @@ public class PreviousFragment extends BaseFragment {
     );
     xRecyclerView.setAdapter(mPreviousAdapter);
 
-    xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener()
+    xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+       @Override public void onRefresh() {
+         model.getPreviousList()
+             .subscribeOn(Schedulers.newThread())
+             .subscribe(new ServiceResponse<IndexBean>() {
+               @Override
+               public void onNext(IndexBean indexBean) {
+                 List<IndexBean.product> child_list =
+                     indexBean.getChild_list();
+                 List<IndexBean.product> female_list =
+                     indexBean.getFemale_list();
+                 List<IndexBean.product> list =
+                     new ArrayList<>();
+                 list.addAll(child_list);
+                 list.addAll(female_list);
+                 mPreviousAdapter.updateWithClear(list);
+                 mPreviousAdapter.notifyDataSetChanged();
+               }
 
-                                     {
-                                       @Override public void onRefresh() {
-                                         model.getPreviousList()
-                                             .subscribeOn(Schedulers.newThread())
-                                             .subscribe(new ServiceResponse<IndexBean>() {
-                                               @Override
-                                               public void onNext(IndexBean indexBean) {
-                                                 List<IndexBean.product> child_list =
-                                                     indexBean.getChild_list();
-                                                 List<IndexBean.product> female_list =
-                                                     indexBean.getFemale_list();
-                                                 List<IndexBean.product> list =
-                                                     new ArrayList<>();
-                                                 list.addAll(child_list);
-                                                 list.addAll(female_list);
-                                                 mPreviousAdapter.updateWithClear(list);
-                                                 mPreviousAdapter.notifyDataSetChanged();
-                                               }
+               @Override public void onCompleted() {
+                 super.onCompleted();
+                 xRecyclerView.post(
+                     xRecyclerView::refreshComplete);
+               }
+             });
+       }
 
-                                               @Override public void onCompleted() {
-                                                 super.onCompleted();
-                                                 xRecyclerView.post(
-                                                     xRecyclerView::refreshComplete);
-                                               }
-                                             });
-                                       }
+       @Override public void onLoadMore() {
 
-                                       @Override public void onLoadMore() {
-
-                                         xRecyclerView.postDelayed(
-                                             xRecyclerView::loadMoreComplete, 1000);
-                                       }
-                                     }
+         xRecyclerView.postDelayed(
+             xRecyclerView::loadMoreComplete, 1000);
+       }
+     }
 
     );
   }

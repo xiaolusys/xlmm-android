@@ -55,7 +55,6 @@
         android:id="@+id/register_password"
         android:layout_width="0dp"
         android:layout_height="110px"
-        android:inputType="textPassword"
         android:singleLine="true"
         android:paddingLeft="10sp"
         android:paddingRight="10sp"

@@ -7,6 +7,8 @@ import com.jimei.xiaolumeimei.entities.MembershipPointBean;
 import com.jimei.xiaolumeimei.entities.NicknameBean;
 import com.jimei.xiaolumeimei.entities.PointLogBean;
 import com.jimei.xiaolumeimei.entities.RegisterBean;
+import com.jimei.xiaolumeimei.entities.SmsLoginBean;
+import com.jimei.xiaolumeimei.entities.SmsLoginUserBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.rx.DefaultTransform;
@@ -124,7 +126,7 @@ public class UserModel {
   }
 
   //获取短信登录验证码
-  public Observable<RegisterBean> getSmsCheckCode(String mobile) {
+  public Observable<SmsLoginBean> getSmsCheckCode(String mobile) {
     return XlmmRetrofitClient.getService()
         .getSmsCheckCode(mobile)
         .compose(new DefaultTransform<>());
@@ -132,7 +134,7 @@ public class UserModel {
 
 
   //短信登录
-  public Observable<RegisterBean> smsLogin(String mobile,String code) {
+  public Observable<SmsLoginUserBean> smsLogin(String mobile,String code) {
     return XlmmRetrofitClient.getService()
         .smsLogin(mobile,code)
         .compose(new DefaultTransform<>());
