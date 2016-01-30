@@ -300,7 +300,6 @@ public interface XlmmService {
     );
 
     //设置用户昵称
-    @FormUrlEncoded
     @POST("order/{id}/confirm_sign")
     Observable<UserBean> receiveGoods(
             @Path("id") int id);

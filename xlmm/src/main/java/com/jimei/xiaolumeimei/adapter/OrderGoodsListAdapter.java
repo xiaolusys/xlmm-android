@@ -228,6 +228,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                     + " to "
                     + "ApplyReturnGoodsActivity");
                 context.startActivity(intent);
+                context.finish();
               }
             });
             break;
@@ -244,6 +245,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
         .subscribe(new ServiceResponse<UserBean>() {
           @Override public void onNext(UserBean userBean) {
             Log.d(TAG, "returncode " + userBean.getCode());
+            context.finish();
           }
         });
   }

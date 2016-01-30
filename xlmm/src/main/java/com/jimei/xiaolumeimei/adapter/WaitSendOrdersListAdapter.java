@@ -70,6 +70,7 @@ public class WaitSendOrdersListAdapter extends BaseAdapter {
     float payment = 0;
     String orderState = "";
     String picpath;
+    int state;
 
     Log.d(TAG, "dataSource.size " + list.size());
     for (int i = 0; i < list.size(); i++) {
@@ -77,10 +78,12 @@ public class WaitSendOrdersListAdapter extends BaseAdapter {
       payment = (float) list.get(i).getPayment();
       orderState = list.get(i).getStatusDisplay();
       picpath = list.get(i).getOrderPic();
+      state = list.get(i).getStatus();
 
       map.put("payment", Float.toString(payment));
       map.put("orderState", orderState);
       map.put("img_url", picpath);
+      map.put("state", Integer.toString(state));
 
       data.add(map);
     }
@@ -178,7 +181,7 @@ public class WaitSendOrdersListAdapter extends BaseAdapter {
       showTime(Integer.parseInt(data.get(position).get("state")),
           data.get(position).get("crtTime"), convertView, order_id);
     } catch (Exception e) {
-      Log.e(TAG, "showTimeAndBtn failed");
+      Log.e(TAG, "showTime failed");
       e.printStackTrace();
     }
 
@@ -238,6 +241,7 @@ public class WaitSendOrdersListAdapter extends BaseAdapter {
         intent.putExtra("orderinfo", order_id);
         Log.d(TAG, "LinearLayout transfer orderid  " + order_id + " to OrderDetailActivity");
         context.startActivity(intent);
+        context.finish();
       }
     });
 
