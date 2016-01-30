@@ -132,8 +132,14 @@ public class OrderGoodsListAdapter extends BaseAdapter {
       case XlmmConst.ORDER_STATE_PAYED: {
         if (kill_title) {
           btn.setVisibility(View.INVISIBLE);
-        } else {
-          btn.setText("申请退款");
+        }
+        else {
+          if(refund_state != XlmmConst.REFUND_STATE_NO_REFUND){
+            btn.setVisibility(View.INVISIBLE);
+          }
+          else {
+            btn.setText("申请退款");
+          }
         }
         break;
       }
