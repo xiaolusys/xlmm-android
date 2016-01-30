@@ -6,8 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
@@ -16,6 +14,7 @@ import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.entities.PostBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
+import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.victor.loading.rotate.RotateLoading;
@@ -93,22 +92,20 @@ public class TodayFragment extends BaseFragment {
               String picLink = postBean.getWem_posters().get(0).pic_link;
               String picLink1 = postBean.getChd_posters().get(0).pic_link;
 
-              post1.post(() -> Glide.with(getActivity())
-                  .load(picLink)
-                  .placeholder(R.drawable.header)
-                  .diskCacheStrategy(DiskCacheStrategy.ALL)
-                  .centerCrop()
-                  .into(post1));
+              post1.post(new Runnable() {
+                @Override public void run() {
 
-              post2.post(() -> Glide.with(getActivity())
-                  .load(picLink1)
-                  .placeholder(R.drawable.header)
-                  .diskCacheStrategy(DiskCacheStrategy.ALL)
-                  .centerCrop()
-                  .into(post2));
+                  ViewUtils.loadImgToImgViewPost(getActivity(), post1, picLink);
+                }
+              });
+
+              post2.post(new Runnable() {
+                @Override public void run() {
+                  ViewUtils.loadImgToImgViewPost(getActivity(), post2, picLink1);
+                }
+              });
             } catch (NullPointerException ex) {
               ex.printStackTrace();
-
             }
           }
         });

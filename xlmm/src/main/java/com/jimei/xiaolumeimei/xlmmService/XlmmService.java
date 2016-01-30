@@ -24,6 +24,8 @@ import com.jimei.xiaolumeimei.entities.ProductDetailBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
 import com.jimei.xiaolumeimei.entities.RegisterBean;
+import com.jimei.xiaolumeimei.entities.SmsLoginBean;
+import com.jimei.xiaolumeimei.entities.SmsLoginUserBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.squareup.okhttp.ResponseBody;
@@ -267,7 +269,7 @@ public interface XlmmService {
     //获取短信登录验证码
     @FormUrlEncoded
     @POST("register/send_code")
-    Observable<RegisterBean> getSmsCheckCode(
+    Observable<SmsLoginBean> getSmsCheckCode(
             @Field("mobile") String mobile
     );
 
@@ -275,7 +277,7 @@ public interface XlmmService {
   //短信登录
     @FormUrlEncoded
     @POST("register/sms_login")
-    Observable<RegisterBean> smsLogin(
+    Observable<SmsLoginUserBean> smsLogin(
             @Field("mobile") String username,
             @Field("sms_code") String valid_code
     );
