@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -31,7 +32,11 @@ import com.jude.utils.JUtils;
 import com.pingplusplus.android.PaymentActivity;
 import com.squareup.okhttp.ResponseBody;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+
+import cn.iwgang.countdownview.CountdownView;
 import rx.schedulers.Schedulers;
 
 public class OrderDetailActivity extends BaseSwipeBackCompatActivity
@@ -143,6 +148,20 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
           LinearLayout llayout_order_lefttime =
               (LinearLayout) findViewById(R.id.llayout_order_lefttime);
           llayout_order_lefttime.setVisibility(View.VISIBLE);
+          cn.iwgang.countdownview.CountdownView cv_lefttime =
+                  (cn.iwgang.countdownview.CountdownView) findViewById(
+                          R.id.cv_lefttime);
+          cv_lefttime.start(calcLeftTime(orderDetailBean.getCreated()));
+          cv_lefttime.setOnCountdownEndListener(new CountdownView.OnCountdownEndListener() {
+            @Override
+            public void onEnd(CountdownView cv){
+              JUtils.Log(TAG,"timeout");
+              btn_proc.setClickable(false);
+              btn_proc.setBackgroundColor(Color.parseColor("#f3f3f4"));
+            }
+
+          });
+
           Button btn_order_cancel = (Button) findViewById(R.id.btn_order_cancel);
           btn_order_cancel.setVisibility(View.VISIBLE);
           break;
@@ -154,6 +173,27 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+
+  private long calcLeftTime(String crtTime) {
+    long left = 0;
+    Date now = new Date();
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    try {
+      crtTime = crtTime.replace("T"," ");
+      Date crtdate = format.parse(crtTime);
+      Log.d(TAG, " crtdate  " + crtdate.getTime() + "now "+now.getTime());
+      if (crtdate.getTime() + 20 * 60 * 1000 - now.getTime() > 0) {
+        left = crtdate.getTime() + 20 * 60 * 1000 - now.getTime();
+      }
+    } catch (Exception e) {
+      Log.e(TAG, "left time get failed ");
+      e.printStackTrace();
+    }
+
+    Log.d(TAG, "left time  " + left);
+
+    return left;
   }
 
   @Override public void onClick(View v) {
@@ -181,14 +221,14 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
           @Override public void onNext(ResponseBody responseBody) {
             super.onNext(responseBody);
             try {
-              String string = responseBody.string();
-              Log.i("charge", string);
+              String charge = responseBody.string();
+              Log.i("charge", charge);
               Intent intent = new Intent();
               String packageName = getPackageName();
               ComponentName componentName = new ComponentName(packageName,
                   packageName + ".wxapi.WXPayEntryActivity");
               intent.setComponent(componentName);
-              intent.putExtra(PaymentActivity.EXTRA_CHARGE, string);
+              intent.putExtra(PaymentActivity.EXTRA_CHARGE, charge);
               startActivityForResult(intent, REQUEST_CODE_PAYMENT);
             } catch (IOException e) {
               e.printStackTrace();
