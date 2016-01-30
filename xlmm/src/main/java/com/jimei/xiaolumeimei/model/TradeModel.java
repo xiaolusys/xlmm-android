@@ -93,7 +93,7 @@ public class TradeModel {
         .compose(new DefaultTransform<>());
   }
 
-  //删除退货单详细数据
+  //删除ding单详细数据
   public Observable<ResponseBody> delRefund(int order_id) {
     return XlmmRetrofitClient.getService()
             .delRefund(order_id)

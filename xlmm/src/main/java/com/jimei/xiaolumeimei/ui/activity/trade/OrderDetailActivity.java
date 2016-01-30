@@ -263,7 +263,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                 super.onNext(responseBody);
                 try {
 
-
+                  startActivity(new Intent(OrderDetailActivity.this, AllOrdersActivity.class));
                   finish();
                 } catch (Exception e) {
                   e.printStackTrace();

@@ -313,8 +313,8 @@ public interface XlmmService {
     Observable<AllRefundsBean.ResultsEntity> getRefundDetailBean(
             @Path("pk") int order_id);
 
-    //删除退款单数据
-    @DELETE( "refunds/{pk}")
+    //删除订单数据
+    @DELETE( "trades/{pk}")
     Observable<ResponseBody> delRefund(
             @Path("pk") int order_id);
 
