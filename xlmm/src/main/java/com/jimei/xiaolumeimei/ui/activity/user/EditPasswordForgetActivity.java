@@ -2,7 +2,6 @@ package com.jimei.xiaolumeimei.ui.activity.user;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -18,7 +17,7 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import rx.schedulers.Schedulers;
 
-public class SettingPasswordActivity extends BaseSwipeBackCompatActivity
+public class EditPasswordForgetActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener {
   String TAG = "SettingPasswordActivity";
   @Bind(R.id.toolbar) Toolbar toolbar;
@@ -26,7 +25,6 @@ public class SettingPasswordActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.set_password) EditText etPassword;
   @Bind(R.id.set_password2) EditText etPassword2;
   @Bind(R.id.set_commit_button) Button commit_button;
-  @Bind(R.id.check_agree) AppCompatCheckBox checkBox;
   String username;
   String valid_code;
   private boolean isShow = true;
@@ -46,7 +44,7 @@ public class SettingPasswordActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected int getContentViewLayoutID() {
-    return R.layout.setting_password_activity;
+    return R.layout.setting_password_activity_1;
   }
 
   @Override protected void initViews() {
@@ -72,17 +70,10 @@ public class SettingPasswordActivity extends BaseSwipeBackCompatActivity
         String password2 = etPassword2.getText().toString().trim();
         Log.d(TAG, "password " + password1 + " " + password2);
 
-        if (checkBox.isChecked()) {
-          if (checkInput(password1) || checkInput(password2)) {
-
-            if (checkInputSame(password1, password2)) {
-              changePassword(username, valid_code, password1, password2);
-            }
-          } else {
-            Toast.makeText(mContext, "密码长度或者字符错误,请检查", Toast.LENGTH_SHORT).show();
-          }
+        if (checkInput(password1) && checkInput(password2)) {
+          changePassword(username, valid_code, password1, password2);
         } else {
-          JUtils.Toast("请选择是否同意条款");
+          Toast.makeText(mContext, "密码长度或者字符错误,请检查", Toast.LENGTH_SHORT).show();
         }
 
         break;
@@ -95,16 +86,7 @@ public class SettingPasswordActivity extends BaseSwipeBackCompatActivity
 
   private boolean checkInput(String name) {
     if (name.length() < 4 || name.length() > 20) {
-      JUtils.Toast("请输入6-16位密码");
-      return false;
-    }
-
-    return true;
-  }
-
-  private boolean checkInputSame(String pass1, String pass2) {
-    if (!pass1.equals(pass2)) {
-      JUtils.Toast("两次密码不一致");
+      JUtils.Toast("请输入6-16位昵称");
       return false;
     }
 
@@ -123,8 +105,13 @@ public class SettingPasswordActivity extends BaseSwipeBackCompatActivity
                 + user.getResult());
 
             if (user.getCode() == 0) {
-              Toast.makeText(mContext, "修改成功", Toast.LENGTH_SHORT).show();
-              Intent intent = new Intent(mContext, SettingActivity.class);
+              Toast.makeText(mContext, "密码重置成功", Toast.LENGTH_SHORT).show();
+              Intent intent = new Intent(mContext, LoginActivity.class);
+
+              Bundle bundle = new Bundle();
+              bundle.putString("login", "axiba");
+              intent.putExtras(bundle);
+
               startActivity(intent);
               finish();
             } else {

@@ -74,7 +74,7 @@
       android:layout_gravity="right|center_vertical"/>
 
   <LinearLayout
-      android:layout_marginTop="50px"
+      android:layout_marginTop="30px"
       android:orientation="vertical"
       android:gravity="center"
       android:layout_width="fill_parent"

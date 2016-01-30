@@ -18,6 +18,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.model.UserModel;
+import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.widget.ClearEditText;
@@ -56,6 +57,8 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
 
     wx.setOnClickListener(this);
     sms.setOnClickListener(this);
+
+    forGetTextView.setOnClickListener(this);
   }
 
   @Override protected void initData() {
@@ -135,6 +138,10 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                       Intent intent = new Intent(mContext, MembershipPointActivity.class);
                       startActivity(intent);
                       finish();
+                    } else if (login.equals("axiba")) {
+                      Intent intent = new Intent(mContext, MainActivity.class);
+                      startActivity(intent);
+                      finish();
                     } else if (login.equals("coupon")) {
                       Intent intent = new Intent(mContext, CouponActivity.class);
                       startActivity(intent);
@@ -173,6 +180,12 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
 
       case R.id.sms_login:
         startActivity(new Intent(LoginActivity.this, SmsLoginActivity.class));
+        finish();
+        break;
+
+      case R.id.forgetTextView:
+
+        startActivity(new Intent(LoginActivity.this, VerifyPhoneForgetActivity.class));
         finish();
         break;
     }

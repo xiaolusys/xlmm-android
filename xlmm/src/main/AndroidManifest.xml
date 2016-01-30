@@ -169,15 +169,18 @@
     <activity android:name=".ui.activity.user.CouponActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
+    <activity android:name=".ui.activity.user.VerifyPhoneForgetActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
+    <activity android:name=".ui.activity.user.EditPasswordForgetActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
 
     <activity android:name=".ui.activity.user.MembershipPointActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
 
     <activity android:name=".ui.activity.main.CompanyInfoActivity"
-        android:theme="@style/AppTheme.TransparentActivity"
-        />
-    <activity android:name=".ui.activity.user.FindPassActivty"
         android:theme="@style/AppTheme.TransparentActivity"
         />
     <activity android:name=".ui.activity.user.SmsLoginActivity"

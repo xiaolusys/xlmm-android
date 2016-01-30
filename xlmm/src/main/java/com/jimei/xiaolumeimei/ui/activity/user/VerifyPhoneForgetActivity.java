@@ -16,7 +16,7 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import rx.schedulers.Schedulers;
 
-public class VerifyPhoneActivity extends BaseSwipeBackCompatActivity
+public class VerifyPhoneForgetActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener {
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.register_name) EditText editTextMobile;
@@ -125,8 +125,8 @@ public class VerifyPhoneActivity extends BaseSwipeBackCompatActivity
                   super.onNext(registerBean);
                   String result = registerBean.getResult();
                   if (result.equals("0")) {
-                    Intent intent = new Intent(VerifyPhoneActivity.this,
-                        SettingPasswordActivity.class);
+                    Intent intent = new Intent(VerifyPhoneForgetActivity.this,
+                        EditPasswordForgetActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("username", mobile);
                     bundle.putString("valid_code", invalid_code);

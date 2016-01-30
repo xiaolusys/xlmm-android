@@ -81,7 +81,7 @@
       android:id="@+id/register_button"
       android:layout_width="656px"
       android:layout_height="wrap_content"
-      android:background="@drawable/shape_login"
+      android:background="@drawable/shape_common"
       android:text="@string/next"
       >
   </Button>
