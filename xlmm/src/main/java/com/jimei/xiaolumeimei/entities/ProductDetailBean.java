@@ -32,7 +32,7 @@ public class ProductDetailBean {
   @SerializedName("std_sale_price") private int mStdSalePrice;
   @SerializedName("agent_price") private double mAgentPrice;
   @SerializedName("sale_time") private String mSaleTime;
-  @SerializedName("offshelf_time") private Object mOffshelfTime;
+  @SerializedName("offshelf_time") private String mOffshelfTime;
   @SerializedName("memo") private String mMemo;
   @SerializedName("lowest_price") private double mLowestPrice;
   @SerializedName("product_lowest_price") private double mProductLowestPrice;
@@ -192,11 +192,11 @@ public class ProductDetailBean {
     this.mSaleTime = saleTime;
   }
 
-  public Object getOffshelfTime() {
+  public String getOffshelfTime() {
     return mOffshelfTime;
   }
 
-  public void setOffshelfTime(Object offshelfTime) {
+  public void setOffshelfTime(String offshelfTime) {
     this.mOffshelfTime = offshelfTime;
   }
 

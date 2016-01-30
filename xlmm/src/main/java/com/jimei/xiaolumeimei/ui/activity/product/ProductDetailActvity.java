@@ -51,7 +51,9 @@ import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import okhttp3.Call;
@@ -113,7 +115,16 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
             price1.setText("¥" + productDetailBean.getAgentPrice());
             price2.setText("/¥" + productDetailBean.getStdSalePrice());
 
-            countdownView.start(2000000l);
+            if ((null == productDetailBean.getOffshelfTime())
+                || (productDetailBean.getOffshelfTime().equals(""))) {
+
+              long time = 38 * 60 * 60 * 1000;
+
+              countdownView.start(time);
+            } else {
+              long time = calcLeftTime(productDetailBean.getOffshelfTime());
+              countdownView.start(time);
+            }
 
             List<String> contentImgs =
                 productDetailBean.getProductModel().getContentImgs();
@@ -452,5 +463,25 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
             }
           }
         });
+  }
+
+  private long calcLeftTime(String crtTime) {
+    long left = 0;
+    Date now = new Date();
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    try {
+      crtTime = crtTime.replace("T", " ");
+      Date crtdate = format.parse(crtTime);
+      if (crtdate.getTime() - now.getTime() > 0) {
+        left = crtdate.getTime() - now.getTime();
+        return left;
+      } else {
+        return 0;
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    return left;
   }
 }

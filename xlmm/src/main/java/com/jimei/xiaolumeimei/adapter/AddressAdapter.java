@@ -74,7 +74,6 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         }
       });
-
     } else if (holder instanceof AddressVH) {
 
       AddressVH addressVH = (AddressVH) holder;
@@ -96,7 +95,6 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
           Intent intent = new Intent(context, ChanggeAddressActivity.class);
         }
       });
-
     }
   }
 
@@ -134,6 +132,7 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Bind(R.id.receiver_mobile) TextView receiverMobile;
     @Bind(R.id.receiver_address) TextView receiverAddress;
     View card;
+
     public AddressVH(View itemView) {
       super(itemView);
       card = itemView;
