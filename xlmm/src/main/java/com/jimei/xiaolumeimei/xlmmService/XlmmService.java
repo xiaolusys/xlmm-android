@@ -308,7 +308,7 @@ public interface XlmmService {
 
 
     //获得详细退款单数据
-    @GET(XlmmApi.ALL_REFUNDS_URL + "/{pk}")
+    @GET( "refunds/{pk}")
     Observable<AllRefundsBean.ResultsEntity> getRefundDetailBean(
             @Path("pk") int order_id);
 

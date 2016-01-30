@@ -111,9 +111,10 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     tx_custom_address.setText("地址：" + orderDetailBean.getReceiver_address());
 
     TextView tx_order_crttime = (TextView) findViewById(R.id.tx_order_crttime);
-    tx_order_crttime.setText(" " + orderDetailBean.getCreated());
+    tx_order_crttime.setText("时间：" + orderDetailBean.getCreated());
     TextView tx_order_crtstate = (TextView) findViewById(R.id.tx_order_crtstate);
     tx_order_crtstate.setText("订单创建成功");
+    JUtils.Log(TAG,"crt time "+orderDetailBean.getCreated());
 
     mGoodsAdapter.update(orderDetailBean.getOrders());
 
