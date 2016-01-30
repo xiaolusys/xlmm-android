@@ -63,7 +63,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:text="￥120"
+        android:text="￥0"
         android:textColor="@color/colorAccent"
         android:textSize="15sp"
         />
@@ -92,7 +92,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:text="七天无理由退货"
+        android:text="其他"
         android:textSize="15sp"
         />
   </RelativeLayout>
@@ -111,7 +111,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="时间：2016年1月6日"
+        android:text="时间："
         android:textSize="15sp"
         />
 

@@ -54,6 +54,8 @@ public class AllRefundsListAdapter extends BaseAdapter {
     float pay_price = 0;
     String model_id = "";
     int num = 0;
+    int apply_num = 0;
+    String apply_reason = "";
 
     Log.d(TAG, "update size " + list.size());
     for (int i = 0; i < list.size(); i++) {
@@ -67,6 +69,8 @@ public class AllRefundsListAdapter extends BaseAdapter {
       pay_price = (float) list.get(i).getPayment();
       model_id = list.get(i).getSku_name();
       num = list.get(i).getRefund_num();
+      apply_num = list.get(i).getRefund_num();
+      apply_reason = list.get(i).getReason();
       Log.d(TAG, "state " + list.get(i).getStatus()+" "+ list.get(i).getStatus_display());
 
       map.put("img_url", img_url);
@@ -78,7 +82,9 @@ public class AllRefundsListAdapter extends BaseAdapter {
 
       map.put("refund_no", (refund_no));
       map.put("refund_State", refund_State);
+      map.put("refund_num", Integer.toString(apply_num));
       map.put("refund_fee", Float.toString(refund_fee));
+      map.put("refund_reason", (apply_reason));
       data.add(map);
     }
     data_refund_list.addAll(list);
@@ -107,11 +113,15 @@ public class AllRefundsListAdapter extends BaseAdapter {
 
     TextView tx_refundno = (TextView) convertView.findViewById(R.id.tx_refund_no);
     TextView tx_refund_state = (TextView) convertView.findViewById(R.id.tx_refund_state);
+    TextView tx_refund_num= (TextView) convertView.findViewById(R.id.tx_refund_num);
     TextView tx_refundfee = (TextView) convertView.findViewById(R.id.tx_refundfee);
+    TextView tx_refund_reason = (TextView) convertView.findViewById(R.id.tx_refund_reason);
 
     tx_refundno.setText("订单编号：" + data.get(position).get("refund_no"));
     tx_refund_state.setText(data.get(position).get("refund_State"));
+    tx_refund_num.setText(data.get(position).get("refund_num"));
     tx_refundfee.setText("¥" + data.get(position).get("refund_fee"));
+    tx_refund_reason.setText(data.get(position).get("refund_reason"));
 
     ImageView img_goods = (ImageView) convertView.findViewById(R.id.img_good);
     ;
@@ -130,6 +140,8 @@ public class AllRefundsListAdapter extends BaseAdapter {
     tx_good_price.setText("¥" + data.get(position).get("pay_price"));
     tx_good_size.setText(data.get(position).get("model_id"));
     tx_good_num.setText(data.get(position).get("num"));
+
+
 
     return convertView;
   }

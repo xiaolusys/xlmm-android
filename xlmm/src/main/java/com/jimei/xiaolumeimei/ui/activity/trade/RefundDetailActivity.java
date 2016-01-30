@@ -26,6 +26,7 @@ import com.jimei.xiaolumeimei.widget.MyHorizontalScrollView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 
 import com.jimei.xiaolumeimei.R;
+import com.jude.utils.JUtils;
 
 import butterknife.Bind;
 import java.util.ArrayList;
@@ -109,11 +110,12 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
 
   //从server端获得所有订单数据，可能要查询几次
   @Override protected void initData() {
-
+    JUtils.Log(TAG, "initData goods_id "+ goods_id);
     model.getRefundDetailBean(goods_id)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<AllRefundsBean.ResultsEntity>() {
           @Override public void onNext(AllRefundsBean.ResultsEntity refundDetailBean) {
+            JUtils.Log(TAG,"getRefundDetailBean success ");
             refundDetail = refundDetailBean;
             fillDataToView(refundDetailBean);
             Log.i(TAG, refundDetailBean.toString());
@@ -173,6 +175,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     tx_refund_reason.setText(refundDetailBean.getReason());
 
     tx_order_crttime.setText(refundDetailBean.getCreated());
+    JUtils.Log(TAG,"crt time "+refundDetailBean.getCreated());
 
   }
 

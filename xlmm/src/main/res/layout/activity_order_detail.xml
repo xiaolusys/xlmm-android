@@ -140,7 +140,7 @@
             android:id="@+id/tx_order_crttime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="时间：2016年1月6日"
+            android:text="时间："
             android:textSize="15sp"
             />
 
