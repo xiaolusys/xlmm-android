@@ -162,6 +162,9 @@
     <activity android:name=".ui.activity.user.VerifyPhoneActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
+    <activity android:name=".ui.activity.user.EditPasswordActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
 
     <activity android:name=".ui.activity.user.CouponActivity"
         android:theme="@style/AppTheme.TransparentActivity"

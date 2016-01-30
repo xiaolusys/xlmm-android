@@ -48,7 +48,6 @@
         />
     <EditText
         android:background="@null"
-        android:textColor="@null"
         android:textSize="14sp"
         android:id="@+id/name"
         android:hint="请输入收货人姓名"
@@ -78,7 +77,6 @@
     <EditText
         android:textSize="14sp"
         android:background="@null"
-        android:textColor="@null"
         android:id="@+id/mobile"
         android:hint="请输入收货人手机号"
         android:layout_weight="2"
@@ -132,7 +130,6 @@
     <EditText
         android:textSize="14sp"
         android:background="@null"
-        android:textColor="@null"
         android:id="@+id/clear_address"
         android:hint="请输入详细地址"
         android:layout_weight="2"

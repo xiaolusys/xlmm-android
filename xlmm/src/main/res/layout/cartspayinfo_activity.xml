@@ -212,7 +212,7 @@
       <include layout="@layout/common_gap"/>
       <LinearLayout
           android:layout_width="match_parent"
-          android:layout_height="160px"/>
+          android:layout_height="250px"/>
     </LinearLayout>
   </ScrollView>
   <include layout="@layout/include_cartpayinfo_lin"/>

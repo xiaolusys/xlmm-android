@@ -79,8 +79,8 @@ public class RegisterActivity extends BaseSwipeBackCompatActivity
                 String result = registerBean.getResult();
                 if (result.equals("0")) {
                   JUtils.Toast("已经注册过该手机号");
-                } else if (result.equals("7")) {
-                  return;
+                } else if (result.equals("OK")) {
+                  JUtils.Toast("获取验证码成功");
                 }
               }
             });
@@ -94,7 +94,7 @@ public class RegisterActivity extends BaseSwipeBackCompatActivity
               @Override public void onNext(RegisterBean registerBean) {
                 super.onNext(registerBean);
                 String result = registerBean.getResult();
-                if (result.equals("7")) {
+                if (result.equals("0")) {
                   Intent intent =
                       new Intent(RegisterActivity.this, SettingPasswordActivity.class);
                   Bundle bundle = new Bundle();
