@@ -123,7 +123,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
             if ((refund_state == XlmmConst.REFUND_STATE_SELLER_AGREED)
             || (refund_state == XlmmConst.REFUND_STATE_BUYER_APPLY)){
               List<String> mDatas = new ArrayList<String>();
-              fillPicPath(mDatas, (String) (refundDetailBean.getProof_pic()));
+              fillPicPath(mDatas, (String) (refundDetailBean.getProof_pic().toString()));
               Log.d(TAG, "proofpic " + refundDetailBean.getProof_pic());
 
               mHorizontalScrollView = (MyHorizontalScrollView) findViewById(R.id.id_horizontalScrollView);
@@ -132,6 +132,18 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
               //设置适配器
               mHorizontalScrollView.initDatas(mAdapter);
             }
+          }
+
+          @Override
+          public void onCompleted() {
+            super.onCompleted();
+          }
+
+          @Override
+          public void onError(Throwable e) {
+
+            Log.e(TAG, "getRefundDetailBean error:, "   + e.toString());
+            super.onError(e);
           }
         });
   }
@@ -145,18 +157,21 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
   }
 
   private void fillDataToView(AllRefundsBean.ResultsEntity refundDetailBean) {
+    JUtils.Log(TAG,"fillDataToView ");
 
-    //TextView tx_order_id = (TextView) findViewById(R.id.tx_refund_no);
     tx_order_id.setText("订单编号" + refundDetailBean.getRefund_no());
 
-    //TextView tx_refund_state = (TextView) findViewById(R.id.tx_refund_state);
     tx_refund_state.setText(refundDetailBean.getStatus_display());
 
-    //ImageView img_good = (ImageView) findViewById(R.id.img_good);
     ViewUtils.loadImgToImgView(this, img_good, refundDetailBean.getPic_path());
 
     //TextView tx_good_name = (TextView) findViewById(R.id.tx_good_name);
-    tx_good_name.setText(refundDetailBean.getTitle());
+    if(refundDetailBean.getTitle().length() >= 9) {
+      tx_good_name.setText(refundDetailBean.getTitle().substring(0, 8) + "...");
+    }
+    else {
+      tx_good_name.setText(refundDetailBean.getTitle());
+    }
     //TextView tx_good_price = (TextView) findViewById(R.id.tx_good_price);
     tx_good_price.setText("¥" + refundDetailBean.getTotal_fee());
 
@@ -166,7 +181,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     tx_good_num.setText("x" + refundDetailBean.getRefund_num());
 
     //TextView tx_refund_num = (TextView) findViewById(R.id.tx_refund_num);
-    tx_refund_num.setText(refundDetailBean.getRefund_num());
+    tx_refund_num.setText(Integer.toString(refundDetailBean.getRefund_num()));
 
     //TextView tx_refundfee = (TextView) findViewById(R.id.tx_refundfee);
     tx_refundfee.setText("¥" + refundDetailBean.getRefund_fee());
@@ -192,7 +207,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
   }
 
   private void fillPicPath(List<String> mDatas, String pics){
-    if((null == pics) || (pics.equals(""))) return;
+    if((null == pics) || (pics.equals("")) || (pics.equals("[]"))) return;
     String[] strArray = null;
     strArray = pics.split(",");
     for(int i = 0; i< strArray.length;i++) {
