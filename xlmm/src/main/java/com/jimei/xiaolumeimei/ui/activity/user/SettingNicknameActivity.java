@@ -133,6 +133,13 @@ public class SettingNicknameActivity extends BaseSwipeBackCompatActivity impleme
                     public void onCompleted() {
                         super.onCompleted();
                     }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                        Log.e(TAG, " error:, "   + e.toString());
+                        super.onError(e);
+                    }
                 });
     }
 

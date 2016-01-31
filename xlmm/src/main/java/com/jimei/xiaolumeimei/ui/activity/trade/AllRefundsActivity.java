@@ -101,6 +101,18 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity implements V
 
                         Log.i(TAG, allRefundsBean.toString());
                     }
+
+                    @Override
+                    public void onCompleted() {
+                        super.onCompleted();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                        Log.e(TAG, " error:, "   + e.toString());
+                        super.onError(e);
+                    }
                 });
     }
 

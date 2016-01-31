@@ -271,6 +271,18 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
             finish();
 
           }
+
+          @Override
+          public void onCompleted() {
+            super.onCompleted();
+          }
+
+          @Override
+          public void onError(Throwable e) {
+
+            Log.e(TAG, " error:, "   + e.toString());
+            super.onError(e);
+          }
         });
   }
 
@@ -445,6 +457,18 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
           @Override public void onNext(QiniuTokenBean resp) {
             uptoken = resp.getUptoken();
             Log.i(TAG,"getQiniuToken "+ resp.toString());
+          }
+
+          @Override
+          public void onCompleted() {
+            super.onCompleted();
+          }
+
+          @Override
+          public void onError(Throwable e) {
+
+            Log.e(TAG, " error:, "   + e.toString());
+            super.onError(e);
           }
         });
   }

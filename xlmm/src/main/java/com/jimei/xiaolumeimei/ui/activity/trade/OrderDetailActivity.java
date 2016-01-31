@@ -96,6 +96,18 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
 
             Log.i(TAG,"order_id "+order_id + " " + orderDetailBean.toString());
           }
+
+          @Override
+          public void onCompleted() {
+            super.onCompleted();
+          }
+
+          @Override
+          public void onError(Throwable e) {
+
+            Log.e(TAG, " error:, "   + e.toString());
+            super.onError(e);
+          }
         });
   }
 
@@ -252,6 +264,18 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
             } catch (IOException e) {
               e.printStackTrace();
             }
+          }
+
+          @Override
+          public void onCompleted() {
+            super.onCompleted();
+          }
+
+          @Override
+          public void onError(Throwable e) {
+
+            Log.e(TAG, " error:, "   + e.toString());
+            super.onError(e);
           }
         });
 

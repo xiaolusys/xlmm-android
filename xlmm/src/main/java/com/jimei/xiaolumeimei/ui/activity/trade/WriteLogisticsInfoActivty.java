@@ -121,6 +121,18 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity imple
             Log.i(TAG,"commit_logistics_info "+ resp.toString());
             finish();
           }
+
+          @Override
+          public void onCompleted() {
+            super.onCompleted();
+          }
+
+          @Override
+          public void onError(Throwable e) {
+
+            Log.e(TAG, " error:, "   + e.toString());
+            super.onError(e);
+          }
         });
   }
 }
