@@ -108,6 +108,7 @@ public class CameraUtils
   {
     try
     {
+      Log.i("decodeFile", "length " + f.length()/1024);
       BitmapFactory.Options o = new BitmapFactory.Options();
       o.inJustDecodeBounds = true;
       BitmapFactory.decodeStream(new FileInputStream(f), null, o);

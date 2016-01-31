@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -29,6 +30,7 @@ import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
+import com.jimei.xiaolumeimei.utils.BitmapUtil;
 import com.jimei.xiaolumeimei.utils.CameraUtils;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -43,6 +45,9 @@ import com.qiniu.android.storage.UpProgressHandler;
 import com.qiniu.android.storage.UploadManager;
 import com.qiniu.android.storage.UploadOptions;
 import com.squareup.okhttp.ResponseBody;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import org.json.JSONObject;
 import rx.schedulers.Schedulers;
@@ -90,6 +95,8 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
   File tmpPic[] = new File[3];
   String uploadPic[] = new String[3];
   int picNum = 0;
+  // 重用 uploadManager。一般地，只需要创建一个 uploadManager 对象
+  UploadManager uploadManager = new UploadManager();
 
   @Override protected void setListener() {
     toolbar.setOnClickListener(this);
@@ -215,6 +222,7 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
         break;
       case R.id.btn_commit:
         desc = et_refund_info.getText().toString().trim();
+        proof_pic = "";
         for(int i=0; i< picNum;i++) {
           if(uploadPic[i] != null) {
             if(i != picNum -1)
@@ -475,12 +483,24 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
 
   private void uploadFile(File file){
     Log.i(TAG, "qiniu uploadFile");
-        // 重用 uploadManager。一般地，只需要创建一个 uploadManager 对象
-    UploadManager uploadManager = new UploadManager();
-    File data = file;
+    //compress first
+    byte[] file_byte = {};
+    try {
+      Bitmap b = CameraUtils.decodeFile(file);
+      file_byte = compressImage(b);
+
+    }
+    catch (Exception e){
+      e.printStackTrace();
+      JUtils.Log(TAG,"compress file failed.return");
+      JUtils.Toast("文件压缩失败,请重新选择文件!");
+      return;
+    }
+    //upload
+    //File data = file;
     String key = file.getName();
     String token = uptoken;
-    uploadManager.put(data, key, token,
+    uploadManager.put(file_byte, key, token,
         new UpCompletionHandler() {
           @Override
           public void complete(String key, ResponseInfo info, JSONObject res) {
@@ -495,6 +515,24 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
                         Log.i("qiniu", "percent key=" +key + ": " + percent);
                       }
                     }, null));
+  }
+
+  public byte[] compressImage(Bitmap image) {
+
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    image.compress(Bitmap.CompressFormat.JPEG, 100,
+            baos);// 质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
+    JUtils.Log(TAG, "before compressed file length "+baos.toByteArray().length /1024);
+    int options = 100;
+    while (baos.toByteArray().length / 1024 > 300) { // 循环判断如果压缩后图片是否大于100kb,大于继续压缩
+      baos.reset();// 重置baos即清空baos
+      image.compress(Bitmap.CompressFormat.JPEG, options,
+              baos);// 这里压缩options%，把压缩后的数据存放到baos中
+      options -= 5;// 每次都减少10
+      JUtils.Log(TAG, "compressed file length "+baos.toByteArray().length /1024);
+    }
+
+    return  baos.toByteArray();
   }
 
   private void showPic(){
