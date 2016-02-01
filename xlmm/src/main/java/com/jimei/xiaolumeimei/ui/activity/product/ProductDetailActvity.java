@@ -38,6 +38,7 @@ import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
+import com.jimei.xiaolumeimei.utils.BitmapUtil;
 import com.jimei.xiaolumeimei.utils.DisplayUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.widget.FlowLayout;
@@ -144,14 +145,20 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
             List<String> contentImgs =
                 productDetailBean.getProductModel().getContentImgs();
 
-            List<SubsamplingScaleImageView> viewList = new ArrayList<>();
+            //List<SubsamplingScaleImageView> viewList = new ArrayList<>();
+            List<ImageView> viewList = new ArrayList<>();
 
             for (String s : contentImgs) {
-              SubsamplingScaleImageView scaleImageView =
-                  new SubsamplingScaleImageView(ProductDetailActvity.this);
+              //SubsamplingScaleImageView scaleImageView =
+              //    new SubsamplingScaleImageView(ProductDetailActvity.this);
               //scaleImageView.setMinimumScaleType(
               //    SubsamplingScaleImageView.SCALE_TYPE_CENTER_INSIDE);
+
+              ImageView scaleImageView = new ImageView(ProductDetailActvity.this);
               viewList.add(scaleImageView);
+
+
+
             }
 
             for (int i = 0; i < contentImgs.size(); i++) {
@@ -168,13 +175,15 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
                   try {
                     head_img = "http://image.xiaolu.so/"
                             + URLEncoder.encode(temp[1], "utf-8")
-                            + "?imageMogr2/format/jpg/size-limit/512k/quality/85";
+                            + "?imageMogr2/format/jpg/thumbnail/640/quality/90";
                   } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                   }
                 }
               }
 
+
+              final String finalHead_img = head_img;
               OkHttpUtils.get()
                   .url(head_img)
                   .build()
@@ -186,16 +195,33 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
                     @Override public void onResponse(Bitmap response) {
                       if (response != null) {
                         try {
-                          JUtils.Log("ProductDetail", "bmp size" + response.getByteCount()/1024);
+                          JUtils.Log("ProductDetail", "bmp size= " + response.getByteCount()/1024 + " height= " + response.getHeight());
                           int width = DisplayUtils.getScreenW(ProductDetailActvity.this);
 
                           int nh = (int) (response.getHeight() * (420.0
                               / response.getWidth()));
-                          Bitmap scaled =
-                              Bitmap.createScaledBitmap(response, 480, nh, true);
-                          JUtils.Log("ProductDetail", "sacled bmp size" + scaled.getByteCount()/1024);
+                          //if (nh > 4096) nh = 4096;
+                          Bitmap scaled = null;
 
-                          viewList.get(finalI).setImage(ImageSource.bitmap(scaled));
+                          if(response.getHeight() > 4096) {
+                            JUtils.Log("ProductDetail", ">4096,just get 2048 height bmp ");
+                            scaled = Bitmap.createBitmap(response, 0, 0, 640, 2048);
+                            viewList.get(finalI).setImageBitmap(scaled);
+                          }
+                          else {
+                            JUtils.Log("ProductDetail", "use glide");
+                            Glide.with(ProductDetailActvity.this)
+                                    .load(finalHead_img)
+                                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                    .placeholder(R.drawable.parceholder)
+                                    .centerCrop()
+                                    .into(viewList.get(finalI1));
+                          }
+
+                          //Bitmap scaled = Bitmap.createScaledBitmap(response, 480, nh, true);
+
+
+
                           longimageview_content.addView(viewList.get(finalI1));
                         } catch (Exception e) {
                           e.printStackTrace();
