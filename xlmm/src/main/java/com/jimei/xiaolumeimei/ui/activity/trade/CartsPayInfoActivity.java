@@ -42,10 +42,9 @@ import rx.schedulers.Schedulers;
  */
 public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
-  String TAG = "CartsPayInfoActivity";
-
   private static final int REQUEST_CODE_PAYMENT = 1;
   private static final int REQUEST_CODE_COUPONT = 2;
+  String TAG = "CartsPayInfoActivity";
   CartsModel model = new CartsModel();
   TradeModel tradeModel = new TradeModel();
   AddressModel addressModel = new AddressModel();
@@ -200,17 +199,26 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         break;
 
       case R.id.confirm:
+
+        JUtils.Log("CartsPayinfo", "isCoupon" + isCoupon);
+        JUtils.Log("CartsPayinfo", "iswx" + isWx);
+        JUtils.Log("CartsPayinfo", "isalipay" + isAlipay);
+
         if (isCoupon) {
           if (isWx) {
             payWithCoupon("wx");
           } else if (isAlipay) {
             payWithCoupon("alipay");
+          } else {
+            JUtils.Toast("请选择支付方式");
           }
         } else {
           if (isAlipay) {
             payWithNoCoupon("alipay");
           } else if (isWx) {
             payWithNoCoupon("wx");
+          } else {
+            JUtils.Toast("请选择支付方式");
           }
         }
 
@@ -225,6 +233,11 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   }
 
   private void payWithNoCoupon(String pay_method) {
+    JUtils.Log("CartsPayinfo",
+        cart_ids + "    " + addr_id + "    " + pay_method + "    " +
+            payment + "    " + post_fee + "    " +
+            discount_fee + "    " + total_fee + "    " + uuid);
+
     tradeModel.shoppingcart_create(cart_ids, addr_id, pay_method, payment, post_fee,
         discount_fee, total_fee, uuid)
         .subscribeOn(Schedulers.io())
@@ -287,15 +300,13 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
              */
         String errorMsg = data.getExtras().getString("error_msg"); // 错误信息
         String extraMsg = data.getExtras().getString("extra_msg"); // 错误信息
-        if(result.equals( "cancel")) {
+        if (result.equals("cancel")) {
           //wexin alipay already showmsg
-        }
-        else if(result.equals( "success")){
+        } else if (result.equals("success")) {
           JUtils.Toast("支付成功！");
           startActivity(new Intent(CartsPayInfoActivity.this, MainActivity.class));
           finish();
-        }
-        else {
+        } else {
           showMsg(result, errorMsg, extraMsg);
           //JUtils.Toast(result + "" + errorMsg + "" + extraMsg);
         }
@@ -321,11 +332,10 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
       str += "\n" + msg2;
     }
     JUtils.Log(TAG, "charge result" + str);
-    if(title.equals( "fail")){
-      str ="支付失败，请重试！";
-    }
-    else if(title.equals( "invalid")){
-      str ="支付失败，支付软件未安装完整！";
+    if (title.equals("fail")) {
+      str = "支付失败，请重试！";
+    } else if (title.equals("invalid")) {
+      str = "支付失败，支付软件未安装完整！";
     }
 
     AlertDialog.Builder builder = new AlertDialog.Builder(CartsPayInfoActivity.this);
