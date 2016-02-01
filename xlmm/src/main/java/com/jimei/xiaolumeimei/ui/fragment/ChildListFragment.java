@@ -37,8 +37,15 @@ public class ChildListFragment extends BaseFragment {
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<ChildListBean>() {
           @Override public void onNext(ChildListBean childListBean) {
-            List<ChildListBean.ResultsEntity> results = childListBean.getResults();
-            mChildListAdapter.update(results);
+
+            try {
+
+              if (childListBean != null) {
+                List<ChildListBean.ResultsEntity> results = childListBean.getResults();
+                mChildListAdapter.update(results);
+              }
+            } catch (Exception ex) {
+            }
           }
 
           @Override public void onCompleted() {

@@ -43,7 +43,13 @@ public class TongkuanActivity extends BaseSwipeBackCompatActivity {
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<List<ProductBean>>() {
           @Override public void onNext(List<ProductBean> productBeans) {
-            mTongkuanAdapter.update(productBeans);
+
+            try {
+              if (productBeans != null) {
+                mTongkuanAdapter.update(productBeans);
+              }
+            } catch (Exception e) {
+            }
           }
 
           @Override public void onCompleted() {

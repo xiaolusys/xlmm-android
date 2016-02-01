@@ -37,12 +37,19 @@ public class LadyListFragment extends BaseFragment {
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<LadyListBean>() {
           @Override public void onNext(LadyListBean ladyListBean) {
-            List<LadyListBean.ResultsEntity> results = ladyListBean.getResults();
-            mLadyListAdapter.update(results);
+
+            try {
+              if (ladyListBean != null) {
+                List<LadyListBean.ResultsEntity> results = ladyListBean.getResults();
+                mLadyListAdapter.update(results);
+              }
+            } catch (Exception ex) {
+            }
           }
+
           @Override public void onCompleted() {
             super.onCompleted();
-           loading.post(loading::stop);
+            loading.post(loading::stop);
           }
         });
   }

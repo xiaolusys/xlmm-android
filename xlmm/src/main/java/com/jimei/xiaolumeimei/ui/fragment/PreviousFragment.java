@@ -50,13 +50,20 @@ public class PreviousFragment extends BaseFragment {
         .subscribe(new ServiceResponse<IndexBean>() {
           @Override public void onNext(IndexBean indexBean) {
 
-            List<IndexBean.product> female_list = indexBean.getFemale_list();
-            List<IndexBean.product> child_list = indexBean.getChild_list();
-            List<IndexBean.product> list = new ArrayList<>();
-            list.addAll(female_list);
-            list.addAll(child_list);
-            mPreviousAdapter.update(list);
-            mPreviousAdapter.notifyDataSetChanged();
+            try {
+
+              if (indexBean != null) {
+                List<IndexBean.product> female_list = indexBean.getFemale_list();
+                List<IndexBean.product> child_list = indexBean.getChild_list();
+                List<IndexBean.product> list = new ArrayList<>();
+                list.addAll(female_list);
+                list.addAll(child_list);
+                mPreviousAdapter.update(list);
+                mPreviousAdapter.notifyDataSetChanged();
+              }
+            } catch (NullPointerException ex) {
+
+            }
           }
 
           @Override public void onCompleted() {
@@ -128,38 +135,38 @@ public class PreviousFragment extends BaseFragment {
     xRecyclerView.setAdapter(mPreviousAdapter);
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
-       @Override public void onRefresh() {
-         model.getPreviousList()
-             .subscribeOn(Schedulers.newThread())
-             .subscribe(new ServiceResponse<IndexBean>() {
-               @Override
-               public void onNext(IndexBean indexBean) {
-                 List<IndexBean.product> child_list =
-                     indexBean.getChild_list();
-                 List<IndexBean.product> female_list =
-                     indexBean.getFemale_list();
-                 List<IndexBean.product> list =
-                     new ArrayList<>();
-                 list.addAll(child_list);
-                 list.addAll(female_list);
-                 mPreviousAdapter.updateWithClear(list);
-                 mPreviousAdapter.notifyDataSetChanged();
-               }
+                                       @Override public void onRefresh() {
+                                         model.getPreviousList()
+                                             .subscribeOn(Schedulers.newThread())
+                                             .subscribe(new ServiceResponse<IndexBean>() {
+                                               @Override
+                                               public void onNext(IndexBean indexBean) {
+                                                 List<IndexBean.product> child_list =
+                                                     indexBean.getChild_list();
+                                                 List<IndexBean.product> female_list =
+                                                     indexBean.getFemale_list();
+                                                 List<IndexBean.product> list =
+                                                     new ArrayList<>();
+                                                 list.addAll(child_list);
+                                                 list.addAll(female_list);
+                                                 mPreviousAdapter.updateWithClear(list);
+                                                 mPreviousAdapter.notifyDataSetChanged();
+                                               }
 
-               @Override public void onCompleted() {
-                 super.onCompleted();
-                 xRecyclerView.post(
-                     xRecyclerView::refreshComplete);
-               }
-             });
-       }
+                                               @Override public void onCompleted() {
+                                                 super.onCompleted();
+                                                 xRecyclerView.post(
+                                                     xRecyclerView::refreshComplete);
+                                               }
+                                             });
+                                       }
 
-       @Override public void onLoadMore() {
+                                       @Override public void onLoadMore() {
 
-         xRecyclerView.postDelayed(
-             xRecyclerView::loadMoreComplete, 1000);
-       }
-     }
+                                         xRecyclerView.postDelayed(
+                                             xRecyclerView::loadMoreComplete, 1000);
+                                       }
+                                     }
 
     );
   }

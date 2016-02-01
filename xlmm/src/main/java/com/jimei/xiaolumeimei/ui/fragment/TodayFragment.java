@@ -52,9 +52,16 @@ public class TodayFragment extends BaseFragment {
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<ProductListBean>() {
           @Override public void onNext(ProductListBean productListBean) {
-            List<ProductListBean.ResultsEntity> results = productListBean.getResults();
-            totalPages = productListBean.getCount() / page_size;
-            mTodayAdapter.update(results);
+
+            try {
+              if (productListBean != null) {
+                List<ProductListBean.ResultsEntity> results =
+                    productListBean.getResults();
+                totalPages = productListBean.getCount() / page_size;
+                mTodayAdapter.update(results);
+              }
+            } catch (NullPointerException ex) {
+            }
           }
 
           @Override public void onCompleted() {
