@@ -168,7 +168,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
                   try {
                     head_img = "http://image.xiaolu.so/"
                             + URLEncoder.encode(temp[1], "utf-8")
-                            + "?imageMogr2/format/jpg/quality/85";
+                            + "?imageMogr2/format/jpg/size-limit/512k/quality/85";
                   } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                   }
@@ -186,12 +186,14 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
                     @Override public void onResponse(Bitmap response) {
                       if (response != null) {
                         try {
+                          JUtils.Log("ProductDetail", "bmp size" + response.getByteCount()/1024);
                           int width = DisplayUtils.getScreenW(ProductDetailActvity.this);
 
                           int nh = (int) (response.getHeight() * (420.0
                               / response.getWidth()));
                           Bitmap scaled =
                               Bitmap.createScaledBitmap(response, 480, nh, true);
+                          JUtils.Log("ProductDetail", "sacled bmp size" + scaled.getByteCount()/1024);
 
                           viewList.get(finalI).setImage(ImageSource.bitmap(scaled));
                           longimageview_content.addView(viewList.get(finalI1));
