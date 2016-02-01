@@ -316,9 +316,28 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
   {
 
     AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(this);
-    myAlertDialog.setTitle("照片选择");
+    myAlertDialog.setTitle("请选择照片模式");
     //myAlertDialog.setMessage("选择照片模式");
 
+    final String[] arrayPhotoType = new String[] { "照相机", "相册"};
+    myAlertDialog.setItems(arrayPhotoType, new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialog, int which) {
+        JUtils.Log(TAG,"click item " + arrayPhotoType[which]);
+        if(0 == which){
+          CameraUtils.pictureActionIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+          startActivityForResult(CameraUtils.pictureActionIntent, CameraUtils.CAMERA_PICTURE);
+        }
+        else if(1 == which){
+          CameraUtils.pictureActionIntent = new Intent(Intent.ACTION_GET_CONTENT, null);
+          CameraUtils.pictureActionIntent.setType("image/*");
+          CameraUtils.pictureActionIntent.putExtra("return-data", true);
+          startActivityForResult(CameraUtils.pictureActionIntent, CameraUtils.GALLERY_PICTURE);
+        }
+      }
+    });
+
+    /*
     myAlertDialog.setPositiveButton("相册", new DialogInterface.OnClickListener(){
       public void onClick(DialogInterface arg0, int arg1)
       {
@@ -335,7 +354,7 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
         CameraUtils.pictureActionIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(CameraUtils.pictureActionIntent, CameraUtils.CAMERA_PICTURE);
       }
-    });
+    });*/
     myAlertDialog.show();
 
   }
