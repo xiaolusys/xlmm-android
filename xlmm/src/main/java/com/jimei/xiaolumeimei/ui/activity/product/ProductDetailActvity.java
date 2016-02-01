@@ -440,8 +440,16 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
         break;
 
       case R.id.rv_cart:
+        if (LoginUtils.checkLoginState(getApplicationContext())) {
+          startActivity(new Intent(ProductDetailActvity.this, CartActivity.class));
+        } else {
+          Intent intent = new Intent(ProductDetailActvity.this, LoginActivity.class);
+          Bundle bundle = new Bundle();
+          bundle.putString("login", "cart");
+          intent.putExtras(bundle);
+          startActivity(intent);
+        }
 
-        startActivity(new Intent(ProductDetailActvity.this, CartActivity.class));
 
         break;
     }
