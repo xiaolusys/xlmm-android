@@ -1,5 +1,6 @@
 package com.jimei.xiaolumeimei.ui.fragment;
 
+import android.os.AsyncTask;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,8 @@ import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.victor.loading.rotate.RotateLoading;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import rx.schedulers.Schedulers;
 
@@ -71,6 +74,27 @@ public class PreviousFragment extends BaseFragment {
             loading.post(loading::stop);
           }
         });
+
+    new AsyncTask<Void, Long, Void>() {
+      @Override protected Void doInBackground(Void... params) {
+        long time = calcLeftTime();
+        while (true) {
+          try {
+            Thread.sleep(1000);
+            time -= 1000;
+            publishProgress(time);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
+      }
+
+      @Override protected void onProgressUpdate(Long... values) {
+        super.onProgressUpdate(values);
+        countTime.updateShow(values[0]);
+      }
+    }.execute();
+
   }
 
   @Override protected void initViews() {
@@ -169,5 +193,28 @@ public class PreviousFragment extends BaseFragment {
                                      }
 
     );
+  }
+
+  private long calcLeftTime() {
+
+    Date now = new Date();
+    Date nextDay14PM = new Date();
+    Calendar calendar = Calendar.getInstance();
+
+    calendar.setTime(nextDay14PM);
+    calendar.set(Calendar.HOUR_OF_DAY, 14);
+    calendar.set(Calendar.MINUTE, 0);
+    calendar.set(Calendar.SECOND, 0);
+    calendar.set(Calendar.MILLISECOND, 0);
+
+    nextDay14PM = calendar.getTime();
+
+    long left;
+    if (nextDay14PM.getTime() - now.getTime() > 0) {
+      left = nextDay14PM.getTime() - now.getTime();
+      return left;
+    } else {
+      return 0;
+    }
   }
 }

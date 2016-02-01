@@ -479,6 +479,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
   }
 
   private long calcLeftTime(String crtTime) {
+    JUtils.Log("ProductDetailActvity", "calcLeftTime");
     long left = 0;
     Date now = new Date();
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -487,25 +488,27 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
       Date crtdate = format.parse(crtTime);
       if (crtdate.getTime() - now.getTime() > 0) {
         left = crtdate.getTime() - now.getTime();
+        JUtils.Log("ProductDetailActvity",
+            crtdate.getTime() + "　　　" + now.getTime() + "　　　" + left);
         return left;
-      } else {
-        return 0;
       }
     } catch (Exception e) {
       e.printStackTrace();
     }
 
-    return left;
+    return 0;
   }
 
   private long calcLeftTime1(String crtTime) {
-    long left = 0;
+    JUtils.Log("ProductDetailActvity", crtTime + " calcLeftTime1");
+    long left;
     Date now = new Date();
 
-    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     try {
 
       Date nextDay14PM = format.parse(crtTime);
+      JUtils.Log("ProductDetailActvity", nextDay14PM.getTime() + " calcLeftTime1");
       Calendar calendar = Calendar.getInstance();
       calendar.setTime(nextDay14PM);
       calendar.add(Calendar.DATE, 1);
@@ -513,17 +516,22 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
       calendar.set(Calendar.MINUTE, 0);
       calendar.set(Calendar.SECOND, 0);
       calendar.set(Calendar.MILLISECOND, 0);
+      nextDay14PM = calendar.getTime();
+
+      JUtils.Log("ProductDetailActvity", nextDay14PM.getTime() + " calcLeftTime1");
 
       if (nextDay14PM.getTime() - now.getTime() > 0) {
         left = nextDay14PM.getTime() - now.getTime();
+        JUtils.Log("ProductDetailActvity",
+            nextDay14PM.getTime() + "　　　" + now.getTime() + "　　　" + left);
         return left;
-      } else {
-        return 0;
       }
     } catch (Exception e) {
+      JUtils.Log("ProductDetailActvity", e.getMessage());
+
       e.printStackTrace();
     }
 
-    return left;
+    return 0;
   }
 }

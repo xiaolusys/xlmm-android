@@ -1,5 +1,6 @@
 package com.jimei.xiaolumeimei.ui.fragment;
 
+import android.os.AsyncTask;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -72,7 +73,27 @@ public class TodayFragment extends BaseFragment {
 
     //long time = calcLeftTime();
 
-    countTime.start(20000000l);
+    //countTime.start(20000000l);
+
+    new AsyncTask<Void, Long, Void>() {
+      @Override protected Void doInBackground(Void... params) {
+        long time = calcLeftTime();
+        while (true) {
+          try {
+            Thread.sleep(1000);
+            time -= 1000;
+            publishProgress(time);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
+      }
+
+      @Override protected void onProgressUpdate(Long... values) {
+        super.onProgressUpdate(values);
+        countTime.updateShow(values[0]);
+      }
+    }.execute();
   }
 
   @Override protected void initViews() {
@@ -99,7 +120,7 @@ public class TodayFragment extends BaseFragment {
 
     xRecyclerView.addHeaderView(head);
 
-    //countTime.start(200000l);
+    //countTime.start(calcLeftTime());
 
     model.getTodayPost()
         .subscribeOn(Schedulers.newThread())
@@ -194,6 +215,8 @@ public class TodayFragment extends BaseFragment {
     calendar.set(Calendar.MINUTE, 0);
     calendar.set(Calendar.SECOND, 0);
     calendar.set(Calendar.MILLISECOND, 0);
+
+    nextDay14PM = calendar.getTime();
 
     long left;
     if (nextDay14PM.getTime() - now.getTime() > 0) {

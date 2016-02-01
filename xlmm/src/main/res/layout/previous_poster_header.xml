@@ -34,6 +34,7 @@
             android:textSize="20dp" />
 
         <cn.iwgang.countdownview.CountdownView
+            android:layout_marginTop="6dp"
             android:id="@+id/countTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
