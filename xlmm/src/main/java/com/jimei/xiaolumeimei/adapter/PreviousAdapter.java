@@ -63,21 +63,21 @@ public class PreviousAdapter extends RecyclerView.Adapter<PreviousAdapter.Previo
     IndexBean.Productmodel product_model = products.getProduct_model();
 
     boolean isSaleopen = products.is_saleopen();
-    if (isSaleopen) {
-
-      boolean isSaleOut = product_model.isIsSaleOut();
-      boolean isSingleSpec = product_model.isIsSingleSpec();
-
-      if (isSaleOut && isSingleSpec) {
-        holder.saleout.setVisibility(View.VISIBLE);
-      } else {
-        holder.saleout.setVisibility(View.INVISIBLE);
-      }
-    } else {
-      holder.saleout.setVisibility(View.VISIBLE);
-    }
-
     try {
+      if (isSaleopen) {
+
+        boolean isSaleOut = product_model.isIsSaleOut();
+        boolean isSingleSpec = product_model.isIsSingleSpec();
+
+        if (isSaleOut && isSingleSpec) {
+          holder.saleout.setVisibility(View.VISIBLE);
+        } else {
+          holder.saleout.setVisibility(View.INVISIBLE);
+        }
+      } else {
+        holder.saleout.setVisibility(View.VISIBLE);
+      }
+
       if (product_model.getName().length() <= 9) {
         holder.childlistName.setText(product_model.getName());
       } else {

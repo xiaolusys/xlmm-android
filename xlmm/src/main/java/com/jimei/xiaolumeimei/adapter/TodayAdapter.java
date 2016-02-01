@@ -66,6 +66,7 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.TodayVH> {
         products.getProductModel();
 
     boolean isSaleopen = products.isIsSaleopen();
+    try {
     if (isSaleopen) {
 
       boolean isSaleOut = productModel.isIsSaleOut();
@@ -80,7 +81,6 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.TodayVH> {
       holder.saleout.setVisibility(View.VISIBLE);
     }
 
-    try {
 
       if (productModel.getName().length() <= 9) {
         holder.childlistName.setText(productModel.getName());

@@ -65,6 +65,7 @@ public class TongkuanAdapter extends RecyclerView.Adapter<TongkuanAdapter.Tongku
     ProductModelBean productModel = productBean.product_model;
 
     boolean isSaleopen = productBean.is_saleopen;
+    try {
     if (isSaleopen) {
 
       boolean isSaleOut = productModel.is_sale_out;
@@ -79,7 +80,7 @@ public class TongkuanAdapter extends RecyclerView.Adapter<TongkuanAdapter.Tongku
       holder.saleout.setVisibility(View.VISIBLE);
     }
 
-    try {
+
       if (productBean.name.length() <= 9) {
         holder.childlistName.setText(productBean.name);
       } else {
