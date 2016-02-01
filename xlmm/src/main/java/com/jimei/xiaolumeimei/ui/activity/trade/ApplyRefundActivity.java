@@ -86,10 +86,7 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
-    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-    btn_commit.setFocusable(true);
-    btn_commit.setFocusableInTouchMode(true);
-    btn_commit.requestFocus();
+
 
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
@@ -141,7 +138,7 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
 
         break;
       case R.id.et_refund_info:
-        Log.i(TAG,"et_refund_info ");
+        Log.i(TAG,"click et_refund_info ");
         et_refund_info.setCursorVisible(true);
         et_refund_info.setFocusable(true);
         et_refund_info.setFocusableInTouchMode(true);

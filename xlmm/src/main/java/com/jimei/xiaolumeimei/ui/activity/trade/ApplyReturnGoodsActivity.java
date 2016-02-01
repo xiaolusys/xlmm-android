@@ -170,7 +170,7 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
     }
 
   @Override protected void initViews() {
-    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+    //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
@@ -240,6 +240,8 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
         break;
       case R.id.et_refund_info:
         Log.i(TAG,"et_refund_info ");
+        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
         et_refund_info.setCursorVisible(true);
         et_refund_info.setFocusable(true);
         et_refund_info.setFocusableInTouchMode(true);

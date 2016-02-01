@@ -178,7 +178,7 @@
             android:paddingRight="4dp"
             />
 
-        <EditText
+        <com.jimei.xiaolumeimei.widget.ClearEditText
             android:id="@+id/et_refund_info"
             android:layout_width="match_parent"
             android:layout_height="140px"
@@ -188,10 +188,12 @@
             android:layout_marginLeft="10px"
             android:layout_marginRight="10px"
             android:layout_marginTop="10px"
+            android:padding="4dp"
             android:background="@drawable/text_frame"
             android:focusable="false"
             android:cursorVisible="false"
-            android:gravity="top" />
+            android:gravity="top"
+            android:maxLength="80"/>
 
       </RelativeLayout>
 

@@ -38,9 +38,10 @@
 
   <ScrollView
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
+      android:layout_height="match_parent"
       android:layout_below="@+id/app_bar_layout"
       android:padding="4dp"
+      android:layout_above="@+id/btn_commit"
       >
 
     <LinearLayout
@@ -210,21 +211,23 @@
             android:paddingRight="4dp"
             />
 
-        <EditText
+        <com.jimei.xiaolumeimei.widget.ClearEditText
             android:id="@+id/et_refund_info"
             android:layout_width="match_parent"
-            android:layout_height="140px"
+            android:layout_height="180px"
             android:layout_below="@+id/et_refund_reason"
             android:layout_marginLeft="10px"
             android:layout_marginRight="10px"
             android:layout_marginTop="10px"
+            android:padding="4dp"
             android:background="@drawable/text_frame"
             android:cursorVisible="false"
             android:focusable="false"
             android:text="请输入退货说明"
             android:textSize="15sp"
             android:gravity="top"
-            />
+            android:maxLength="80"
+        />
 
       </RelativeLayout>
 
@@ -288,9 +291,9 @@
         </RelativeLayout>
       </RelativeLayout>
 
+
     </LinearLayout>
   </ScrollView>
-
 
   <Button
       android:id="@+id/btn_commit"
@@ -304,6 +307,7 @@
       android:textSize="15sp"
       android:background="@drawable/shape_common"
       />
+
 
 
 </RelativeLayout>
