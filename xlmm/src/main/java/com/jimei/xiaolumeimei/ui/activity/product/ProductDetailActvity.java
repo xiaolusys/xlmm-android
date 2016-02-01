@@ -53,6 +53,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -118,7 +119,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
             if ((null == productDetailBean.getOffshelfTime())
                 || (productDetailBean.getOffshelfTime().equals(""))) {
 
-              long time = 38 * 60 * 60 * 1000;
+              long time = calcLeftTime1(productDetailBean.getSaleTime());
 
               countdownView.start(time);
             } else {
@@ -407,8 +408,6 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
                   badge.setBadgeCount(num);
                 }
               });
-
-          countdownView.start(1200000l);
         }
 
         break;
@@ -474,6 +473,35 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
       Date crtdate = format.parse(crtTime);
       if (crtdate.getTime() - now.getTime() > 0) {
         left = crtdate.getTime() - now.getTime();
+        return left;
+      } else {
+        return 0;
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    return left;
+  }
+
+  private long calcLeftTime1(String crtTime) {
+    long left = 0;
+    Date now = new Date();
+
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    try {
+
+      Date nextDay14PM = format.parse(crtTime);
+      Calendar calendar = Calendar.getInstance();
+      calendar.setTime(nextDay14PM);
+      calendar.add(Calendar.DATE, 1);
+      calendar.set(Calendar.HOUR_OF_DAY, 14);
+      calendar.set(Calendar.MINUTE, 0);
+      calendar.set(Calendar.SECOND, 0);
+      calendar.set(Calendar.MILLISECOND, 0);
+
+      if (nextDay14PM.getTime() - now.getTime() > 0) {
+        left = nextDay14PM.getTime() - now.getTime();
         return left;
       } else {
         return 0;

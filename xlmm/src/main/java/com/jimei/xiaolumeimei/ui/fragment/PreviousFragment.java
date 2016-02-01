@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import cn.iwgang.countdownview.CountdownView;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
@@ -35,6 +36,7 @@ public class PreviousFragment extends BaseFragment {
   private ImageView post2;
   private RotateLoading loading;
   private View head;
+  private CountdownView countTime;
 
   @Override protected int provideContentViewId() {
     return R.layout.previous_fragment;
@@ -83,6 +85,7 @@ public class PreviousFragment extends BaseFragment {
 
     post1 = (ImageView) head.findViewById(R.id.post_1);
     post2 = (ImageView) head.findViewById(R.id.post_2);
+    countTime = (CountdownView) head.findViewById(R.id.countTime);
 
     xRecyclerView.addHeaderView(head);
 

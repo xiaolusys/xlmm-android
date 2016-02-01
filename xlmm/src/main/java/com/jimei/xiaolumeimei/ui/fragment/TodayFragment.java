@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
+import cn.iwgang.countdownview.CountdownView;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
@@ -18,6 +19,8 @@ import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.victor.loading.rotate.RotateLoading;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import rx.schedulers.Schedulers;
 
@@ -37,6 +40,7 @@ public class TodayFragment extends BaseFragment {
   private RotateLoading loading;
   private int page = 2;
   private int totalPages;//总的分页数
+  private CountdownView countTime;
 
   @Override protected int provideContentViewId() {
     return R.layout.today_fragment;
@@ -58,6 +62,10 @@ public class TodayFragment extends BaseFragment {
             loading.post(loading::stop);
           }
         });
+
+    long time = calcLeftTime();
+
+    countTime.start(time);
   }
 
   @Override protected void initViews() {
@@ -80,8 +88,11 @@ public class TodayFragment extends BaseFragment {
 
     post1 = (ImageView) head.findViewById(R.id.post_1);
     post2 = (ImageView) head.findViewById(R.id.post_2);
+    countTime = (CountdownView) head.findViewById(R.id.countTime);
 
     xRecyclerView.addHeaderView(head);
+
+    //countTime.start(200000l);
 
     model.getTodayPost()
         .subscribeOn(Schedulers.newThread())
@@ -162,6 +173,28 @@ public class TodayFragment extends BaseFragment {
 
   @Override public void onDestroy() {
     super.onDestroy();
+  }
+
+  private long calcLeftTime() {
+
+    Date now = new Date();
+    Date nextDay14PM = new Date();
+    Calendar calendar = Calendar.getInstance();
+
+    calendar.setTime(nextDay14PM);
+    calendar.add(Calendar.DATE, 1);
+    calendar.set(Calendar.HOUR_OF_DAY, 14);
+    calendar.set(Calendar.MINUTE, 0);
+    calendar.set(Calendar.SECOND, 0);
+    calendar.set(Calendar.MILLISECOND, 0);
+
+    long left;
+    if (nextDay14PM.getTime() - now.getTime() > 0) {
+      left = nextDay14PM.getTime() - now.getTime();
+      return left;
+    } else {
+      return 0;
+    }
   }
 }
 

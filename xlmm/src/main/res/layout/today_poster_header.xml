@@ -27,8 +27,8 @@
         android:id="@+id/nvzhuangText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginLeft="14dp"
+        android:layout_marginTop="12dp"
         android:text="@string/today_new"
         android:textColor="@color/white"
         android:textSize="20dp"/>
@@ -37,7 +37,6 @@
         android:id="@+id/countTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/nvzhuangText"
         app:isHideTimeBackground="true"

@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
@@ -60,54 +59,54 @@ public class CartActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initData() {
-    model.getCartsList()
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
-          @Override public void onNext(List<CartsinfoBean> cartsinfoBeans) {
-
-            if ((cartsinfoBeans != null) && (cartsinfoBeans.size() > 0)) {
-
-              mCartsAdapetr.update(cartsinfoBeans);
-              for (int i = 0; i < cartsinfoBeans.size(); i++) {
-                ids.add(cartsinfoBeans.get(i).getId());
-              }
-
-              StringBuilder sb = new StringBuilder();
-              String s = null;
-              if (ids.size() > 0) {
-                s = apendString(sb);
-              }
-
-              model.getCartsInfoList(s)
-                  .subscribeOn(Schedulers.newThread())
-                  .subscribe(new ServiceResponse<CartsPayinfoBean>() {
-                    @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
-                      super.onNext(cartsPayinfoBean);
-                      if (cartsPayinfoBean != null) {
-
-                        total_price = cartsPayinfoBean.getTotalFee();
-                        totalPrice.setText("¥" + total_price);
-                        totalPrice_all_1.setText("总金额¥" + total_price);
-                        if (total_price < 150) {
-                          extra_price = 150 - total_price;
-                          extra_price_a.setText("还差" + extra_price + "元");
-                        } else {
-                          haicha.setVisibility(View.INVISIBLE);
-                        }
-                      }
-                    }
-                  });
-            } else {
-              emptyContent.setVisibility(View.VISIBLE);
-              goMain.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                  startActivity(new Intent(CartActivity.this, MainActivity.class));
-                  finish();
-                }
-              });
-            }
-          }
-        });
+    //model.getCartsList()
+    //    .subscribeOn(Schedulers.io())
+    //    .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
+    //      @Override public void onNext(List<CartsinfoBean> cartsinfoBeans) {
+    //
+    //        if ((cartsinfoBeans != null) && (cartsinfoBeans.size() > 0)) {
+    //
+    //          mCartsAdapetr.update(cartsinfoBeans);
+    //          for (int i = 0; i < cartsinfoBeans.size(); i++) {
+    //            ids.add(cartsinfoBeans.get(i).getId());
+    //          }
+    //
+    //          StringBuilder sb = new StringBuilder();
+    //          String s = null;
+    //          if (ids.size() > 0) {
+    //            s = apendString(sb);
+    //          }
+    //
+    //          model.getCartsInfoList(s)
+    //              .subscribeOn(Schedulers.newThread())
+    //              .subscribe(new ServiceResponse<CartsPayinfoBean>() {
+    //                @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
+    //                  super.onNext(cartsPayinfoBean);
+    //                  if (cartsPayinfoBean != null) {
+    //
+    //                    total_price = cartsPayinfoBean.getTotalFee();
+    //                    totalPrice.setText("¥" + total_price);
+    //                    totalPrice_all_1.setText("总金额¥" + total_price);
+    //                    if (total_price < 150) {
+    //                      extra_price = 150 - total_price;
+    //                      extra_price_a.setText("还差" + extra_price + "元");
+    //                    } else {
+    //                      haicha.setVisibility(View.INVISIBLE);
+    //                    }
+    //                  }
+    //                }
+    //              });
+    //        } else {
+    //          emptyContent.setVisibility(View.VISIBLE);
+    //          goMain.setOnClickListener(new View.OnClickListener() {
+    //            @Override public void onClick(View v) {
+    //              startActivity(new Intent(CartActivity.this, MainActivity.class));
+    //              finish();
+    //            }
+    //          });
+    //        }
+    //      }
+    //    });
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -169,6 +168,59 @@ public class CartActivity extends BaseSwipeBackCompatActivity
     String str = new String(sb);
 
     return str.substring(0, str.length() - 1);
+  }
+
+  @Override protected void onResume() {
+    super.onResume();
+
+    model.getCartsList()
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
+          @Override public void onNext(List<CartsinfoBean> cartsinfoBeans) {
+
+            if ((cartsinfoBeans != null) && (cartsinfoBeans.size() > 0)) {
+
+              mCartsAdapetr.updateWithClear(cartsinfoBeans);
+              for (int i = 0; i < cartsinfoBeans.size(); i++) {
+                ids.add(cartsinfoBeans.get(i).getId());
+              }
+
+              StringBuilder sb = new StringBuilder();
+              String s = null;
+              if (ids.size() > 0) {
+                s = apendString(sb);
+              }
+
+              model.getCartsInfoList(s)
+                  .subscribeOn(Schedulers.newThread())
+                  .subscribe(new ServiceResponse<CartsPayinfoBean>() {
+                    @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
+                      super.onNext(cartsPayinfoBean);
+                      if (cartsPayinfoBean != null) {
+
+                        total_price = cartsPayinfoBean.getTotalFee();
+                        totalPrice.setText("¥" + total_price);
+                        totalPrice_all_1.setText("总金额¥" + total_price);
+                        if (total_price < 150) {
+                          extra_price = 150 - total_price;
+                          extra_price_a.setText("还差" + extra_price + "元");
+                        } else {
+                          haicha.setVisibility(View.INVISIBLE);
+                        }
+                      }
+                    }
+                  });
+            } else {
+              emptyContent.setVisibility(View.VISIBLE);
+              goMain.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                  startActivity(new Intent(CartActivity.this, MainActivity.class));
+                  finish();
+                }
+              });
+            }
+          }
+        });
   }
 
   //内部Recycler Adapter类
@@ -233,6 +285,11 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                   } catch (IOException e) {
                     e.printStackTrace();
                   }
+                }
+
+                @Override public void onError(Throwable e) {
+                  super.onError(e);
+                  JUtils.Toast("该商品库存已经不足");
                 }
               });
         }
@@ -430,10 +487,8 @@ public class CartActivity extends BaseSwipeBackCompatActivity
       @Bind(R.id.cart_image) ImageView cartImage;
       @Bind(R.id.title) TextView title;
       @Bind(R.id.sku_name) TextView skuName;
-      //@Bind(R.id.color) TextView color;
       @Bind(R.id.price1) TextView price1;
       @Bind(R.id.price2) TextView price2;
-      @Bind(R.id.ll) LinearLayout ll;
       @Bind(R.id.delete) TextView delete;
       @Bind(R.id.count) TextView count;
       @Bind(R.id.add) TextView add;
