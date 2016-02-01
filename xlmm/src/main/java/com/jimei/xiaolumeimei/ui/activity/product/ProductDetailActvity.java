@@ -310,7 +310,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
     look_chima.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
     xidi.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
 
-    look_chima.setOnClickListener(this);
+    //look_chima.setOnClickListener(this);
     xidi.setOnClickListener(this);
   }
 
@@ -426,11 +426,11 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
 
         break;
 
-      case R.id.look_size:
-
-        startActivity(new Intent(ProductDetailActvity.this, SizeActivity.class));
-
-        break;
+      //case R.id.look_size:
+      //
+      //  startActivity(new Intent(ProductDetailActvity.this, SizeActivity.class));
+      //
+      //  break;
 
       case R.id.look_xidi:
 
