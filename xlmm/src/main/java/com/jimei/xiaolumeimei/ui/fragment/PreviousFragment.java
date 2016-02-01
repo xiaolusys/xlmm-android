@@ -49,8 +49,9 @@ public class PreviousFragment extends BaseFragment {
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<IndexBean>() {
           @Override public void onNext(IndexBean indexBean) {
-            List<IndexBean.product> child_list = indexBean.getChild_list();
+
             List<IndexBean.product> female_list = indexBean.getFemale_list();
+            List<IndexBean.product> child_list = indexBean.getChild_list();
             List<IndexBean.product> list = new ArrayList<>();
             list.addAll(female_list);
             list.addAll(child_list);

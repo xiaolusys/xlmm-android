@@ -84,6 +84,22 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Chil
     ChildListBean.ResultsEntity.ProductModelEntity productModel =
         resultsEntity.getProductModel();
 
+
+    boolean isSaleopen = resultsEntity.isIsSaleopen();
+    if (isSaleopen) {
+
+      boolean isSaleOut = productModel.isIsSaleOut();
+      boolean isSingleSpec = productModel.isIsSingleSpec();
+
+      if (isSaleOut && isSingleSpec) {
+        holder.saleout.setVisibility(View.VISIBLE);
+      } else {
+        holder.saleout.setVisibility(View.INVISIBLE);
+      }
+    } else {
+      holder.saleout.setVisibility(View.VISIBLE);
+    }
+
     String headImg = resultsEntity.getHeadImg();
 
     try {
@@ -171,6 +187,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Chil
     @Bind(R.id.childlist_name) TextView childlistName;
     @Bind(R.id.childlist_agent_price) TextView childlistAgentPrice;
     @Bind(R.id.childlist_stdsale_price) TextView childlistStdsalePrice;
+    @Bind(R.id.saleout) TextView saleout;
     private onItemClickListener listener;//点击事件
 
     public ChildListVH(View itemView) {

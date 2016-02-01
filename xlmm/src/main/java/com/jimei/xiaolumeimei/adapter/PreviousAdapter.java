@@ -62,6 +62,21 @@ public class PreviousAdapter extends RecyclerView.Adapter<PreviousAdapter.Previo
 
     IndexBean.Productmodel product_model = products.getProduct_model();
 
+    boolean isSaleopen = products.is_saleopen();
+    if (isSaleopen) {
+
+      boolean isSaleOut = product_model.isIsSaleOut();
+      boolean isSingleSpec = product_model.isIsSingleSpec();
+
+      if (isSaleOut && isSingleSpec) {
+        holder.saleout.setVisibility(View.VISIBLE);
+      } else {
+        holder.saleout.setVisibility(View.INVISIBLE);
+      }
+    } else {
+      holder.saleout.setVisibility(View.VISIBLE);
+    }
+
     try {
       if (product_model.getName().length() <= 9) {
         holder.childlistName.setText(product_model.getName());
@@ -121,7 +136,7 @@ public class PreviousAdapter extends RecyclerView.Adapter<PreviousAdapter.Previo
       if (name != null) {
         bundle.putString("name", name.split("/")[0]);
       }
-      if (product_model.is_single_spec) {
+      if (product_model.isIsSingleSpec()) {
         Intent intent = new Intent(mContext, ProductDetailActvity.class);
         intent.putExtras(bundle);
         mContext.startActivity(intent);
@@ -143,6 +158,7 @@ public class PreviousAdapter extends RecyclerView.Adapter<PreviousAdapter.Previo
     @Bind(R.id.childlist_name) TextView childlistName;
     @Bind(R.id.childlist_agent_price) TextView childlistAgentPrice;
     @Bind(R.id.childlist_stdsale_price) TextView childlistStdsalePrice;
+    @Bind(R.id.saleout) TextView saleout;
 
     public PreviousVH(View itemView) {
       super(itemView);

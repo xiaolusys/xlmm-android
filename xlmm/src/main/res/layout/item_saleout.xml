@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/saleout"
+    android:gravity="center"
+    android:layout_width="90dp"
+    android:layout_height="90dp"
+    android:textColor="@color/white"
+    android:text="已抢光"
+    android:visibility="invisible"
+    android:background="@drawable/shape_saleout"
+    android:layout_centerInParent="true"
+    android:layout_gravity="center"
+   />

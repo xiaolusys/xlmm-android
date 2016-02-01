@@ -85,6 +85,21 @@ public class LadyListAdapter extends RecyclerView.Adapter<LadyListAdapter.LadyLi
 
     String headImg = resultsEntity.getHeadImg();
 
+    boolean isSaleopen = resultsEntity.isIsSaleopen();
+    if (isSaleopen) {
+
+      boolean isSaleOut = productModel.isIsSaleOut();
+      boolean isSingleSpec = productModel.isIsSingleSpec();
+
+      if (isSaleOut && isSingleSpec) {
+        holder.saleout.setVisibility(View.VISIBLE);
+      } else {
+        holder.saleout.setVisibility(View.INVISIBLE);
+      }
+    } else {
+      holder.saleout.setVisibility(View.VISIBLE);
+    }
+
     if (productModel.getName().length() <= 9) {
       holder.childlistName.setText(productModel.getName());
     } else {
@@ -171,6 +186,7 @@ public class LadyListAdapter extends RecyclerView.Adapter<LadyListAdapter.LadyLi
     @Bind(R.id.childlist_name) TextView childlistName;
     @Bind(R.id.childlist_agent_price) TextView childlistAgentPrice;
     @Bind(R.id.childlist_stdsale_price) TextView childlistStdsalePrice;
+    @Bind(R.id.saleout) TextView saleout;
     private onItemClickListener listener;//点击事件
 
     public LadyListVH(View itemView) {
