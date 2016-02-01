@@ -24,7 +24,7 @@
         android:textSize="20sp"
         android:textColor="@color/colorPrimary"
         android:layout_width="wrap_content"
-        android:text="108.9"
+        android:text=""
         android:layout_height="wrap_content"
         />
 
@@ -33,7 +33,7 @@
         android:id="@+id/jiehsneg"
         android:textSize="15sp"
         android:layout_width="wrap_content"
-        android:text="已节省50"
+        android:text="已节省"
         android:layout_height="wrap_content"
         />
   </LinearLayout>

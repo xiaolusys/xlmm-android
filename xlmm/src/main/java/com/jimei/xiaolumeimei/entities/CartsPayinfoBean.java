@@ -27,7 +27,7 @@ public class CartsPayinfoBean {
         '}';
   }
 
-  @SerializedName("wallet_cash") private int mWalletCash;
+  @SerializedName("wallet_cash") private float mWalletCash;
   @SerializedName("total_payment") private double mTotalPayment;
   @SerializedName("wallet_payable") private boolean mWalletPayable;
   @SerializedName("weixin_payable") private boolean mWeixinPayable;
@@ -106,7 +106,7 @@ public class CartsPayinfoBean {
     this.mCartList = cartList;
   }
 
-  public int getWalletCash() {
+  public float getWalletCash() {
     return mWalletCash;
   }
 

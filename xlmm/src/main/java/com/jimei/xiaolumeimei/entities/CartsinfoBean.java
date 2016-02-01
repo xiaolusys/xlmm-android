@@ -33,8 +33,8 @@ public class CartsinfoBean {
   @SerializedName("buyer_nick") private String mBuyerNick;
   @SerializedName("num") private String mNum;
   @SerializedName("remain_time") private String mRemaStringime;
-  @SerializedName("std_sale_price") private double mStdSalePrice;
-  @SerializedName("total_fee") private double mTotalFee;
+  @SerializedName("std_sale_price") private float mStdSalePrice;
+  @SerializedName("total_fee") private float mTotalFee;
   @SerializedName("item_id") private String mItemId;
   @SerializedName("pic_path") private String mPicPath;
   @SerializedName("sku_name") private String mSkuName;
@@ -101,7 +101,7 @@ public class CartsinfoBean {
     return mStdSalePrice;
   }
 
-  public void setStdSalePrice(double stdSalePrice) {
+  public void setStdSalePrice(float stdSalePrice) {
     this.mStdSalePrice = stdSalePrice;
   }
 
@@ -109,7 +109,7 @@ public class CartsinfoBean {
     return mTotalFee;
   }
 
-  public void setTotalFee(double totalFee) {
+  public void setTotalFee(float totalFee) {
     this.mTotalFee = totalFee;
   }
 

@@ -20,7 +20,7 @@
         android:layout_marginTop="26px"
         android:textColor="@color/black"
         android:id="@+id/title"
-        android:text="多功能防风外出被/红色"
+        android:text=""
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
@@ -28,7 +28,7 @@
           android:layout_marginTop="32px"
           android:layout_width="wrap_content"
           android:id="@+id/sku_name"
-          android:text="均码"
+          android:text=""
           android:layout_toRightOf="@id/cart_image"
           android:layout_height="wrap_content"
           />
@@ -43,7 +43,7 @@
           android:id="@+id/price1"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="¥99.9"
+          android:text=""
           />
       <TextView
           android:textColor="@color/colorPrimary"
@@ -51,7 +51,7 @@
           android:id="@+id/price2"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="/¥239"
+          android:text=""
           />
 
     </LinearLayout>
