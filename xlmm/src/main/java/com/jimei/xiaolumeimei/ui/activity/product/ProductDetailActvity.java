@@ -157,8 +157,26 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
             for (int i = 0; i < contentImgs.size(); i++) {
               final int finalI = i;
               final int finalI1 = i;
+              String head_img = "";
+
+              if (contentImgs.get(i).startsWith("https://mmbiz.qlogo.cn")) {
+                head_img = contentImgs.get(i);
+              } else {
+                String[] temp = contentImgs.get(i).split("http://image.xiaolu.so/");
+
+                if (temp.length > 1) {
+                  try {
+                    head_img = "http://image.xiaolu.so/"
+                            + URLEncoder.encode(temp[1], "utf-8")
+                            + "?imageMogr2/format/jpg/quality/85";
+                  } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                  }
+                }
+              }
+
               OkHttpUtils.get()
-                  .url(contentImgs.get(i))
+                  .url(head_img)
                   .build()
                   .execute(new BitmapCallback() {
                     @Override public void onError(Call call, Exception e) {
