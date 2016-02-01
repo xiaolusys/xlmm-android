@@ -85,8 +85,8 @@ android {
 
       println("====== buildTypes.release ======")
       //      开启或者关闭 混淆 。
-      minifyEnabled false
-      shrinkResources false
+      minifyEnabled true
+      shrinkResources true
       proguardFiles file('proguard-rules.pro')
       if (keyStore.exists()) {
         println("xlmm -> buildTypes -> release: using jks key")
