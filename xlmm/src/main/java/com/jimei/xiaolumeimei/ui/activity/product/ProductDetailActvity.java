@@ -104,6 +104,20 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
           @Override public void onNext(ProductDetailBean productDetailBean) {
             //String headImg = productDetailBean.getPicPath();
 
+            boolean isSaleopen = productDetailBean.isIsSaleopen();
+            boolean isSaleout = productDetailBean.isIsSaleout();
+            if (isSaleopen) {
+              if (isSaleout) {
+                button_shop.setClickable(false);
+                button_shop.setBackgroundColor(Color.parseColor("#f3f3f4"));
+              } else {
+                button_shop.setClickable(true);
+              }
+            } else {
+              button_shop.setClickable(false);
+              button_shop.setBackgroundColor(Color.parseColor("#f3f3f4"));
+            }
+
             bianhao.setText(productDetailBean.getName());
 
             caizhi.setText(productDetailBean.getDetails().getMaterial());

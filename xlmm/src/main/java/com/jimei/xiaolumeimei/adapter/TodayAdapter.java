@@ -65,6 +65,21 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.TodayVH> {
     ProductListBean.ResultsEntity.ProductModelEntity productModel =
         products.getProductModel();
 
+    boolean isSaleopen = products.isIsSaleopen();
+    if (isSaleopen) {
+
+      boolean isSaleOut = productModel.isIsSaleOut();
+      boolean isSingleSpec = productModel.isIsSingleSpec();
+
+      if (isSaleOut && isSingleSpec) {
+        holder.saleout.setVisibility(View.VISIBLE);
+      } else {
+        holder.saleout.setVisibility(View.INVISIBLE);
+      }
+    } else {
+      holder.saleout.setVisibility(View.VISIBLE);
+    }
+
     try {
 
       if (productModel.getName().length() <= 9) {
@@ -157,6 +172,7 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.TodayVH> {
     @Bind(R.id.childlist_name) TextView childlistName;
     @Bind(R.id.childlist_agent_price) TextView childlistAgentPrice;
     @Bind(R.id.childlist_stdsale_price) TextView childlistStdsalePrice;
+    @Bind(R.id.saleout) TextView saleout;
 
     public TodayVH(View itemView) {
       super(itemView);

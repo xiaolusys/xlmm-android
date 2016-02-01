@@ -7,11 +7,15 @@
     android:background="@drawable/shot_item_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <RelativeLayout android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <include layout="@layout/item_saleout"/>
   <ImageView
       android:scaleType="fitXY"
       android:id="@+id/childlist_image"
       android:layout_width="match_parent"
       android:layout_height="420px"/>
+    </RelativeLayout>
   <LinearLayout
       android:layout_marginTop="26px"
       android:gravity="center"

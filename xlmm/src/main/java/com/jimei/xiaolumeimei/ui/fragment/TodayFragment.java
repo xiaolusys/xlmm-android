@@ -63,9 +63,9 @@ public class TodayFragment extends BaseFragment {
           }
         });
 
-    long time = calcLeftTime();
+    //long time = calcLeftTime();
 
-    countTime.start(time);
+    countTime.start(20000000l);
   }
 
   @Override protected void initViews() {

@@ -1,5 +1,6 @@
 package com.jimei.xiaolumeimei.entities;
 
+import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
 
@@ -161,40 +162,88 @@ public class IndexBean implements Serializable {
 
   public static class Productmodel {
 
-    public int id;
-    public String name;
-    public List<String> head_imgs;
-    public List<String> content_imgs;
-    public boolean is_single_spec;
-    public boolean buy_limit;
-    public int per_limit;
+    /**
+     * id : 7789
+     * name : 七分袖蕾丝雪纺衫
+     * head_imgs : ["http://image.xiaolu.so/MG_14539595037370.png"]
+     * content_imgs : ["https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLvdRz7ZHuZAVjA05LLAOS35cZd07x435G9oPEsbHTUZ56t1hc5erNibHhOeU7OOOCAxvJ408zhvCow/0?wx_fmt=png","https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLvdRz7ZHuZAVjA05LLAOS35YOj7MmEaob3Q0XIxeX7FJIn7YIRZQSPcsvUzLwniaDL97DCktZCD8QQ/0?wx_fmt=jpeg","https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLvdRz7ZHuZAVjA05LLAOS35m8dAI2r2S8JJMLZ99Ab0LicRH0LxoNmVILKFGa8ElPYFyjRIEL1jIzQ/0?wx_fmt=jpeg","https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLvdRz7ZHuZAVjA05LLAOS35a8jiaMEf1r2a9n3A6icsgUJxoCrBupSKoWwOW25Ic45XDJibqdOTIhDVQ/0?wx_fmt=jpeg"]
+     * is_single_spec : false
+     * is_sale_out : false
+     * buy_limit : false
+     * per_limit : 5
+     */
+
+    @SerializedName("id") private int mId;
+    @SerializedName("name") private String mName;
+    @SerializedName("is_single_spec") private boolean mIsSingleSpec;
+    @SerializedName("is_sale_out") private boolean mIsSaleOut;
+    @SerializedName("buy_limit") private boolean mBuyLimit;
+    @SerializedName("per_limit") private int mPerLimit;
+    @SerializedName("head_imgs") private List<String> mHeadImgs;
+    @SerializedName("content_imgs") private List<String> mContentImgs;
+
+    public void setId(int id) {
+      this.mId = id;
+    }
+
+    public void setName(String name) {
+      this.mName = name;
+    }
+
+    public void setIsSingleSpec(boolean isSingleSpec) {
+      this.mIsSingleSpec = isSingleSpec;
+    }
+
+    public void setIsSaleOut(boolean isSaleOut) {
+      this.mIsSaleOut = isSaleOut;
+    }
+
+    public void setBuyLimit(boolean buyLimit) {
+      this.mBuyLimit = buyLimit;
+    }
+
+    public void setPerLimit(int perLimit) {
+      this.mPerLimit = perLimit;
+    }
+
+    public void setHeadImgs(List<String> headImgs) {
+      this.mHeadImgs = headImgs;
+    }
+
+    public void setContentImgs(List<String> contentImgs) {
+      this.mContentImgs = contentImgs;
+    }
 
     public int getId() {
-      return id;
+      return mId;
     }
 
     public String getName() {
-      return name;
+      return mName;
     }
 
-    public List<String> getHead_imgs() {
-      return head_imgs;
+    public boolean isIsSingleSpec() {
+      return mIsSingleSpec;
     }
 
-    public List<String> getContent_imgs() {
-      return content_imgs;
+    public boolean isIsSaleOut() {
+      return mIsSaleOut;
     }
 
-    public boolean is_single_spec() {
-      return is_single_spec;
+    public boolean isBuyLimit() {
+      return mBuyLimit;
     }
 
-    public boolean isBuy_limit() {
-      return buy_limit;
+    public int getPerLimit() {
+      return mPerLimit;
     }
 
-    public int getPer_limit() {
-      return per_limit;
+    public List<String> getHeadImgs() {
+      return mHeadImgs;
+    }
+
+    public List<String> getContentImgs() {
+      return mContentImgs;
     }
   }
 }

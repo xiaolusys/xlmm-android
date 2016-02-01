@@ -14,6 +14,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.ProductBean;
+import com.jimei.xiaolumeimei.entities.ProductModelBean;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActvity;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.zhy.autolayout.utils.AutoUtils;
@@ -60,6 +61,23 @@ public class TongkuanAdapter extends RecyclerView.Adapter<TongkuanAdapter.Tongku
 
   @Override public void onBindViewHolder(TongkuanVH holder, int position) {
     ProductBean productBean = mList.get(position);
+
+    ProductModelBean productModel = productBean.product_model;
+
+    boolean isSaleopen = productBean.is_saleopen;
+    if (isSaleopen) {
+
+      boolean isSaleOut = productModel.is_sale_out;
+      boolean isSingleSpec = productModel.is_single_spec;
+
+      if (isSaleOut && isSingleSpec) {
+        holder.saleout.setVisibility(View.VISIBLE);
+      } else {
+        holder.saleout.setVisibility(View.INVISIBLE);
+      }
+    } else {
+      holder.saleout.setVisibility(View.VISIBLE);
+    }
 
     try {
       if (productBean.name.length() <= 9) {
@@ -133,6 +151,7 @@ public class TongkuanAdapter extends RecyclerView.Adapter<TongkuanAdapter.Tongku
     @Bind(R.id.childlist_name) TextView childlistName;
     @Bind(R.id.childlist_agent_price) TextView childlistAgentPrice;
     @Bind(R.id.childlist_stdsale_price) TextView childlistStdsalePrice;
+    @Bind(R.id.saleout) TextView saleout;
 
     public TongkuanVH(View itemView) {
       super(itemView);
