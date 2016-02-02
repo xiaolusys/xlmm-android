@@ -182,6 +182,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
                 }
               }
 
+              JUtils.Log("ProductDetail", "head_img "+head_img);
 
               final String finalHead_img = head_img;
               OkHttpUtils.get()
@@ -196,6 +197,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
                       if (response != null) {
                         try {
                           JUtils.Log("ProductDetail", "bmp size= " + response.getByteCount()/1024 + " height= " + response.getHeight());
+                          JUtils.Log("ProductDetail", "head_img "+finalHead_img);
                           int width = DisplayUtils.getScreenW(ProductDetailActvity.this);
 
                           int nh = (int) (response.getHeight() * (420.0
@@ -213,7 +215,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
                             Glide.with(ProductDetailActvity.this)
                                     .load(finalHead_img)
                                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                    .placeholder(R.drawable.parceholder)
+                                    .override(640,response.getHeight())
                                     .centerCrop()
                                     .into(viewList.get(finalI1));
                           }

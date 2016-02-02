@@ -210,7 +210,7 @@ dependencies {
   //  compile 'cat.ereza:customactivityoncrash:1.4.0'
   compile 'com.github.iwgang:countdownview:1.2'
   compile 'com.jude:utils:1.1.0'
-  compile project(':beam')
+
   compile project(':library')
   compile files('libs/alipaySDK-20150818.jar')
   compile files('libs/libammsdk.jar')
@@ -229,6 +229,8 @@ dependencies {
 
   compile 'com.zhy:okhttputils:2.2.0'
   compile  'com.davemorrissey.labs:subsampling-scale-image-view:3.4.1'
+  compile 'com.android.support:appcompat-v7:23.1.1'
 
+  compile 'io.reactivex:rxandroid:1.0.1'
   compile 'com.qiniu:qiniu-android-sdk:(7.0.1,7.1)'
 }
