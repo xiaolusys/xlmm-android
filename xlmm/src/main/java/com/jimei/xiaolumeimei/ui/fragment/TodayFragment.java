@@ -50,7 +50,7 @@ public class TodayFragment extends BaseFragment {
   @Override protected void initData() {
     loading.start();
     model.getTodayList(1, 10)
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ProductListBean>() {
           @Override public void onNext(ProductListBean productListBean) {
 

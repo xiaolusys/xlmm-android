@@ -12,7 +12,7 @@ import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.entities.IndexBean;
+import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActvity;
 import com.jimei.xiaolumeimei.ui.activity.product.TongkuanActivity;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
@@ -27,7 +27,7 @@ import java.util.List;
  */
 public class PreviousAdapter extends RecyclerView.Adapter<PreviousAdapter.PreviousVH> {
 
-  private List<IndexBean.product> mList;
+  private List<ProductListBean.ResultsEntity> mList;
   private Context mContext;
 
   public PreviousAdapter(Context context) {
@@ -35,14 +35,14 @@ public class PreviousAdapter extends RecyclerView.Adapter<PreviousAdapter.Previo
     mList = new ArrayList<>();
   }
 
-  public void updateWithClear(List<IndexBean.product> femallist) {
+  public void updateWithClear(List<ProductListBean.ResultsEntity> femallist) {
     mList.clear();
 
     mList.addAll(femallist);
     notifyDataSetChanged();
   }
 
-  public void update(List<IndexBean.product> femallist) {
+  public void update(List<ProductListBean.ResultsEntity> femallist) {
 
     mList.addAll(femallist);
     notifyDataSetChanged();
@@ -58,16 +58,17 @@ public class PreviousAdapter extends RecyclerView.Adapter<PreviousAdapter.Previo
   }
 
   @Override public void onBindViewHolder(PreviousVH holder, int position) {
-    IndexBean.product products = mList.get(position);
+    ProductListBean.ResultsEntity products = mList.get(position);
 
-    IndexBean.Productmodel product_model = products.getProduct_model();
+    ProductListBean.ResultsEntity.ProductModelEntity productModel =
+        products.getProductModel();
 
-    boolean isSaleopen = products.is_saleopen();
+    boolean isSaleopen = products.isIsSaleopen();
     try {
       if (isSaleopen) {
 
-        boolean isSaleOut = product_model.isIsSaleOut();
-        boolean isSingleSpec = product_model.isIsSingleSpec();
+        boolean isSaleOut = productModel.isIsSaleOut();
+        boolean isSingleSpec = productModel.isIsSingleSpec();
 
         if (isSaleOut && isSingleSpec) {
           holder.saleout.setVisibility(View.VISIBLE);
@@ -78,19 +79,19 @@ public class PreviousAdapter extends RecyclerView.Adapter<PreviousAdapter.Previo
         holder.saleout.setVisibility(View.VISIBLE);
       }
 
-      if (product_model.getName().length() <= 9) {
-        holder.childlistName.setText(product_model.getName());
+      if (productModel.getName().length() <= 9) {
+        holder.childlistName.setText(productModel.getName());
       } else {
-        holder.childlistName.setText(product_model.getName().substring(0, 8) + "...");
+        holder.childlistName.setText(productModel.getName().substring(0, 8) + "...");
       }
 
-      holder.childlistAgentPrice.setText("¥" + products.getAgent_price());
-      holder.childlistStdsalePrice.setText("/¥" + products.getStd_sale_price());
+      holder.childlistAgentPrice.setText("¥" + products.getAgentPrice());
+      holder.childlistStdsalePrice.setText("/¥" + products.getStdSalePrice());
     } catch (Exception e) {
       e.printStackTrace();
     }
 
-    String headImg = products.getHead_img();
+    String headImg = products.getHeadImg();
     //String[] temp = headImg.split("http://image.xiaolu.so/");
     //String head_img = "";
     //if (temp.length > 1) {
@@ -124,7 +125,7 @@ public class PreviousAdapter extends RecyclerView.Adapter<PreviousAdapter.Previo
 
       try {
         product_id = mList.get(position).getId();
-        model_id = mList.get(position).getModel_id();
+        model_id = mList.get(position).getModelId();
         name = mList.get(position).getName();
       } catch (Exception e) {
         e.printStackTrace();
@@ -136,7 +137,7 @@ public class PreviousAdapter extends RecyclerView.Adapter<PreviousAdapter.Previo
       if (name != null) {
         bundle.putString("name", name.split("/")[0]);
       }
-      if (product_model.isIsSingleSpec()) {
+      if (productModel.isIsSingleSpec()) {
         Intent intent = new Intent(mContext, ProductDetailActvity.class);
         intent.putExtras(bundle);
         mContext.startActivity(intent);

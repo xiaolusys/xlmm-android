@@ -60,9 +60,23 @@ public interface XlmmService {
     @GET(XlmmApi.CHILD_URL)
     Observable<ChildListBean> getChildList();
 
+  //童装分页列表
+    @GET(XlmmApi.CHILD_URL)
+    Observable<ChildListBean> getChildList(
+            @Query("page") int page,
+            @Query("page_size") int page_size);
+
+
     //女装列表
     @GET(XlmmApi.WOMAN_URL)
     Observable<LadyListBean> getLadyList();
+
+  //昨日分页列表
+    @GET(XlmmApi.WOMAN_URL)
+    Observable<LadyListBean> getLadyList(
+            @Query("page") int page,
+            @Query("page_size") int page_size);
+
 
     //今日列表
     @GET(XlmmApi.TODAY_URL)
@@ -81,6 +95,12 @@ public interface XlmmService {
     //昨日列表
     @GET(XlmmApi.YESTERDAY_URL)
     Observable<IndexBean> getYestDayList();
+
+  //昨日分页列表
+    @GET("products/promote_previous_paging")
+    Observable<ProductListBean> getPreviousList(
+            @Query("page") int page,
+            @Query("page_size") int page_size);
 
     //同款列表
     @GET(XlmmApi.TONGKUAN_URL + "{model_id}")
