@@ -381,4 +381,14 @@ public interface XlmmService {
   @GET("refunds/qiniu_token")
   Observable<QiniuTokenBean> getQiniuToken(
   );
+
+  @FormUrlEncoded
+  @POST("register/wxapp_login")
+  Observable<ResponseBody> wxapp_login(
+      String headimgurl
+
+
+  );
+
+
 }
