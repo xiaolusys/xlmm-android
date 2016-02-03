@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.ui.fragment;
 
 import android.support.v7.widget.GridLayoutManager;
+import android.widget.Toast;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
@@ -20,7 +21,9 @@ import rx.schedulers.Schedulers;
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class LadyListFragment extends BaseFragment {
-
+  private int page = 2;
+  private int totalPages;//总的分页数
+  int page_size = 10;
   ProductModel model = new ProductModel();
   private XRecyclerView xRecyclerView;
   private LadyListAdapter mLadyListAdapter;
@@ -33,7 +36,7 @@ public class LadyListFragment extends BaseFragment {
   @Override protected void initData() {
     loading.start();
 
-    model.getLadyList()
+    model.getLadyList(1,10)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<LadyListBean>() {
           @Override public void onNext(LadyListBean ladyListBean) {
@@ -41,6 +44,7 @@ public class LadyListFragment extends BaseFragment {
             try {
               if (ladyListBean != null) {
                 List<LadyListBean.ResultsEntity> results = ladyListBean.getResults();
+                totalPages = ladyListBean.getCount() / page_size;
                 mLadyListAdapter.update(results);
               }
             } catch (Exception ex) {
@@ -77,7 +81,7 @@ public class LadyListFragment extends BaseFragment {
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
       @Override public void onRefresh() {
-        model.getLadyList()
+        model.getLadyList(1, page * page_size)
             .subscribeOn(Schedulers.newThread())
             .subscribe(new ServiceResponse<LadyListBean>() {
               @Override public void onNext(LadyListBean ladyListBean) {
@@ -93,8 +97,31 @@ public class LadyListFragment extends BaseFragment {
       }
 
       @Override public void onLoadMore() {
-        xRecyclerView.postDelayed(xRecyclerView::loadMoreComplete, 1000);
+        if (page <= totalPages) {
+          loadMoreData(page, 10);
+          page++;
+        } else {
+          Toast.makeText(activity, "没有更多了拉,去购物吧", Toast.LENGTH_SHORT).show();
+          xRecyclerView.post(xRecyclerView::loadMoreComplete);
+        }
       }
     });
+  }
+
+  private void loadMoreData(int page, int page_size) {
+
+    model.getLadyList(page, page_size)
+        .subscribeOn(Schedulers.newThread())
+        .subscribe(new ServiceResponse<LadyListBean>() {
+          @Override public void onNext(LadyListBean productListBean) {
+            List<LadyListBean.ResultsEntity> results = productListBean.getResults();
+            mLadyListAdapter.update(results);
+          }
+
+          @Override public void onCompleted() {
+            super.onCompleted();
+            xRecyclerView.post(xRecyclerView::loadMoreComplete);
+          }
+        });
   }
 }

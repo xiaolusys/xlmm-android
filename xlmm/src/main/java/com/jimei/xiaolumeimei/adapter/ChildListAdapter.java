@@ -86,19 +86,27 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Chil
 
 
     boolean isSaleopen = resultsEntity.isIsSaleopen();
-    if (isSaleopen) {
 
-      boolean isSaleOut = productModel.isIsSaleOut();
-      boolean isSingleSpec = productModel.isIsSingleSpec();
+    try {
 
-      if (isSaleOut && isSingleSpec) {
-        holder.saleout.setVisibility(View.VISIBLE);
+      if (isSaleopen) {
+
+        boolean isSaleOut = productModel.isIsSaleOut();
+        boolean isSingleSpec = productModel.isIsSingleSpec();
+
+        if (isSaleOut && isSingleSpec) {
+          holder.saleout.setVisibility(View.VISIBLE);
+        } else {
+          holder.saleout.setVisibility(View.INVISIBLE);
+        }
       } else {
-        holder.saleout.setVisibility(View.INVISIBLE);
+        holder.saleout.setVisibility(View.VISIBLE);
       }
-    } else {
-      holder.saleout.setVisibility(View.VISIBLE);
+
+    } catch (NullPointerException ex) {
+
     }
+
 
     String headImg = resultsEntity.getHeadImg();
 

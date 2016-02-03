@@ -34,6 +34,27 @@ public class ProductModel {
         .getTodayList(page, page_size)
         .compose(new DefaultTransform<>());
   }
+  //得到昨日分页数据
+  public Observable<ProductListBean> getPreviousList(int page, int page_size) {
+
+    return XlmmRetrofitClient.getService()
+        .getPreviousList(page, page_size)
+        .compose(new DefaultTransform<>());
+  }
+  //得到儿童分页数据
+  public Observable<ChildListBean> getChildList(int page, int page_size) {
+
+    return XlmmRetrofitClient.getService()
+        .getChildList(page, page_size)
+        .compose(new DefaultTransform<>());
+  }
+  //得到女装分页数据
+  public Observable<LadyListBean> getLadyList(int page, int page_size) {
+
+    return XlmmRetrofitClient.getService()
+        .getLadyList(page, page_size)
+        .compose(new DefaultTransform<>());
+  }
 
   //得到昨日数据
   public Observable<IndexBean> getPreviousList() {
