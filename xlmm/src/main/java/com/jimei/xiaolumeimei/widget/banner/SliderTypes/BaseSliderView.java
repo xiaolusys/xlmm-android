@@ -4,12 +4,10 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.jimei.xiaolumeimei.R;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
 import java.io.File;
 
 public abstract class BaseSliderView {
@@ -33,6 +31,8 @@ public abstract class BaseSliderView {
   private ImageLoadListener mLoadListener;
 
   private String mDescription;
+
+  private Picasso mPicasso;
 
   /**
    * Scale type of the image.
@@ -175,159 +175,156 @@ public abstract class BaseSliderView {
     if (mLoadListener != null) {
       mLoadListener.onStart(me);
     }
-    //Glide g = (mGlide != null) ? mGlide : Glide.get(mContext);
-    ////RequestCreator rq = null;
-    //RequestManager rm;
+    Picasso p = (mPicasso != null) ? mPicasso : Picasso.with(mContext);
+    RequestCreator rq = null;
+    ////RequestManager rm;
     //if (mUrl != null) {
-    //    rm = g.with(mContext)
-    //        .load(mUrl);
+    //  rq = p.load(mUrl);
     //}
-
-    //if(mUrl!=null){
-    //    rq = p.load(mUrl);
-    //}else if(mFile != null){
-    //    rq = p.load(mFile);
-    //}else if(mRes != 0){
-    //    rq = p.load(mRes);
-    //}else{
-    //    return;
-    //}
-    //
-    //if(rq == null){
-    //    return;
-    //}
-    //
-    //if(getEmpty() != 0){
-    //    rq.placeholder(getEmpty());
-    //}
-    //
-    //if(getError() != 0){
-    //    rq.error(getError());
-    //}
-    //
-    //switch (mScaleType){
-    //    case Fit:
-    //        rq.fit();
-    //        break;
-    //    case CenterCrop:
-    //        rq.fit().centerCrop();
-    //        break;
-    //    case CenterInside:
-    //        rq.fit().centerInside();
-    //        break;
-    //}
-    //
-    //rq.into(targetImageView,new Callback() {
-    //    @Override
-    //    public void onSuccess() {
-    //        if(v.findViewById(R.id.loading_bar) != null){
-    //            v.findViewById(R.id.loading_bar).setVisibility(View.INVISIBLE);
-    //        }
-    //    }
-    //
-    //    @Override
-    //    public void onError() {
-    //        if(mLoadListener != null){
-    //            mLoadListener.onEnd(false,me);
-    //        }
-    //        if(v.findViewById(R.id.loading_bar) != null){
-    //            v.findViewById(R.id.loading_bar).setVisibility(View.INVISIBLE);
-    //        }
-    //    }
-    //});
 
     if (mUrl != null) {
-      Glide.with(mContext)
-          .load(mUrl)
-          .placeholder(R.drawable.header)
-          .diskCacheStrategy(DiskCacheStrategy.ALL)
-          .listener(new RequestListener<String, GlideDrawable>() {
-            @Override public boolean onException(Exception e, String model,
-                Target<GlideDrawable> target, boolean isFirstResource) {
-              if (mLoadListener != null) {
-                mLoadListener.onEnd(false, me);
-              }
-              if (v.findViewById(R.id.loading_bar) != null) {
-                v.findViewById(R.id.loading_bar).setVisibility(View.INVISIBLE);
-              }
-
-              return true;
-            }
-
-            @Override public boolean onResourceReady(GlideDrawable resource, String model,
-                Target<GlideDrawable> target, boolean isFromMemoryCache,
-                boolean isFirstResource) {
-              if (v.findViewById(R.id.loading_bar) != null) {
-                v.findViewById(R.id.loading_bar).setVisibility(View.INVISIBLE);
-              }
-              return true;
-            }
-          })
-          .centerCrop()
-          .into(targetImageView);
+      rq = p.load(mUrl);
     } else if (mFile != null) {
-      Glide.with(mContext)
-          .load(mFile)
-          .placeholder(R.drawable.header)
-          .diskCacheStrategy(DiskCacheStrategy.ALL)
-          .listener(new RequestListener<File, GlideDrawable>() {
-            @Override public boolean onException(Exception e, File model,
-                Target<GlideDrawable> target, boolean isFirstResource) {
-              if (mLoadListener != null) {
-                mLoadListener.onEnd(false, me);
-              }
-              if (v.findViewById(R.id.loading_bar) != null) {
-                v.findViewById(R.id.loading_bar).setVisibility(View.INVISIBLE);
-              }
-
-              return true;
-            }
-
-            @Override public boolean onResourceReady(GlideDrawable resource, File model,
-                Target<GlideDrawable> target, boolean isFromMemoryCache,
-                boolean isFirstResource) {
-              if (v.findViewById(R.id.loading_bar) != null) {
-                v.findViewById(R.id.loading_bar).setVisibility(View.INVISIBLE);
-              }
-              return true;
-            }
-          })
-          .centerCrop()
-          .into(targetImageView);
+      rq = p.load(mFile);
     } else if (mRes != 0) {
-      Glide.with(mContext)
-          .load(mRes)
-          .placeholder(R.drawable.header)
-          .diskCacheStrategy(DiskCacheStrategy.ALL)
-          .listener(new RequestListener<Integer, GlideDrawable>() {
-            @Override public boolean onException(Exception e, Integer model,
-                Target<GlideDrawable> target, boolean isFirstResource) {
-
-              if (mLoadListener != null) {
-                mLoadListener.onEnd(false, me);
-              }
-              if (v.findViewById(R.id.loading_bar) != null) {
-                v.findViewById(R.id.loading_bar).setVisibility(View.INVISIBLE);
-              }
-
-              return true;
-            }
-
-            @Override
-            public boolean onResourceReady(GlideDrawable resource, Integer model,
-                Target<GlideDrawable> target, boolean isFromMemoryCache,
-                boolean isFirstResource) {
-              if (v.findViewById(R.id.loading_bar) != null) {
-                v.findViewById(R.id.loading_bar).setVisibility(View.INVISIBLE);
-              }
-              return true;
-            }
-          })
-          .centerCrop()
-          .into(targetImageView);
+      rq = p.load(mRes);
     } else {
       return;
     }
+
+    if (rq == null) {
+      return;
+    }
+
+    if (getEmpty() != 0) {
+      rq.placeholder(getEmpty());
+    }
+
+    if (getError() != 0) {
+      rq.error(getError());
+    }
+
+    switch (mScaleType) {
+      case Fit:
+        rq.fit();
+        break;
+      case CenterCrop:
+        rq.fit().centerCrop();
+        break;
+      case CenterInside:
+        rq.fit().centerInside();
+        break;
+    }
+
+    rq.into(targetImageView, new Callback() {
+      @Override public void onSuccess() {
+        if (v.findViewById(R.id.loading_bar) != null) {
+          v.findViewById(R.id.loading_bar).setVisibility(View.INVISIBLE);
+        }
+      }
+
+      @Override public void onError() {
+        if (mLoadListener != null) {
+          mLoadListener.onEnd(false, me);
+        }
+        if (v.findViewById(R.id.loading_bar) != null) {
+          v.findViewById(R.id.loading_bar).setVisibility(View.INVISIBLE);
+        }
+      }
+    });
+
+    //if (mUrl != null) {
+    //  Glide.with(mContext)
+    //      .load(mUrl)
+    //      .placeholder(R.drawable.header)
+    //      .diskCacheStrategy(DiskCacheStrategy.ALL)
+    //      .listener(new RequestListener<String, GlideDrawable>() {
+    //        @Override public boolean onException(Exception e, String model,
+    //            Target<GlideDrawable> target, boolean isFirstResource) {
+    //          if (mLoadListener != null) {
+    //            mLoadListener.onEnd(false, me);
+    //          }
+    //          if (v.findViewById(R.id.loading_bar) != null) {
+    //            v.findViewById(R.id.loading_bar).setVisibility(View.INVISIBLE);
+    //          }
+    //
+    //          return true;
+    //        }
+    //
+    //        @Override public boolean onResourceReady(GlideDrawable resource, String model,
+    //            Target<GlideDrawable> target, boolean isFromMemoryCache,
+    //            boolean isFirstResource) {
+    //          if (v.findViewById(R.id.loading_bar) != null) {
+    //            v.findViewById(R.id.loading_bar).setVisibility(View.INVISIBLE);
+    //          }
+    //          return true;
+    //        }
+    //      })
+    //      .centerCrop()
+    //      .into(targetImageView);
+    //} else if (mFile != null) {
+    //  Glide.with(mContext)
+    //      .load(mFile)
+    //      .placeholder(R.drawable.header)
+    //      .diskCacheStrategy(DiskCacheStrategy.ALL)
+    //      .listener(new RequestListener<File, GlideDrawable>() {
+    //        @Override public boolean onException(Exception e, File model,
+    //            Target<GlideDrawable> target, boolean isFirstResource) {
+    //          if (mLoadListener != null) {
+    //            mLoadListener.onEnd(false, me);
+    //          }
+    //          if (v.findViewById(R.id.loading_bar) != null) {
+    //            v.findViewById(R.id.loading_bar).setVisibility(View.INVISIBLE);
+    //          }
+    //
+    //          return true;
+    //        }
+    //
+    //        @Override public boolean onResourceReady(GlideDrawable resource, File model,
+    //            Target<GlideDrawable> target, boolean isFromMemoryCache,
+    //            boolean isFirstResource) {
+    //          if (v.findViewById(R.id.loading_bar) != null) {
+    //            v.findViewById(R.id.loading_bar).setVisibility(View.INVISIBLE);
+    //          }
+    //          return true;
+    //        }
+    //      })
+    //      .centerCrop()
+    //      .into(targetImageView);
+    //} else if (mRes != 0) {
+    //  Glide.with(mContext)
+    //      .load(mRes)
+    //      .placeholder(R.drawable.header)
+    //      .diskCacheStrategy(DiskCacheStrategy.ALL)
+    //      .listener(new RequestListener<Integer, GlideDrawable>() {
+    //        @Override public boolean onException(Exception e, Integer model,
+    //            Target<GlideDrawable> target, boolean isFirstResource) {
+    //
+    //          if (mLoadListener != null) {
+    //            mLoadListener.onEnd(false, me);
+    //          }
+    //          if (v.findViewById(R.id.loading_bar) != null) {
+    //            v.findViewById(R.id.loading_bar).setVisibility(View.INVISIBLE);
+    //          }
+    //
+    //          return true;
+    //        }
+    //
+    //        @Override
+    //        public boolean onResourceReady(GlideDrawable resource, Integer model,
+    //            Target<GlideDrawable> target, boolean isFromMemoryCache,
+    //            boolean isFirstResource) {
+    //          if (v.findViewById(R.id.loading_bar) != null) {
+    //            v.findViewById(R.id.loading_bar).setVisibility(View.INVISIBLE);
+    //          }
+    //          return true;
+    //        }
+    //      })
+    //      .centerCrop()
+    //      .into(targetImageView);
+    //} else {
+    //  return;
+    //}
   }
 
   public ScaleType getScaleType() {
@@ -359,6 +356,22 @@ public abstract class BaseSliderView {
     return mBundle;
   }
 
+  /**
+   * Get the last instance set via setPicasso(), or null if no user provided instance was
+   * set
+   *
+   * @return The current user-provided Picasso instance, or null if none
+   */
+  public Picasso getPicasso() {
+    return mPicasso;
+  }
+
+  public void setPicasso(Picasso picasso) {
+    mPicasso = picasso;
+  }
+
+
+
   public enum ScaleType {
     CenterCrop, CenterInside, Fit, FitCenterCrop
   }
@@ -372,18 +385,4 @@ public abstract class BaseSliderView {
 
     public void onEnd(boolean result, BaseSliderView target);
   }
-
-  /**
-   * Get the last instance set via setPicasso(), or null if no user provided instance was set
-   *
-   * @return The current user-provided Picasso instance, or null if none
-   */
-  //public Glide getPicasso() {
-  //    return mGlide;
-  //}
-  //
-  //
-  //public void setPicasso(Glide glide) {
-  //    mGlide = glide;
-  //}
 }

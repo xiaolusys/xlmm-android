@@ -1,6 +1,8 @@
 package com.jimei.xiaolumeimei.ui.fragment;
 
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,8 @@ import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.entities.PostBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
+import com.jimei.xiaolumeimei.ui.activity.product.ChildListActivity;
+import com.jimei.xiaolumeimei.ui.activity.product.LadyListActivity;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.widget.banner.Indicators.PagerIndicator;
@@ -26,10 +30,11 @@ import com.jimei.xiaolumeimei.widget.banner.SliderTypes.BaseSliderView;
 import com.jimei.xiaolumeimei.widget.banner.SliderTypes.DefaultSliderView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.victor.loading.rotate.RotateLoading;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import rx.schedulers.Schedulers;
 
 /**
@@ -140,24 +145,66 @@ public class TodayFragment extends BaseFragment {
               String picLink1 =
                   ViewUtils.getDecodeUrl(postBean.getChd_posters().get(0).pic_link);
 
-              List<String> list = new ArrayList<>();
-              list.add(picLink);
-              list.add(picLink1);
+              //List<String> list = new ArrayList<>();
+              //list.add(picLink);
+              //list.add(picLink1);
 
-              for (String url : list) {
+              Map<String, String> map = new HashMap<>();
+              map.put("post1", picLink);
+              map.put("post2", picLink1);
+
+              //for (String url : list) {
+              //  TextSliderView textSliderView = new TextSliderView(getActivity());
+              //  // initialize a SliderLayout
+              //  textSliderView.image(url)
+              //      .setScaleType(BaseSliderView.ScaleType.CenterCrop);
+              //
+              //  //add your extra information
+              //  //textSliderView.bundle(new Bundle());
+              //  //textSliderView.getBundle().putString("extra", name);
+              //
+              //  mSliderLayout.addSlider(textSliderView);
+              //  mSliderLayout.setDuration(3000);
+              //  mSliderLayout.setCustomIndicator(mPagerIndicator);
+              //
+              //  textSliderView.setOnSliderClickListener(
+              //      new BaseSliderView.OnSliderClickListener() {
+              //        @Override public void onSliderClick(BaseSliderView slider) {
+              //
+              //        }
+              //      });
+              //
+              //}
+
+              for (String name : map.keySet()) {
                 DefaultSliderView textSliderView = new DefaultSliderView(getActivity());
                 // initialize a SliderLayout
-                textSliderView.image(url)
+                textSliderView.image(map.get(name))
                     .setScaleType(BaseSliderView.ScaleType.CenterCrop);
 
                 //add your extra information
-                //textSliderView.bundle(new Bundle());
-                //textSliderView.getBundle().putString("extra", name);
-
+                textSliderView.bundle(new Bundle());
+                textSliderView.getBundle().putString("extra", name);
                 mSliderLayout.addSlider(textSliderView);
                 mSliderLayout.setDuration(3000);
                 mSliderLayout.setCustomIndicator(mPagerIndicator);
+                textSliderView.setOnSliderClickListener(
+                    new BaseSliderView.OnSliderClickListener() {
+                      @Override public void onSliderClick(BaseSliderView slider) {
+
+                        String extra = slider.getBundle().getString("extra");
+                        assert extra != null;
+                        if (extra.equals("post2")) {
+                          startActivity(
+                              new Intent(getActivity(), ChildListActivity.class));
+                        }else if (extra.equals("post1")) {
+                          startActivity(
+                              new Intent(getActivity(), LadyListActivity.class));
+                        }
+                      }
+                    });
               }
+
 
               post2.post(new Runnable() {
                 @Override public void run() {

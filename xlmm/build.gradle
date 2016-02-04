@@ -239,6 +239,6 @@ dependencies {
   compile 'com.qiniu:qiniu-android-sdk:(7.0.1,7.1)'
 
   compile 'com.nineoldandroids:library:2.4.0'
-
+  compile 'com.squareup.picasso:picasso:2.5.2'
 
 }
