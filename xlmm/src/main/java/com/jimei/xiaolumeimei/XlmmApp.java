@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei;
 
 import android.app.Application;
 import android.content.Context;
+import android.support.multidex.MultiDex;
 import android.util.Log;
 import cn.sharesdk.framework.ShareSDK;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
@@ -26,8 +27,8 @@ import rx.schedulers.Schedulers;
  */
 public class XlmmApp extends Application {
 
-  private static Context mContext;
   public static OkHttpClient client;
+  private static Context mContext;
 
   public static Context getInstance() {
     return mContext;
@@ -46,30 +47,25 @@ public class XlmmApp extends Application {
     //CustomActivityOnCrash.install(this);
 
     //获取用户信息失败，说明要重新登陆
-    if(NetWorkUtil.isNetWorkConnected(this)){
+    if (NetWorkUtil.isNetWorkConnected(this)) {
       UserModel model = new UserModel();
       model.getUserInfo()
-              .subscribeOn(Schedulers.newThread())
-              .subscribe(new ServiceResponse<UserInfoBean>() {
-                @Override
-                public void onNext(UserInfoBean user) {
-                  Log.d("XlmmApp", "getUserInfo:, "   + user.getResults().get(0).toString());
-                }
+          .subscribeOn(Schedulers.newThread())
+          .subscribe(new ServiceResponse<UserInfoBean>() {
+            @Override public void onNext(UserInfoBean user) {
+              Log.d("XlmmApp", "getUserInfo:, " + user.getResults().get(0).toString());
+            }
 
-                @Override
-                public void onCompleted() {
-                  super.onCompleted();
-                }
+            @Override public void onCompleted() {
+              super.onCompleted();
+            }
 
-                @Override
-                public void onError(Throwable e) {
-                  LoginUtils.delLoginInfo(mContext);
-                  Log.e("XlmmApp", "error:, "   + e.toString());
-                  super.onError(e);
-                }
-              });
-
-
+            @Override public void onError(Throwable e) {
+              LoginUtils.delLoginInfo(mContext);
+              Log.e("XlmmApp", "error:, " + e.toString());
+              super.onError(e);
+            }
+          });
     }
   }
 
@@ -86,5 +82,10 @@ public class XlmmApp extends Application {
         new CookieManager(new PersistentCookieStore(getApplicationContext()),
             CookiePolicy.ACCEPT_ALL));
     return httpClient;
+  }
+
+  @Override protected void attachBaseContext(Context base) {
+    super.attachBaseContext(base);
+    MultiDex.install(this);
   }
 }

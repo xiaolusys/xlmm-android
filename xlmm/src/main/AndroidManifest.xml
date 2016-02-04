@@ -207,6 +207,12 @@
     <activity android:name=".ui.activity.product.WashingIntrductionActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
+    <activity android:name=".ui.activity.product.ChildListActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
+    <activity android:name=".ui.activity.product.LadyListActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
 
     <activity
         android:name="com.mob.tools.MobUIShell"

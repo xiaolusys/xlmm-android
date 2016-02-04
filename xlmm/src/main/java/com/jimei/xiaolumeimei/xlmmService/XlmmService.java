@@ -385,9 +385,10 @@ public interface XlmmService {
   @FormUrlEncoded
   @POST("register/wxapp_login")
   Observable<ResponseBody> wxapp_login(
-      String headimgurl
-
-
+     String headimgurl,
+      String nickname,
+      String openid,
+      String unionid
   );
 
 

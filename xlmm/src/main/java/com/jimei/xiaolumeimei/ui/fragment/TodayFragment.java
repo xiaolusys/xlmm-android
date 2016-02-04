@@ -35,7 +35,6 @@ public class TodayFragment extends BaseFragment {
   ProductModel model = new ProductModel();
   private XRecyclerView xRecyclerView;
   private TodayAdapter mTodayAdapter;
-  private View head;
   private ImageView post1;
   private ImageView post2;
   private RotateLoading loading;
@@ -110,7 +109,7 @@ public class TodayFragment extends BaseFragment {
     xRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
     xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
 
-    head = LayoutInflater.from(getActivity())
+    View head = LayoutInflater.from(getActivity())
         .inflate(R.layout.today_poster_header,
             (ViewGroup) view.findViewById(R.id.head_today), false);
 
