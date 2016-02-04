@@ -9,6 +9,18 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+
+        multiDexEnabled = true
+    }
+
+    sourceSets {
+        main {
+            java.srcDirs = ['src/main/java/']
+            assets.srcDirs = ['src/main/assets', 'src/main/assets/']
+            res.srcDirs = ['src/main/res', 'src/main/res/']
+            manifest.srcFile 'src/main/AndroidManifest.xml'
+            jniLibs.srcDirs=['libs']
+        }
     }
 
 }
