@@ -164,6 +164,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
 
             }
 
+            boolean isOldTencentPic = false;
             for (int i = 0; i < contentImgs.size(); i++) {
               final int finalI = i;
               final int finalI1 = i;
@@ -171,6 +172,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
 
               if (contentImgs.get(i).startsWith("https://mmbiz.qlogo.cn")) {
                 head_img = contentImgs.get(i);
+                isOldTencentPic = true;
               } else {
                 String[] temp = contentImgs.get(i).split("http://image.xiaolu.so/");
 
@@ -179,7 +181,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
                     head_img = "http://image.xiaolu.so/"
                             + URLEncoder.encode(temp[1], "utf-8")
                             + "?imageMogr2/format/jpg/thumbnail/640/quality/90/crop"
-                        + "/x4096";
+                        + "/x2048";
                   } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                   }
@@ -201,38 +203,37 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
                       if (response != null) {
                         try {
                           JUtils.Log("ProductDetail",  " height= " + response.getHeight()
-                              + "width= "+response.getWidth());
+                              + " width= "+response.getWidth());
                           JUtils.Log("ProductDetail", "head_img "+finalHead_img);
                           int width = DisplayUtils.getScreenW(ProductDetailActvity.this);
 
                           Bitmap scaled = null;
 
-                          if(response.getHeight() > 4096) {
+                          if(response.getHeight() > 2048) {
                             Log.e("ProductDetail", "mmbiz.qlogo.cn bad picture,height "+response.getHeight());
 
                           }
                           else {
                             int scale_size = DisplayUtils.getScreenW
                                 (ProductDetailActvity.this) / 640;
-                            JUtils.Log("ProductDetail", "use glide scale_size"+
-                                scale_size);
-                            if(DisplayUtils.getScreenH(ProductDetailActvity.this) *
-                                scale_size >4096){
+                            JUtils.Log("ProductDetail", "use glide scale_size="+ scale_size);
+                            if(response.getHeight() * scale_size >2048){
+                              JUtils.Log("ProductDetail", "use glide width chg ="+ 640*(2048 / response.getHeight()));
                               Glide.with(ProductDetailActvity.this)
                                   .load(finalHead_img)
                                   .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                  .override(640*(4096 / response.getHeight()),
-                                      4096)
+                                  .override(640*(2048 / response.getHeight()),
+                                          2048)
                                   .centerCrop()
                                   .into(viewList.get(finalI1));
                             }
                             else {
+                              JUtils.Log("ProductDetail", "use glide height chg="+ response.getHeight() * scale_size);
                               Glide.with(ProductDetailActvity.this)
                                   .load(finalHead_img)
                                   .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                  .override(DisplayUtils.getScreenW(ProductDetailActvity.this),
-                                      DisplayUtils.getScreenH(ProductDetailActvity.this) *
-                                      scale_size)
+                                  .override(response.getWidth(),
+                                      response.getHeight() * scale_size)
                                   .centerCrop()
                                   .into(viewList.get(finalI1));
                             }
