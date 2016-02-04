@@ -13,6 +13,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -44,7 +45,7 @@ import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseActivity
     implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
-
+  public  static String TAG = "MainActivity";
   @Bind(R.id.tab_layout) TabLayout mTabLayout;
   @Bind(R.id.view_pager) ViewPager mViewPager;
   @Bind(R.id.tool_bar) Toolbar toolbar;
@@ -103,8 +104,9 @@ public class MainActivity extends BaseActivity
   }
 
   @Override protected void initView() {
-    toolbar.setTitle("小鹿美美--外贸原单 天天特价");
+    toolbar.setTitle("小鹿美美");
     setSupportActionBar(toolbar);
+    toolbar.setNavigationIcon(R.drawable.ic_deerhead);
 
     DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
     ActionBarDrawerToggle toggle =
@@ -273,5 +275,22 @@ public class MainActivity extends BaseActivity
     @Override public CharSequence getPageTitle(int position) {
       return listTitle.get(position);
     }
+  }
+
+  @Override public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()){
+      case R.id.action_settings:
+        JUtils.Log(TAG,"xiaolu mama entry");
+
+        break;
+      default:
+        break;
+    }
+    return super.onOptionsItemSelected(item);
+  }
+
+  @Override public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.mainframe_menu,menu);
+    return super.onCreateOptionsMenu(menu);
   }
 }
