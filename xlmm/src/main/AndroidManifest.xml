@@ -228,6 +228,10 @@
         android:exported="true"
         android:screenOrientation="portrait"/>
 
+    <activity android:name=".ui.activity.xiaolumama.MamaInfoActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
+
   </application>
 
 </manifest>

@@ -4,6 +4,7 @@ import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.entities.AddCartsBean;
 import com.jimei.xiaolumeimei.entities.AddressBean;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
+import com.jimei.xiaolumeimei.entities.AgentInfoBean;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
@@ -391,5 +392,7 @@ public interface XlmmService {
       String unionid
   );
 
-
+  @GET("pmt/xlmm/agency_info")
+  Observable<AgentInfoBean> getAgentInfoBean(
+  );
 }
