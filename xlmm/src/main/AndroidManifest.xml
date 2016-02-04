@@ -229,6 +229,14 @@
         android:screenOrientation="portrait"/>
 
     <activity android:name=".ui.activity.xiaolumama.MamaInfoActivity"
+      android:theme="@style/AppTheme.TransparentActivity"
+      />
+
+    <activity android:name=".ui.activity.xiaolumama.WithdrawCashActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
+
+    <activity android:name=".ui.activity.xiaolumama.WithdrawCashHistoryActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
 
