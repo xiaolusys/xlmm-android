@@ -34,7 +34,7 @@
 
   <RelativeLayout
       android:layout_width="match_parent"
-      android:layout_height="400px"
+      android:layout_height="300px"
       android:layout_below="@+id/app_bar_layout"
       android:layout_centerHorizontal="true"
       android:id="@+id/rl_mamainfo">
@@ -46,7 +46,7 @@
         android:gravity="center"
         android:layout_centerHorizontal="true"
         android:textSize="15sp"
-
+        android:layout_marginTop="40px"
         />
 
     <TextView android:layout_width="wrap_content"
@@ -54,7 +54,7 @@
         android:layout_centerHorizontal="true"
         android:id="@+id/tv_reminder"
         android:text="0"
-        android:textSize="20sp"
+        android:textSize="30sp"
         android:layout_gravity="center"
         android:textColor="@color/colorAccent"
         android:layout_below="@id/tv_Point"/>
@@ -71,14 +71,10 @@
   </RelativeLayout>
 
 
-
-
-  <include layout="@layout/common_gap"/>
-
   <RelativeLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_below="@+id/rl_btn"
+      android:layout_below="@+id/rl_mamainfo"
       android:orientation="horizontal"
       android:layout_marginTop="8px"
       android:layout_centerHorizontal="true"
@@ -88,7 +84,8 @@
         android:id="@+id/tv_order1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="true"
+        android:gravity="center_horizontal"
+        android:layout_marginLeft="100px"
         android:text="@string/withdrawcash"
         android:background="@drawable/text_frame"
         />
@@ -97,10 +94,11 @@
         android:id="@+id/img_red_packet1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="300px"
-        android:layout_marginTop="100px"
+        android:layout_marginLeft="200px"
+        android:layout_marginTop="40px"
         android:clickable="true"
-        android:src="@drawable/img_head"/>
+        android:src="@drawable/img_redpacket100_1"
+        android:layout_below="@+id/tv_order1"/>
 
     <ImageView
         android:id="@+id/img_red_packet2"
@@ -111,6 +109,8 @@
         android:background="@drawable/text_frame"
         android:layout_below="@+id/img_red_packet1"
         android:layout_marginLeft="200px"
+        android:layout_marginTop="40px"
+        android:src="@drawable/img_redpacket200_1"
         />
 
 

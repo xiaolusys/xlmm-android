@@ -30,10 +30,12 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity implements Vie
 
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.btn_jump) Button btn_jump;
+  @Bind(R.id.imgUser) ImageView imgUser;
 
   @Override protected void setListener() {
     btn_jump.setOnClickListener(this);
     toolbar.setOnClickListener(this);
+    imgUser.setOnClickListener(this);
   }
   @Override protected void getBundleExtras(Bundle extras) {
 
@@ -76,12 +78,14 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity implements Vie
   public void onClick(View v) {
     switch (v.getId()) {
       case R.id.btn_jump:
-        Intent intent = new Intent(MamaInfoActivity.this, MainActivity.class);
-        startActivity(intent);
+        startActivity(new Intent(MamaInfoActivity.this, MainActivity.class));
         finish();
         break;
       case R.id.toolbar:
         finish();
+        break;
+      case R.id.imgUser:
+        startActivity(new Intent(MamaInfoActivity.this, WithdrawCashActivity.class));
         break;
     }
   }

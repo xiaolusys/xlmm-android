@@ -72,8 +72,7 @@ public class WithdrawCashActivity extends BaseSwipeBackCompatActivity implements
     switch (v.getId()) {
       case R.id.btn_jump:
         JUtils.Log(TAG,"withdraw cash now");
-        //Intent intent = new Intent(WithdrawCashActivity.this, MainActivity.class);
-        //startActivity(intent);
+        //startActivity(new Intent(WithdrawCashActivity.this, MainActivity.class));
         finish();
         break;
       case R.id.toolbar:
@@ -86,8 +85,7 @@ public class WithdrawCashActivity extends BaseSwipeBackCompatActivity implements
     switch (item.getItemId()){
       case R.id.action_history:
         JUtils.Log(TAG,"withdraw cash history entry");
-        //Intent intent = new Intent(this, MamaInfoActivity.class);
-        //startActivity(intent);
+        startActivity(new Intent(this, WithdrawCashHistoryActivity.class));
         break;
       default:
         break;
