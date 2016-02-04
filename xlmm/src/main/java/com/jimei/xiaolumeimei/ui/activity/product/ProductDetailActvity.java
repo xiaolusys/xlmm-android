@@ -200,9 +200,6 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
                           JUtils.Log("ProductDetail", "head_img "+finalHead_img);
                           int width = DisplayUtils.getScreenW(ProductDetailActvity.this);
 
-                          int nh = (int) (response.getHeight() * (420.0
-                              / response.getWidth()));
-                          //if (nh > 4096) nh = 4096;
                           Bitmap scaled = null;
 
                           if(response.getHeight() > 4096) {
@@ -211,18 +208,34 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
                             viewList.get(finalI).setImageBitmap(scaled);
                           }
                           else {
-                            JUtils.Log("ProductDetail", "use glide");
-                            Glide.with(ProductDetailActvity.this)
-                                    .load(finalHead_img)
-                                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                    .override(640,response.getHeight())
-                                    .centerCrop()
-                                    .into(viewList.get(finalI1));
+                            int scale_size = DisplayUtils.getScreenW
+                                (ProductDetailActvity.this) / 640;
+                            JUtils.Log("ProductDetail", "use glide scale_size"+
+                                scale_size);
+                            if(DisplayUtils.getScreenH(ProductDetailActvity.this) *
+                                scale_size >4096){
+                              Glide.with(ProductDetailActvity.this)
+                                  .load(finalHead_img)
+                                  .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                  .override(DisplayUtils.getScreenW
+                                      (ProductDetailActvity.this)/scale_size,
+                                      DisplayUtils.getScreenH(ProductDetailActvity.this))
+                                  .centerCrop()
+                                  .into(viewList.get(finalI1));
+                            }
+                            else {
+                              Glide.with(ProductDetailActvity.this)
+                                  .load(finalHead_img)
+                                  .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                  .override(DisplayUtils.getScreenW(ProductDetailActvity.this),
+                                      DisplayUtils.getScreenH(ProductDetailActvity.this) *
+                                      scale_size)
+                                  .centerCrop()
+                                  .into(viewList.get(finalI1));
+                            }
                           }
 
                           //Bitmap scaled = Bitmap.createScaledBitmap(response, 480, nh, true);
-
-
 
                           longimageview_content.addView(viewList.get(finalI1));
                         } catch (Exception e) {
