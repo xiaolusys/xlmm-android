@@ -30,8 +30,6 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity implements Vie
 
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.btn_jump) Button btn_jump;
-  @Bind(R.id.rlayout_order_empty) RelativeLayout rlayout_order_empty;
-
 
   @Override protected void setListener() {
     btn_jump.setOnClickListener(this);
