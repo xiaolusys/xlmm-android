@@ -338,42 +338,7 @@ public class SliderLayout extends RelativeLayout {
       case Default:
         t = new DefaultTransformer();
         break;
-      case Accordion:
-        t = new AccordionTransformer();
-        break;
-      case Background2Foreground:
-        t = new BackgroundToForegroundTransformer();
-        break;
-      case CubeIn:
-        t = new CubeInTransformer();
-        break;
-      case DepthPage:
-        t = new DepthPageTransformer();
-        break;
-      case Fade:
-        t = new FadeTransformer();
-        break;
-      case FlipHorizontal:
-        t = new FlipHorizontalTransformer();
-        break;
-      case FlipPage:
-        t = new FlipPageViewTransformer();
-        break;
-      case Foreground2Background:
-        t = new ForegroundToBackgroundTransformer();
-        break;
-      case RotateDown:
-        t = new RotateDownTransformer();
-        break;
-      case RotateUp:
-        t = new RotateUpTransformer();
-        break;
-      case Stack:
-        t = new StackTransformer();
-        break;
-      case Tablet:
-        t = new TabletTransformer();
-        break;
+
       case ZoomIn:
         t = new ZoomInTransformer();
         break;
