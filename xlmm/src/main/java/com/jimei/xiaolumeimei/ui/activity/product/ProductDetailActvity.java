@@ -210,20 +210,21 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
                           Bitmap scaled = null;
 
                           if(response.getHeight() > 2048) {
-                            Log.e("ProductDetail", "mmbiz.qlogo.cn bad picture,height "+response.getHeight());
+                            Log.e("ProductDetail", finalHead_img + ",bad picture,height "+response.getHeight());
 
                           }
                           else {
-                            int scale_size = DisplayUtils.getScreenW
-                                (ProductDetailActvity.this) / 640;
-                            JUtils.Log("ProductDetail", "use glide scale_size="+ scale_size);
-                            if(response.getHeight() * scale_size >2048){
+                            float scale_size = DisplayUtils.getScreenW
+                                (ProductDetailActvity.this) / (float)(response.getWidth());
+                            JUtils.Log("ProductDetail", "use glide scale_size="+ scale_size + " screen width="+DisplayUtils.getScreenW
+                                    (ProductDetailActvity.this));
+                            if(response.getHeight() * scale_size > 2048){
                               JUtils.Log("ProductDetail", "use glide width chg ="+ 640*(2048 / response.getHeight()));
                               Glide.with(ProductDetailActvity.this)
                                   .load(finalHead_img)
                                   .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                  .override(640*(2048 / response.getHeight()),
-                                          2048)
+                                  .override((int)(response.getWidth()* scale_size),
+                                          (int)(response.getHeight() * scale_size))
                                   .centerCrop()
                                   .into(viewList.get(finalI1));
                             }
@@ -232,8 +233,8 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
                               Glide.with(ProductDetailActvity.this)
                                   .load(finalHead_img)
                                   .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                  .override(response.getWidth(),
-                                      response.getHeight() * scale_size)
+                                  .override((int)(response.getWidth()* scale_size),
+                                          (int)(response.getHeight() * scale_size))
                                   .centerCrop()
                                   .into(viewList.get(finalI1));
                             }
