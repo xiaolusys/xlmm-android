@@ -6,6 +6,7 @@ import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
+import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 import com.squareup.okhttp.ResponseBody;
@@ -39,5 +40,10 @@ public class MamaInfoModel {
         .compose(new DefaultTransform<>());
   }
 
-
+  //得到全部订单数据列表
+  public Observable<WithdrawCashHisBean> getWithdrawCashHis() {
+    return XlmmRetrofitClient.getService()
+        .getWithdrawCashHis()
+        .compose(new DefaultTransform<>());
+  }
 }

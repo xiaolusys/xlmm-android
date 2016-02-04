@@ -6,13 +6,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.adapter.WithdrawCashHisAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AgentInfoBean;
+import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import java.util.List;
 import rx.schedulers.Schedulers;
 
 /**
@@ -22,6 +26,9 @@ public class WithdrawCashHistoryActivity extends BaseSwipeBackCompatActivity imp
   String TAG = "WithdrawCashHistoryActivity";
 
   @Bind(R.id.toolbar) Toolbar toolbar;
+  @Bind(R.id.lv_withdrawcash_his) ListView lv_withdrawcash_his;
+
+  private WithdrawCashHisAdapter mHisAdapter;
 
   @Override protected void setListener() {
     toolbar.setOnClickListener(this);
@@ -39,16 +46,24 @@ public class WithdrawCashHistoryActivity extends BaseSwipeBackCompatActivity imp
     setSupportActionBar(toolbar);
     toolbar.setNavigationIcon(R.drawable.back);
 
-
+    mHisAdapter = new WithdrawCashHisAdapter(this);
+    lv_withdrawcash_his.setAdapter(mHisAdapter);
   }
 
   @Override protected void initData() {
-    MamaInfoModel.getInstance().getAgentInfoBean()
+    MamaInfoModel.getInstance().getWithdrawCashHis()
         .subscribeOn(Schedulers.newThread())
-        .subscribe(new ServiceResponse<AgentInfoBean>() {
-          @Override public void onNext(AgentInfoBean pointBean) {
-            JUtils.Log(TAG,"AgentInfoBean="+ pointBean.toString());
+        .subscribe(new ServiceResponse<WithdrawCashHisBean>() {
+          @Override public void onNext(WithdrawCashHisBean pointBean) {
+            JUtils.Log(TAG,"WithdrawCashHisBean="+ pointBean.toString());
+            List<WithdrawCashHisBean.WithdrawCashRecord> results = pointBean.getResults();
 
+            if (0 == results.size()) {
+              JUtils.Log(TAG, "results.size()=0");
+
+            } else {
+              mHisAdapter.update(results);
+            }
           }
         });
 
