@@ -5,16 +5,44 @@
     android:id="@+id/head_today"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-  <ImageView
-      android:id="@+id/post_1"
-      android:layout_width="match_parent"
-      android:layout_height="309px"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.jimei.xiaolumeimei.widget.banner.SliderLayout
+            android:id="@+id/slider"
+            app:auto_cycle="true"
+            android:layout_width="match_parent"
+            android:layout_height="309px"
+            />
+
+        <com.jimei.xiaolumeimei.widget.banner.Indicators.PagerIndicator
+            android:id="@+id/pi_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            app:selected_color="@color/colorPrimary"
+            app:selected_height="6dp"
+            app:selected_padding_left="3dp"
+            app:selected_padding_right="3dp"
+            app:selected_width="6dp"
+            app:shape="oval"
+            app:unselected_color="#fff"
+            app:unselected_height="4dp"
+            app:unselected_padding_left="3dp"
+            app:unselected_padding_right="3dp"
+            app:unselected_width="4dp"
+            />
+    </FrameLayout>
 
   <ImageView
       android:id="@+id/post_2"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="20px"
+      android:layout_height="309px"
+      android:layout_marginTop="15px"
       />
 
   <RelativeLayout
@@ -53,6 +81,6 @@
         app:suffixHour="时"
         app:suffixMinute="分"
         app:suffixSecond="秒"
-       />
+        />
   </RelativeLayout>
 </LinearLayout>

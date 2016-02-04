@@ -306,6 +306,23 @@ public final class ViewUtils {
     }
   }
 
+  public static String getDecodeUrl(String path) {
+    String imagUrl = "";
+    if (path.startsWith("https://mmbiz.qlogo.cn")) {
+      imagUrl = path;
+    } else {
+      String[] temp = path.split("http://image.xiaolu.so/");
+      if (temp.length > 1) {
+        try {
+          imagUrl = "http://image.xiaolu.so/" + URLEncoder.encode(temp[1], "utf-8");
+        } catch (UnsupportedEncodingException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+    return imagUrl;
+  }
+
   public static void loadImgToImgViewWithPlaceholderTransform(Context context,
       ImageView img, String picPath) {
     if (null == picPath) return;

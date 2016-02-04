@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 import cn.iwgang.countdownview.CountdownView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
@@ -18,8 +20,13 @@ import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
+import com.jimei.xiaolumeimei.widget.banner.Indicators.PagerIndicator;
+import com.jimei.xiaolumeimei.widget.banner.SliderLayout;
+import com.jimei.xiaolumeimei.widget.banner.SliderTypes.BaseSliderView;
+import com.jimei.xiaolumeimei.widget.banner.SliderTypes.DefaultSliderView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.victor.loading.rotate.RotateLoading;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -41,6 +48,8 @@ public class TodayFragment extends BaseFragment {
   private int page = 2;
   private int totalPages;//总的分页数
   private CountdownView countTime;
+  private SliderLayout mSliderLayout;
+  private PagerIndicator mPagerIndicator;
 
   @Override protected int provideContentViewId() {
     return R.layout.today_fragment;
@@ -113,13 +122,12 @@ public class TodayFragment extends BaseFragment {
         .inflate(R.layout.today_poster_header,
             (ViewGroup) view.findViewById(R.id.head_today), false);
 
-    post1 = (ImageView) head.findViewById(R.id.post_1);
     post2 = (ImageView) head.findViewById(R.id.post_2);
     countTime = (CountdownView) head.findViewById(R.id.countTime);
+    mSliderLayout = (SliderLayout) head.findViewById(R.id.slider);
+    mPagerIndicator = (PagerIndicator) head.findViewById(R.id.pi_header);
 
     xRecyclerView.addHeaderView(head);
-
-    //countTime.start(calcLeftTime());
 
     model.getTodayPost()
         .subscribeOn(Schedulers.newThread())
@@ -127,19 +135,38 @@ public class TodayFragment extends BaseFragment {
           @Override public void onNext(PostBean postBean) {
             try {
 
-              String picLink = postBean.getWem_posters().get(0).pic_link;
-              String picLink1 = postBean.getChd_posters().get(0).pic_link;
+              String picLink =
+                  ViewUtils.getDecodeUrl(postBean.getWem_posters().get(0).pic_link);
+              String picLink1 =
+                  ViewUtils.getDecodeUrl(postBean.getChd_posters().get(0).pic_link);
 
-              post1.post(new Runnable() {
-                @Override public void run() {
+              List<String> list = new ArrayList<>();
+              list.add(picLink);
+              list.add(picLink1);
 
-                  ViewUtils.loadImgToImgViewPost(getActivity(), post1, picLink);
-                }
-              });
+              for (String url : list) {
+                DefaultSliderView textSliderView = new DefaultSliderView(getActivity());
+                // initialize a SliderLayout
+                textSliderView.image(url)
+                    .setScaleType(BaseSliderView.ScaleType.CenterCrop);
+
+                //add your extra information
+                //textSliderView.bundle(new Bundle());
+                //textSliderView.getBundle().putString("extra", name);
+
+                mSliderLayout.addSlider(textSliderView);
+                mSliderLayout.setDuration(3000);
+                mSliderLayout.setCustomIndicator(mPagerIndicator);
+              }
 
               post2.post(new Runnable() {
                 @Override public void run() {
-                  ViewUtils.loadImgToImgViewPost(getActivity(), post2, picLink1);
+                  Glide.with(getActivity())
+                      .load(picLink1)
+                      .diskCacheStrategy(DiskCacheStrategy.ALL)
+                      .placeholder(R.drawable.header)
+                      .centerCrop()
+                      .into(post2);
                 }
               });
             } catch (NullPointerException ex) {
