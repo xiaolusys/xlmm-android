@@ -14,20 +14,8 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.widget.banner.Animations.BaseAnimationInterface;
 import com.jimei.xiaolumeimei.widget.banner.Indicators.PagerIndicator;
 import com.jimei.xiaolumeimei.widget.banner.SliderTypes.BaseSliderView;
-import com.jimei.xiaolumeimei.widget.banner.Transformers.AccordionTransformer;
-import com.jimei.xiaolumeimei.widget.banner.Transformers.BackgroundToForegroundTransformer;
 import com.jimei.xiaolumeimei.widget.banner.Transformers.BaseTransformer;
-import com.jimei.xiaolumeimei.widget.banner.Transformers.CubeInTransformer;
 import com.jimei.xiaolumeimei.widget.banner.Transformers.DefaultTransformer;
-import com.jimei.xiaolumeimei.widget.banner.Transformers.DepthPageTransformer;
-import com.jimei.xiaolumeimei.widget.banner.Transformers.FadeTransformer;
-import com.jimei.xiaolumeimei.widget.banner.Transformers.FlipHorizontalTransformer;
-import com.jimei.xiaolumeimei.widget.banner.Transformers.FlipPageViewTransformer;
-import com.jimei.xiaolumeimei.widget.banner.Transformers.ForegroundToBackgroundTransformer;
-import com.jimei.xiaolumeimei.widget.banner.Transformers.RotateDownTransformer;
-import com.jimei.xiaolumeimei.widget.banner.Transformers.RotateUpTransformer;
-import com.jimei.xiaolumeimei.widget.banner.Transformers.StackTransformer;
-import com.jimei.xiaolumeimei.widget.banner.Transformers.TabletTransformer;
 import com.jimei.xiaolumeimei.widget.banner.Transformers.ZoomInTransformer;
 import com.jimei.xiaolumeimei.widget.banner.Transformers.ZoomOutSlideTransformer;
 import com.jimei.xiaolumeimei.widget.banner.Transformers.ZoomOutTransformer;
@@ -350,42 +338,7 @@ public class SliderLayout extends RelativeLayout {
       case Default:
         t = new DefaultTransformer();
         break;
-      case Accordion:
-        t = new AccordionTransformer();
-        break;
-      case Background2Foreground:
-        t = new BackgroundToForegroundTransformer();
-        break;
-      case CubeIn:
-        t = new CubeInTransformer();
-        break;
-      case DepthPage:
-        t = new DepthPageTransformer();
-        break;
-      case Fade:
-        t = new FadeTransformer();
-        break;
-      case FlipHorizontal:
-        t = new FlipHorizontalTransformer();
-        break;
-      case FlipPage:
-        t = new FlipPageViewTransformer();
-        break;
-      case Foreground2Background:
-        t = new ForegroundToBackgroundTransformer();
-        break;
-      case RotateDown:
-        t = new RotateDownTransformer();
-        break;
-      case RotateUp:
-        t = new RotateUpTransformer();
-        break;
-      case Stack:
-        t = new StackTransformer();
-        break;
-      case Tablet:
-        t = new TabletTransformer();
-        break;
+
       case ZoomIn:
         t = new ZoomInTransformer();
         break;
