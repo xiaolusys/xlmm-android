@@ -221,9 +221,8 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
                               Glide.with(ProductDetailActvity.this)
                                   .load(finalHead_img)
                                   .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                  .override(DisplayUtils.getScreenW
-                                      (ProductDetailActvity.this)/scale_size,
-                                      DisplayUtils.getScreenH(ProductDetailActvity.this))
+                                  .override(640*(4096 / response.getHeight()),
+                                      4096)
                                   .centerCrop()
                                   .into(viewList.get(finalI1));
                             }
