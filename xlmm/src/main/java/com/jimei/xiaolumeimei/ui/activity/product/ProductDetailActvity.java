@@ -12,6 +12,7 @@ import android.graphics.PointF;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -31,11 +32,13 @@ import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.ecloud.pulltozoomview.PullToZoomScrollViewEx;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.data.FilePara;
 import com.jimei.xiaolumeimei.entities.AddCartsBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.ProductModel;
+import com.jimei.xiaolumeimei.okhttp.callback.FileParaCallback;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.utils.BitmapUtil;
@@ -175,7 +178,8 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
                   try {
                     head_img = "http://image.xiaolu.so/"
                             + URLEncoder.encode(temp[1], "utf-8")
-                            + "?imageMogr2/format/jpg/thumbnail/640/quality/90";
+                            + "?imageMogr2/format/jpg/thumbnail/640/quality/90/crop"
+                        + "/x4096";
                   } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                   }
@@ -188,24 +192,24 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
               OkHttpUtils.get()
                   .url(head_img)
                   .build()
-                  .execute(new BitmapCallback() {
+                  .execute(new FileParaCallback() {
                     @Override public void onError(Call call, Exception e) {
 
                     }
 
-                    @Override public void onResponse(Bitmap response) {
+                    @Override public void onResponse(FilePara response) {
                       if (response != null) {
                         try {
-                          JUtils.Log("ProductDetail", "bmp size= " + response.getByteCount()/1024 + " height= " + response.getHeight());
+                          JUtils.Log("ProductDetail",  " height= " + response.getHeight()
+                              + "width= "+response.getWidth());
                           JUtils.Log("ProductDetail", "head_img "+finalHead_img);
                           int width = DisplayUtils.getScreenW(ProductDetailActvity.this);
 
                           Bitmap scaled = null;
 
                           if(response.getHeight() > 4096) {
-                            JUtils.Log("ProductDetail", ">4096,just get 2048 height bmp ");
-                            scaled = Bitmap.createBitmap(response, 0, 0, 640, 2048);
-                            viewList.get(finalI).setImageBitmap(scaled);
+                            Log.e("ProductDetail", "mmbiz.qlogo.cn bad picture,height "+response.getHeight());
+
                           }
                           else {
                             int scale_size = DisplayUtils.getScreenW
