@@ -133,39 +133,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
           }
         });
 
-    addressModel.getAddressList()
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<List<AddressBean>>() {
-          @Override public void onNext(List<AddressBean> list) {
-            super.onNext(list);
-            if (list != null) {
-              chooseAddress.setVisibility(View.INVISIBLE);
-              AddressBean addressBean = list.get(0);
 
-              addr_id = addressBean.getId();
-              name.setText(addressBean.getReceiverName());
-              phone.setText(addressBean.getReceiverMobile());
-
-              addressDetails.setText(addressBean.getReceiverState()
-                  + addressBean.getReceiverCity()
-                  + addressBean.getReceiverDistrict()
-                  + addressBean.getReceiverAddress());
-            } else {
-              chooseAddress.setVisibility(View.VISIBLE);
-              name.setVisibility(View.INVISIBLE);
-              phone.setVisibility(View.INVISIBLE);
-              addressDetails.setVisibility(View.INVISIBLE);
-            }
-          }
-
-          @Override public void onError(Throwable e) {
-            super.onError(e);
-            chooseAddress.setVisibility(View.VISIBLE);
-            name.setVisibility(View.INVISIBLE);
-            phone.setVisibility(View.INVISIBLE);
-            addressDetails.setVisibility(View.INVISIBLE);
-          }
-        });
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -358,5 +326,40 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   @Override protected void onResume() {
 
     super.onResume();
+
+    addressModel.getAddressList()
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<List<AddressBean>>() {
+          @Override public void onNext(List<AddressBean> list) {
+            super.onNext(list);
+            if (list != null) {
+              chooseAddress.setVisibility(View.INVISIBLE);
+              AddressBean addressBean = list.get(0);
+
+              addr_id = addressBean.getId();
+              name.setText(addressBean.getReceiverName());
+              phone.setText(addressBean.getReceiverMobile());
+
+              addressDetails.setText(addressBean.getReceiverState()
+                  + addressBean.getReceiverCity()
+                  + addressBean.getReceiverDistrict()
+                  + addressBean.getReceiverAddress());
+            } else {
+              chooseAddress.setVisibility(View.VISIBLE);
+              name.setVisibility(View.INVISIBLE);
+              phone.setVisibility(View.INVISIBLE);
+              addressDetails.setVisibility(View.INVISIBLE);
+            }
+          }
+
+          @Override public void onError(Throwable e) {
+            super.onError(e);
+            chooseAddress.setVisibility(View.VISIBLE);
+            name.setVisibility(View.INVISIBLE);
+            phone.setVisibility(View.INVISIBLE);
+            addressDetails.setVisibility(View.INVISIBLE);
+          }
+        });
+
   }
 }

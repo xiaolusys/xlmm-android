@@ -23,14 +23,20 @@
 # Gson uses generic type information stored in a class file when working with fields. Proguard
 # removes such information by default, so configure it to keep all of it.
 
--optimizationpasses 5          # 指定代码的压缩级别
--dontusemixedcaseclassnames   # 是否使用大小写混合
--dontpreverify           # 混淆时是否做预校验
--verbose                # 混淆时是否记录日志
+##--- For:android默认 ---
+-optimizationpasses 5  # 指定代码的压缩级别
+-allowaccessmodification #优化时允许访问并修改有修饰符的类和类的成员
+-dontusemixedcaseclassnames  # 是否使用大小写混合
+-dontskipnonpubliclibraryclasses  # 是否混淆第三方jar
+-dontpreverify  # 混淆时是否做预校验
+-verbose    # 混淆时是否记录日志
+-ignorewarnings  # 忽略警告，避免打包时某些警告出现
+-optimizations !code/simplification/arithmetic,!code/simplification/cast,!field/*,!class/merging/*  # 混淆时所采用的算法
+-keep public class com.google.vending.licensing.ILicensingService
+-keep public class com.android.vending.licensing.ILicensingService
 
--optimizations !code/simplification/arithmetic,!field/*,!class/merging/*  # 混淆时所采用的算法
-
--keep public class * extends android.app.Activity      # 保持哪些类不被混淆
+-keep public class * extends android.app.Activity
+-keep public class * extends android.app.Fragment# 保持哪些类不被混淆
 -keep public class * extends android.app.Application   # 保持哪些类不被混淆
 -keep public class * extends android.app.Service       # 保持哪些类不被混淆
 -keep public class * extends android.content.BroadcastReceiver  # 保持哪些类不被混淆
@@ -42,6 +48,12 @@
 -keepclasseswithmembernames class * {  # 保持 native 方法不被混淆
     native <methods>;
 }
+
+-keepclassmembers public class * extends android.view.View {
+   void set*(***);
+   *** get*();
+}
+
 -keepclasseswithmembers class * {   # 保持自定义控件类不被混淆
     public <init>(android.content.Context, android.util.AttributeSet);
 }
@@ -64,7 +76,9 @@
 
 # Gson specific classes
 -keep class sun.misc.Unsafe { *; }
-#-keep class com.google.gson.stream.** { *; }
+#
+-keep class com.idea.fifaalarmclock.entity.***
+-keep class com.google.gson.stream.** { *; }
 
 
 # Application classes that will be serialized/deserialized over Gson
@@ -102,9 +116,12 @@
 ##--------------------------end
 
 ##umeng---------------
--keep public class com.jimei.xiaolumeimei.R$*{
-public static final int *;
+-keepclassmembers class **.R$* { #不混淆R文件
+    public static <fields>;
 }
+
+-dontwarn android.support.**
+##--- End android默认 ---
 
 -keepclassmembers enum * {
     public static **[] values();
@@ -180,3 +197,21 @@ public static final int *;
 -keepclasseswithmembernames class * {
     @butterknife.* <methods>;
 }
+
+##--- For:android-support-v4 ---
+-dontwarn android.support.v4.**
+-keep class android.support.v4.** { *; }
+-keep interface android.support.v4.app.** { *; }
+-keep class * extends android.support.v4.** { *; }
+-keep public class * extends android.support.v4.**
+-keep public class * extends android.support.v4.widget
+-keep class * extends android.support.v4.app.** {*;}
+-keep class * extends android.support.v4.view.** {*;}
+
+
+##--- For:attributes(未启用) ---
+#
+-keepattributes SourceFile,LineNumberTable # 保持反编译工具能看到代码的行数，以及release包安装后出现异常信息可以知道在哪行代码出现异常，建议不启用
+-keepattributes *Annotation* #使用注解
+-keepattributes Signature #过滤泛型  出现类型转换错误时，启用这个
+

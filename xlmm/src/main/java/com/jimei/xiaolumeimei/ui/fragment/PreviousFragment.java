@@ -6,20 +6,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 import cn.iwgang.countdownview.CountdownView;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.PreviousAdapter;
 import com.jimei.xiaolumeimei.base.BaseFragment;
-import com.jimei.xiaolumeimei.entities.IndexBean;
 import com.jimei.xiaolumeimei.entities.PostBean;
+import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.victor.loading.rotate.RotateLoading;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -32,7 +32,10 @@ import rx.schedulers.Schedulers;
  */
 public class PreviousFragment extends BaseFragment {
 
+  int page_size = 10;
   ProductModel model = new ProductModel();
+  private int page = 2;
+  private int totalPages;//总的分页数
   private XRecyclerView xRecyclerView;
   private PreviousAdapter mPreviousAdapter;
   private ImageView post1;
@@ -48,21 +51,19 @@ public class PreviousFragment extends BaseFragment {
   @Override protected void initData() {
 
     loading.start();
-    model.getPreviousList()
-        .subscribeOn(Schedulers.newThread())
-        .subscribe(new ServiceResponse<IndexBean>() {
-          @Override public void onNext(IndexBean indexBean) {
+    model.getPreviousList(1, 10)
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<ProductListBean>() {
+          @Override public void onNext(ProductListBean productListBean) {
 
             try {
 
-              if (indexBean != null) {
-                List<IndexBean.product> female_list = indexBean.getFemale_list();
-                List<IndexBean.product> child_list = indexBean.getChild_list();
-                List<IndexBean.product> list = new ArrayList<>();
-                list.addAll(female_list);
-                list.addAll(child_list);
-                mPreviousAdapter.update(list);
-                mPreviousAdapter.notifyDataSetChanged();
+              if (productListBean != null) {
+
+                List<ProductListBean.ResultsEntity> results =
+                    productListBean.getResults();
+                totalPages = productListBean.getCount() / page_size;
+                mPreviousAdapter.update(results);
               }
             } catch (NullPointerException ex) {
 
@@ -94,7 +95,6 @@ public class PreviousFragment extends BaseFragment {
         countTime.updateShow(values[0]);
       }
     }.execute();
-
   }
 
   @Override protected void initViews() {
@@ -151,48 +151,58 @@ public class PreviousFragment extends BaseFragment {
 
         );
 
-    mPreviousAdapter = new
-
-        PreviousAdapter(getActivity()
-
-    );
+    mPreviousAdapter = new PreviousAdapter(getActivity());
     xRecyclerView.setAdapter(mPreviousAdapter);
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
-                                       @Override public void onRefresh() {
-                                         model.getPreviousList()
-                                             .subscribeOn(Schedulers.newThread())
-                                             .subscribe(new ServiceResponse<IndexBean>() {
-                                               @Override
-                                               public void onNext(IndexBean indexBean) {
-                                                 List<IndexBean.product> child_list =
-                                                     indexBean.getChild_list();
-                                                 List<IndexBean.product> female_list =
-                                                     indexBean.getFemale_list();
-                                                 List<IndexBean.product> list =
-                                                     new ArrayList<>();
-                                                 list.addAll(child_list);
-                                                 list.addAll(female_list);
-                                                 mPreviousAdapter.updateWithClear(list);
-                                                 mPreviousAdapter.notifyDataSetChanged();
-                                               }
+        @Override public void onRefresh() {
+        model.getTodayList(1, page * page_size)
+        .subscribeOn(Schedulers.newThread())
+        .subscribe(new ServiceResponse<ProductListBean>() {
+          @Override public void onNext(ProductListBean productListBean) {
+            List<ProductListBean.ResultsEntity> results =
+                productListBean.getResults();
+            mPreviousAdapter.updateWithClear(results);
 
-                                               @Override public void onCompleted() {
-                                                 super.onCompleted();
-                                                 xRecyclerView.post(
-                                                     xRecyclerView::refreshComplete);
-                                               }
-                                             });
-                                       }
+          }
 
-                                       @Override public void onLoadMore() {
+          @Override public void onCompleted() {
+            super.onCompleted();
+            xRecyclerView.post(xRecyclerView::refreshComplete);
+          }
+        });
+        }
 
-                                         xRecyclerView.postDelayed(
-                                             xRecyclerView::loadMoreComplete, 1000);
-                                       }
-                                     }
+        @Override public void onLoadMore() {
+
+          if (page <= totalPages) {
+            loadMoreData(page, 10);
+            page++;
+          } else {
+            Toast.makeText(activity, "没有更多了拉,去购物吧", Toast.LENGTH_SHORT).show();
+            xRecyclerView.post(xRecyclerView::loadMoreComplete);
+          }
+        }
+        }
 
     );
+  }
+
+  private void loadMoreData(int page, int page_size) {
+
+    model.getPreviousList(page, page_size)
+        .subscribeOn(Schedulers.newThread())
+        .subscribe(new ServiceResponse<ProductListBean>() {
+          @Override public void onNext(ProductListBean productListBean) {
+            List<ProductListBean.ResultsEntity> results = productListBean.getResults();
+            mPreviousAdapter.update(results);
+          }
+
+          @Override public void onCompleted() {
+            super.onCompleted();
+            xRecyclerView.post(xRecyclerView::loadMoreComplete);
+          }
+        });
   }
 
   private long calcLeftTime() {

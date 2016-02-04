@@ -29,7 +29,7 @@ public class ProductDetailBean {
   @SerializedName("head_img") private String mHeadImg;
   @SerializedName("is_saleopen") private boolean mIsSaleopen;
   @SerializedName("is_newgood") private boolean mIsNewgood;
-  @SerializedName("std_sale_price") private int mStdSalePrice;
+  @SerializedName("std_sale_price") private double mStdSalePrice;
   @SerializedName("agent_price") private double mAgentPrice;
   @SerializedName("sale_time") private String mSaleTime;
   @SerializedName("offshelf_time") private String mOffshelfTime;
@@ -168,11 +168,11 @@ public class ProductDetailBean {
     this.mIsNewgood = isNewgood;
   }
 
-  public int getStdSalePrice() {
+  public double getStdSalePrice() {
     return mStdSalePrice;
   }
 
-  public void setStdSalePrice(int stdSalePrice) {
+  public void setStdSalePrice(double stdSalePrice) {
     this.mStdSalePrice = stdSalePrice;
   }
 

@@ -86,25 +86,34 @@ public class LadyListAdapter extends RecyclerView.Adapter<LadyListAdapter.LadyLi
     String headImg = resultsEntity.getHeadImg();
 
     boolean isSaleopen = resultsEntity.isIsSaleopen();
-    if (isSaleopen) {
 
-      boolean isSaleOut = productModel.isIsSaleOut();
-      boolean isSingleSpec = productModel.isIsSingleSpec();
+    try {
+      if (isSaleopen) {
 
-      if (isSaleOut && isSingleSpec) {
-        holder.saleout.setVisibility(View.VISIBLE);
+        boolean isSaleOut = productModel.isIsSaleOut();
+        boolean isSingleSpec = productModel.isIsSingleSpec();
+
+        if (isSaleOut && isSingleSpec) {
+          holder.saleout.setVisibility(View.VISIBLE);
+        } else {
+          holder.saleout.setVisibility(View.INVISIBLE);
+        }
       } else {
-        holder.saleout.setVisibility(View.INVISIBLE);
+        holder.saleout.setVisibility(View.VISIBLE);
       }
-    } else {
-      holder.saleout.setVisibility(View.VISIBLE);
+
+
+      if (productModel.getName().length() <= 9) {
+        holder.childlistName.setText(productModel.getName());
+      } else {
+        holder.childlistName.setText(productModel.getName().substring(0,8)+"...");
+      }
+
+    } catch (Exception ex) {
+
     }
 
-    if (productModel.getName().length() <= 9) {
-      holder.childlistName.setText(productModel.getName());
-    } else {
-      holder.childlistName.setText(productModel.getName().substring(0,8)+"...");
-    }
+
 
 
     holder.childlistAgentPrice.setText("¥" + resultsEntity.getAgentPrice());
