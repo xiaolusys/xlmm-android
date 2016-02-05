@@ -316,7 +316,9 @@ public class MainActivity extends BaseActivity
         .subscribe(new ServiceResponse<UserInfoBean>() {
           @Override
           public void onNext(UserInfoBean user) {
-            if(user.getResults().get(0).getXiaolumm() != null){
+            if((user.getResults().get(0).getXiaolumm() != null)
+                && (user.getResults().get(0).getXiaolumm().getId() != 0)){
+              JUtils.Log(TAG, "i am xiaolumama, id="+ user.getResults().get(0).getXiaolumm().getId());
               Intent intent = new Intent(MainActivity.this, MamaInfoActivity.class);
               startActivity(intent);
             }
