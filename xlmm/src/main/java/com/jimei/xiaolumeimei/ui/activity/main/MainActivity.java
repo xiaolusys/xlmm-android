@@ -310,6 +310,7 @@ public class MainActivity extends BaseActivity
   }
 
   private void getUserInfo() {
+    JUtils.Log(TAG, "get mama userinfo");
     UserModel model = new UserModel();
     model.getUserInfo()
         .subscribeOn(Schedulers.newThread())
@@ -337,7 +338,7 @@ public class MainActivity extends BaseActivity
           @Override
           public void onError(Throwable e) {
 
-            Log.e(TAG, "error:, "   + e.toString());
+            Log.e(TAG, "getUserInfo error: "   + e.getLocalizedMessage());
             super.onError(e);
           }
         });
