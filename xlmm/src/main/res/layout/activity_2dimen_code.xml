@@ -45,7 +45,6 @@
         android:layout_height="500px"
         android:layout_marginLeft="100px"
         android:layout_marginTop="40px"
-        android:clickable="true"
         />
 
     <Button android:layout_width="wrap_content"
