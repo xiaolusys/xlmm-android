@@ -14,6 +14,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.Bind;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.wechat.friends.Wechat;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.UserBean;
@@ -25,6 +29,7 @@ import com.jimei.xiaolumeimei.widget.ClearEditText;
 import com.jimei.xiaolumeimei.widget.PasswordEditText;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import java.util.HashMap;
 import rx.schedulers.Schedulers;
 
 public class LoginActivity extends BaseSwipeBackCompatActivity
@@ -47,6 +52,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
 
   private SharedPreferences sharedPreferences;
   private SharedPreferences.Editor editor;
+  private String timestamp;
 
   @Override protected void setListener() {
     login_button.setOnClickListener(this);
@@ -86,6 +92,11 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
     toolbar.setNavigationIcon(R.drawable.back);
+    toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        finish();
+      }
+    });
 
     forGetTextView.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
   }
@@ -168,13 +179,25 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
 
         break;
 
-      case R.id.toolbar:
-        finish();
-        break;
-
       case R.id.wx_login:
-        //startActivity(new Intent(LoginActivity.this,));
-        //finish();
+
+        sha1();
+
+        Platform wechat = ShareSDK.getPlatform(getApplicationContext(), Wechat.NAME);
+        wechat.setPlatformActionListener(new PlatformActionListener() {
+          @Override public void onComplete(Platform platform, int i,
+              HashMap<String, Object> hashMap) {
+          }
+
+          @Override public void onError(Platform platform, int i, Throwable throwable) {
+
+          }
+
+          @Override public void onCancel(Platform platform, int i) {
+
+          }
+        });
+        wechat.authorize();
 
         break;
 
@@ -189,6 +212,10 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
         finish();
         break;
     }
+  }
+
+  private void sha1() {
+
   }
 
   public boolean checkInput(String mobile, String password) {
