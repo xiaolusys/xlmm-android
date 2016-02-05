@@ -110,9 +110,9 @@ public class TwoDimenCodeActivity extends BaseSwipeBackCompatActivity implements
     // url仅在微信（包括好友和朋友圈）中使用
     oks.setUrl(myurl);
     // comment是我对这条分享的评论，仅在人人网和QQ空间使用
-    oks.setComment("我是测试评论文本");
+    //oks.setComment("我是测试评论文本");
     // site是分享此内容的网站名称，仅在QQ空间使用
-    oks.setSite(getString(R.string.app_name));
+    //oks.setSite(getString(R.string.app_name));
     // siteUrl是分享此内容的网站地址，仅在QQ空间使用
     //oks.setSiteUrl("http://sharesdk.cn");
 

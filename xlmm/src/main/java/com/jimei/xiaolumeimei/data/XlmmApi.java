@@ -12,7 +12,7 @@ public class XlmmApi {
   //public static final String URL_BASE = "http://192.168.1.57:8000/rest/v1/";
   //public static final String URL_BASE = "http://192.168.1.31:9000/rest/v1/";
 
-  public static final String TWO_DIMEN_URL_BASE = "http://api.xiaolumeimei.com/";
+  public static final String TWO_DIMEN_URL_BASE = "http://api.xiaolumeimei.com";
 
   //注册链接
   public static final String LOGIN_URL = URL_BASE + "register/customer_login";
