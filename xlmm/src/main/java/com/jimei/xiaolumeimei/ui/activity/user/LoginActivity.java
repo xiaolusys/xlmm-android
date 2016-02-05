@@ -30,13 +30,15 @@ import com.jimei.xiaolumeimei.widget.PasswordEditText;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import java.util.HashMap;
+import java.util.Random;
+import java.util.Set;
 import rx.schedulers.Schedulers;
 
 public class LoginActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener {
+  public static final String SECRET = "3c7b4e3eb5ae4cfb132b2ac060a872ee";
   String login_name_value;//登录名
   String login_pass_value;//登录密码
-
   //boolean isLogin;//判断是否登录
   @Bind(R.id.set_login_name) ClearEditText nameEditText;
   @Bind(R.id.set_login_password) PasswordEditText passEditText;
@@ -47,12 +49,23 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.forgetTextView) TextView forGetTextView;
   @Bind(R.id.wx_login) ImageView wx;
   @Bind(R.id.sms_login) ImageView sms;
-
   String TAG = "LoginActivity";
-
   private SharedPreferences sharedPreferences;
   private SharedPreferences.Editor editor;
   private String timestamp;
+  private String randomString;
+
+  public static String getRandomString(int length) {
+    //length表示生成字符串的长度
+    String base = "abcdefghijklmnopqrstuvwxyz0123456789";
+    Random random = new Random();
+    StringBuffer sb = new StringBuffer();
+    for (int i = 0; i < length; i++) {
+      int number = random.nextInt(base.length());
+      sb.append(base.charAt(number));
+    }
+    return sb.toString();
+  }
 
   @Override protected void setListener() {
     login_button.setOnClickListener(this);
@@ -105,11 +118,11 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
     return false;
   }
 
+  //save user information
+
   @Override protected TransitionMode getOverridePendingTransitionMode() {
     return null;
   }
-
-  //save user information
 
   @Override public void onClick(View v) {
     switch (v.getId()) {
@@ -187,6 +200,15 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
         wechat.setPlatformActionListener(new PlatformActionListener() {
           @Override public void onComplete(Platform platform, int i,
               HashMap<String, Object> hashMap) {
+
+            Set<String> keys = hashMap.keySet();
+
+            for (String key : keys) {
+
+              String value = (String) hashMap.get(key);
+              JUtils.Log("LoginActivity", key + "========" + value);
+            }
+
           }
 
           @Override public void onError(Platform platform, int i, Throwable throwable) {
@@ -216,6 +238,8 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
 
   private void sha1() {
 
+    timestamp = System.currentTimeMillis() / 1000 + "";//时间戳
+    randomString = getRandomString(8);//随机八位字符串
   }
 
   public boolean checkInput(String mobile, String password) {

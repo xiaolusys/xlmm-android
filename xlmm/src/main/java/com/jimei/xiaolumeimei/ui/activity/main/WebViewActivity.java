@@ -32,7 +32,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity {
   }
 
   @Override protected void initData() {
-    mWebView.loadUrl("http://m.xiaolumeimei.com/chaotong.html");
+    mWebView.loadUrl("http://192.168.1.13:8000/weixin/freesamples/");
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
