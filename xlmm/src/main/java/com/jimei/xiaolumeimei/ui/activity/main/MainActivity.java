@@ -13,6 +13,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +23,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseActivity;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
+import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllOrdersActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity;
@@ -282,8 +284,19 @@ public class MainActivity extends BaseActivity
     switch (item.getItemId()){
       case R.id.action_settings:
         JUtils.Log(TAG,"xiaolu mama entry");
-        Intent intent = new Intent(this, MamaInfoActivity.class);
-        startActivity(intent);
+        if (!LoginUtils.checkLoginState(getApplicationContext())) {
+            /*未登录进入登录界面*/
+
+          Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+          Bundle bundle = new Bundle();
+          bundle.putString("login", "main");
+          intent.putExtras(bundle);
+          startActivity(intent);
+          //startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        }
+        else {
+          getUserInfo();
+        }
         break;
       default:
         break;
@@ -294,5 +307,38 @@ public class MainActivity extends BaseActivity
   @Override public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.mainframe_menu,menu);
     return super.onCreateOptionsMenu(menu);
+  }
+
+  private void getUserInfo() {
+    UserModel model = new UserModel();
+    model.getUserInfo()
+        .subscribeOn(Schedulers.newThread())
+        .subscribe(new ServiceResponse<UserInfoBean>() {
+          @Override
+          public void onNext(UserInfoBean user) {
+            if(user.getResults().get(0).getXiaolumm() != null){
+              Intent intent = new Intent(MainActivity.this, MamaInfoActivity.class);
+              startActivity(intent);
+            }
+            else{
+              JUtils.Toast("您还不是小鹿妈妈，赶紧加入我们吧！");
+            }
+
+
+          }
+
+          @Override
+          public void onCompleted() {
+            super.onCompleted();
+          }
+
+          @Override
+          public void onError(Throwable e) {
+
+            Log.e(TAG, "error:, "   + e.toString());
+            super.onError(e);
+          }
+        });
+
   }
 }

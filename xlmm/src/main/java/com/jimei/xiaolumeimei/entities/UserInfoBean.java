@@ -7,39 +7,29 @@ import java.util.List;
  */
 public class UserInfoBean {
 
-    @Override
-    public String toString() {
-        return "UserInfoBean{" +
-                "count=" + count +
-                ", next=" + next +
-                ", previous=" + previous +
-                ", results=" + results +
-                '}';
-    }
-
     /**
      * count : 1
      * next : null
      * previous : null
-     * results : [{"id":33,"url":"http://192.168.1.31:9000/rest/v1/users/33","user_id":"125","username":"lei.wu","nick":"lei.wu","mobile":"13739234100","email":" ","phone":" ","status":1,"created":"2016-01-19T11:04:02","modified":"2016-01-20T19:27:37","xiaolumm":null,"has_usable_password":true}]
+     * results : [{"id":1,"url":"http://dev.xiaolumeimei.com/rest/v1/users/1","user_id":"1","username":"xiuqing.mei","nick":"meron","mobile":"18621623915","email":"","phone":"","status":1,"created":"2015-04-18T18:40:33","modified":"2015-10-22T13:06:46","xiaolumm":{"id":1,"cash":100000,"agencylevel":1,"created":"2015-05-12T10:04:07","status":"effect"},"has_usable_password":true}]
      */
 
     private int count;
     private Object next;
     private Object previous;
     /**
-     * id : 33
-     * url : http://192.168.1.31:9000/rest/v1/users/33
-     * user_id : 125
-     * username : lei.wu
-     * nick : lei.wu
-     * mobile : 13739234100
+     * id : 1
+     * url : http://dev.xiaolumeimei.com/rest/v1/users/1
+     * user_id : 1
+     * username : xiuqing.mei
+     * nick : meron
+     * mobile : 18621623915
      * email :
      * phone :
      * status : 1
-     * created : 2016-01-19T11:04:02
-     * modified : 2016-01-20T19:27:37
-     * xiaolumm : null
+     * created : 2015-04-18T18:40:33
+     * modified : 2015-10-22T13:06:46
+     * xiaolumm : {"id":1,"cash":100000,"agencylevel":1,"created":"2015-05-12T10:04:07","status":"effect"}
      * has_usable_password : true
      */
 
@@ -78,25 +68,6 @@ public class UserInfoBean {
     }
 
     public static class ResultsEntity {
-        @Override
-        public String toString() {
-            return "ResultsEntity{" +
-                    "id=" + id +
-                    ", url='" + url + '\'' +
-                    ", user_id='" + user_id + '\'' +
-                    ", username='" + username + '\'' +
-                    ", nick='" + nick + '\'' +
-                    ", mobile='" + mobile + '\'' +
-                    ", email='" + email + '\'' +
-                    ", phone='" + phone + '\'' +
-                    ", status=" + status +
-                    ", created='" + created + '\'' +
-                    ", modified='" + modified + '\'' +
-                    ", xiaolumm=" + xiaolumm +
-                    ", has_usable_password=" + has_usable_password +
-                    '}';
-        }
-
         private int id;
         private String url;
         private String user_id;
@@ -108,7 +79,15 @@ public class UserInfoBean {
         private int status;
         private String created;
         private String modified;
-        private Object xiaolumm;
+        /**
+         * id : 1
+         * cash : 100000
+         * agencylevel : 1
+         * created : 2015-05-12T10:04:07
+         * status : effect
+         */
+
+        private XiaolummEntity xiaolumm;
         private boolean has_usable_password;
 
         public void setId(int id) {
@@ -155,7 +134,7 @@ public class UserInfoBean {
             this.modified = modified;
         }
 
-        public void setXiaolumm(Object xiaolumm) {
+        public void setXiaolumm(XiaolummEntity xiaolumm) {
             this.xiaolumm = xiaolumm;
         }
 
@@ -207,12 +186,97 @@ public class UserInfoBean {
             return modified;
         }
 
-        public Object getXiaolumm() {
+        public XiaolummEntity getXiaolumm() {
             return xiaolumm;
         }
 
         public boolean isHas_usable_password() {
             return has_usable_password;
         }
+
+        public static class XiaolummEntity {
+            private int id;
+            private float cash;
+            private int agencylevel;
+            private String created;
+            private String status;
+
+            public void setId(int id) {
+                this.id = id;
+            }
+
+            public void setCash(float cash) {
+                this.cash = cash;
+            }
+
+            public void setAgencylevel(int agencylevel) {
+                this.agencylevel = agencylevel;
+            }
+
+            public void setCreated(String created) {
+                this.created = created;
+            }
+
+            public void setStatus(String status) {
+                this.status = status;
+            }
+
+            public int getId() {
+                return id;
+            }
+
+            public float getCash() {
+                return cash;
+            }
+
+            public int getAgencylevel() {
+                return agencylevel;
+            }
+
+            public String getCreated() {
+                return created;
+            }
+
+            public String getStatus() {
+                return status;
+            }
+
+            @Override public String toString() {
+                return "XiaolummEntity{" +
+                    "id=" + id +
+                    ", cash=" + cash +
+                    ", agencylevel=" + agencylevel +
+                    ", created='" + created + '\'' +
+                    ", status='" + status + '\'' +
+                    '}';
+            }
+        }
+
+        @Override public String toString() {
+            return "ResultsEntity{" +
+                "id=" + id +
+                ", url='" + url + '\'' +
+                ", user_id='" + user_id + '\'' +
+                ", username='" + username + '\'' +
+                ", nick='" + nick + '\'' +
+                ", mobile='" + mobile + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", status=" + status +
+                ", created='" + created + '\'' +
+                ", modified='" + modified + '\'' +
+                ", xiaolumm=" + xiaolumm +
+                ", has_usable_password=" + has_usable_password +
+                '}';
+        }
+    }
+
+    @Override public String toString() {
+        return "UserInfoBean{" +
+            "count=" + count +
+            ", next=" + next +
+            ", previous=" + previous +
+            ", results=" + results +
+            '}';
     }
 }
