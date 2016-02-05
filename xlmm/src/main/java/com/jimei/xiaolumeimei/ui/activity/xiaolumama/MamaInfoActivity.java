@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -32,6 +33,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity implements Vie
   @Bind(R.id.btn_jump) Button btn_jump;
   @Bind(R.id.imgUser) ImageView imgUser;
   @Bind(R.id.btn_two_dimen) Button btn_two_dimen;
+  @Bind(R.id.tv_fansnum) TextView tv_fansnum;
 
   AgentInfoBean mamaAgentInfo;
 
@@ -41,6 +43,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity implements Vie
     imgUser.setOnClickListener(this);
 
     btn_two_dimen.setOnClickListener(this);
+    tv_fansnum.setOnClickListener(this);
   }
   @Override protected void getBundleExtras(Bundle extras) {
 
@@ -98,6 +101,9 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity implements Vie
         break;
       case R.id.imgUser:
         startActivity(new Intent(MamaInfoActivity.this, WithdrawCashActivity.class));
+        break;
+      case R.id.tv_fansnum:
+        startActivity(new Intent(MamaInfoActivity.this, MamaFansActivity.class));
         break;
     }
   }

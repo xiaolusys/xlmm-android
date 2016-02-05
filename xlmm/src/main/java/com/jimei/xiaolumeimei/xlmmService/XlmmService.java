@@ -15,6 +15,7 @@ import com.jimei.xiaolumeimei.entities.CouponBean;
 import com.jimei.xiaolumeimei.entities.IndexBean;
 import com.jimei.xiaolumeimei.entities.LadyListBean;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
+import com.jimei.xiaolumeimei.entities.MamaFansBean;
 import com.jimei.xiaolumeimei.entities.MembershipPointBean;
 import com.jimei.xiaolumeimei.entities.NicknameBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
@@ -399,4 +400,7 @@ public interface XlmmService {
 
   @GET("pmt/cashout")
   Observable<WithdrawCashHisBean> getWithdrawCashHis();
+
+  @GET("pmt/fanlist")
+  Observable<List<MamaFansBean>> getMamaFans();
 }
