@@ -32,6 +32,7 @@ import com.jimei.xiaolumeimei.ui.activity.user.CouponActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.MembershipPointActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.SettingActivity;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaInfoActivity;
 import com.jimei.xiaolumeimei.ui.fragment.ChildListFragment;
 import com.jimei.xiaolumeimei.ui.fragment.LadyListFragment;
 import com.jimei.xiaolumeimei.ui.fragment.PreviousFragment;
@@ -281,7 +282,8 @@ public class MainActivity extends BaseActivity
     switch (item.getItemId()){
       case R.id.action_settings:
         JUtils.Log(TAG,"xiaolu mama entry");
-
+        Intent intent = new Intent(this, MamaInfoActivity.class);
+        startActivity(intent);
         break;
       default:
         break;

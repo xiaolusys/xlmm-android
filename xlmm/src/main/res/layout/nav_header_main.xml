@@ -32,7 +32,7 @@
         android:text="小鹿妈妈"
         android:layout_below="@id/imgUser"/>
   </RelativeLayout>
-  >
+
 
   <LinearLayout
       android:layout_width="match_parent"

@@ -27,7 +27,7 @@ public class ServiceResponse<T> implements Observer<T> {
     //  JUtils.Log("UnKnow Error:" + e.getLocalizedMessage());
     //  //onServiceError(XlmmApi.CODE.NET_INVALID, "网络错误");
     //}
-    JUtils.Log("XLMM", e.getLocalizedMessage());
+    JUtils.Log("XLMM","ServiceResponse "+ e.getLocalizedMessage());
   }
 
   //public void onServiceError(int status, String info) {

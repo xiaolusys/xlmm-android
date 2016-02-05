@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    style="@style/AppTheme.AppBarOverlay">
+
+  <android.support.design.widget.AppBarLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:id="@+id/app_bar_layout"
+      android:theme="@style/AppTheme.AppBarOverlay">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#fdb916"
+        app:popupTheme="@style/AppTheme.PopupOverlay" >
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerInParent="true"
+          android:layout_gravity="center"
+          android:text=""
+          android:textColor="@android:color/white"
+          android:textSize="24sp"
+          />
+    </android.support.v7.widget.Toolbar>>
+
+  </android.support.design.widget.AppBarLayout>
+
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="400px"
+      android:layout_below="@+id/app_bar_layout"
+      android:layout_centerHorizontal="true"
+      android:id="@+id/rl_mamainfo">
+
+    <ImageView
+        android:id="@+id/imgUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="300px"
+        android:layout_marginTop="100px"
+        android:clickable="true"
+        android:src="@drawable/img_head"/>
+
+    <TextView
+        android:layout_centerHorizontal="true"
+        android:id="@+id/tv_fansnum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="10px"
+        android:text="我的粉丝"
+        android:layout_below="@id/imgUser"/>
+
+    <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="账户余额（元）"
+        android:id="@+id/tv_Point"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:textSize="15sp"
+        android:layout_below="@id/tv_fansnum"
+        />
+
+    <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="0"
+        android:textSize="20sp"
+        android:layout_gravity="center"
+        android:textColor="@color/colorAccent"
+        android:layout_below="@id/tv_Point"/>
+  </RelativeLayout>
+
+
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:layout_below="@+id/rl_mamainfo"
+      android:id="@+id/rl_btn"
+      android:layout_marginTop="8px"
+      android:layout_centerHorizontal="true"
+      >
+
+    <Button
+        android:id="@+id/btn_two_dimen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:text="推荐二维码"
+        android:textColor="@color/colorAccent"
+        android:background="@drawable/text_frame"
+        />
+
+    <Button
+        android:id="@+id/btn_mychoose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="我的精选"
+        android:textColor="@color/colorAccent"
+        android:background="@drawable/text_frame"
+        />
+
+    <Button android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="选品列表"
+        android:id="@+id/btn_chooselist"
+        android:layout_gravity="center"
+        android:textSize="15sp"
+        android:textColor="@color/colorAccent"
+        android:background="@drawable/text_frame"
+        />
+
+    <Button android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="活动中心"
+        android:textSize="15sp"
+        android:layout_gravity="center"
+        android:textColor="@color/colorAccent"
+        android:background="@drawable/text_frame"/>
+  </LinearLayout>
+
+  <include layout="@layout/common_gap"/>
+
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@+id/rl_btn"
+      android:orientation="horizontal"
+      android:layout_marginTop="8px"
+      android:layout_centerHorizontal="true"
+      >
+
+    <TextView
+        android:id="@+id/tv_order1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:text="订单记录"
+        android:background="@drawable/text_frame"
+        />
+
+    <TextView
+        android:id="@+id/tv_order2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="0"
+        android:textColor="@color/colorAccent"
+        android:background="@drawable/text_frame"
+        android:layout_toRightOf="@+id/tv_order1"
+        />
+
+    <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="历史积累收益"
+        android:id="@+id/tv_fund1"
+        android:layout_gravity="center"
+        android:textSize="15sp"
+        android:background="@drawable/text_frame"
+        android:layout_toRightOf="@+id/tv_order2"
+        android:layout_marginLeft="200px"
+        />
+
+    <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_fund2"
+        android:text="0"
+        android:textSize="15sp"
+        android:layout_gravity="center"
+        android:textColor="@color/colorAccent"
+        android:background="@drawable/text_frame"
+        android:layout_toRightOf="@+id/tv_fund1"/>
+  </RelativeLayout>
+
+  <include layout="@layout/common_gap"/>
+
+  <Button
+      android:id="@+id/btn_jump"
+      android:layout_width="690px"
+      android:layout_height="80px"
+      android:layout_alignParentBottom="true"
+      android:layout_centerHorizontal="true"
+      android:layout_marginBottom="10px"
+      android:text="发布产品"
+      android:textColor="@color/white"
+      android:textSize="15sp"
+      android:background="@drawable/shape_common"
+      />
+
+</RelativeLayout>
