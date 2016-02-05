@@ -7,11 +7,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.entities.AgentInfoBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
+import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import rx.schedulers.Schedulers;
@@ -23,8 +26,11 @@ public class TwoDimenCodeActivity extends BaseSwipeBackCompatActivity implements
   String TAG = "TwoDimenCodeActivity";
 
   @Bind(R.id.toolbar) Toolbar toolbar;
+  @Bind(R.id.img_2dimen) ImageView img_2dimen;
   @Bind(R.id.btn_save) Button btn_save;
   @Bind(R.id.btn_share) Button btn_share;
+
+  String myurl ="";
 
   @Override protected void setListener() {
     btn_save.setOnClickListener(this);
@@ -49,10 +55,15 @@ public class TwoDimenCodeActivity extends BaseSwipeBackCompatActivity implements
       }
     });
 
+    ViewUtils.loadImgToImgView(this, img_2dimen, myurl);
   }
 
   @Override protected void initData() {
-
+    myurl = getIntent().getExtras().getString("myurl");
+    if(false == myurl.equals("")){
+      myurl = XlmmApi.URL_BASE + myurl;
+      JUtils.Log(TAG,"myurl " + myurl);
+    }
   }
 
   @Override protected boolean toggleOverridePendingTransition() {

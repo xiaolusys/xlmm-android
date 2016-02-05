@@ -33,6 +33,8 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity implements Vie
   @Bind(R.id.imgUser) ImageView imgUser;
   @Bind(R.id.btn_two_dimen) Button btn_two_dimen;
 
+  AgentInfoBean mamaAgentInfo;
+
   @Override protected void setListener() {
     btn_jump.setOnClickListener(this);
     toolbar.setOnClickListener(this);
@@ -66,7 +68,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity implements Vie
         .subscribe(new ServiceResponse<AgentInfoBean>() {
           @Override public void onNext(AgentInfoBean pointBean) {
             JUtils.Log(TAG,"AgentInfoBean="+ pointBean.toString());
-
+            mamaAgentInfo = pointBean;
           }
         });
 
@@ -89,7 +91,9 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity implements Vie
         finish();
         break;
       case R.id.btn_two_dimen:
-        startActivity(new Intent(MamaInfoActivity.this, TwoDimenCodeActivity.class));
+        Intent intent = new Intent(MamaInfoActivity.this, TwoDimenCodeActivity.class);
+        intent.putExtra("myurl", mamaAgentInfo.getShare_mmcode());
+        startActivity(intent);
 
         break;
       case R.id.imgUser:

@@ -286,7 +286,7 @@ public class MainActivity extends BaseActivity
         JUtils.Log(TAG,"xiaolu mama entry");
         if (!LoginUtils.checkLoginState(getApplicationContext())) {
             /*未登录进入登录界面*/
-
+          JUtils.Log(TAG, "need login");
           Intent intent = new Intent(MainActivity.this, LoginActivity.class);
           Bundle bundle = new Bundle();
           bundle.putString("login", "main");
