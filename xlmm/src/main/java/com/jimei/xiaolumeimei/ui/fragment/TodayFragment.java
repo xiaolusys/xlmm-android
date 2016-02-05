@@ -20,6 +20,7 @@ import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.entities.PostBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
+import com.jimei.xiaolumeimei.ui.activity.main.WebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ChildListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.LadyListActivity;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
@@ -139,7 +140,6 @@ public class TodayFragment extends BaseFragment {
         .subscribe(new ServiceResponse<PostBean>() {
           @Override public void onNext(PostBean postBean) {
             try {
-
               String picLink =
                   ViewUtils.getDecodeUrl(postBean.getWem_posters().get(0).pic_link);
               String picLink1 =
@@ -197,14 +197,13 @@ public class TodayFragment extends BaseFragment {
                         if (extra.equals("post2")) {
                           startActivity(
                               new Intent(getActivity(), ChildListActivity.class));
-                        }else if (extra.equals("post1")) {
+                        } else if (extra.equals("post1")) {
                           startActivity(
                               new Intent(getActivity(), LadyListActivity.class));
                         }
                       }
                     });
               }
-
 
               post2.post(new Runnable() {
                 @Override public void run() {
@@ -251,6 +250,12 @@ public class TodayFragment extends BaseFragment {
           Toast.makeText(activity, "没有更多了拉,去购物吧", Toast.LENGTH_SHORT).show();
           xRecyclerView.post(xRecyclerView::loadMoreComplete);
         }
+      }
+    });
+
+    post2.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        startActivity(new Intent(getActivity(), WebViewActivity.class));
       }
     });
   }

@@ -213,6 +213,9 @@
     <activity android:name=".ui.activity.product.LadyListActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
+    <activity android:name=".ui.activity.main.WebViewActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
 
     <activity
         android:name="com.mob.tools.MobUIShell"
