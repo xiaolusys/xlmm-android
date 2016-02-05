@@ -34,6 +34,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.glidemoudle.GlideRoundTransform;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
@@ -227,7 +228,8 @@ public final class ViewUtils {
 
   public static void loadImgToImgView(Context context, ImageView img, String picPath) {
     if (null == picPath) return;
-    if (picPath.startsWith("https://mmbiz.qlogo.cn")) {
+    if (picPath.startsWith("https://mmbiz.qlogo.cn")
+        || picPath.startsWith(XlmmApi.TWO_DIMEN_URL_BASE)) {
       Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
           //.placeholder(R.drawable.parceholder)
           .centerCrop().into(img);
