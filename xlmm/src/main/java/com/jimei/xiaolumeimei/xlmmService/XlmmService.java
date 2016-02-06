@@ -403,4 +403,10 @@ public interface XlmmService {
 
   @GET("pmt/fanlist")
   Observable<List<MamaFansBean>> getMamaFans();
+
+  //创建提款单信息
+  @FormUrlEncoded
+  @POST("pmt/cashout")
+  Observable<ResponseBody> withdraw_cash(
+      @Field("choice") String fund_type );
 }

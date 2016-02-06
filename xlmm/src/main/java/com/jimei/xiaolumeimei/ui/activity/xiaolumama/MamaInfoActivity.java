@@ -88,19 +88,22 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity implements Vie
 
   @Override
   public void onClick(View v) {
+    Intent intent;
     switch (v.getId()) {
       case R.id.btn_jump:
         startActivity(new Intent(MamaInfoActivity.this, MainActivity.class));
         finish();
         break;
       case R.id.btn_two_dimen:
-        Intent intent = new Intent(MamaInfoActivity.this, TwoDimenCodeActivity.class);
+        intent = new Intent(MamaInfoActivity.this, TwoDimenCodeActivity.class);
         intent.putExtra("myurl", mamaAgentInfo.getShare_mmcode());
         startActivity(intent);
 
         break;
       case R.id.imgUser:
-        startActivity(new Intent(MamaInfoActivity.this, WithdrawCashActivity.class));
+        intent = new Intent(MamaInfoActivity.this, WithdrawCashActivity.class);
+        intent.putExtra("cash", mamaAgentInfo.getCash());
+        startActivity(intent);
         break;
       case R.id.tv_fansnum:
         startActivity(new Intent(MamaInfoActivity.this, MamaFansActivity.class));

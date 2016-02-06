@@ -70,65 +70,125 @@
         android:layout_below="@id/tv_reminder"/>
   </RelativeLayout>
 
-
-  <RelativeLayout
+  <FrameLayout
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_below="@+id/rl_mamainfo"
-      android:orientation="horizontal"
-      android:layout_marginTop="8px"
-      android:layout_centerHorizontal="true"
-      >
+      android:layout_height="match_parent"
+      android:layout_below="@+id/rl_mamainfo">
 
-    <TextView
-        android:id="@+id/tv_order1"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:layout_marginLeft="100px"
-        android:text="@string/withdrawcash"
+        android:id="@+id/rl_has_cash"
+        android:layout_marginTop="8px"
+        android:layout_centerHorizontal="true"
         android:background="@drawable/text_frame"
-        />
+        >
 
-    <ImageView
-        android:id="@+id/img_red_packet1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="200px"
-        android:layout_marginTop="40px"
-        android:clickable="true"
-        android:src="@drawable/img_redpacket100_1"
-        android:layout_below="@+id/tv_order1"/>
+      <TextView
+          android:id="@+id/tv_order1"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:gravity="center_horizontal"
+          android:layout_marginLeft="100px"
+          android:text="@string/withdrawcash"
+          android:background="@drawable/text_frame"
+          />
 
-    <ImageView
-        android:id="@+id/img_red_packet2"
-        android:layout_width="wrap_content"
+      <ImageView
+          android:id="@+id/img_red_packet1"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="200px"
+          android:layout_marginTop="40px"
+          android:clickable="true"
+          android:src="@drawable/img_redpacket100_1"
+          android:layout_below="@+id/tv_order1"/>
+
+      <ImageView
+          android:id="@+id/img_red_packet2"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:textSize="15sp"
+          android:background="@drawable/text_frame"
+          android:layout_below="@+id/img_red_packet1"
+          android:layout_marginLeft="200px"
+          android:layout_marginTop="40px"
+          android:src="@drawable/img_redpacket200_1"
+          />
+
+      <Button
+          android:id="@+id/btn_withdraw"
+          android:layout_width="690px"
+          android:layout_height="80px"
+          android:layout_alignParentBottom="true"
+          android:layout_centerHorizontal="true"
+          android:layout_marginBottom="30px"
+          android:padding="10px"
+          android:text="马上提现"
+          android:textColor="@color/white"
+          android:textSize="15sp"
+          android:background="@drawable/shape_common"
+          />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textSize="15sp"
+        android:id="@+id/rl_has_no_cash"
+        android:layout_marginTop="8px"
         android:background="@drawable/text_frame"
-        android:layout_below="@+id/img_red_packet1"
-        android:layout_marginLeft="200px"
-        android:layout_marginTop="40px"
-        android:src="@drawable/img_redpacket200_1"
-        />
+        >
 
+      <ImageView
+          android:id="@+id/img_gray_packet1"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="200px"
+          android:layout_marginTop="40px"
+          android:src="@drawable/img_redpacket100_1"
+          />
 
-  </RelativeLayout>
+      <ImageView
+          android:id="@+id/img_gray_packet2"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:textSize="15sp"
+          android:background="@drawable/text_frame"
+          android:layout_below="@+id/img_gray_packet1"
+          android:layout_marginLeft="200px"
+          android:layout_marginTop="40px"
+          android:src="@drawable/img_redpacket200_1"
+          />
 
-  <include layout="@layout/common_gap"/>
+      <TextView
+          android:id="@+id/tv_info2"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:gravity="center_horizontal"
+          android:layout_marginLeft="150px"
+          android:layout_marginTop="20px"
+          android:text="@string/not_enough_cash"
+          android:background="@drawable/text_frame"
+          android:layout_below="@+id/img_gray_packet2"
+          />
 
-  <Button
-      android:id="@+id/btn_jump"
-      android:layout_width="690px"
-      android:layout_height="80px"
-      android:layout_alignParentBottom="true"
-      android:layout_centerHorizontal="true"
-      android:layout_marginBottom="10px"
-      android:text="马上提现"
-      android:textColor="@color/white"
-      android:textSize="15sp"
-      android:background="@drawable/shape_common"
-      />
+      <Button
+          android:id="@+id/btn_jump"
+          android:layout_width="190px"
+          android:layout_height="80px"
+          android:layout_centerHorizontal="true"
+          android:layout_marginTop="20px"
+          android:padding="10px"
+          android:text="发布产品"
+          android:textColor="@color/white"
+          android:textSize="15sp"
+          android:background="@drawable/shape_common"
+          android:layout_below="@+id/tv_info2"
+          />
+    </RelativeLayout>
+  </FrameLayout>
+
 
 </RelativeLayout>

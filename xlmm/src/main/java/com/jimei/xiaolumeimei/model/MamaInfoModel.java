@@ -55,4 +55,11 @@ public class MamaInfoModel {
         .getMamaFans()
         .compose(new DefaultTransform<>());
   }
+
+  //创建提款单信息
+  public Observable<ResponseBody> withdraw_cash(String fund_type) {
+    return XlmmRetrofitClient.getService()
+        .withdraw_cash(fund_type)
+        .compose(new DefaultTransform<>());
+  }
 }

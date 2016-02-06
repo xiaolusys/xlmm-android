@@ -1,7 +1,6 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -15,7 +14,6 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AgentInfoBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
-import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.squareup.okhttp.ResponseBody;
@@ -24,14 +22,11 @@ import rx.schedulers.Schedulers;
 /**
  * Created by wulei on 2016/2/4.
  */
-public class WithdrawCashActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener{
-  String TAG = "WithdrawCashActivity";
+public class WithdrawCashResultActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener{
+  String TAG = "WithdrawCashResultActivity";
 
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.btn_jump) Button btn_jump;
-  @Bind(R.id.btn_withdraw) Button btn_withdraw;
-  @Bind(R.id.rl_has_cash) RelativeLayout rl_has_cash;
-  @Bind(R.id.rl_has_no_cash) Button rl_has_no_cash;
   @Bind(R.id.img_red_packet1) ImageView img_red_packet1;
   @Bind(R.id.img_red_packet2) ImageView img_red_packet2;
 
@@ -42,16 +37,14 @@ public class WithdrawCashActivity extends BaseSwipeBackCompatActivity implements
 
   @Override protected void setListener() {
     btn_jump.setOnClickListener(this);
-    btn_withdraw.setOnClickListener(this);
-    img_red_packet1.setOnClickListener(this);
-    img_red_packet2.setOnClickListener(this);
+
   }
   @Override protected void getBundleExtras(Bundle extras) {
 
   }
 
   @Override protected int getContentViewLayoutID() {
-    return R.layout.activity_withdrawcash;
+    return R.layout.activity_withdrawcash_result;
   }
 
   @Override protected void initViews() {
@@ -65,22 +58,13 @@ public class WithdrawCashActivity extends BaseSwipeBackCompatActivity implements
     });
 
     cash = getIntent().getExtras().getFloat("cash");
-    if(Float.compare(cash , 0) > 0){
-      rl_has_no_cash.setVisibility(View.INVISIBLE);
+    if(Float.compare(cash , 100) == 0){
+
     }
 
   }
 
   @Override protected void initData() {
-    MamaInfoModel.getInstance().getAgentInfoBean()
-        .subscribeOn(Schedulers.newThread())
-        .subscribe(new ServiceResponse<AgentInfoBean>() {
-          @Override public void onNext(AgentInfoBean pointBean) {
-            JUtils.Log(TAG,"AgentInfoBean="+ pointBean.toString());
-
-          }
-        });
-
 
   }
 
@@ -100,42 +84,7 @@ public class WithdrawCashActivity extends BaseSwipeBackCompatActivity implements
         //startActivity(new Intent(WithdrawCashActivity.this, MainActivity.class));
         finish();
         break;
-      case R.id.btn_withdraw:
-        JUtils.Log(TAG,"withdraw cash now");
-        withdraw_cash(withdraw_cash_fund);
-        break;
-      case R.id.img_red_packet1:
-        if(click_cash100) {
-          click_cash100 = false;
-          withdraw_cash_fund = 0;
-          img_red_packet1.setImageResource(R.drawable.img_redpacket100_1);
-        }
-        else{
-          click_cash100 = true;
-          withdraw_cash_fund = 100;
-          img_red_packet1.setImageResource(R.drawable.img_redpacket100_2);
-        }
-        if(click_cash200){
-          img_red_packet2.setImageResource(R.drawable.img_redpacket200_1);
-        }
 
-        break;
-      case R.id.img_red_packet2:
-        if(click_cash200) {
-          click_cash200 = false;
-          withdraw_cash_fund = 0;
-          img_red_packet2.setImageResource(R.drawable.img_redpacket200_1);
-        }
-        else{
-          click_cash200 = true;
-          withdraw_cash_fund = 200;
-          img_red_packet2.setImageResource(R.drawable.img_redpacket200_2);
-        }
-        if(click_cash100){
-          img_red_packet1.setImageResource(R.drawable.img_redpacket100_1);
-        }
-
-        break;
     }
   }
 
