@@ -85,9 +85,6 @@ public class TodayFragment extends BaseFragment {
           }
         });
 
-    //long time = calcLeftTime();
-
-    //countTime.start(20000000l);
 
     new AsyncTask<Void, Long, Void>() {
       @Override protected Void doInBackground(Void... params) {
@@ -145,36 +142,10 @@ public class TodayFragment extends BaseFragment {
               String picLink1 =
                   ViewUtils.getDecodeUrl(postBean.getChd_posters().get(0).pic_link);
 
-              //List<String> list = new ArrayList<>();
-              //list.add(picLink);
-              //list.add(picLink1);
-
               Map<String, String> map = new HashMap<>();
               map.put("post1", picLink);
               map.put("post2", picLink1);
 
-              //for (String url : list) {
-              //  TextSliderView textSliderView = new TextSliderView(getActivity());
-              //  // initialize a SliderLayout
-              //  textSliderView.image(url)
-              //      .setScaleType(BaseSliderView.ScaleType.CenterCrop);
-              //
-              //  //add your extra information
-              //  //textSliderView.bundle(new Bundle());
-              //  //textSliderView.getBundle().putString("extra", name);
-              //
-              //  mSliderLayout.addSlider(textSliderView);
-              //  mSliderLayout.setDuration(3000);
-              //  mSliderLayout.setCustomIndicator(mPagerIndicator);
-              //
-              //  textSliderView.setOnSliderClickListener(
-              //      new BaseSliderView.OnSliderClickListener() {
-              //        @Override public void onSliderClick(BaseSliderView slider) {
-              //
-              //        }
-              //      });
-              //
-              //}
 
               for (String name : map.keySet()) {
                 DefaultSliderView textSliderView = new DefaultSliderView(getActivity());

@@ -33,7 +33,6 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.TodayVH> {
 
   public TodayAdapter(Context context) {
     this.mContext = context;
-
     mList = new ArrayList<>();
   }
 
@@ -67,20 +66,19 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.TodayVH> {
 
     boolean isSaleopen = products.isIsSaleopen();
     try {
-    if (isSaleopen) {
+      if (isSaleopen) {
 
-      boolean isSaleOut = productModel.isIsSaleOut();
-      boolean isSingleSpec = productModel.isIsSingleSpec();
+        boolean isSaleOut = productModel.isIsSaleOut();
+        boolean isSingleSpec = productModel.isIsSingleSpec();
 
-      if (isSaleOut && isSingleSpec) {
-        holder.saleout.setVisibility(View.VISIBLE);
+        if (isSaleOut && isSingleSpec) {
+          holder.saleout.setVisibility(View.VISIBLE);
+        } else {
+          holder.saleout.setVisibility(View.INVISIBLE);
+        }
       } else {
-        holder.saleout.setVisibility(View.INVISIBLE);
+        holder.saleout.setVisibility(View.VISIBLE);
       }
-    } else {
-      holder.saleout.setVisibility(View.VISIBLE);
-    }
-
 
       if (productModel.getName().length() <= 9) {
         holder.childlistName.setText(productModel.getName());

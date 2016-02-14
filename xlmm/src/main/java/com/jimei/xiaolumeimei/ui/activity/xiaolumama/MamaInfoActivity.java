@@ -3,24 +3,18 @@ package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AgentInfoBean;
-import com.jimei.xiaolumeimei.entities.MembershipPointBean;
-import com.jimei.xiaolumeimei.entities.PointLogBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
-import java.util.List;
 import rx.schedulers.Schedulers;
 
 /**
@@ -34,6 +28,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity implements Vie
   @Bind(R.id.imgUser) ImageView imgUser;
   @Bind(R.id.btn_two_dimen) Button btn_two_dimen;
   @Bind(R.id.tv_fansnum) TextView tv_fansnum;
+  @Bind(R.id.btn_chooselist)Button btn_chooselist;
 
   AgentInfoBean mamaAgentInfo;
 
@@ -44,6 +39,8 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity implements Vie
 
     btn_two_dimen.setOnClickListener(this);
     tv_fansnum.setOnClickListener(this);
+
+    btn_chooselist.setOnClickListener(this);
   }
   @Override protected void getBundleExtras(Bundle extras) {
 
@@ -107,6 +104,10 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity implements Vie
         break;
       case R.id.tv_fansnum:
         startActivity(new Intent(MamaInfoActivity.this, MamaFansActivity.class));
+        break;
+
+      case R.id.btn_chooselist:
+        startActivity(new Intent(MamaInfoActivity.this, MMChooseListActivity.class));
         break;
     }
   }

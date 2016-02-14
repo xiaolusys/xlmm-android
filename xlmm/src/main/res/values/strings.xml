@@ -39,4 +39,5 @@
   <string name="withdrawcash">亲爱的小鹿妈妈们，\n系统升级中暂时只能用微信红包提现哦~</string>
   <string name="not_enough_cash">您的余额不足，不能提现\n快去发布产品赚取更多返利吧~</string>
   <string name="publish_info">发布产品就会\n有机会获得更多的返利现金哦~</string>
+  <string name="chooselist">选品列表</string>
 </resources>

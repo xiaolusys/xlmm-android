@@ -11,10 +11,12 @@ import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.CartsinfoBean;
 import com.jimei.xiaolumeimei.entities.ChildListBean;
+import com.jimei.xiaolumeimei.entities.ChooseResponseBean;
 import com.jimei.xiaolumeimei.entities.CouponBean;
 import com.jimei.xiaolumeimei.entities.IndexBean;
 import com.jimei.xiaolumeimei.entities.LadyListBean;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
+import com.jimei.xiaolumeimei.entities.MMChooselistBean;
 import com.jimei.xiaolumeimei.entities.MamaFansBean;
 import com.jimei.xiaolumeimei.entities.MembershipPointBean;
 import com.jimei.xiaolumeimei.entities.NicknameBean;
@@ -409,4 +411,43 @@ public interface XlmmService {
   @POST("pmt/cashout")
   Observable<ResponseBody> withdraw_cash(
       @Field("choice") String fund_type );
+
+  //选品默认列表
+    @GET("products/my_choice_pro")
+    Observable<List<MMChooselistBean>> getMMChooseList();
+
+  //选品默认列表排序
+    @GET("products/my_choice_pro")
+    Observable<List<MMChooselistBean>> getMMChooseSortList(
+          @Query("sort_field")String sort_field
+    );
+
+  //选品女装或者童装列表
+    @GET("products/my_choice_pro")
+    Observable<List<MMChooselistBean>> getMMChooseLadyOrChildList(
+
+        @Query("category")String category
+    );
+
+  //选品排序列表
+    @GET("products/my_choice_pro")
+    Observable<List<MMChooselistBean>> getMMChooseLadyOrChildSortListSort(
+        @Query("sort_field")String sort_field,
+        @Query("category")String category
+    );
+
+  //MM上架商品到商铺
+  @FormUrlEncoded
+  @POST("pmt/cushoppros/add_pro_to_shop")
+  Observable<ChooseResponseBean> add_pro_to_shop(
+       @Field("product")String product
+  );
+
+  //MM下架商品
+  @FormUrlEncoded
+  @POST("pmt/cushoppros/remove_pro_from_shop")
+  Observable<ChooseResponseBean> remove_pro_from_shop (
+        @Field("product")String product
+  );
+
 }

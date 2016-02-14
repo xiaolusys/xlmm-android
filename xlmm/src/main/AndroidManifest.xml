@@ -253,6 +253,9 @@
     <activity android:name=".ui.activity.xiaolumama.MamaFansActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
+    <activity android:name=".ui.activity.xiaolumama.MMChooseListActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
 
   </application>
 

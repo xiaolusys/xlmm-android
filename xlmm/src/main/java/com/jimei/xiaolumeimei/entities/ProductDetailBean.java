@@ -517,7 +517,7 @@ public class ProductDetailBean {
 
     @SerializedName("size_of_sku") private SizeOfSkuEntity mSizeOfSku;
     @SerializedName("is_saleout") private boolean mIsSaleout;
-    @SerializedName("std_sale_price") private int mStdSalePrice;
+    @SerializedName("std_sale_price") private double mStdSalePrice;
     @SerializedName("agent_price") private double mAgentPrice;
 
     public String getId() {
@@ -568,7 +568,7 @@ public class ProductDetailBean {
       this.mIsSaleout = isSaleout;
     }
 
-    public int getStdSalePrice() {
+    public double getStdSalePrice() {
       return mStdSalePrice;
     }
 
