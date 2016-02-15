@@ -23,6 +23,10 @@ import com.victor.loading.rotate.RotateLoading;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import rx.Observable;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
@@ -43,6 +47,7 @@ public class PreviousFragment extends BaseFragment {
   private RotateLoading loading;
   private View head;
   private CountdownView countTime;
+  private Subscription subscription;
 
   @Override protected int provideContentViewId() {
     return R.layout.previous_fragment;
@@ -102,6 +107,26 @@ public class PreviousFragment extends BaseFragment {
     initRecyclerView();
   }
 
+  @Override public void onStop() {
+    super.onStop();
+    if (subscription != null) {
+      subscription.unsubscribe();
+    }
+  }
+
+  @Override public void onResume() {
+    super.onResume();
+
+    countTime = (CountdownView) head.findViewById(R.id.countTime);
+
+    subscription = Observable.timer(1, 1, TimeUnit.SECONDS)
+        .map(aLong -> calcLeftTime())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribeOn(Schedulers.io())
+        .subscribe(countTime::updateShow, throwable -> {
+        });
+  }
+
   private void initRecyclerView() {
 
     xRecyclerView = (XRecyclerView) view.findViewById(R.id.previous_xrv);
@@ -155,35 +180,41 @@ public class PreviousFragment extends BaseFragment {
     xRecyclerView.setAdapter(mPreviousAdapter);
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
-        @Override public void onRefresh() {
-        model.getTodayList(1, page * page_size)
-        .subscribeOn(Schedulers.newThread())
-        .subscribe(new ServiceResponse<ProductListBean>() {
-          @Override public void onNext(ProductListBean productListBean) {
-            List<ProductListBean.ResultsEntity> results =
-                productListBean.getResults();
-            mPreviousAdapter.updateWithClear(results);
+                                       @Override public void onRefresh() {
+                                         model.getTodayList(1, page * page_size)
+                                             .subscribeOn(Schedulers.newThread())
+                                             .subscribe(
+                                                 new ServiceResponse<ProductListBean>() {
+                                                   @Override public void onNext(
+                                                       ProductListBean productListBean) {
+                                                     List<ProductListBean.ResultsEntity>
+                                                         results =
+                                                         productListBean.getResults();
+                                                     mPreviousAdapter.updateWithClear(
+                                                         results);
+                                                   }
 
-          }
+                                                   @Override public void onCompleted() {
+                                                     super.onCompleted();
+                                                     xRecyclerView.post(
+                                                         xRecyclerView::refreshComplete);
+                                                   }
+                                                 });
+                                       }
 
-          @Override public void onCompleted() {
-            super.onCompleted();
-            xRecyclerView.post(xRecyclerView::refreshComplete);
-          }
-        });
-        }
+                                       @Override public void onLoadMore() {
 
-        @Override public void onLoadMore() {
-
-          if (page <= totalPages) {
-            loadMoreData(page, 10);
-            page++;
-          } else {
-            Toast.makeText(activity, "没有更多了拉,去购物吧", Toast.LENGTH_SHORT).show();
-            xRecyclerView.post(xRecyclerView::loadMoreComplete);
-          }
-        }
-        }
+                                         if (page <= totalPages) {
+                                           loadMoreData(page, 10);
+                                           page++;
+                                         } else {
+                                           Toast.makeText(activity, "没有更多了拉,去购物吧",
+                                               Toast.LENGTH_SHORT).show();
+                                           xRecyclerView.post(
+                                               xRecyclerView::loadMoreComplete);
+                                         }
+                                       }
+                                     }
 
     );
   }

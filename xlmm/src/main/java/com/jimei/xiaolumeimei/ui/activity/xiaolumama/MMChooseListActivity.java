@@ -35,7 +35,7 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
     implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
   private static final String COMMISSION = "rebet_amount";//佣金
-  private static final String SALES = "lock_num";//销量
+  private static final String SALES = "sale_num";//销量
   private static final String CHILD = "1";//童装
   private static final String LADY = "2";//女装
   @Bind(R.id.toolbar) Toolbar toolbar;

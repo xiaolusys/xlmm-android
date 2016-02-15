@@ -46,7 +46,6 @@
             app:isShowSecond="true"
             app:timeTextColor="@color/colorAccent"
             app:timeTextSize="22sp"
-            app:isTimeTextBold="true"
             app:suffixGravity="bottom"
             app:suffixTextColor="@color/colorAccent"
             app:suffixTextSize="12sp"

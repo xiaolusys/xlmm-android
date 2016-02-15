@@ -1,9 +1,9 @@
 package com.jimei.xiaolumeimei.ui.fragment;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,12 +30,17 @@ import com.jimei.xiaolumeimei.widget.banner.SliderLayout;
 import com.jimei.xiaolumeimei.widget.banner.SliderTypes.BaseSliderView;
 import com.jimei.xiaolumeimei.widget.banner.SliderTypes.DefaultSliderView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jude.utils.JUtils;
 import com.victor.loading.rotate.RotateLoading;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import rx.Observable;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
@@ -44,11 +49,12 @@ import rx.schedulers.Schedulers;
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class TodayFragment extends BaseFragment {
+  private static final String TAG = TodayFragment.class.getSimpleName();
+
   int page_size = 10;
   ProductModel model = new ProductModel();
   private XRecyclerView xRecyclerView;
   private TodayAdapter mTodayAdapter;
-  private ImageView post1;
   private ImageView post2;
   private RotateLoading loading;
   private int page = 2;
@@ -56,6 +62,8 @@ public class TodayFragment extends BaseFragment {
   private CountdownView countTime;
   private SliderLayout mSliderLayout;
   private PagerIndicator mPagerIndicator;
+  private View head;
+  private Subscription subscription;
 
   @Override protected int provideContentViewId() {
     return R.layout.today_fragment;
@@ -84,27 +92,10 @@ public class TodayFragment extends BaseFragment {
             loading.post(loading::stop);
           }
         });
-
-
-    new AsyncTask<Void, Long, Void>() {
-      @Override protected Void doInBackground(Void... params) {
-        long time = calcLeftTime();
-        while (true) {
-          try {
-            Thread.sleep(1000);
-            time -= 1000;
-            publishProgress(time);
-          } catch (InterruptedException e) {
-            e.printStackTrace();
-          }
-        }
-      }
-
-      @Override protected void onProgressUpdate(Long... values) {
-        super.onProgressUpdate(values);
-        countTime.updateShow(values[0]);
-      }
-    }.execute();
+    if (null != countTime) {
+      long remainTime = countTime.getRemainTime();
+      JUtils.Log(TAG, remainTime + "");
+    }
   }
 
   @Override protected void initViews() {
@@ -121,7 +112,7 @@ public class TodayFragment extends BaseFragment {
     xRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
     xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
 
-    View head = LayoutInflater.from(getActivity())
+    head = LayoutInflater.from(getActivity())
         .inflate(R.layout.today_poster_header,
             (ViewGroup) view.findViewById(R.id.head_today), false);
 
@@ -145,7 +136,6 @@ public class TodayFragment extends BaseFragment {
               Map<String, String> map = new HashMap<>();
               map.put("post1", picLink);
               map.put("post2", picLink1);
-
 
               for (String name : map.keySet()) {
                 DefaultSliderView textSliderView = new DefaultSliderView(getActivity());
@@ -273,6 +263,26 @@ public class TodayFragment extends BaseFragment {
       return left;
     } else {
       return 0;
+    }
+  }
+
+  @Override public void onResume() {
+    super.onResume();
+    countTime = (CountdownView) head.findViewById(R.id.countTime);
+
+    subscription = Observable.timer(1, 1, TimeUnit.SECONDS)
+        .map(aLong -> calcLeftTime())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribeOn(Schedulers.io())
+        .subscribe(countTime::updateShow, throwable -> {
+          Log.e(TAG, throwable.getMessage(), throwable);
+        });
+  }
+
+  @Override public void onStop() {
+    super.onStop();
+    if (subscription != null) {
+      subscription.unsubscribe();
     }
   }
 }
