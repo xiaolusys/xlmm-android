@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
@@ -53,12 +52,6 @@ public class ComplainActvity extends BaseSwipeBackCompatActivity
 
   @Override protected TransitionMode getOverridePendingTransitionMode() {
     return null;
-  }
-
-  @Override protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    // TODO: add setContentView(...) invocation
-    ButterKnife.bind(this);
   }
 
   @Override public void onClick(View v) {

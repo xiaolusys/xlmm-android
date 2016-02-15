@@ -29,6 +29,13 @@ public class MMProductModel {
         .compose(new DefaultTransform<>());
   }
 
+  //得到MM店铺列表
+  public Observable<List<MMChooselistBean>> getMMStoreList() {
+    return XlmmRetrofitClient.getService()
+        .getMMStoreList()
+        .compose(new DefaultTransform<>());
+  }
+
   //得到默认选品列表排序
   public Observable<List<MMChooselistBean>> getMMChooseSortList(String sort_field) {
     return XlmmRetrofitClient.getService()

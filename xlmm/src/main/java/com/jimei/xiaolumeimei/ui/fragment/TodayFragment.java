@@ -3,7 +3,6 @@ package com.jimei.xiaolumeimei.ui.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +40,7 @@ import java.util.concurrent.TimeUnit;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -64,6 +64,7 @@ public class TodayFragment extends BaseFragment {
   private PagerIndicator mPagerIndicator;
   private View head;
   private Subscription subscription;
+  //private long l;
 
   @Override protected int provideContentViewId() {
     return R.layout.today_fragment;
@@ -274,9 +275,38 @@ public class TodayFragment extends BaseFragment {
         .map(aLong -> calcLeftTime())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribeOn(Schedulers.io())
-        .subscribe(countTime::updateShow, throwable -> {
-          Log.e(TAG, throwable.getMessage(), throwable);
+        .subscribe(new Action1<Long>() {
+          @Override public void call(Long aLong) {
+            if (aLong > 0) {
+              countTime.updateShow(aLong);
+            } else {
+              countTime.setVisibility(View.INVISIBLE);
+            }
+          }
         });
+
+    //new AsyncTask<Void, Void, Void>() {
+    //
+    //
+    //  @Override protected Void doInBackground(Void... params) {
+    //    JUtils.Log("异步", "   1111");
+    //    //long l = calcLeftTime();
+    //    //while (true) {
+    //    //  try {
+    //    //    Thread.sleep(1000);
+    //    //
+    //    //    l -= 1000;
+    //    //    publishProgress(l);
+    //    //  } catch (InterruptedException e) {
+    //    //    e.printStackTrace();
+    //    //  }
+    //    //}
+    //
+    //    return null;
+    //  }
+    //
+    //}.execute();
+
   }
 
   @Override public void onStop() {

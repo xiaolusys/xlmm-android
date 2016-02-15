@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import cn.iwgang.countdownview.CountdownView;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
@@ -27,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -48,6 +50,7 @@ public class PreviousFragment extends BaseFragment {
   private View head;
   private CountdownView countTime;
   private Subscription subscription;
+  private TextView tv_tomorrow;
 
   @Override protected int provideContentViewId() {
     return R.layout.previous_fragment;
@@ -123,7 +126,16 @@ public class PreviousFragment extends BaseFragment {
         .map(aLong -> calcLeftTime())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribeOn(Schedulers.io())
-        .subscribe(countTime::updateShow, throwable -> {
+        .subscribe(new Action1<Long>() {
+          @Override public void call(Long aLong) {
+            if (aLong > 0) {
+              countTime.updateShow(aLong);
+            } else {
+              countTime.setVisibility(View.INVISIBLE);
+              tv_tomorrow.setVisibility(View.VISIBLE);
+            }
+          }
+        }, throwable -> {
         });
   }
 
@@ -143,7 +155,7 @@ public class PreviousFragment extends BaseFragment {
     post1 = (ImageView) head.findViewById(R.id.post_1);
     post2 = (ImageView) head.findViewById(R.id.post_2);
     countTime = (CountdownView) head.findViewById(R.id.countTime);
-
+    tv_tomorrow = (TextView) head.findViewById(R.id.tv_tomorrow);
     xRecyclerView.addHeaderView(head);
 
     model.getYestdayPost()

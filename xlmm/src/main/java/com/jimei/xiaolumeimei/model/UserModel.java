@@ -4,6 +4,7 @@ import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.entities.CouponBean;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.entities.MembershipPointBean;
+import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
 import com.jimei.xiaolumeimei.entities.NicknameBean;
 import com.jimei.xiaolumeimei.entities.PointLogBean;
 import com.jimei.xiaolumeimei.entities.RegisterBean;
@@ -139,6 +140,13 @@ public class UserModel {
       String openid, String unionid) {
     return XlmmRetrofitClient.getService()
         .wxapp_login(headimgurl, nickname, openid, unionid)
+        .compose(new DefaultTransform<>());
+  }
+
+  //判断用户是否需要绑定
+  public Observable<NeedSetInfoBean> need_set_info() {
+    return XlmmRetrofitClient.getService()
+        .need_set_info()
         .compose(new DefaultTransform<>());
   }
 }

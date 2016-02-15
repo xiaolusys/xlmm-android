@@ -29,6 +29,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity implements Vie
   @Bind(R.id.btn_two_dimen) Button btn_two_dimen;
   @Bind(R.id.tv_fansnum) TextView tv_fansnum;
   @Bind(R.id.btn_chooselist)Button btn_chooselist;
+  @Bind(R.id.btn_store)Button btn_store;
 
   AgentInfoBean mamaAgentInfo;
 
@@ -41,6 +42,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity implements Vie
     tv_fansnum.setOnClickListener(this);
 
     btn_chooselist.setOnClickListener(this);
+    btn_store.setOnClickListener(this);
   }
   @Override protected void getBundleExtras(Bundle extras) {
 
@@ -108,6 +110,10 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity implements Vie
 
       case R.id.btn_chooselist:
         startActivity(new Intent(MamaInfoActivity.this, MMChooseListActivity.class));
+        break;
+
+      case R.id.btn_store:
+        startActivity(new Intent(MamaInfoActivity.this, MaMaMyStoreActivity.class));
         break;
     }
   }

@@ -16,34 +16,27 @@
         app:popupTheme="@style/AppTheme.PopupOverlay">
 
       <TextView
+          android:padding="4dp"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_centerInParent="true"
           android:layout_gravity="center"
-          android:text="投诉建议"
+          android:text="我的店铺"
           android:textColor="@android:color/white"
-          android:textSize="24sp"
-          android:textStyle="bold"/>
+          android:textSize="16sp"
+          />
 
     </android.support.v7.widget.Toolbar>
 
   </android.support.design.widget.AppBarLayout>
 
-  <EditText
-      android:id="@+id/complain_text"
-      android:layout_width="match_parent"
-      android:hint="@string/complaininfo"
-      android:layout_height="wrap_content"
-      android:lines="9"
-      />
+  <FrameLayout android:layout_width="match_parent"
+      android:layout_height="match_parent">
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/store_rcyView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
-  <Button
-      android:textColor="@color/white"
-      android:layout_marginTop="16dp"
-      android:layout_width="match_parent"
-      android:text="提交"
-      android:layout_height="wrap_content"
-      android:id="@+id/tijiao"
-      android:background="@drawable/shape_common"
-      />
+    <include layout="@layout/common_loading"/>
+  </FrameLayout>
 </LinearLayout>

@@ -19,6 +19,7 @@ import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.entities.MMChooselistBean;
 import com.jimei.xiaolumeimei.entities.MamaFansBean;
 import com.jimei.xiaolumeimei.entities.MembershipPointBean;
+import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
 import com.jimei.xiaolumeimei.entities.NicknameBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.PointLogBean;
@@ -416,6 +417,10 @@ public interface XlmmService {
     @GET("products/my_choice_pro")
     Observable<List<MMChooselistBean>> getMMChooseList();
 
+  //我的店铺列表
+    @GET("pmt/cushoppros")
+    Observable<List<MMChooselistBean>> getMMStoreList();
+
   //选品默认列表排序
     @GET("products/my_choice_pro")
     Observable<List<MMChooselistBean>> getMMChooseSortList(
@@ -450,4 +455,8 @@ public interface XlmmService {
         @Field("product")String product
   );
 
+  @GET("users/need_set_info")
+  Observable<NeedSetInfoBean> need_set_info(
+
+  );
 }

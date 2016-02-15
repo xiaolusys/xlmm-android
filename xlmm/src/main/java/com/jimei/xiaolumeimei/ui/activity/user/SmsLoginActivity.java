@@ -9,6 +9,7 @@ import android.widget.TextView;
 import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
 import com.jimei.xiaolumeimei.entities.SmsLoginBean;
 import com.jimei.xiaolumeimei.entities.SmsLoginUserBean;
 import com.jimei.xiaolumeimei.model.UserModel;
@@ -25,6 +26,7 @@ import rx.schedulers.Schedulers;
  */
 public class SmsLoginActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener {
+  private static final String TAG = SmsLoginActivity.class.getSimpleName();
 
   UserModel model = new UserModel();
   @Bind(R.id.tx_title) TextView txTitle;
@@ -102,9 +104,23 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                   int code = registerBean.getCode();
 
                   if (code == 0) {
-                    LoginUtils.saveLoginSuccess(true, getApplicationContext());
-                    JUtils.Toast("登录成功");
-                    finish();
+                    model.need_set_info()
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(new ServiceResponse<NeedSetInfoBean>() {
+                          @Override public void onNext(NeedSetInfoBean needSetInfoBean) {
+                            super.onNext(needSetInfoBean);
+                            int codeInfo = needSetInfoBean.getCode();
+                            if (0 == codeInfo) {
+                              LoginUtils.saveLoginSuccess(true, getApplicationContext());
+                              JUtils.Toast("登录成功");
+                              finish();
+                            } else if (1 == codeInfo) {
+                              //Intent intent = new Intent(SmsLoginActivity.this,);
+                            } else if (2 == codeInfo) {
+
+                            }
+                          }
+                        });
                   } else if (code == 1) {
                     LoginUtils.saveLoginSuccess(false, getApplicationContext());
                     JUtils.Toast("登录验证失败,请重新尝试");

@@ -38,9 +38,9 @@
             android:id="@+id/countTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignTop="@+id/nvzhuangText"
+            app:isShowDay="true"
             app:isShowHour="true"
             app:isShowMinute="true"
             app:isShowSecond="true"
@@ -49,9 +49,23 @@
             app:suffixGravity="bottom"
             app:suffixTextColor="@color/colorAccent"
             app:suffixTextSize="12sp"
+            app:suffixDay="天"
             app:suffixHour="时"
             app:suffixMinute="分"
             app:suffixSecond="秒"
+            />
+
+        <TextView
+            android:id="@+id/tv_tomorrow"
+            android:textSize="16sp"
+            android:layout_marginTop="6dp"
+            android:text="敬请期待明日上新"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
+            android:visibility="invisible"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/nvzhuangText"
             />
     </RelativeLayout>
 </LinearLayout>
