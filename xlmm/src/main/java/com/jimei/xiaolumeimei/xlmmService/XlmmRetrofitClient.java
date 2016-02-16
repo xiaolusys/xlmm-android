@@ -2,7 +2,6 @@ package com.jimei.xiaolumeimei.xlmmService;
 
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.data.XlmmApi;
-
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 import retrofit.RxJavaCallAdapterFactory;
@@ -44,10 +43,12 @@ public class XlmmRetrofitClient {
     //client.setConnectTimeout(10 * 1000, TimeUnit.MILLISECONDS);
     //client.setWriteTimeout(30 * 1000, TimeUnit.MILLISECONDS);
     //client.setWriteTimeout(30 * 1000, TimeUnit.MILLISECONDS);
-    //client.interceptors().add(interceptor);
+    //client.interceptors().add(new ReceivedCookiesInterceptor());
     //client.setCookieHandler(
     //    new CookieManager(new PersistentCookieStore(getApplicationContext()),
     //        CookiePolicy.ACCEPT_ALL));
+
+    //XlmmApp.client.interceptors().add(new ReceivedCookiesInterceptor());
 
     return new Retrofit.Builder().baseUrl(XlmmApi.URL_BASE)
         .addConverterFactory(GsonConverterFactory.create())
@@ -55,8 +56,23 @@ public class XlmmRetrofitClient {
         .client(XlmmApp.client)
         .build();
   }
-
+  //
   //private static Context getApplicationContext() {
   //  return XlmmApp.getInstance();
+  //}
+
+  //static class ReceivedCookiesInterceptor implements Interceptor {
+  //  @Override public Response intercept(Chain chain) throws IOException {
+  //    Response originalResponse = chain.proceed(chain.request());
+  //    List<String> cookieList = originalResponse.headers("Set-Cookie");
+  //    if (cookieList != null) {
+  //      JUtils.Log("XLMMAPP", cookieList.get(0));
+  //      for (String s : cookieList) {//Cookie的格式为:cookieName=cookieValue;path=xxx
+  //        //保存你需要的cookie数据
+  //        JUtils.Log("XLMMAPP", s);
+  //      }
+  //    }
+  //    return originalResponse;
+  //  }
   //}
 }

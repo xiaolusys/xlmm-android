@@ -1,6 +1,5 @@
 package com.jimei.xiaolumeimei.xlmmService;
 
-import com.jude.utils.JUtils;
 import rx.Observer;
 
 /**
@@ -27,7 +26,7 @@ public class ServiceResponse<T> implements Observer<T> {
     //  JUtils.Log("UnKnow Error:" + e.getLocalizedMessage());
     //  //onServiceError(XlmmApi.CODE.NET_INVALID, "网络错误");
     //}
-    JUtils.Log("XLMM","ServiceResponse "+ e.getLocalizedMessage());
+    //JUtils.Log("XLMM","ServiceResponse "+ e.getLocalizedMessage());
   }
 
   //public void onServiceError(int status, String info) {

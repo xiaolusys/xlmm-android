@@ -33,6 +33,7 @@ public class PersistentCookieStore implements CookieStore {
 
   private final HashMap<String, ConcurrentHashMap<String, HttpCookie>> cookies;
   private final SharedPreferences cookiePrefs;
+  private final SharedPreferences cookiePrefs1;
 
   /**
    * Construct a persistent cookie store.
@@ -41,6 +42,7 @@ public class PersistentCookieStore implements CookieStore {
    */
   public PersistentCookieStore(Context context) {
     cookiePrefs = context.getSharedPreferences(COOKIE_PREFS, 0);
+    cookiePrefs1 = context.getSharedPreferences(COOKIE_PREFS + "xlmm", 0);
     cookies = new HashMap<>();
 
     // Load any previously stored cookies into the store
@@ -85,6 +87,10 @@ public class PersistentCookieStore implements CookieStore {
     prefsWriter.putString(COOKIE_NAME_PREFIX + name,
         encodeCookie(new SerializableHttpCookie(cookie)));
     prefsWriter.apply();
+
+    SharedPreferences.Editor editor = cookiePrefs1.edit();
+    editor.putString(COOKIE_NAME_PREFIX + name, cookie.getValue());
+    editor.apply();
   }
 
   protected String getCookieToken(URI uri, HttpCookie cookie) {

@@ -2,21 +2,26 @@ package com.jimei.xiaolumeimei;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.multidex.MultiDex;
 import android.util.Log;
 import cn.sharesdk.framework.ShareSDK;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.model.UserModel;
-import com.jimei.xiaolumeimei.okhttp.OkHttpClientManager;
 import com.jimei.xiaolumeimei.okhttp.PersistentCookieStore;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.utils.NetWorkUtil;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 import com.zhy.autolayout.config.AutoLayoutConifg;
+import java.io.IOException;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import rx.schedulers.Schedulers;
 
@@ -29,6 +34,7 @@ public class XlmmApp extends Application {
 
   public static OkHttpClient client;
   private static Context mContext;
+  private SharedPreferences cookiePrefs;
 
   public static Context getInstance() {
     return mContext;
@@ -37,8 +43,10 @@ public class XlmmApp extends Application {
   @Override public void onCreate() {
     super.onCreate();
     mContext = this;
-
+    cookiePrefs = getSharedPreferences("COOKIESxlmm", 0);
     client = initOkHttpClient();
+    //receivedCookiesInterceptor =
+    //   new ReceivedCookiesInterceptor();
     JUtils.initialize(this);
     JUtils.setDebug(true, "xlmm");
     //CrashWoodpecker.fly(false).to(this);
@@ -72,15 +80,48 @@ public class XlmmApp extends Application {
   //初始化OkHttpClient
   private OkHttpClient initOkHttpClient() {
 
-    //okhttp3.OkHttpClient okHttpClient = OkHttpUtils.getInstance().getOkHttpClient();
+    //OkHttpClient httpClient = OkHttpClientManager.getInstance().getOkHttpClient();
+    //httpClient.setConnectTimeout(10 * 1000, TimeUnit.MILLISECONDS);
+    //httpClient.setWriteTimeout(30 * 1000, TimeUnit.MILLISECONDS);
+    //httpClient.setWriteTimeout(30 * 1000, TimeUnit.MILLISECONDS);
+    //
+    //httpClient.setCookieHandler(
+    //    new CookieManager(new PersistentCookieStore(getApplicationContext()),
+    //        CookiePolicy.ACCEPT_ALL));
+    //httpClient.interceptors().add(receivedCookiesInterceptor);
 
-    OkHttpClient httpClient = OkHttpClientManager.getInstance().getOkHttpClient();
+    SharedPreferences.Editor editor = cookiePrefs.edit();
+
+    CookieManager cookieManager =
+        new CookieManager(new PersistentCookieStore(getApplicationContext()),
+            CookiePolicy.ACCEPT_ALL);
+    OkHttpClient httpClient = new OkHttpClient(); //create OKHTTPClient
+    //create a cookieManager so your client can be cookie persistant
     httpClient.setConnectTimeout(10 * 1000, TimeUnit.MILLISECONDS);
     httpClient.setWriteTimeout(30 * 1000, TimeUnit.MILLISECONDS);
     httpClient.setWriteTimeout(30 * 1000, TimeUnit.MILLISECONDS);
-    httpClient.setCookieHandler(
-        new CookieManager(new PersistentCookieStore(getApplicationContext()),
-            CookiePolicy.ACCEPT_ALL));
+    httpClient.interceptors().add(new Interceptor() {
+      @Override public Response intercept(Chain chain) throws IOException {
+        Request request = chain.request()
+            .newBuilder()
+            .addHeader("Content-Type", "application/json;charset=utf-8")
+            .build();
+
+        Response originalResponse = chain.proceed(request);
+
+        List<String> cookieList = originalResponse.headers("Set-Cookie");
+        if (cookieList != null) {
+          //JUtils.Log("XLMMAPP", cookieList.get(0));
+          for (String s : cookieList) {//Cookie的格式为:cookieName=cookieValue;path=xxx
+            //保存你需要的cookie数据
+            editor.putString("Cookies", s);
+            editor.apply();
+          }
+        }
+        return originalResponse;
+      }
+    });
+    httpClient.setCookieHandler(cookieManager);
     return httpClient;
   }
 
@@ -88,4 +129,5 @@ public class XlmmApp extends Application {
     super.attachBaseContext(base);
     MultiDex.install(this);
   }
+
 }
