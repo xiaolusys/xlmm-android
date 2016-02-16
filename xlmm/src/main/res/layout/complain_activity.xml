@@ -22,8 +22,7 @@
           android:layout_gravity="center"
           android:text="投诉建议"
           android:textColor="@android:color/white"
-          android:textSize="24sp"
-          android:textStyle="bold"/>
+          android:textSize="16sp"/>
 
     </android.support.v7.widget.Toolbar>
 

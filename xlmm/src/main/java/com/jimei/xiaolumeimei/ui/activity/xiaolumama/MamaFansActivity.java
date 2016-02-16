@@ -7,10 +7,8 @@ import android.widget.ListView;
 import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.MamaFansAdapter;
-import com.jimei.xiaolumeimei.adapter.WithdrawCashHisAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.MamaFansBean;
-import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
@@ -42,8 +40,7 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity implements Vie
   @Override protected void initViews() {
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
-    toolbar.setNavigationIcon(R.drawable.back);
-
+    finishBack(toolbar);
     mAdapter = new MamaFansAdapter(this);
     lv_fans.setAdapter(mAdapter);
   }
@@ -79,9 +76,7 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity implements Vie
   public void onClick(View v) {
     switch (v.getId()) {
 
-      case R.id.toolbar:
-        finish();
-        break;
+
     }
   }
 

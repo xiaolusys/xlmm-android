@@ -2,7 +2,10 @@ package com.jimei.xiaolumeimei.base;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 import butterknife.ButterKnife;
+import com.jimei.xiaolumeimei.R;
 import com.umeng.analytics.MobclickAgent;
 import com.zhy.autolayout.AutoLayoutActivity;
 
@@ -52,5 +55,14 @@ public abstract class BaseActivity extends AutoLayoutActivity {
   @Override protected void onPause() {
     super.onPause();
     MobclickAgent.onPause(this);
+  }
+
+  public void finishBack(Toolbar toolbar) {
+    toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+    toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        finish();
+      }
+    });
   }
 }

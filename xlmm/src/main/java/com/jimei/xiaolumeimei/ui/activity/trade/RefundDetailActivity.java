@@ -1,34 +1,28 @@
 package com.jimei.xiaolumeimei.ui.activity.trade;
 
 import android.content.Intent;
-import android.graphics.RadialGradient;
 import android.os.Bundle;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import butterknife.Bind;
+import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.HorizontalScrollViewAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.data.LogisticsCompanyInfo;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.MyHorizontalScrollView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-
-import com.jimei.xiaolumeimei.R;
 import com.jude.utils.JUtils;
-
-import butterknife.Bind;
 import java.util.ArrayList;
 import java.util.List;
 import rx.schedulers.Schedulers;
@@ -83,7 +77,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
   @Override protected void initViews() {
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
-    toolbar.setNavigationIcon(R.drawable.back);
+    finishBack(toolbar);
 
     goods_id = getIntent().getExtras().getInt("goods_id");
     Log.d(TAG, "goods_id " + goods_id);
@@ -196,9 +190,6 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
 
   @Override public void onClick(View v) {
     switch (v.getId()) {
-      case R.id.toolbar:
-        finish();
-        break;
       case R.id.btn_return_addr:
         new AlertDialog.Builder(this).setTitle("")
             .setMessage(R.string.return_addr).show();

@@ -22,8 +22,10 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import butterknife.ButterKnife;
@@ -282,4 +284,15 @@ public abstract class BaseAppCompatActivity extends AutoLayoutActivity {
 
     return sharedPreferences.getBoolean("success", false);
   }
+
+  public void finishBack(Toolbar toolbar) {
+    toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+    toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+
+        finish();
+      }
+    });
+  }
+
 }

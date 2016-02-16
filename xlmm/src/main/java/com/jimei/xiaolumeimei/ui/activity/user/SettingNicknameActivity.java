@@ -57,7 +57,7 @@ public class SettingNicknameActivity extends BaseSwipeBackCompatActivity impleme
     protected void initViews() {
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.back);
+        finishBack(toolbar);
     }
 
     @Override
@@ -86,9 +86,6 @@ public class SettingNicknameActivity extends BaseSwipeBackCompatActivity impleme
                 } else {
                     Toast.makeText(mContext, "昵称长度或者字符错误,请检查", Toast.LENGTH_SHORT).show();
                 }
-                break;
-            case R.id.toolbar:
-                finish();
                 break;
         }
     }

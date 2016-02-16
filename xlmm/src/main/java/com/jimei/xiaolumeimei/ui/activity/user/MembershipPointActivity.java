@@ -4,16 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
+import butterknife.Bind;
+import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.MembershipPointListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.MembershipPointBean;
@@ -22,8 +20,6 @@ import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import java.util.List;
-import com.jimei.xiaolumeimei.R;
-import butterknife.Bind;
 import rx.schedulers.Schedulers;
 
 
@@ -53,8 +49,7 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity impleme
     @Override protected void initViews() {
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.back);
-
+        finishBack(toolbar);
         ListView all_orders_listview = (ListView) findViewById(R.id.all_points_listview);
 
         mPointAdapter = new MembershipPointListAdapter(this);
@@ -123,9 +118,7 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity impleme
                 startActivity(intent);
                 finish();
                 break;
-            case R.id.toolbar:
-                finish();
-                break;
+
         }
     }
 }

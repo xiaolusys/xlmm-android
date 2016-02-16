@@ -8,11 +8,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.entities.AgentInfoBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
@@ -50,12 +48,7 @@ public class WithdrawCashResultActivity extends BaseSwipeBackCompatActivity impl
   @Override protected void initViews() {
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
-    toolbar.setNavigationIcon(R.drawable.back);
-    toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        finish();
-      }
-    });
+    finishBack(toolbar);
 
     cash = getIntent().getExtras().getFloat("cash");
     if(Float.compare(cash , 100) == 0){

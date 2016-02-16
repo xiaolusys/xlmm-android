@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +46,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.confirm) Button confirmTrade;
   @Bind(R.id.total_price) TextView totalPrice;
   @Bind(R.id.go_main) Button goMain;
+  @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.empty_content) RelativeLayout emptyContent;
   private TextView totalPrice_all_1;
   private TextView extra_price_a, haicha;
@@ -118,6 +120,9 @@ public class CartActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
+    toolbar.setTitle("");
+    setSupportActionBar(toolbar);
+    finishBack(toolbar);
 
     view = getLayoutInflater().inflate(R.layout.footer, null);
 

@@ -2,16 +2,12 @@ package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
 import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.WithdrawCashHisAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.entities.AgentInfoBean;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -44,7 +40,7 @@ public class WithdrawCashHistoryActivity extends BaseSwipeBackCompatActivity imp
   @Override protected void initViews() {
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
-    toolbar.setNavigationIcon(R.drawable.back);
+    finishBack(toolbar);
 
     mHisAdapter = new WithdrawCashHisAdapter(this);
     lv_withdrawcash_his.setAdapter(mHisAdapter);
@@ -82,9 +78,7 @@ public class WithdrawCashHistoryActivity extends BaseSwipeBackCompatActivity imp
   public void onClick(View v) {
     switch (v.getId()) {
 
-      case R.id.toolbar:
-        finish();
-        break;
+
     }
   }
 

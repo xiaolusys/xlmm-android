@@ -44,10 +44,12 @@ public class VerifyPhoneActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
+
     TextView tx_title = (TextView) findViewById(R.id.tx_title);
     tx_title.setText("请验证手机");
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
+    finishBack(toolbar);
 
     register_button.setText("下一步");
   }

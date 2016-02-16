@@ -1,51 +1,22 @@
 package com.jimei.xiaolumeimei.ui.activity.trade;
 
-import android.app.ActionBar;
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.v4.view.MotionEventCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.gson.Gson;
-import com.jimei.xiaolumeimei.adapter.AllOrdersListAdapter;
+import butterknife.Bind;
+import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.MyAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.LogisticsCompanyInfo;
 import com.jimei.xiaolumeimei.model.TradeModel;
-import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.widget.SideBar;
-
-
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
-
-import com.jimei.xiaolumeimei.R;
-
-
-import butterknife.Bind;
-import rx.schedulers.Schedulers;
 
 public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener {
@@ -81,7 +52,7 @@ public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
   @Override protected void initViews() {
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
-    toolbar.setNavigationIcon(R.drawable.back);
+    finishBack(toolbar);
     //ListView all_orders_listview = (ListView) findViewById(R.id.all_orders_listview);
 
     fillCompanyInfo();
@@ -130,9 +101,7 @@ public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
   @Override public void onClick(View v) {
     switch (v.getId()) {
 
-      case R.id.toolbar:
-        finish();
-        break;
+
     }
   }
 

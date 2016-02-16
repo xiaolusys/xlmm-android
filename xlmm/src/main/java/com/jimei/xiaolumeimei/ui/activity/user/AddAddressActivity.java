@@ -69,6 +69,9 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
+    toolbar.setTitle("");
+    setSupportActionBar(toolbar);
+    finishBack(toolbar);
     parent = findViewById(R.id.main);
 
     initPopupWindow();

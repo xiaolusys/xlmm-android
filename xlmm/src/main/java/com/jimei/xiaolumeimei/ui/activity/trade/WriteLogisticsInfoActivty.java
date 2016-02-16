@@ -58,8 +58,7 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity imple
   @Override protected void initViews() {
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
-    toolbar.setNavigationIcon(R.drawable.back);
-
+    finishBack(toolbar);
     et_logistics_company.setOnTouchListener(new View.OnTouchListener(){
       public boolean onTouch(View v, MotionEvent event){
         //et_refund_reason.setInputType(InputType.TYPE_NULL); //关闭软键盘
@@ -85,9 +84,7 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity imple
 
   @Override public void onClick(View v) {
     switch (v.getId()) {
-      case R.id.toolbar:
-        finish();
-        break;
+
       case R.id.btn_commit:
         commit_logistics_info();
         break;

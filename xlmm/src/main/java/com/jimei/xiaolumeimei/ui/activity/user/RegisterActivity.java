@@ -47,8 +47,7 @@ public class RegisterActivity extends BaseSwipeBackCompatActivity
   @Override protected void initViews() {
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
-    toolbar.setNavigationIcon(R.drawable.back);
-    toolbar.setOnClickListener(this);
+    finishBack(toolbar);
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
@@ -140,10 +139,6 @@ public class RegisterActivity extends BaseSwipeBackCompatActivity
 
         break;
 
-      case R.id.toolbar:
-        finish();
-
-        break;
     }
   }
 }

@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.ui.activity.product;
 
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -74,7 +75,10 @@ public class LadyListActivity extends BaseSwipeBackCompatActivity {
   }
 
   private void initRecyclerView() {
-
+    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    toolbar.setTitle("");
+    setSupportActionBar(toolbar);
+    finishBack(toolbar);
     xRecyclerView = (XRecyclerView) findViewById(R.id.childlist_recyclerView);
     GridLayoutManager layoutManager = new GridLayoutManager(LadyListActivity.this, 2);
 

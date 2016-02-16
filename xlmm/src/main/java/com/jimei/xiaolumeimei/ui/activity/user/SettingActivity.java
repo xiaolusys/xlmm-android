@@ -10,9 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import butterknife.Bind;
-import butterknife.ButterKnife;
-import rx.schedulers.Schedulers;
-
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -21,6 +18,7 @@ import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.utils.AppUtils;
 import com.jimei.xiaolumeimei.utils.DataClearManager;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/01/18.
@@ -78,6 +76,9 @@ public class SettingActivity extends BaseSwipeBackCompatActivity {
   }
 
   @Override protected void initViews() {
+    toolbar.setTitle("");
+    setSupportActionBar(toolbar);
+    finishBack(toolbar);
     settingFragment = new SettingFragment();
     getFragmentManager().beginTransaction()
         .replace(R.id.container_setting, settingFragment)

@@ -55,12 +55,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity implements Vie
   @Override protected void initViews() {
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
-    toolbar.setNavigationIcon(R.drawable.back);
-    toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        finish();
-      }
-    });
+    finishBack(toolbar);
 
   }
 

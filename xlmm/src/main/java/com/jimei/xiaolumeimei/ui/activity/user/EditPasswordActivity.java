@@ -53,7 +53,7 @@ public class EditPasswordActivity extends BaseSwipeBackCompatActivity
 
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
-    toolbar.setNavigationIcon(R.drawable.back);
+    finishBack(toolbar);
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
@@ -84,9 +84,7 @@ public class EditPasswordActivity extends BaseSwipeBackCompatActivity
 
         break;
 
-      case R.id.toolbar:
-        finish();
-        break;
+
     }
   }
 

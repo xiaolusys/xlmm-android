@@ -1,6 +1,8 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 
@@ -10,6 +12,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class ChanggeAddressActivity extends BaseSwipeBackCompatActivity{
+  @Bind(R.id.toolbar) Toolbar toolbar;
   @Override protected void setListener() {
 
   }
@@ -27,7 +30,9 @@ public class ChanggeAddressActivity extends BaseSwipeBackCompatActivity{
   }
 
   @Override protected void initViews() {
-
+    toolbar.setTitle("");
+    setSupportActionBar(toolbar);
+    finishBack(toolbar);
   }
 
   @Override protected boolean toggleOverridePendingTransition() {

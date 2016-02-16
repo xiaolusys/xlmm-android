@@ -43,7 +43,9 @@ public class ComplainActvity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
-
+    toolbar.setTitle("");
+    setSupportActionBar(toolbar);
+    finishBack(toolbar);
   }
 
   @Override protected boolean toggleOverridePendingTransition() {

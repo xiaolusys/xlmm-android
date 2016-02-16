@@ -146,7 +146,9 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
-
+    toolbar.setTitle("");
+    setSupportActionBar(toolbar);
+    finishBack(toolbar);
     mAdapter = new CartsPayInfoAdapter(this, list);
     payinfoListview.setAdapter(mAdapter);
   }

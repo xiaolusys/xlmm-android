@@ -14,18 +14,14 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.Bind;
+import cn.iwgang.countdownview.CountdownView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.OrderGoodsListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.PayRightNowInfo;
 import com.jimei.xiaolumeimei.data.XlmmConst;
-import com.jimei.xiaolumeimei.entities.AddressBean;
-import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
-import com.jimei.xiaolumeimei.model.AddressModel;
-import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
@@ -34,9 +30,6 @@ import com.squareup.okhttp.ResponseBody;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
-
-import cn.iwgang.countdownview.CountdownView;
 import rx.schedulers.Schedulers;
 
 public class OrderDetailActivity extends BaseSwipeBackCompatActivity
@@ -73,8 +66,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
   @Override protected void initViews() {
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
-    toolbar.setNavigationIcon(R.drawable.back);
-
+    finishBack(toolbar);
     ListView lv_goods = (ListView) findViewById(R.id.lv_goods);
     mGoodsAdapter = new OrderGoodsListAdapter(this);
     lv_goods.setAdapter(mGoodsAdapter);
@@ -235,9 +227,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
       case R.id.btn_order_cancel:
         JUtils.Log(TAG, "onClick cancel");
         cancel_order();
-        break;
-      case R.id.toolbar:
-        finish();
         break;
     }
   }

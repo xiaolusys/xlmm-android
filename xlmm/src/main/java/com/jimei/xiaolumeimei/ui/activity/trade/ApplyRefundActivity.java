@@ -8,26 +8,18 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
-
-import butterknife.OnTouch;
+import butterknife.Bind;
+import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
-import com.jimei.xiaolumeimei.widget.ClearEditText;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-
-import com.jimei.xiaolumeimei.R;
-
-import butterknife.Bind;
 import com.jude.utils.JUtils;
 import com.squareup.okhttp.ResponseBody;
 import rx.schedulers.Schedulers;
@@ -90,7 +82,6 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
 
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
-    toolbar.setNavigationIcon(R.drawable.back);
   }
 
   //从server端获得所有订单数据，可能要查询几次

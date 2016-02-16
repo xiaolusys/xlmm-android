@@ -104,12 +104,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
   @Override protected void initViews() {
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
-    toolbar.setNavigationIcon(R.drawable.back);
-    toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        finish();
-      }
-    });
+    finishBack(toolbar);
 
     forGetTextView.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
   }
@@ -204,7 +199,6 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
             Set<String> keys = hashMap.keySet();
 
             for (String key : keys) {
-
               String value = (String) hashMap.get(key);
               JUtils.Log("LoginActivity", key + "========" + value);
             }

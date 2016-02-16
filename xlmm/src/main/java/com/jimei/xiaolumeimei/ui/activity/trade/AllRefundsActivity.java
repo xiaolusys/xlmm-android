@@ -52,7 +52,7 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity implements V
     @Override protected void initViews() {
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.back);
+        finishBack(toolbar);
         //config allorders list adaptor
         ListView all_refunds_listview = (ListView) findViewById(R.id.all_refunds_listview);
         mAllRefundsAdapter = new AllRefundsListAdapter(this);
@@ -130,9 +130,6 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity implements V
             case R.id.btn_jump:
                 Intent intent = new Intent(AllRefundsActivity.this, MainActivity.class);
                 startActivity(intent);
-                finish();
-                break;
-            case R.id.toolbar:
                 finish();
                 break;
         }

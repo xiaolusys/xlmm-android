@@ -78,6 +78,9 @@ public class TongkuanActivity extends BaseSwipeBackCompatActivity {
   }
 
   private void initRecyclerView() {
+    toolbar.setTitle("");
+    setSupportActionBar(toolbar);
+    finishBack(toolbar);
     recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
     recyclerView.addItemDecoration(new SpaceItemDecoration(10));
 

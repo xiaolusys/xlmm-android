@@ -49,7 +49,7 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity
   @Override protected void initViews() {
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
-    toolbar.setNavigationIcon(R.drawable.back);
+    finishBack(toolbar);
     //ListView all_orders_listview = (ListView) findViewById(R.id.all_orders_listview);
 
     mAllOrderAdapter = new AllOrdersListAdapter(this);
@@ -108,9 +108,6 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity
       case R.id.btn_jump:
         Intent intent = new Intent(AllOrdersActivity.this, MainActivity.class);
         startActivity(intent);
-        finish();
-        break;
-      case R.id.toolbar:
         finish();
         break;
     }

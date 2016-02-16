@@ -56,7 +56,7 @@ public class CouponActivity extends BaseSwipeBackCompatActivity
   @Override protected void initViews() {
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
-    toolbar.setNavigationIcon(R.drawable.back);
+    finishBack(toolbar);
 
     lv_unused_coupon = (ListView) findViewById(R.id.lv_unused_coupon);
     mCouponAdapter = new CouponListAdapter(this);
@@ -123,9 +123,7 @@ public class CouponActivity extends BaseSwipeBackCompatActivity
         startActivity(intent);
         finish();
         break;
-      case R.id.toolbar:
-        finish();
-        break;
+
     }
   }
 

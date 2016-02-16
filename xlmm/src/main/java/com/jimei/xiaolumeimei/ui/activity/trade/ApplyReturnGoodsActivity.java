@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -14,30 +13,24 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import android.widget.Toast;
+import butterknife.Bind;
+import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
-import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
-import com.jimei.xiaolumeimei.utils.BitmapUtil;
 import com.jimei.xiaolumeimei.utils.CameraUtils;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-
-import com.jimei.xiaolumeimei.R;
-
-import butterknife.Bind;
 import com.jude.utils.JUtils;
 import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.UpCompletionHandler;
@@ -45,8 +38,6 @@ import com.qiniu.android.storage.UpProgressHandler;
 import com.qiniu.android.storage.UploadManager;
 import com.qiniu.android.storage.UploadOptions;
 import com.squareup.okhttp.ResponseBody;
-
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import org.json.JSONObject;
@@ -174,7 +165,7 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
 
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
-    toolbar.setNavigationIcon(R.drawable.back);
+    finishBack(toolbar);
 
     img_proof_pic1 = (ImageView)rl_proof_pic1.findViewById(R.id.img_proof_pic);
     img_proof_pic2 = (ImageView)rl_proof_pic2.findViewById(R.id.img_proof_pic);
@@ -217,9 +208,6 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
 
   @Override public void onClick(View v) {
     switch (v.getId()) {
-      case R.id.toolbar:
-        finish();
-        break;
       case R.id.btn_commit:
         desc = et_refund_info.getText().toString().trim();
         proof_pic = "";

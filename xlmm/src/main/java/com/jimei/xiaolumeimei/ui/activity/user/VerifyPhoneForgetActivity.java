@@ -48,6 +48,7 @@ public class VerifyPhoneForgetActivity extends BaseSwipeBackCompatActivity
     tx_title.setText("请验证手机");
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
+    finishBack(toolbar);
 
     register_button.setText("下一步");
   }

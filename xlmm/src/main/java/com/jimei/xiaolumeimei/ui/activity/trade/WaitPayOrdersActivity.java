@@ -47,8 +47,7 @@ public class WaitPayOrdersActivity extends BaseSwipeBackCompatActivity
   @Override protected void initViews() {
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
-    toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-
+    finishBack(toolbar);
     ListView all_orders_listview = (ListView) findViewById(R.id.all_orders_listview);
 
     mAllOrderAdapter = new WaitPayOrdersListAdapter(this);
@@ -107,9 +106,7 @@ public class WaitPayOrdersActivity extends BaseSwipeBackCompatActivity
         //startActivity(intent);
         finish();
         break;
-      case R.id.toolbar:
-        finish();
-        break;
+
     }
   }
 

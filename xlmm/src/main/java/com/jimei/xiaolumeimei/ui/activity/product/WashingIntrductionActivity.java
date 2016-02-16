@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.ui.activity.product;
 
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 
@@ -28,7 +29,10 @@ public class WashingIntrductionActivity extends BaseSwipeBackCompatActivity{
   }
 
   @Override protected void initViews() {
-
+    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    toolbar.setTitle("");
+    setSupportActionBar(toolbar);
+    finishBack(toolbar);
   }
 
   @Override protected boolean toggleOverridePendingTransition() {

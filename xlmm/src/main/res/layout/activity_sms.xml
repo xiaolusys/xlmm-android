@@ -25,7 +25,7 @@
                 android:layout_gravity="center"
                 android:text="短信验证码登录"
                 android:textColor="@android:color/white"
-                android:textSize="24sp"
+                android:textSize="16sp"
                 />
         </android.support.v7.widget.Toolbar>
 
