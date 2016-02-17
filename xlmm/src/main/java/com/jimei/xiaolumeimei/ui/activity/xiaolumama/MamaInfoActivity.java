@@ -22,11 +22,13 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AgentInfoBean;
@@ -139,25 +141,25 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity implements Vie
   private void init_chart()
   {
 
-    mChart.setOnChartGestureListener(this);
+    //mChart.setOnChartGestureListener(this);
     mChart.setOnChartValueSelectedListener(this);
     mChart.setDrawGridBackground(false);
 
     // no description text
     mChart.setDescription("");
-    mChart.setNoDataTextDescription("You need to provide data for the chart.");
+    mChart.setNoDataTextDescription("您暂无订单收益!");
 
     // enable touch gestures
     mChart.setTouchEnabled(true);
 
     // enable scaling and dragging
-    mChart.setDragEnabled(true);
-    mChart.setScaleEnabled(true);
+    mChart.setDragEnabled(false);
+    mChart.setScaleEnabled(false);
     // mChart.setScaleXEnabled(true);
     // mChart.setScaleYEnabled(true);
 
     // if disabled, scaling can be done on x- and y-axis separately
-    mChart.setPinchZoom(true);
+    //mChart.setPinchZoom(true);
 
     // set an alternative background color
     // mChart.setBackgroundColor(Color.GRAY);
@@ -170,14 +172,14 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity implements Vie
     //mChart.setMarkerView(mv);
 
     // x-axis limit line
-    LimitLine llXAxis = new LimitLine(10f, "Index 10");
+    /*LimitLine llXAxis = new LimitLine(10f, "Index 10");
     llXAxis.setLineWidth(4f);
     llXAxis.enableDashedLine(10f, 10f, 0f);
     llXAxis.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
     llXAxis.setTextSize(10f);
 
     XAxis xAxis = mChart.getXAxis();
-/*
+
     Typeface tf = Typeface.createFromAsset(getAssets(), "OpenSans-Regular.ttf");
 
     LimitLine ll1 = new LimitLine(130f, "Upper Limit");
@@ -194,20 +196,28 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity implements Vie
     ll2.setTextSize(10f);
     ll2.setTypeface(tf);*/
 
-    YAxis leftAxis = mChart.getAxisLeft();
-    leftAxis.removeAllLimitLines(); // reset all limit lines to avoid overlapping lines
+    //YAxis leftAxis = mChart.getAxisLeft();
+    //leftAxis.removeAllLimitLines(); // reset all limit lines to avoid overlapping lines
     //leftAxis.addLimitLine(ll1);
     //leftAxis.addLimitLine(ll2);
     //leftAxis.setAxisMaxValue(220f);
     //leftAxis.setAxisMinValue(-50f);
     //leftAxis.setYOffset(20f);
-    leftAxis.enableGridDashedLine(10f, 10f, 0f);
-    leftAxis.setDrawZeroLine(false);
+    //leftAxis.enableGridDashedLine(10f, 10f, 0f);
+    //leftAxis.setDrawZeroLine(false);
 
     // limit lines are drawn behind data (and not on top)
-    leftAxis.setDrawLimitLinesBehindData(true);
+    //leftAxis.setDrawLimitLinesBehindData(true);
+
+    mChart.getLegend().setEnabled(false);
+    mChart.getAxisLeft().setDrawGridLines(false);
+    mChart.getAxisRight().setDrawGridLines(false);
+    mChart.getXAxis().setDrawGridLines(false);
+    mChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
 
     mChart.getAxisRight().setEnabled(false);
+    mChart.setVisibleXRangeMaximum(7);
+
 
     // add data
     setData(45, 100);
@@ -233,22 +243,29 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity implements Vie
     }
 
     // create a dataset and give it a type
-    LineDataSet set1 = new LineDataSet(yVals, "DataSet 1");
+    LineDataSet set1 = new LineDataSet(yVals, "");
     // set1.setFillAlpha(110);
     // set1.setFillColor(Color.RED);
 
     // set the line to be drawn like this "- - - - - -"
-    set1.enableDashedLine(10f, 5f, 0f);
-    set1.enableDashedHighlightLine(10f, 5f, 0f);
-    set1.setColor(Color.BLACK);
-    set1.setCircleColor(Color.BLACK);
+    set1.enableDashedLine(20f, 5f, 0f);
+    set1.enableDashedHighlightLine(20f, 5f, 0f);
+    set1.setColor(Color.YELLOW);
+    set1.setCircleColor(Color.YELLOW);
     set1.setLineWidth(1f);
     set1.setCircleRadius(3f);
     set1.setDrawCircleHole(false);
     set1.setValueTextSize(9f);
-    Drawable drawable = ContextCompat.getDrawable(this, R.drawable.fade_red);
-    set1.setFillDrawable(drawable);
-    set1.setDrawFilled(true);
+    //Drawable drawable = ContextCompat.getDrawable(this, R.drawable.fade_red);
+    //set1.setFillDrawable(drawable);
+    //set1.setDrawFilled(true);
+
+    set1.setValueFormatter(new ValueFormatter() {
+      @Override
+      public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+        return "";
+      }
+    });
 
     ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
     dataSets.add(set1); // add the datasets
