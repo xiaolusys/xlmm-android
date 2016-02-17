@@ -32,19 +32,31 @@
 
   </android.support.design.widget.AppBarLayout>
 
+  <ScrollView
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_centerHorizontal="true"
+      android:layout_below="@id/app_bar_layout"
+      >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        >
+
   <RelativeLayout
       android:layout_width="match_parent"
-      android:layout_height="400px"
-      android:layout_below="@+id/app_bar_layout"
+      android:layout_height="350px"
       android:layout_centerHorizontal="true"
-      android:id="@+id/rl_mamainfo">
+      android:id="@+id/rl_mama_info">
 
     <ImageView
         android:id="@+id/imgUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="300px"
-        android:layout_marginTop="100px"
+        android:layout_marginTop="60px"
         android:clickable="true"
         android:src="@drawable/img_head"/>
 
@@ -78,113 +90,151 @@
         android:layout_below="@id/tv_Point"/>
   </RelativeLayout>
 
-
-
-  <LinearLayout
+  <com.github.mikephil.charting.charts.LineChart
+      android:id="@+id/chart1"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:orientation="horizontal"
-      android:layout_below="@+id/rl_mamainfo"
-      android:id="@+id/rl_btn"
-      android:layout_marginTop="8px"
-      android:layout_centerHorizontal="true"
-      >
+      android:layout_height="235px"
+      android:layout_below="@id/rl_mama_info"
+       />
 
-    <Button
-        android:id="@+id/btn_two_dimen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:text="推荐二维码"
-        android:textColor="@color/colorAccent"
-        android:background="@drawable/text_frame"
-        />
+      <include layout="@layout/common_gap"/>
 
-    <Button
-        android:id="@+id/btn_mychoose"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="我的精选"
-        android:textColor="@color/colorAccent"
-        android:background="@drawable/text_frame"
-        />
+      <RelativeLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:id="@+id/rl_order"
+          android:layout_below="@+id/chart1"
+          android:orientation="horizontal"
+          android:layout_marginTop="8px"
+          android:layout_centerHorizontal="true"
+          >
 
-    <Button android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="选品列表"
-        android:id="@+id/btn_chooselist"
-        android:layout_gravity="center"
-        android:textSize="15sp"
-        android:textColor="@color/colorAccent"
-        android:background="@drawable/text_frame"
-        />
+        <TextView
+            android:id="@+id/tv_order1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:text="订单记录"
+            android:background="@drawable/text_frame"
+            />
 
-    <Button
-        android:id="@+id/btn_store"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="我的店铺"
-        android:textSize="15sp"
-        android:layout_gravity="center"
-        android:textColor="@color/colorAccent"
-        android:background="@drawable/text_frame"/>
-  </LinearLayout>
+        <TextView
+            android:id="@+id/tv_order2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="0"
+            android:textColor="@color/colorAccent"
+            android:background="@drawable/text_frame"
+            android:layout_toRightOf="@+id/tv_order1"
+            />
 
-  <include layout="@layout/common_gap"/>
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="历史积累收益"
+            android:id="@+id/tv_fund1"
+            android:layout_gravity="center"
+            android:textSize="15sp"
+            android:background="@drawable/text_frame"
+            android:layout_toRightOf="@+id/tv_order2"
+            android:layout_marginLeft="200px"
+            />
 
-  <RelativeLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_below="@+id/rl_btn"
-      android:orientation="horizontal"
-      android:layout_marginTop="8px"
-      android:layout_centerHorizontal="true"
-      >
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_fund2"
+            android:text="0"
+            android:textSize="15sp"
+            android:layout_gravity="center"
+            android:textColor="@color/colorAccent"
+            android:background="@drawable/text_frame"
+            android:layout_toRightOf="@+id/tv_fund1"/>
+      </RelativeLayout>
 
-    <TextView
-        android:id="@+id/tv_order1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:text="订单记录"
-        android:background="@drawable/text_frame"
-        />
+      <RelativeLayout
+          android:layout_width="match_parent"
+          android:layout_height="300px"
+          android:layout_below="@+id/rl_order"
+          android:id="@+id/rl_btn"
+          android:layout_marginTop="8px"
+          android:layout_centerHorizontal="true"
+          >
 
-    <TextView
-        android:id="@+id/tv_order2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="0"
-        android:textColor="@color/colorAccent"
-        android:background="@drawable/text_frame"
-        android:layout_toRightOf="@+id/tv_order1"
-        />
+        <RelativeLayout
+            android:layout_width="360px"
+            android:layout_height="150px"
+            android:id="@+id/rl_two_dimen"
+            android:layout_marginTop="8px"
+            >
+          <Button
+            android:id="@+id/btn_two_dimen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:text="我的二维码"
+            android:textColor="@color/colorAccent"
+            android:background="@drawable/text_frame"
+            />
+        </RelativeLayout>
 
-    <TextView android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="历史积累收益"
-        android:id="@+id/tv_fund1"
-        android:layout_gravity="center"
-        android:textSize="15sp"
-        android:background="@drawable/text_frame"
-        android:layout_toRightOf="@+id/tv_order2"
-        android:layout_marginLeft="200px"
-        />
+        <RelativeLayout
+            android:layout_width="360px"
+            android:layout_height="150px"
+            android:id="@+id/rl_share"
+            android:layout_marginTop="8px"
+            android:layout_toRightOf="@id/rl_two_dimen"
+            >
+          <Button
+            android:id="@+id/btn_share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="分享补贴"
+            android:textColor="@color/colorAccent"
+            android:background="@drawable/text_frame"
+            />
+        </RelativeLayout>>
 
-    <TextView android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv_fund2"
-        android:text="0"
-        android:textSize="15sp"
-        android:layout_gravity="center"
-        android:textColor="@color/colorAccent"
-        android:background="@drawable/text_frame"
-        android:layout_toRightOf="@+id/tv_fund1"/>
-  </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="360px"
+            android:layout_height="150px"
+            android:id="@+id/rl_chooselist"
+            android:layout_marginTop="8px"
+            android:layout_below="@id/rl_two_dimen"
+            >
+          <Button android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="选品上架"
+            android:id="@+id/btn_chooselist"
+            android:layout_gravity="center"
+            android:textSize="15sp"
+            android:textColor="@color/colorAccent"
+            android:background="@drawable/text_frame"
+            />
+          </RelativeLayout>
 
-  <include layout="@layout/common_gap"/>
+        <RelativeLayout
+            android:layout_width="360px"
+            android:layout_height="150px"
+            android:id="@+id/rl_store"
+            android:layout_marginTop="8px"
+            android:layout_toRightOf="@id/rl_chooselist"
+            android:layout_below="@id/rl_share"
+            >
+          <Button
+            android:id="@+id/btn_store"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="我的精选"
+            android:textSize="15sp"
+            android:layout_gravity="center"
+            android:textColor="@color/colorAccent"
+            android:background="@drawable/text_frame"/>
+        </RelativeLayout>
+      </RelativeLayout>
+
+    </RelativeLayout>
+</ScrollView>
 
   <Button
       android:id="@+id/btn_jump"
@@ -197,6 +247,8 @@
       android:textColor="@color/white"
       android:textSize="15sp"
       android:background="@drawable/shape_common"
+      android:layout_alignParentEnd="true"
+      android:layout_alignParentRight="true"
       />
 
 </RelativeLayout>
