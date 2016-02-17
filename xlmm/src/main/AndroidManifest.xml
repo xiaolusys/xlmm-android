@@ -260,6 +260,9 @@
     <activity android:name=".ui.activity.xiaolumama.MaMaMyStoreActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
+    <activity android:name=".ui.activity.user.WxLoginBindPhoneActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
 
   </application>
 

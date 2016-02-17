@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -11,9 +12,12 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.RegisterBean;
 import com.jimei.xiaolumeimei.model.UserModel;
+import com.jimei.xiaolumeimei.rx.RxCountDown;
 import com.jimei.xiaolumeimei.widget.ClearEditText;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import rx.Subscriber;
+import rx.functions.Action0;
 import rx.schedulers.Schedulers;
 
 public class RegisterActivity extends BaseSwipeBackCompatActivity
@@ -95,19 +99,43 @@ public class RegisterActivity extends BaseSwipeBackCompatActivity
       case R.id.getCheckCode:
         mobile = editTextMobile.getText().toString().trim();
         if (checkMobileInput(mobile)) {
-          model.getRegisterCheckCode(mobile)
-              .subscribeOn(Schedulers.io())
-              .subscribe(new ServiceResponse<RegisterBean>() {
-                @Override public void onNext(RegisterBean registerBean) {
-                  super.onNext(registerBean);
-                  String result = registerBean.getResult();
-                  if (result.equals("0")) {
-                    JUtils.Toast("已经注册过该手机号");
-                  } else if (result.equals("OK")) {
-                    JUtils.Toast("获取验证码成功");
-                  }
-                }
-              });
+
+
+          RxCountDown.countdown(60).doOnSubscribe(new Action0() {
+            @Override public void call() {
+              getCheckCode.setClickable(false);
+              getCheckCode.setBackgroundColor(Color.parseColor("#f3f3f4"));
+
+              model.getRegisterCheckCode(mobile)
+                  .subscribeOn(Schedulers.io())
+                  .subscribe(new ServiceResponse<RegisterBean>() {
+                    @Override public void onNext(RegisterBean registerBean) {
+                      super.onNext(registerBean);
+                      String result = registerBean.getResult();
+                      if (result.equals("0")) {
+                        JUtils.Toast("已经注册过该手机号");
+                      } else if (result.equals("OK")) {
+                        JUtils.Toast("获取验证码成功");
+                      }
+                    }
+                  });
+            }
+          }).subscribe(new Subscriber<Integer>() {
+            @Override public void onCompleted() {
+              getCheckCode.setText("获取验证码");
+              getCheckCode.setClickable(true);
+              getCheckCode.setBackgroundResource(R.drawable.shape_getcheckcode);
+            }
+
+            @Override public void onError(Throwable e) {
+
+            }
+
+            @Override public void onNext(Integer integer) {
+              getCheckCode.setText(integer + "s后重新获取");
+            }
+          });
+
         }
 
         break;

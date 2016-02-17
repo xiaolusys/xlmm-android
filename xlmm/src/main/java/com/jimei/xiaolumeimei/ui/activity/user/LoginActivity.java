@@ -23,6 +23,7 @@ import cn.sharesdk.wechat.friends.Wechat;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.UserBean;
+import com.jimei.xiaolumeimei.entities.WxLogininfoBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
@@ -33,8 +34,6 @@ import com.jimei.xiaolumeimei.widget.PasswordEditText;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.mob.tools.utils.UIHandler;
-import com.squareup.okhttp.ResponseBody;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -205,28 +204,14 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
         break;
 
       case R.id.wx_login:
-
         sha1();
-
         //sha1 签名
         sign = SHA1Utils.hex_sha1(sign_params);
         JUtils.Log(TAG, "sign=" + sign);
 
-
         authorize(new Wechat(this));
 
-        model.wxapp_login(noncestr, timestamp, sign, headimgurl, nickname, openid, unionid)
-            .subscribeOn(Schedulers.io())
-            .subscribe(new ServiceResponse<ResponseBody>() {
-              @Override public void onNext(ResponseBody responseBody) {
-                super.onNext(responseBody);
-                try {
-                  JUtils.Log(TAG, responseBody.string());
-                } catch (IOException e) {
-                  e.printStackTrace();
-                }
-              }
-            });
+
 
         break;
 
@@ -333,6 +318,34 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
     openid = (String) hashMap.get("openid");
     unionid = (String) hashMap.get("unionid");
 
+    model.wxapp_login(noncestr, timestamp, sign, headimgurl, nickname, openid, unionid)
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<WxLogininfoBean>() {
+          @Override public void onNext(WxLogininfoBean wxLogininfoBean) {
+            super.onNext(wxLogininfoBean);
+            if (wxLogininfoBean != null) {
+              int code = wxLogininfoBean.getCode();
+              if (0 == code) {
+
+                LoginUtils.saveLoginSuccess(true, getApplicationContext());
+                JUtils.Toast("登录成功,前往绑定手机");
+                Intent intent =
+                    new Intent(LoginActivity.this, WxLoginBindPhoneActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("headimgurl", headimgurl);
+                bundle.putString("nickname", nickname);
+                intent.putExtras(bundle);
+                startActivity(intent);
+
+                finish();
+
+              } else {
+                JUtils.Toast("登陆有误,请检查你的微信版本");
+
+              }
+            }
+          }
+        });
 
   }
 

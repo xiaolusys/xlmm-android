@@ -1,5 +1,6 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -13,10 +14,13 @@ import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
 import com.jimei.xiaolumeimei.entities.SmsLoginBean;
 import com.jimei.xiaolumeimei.entities.SmsLoginUserBean;
 import com.jimei.xiaolumeimei.model.UserModel;
+import com.jimei.xiaolumeimei.rx.RxCountDown;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.widget.ClearEditText;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import rx.Subscriber;
+import rx.functions.Action0;
 import rx.schedulers.Schedulers;
 
 /**
@@ -73,21 +77,43 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
   @Override public void onClick(View v) {
     switch (v.getId()) {
       case R.id.getCheckCode:
+
         mobile = registerName.getText().toString().trim();
         if (checkMobileInput(mobile)) {
-          model.getSmsCheckCode(mobile)
-              .subscribeOn(Schedulers.io())
-              .subscribe(new ServiceResponse<SmsLoginBean>() {
-                @Override public void onNext(SmsLoginBean registerBean) {
-                  super.onNext(registerBean);
-                  int code = registerBean.getCode();
-                  if (0 == code) {
-                    JUtils.Toast("获取成功");
-                  } else if (2 == code) {
-                    JUtils.Toast("手机号码不合法");
-                  }
-                }
-              });
+          RxCountDown.countdown(60).doOnSubscribe(new Action0() {
+            @Override public void call() {
+              getCheckCode.setClickable(false);
+              getCheckCode.setBackgroundColor(Color.parseColor("#f3f3f4"));
+
+              model.getSmsCheckCode(mobile)
+                  .subscribeOn(Schedulers.io())
+                  .subscribe(new ServiceResponse<SmsLoginBean>() {
+                    @Override public void onNext(SmsLoginBean registerBean) {
+                      super.onNext(registerBean);
+                      int code = registerBean.getCode();
+                      if (0 == code) {
+                        JUtils.Toast("获取成功");
+                      } else if (2 == code) {
+                        JUtils.Toast("手机号码不合法");
+                      }
+                    }
+                  });
+            }
+          }).subscribe(new Subscriber<Integer>() {
+            @Override public void onCompleted() {
+              getCheckCode.setText("获取验证码");
+              getCheckCode.setClickable(true);
+              getCheckCode.setBackgroundResource(R.drawable.shape_getcheckcode);
+            }
+
+            @Override public void onError(Throwable e) {
+
+            }
+
+            @Override public void onNext(Integer integer) {
+              getCheckCode.setText(integer + "s后重新获取");
+            }
+          });
         }
 
         break;
@@ -116,6 +142,7 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                               finish();
                             } else if (1 == codeInfo) {
                               //Intent intent = new Intent(SmsLoginActivity.this,);
+                              JUtils.Toast("验证码过期或超次");
                             } else if (2 == codeInfo) {
 
                             }
@@ -133,7 +160,6 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
         }
 
         break;
-
     }
   }
 

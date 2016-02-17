@@ -12,6 +12,7 @@ import com.jimei.xiaolumeimei.entities.SmsLoginBean;
 import com.jimei.xiaolumeimei.entities.SmsLoginUserBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.entities.WxLogininfoBean;
 import com.jimei.xiaolumeimei.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 import com.squareup.okhttp.ResponseBody;
@@ -136,7 +137,7 @@ public class UserModel {
   }
 
   //微信登录
-  public Observable<ResponseBody> wxapp_login(String noncestr, String timestamp,
+  public Observable<WxLogininfoBean> wxapp_login(String noncestr, String timestamp,
       String sign, String headimgurl, String nickname, String openid, String unionid) {
     return XlmmRetrofitClient.getService()
         .wxapp_login(noncestr, timestamp, sign, headimgurl, nickname, openid, unionid)

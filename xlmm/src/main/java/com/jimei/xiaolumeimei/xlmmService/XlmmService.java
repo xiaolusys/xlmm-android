@@ -34,6 +34,7 @@ import com.jimei.xiaolumeimei.entities.SmsLoginUserBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
+import com.jimei.xiaolumeimei.entities.WxLogininfoBean;
 import com.squareup.okhttp.ResponseBody;
 import java.util.List;
 import retrofit.http.Body;
@@ -390,7 +391,7 @@ public interface XlmmService {
 
   @FormUrlEncoded
   @POST("register/wxapp_login")
-  Observable<ResponseBody> wxapp_login(
+  Observable<WxLogininfoBean> wxapp_login(
       @Query("noncestr")   String noncestr,
       @Query("timestamp")  String timestamp,
       @Query("sign")       String sign,
