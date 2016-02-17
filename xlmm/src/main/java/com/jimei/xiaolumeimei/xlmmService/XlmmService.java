@@ -391,10 +391,13 @@ public interface XlmmService {
   @FormUrlEncoded
   @POST("register/wxapp_login")
   Observable<ResponseBody> wxapp_login(
-     String headimgurl,
-      String nickname,
-      String openid,
-      String unionid
+      @Query("noncestr")   String noncestr,
+      @Query("timestamp")  String timestamp,
+      @Query("sign")       String sign,
+      @Field("headimgurl")String headimgurl,
+      @Field("nickname")String nickname,
+      @Field("openid")String openid,
+      @Field("unionid")String unionid
   );
 
   @GET("pmt/xlmm/agency_info")

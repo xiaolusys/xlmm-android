@@ -1,4 +1,4 @@
-package com.jimei.xiaolumeimei.js;
+package com.jimei.xiaolumeimei.htmlJsBridge;
 
 import android.webkit.JavascriptInterface;
 import android.widget.Toast;

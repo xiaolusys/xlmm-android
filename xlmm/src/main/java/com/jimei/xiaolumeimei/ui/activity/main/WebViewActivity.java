@@ -23,7 +23,7 @@ import cn.sharesdk.wechat.friends.Wechat;
 import cn.sharesdk.wechat.moments.WechatMoments;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.js.AndroidJsBridge;
+import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/02/04.

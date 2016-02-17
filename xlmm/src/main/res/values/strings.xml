@@ -41,4 +41,9 @@
   <string name="publish_info">发布产品就会\n有机会获得更多的返利现金哦~</string>
   <string name="chooselist">选品列表</string>
   <string name="complaininfo">请输入您的建议,以便我们更好的服务于您</string>
+  <string name="logining">正在登录</string>
+  <string name="auth_cancel">取消授权</string>
+  <string name="auth_error">授权失败</string>
+  <string name="auth_complete">授权成功</string>
+  <string name="userid_found">微信用户</string>
 </resources>

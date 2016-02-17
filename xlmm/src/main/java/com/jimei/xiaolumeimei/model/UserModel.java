@@ -136,10 +136,10 @@ public class UserModel {
   }
 
   //微信登录
-  public Observable<ResponseBody> wxapp_login(String headimgurl, String nickname,
-      String openid, String unionid) {
+  public Observable<ResponseBody> wxapp_login(String noncestr, String timestamp,
+      String sign, String headimgurl, String nickname, String openid, String unionid) {
     return XlmmRetrofitClient.getService()
-        .wxapp_login(headimgurl, nickname, openid, unionid)
+        .wxapp_login(noncestr, timestamp, sign, headimgurl, nickname, openid, unionid)
         .compose(new DefaultTransform<>());
   }
 

@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,7 +19,6 @@ import android.widget.Toast;
 import butterknife.Bind;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
-import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.wechat.friends.Wechat;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -25,18 +27,28 @@ import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
+import com.jimei.xiaolumeimei.utils.SHA1Utils;
 import com.jimei.xiaolumeimei.widget.ClearEditText;
 import com.jimei.xiaolumeimei.widget.PasswordEditText;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import com.mob.tools.utils.UIHandler;
+import com.squareup.okhttp.ResponseBody;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 import rx.schedulers.Schedulers;
 
 public class LoginActivity extends BaseSwipeBackCompatActivity
-    implements View.OnClickListener {
+    implements View.OnClickListener, Handler.Callback, PlatformActionListener {
   public static final String SECRET = "3c7b4e3eb5ae4cfb132b2ac060a872ee";
+  private static final int MSG_USERID_FOUND = 1;
+  private static final int MSG_LOGIN = 2;
+  private static final int MSG_AUTH_CANCEL = 3;
+  private static final int MSG_AUTH_ERROR = 4;
+  private static final int MSG_AUTH_COMPLETE = 5;
+  private static final String TAG = LoginActivity.class.getSimpleName();
   String login_name_value;//登录名
   String login_pass_value;//登录密码
   //boolean isLogin;//判断是否登录
@@ -49,11 +61,16 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.forgetTextView) TextView forGetTextView;
   @Bind(R.id.wx_login) ImageView wx;
   @Bind(R.id.sms_login) ImageView sms;
-  String TAG = "LoginActivity";
   private SharedPreferences sharedPreferences;
   private SharedPreferences.Editor editor;
   private String timestamp;
-  private String randomString;
+  private String noncestr;
+  private String sign_params;
+  private String sign;
+  private String headimgurl;
+  private String nickname;
+  private String openid;
+  private String unionid;
 
   public static String getRandomString(int length) {
     //length表示生成字符串的长度
@@ -191,28 +208,25 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
 
         sha1();
 
-        Platform wechat = ShareSDK.getPlatform(getApplicationContext(), Wechat.NAME);
-        wechat.setPlatformActionListener(new PlatformActionListener() {
-          @Override public void onComplete(Platform platform, int i,
-              HashMap<String, Object> hashMap) {
+        //sha1 签名
+        sign = SHA1Utils.hex_sha1(sign_params);
+        JUtils.Log(TAG, "sign=" + sign);
 
-            Set<String> keys = hashMap.keySet();
 
-            for (String key : keys) {
-              String value = (String) hashMap.get(key);
-              JUtils.Log("LoginActivity", key + "========" + value);
-            }
-          }
+        authorize(new Wechat(this));
 
-          @Override public void onError(Platform platform, int i, Throwable throwable) {
-
-          }
-
-          @Override public void onCancel(Platform platform, int i) {
-
-          }
-        });
-        wechat.authorize();
+        model.wxapp_login(noncestr, timestamp, sign, headimgurl, nickname, openid, unionid)
+            .subscribeOn(Schedulers.io())
+            .subscribe(new ServiceResponse<ResponseBody>() {
+              @Override public void onNext(ResponseBody responseBody) {
+                super.onNext(responseBody);
+                try {
+                  JUtils.Log(TAG, responseBody.string());
+                } catch (IOException e) {
+                  e.printStackTrace();
+                }
+              }
+            });
 
         break;
 
@@ -231,7 +245,9 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
 
   private void sha1() {
     timestamp = System.currentTimeMillis() / 1000 + "";//时间戳
-    randomString = getRandomString(8);//随机八位字符串
+    noncestr = getRandomString(8);//随机八位字符串
+    sign_params =
+        "noncestr=" + noncestr + "&secret=" + SECRET + "&timestamp=" + timestamp;
   }
 
   public boolean checkInput(String mobile, String password) {
@@ -248,6 +264,84 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
       }
     }
     return false;
+  }
+
+  private void login(String plat, String userId, HashMap<String, Object> userInfo) {
+    Message msg = new Message();
+    msg.what = MSG_LOGIN;
+    msg.obj = plat;
+    UIHandler.sendMessage(msg, this);
+  }
+
+  private void authorize(Platform plat) {
+    if (plat.isValid()) {
+      String userId = plat.getDb().getUserId();
+      if (!TextUtils.isEmpty(userId)) {
+        UIHandler.sendEmptyMessage(MSG_USERID_FOUND, this);
+        login(plat.getName(), userId, null);
+        return;
+      }
+    }
+    plat.setPlatformActionListener(this);
+    plat.SSOSetting(true);
+    plat.showUser(null);
+  }
+
+  public boolean handleMessage(Message msg) {
+    switch (msg.what) {
+      case MSG_USERID_FOUND: {
+        Toast.makeText(this, R.string.userid_found, Toast.LENGTH_SHORT).show();
+      }
+      break;
+      case MSG_LOGIN: {
+
+        String text = getString(R.string.logining, msg.obj);
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+      }
+      break;
+      case MSG_AUTH_CANCEL: {
+        Toast.makeText(this, R.string.auth_cancel, Toast.LENGTH_SHORT).show();
+      }
+      break;
+      case MSG_AUTH_ERROR: {
+        Toast.makeText(this, R.string.auth_error, Toast.LENGTH_SHORT).show();
+      }
+      break;
+      case MSG_AUTH_COMPLETE: {
+        Toast.makeText(this, R.string.auth_complete, Toast.LENGTH_SHORT).show();
+      }
+      break;
+    }
+    return false;
+  }
+
+  @Override
+  public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
+    if (i == Platform.ACTION_USER_INFOR) {
+      UIHandler.sendEmptyMessage(MSG_AUTH_COMPLETE, this);
+      login(platform.getName(), platform.getDb().getUserId(), hashMap);
+    }
+    for (Map.Entry<String, Object> entry : hashMap.entrySet()) {
+      String key = entry.getKey();
+      Object value = entry.getValue();
+      JUtils.Log(TAG, key + "=====" + value);
+    }
+    JUtils.Log(TAG, "------User Name ---------" + platform.getDb().getUserName());
+    JUtils.Log(TAG, "------User ID ---------" + platform.getDb().getUserId());
+    headimgurl = (String) hashMap.get("headimgurl");
+    nickname = (String) hashMap.get("nickname");
+    openid = (String) hashMap.get("openid");
+    unionid = (String) hashMap.get("unionid");
+
+
+  }
+
+  @Override public void onError(Platform platform, int i, Throwable throwable) {
+
+  }
+
+  @Override public void onCancel(Platform platform, int i) {
+
   }
 }
 
