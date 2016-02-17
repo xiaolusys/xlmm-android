@@ -158,10 +158,8 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
               //    SubsamplingScaleImageView.SCALE_TYPE_CENTER_INSIDE);
 
               ImageView scaleImageView = new ImageView(ProductDetailActvity.this);
+              scaleImageView.setImageResource(R.drawable.pictures_no);
               viewList.add(scaleImageView);
-
-
-
             }
 
             boolean isOldTencentPic = false;
@@ -242,13 +240,15 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
 
                           //Bitmap scaled = Bitmap.createScaledBitmap(response, 480, nh, true);
 
-                          longimageview_content.addView(viewList.get(finalI1));
+
                         } catch (Exception e) {
                           e.printStackTrace();
                         }
                       }
                     }
                   });
+
+              longimageview_content.addView(viewList.get(finalI1));
             }
 
             String headImg2 = productDetailBean.getPicPath();
@@ -270,7 +270,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
                 try {
                   head_img = "http://image.xiaolu.so/"
                       + URLEncoder.encode(temp[1], "utf-8")
-                      + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/100";
+                      + "?imageMogr2/format/jpg/thumbnail/640/quality/90";
                   final String finalHead_img = head_img;
                   titleImage.post(new Runnable() {
                     @Override public void run() {
