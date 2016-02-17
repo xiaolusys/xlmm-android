@@ -158,7 +158,6 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
               //    SubsamplingScaleImageView.SCALE_TYPE_CENTER_INSIDE);
 
               ImageView scaleImageView = new ImageView(ProductDetailActvity.this);
-              scaleImageView.setImageResource(R.drawable.pictures_no);
               viewList.add(scaleImageView);
             }
 
@@ -224,6 +223,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
                                   .override((int)(response.getWidth()* scale_size),
                                           (int)(response.getHeight() * scale_size))
                                   .centerCrop()
+                                      .placeholder(R.drawable.img_emptypic)
                                   .into(viewList.get(finalI1));
                             }
                             else {
@@ -234,6 +234,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
                                   .override((int)(response.getWidth()* scale_size),
                                           (int)(response.getHeight() * scale_size))
                                   .centerCrop()
+                                      .placeholder(R.drawable.img_emptypic)
                                   .into(viewList.get(finalI1));
                             }
                           }
@@ -278,6 +279,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
                           .load(finalHead_img)
                           .diskCacheStrategy(DiskCacheStrategy.ALL)
                           .centerCrop()
+                              .placeholder(R.drawable.parceholder)
                           .into(titleImage);
                     }
                   });
