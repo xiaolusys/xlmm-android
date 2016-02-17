@@ -177,7 +177,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity implements Vie
     llXAxis.setTextSize(10f);
 
     XAxis xAxis = mChart.getXAxis();
-
+/*
     Typeface tf = Typeface.createFromAsset(getAssets(), "OpenSans-Regular.ttf");
 
     LimitLine ll1 = new LimitLine(130f, "Upper Limit");
@@ -192,14 +192,14 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity implements Vie
     ll2.enableDashedLine(10f, 10f, 0f);
     ll2.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
     ll2.setTextSize(10f);
-    ll2.setTypeface(tf);
+    ll2.setTypeface(tf);*/
 
     YAxis leftAxis = mChart.getAxisLeft();
     leftAxis.removeAllLimitLines(); // reset all limit lines to avoid overlapping lines
-    leftAxis.addLimitLine(ll1);
-    leftAxis.addLimitLine(ll2);
-    leftAxis.setAxisMaxValue(220f);
-    leftAxis.setAxisMinValue(-50f);
+    //leftAxis.addLimitLine(ll1);
+    //leftAxis.addLimitLine(ll2);
+    //leftAxis.setAxisMaxValue(220f);
+    //leftAxis.setAxisMinValue(-50f);
     //leftAxis.setYOffset(20f);
     leftAxis.enableGridDashedLine(10f, 10f, 0f);
     leftAxis.setDrawZeroLine(false);

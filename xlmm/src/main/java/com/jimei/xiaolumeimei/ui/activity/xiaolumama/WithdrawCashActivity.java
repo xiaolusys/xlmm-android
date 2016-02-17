@@ -29,7 +29,7 @@ public class WithdrawCashActivity extends BaseSwipeBackCompatActivity implements
   @Bind(R.id.btn_jump) Button btn_jump;
   @Bind(R.id.btn_withdraw) Button btn_withdraw;
   @Bind(R.id.rl_has_cash) RelativeLayout rl_has_cash;
-  @Bind(R.id.rl_has_no_cash) Button rl_has_no_cash;
+  @Bind(R.id.rl_has_no_cash) RelativeLayout rl_has_no_cash;
   @Bind(R.id.img_red_packet1) ImageView img_red_packet1;
   @Bind(R.id.img_red_packet2) ImageView img_red_packet2;
 
