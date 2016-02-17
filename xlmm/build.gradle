@@ -116,6 +116,12 @@ android {
 
 //   渠道Flavors
       productFlavors {
+        xlmm {
+          manifestPlaceholders = [CHANNEL_NAME: "xlmm",
+                                  UMENG_APPKEY: "569f78a667e58ee15300094b"
+          ]
+        }
+
         Fir {
           manifestPlaceholders = [CHANNEL_NAME: "Fir",
                                   UMENG_APPKEY: "569f78a667e58ee15300094b"
