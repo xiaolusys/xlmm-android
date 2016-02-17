@@ -102,7 +102,11 @@
         />
 
   </LinearLayout>
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
+
+</RelativeLayout>
   <TextView
       android:textSize="12sp"
       android:text="第三方登录"
@@ -118,7 +122,8 @@
       android:background="@color/c8c8c8"
       android:layout_height="1dp"
       />
-  <LinearLayout android:layout_width="match_parent"
+  <LinearLayout
+      android:layout_width="match_parent"
       android:orientation="horizontal"
       android:layout_marginTop="52px"
       android:layout_height="wrap_content">

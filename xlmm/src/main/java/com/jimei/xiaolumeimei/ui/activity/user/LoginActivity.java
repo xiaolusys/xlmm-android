@@ -19,9 +19,11 @@ import android.widget.Toast;
 import butterknife.Bind;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.wechat.friends.Wechat;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.WxLogininfoBean;
 import com.jimei.xiaolumeimei.model.UserModel;
@@ -96,8 +98,18 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
     forGetTextView.setOnClickListener(this);
   }
 
+  @Override protected void onResume() {
+    super.onResume();
+  }
+
   @Override protected void initData() {
 
+    if (!LoginUtils.checkLoginState(getApplicationContext())) {
+      removeWX(new Wechat(this));
+    }
+    //UMWXHandler wxHandler =
+    //    new UMWXHandler(this, "wx25fcb32689872499", "3c7b4e3eb5ae4cfb132b2ac060a872ee");
+    //wxHandler.;
     sharedPreferences =
         getApplicationContext().getSharedPreferences("login_info", Context.MODE_PRIVATE);
   }
@@ -209,9 +221,9 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
         sign = SHA1Utils.hex_sha1(sign_params);
         JUtils.Log(TAG, "sign=" + sign);
 
+        //authorize(new Wechat(this));
+
         authorize(new Wechat(this));
-
-
 
         break;
 
@@ -259,7 +271,11 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
   }
 
   private void authorize(Platform plat) {
-    if (plat.isValid()) {
+    if (plat == null) {
+      return;
+    }
+
+    if (plat.isAuthValid()) {
       String userId = plat.getDb().getUserId();
       if (!TextUtils.isEmpty(userId)) {
         UIHandler.sendEmptyMessage(MSG_USERID_FOUND, this);
@@ -267,7 +283,92 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
         return;
       }
     }
-    plat.setPlatformActionListener(this);
+    plat.setPlatformActionListener(new PlatformActionListener() {
+      @Override
+      public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
+
+        if (i == Platform.ACTION_USER_INFOR) {
+          UIHandler.sendEmptyMessage(MSG_AUTH_COMPLETE, LoginActivity.this);
+          login(platform.getName(), platform.getDb().getUserId(), hashMap);
+        }
+        for (Map.Entry<String, Object> entry : hashMap.entrySet()) {
+          String key = entry.getKey();
+          Object value = entry.getValue();
+          JUtils.Log(TAG, key + "=====" + value);
+        }
+        JUtils.Log(TAG, "------User Name ---------" + platform.getDb().getUserName());
+        JUtils.Log(TAG, "------User ID ---------" + platform.getDb().getUserId());
+
+        headimgurl = (String) hashMap.get("headimgurl");
+        nickname = (String) hashMap.get("nickname");
+        openid = (String) hashMap.get("openid");
+        unionid = (String) hashMap.get("unionid");
+
+        model.wxapp_login(noncestr, timestamp, sign, headimgurl, nickname, openid,
+            unionid)
+            .subscribeOn(Schedulers.io())
+            .subscribe(new ServiceResponse<WxLogininfoBean>() {
+              @Override public void onNext(WxLogininfoBean wxLogininfoBean) {
+                super.onNext(wxLogininfoBean);
+                if (wxLogininfoBean != null) {
+                  int code = wxLogininfoBean.getCode();
+                  if (0 == code) {
+
+                    model.need_set_info()
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(new ServiceResponse<NeedSetInfoBean>() {
+                          @Override public void onNext(NeedSetInfoBean needSetInfoBean) {
+                            super.onNext(needSetInfoBean);
+                            int codeInfo = needSetInfoBean.getCode();
+                            if (0 == codeInfo) {
+                              LoginUtils.saveLoginSuccess(true, getApplicationContext());
+                              JUtils.Toast("登录成功");
+                              Intent intent =
+                                  new Intent(LoginActivity.this, MainActivity.class);
+                              startActivity(intent);
+
+                              finish();
+                            } else if (1 == codeInfo) {
+                              LoginUtils.saveLoginSuccess(true, getApplicationContext());
+                              JUtils.Toast("登录成功,需要设置密码");
+                              Intent intent = new Intent(LoginActivity.this,
+                                  WxLoginBindPhoneActivity.class);
+                              Bundle bundle = new Bundle();
+                              bundle.putString("headimgurl", headimgurl);
+                              bundle.putString("nickname", nickname);
+                              intent.putExtras(bundle);
+                              startActivity(intent);
+
+                              finish();
+                            } else if (2 == codeInfo) {
+                              LoginUtils.saveLoginSuccess(true, getApplicationContext());
+                              JUtils.Toast("登录成功,前往绑定手机");
+                              Intent intent = new Intent(LoginActivity.this,
+                                  WxLoginBindPhoneActivity.class);
+                              Bundle bundle = new Bundle();
+                              bundle.putString("headimgurl", headimgurl);
+                              bundle.putString("nickname", nickname);
+                              intent.putExtras(bundle);
+                              startActivity(intent);
+
+                              finish();
+                            }
+                          }
+                        });
+                  }
+                }
+              }
+            });
+      }
+
+      @Override public void onError(Platform platform, int i, Throwable throwable) {
+
+      }
+
+      @Override public void onCancel(Platform platform, int i) {
+
+      }
+    });
     plat.SSOSetting(true);
     plat.showUser(null);
   }
@@ -281,19 +382,19 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
       case MSG_LOGIN: {
 
         String text = getString(R.string.logining, msg.obj);
-        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
       }
       break;
       case MSG_AUTH_CANCEL: {
-        Toast.makeText(this, R.string.auth_cancel, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, R.string.auth_cancel, Toast.LENGTH_SHORT).show();
       }
       break;
       case MSG_AUTH_ERROR: {
-        Toast.makeText(this, R.string.auth_error, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, R.string.auth_error, Toast.LENGTH_SHORT).show();
       }
       break;
       case MSG_AUTH_COMPLETE: {
-        Toast.makeText(this, R.string.auth_complete, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, R.string.auth_complete, Toast.LENGTH_SHORT).show();
       }
       break;
     }
@@ -338,15 +439,12 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                 startActivity(intent);
 
                 finish();
-
               } else {
                 JUtils.Toast("登陆有误,请检查你的微信版本");
-
               }
             }
           }
         });
-
   }
 
   @Override public void onError(Platform platform, int i, Throwable throwable) {
@@ -355,6 +453,19 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
 
   @Override public void onCancel(Platform platform, int i) {
 
+  }
+
+  public void removeWX(Platform platform) {
+    if (platform != null) {
+      platform.removeAccount(true);
+      platform.removeAccount();
+    }
+  }
+
+  @Override protected void onStop() {
+    super.onStop();
+    removeWX(new Wechat(this));
+    ShareSDK.stopSDK(this);
   }
 }
 

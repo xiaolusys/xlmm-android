@@ -1,6 +1,5 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -11,13 +10,13 @@ import android.widget.Toast;
 import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.entities.UserBean;
+import com.jimei.xiaolumeimei.entities.BindInfoBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import rx.schedulers.Schedulers;
 
-public class EditPasswordForgetActivity extends BaseSwipeBackCompatActivity
+public class BindSettingPasswordActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener {
   String TAG = "SettingPasswordActivity";
   @Bind(R.id.toolbar) Toolbar toolbar;
@@ -27,7 +26,6 @@ public class EditPasswordForgetActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.set_commit_button) Button commit_button;
   String username;
   String valid_code;
-  private boolean isShow = true;
 
   @Override protected void setListener() {
     commit_button.setOnClickListener(this);
@@ -44,7 +42,7 @@ public class EditPasswordForgetActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected int getContentViewLayoutID() {
-    return R.layout.setting_password_activity_1;
+    return R.layout.setting_password_activity;
   }
 
   @Override protected void initViews() {
@@ -71,6 +69,7 @@ public class EditPasswordForgetActivity extends BaseSwipeBackCompatActivity
         Log.d(TAG, "password " + password1 + " " + password2);
 
         if (checkInput(password1) && checkInput(password2)) {
+
           if (checkInputSame(password1, password2)) {
             changePassword(username, valid_code, password1, password2);
           }
@@ -79,50 +78,16 @@ public class EditPasswordForgetActivity extends BaseSwipeBackCompatActivity
         }
 
         break;
-
     }
   }
 
   private boolean checkInput(String name) {
     if (name.length() < 4 || name.length() > 20) {
-      JUtils.Toast("请输入6-16位昵称");
+      JUtils.Toast("请输入6-16位密码");
       return false;
     }
 
     return true;
-  }
-
-  private void changePassword(String username, String valid_code, String password1,
-      String password2) {
-    model.changePassword(username, valid_code, password1, password2)
-        .subscribeOn(Schedulers.newThread())
-        .subscribe(new ServiceResponse<UserBean>() {
-          @Override public void onNext(UserBean user) {
-            Log.d(TAG, "user.getCode() "
-                + user.getCode()
-                + ", user.getResult() "
-                + user.getResult());
-
-            if (user.getCode() == 0) {
-              Toast.makeText(mContext, "密码重置成功", Toast.LENGTH_SHORT).show();
-              Intent intent = new Intent(mContext, LoginActivity.class);
-
-              Bundle bundle = new Bundle();
-              bundle.putString("login", "axiba");
-              intent.putExtras(bundle);
-
-              startActivity(intent);
-              finish();
-            } else {
-
-              Toast.makeText(mContext, "修改失败", Toast.LENGTH_SHORT).show();
-            }
-          }
-
-          @Override public void onCompleted() {
-            super.onCompleted();
-          }
-        });
   }
 
   private boolean checkInputSame(String pass1, String pass2) {
@@ -132,5 +97,27 @@ public class EditPasswordForgetActivity extends BaseSwipeBackCompatActivity
     }
 
     return true;
+  }
+
+  private void changePassword(String username, String valid_code, String password1,
+      String password2) {
+    model.bang_mobile(username, valid_code, password1, password2)
+        .subscribeOn(Schedulers.newThread())
+        .subscribe(new ServiceResponse<BindInfoBean>() {
+          @Override public void onNext(BindInfoBean bindInfoBean) {
+
+            int code = bindInfoBean.getCode();
+            if (0 == code) {
+              JUtils.Toast("密码设置成功");
+              finish();
+            } else if (1 == code) {
+
+            }
+          }
+
+          @Override public void onCompleted() {
+            super.onCompleted();
+          }
+        });
   }
 }

@@ -73,7 +73,7 @@ public class SettingPasswordActivity extends BaseSwipeBackCompatActivity
         Log.d(TAG, "password " + password1 + " " + password2);
 
         if (checkBox.isChecked()) {
-          if (checkInput(password1) || checkInput(password2)) {
+          if (checkInput(password1) && checkInput(password2)) {
 
             if (checkInputSame(password1, password2)) {
               changePassword(username, valid_code, password1, password2);

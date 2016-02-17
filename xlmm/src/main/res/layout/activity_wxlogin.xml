@@ -44,7 +44,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         />
-    <include layout="@layout/common_gap"/>
     <com.jimei.xiaolumeimei.widget.ClearEditText
         android:layout_marginTop="16dp"
         android:id="@+id/register_name"
@@ -90,7 +89,7 @@
     <include layout="@layout/common_gap"/>
     <Button
         android:id="@+id/next"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:textColor="@color/white"
         android:text="下一步"
         android:background="@drawable/shape_common"

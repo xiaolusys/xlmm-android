@@ -7,6 +7,7 @@ import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.entities.AgentInfoBean;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
+import com.jimei.xiaolumeimei.entities.BindInfoBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.CartsinfoBean;
@@ -461,6 +462,23 @@ public interface XlmmService {
 
   @GET("users/need_set_info")
   Observable<NeedSetInfoBean> need_set_info(
-
   );
+
+  //绑定手机获取验证码
+  @FormUrlEncoded
+  @POST("users/bang_mobile_code")
+  Observable<BindInfoBean> bang_mobile_code(
+      @Field("vmobile")String vmobile
+  );
+
+  @FormUrlEncoded
+  @POST("users/bang_mobile")
+  Observable<BindInfoBean> bang_mobile(
+      @Field("username")   String username,
+      @Field("password1")  String password1,
+      @Field("password2")  String password2,
+      @Field("valid_code") String valid_code
+  );
+
+
 }

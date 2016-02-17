@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.model;
 
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
+import com.jimei.xiaolumeimei.entities.BindInfoBean;
 import com.jimei.xiaolumeimei.entities.CouponBean;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.entities.MembershipPointBean;
@@ -15,7 +16,6 @@ import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.WxLogininfoBean;
 import com.jimei.xiaolumeimei.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
-import com.squareup.okhttp.ResponseBody;
 import rx.Observable;
 
 /**
@@ -148,6 +148,22 @@ public class UserModel {
   public Observable<NeedSetInfoBean> need_set_info() {
     return XlmmRetrofitClient.getService()
         .need_set_info()
+        .compose(new DefaultTransform<>());
+  }
+
+  //绑定手机获取验证码
+  public Observable<BindInfoBean> bang_mobile_code(String vmobile) {
+
+    return XlmmRetrofitClient.getService()
+        .bang_mobile_code(vmobile)
+        .compose(new DefaultTransform<>());
+  }
+
+  //绑定手机
+  public Observable<BindInfoBean> bang_mobile(String username, String password1,
+      String password2, String valid_code) {
+    return XlmmRetrofitClient.getService()
+        .bang_mobile(username, password1, password2, valid_code)
         .compose(new DefaultTransform<>());
   }
 }

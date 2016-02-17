@@ -51,6 +51,14 @@
 
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
+
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW"/>
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="xlmm" android:host="local.app" android:pathPrefix="/openwith"/>
+      </intent-filter>
+
     </activity>
     <activity android:name=".ui.activity.main.MainActivity"/>
     <activity android:name=".ui.activity.user.LoginActivity"
@@ -261,6 +269,9 @@
         android:theme="@style/AppTheme.TransparentActivity"
         />
     <activity android:name=".ui.activity.user.WxLoginBindPhoneActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
+    <activity android:name=".ui.activity.user.BindSettingPasswordActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
 
