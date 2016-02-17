@@ -253,17 +253,18 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
             }
 
             String headImg2 = productDetailBean.getPicPath();
+            JUtils.Log("ProductDetail", "head_img2: "+ headImg2);
 
             if (headImg2.startsWith("https://mmbiz.qlogo.cn")) {
-              titleImage.post(new Runnable() {
-                @Override public void run() {
+              //titleImage.post(new Runnable() {
+              //  @Override public void run() {
                   Glide.with(mContext)
                       .load(headImg2)
                       .diskCacheStrategy(DiskCacheStrategy.ALL)
                       .centerCrop()
                       .into(titleImage);
-                }
-              });
+              //  }
+              //});
             } else {
               String[] temp = headImg2.split("http://image.xiaolu.so/");
               String head_img = "";
@@ -272,17 +273,19 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
                   head_img = "http://image.xiaolu.so/"
                       + URLEncoder.encode(temp[1], "utf-8")
                       + "?imageMogr2/format/jpg/thumbnail/640/quality/90";
+                  JUtils.Log("ProductDetail", "head_img2 encode: "+ head_img);
+
                   final String finalHead_img = head_img;
-                  titleImage.post(new Runnable() {
-                    @Override public void run() {
+                  //titleImage.post(new Runnable() {
+                  //  @Override public void run() {
                       Glide.with(mContext)
                           .load(finalHead_img)
                           .diskCacheStrategy(DiskCacheStrategy.ALL)
                           .centerCrop()
                               .placeholder(R.drawable.parceholder)
                           .into(titleImage);
-                    }
-                  });
+                  //  }
+                  //});
                 } catch (UnsupportedEncodingException e) {
                   e.printStackTrace();
                 }
