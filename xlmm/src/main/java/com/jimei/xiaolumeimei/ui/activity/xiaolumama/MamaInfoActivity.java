@@ -48,6 +48,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener, OnChartGestureListener,
     OnChartValueSelectedListener {
   String TAG = "MamaInfoActivity";
+  private static final int MAX_RECENT_DAYS = 30;
 
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.btn_jump) Button btn_jump;
@@ -213,7 +214,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     mChart.setTouchEnabled(true);
 
     // enable scaling and dragging
-    mChart.setDragEnabled(false);
+    mChart.setDragEnabled(true);
     mChart.setScaleEnabled(false);
     // mChart.setScaleXEnabled(true);
     // mChart.setScaleYEnabled(true);
@@ -275,15 +276,21 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     mChart.getXAxis().setDrawGridLines(false);
     mChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
 
+    mChart.getXAxis().setEnabled(false);
     mChart.getAxisRight().setEnabled(false);
-    mChart.setVisibleXRangeMaximum(7);
+
 
     // add data
-    setData(45, 100);
+    setData(MAX_RECENT_DAYS);
     mChart.animateX(2500, Easing.EasingOption.EaseInOutQuart);
+    mChart.setVisibleXRangeMaximum(6);
+    //mChart.setMaxVisibleValueCount(7);
+
+    mChart.moveViewToX(MAX_RECENT_DAYS - 6);
+
   }
 
-  private void setData(int count, float range) {
+  private void setData(int count) {
 
     ArrayList<String> xVals = new ArrayList<String>();
     for (int i = 0; i < count; i++) {
@@ -294,10 +301,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
 
     for (int i = 0; i < count; i++) {
 
-      float mult = (range + 1);
-      float val = (float) (Math.random() * mult) + 3;// + (float)
-      // ((mult *
-      // 0.1) / 10);
+      float val = (float) (Math.random() * 100) + 3;
       yVals.add(new Entry(val, i));
     }
 
@@ -309,8 +313,8 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     // set the line to be drawn like this "- - - - - -"
     set1.enableDashedLine(20f, 5f, 0f);
     set1.enableDashedHighlightLine(20f, 5f, 0f);
-    set1.setColor(Color.YELLOW);
-    set1.setCircleColor(Color.YELLOW);
+    set1.setColor(R.color.colorAccent);
+    set1.setCircleColor(R.color.colorAccent);
     set1.setLineWidth(1f);
     set1.setCircleRadius(3f);
     set1.setDrawCircleHole(false);
@@ -335,6 +339,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
 
     // set data
     mChart.setData(data);
+
   }
 
   @Override public void onChartGestureStart(MotionEvent me,
