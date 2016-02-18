@@ -41,6 +41,7 @@
         android:layout_height="84px"
         android:layout_marginLeft="8px"
         android:id="@+id/img_tip"
+        android:src="@drawable/img_allowance"
         />
 
     <TextView
