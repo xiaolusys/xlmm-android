@@ -180,8 +180,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginLeft="200px"
-                    android:layout_toRightOf="@+id/tv_order2"
-                    android:text="历史积累收益"
+                    android:layout_toRightOf="@+id/tv_order1"
+                    android:text="积累收益"
                     android:textSize="15sp" />
 
                 <TextView
