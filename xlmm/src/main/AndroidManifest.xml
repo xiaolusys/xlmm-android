@@ -281,6 +281,9 @@
     <activity android:name=".ui.activity.xiaolumama.MMShoppingListActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
+    <activity android:name=".ui.activity.xiaolumama.MMCarryLogListActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
 
   </application>
 

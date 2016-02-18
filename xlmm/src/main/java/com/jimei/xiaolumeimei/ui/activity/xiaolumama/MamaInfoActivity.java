@@ -87,7 +87,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     btn_chooselist.setOnClickListener(this);
     btn_store.setOnClickListener(this);
     tvOrder1.setOnClickListener(this);
-    tvOrder2.setOnClickListener(this);
+    tvFund1.setOnClickListener(this);
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -189,7 +189,8 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
       case R.id.tv_order1:
         startActivity(new Intent(MamaInfoActivity.this, MMShoppingListActivity.class));
         break;
-      case R.id.tv_order2:
+      case R.id.tv_fund1:
+        startActivity(new Intent(MamaInfoActivity.this, MMCarryLogListActivity.class));
         break;
     }
   }

@@ -9,6 +9,7 @@ import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.entities.AllowanceBean;
 import com.jimei.xiaolumeimei.entities.BindInfoBean;
+import com.jimei.xiaolumeimei.entities.CarryLogListBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.CartsinfoBean;
@@ -486,6 +487,13 @@ public interface XlmmService {
    //MM订单历史
     @GET("pmt/shopping")
     Observable<ShoppingListBean> getShoppingList(
+
+        @Query("page")String page
+    );
+
+   //MM历史收益
+    @GET("pmt/carrylog")
+    Observable<CarryLogListBean> getCarrylogList(
 
         @Query("page")String page
     );

@@ -6,12 +6,13 @@ import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.ShoppingListAdapter;
+import com.jimei.xiaolumeimei.adapter.CarryLogListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.entities.ShoppingListBean;
+import com.jimei.xiaolumeimei.entities.CarryLogListBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -22,29 +23,27 @@ import rx.schedulers.Schedulers;
  *
  * Copyright 2016年 上海己美. All rights reserved.
  */
-public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
+public class MMCarryLogListActivity extends BaseSwipeBackCompatActivity {
+
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.tv_count) TextView tvCount;
-  @Bind(R.id.shoppinglist_xry) XRecyclerView shoppinglistXry;
+  @Bind(R.id.carryloglist_xry) XRecyclerView carryloglistXry;
+  private CarryLogListAdapter adapter;
   private int page = 2;
-  private ShoppingListAdapter adapter;
 
   @Override protected void setListener() {
 
   }
 
   @Override protected void initData() {
-
     MMProductModel.getInstance()
-        .getShoppingList("1")
+        .getCarryLogList("1")
         .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<ShoppingListBean>() {
-          @Override public void onNext(ShoppingListBean shoppingListBean) {
-            super.onNext(shoppingListBean);
-            if (shoppingListBean != null) {
-              int count = shoppingListBean.getCount();
-              tvCount.setText("" + count);
-              adapter.update(shoppingListBean.getResults());
+        .subscribe(new ServiceResponse<CarryLogListBean>() {
+          @Override public void onNext(CarryLogListBean carryLogListBean) {
+            if (carryLogListBean != null) {
+
+              adapter.update(carryLogListBean.getResults());
             }
           }
         });
@@ -55,7 +54,7 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
   }
 
   @Override protected int getContentViewLayoutID() {
-    return R.layout.activity_mmshoppinglist;
+    return R.layout.activity_carrylog;
   }
 
   @Override protected void initViews() {
@@ -66,19 +65,20 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
   }
 
   private void initRecyclerView() {
-    shoppinglistXry.setLayoutManager(new LinearLayoutManager(this));
-    shoppinglistXry.addItemDecoration(
+
+    carryloglistXry.setLayoutManager(new LinearLayoutManager(this));
+    carryloglistXry.addItemDecoration(
         new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
-    shoppinglistXry.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-    shoppinglistXry.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
-    shoppinglistXry.setArrowImageView(R.drawable.iconfont_downgrey);
-    shoppinglistXry.setPullRefreshEnabled(false);
-    shoppinglistXry.setLoadingMoreEnabled(true);
+    carryloglistXry.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
+    carryloglistXry.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
+    carryloglistXry.setArrowImageView(R.drawable.iconfont_downgrey);
+    carryloglistXry.setPullRefreshEnabled(false);
+    carryloglistXry.setLoadingMoreEnabled(true);
 
-    adapter = new ShoppingListAdapter(this);
-    shoppinglistXry.setAdapter(adapter);
+    adapter = new CarryLogListAdapter(this);
+    carryloglistXry.setAdapter(adapter);
 
-    shoppinglistXry.setLoadingListener(new XRecyclerView.LoadingListener() {
+    carryloglistXry.setLoadingListener(new XRecyclerView.LoadingListener() {
       @Override public void onRefresh() {
 
       }
@@ -90,25 +90,24 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
 
       private void loadMoreData(String page) {
         MMProductModel.getInstance()
-            .getShoppingList(page)
+            .getCarryLogList(page)
             .subscribeOn(Schedulers.io())
-            .subscribe(new ServiceResponse<ShoppingListBean>() {
-              @Override public void onNext(ShoppingListBean shoppingListBean) {
-                super.onNext(shoppingListBean);
-                if (shoppingListBean != null) {
-                  if (null != shoppingListBean.getNext()) {
-                    adapter.update(shoppingListBean.getResults());
+            .subscribe(new ServiceResponse<CarryLogListBean>() {
+              @Override public void onNext(CarryLogListBean carryLogListBean) {
+                if (carryLogListBean != null) {
+                  if (null != carryLogListBean.getNext()) {
+                    adapter.update(carryLogListBean.getResults());
                   } else {
-                    Toast.makeText(MMShoppingListActivity.this, "没有更多了",
+                    Toast.makeText(MMCarryLogListActivity.this, "没有更多了",
                         Toast.LENGTH_SHORT).show();
-                    shoppinglistXry.post(shoppinglistXry::loadMoreComplete);
+                    carryloglistXry.post(carryloglistXry::loadMoreComplete);
                   }
                 }
               }
 
               @Override public void onCompleted() {
                 super.onCompleted();
-                shoppinglistXry.post(shoppinglistXry::loadMoreComplete);
+                carryloglistXry.post(carryloglistXry::loadMoreComplete);
               }
             });
       }
@@ -121,5 +120,11 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
 
   @Override protected TransitionMode getOverridePendingTransitionMode() {
     return null;
+  }
+
+  @Override protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    // TODO: add setContentView(...) invocation
+    ButterKnife.bind(this);
   }
 }
