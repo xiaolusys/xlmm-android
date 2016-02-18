@@ -67,7 +67,7 @@ public class VerifyPhoneForgetActivity extends BaseSwipeBackCompatActivity
 
   public boolean checkMobileInput(String mobile) {
 
-    if (mobile == null || mobile.trim().trim().equals("")) {
+    if (mobile == null || mobile.trim().equals("")) {
       JUtils.Toast("请输入手机号");
     } else {
       if (mobile.length() != 11) {
@@ -82,7 +82,7 @@ public class VerifyPhoneForgetActivity extends BaseSwipeBackCompatActivity
 
   public boolean checkInput(String mobile, String checkcode) {
 
-    if (mobile == null || mobile.trim().trim().equals("")) {
+    if (mobile == null || mobile.trim().equals("")) {
       JUtils.Toast("请输入手机号");
     } else {
       if (mobile.length() != 11) {

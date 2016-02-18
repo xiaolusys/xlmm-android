@@ -104,7 +104,6 @@ public class VerifyPhoneActivity extends BaseSwipeBackCompatActivity
         mobile = editTextMobile.getText().toString().trim();
         if (checkMobileInput(mobile)) {
 
-
           RxCountDown.countdown(60).doOnSubscribe(new Action0() {
             @Override public void call() {
               getCheckCode.setClickable(false);
@@ -114,12 +113,13 @@ public class VerifyPhoneActivity extends BaseSwipeBackCompatActivity
                   .subscribeOn(Schedulers.io())
                   .subscribe(new ServiceResponse<RegisterBean>() {
                     @Override public void onNext(RegisterBean registerBean) {
-                      super.onNext(registerBean);
-                      String result = registerBean.getResult();
-                      if (result.equals("0")) {
-                        JUtils.Toast("验证码获取成功");
-                      } else if (result.equals("5")) {
-                        return;
+                      if (registerBean != null) {
+                        String result = registerBean.getResult();
+                        if (result.equals("0")) {
+                          JUtils.Toast("验证码获取成功");
+                        } else if (result.equals("5")) {
+                          return;
+                        }
                       }
                     }
                   });
@@ -139,8 +139,6 @@ public class VerifyPhoneActivity extends BaseSwipeBackCompatActivity
               getCheckCode.setText(integer + "s后重新获取");
             }
           });
-
-
         }
 
         break;
@@ -154,17 +152,21 @@ public class VerifyPhoneActivity extends BaseSwipeBackCompatActivity
               .subscribe(new ServiceResponse<RegisterBean>() {
                 @Override public void onNext(RegisterBean registerBean) {
                   super.onNext(registerBean);
-                  String result = registerBean.getResult();
-                  if (result.equals("0")) {
-                    Intent intent = new Intent(VerifyPhoneActivity.this,
-                        SettingPasswordActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("username", mobile);
-                    bundle.putString("valid_code", invalid_code);
+                  if (registerBean != null) {
+                    String result = registerBean.getResult();
+                    if (result.equals("0")) {
+                      Intent intent = new Intent(VerifyPhoneActivity.this,
+                          SettingPasswordActivity.class);
+                      Bundle bundle = new Bundle();
+                      bundle.putString("username", mobile);
+                      bundle.putString("valid_code", invalid_code);
 
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                    finish();
+                      intent.putExtras(bundle);
+                      startActivity(intent);
+                      finish();
+                    } else if (result.equals("1")) {
+                      JUtils.Toast("验证码过期或超次，尝试重新获取");
+                    }
                   }
                 }
               });

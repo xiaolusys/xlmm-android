@@ -243,6 +243,18 @@ public interface XlmmService {
     @GET("address")
     Observable<AddressBean> getOneAddressList();
 
+    //删除某一个地址
+    @POST("address/{id}/delete_address")
+    Observable<ResponseBody> delete_address(
+        @Path("id")String id
+    );
+
+    //设置默认地址
+    @POST("address/{id}/change_default")
+    Observable<ResponseBody> change_default(
+        @Path("id")String id
+    );
+
     //获取用户信息
     @GET(XlmmApi.USERINFO_URL)
     Observable<UserInfoBean> getUserInfo();

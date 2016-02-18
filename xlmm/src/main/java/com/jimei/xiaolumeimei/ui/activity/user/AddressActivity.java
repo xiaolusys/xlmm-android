@@ -37,12 +37,29 @@ public class AddressActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initData() {
+    //model.getAddressList()
+    //    .subscribeOn(Schedulers.io())
+    //    .subscribe(new ServiceResponse<List<AddressBean>>() {
+    //      @Override public void onNext(List<AddressBean> list) {
+    //        super.onNext(list);
+    //        if (list != null) {
+    //          adapter.update(list);
+    //        }
+    //
+    //      }
+    //    });
+  }
+
+  @Override protected void onResume() {
+    super.onResume();
     model.getAddressList()
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<List<AddressBean>>() {
           @Override public void onNext(List<AddressBean> list) {
             super.onNext(list);
-            adapter.update(list);
+            if (list != null) {
+              adapter.updateWithClear(list);
+            }
           }
         });
   }
@@ -73,8 +90,6 @@ public class AddressActivity extends BaseSwipeBackCompatActivity
   @Override protected TransitionMode getOverridePendingTransitionMode() {
     return null;
   }
-
-
 
   @Override public void onClick(View v) {
     switch (v.getId()) {
