@@ -133,7 +133,6 @@
                 android:layout_marginLeft="4dp"
                 android:layout_gravity="center"
                 android:layout_toRightOf="@+id/tv_today_fund1"
-                android:background="@drawable/text_frame"
                 android:text="0"
                 android:textColor="@color/colorAccent"
                 android:textSize="15sp" />
@@ -191,7 +190,6 @@
                     android:layout_marginLeft="4dp"
                     android:layout_gravity="center"
                     android:layout_toRightOf="@+id/tv_fund1"
-                    android:background="@drawable/text_frame"
                     android:text="0"
                     android:textColor="@color/colorAccent"
                     android:textSize="15sp" />

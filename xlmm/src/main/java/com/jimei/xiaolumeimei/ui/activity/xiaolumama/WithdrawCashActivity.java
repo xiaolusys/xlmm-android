@@ -60,6 +60,9 @@ public class WithdrawCashActivity extends BaseSwipeBackCompatActivity implements
     if(Float.compare(cash , 0) > 0){
       rl_has_no_cash.setVisibility(View.INVISIBLE);
     }
+    else{
+      rl_has_cash.setVisibility(View.INVISIBLE);
+    }
 
   }
 

@@ -82,6 +82,7 @@
         android:layout_marginTop="8px"
         android:layout_centerHorizontal="true"
         android:background="@drawable/text_frame"
+        android:padding="4dp"
         >
 
       <TextView
@@ -119,12 +120,10 @@
 
       <Button
           android:id="@+id/btn_withdraw"
-          android:layout_width="690px"
+          android:layout_width="660px"
           android:layout_height="80px"
           android:layout_alignParentBottom="true"
           android:layout_centerHorizontal="true"
-          android:layout_marginBottom="30px"
-          android:padding="10px"
           android:text="马上提现"
           android:textColor="@color/white"
           android:textSize="15sp"
@@ -138,6 +137,7 @@
         android:id="@+id/rl_has_no_cash"
         android:layout_marginTop="8px"
         android:background="@drawable/text_frame"
+        android:padding="4dp"
         >
 
       <ImageView
@@ -180,6 +180,7 @@
           android:layout_height="80px"
           android:layout_centerHorizontal="true"
           android:layout_marginTop="20px"
+
           android:padding="10px"
           android:text="发布产品"
           android:textColor="@color/white"
