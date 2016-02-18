@@ -31,6 +31,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AgentInfoBean;
 import com.jimei.xiaolumeimei.entities.MamaFansBean;
+import com.jimei.xiaolumeimei.entities.OneDayAgentOrdersBean;
 import com.jimei.xiaolumeimei.entities.ShoppingListBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
@@ -49,6 +50,8 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     OnChartValueSelectedListener {
   String TAG = "MamaInfoActivity";
   private static final int MAX_RECENT_DAYS = 30;
+
+  List<HisRefund> show_his_refund = new ArrayList<HisRefund>(MAX_RECENT_DAYS);
 
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.btn_jump) Button btn_jump;
@@ -107,6 +110,8 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     finishBack(toolbar);
 
     init_chart();
+
+
   }
 
   @Override protected void initData() {
@@ -148,6 +153,9 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
               }
             });
 
+    get_his_refund();
+    tv_today_order2.setText(Float.toString(show_his_refund.get(0).getOrder_num()));
+    tv_today_fund2.setText(Float.toString(show_his_refund.get(0).getRefund()));
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
@@ -301,7 +309,8 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
 
     for (int i = 0; i < count; i++) {
 
-      float val = (float) (Math.random() * 100) + 3;
+      //float val = (float) (Math.random() * 100) + 3;
+      float val = show_his_refund.get(i).getOrder_num();
       yVals.add(new Entry(val, i));
     }
 
@@ -390,6 +399,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         + ", high: "
         + mChart.getHighestVisibleXIndex());
     tv_today_order2.setText(Float.toString(e.getVal()));
+    tv_today_fund2.setText(Float.toString(show_his_refund.get(e.getXIndex()).getRefund()));
   }
 
   @Override public void onNothingSelected() {
@@ -400,5 +410,58 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     super.onCreate(savedInstanceState);
     // TODO: add setContentView(...) invocation
     ButterKnife.bind(this);
+  }
+
+  final static class HisRefund {
+    int order_num;
+    float refund;
+
+    public int getOrder_num() {
+      return order_num;
+    }
+
+    public float getRefund() {
+      return refund;
+    }
+
+    public void setOrder_num(int order_num) {
+      this.order_num = order_num;
+    }
+
+    public void setRefund(float refund) {
+      this.refund = refund;
+    }
+  }
+
+  void get_his_refund(){
+    for(int i=0; i< MAX_RECENT_DAYS; i++){
+      JUtils.Log(TAG, " day  =" + (MAX_RECENT_DAYS - 1 - i));
+      final int finalI = i;
+      MMProductModel.getInstance()
+          .getOneDayAgentOrders(MAX_RECENT_DAYS - 1 - i)
+          .subscribeOn(Schedulers.io())
+          .subscribe(new ServiceResponse<OneDayAgentOrdersBean>() {
+            @Override public void onNext(OneDayAgentOrdersBean oneDayBean) {
+              super.onNext(oneDayBean);
+              if (oneDayBean != null) {
+                int count = oneDayBean.getShops().size();
+                HisRefund hisRefund = new HisRefund();
+                hisRefund.setOrder_num(count);
+                hisRefund.setRefund(calc_refund(oneDayBean.getShops()));
+                JUtils.Log(TAG, "one day  orders num =" + hisRefund.getOrder_num() + " "
+                    + "refund= " + hisRefund.getRefund());
+                show_his_refund.add(finalI, hisRefund);
+              }
+            }
+          });
+    }
+  }
+  float calc_refund(List<OneDayAgentOrdersBean.ShopsEntity> list){
+    float sum = 0;
+    if(list == null) return 0;
+    for(int i = 0; i < list.size(); i++){
+      sum+= list.get(i).getTicheng_cash();
+    }
+    return sum;
   }
 }
