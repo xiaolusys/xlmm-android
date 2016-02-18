@@ -79,12 +79,38 @@ public class AllowanceAdapter extends RecyclerView.Adapter<AllowanceAdapter.Allo
 
     final AllowanceBean.AllowanceEntity resultsEntity = mList.get(position);
 
-    holder.card.setTag(new Object());
+    if (position == 0) {
+      showCategory(holder);
+    } else {
+      boolean theCategoryOfLastEqualsToThis = mList.get(position - 1)
+          .getCarry_date()
+          .substring(1, 10)
+          .equals(mList.get(position).getCarry_date().substring(1, 10));
+      if (!theCategoryOfLastEqualsToThis) {
+        showCategory(holder);
+      } else {
+        hideCategory(holder);
+      }
+    }
 
+    holder.tv_day.setText(resultsEntity.getCarry_date().substring(0, 10));
+    holder.tv_today_allowance.setText("总收益");
+    holder.tv_time.setText(resultsEntity.getCreated());
+    holder.tv_click_info.setText(resultsEntity.getCarry_type_name());
+    holder.tv_one_allowance.setText("+ " + resultsEntity.getValue_money());
   }
 
-  @Override public void onViewRecycled(AllowanceVH holder) {
-    super.onViewRecycled(holder);
+  private void showCategory(AllowanceVH holder) {
+    if (!isVisibleOf(holder.rl_sum)) holder.rl_sum.setVisibility(View.VISIBLE);
+  }
+
+  private void hideCategory(AllowanceVH holder) {
+    if (isVisibleOf(holder.rl_sum)) holder.rl_sum.setVisibility(View.GONE);
+  }
+
+
+  private boolean isVisibleOf(View view) {
+    return view.getVisibility() == View.VISIBLE;
   }
 
   @Override public int getItemCount() {
@@ -105,6 +131,8 @@ public class AllowanceAdapter extends RecyclerView.Adapter<AllowanceAdapter.Allo
     @Bind(R.id.tv_time) TextView tv_time;
     @Bind(R.id.tv_click_info) TextView tv_click_info;
     @Bind(R.id.tv_one_allowance) TextView tv_one_allowance;
+    @Bind(R.id.rl_sum) RelativeLayout rl_sum;
+    @Bind(R.id.rl_info) RelativeLayout rl_info;
 
     public AllowanceVH(View itemView) {
       super(itemView);

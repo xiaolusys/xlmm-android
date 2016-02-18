@@ -65,9 +65,9 @@ public class MamaInfoModel {
   }
 
   //得到分享补贴
-  public Observable<AllowanceBean> getAllowance() {
+  public Observable<AllowanceBean> getAllowance(String page) {
     return XlmmRetrofitClient.getService()
-        .getAllowance()
+        .getAllowance(page)
         .compose(new DefaultTransform<>());
   }
 }
