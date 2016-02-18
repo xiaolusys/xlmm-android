@@ -5,6 +5,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ListView;
 import butterknife.Bind;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.AllowanceAdapter;
 import com.jimei.xiaolumeimei.adapter.WithdrawCashHisAdapter;
@@ -24,7 +25,7 @@ public class ShareAllowanceActivity extends BaseSwipeBackCompatActivity implemen
   String TAG = "ShareAllowanceActivity";
 
   @Bind(R.id.toolbar) Toolbar toolbar;
-  @Bind(R.id.lv_allowance) ListView lv_allowance;
+  @Bind(R.id.lv_allowance) XRecyclerView lv_allowance;
 
   private AllowanceAdapter mAdapter;
 
