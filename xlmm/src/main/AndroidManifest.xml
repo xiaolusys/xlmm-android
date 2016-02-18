@@ -286,6 +286,7 @@
         android:theme="@style/AppTheme.TransparentActivity"
         />
 
+
   </application>
 
 </manifest>
