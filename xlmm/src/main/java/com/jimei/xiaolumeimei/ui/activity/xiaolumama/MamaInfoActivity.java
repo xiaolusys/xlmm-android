@@ -30,11 +30,13 @@ import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AgentInfoBean;
+import com.jimei.xiaolumeimei.entities.MamaFansBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import java.util.ArrayList;
+import java.util.List;
 import rx.schedulers.Schedulers;
 
 /**
@@ -50,6 +52,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.imgUser) ImageView imgUser;
   @Bind(R.id.btn_two_dimen) Button btn_two_dimen;
   @Bind(R.id.tv_fansnum) TextView tv_fansnum;
+  @Bind(R.id.tv_cash) TextView tv_cash;
   @Bind(R.id.btn_chooselist) Button btn_chooselist;
   @Bind(R.id.btn_store) Button btn_store;
   @Bind(R.id.chart1) LineChart mChart;
@@ -77,6 +80,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
 
     btn_two_dimen.setOnClickListener(this);
     tv_fansnum.setOnClickListener(this);
+    btnShare.setOnClickListener(this);
 
     btn_chooselist.setOnClickListener(this);
     btn_store.setOnClickListener(this);
@@ -108,6 +112,18 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
           @Override public void onNext(AgentInfoBean pointBean) {
             JUtils.Log(TAG, "AgentInfoBean=" + pointBean.toString());
             mamaAgentInfo = pointBean;
+
+            tv_cash.setText(Double.toString(pointBean.getCash()));
+          }
+        });
+
+    MamaInfoModel.getInstance().getMamaFans()
+        .subscribeOn(Schedulers.newThread())
+        .subscribe(new ServiceResponse<List<MamaFansBean>>() {
+          @Override public void onNext(List<MamaFansBean> fansBeen) {
+            JUtils.Log(TAG,"size ="+ fansBeen.size());
+            tv_fansnum.setText("我的粉丝 " + fansBeen.size());
+
           }
         });
   }

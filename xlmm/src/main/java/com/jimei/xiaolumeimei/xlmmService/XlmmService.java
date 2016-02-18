@@ -501,6 +501,7 @@ public interface XlmmService {
 
   @GET("pmt/carrylog/get_clk_list")
   Observable<AllowanceBean> getAllowance(
+      @Query("page")String page
   );
 
 }
