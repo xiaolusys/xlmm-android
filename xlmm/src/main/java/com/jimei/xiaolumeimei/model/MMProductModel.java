@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.model;
 
 import com.jimei.xiaolumeimei.entities.ChooseResponseBean;
 import com.jimei.xiaolumeimei.entities.MMChooselistBean;
+import com.jimei.xiaolumeimei.entities.ShoppingListBean;
 import com.jimei.xiaolumeimei.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 import java.util.List;
@@ -69,6 +70,13 @@ public class MMProductModel {
   public Observable<ChooseResponseBean> remove_pro_from_shop(String product) {
     return XlmmRetrofitClient.getService()
         .remove_pro_from_shop(product)
+        .compose(new DefaultTransform<>());
+  }
+
+  //MM订单历史
+  public Observable<ShoppingListBean> getShoppingList(String page) {
+    return XlmmRetrofitClient.getService()
+        .getShoppingList(page)
         .compose(new DefaultTransform<>());
   }
 }

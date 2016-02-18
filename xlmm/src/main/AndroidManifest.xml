@@ -274,6 +274,9 @@
     <activity android:name=".ui.activity.user.BindSettingPasswordActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
+    <activity android:name=".ui.activity.xiaolumama.MMShoppingListActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
 
   </application>
 

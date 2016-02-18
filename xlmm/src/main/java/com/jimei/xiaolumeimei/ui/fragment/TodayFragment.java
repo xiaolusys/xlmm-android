@@ -285,28 +285,6 @@ public class TodayFragment extends BaseFragment {
           }
         });
 
-    //new AsyncTask<Void, Void, Void>() {
-    //
-    //
-    //  @Override protected Void doInBackground(Void... params) {
-    //    JUtils.Log("异步", "   1111");
-    //    //long l = calcLeftTime();
-    //    //while (true) {
-    //    //  try {
-    //    //    Thread.sleep(1000);
-    //    //
-    //    //    l -= 1000;
-    //    //    publishProgress(l);
-    //    //  } catch (InterruptedException e) {
-    //    //    e.printStackTrace();
-    //    //  }
-    //    //}
-    //
-    //    return null;
-    //  }
-    //
-    //}.execute();
-
   }
 
   @Override public void onStop() {

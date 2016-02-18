@@ -30,6 +30,7 @@ import com.jimei.xiaolumeimei.entities.ProductDetailBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
 import com.jimei.xiaolumeimei.entities.RegisterBean;
+import com.jimei.xiaolumeimei.entities.ShoppingListBean;
 import com.jimei.xiaolumeimei.entities.SmsLoginBean;
 import com.jimei.xiaolumeimei.entities.SmsLoginUserBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
@@ -480,5 +481,11 @@ public interface XlmmService {
       @Field("valid_code") String valid_code
   );
 
+   //MM订单历史
+    @GET("pmt/shopping")
+    Observable<ShoppingListBean> getShoppingList(
+
+        @Query("page")String page
+    );
 
 }

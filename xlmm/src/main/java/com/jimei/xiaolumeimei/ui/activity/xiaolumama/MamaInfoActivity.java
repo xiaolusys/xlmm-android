@@ -2,23 +2,21 @@ package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -42,8 +40,9 @@ import rx.schedulers.Schedulers;
 /**
  * Created by wulei on 2016/2/4.
  */
-public class MamaInfoActivity extends BaseSwipeBackCompatActivity implements View
-    .OnClickListener, OnChartGestureListener, OnChartValueSelectedListener {
+public class MamaInfoActivity extends BaseSwipeBackCompatActivity
+    implements View.OnClickListener, OnChartGestureListener,
+    OnChartValueSelectedListener {
   String TAG = "MamaInfoActivity";
 
   @Bind(R.id.toolbar) Toolbar toolbar;
@@ -51,11 +50,25 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity implements Vie
   @Bind(R.id.imgUser) ImageView imgUser;
   @Bind(R.id.btn_two_dimen) Button btn_two_dimen;
   @Bind(R.id.tv_fansnum) TextView tv_fansnum;
-  @Bind(R.id.btn_chooselist)Button btn_chooselist;
-  @Bind(R.id.btn_store)Button btn_store;
+  @Bind(R.id.btn_chooselist) Button btn_chooselist;
+  @Bind(R.id.btn_store) Button btn_store;
   @Bind(R.id.chart1) LineChart mChart;
 
   AgentInfoBean mamaAgentInfo;
+  @Bind(R.id.app_bar_layout) AppBarLayout appBarLayout;
+  @Bind(R.id.tv_Point) TextView tvPoint;
+  @Bind(R.id.rl_mama_info) RelativeLayout rlMamaInfo;
+  @Bind(R.id.tv_order1) TextView tvOrder1;
+  @Bind(R.id.tv_order2) TextView tvOrder2;
+  @Bind(R.id.tv_fund1) TextView tvFund1;
+  @Bind(R.id.tv_fund2) TextView tvFund2;
+  @Bind(R.id.rl_order) RelativeLayout rlOrder;
+  @Bind(R.id.rl_two_dimen) RelativeLayout rlTwoDimen;
+  @Bind(R.id.btn_share) Button btnShare;
+  @Bind(R.id.rl_share) RelativeLayout rlShare;
+  @Bind(R.id.rl_chooselist) RelativeLayout rlChooselist;
+  @Bind(R.id.rl_store) RelativeLayout rlStore;
+  @Bind(R.id.rl_btn) RelativeLayout rlBtn;
 
   @Override protected void setListener() {
     btn_jump.setOnClickListener(this);
@@ -67,7 +80,10 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity implements Vie
 
     btn_chooselist.setOnClickListener(this);
     btn_store.setOnClickListener(this);
+    tvOrder1.setOnClickListener(this);
+    tvOrder2.setOnClickListener(this);
   }
+
   @Override protected void getBundleExtras(Bundle extras) {
 
   }
@@ -85,16 +101,15 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity implements Vie
   }
 
   @Override protected void initData() {
-    MamaInfoModel.getInstance().getAgentInfoBean()
+    MamaInfoModel.getInstance()
+        .getAgentInfoBean()
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<AgentInfoBean>() {
           @Override public void onNext(AgentInfoBean pointBean) {
-            JUtils.Log(TAG,"AgentInfoBean="+ pointBean.toString());
+            JUtils.Log(TAG, "AgentInfoBean=" + pointBean.toString());
             mamaAgentInfo = pointBean;
           }
         });
-
-
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
@@ -105,8 +120,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity implements Vie
     return null;
   }
 
-  @Override
-  public void onClick(View v) {
+  @Override public void onClick(View v) {
     Intent intent;
     switch (v.getId()) {
       case R.id.btn_jump:
@@ -135,11 +149,15 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity implements Vie
       case R.id.btn_store:
         startActivity(new Intent(MamaInfoActivity.this, MaMaMyStoreActivity.class));
         break;
+      case R.id.tv_order1:
+        startActivity(new Intent(MamaInfoActivity.this, MMShoppingListActivity.class));
+        break;
+      case R.id.tv_order2:
+        break;
     }
   }
 
-  private void init_chart()
-  {
+  private void init_chart() {
 
     //mChart.setOnChartGestureListener(this);
     mChart.setOnChartValueSelectedListener(this);
@@ -218,7 +236,6 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity implements Vie
     mChart.getAxisRight().setEnabled(false);
     mChart.setVisibleXRangeMaximum(7);
 
-
     // add data
     setData(45, 100);
     mChart.animateX(2500, Easing.EasingOption.EaseInOutQuart);
@@ -262,7 +279,8 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity implements Vie
 
     set1.setValueFormatter(new ValueFormatter() {
       @Override
-      public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+      public String getFormattedValue(float value, Entry entry, int dataSetIndex,
+          ViewPortHandler viewPortHandler) {
         return "";
       }
     });
@@ -277,58 +295,62 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity implements Vie
     mChart.setData(data);
   }
 
-  @Override
-  public void onChartGestureStart(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+  @Override public void onChartGestureStart(MotionEvent me,
+      ChartTouchListener.ChartGesture lastPerformedGesture) {
     Log.i("Gesture", "START");
   }
 
-  @Override
-  public void onChartGestureEnd(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+  @Override public void onChartGestureEnd(MotionEvent me,
+      ChartTouchListener.ChartGesture lastPerformedGesture) {
     Log.i("Gesture", "END, lastGesture: " + lastPerformedGesture);
 
     // un-highlight values after the gesture is finished and no single-tap
-    if(lastPerformedGesture != ChartTouchListener.ChartGesture.SINGLE_TAP)
-      mChart.highlightValues(null); // or highlightTouch(null) for callback to onNothingSelected(...)
+    if (lastPerformedGesture != ChartTouchListener.ChartGesture.SINGLE_TAP) {
+      mChart.highlightValues(
+          null); // or highlightTouch(null) for callback to onNothingSelected(...)
+    }
   }
 
-  @Override
-  public void onChartLongPressed(MotionEvent me) {
+  @Override public void onChartLongPressed(MotionEvent me) {
     Log.i("LongPress", "Chart longpressed.");
   }
 
-  @Override
-  public void onChartDoubleTapped(MotionEvent me) {
+  @Override public void onChartDoubleTapped(MotionEvent me) {
     Log.i("DoubleTap", "Chart double-tapped.");
   }
 
-  @Override
-  public void onChartSingleTapped(MotionEvent me) {
+  @Override public void onChartSingleTapped(MotionEvent me) {
     Log.i("SingleTap", "Chart single-tapped.");
   }
 
-  @Override
-  public void onChartFling(MotionEvent me1, MotionEvent me2, float velocityX, float velocityY) {
+  @Override public void onChartFling(MotionEvent me1, MotionEvent me2, float velocityX,
+      float velocityY) {
     Log.i("Fling", "Chart flinged. VeloX: " + velocityX + ", VeloY: " + velocityY);
   }
 
-  @Override
-  public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
+  @Override public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
     Log.i("Scale / Zoom", "ScaleX: " + scaleX + ", ScaleY: " + scaleY);
   }
 
-  @Override
-  public void onChartTranslate(MotionEvent me, float dX, float dY) {
+  @Override public void onChartTranslate(MotionEvent me, float dX, float dY) {
     Log.i("Translate / Move", "dX: " + dX + ", dY: " + dY);
   }
 
-  @Override
-  public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
+  @Override public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
     Log.i("Entry selected", e.toString());
-    Log.i("", "low: " + mChart.getLowestVisibleXIndex() + ", high: " + mChart.getHighestVisibleXIndex());
+    Log.i("", "low: "
+        + mChart.getLowestVisibleXIndex()
+        + ", high: "
+        + mChart.getHighestVisibleXIndex());
   }
 
-  @Override
-  public void onNothingSelected() {
+  @Override public void onNothingSelected() {
     Log.i("Nothing selected", "Nothing selected.");
+  }
+
+  @Override protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    // TODO: add setContentView(...) invocation
+    ButterKnife.bind(this);
   }
 }
