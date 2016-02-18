@@ -51,7 +51,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10px"
+        android:layout_marginTop="48px"
         android:gravity="center"
         android:text="今日补贴"
         />
@@ -65,7 +65,7 @@
         android:gravity="center"
         android:text="0.00"
         android:textColor="@color/colorAccent"
-        android:textSize="25sp"
+        android:textSize="30sp"
         />
 
     <TextView
@@ -84,8 +84,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_today_allowance"
         android:layout_toRightOf="@id/tv_his_title"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="270px"
+        android:layout_marginLeft="8px"
         android:text="0.00"
         android:textSize="15sp"
         android:layout_margin="4px"
@@ -102,6 +101,7 @@
         android:id="@+id/lv_allowance"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:padding="4dp"
         >
     </com.jcodecraeer.xrecyclerview.XRecyclerView>
 
