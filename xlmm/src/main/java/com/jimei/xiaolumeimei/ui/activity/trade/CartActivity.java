@@ -186,6 +186,10 @@ public class CartActivity extends BaseSwipeBackCompatActivity
             if ((cartsinfoBeans != null) && (cartsinfoBeans.size() > 0)) {
 
               mCartsAdapetr.updateWithClear(cartsinfoBeans);
+
+              if (ids != null) {
+                ids.clear();
+              }
               for (int i = 0; i < cartsinfoBeans.size(); i++) {
                 ids.add(cartsinfoBeans.get(i).getId());
               }
