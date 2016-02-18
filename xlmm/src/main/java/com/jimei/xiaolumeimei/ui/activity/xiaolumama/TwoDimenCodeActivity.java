@@ -21,13 +21,11 @@ public class TwoDimenCodeActivity extends BaseSwipeBackCompatActivity implements
 
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.img_2dimen) ImageView img_2dimen;
-  @Bind(R.id.btn_save) Button btn_save;
   @Bind(R.id.btn_share) Button btn_share;
 
   String myurl ="";
 
   @Override protected void setListener() {
-    btn_save.setOnClickListener(this);
     btn_share.setOnClickListener(this);
     toolbar.setOnClickListener(this);
   }
@@ -67,11 +65,6 @@ public class TwoDimenCodeActivity extends BaseSwipeBackCompatActivity implements
   @Override
   public void onClick(View v) {
     switch (v.getId()) {
-      case R.id.btn_save:
-        JUtils.Log(TAG,"save 2 dimen code");
-
-        finish();
-        break;
       case R.id.btn_share:
         JUtils.Log(TAG,"share 2 dimen code");
         share_2dimencode();

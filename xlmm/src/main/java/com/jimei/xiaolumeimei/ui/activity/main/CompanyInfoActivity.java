@@ -5,10 +5,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -21,8 +23,8 @@ import rx.schedulers.Schedulers;
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class CompanyInfoActivity extends BaseSwipeBackCompatActivity {
-  
- 
+
+  @Bind(R.id.tv_version) TextView tv_version;
 
   @Override protected void setListener() {
     
@@ -41,7 +43,7 @@ public class CompanyInfoActivity extends BaseSwipeBackCompatActivity {
   }
 
   @Override protected void initViews() {
-
+    tv_version.setText(XlmmConst.VERSION);
   }
 
   @Override protected boolean toggleOverridePendingTransition() {

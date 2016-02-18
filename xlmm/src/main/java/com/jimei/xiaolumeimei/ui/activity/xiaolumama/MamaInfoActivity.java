@@ -142,6 +142,10 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         startActivity(new Intent(MamaInfoActivity.this, MamaFansActivity.class));
         break;
 
+      case R.id.btn_share:
+        startActivity(new Intent(MamaInfoActivity.this, ShareAllowanceActivity.class));
+        break;
+
       case R.id.btn_chooselist:
         startActivity(new Intent(MamaInfoActivity.this, MMChooseListActivity.class));
         break;

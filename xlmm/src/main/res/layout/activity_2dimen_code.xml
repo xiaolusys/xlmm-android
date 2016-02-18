@@ -24,7 +24,7 @@
           android:layout_height="wrap_content"
           android:layout_centerInParent="true"
           android:layout_gravity="center"
-          android:text="推荐二维码"
+          android:text="我的二维码"
           android:textColor="@android:color/white"
           android:textSize="16sp"
           />
@@ -47,28 +47,18 @@
         android:layout_marginTop="40px"
         />
 
-    <Button android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btn_save"
-        android:text="保存"
-        android:textSize="15sp"
-        android:textColor="@color/white"
-        android:layout_below="@id/img_2dimen"
-        android:layout_marginLeft="150px"
-        android:layout_marginTop="40px"
-        android:background="@drawable/shape_common"/>
-
     <Button
         android:id="@+id/btn_share"
-        android:layout_width="wrap_content"
+        android:layout_width="660px"
         android:layout_height="wrap_content"
-        android:text="分享"
+        android:text="马上分享"
         android:textColor="@color/white"
         android:textSize="15sp"
         android:background="@drawable/shape_common"
-        android:layout_alignTop="@+id/btn_save"
-        android:layout_toRightOf="@+id/btn_save"
-        android:layout_marginLeft="50px"
+        android:layout_below="@id/img_2dimen"
+        android:layout_gravity="center"
+        android:layout_marginTop="20px"
+        android:layout_marginLeft="30px"
         />
   </RelativeLayout>
 
