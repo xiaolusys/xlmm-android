@@ -109,7 +109,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     setSupportActionBar(toolbar);
     finishBack(toolbar);
 
-    init_chart();
+
 
 
   }
@@ -294,7 +294,9 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     mChart.setVisibleXRangeMaximum(6);
     //mChart.setMaxVisibleValueCount(7);
 
-    mChart.moveViewToX(MAX_RECENT_DAYS - 6);
+    if(show_his_refund.size() > 7) {
+      mChart.moveViewToX(MAX_RECENT_DAYS - 6);
+    }
 
   }
 
@@ -310,7 +312,10 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     for (int i = 0; i < count; i++) {
 
       //float val = (float) (Math.random() * 100) + 3;
-      float val = show_his_refund.get(i).getOrder_num();
+      float val = 0;
+      if(show_his_refund.size() > 0) {
+        val = show_his_refund.get(i).getOrder_num();
+      }
       yVals.add(new Entry(val, i));
     }
 
@@ -451,6 +456,9 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
                 JUtils.Log(TAG, "one day  orders num =" + hisRefund.getOrder_num() + " "
                     + "refund= " + hisRefund.getRefund());
                 show_his_refund.add(finalI, hisRefund);
+                if(finalI == MAX_RECENT_DAYS - 1){
+                  init_chart();
+                }
               }
             }
           });
