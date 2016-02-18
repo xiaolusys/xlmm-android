@@ -31,6 +31,8 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AgentInfoBean;
 import com.jimei.xiaolumeimei.entities.MamaFansBean;
+import com.jimei.xiaolumeimei.entities.ShoppingListBean;
+import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -64,7 +66,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.tv_order1) TextView tvOrder1;
   @Bind(R.id.tv_order2) TextView tvOrder2;
   @Bind(R.id.tv_fund1) TextView tvFund1;
-  @Bind(R.id.tv_fund2) TextView tvFund2;
+  @Bind(R.id.tv_fund2) TextView tv_fund2;
   @Bind(R.id.rl_order) RelativeLayout rlOrder;
   @Bind(R.id.rl_two_dimen) RelativeLayout rlTwoDimen;
   @Bind(R.id.btn_share) Button btnShare;
@@ -114,6 +116,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
             mamaAgentInfo = pointBean;
 
             tv_cash.setText(Double.toString(pointBean.getCash()));
+            tv_fund2.setText(Double.toString(pointBean.getMmclog().getMci()));
           }
         });
 
@@ -124,6 +127,20 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
             JUtils.Log(TAG,"size ="+ fansBeen.size());
             tv_fansnum.setText("我的粉丝 " + fansBeen.size());
 
+          }
+        });
+
+    MMProductModel.getInstance()
+        .getShoppingList("1")
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<ShoppingListBean>() {
+          @Override public void onNext(ShoppingListBean shoppingListBean) {
+            super.onNext(shoppingListBean);
+            if (shoppingListBean != null) {
+              int count = shoppingListBean.getCount();
+              tvOrder2.setText("" + count);
+
+            }
           }
         });
   }

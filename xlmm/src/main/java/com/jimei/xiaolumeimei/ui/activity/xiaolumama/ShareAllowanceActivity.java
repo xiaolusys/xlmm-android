@@ -60,7 +60,7 @@ public class ShareAllowanceActivity extends BaseSwipeBackCompatActivity implemen
     lv_allowance.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
     lv_allowance.setArrowImageView(R.drawable.iconfont_downgrey);
     lv_allowance.setPullRefreshEnabled(false);
-    lv_allowance.setPullRefreshEnabled(false);
+    lv_allowance.setLoadingMoreEnabled(true);
 
     mAdapter = new AllowanceAdapter(this);
     lv_allowance.setAdapter(mAdapter);
