@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.AddressBean;
 import com.jimei.xiaolumeimei.ui.activity.user.ChanggeAddressActivity;
@@ -33,6 +34,11 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
   public void update(List<AddressBean> list) {
 
+    mList.addAll(list);
+    notifyDataSetChanged();
+  }
+  public void updateWithClear(List<AddressBean> list) {
+    mList.clear();
     mList.addAll(list);
     notifyDataSetChanged();
   }
@@ -74,6 +80,32 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         }
       });
+
+      ((AddressDefaultVH) holder).card.setOnLongClickListener(
+          new View.OnLongClickListener() {
+            @Override public boolean onLongClick(View v) {
+
+              new MaterialDialog.Builder(context).
+                  title("删除地址").
+                  content("您确定要删除吗？").
+                  positiveText("确定").
+                  negativeText("取消").
+                  callback(new MaterialDialog.ButtonCallback() {
+                    @Override public void onPositive(MaterialDialog dialog) {
+
+
+
+                      dialog.dismiss();
+                    }
+
+                    @Override public void onNegative(MaterialDialog dialog) {
+                      dialog.dismiss();
+                    }
+                  }).show();
+
+              return false;
+            }
+          });
     } else if (holder instanceof AddressVH) {
 
       AddressVH addressVH = (AddressVH) holder;
@@ -95,6 +127,30 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
           Intent intent = new Intent(context, ChanggeAddressActivity.class);
         }
       });
+
+      ((AddressVH) holder).card.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override public boolean onLongClick(View v) {
+
+              new MaterialDialog.Builder(context).
+                  title("删除地址").
+                  content("您确定要删除吗？").
+                  positiveText("确定").
+                  negativeText("取消").
+                  callback(new MaterialDialog.ButtonCallback() {
+                    @Override public void onPositive(MaterialDialog dialog) {
+
+                      dialog.dismiss();
+                    }
+
+                    @Override public void onNegative(MaterialDialog dialog) {
+                      dialog.dismiss();
+                    }
+                  }).show();
+
+
+              return false;
+            }
+          });
     }
   }
 

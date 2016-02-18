@@ -1,5 +1,6 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -8,7 +9,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -29,7 +32,9 @@ import rx.schedulers.Schedulers;
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class AddAddressActivity extends BaseSwipeBackCompatActivity
-    implements View.OnClickListener {
+    implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+
+  private static final String TAG = AddAddressActivity.class.getSimpleName();
 
   AddressModel model = new AddressModel();
   @Bind(R.id.toolbar) Toolbar toolbar;
@@ -50,10 +55,13 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
   private String receiver_name;
   private String receiver_mobile;
   private boolean isDefault;
+  private String city_string;
+  private String clearaddressa;
 
   @Override protected void setListener() {
     save.setOnClickListener(this);
     address.setOnClickListener(this);
+    switchButton.setOnCheckedChangeListener(this);
   }
 
   @Override protected void initData() {
@@ -93,6 +101,11 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
   @Override public void onClick(View v) {
     switch (v.getId()) {
       case R.id.address:
+
+        InputMethodManager imm =
+            (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mobile.getWindowToken(), 0);
+
         //为popWindow添加动画效果
         popupWindow.setAnimationStyle(R.style.popWindow_animation);
         // 点击弹出泡泡窗口
@@ -100,10 +113,13 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
         cityPicker.setOnSelectingListener(new CityPicker.OnSelectingListener() {
           @Override public void selected(boolean selected) {
             if (selected) {
+              city_string = cityPicker.getCity_string();
               address.setText(cityPicker.getCity_string());
+
               receiver_state = cityPicker.getCity_receiver_state();
               receiver_district = cityPicker.getCity_receiver_district();
               receiver_city = cityPicker.getCity_receiver_city();
+              JUtils.Log(TAG, receiver_state + receiver_district + receiver_city);
             }
           }
         });
@@ -113,38 +129,58 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
         receiver_name = name.getText().toString().trim();
         receiver_address = address.getText().toString().trim();
         receiver_mobile = mobile.getText().toString().trim();
+        clearaddressa = clearAddress.getText().toString().trim();
 
-        checkkInput();
+        if (checkInput(receiver_name, receiver_mobile, city_string, clearaddressa)) {
+          model.create_address(receiver_state, receiver_city, receiver_district,
+              clearaddressa, receiver_name, receiver_mobile)
+              .subscribeOn(Schedulers.io())
+              .subscribe(new ServiceResponse<AddressResultBean>() {
+                @Override public void onNext(AddressResultBean addressResultBean) {
+                  if (addressResultBean != null) {
+                    if (addressResultBean.isRet()) {
 
-        model.create_address(receiver_state, receiver_city, receiver_district,
-            receiver_address, receiver_name, receiver_mobile)
-            .subscribeOn(Schedulers.io())
-            .subscribe(new ServiceResponse<AddressResultBean>() {
-              @Override public void onNext(AddressResultBean addressResultBean) {
-                super.onNext(addressResultBean);
-
-                if (addressResultBean.isRet()) {
-                  startActivity(
-                      new Intent(AddAddressActivity.this, AddressActivity.class));
-                  AddAddressActivity.this.finish();
+                      if (isDefault) {
+                        startActivity(
+                            new Intent(AddAddressActivity.this, AddressActivity.class));
+                        AddAddressActivity.this.finish();
+                      } else {
+                        startActivity(
+                            new Intent(AddAddressActivity.this, AddressActivity.class));
+                        AddAddressActivity.this.finish();
+                      }
+                    }
+                  }
                 }
-              }
-            });
+              });
+        }
 
         break;
     }
   }
 
-  private void checkkInput() {
-    if (receiver_mobile.length() != 11) {
-      JUtils.Toast("请输入正确的手机号");
-      return;
+  public boolean checkInput(String receivername, String mobile, String address1,
+      String address2) {
+
+    if (receivername == null || receivername.trim().equals("")) {
+      JUtils.Toast("请输入收货人姓名");
+    } else {
+      if (mobile == null || mobile.trim().equals("")) {
+        JUtils.Toast("请输入手机号");
+      } else {
+        if (mobile.length() != 11) {
+          JUtils.Toast("请输入正确的手机号");
+        } else if (address1 == null || address1.trim().equals("")) {
+          JUtils.Toast("请选择所在地区");
+        } else if (address2 == null || address2.trim().equals("")) {
+          JUtils.Toast("请输入详细地址");
+        } else {
+          return true;
+        }
+      }
     }
 
-    //if (receiver_address == null || receiver_name == null || receiver_mobile == null) {
-    //  JUtils.Toast();
-    //
-    //}
+    return false;
   }
 
   private void initPopupWindow() {
@@ -157,5 +193,18 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
     popupWindow.setBackgroundDrawable(new BitmapDrawable());
     popupWindow.setOutsideTouchable(true);
     cityPicker = (CityPicker) view.findViewById(R.id.city_picker);
+  }
+
+  @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+    switch (buttonView.getId()) {
+      case R.id.switch_button:
+        if (isChecked) {
+          isDefault = true;
+        } else {
+          isDefault = false;
+        }
+
+        break;
+    }
   }
 }
