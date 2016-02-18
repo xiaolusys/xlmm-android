@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<RelativeLayout
+    android:background="#F3F3F4"
+    android:id="@+id/category"
+    android:padding="4dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TextView
+        android:textColor="@color/black"
+        android:id="@+id/shoptime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <TextView
+        android:layout_alignParentRight="true"
+        android:id="@+id/total_cash"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+</RelativeLayout>
+    <RelativeLayout
+        android:background="@color/white"
+        android:id="@+id/content"
+        android:padding="4dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:src="@drawable/carrylog_image"
+            android:id="@+id/pic_path"
+            android:layout_width="190px"
+            android:layout_height="190px"
+            />
+<TextView
+    android:text="佣金收益"
+    android:id="@+id/time_display"
+    android:layout_marginTop="16dp"
+    android:textColor="@color/black"
+    android:layout_marginLeft="8dp"
+    android:layout_toRightOf="@id/pic_path"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"/>
+
+<!--<TextView-->
+    <!--android:id="@+id/get_status_display"-->
+    <!--android:layout_marginTop="16dp"-->
+    <!--android:textColor="@color/colorPrimary"-->
+    <!--android:layout_marginLeft="20dp"-->
+    <!--android:layout_toRightOf="@id/time_display"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"/>-->
+
+<TextView
+
+    android:text="今日成功推进8个订单交易"
+    android:layout_alignParentBottom="true"
+    android:id="@+id/wxordernick"
+    android:layout_marginTop="16dp"
+    android:textColor="@color/c8c8c8"
+    android:layout_marginLeft="8dp"
+    android:layout_toRightOf="@id/pic_path"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"/>
+
+<TextView
+
+    android:layout_marginRight="12dp"
+    android:layout_centerVertical="true"
+    android:layout_alignParentRight="true"
+    android:id="@+id/ticheng_cash"
+    android:layout_marginTop="16dp"
+    android:textColor="@color/black"
+    android:layout_marginLeft="8dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"/>
+    </RelativeLayout>
+</LinearLayout>

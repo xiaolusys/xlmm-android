@@ -1,5 +1,6 @@
 package com.jimei.xiaolumeimei.model;
 
+import com.jimei.xiaolumeimei.entities.CarryLogListBean;
 import com.jimei.xiaolumeimei.entities.ChooseResponseBean;
 import com.jimei.xiaolumeimei.entities.MMChooselistBean;
 import com.jimei.xiaolumeimei.entities.ShoppingListBean;
@@ -77,6 +78,13 @@ public class MMProductModel {
   public Observable<ShoppingListBean> getShoppingList(String page) {
     return XlmmRetrofitClient.getService()
         .getShoppingList(page)
+        .compose(new DefaultTransform<>());
+  }
+
+  //MM订单历史
+  public Observable<CarryLogListBean> getCarryLogList(String page) {
+    return XlmmRetrofitClient.getService()
+        .getCarrylogList(page)
         .compose(new DefaultTransform<>());
   }
 }
