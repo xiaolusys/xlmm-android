@@ -117,6 +117,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
             JUtils.Log(TAG, "AgentInfoBean=" + pointBean.toString());
             mamaAgentInfo = pointBean;
 
+            JUtils.Log(TAG, "cash =" + pointBean.getCash() + " all fund=" + pointBean.getMmclog().getMci());
             tv_cash.setText(Double.toString(pointBean.getCash()));
             tv_fund2.setText(Double.toString(pointBean.getMmclog().getMci()));
           }
@@ -128,23 +129,24 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
           @Override public void onNext(List<MamaFansBean> fansBeen) {
             JUtils.Log(TAG,"size ="+ fansBeen.size());
             tv_fansnum.setText("我的粉丝 " + fansBeen.size());
-
+            JUtils.Log(TAG, "fans num =" + fansBeen.size());
           }
         });
 
     MMProductModel.getInstance()
-        .getShoppingList("1")
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<ShoppingListBean>() {
-          @Override public void onNext(ShoppingListBean shoppingListBean) {
-            super.onNext(shoppingListBean);
-            if (shoppingListBean != null) {
-              int count = shoppingListBean.getCount();
-              tvOrder2.setText("" + count);
+            .getShoppingList("1")
+            .subscribeOn(Schedulers.io())
+            .subscribe(new ServiceResponse<ShoppingListBean>() {
+              @Override public void onNext(ShoppingListBean shoppingListBean) {
+                super.onNext(shoppingListBean);
+                if (shoppingListBean != null) {
+                  int count = shoppingListBean.getCount();
+                  JUtils.Log(TAG, "all orders num =" + shoppingListBean.getCount());
+                  tvOrder2.setText(Integer.toString(shoppingListBean.getCount()));
+                }
+              }
+            });
 
-            }
-          }
-        });
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
