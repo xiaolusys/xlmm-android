@@ -103,7 +103,7 @@
     <TextView
         android:text="请选择收货人地址"
         android:padding="8dp"
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="13dp"
         android:layout_toRightOf="@id/tv_1"
         android:textSize="14sp"
         android:id="@+id/address"
@@ -129,6 +129,7 @@
         android:layout_height="wrap_content"
         />
     <EditText
+        android:paddingTop="8dp"
         android:textSize="14sp"
         android:background="@null"
         android:id="@+id/clear_address"

@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +13,13 @@ import butterknife.ButterKnife;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.AddressBean;
+import com.jimei.xiaolumeimei.entities.AddressResultBean;
+import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.ui.activity.user.ChanggeAddressActivity;
+import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import java.util.ArrayList;
 import java.util.List;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/01/18.
@@ -23,8 +28,9 @@ import java.util.List;
  */
 public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+  private static final String TAG = AddressAdapter.class.getSimpleName();
+  AddressModel model = new AddressModel();
   private List<AddressBean> mList;
-
   private Context context;
 
   public AddressAdapter(Context context) {
@@ -37,6 +43,7 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     mList.addAll(list);
     notifyDataSetChanged();
   }
+
   public void updateWithClear(List<AddressBean> list) {
     mList.clear();
     mList.addAll(list);
@@ -77,7 +84,7 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
       ((AddressDefaultVH) holder).card.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View v) {
-
+          setBundle(addressBean);
         }
       });
 
@@ -93,7 +100,17 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                   callback(new MaterialDialog.ButtonCallback() {
                     @Override public void onPositive(MaterialDialog dialog) {
 
-
+                      model.delete_address(addressBean.getId())
+                          .subscribeOn(Schedulers.io())
+                          .subscribe(new ServiceResponse<AddressResultBean>() {
+                            @Override
+                            public void onNext(AddressResultBean addressResultBean) {
+                              if (addressResultBean != null
+                                  && addressResultBean.isRet()) {
+                                removeAt(position);
+                              }
+                            }
+                          });
 
                       dialog.dismiss();
                     }
@@ -124,34 +141,69 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
       ((AddressVH) holder).card.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View v) {
-          Intent intent = new Intent(context, ChanggeAddressActivity.class);
+          setBundle(addressBean);
         }
       });
 
       ((AddressVH) holder).card.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override public boolean onLongClick(View v) {
+        @Override public boolean onLongClick(View v) {
 
-              new MaterialDialog.Builder(context).
-                  title("删除地址").
-                  content("您确定要删除吗？").
-                  positiveText("确定").
-                  negativeText("取消").
-                  callback(new MaterialDialog.ButtonCallback() {
-                    @Override public void onPositive(MaterialDialog dialog) {
+          new MaterialDialog.Builder(context).
+              title("删除地址").
+              content("您确定要删除吗？").
+              positiveText("确定").
+              negativeText("取消").
+              callback(new MaterialDialog.ButtonCallback() {
+                @Override public void onPositive(MaterialDialog dialog) {
 
-                      dialog.dismiss();
-                    }
+                  model.delete_address(addressBean.getId())
+                      .subscribeOn(Schedulers.io())
+                      .subscribe(new ServiceResponse<AddressResultBean>() {
+                        @Override
+                        public void onNext(AddressResultBean addressResultBean) {
+                          if (addressResultBean != null && addressResultBean.isRet()) {
+                            removeAt(position);
+                          }
+                        }
+                      });
 
-                    @Override public void onNegative(MaterialDialog dialog) {
-                      dialog.dismiss();
-                    }
-                  }).show();
+                  dialog.dismiss();
+                }
 
+                @Override public void onNegative(MaterialDialog dialog) {
+                  dialog.dismiss();
+                }
+              }).show();
 
-              return false;
-            }
-          });
+          return false;
+        }
+      });
     }
+  }
+
+  private void setBundle(AddressBean addressBean) {
+    Intent intent = new Intent(context, ChanggeAddressActivity.class);
+    Bundle bundle = new Bundle();
+    bundle.putString("receiver_state", addressBean.getReceiverState());
+    bundle.putString("receiver_district", addressBean.getReceiverDistrict());
+    bundle.putString("receiver_city", addressBean.getReceiverCity());
+
+    bundle.putString("receiver_name", addressBean.getReceiverName());
+    bundle.putString("id", addressBean.getId());
+    bundle.putString("mobile", addressBean.getReceiverMobile());
+    bundle.putString("address1", addressBean.getReceiverState()
+        + addressBean.getReceiverCity()
+        + addressBean.getReceiverDistrict());
+    bundle.putString("address2", addressBean.getReceiverAddress());
+    intent.putExtras(bundle);
+    context.startActivity(intent);
+  }
+
+  //删除某一项
+  public void removeAt(int position) {
+    mList.remove(position);
+    notifyItemRemoved(position);
+    notifyItemRangeChanged(position, mList.size());
   }
 
   @Override public int getItemCount() {

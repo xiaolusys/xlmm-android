@@ -235,6 +235,19 @@ public interface XlmmService {
             @Field("receiver_mobile") String receiver_mobile
     );
 
+    //修改地址
+    @FormUrlEncoded
+    @POST("address/{id}/update")
+    Observable<AddressResultBean> update_address(
+            @Path("id")String id,
+            @Field("receiver_state") String receiver_state,
+            @Field("receiver_city") String receiver_city,
+            @Field("receiver_district") String receiver_district,
+            @Field("receiver_address") String receiver_address,
+            @Field("receiver_name") String receiver_name,
+            @Field("receiver_mobile") String receiver_mobile
+    );
+
 
     //获取地址列表
     @GET("address")
@@ -246,13 +259,13 @@ public interface XlmmService {
 
     //删除某一个地址
     @POST("address/{id}/delete_address")
-    Observable<ResponseBody> delete_address(
+    Observable<AddressResultBean> delete_address(
         @Path("id")String id
     );
 
     //设置默认地址
     @POST("address/{id}/change_default")
-    Observable<ResponseBody> change_default(
+    Observable<AddressResultBean> change_default(
         @Path("id")String id
     );
 

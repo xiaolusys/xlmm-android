@@ -4,7 +4,6 @@ import com.jimei.xiaolumeimei.entities.AddressBean;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
-import com.squareup.okhttp.ResponseBody;
 import java.util.List;
 import rx.Observable;
 
@@ -30,14 +29,14 @@ public class AddressModel {
   }
 
   //删除某个地址
-  public Observable<ResponseBody> delete_address(String id) {
+  public Observable<AddressResultBean> delete_address(String id) {
     return XlmmRetrofitClient.getService()
         .delete_address(id)
         .compose(new DefaultTransform<>());
   }
 
   //获取某个地址
-  public Observable<ResponseBody> change_default(String id) {
+  public Observable<AddressResultBean> change_default(String id) {
     return XlmmRetrofitClient.getService()
         .change_default(id)
         .compose(new DefaultTransform<>());
@@ -50,6 +49,17 @@ public class AddressModel {
 
     return XlmmRetrofitClient.getService()
         .create_address(receiver_state, receiver_city, receiver_district,
+            receiver_address, receiver_name, receiver_mobile)
+        .compose(new DefaultTransform<>());
+  }
+
+  //更新地址
+  public Observable<AddressResultBean> update_address(String id,String receiver_state,
+      String receiver_city, String receiver_district, String receiver_address,
+      String receiver_name, String receiver_mobile) {
+
+    return XlmmRetrofitClient.getService()
+        .update_address(id, receiver_state, receiver_city, receiver_district,
             receiver_address, receiver_name, receiver_mobile)
         .compose(new DefaultTransform<>());
   }
