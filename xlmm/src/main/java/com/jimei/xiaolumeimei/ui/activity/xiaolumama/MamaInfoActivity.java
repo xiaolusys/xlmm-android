@@ -50,11 +50,11 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.btn_jump) Button btn_jump;
   @Bind(R.id.imgUser) ImageView imgUser;
-  @Bind(R.id.btn_two_dimen) Button btn_two_dimen;
+  @Bind(R.id.btn_two_dimen) TextView btn_two_dimen;
   @Bind(R.id.tv_fansnum) TextView tv_fansnum;
   @Bind(R.id.tv_cash) TextView tv_cash;
-  @Bind(R.id.btn_chooselist) Button btn_chooselist;
-  @Bind(R.id.btn_store) Button btn_store;
+  @Bind(R.id.btn_chooselist) TextView btn_chooselist;
+  @Bind(R.id.btn_store) TextView btn_store;
   @Bind(R.id.chart1) LineChart mChart;
 
   AgentInfoBean mamaAgentInfo;
@@ -67,11 +67,13 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.tv_fund2) TextView tvFund2;
   @Bind(R.id.rl_order) RelativeLayout rlOrder;
   @Bind(R.id.rl_two_dimen) RelativeLayout rlTwoDimen;
-  @Bind(R.id.btn_share) Button btnShare;
+  @Bind(R.id.btn_share) TextView btnShare;
   @Bind(R.id.rl_share) RelativeLayout rlShare;
   @Bind(R.id.rl_chooselist) RelativeLayout rlChooselist;
   @Bind(R.id.rl_store) RelativeLayout rlStore;
   @Bind(R.id.rl_btn) RelativeLayout rlBtn;
+  @Bind(R.id.tv_today_order2) TextView tv_today_order2;
+  @Bind(R.id.tv_today_fund2) TextView tv_today_fund2;
 
   @Override protected void setListener() {
     btn_jump.setOnClickListener(this);
@@ -363,6 +365,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         + mChart.getLowestVisibleXIndex()
         + ", high: "
         + mChart.getHighestVisibleXIndex());
+    tv_today_order2.setText(Float.toString(e.getVal()));
   }
 
   @Override public void onNothingSelected() {
