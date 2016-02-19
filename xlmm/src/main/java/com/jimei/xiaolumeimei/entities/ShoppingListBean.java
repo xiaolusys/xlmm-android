@@ -33,6 +33,7 @@ public class ShoppingListBean {
    * get_status_display : 已付款
    * pic_path : http://image.xiaolu.so/MG-1449798444842-weqwwwwweq.jpg
    * time_display : 10:29
+   * "dayly_amount": 0.0
    */
 
   @SerializedName("results") private List<ResultsEntity> mResults;
@@ -82,6 +83,7 @@ public class ShoppingListBean {
     @SerializedName("get_status_display") private String mGetStatusDisplay;
     @SerializedName("pic_path") private String mPicPath;
     @SerializedName("time_display") private String mTimeDisplay;
+    @SerializedName("dayly_amount") private double mDaylyAmount;
 
     public void setLinkid(int linkid) {
       this.mLinkid = linkid;
@@ -131,6 +133,10 @@ public class ShoppingListBean {
       this.mTimeDisplay = timeDisplay;
     }
 
+    public void setDaylyAmount(double daylyAmount) {
+      this.mDaylyAmount = daylyAmount;
+    }
+
     public int getLinkid() {
       return mLinkid;
     }
@@ -177,6 +183,10 @@ public class ShoppingListBean {
 
     public String getTimeDisplay() {
       return mTimeDisplay;
+    }
+
+    public double getDaylyAmount() {
+      return mDaylyAmount;
     }
   }
 }

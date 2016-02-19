@@ -128,7 +128,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
 
             JUtils.Log(TAG, "cash =" + pointBean.getCash() + " all fund=" + pointBean.getMmclog().getMci());
             tv_cash.setText(Double.toString(pointBean.getCash()));
-            tv_fund2.setText(Double.toString(Math.round((pointBean.getMmclog().getMci()*100)/100)));
+            tv_fund2.setText(Double.toString((float)(Math.round(pointBean.getMmclog().getMci()*100)/100)));
           }
         });
 
@@ -404,7 +404,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         + ", high: "
         + mChart.getHighestVisibleXIndex());
     tv_today_order2.setText(Integer.toString((int)(e.getVal())));
-    tv_today_fund2.setText(Float.toString(Math.round((show_his_refund.get(e.getXIndex()).getRefund()*100)/100)));
+    tv_today_fund2.setText(Float.toString((float)(Math.round(show_his_refund.get(e.getXIndex()).getRefund()*100)/100)));
   }
 
   @Override public void onNothingSelected() {
@@ -483,7 +483,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
                   }
                   if(show_his_refund.get(0) != null) {
                     tv_today_order2.setText(Float.toString(show_his_refund.get(0).getOrder_num()));
-                    tv_today_fund2.setText(Float.toString(Math.round((show_his_refund.get(0).getRefund()*100)/100)));
+                    tv_today_fund2.setText(Float.toString((float)(Math.round(show_his_refund.get(0).getRefund()*100)/100)));
                   }
                 }
               }
