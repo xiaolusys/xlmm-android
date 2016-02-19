@@ -203,7 +203,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity {
     sp.setTitle(title);
     sp.setText(activeDec);
 
-    sp.setUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
+    sp.setTitleUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
 
     Platform pyq = ShareSDK.getPlatform(WebViewActivity.this, WechatMoments.NAME);
     //weibo.setPlatformActionListener(paListener); // 设置分享事件回调
