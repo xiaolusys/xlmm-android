@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -32,6 +34,8 @@ public class WithdrawCashActivity extends BaseSwipeBackCompatActivity implements
   @Bind(R.id.rl_has_no_cash) RelativeLayout rl_has_no_cash;
   @Bind(R.id.img_red_packet1) ImageView img_red_packet1;
   @Bind(R.id.img_red_packet2) ImageView img_red_packet2;
+  @Bind(R.id.tv_reminder)
+  TextView tv_reminder;
 
   float cash;
   float withdraw_cash_fund = 0;
@@ -57,6 +61,7 @@ public class WithdrawCashActivity extends BaseSwipeBackCompatActivity implements
     setSupportActionBar(toolbar);
     finishBack(toolbar);
     cash = getIntent().getExtras().getFloat("cash");
+    tv_reminder.setText(Float.toString(Math.round((cash*100)/100)));
     if(Float.compare(cash , 0) > 0){
       rl_has_no_cash.setVisibility(View.INVISIBLE);
     }

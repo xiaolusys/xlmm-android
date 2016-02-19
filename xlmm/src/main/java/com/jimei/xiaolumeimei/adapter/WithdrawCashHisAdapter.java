@@ -84,7 +84,7 @@ public class WithdrawCashHisAdapter extends BaseAdapter {
     WithdrawCashHisBean.WithdrawCashRecord record = (WithdrawCashHisBean
         .WithdrawCashRecord)getItem(position);
     if (null != record) {
-      holder.tx_withdraw_fund.setText(String.valueOf(record.getValue_money()));
+      holder.tx_withdraw_fund.setText(String.valueOf(Math.round((record.getValue_money()*100)/100)));
       holder.tx_withdraw_state.setText(record.getGet_status_display());
       holder.tx_time.setText(record.getCreated());
     }
