@@ -1,9 +1,5 @@
 package com.jimei.xiaolumeimei.ui.activity.product;
 
-import android.animation.Animator;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -27,8 +23,6 @@ import butterknife.Bind;
 import cn.iwgang.countdownview.CountdownView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.davemorrissey.labs.subscaleview.ImageSource;
-import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.ecloud.pulltozoomview.PullToZoomScrollViewEx;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -41,18 +35,15 @@ import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.okhttp.callback.FileParaCallback;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
-import com.jimei.xiaolumeimei.utils.BitmapUtil;
 import com.jimei.xiaolumeimei.utils.DisplayUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.widget.FlowLayout;
 import com.jimei.xiaolumeimei.widget.TagAdapter;
 import com.jimei.xiaolumeimei.widget.TagFlowLayout;
-import com.jimei.xiaolumeimei.widget.anim.BezierEvaluator;
 import com.jimei.xiaolumeimei.widget.badgelib.BadgeView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.BitmapCallback;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
@@ -438,57 +429,57 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
                 @Override public void onNext(AddCartsBean addCartsBean) {
                   super.onNext(addCartsBean);
 
-                  int[] location = new int[2];
-                  if (endP == null) {
-                    frameLayout.getLocationOnScreen(location);
-                    baseP = new PointF(location[0], location[1]);
-                    endP = new PointF();
-                    endP.x = 0;
-                    endP.y = frameLayout.getMeasuredHeight();
-                  }
-
-                  //final int viewW, viewH;
-                  //viewW = v.getMeasuredWidth();
-                  //viewH = v.getMeasuredHeight();
-                  v.getLocationOnScreen(location);
-                  startP = new PointF(location[0] - baseP.x, location[1] - baseP.y);
-
-                  final View animView =
-                      getLayoutInflater().inflate(R.layout.item_cart, frameLayout, false);
-                  ValueAnimator valueAnimator =
-                      ValueAnimator.ofObject(new BezierEvaluator(), startP, endP);
-                  valueAnimator.addUpdateListener(
-                      new ValueAnimator.AnimatorUpdateListener() {
-                        @Override public void onAnimationUpdate(ValueAnimator animation) {
-                          PointF pointF = (PointF) animation.getAnimatedValue();
-                          animView.setX(pointF.x);
-                          animView.setY(pointF.y);
-                        }
-                      });
-                  valueAnimator.addListener(new Animator.AnimatorListener() {
-                    public void onAnimationStart(Animator animation) {
-                      frameLayout.addView(animView);
-                    }
-
-                    public void onAnimationEnd(Animator animation) {
-                      frameLayout.removeView(animView);
-                      animView.destroyDrawingCache();
-                    }
-
-                    public void onAnimationCancel(Animator animation) {
-                    }
-
-                    public void onAnimationRepeat(Animator animation) {
-                    }
-                  });
-
-                  AnimatorSet animatorSet = new AnimatorSet();
-                  animatorSet.playTogether(
-                      ObjectAnimator.ofFloat(animView, "scaleX", 0.3f, 1f),
-                      ObjectAnimator.ofFloat(animView, "scaleY", 0.3f, 1f),
-                      valueAnimator);
-                  animatorSet.setDuration(1000);
-                  animatorSet.start();
+                  //int[] location = new int[2];
+                  //if (endP == null) {
+                  //  frameLayout.getLocationOnScreen(location);
+                  //  baseP = new PointF(location[0], location[1]);
+                  //  endP = new PointF();
+                  //  endP.x = 0;
+                  //  endP.y = frameLayout.getMeasuredHeight();
+                  //}
+                  //
+                  ////final int viewW, viewH;
+                  ////viewW = v.getMeasuredWidth();
+                  ////viewH = v.getMeasuredHeight();
+                  //v.getLocationOnScreen(location);
+                  //startP = new PointF(location[0] - baseP.x, location[1] - baseP.y);
+                  //
+                  //final View animView =
+                  //    getLayoutInflater().inflate(R.layout.item_cart, frameLayout, false);
+                  //ValueAnimator valueAnimator =
+                  //    ValueAnimator.ofObject(new BezierEvaluator(), startP, endP);
+                  //valueAnimator.addUpdateListener(
+                  //    new ValueAnimator.AnimatorUpdateListener() {
+                  //      @Override public void onAnimationUpdate(ValueAnimator animation) {
+                  //        PointF pointF = (PointF) animation.getAnimatedValue();
+                  //        animView.setX(pointF.x);
+                  //        animView.setY(pointF.y);
+                  //      }
+                  //    });
+                  //valueAnimator.addListener(new Animator.AnimatorListener() {
+                  //  public void onAnimationStart(Animator animation) {
+                  //    frameLayout.addView(animView);
+                  //  }
+                  //
+                  //  public void onAnimationEnd(Animator animation) {
+                  //    frameLayout.removeView(animView);
+                  //    animView.destroyDrawingCache();
+                  //  }
+                  //
+                  //  public void onAnimationCancel(Animator animation) {
+                  //  }
+                  //
+                  //  public void onAnimationRepeat(Animator animation) {
+                  //  }
+                  //});
+                  //
+                  //AnimatorSet animatorSet = new AnimatorSet();
+                  //animatorSet.playTogether(
+                  //    ObjectAnimator.ofFloat(animView, "scaleX", 0.3f, 1f),
+                  //    ObjectAnimator.ofFloat(animView, "scaleY", 0.3f, 1f),
+                  //    valueAnimator);
+                  //animatorSet.setDuration(1000);
+                  //animatorSet.start();
                   num++;
                   badge.setBadgeCount(num);
                 }
