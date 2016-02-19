@@ -94,10 +94,10 @@ public class AllowanceAdapter extends RecyclerView.Adapter<AllowanceAdapter.Allo
     }
 
     holder.tv_day.setText(resultsEntity.getCarry_date().substring(0, 10));
-    holder.tv_today_allowance.setText("总收益");
-    holder.tv_time.setText(resultsEntity.getCreated());
-    holder.tv_click_info.setText(resultsEntity.getCarry_type_name());
-    holder.tv_one_allowance.setText("+ " + resultsEntity.getValue_money());
+    holder.tv_today_allowance.setText("总收益 "+ (float)(Math.round(resultsEntity.getDaylyClkAmount()*100)/100));
+    holder.tv_time.setText(resultsEntity.getCarry_date().replace("T"," "));
+    holder.tv_click_info.setText("用户通过微信链接点击进入");
+    holder.tv_one_allowance.setText("+ " + (float)(Math.round(resultsEntity.getValue_money()*100)/100));
   }
 
   private void showCategory(AllowanceVH holder) {

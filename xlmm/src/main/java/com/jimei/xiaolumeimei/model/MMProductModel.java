@@ -3,6 +3,7 @@ package com.jimei.xiaolumeimei.model;
 import com.jimei.xiaolumeimei.entities.CarryLogListBean;
 import com.jimei.xiaolumeimei.entities.ChooseResponseBean;
 import com.jimei.xiaolumeimei.entities.MMChooselistBean;
+import com.jimei.xiaolumeimei.entities.OneDayAgentOrdersBean;
 import com.jimei.xiaolumeimei.entities.ShoppingListBean;
 import com.jimei.xiaolumeimei.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
@@ -85,6 +86,13 @@ public class MMProductModel {
   public Observable<CarryLogListBean> getCarryLogList(String page) {
     return XlmmRetrofitClient.getService()
         .getCarrylogList(page)
+        .compose(new DefaultTransform<>());
+  }
+
+  //MM one day订单
+  public Observable<OneDayAgentOrdersBean> getOneDayAgentOrders(int day) {
+    return XlmmRetrofitClient.getService()
+        .getOneDayAgentOrders(Integer.toString(day))
         .compose(new DefaultTransform<>());
   }
 }

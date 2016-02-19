@@ -18,6 +18,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
+
 import butterknife.Bind;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
@@ -53,12 +55,15 @@ public class MainActivity extends BaseActivity
   @Bind(R.id.view_pager) ViewPager mViewPager;
   @Bind(R.id.tool_bar) Toolbar toolbar;
   @Bind(R.id.fab) FloatingActionButton carts;
+  TextView tvNickname;
+
   ImageView imgPoint;
   ImageView imgCoupon;
   ImageView imgUser;
   List<Fragment> fragments;
   List<String> titles;
   UserModel model = new UserModel();
+  UserInfoBean userInfoBean = new UserInfoBean();
 
   @Override protected int provideContentViewId() {
     return R.layout.activity_main;
@@ -74,6 +79,29 @@ public class MainActivity extends BaseActivity
     initTitles();
 
     initTabLayout();
+
+    model.getUserInfo()
+            .subscribeOn(Schedulers.newThread())
+            .subscribe(new ServiceResponse<UserInfoBean>() {
+              @Override
+              public void onNext(UserInfoBean user) {
+
+                userInfoBean = user;
+
+              }
+
+              @Override
+              public void onCompleted() {
+                super.onCompleted();
+              }
+
+              @Override
+              public void onError(Throwable e) {
+
+                Log.e(TAG, "getUserInfo error1: "   + e.getLocalizedMessage());
+                super.onError(e);
+              }
+            });
   }
 
   private void initTabLayout() {
@@ -169,6 +197,11 @@ public class MainActivity extends BaseActivity
 
       }
     });
+
+    tvNickname = (TextView) llayout.findViewById(R.id.tvNickname);
+    if (!(LoginUtils.checkLoginState(getApplicationContext()))) {
+      tvNickname.setText("点击登录");
+    }
   }
 
   @Override public boolean onNavigationItemSelected(MenuItem item) {
@@ -216,6 +249,7 @@ public class MainActivity extends BaseActivity
 
                         if (responseBody.getCode() == 0) {
                           JUtils.Toast("退出成功");
+                          tvNickname.setText("点击登录");
                         }
                       }
                     });
@@ -311,7 +345,7 @@ public class MainActivity extends BaseActivity
 
   private void getUserInfo() {
     JUtils.Log(TAG, "get mama userinfo");
-    UserModel model = new UserModel();
+
     model.getUserInfo()
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<UserInfoBean>() {
@@ -343,5 +377,19 @@ public class MainActivity extends BaseActivity
           }
         });
 
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    if (LoginUtils.checkLoginState(getApplicationContext())) {
+      if((userInfoBean != null)  && (userInfoBean.getResults() != null)
+              && (userInfoBean.getResults().size() > 0) && (! userInfoBean.getResults().get(0).getNick().isEmpty())){
+        tvNickname.setText(userInfoBean.getResults().get(0).getNick());
+      }
+      else {
+        tvNickname.setText("小鹿妈妈");
+      }
+    }
   }
 }

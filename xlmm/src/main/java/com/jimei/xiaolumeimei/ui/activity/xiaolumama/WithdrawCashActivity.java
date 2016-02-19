@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -32,8 +34,10 @@ public class WithdrawCashActivity extends BaseSwipeBackCompatActivity implements
   @Bind(R.id.rl_has_no_cash) RelativeLayout rl_has_no_cash;
   @Bind(R.id.img_red_packet1) ImageView img_red_packet1;
   @Bind(R.id.img_red_packet2) ImageView img_red_packet2;
+  @Bind(R.id.tv_reminder)
+  TextView tv_reminder;
 
-  float cash;
+  double cash;
   float withdraw_cash_fund = 0;
   boolean click_cash100 = false;
   boolean click_cash200 = false;
@@ -56,8 +60,9 @@ public class WithdrawCashActivity extends BaseSwipeBackCompatActivity implements
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
     finishBack(toolbar);
-    cash = getIntent().getExtras().getFloat("cash");
-    if(Float.compare(cash , 0) > 0){
+    cash = getIntent().getExtras().getDouble("cash");
+    tv_reminder.setText(Double.toString(Math.round((cash*100)/100)));
+    if(Double.compare(cash , 0) > 0){
       rl_has_no_cash.setVisibility(View.INVISIBLE);
     }
     else{
@@ -106,9 +111,11 @@ public class WithdrawCashActivity extends BaseSwipeBackCompatActivity implements
           img_red_packet1.setImageResource(R.drawable.img_redpacket100_1);
         }
         else{
-          click_cash100 = true;
-          withdraw_cash_fund = 100;
-          img_red_packet1.setImageResource(R.drawable.img_redpacket100_2);
+          if(Double.compare(cash , 100) > 0) {
+            click_cash100 = true;
+            withdraw_cash_fund = 100;
+            img_red_packet1.setImageResource(R.drawable.img_redpacket100_2);
+          }
         }
         if(click_cash200){
           img_red_packet2.setImageResource(R.drawable.img_redpacket200_1);
@@ -122,9 +129,11 @@ public class WithdrawCashActivity extends BaseSwipeBackCompatActivity implements
           img_red_packet2.setImageResource(R.drawable.img_redpacket200_1);
         }
         else{
-          click_cash200 = true;
-          withdraw_cash_fund = 200;
-          img_red_packet2.setImageResource(R.drawable.img_redpacket200_2);
+          if(Double.compare(cash , 200) > 0) {
+            click_cash200 = true;
+            withdraw_cash_fund = 200;
+            img_red_packet2.setImageResource(R.drawable.img_redpacket200_2);
+          }
         }
         if(click_cash100){
           img_red_packet1.setImageResource(R.drawable.img_redpacket100_1);
@@ -153,8 +162,10 @@ public class WithdrawCashActivity extends BaseSwipeBackCompatActivity implements
 
   private void withdraw_cash(float fund){
     String fund_type = "";
+
+    JUtils.Log(TAG,"withdraw cash =" + fund);
     if((Float.compare(fund, 100) != 0)
-      ||(Float.compare(fund, 200) != 0)){
+      && (Float.compare(fund, 200) != 0)){
       JUtils.Toast("提现金额不够。");
     }
     else{
@@ -169,8 +180,10 @@ public class WithdrawCashActivity extends BaseSwipeBackCompatActivity implements
           .subscribeOn(Schedulers.newThread())
           .subscribe(new ServiceResponse<ResponseBody>() {
             @Override public void onNext(ResponseBody resp) {
-              JUtils.Log(TAG,"ResponseBody="+ resp.toString());
-
+              JUtils.Log(TAG,"ResponseBody11="+ resp.toString());
+              Intent intent = new Intent(WithdrawCashActivity.this, WithdrawCashResultActivity.class);
+              intent.putExtra("cash", fund);
+              startActivity(intent);
             }
           });
     }

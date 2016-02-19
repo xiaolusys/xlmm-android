@@ -72,6 +72,8 @@ public class AllowanceBean {
     private String log_type;
     private String carry_date;
     private String created;
+    private double mDaylyInAmount;
+    private double mDaylyClkAmount;
 
     public void setId(int id) {
       this.id = id;
@@ -105,6 +107,14 @@ public class AllowanceBean {
       this.created = created;
     }
 
+    public void setDaylyInAmount(double daylyInAmount) {
+      this.mDaylyInAmount = daylyInAmount;
+    }
+
+    public void setDaylyClkAmount(double daylyClkAmount ) {
+      this.mDaylyClkAmount = daylyClkAmount;
+    }
+
     public int getId() {
       return id;
     }
@@ -136,5 +146,9 @@ public class AllowanceBean {
     public String getCreated() {
       return created;
     }
+
+    public double getDaylyInAmount() {return mDaylyInAmount;}
+
+    public double getDaylyClkAmount() {return mDaylyClkAmount;}
   }
 }

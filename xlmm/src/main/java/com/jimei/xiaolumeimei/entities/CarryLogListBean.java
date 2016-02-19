@@ -29,6 +29,8 @@ public class CarryLogListBean {
    * log_type : buy
    * carry_date : 2015-04-30
    * created : 2015-04-30T15:47:30
+   * "dayly_in_amount": 0.0,
+   "dayly_clk_amount": 0.0
    */
 
   @SerializedName("results") private List<ResultsEntity> mResults;
@@ -74,6 +76,8 @@ public class CarryLogListBean {
     @SerializedName("log_type") private String mLogType;
     @SerializedName("carry_date") private String mCarryDate;
     @SerializedName("created") private String mCreated;
+    @SerializedName("dayly_in_amount") private double mDaylyInAmount;
+    @SerializedName("dayly_clk_amount") private double mDaylyClkAmount;
 
     public void setId(int id) {
       this.mId = id;
@@ -107,6 +111,14 @@ public class CarryLogListBean {
       this.mCreated = created;
     }
 
+    public void setDaylyInAmount(double daylyInAmount) {
+      this.mDaylyInAmount = daylyInAmount;
+    }
+
+    public void setDaylyClkAmount(double daylyClkAmount ) {
+      this.mDaylyClkAmount = daylyClkAmount;
+    }
+
     public int getId() {
       return mId;
     }
@@ -138,5 +150,9 @@ public class CarryLogListBean {
     public String getCreated() {
       return mCreated;
     }
+
+    public double getDaylyInAmount() {return mDaylyInAmount;}
+
+    public double getDaylyClkAmount() {return mDaylyClkAmount;}
   }
 }

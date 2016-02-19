@@ -83,7 +83,7 @@ public class CarryLogListAdapter
 
     holder.shoptime.setText(resultsEntity.getCreated().substring(0, 10));
     //holder.picPath.setImageResource(R.drawable.carrylog_image);
-    //holder.
+    holder.totalCash.setText("总收益 "+ (float)(Math.round(resultsEntity.getDaylyInAmount()*100)/100));
     holder.tichengCash.setText("+" + resultsEntity.getValueMoney());
   }
 

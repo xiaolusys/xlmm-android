@@ -25,6 +25,7 @@ import com.jimei.xiaolumeimei.entities.MamaFansBean;
 import com.jimei.xiaolumeimei.entities.MembershipPointBean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
 import com.jimei.xiaolumeimei.entities.NicknameBean;
+import com.jimei.xiaolumeimei.entities.OneDayAgentOrdersBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.PointLogBean;
 import com.jimei.xiaolumeimei.entities.PostBean;
@@ -530,11 +531,18 @@ public interface XlmmService {
       @Query("page")String page
   );
 
+
   //活动内容分享
   @FormUrlEncoded
   @POST("pmt/free_order/get_share_content")
   Observable<ActivityBean> get_share_content(
     @Field("ufrom")String ufrom
   );
+
+  //获得one day小鹿妈妈订单记录
+  @GET( "pmt/shopping/shops_by_day")
+  Observable<OneDayAgentOrdersBean> getOneDayAgentOrders(
+      @Query("days") String day);
+
 
 }

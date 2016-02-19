@@ -34,17 +34,17 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="300px"
+        android:layout_height="600px"
         android:layout_below="@+id/app_bar_layout"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/rl_mamainfo">
+        android:id="@+id/rl_result"
+        android:background="@drawable/text_frame">
 
         <ImageView
             android:id="@+id/img_red_packet1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="200px"
-            android:layout_marginTop="40px"
+            android:layout_marginTop="90px"
             android:clickable="true"
             android:src="@drawable/img_redpacket100_1"
             />
@@ -57,6 +57,7 @@
             android:layout_centerHorizontal="true"
             android:textSize="15sp"
             android:layout_marginTop="40px"
+            android:layout_below="@id/img_red_packet1"
             />
 
         <TextView android:layout_width="wrap_content"
@@ -64,7 +65,7 @@
             android:layout_centerHorizontal="true"
             android:id="@+id/tv_reminder"
             android:text="小鹿美美公众号将会在24小时内将红包发到"
-            android:textSize="30sp"
+            android:textSize="15sp"
             android:layout_gravity="center"
             android:textColor="@color/colorAccent"
             android:layout_below="@id/tv_Point"/>
@@ -80,50 +81,49 @@
             android:layout_below="@id/tv_reminder"/>
     </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rl_publish"
+        android:layout_below="@id/rl_result"
+
+        >
+
+        <ImageView
+            android:id="@+id/img_gray_packet1"
+            android:layout_width="120px"
+            android:layout_height="120px"
+            android:layout_marginLeft="300px"
+            android:layout_marginTop="40px"
+            android:src="@drawable/img_return"
+            />
+
+
+        <TextView
+            android:id="@+id/tv_info2"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/rl_has_no_cash"
-            android:layout_marginTop="8px"
-            android:background="@drawable/text_frame"
-            >
+            android:gravity="center_horizontal"
+            android:layout_marginLeft="150px"
+            android:layout_marginTop="20px"
+            android:text="@string/publish_info"
+            android:layout_below="@+id/img_gray_packet1"
+            />
 
-            <ImageView
-                android:id="@+id/img_gray_packet1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="200px"
-                android:layout_marginTop="40px"
-                android:src="@drawable/img_redpacket100_1"
-                />
-
-
-            <TextView
-                android:id="@+id/tv_info2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:layout_marginLeft="150px"
-                android:layout_marginTop="20px"
-                android:text="@string/not_enough_cash"
-                android:background="@drawable/text_frame"
-                android:layout_below="@+id/img_gray_packet2"
-                />
-
-            <Button
-                android:id="@+id/btn_jump"
-                android:layout_width="190px"
-                android:layout_height="80px"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="20px"
-                android:padding="10px"
-                android:text="发布产品"
-                android:textColor="@color/white"
-                android:textSize="15sp"
-                android:background="@drawable/shape_common"
-                android:layout_below="@+id/tv_info2"
-                />
-        </RelativeLayout>
+        <Button
+            android:id="@+id/btn_jump"
+            android:layout_width="190px"
+            android:layout_height="80px"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20px"
+            android:padding="10px"
+            android:text="发布产品"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:background="@drawable/shape_common"
+            android:layout_below="@+id/tv_info2"
+            />
+    </RelativeLayout>
 
 
 

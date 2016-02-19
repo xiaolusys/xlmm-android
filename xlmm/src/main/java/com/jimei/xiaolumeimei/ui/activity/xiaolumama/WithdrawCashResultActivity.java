@@ -26,7 +26,6 @@ public class WithdrawCashResultActivity extends BaseSwipeBackCompatActivity impl
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.btn_jump) Button btn_jump;
   @Bind(R.id.img_red_packet1) ImageView img_red_packet1;
-  @Bind(R.id.img_red_packet2) ImageView img_red_packet2;
 
   float cash;
   float withdraw_cash_fund = 0;
@@ -52,7 +51,10 @@ public class WithdrawCashResultActivity extends BaseSwipeBackCompatActivity impl
 
     cash = getIntent().getExtras().getFloat("cash");
     if(Float.compare(cash , 100) == 0){
-
+      img_red_packet1.setImageResource(R.drawable.img_redpacket100_1);
+    }
+    else if(Float.compare(cash , 200) == 0){
+      img_red_packet1.setImageResource(R.drawable.img_redpacket200_1);
     }
 
   }
@@ -73,7 +75,7 @@ public class WithdrawCashResultActivity extends BaseSwipeBackCompatActivity impl
   public void onClick(View v) {
     switch (v.getId()) {
       case R.id.btn_jump:
-        JUtils.Log(TAG,"withdraw cash now");
+        JUtils.Log(TAG,"publish now");
         //startActivity(new Intent(WithdrawCashActivity.this, MainActivity.class));
         finish();
         break;
@@ -98,28 +100,4 @@ public class WithdrawCashResultActivity extends BaseSwipeBackCompatActivity impl
     return super.onCreateOptionsMenu(menu);
   }
 
-  private void withdraw_cash(float fund){
-    String fund_type = "";
-    if((Float.compare(fund, 100) != 0)
-      ||(Float.compare(fund, 200) != 0)){
-      JUtils.Toast("提现金额不够。");
-    }
-    else{
-      if(Float.compare(fund, 100) == 0) {
-        fund_type="c1";
-      }
-      else if(Float.compare(fund, 200) == 0){
-        fund_type="c2";
-      }
-
-      MamaInfoModel.getInstance().withdraw_cash(fund_type)
-          .subscribeOn(Schedulers.newThread())
-          .subscribe(new ServiceResponse<ResponseBody>() {
-            @Override public void onNext(ResponseBody resp) {
-              JUtils.Log(TAG,"ResponseBody="+ resp.toString());
-
-            }
-          });
-    }
-  }
 }
