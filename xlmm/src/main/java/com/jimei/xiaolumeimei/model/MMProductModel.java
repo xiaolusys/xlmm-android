@@ -92,7 +92,7 @@ public class MMProductModel {
   //MM one day订单
   public Observable<OneDayAgentOrdersBean> getOneDayAgentOrders(int day) {
     return XlmmRetrofitClient.getService()
-        .getOneDayAgentOrders(day)
+        .getOneDayAgentOrders(Integer.toString(day))
         .compose(new DefaultTransform<>());
   }
 }

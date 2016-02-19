@@ -51,7 +51,8 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   String TAG = "MamaInfoActivity";
   private static final int MAX_RECENT_DAYS = 30;
 
-  List<HisRefund> show_his_refund = new ArrayList<HisRefund>(MAX_RECENT_DAYS);
+  List<HisRefund> show_his_refund = new ArrayList<HisRefund>();
+  int get_num = 0;
 
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.btn_jump) Button btn_jump;
@@ -154,8 +155,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
             });
 
     get_his_refund();
-    tv_today_order2.setText(Float.toString(show_his_refund.get(0).getOrder_num()));
-    tv_today_fund2.setText(Float.toString(show_his_refund.get(0).getRefund()));
+
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
@@ -289,14 +289,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
 
 
     // add data
-    setData(MAX_RECENT_DAYS);
-    mChart.animateX(2500, Easing.EasingOption.EaseInOutQuart);
-    mChart.setVisibleXRangeMaximum(6);
-    //mChart.setMaxVisibleValueCount(7);
 
-    if(show_his_refund.size() > 7) {
-      mChart.moveViewToX(MAX_RECENT_DAYS - 6);
-    }
 
   }
 
@@ -440,8 +433,16 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
 
   void get_his_refund(){
     for(int i=0; i< MAX_RECENT_DAYS; i++){
+      HisRefund hisRefund = new HisRefund();
+      hisRefund.setOrder_num(0);
+      hisRefund.setRefund(0);
+      show_his_refund.add(i, hisRefund);
+    }
+
+    for(int i=0; i< MAX_RECENT_DAYS; i++){
       JUtils.Log(TAG, " day  =" + (MAX_RECENT_DAYS - 1 - i));
       final int finalI = i;
+
       MMProductModel.getInstance()
           .getOneDayAgentOrders(MAX_RECENT_DAYS - 1 - i)
           .subscribeOn(Schedulers.io())
@@ -453,11 +454,28 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
                 HisRefund hisRefund = new HisRefund();
                 hisRefund.setOrder_num(count);
                 hisRefund.setRefund(calc_refund(oneDayBean.getShops()));
-                JUtils.Log(TAG, "one day  orders num =" + hisRefund.getOrder_num() + " "
+                JUtils.Log(TAG, "finalI=" + finalI + " one day  orders num =" + hisRefund.getOrder_num() + " "
                     + "refund= " + hisRefund.getRefund());
-                show_his_refund.add(finalI, hisRefund);
-                if(finalI == MAX_RECENT_DAYS - 1){
+
+                synchronized (this) {
+                  show_his_refund.set(finalI, hisRefund);
+                  get_num++;
+                }
+                JUtils.Log(TAG, "get_num =" + get_num + " "
+                        + "size= " + show_his_refund.size());
+                if((get_num == MAX_RECENT_DAYS - 1) && (show_his_refund.size() > 0)){
                   init_chart();
+                  setData(MAX_RECENT_DAYS);
+                  mChart.animateX(2500, Easing.EasingOption.EaseInOutQuart);
+                  mChart.setVisibleXRangeMaximum(6);
+
+                  if(show_his_refund.size() > 7) {
+                    mChart.moveViewToX(MAX_RECENT_DAYS - 6);
+                  }
+                  if(show_his_refund.get(0) != null) {
+                    tv_today_order2.setText(Float.toString(show_his_refund.get(0).getOrder_num()));
+                    tv_today_fund2.setText(Float.toString(show_his_refund.get(0).getRefund()));
+                  }
                 }
               }
             }

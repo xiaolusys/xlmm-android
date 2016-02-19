@@ -531,8 +531,8 @@ public interface XlmmService {
   );
 
   //获得one day小鹿妈妈订单记录
-  @GET( "pmt/shopping/shops_by_day?days={pk}")
+  @GET( "pmt/shopping/shops_by_day")
   Observable<OneDayAgentOrdersBean> getOneDayAgentOrders(
-      @Path("pk") int day);
+      @Query("days") String day);
 
 }
