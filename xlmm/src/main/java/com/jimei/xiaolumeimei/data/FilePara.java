@@ -4,6 +4,7 @@ package com.jimei.xiaolumeimei.data;
  * Created by wulei on 2016/2/4.
  */
 public class FilePara {
+  String filePath;
   int width;
   int height;
 

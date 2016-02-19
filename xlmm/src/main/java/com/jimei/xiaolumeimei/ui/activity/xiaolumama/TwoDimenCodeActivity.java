@@ -7,11 +7,16 @@ import android.widget.Button;
 import android.widget.ImageView;
 import butterknife.Bind;
 import cn.sharesdk.onekeyshare.OnekeyShare;
+import okhttp3.Call;
+
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.data.FilePara;
 import com.jimei.xiaolumeimei.data.XlmmApi;
+import com.jimei.xiaolumeimei.okhttp.callback.FileParaCallback;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jude.utils.JUtils;
+import com.zhy.http.okhttp.OkHttpUtils;
 
 /**
  * Created by wulei on 2016/2/4.
@@ -52,6 +57,27 @@ public class TwoDimenCodeActivity extends BaseSwipeBackCompatActivity implements
       ViewUtils.loadImgToImgView(this, img_2dimen, myurl);
       JUtils.Log(TAG,"myurl " + myurl);
     }
+
+    OkHttpUtils.get()
+            .url(myurl)
+            .build()
+            .execute(new FileParaCallback() {
+              @Override public void onError(Call call, Exception e) {
+
+              }
+
+              @Override public void onResponse(FilePara response) {
+                if (response != null) {
+                  try {
+
+
+
+                  } catch (Exception e) {
+                    e.printStackTrace();
+                  }
+                }
+              }
+            });
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
@@ -68,7 +94,7 @@ public class TwoDimenCodeActivity extends BaseSwipeBackCompatActivity implements
       case R.id.btn_share:
         JUtils.Log(TAG,"share 2 dimen code");
         share_2dimencode();
-        finish();
+        //finish();
         break;
     }
   }
