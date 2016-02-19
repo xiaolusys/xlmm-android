@@ -49,7 +49,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener, OnChartGestureListener,
     OnChartValueSelectedListener {
   String TAG = "MamaInfoActivity";
-  private static final int MAX_RECENT_DAYS = 30;
+  private static final int MAX_RECENT_DAYS = 15;
 
   List<HisRefund> show_his_refund = new ArrayList<HisRefund>();
   int get_num = 0;
@@ -182,6 +182,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
       case R.id.imgUser:
         intent = new Intent(MamaInfoActivity.this, WithdrawCashActivity.class);
         intent.putExtra("cash", mamaAgentInfo.getCash());
+
         startActivity(intent);
         break;
       case R.id.tv_fansnum:
@@ -468,6 +469,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
                 if((get_num == MAX_RECENT_DAYS - 1) && (show_his_refund.size() > 0)){
                   init_chart();
                   setData(MAX_RECENT_DAYS);
+                  mChart.setVisibility(View.VISIBLE);
 
                   mChart.animateX(2500, Easing.EasingOption.EaseInOutQuart);
                   mChart.setVisibleXRangeMaximum(6);
