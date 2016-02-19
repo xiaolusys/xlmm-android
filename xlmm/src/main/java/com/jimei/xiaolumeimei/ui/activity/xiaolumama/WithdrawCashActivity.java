@@ -162,8 +162,10 @@ public class WithdrawCashActivity extends BaseSwipeBackCompatActivity implements
 
   private void withdraw_cash(float fund){
     String fund_type = "";
+
+    JUtils.Log(TAG,"withdraw cash =" + fund);
     if((Float.compare(fund, 100) != 0)
-      ||(Float.compare(fund, 200) != 0)){
+      && (Float.compare(fund, 200) != 0)){
       JUtils.Toast("提现金额不够。");
     }
     else{
@@ -179,7 +181,9 @@ public class WithdrawCashActivity extends BaseSwipeBackCompatActivity implements
           .subscribe(new ServiceResponse<ResponseBody>() {
             @Override public void onNext(ResponseBody resp) {
               JUtils.Log(TAG,"ResponseBody="+ resp.toString());
-
+              Intent intent = new Intent(WithdrawCashActivity.this, WithdrawCashResultActivity.class);
+              intent.putExtra("cash", fund);
+              startActivity(intent);
             }
           });
     }
