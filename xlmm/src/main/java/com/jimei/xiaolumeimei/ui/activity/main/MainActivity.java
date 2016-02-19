@@ -249,7 +249,9 @@ public class MainActivity extends BaseActivity
 
                         if (responseBody.getCode() == 0) {
                           JUtils.Toast("退出成功");
-                          tvNickname.setText("点击登录");
+                          if(tvNickname != null) {
+                            tvNickname.setText("点击登录");
+                          }
                         }
                       }
                     });
@@ -382,7 +384,7 @@ public class MainActivity extends BaseActivity
   @Override
   protected void onResume() {
     super.onResume();
-    if (LoginUtils.checkLoginState(getApplicationContext())) {
+    if (LoginUtils.checkLoginState(getApplicationContext()) && (tvNickname != null)) {
       if((userInfoBean != null)  && (userInfoBean.getResults() != null)
               && (userInfoBean.getResults().size() > 0) && (! userInfoBean.getResults().get(0).getNick().isEmpty())){
         tvNickname.setText(userInfoBean.getResults().get(0).getNick());
