@@ -163,8 +163,8 @@ public class PreviousFragment extends BaseFragment {
         .subscribe(new ServiceResponse<PostBean>() {
                      @Override public void onNext(PostBean postBean) {
                        try {
-                         String picLink = postBean.getWem_posters().get(0).pic_link;
-                         String picLink1 = postBean.getChd_posters().get(0).pic_link;
+                         String picLink = postBean.getWemPosters().get(0).getPicLink();
+                         String picLink1 = postBean.getmChdPosters().get(0).getPicLink();
 
                          post1.post(new Runnable() {
                            @Override public void run() {

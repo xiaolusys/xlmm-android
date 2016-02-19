@@ -2,7 +2,6 @@ package com.jimei.xiaolumeimei.ui.activity.main;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
@@ -23,7 +22,11 @@ import cn.sharesdk.wechat.friends.Wechat;
 import cn.sharesdk.wechat.moments.WechatMoments;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
+import com.jimei.xiaolumeimei.model.ActivityModel;
+import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/02/04.
@@ -34,13 +37,18 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity {
 
   //private static final String URL =
   //    "http://m.xiaolumeimei.com/sale/promotion/xlsampleorder/";
-
-  private static final String URL =
-      "http://192.168.1.31:9000/sale/promotion/xlsampleorder/";
+  private static final String URL = "http://m.xiaolumeimei.com/";
+  private static final String TAG = WebViewActivity.class.getSimpleName();
+  //private static final String URL =
+  //    "http://192.168.1.31:9000/sale/promotion/xlsampleorder/";
   private Toolbar mToolbar;
   private WebView mWebView;
   private ProgressBar mProgressBar;
-  private SharedPreferences sharedPreferences;
+  private String cookies;
+  private String actlink;
+  private String activeDec;
+  private String linkQrcode;
+  private String title;
 
   @Override protected void setListener() {
     mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -51,11 +59,13 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity {
   }
 
   @Override protected void initData() {
-    mWebView.loadUrl(URL);
+    mWebView.loadUrl(actlink);
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
 
+    cookies = extras.getString("cookies");
+    actlink = extras.getString("actlink");
   }
 
   @Override protected int getContentViewLayoutID() {
@@ -63,6 +73,9 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity {
   }
 
   @SuppressLint("JavascriptInterface") @Override protected void initViews() {
+
+    syncCookie(WebViewActivity.this, actlink);
+
     mProgressBar = (ProgressBar) findViewById(R.id.pb_view);
     mWebView = (WebView) findViewById(R.id.wb_view);
     mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -83,7 +96,6 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity {
     mWebView.getSettings().setDomStorageEnabled(true);
     mWebView.getSettings().setDatabaseEnabled(true);
 
-    syncCookie(getApplicationContext(), URL);
     mWebView.setWebChromeClient(new WebChromeClient() {
       @Override public void onProgressChanged(WebView view, int newProgress) {
         mProgressBar.setProgress(newProgress);
@@ -137,41 +149,18 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity {
   @Override protected void onDestroy() {
     super.onDestroy();
     mWebView.destroy();
+    ShareSDK.stopSDK(this);
   }
 
   public void syncCookie(Context context, String url) {
     try {
-      //CookieSyncManager.createInstance(context);
-      //CookieManager cookieManager = CookieManager.getInstance();
-      //cookieManager.setAcceptCookie(true);
-      //cookieManager.removeSessionCookie();// 移除
-      //cookieManager.removeAllCookie();
-      //String oldCookie = cookieManager.getCookie(url);
-
-      //URL aURL = new URL(url);
-
-      //StringBuilder sbCookie = new StringBuilder();
-      //sbCookie.append(String.format("sessionid" + "=%s", XlmmApp.cookies));
-      ////webview在使用cookie前会前判断保存cookie的domain和当前要请求的domain是否相同，相同才会发送cookie
-      ////sbCookie.append(
-      ////    String.format(";domain=%s", aURL.getHost())); //注意，是getHost()，不是getAuthority(),
-      //sbCookie.append(String.format(";path=%s", "/"));
-      //
-      //String cookieValue = sbCookie.toString();
-      //cookieManager.setCookie(url, XlmmApp.cookies);
-      //CookieSyncManager.getInstance().sync();
-
-      sharedPreferences =
-          context.getSharedPreferences("COOKIESxlmm", Context.MODE_PRIVATE);
-
-      String cookies = sharedPreferences.getString("Cookies", "");
-
       CookieSyncManager.createInstance(context);
       CookieManager cookieManager = CookieManager.getInstance();
       cookieManager.setAcceptCookie(true);
       cookieManager.removeSessionCookie();// 移除
       cookieManager.removeAllCookie();
-      cookieManager.setCookie(url, cookies);//cookies是在HttpClient中获得的cookie
+
+      cookieManager.setCookie(url, cookies);
       CookieSyncManager.getInstance().sync();
     } catch (Exception e) {
     }
@@ -180,87 +169,122 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity {
   public void getPromotionParams(String uform, String share_link) {
 
     if (uform.equals("wxapp")) {
-      share_wxapp(share_link);
+      share_wxapp(share_link, uform);
     } else if (uform.equals("pyq")) {
-      share_pyq(share_link);
+      share_pyq(share_link, uform);
     } else if (uform.equals("qq")) {
-      share_qq(share_link);
+
+      share_qq(share_link, uform);
     } else if (uform.equals("qqspa")) {
-      share_qqspa(share_link);
+      share_qqspa(share_link, uform);
     } else if (uform.equals("sinawb")) {
-      share_sina(share_link);
+      share_sina(share_link, uform);
     }
   }
 
-  private void share_wxapp(String myurl) {
+  private void share_wxapp(String myurl, String ufrom) {
+    Platform.ShareParams sp = new Platform.ShareParams();
+    sp.setImageUrl(linkQrcode);
+    sp.setTitle(title);
+    sp.setText(activeDec);
 
-    Wechat.ShareParams sp = new Wechat.ShareParams();
-    sp.setText("小鹿美美");
-    sp.setUrl("http://m.xiaolumeimei.com/" + myurl);
+    sp.setUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
 
-    Platform wxapp = ShareSDK.getPlatform(Wechat.NAME);
+    Platform wx = ShareSDK.getPlatform(WebViewActivity.this, Wechat.NAME);
     //weibo.setPlatformActionListener(paListener); // 设置分享事件回调
     // 执行图文分享
-    wxapp.share(sp);
+    wx.share(sp);
   }
 
-  private void share_pyq(String myurl) {
+  private void share_pyq(String myurl, String ufrom) {
 
     WechatMoments.ShareParams sp = new WechatMoments.ShareParams();
-    sp.setText("小鹿美美");
-    sp.setUrl("http://m.xiaolumeimei.com/" + myurl);
+    sp.setImageUrl(linkQrcode);
+    sp.setTitle(title);
+    sp.setText(activeDec);
 
-    Platform pyq = ShareSDK.getPlatform(WechatMoments.NAME);
+    sp.setUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
+
+    Platform pyq = ShareSDK.getPlatform(WebViewActivity.this, WechatMoments.NAME);
     //weibo.setPlatformActionListener(paListener); // 设置分享事件回调
     // 执行图文分享
     pyq.share(sp);
   }
 
-  private void share_qq(String myurl) {
+  private void share_qq(String myurl, String ufrom) {
 
+    get_share_content(ufrom);
     QQ.ShareParams sp = new QQ.ShareParams();
-    sp.setText("小鹿美美");
-    sp.setUrl("http://m.xiaolumeimei.com/" + myurl);
+    sp.setTitle(title);
 
-    Platform qq = ShareSDK.getPlatform(QQ.NAME);
+    sp.setText(activeDec);
+    sp.setImageUrl(linkQrcode);
+
+    sp.setTitleUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
+
+    Platform qq = ShareSDK.getPlatform(WebViewActivity.this, QQ.NAME);
     //weibo.setPlatformActionListener(paListener); // 设置分享事件回调
     // 执行图文分享
     qq.share(sp);
   }
 
-  private void share_qqspa(String myurl) {
-
+  private void share_qqspa(String myurl, String ufrom) {
+    get_share_content(ufrom);
     QZone.ShareParams sp = new QZone.ShareParams();
-    sp.setText("小鹿美美");
-    sp.setUrl("http://m.xiaolumeimei.com/" + myurl);
+    sp.setTitle(title);
+    // 标题的超链接
+    sp.setTitleUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
+    sp.setText(activeDec);
+    sp.setImageUrl(linkQrcode);
+    //sp.setSite("发布分享的网站名称");
+    sp.setSiteUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
 
-    Platform qspa = ShareSDK.getPlatform(QZone.NAME);
-    //weibo.setPlatformActionListener(paListener); // 设置分享事件回调
+    Platform qzone = ShareSDK.getPlatform(WebViewActivity.this, QZone.NAME);
+    //qzone.setPlatformActionListener(paListener); // 设置分享事件回调
     // 执行图文分享
-    qspa.share(sp);
+    qzone.share(sp);
   }
 
-  private void share_2dimencode(String myurl) {
+  private void share_2dimencode(String myurl, String ufrom) {
 
     SinaWeibo.ShareParams sp = new SinaWeibo.ShareParams();
     sp.setText("小鹿美美");
-    sp.setUrl("http://m.xiaolumeimei.com/" + myurl);
+    sp.setUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
 
-    Platform weibo = ShareSDK.getPlatform(SinaWeibo.NAME);
+    Platform weibo = ShareSDK.getPlatform(WebViewActivity.this, SinaWeibo.NAME);
     //weibo.setPlatformActionListener(paListener); // 设置分享事件回调
     // 执行图文分享
     weibo.share(sp);
   }
 
-  private void share_sina(String myurl) {
-
+  private void share_sina(String myurl, String ufrom) {
+    get_share_content(ufrom);
     SinaWeibo.ShareParams sp = new SinaWeibo.ShareParams();
-    sp.setText("小鹿美美");
-    sp.setUrl("http://m.xiaolumeimei.com/" + myurl);
+    sp.setTitle(title);
+    sp.setTitleUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
+    sp.setText(activeDec);
+    sp.setImageUrl(linkQrcode);
+    sp.setUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
 
-    Platform weibo = ShareSDK.getPlatform(SinaWeibo.NAME);
+    Platform weibo = ShareSDK.getPlatform(WebViewActivity.this, SinaWeibo.NAME);
     //weibo.setPlatformActionListener(paListener); // 设置分享事件回调
     // 执行图文分享
     weibo.share(sp);
+  }
+
+  public void get_share_content(String ufrom) {
+    ActivityModel.getInstance()
+        .get_share_content(ufrom)
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<ActivityBean>() {
+          @Override public void onNext(ActivityBean activityBean) {
+
+            if (null != activityBean) {
+              activeDec = activityBean.getActiveDec();
+              linkQrcode = URL + activityBean.getLinkQrcode();
+              title = activityBean.getTitle();
+            }
+          }
+        });
   }
 }

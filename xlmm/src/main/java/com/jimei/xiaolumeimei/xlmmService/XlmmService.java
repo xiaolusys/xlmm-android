@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.xlmmService;
 
 import com.jimei.xiaolumeimei.data.XlmmApi;
+import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.entities.AddCartsBean;
 import com.jimei.xiaolumeimei.entities.AddressBean;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
@@ -527,6 +528,13 @@ public interface XlmmService {
   @GET("pmt/carrylog/get_clk_list")
   Observable<AllowanceBean> getAllowance(
       @Query("page")String page
+  );
+
+  //活动内容分享
+  @FormUrlEncoded
+  @POST("pmt/free_order/get_share_content")
+  Observable<ActivityBean> get_share_content(
+    @Field("ufrom")String ufrom
   );
 
 }

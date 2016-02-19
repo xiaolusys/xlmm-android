@@ -141,6 +141,11 @@ public class ChanggeAddressActivity extends BaseSwipeBackCompatActivity
         receiver_mobile = mobile.getText().toString().trim();
         clearaddressa = clearAddress.getText().toString().trim();
 
+        JUtils.Log(TAG,
+            receiver_mobile + "====" + receiver_state + "====" + receiver_city + "====" +
+                receiver_district + "====" +
+                clearaddressa + "====" + receiver_name);
+
         if (checkInput(receiver_name, receiver_mobile, city_string, clearaddressa)) {
           model.update_address(id, receiver_state, receiver_city, receiver_district,
               clearaddressa, receiver_name, receiver_mobile)

@@ -114,6 +114,7 @@ public class XlmmApp extends Application {
           //JUtils.Log("XLMMAPP", cookieList.get(0));
           for (String s : cookieList) {//Cookie的格式为:cookieName=cookieValue;path=xxx
             //保存你需要的cookie数据
+            JUtils.Log("XLMMAPP", cookieList.get(0));
             editor.putString("Cookies", s);
             editor.apply();
           }

@@ -1,11 +1,15 @@
 package com.jimei.xiaolumeimei.ui.fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 import cn.iwgang.countdownview.CountdownView;
@@ -22,6 +26,7 @@ import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.ui.activity.main.WebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ChildListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.LadyListActivity;
+import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.widget.banner.Indicators.PagerIndicator;
@@ -65,6 +70,8 @@ public class TodayFragment extends BaseFragment {
   private View head;
   private Subscription subscription;
   //private long l;
+  private SharedPreferences sharedPreferences;
+  private String cookies;
 
   @Override protected int provideContentViewId() {
     return R.layout.today_fragment;
@@ -129,10 +136,11 @@ public class TodayFragment extends BaseFragment {
         .subscribe(new ServiceResponse<PostBean>() {
           @Override public void onNext(PostBean postBean) {
             try {
+
               String picLink =
-                  ViewUtils.getDecodeUrl(postBean.getWem_posters().get(0).pic_link);
+                  ViewUtils.getDecodeUrl(postBean.getWemPosters().get(0).getPicLink());
               String picLink1 =
-                  ViewUtils.getDecodeUrl(postBean.getChd_posters().get(0).pic_link);
+                  ViewUtils.getDecodeUrl(postBean.getmChdPosters().get(0).getPicLink());
 
               Map<String, String> map = new HashMap<>();
               map.put("post1", picLink);
@@ -167,16 +175,57 @@ public class TodayFragment extends BaseFragment {
                     });
               }
 
-              post2.post(new Runnable() {
-                @Override public void run() {
-                  Glide.with(getActivity())
-                      .load(picLink1)
-                      .diskCacheStrategy(DiskCacheStrategy.ALL)
-                      .placeholder(R.drawable.header)
-                      .centerCrop()
-                      .into(post2);
-                }
-              });
+              if (null != postBean.getActivity()) {
+
+                post2.setVisibility(View.VISIBLE);
+                post2.setClickable(true);
+
+                Glide.with(getActivity())
+                    .load(postBean.getActivity().getActImg())
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .placeholder(R.drawable.header)
+                    .centerCrop()
+                    .into(post2);
+
+                post2.setOnClickListener(new View.OnClickListener() {
+                  @Override public void onClick(View v) {
+
+                    //syncCookie(getActivity(), postBean.getActivity().getActLink());
+
+                    if (postBean.getActivity().isLoginRequired()) {
+                      if (LoginUtils.checkLoginState(getActivity())) {
+                        Intent intent = new Intent(getActivity(), WebViewActivity.class);
+                        sharedPreferences =
+                            getActivity().getSharedPreferences("COOKIESxlmm",
+                                Context.MODE_PRIVATE);
+                        String cookies = sharedPreferences.getString("Cookies", "");
+                        Bundle bundle = new Bundle();
+                        bundle.putString("cookies", cookies);
+                        bundle.putString("actlink", postBean.getActivity().getActLink());
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                      } else {
+                        JUtils.Toast("登录后才可参加活动");
+                      }
+                    } else {
+                      Intent intent = new Intent(getActivity(), WebViewActivity.class);
+                      sharedPreferences =
+                          getActivity().getSharedPreferences("COOKIESxlmm",
+                              Context.MODE_PRIVATE);
+                      cookies = sharedPreferences.getString("Cookies", "");
+                      Bundle bundle = new Bundle();
+                      bundle.putString("cookies", cookies);
+                      bundle.putString("actlink", postBean.getActivity().getActLink());
+                      intent.putExtras(bundle);
+                      startActivity(intent);
+                    }
+                  }
+                });
+              } else {
+
+                post2.setVisibility(View.GONE);
+                post2.setClickable(false);
+              }
             } catch (NullPointerException ex) {
               ex.printStackTrace();
             }
@@ -212,12 +261,6 @@ public class TodayFragment extends BaseFragment {
           Toast.makeText(activity, "没有更多了拉,去购物吧", Toast.LENGTH_SHORT).show();
           xRecyclerView.post(xRecyclerView::loadMoreComplete);
         }
-      }
-    });
-
-    post2.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        startActivity(new Intent(getActivity(), WebViewActivity.class));
       }
     });
   }
@@ -284,13 +327,26 @@ public class TodayFragment extends BaseFragment {
             }
           }
         });
-
   }
 
   @Override public void onStop() {
     super.onStop();
     if (subscription != null) {
       subscription.unsubscribe();
+    }
+  }
+
+  public void syncCookie(Context context, String url) {
+    try {
+      CookieSyncManager.createInstance(context);
+      CookieManager cookieManager = CookieManager.getInstance();
+      cookieManager.setAcceptCookie(true);
+      cookieManager.removeSessionCookie();// 移除
+      cookieManager.removeAllCookie();
+
+      cookieManager.setCookie(url, cookies);
+      CookieSyncManager.getInstance().sync();
+    } catch (Exception e) {
     }
   }
 }

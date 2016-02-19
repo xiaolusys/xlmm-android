@@ -234,8 +234,39 @@
         android:name="com.mob.tools.MobUIShell"
         android:theme="@android:style/Theme.Translucent.NoTitleBar"
         android:configChanges="keyboardHidden|orientation|screenSize"
-        android:windowSoftInputMode="stateHidden|adjustResize"/>
+        android:windowSoftInputMode="stateHidden|adjustResize">
+      <intent-filter>
+        <data android:scheme="tencent1105166296" />
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <category android:name="android.intent.category.DEFAULT" />
+      </intent-filter>
 
+
+
+      <!-- 调用新浪原生SDK，需要注册的回调activity -->
+      <intent-filter>
+        <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+        <category android:name="android.intent.category.DEFAULT" />
+      </intent-filter>
+    </activity>
+    <!-- QQ客户端回调 2.6.3开始独立添加activity来处理QQ客户端的回调-->
+    <!--<activity-->
+        <!--android:name="cn.sharesdk.tencent.qq.ResultReceiver"-->
+        <!--android:launchMode="singleTask"-->
+        <!--android:noHistory="true">-->
+      <!--&lt;!&ndash;-->
+      <!--如果集成QQ分享，或者使用QQ客户端来进行QQ空间的分享，须要在此处添加一个对ACTION_VIEW-->
+      <!--事件的过滤器，其中的scheme是“tencent”前缀再开发者应用的加上appId。如果此过滤器不设置，-->
+      <!--则分享结束以后不能得到正确的回调-->
+      <!--&ndash;&gt;-->
+      <!--<intent-filter android:priority="1000" >-->
+        <!--<data android:scheme="tencent100371282" />-->
+        <!--<action android:name="android.intent.action.VIEW" />-->
+        <!--<category android:name="android.intent.category.DEFAULT" />-->
+        <!--<category android:name="android.intent.category.BROWSABLE" />-->
+      <!--</intent-filter>-->
+    <!--</activity>-->
     <!--微信分享回调 -->
     <activity
         android:name=".wxapi.WXEntryActivity"
@@ -243,6 +274,13 @@
         android:configChanges="keyboardHidden|orientation|screenSize"
         android:exported="true"
         android:screenOrientation="portrait"/>
+
+    <!--&lt;!&ndash; 支付宝分享回调 &ndash;&gt;-->
+    <!--<activity-->
+        <!--android:name=".apshare.ShareEntryActivity"-->
+        <!--android:theme="@android:style/Theme.Translucent.NoTitleBar"-->
+        <!--android:configChanges="keyboardHidden|orientation|screenSize"-->
+        <!--android:exported="true"/>-->
 
     <activity android:name=".ui.activity.xiaolumama.MamaInfoActivity"
       android:theme="@style/AppTheme.TransparentActivity"
