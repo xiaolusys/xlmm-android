@@ -180,7 +180,7 @@ public class WithdrawCashActivity extends BaseSwipeBackCompatActivity implements
           .subscribeOn(Schedulers.newThread())
           .subscribe(new ServiceResponse<ResponseBody>() {
             @Override public void onNext(ResponseBody resp) {
-              JUtils.Log(TAG,"ResponseBody="+ resp.toString());
+              JUtils.Log(TAG,"ResponseBody11="+ resp.toString());
               Intent intent = new Intent(WithdrawCashActivity.this, WithdrawCashResultActivity.class);
               intent.putExtra("cash", fund);
               startActivity(intent);

@@ -398,8 +398,8 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         + mChart.getLowestVisibleXIndex()
         + ", high: "
         + mChart.getHighestVisibleXIndex());
-    tv_today_order2.setText(Float.toString(e.getVal()));
-    tv_today_fund2.setText(Float.toString(show_his_refund.get(e.getXIndex()).getRefund()));
+    tv_today_order2.setText(Integer.toString((int)(e.getVal())));
+    tv_today_fund2.setText(Float.toString(Math.round((show_his_refund.get(e.getXIndex()).getRefund()*100)/100)));
   }
 
   @Override public void onNothingSelected() {
