@@ -146,7 +146,7 @@
           android:layout_height="wrap_content"
           android:layout_marginLeft="200px"
           android:layout_marginTop="40px"
-          android:src="@drawable/img_redpacket100_1"
+          android:src="@drawable/img_graypacket100"
           />
 
       <ImageView
@@ -159,7 +159,7 @@
           android:layout_below="@+id/img_gray_packet1"
           android:layout_marginLeft="200px"
           android:layout_marginTop="40px"
-          android:src="@drawable/img_redpacket200_1"
+          android:src="@drawable/img_graypacket200"
           />
 
       <TextView

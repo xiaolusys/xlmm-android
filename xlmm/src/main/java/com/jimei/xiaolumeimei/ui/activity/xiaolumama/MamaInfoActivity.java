@@ -215,9 +215,10 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     mChart.setDrawGridBackground(false);
 
     // no description text
-    mChart.setDescription("");
-    mChart.setNoDataText("");
-    mChart.setNoDataTextDescription("您暂无订单收益!");
+    //mChart.setDescription("");
+    //mChart.setNoDataText("");
+    //mChart.setNoDataTextDescription("您暂无订单收益!");
+    //mChart.invalidate();
 
     // enable touch gestures
     mChart.setTouchEnabled(true);
@@ -467,6 +468,11 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
                 if((get_num == MAX_RECENT_DAYS - 1) && (show_his_refund.size() > 0)){
                   init_chart();
                   setData(MAX_RECENT_DAYS);
+                  mChart.setDescription("");
+                  mChart.setNoDataText("");
+                  mChart.setNoDataTextDescription("您暂无订单收益!");
+                  mChart.invalidate();
+
                   mChart.animateX(2500, Easing.EasingOption.EaseInOutQuart);
                   mChart.setVisibleXRangeMaximum(6);
 

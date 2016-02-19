@@ -37,7 +37,7 @@ public class WithdrawCashActivity extends BaseSwipeBackCompatActivity implements
   @Bind(R.id.tv_reminder)
   TextView tv_reminder;
 
-  float cash;
+  double cash;
   float withdraw_cash_fund = 0;
   boolean click_cash100 = false;
   boolean click_cash200 = false;
@@ -60,9 +60,9 @@ public class WithdrawCashActivity extends BaseSwipeBackCompatActivity implements
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
     finishBack(toolbar);
-    cash = getIntent().getExtras().getFloat("cash");
-    tv_reminder.setText(Float.toString(Math.round((cash*100)/100)));
-    if(Float.compare(cash , 0) > 0){
+    cash = getIntent().getExtras().getDouble("cash");
+    tv_reminder.setText(Double.toString(Math.round((cash*100)/100)));
+    if(Double.compare(cash , 0) > 0){
       rl_has_no_cash.setVisibility(View.INVISIBLE);
     }
     else{
@@ -111,9 +111,11 @@ public class WithdrawCashActivity extends BaseSwipeBackCompatActivity implements
           img_red_packet1.setImageResource(R.drawable.img_redpacket100_1);
         }
         else{
-          click_cash100 = true;
-          withdraw_cash_fund = 100;
-          img_red_packet1.setImageResource(R.drawable.img_redpacket100_2);
+          if(Double.compare(cash , 100) > 0) {
+            click_cash100 = true;
+            withdraw_cash_fund = 100;
+            img_red_packet1.setImageResource(R.drawable.img_redpacket100_2);
+          }
         }
         if(click_cash200){
           img_red_packet2.setImageResource(R.drawable.img_redpacket200_1);
@@ -127,9 +129,11 @@ public class WithdrawCashActivity extends BaseSwipeBackCompatActivity implements
           img_red_packet2.setImageResource(R.drawable.img_redpacket200_1);
         }
         else{
-          click_cash200 = true;
-          withdraw_cash_fund = 200;
-          img_red_packet2.setImageResource(R.drawable.img_redpacket200_2);
+          if(Double.compare(cash , 200) > 0) {
+            click_cash200 = true;
+            withdraw_cash_fund = 200;
+            img_red_packet2.setImageResource(R.drawable.img_redpacket200_2);
+          }
         }
         if(click_cash100){
           img_red_packet1.setImageResource(R.drawable.img_redpacket100_1);
