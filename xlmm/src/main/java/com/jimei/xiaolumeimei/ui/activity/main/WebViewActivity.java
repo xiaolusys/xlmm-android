@@ -188,28 +188,47 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
 
   public void getPromotionParams(String uform, String share_link) {
 
-    if (uform.equals("wxapp")) {
-      share_wxapp(share_link, uform);
-    } else if (uform.equals("pyq")) {
-      share_pyq(share_link, uform);
-    } else if (uform.equals("qq")) {
+    ActivityModel.getInstance()
+            .get_share_content(uform)
+            .subscribeOn(Schedulers.io())
+            .subscribe(new ServiceResponse<ActivityBean>() {
+              @Override public void onNext(ActivityBean activityBean) {
 
-      share_qq(share_link, uform);
-    } else if (uform.equals("qqspa")) {
-      share_qqspa(share_link, uform);
-    } else if (uform.equals("sinawb")) {
-      share_sina(share_link, uform);
-    }
+                if (null != activityBean) {
+                  activeDec = activityBean.getActiveDec();
+                  linkQrcode = URL + activityBean.getLinkQrcode();
+                  title = activityBean.getTitle();
+                  JUtils.Log(TAG,"getPromotionParams get_share_content:"+ activeDec + " " + linkQrcode + " " + title);
+
+                  if (uform.equals("wxapp")) {
+                    share_wxapp(share_link, uform);
+                  } else if (uform.equals("pyq")) {
+                    share_pyq(share_link, uform);
+                  } else if (uform.equals("qq")) {
+
+                    share_qq(share_link, uform);
+                  } else if (uform.equals("qqspa")) {
+                    share_qqspa(share_link, uform);
+                  } else if (uform.equals("sinawb")) {
+                    share_sina(share_link, uform);
+                  }
+                }
+              }
+            });
+
+
   }
 
   private void share_wxapp(String myurl, String ufrom) {
     Platform.ShareParams sp = new Platform.ShareParams();
     //sp.setImageUrl(linkQrcode);
-    sp.setTitle(title);
-    sp.setText(activeDec);
+    //sp.setTitle(title);
+    sp.setText(activeDec + " http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
 
-    sp.setUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
-    sp.setShareType(Platform.SHARE_WEBPAGE);
+    //sp.setUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
+    //sp.setShareType(Platform.SHARE_WEBPAGE);
+    //sp.setImageUrl(linkQrcode);
+    JUtils.Log(TAG, "wxapp: http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
 
     Platform wx = ShareSDK.getPlatform(WebViewActivity.this, Wechat.NAME);
     wx.setPlatformActionListener(this); // 设置分享事件回调
@@ -221,10 +240,13 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
 
     WechatMoments.ShareParams sp = new WechatMoments.ShareParams();
     //sp.setImageUrl(linkQrcode);
-    sp.setTitle(title);
-    sp.setText(activeDec);
-    sp.setTitleUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
-    sp.setShareType(Platform.SHARE_WEBPAGE);
+    //sp.setTitle(title);
+    sp.setText(activeDec + " http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
+    //sp.setTitleUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
+    //sp.setShareType(Platform.SHARE_WEBPAGE);
+    sp.setImageUrl(linkQrcode);
+    //sp.setUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
+
     Platform pyq = ShareSDK.getPlatform(WebViewActivity.this, WechatMoments.NAME);
     pyq.setPlatformActionListener(this); // 设置分享事件回调
     // 执行图文分享
@@ -282,9 +304,9 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     SinaWeibo.ShareParams sp = new SinaWeibo.ShareParams();
     //sp.setTitle(title);
     //sp.setTitleUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
-    sp.setText(activeDec);
-    sp.setImageUrl(linkQrcode);
-    //sp.setUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
+    sp.setText(activeDec+" http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
+    //sp.setImageUrl(linkQrcode);
+    sp.setSiteUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
 
     Platform weibo = ShareSDK.getPlatform(WebViewActivity.this, SinaWeibo.NAME);
     weibo.setPlatformActionListener(this); // 设置分享事件回调
@@ -303,6 +325,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
               activeDec = activityBean.getActiveDec();
               linkQrcode = URL + activityBean.getLinkQrcode();
               title = activityBean.getTitle();
+              JUtils.Log(TAG,"get_share_content:"+ activeDec + " " + linkQrcode + " " + title);
             }
           }
         });
