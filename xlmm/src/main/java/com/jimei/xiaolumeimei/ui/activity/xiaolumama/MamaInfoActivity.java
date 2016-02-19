@@ -87,6 +87,8 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     toolbar.setOnClickListener(this);
     imgUser.setOnClickListener(this);
 
+    rlTwoDimen.setOnClickListener(this);
+    rlShare.setOnClickListener(this);
     btn_two_dimen.setOnClickListener(this);
     tv_fansnum.setOnClickListener(this);
     btnShare.setOnClickListener(this);
@@ -173,6 +175,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         startActivity(new Intent(MamaInfoActivity.this, MainActivity.class));
         finish();
         break;
+      case R.id.rl_two_dimen:
       case R.id.btn_two_dimen:
         intent = new Intent(MamaInfoActivity.this, TwoDimenCodeActivity.class);
         intent.putExtra("myurl", mamaAgentInfo.getShare_mmcode());
@@ -189,6 +192,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         startActivity(new Intent(MamaInfoActivity.this, MamaFansActivity.class));
         break;
 
+      case R.id.rl_share:
       case R.id.btn_share:
         startActivity(new Intent(MamaInfoActivity.this, ShareAllowanceActivity.class));
         break;
