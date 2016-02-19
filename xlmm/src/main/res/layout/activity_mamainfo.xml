@@ -208,7 +208,8 @@
                     android:id="@+id/rl_two_dimen"
                     android:layout_width="360px"
                     android:layout_height="150px"
-                    android:layout_marginTop="8px">
+                    android:layout_marginTop="8px"
+                    android:background="@drawable/text_frame">
 
                     <ImageView
                         android:id="@+id/img_two_dimen"
@@ -247,7 +248,8 @@
                     android:layout_width="360px"
                     android:layout_height="150px"
                     android:layout_marginTop="8px"
-                    android:layout_toRightOf="@id/rl_two_dimen">
+                    android:layout_toRightOf="@id/rl_two_dimen"
+                    android:background="@drawable/text_frame">
 
                     <ImageView
                         android:id="@+id/img_share"
@@ -287,7 +289,7 @@
                     android:layout_width="360px"
                     android:layout_height="150px"
                     android:layout_below="@id/rl_two_dimen"
-                    android:layout_marginTop="8px">
+                    android:background="@drawable/text_frame">
 
                     <ImageView
                         android:id="@+id/img_choose"
@@ -327,8 +329,8 @@
                     android:layout_width="360px"
                     android:layout_height="150px"
                     android:layout_below="@id/rl_share"
-                    android:layout_marginTop="8px"
-                    android:layout_toRightOf="@id/rl_chooselist">
+                    android:layout_toRightOf="@id/rl_chooselist"
+                    android:background="@drawable/text_frame">
 
                     <ImageView
                         android:id="@+id/img_store"
