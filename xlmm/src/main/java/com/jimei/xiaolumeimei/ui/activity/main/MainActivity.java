@@ -384,6 +384,7 @@ public class MainActivity extends BaseActivity
   @Override
   protected void onResume() {
     super.onResume();
+    JUtils.Log(TAG, "resume");
     if (LoginUtils.checkLoginState(getApplicationContext()) && (tvNickname != null)) {
       if((userInfoBean != null)  && (userInfoBean.getResults() != null)
               && (userInfoBean.getResults().size() > 0) && (! userInfoBean.getResults().get(0).getNick().isEmpty())){
