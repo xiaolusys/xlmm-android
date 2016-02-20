@@ -180,16 +180,19 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         break;
       case R.id.rl_two_dimen:
       case R.id.btn_two_dimen:
-        intent = new Intent(MamaInfoActivity.this, TwoDimenCodeActivity.class);
-        intent.putExtra("myurl", mamaAgentInfo.getShareMmcode());
-        startActivity(intent);
-
+        if(mamaAgentInfo != null) {
+          intent = new Intent(MamaInfoActivity.this, TwoDimenCodeActivity.class);
+          intent.putExtra("myurl", mamaAgentInfo.getShareMmcode());
+          startActivity(intent);
+        }
         break;
       case R.id.imgUser:
-        intent = new Intent(MamaInfoActivity.this, WithdrawCashActivity.class);
-        intent.putExtra("cash", mamaAgentInfo.getCash());
+        if(mamaAgentInfo != null) {
+          intent = new Intent(MamaInfoActivity.this, WithdrawCashActivity.class);
+          intent.putExtra("cash", mamaAgentInfo.getCash());
 
-        startActivity(intent);
+          startActivity(intent);
+        }
         break;
       case R.id.tv_fansnum:
         startActivity(new Intent(MamaInfoActivity.this, MamaFansActivity.class));
