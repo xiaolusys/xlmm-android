@@ -129,10 +129,13 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
             JUtils.Log(TAG, "cash =" + pointBean.getCash() + " all fund=" + pointBean.getMmclog().getMci());
             tv_cash.setText(Double.toString(pointBean.getCash()));
             tv_fund2.setText(Double.toString((float)(Math.round(pointBean.getMmclog().getMci()*100)/100)));
+
+            tv_fansnum.setText("我的粉丝 " + pointBean.getFansNum());
+            JUtils.Log(TAG, "fans num =" + pointBean.getFansNum());
           }
         });
 
-    MamaInfoModel.getInstance().getMamaFans()
+    /*MamaInfoModel.getInstance().getMamaFans()
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<List<MamaFansBean>>() {
           @Override public void onNext(List<MamaFansBean> fansBeen) {
@@ -140,7 +143,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
             tv_fansnum.setText("我的粉丝 " + fansBeen.size());
             JUtils.Log(TAG, "fans num =" + fansBeen.size());
           }
-        });
+        });*/
 
     MMProductModel.getInstance()
             .getShoppingList("1")
