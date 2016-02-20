@@ -181,7 +181,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
       case R.id.rl_two_dimen:
       case R.id.btn_two_dimen:
         intent = new Intent(MamaInfoActivity.this, TwoDimenCodeActivity.class);
-        intent.putExtra("myurl", mamaAgentInfo.getShare_mmcode());
+        intent.putExtra("myurl", mamaAgentInfo.getShareMmcode());
         startActivity(intent);
 
         break;
