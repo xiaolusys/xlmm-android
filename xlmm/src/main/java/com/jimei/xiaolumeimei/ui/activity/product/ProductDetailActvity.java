@@ -73,6 +73,8 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
   @Bind(R.id.shopping_button) Button button_shop;
   @Bind(R.id.dot_cart) FrameLayout frameLayout;
   @Bind(R.id.rv_cart) RelativeLayout rv_cart;
+  @Bind(R.id.img_share) ImageView img_share;
+
   int num = 0;
   List<ProductDetailBean.NormalSkusEntity> normalSkus = new ArrayList<>();
   CartsModel cartsModel = new CartsModel();
@@ -94,6 +96,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
 
   @Override protected void setListener() {
     rv_cart.setOnClickListener(this);
+    img_share.setOnClickListener(this);
   }
 
   @Override protected void initData() {
@@ -526,8 +529,11 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
           intent.putExtras(bundle);
           startActivity(intent);
         }
+        break;
 
-
+      case R.id.img_share:
+        JUtils.Log(TAG,"share productdetail");
+        share_productdetail();
         break;
     }
   }
@@ -618,23 +624,6 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
     }
 
     return 0;
-  }
-
-  @Override public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()){
-      case R.id.action_share:
-        JUtils.Log(TAG,"share productdetail");
-        share_productdetail();
-        break;
-      default:
-        break;
-    }
-    return super.onOptionsItemSelected(item);
-  }
-
-  @Override public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.menu_shareproduct,menu);
-    return super.onCreateOptionsMenu(menu);
   }
 
   private void share_productdetail(){
