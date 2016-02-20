@@ -1,12 +1,17 @@
 package com.jimei.xiaolumeimei;
 
+import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.multidex.MultiDex;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import cn.sharesdk.framework.ShareSDK;
+import com.jimei.xiaolumeimei.data.XlmmConst;
+import com.jimei.xiaolumeimei.entities.UserAccountBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.mipush.XiaoMiMessageReceiver;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.okhttp.PersistentCookieStore;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
@@ -17,6 +22,7 @@ import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
+import com.xiaomi.mipush.sdk.MiPushClient;
 import com.zhy.autolayout.config.AutoLayoutConifg;
 import java.io.IOException;
 import java.net.CookieManager;
@@ -36,6 +42,8 @@ public class XlmmApp extends Application {
   private static Context mContext;
   private SharedPreferences cookiePrefs;
 
+  private static XiaoMiMessageReceiver.XiaoMiPushHandler handler = null;
+
   public static Context getInstance() {
     return mContext;
   }
@@ -54,9 +62,15 @@ public class XlmmApp extends Application {
     AutoLayoutConifg.getInstance().useDeviceSize();
     //CustomActivityOnCrash.install(this);
 
+    //初始化push推送服务
+    if(shouldInit()) {
+      MiPushClient.registerPush(this, XlmmConst.XIAOMI_APP_ID, XlmmConst.XIAOMI_APP_KEY);
+    }
+
     //获取用户信息失败，说明要重新登陆
+    UserModel model =  new UserModel();
     if (NetWorkUtil.isNetWorkConnected(this)) {
-      UserModel model = new UserModel();
+
       model.getUserInfo()
           .subscribeOn(Schedulers.newThread())
           .subscribe(new ServiceResponse<UserInfoBean>() {
@@ -75,6 +89,8 @@ public class XlmmApp extends Application {
             }
           });
     }
+
+
   }
 
   //初始化OkHttpClient
@@ -129,6 +145,23 @@ public class XlmmApp extends Application {
   @Override protected void attachBaseContext(Context base) {
     super.attachBaseContext(base);
     MultiDex.install(this);
+  }
+
+  private boolean shouldInit() {
+    ActivityManager am = ((ActivityManager) getSystemService(Context.ACTIVITY_SERVICE));
+    List<ActivityManager.RunningAppProcessInfo> processInfos = am.getRunningAppProcesses();
+    String mainProcessName = getPackageName();
+    int myPid = android.os.Process.myPid();
+    for (ActivityManager.RunningAppProcessInfo info : processInfos) {
+      if (info.pid == myPid && mainProcessName.equals(info.processName)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public static XiaoMiMessageReceiver.XiaoMiPushHandler getHandler() {
+    return handler;
   }
 
 }

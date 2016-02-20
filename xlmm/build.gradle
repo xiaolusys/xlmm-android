@@ -255,4 +255,5 @@ dependencies {
   compile files('libs/ShareSDK-Wechat-Favorite-2.6.6.jar')
   compile files('libs/ShareSDK-Wechat-Moments-2.6.6.jar')
   compile 'com.github.PhilJay:MPAndroidChart:v2.2.2'
+  compile files('libs/MiPush_SDK_Client_2_2_21.jar')
 }

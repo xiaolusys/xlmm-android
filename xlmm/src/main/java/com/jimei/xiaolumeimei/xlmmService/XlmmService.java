@@ -38,6 +38,7 @@ import com.jimei.xiaolumeimei.entities.ShareProductBean;
 import com.jimei.xiaolumeimei.entities.ShoppingListBean;
 import com.jimei.xiaolumeimei.entities.SmsLoginBean;
 import com.jimei.xiaolumeimei.entities.SmsLoginUserBean;
+import com.jimei.xiaolumeimei.entities.UserAccountBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
@@ -549,4 +550,13 @@ public interface XlmmService {
   @GET( "share/product")
   Observable<ShareProductBean> getProductShareInfo(
       @Query("product_id") String product_id);
+
+  //get push useraccount
+  @FormUrlEncoded
+  @POST("push/set_device")
+  Observable<UserAccountBean> getUserAccount(
+      @Field("platform")String platform,
+      @Field("regid")String regid,
+      @Field("device_id")String device_id
+  );
 }

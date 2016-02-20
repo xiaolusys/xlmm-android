@@ -29,6 +29,9 @@ public class XlmmConst {
     public static final int PAST_COUPON = 1;
     public static final int USED_COUPON = 2;
 
+    public static final String XIAOMI_APP_ID = "2882303761517424029";
+    public static final String XIAOMI_APP_KEY = "5481742491029";
+
     public static int get_reason_num(String reason){
         int reason_num = 0;
 

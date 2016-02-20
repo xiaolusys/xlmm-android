@@ -11,6 +11,7 @@ import com.jimei.xiaolumeimei.entities.PointLogBean;
 import com.jimei.xiaolumeimei.entities.RegisterBean;
 import com.jimei.xiaolumeimei.entities.SmsLoginBean;
 import com.jimei.xiaolumeimei.entities.SmsLoginUserBean;
+import com.jimei.xiaolumeimei.entities.UserAccountBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.WxLogininfoBean;
@@ -164,6 +165,15 @@ public class UserModel {
       String password2, String valid_code) {
     return XlmmRetrofitClient.getService()
         .bang_mobile(username, password1, password2, valid_code)
+        .compose(new DefaultTransform<>());
+  }
+
+  //get push useraccount
+  public Observable<UserAccountBean> getUserAccount(String platform,
+      String regid,
+      String device_id) {
+    return XlmmRetrofitClient.getService()
+        .getUserAccount(platform, regid, device_id)
         .compose(new DefaultTransform<>());
   }
 }
