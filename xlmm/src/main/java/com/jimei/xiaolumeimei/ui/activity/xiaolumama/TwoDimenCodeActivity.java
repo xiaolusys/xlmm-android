@@ -29,6 +29,7 @@ public class TwoDimenCodeActivity extends BaseSwipeBackCompatActivity implements
   @Bind(R.id.btn_share) Button btn_share;
 
   String myurl ="";
+  FilePara filePara = new FilePara();
 
   @Override protected void setListener() {
     btn_share.setOnClickListener(this);
@@ -68,13 +69,7 @@ public class TwoDimenCodeActivity extends BaseSwipeBackCompatActivity implements
 
               @Override public void onResponse(FilePara response) {
                 if (response != null) {
-                  try {
-
-
-
-                  } catch (Exception e) {
-                    e.printStackTrace();
-                  }
+                  filePara = response;
                 }
               }
             });
@@ -113,9 +108,15 @@ public class TwoDimenCodeActivity extends BaseSwipeBackCompatActivity implements
     // text是分享文本，所有平台都需要这个字段
     oks.setText("分享我的二维码");
     // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
-    //oks.setImagePath("/sdcard/test.jpg");//确保SDcard下面存在此张图片
+    if(filePara != null && (!filePara.getFilePath().isEmpty())) {
+      oks.setImagePath(filePara.getFilePath());//确保SDcard下面存在此张图片
+      JUtils.Log(TAG, "local pic " + filePara.getFilePath());
+    }
+    else {
+      JUtils.Log(TAG, "url pic");
+      oks.setImageUrl(myurl);
+    }
     // url仅在微信（包括好友和朋友圈）中使用
-    oks.setImageUrl(myurl);
     //oks.setUrl(myurl);
     // comment是我对这条分享的评论，仅在人人网和QQ空间使用
     //oks.setComment("我是测试评论文本");
