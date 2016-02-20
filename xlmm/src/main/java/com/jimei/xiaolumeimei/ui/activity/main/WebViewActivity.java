@@ -226,9 +226,9 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     sp.setTitle(title);
     sp.setText(activeDec + " http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
 
-    //sp.setUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
+    sp.setUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
     sp.setShareType(Platform.SHARE_WEBPAGE);
-    //sp.setImageUrl(linkQrcode);
+    sp.setImageUrl(linkQrcode);
     JUtils.Log(TAG, "wxapp: http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
 
     Platform wx = ShareSDK.getPlatform(WebViewActivity.this, Wechat.NAME);
@@ -246,7 +246,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     //sp.setTitleUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
     sp.setShareType(Platform.SHARE_WEBPAGE);
     sp.setImageUrl(linkQrcode);
-    //sp.setUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
+    sp.setUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
 
     Platform pyq = ShareSDK.getPlatform(WebViewActivity.this, WechatMoments.NAME);
     pyq.setPlatformActionListener(this); // 设置分享事件回调
