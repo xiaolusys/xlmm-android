@@ -198,7 +198,8 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
                   activeDec = activityBean.getActiveDec();
                   linkQrcode = URL + activityBean.getLinkQrcode();
                   title = activityBean.getTitle();
-                  JUtils.Log(TAG,"getPromotionParams get_share_content:"+ activeDec + " " + linkQrcode + " " + title);
+                  JUtils.Log(TAG,"getPromotionParams get_share_content: activeDec="+ activeDec + " linkQrcode=" + linkQrcode + " title=" + title);
+                  JUtils.Log(TAG,"getPromotionParams get_share_content: uform="+ uform + " share_link=" + share_link);
 
                   if (uform.equals("wxapp")) {
                     share_wxapp(share_link, uform);
@@ -221,12 +222,12 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
 
   private void share_wxapp(String myurl, String ufrom) {
     Platform.ShareParams sp = new Platform.ShareParams();
-    //sp.setImageUrl(linkQrcode);
-    //sp.setTitle(title);
+
+    sp.setTitle(title);
     sp.setText(activeDec + " http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
 
     //sp.setUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
-    //sp.setShareType(Platform.SHARE_WEBPAGE);
+    sp.setShareType(Platform.SHARE_WEBPAGE);
     //sp.setImageUrl(linkQrcode);
     JUtils.Log(TAG, "wxapp: http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
 
@@ -243,7 +244,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     //sp.setTitle(title);
     sp.setText(activeDec + " http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
     //sp.setTitleUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
-    //sp.setShareType(Platform.SHARE_WEBPAGE);
+    sp.setShareType(Platform.SHARE_WEBPAGE);
     sp.setImageUrl(linkQrcode);
     //sp.setUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
 
