@@ -7,6 +7,7 @@ import com.jimei.xiaolumeimei.entities.PostBean;
 import com.jimei.xiaolumeimei.entities.ProductBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
+import com.jimei.xiaolumeimei.entities.ShareProductBean;
 import com.jimei.xiaolumeimei.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 import java.util.List;
@@ -101,6 +102,14 @@ public class ProductModel {
 
     return XlmmRetrofitClient.getService()
         .getProductDetails(id)
+        .compose(new DefaultTransform<>());
+  }
+
+  //得到商品详情share link
+  public Observable<ShareProductBean> getProductShareInfo(String product_id) {
+
+    return XlmmRetrofitClient.getService()
+        .getProductShareInfo(product_id)
         .compose(new DefaultTransform<>());
   }
 }

@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -21,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
 import cn.iwgang.countdownview.CountdownView;
+import cn.sharesdk.onekeyshare.OnekeyShare;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ecloud.pulltozoomview.PullToZoomScrollViewEx;
@@ -30,6 +33,7 @@ import com.jimei.xiaolumeimei.data.FilePara;
 import com.jimei.xiaolumeimei.entities.AddCartsBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
+import com.jimei.xiaolumeimei.entities.ShareProductBean;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.okhttp.callback.FileParaCallback;
@@ -63,6 +67,7 @@ import rx.schedulers.Schedulers;
 public class ProductDetailActvity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener, TagFlowLayout.OnSelectListener,
     TagFlowLayout.OnTagClickListener {
+  public  static String TAG = "ProductDetailActvity";
 
   ProductModel model = new ProductModel();
   @Bind(R.id.shopping_button) Button button_shop;
@@ -85,6 +90,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
   private CountdownView countdownView;
   private BadgeView badge;
   private List<String> list = new ArrayList<>();
+  ShareProductBean shareProductBean = new ShareProductBean();
 
   @Override protected void setListener() {
     rv_cart.setOnClickListener(this);
@@ -301,6 +307,15 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
 
             tagFlowLayout.setOnTagClickListener(ProductDetailActvity.this);
             tagFlowLayout.setOnSelectListener(ProductDetailActvity.this);
+          }
+        });
+
+    model.getProductShareInfo(productId)
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<ShareProductBean>() {
+
+          @Override public void onNext(ShareProductBean productBean) {
+            shareProductBean = productBean;
           }
         });
   }
@@ -603,5 +618,52 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
     }
 
     return 0;
+  }
+
+  @Override public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()){
+      case R.id.action_share:
+        JUtils.Log(TAG,"share productdetail");
+        share_productdetail();
+        break;
+      default:
+        break;
+    }
+    return super.onOptionsItemSelected(item);
+  }
+
+  @Override public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.menu_shareproduct,menu);
+    return super.onCreateOptionsMenu(menu);
+  }
+
+  private void share_productdetail(){
+    OnekeyShare oks = new OnekeyShare();
+    //关闭sso授权
+    oks.disableSSOWhenAuthorize();
+
+    // 分享时Notification的图标和文字  2.5.9以后的版本不调用此方法
+    //oks.setNotification(R.drawable.ic_launcher, getString(R.string.app_name));
+    // title标题，印象笔记、邮箱、信息、微信、人人网和QQ空间使用
+    oks.setTitle(shareProductBean.getTitle());
+    // titleUrl是标题的网络链接，仅在人人网和QQ空间使用
+    //oks.setTitleUrl("http://sharesdk.cn");
+    // text是分享文本，所有平台都需要这个字段
+    oks.setText(shareProductBean.getDesc());
+    // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
+    //oks.setImagePath(filePara.getFilePath());//确保SDcard下面存在此张图片
+    oks.setUrl(shareProductBean.getShareLink());
+
+    // url仅在微信（包括好友和朋友圈）中使用
+    //oks.setUrl(myurl);
+    // comment是我对这条分享的评论，仅在人人网和QQ空间使用
+    //oks.setComment("我是测试评论文本");
+    // site是分享此内容的网站名称，仅在QQ空间使用
+    //oks.setSite(getString(R.string.app_name));
+    // siteUrl是分享此内容的网站地址，仅在QQ空间使用
+    //oks.setSiteUrl("http://sharesdk.cn");
+
+    // 启动分享GUI
+    oks.show(this);
   }
 }
