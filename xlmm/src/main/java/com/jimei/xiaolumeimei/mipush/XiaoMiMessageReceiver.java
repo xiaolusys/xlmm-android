@@ -223,10 +223,10 @@ public class XiaoMiMessageReceiver extends PushMessageReceiver {
         log = context.getString(R.string.register_success);
 
         //register xiaomi push
-        JUtils.Log("XlmmApp", "regid: " + MiPushClient.getRegId(context.getApplicationContext())
+        JUtils.Log("XlmmApp", "regid: " + mRegId
             + " devid:"+((TelephonyManager) context.getSystemService( Context.TELEPHONY_SERVICE ))
             .getDeviceId());
-        new UserModel().getUserAccount("android", MiPushClient.getRegId(context.getApplicationContext()),
+        new UserModel().getUserAccount("android", mRegId,
             ((TelephonyManager)context.getSystemService( Context.TELEPHONY_SERVICE ))
                 .getDeviceId())
             .subscribeOn(Schedulers.newThread())
