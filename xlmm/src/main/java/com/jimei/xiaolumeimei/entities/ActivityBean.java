@@ -19,6 +19,7 @@ public class ActivityBean {
   @SerializedName("link_qrcode") private String mLinkQrcode;
   @SerializedName("title") private String mTitle;
   @SerializedName("share_type") private String mShareType;
+  @SerializedName("share_img") private String mShareImg;
 
   public void setActiveDec(String activeDec) {
     this.mActiveDec = activeDec;
@@ -36,6 +37,10 @@ public class ActivityBean {
     this.mShareType = mShareType;
   }
 
+  public void setmShareImg(String mShareImg) {
+    this.mShareImg = mShareImg;
+  }
+
   public String getActiveDec() {
     return mActiveDec;
   }
@@ -50,5 +55,9 @@ public class ActivityBean {
 
   public String getmShareType() {
     return mShareType;
+  }
+
+  public String getmShareImg() {
+    return mShareImg;
   }
 }

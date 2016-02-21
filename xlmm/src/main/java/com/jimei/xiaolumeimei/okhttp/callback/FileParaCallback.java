@@ -28,8 +28,8 @@ public abstract class FileParaCallback extends Callback<FilePara> {
       File Target_Location = null;
       try {
         CameraUtils.Create_MY_IMAGES_DIR();
-        Target_Location = new File("" + Environment.getExternalStorageDirectory() + "/xlmm/img/" + "/" +
-                CameraUtils.Get_Random_File_Name() + ".jpg");
+        Target_Location = new File("" + Environment.getExternalStorageDirectory() + "/xlmm/img" + "/" +
+                CameraUtils.Get_Random_File_Name() + ".jpgtemp");
 
         JUtils.Log("FileParaCallback", "Target_Location= " + Target_Location.getAbsolutePath());
         Target_Location.createNewFile();

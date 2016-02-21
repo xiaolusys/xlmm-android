@@ -1,12 +1,16 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import butterknife.Bind;
 import cn.sharesdk.onekeyshare.OnekeyShare;
+import com.jimei.xiaolumeimei.utils.FileUtils;
+import com.jimei.xiaolumeimei.widget.citypicker.FileUtil;
+import java.io.File;
 import okhttp3.Call;
 
 import com.jimei.xiaolumeimei.R;
@@ -70,6 +74,14 @@ public class TwoDimenCodeActivity extends BaseSwipeBackCompatActivity implements
               @Override public void onResponse(FilePara response) {
                 if (response != null) {
                   filePara = response;
+                  try {
+                    new File(response.getFilePath()).renameTo(
+                        new File(Environment.getExternalStorageDirectory() +
+                            "/xlmm/img/" + "我的推荐二维码.jpg"));
+                  }
+                  catch (Exception e){
+                    e.printStackTrace();
+                  }
                 }
               }
             });

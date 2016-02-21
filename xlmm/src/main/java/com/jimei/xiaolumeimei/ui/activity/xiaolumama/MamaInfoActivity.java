@@ -195,7 +195,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         }
         break;
       case R.id.tv_fansnum:
-        startActivity(new Intent(MamaInfoActivity.this, MamaFansActivity.class));
+        //startActivity(new Intent(MamaInfoActivity.this, MamaFansActivity.class));
         break;
 
       case R.id.rl_share:

@@ -40,6 +40,7 @@ import com.jimei.xiaolumeimei.okhttp.callback.FileParaCallback;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.utils.DisplayUtils;
+import com.jimei.xiaolumeimei.utils.FileUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.widget.FlowLayout;
 import com.jimei.xiaolumeimei.widget.TagAdapter;
@@ -48,6 +49,7 @@ import com.jimei.xiaolumeimei.widget.badgelib.BadgeView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
@@ -240,7 +242,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
                           }
 
                           //Bitmap scaled = Bitmap.createScaledBitmap(response, 480, nh, true);
-
+                          new File(response.getFilePath()).delete();
 
                         } catch (Exception e) {
                           e.printStackTrace();

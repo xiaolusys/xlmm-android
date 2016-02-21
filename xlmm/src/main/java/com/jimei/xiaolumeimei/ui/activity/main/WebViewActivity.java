@@ -3,6 +3,7 @@ package com.jimei.xiaolumeimei.ui.activity.main;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.Toolbar;
@@ -26,13 +27,19 @@ import cn.sharesdk.wechat.friends.Wechat;
 import cn.sharesdk.wechat.moments.WechatMoments;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.data.FilePara;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
 import com.jimei.xiaolumeimei.model.ActivityModel;
+import com.jimei.xiaolumeimei.okhttp.callback.FileParaCallback;
+import com.jimei.xiaolumeimei.utils.FileUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.mob.tools.utils.UIHandler;
+import com.zhy.http.okhttp.OkHttpUtils;
+import java.io.File;
 import java.util.HashMap;
+import okhttp3.Call;
 import rx.schedulers.Schedulers;
 
 /**
@@ -62,6 +69,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   private String linkQrcode;
   private String title;
   private String shareType;
+  private String shareImg;
 
   @Override protected void setListener() {
     mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -76,9 +84,10 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
-
-    cookies = extras.getString("cookies");
-    actlink = extras.getString("actlink");
+    if(extras != null) {
+      cookies = extras.getString("cookies");
+      actlink = extras.getString("actlink");
+    }
   }
 
   @Override protected int getContentViewLayoutID() {
@@ -200,6 +209,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
                   linkQrcode = URL + activityBean.getLinkQrcode();
                   title = activityBean.getTitle();
                   shareType = activityBean.getmShareType();
+                  shareImg = activityBean.getmShareImg();
                   JUtils.Log(TAG,"getPromotionParams get_share_content: activeDec="+ activeDec + " linkQrcode=" + linkQrcode + " title=" + title);
                   JUtils.Log(TAG,"getPromotionParams get_share_content: uform="+ uform + " share_link=" + share_link);
 
@@ -215,6 +225,32 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
                   } else if (uform.equals("sinawb")) {
                     share_sina(share_link, uform);
                   }
+
+                  OkHttpUtils.get()
+                      .url(linkQrcode)
+                      .build()
+                      .execute(new FileParaCallback() {
+                        @Override public void onError(Call call, Exception e) {
+
+                        }
+
+                        @Override public void onResponse(FilePara response) {
+                          if (response != null) {
+                            try {
+                              new File(response.getFilePath()).renameTo(
+                                  new File(Environment.getExternalStorageDirectory() + "/xlmm/img" + "/" +
+                                      "小鹿美美活动二维码.jpg"));
+                              FileUtils.copyFile(Environment.getExternalStorageDirectory() + "/xlmm/img" + "/" +
+                                  "小鹿美美活动二维码.jpg", getExternalFilesDir(Environment
+                                  .DIRECTORY_DCIM).getPath() );
+                            }
+                            catch (Exception e){
+                              e.printStackTrace();
+                            }
+                          }
+                        }
+                      });
+
                 }
               }
             });
@@ -230,7 +266,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
 
     sp.setUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
     sp.setShareType(Platform.SHARE_WEBPAGE);
-    sp.setImageUrl(linkQrcode);
+    sp.setImageUrl(shareImg);
     JUtils.Log(TAG, "wxapp: http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
 
     Platform wx = ShareSDK.getPlatform(WebViewActivity.this, Wechat.NAME);
@@ -247,7 +283,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     sp.setText(activeDec + " http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
     //sp.setTitleUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
     sp.setShareType(Platform.SHARE_WEBPAGE);
-    sp.setImageUrl(linkQrcode);
+    sp.setImageUrl(shareImg);
     sp.setUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
 
     Platform pyq = ShareSDK.getPlatform(WebViewActivity.this, WechatMoments.NAME);
@@ -263,7 +299,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     sp.setTitle(title);
 
     sp.setText(activeDec);
-    sp.setImageUrl(linkQrcode);
+    sp.setImageUrl(shareImg);
 
     sp.setTitleUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
 
@@ -280,7 +316,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     // 标题的超链接
     sp.setTitleUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
     sp.setText(activeDec);
-    sp.setImageUrl(linkQrcode);
+    sp.setImageUrl(shareImg);
     //sp.setSite("发布分享的网站名称");
     sp.setSiteUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
 
@@ -389,5 +425,42 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     }
 
     return false;
+  }
+
+  public void saveTowDimenCode(){
+    ActivityModel.getInstance()
+        .get_share_content("wxapp")
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<ActivityBean>() {
+          @Override public void onNext(ActivityBean activityBean) {
+
+            if (null != activityBean) {
+              linkQrcode = URL + activityBean.getLinkQrcode();
+              JUtils.Log(TAG,"saveTowDimenCode : activeDec="+" linkQrcode=" + linkQrcode);
+
+              OkHttpUtils.get()
+                  .url(linkQrcode)
+                  .build()
+                  .execute(new FileParaCallback() {
+                    @Override public void onError(Call call, Exception e) {
+
+                    }
+
+                    @Override public void onResponse(FilePara response) {
+                      if (response != null) {
+                        try {
+                          new File(response.getFilePath()).renameTo(
+                              new File(getExternalFilesDir(Environment.DIRECTORY_DCIM).getPath()  +
+                                   "小鹿美美活动二维码.jpg"));
+                        }
+                        catch (Exception e){
+                          e.printStackTrace();
+                        }
+                      }
+                    }
+                  });
+            }
+          }
+        });
   }
 }
