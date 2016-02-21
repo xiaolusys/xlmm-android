@@ -1,9 +1,11 @@
 package com.jimei.xiaolumeimei.mipush;
 
 import android.telephony.TelephonyManager;
+import com.google.gson.Gson;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.entities.UserAccountBean;
+import com.jimei.xiaolumeimei.entities.XiaoMiPushContent;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -85,9 +87,27 @@ public class XiaoMiMessageReceiver extends PushMessageReceiver {
   public void onNotificationMessageClicked(Context context, MiPushMessage message) {
     JUtils.Log(TAG, "onNotificationMessageClicked is called. " + message.toString());
     JUtils.Log(TAG,"content:"+ message.getContent());
-    String log =
+
+    XiaoMiPushContent miPushContent = null;
+    if (!message.getContent().isEmpty()) {
+      try {
+        Gson mgson = new Gson();
+        miPushContent = mgson.fromJson(
+            message.getContent(), XiaoMiPushContent.class);
+        JUtils.Log(TAG, "target url "+ miPushContent.getTargetUrl());
+      } catch (Exception e) {
+        e.printStackTrace();
+
+      }
+    }
+
+    if((miPushContent!= null) && (!miPushContent.getTargetUrl().isEmpty())) {
+      push_jump_proc(miPushContent.getTargetUrl());
+    }
+
+    /*String log =
         context.getString(R.string.click_notification_message, message.getContent());
-    //MainActivity.logList.add(0, getSimpleDate() + " " + log);
+    MainActivity.logList.add(0, getSimpleDate() + " " + log);
 
     if (!TextUtils.isEmpty(message.getTopic())) {
       mTopic = message.getTopic();
@@ -99,7 +119,7 @@ public class XiaoMiMessageReceiver extends PushMessageReceiver {
     if (message.isNotified()) {
       msg.obj = log;
     }
-    XlmmApp.getHandler().sendMessage(msg);
+    XlmmApp.getHandler().sendMessage(msg);*/
   }
 
   @Override
@@ -278,8 +298,12 @@ public class XiaoMiMessageReceiver extends PushMessageReceiver {
       //    MainActivity.sMainActivity.refreshLogInfo();
       //}
       if (!TextUtils.isEmpty(s)) {
-        Toast.makeText(context, s, Toast.LENGTH_LONG).show();
+        //Toast.makeText(context, s, Toast.LENGTH_LONG).show();
       }
     }
+  }
+
+  private void push_jump_proc(String msg){
+
   }
 }

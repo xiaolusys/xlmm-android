@@ -1,8 +1,10 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,12 +15,14 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
 import com.jimei.xiaolumeimei.entities.SmsLoginBean;
 import com.jimei.xiaolumeimei.entities.SmsLoginUserBean;
+import com.jimei.xiaolumeimei.entities.UserAccountBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.rx.RxCountDown;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.widget.ClearEditText;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import com.xiaomi.mipush.sdk.MiPushClient;
 import rx.Subscriber;
 import rx.functions.Action0;
 import rx.schedulers.Schedulers;
@@ -139,6 +143,21 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                             if (0 == codeInfo) {
                               LoginUtils.saveLoginSuccess(true, getApplicationContext());
                               JUtils.Toast("登录成功");
+
+                              //set xiaomi push useraccount
+                              JUtils.Log(TAG, "regid: " + MiPushClient.getRegId(getApplicationContext())
+                                  + " devid:"+((TelephonyManager) getSystemService( Context.TELEPHONY_SERVICE ))
+                                  .getDeviceId());
+                              new UserModel().getUserAccount("android", MiPushClient.getRegId(getApplicationContext()),
+                                  ((TelephonyManager)getSystemService( Context.TELEPHONY_SERVICE ))
+                                      .getDeviceId())
+                                  .subscribeOn(Schedulers.newThread())
+                                  .subscribe(new ServiceResponse<UserAccountBean>() {
+                                    @Override public void onNext(UserAccountBean user) {
+                                      JUtils.Log(TAG, "UserAccountBean:, " + user.toString());
+                                      MiPushClient.setUserAccount(getApplicationContext(), user.getUserAccount(), null);
+                                    }
+                                  });
                               finish();
                             } else if (1 == codeInfo) {
                               //Intent intent = new Intent(SmsLoginActivity.this,);

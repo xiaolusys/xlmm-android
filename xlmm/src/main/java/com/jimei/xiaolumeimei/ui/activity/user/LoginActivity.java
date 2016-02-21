@@ -173,7 +173,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
 
                     Toast.makeText(mContext, "登录成功", Toast.LENGTH_SHORT).show();
 
-                    //register xiaomi push
+                    //set xiaomi push useraccount
                     JUtils.Log(TAG, "regid: " + MiPushClient.getRegId(getApplicationContext())
                         + " devid:"+((TelephonyManager) getSystemService( Context.TELEPHONY_SERVICE ))
                         .getDeviceId());
@@ -340,6 +340,22 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                             if (0 == codeInfo) {
                               LoginUtils.saveLoginSuccess(true, getApplicationContext());
                               JUtils.Toast("登录成功");
+
+                              //set xiaomi push useraccount
+                              JUtils.Log(TAG, "regid: " + MiPushClient.getRegId(getApplicationContext())
+                                  + " devid:"+((TelephonyManager) getSystemService( Context.TELEPHONY_SERVICE ))
+                                  .getDeviceId());
+                              new UserModel().getUserAccount("android", MiPushClient.getRegId(getApplicationContext()),
+                                  ((TelephonyManager)getSystemService( Context.TELEPHONY_SERVICE ))
+                                      .getDeviceId())
+                                  .subscribeOn(Schedulers.newThread())
+                                  .subscribe(new ServiceResponse<UserAccountBean>() {
+                                    @Override public void onNext(UserAccountBean user) {
+                                      JUtils.Log(TAG, "UserAccountBean:, " + user.toString());
+                                      MiPushClient.setUserAccount(getApplicationContext(), user.getUserAccount(), null);
+                                    }
+                                  });
+
                               Intent intent =
                                   new Intent(LoginActivity.this, MainActivity.class);
                               startActivity(intent);
