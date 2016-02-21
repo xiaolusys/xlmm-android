@@ -65,7 +65,7 @@ public class XiaoMiMessageReceiver extends PushMessageReceiver {
 
   @Override
   public void onReceivePassThroughMessage(Context context, MiPushMessage message) {
-    Log.v(TAG, "onReceivePassThroughMessage is called. " + message.toString());
+    Log.i(TAG, "onReceivePassThroughMessage is called. " + message.toString());
     String log =
         context.getString(R.string.recv_passthrough_message, message.getContent());
     //MainActivity.logList.add(0, getSimpleDate() + " " + log);
@@ -83,7 +83,8 @@ public class XiaoMiMessageReceiver extends PushMessageReceiver {
 
   @Override
   public void onNotificationMessageClicked(Context context, MiPushMessage message) {
-    Log.v(TAG, "onNotificationMessageClicked is called. " + message.toString());
+    JUtils.Log(TAG, "onNotificationMessageClicked is called. " + message.toString());
+    JUtils.Log(TAG,"content:"+ message.getContent());
     String log =
         context.getString(R.string.click_notification_message, message.getContent());
     //MainActivity.logList.add(0, getSimpleDate() + " " + log);
@@ -103,7 +104,7 @@ public class XiaoMiMessageReceiver extends PushMessageReceiver {
 
   @Override
   public void onNotificationMessageArrived(Context context, MiPushMessage message) {
-    Log.v(TAG, "onNotificationMessageArrived is called. " + message.toString());
+    Log.i(TAG, "onNotificationMessageArrived is called. " + message.toString());
     String log =
         context.getString(R.string.arrive_notification_message, message.getContent());
     //MainActivity.logList.add(0, getSimpleDate() + " " + log);
@@ -134,7 +135,8 @@ public class XiaoMiMessageReceiver extends PushMessageReceiver {
         log = context.getString(R.string.register_success);
 
         //register xiaomi push
-        JUtils.Log("XlmmApp", "regid: " + mRegId
+        JUtils.Log("XlmmApp", "regid: " + mRegId + " "
+            + MiPushClient.getRegId(context.getApplicationContext())
             + " devid:"+((TelephonyManager) context.getSystemService( Context.TELEPHONY_SERVICE ))
             .getDeviceId());
         new UserModel().getUserAccount("android", mRegId,

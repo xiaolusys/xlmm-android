@@ -64,7 +64,12 @@ public class XlmmApp extends Application {
 
     //初始化push推送服务
     if(shouldInit()) {
-      MiPushClient.registerPush(this, XlmmConst.XIAOMI_APP_ID, XlmmConst.XIAOMI_APP_KEY);
+      JUtils.Log("XlmmApp", "reg xiaomi push");
+      MiPushClient.registerPush(getApplicationContext(), XlmmConst.XIAOMI_APP_ID, XlmmConst.XIAOMI_APP_KEY);
+    }
+
+    if (handler == null) {
+      handler = new XiaoMiMessageReceiver.XiaoMiPushHandler(getApplicationContext());
     }
 
     //获取用户信息失败，说明要重新登陆
