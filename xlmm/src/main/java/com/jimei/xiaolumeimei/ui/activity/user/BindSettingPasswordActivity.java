@@ -103,14 +103,16 @@ public class BindSettingPasswordActivity extends BaseSwipeBackCompatActivity
 
   private void changePassword(String username, String valid_code, String password1,
       String password2) {
-    model.bang_mobile(username, valid_code, password1, password2)
+
+    JUtils.Log(TAG, "username=" + username + " valid_code=" + valid_code);
+    model.bang_mobile(username,  password1, password2, valid_code)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<BindInfoBean>() {
           @Override public void onNext(BindInfoBean bindInfoBean) {
-
+            JUtils.Log(TAG, bindInfoBean.toString());
             int code = bindInfoBean.getCode();
+            JUtils.Toast(bindInfoBean.getInfo());
             if (0 == code) {
-              JUtils.Toast("密码设置成功");
               finish();
             } else if (1 == code) {
 

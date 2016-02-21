@@ -42,4 +42,12 @@ public class BindInfoBean {
   public String getInfo() {
     return mInfo;
   }
+
+  @Override public String toString() {
+    return "BindInfoBean{" +
+        "mCode=" + mCode +
+        ", mResult='" + mResult + '\'' +
+        ", mInfo='" + mInfo + '\'' +
+        '}';
+  }
 }
