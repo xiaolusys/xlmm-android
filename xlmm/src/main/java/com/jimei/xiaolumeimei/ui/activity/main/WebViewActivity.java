@@ -226,30 +226,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
                     share_sina(share_link, uform);
                   }
 
-                  OkHttpUtils.get()
-                      .url(linkQrcode)
-                      .build()
-                      .execute(new FileParaCallback() {
-                        @Override public void onError(Call call, Exception e) {
 
-                        }
-
-                        @Override public void onResponse(FilePara response) {
-                          if (response != null) {
-                            try {
-                              new File(response.getFilePath()).renameTo(
-                                  new File(Environment.getExternalStorageDirectory() + "/xlmm/img" + "/" +
-                                      "小鹿美美活动二维码.jpg"));
-                              FileUtils.copyFile(Environment.getExternalStorageDirectory() + "/xlmm/img" + "/" +
-                                  "小鹿美美活动二维码.jpg", getExternalFilesDir(Environment
-                                  .DIRECTORY_DCIM).getPath() );
-                            }
-                            catch (Exception e){
-                              e.printStackTrace();
-                            }
-                          }
-                        }
-                      });
 
                 }
               }
@@ -450,8 +427,12 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
                       if (response != null) {
                         try {
                           new File(response.getFilePath()).renameTo(
-                              new File(getExternalFilesDir(Environment.DIRECTORY_DCIM).getPath()  +
-                                   "小鹿美美活动二维码.jpg"));
+                              new File(Environment.getExternalStorageDirectory() + "/xlmm/img" + "/" +
+                                  "小鹿美美活动二维码.jpg"));
+                          FileUtils.copyFile(Environment.getExternalStorageDirectory() + "/xlmm/img" + "/" +
+                              "小鹿美美活动二维码.jpg", Environment
+                              .getExternalStorageDirectory()+"/"+Environment
+                              .DIRECTORY_DCIM+ "/Camera/小鹿美美活动二维码.jpg");
                         }
                         catch (Exception e){
                           e.printStackTrace();
