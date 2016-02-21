@@ -556,6 +556,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
                 + Environment.DIRECTORY_DCIM
                 + "/Camera/小鹿美美活动二维码.jpg";
             saveBitmap(b, fileName);
+            Toast.makeText(WebViewActivity.this, "保存活动图片成功", Toast.LENGTH_SHORT).show();
           }
         });
         w.setPictureListener(new WebView.PictureListener() {
