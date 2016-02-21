@@ -104,6 +104,7 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
           Bundle bundle = new Bundle();
           bundle.putString("username", mobile);
           bundle.putString("valid_code", invalid_code);
+          intent.putExtras(bundle);
           startActivity(intent);
           finish();
         }
