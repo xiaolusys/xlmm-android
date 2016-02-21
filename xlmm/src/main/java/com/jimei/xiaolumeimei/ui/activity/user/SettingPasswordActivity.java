@@ -128,13 +128,20 @@ public class SettingPasswordActivity extends BaseSwipeBackCompatActivity
               finish();
             } else {
 
-              Toast.makeText(mContext, "修改失败", Toast.LENGTH_SHORT).show();
+              Toast.makeText(mContext, "修改失败，请重试", Toast.LENGTH_SHORT).show();
             }
           }
 
           @Override public void onCompleted() {
             super.onCompleted();
           }
+
+          @Override public void onError(Throwable e) {
+            JUtils.Log(TAG, e.getLocalizedMessage());
+            Toast.makeText(mContext, "修改失败，请重试", Toast.LENGTH_SHORT).show();
+          }
         });
+
+
   }
 }
