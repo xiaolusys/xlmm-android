@@ -37,8 +37,10 @@ public class SettingPasswordActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initData() {
-    username = getIntent().getExtras().getString("username");
-    valid_code = getIntent().getExtras().getString("valid_code");
+    if(getIntent().getExtras() != null) {
+      username = getIntent().getExtras().getString("username");
+      valid_code = getIntent().getExtras().getString("valid_code");
+    }
   }
 
   @Override protected void getBundleExtras(Bundle extras) {

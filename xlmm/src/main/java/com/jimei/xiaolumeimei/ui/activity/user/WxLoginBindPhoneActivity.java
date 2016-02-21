@@ -67,9 +67,10 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
-
-    headimgurl = extras.getString("headimgurl");
-    nickname = extras.getString("nickname");
+    if(extras != null) {
+      headimgurl = extras.getString("headimgurl");
+      nickname = extras.getString("nickname");
+    }
   }
 
   @Override protected int getContentViewLayoutID() {
@@ -133,7 +134,7 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
                       if (0 == code) {
                         JUtils.Toast("验证码获取成功");
                       } else if (1 == code) {
-                        JUtils.Toast("手机号码已经注册");
+                        JUtils.Toast("手机号码已经注册，请直接跳过");
                       }
                     }
                   });
