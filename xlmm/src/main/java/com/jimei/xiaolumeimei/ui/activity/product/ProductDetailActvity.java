@@ -179,7 +179,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
                   try {
                     head_img = "http://image.xiaolu.so/"
                             + URLEncoder.encode(temp[1], "utf-8")
-                            + "?imageMogr2/format/jpg/thumbnail/640/quality/90/crop"
+                            + "?imageMogr2/format/jpg/thumbnail/640/quality/85/crop"
                         + "/x2048";
                   } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
