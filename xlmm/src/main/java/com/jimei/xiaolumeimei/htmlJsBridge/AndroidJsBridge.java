@@ -22,8 +22,8 @@ public class AndroidJsBridge {
     webViewActivity.getPromotionParams(uform, share_link);
   }
 
-  @JavascriptInterface public void saveTowDimenCode() {
+  @JavascriptInterface public void saveTwoDimenCode() {
     JUtils.Log("WebViewActivity", "saveTowDimenCode");
-    webViewActivity.saveTowDimenCode();
+    webViewActivity.saveTwoDimenCode();
   }
 }

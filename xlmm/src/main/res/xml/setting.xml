@@ -15,6 +15,10 @@
       android:key="绑定手机"
       android:title="绑定手机"
       android:summary="">
+    <intent
+        android:action="android.intent.action.MAIN"
+        android:targetPackage="com.jimei.xiaolumeimei"
+        android:targetClass="com.jimei.xiaolumeimei.ui.activity.user.WxLoginBindPhoneActivity"/>
   </Preference>
   <Preference
       android:layout="@layout/preference_list_item"
