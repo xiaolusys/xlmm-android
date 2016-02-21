@@ -29,6 +29,19 @@ public class XlmmConst {
     public static final int PAST_COUPON = 1;
     public static final int USED_COUPON = 2;
 
+    public static  final int JUMP_PROMOTE_TODAY = 1;
+    public static  final int JUMP_PROMOTE_PREVIOUS = 2;
+    public static  final int JUMP_PRODUCT_CHILDLIST= 3;
+    public static  final int JUMP_PRODUCT_LADYLIST = 4;
+    public static  final int JUMP_PRODUCT_MODELLIST = 5;
+    public static  final int JUMP_PRODUCT_DETAIL = 6;
+    public static  final int JUMP_TRADE_DETAIL = 7;
+    public static  final int JUMP_USER_COUPON = 8;
+    public static  final int JUMP_WEBVIEW = 9;
+    public static  final int JUMP_XIAOLUMAMA = 10;
+
+    public static  final String JUMP_PREFIX = "com.jimei.xlmm://app/v1/";
+
     public static final String XIAOMI_APP_ID = "2882303761517434918";
     public static final String XIAOMI_APP_KEY = "5551743422918";
 

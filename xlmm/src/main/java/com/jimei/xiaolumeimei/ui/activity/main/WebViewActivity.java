@@ -61,6 +61,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   private String activeDec;
   private String linkQrcode;
   private String title;
+  private String shareType;
 
   @Override protected void setListener() {
     mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -198,6 +199,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
                   activeDec = activityBean.getActiveDec();
                   linkQrcode = URL + activityBean.getLinkQrcode();
                   title = activityBean.getTitle();
+                  shareType = activityBean.getmShareType();
                   JUtils.Log(TAG,"getPromotionParams get_share_content: activeDec="+ activeDec + " linkQrcode=" + linkQrcode + " title=" + title);
                   JUtils.Log(TAG,"getPromotionParams get_share_content: uform="+ uform + " share_link=" + share_link);
 

@@ -1,15 +1,22 @@
 package com.jimei.xiaolumeimei.mipush;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import com.google.gson.Gson;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
+import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.UserAccountBean;
 import com.jimei.xiaolumeimei.entities.XiaoMiPushContent;
 import com.jimei.xiaolumeimei.model.UserModel;
+import com.jimei.xiaolumeimei.ui.activity.main.WebViewActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -102,7 +109,7 @@ public class XiaoMiMessageReceiver extends PushMessageReceiver {
     }
 
     if((miPushContent!= null) && (!miPushContent.getTargetUrl().isEmpty())) {
-      push_jump_proc(miPushContent.getTargetUrl());
+      push_jump_proc(context, miPushContent.getTargetUrl());
     }
 
     /*String log =
@@ -303,7 +310,117 @@ public class XiaoMiMessageReceiver extends PushMessageReceiver {
     }
   }
 
-  private void push_jump_proc(String msg){
+  private void push_jump_proc(Context context,String recvContent){
+    JUtils.Log(TAG, "push_jump_proc:" + recvContent);
+    JUtils.Log(TAG, "push_jump_proc:" + (recvContent== null) + " " +  (recvContent.isEmpty()));
+    if((recvContent== null) || (recvContent.isEmpty()))
+      return;
 
+    JumpInfo jumpInfo = get_jump_info(recvContent);
+
+    switch (jumpInfo.getType()){
+      case XlmmConst.JUMP_WEBVIEW:
+        Intent intent = new Intent(context, WebViewActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        SharedPreferences sharedPreferences =
+            context.getSharedPreferences("COOKIESxlmm",
+                Context.MODE_PRIVATE);
+        String cookies = sharedPreferences.getString("Cookies", "");
+        Bundle bundle = new Bundle();
+        bundle.putString("cookies", cookies);
+        bundle.putString("actlink", jumpInfo.getUrl());
+        intent.putExtras(bundle);
+        context.startActivity(intent);
+        break;
+    }
+  }
+
+  private JumpInfo get_jump_info(String recvContent){
+
+    JumpInfo jumpInfo = new JumpInfo();
+    String[] content = recvContent.split(XlmmConst.JUMP_PREFIX);
+    if(! content[1].isEmpty()) {
+      if (content[1].contains("promote_today")) {
+        jumpInfo.setType(XlmmConst.JUMP_PROMOTE_TODAY);
+        jumpInfo.setUrl(content[1]);
+      }
+      else if(content[1].contains("promote_previous")) {
+        jumpInfo.setType(XlmmConst.JUMP_PROMOTE_PREVIOUS);
+        jumpInfo.setUrl(content[1]);
+      }
+      else if(content[1].contains("childlist")) {
+        jumpInfo.setType(XlmmConst.JUMP_PRODUCT_CHILDLIST);
+        jumpInfo.setUrl(content[1]);
+      }
+      else if(content[1].contains("ladylist")) {
+        jumpInfo.setType(XlmmConst.JUMP_PRODUCT_LADYLIST);
+        jumpInfo.setUrl(content[1]);
+      }
+      else if(content[1].contains("modelist")) {
+        jumpInfo.setType(XlmmConst.JUMP_PRODUCT_MODELLIST);
+        jumpInfo.setUrl(content[1]);
+      }
+      else if(content[1].contains("product_id")) {
+        jumpInfo.setType(XlmmConst.JUMP_PRODUCT_DETAIL);
+        jumpInfo.setUrl(content[1]);
+      }
+      else if(content[1].contains("trade_id")) {
+        jumpInfo.setType(XlmmConst.JUMP_TRADE_DETAIL);
+        jumpInfo.setUrl(content[1]);
+      }
+      else if(content[1].contains("usercoupons")) {
+        jumpInfo.setType(XlmmConst.JUMP_USER_COUPON);
+        jumpInfo.setUrl(content[1]);
+      }
+      else if(content[1].contains("webview")) {
+        jumpInfo.setType(XlmmConst.JUMP_WEBVIEW);
+        String url = content[1].substring(content[1].lastIndexOf("http"));
+        if(url.contains("is_native")) {
+          String temp[] = url.split("&is_native=");
+          url = temp[0];
+        }
+        try {
+          jumpInfo.setUrl(URLDecoder.decode(url, "utf-8"));
+        }
+        catch (Exception e){
+          e.printStackTrace();
+        }
+      }
+      else if(content[1].contains("vip_home")) {
+        jumpInfo.setType(XlmmConst.JUMP_XIAOLUMAMA);
+        jumpInfo.setUrl(content[1]);
+      }
+    }
+
+    JUtils.Log(TAG, jumpInfo.toString());
+    return  jumpInfo;
+  }
+
+  class JumpInfo{
+    int type;
+    String url;
+
+    public int getType() {
+      return type;
+    }
+
+    public String getUrl() {
+      return url;
+    }
+
+    public void setType(int type) {
+      this.type = type;
+    }
+
+    public void setUrl(String url) {
+      this.url = url;
+    }
+
+    @Override public String toString() {
+      return "JumpInfo{" +
+          "type=" + type +
+          ", url='" + url + '\'' +
+          '}';
+    }
   }
 }
