@@ -23,9 +23,11 @@ import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.entities.PostBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
+import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.ui.activity.main.WebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ChildListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.LadyListActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
@@ -206,6 +208,12 @@ public class TodayFragment extends BaseFragment {
                         startActivity(intent);
                       } else {
                         JUtils.Toast("登录后才可参加活动");
+                        JUtils.Log(TAG, "entry activity,Need login");
+                        Intent intent = new Intent(getContext(), LoginActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("login", "main");
+                        intent.putExtras(bundle);
+                        startActivity(intent);
                       }
                     } else {
                       Intent intent = new Intent(getActivity(), WebViewActivity.class);
