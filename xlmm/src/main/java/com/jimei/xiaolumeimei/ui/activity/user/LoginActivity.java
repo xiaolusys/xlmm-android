@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.Toolbar;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
@@ -24,6 +25,7 @@ import cn.sharesdk.wechat.friends.Wechat;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
+import com.jimei.xiaolumeimei.entities.UserAccountBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.WxLogininfoBean;
 import com.jimei.xiaolumeimei.model.UserModel;
@@ -36,6 +38,7 @@ import com.jimei.xiaolumeimei.widget.PasswordEditText;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.mob.tools.utils.UIHandler;
+import com.xiaomi.mipush.sdk.MiPushClient;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -170,8 +173,22 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
 
                     Toast.makeText(mContext, "登录成功", Toast.LENGTH_SHORT).show();
 
-                    String login = getIntent().getExtras().getString("login");
+                    //set xiaomi push useraccount
+                    JUtils.Log(TAG, "regid: " + MiPushClient.getRegId(getApplicationContext())
+                        + " devid:"+((TelephonyManager) getSystemService( Context.TELEPHONY_SERVICE ))
+                        .getDeviceId());
+                    new UserModel().getUserAccount("android", MiPushClient.getRegId(getApplicationContext()),
+                        ((TelephonyManager)getSystemService( Context.TELEPHONY_SERVICE ))
+                            .getDeviceId())
+                        .subscribeOn(Schedulers.newThread())
+                        .subscribe(new ServiceResponse<UserAccountBean>() {
+                          @Override public void onNext(UserAccountBean user) {
+                            JUtils.Log(TAG, "UserAccountBean:, " + user.toString());
+                            MiPushClient.setUserAccount(getApplicationContext(), user.getUserAccount(), null);
+                          }
+                        });
 
+                    String login = getIntent().getExtras().getString("login");
                     assert login != null;
                     if (login.equals("cart")) {
                       Intent intent = new Intent(mContext, CartActivity.class);
@@ -323,6 +340,22 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                             if (0 == codeInfo) {
                               LoginUtils.saveLoginSuccess(true, getApplicationContext());
                               JUtils.Toast("登录成功");
+
+                              //set xiaomi push useraccount
+                              JUtils.Log(TAG, "regid: " + MiPushClient.getRegId(getApplicationContext())
+                                  + " devid:"+((TelephonyManager) getSystemService( Context.TELEPHONY_SERVICE ))
+                                  .getDeviceId());
+                              new UserModel().getUserAccount("android", MiPushClient.getRegId(getApplicationContext()),
+                                  ((TelephonyManager)getSystemService( Context.TELEPHONY_SERVICE ))
+                                      .getDeviceId())
+                                  .subscribeOn(Schedulers.newThread())
+                                  .subscribe(new ServiceResponse<UserAccountBean>() {
+                                    @Override public void onNext(UserAccountBean user) {
+                                      JUtils.Log(TAG, "UserAccountBean:, " + user.toString());
+                                      MiPushClient.setUserAccount(getApplicationContext(), user.getUserAccount(), null);
+                                    }
+                                  });
+
                               Intent intent =
                                   new Intent(LoginActivity.this, MainActivity.class);
                               startActivity(intent);
@@ -381,7 +414,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
       break;
       case MSG_LOGIN: {
 
-        String text = getString(R.string.logining, msg.obj);
+        //String text = getString(R.string.logining, msg.obj);
         //Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
       }
       break;

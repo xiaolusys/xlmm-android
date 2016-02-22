@@ -1,12 +1,16 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import butterknife.Bind;
 import cn.sharesdk.onekeyshare.OnekeyShare;
+import com.jimei.xiaolumeimei.utils.FileUtils;
+import com.jimei.xiaolumeimei.widget.citypicker.FileUtil;
+import java.io.File;
 import okhttp3.Call;
 
 import com.jimei.xiaolumeimei.R;
@@ -29,6 +33,7 @@ public class TwoDimenCodeActivity extends BaseSwipeBackCompatActivity implements
   @Bind(R.id.btn_share) Button btn_share;
 
   String myurl ="";
+  FilePara filePara = new FilePara();
 
   @Override protected void setListener() {
     btn_share.setOnClickListener(this);
@@ -68,11 +73,13 @@ public class TwoDimenCodeActivity extends BaseSwipeBackCompatActivity implements
 
               @Override public void onResponse(FilePara response) {
                 if (response != null) {
+                  filePara = response;
                   try {
-
-
-
-                  } catch (Exception e) {
+                    new File(response.getFilePath()).renameTo(
+                        new File(Environment.getExternalStorageDirectory() +
+                            "/xlmm/img/" + "我的推荐二维码.jpg"));
+                  }
+                  catch (Exception e){
                     e.printStackTrace();
                   }
                 }
@@ -113,9 +120,15 @@ public class TwoDimenCodeActivity extends BaseSwipeBackCompatActivity implements
     // text是分享文本，所有平台都需要这个字段
     oks.setText("分享我的二维码");
     // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
-    //oks.setImagePath("/sdcard/test.jpg");//确保SDcard下面存在此张图片
+    if(filePara != null && (!filePara.getFilePath().isEmpty())) {
+      oks.setImagePath(filePara.getFilePath());//确保SDcard下面存在此张图片
+      JUtils.Log(TAG, "local pic " + filePara.getFilePath());
+    }
+    else {
+      JUtils.Log(TAG, "url pic");
+      oks.setImageUrl(myurl);
+    }
     // url仅在微信（包括好友和朋友圈）中使用
-    oks.setImageUrl(myurl);
     //oks.setUrl(myurl);
     // comment是我对这条分享的评论，仅在人人网和QQ空间使用
     //oks.setComment("我是测试评论文本");

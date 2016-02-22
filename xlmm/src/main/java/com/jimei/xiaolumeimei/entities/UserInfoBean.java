@@ -26,6 +26,7 @@ public class UserInfoBean {
      * mobile : 18621623915
      * email :
      * phone :
+     * "thumbnail": "http://7xogkj.com2.z0.glb.qiniucdn.com/222-ohmydeer.png",
      * status : 1
      * created : 2015-04-18T18:40:33
      * modified : 2015-10-22T13:06:46
@@ -76,6 +77,7 @@ public class UserInfoBean {
         private String mobile;
         private String email;
         private String phone;
+        private String thumbnail;
         private int status;
         private String created;
         private String modified;
@@ -120,6 +122,10 @@ public class UserInfoBean {
 
         public void setPhone(String phone) {
             this.phone = phone;
+        }
+
+        public void setThumbnail(String thumbnail) {
+            this.thumbnail = thumbnail;
         }
 
         public void setStatus(int status) {
@@ -172,6 +178,10 @@ public class UserInfoBean {
 
         public String getPhone() {
             return phone;
+        }
+
+        public String getThumbnail() {
+            return thumbnail;
         }
 
         public int getStatus() {

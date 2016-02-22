@@ -1,133 +1,161 @@
 package com.jimei.xiaolumeimei.entities;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by wulei on 2016/2/4.
  */
 public class AgentInfoBean {
 
   /**
-   * share_mmcode : /media/mm/mm-1.jpg
+   * share_mmcode : /media/mm/mm-9.jpg
    * recommend_num : 1
+   * xlmm : 9
+   * mama_link : http://xiaolu.so/m/9/
    * clk_num : 0
-   * shop_num : 0
+   * fans_num : 0
    * mobile : 18801806068
-   * xlmm : 1
-   * mmclog : {"mco":0,"mci":-30,"nmci":0,"ymco":0,"pdc":0,"ymci":0}
-   * cash : 1000.0
-   * mama_link : http://xiaolu.so/m/1/
+   * cash : 0.0
+   * clk_money : 0
+   * shop_num : 0
+   * mmclog : {"mco":0,"clki":0,"mci":0,"nmci":0,"ymco":0,"pdc":0,"ymci":0}
    * all_shop_num : 0
    */
 
-  private String share_mmcode;
-  private int recommend_num;
-  private int clk_num;
-  private int shop_num;
-  private String mobile;
-  private int xlmm;
+  @SerializedName("share_mmcode") private String shareMmcode;
+  @SerializedName("recommend_num") private int recommendNum;
+  @SerializedName("xlmm") private int xlmm;
+  @SerializedName("mama_link") private String mamaLink;
+  @SerializedName("clk_num") private int clkNum;
+  @SerializedName("fans_num") private int fansNum;
+  @SerializedName("mobile") private String mobile;
+  @SerializedName("cash") private double cash;
+  @SerializedName("clk_money") private int clkMoney;
+  @SerializedName("shop_num") private int shopNum;
   /**
    * mco : 0.0
-   * mci : -30.0
+   * clki : 0.0
+   * mci : 0.0
    * nmci : 0.0
    * ymco : 0.0
    * pdc : 0.0
    * ymci : 0.0
    */
 
-  private MmclogEntity mmclog;
-  private double cash;
-  private String mama_link;
-  private int all_shop_num;
+  @SerializedName("mmclog") private MmclogEntity mmclog;
+  @SerializedName("all_shop_num") private int allShopNum;
 
-  public void setShare_mmcode(String share_mmcode) {
-    this.share_mmcode = share_mmcode;
+  public void setShareMmcode(String shareMmcode) {
+    this.shareMmcode = shareMmcode;
   }
 
-  public void setRecommend_num(int recommend_num) {
-    this.recommend_num = recommend_num;
-  }
-
-  public void setClk_num(int clk_num) {
-    this.clk_num = clk_num;
-  }
-
-  public void setShop_num(int shop_num) {
-    this.shop_num = shop_num;
-  }
-
-  public void setMobile(String mobile) {
-    this.mobile = mobile;
+  public void setRecommendNum(int recommendNum) {
+    this.recommendNum = recommendNum;
   }
 
   public void setXlmm(int xlmm) {
     this.xlmm = xlmm;
   }
 
-  public void setMmclog(MmclogEntity mmclog) {
-    this.mmclog = mmclog;
+  public void setMamaLink(String mamaLink) {
+    this.mamaLink = mamaLink;
+  }
+
+  public void setClkNum(int clkNum) {
+    this.clkNum = clkNum;
+  }
+
+  public void setFansNum(int fansNum) {
+    this.fansNum = fansNum;
+  }
+
+  public void setMobile(String mobile) {
+    this.mobile = mobile;
   }
 
   public void setCash(double cash) {
     this.cash = cash;
   }
 
-  public void setMama_link(String mama_link) {
-    this.mama_link = mama_link;
+  public void setClkMoney(int clkMoney) {
+    this.clkMoney = clkMoney;
   }
 
-  public void setAll_shop_num(int all_shop_num) {
-    this.all_shop_num = all_shop_num;
+  public void setShopNum(int shopNum) {
+    this.shopNum = shopNum;
   }
 
-  public String getShare_mmcode() {
-    return share_mmcode;
+  public void setMmclog(MmclogEntity mmclog) {
+    this.mmclog = mmclog;
   }
 
-  public int getRecommend_num() {
-    return recommend_num;
+  public void setAllShopNum(int allShopNum) {
+    this.allShopNum = allShopNum;
   }
 
-  public int getClk_num() {
-    return clk_num;
+  public String getShareMmcode() {
+    return shareMmcode;
   }
 
-  public int getShop_num() {
-    return shop_num;
-  }
-
-  public String getMobile() {
-    return mobile;
+  public int getRecommendNum() {
+    return recommendNum;
   }
 
   public int getXlmm() {
     return xlmm;
   }
 
-  public MmclogEntity getMmclog() {
-    return mmclog;
+  public String getMamaLink() {
+    return mamaLink;
+  }
+
+  public int getClkNum() {
+    return clkNum;
+  }
+
+  public int getFansNum() {
+    return fansNum;
+  }
+
+  public String getMobile() {
+    return mobile;
   }
 
   public double getCash() {
     return cash;
   }
 
-  public String getMama_link() {
-    return mama_link;
+  public int getClkMoney() {
+    return clkMoney;
   }
 
-  public int getAll_shop_num() {
-    return all_shop_num;
+  public int getShopNum() {
+    return shopNum;
+  }
+
+  public MmclogEntity getMmclog() {
+    return mmclog;
+  }
+
+  public int getAllShopNum() {
+    return allShopNum;
   }
 
   public static class MmclogEntity {
-    private double mco;
-    private double mci;
-    private double nmci;
-    private double ymco;
-    private double pdc;
-    private double ymci;
+    @SerializedName("mco") private double mco;
+    @SerializedName("clki") private double clki;
+    @SerializedName("mci") private double mci;
+    @SerializedName("nmci") private double nmci;
+    @SerializedName("ymco") private double ymco;
+    @SerializedName("pdc") private double pdc;
+    @SerializedName("ymci") private double ymci;
 
     public void setMco(double mco) {
       this.mco = mco;
+    }
+
+    public void setClki(double clki) {
+      this.clki = clki;
     }
 
     public void setMci(double mci) {
@@ -154,6 +182,10 @@ public class AgentInfoBean {
       return mco;
     }
 
+    public double getClki() {
+      return clki;
+    }
+
     public double getMci() {
       return mci;
     }
@@ -177,16 +209,18 @@ public class AgentInfoBean {
 
   @Override public String toString() {
     return "AgentInfoBean{" +
-        "share_mmcode='" + share_mmcode + '\'' +
-        ", recommend_num=" + recommend_num +
-        ", clk_num=" + clk_num +
-        ", shop_num=" + shop_num +
-        ", mobile='" + mobile + '\'' +
+        "shareMmcode='" + shareMmcode + '\'' +
+        ", recommendNum=" + recommendNum +
         ", xlmm=" + xlmm +
-        ", mmclog=" + mmclog +
+        ", mamaLink='" + mamaLink + '\'' +
+        ", clkNum=" + clkNum +
+        ", fansNum=" + fansNum +
+        ", mobile='" + mobile + '\'' +
         ", cash=" + cash +
-        ", mama_link='" + mama_link + '\'' +
-        ", all_shop_num=" + all_shop_num +
+        ", clkMoney=" + clkMoney +
+        ", shopNum=" + shopNum +
+        ", mmclog=" + mmclog +
+        ", allShopNum=" + allShopNum +
         '}';
   }
 }

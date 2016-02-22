@@ -23,9 +23,12 @@ import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.entities.PostBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
+import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.ui.activity.main.WebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ChildListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.LadyListActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.WxLoginBindPhoneActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
@@ -186,6 +189,8 @@ public class TodayFragment extends BaseFragment {
                     .placeholder(R.drawable.header)
                     .centerCrop()
                     .into(post2);
+                /*ViewUtils.loadImgToImgView(getActivity(), post2, postBean.getActivity()
+                    .getActImg());*/
 
                 post2.setOnClickListener(new View.OnClickListener() {
                   @Override public void onClick(View v) {
@@ -193,7 +198,10 @@ public class TodayFragment extends BaseFragment {
                     //syncCookie(getActivity(), postBean.getActivity().getActLink());
 
                     if (postBean.getActivity().isLoginRequired()) {
-                      if (LoginUtils.checkLoginState(getActivity())) {
+                      if (LoginUtils.checkLoginState(getActivity())
+                          && (null != ((MainActivity)getActivity()).getUserInfoBean())
+                          && !(((MainActivity)getActivity()).getUserInfoBean()
+                          .getResults().get(0).getMobile().isEmpty())) {
                         Intent intent = new Intent(getActivity(), WebViewActivity.class);
                         sharedPreferences =
                             getActivity().getSharedPreferences("COOKIESxlmm",
@@ -205,7 +213,34 @@ public class TodayFragment extends BaseFragment {
                         intent.putExtras(bundle);
                         startActivity(intent);
                       } else {
-                        JUtils.Toast("登录后才可参加活动");
+
+                        JUtils.Log(TAG, "entry activity,Need login");
+                        if (!LoginUtils.checkLoginState(getActivity())) {
+                          JUtils.Toast("登录并绑定手机号后才可参加活动");
+                          Intent intent = new Intent(getContext(), LoginActivity.class);
+                          Bundle bundle = new Bundle();
+                          bundle.putString("login", "main");
+                          intent.putExtras(bundle);
+                          startActivity(intent);
+                        }
+                        else{
+                          JUtils.Toast("登录成功,前往绑定手机号后才可参加活动");
+                          Intent intent = new Intent(getContext(),
+                              WxLoginBindPhoneActivity.class);
+                          if(null != ((MainActivity)getActivity()).getUserInfoBean()) {
+                            Bundle bundle = new Bundle();
+                            bundle.putString("headimgurl", ((MainActivity) getActivity()).getUserInfoBean()
+                                .getResults()
+                                .get(0)
+                                .getThumbnail());
+                            bundle.putString("nickname", ((MainActivity) getActivity()).getUserInfoBean()
+                                .getResults()
+                                .get(0)
+                                .getNick());
+                            intent.putExtras(bundle);
+                          }
+                          startActivity(intent);
+                        }
                       }
                     } else {
                       Intent intent = new Intent(getActivity(), WebViewActivity.class);

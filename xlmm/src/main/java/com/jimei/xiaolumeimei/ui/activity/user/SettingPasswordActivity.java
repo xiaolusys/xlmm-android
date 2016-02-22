@@ -37,8 +37,10 @@ public class SettingPasswordActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initData() {
-    username = getIntent().getExtras().getString("username");
-    valid_code = getIntent().getExtras().getString("valid_code");
+    if(getIntent().getExtras() != null) {
+      username = getIntent().getExtras().getString("username");
+      valid_code = getIntent().getExtras().getString("valid_code");
+    }
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -126,13 +128,20 @@ public class SettingPasswordActivity extends BaseSwipeBackCompatActivity
               finish();
             } else {
 
-              Toast.makeText(mContext, "修改失败", Toast.LENGTH_SHORT).show();
+              Toast.makeText(mContext, "修改失败，请重试", Toast.LENGTH_SHORT).show();
             }
           }
 
           @Override public void onCompleted() {
             super.onCompleted();
           }
+
+          @Override public void onError(Throwable e) {
+            JUtils.Log(TAG, e.getLocalizedMessage());
+            Toast.makeText(mContext, "修改失败，请重试", Toast.LENGTH_SHORT).show();
+          }
         });
+
+
   }
 }

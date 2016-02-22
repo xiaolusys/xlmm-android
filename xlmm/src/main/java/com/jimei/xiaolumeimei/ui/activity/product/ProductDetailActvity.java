@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -21,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
 import cn.iwgang.countdownview.CountdownView;
+import cn.sharesdk.onekeyshare.OnekeyShare;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ecloud.pulltozoomview.PullToZoomScrollViewEx;
@@ -30,12 +33,14 @@ import com.jimei.xiaolumeimei.data.FilePara;
 import com.jimei.xiaolumeimei.entities.AddCartsBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
+import com.jimei.xiaolumeimei.entities.ShareProductBean;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.okhttp.callback.FileParaCallback;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.utils.DisplayUtils;
+import com.jimei.xiaolumeimei.utils.FileUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.widget.FlowLayout;
 import com.jimei.xiaolumeimei.widget.TagAdapter;
@@ -44,6 +49,7 @@ import com.jimei.xiaolumeimei.widget.badgelib.BadgeView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
@@ -63,11 +69,14 @@ import rx.schedulers.Schedulers;
 public class ProductDetailActvity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener, TagFlowLayout.OnSelectListener,
     TagFlowLayout.OnTagClickListener {
+  public  static String TAG = "ProductDetailActvity";
 
   ProductModel model = new ProductModel();
   @Bind(R.id.shopping_button) Button button_shop;
   @Bind(R.id.dot_cart) FrameLayout frameLayout;
   @Bind(R.id.rv_cart) RelativeLayout rv_cart;
+  @Bind(R.id.img_share) ImageView img_share;
+
   int num = 0;
   List<ProductDetailBean.NormalSkusEntity> normalSkus = new ArrayList<>();
   CartsModel cartsModel = new CartsModel();
@@ -85,9 +94,11 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
   private CountdownView countdownView;
   private BadgeView badge;
   private List<String> list = new ArrayList<>();
+  ShareProductBean shareProductBean = new ShareProductBean();
 
   @Override protected void setListener() {
     rv_cart.setOnClickListener(this);
+    img_share.setOnClickListener(this);
   }
 
   @Override protected void initData() {
@@ -168,7 +179,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
                   try {
                     head_img = "http://image.xiaolu.so/"
                             + URLEncoder.encode(temp[1], "utf-8")
-                            + "?imageMogr2/format/jpg/thumbnail/640/quality/90/crop"
+                            + "?imageMogr2/format/jpg/thumbnail/640/quality/85/crop"
                         + "/x2048";
                   } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
@@ -231,7 +242,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
                           }
 
                           //Bitmap scaled = Bitmap.createScaledBitmap(response, 480, nh, true);
-
+                          new File(response.getFilePath()).delete();
 
                         } catch (Exception e) {
                           e.printStackTrace();
@@ -303,11 +314,20 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
             tagFlowLayout.setOnSelectListener(ProductDetailActvity.this);
           }
         });
+
+    model.getProductShareInfo(productId)
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<ShareProductBean>() {
+
+          @Override public void onNext(ShareProductBean productBean) {
+            shareProductBean = productBean;
+          }
+        });
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
     productId = extras.getString("product_id");
-    //Log.i("ProductDetailActivity", productId);
+    JUtils.Log("ProductDetailActivity", productId);
   }
 
   @Override protected int getContentViewLayoutID() {
@@ -372,7 +392,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
     look_chima.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
     xidi.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
 
-    //look_chima.setOnClickListener(this);
+    look_chima.setOnClickListener(this);
     xidi.setOnClickListener(this);
   }
 
@@ -488,11 +508,11 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
 
         break;
 
-      //case R.id.look_size:
-      //
-      //  startActivity(new Intent(ProductDetailActvity.this, SizeActivity.class));
-      //
-      //  break;
+      case R.id.look_size:
+
+        //startActivity(new Intent(ProductDetailActvity.this, SizeActivity.class));
+
+        break;
 
       case R.id.look_xidi:
 
@@ -511,8 +531,11 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
           intent.putExtras(bundle);
           startActivity(intent);
         }
+        break;
 
-
+      case R.id.img_share:
+        JUtils.Log(TAG,"share productdetail");
+        share_productdetail();
         break;
     }
   }
@@ -603,5 +626,39 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
     }
 
     return 0;
+  }
+
+  private void share_productdetail(){
+    JUtils.Log(TAG,"Productid="+productId + " title ="+shareProductBean.getTitle() );
+    JUtils.Log(TAG," desc=" +shareProductBean.getDesc() + " url=" + shareProductBean.getShareLink());
+
+    OnekeyShare oks = new OnekeyShare();
+    //关闭sso授权
+    oks.disableSSOWhenAuthorize();
+
+    // 分享时Notification的图标和文字  2.5.9以后的版本不调用此方法
+    //oks.setNotification(R.drawable.ic_launcher, getString(R.string.app_name));
+    // title标题，印象笔记、邮箱、信息、微信、人人网和QQ空间使用
+    oks.setTitle(shareProductBean.getTitle());
+    // titleUrl是标题的网络链接，仅在人人网和QQ空间使用
+    oks.setTitleUrl(shareProductBean.getShareLink());
+    // text是分享文本，所有平台都需要这个字段
+    oks.setText(shareProductBean.getDesc());
+    // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
+    //oks.setImagePath(filePara.getFilePath());//确保SDcard下面存在此张图片
+    oks.setImageUrl(shareProductBean.getShareImg());
+    oks.setUrl(shareProductBean.getShareLink());
+
+    // url仅在微信（包括好友和朋友圈）中使用
+    //oks.setUrl(myurl);
+    // comment是我对这条分享的评论，仅在人人网和QQ空间使用
+    //oks.setComment("我是测试评论文本");
+    // site是分享此内容的网站名称，仅在QQ空间使用
+    //oks.setSite(getString(R.string.app_name));
+    // siteUrl是分享此内容的网站地址，仅在QQ空间使用
+    //oks.setSiteUrl("http://sharesdk.cn");
+
+    // 启动分享GUI
+    oks.show(this);
   }
 }

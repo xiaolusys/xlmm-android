@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,8 +14,10 @@ import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.BindInfoBean;
+import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.rx.RxCountDown;
+import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.widget.CircleImageView;
 import com.jimei.xiaolumeimei.widget.ClearEditText;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -55,21 +58,47 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initData() {
-    OkHttpUtils.get().url(headimgurl).build().execute(new BitmapCallback() {
-      @Override public void onError(Call call, Exception e) {
+    if((headimgurl != null) && (!headimgurl.isEmpty()) ) {
+      OkHttpUtils.get().url(headimgurl).build().execute(new BitmapCallback() {
+        @Override public void onError(Call call, Exception e) {
 
-      }
+        }
 
-      @Override public void onResponse(Bitmap response) {
-        headimage.setImageBitmap(response);
-      }
-    });
+        @Override public void onResponse(Bitmap response) {
+          headimage.setImageBitmap(response);
+        }
+      });
+    }
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
+    if(extras != null) {
+      headimgurl = extras.getString("headimgurl");
+      nickname = extras.getString("nickname");
+    }
+    else{
+      model.getUserInfo()
+          .subscribeOn(Schedulers.newThread())
+          .subscribe(new ServiceResponse<UserInfoBean>() {
+            @Override public void onNext(UserInfoBean user) {
+              Log.d(TAG, "getUserInfo:, " + user.getResults().get(0).toString());
+              if((user.getResults() != null) && (user.getResults().get(0) != null)) {
+                headimgurl = user.getResults().get(0).getThumbnail();
+                nickname = user.getResults().get(0).getNick();
+              }
+            }
 
-    headimgurl = extras.getString("headimgurl");
-    nickname = extras.getString("nickname");
+            @Override public void onCompleted() {
+              super.onCompleted();
+            }
+
+            @Override public void onError(Throwable e) {
+              LoginUtils.delLoginInfo(mContext);
+              Log.e(TAG, "error:, " + e.toString());
+              super.onError(e);
+            }
+          });
+    }
   }
 
   @Override protected int getContentViewLayoutID() {
@@ -81,7 +110,9 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
     setSupportActionBar(toolbar);
     finishBack(toolbar);
 
-    tvNickname.setText("微信账号： " + nickname);
+    if(nickname != null) {
+      tvNickname.setText("微信账号： " + nickname);
+    }
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
@@ -104,6 +135,7 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
           Bundle bundle = new Bundle();
           bundle.putString("username", mobile);
           bundle.putString("valid_code", invalid_code);
+          intent.putExtras(bundle);
           startActivity(intent);
           finish();
         }
@@ -132,7 +164,7 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
                       if (0 == code) {
                         JUtils.Toast("验证码获取成功");
                       } else if (1 == code) {
-                        JUtils.Toast("手机号码已经注册");
+                        JUtils.Toast("手机号码已经注册，请直接跳过");
                       }
                     }
                   });

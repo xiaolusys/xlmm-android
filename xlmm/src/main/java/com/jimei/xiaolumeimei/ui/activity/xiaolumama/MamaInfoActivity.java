@@ -129,10 +129,13 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
             JUtils.Log(TAG, "cash =" + pointBean.getCash() + " all fund=" + pointBean.getMmclog().getMci());
             tv_cash.setText(Double.toString(pointBean.getCash()));
             tv_fund2.setText(Double.toString((float)(Math.round(pointBean.getMmclog().getMci()*100)/100)));
+
+            tv_fansnum.setText("我的粉丝 " + pointBean.getFansNum());
+            JUtils.Log(TAG, "fans num =" + pointBean.getFansNum());
           }
         });
 
-    MamaInfoModel.getInstance().getMamaFans()
+    /*MamaInfoModel.getInstance().getMamaFans()
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<List<MamaFansBean>>() {
           @Override public void onNext(List<MamaFansBean> fansBeen) {
@@ -140,7 +143,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
             tv_fansnum.setText("我的粉丝 " + fansBeen.size());
             JUtils.Log(TAG, "fans num =" + fansBeen.size());
           }
-        });
+        });*/
 
     MMProductModel.getInstance()
             .getShoppingList("1")
@@ -177,19 +180,22 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         break;
       case R.id.rl_two_dimen:
       case R.id.btn_two_dimen:
-        intent = new Intent(MamaInfoActivity.this, TwoDimenCodeActivity.class);
-        intent.putExtra("myurl", mamaAgentInfo.getShare_mmcode());
-        startActivity(intent);
-
+        if(mamaAgentInfo != null) {
+          intent = new Intent(MamaInfoActivity.this, TwoDimenCodeActivity.class);
+          intent.putExtra("myurl", mamaAgentInfo.getShareMmcode());
+          startActivity(intent);
+        }
         break;
       case R.id.imgUser:
-        intent = new Intent(MamaInfoActivity.this, WithdrawCashActivity.class);
-        intent.putExtra("cash", mamaAgentInfo.getCash());
+        if(mamaAgentInfo != null) {
+          intent = new Intent(MamaInfoActivity.this, WithdrawCashActivity.class);
+          intent.putExtra("cash", mamaAgentInfo.getCash());
 
-        startActivity(intent);
+          startActivity(intent);
+        }
         break;
       case R.id.tv_fansnum:
-        startActivity(new Intent(MamaInfoActivity.this, MamaFansActivity.class));
+        //startActivity(new Intent(MamaInfoActivity.this, MamaFansActivity.class));
         break;
 
       case R.id.rl_share:

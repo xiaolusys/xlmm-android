@@ -8,12 +8,20 @@ public class FilePara {
   int width;
   int height;
 
+  public String getFilePath() {
+    return filePath;
+  }
+
   public int getWidth() {
     return width;
   }
 
   public int getHeight() {
     return height;
+  }
+
+  public void setFilePath(String filePath) {
+    this.filePath = filePath;
   }
 
   public void setWidth(int width) {
@@ -26,7 +34,8 @@ public class FilePara {
 
   @Override public String toString() {
     return "FilePara{" +
-        "width=" + width +
+        "filePath='" + filePath + '\'' +
+        ", width=" + width +
         ", height=" + height +
         '}';
   }

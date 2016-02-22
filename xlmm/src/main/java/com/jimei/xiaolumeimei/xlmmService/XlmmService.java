@@ -34,9 +34,11 @@ import com.jimei.xiaolumeimei.entities.ProductDetailBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
 import com.jimei.xiaolumeimei.entities.RegisterBean;
+import com.jimei.xiaolumeimei.entities.ShareProductBean;
 import com.jimei.xiaolumeimei.entities.ShoppingListBean;
 import com.jimei.xiaolumeimei.entities.SmsLoginBean;
 import com.jimei.xiaolumeimei.entities.SmsLoginUserBean;
+import com.jimei.xiaolumeimei.entities.UserAccountBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
@@ -544,5 +546,17 @@ public interface XlmmService {
   Observable<OneDayAgentOrdersBean> getOneDayAgentOrders(
       @Query("days") String day);
 
+  //获得商品详情共享页面信息
+  @GET( "share/product")
+  Observable<ShareProductBean> getProductShareInfo(
+      @Query("product_id") String product_id);
 
+  //get push useraccount
+  @FormUrlEncoded
+  @POST("push/set_device")
+  Observable<UserAccountBean> getUserAccount(
+      @Field("platform")String platform,
+      @Field("regid")String regid,
+      @Field("device_id")String device_id
+  );
 }

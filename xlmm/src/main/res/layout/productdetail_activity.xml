@@ -5,11 +5,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-  <com.ecloud.pulltozoomview.PullToZoomScrollViewEx
+  <FrameLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+    <com.ecloud.pulltozoomview.PullToZoomScrollViewEx
       android:id="@+id/pulltoZoomScrollView"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/img_share"
+        android:src="@drawable/ic_share"
+        android:layout_marginLeft="640px"
+        android:layout_marginRight="8px"
+        android:layout_marginTop="56px"
+        />
+  </FrameLayout>
+
   <LinearLayout
       android:layout_alignParentBottom="true"
       android:padding="8dp"
@@ -57,8 +71,12 @@
     <!--</com.jimei.xiaolumeimei.widget.badgelib.BadgeFrameLayout>-->
   </LinearLayout>
 
+
+
   <FrameLayout
       android:id="@+id/dot_cart"
       android:layout_width="match_parent"
       android:layout_height="match_parent"/>
+
+
 </RelativeLayout>
