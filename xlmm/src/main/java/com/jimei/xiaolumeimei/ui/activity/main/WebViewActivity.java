@@ -162,13 +162,11 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   @Override protected void onDestroy() {
     super.onDestroy();
     mWebView.destroy();
-
   }
 
   @Override protected void onStop() {
     super.onStop();
     ShareSDK.stopSDK(this);
-
   }
 
   public void syncCookie(Context context, String url) {
@@ -185,38 +183,40 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     }
   }
 
-
   public void getPromotionParams(String uform, String share_link) {
 
     ActivityModel.getInstance()
-            .get_share_content(uform)
-            .subscribeOn(Schedulers.io())
-            .subscribe(new ServiceResponse<ActivityBean>() {
-              @Override public void onNext(ActivityBean activityBean) {
+        .get_share_content(uform)
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<ActivityBean>() {
+          @Override public void onNext(ActivityBean activityBean) {
 
-                if (null != activityBean) {
-                  activeDec = activityBean.getActiveDec();
-                  linkQrcode = URL + activityBean.getLinkQrcode();
-                  title = activityBean.getTitle();
-                  JUtils.Log(TAG,"getPromotionParams get_share_content:"+ activeDec + " " + linkQrcode + " " + title);
+            if (null != activityBean) {
+              activeDec = activityBean.getActiveDec();
+              linkQrcode = URL + activityBean.getLinkQrcode();
+              title = activityBean.getTitle();
+              JUtils.Log(TAG, "getPromotionParams get_share_content:"
+                  + activeDec
+                  + " "
+                  + linkQrcode
+                  + " "
+                  + title);
 
-                  if (uform.equals("wxapp")) {
-                    share_wxapp(share_link, uform);
-                  } else if (uform.equals("pyq")) {
-                    share_pyq(share_link, uform);
-                  } else if (uform.equals("qq")) {
+              if (uform.equals("wxapp")) {
+                share_wxapp(share_link, uform);
+              } else if (uform.equals("pyq")) {
+                share_pyq(share_link, uform);
+              } else if (uform.equals("qq")) {
 
-                    share_qq(share_link, uform);
-                  } else if (uform.equals("qqspa")) {
-                    share_qqspa(share_link, uform);
-                  } else if (uform.equals("sinawb")) {
-                    share_sina(share_link, uform);
-                  }
-                }
+                share_qq(share_link, uform);
+              } else if (uform.equals("qqspa")) {
+                share_qqspa(share_link, uform);
+              } else if (uform.equals("sinawb")) {
+                share_sina(share_link, uform);
               }
-            });
-
-
+            }
+          }
+        });
   }
 
   private void share_wxapp(String myurl, String ufrom) {
@@ -304,7 +304,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     SinaWeibo.ShareParams sp = new SinaWeibo.ShareParams();
     //sp.setTitle(title);
     //sp.setTitleUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
-    sp.setText(activeDec+" http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
+    sp.setText(activeDec + " http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
     //sp.setImageUrl(linkQrcode);
     sp.setSiteUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
 
@@ -325,7 +325,8 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
               activeDec = activityBean.getActiveDec();
               linkQrcode = URL + activityBean.getLinkQrcode();
               title = activityBean.getTitle();
-              JUtils.Log(TAG,"get_share_content:"+ activeDec + " " + linkQrcode + " " + title);
+              JUtils.Log(TAG,
+                  "get_share_content:" + activeDec + " " + linkQrcode + " " + title);
             }
           }
         });
