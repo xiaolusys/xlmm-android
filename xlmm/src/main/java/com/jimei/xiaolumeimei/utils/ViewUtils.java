@@ -41,6 +41,7 @@ import java.lang.reflect.Field;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import retrofit.http.HEAD;
 
 /**
  * ViewUtils
@@ -255,11 +256,8 @@ public final class ViewUtils {
   public static void loadImgToImgViewWithPlaceholder(Context context, ImageView img,
       String picPath) {
     if (null == picPath) return;
-    if (picPath.startsWith("https://mmbiz.qlogo.cn")) {
-      Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
-          //.placeholder(R.drawable.parceholder)
-          .centerCrop().into(img);
-    } else {
+
+    if (picPath.startsWith("http://image.xiaolu.so")){
       String[] temp = picPath.split("http://image.xiaolu.so/");
       String head_img = "";
       if (temp.length > 1) {
@@ -279,16 +277,19 @@ public final class ViewUtils {
           .centerCrop()
           .into(img);
     }
+    else{
+      //if (picPath.startsWith("https://mmbiz.qlogo.cn")) {
+        Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
+            //.placeholder(R.drawable.parceholder)
+            .centerCrop().into(img);
+
+    }
   }
 
   public static void loadImgToImgViewPost(Context context, ImageView img,
       String picPath) {
     if (null == picPath) return;
-    if (picPath.startsWith("https://mmbiz.qlogo.cn")) {
-      Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
-          //.placeholder(R.drawable.parceholder)
-          .centerCrop().into(img);
-    } else {
+    if (picPath.startsWith("http://image.xiaolu.so")){
       String[] temp = picPath.split("http://image.xiaolu.so/");
       String head_img = "";
       if (temp.length > 1) {
@@ -306,13 +307,19 @@ public final class ViewUtils {
           .centerCrop()
           .into(img);
     }
+    else{
+      //if (picPath.startsWith("https://mmbiz.qlogo.cn")) {
+        Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
+            //.placeholder(R.drawable.parceholder)
+            .centerCrop().into(img);
+
+    }
   }
 
   public static String getDecodeUrl(String path) {
     String imagUrl = "";
-    if (path.startsWith("https://mmbiz.qlogo.cn")) {
-      imagUrl = path;
-    } else {
+
+    if (path.startsWith("http://image.xiaolu.so")){
       String[] temp = path.split("http://image.xiaolu.so/");
       if (temp.length > 1) {
         try {
@@ -322,17 +329,19 @@ public final class ViewUtils {
         }
       }
     }
+    else{
+      //if (path.startsWith("https://mmbiz.qlogo.cn")) {
+        imagUrl = path;
+
+    }
     return imagUrl;
   }
 
   public static void loadImgToImgViewWithPlaceholderTransform(Context context,
       ImageView img, String picPath) {
     if (null == picPath) return;
-    if (picPath.startsWith("https://mmbiz.qlogo.cn")) {
-      Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
-          //.placeholder(R.drawable.parceholder)
-          .centerCrop().into(img);
-    } else {
+
+    if (picPath.startsWith("http://image.xiaolu.so")){
       String[] temp = picPath.split("http://image.xiaolu.so/");
       String head_img = "";
       if (temp.length > 1) {
@@ -351,6 +360,13 @@ public final class ViewUtils {
           .transform(new GlideRoundTransform(context))
           .centerCrop()
           .into(img);
+    }
+    else{
+      //if (picPath.startsWith("https://mmbiz.qlogo.cn")) {
+        Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
+            //.placeholder(R.drawable.parceholder)
+            .centerCrop().into(img);
+
     }
   }
 }

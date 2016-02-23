@@ -17,6 +17,7 @@ import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.WxLogininfoBean;
 import com.jimei.xiaolumeimei.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
+import com.squareup.okhttp.ResponseBody;
 import rx.Observable;
 
 /**
@@ -165,6 +166,12 @@ public class UserModel {
       String password2, String valid_code) {
     return XlmmRetrofitClient.getService()
         .bang_mobile(username, password1, password2, valid_code)
+        .compose(new DefaultTransform<>());
+  }
+
+  public Observable<BindInfoBean> bang_mobile_unpassword(String username, String valid_code) {
+    return XlmmRetrofitClient.getService()
+        .bang_mobile_unpassword(username, valid_code)
         .compose(new DefaultTransform<>());
   }
 

@@ -263,8 +263,9 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
 
     WechatMoments.ShareParams sp = new WechatMoments.ShareParams();
     //sp.setImageUrl(linkQrcode);
-    //sp.setTitle(title);
-    sp.setText(shareInfo.getActiveDec() + " http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
+    sp.setTitle(shareInfo.getTitle());
+    //sp.setText(shareInfo.getActiveDec() + " http://m.xiaolumeimei.com/" + myurl +
+    //    "&ufrom=" + ufrom);
     //sp.setTitleUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
     sp.setShareType(Platform.SHARE_WEBPAGE);
     sp.setImageUrl(shareInfo.getShareImg());
@@ -536,7 +537,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
 
   /**
    * 抓取WEB界面的截屏
-   * @param WebView
+   * @param
    * @param containerWidth 截屏宽度，也就放置WebView的宽度
    * @param containerHeight  截屏高度，也就放置WebView的高度
    * @param baseUrl Base Url
@@ -554,9 +555,11 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
             String fileName = Environment.getExternalStorageDirectory()
                 + "/"
                 + Environment.DIRECTORY_DCIM
-                + "/Camera/小鹿美美活动二维码.jpg";
+                + "/Camera/"+ R.string.share_2dimen_pic_name+".jpg";
             saveBitmap(b, fileName);
-            Toast.makeText(WebViewActivity.this, "保存活动图片成功", Toast.LENGTH_SHORT).show();
+            Toast.makeText(WebViewActivity.this, R.string.share_2dimen_pic_tips, Toast
+                .LENGTH_SHORT)
+                .show();
           }
         });
         w.setPictureListener(new WebView.PictureListener() {

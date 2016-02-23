@@ -3,16 +3,23 @@ package com.jimei.xiaolumeimei.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.jimei.xiaolumeimei.data.XlmmApi;
+import com.jimei.xiaolumeimei.entities.UserAccountBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.okhttp.callback.OkHttpCallback;
 import com.jimei.xiaolumeimei.okhttp.request.OkHttpRequest;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
+import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jude.utils.JUtils;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
+import com.xiaomi.mipush.sdk.MiPushClient;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 15/12/29.
@@ -108,6 +115,62 @@ public class LoginUtils {
       Log.d(TAG, "have not logined, "   + "jump to LoginActivity");
       context.startActivity(intent);
     }
+  }
+
+  public static void setPushUserAccount(Context context, String mRegId){
+    //register xiaomi push
+    JUtils.Log("XlmmApp", "regid: " + mRegId
+        + " devid:"+((TelephonyManager) context.getSystemService( Context.TELEPHONY_SERVICE ))
+        .getDeviceId());
+    new UserModel().getUserAccount("android", mRegId,
+        ((TelephonyManager)context.getSystemService( Context.TELEPHONY_SERVICE ))
+            .getDeviceId())
+        .subscribeOn(Schedulers.newThread())
+        .subscribe(new ServiceResponse<UserAccountBean>() {
+          @Override public void onNext(UserAccountBean user) {
+            JUtils.Log("XlmmApp", "UserAccountBean:, " + user.toString());
+            if((!getUserAccount(context).isEmpty())
+                && (!getUserAccount(context).equals(user.getUserAccount()))) {
+              MiPushClient.unsetUserAccount(context.getApplicationContext(), getUserAccount(context), null);
+              JUtils.Log("XlmmApp", "unset useraccount: " + getUserAccount(context));
+            }
+            MiPushClient.setUserAccount(context.getApplicationContext(), user.getUserAccount(), null);
+          }
+
+          @Override public void onCompleted() {
+            super.onCompleted();
+          }
+
+          @Override public void onError(Throwable e) {
+            Log.e("XlmmApp", "error:, " + e.toString());
+            super.onError(e);
+          }
+        });
+  }
+
+  public static void saveUserAccount(Context context, String userAccount) {
+    sharedPreferences = context.getSharedPreferences("login_info", Context.MODE_PRIVATE);
+    editor = sharedPreferences.edit();
+    editor.putString("userAccount", userAccount);
+    editor.apply();
+    Log.d(TAG, "save saveUserAccount "  );
+  }
+
+  public static void delUserAccount(Context context, String userAccount) {
+    sharedPreferences = context.getSharedPreferences("login_info", Context.MODE_PRIVATE);
+    editor = sharedPreferences.edit();
+    editor.putString("userAccount", "");
+    editor.apply();
+    Log.d(TAG, "delUserAccount "  );
+  }
+
+  public static String getUserAccount(Context context) {
+
+    sharedPreferences = context.getSharedPreferences("login_info", Context.MODE_PRIVATE);
+
+    String account = sharedPreferences.getString("userAccount", "");
+
+    return account;
   }
 
 }

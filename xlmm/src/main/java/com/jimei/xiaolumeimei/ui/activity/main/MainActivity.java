@@ -44,6 +44,7 @@ import com.jimei.xiaolumeimei.ui.fragment.TodayFragment;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import com.xiaomi.mipush.sdk.MiPushClient;
 import java.util.ArrayList;
 import java.util.List;
 import rx.schedulers.Schedulers;
@@ -244,6 +245,7 @@ public class MainActivity extends BaseActivity
             negativeText("取消").
             callback(new MaterialDialog.ButtonCallback() {
               @Override public void onPositive(MaterialDialog dialog) {
+                final String finalAccount = LoginUtils.getUserAccount(MainActivity.this);
                 LoginUtils.delLoginInfo(getApplicationContext());
                 model.customer_logout()
                     .subscribeOn(Schedulers.io())
@@ -255,6 +257,11 @@ public class MainActivity extends BaseActivity
                           JUtils.Toast("退出成功");
                           if(tvNickname != null) {
                             tvNickname.setText("点击登录");
+                          }
+
+                          if((!finalAccount.isEmpty())) {
+                            MiPushClient.unsetUserAccount(getApplicationContext(), finalAccount, null);
+                            JUtils.Log("XlmmApp", "unset useraccount: " + finalAccount);
                           }
                         }
                       }

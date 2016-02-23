@@ -46,6 +46,8 @@
   <string name="auth_error">授权失败</string>
   <string name="auth_complete">授权成功</string>
   <string name="userid_found">微信用户</string>
+  <string name="share_2dimen_pic_name">小鹿美美群发二维码</string>
+  <string name="share_2dimen_pic_tips">您的专属二维码已保存，可用微信群发200好友哦</string>
 
   <string name="register_success">Register push success.</string>
   <string name="register_fail">Register push fail.</string>

@@ -38,14 +38,16 @@ import com.jimei.xiaolumeimei.widget.PasswordEditText;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.mob.tools.utils.UIHandler;
+import com.squareup.okhttp.ResponseBody;
 import com.xiaomi.mipush.sdk.MiPushClient;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import rx.schedulers.Schedulers;
 
 public class LoginActivity extends BaseSwipeBackCompatActivity
-    implements View.OnClickListener, Handler.Callback, PlatformActionListener {
+    implements View.OnClickListener, Handler.Callback {
   public static final String SECRET = "3c7b4e3eb5ae4cfb132b2ac060a872ee";
   private static final int MSG_USERID_FOUND = 1;
   private static final int MSG_LOGIN = 2;
@@ -174,19 +176,8 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                     Toast.makeText(mContext, "登录成功", Toast.LENGTH_SHORT).show();
 
                     //set xiaomi push useraccount
-                    JUtils.Log(TAG, "regid: " + MiPushClient.getRegId(getApplicationContext())
-                        + " devid:"+((TelephonyManager) getSystemService( Context.TELEPHONY_SERVICE ))
-                        .getDeviceId());
-                    new UserModel().getUserAccount("android", MiPushClient.getRegId(getApplicationContext()),
-                        ((TelephonyManager)getSystemService( Context.TELEPHONY_SERVICE ))
-                            .getDeviceId())
-                        .subscribeOn(Schedulers.newThread())
-                        .subscribe(new ServiceResponse<UserAccountBean>() {
-                          @Override public void onNext(UserAccountBean user) {
-                            JUtils.Log(TAG, "UserAccountBean:, " + user.toString());
-                            MiPushClient.setUserAccount(getApplicationContext(), user.getUserAccount(), null);
-                          }
-                        });
+                    LoginUtils.setPushUserAccount(LoginActivity.this, MiPushClient
+                        .getRegId(getApplicationContext()));
 
                     String login = getIntent().getExtras().getString("login");
                     assert login != null;
@@ -321,11 +312,19 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
         openid = (String) hashMap.get("openid");
         unionid = (String) hashMap.get("unionid");
 
+        JUtils.Log(TAG, "------noncestr---------" + noncestr);
+        JUtils.Log(TAG, "------timestamp---------" + timestamp);
+        JUtils.Log(TAG, "------sign---------" + sign);
+        JUtils.Log(TAG, "------headimgurl---------" + headimgurl);
+        JUtils.Log(TAG, "------nickname---------" + nickname);
+        JUtils.Log(TAG, "------openid---------" + openid);
+        JUtils.Log(TAG, "------unionid---------" + unionid);
         model.wxapp_login(noncestr, timestamp, sign, headimgurl, nickname, openid,
             unionid)
             .subscribeOn(Schedulers.io())
             .subscribe(new ServiceResponse<WxLogininfoBean>() {
               @Override public void onNext(WxLogininfoBean wxLogininfoBean) {
+
                 super.onNext(wxLogininfoBean);
                 if (wxLogininfoBean != null) {
                   int code = wxLogininfoBean.getCode();
@@ -336,26 +335,15 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                         .subscribe(new ServiceResponse<NeedSetInfoBean>() {
                           @Override public void onNext(NeedSetInfoBean needSetInfoBean) {
                             super.onNext(needSetInfoBean);
+
+                            //set xiaomi push useraccount
+                            LoginUtils.setPushUserAccount(LoginActivity.this, MiPushClient
+                                .getRegId(getApplicationContext()));
+
                             int codeInfo = needSetInfoBean.getCode();
                             if (0 == codeInfo) {
                               LoginUtils.saveLoginSuccess(true, getApplicationContext());
                               JUtils.Toast("登录成功");
-
-                              //set xiaomi push useraccount
-                              JUtils.Log(TAG, "regid: " + MiPushClient.getRegId(getApplicationContext())
-                                  + " devid:"+((TelephonyManager) getSystemService( Context.TELEPHONY_SERVICE ))
-                                  .getDeviceId());
-                              new UserModel().getUserAccount("android", MiPushClient.getRegId(getApplicationContext()),
-                                  ((TelephonyManager)getSystemService( Context.TELEPHONY_SERVICE ))
-                                      .getDeviceId())
-                                  .subscribeOn(Schedulers.newThread())
-                                  .subscribe(new ServiceResponse<UserAccountBean>() {
-                                    @Override public void onNext(UserAccountBean user) {
-                                      JUtils.Log(TAG, "UserAccountBean:, " + user.toString());
-                                      MiPushClient.setUserAccount(getApplicationContext(), user.getUserAccount(), null);
-                                    }
-                                  });
-
                               Intent intent =
                                   new Intent(LoginActivity.this, MainActivity.class);
                               startActivity(intent);
@@ -364,12 +352,15 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                             } else if (1 == codeInfo) {
                               LoginUtils.saveLoginSuccess(true, getApplicationContext());
                               JUtils.Toast("登录成功,需要设置密码");
-                              Intent intent = new Intent(LoginActivity.this,
+                              /*Intent intent = new Intent(LoginActivity.this,
                                   WxLoginBindPhoneActivity.class);
                               Bundle bundle = new Bundle();
                               bundle.putString("headimgurl", headimgurl);
                               bundle.putString("nickname", nickname);
                               intent.putExtras(bundle);
+                              startActivity(intent);*/
+                              Intent intent =
+                                  new Intent(LoginActivity.this, MainActivity.class);
                               startActivity(intent);
 
                               finish();
@@ -388,6 +379,12 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                             }
                           }
                         });
+                  }
+                  else if(1 == code ){
+                    JUtils.Toast("签名错误");
+                  }
+                  else if(2 == code ){
+                    JUtils.Toast("非法用户");
                   }
                 }
               }
@@ -434,6 +431,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
     return false;
   }
 
+  /*
   @Override
   public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
     if (i == Platform.ACTION_USER_INFOR) {
@@ -487,7 +485,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
   @Override public void onCancel(Platform platform, int i) {
 
   }
-
+*/
   public void removeWX(Platform platform) {
     if (platform != null) {
       platform.removeAccount(true);
