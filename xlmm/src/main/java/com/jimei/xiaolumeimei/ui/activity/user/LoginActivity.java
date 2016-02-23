@@ -38,14 +38,16 @@ import com.jimei.xiaolumeimei.widget.PasswordEditText;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.mob.tools.utils.UIHandler;
+import com.squareup.okhttp.ResponseBody;
 import com.xiaomi.mipush.sdk.MiPushClient;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import rx.schedulers.Schedulers;
 
 public class LoginActivity extends BaseSwipeBackCompatActivity
-    implements View.OnClickListener, Handler.Callback, PlatformActionListener {
+    implements View.OnClickListener, Handler.Callback {
   public static final String SECRET = "3c7b4e3eb5ae4cfb132b2ac060a872ee";
   private static final int MSG_USERID_FOUND = 1;
   private static final int MSG_LOGIN = 2;
@@ -310,11 +312,19 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
         openid = (String) hashMap.get("openid");
         unionid = (String) hashMap.get("unionid");
 
+        JUtils.Log(TAG, "------noncestr---------" + noncestr);
+        JUtils.Log(TAG, "------timestamp---------" + timestamp);
+        JUtils.Log(TAG, "------sign---------" + sign);
+        JUtils.Log(TAG, "------headimgurl---------" + headimgurl);
+        JUtils.Log(TAG, "------nickname---------" + nickname);
+        JUtils.Log(TAG, "------openid---------" + openid);
+        JUtils.Log(TAG, "------unionid---------" + unionid);
         model.wxapp_login(noncestr, timestamp, sign, headimgurl, nickname, openid,
             unionid)
             .subscribeOn(Schedulers.io())
             .subscribe(new ServiceResponse<WxLogininfoBean>() {
               @Override public void onNext(WxLogininfoBean wxLogininfoBean) {
+
                 super.onNext(wxLogininfoBean);
                 if (wxLogininfoBean != null) {
                   int code = wxLogininfoBean.getCode();
@@ -367,6 +377,12 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                           }
                         });
                   }
+                  else if(1 == code ){
+                    JUtils.Toast("签名错误");
+                  }
+                  else if(2 == code ){
+                    JUtils.Toast("非法用户");
+                  }
                 }
               }
             });
@@ -412,6 +428,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
     return false;
   }
 
+  /*
   @Override
   public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
     if (i == Platform.ACTION_USER_INFOR) {
@@ -465,7 +482,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
   @Override public void onCancel(Platform platform, int i) {
 
   }
-
+*/
   public void removeWX(Platform platform) {
     if (platform != null) {
       platform.removeAccount(true);
