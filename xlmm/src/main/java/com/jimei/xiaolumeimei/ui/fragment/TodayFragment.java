@@ -187,10 +187,8 @@ public class TodayFragment extends BaseFragment {
                     .load(postBean.getActivity().getActImg())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .placeholder(R.drawable.header)
-                    .centerCrop()
+                    //.centerCrop()
                     .into(post2);
-                /*ViewUtils.loadImgToImgView(getActivity(), post2, postBean.getActivity()
-                    .getActImg());*/
 
                 post2.setOnClickListener(new View.OnClickListener() {
                   @Override public void onClick(View v) {
