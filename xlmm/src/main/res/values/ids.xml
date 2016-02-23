@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="swipBackLayout" type="id" />
+    <item name="header" type="id">12</item>
+    <item name="footer" type="id">34</item>
 </resources>

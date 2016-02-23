@@ -7,6 +7,7 @@ import android.view.View;
 import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.update.UmengUpdateAgent;
 import com.zhy.autolayout.AutoLayoutActivity;
 
 /**
@@ -24,6 +25,7 @@ public abstract class BaseActivity extends AutoLayoutActivity {
     setContentView(provideContentViewId());
     ButterKnife.bind(this);
 
+    UmengUpdateAgent.update(this);
 
     if (savedInstanceState == null) {
       initView();

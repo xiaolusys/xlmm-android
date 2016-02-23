@@ -2,10 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-  <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:id="@+id/longimageview"
-      />
+    android:layout_height="wrap_content">
+  <ImageView
+      android:scaleType="centerCrop"
+    android:layout_width="match_parent"
+    android:layout_height="1200px"
+    android:id="@+id/longimageview"
+    />
+  <!--<TextView-->
+      <!--android:id="@+id/tv"-->
+      <!--android:textSize="30sp"-->
+      <!--android:layout_width="wrap_content"-->
+      <!--android:text="axiba"-->
+      <!--android:layout_height="wrap_content"/>-->
 </LinearLayout>

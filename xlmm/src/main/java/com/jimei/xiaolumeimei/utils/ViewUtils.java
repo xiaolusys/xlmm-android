@@ -233,7 +233,7 @@ public final class ViewUtils {
       Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
           //.placeholder(R.drawable.parceholder)
           .centerCrop().into(img);
-    } else {
+    } else  {
       String[] temp = picPath.split("http://image.xiaolu.so/");
       String head_img = "";
       if (temp.length > 1) {

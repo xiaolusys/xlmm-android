@@ -48,6 +48,16 @@
     <meta-data
         android:name="com.bumptech.glide.integration.okhttp.OkHttpGlideModule"
         android:value="GlideModule"/>
+
+    <service
+        android:name="com.umeng.update.net.DownloadingService"
+        android:process=":DownloadingService" >
+    </service>
+    <activity
+        android:name="com.umeng.update.UpdateDialogActivity"
+        android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+    </activity>
+
     <activity
         android:theme="@style/AppTheme.TransparentActivity"
         android:name=".ui.activity.main.SplashActivity">
@@ -78,6 +88,10 @@
     <activity
         android:theme="@style/AppTheme.TransparentActivity"
         android:name=".ui.activity.product.ProductDetailActvity"/>
+
+    <!--<activity-->
+        <!--android:theme="@style/AppTheme.TransparentActivity"-->
+        <!--android:name=".ui.activity.product.ProductDetailActvity1"/>-->
 
     <activity android:name=".ui.activity.trade.CartActivity"
         android:theme="@style/AppTheme.TransparentActivity"
