@@ -183,6 +183,8 @@ public class XiaoMiMessageReceiver extends PushMessageReceiver {
       if (message.getResultCode() == ErrorCode.SUCCESS) {
         mAccount = cmdArg1;
         log = context.getString(R.string.set_account_success, mAccount);
+
+        LoginUtils.saveUserAccount(context, mAccount);
       } else {
         log = context.getString(R.string.set_account_fail, message.getReason());
       }
@@ -190,6 +192,7 @@ public class XiaoMiMessageReceiver extends PushMessageReceiver {
       if (message.getResultCode() == ErrorCode.SUCCESS) {
         mAccount = cmdArg1;
         log = context.getString(R.string.unset_account_success, mAccount);
+        LoginUtils.delUserAccount(context, mAccount);
       } else {
         log = context.getString(R.string.unset_account_fail, message.getReason());
       }

@@ -325,15 +325,15 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                         .subscribe(new ServiceResponse<NeedSetInfoBean>() {
                           @Override public void onNext(NeedSetInfoBean needSetInfoBean) {
                             super.onNext(needSetInfoBean);
+
+                            //set xiaomi push useraccount
+                            LoginUtils.setPushUserAccount(LoginActivity.this, MiPushClient
+                                .getRegId(getApplicationContext()));
+
                             int codeInfo = needSetInfoBean.getCode();
                             if (0 == codeInfo) {
                               LoginUtils.saveLoginSuccess(true, getApplicationContext());
                               JUtils.Toast("登录成功");
-
-                              //set xiaomi push useraccount
-                              LoginUtils.setPushUserAccount(LoginActivity.this, MiPushClient
-                                  .getRegId(getApplicationContext()));
-
                               Intent intent =
                                   new Intent(LoginActivity.this, MainActivity.class);
                               startActivity(intent);

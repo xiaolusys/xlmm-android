@@ -129,8 +129,12 @@ public class LoginUtils {
         .subscribe(new ServiceResponse<UserAccountBean>() {
           @Override public void onNext(UserAccountBean user) {
             JUtils.Log("XlmmApp", "UserAccountBean:, " + user.toString());
-            MiPushClient.setUserAccount(context.getApplicationContext(), user
-                .getUserAccount(), null);
+            if((!getUserAccount(context).isEmpty())
+                && (!getUserAccount(context).equals(user.getUserAccount()))) {
+              MiPushClient.unsetUserAccount(context.getApplicationContext(), getUserAccount(context), null);
+              JUtils.Log("XlmmApp", "unset useraccount: " + getUserAccount(context));
+            }
+            MiPushClient.setUserAccount(context.getApplicationContext(), user.getUserAccount(), null);
           }
 
           @Override public void onCompleted() {
@@ -142,6 +146,31 @@ public class LoginUtils {
             super.onError(e);
           }
         });
+  }
+
+  public static void saveUserAccount(Context context, String userAccount) {
+    sharedPreferences = context.getSharedPreferences("login_info", Context.MODE_PRIVATE);
+    editor = sharedPreferences.edit();
+    editor.putString("userAccount", userAccount);
+    editor.apply();
+    Log.d(TAG, "save saveUserAccount "  );
+  }
+
+  public static void delUserAccount(Context context, String userAccount) {
+    sharedPreferences = context.getSharedPreferences("login_info", Context.MODE_PRIVATE);
+    editor = sharedPreferences.edit();
+    editor.putString("userAccount", "");
+    editor.apply();
+    Log.d(TAG, "delUserAccount "  );
+  }
+
+  public static String getUserAccount(Context context) {
+
+    sharedPreferences = context.getSharedPreferences("login_info", Context.MODE_PRIVATE);
+
+    String account = sharedPreferences.getString("userAccount", "");
+
+    return account;
   }
 
 }
