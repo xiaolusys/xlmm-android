@@ -351,7 +351,8 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                               finish();
                             } else if (1 == codeInfo) {
                               LoginUtils.saveLoginSuccess(true, getApplicationContext());
-                              JUtils.Toast("登录成功,需要设置密码");
+                              JUtils.Toast("登录成功，已绑定手机号");
+                              JUtils.Log(TAG,"code=1,login succ,need reset pwd");
                               /*Intent intent = new Intent(LoginActivity.this,
                                   WxLoginBindPhoneActivity.class);
                               Bundle bundle = new Bundle();
