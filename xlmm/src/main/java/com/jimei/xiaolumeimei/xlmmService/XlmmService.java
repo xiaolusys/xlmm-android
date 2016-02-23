@@ -512,6 +512,13 @@ public interface XlmmService {
       @Field("valid_code") String valid_code
   );
 
+  @FormUrlEncoded
+  @POST("users/bang_mobile_unpassword")
+  Observable<BindInfoBean> bang_mobile_unpassword(
+      @Field("username")   String username,
+      @Field("valid_code") String valid_code
+  );
+
 
    //MM订单历史
     @GET("pmt/shopping")

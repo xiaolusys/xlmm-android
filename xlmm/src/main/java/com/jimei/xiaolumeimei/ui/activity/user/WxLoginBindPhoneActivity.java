@@ -131,13 +131,14 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
         mobile = registerName.getText().toString().trim();
         invalid_code = checkcode.getText().toString().trim();
         if (checkInput(mobile, invalid_code)) {
-          Intent intent = new Intent(this, BindSettingPasswordActivity.class);
+          bindMobilePhone(mobile, invalid_code);
+          /*Intent intent = new Intent(this, BindSettingPasswordActivity.class);
           Bundle bundle = new Bundle();
           bundle.putString("username", mobile);
           bundle.putString("valid_code", invalid_code);
           intent.putExtras(bundle);
           startActivity(intent);
-          finish();
+          finish();*/
         }
 
         break;
@@ -165,6 +166,12 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
                         JUtils.Toast("验证码获取成功");
                       } else if (1 == code) {
                         JUtils.Toast("手机号码已经注册，请直接跳过");
+                      }else if (2 == code) {
+                        JUtils.Toast("当日验证超过５次");
+                      }else if (3 == code) {
+                        JUtils.Toast("180秒内已发过验证码");
+                      }else if (4 == code) {
+                        JUtils.Toast("手机号码不对");
                       }
                     }
                   });
@@ -220,5 +227,37 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
     }
 
     return false;
+  }
+
+  private void bindMobilePhone(String username, String valid_code) {
+
+    JUtils.Log(TAG, "username=" + username + " valid_code=" + valid_code);
+    model.bang_mobile_unpassword(username,   valid_code)
+        .subscribeOn(Schedulers.newThread())
+        .subscribe(new ServiceResponse<BindInfoBean>() {
+          @Override public void onNext(BindInfoBean bindInfoBean) {
+            JUtils.Log(TAG, bindInfoBean.toString());
+            int code = bindInfoBean.getCode();
+            JUtils.Toast(bindInfoBean.getInfo());
+            if (0 == code) {
+              finish();
+            } else if (1 == code) {
+              JUtils.Toast("手机已经绑定");
+            }else if (2 == code) {
+              JUtils.Toast( "手机号码不对");
+            }else if (3 == code) {
+              JUtils.Toast( "验证码不对");
+            }else if (4 == code) {
+              JUtils.Toast( "验证码过期");
+            }else if (5 == code) {
+              JUtils.Toast( "系统异常");
+            }
+
+          }
+
+          @Override public void onCompleted() {
+            super.onCompleted();
+          }
+        });
   }
 }

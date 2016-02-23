@@ -352,12 +352,15 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                             } else if (1 == codeInfo) {
                               LoginUtils.saveLoginSuccess(true, getApplicationContext());
                               JUtils.Toast("登录成功,需要设置密码");
-                              Intent intent = new Intent(LoginActivity.this,
+                              /*Intent intent = new Intent(LoginActivity.this,
                                   WxLoginBindPhoneActivity.class);
                               Bundle bundle = new Bundle();
                               bundle.putString("headimgurl", headimgurl);
                               bundle.putString("nickname", nickname);
                               intent.putExtras(bundle);
+                              startActivity(intent);*/
+                              Intent intent =
+                                  new Intent(LoginActivity.this, MainActivity.class);
                               startActivity(intent);
 
                               finish();

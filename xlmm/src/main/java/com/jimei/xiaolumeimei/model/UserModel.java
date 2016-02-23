@@ -169,6 +169,12 @@ public class UserModel {
         .compose(new DefaultTransform<>());
   }
 
+  public Observable<BindInfoBean> bang_mobile_unpassword(String username, String valid_code) {
+    return XlmmRetrofitClient.getService()
+        .bang_mobile_unpassword(username, valid_code)
+        .compose(new DefaultTransform<>());
+  }
+
   //get push useraccount
   public Observable<UserAccountBean> getUserAccount(String platform,
       String regid,
