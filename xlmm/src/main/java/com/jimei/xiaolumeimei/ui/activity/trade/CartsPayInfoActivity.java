@@ -100,52 +100,105 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   @Override protected void initData() {
 
     list = new ArrayList<>();
-    model.getCartsInfoList(ids)
-        .subscribeOn(Schedulers.newThread())
-        .subscribe(new ServiceResponse<CartsPayinfoBean>() {
-          @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
-            super.onNext(cartsPayinfoBean);
-            if (cartsPayinfoBean != null) {
-              mAdapter.update(cartsPayinfoBean.getCartList());
-              cart_ids = cartsPayinfoBean.getCartIds();
-              channel = "alipay";
-              payment = cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
-                  - cartsPayinfoBean.getDiscountFee() + "";
-              post_fee = cartsPayinfoBean.getPostFee() + "";
-              discount_fee = cartsPayinfoBean.getDiscountFee() + "";
-              total_fee = cartsPayinfoBean.getTotalFee() + "";
-              uuid = cartsPayinfoBean.getUuid();
-              totalPrice.setText("¥" + payment);
-              tv_postfee.setText("¥" + post_fee);
 
-              if (isCoupon) {
-                totalPrice_all.setText(
-                    "合计: ¥" + (cartsPayinfoBean.getTotalFee() - coupon_price) + "");
-                jiehsneg.setText(
-                    "已节省" + (cartsPayinfoBean.getDiscountFee() + coupon_price) + "");
-              } else {
-                totalPrice_all.setText("合计: ¥" + cartsPayinfoBean.getTotalFee() + "");
-                jiehsneg.setText("已节省" + cartsPayinfoBean.getDiscountFee() + "");
-              }
+    if (isCoupon) {
+      model.getCartsInfoList(ids, coupon_id)
+          .subscribeOn(Schedulers.newThread())
+          .subscribe(new ServiceResponse<CartsPayinfoBean>() {
+            @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
+              super.onNext(cartsPayinfoBean);
+              if (cartsPayinfoBean != null) {
+                mAdapter.update(cartsPayinfoBean.getCartList());
+                cart_ids = cartsPayinfoBean.getCartIds();
+                channel = "alipay";
+                payment = cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
+                    - cartsPayinfoBean.getDiscountFee() + "";
+                post_fee = cartsPayinfoBean.getPostFee() + "";
+                discount_fee = cartsPayinfoBean.getDiscountFee() + "";
+                total_fee = cartsPayinfoBean.getTotalFee() + "";
+                uuid = cartsPayinfoBean.getUuid();
+                totalPrice.setText(
+                    "¥" + (cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
+                        - cartsPayinfoBean.getDiscountFee()
+                        - coupon_price));
+                tv_postfee.setText("¥" + post_fee);
 
-              if (Double.parseDouble(total_fee) < 150) {
-                coupon_layout.setOnClickListener(null);
-                tv_coupon.setText("无可用优惠券");
-              } else {
-                coupon_layout.setOnClickListener(CartsPayInfoActivity.this);
-              }
-            } else {
-              emptyContent.setVisibility(View.VISIBLE);
-              goMain.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                  startActivity(
-                      new Intent(CartsPayInfoActivity.this, MainActivity.class));
-                  finish();
+                if (isCoupon) {
+                  totalPrice_all.setText(
+                      "合计: ¥" + (cartsPayinfoBean.getTotalFee() - coupon_price) + "");
+                  jiehsneg.setText(
+                      "已节省" + (cartsPayinfoBean.getDiscountFee() + coupon_price) + "");
+                } else {
+                  totalPrice_all.setText("合计: ¥" + cartsPayinfoBean.getTotalFee() + "");
+                  jiehsneg.setText("已节省" + cartsPayinfoBean.getDiscountFee() + "");
                 }
-              });
+
+                if (Double.parseDouble(total_fee) < 150) {
+                  coupon_layout.setOnClickListener(null);
+                  tv_coupon.setText("无可用优惠券");
+                } else {
+                  coupon_layout.setOnClickListener(CartsPayInfoActivity.this);
+                }
+              } else {
+                emptyContent.setVisibility(View.VISIBLE);
+                goMain.setOnClickListener(new View.OnClickListener() {
+                  @Override public void onClick(View v) {
+                    startActivity(
+                        new Intent(CartsPayInfoActivity.this, MainActivity.class));
+                    finish();
+                  }
+                });
+              }
             }
-          }
-        });
+          });
+    } else {
+      model.getCartsInfoList(ids)
+          .subscribeOn(Schedulers.newThread())
+          .subscribe(new ServiceResponse<CartsPayinfoBean>() {
+            @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
+              super.onNext(cartsPayinfoBean);
+              if (cartsPayinfoBean != null) {
+                mAdapter.update(cartsPayinfoBean.getCartList());
+                cart_ids = cartsPayinfoBean.getCartIds();
+                channel = "alipay";
+                payment = cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
+                    - cartsPayinfoBean.getDiscountFee() + "";
+                post_fee = cartsPayinfoBean.getPostFee() + "";
+                discount_fee = cartsPayinfoBean.getDiscountFee() + "";
+                total_fee = cartsPayinfoBean.getTotalFee() + "";
+                uuid = cartsPayinfoBean.getUuid();
+                totalPrice.setText("¥" + payment);
+                tv_postfee.setText("¥" + post_fee);
+
+                if (isCoupon) {
+                  totalPrice_all.setText(
+                      "合计: ¥" + (cartsPayinfoBean.getTotalFee() - coupon_price) + "");
+                  jiehsneg.setText(
+                      "已节省" + (cartsPayinfoBean.getDiscountFee() + coupon_price) + "");
+                } else {
+                  totalPrice_all.setText("合计: ¥" + cartsPayinfoBean.getTotalFee() + "");
+                  jiehsneg.setText("已节省" + cartsPayinfoBean.getDiscountFee() + "");
+                }
+
+                if (Double.parseDouble(total_fee) < 150) {
+                  coupon_layout.setOnClickListener(null);
+                  tv_coupon.setText("无可用优惠券");
+                } else {
+                  coupon_layout.setOnClickListener(CartsPayInfoActivity.this);
+                }
+              } else {
+                emptyContent.setVisibility(View.VISIBLE);
+                goMain.setOnClickListener(new View.OnClickListener() {
+                  @Override public void onClick(View v) {
+                    startActivity(
+                        new Intent(CartsPayInfoActivity.this, MainActivity.class));
+                    finish();
+                  }
+                });
+              }
+            }
+          });
+    }
   }
 
   @Override protected void getBundleExtras(Bundle extras) {

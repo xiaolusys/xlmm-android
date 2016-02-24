@@ -154,6 +154,14 @@ public interface XlmmService {
             @Query("cart_ids") String cart_ids);
 
 
+    //获取购物信息列表
+    @GET("carts/carts_payinfo")
+    Observable<CartsPayinfoBean> getCartsPayInfoList(
+            @Query("cart_ids") String cart_ids,
+            @Query("coupon_id") String coupon_id
+    );
+
+
     //创建订单接口
 
     @FormUrlEncoded

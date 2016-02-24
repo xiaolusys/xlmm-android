@@ -39,6 +39,14 @@ public class CartsModel {
         .compose(new DefaultTransform<>());
   }
 
+  //获取购物车列表信息
+  public Observable<CartsPayinfoBean> getCartsInfoList(String cart_ids,
+      String coupon_id) {
+    return XlmmRetrofitClient.getService()
+        .getCartsPayInfoList(cart_ids, coupon_id)
+        .compose(new DefaultTransform<>());
+  }
+
   //增加一件
   public Observable<ResponseBody> plus_product_carts(String id) {
     return XlmmRetrofitClient.getService()
