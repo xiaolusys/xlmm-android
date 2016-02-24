@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Picture;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -14,6 +15,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
+import android.webkit.HttpAuthHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -30,23 +32,17 @@ import cn.sharesdk.wechat.friends.Wechat;
 import cn.sharesdk.wechat.moments.WechatMoments;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.data.FilePara;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
 import com.jimei.xiaolumeimei.model.ActivityModel;
-import com.jimei.xiaolumeimei.okhttp.callback.FileParaCallback;
-import com.jimei.xiaolumeimei.utils.BitmapUtil;
-import com.jimei.xiaolumeimei.utils.FileUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.mob.tools.utils.UIHandler;
-import com.zhy.http.okhttp.OkHttpUtils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
-import okhttp3.Call;
 import rx.schedulers.Schedulers;
 
 /**
@@ -88,7 +84,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
-    if(extras != null) {
+    if (extras != null) {
       cookies = extras.getString("cookies");
       actlink = extras.getString("actlink");
     }
@@ -108,8 +104,14 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     mToolbar.setTitle("");
     setSupportActionBar(mToolbar);
     mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    if (Build.VERSION.SDK_INT >= 19) {
+      mWebView.getSettings().setLoadsImagesAutomatically(true);
+    } else {
+      mWebView.getSettings().setLoadsImagesAutomatically(false);
+    }
+
+
     mWebView.getSettings().setJavaScriptEnabled(true);
     mWebView.addJavascriptInterface(new AndroidJsBridge(this), "AndroidBridge");
 
@@ -132,7 +134,21 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
         }
       }
     });
+
     mWebView.setWebViewClient(new WebViewClient() {
+
+      @Override public void onPageFinished(WebView view, String url) {
+        if (!mWebView.getSettings().getLoadsImagesAutomatically()) {
+          mWebView.getSettings().setLoadsImagesAutomatically(true);
+        }
+      }
+
+      @Override
+      public void onReceivedHttpAuthRequest(WebView view, HttpAuthHandler handler,
+          String host, String realm) {
+        view.reload();
+      }
+
       @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
         view.loadUrl(url);
         return true;
@@ -178,13 +194,11 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   @Override protected void onDestroy() {
     super.onDestroy();
     mWebView.destroy();
-
   }
 
   @Override protected void onStop() {
     super.onStop();
     ShareSDK.stopSDK(this);
-
   }
 
   public void syncCookie(Context context, String url) {
@@ -201,52 +215,58 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     }
   }
 
-
   public void getPromotionParams(String uform, String share_link) {
 
     ActivityModel.getInstance()
-            .get_share_content(uform)
-            .subscribeOn(Schedulers.io())
-            .subscribe(new ServiceResponse<ActivityBean>() {
-              @Override public void onNext(ActivityBean activityBean) {
+        .get_share_content(uform)
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<ActivityBean>() {
+          @Override public void onNext(ActivityBean activityBean) {
 
-                if (null != activityBean) {
-                  shareInfo = activityBean;
-                  shareInfo.setLinkQrcode(URL + activityBean.getLinkQrcode());
-                  JUtils.Log(TAG,"getPromotionParams get_share_content: activeDec="+
-                      shareInfo.getActiveDec() + " linkQrcode=" + shareInfo.getLinkQrcode() + " "
-                      + "title=" + shareInfo.getTitle());
-                  JUtils.Log(TAG,"getPromotionParams get_share_content: uform="+ uform + " share_link=" + share_link);
+            if (null != activityBean) {
+              shareInfo = activityBean;
+              shareInfo.setLinkQrcode(URL + activityBean.getLinkQrcode());
+              JUtils.Log(TAG, "getPromotionParams get_share_content: activeDec="
+                  +
+                  shareInfo.getActiveDec()
+                  + " linkQrcode="
+                  + shareInfo.getLinkQrcode()
+                  + " "
+                  + "title="
+                  + shareInfo.getTitle());
+              JUtils.Log(TAG, "getPromotionParams get_share_content: uform="
+                  + uform
+                  + " share_link="
+                  + share_link);
 
-                  if (uform.equals("wxapp")) {
-                    share_wxapp(share_link, uform);
-                  } else if (uform.equals("pyq")) {
-                    share_pyq(share_link, uform);
-                  } else if (uform.equals("qq")) {
+              if (uform.equals("wxapp")) {
+                share_wxapp(share_link, uform);
+              } else if (uform.equals("pyq")) {
+                share_pyq(share_link, uform);
+              } else if (uform.equals("qq")) {
 
-                    share_qq(share_link, uform);
-                  } else if (uform.equals("qqspa")) {
-                    share_qqspa(share_link, uform);
-                  } else if (uform.equals("sinawb")) {
-                    share_sina(share_link, uform);
-                  }else if (uform.equals("web")) {
-                    saveTwoDimenCode();
-                  }
-
-
-
-                }
+                share_qq(share_link, uform);
+              } else if (uform.equals("qqspa")) {
+                share_qqspa(share_link, uform);
+              } else if (uform.equals("sinawb")) {
+                share_sina(share_link, uform);
+              } else if (uform.equals("web")) {
+                saveTwoDimenCode();
               }
-            });
-
-
+            }
+          }
+        });
   }
 
   private void share_wxapp(String myurl, String ufrom) {
     Platform.ShareParams sp = new Platform.ShareParams();
 
     sp.setTitle(shareInfo.getTitle());
-    sp.setText(shareInfo.getActiveDec() + " http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
+    sp.setText(shareInfo.getActiveDec()
+        + " http://m.xiaolumeimei.com/"
+        + myurl
+        + "&ufrom="
+        + ufrom);
 
     sp.setUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
     sp.setShareType(Platform.SHARE_WEBPAGE);
@@ -328,7 +348,11 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     SinaWeibo.ShareParams sp = new SinaWeibo.ShareParams();
     //sp.setTitle(title);
     //sp.setTitleUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
-    sp.setText(shareInfo.getActiveDec()+" http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
+    sp.setText(shareInfo.getActiveDec()
+        + " http://m.xiaolumeimei.com/"
+        + myurl
+        + "&ufrom="
+        + ufrom);
     //sp.setImageUrl(linkQrcode);
     sp.setSiteUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
 
@@ -349,8 +373,12 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
               shareInfo = activityBean;
               shareInfo.setLinkQrcode(URL + activityBean.getLinkQrcode());
 
-              JUtils.Log(TAG,"get_share_content: desc="+ shareInfo.getActiveDec() + " "
-                  + "qrcode=" + shareInfo.getLinkQrcode() + " title="
+              JUtils.Log(TAG, "get_share_content: desc="
+                  + shareInfo.getActiveDec()
+                  + " "
+                  + "qrcode="
+                  + shareInfo.getLinkQrcode()
+                  + " title="
                   + shareInfo.getTitle());
             }
           }
@@ -414,48 +442,55 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     return false;
   }
 
-  public void saveTwoDimenCode(){
+  public void saveTwoDimenCode() {
 
-    if((shareInfo == null) || (shareInfo.getQrcodeLink() == null)
-        || (shareInfo.getQrcodeLink().equals("")  )) {
-      ActivityModel.getInstance().get_share_content("wxapp")
-          .subscribeOn(Schedulers.io()).subscribe(new ServiceResponse<ActivityBean>() {
-        @Override public void onNext(ActivityBean activityBean) {
+    if ((shareInfo == null)
+        || (shareInfo.getQrcodeLink() == null)
+        || (shareInfo.getQrcodeLink().equals(""))) {
+      ActivityModel.getInstance()
+          .get_share_content("wxapp")
+          .subscribeOn(Schedulers.io())
+          .subscribe(new ServiceResponse<ActivityBean>() {
+            @Override public void onNext(ActivityBean activityBean) {
 
-          if (null != activityBean) {
+              if (null != activityBean) {
 
-            JUtils.Log(TAG, "saveTowDimenCode : Qrcodelink=" + shareInfo.getQrcodeLink());
+                JUtils.Log(TAG,
+                    "saveTowDimenCode : Qrcodelink=" + shareInfo.getQrcodeLink());
 
-            try {
-              WebView webView = new WebView(WebViewActivity.this);
-              webView.setLayoutParams(new Toolbar.LayoutParams(Toolbar.LayoutParams.MATCH_PARENT,
-                  Toolbar.LayoutParams.MATCH_PARENT));
-              webView.getSettings().setJavaScriptEnabled(true);
+                try {
+                  WebView webView = new WebView(WebViewActivity.this);
+                  webView.setLayoutParams(
+                      new Toolbar.LayoutParams(Toolbar.LayoutParams.MATCH_PARENT,
+                          Toolbar.LayoutParams.MATCH_PARENT));
+                  webView.getSettings().setJavaScriptEnabled(true);
 
-              webView.getSettings().setAllowFileAccess(true);
-              //如果访问的页面中有Javascript，则webview必须设置支持Javascript
-              //mWebView.getSettings().setUserAgentString(MyApplication.getUserAgent());
-              webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-              webView.getSettings().setAllowFileAccess(true);
-              webView.getSettings().setAppCacheEnabled(true);
-              webView.getSettings().setDomStorageEnabled(true);
-              webView.getSettings().setDatabaseEnabled(true);
+                  webView.getSettings().setAllowFileAccess(true);
+                  //如果访问的页面中有Javascript，则webview必须设置支持Javascript
+                  //mWebView.getSettings().setUserAgentString(MyApplication.getUserAgent());
+                  webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+                  webView.getSettings().setAllowFileAccess(true);
+                  webView.getSettings().setAppCacheEnabled(true);
+                  webView.getSettings().setDomStorageEnabled(true);
+                  webView.getSettings().setDatabaseEnabled(true);
 
-              webView.setWebChromeClient(new WebChromeClient() {
-                @Override public void onProgressChanged(WebView view, int newProgress) {
+                  webView.setWebChromeClient(new WebChromeClient() {
+                    @Override
+                    public void onProgressChanged(WebView view, int newProgress) {
 
-                }
-              });
-              webView.setWebViewClient(new WebViewClient() {
-                @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                  view.loadUrl(url);
-                  return true;
-                }
-              });
-              webView.loadUrl(shareInfo.getQrcodeLink());
-              View cv = getWindow().getDecorView();
-              Bitmap bmp=catchWebScreenshot(webView, cv.getWidth(), cv.getHeight(),shareInfo
-                  .getQrcodeLink(),null);
+                    }
+                  });
+                  webView.setWebViewClient(new WebViewClient() {
+                    @Override
+                    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                      view.loadUrl(url);
+                      return true;
+                    }
+                  });
+                  webView.loadUrl(shareInfo.getQrcodeLink());
+                  View cv = getWindow().getDecorView();
+                  Bitmap bmp = catchWebScreenshot(webView, cv.getWidth(), cv.getHeight(),
+                      shareInfo.getQrcodeLink(), null);
               /*Bitmap bmp= captureWebView(webView);
               String fileName = Environment.getExternalStorageDirectory()
                   + "/"
@@ -463,20 +498,19 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
                   + "/Camera/小鹿美美活动二维码.jpg";
               saveBitmap(bmp, fileName);*/
 
-            } catch (Exception e) {
-              e.printStackTrace();
+                } catch (Exception e) {
+                  e.printStackTrace();
+                }
+              }
             }
-          }
-        }
-
-      });
-    }
-    else{
+          });
+    } else {
       JUtils.Log(TAG, "saveTowDimenCode : Qrcodelink=" + shareInfo.getQrcodeLink());
       try {
         WebView webView = new WebView(WebViewActivity.this);
-        webView.setLayoutParams(new Toolbar.LayoutParams(Toolbar.LayoutParams.MATCH_PARENT,
-            Toolbar.LayoutParams.MATCH_PARENT));
+        webView.setLayoutParams(
+            new Toolbar.LayoutParams(Toolbar.LayoutParams.MATCH_PARENT,
+                Toolbar.LayoutParams.MATCH_PARENT));
         webView.getSettings().setJavaScriptEnabled(true);
 
         webView.getSettings().setAllowFileAccess(true);
@@ -503,8 +537,8 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
         webView.loadUrl(shareInfo.getQrcodeLink());
         //Bitmap bmp= captureWebView(webView);
         View cv = getWindow().getDecorView();
-        Bitmap bmp=catchWebScreenshot(webView, cv.getWidth(), cv.getHeight(),shareInfo
-            .getQrcodeLink(),null);
+        Bitmap bmp = catchWebScreenshot(webView, cv.getWidth(), cv.getHeight(),
+            shareInfo.getQrcodeLink(), null);
         /*String fileName = Environment.getExternalStorageDirectory()
             + "/"
             + Environment.DIRECTORY_DCIM
@@ -519,17 +553,15 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
 
   /**
    * 截取webView快照(webView加载的整个内容的大小)
-   * @param webView
-   * @return
    */
-  private Bitmap captureWebView(WebView webView){
+  private Bitmap captureWebView(WebView webView) {
     //Picture snapShot = webView.capturePicture();
     View cv = getWindow().getDecorView();
     //Bitmap bmp = Bitmap.createBitmap(snapShot.getWidth(),snapShot.getHeight(), Bitmap
     //    .Config.ARGB_8888);
 
-    Bitmap bmp = Bitmap.createBitmap(cv.getWidth(), cv.getHeight(), Bitmap
-        .Config.ARGB_8888);
+    Bitmap bmp =
+        Bitmap.createBitmap(cv.getWidth(), cv.getHeight(), Bitmap.Config.ARGB_8888);
     Canvas canvas = new Canvas(bmp);
     webView.draw(canvas);
     return bmp;
@@ -537,51 +569,53 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
 
   /**
    * 抓取WEB界面的截屏
-   * @param
+   *
    * @param containerWidth 截屏宽度，也就放置WebView的宽度
-   * @param containerHeight  截屏高度，也就放置WebView的高度
+   * @param containerHeight 截屏高度，也就放置WebView的高度
    * @param baseUrl Base Url
    * @param content 加载的内容
    */
-  public Bitmap catchWebScreenshot(final WebView w,final int containerWidth,final int containerHeight, final String baseUrl,final String content) {
-    final Bitmap b = Bitmap.createBitmap(containerWidth, containerHeight, Bitmap.Config.ARGB_8888);
+  public Bitmap catchWebScreenshot(final WebView w, final int containerWidth,
+      final int containerHeight, final String baseUrl, final String content) {
+    final Bitmap b =
+        Bitmap.createBitmap(containerWidth, containerHeight, Bitmap.Config.ARGB_8888);
     w.post(new Runnable() {
       public void run() {
         w.setWebViewClient(new WebViewClient() {
-          @Override
-          public void onPageFinished(WebView view, String url) {
-            JUtils.Log(TAG,"onPageFinished URL="+url);
+          @Override public void onPageFinished(WebView view, String url) {
+            JUtils.Log(TAG, "onPageFinished URL=" + url);
 
             String fileName = Environment.getExternalStorageDirectory()
                 + "/"
                 + Environment.DIRECTORY_DCIM
-                + "/Camera/"+ R.string.share_2dimen_pic_name+".jpg";
+                + "/Camera/"
+                + R.string.share_2dimen_pic_name
+                + ".jpg";
             saveBitmap(b, fileName);
-            Toast.makeText(WebViewActivity.this, R.string.share_2dimen_pic_tips, Toast
-                .LENGTH_SHORT)
-                .show();
+            Toast.makeText(WebViewActivity.this, R.string.share_2dimen_pic_tips,
+                Toast.LENGTH_SHORT).show();
           }
         });
         w.setPictureListener(new WebView.PictureListener() {
           public void onNewPicture(WebView view, Picture picture) {
-            JUtils.Log(TAG,"onNewPicture ");
+            JUtils.Log(TAG, "onNewPicture ");
             final Canvas c = new Canvas(b);
             view.draw(c);
             //w.setPictureListener(null);
 
-
           }
         });
-        w.layout(0, 0, containerWidth,containerHeight);
+        w.layout(0, 0, containerWidth, containerHeight);
         w.loadUrl(baseUrl);
         //              w.loadDataWithBaseURL(baseUrl, content, "text/html", "UTF-8", null);
-      }});
+      }
+    });
 
     return b;
   }
 
   /** 保存方法 */
-  public void saveBitmap(Bitmap bm,String fileName) {
+  public void saveBitmap(Bitmap bm, String fileName) {
 
     File f = new File(fileName);
     if (f.exists()) {
@@ -592,7 +626,6 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
       bm.compress(Bitmap.CompressFormat.PNG, 90, out);
       out.flush();
       out.close();
-
     } catch (FileNotFoundException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
@@ -600,6 +633,5 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-
   }
 }
