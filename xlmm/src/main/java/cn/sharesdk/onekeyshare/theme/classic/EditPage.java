@@ -8,6 +8,16 @@
 
 package cn.sharesdk.onekeyshare.theme.classic;
 
+import static com.mob.tools.utils.BitmapHelper.blur;
+import static com.mob.tools.utils.BitmapHelper.captureView;
+import static com.mob.tools.utils.R.dipToPx;
+import static com.mob.tools.utils.R.getScreenWidth;
+import static cn.sharesdk.framework.utils.ShareSDKR.getStringRes;
+import static cn.sharesdk.framework.utils.ShareSDKR.getBitmapRes;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -48,16 +58,8 @@ import cn.sharesdk.framework.TitleLayout;
 import cn.sharesdk.onekeyshare.EditPageFakeActivity;
 import cn.sharesdk.onekeyshare.PicViewer;
 import cn.sharesdk.onekeyshare.ShareCore;
-import com.mob.tools.utils.UIHandler;
-import java.util.ArrayList;
-import java.util.HashMap;
 
-import static cn.sharesdk.framework.utils.ShareSDKR.getBitmapRes;
-import static cn.sharesdk.framework.utils.ShareSDKR.getStringRes;
-import static com.mob.tools.utils.BitmapHelper.blur;
-import static com.mob.tools.utils.BitmapHelper.captureView;
-import static com.mob.tools.utils.R.dipToPx;
-import static com.mob.tools.utils.R.getScreenWidth;
+import com.mob.tools.utils.UIHandler;
 
 /**
  * Photo-text Sharing will be handling in this page
@@ -181,7 +183,7 @@ public class EditPage extends EditPageFakeActivity implements OnClickListener, T
 	// title bar
 	private TitleLayout getPageTitle() {
 		llTitle = new TitleLayout(getContext());
-		//llTitle.setId(22222);
+		llTitle.setId(22222);
 		int resId = getBitmapRes(activity, "title_back");
 		if (resId > 0) {
 			llTitle.setBackgroundResource(resId);
@@ -211,7 +213,7 @@ public class EditPage extends EditPageFakeActivity implements OnClickListener, T
 	// page body
 	private LinearLayout getPageBody() {
 		llBody = new LinearLayout(getContext());
-		//llBody.setId(2);
+		llBody.setId(2);
 		int resId = getBitmapRes(activity, "ssdk_oks_edittext_back");
 		if (resId > 0) {
 			llBody.setBackgroundResource(resId);
@@ -273,7 +275,7 @@ public class EditPage extends EditPageFakeActivity implements OnClickListener, T
 	// shared image container
 	private RelativeLayout getThumbView() {
 		rlThumb = new RelativeLayout(getContext());
-		//rlThumb.setId(1);
+		rlThumb.setId(1);
 		int dp_82 = dipToPx(getContext(), 82);
 		int dp_98 = dipToPx(getContext(), 98);
 		LayoutParams lpThumb

@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.Toolbar;
-import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
@@ -25,7 +24,6 @@ import cn.sharesdk.wechat.friends.Wechat;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
-import com.jimei.xiaolumeimei.entities.UserAccountBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.WxLogininfoBean;
 import com.jimei.xiaolumeimei.model.UserModel;
@@ -38,9 +36,7 @@ import com.jimei.xiaolumeimei.widget.PasswordEditText;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.mob.tools.utils.UIHandler;
-import com.squareup.okhttp.ResponseBody;
 import com.xiaomi.mipush.sdk.MiPushClient;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -176,8 +172,8 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                     Toast.makeText(mContext, "登录成功", Toast.LENGTH_SHORT).show();
 
                     //set xiaomi push useraccount
-                    LoginUtils.setPushUserAccount(LoginActivity.this, MiPushClient
-                        .getRegId(getApplicationContext()));
+                    LoginUtils.setPushUserAccount(LoginActivity.this,
+                        MiPushClient.getRegId(getApplicationContext()));
 
                     String login = getIntent().getExtras().getString("login");
                     assert login != null;
@@ -202,11 +198,14 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                       startActivity(intent);
                       finish();
                     }
-                  } else {
+                  } else if (2 == user.getCode()) {
 
                     LoginUtils.saveLoginInfo(false, getApplicationContext(), "", "");
 
                     Toast.makeText(mContext, "用户名或者密码错误,请检查", Toast.LENGTH_SHORT).show();
+                  } else if (5 == user.getCode()) {
+                    LoginUtils.saveLoginInfo(false, getApplicationContext(), "", "");
+                    JUtils.Toast("未设置密码,请选择短信登陆");
                   }
                 }
 
@@ -337,8 +336,8 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                             super.onNext(needSetInfoBean);
 
                             //set xiaomi push useraccount
-                            LoginUtils.setPushUserAccount(LoginActivity.this, MiPushClient
-                                .getRegId(getApplicationContext()));
+                            LoginUtils.setPushUserAccount(LoginActivity.this,
+                                MiPushClient.getRegId(getApplicationContext()));
 
                             int codeInfo = needSetInfoBean.getCode();
                             if (0 == codeInfo) {
@@ -352,7 +351,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                             } else if (1 == codeInfo) {
                               LoginUtils.saveLoginSuccess(true, getApplicationContext());
                               JUtils.Toast("登录成功，已绑定手机号");
-                              JUtils.Log(TAG,"code=1,login succ,need reset pwd");
+                              JUtils.Log(TAG, "code=1,login succ,need reset pwd");
                               /*Intent intent = new Intent(LoginActivity.this,
                                   WxLoginBindPhoneActivity.class);
                               Bundle bundle = new Bundle();
@@ -380,11 +379,9 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                             }
                           }
                         });
-                  }
-                  else if(1 == code ){
+                  } else if (1 == code) {
                     JUtils.Toast("签名错误");
-                  }
-                  else if(2 == code ){
+                  } else if (2 == code) {
                     JUtils.Toast("非法用户");
                   }
                 }

@@ -24,8 +24,10 @@ import butterknife.Bind;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseActivity;
+import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllOrdersActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity;
@@ -42,6 +44,7 @@ import com.jimei.xiaolumeimei.ui.fragment.LadyListFragment;
 import com.jimei.xiaolumeimei.ui.fragment.PreviousFragment;
 import com.jimei.xiaolumeimei.ui.fragment.TodayFragment;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
+import com.jimei.xiaolumeimei.widget.badgelib.BadgeView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.xiaomi.mipush.sdk.MiPushClient;
@@ -66,6 +69,9 @@ public class MainActivity extends BaseActivity
   List<String> titles;
   UserModel model = new UserModel();
   UserInfoBean userInfoBean = new UserInfoBean();
+  private CartsModel cartsModel = new CartsModel();
+  private int num;
+  private BadgeView badge;
 
   @Override protected int provideContentViewId() {
     return R.layout.activity_main;
@@ -160,8 +166,7 @@ public class MainActivity extends BaseActivity
         if (LoginUtils.checkLoginState(getApplicationContext())) {
           Intent intent = new Intent(MainActivity.this, MembershipPointActivity.class);
           startActivity(intent);
-        }
-        else{
+        } else {
           Intent intent = new Intent(MainActivity.this, LoginActivity.class);
           Bundle bundle = new Bundle();
           bundle.putString("login", "point");
@@ -207,6 +212,9 @@ public class MainActivity extends BaseActivity
     if (!(LoginUtils.checkLoginState(getApplicationContext()))) {
       tvNickname.setText("点击登录");
     }
+
+    badge = new BadgeView(this);
+    badge.setTargetView(carts);
   }
 
   @Override public boolean onNavigationItemSelected(MenuItem item) {
@@ -415,6 +423,20 @@ public class MainActivity extends BaseActivity
   @Override
   protected void onResume() {
     super.onResume();
+
+    //显示购物车数量
+    cartsModel.show_carts_num()
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<CartsNumResultBean>() {
+          @Override public void onNext(CartsNumResultBean cartsNumResultBean) {
+            super.onNext(cartsNumResultBean);
+            if (cartsNumResultBean != null) {
+              num = cartsNumResultBean.getResult();
+              badge.setBadgeCount(num);
+            }
+          }
+        });
+
     JUtils.Log(TAG, "resume");
     getUserInfo();
 

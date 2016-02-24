@@ -179,11 +179,17 @@
     <activity android:name=".ui.activity.user.AddAddressActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
+    <activity android:name=".ui.activity.user.AddNoAddressActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
 
     <activity android:name=".ui.activity.user.SettingNicknameActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
     <activity android:name=".ui.activity.user.SettingPasswordActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
+    <activity android:name=".ui.activity.user.SettingPasswordForgetActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
 

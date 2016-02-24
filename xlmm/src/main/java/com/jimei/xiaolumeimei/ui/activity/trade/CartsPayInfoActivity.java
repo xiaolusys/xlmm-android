@@ -23,7 +23,8 @@ import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
-import com.jimei.xiaolumeimei.ui.activity.user.AddAddressActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.AddNoAddressActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.AddressActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.CouponActivity;
 import com.jimei.xiaolumeimei.widget.NestedListView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -83,6 +84,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   private String coupon_id;
   private boolean isCoupon;
   private double coupon_price;
+  private boolean isHaveAddress;
 
   @Override protected void setListener() {
     adress.setOnClickListener(this);
@@ -111,8 +113,15 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
               totalPrice.setText("¥" + payment);
               tv_postfee.setText("¥" + post_fee);
 
-              totalPrice_all.setText("合计: ¥" + cartsPayinfoBean.getTotalFee() + "");
-              jiehsneg.setText("已节省" + cartsPayinfoBean.getDiscountFee() + "");
+              if (isCoupon) {
+                totalPrice_all.setText(
+                    "合计: ¥" + (cartsPayinfoBean.getTotalFee() - coupon_price) + "");
+                jiehsneg.setText(
+                    "已节省" + (cartsPayinfoBean.getDiscountFee() + coupon_price) + "");
+              } else {
+                totalPrice_all.setText("合计: ¥" + cartsPayinfoBean.getTotalFee() + "");
+                jiehsneg.setText("已节省" + cartsPayinfoBean.getDiscountFee() + "");
+              }
 
               if (Double.parseDouble(total_fee) < 150) {
                 coupon_layout.setOnClickListener(null);
@@ -136,7 +145,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void getBundleExtras(Bundle extras) {
     ids = extras.getString("ids");
-    JUtils.Log("hhahha", ids);
   }
 
   @Override protected int getContentViewLayoutID() {
@@ -163,7 +171,14 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
     switch (v.getId()) {
       case R.id.adress:
-        startActivity(new Intent(CartsPayInfoActivity.this, AddAddressActivity.class));
+
+        if (isHaveAddress) {
+          startActivity(new Intent(CartsPayInfoActivity.this, AddressActivity.class));
+
+        } else {
+          startActivity(new Intent(CartsPayInfoActivity.this, AddNoAddressActivity.class));
+        }
+
         break;
 
       case R.id.confirm:
@@ -335,6 +350,10 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             super.onNext(list);
             if (list != null) {
               chooseAddress.setVisibility(View.INVISIBLE);
+
+              name.setVisibility(View.VISIBLE);
+              phone.setVisibility(View.VISIBLE);
+              addressDetails.setVisibility(View.VISIBLE);
               AddressBean addressBean = list.get(0);
 
               addr_id = addressBean.getId();
@@ -345,11 +364,13 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                   + addressBean.getReceiverCity()
                   + addressBean.getReceiverDistrict()
                   + addressBean.getReceiverAddress());
+              isHaveAddress = true;
             } else {
               chooseAddress.setVisibility(View.VISIBLE);
               name.setVisibility(View.INVISIBLE);
               phone.setVisibility(View.INVISIBLE);
               addressDetails.setVisibility(View.INVISIBLE);
+              isHaveAddress = false;
             }
           }
 
@@ -359,6 +380,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             name.setVisibility(View.INVISIBLE);
             phone.setVisibility(View.INVISIBLE);
             addressDetails.setVisibility(View.INVISIBLE);
+            isHaveAddress = false;
           }
         });
   }

@@ -630,10 +630,8 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
 
   private void share_productdetail() {
     JUtils.Log(TAG, "Productid=" + productId + " title =" + shareProductBean.getTitle());
-    JUtils.Log(TAG, " desc="
-        + shareProductBean.getDesc()
-        + " url="
-        + shareProductBean.getShareLink());
+    JUtils.Log(TAG,
+        " desc=" + shareProductBean.getDesc() + " url=" + shareProductBean.getShareLink());
 
     OnekeyShare oks = new OnekeyShare();
     //关闭sso授权
@@ -649,6 +647,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
     oks.setText(shareProductBean.getDesc());
     // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
     //oks.setImagePath(filePara.getFilePath());//确保SDcard下面存在此张图片
+    //oks.setImageUrl("http://f1.sharesdk.cn/imgs/2014/02/26/owWpLZo_638x960.jpg");
     oks.setImageUrl(shareProductBean.getShareImg());
     oks.setUrl(shareProductBean.getShareLink());
 

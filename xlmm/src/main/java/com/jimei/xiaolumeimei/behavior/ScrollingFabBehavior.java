@@ -3,9 +3,9 @@ package com.jimei.xiaolumeimei.behavior;
 import android.content.Context;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.FrameLayout;
 import com.jimei.xiaolumeimei.utils.Utils;
 
 /**
@@ -14,7 +14,7 @@ import com.jimei.xiaolumeimei.utils.Utils;
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class ScrollingFabBehavior//滑动的行为，用于tablayout
-    extends CoordinatorLayout.Behavior<FloatingActionButton> {
+    extends CoordinatorLayout.Behavior<FrameLayout> {
   private int toolbarHeight;
 
   public ScrollingFabBehavior(Context context, AttributeSet attrs) {
@@ -23,13 +23,13 @@ public class ScrollingFabBehavior//滑动的行为，用于tablayout
   }
 
   @Override
-  public boolean layoutDependsOn(CoordinatorLayout parent, FloatingActionButton fab,
+  public boolean layoutDependsOn(CoordinatorLayout parent, FrameLayout fab,
       View dependency) {
     return dependency instanceof AppBarLayout;
   }
 
   @Override public boolean onDependentViewChanged(CoordinatorLayout parent,
-      FloatingActionButton fab, View dependency) {
+      FrameLayout fab, View dependency) {
     if (dependency instanceof AppBarLayout) {
       CoordinatorLayout.LayoutParams lp =
           (CoordinatorLayout.LayoutParams) fab.getLayoutParams();

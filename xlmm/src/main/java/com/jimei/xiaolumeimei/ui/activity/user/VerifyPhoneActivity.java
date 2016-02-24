@@ -117,8 +117,12 @@ public class VerifyPhoneActivity extends BaseSwipeBackCompatActivity
                         String result = registerBean.getResult();
                         if (result.equals("0")) {
                           JUtils.Toast("验证码获取成功");
-                        } else if (result.equals("5")) {
-                          return;
+                        } else if (result.equals("1")) {
+                          JUtils.Toast("尚无用户或者手机未绑定");
+                        } else if (result.equals("2")) {
+                          JUtils.Toast("当日验证次数超过上限");
+                        } else if (result.equals("3")) {
+                          JUtils.Toast("验证码过期");
                         }
                       }
                     }
@@ -154,9 +158,11 @@ public class VerifyPhoneActivity extends BaseSwipeBackCompatActivity
                   super.onNext(registerBean);
                   if (registerBean != null) {
                     String result = registerBean.getResult();
+                    JUtils.Log("修改密码", result);
+
                     if (result.equals("0")) {
                       Intent intent = new Intent(VerifyPhoneActivity.this,
-                          SettingPasswordActivity.class);
+                          SettingPasswordForgetActivity.class);
                       Bundle bundle = new Bundle();
                       bundle.putString("username", mobile);
                       bundle.putString("valid_code", invalid_code);
@@ -166,6 +172,8 @@ public class VerifyPhoneActivity extends BaseSwipeBackCompatActivity
                       finish();
                     } else if (result.equals("1")) {
                       JUtils.Toast("验证码过期或超次，尝试重新获取");
+                    }else if (result.equals("2")) {
+                      JUtils.Toast("手机号码不合法");
                     }
                   }
                 }
