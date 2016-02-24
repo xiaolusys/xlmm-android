@@ -24,7 +24,7 @@ import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.AddNoAddressActivity;
-import com.jimei.xiaolumeimei.ui.activity.user.AddressActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.AddressSelectActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.CouponActivity;
 import com.jimei.xiaolumeimei.widget.NestedListView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -45,12 +45,12 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
   private static final int REQUEST_CODE_PAYMENT = 1;
   private static final int REQUEST_CODE_COUPONT = 2;
+  private static final int REQUEST_CODE_ADDRESS = 3;
   String TAG = "CartsPayInfoActivity";
   CartsModel model = new CartsModel();
   TradeModel tradeModel = new TradeModel();
   AddressModel addressModel = new AddressModel();
   CartsPayInfoAdapter mAdapter;
-
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.app_bar_layout) AppBarLayout appBarLayout;
   @Bind(R.id.name) TextView name;
@@ -85,6 +85,11 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   private boolean isCoupon;
   private double coupon_price;
   private boolean isHaveAddress;
+  private boolean isSelectAddress;
+  private String nameSelect;
+  private String phoneSelect;
+  private String addressDetailsSelect;
+  private String addr_idSelect;
 
   @Override protected void setListener() {
     adress.setOnClickListener(this);
@@ -173,10 +178,13 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
       case R.id.adress:
 
         if (isHaveAddress) {
-          startActivity(new Intent(CartsPayInfoActivity.this, AddressActivity.class));
 
+          Intent intent =
+              new Intent(CartsPayInfoActivity.this, AddressSelectActivity.class);
+          startActivityForResult(intent, REQUEST_CODE_ADDRESS);
         } else {
-          startActivity(new Intent(CartsPayInfoActivity.this, AddNoAddressActivity.class));
+          startActivity(
+              new Intent(CartsPayInfoActivity.this, AddNoAddressActivity.class));
         }
 
         break;
@@ -211,6 +219,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
         Intent intent = new Intent(CartsPayInfoActivity.this, CouponActivity.class);
         startActivityForResult(intent, REQUEST_CODE_COUPONT);
+
         break;
     }
   }
@@ -305,6 +314,18 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         isCoupon = false;
       }
     }
+
+    if (requestCode == REQUEST_CODE_ADDRESS) {
+      if (resultCode == Activity.RESULT_OK) {
+        isSelectAddress = true;
+        nameSelect = data.getStringExtra("name");
+        phoneSelect = data.getStringExtra("phone");
+        addressDetailsSelect = data.getStringExtra("addressDetails");
+        addr_idSelect = data.getStringExtra("addr_id");
+      } else {
+        isSelectAddress = false;
+      }
+    }
   }
 
   public void showMsg(String title, String msg1, String msg2) {
@@ -343,45 +364,60 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
     super.onResume();
 
-    addressModel.getAddressList()
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<List<AddressBean>>() {
-          @Override public void onNext(List<AddressBean> list) {
-            super.onNext(list);
-            if (list != null) {
-              chooseAddress.setVisibility(View.INVISIBLE);
+    if (isSelectAddress) {
 
-              name.setVisibility(View.VISIBLE);
-              phone.setVisibility(View.VISIBLE);
-              addressDetails.setVisibility(View.VISIBLE);
-              AddressBean addressBean = list.get(0);
+      chooseAddress.setVisibility(View.INVISIBLE);
 
-              addr_id = addressBean.getId();
-              name.setText(addressBean.getReceiverName());
-              phone.setText(addressBean.getReceiverMobile());
+      name.setVisibility(View.VISIBLE);
+      phone.setVisibility(View.VISIBLE);
+      addressDetails.setVisibility(View.VISIBLE);
 
-              addressDetails.setText(addressBean.getReceiverState()
-                  + addressBean.getReceiverCity()
-                  + addressBean.getReceiverDistrict()
-                  + addressBean.getReceiverAddress());
-              isHaveAddress = true;
-            } else {
+      name.setText(nameSelect);
+      phone.setText(phoneSelect);
+      addressDetails.setText(addressDetailsSelect);
+
+      addr_id = addr_idSelect;
+    } else {
+      addressModel.getAddressList()
+          .subscribeOn(Schedulers.io())
+          .subscribe(new ServiceResponse<List<AddressBean>>() {
+            @Override public void onNext(List<AddressBean> list) {
+              super.onNext(list);
+              if (list != null) {
+                chooseAddress.setVisibility(View.INVISIBLE);
+
+                name.setVisibility(View.VISIBLE);
+                phone.setVisibility(View.VISIBLE);
+                addressDetails.setVisibility(View.VISIBLE);
+                AddressBean addressBean = list.get(0);
+
+                addr_id = addressBean.getId();
+                name.setText(addressBean.getReceiverName());
+                phone.setText(addressBean.getReceiverMobile());
+
+                addressDetails.setText(addressBean.getReceiverState()
+                    + addressBean.getReceiverCity()
+                    + addressBean.getReceiverDistrict()
+                    + addressBean.getReceiverAddress());
+                isHaveAddress = true;
+              } else {
+                chooseAddress.setVisibility(View.VISIBLE);
+                name.setVisibility(View.INVISIBLE);
+                phone.setVisibility(View.INVISIBLE);
+                addressDetails.setVisibility(View.INVISIBLE);
+                isHaveAddress = false;
+              }
+            }
+
+            @Override public void onError(Throwable e) {
+              super.onError(e);
               chooseAddress.setVisibility(View.VISIBLE);
               name.setVisibility(View.INVISIBLE);
               phone.setVisibility(View.INVISIBLE);
               addressDetails.setVisibility(View.INVISIBLE);
               isHaveAddress = false;
             }
-          }
-
-          @Override public void onError(Throwable e) {
-            super.onError(e);
-            chooseAddress.setVisibility(View.VISIBLE);
-            name.setVisibility(View.INVISIBLE);
-            phone.setVisibility(View.INVISIBLE);
-            addressDetails.setVisibility(View.INVISIBLE);
-            isHaveAddress = false;
-          }
-        });
+          });
+    }
   }
 }

@@ -1,8 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 
-
-
 def releaseTime() {
   return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
 }
@@ -24,8 +22,8 @@ android {
 
     targetSdkVersion 23
 
-    versionCode 3
-    versionName "1.0.2"
+    versionCode 4
+    versionName "1.0.3"
 
     multiDexEnabled = true
   }
@@ -43,7 +41,7 @@ android {
       assets.srcDirs = ['src/main/assets', 'src/main/assets/']
       res.srcDirs = ['src/main/res', 'src/main/res/']
       manifest.srcFile 'src/main/AndroidManifest.xml'
-      jniLibs.srcDirs=['libs']
+      jniLibs.srcDirs = ['libs']
     }
   }
 
@@ -52,7 +50,7 @@ android {
     targetCompatibility JavaVersion.VERSION_1_8
   }
 
-  lintOptions{
+  lintOptions {
     checkReleaseBuilds false
   }
 
@@ -118,82 +116,67 @@ android {
             output.outputFile = new File(outputFile.parent, fileName)
           } else {
           }
-
         }
       }
     }
   }
 
-//   渠道Flavors
-      productFlavors {
-        xlmm {
-          manifestPlaceholders = [CHANNEL_NAME: "xlmm",
-                                  UMENG_APPKEY: "569f78a667e58ee15300094b"
-          ]
-        }
+  //   渠道Flavors
+  productFlavors {
+    xlmm {
+      manifestPlaceholders = [CHANNEL_NAME: "xlmm",
+                              UMENG_APPKEY: "569f78a667e58ee15300094b"]
+    }
 
-        Fir {
-          manifestPlaceholders = [CHANNEL_NAME: "Fir",
-                                  UMENG_APPKEY: "569f78a667e58ee15300094b"
-          ]
-        }
+    Fir {
+      manifestPlaceholders = [CHANNEL_NAME: "Fir",
+                              UMENG_APPKEY: "569f78a667e58ee15300094b"]
+    }
 
-        wandoujia {
-          manifestPlaceholders = [CHANNEL_NAME: "wandoujia",
-                                  UMENG_APPKEY: "569f78a667e58ee15300094b"
-          ]
-        }
-        xiaomi {
-          manifestPlaceholders = [CHANNEL_NAME: "xiaomi",
-                                  UMENG_APPKEY: "569f78a667e58ee15300094b"
-          ]
-        }
-        huawei {
-          manifestPlaceholders = [CHANNEL_NAME: "huawei",
-                                  UMENG_APPKEY: "569f78a667e58ee15300094b"
-          ]
-        }
-        flyme  {
-          manifestPlaceholders = [CHANNEL_NAME: "flyme",
-                                  UMENG_APPKEY: "569f78a667e58ee15300094b"
-          ]
-        }
+    wandoujia {
+      manifestPlaceholders = [CHANNEL_NAME: "wandoujia",
+                              UMENG_APPKEY: "569f78a667e58ee15300094b"]
+    }
+    xiaomi {
+      manifestPlaceholders = [CHANNEL_NAME: "xiaomi",
+                              UMENG_APPKEY: "569f78a667e58ee15300094b"]
+    }
+    huawei {
+      manifestPlaceholders = [CHANNEL_NAME: "huawei",
+                              UMENG_APPKEY: "569f78a667e58ee15300094b"]
+    }
+    flyme {
+      manifestPlaceholders = [CHANNEL_NAME: "flyme",
+                              UMENG_APPKEY: "569f78a667e58ee15300094b"]
+    }
 
-        qihu360{
-          manifestPlaceholders = [CHANNEL_NAME: "qihu360",
-                                  UMENG_APPKEY: "569f78a667e58ee15300094b"
-          ]
-        }
+    qihu360 {
+      manifestPlaceholders = [CHANNEL_NAME: "qihu360",
+                              UMENG_APPKEY: "569f78a667e58ee15300094b"]
+    }
 
-        tencent{
-          manifestPlaceholders = [CHANNEL_NAME: "tencent",
-                                  UMENG_APPKEY: "569f78a667e58ee15300094b"
-          ]
-        }
-        assistant91{
-          manifestPlaceholders = [CHANNEL_NAME: "assistant91",
-                                  UMENG_APPKEY: "569f78a667e58ee15300094b"
-          ]
-        }
-        lenovo{
-          manifestPlaceholders = [CHANNEL_NAME: "lenovo",
-                                  UMENG_APPKEY: "569f78a667e58ee15300094b"
-          ]
-        }
-        baidu{
-          manifestPlaceholders = [CHANNEL_NAME: "baidu",
-                                  UMENG_APPKEY: "569f78a667e58ee15300094b"
-          ]
-        }
+    tencent {
+      manifestPlaceholders = [CHANNEL_NAME: "tencent",
+                              UMENG_APPKEY: "569f78a667e58ee15300094b"]
+    }
+    assistant91 {
+      manifestPlaceholders = [CHANNEL_NAME: "assistant91",
+                              UMENG_APPKEY: "569f78a667e58ee15300094b"]
+    }
+    lenovo {
+      manifestPlaceholders = [CHANNEL_NAME: "lenovo",
+                              UMENG_APPKEY: "569f78a667e58ee15300094b"]
+    }
+    baidu {
+      manifestPlaceholders = [CHANNEL_NAME: "baidu",
+                              UMENG_APPKEY: "569f78a667e58ee15300094b"]
+    }
 
-        umeng{
-          manifestPlaceholders = [CHANNEL_NAME: "umeng",
-                                  UMENG_APPKEY: "569f78a667e58ee15300094b"
-          ]
-        }
-
-      }
-
+    umeng {
+      manifestPlaceholders = [CHANNEL_NAME: "umeng",
+                              UMENG_APPKEY: "569f78a667e58ee15300094b"]
+    }
+  }
 }
 
 

@@ -5,7 +5,7 @@
   <uses-permission android:name="android.permission.INTERNET"/>
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
   <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-  <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+  <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
   <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
   <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
   <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
@@ -15,8 +15,8 @@
   <uses-permission android:name="android.permission.GET_TASKS"/>
   <uses-permission android:name="android.permission.VIBRATE"/>
   <permission android:name="com.jimei.xiaolumeimei.permission.MIPUSH_RECEIVE"
-      android:protectionLevel="signature" />
-  <uses-permission android:name="com.jimei.xiaolumeimei.permission.MIPUSH_RECEIVE" />
+      android:protectionLevel="signature"/>
+  <uses-permission android:name="com.jimei.xiaolumeimei.permission.MIPUSH_RECEIVE"/>
   <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
 
   <application
@@ -34,28 +34,28 @@
 
     //友盟统计相关
     <meta-data
-    android:name="UMENG_APPKEY"
-    android:value="${UMENG_APPKEY}" />
+        android:name="UMENG_APPKEY"
+        android:value="${UMENG_APPKEY}"/>
 
     <meta-data
-    android:name="UMENG_CHANNEL"
-    android:value="${CHANNEL_NAME}" />
+        android:name="UMENG_CHANNEL"
+        android:value="${CHANNEL_NAME}"/>
 
 
     <!--<meta-data android:name="com.jimei.xiaolumeimei.glidemoudle.GlideConfig"-->
-        <!--android:value="GlideModule"-->
-        <!--/>-->
+    <!--android:value="GlideModule"-->
+    <!--/>-->
     <meta-data
         android:name="com.bumptech.glide.integration.okhttp.OkHttpGlideModule"
         android:value="GlideModule"/>
 
     <service
         android:name="com.umeng.update.net.DownloadingService"
-        android:process=":DownloadingService" >
+        android:process=":DownloadingService">
     </service>
     <activity
         android:name="com.umeng.update.UpdateDialogActivity"
-        android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        android:theme="@android:style/Theme.Translucent.NoTitleBar">
     </activity>
 
     <activity
@@ -69,9 +69,10 @@
 
       <intent-filter>
         <action android:name="android.intent.action.VIEW"/>
-        <category android:name="android.intent.category.DEFAULT" />
-        <category android:name="android.intent.category.BROWSABLE" />
-        <data android:scheme="xlmm" android:host="local.app" android:pathPrefix="/openwith"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+        <category android:name="android.intent.category.BROWSABLE"/>
+        <data android:scheme="xlmm" android:host="local.app"
+            android:pathPrefix="/openwith"/>
       </intent-filter>
 
     </activity>
@@ -90,8 +91,8 @@
         android:name=".ui.activity.product.ProductDetailActvity"/>
 
     <!--<activity-->
-        <!--android:theme="@style/AppTheme.TransparentActivity"-->
-        <!--android:name=".ui.activity.product.ProductDetailActvity1"/>-->
+    <!--android:theme="@style/AppTheme.TransparentActivity"-->
+    <!--android:name=".ui.activity.product.ProductDetailActvity1"/>-->
 
     <activity android:name=".ui.activity.trade.CartActivity"
         android:theme="@style/AppTheme.TransparentActivity"
@@ -182,6 +183,9 @@
     <activity android:name=".ui.activity.user.AddNoAddressActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
+    <activity android:name=".ui.activity.user.AddressSelectActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
 
     <activity android:name=".ui.activity.user.SettingNicknameActivity"
         android:theme="@style/AppTheme.TransparentActivity"
@@ -261,36 +265,35 @@
         android:configChanges="keyboardHidden|orientation|screenSize"
         android:windowSoftInputMode="stateHidden|adjustResize">
       <intent-filter>
-        <data android:scheme="tencent1105166296" />
-        <action android:name="android.intent.action.VIEW" />
-        <category android:name="android.intent.category.BROWSABLE" />
-        <category android:name="android.intent.category.DEFAULT" />
+        <data android:scheme="tencent1105166296"/>
+        <action android:name="android.intent.action.VIEW"/>
+        <category android:name="android.intent.category.BROWSABLE"/>
+        <category android:name="android.intent.category.DEFAULT"/>
       </intent-filter>
-
 
 
       <!-- 调用新浪原生SDK，需要注册的回调activity -->
       <intent-filter>
-        <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
-        <category android:name="android.intent.category.DEFAULT" />
+        <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY"/>
+        <category android:name="android.intent.category.DEFAULT"/>
       </intent-filter>
     </activity>
     <!-- QQ客户端回调 2.6.3开始独立添加activity来处理QQ客户端的回调-->
     <!--<activity-->
-        <!--android:name="cn.sharesdk.tencent.qq.ResultReceiver"-->
-        <!--android:launchMode="singleTask"-->
-        <!--android:noHistory="true">-->
-      <!--&lt;!&ndash;-->
-      <!--如果集成QQ分享，或者使用QQ客户端来进行QQ空间的分享，须要在此处添加一个对ACTION_VIEW-->
-      <!--事件的过滤器，其中的scheme是“tencent”前缀再开发者应用的加上appId。如果此过滤器不设置，-->
-      <!--则分享结束以后不能得到正确的回调-->
-      <!--&ndash;&gt;-->
-      <!--<intent-filter android:priority="1000" >-->
-        <!--<data android:scheme="tencent100371282" />-->
-        <!--<action android:name="android.intent.action.VIEW" />-->
-        <!--<category android:name="android.intent.category.DEFAULT" />-->
-        <!--<category android:name="android.intent.category.BROWSABLE" />-->
-      <!--</intent-filter>-->
+    <!--android:name="cn.sharesdk.tencent.qq.ResultReceiver"-->
+    <!--android:launchMode="singleTask"-->
+    <!--android:noHistory="true">-->
+    <!--&lt;!&ndash;-->
+    <!--如果集成QQ分享，或者使用QQ客户端来进行QQ空间的分享，须要在此处添加一个对ACTION_VIEW-->
+    <!--事件的过滤器，其中的scheme是“tencent”前缀再开发者应用的加上appId。如果此过滤器不设置，-->
+    <!--则分享结束以后不能得到正确的回调-->
+    <!--&ndash;&gt;-->
+    <!--<intent-filter android:priority="1000" >-->
+    <!--<data android:scheme="tencent100371282" />-->
+    <!--<action android:name="android.intent.action.VIEW" />-->
+    <!--<category android:name="android.intent.category.DEFAULT" />-->
+    <!--<category android:name="android.intent.category.BROWSABLE" />-->
+    <!--</intent-filter>-->
     <!--</activity>-->
     <!--微信分享回调 -->
     <activity
@@ -302,14 +305,14 @@
 
     <!--&lt;!&ndash; 支付宝分享回调 &ndash;&gt;-->
     <!--<activity-->
-        <!--android:name=".apshare.ShareEntryActivity"-->
-        <!--android:theme="@android:style/Theme.Translucent.NoTitleBar"-->
-        <!--android:configChanges="keyboardHidden|orientation|screenSize"-->
-        <!--android:exported="true"/>-->
+    <!--android:name=".apshare.ShareEntryActivity"-->
+    <!--android:theme="@android:style/Theme.Translucent.NoTitleBar"-->
+    <!--android:configChanges="keyboardHidden|orientation|screenSize"-->
+    <!--android:exported="true"/>-->
 
     <activity android:name=".ui.activity.xiaolumama.MamaInfoActivity"
-      android:theme="@style/AppTheme.TransparentActivity"
-      />
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
 
     <activity android:name=".ui.activity.xiaolumama.WithdrawCashActivity"
         android:theme="@style/AppTheme.TransparentActivity"
@@ -334,8 +337,8 @@
         android:theme="@style/AppTheme.TransparentActivity"
         />
     <activity android:name=".ui.activity.xiaolumama.MaMaMyStoreActivity"
-      android:theme="@style/AppTheme.TransparentActivity"
-      />
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
     <activity android:name=".ui.activity.xiaolumama.ShareAllowanceActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
@@ -360,38 +363,38 @@
     <service
         android:enabled="true"
         android:exported="true"
-        android:name="com.xiaomi.mipush.sdk.PushMessageHandler" />
+        android:name="com.xiaomi.mipush.sdk.PushMessageHandler"/>
     <service android:enabled="true"
-        android:name="com.xiaomi.mipush.sdk.MessageHandleService" />
+        android:name="com.xiaomi.mipush.sdk.MessageHandleService"/>
     <!--注：此service必须在2.2.5版本以后（包括2.2.5版本）加入-->
     <receiver
         android:exported="true"
-        android:name="com.xiaomi.push.service.receivers.NetworkStatusReceiver" >
+        android:name="com.xiaomi.push.service.receivers.NetworkStatusReceiver">
       <intent-filter>
-        <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-        <category android:name="android.intent.category.DEFAULT" />
+        <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+        <category android:name="android.intent.category.DEFAULT"/>
       </intent-filter>
     </receiver>
     <receiver
         android:exported="false"
         android:process=":pushservice"
-        android:name="com.xiaomi.push.service.receivers.PingReceiver" >
+        android:name="com.xiaomi.push.service.receivers.PingReceiver">
       <intent-filter>
-        <action android:name="com.xiaomi.push.PING_TIMER" />
+        <action android:name="com.xiaomi.push.PING_TIMER"/>
       </intent-filter>
     </receiver>
 
     <receiver
         android:name="com.jimei.xiaolumeimei.mipush.XiaoMiMessageReceiver"
-        android:exported="true" >
+        android:exported="true">
       <intent-filter>
-        <action android:name="com.xiaomi.mipush.RECEIVE_MESSAGE" />
+        <action android:name="com.xiaomi.mipush.RECEIVE_MESSAGE"/>
       </intent-filter>
       <intent-filter>
-        <action android:name="com.xiaomi.mipush.MESSAGE_ARRIVED" />
+        <action android:name="com.xiaomi.mipush.MESSAGE_ARRIVED"/>
       </intent-filter>
       <intent-filter>
-        <action android:name="com.xiaomi.mipush.ERROR" />
+        <action android:name="com.xiaomi.mipush.ERROR"/>
       </intent-filter>
     </receiver>
   </application>
