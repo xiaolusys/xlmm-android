@@ -244,7 +244,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
 
                       //Bitmap scaled = Bitmap.createScaledBitmap(response, 480, nh, true);
                       new File(response.getFilePath()).delete();
-                    } catch (Exception e) {
+                    } catch (OutOfMemoryError e) {
                       e.printStackTrace();
                     }
                   }
