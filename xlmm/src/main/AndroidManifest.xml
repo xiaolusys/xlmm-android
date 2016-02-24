@@ -42,9 +42,9 @@
     android:value="${CHANNEL_NAME}" />
 
 
-    <meta-data android:name="com.jimei.xiaolumeimei.glidemoudle.GlideConfig"
-        android:value="GlideModule"
-        />
+    <!--<meta-data android:name="com.jimei.xiaolumeimei.glidemoudle.GlideConfig"-->
+        <!--android:value="GlideModule"-->
+        <!--/>-->
     <meta-data
         android:name="com.bumptech.glide.integration.okhttp.OkHttpGlideModule"
         android:value="GlideModule"/>
