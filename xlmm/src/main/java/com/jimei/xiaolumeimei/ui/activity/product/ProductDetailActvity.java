@@ -1,18 +1,18 @@
 package com.jimei.xiaolumeimei.ui.activity.product;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -27,22 +27,26 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ecloud.pulltozoomview.PullToZoomScrollViewEx;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.data.FilePara;
 import com.jimei.xiaolumeimei.entities.AddCartsBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
 import com.jimei.xiaolumeimei.entities.ShareProductBean;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.ProductModel;
+import com.jimei.xiaolumeimei.okhttp.callback.FileParaCallback;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
+import com.jimei.xiaolumeimei.utils.DisplayUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.widget.FlowLayout;
-import com.jimei.xiaolumeimei.widget.NestedListView;
 import com.jimei.xiaolumeimei.widget.TagAdapter;
 import com.jimei.xiaolumeimei.widget.TagFlowLayout;
 import com.jimei.xiaolumeimei.widget.badgelib.BadgeView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import com.zhy.http.okhttp.OkHttpUtils;
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
@@ -51,12 +55,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import okhttp3.Call;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by 优尼世界 on 16/02/23.
+ * Created by 优尼世界 on 15/12/29.
  *
- * Copyright 2016年 上海己美. All rights reserved.
+ * Copyright 2015年 上海己美. All rights reserved.
  */
 public class ProductDetailActvity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener, TagFlowLayout.OnSelectListener,
@@ -68,15 +73,15 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
   @Bind(R.id.dot_cart) FrameLayout frameLayout;
   @Bind(R.id.rv_cart) RelativeLayout rv_cart;
   @Bind(R.id.img_share) ImageView img_share;
+
   int num = 0;
   List<ProductDetailBean.NormalSkusEntity> normalSkus = new ArrayList<>();
   CartsModel cartsModel = new CartsModel();
   boolean isSelect;
   ShareProductBean shareProductBean = new ShareProductBean();
-  private List<String> imageLists = new ArrayList<>();
   private PointF startP, endP, baseP;
   private ImageView titleImage;
-  private NestedListView longimageview_content;
+  private LinearLayout longimageview_content;
   private PullToZoomScrollViewEx scrollView;
   private TagFlowLayout tagFlowLayout;
   private String productId;
@@ -87,7 +92,6 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
   private CountdownView countdownView;
   private BadgeView badge;
   private List<String> list = new ArrayList<>();
-  private ImageAdapter imageAdapter;
 
   @Override protected void setListener() {
     rv_cart.setOnClickListener(this);
@@ -103,29 +107,68 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
           @Override public void onNext(ProductDetailBean productDetailBean) {
             //String headImg = productDetailBean.getPicPath();
 
-            initTextView(productDetailBean);
+            boolean isSaleopen = productDetailBean.isIsSaleopen();
+            boolean isSaleout = productDetailBean.isIsSaleout();
+            if (isSaleopen) {
+              if (isSaleout) {
+                button_shop.setClickable(false);
+                button_shop.setBackgroundColor(Color.parseColor("#f3f3f4"));
+              } else {
+                button_shop.setClickable(true);
+              }
+            } else {
+              button_shop.setClickable(false);
+              button_shop.setBackgroundColor(Color.parseColor("#f3f3f4"));
+            }
 
-            initTitleImage(productDetailBean);
+            bianhao.setText(productDetailBean.getName());
 
-            initTagLayout();
+            caizhi.setText(productDetailBean.getDetails().getMaterial());
+
+            color.setText(productDetailBean.getDetails().getColor());
+
+            beizhu.setText(productDetailBean.getDetails().getNote());
+
+            name.setText(productDetailBean.getName());
+            price1.setText("¥" + productDetailBean.getAgentPrice());
+            price2.setText("/¥" + productDetailBean.getStdSalePrice());
+
+            if ((null == productDetailBean.getOffshelfTime())
+                || (productDetailBean.getOffshelfTime().equals(""))) {
+
+              long time = calcLeftTime1(productDetailBean.getSaleTime());
+
+              countdownView.start(time);
+            } else {
+              long time = calcLeftTime(productDetailBean.getOffshelfTime());
+              countdownView.start(time);
+            }
 
             List<String> contentImgs =
                 productDetailBean.getProductModel().getContentImgs();
 
-            model.getProductShareInfo(productId)
-                .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<ShareProductBean>() {
+            //List<SubsamplingScaleImageView> viewList = new ArrayList<>();
+            List<ImageView> viewList = new ArrayList<>();
 
-                  @Override public void onNext(ShareProductBean productBean) {
-                    shareProductBean = productBean;
-                  }
-                });
+            for (String s : contentImgs) {
+              //SubsamplingScaleImageView scaleImageView =
+              //    new SubsamplingScaleImageView(ProductDetailActvity.this);
+              //scaleImageView.setMinimumScaleType(
+              //    SubsamplingScaleImageView.SCALE_TYPE_CENTER_INSIDE);
 
+              ImageView scaleImageView = new ImageView(ProductDetailActvity.this);
+              viewList.add(scaleImageView);
+            }
+
+            boolean isOldTencentPic = false;
             for (int i = 0; i < contentImgs.size(); i++) {
+              final int finalI = i;
+              final int finalI1 = i;
               String head_img = "";
 
               if (contentImgs.get(i).startsWith("https://mmbiz.qlogo.cn")) {
                 head_img = contentImgs.get(i);
+                isOldTencentPic = true;
               } else {
                 String[] temp = contentImgs.get(i).split("http://image.xiaolu.so/");
 
@@ -141,202 +184,145 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
                 }
               }
 
-              imageLists.add(head_img);
-
               JUtils.Log("ProductDetail", "head_img " + head_img);
 
               final String finalHead_img = head_img;
-              //OkHttpUtils.get().url(head_img).build().execute(new FileParaCallback() {
-              //  @Override public void onError(Call call, Exception e) {
-              //
-              //  }
-              //
-              //  @Override public void onResponse(FilePara response) {
-              //    if (response != null) {
-              //      try {
-              //        JUtils.Log("ProductDetail", " height= "
-              //            + response.getHeight()
-              //            + " width= "
-              //            + response.getWidth());
-              //        JUtils.Log("ProductDetail", "head_img " + finalHead_img);
-              //        int width = DisplayUtils.getScreenW(ProductDetailActvity.this);
-              //
-              //        Bitmap scaled = null;
-              //
-              //        if (response.getHeight() > 2048) {
-              //          Log.e("ProductDetail", finalHead_img
-              //              + ",bad picture,height "
-              //              + response.getHeight());
-              //        } else {
-              //          float scale_size =
-              //              DisplayUtils.getScreenW(ProductDetailActvity.this)
-              //                  / (float) (response.getWidth());
-              //          JUtils.Log("ProductDetail", "use glide scale_size="
-              //              + scale_size
-              //              + " screen width="
-              //              + DisplayUtils.getScreenW(ProductDetailActvity.this));
-              //          if (response.getHeight() * scale_size > 2048) {
-              //            JUtils.Log("ProductDetail", "use glide width chg =" + 640 * (
-              //                2048
-              //                    / response.getHeight()));
-              //            Glide.with(ProductDetailActvity.this)
-              //                .load(finalHead_img)
-              //                .diskCacheStrategy(DiskCacheStrategy.ALL)
-              //                .override((int) (response.getWidth() * scale_size),
-              //                    (int) (response.getHeight() * scale_size))
-              //                .centerCrop()
-              //                .placeholder(R.drawable.img_emptypic)
-              //                .into(viewList.get(finalI1));
-              //          } else {
-              //            JUtils.Log("ProductDetail", "use glide height chg="
-              //                + response.getHeight() * scale_size);
-              //            Glide.with(ProductDetailActvity.this)
-              //                .load(finalHead_img)
-              //                .diskCacheStrategy(DiskCacheStrategy.ALL)
-              //                .override((int) (response.getWidth() * scale_size),
-              //                    (int) (response.getHeight() * scale_size))
-              //                .centerCrop()
-              //                .placeholder(R.drawable.img_emptypic)
-              //                .into(viewList.get(finalI1));
-              //          }
-              //        }
-              //
-              //        //Bitmap scaled = Bitmap.createScaledBitmap(response, 480, nh, true);
-              //        new File(response.getFilePath()).delete();
-              //      } catch (Exception e) {
-              //        e.printStackTrace();
-              //      }
-              //    }
+              OkHttpUtils.get().url(head_img).build().execute(new FileParaCallback() {
+                @Override public void onError(Call call, Exception e) {
+
+                }
+
+                @Override public void onResponse(FilePara response) {
+                  if (response != null) {
+                    try {
+                      JUtils.Log("ProductDetail", " height= "
+                          + response.getHeight()
+                          + " width= "
+                          + response.getWidth());
+                      JUtils.Log("ProductDetail", "head_img " + finalHead_img);
+                      int width = DisplayUtils.getScreenW(ProductDetailActvity.this);
+
+                      Bitmap scaled = null;
+
+                      if (response.getHeight() > 2048) {
+                        Log.e("ProductDetail", finalHead_img
+                            + ",bad picture,height "
+                            + response.getHeight());
+                      } else {
+                        float scale_size =
+                            DisplayUtils.getScreenW(ProductDetailActvity.this)
+                                / (float) (response.getWidth());
+                        JUtils.Log("ProductDetail", "use glide scale_size="
+                            + scale_size
+                            + " screen width="
+                            + DisplayUtils.getScreenW(ProductDetailActvity.this));
+                        if (response.getHeight() * scale_size > 2048) {
+                          JUtils.Log("ProductDetail", "use glide width chg =" + 640 * (
+                              2048
+                                  / response.getHeight()));
+                          Glide.with(ProductDetailActvity.this)
+                              .load(finalHead_img)
+                              .diskCacheStrategy(DiskCacheStrategy.ALL)
+                              .override((int) (response.getWidth() * scale_size),
+                                  (int) (response.getHeight() * scale_size))
+                              .centerCrop()
+                              .placeholder(R.drawable.img_emptypic)
+                              .into(viewList.get(finalI1));
+                        } else {
+                          JUtils.Log("ProductDetail", "use glide height chg="
+                              + response.getHeight() * scale_size);
+                          Glide.with(ProductDetailActvity.this)
+                              .load(finalHead_img)
+                              .diskCacheStrategy(DiskCacheStrategy.ALL)
+                              .override((int) (response.getWidth() * scale_size),
+                                  (int) (response.getHeight() * scale_size))
+                              .centerCrop()
+                              .placeholder(R.drawable.img_emptypic)
+                              .into(viewList.get(finalI1));
+                        }
+                      }
+
+                      //Bitmap scaled = Bitmap.createScaledBitmap(response, 480, nh, true);
+                      new File(response.getFilePath()).delete();
+                    } catch (Exception e) {
+                      e.printStackTrace();
+                    }
+                  }
+                }
+              });
+
+              longimageview_content.addView(viewList.get(finalI1));
+            }
+
+            String headImg2 = productDetailBean.getPicPath();
+            JUtils.Log("ProductDetail", "head_img2: " + headImg2);
+
+            if (headImg2.startsWith("https://mmbiz.qlogo.cn")) {
+              //titleImage.post(new Runnable() {
+              //  @Override public void run() {
+              Glide.with(mContext)
+                  .load(headImg2)
+                  .diskCacheStrategy(DiskCacheStrategy.ALL)
+                  .centerCrop()
+                  .into(titleImage);
               //  }
               //});
+            } else {
+              String[] temp = headImg2.split("http://image.xiaolu.so/");
+              String head_img = "";
+              if (temp.length > 1) {
+                try {
+                  head_img = "http://image.xiaolu.so/"
+                      + URLEncoder.encode(temp[1], "utf-8")
+                      + "?imageMogr2/format/jpg/thumbnail/640/quality/90";
+                  JUtils.Log("ProductDetail", "head_img2 encode: " + head_img);
 
-              //longimageview_content.addView(viewList.get(finalI1));
+                  final String finalHead_img = head_img;
+                  //titleImage.post(new Runnable() {
+                  //  @Override public void run() {
+                  Glide.with(mContext)
+                      .load(finalHead_img)
+                      .diskCacheStrategy(DiskCacheStrategy.ALL)
+                      .centerCrop()
+                      .placeholder(R.drawable.parceholder)
+                      .into(titleImage);
+                  //  }
+                  //});
+                } catch (UnsupportedEncodingException e) {
+                  e.printStackTrace();
+                }
+              }
             }
 
-            //list.addAll(imageLists);
-            //imageAdapter.notifyDataSetChanged();
-            //imageAdapter.update(list);
-            imageAdapter = new ImageAdapter();
-            longimageview_content.setAdapter(imageAdapter);
+            item_id = productDetailBean.getId();
 
-            //ArrayAdapter<String> adapter =
-            //    new ArrayAdapter<String>(ProductDetailActvity.this,
-            //        android.R.layout.simple_list_item_1, android.R.id.text1);
-            //
-            //for (int i = 0; i < 24; i++) {
-            //  adapter.add("Item--------" + i);
-            //}
-            //
-            //longimageview_content.setAdapter(adapter);
-          }
-        });
-  }
+            normalSkus.addAll(productDetailBean.getNormalSkus());
 
-  private void initTagLayout() {
-    tagFlowLayout.setAdapter(
-        new TagAdapter<ProductDetailBean.NormalSkusEntity>(normalSkus) {
+            tagFlowLayout.setAdapter(
+                new TagAdapter<ProductDetailBean.NormalSkusEntity>(normalSkus) {
 
-          @Override public View getView(FlowLayout parent, int position,
-              ProductDetailBean.NormalSkusEntity normalSkusEntity) {
-            TextView tv = (TextView) mInflater.inflate(R.layout.tv, tagFlowLayout, false);
-            tv.setText(normalSkus.get(position).getName());
+                  @Override public View getView(FlowLayout parent, int position,
+                      ProductDetailBean.NormalSkusEntity normalSkusEntity) {
+                    TextView tv =
+                        (TextView) mInflater.inflate(R.layout.tv, tagFlowLayout, false);
+                    tv.setText(normalSkus.get(position).getName());
+                    return tv;
+                  }
+                });
 
-            if (normalSkus.get(position).isIsSaleout()) {
-              tv.setBackgroundColor(Color.parseColor("#f3f3f4"));
-              tv.setTextColor(Color.parseColor("#f3f3f4"));
-              tv.setClickable(false);
-            }
-            return tv;
+            tagFlowLayout.setOnTagClickListener(ProductDetailActvity.this);
+            tagFlowLayout.setOnSelectListener(ProductDetailActvity.this);
           }
         });
 
-    tagFlowLayout.setOnTagClickListener(ProductDetailActvity.this);
-    tagFlowLayout.setOnSelectListener(ProductDetailActvity.this);
-  }
+    model.getProductShareInfo(productId)
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<ShareProductBean>() {
 
-  private void initTitleImage(ProductDetailBean productDetailBean) {
-    String headImg2 = productDetailBean.getPicPath();
-    JUtils.Log("ProductDetail", "head_img2: " + headImg2);
-
-    if (headImg2.startsWith("https://mmbiz.qlogo.cn")) {
-      //titleImage.post(new Runnable() {
-      //  @Override public void run() {
-      Glide.with(mContext)
-          .load(headImg2)
-          .diskCacheStrategy(DiskCacheStrategy.ALL)
-          .centerCrop()
-          .into(titleImage);
-      //  }
-      //});
-    } else {
-      String[] temp = headImg2.split("http://image.xiaolu.so/");
-      String head_img;
-      if (temp.length > 1) {
-        try {
-          head_img = "http://image.xiaolu.so/"
-              + URLEncoder.encode(temp[1], "utf-8")
-              + "?imageMogr2/format/jpg/thumbnail/640/quality/90";
-          JUtils.Log("ProductDetail", "head_img2 encode: " + head_img);
-
-          final String finalHead_img = head_img;
-          //titleImage.post(new Runnable() {
-          //  @Override public void run() {
-          Glide.with(mContext)
-              .load(finalHead_img)
-              .diskCacheStrategy(DiskCacheStrategy.ALL)
-              .centerCrop()
-              .placeholder(R.drawable.parceholder)
-              .into(titleImage);
-          //  }
-          //});
-        } catch (UnsupportedEncodingException e) {
-          e.printStackTrace();
-        }
-      }
-    }
-  }
-
-  private void initTextView(ProductDetailBean productDetailBean) {
-    boolean isSaleopen = productDetailBean.isIsSaleopen();
-    boolean isSaleout = productDetailBean.isIsSaleout();
-    if (isSaleopen) {
-      if (isSaleout) {
-        button_shop.setClickable(false);
-        button_shop.setBackgroundColor(Color.parseColor("#f3f3f4"));
-      } else {
-        button_shop.setClickable(true);
-      }
-    } else {
-      button_shop.setClickable(false);
-      button_shop.setBackgroundColor(Color.parseColor("#f3f3f4"));
-    }
-
-    bianhao.setText(productDetailBean.getName());
-
-    caizhi.setText(productDetailBean.getDetails().getMaterial());
-
-    color.setText(productDetailBean.getDetails().getColor());
-
-    beizhu.setText(productDetailBean.getDetails().getNote());
-
-    name.setText(productDetailBean.getName());
-    price1.setText("¥" + productDetailBean.getAgentPrice());
-    price2.setText("/¥" + productDetailBean.getStdSalePrice());
-
-    if ((null == productDetailBean.getOffshelfTime())
-        || (productDetailBean.getOffshelfTime().equals(""))) {
-
-      long time = calcLeftTime1(productDetailBean.getSaleTime());
-
-      countdownView.start(time);
-    } else {
-      long time = calcLeftTime(productDetailBean.getOffshelfTime());
-      countdownView.start(time);
-    }
-
-    item_id = productDetailBean.getId();
-
-    normalSkus.addAll(productDetailBean.getNormalSkus());
+          @Override public void onNext(ShareProductBean productBean) {
+            shareProductBean = productBean;
+          }
+        });
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -374,7 +360,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
       //window.setNavigationBarColor(Color.TRANSPARENT);
     }
 
-    longimageview_content = (NestedListView) scrollView.getPullRootView()
+    longimageview_content = (LinearLayout) scrollView.getPullRootView()
         .findViewById(R.id.longimageview_content);
 
     tagFlowLayout =
@@ -678,49 +664,5 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
     // 启动分享GUI
     oks.show(this);
   }
-
-  class ImageAdapter extends BaseAdapter {
-
-    @Override public int getCount() {
-      return imageLists == null ? 0 : imageLists.size();
-    }
-
-    @Override public Object getItem(int position) {
-      return imageLists.get(position);
-    }
-
-    @Override public long getItemId(int position) {
-      return position;
-    }
-
-    @Override public View getView(int position, View convertView, ViewGroup parent) {
-
-      JUtils.Log(TAG, "getView1===" + position);
-      ViewHolder holder;
-      //View rootView = convertView;
-      if (convertView == null) {
-
-        JUtils.Log(TAG, "getView2===" + position);
-        holder = new ViewHolder();
-        LayoutInflater layoutInflater = LayoutInflater.from(ProductDetailActvity.this);
-        convertView = layoutInflater.inflate(R.layout.item_longimagview, parent, false);
-        holder.imageView = (ImageView) convertView.findViewById(R.id.longimageview);
-        convertView.setTag(holder);
-      } else {
-        holder = (ViewHolder) convertView.getTag();
-      }
-
-      JUtils.Log(TAG, "getView===" + imageLists.get(position));
-
-      Glide.with(ProductDetailActvity.this)
-          .load(imageLists.get(position)).diskCacheStrategy(DiskCacheStrategy.ALL)
-          //.placeholder(R.drawable.parceholder)
-          .centerCrop().into(holder.imageView);
-      return convertView;
-    }
-
-    class ViewHolder {
-      public ImageView imageView;
-    }
-  }
 }
+

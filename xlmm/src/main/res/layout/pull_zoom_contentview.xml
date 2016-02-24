@@ -178,11 +178,11 @@
       android:text="查看洗涤说明"
       />
   <include layout="@layout/common_gap"/>
-  <com.jimei.xiaolumeimei.widget.NestedListView
-      android:orientation="vertical"
-      android:id="@+id/longimageview_content"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"/>
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/longimageview_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
   <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="120px"/>

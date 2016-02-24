@@ -132,8 +132,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             }
           }
         });
-
-
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -270,6 +268,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
              */
         String errorMsg = data.getExtras().getString("error_msg"); // 错误信息
         String extraMsg = data.getExtras().getString("extra_msg"); // 错误信息
+        assert result != null;
         if (result.equals("cancel")) {
           //wexin alipay already showmsg
         } else if (result.equals("success")) {
@@ -362,6 +361,5 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             addressDetails.setVisibility(View.INVISIBLE);
           }
         });
-
   }
 }
