@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +15,7 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.CartsPayInfoAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -25,7 +27,7 @@ import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.AddNoAddressActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.AddressSelectActivity;
-import com.jimei.xiaolumeimei.ui.activity.user.CouponActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.CouponSelectActivity;
 import com.jimei.xiaolumeimei.widget.NestedListView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
@@ -90,6 +92,9 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   private String phoneSelect;
   private String addressDetailsSelect;
   private String addr_idSelect;
+  private double paymentInfo;
+  private double discount_feeInfo;
+  private double total_feeInfo;
 
   @Override protected void setListener() {
     adress.setOnClickListener(this);
@@ -101,104 +106,67 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
     list = new ArrayList<>();
 
-    if (isCoupon) {
-      model.getCartsInfoList(ids, coupon_id)
-          .subscribeOn(Schedulers.newThread())
-          .subscribe(new ServiceResponse<CartsPayinfoBean>() {
-            @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
-              super.onNext(cartsPayinfoBean);
-              if (cartsPayinfoBean != null) {
-                mAdapter.update(cartsPayinfoBean.getCartList());
-                cart_ids = cartsPayinfoBean.getCartIds();
-                channel = "alipay";
-                payment = cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
-                    - cartsPayinfoBean.getDiscountFee() + "";
-                post_fee = cartsPayinfoBean.getPostFee() + "";
-                discount_fee = cartsPayinfoBean.getDiscountFee() + "";
-                total_fee = cartsPayinfoBean.getTotalFee() + "";
-                uuid = cartsPayinfoBean.getUuid();
-                totalPrice.setText(
-                    "¥" + (cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
-                        - cartsPayinfoBean.getDiscountFee()
-                        - coupon_price));
-                tv_postfee.setText("¥" + post_fee);
+    downLoadCartsInfo();
+  }
 
-                if (isCoupon) {
-                  totalPrice_all.setText(
-                      "合计: ¥" + (cartsPayinfoBean.getTotalFee() - coupon_price) + "");
-                  jiehsneg.setText(
-                      "已节省" + (cartsPayinfoBean.getDiscountFee() + coupon_price) + "");
-                } else {
-                  totalPrice_all.setText("合计: ¥" + cartsPayinfoBean.getTotalFee() + "");
-                  jiehsneg.setText("已节省" + cartsPayinfoBean.getDiscountFee() + "");
-                }
+  private void downLoadCartsInfo() {
+    model.getCartsInfoList(ids)
+        .subscribeOn(Schedulers.newThread())
+        .subscribe(new ServiceResponse<CartsPayinfoBean>() {
+          @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
+            super.onNext(cartsPayinfoBean);
+            if (cartsPayinfoBean != null) {
+              mAdapter.updateWithClear(cartsPayinfoBean.getCartList());
+              cart_ids = cartsPayinfoBean.getCartIds();
+              channel = "alipay";
 
-                if (Double.parseDouble(total_fee) < 150) {
-                  coupon_layout.setOnClickListener(null);
-                  tv_coupon.setText("无可用优惠券");
-                } else {
-                  coupon_layout.setOnClickListener(CartsPayInfoActivity.this);
-                }
+              payment = cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
+                  - cartsPayinfoBean.getDiscountFee() + "";
+
+              paymentInfo = cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
+                  - cartsPayinfoBean.getDiscountFee();
+
+              post_fee = cartsPayinfoBean.getPostFee() + "";
+
+              discount_fee = cartsPayinfoBean.getDiscountFee() + "";
+              discount_feeInfo = cartsPayinfoBean.getDiscountFee();
+              total_fee = cartsPayinfoBean.getTotalFee() + "";
+
+              total_feeInfo = cartsPayinfoBean.getTotalFee();
+
+              uuid = cartsPayinfoBean.getUuid();
+
+              tv_postfee.setText("¥" + post_fee);
+              //
+              //if (isCoupon) {
+              //  totalPrice_all.setText(
+              //      "合计: ¥" + (cartsPayinfoBean.getTotalFee() - coupon_price) + "");
+              //  jiehsneg.setText(
+              //      "已节省" + (cartsPayinfoBean.getDiscountFee() + coupon_price) + "");
+              //} else {
+              totalPrice.setText("¥" + payment);
+              totalPrice_all.setText("合计: ¥" + cartsPayinfoBean.getTotalFee() + "");
+              jiehsneg.setText("已节省" + cartsPayinfoBean.getDiscountFee() + "");
+              //}
+
+              if (Double.parseDouble(total_fee) < 150) {
+                coupon_layout.setOnClickListener(null);
+                tv_coupon.setText("无可用优惠券");
               } else {
-                emptyContent.setVisibility(View.VISIBLE);
-                goMain.setOnClickListener(new View.OnClickListener() {
-                  @Override public void onClick(View v) {
-                    startActivity(
-                        new Intent(CartsPayInfoActivity.this, MainActivity.class));
-                    finish();
-                  }
-                });
+                coupon_layout.setOnClickListener(CartsPayInfoActivity.this);
               }
-            }
-          });
-    } else {
-      model.getCartsInfoList(ids)
-          .subscribeOn(Schedulers.newThread())
-          .subscribe(new ServiceResponse<CartsPayinfoBean>() {
-            @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
-              super.onNext(cartsPayinfoBean);
-              if (cartsPayinfoBean != null) {
-                mAdapter.update(cartsPayinfoBean.getCartList());
-                cart_ids = cartsPayinfoBean.getCartIds();
-                channel = "alipay";
-                payment = cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
-                    - cartsPayinfoBean.getDiscountFee() + "";
-                post_fee = cartsPayinfoBean.getPostFee() + "";
-                discount_fee = cartsPayinfoBean.getDiscountFee() + "";
-                total_fee = cartsPayinfoBean.getTotalFee() + "";
-                uuid = cartsPayinfoBean.getUuid();
-                totalPrice.setText("¥" + payment);
-                tv_postfee.setText("¥" + post_fee);
-
-                if (isCoupon) {
-                  totalPrice_all.setText(
-                      "合计: ¥" + (cartsPayinfoBean.getTotalFee() - coupon_price) + "");
-                  jiehsneg.setText(
-                      "已节省" + (cartsPayinfoBean.getDiscountFee() + coupon_price) + "");
-                } else {
-                  totalPrice_all.setText("合计: ¥" + cartsPayinfoBean.getTotalFee() + "");
-                  jiehsneg.setText("已节省" + cartsPayinfoBean.getDiscountFee() + "");
+            } else {
+              emptyContent.setVisibility(View.VISIBLE);
+              goMain.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                  startActivity(
+                      new Intent(CartsPayInfoActivity.this, MainActivity.class));
+                  finish();
                 }
-
-                if (Double.parseDouble(total_fee) < 150) {
-                  coupon_layout.setOnClickListener(null);
-                  tv_coupon.setText("无可用优惠券");
-                } else {
-                  coupon_layout.setOnClickListener(CartsPayInfoActivity.this);
-                }
-              } else {
-                emptyContent.setVisibility(View.VISIBLE);
-                goMain.setOnClickListener(new View.OnClickListener() {
-                  @Override public void onClick(View v) {
-                    startActivity(
-                        new Intent(CartsPayInfoActivity.this, MainActivity.class));
-                    finish();
-                  }
-                });
-              }
+              });
             }
-          });
-    }
+          }
+        });
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -244,10 +212,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
       case R.id.confirm:
 
-        JUtils.Log("CartsPayinfo", "isCoupon" + isCoupon);
-        JUtils.Log("CartsPayinfo", "iswx" + isWx);
-        JUtils.Log("CartsPayinfo", "isalipay" + isAlipay);
-
         if (isCoupon) {
           if (isWx) {
             payWithCoupon("wx");
@@ -269,10 +233,8 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         break;
 
       case R.id.coupon_layout:
-
-        Intent intent = new Intent(CartsPayInfoActivity.this, CouponActivity.class);
+        Intent intent = new Intent(CartsPayInfoActivity.this, CouponSelectActivity.class);
         startActivityForResult(intent, REQUEST_CODE_COUPONT);
-
         break;
     }
   }
@@ -312,7 +274,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ResponseBody>() {
           @Override public void onNext(ResponseBody responseBody) {
-            super.onNext(responseBody);
             try {
               String string = responseBody.string();
               Log.i("charge", string);
@@ -326,6 +287,10 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             } catch (IOException e) {
               e.printStackTrace();
             }
+          }
+
+          @Override public void onError(Throwable e) {
+            super.onError(e);
           }
         });
   }
@@ -360,11 +325,43 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     }
     if (requestCode == REQUEST_CODE_COUPONT) {
       if (resultCode == Activity.RESULT_OK) {
-        isCoupon = true;
+
         coupon_id = data.getStringExtra("coupon_id");
         coupon_price = data.getDoubleExtra("coupon_price", 0);
-      } else {
-        isCoupon = false;
+
+        totalPrice.setText("¥" + Math.round((paymentInfo - coupon_price) * 100) / 100);
+        totalPrice_all.setText(
+            "合计: ¥" + Math.round((total_feeInfo - coupon_price) * 100) / 100);
+        jiehsneg.setText("已节省" + coupon_price);
+
+        JUtils.Log(TAG, coupon_id);
+        model.getCartsInfoList(ids, coupon_id)
+            .subscribeOn(Schedulers.newThread())
+            .subscribe(new ServiceResponse<CartsPayinfoBean>() {
+              @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
+                if (cartsPayinfoBean != null) {
+                  if (TextUtils.isEmpty(cartsPayinfoBean.getmCoupon_message())) {
+                    isCoupon = true;
+                  } else {
+                    isCoupon = false;
+                    new MaterialDialog.Builder(CartsPayInfoActivity.this).
+                        content(cartsPayinfoBean.getmCoupon_message()).
+                        positiveText("OK").
+                        callback(new MaterialDialog.ButtonCallback() {
+                          @Override public void onPositive(MaterialDialog dialog) {
+                            downLoadCartsInfo();
+
+                            dialog.dismiss();
+                          }
+
+                          @Override public void onNegative(MaterialDialog dialog) {
+                            dialog.dismiss();
+                          }
+                        }).show();
+                  }
+                }
+              }
+            });
       }
     }
 

@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -25,8 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 import rx.schedulers.Schedulers;
 
-public class CouponActivity extends BaseSwipeBackCompatActivity
-    implements View.OnClickListener {
+public class CouponSelectActivity extends BaseSwipeBackCompatActivity
+    implements View.OnClickListener, AdapterView.OnItemClickListener {
   String TAG = "CouponActivity";
 
   @Bind(R.id.toolbar) Toolbar toolbar;
@@ -63,6 +64,7 @@ public class CouponActivity extends BaseSwipeBackCompatActivity
   @Override protected void setListener() {
     btn_jump.setOnClickListener(this);
     toolbar.setOnClickListener(this);
+    lv_unused_coupon.setOnItemClickListener(this);
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -138,10 +140,22 @@ public class CouponActivity extends BaseSwipeBackCompatActivity
   @Override public void onClick(View v) {
     switch (v.getId()) {
       case R.id.btn_jump:
-        Intent intent = new Intent(CouponActivity.this, MainActivity.class);
+        Intent intent = new Intent(CouponSelectActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
         break;
     }
+  }
+
+  @Override
+  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    CouponBean.ResultsEntity resultsEntity = list.get(position);
+    String coupon_id = resultsEntity.getId() + "";
+    double coupon_value = resultsEntity.getCoupon_value();
+    Intent intent = new Intent();
+    intent.putExtra("coupon_id", coupon_id);
+    intent.putExtra("coupon_price", coupon_value);
+    setResult(RESULT_OK, intent);
+    finish();
   }
 }
