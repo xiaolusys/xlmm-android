@@ -83,6 +83,7 @@ public class CouponBean {
         private String created;
         private String modified;
         private double use_fee;
+        private String coupon_type_display;
 
         public void setId(int id) {
             this.id = id;
@@ -138,6 +139,10 @@ public class CouponBean {
 
         public void setUse_fee(double use_fee) {
             this.use_fee = use_fee;
+        }
+
+        public void setCoupon_type_display(String coupon_type_display) {
+            this.coupon_type_display = coupon_type_display;
         }
 
         public int getId() {
@@ -196,24 +201,28 @@ public class CouponBean {
             return use_fee;
         }
 
-        @Override
-        public String toString() {
+        public String getCoupon_type_display() {
+            return coupon_type_display;
+        }
+
+        @Override public String toString() {
             return "ResultsEntity{" +
-                    "id=" + id +
-                    ", coupon_type=" + coupon_type +
-                    ", title='" + title + '\'' +
-                    ", customer='" + customer + '\'' +
-                    ", coupon_no='" + coupon_no + '\'' +
-                    ", coupon_value=" + coupon_value +
-                    ", valid=" + valid +
-                    ", poll_status=" + poll_status +
-                    ", deadline='" + deadline + '\'' +
-                    ", sale_trade='" + sale_trade + '\'' +
-                    ", status=" + status +
-                    ", created='" + created + '\'' +
-                    ", modified='" + modified + '\'' +
-                    ", use_fee=" + use_fee +
-                    '}';
+                "id=" + id +
+                ", coupon_type=" + coupon_type +
+                ", title='" + title + '\'' +
+                ", customer='" + customer + '\'' +
+                ", coupon_no='" + coupon_no + '\'' +
+                ", coupon_value=" + coupon_value +
+                ", valid=" + valid +
+                ", poll_status=" + poll_status +
+                ", deadline='" + deadline + '\'' +
+                ", sale_trade='" + sale_trade + '\'' +
+                ", status=" + status +
+                ", created='" + created + '\'' +
+                ", modified='" + modified + '\'' +
+                ", use_fee=" + use_fee +
+                ", coupon_type_display='" + coupon_type_display + '\'' +
+                '}';
         }
     }
 

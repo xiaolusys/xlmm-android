@@ -71,7 +71,7 @@ public class CouponListAdapter extends BaseAdapter {
 
             crttime = list.get(i).getCreated();
             deadline = list.get(i).getDeadline();
-            usescope = "";
+            usescope = list.get(i).getCoupon_type_display();
 
             coupon_no = list.get(i).getCoupon_no();
 
