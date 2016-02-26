@@ -593,7 +593,7 @@ public class ProductDetailBean {
        * 衣长 : 75
        */
 
-      //@SerializedName("result") private ResultEntity mResult;
+      @SerializedName("result") private Object mResult;
 
       public String getFreeNum() {
         return mFreeNum;
@@ -603,52 +603,13 @@ public class ProductDetailBean {
         this.mFreeNum = freeNum;
       }
 
-      //public ResultEntity getResult() {
-      //  return mResult;
-      //}
-      //
-      //public void setResult(ResultEntity result) {
-      //  this.mResult = result;
-      //}
+      public Object getResult() {
+        return mResult;
+      }
 
-      //public static class ResultEntity {
-      //  @SerializedName("肩宽") private String m肩宽;
-      //  @SerializedName("胸围") private String m胸围;
-      //  @SerializedName("袖长") private String m袖长;
-      //  @SerializedName("衣长") private String m衣长;
-      //
-      //  public String get肩宽() {
-      //    return m肩宽;
-      //  }
-      //
-      //  public void set肩宽(String 肩宽) {
-      //    this.m肩宽 = 肩宽;
-      //  }
-      //
-      //  public String get胸围() {
-      //    return m胸围;
-      //  }
-      //
-      //  public void set胸围(String 胸围) {
-      //    this.m胸围 = 胸围;
-      //  }
-      //
-      //  public String get袖长() {
-      //    return m袖长;
-      //  }
-      //
-      //  public void set袖长(String 袖长) {
-      //    this.m袖长 = 袖长;
-      //  }
-      //
-      //  public String get衣长() {
-      //    return m衣长;
-      //  }
-      //
-      //  public void set衣长(String 衣长) {
-      //    this.m衣长 = 衣长;
-      //  }
-      //}
+      public void setResult(Object result) {
+        this.mResult = result;
+      }
     }
   }
 }

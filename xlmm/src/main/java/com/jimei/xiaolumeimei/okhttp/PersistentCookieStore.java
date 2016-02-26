@@ -42,7 +42,7 @@ public class PersistentCookieStore implements CookieStore {
    */
   public PersistentCookieStore(Context context) {
     cookiePrefs = context.getSharedPreferences(COOKIE_PREFS, 0);
-    cookiePrefs1 = context.getSharedPreferences(COOKIE_PREFS + "xlmm", 0);
+    cookiePrefs1 = context.getSharedPreferences("xlmmCookiesAxiba", 0);
     cookies = new HashMap<>();
 
     // Load any previously stored cookies into the store
@@ -89,7 +89,15 @@ public class PersistentCookieStore implements CookieStore {
     prefsWriter.apply();
 
     SharedPreferences.Editor editor = cookiePrefs1.edit();
-    editor.putString(COOKIE_NAME_PREFIX + name, cookie.getValue());
+    editor.putString("cookiesString", cookie.getName()
+        + "="
+        + cookie.getValue()
+        + "; domain="
+        + cookie.getDomain()
+        + "; path="
+        + cookie.getPath());
+    editor.putString("cookiesDomain", cookie.getDomain());
+
     editor.apply();
   }
 

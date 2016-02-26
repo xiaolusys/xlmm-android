@@ -69,6 +69,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   private String cookies;
   private String actlink;
   private ActivityBean shareInfo;
+  private String domain;
 
   @Override protected void setListener() {
     mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -86,6 +87,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   @Override protected void getBundleExtras(Bundle extras) {
     if (extras != null) {
       cookies = extras.getString("cookies");
+      domain = extras.getString("domain");
       actlink = extras.getString("actlink");
     }
   }
@@ -96,7 +98,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
 
   @SuppressLint("JavascriptInterface") @Override protected void initViews() {
 
-    syncCookie(WebViewActivity.this, actlink);
+    syncCookie(WebViewActivity.this);
 
     mProgressBar = (ProgressBar) findViewById(R.id.pb_view);
     mWebView = (WebView) findViewById(R.id.wb_view);
@@ -110,7 +112,6 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     } else {
       mWebView.getSettings().setLoadsImagesAutomatically(false);
     }
-
 
     mWebView.getSettings().setJavaScriptEnabled(true);
     mWebView.addJavascriptInterface(new AndroidJsBridge(this), "AndroidBridge");
@@ -182,11 +183,13 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void onPause() {
     super.onPause();
+    CookieSyncManager.getInstance().stopSync();
     mWebView.onPause();
   }
 
   @Override protected void onResume() {
     super.onResume();
+    CookieSyncManager.getInstance().startSync();
     mWebView.onResume();
     ShareSDK.initSDK(this);
   }
@@ -201,7 +204,20 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     ShareSDK.stopSDK(this);
   }
 
-  public void syncCookie(Context context, String url) {
+  //public void syncCookie(Context context, String url) {
+  //  try {
+  //    CookieSyncManager.createInstance(context);
+  //    CookieManager cookieManager = CookieManager.getInstance();
+  //    cookieManager.setAcceptCookie(true);
+  //    cookieManager.removeSessionCookie();// 移除
+  //    cookieManager.removeAllCookie();
+  //
+  //    cookieManager.setCookie(url, cookies);
+  //    CookieSyncManager.getInstance().sync();
+  //  } catch (Exception e) {
+  //  }
+  //}
+  public void syncCookie(Context context) {
     try {
       CookieSyncManager.createInstance(context);
       CookieManager cookieManager = CookieManager.getInstance();
@@ -209,7 +225,10 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
       cookieManager.removeSessionCookie();// 移除
       cookieManager.removeAllCookie();
 
-      cookieManager.setCookie(url, cookies);
+      JUtils.Log(TAG, domain + "=====" + cookies);
+      cookieManager.setCookie(domain, cookies);
+
+      CookieSyncManager.getInstance().startSync();
       CookieSyncManager.getInstance().sync();
     } catch (Exception e) {
     }
