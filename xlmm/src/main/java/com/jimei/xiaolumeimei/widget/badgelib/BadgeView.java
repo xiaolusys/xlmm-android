@@ -72,7 +72,7 @@ public class BadgeView extends TextView {
     RoundRectShape roundRect = new RoundRectShape(radiusArray, null, null);
     ShapeDrawable bgDrawable = new ShapeDrawable(roundRect);
     bgDrawable.getPaint().setColor(badgeColor);
-    setBackground(bgDrawable);
+    setBackgroundDrawable(bgDrawable);
   }
 
   /**
