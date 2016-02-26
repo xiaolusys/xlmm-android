@@ -19,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import butterknife.Bind;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
@@ -27,8 +26,10 @@ import com.jimei.xiaolumeimei.base.BaseActivity;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.entities.UserNewBean;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.UserModel;
+import com.jimei.xiaolumeimei.model.UserNewModel;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllOrdersActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
@@ -54,7 +55,7 @@ import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseActivity
     implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
-  public  static String TAG = "MainActivity";
+  public static String TAG = "MainActivity";
   @Bind(R.id.tab_layout) TabLayout mTabLayout;
   @Bind(R.id.view_pager) ViewPager mViewPager;
   @Bind(R.id.tool_bar) Toolbar toolbar;
@@ -65,6 +66,12 @@ public class MainActivity extends BaseActivity
   ImageView imgPoint;
   ImageView imgCoupon;
   ImageView imgUser;
+  ImageView imaMoney;
+
+  TextView tvPoint;
+  TextView tvCoupon;
+  TextView tvMoney;
+
   List<Fragment> fragments;
   List<String> titles;
   UserModel model = new UserModel();
@@ -90,6 +97,17 @@ public class MainActivity extends BaseActivity
 
     getUserInfo();
 
+    UserNewModel.getInstance()
+        .getProfile()
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<UserNewBean>() {
+          @Override public void onNext(UserNewBean userNewBean) {
+            if (userNewBean != null) {
+              int score = userNewBean.getScore();
+              double budgetCash = userNewBean.getUserBudget().getBudgetCash();
+            }
+          }
+        });
   }
 
   private void initTabLayout() {
@@ -131,21 +149,20 @@ public class MainActivity extends BaseActivity
     ActionBarDrawerToggle toggle =
         new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open,
             R.string.navigation_drawer_close) {
-          @Override
-          public void onDrawerClosed(View drawerView) {
+          @Override public void onDrawerClosed(View drawerView) {
             //getActionBar().setTitle(mTitle);
             invalidateOptionsMenu();
           }
-          @Override
-          public void onDrawerOpened(View drawerView) {
+
+          @Override public void onDrawerOpened(View drawerView) {
             //getActionBar().setTitle(mDrawerTitle);
             if (!(LoginUtils.checkLoginState(getApplicationContext()))) {
-              if(tvNickname != null) {
+              if (tvNickname != null) {
                 tvNickname.setText("点击登录");
               }
-            }
-            else{
-              if((tvNickname != null) && (userInfoBean != null)
+            } else {
+              if ((tvNickname != null)
+                  && (userInfoBean != null)
                   && (userInfoBean.getResults() != null)) {
                 tvNickname.setText(userInfoBean.getResults().get(0).getNick());
               }
@@ -160,11 +177,34 @@ public class MainActivity extends BaseActivity
     navigationView.setNavigationItemSelectedListener(this);
 
     View llayout = navigationView.getHeaderView(0);
+
+    //tvCoupon = llayout.findViewById(R.id.)
+
+    imaMoney = (ImageView) llayout.findViewById(R.id.imgMoney);
+    imaMoney.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+
+        if (LoginUtils.checkLoginState(getApplicationContext())) {
+          Intent intent = new Intent(MainActivity.this, MembershipPointActivity.class);
+          startActivity(intent);
+        } else {
+          Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+          Bundle bundle = new Bundle();
+          bundle.putString("login", "money");
+          intent.putExtras(bundle);
+          startActivity(intent);
+        }
+      }
+    });
+
     imgPoint = (ImageView) llayout.findViewById(R.id.imgPoint);
     imgPoint.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
         if (LoginUtils.checkLoginState(getApplicationContext())) {
           Intent intent = new Intent(MainActivity.this, MembershipPointActivity.class);
+          Bundle bundle = new Bundle();
+          bundle.putString("money", "point");
+          intent.putExtras(bundle);
           startActivity(intent);
         } else {
           Intent intent = new Intent(MainActivity.this, LoginActivity.class);
@@ -182,8 +222,7 @@ public class MainActivity extends BaseActivity
         if (LoginUtils.checkLoginState(getApplicationContext())) {
           Intent intent = new Intent(MainActivity.this, CouponActivity.class);
           startActivity(intent);
-        }
-        else{
+        } else {
           Intent intent = new Intent(MainActivity.this, LoginActivity.class);
           Bundle bundle = new Bundle();
           bundle.putString("login", "coupon");
@@ -204,7 +243,6 @@ public class MainActivity extends BaseActivity
           startActivity(intent);
           drawer.closeDrawers();
         }
-
       }
     });
 
@@ -220,7 +258,6 @@ public class MainActivity extends BaseActivity
   @Override public boolean onNavigationItemSelected(MenuItem item) {
 
     int id = item.getItemId();
-
 
     if (!LoginUtils.checkLoginState(getApplicationContext())) {
             /*未登录进入登录界面*/
@@ -263,12 +300,13 @@ public class MainActivity extends BaseActivity
 
                         if (responseBody.getCode() == 0) {
                           JUtils.Toast("退出成功");
-                          if(tvNickname != null) {
+                          if (tvNickname != null) {
                             tvNickname.setText("点击登录");
                           }
 
-                          if((!finalAccount.isEmpty())) {
-                            MiPushClient.unsetUserAccount(getApplicationContext(), finalAccount, null);
+                          if ((!finalAccount.isEmpty())) {
+                            MiPushClient.unsetUserAccount(getApplicationContext(),
+                                finalAccount, null);
                             JUtils.Log("XlmmApp", "unset useraccount: " + finalAccount);
                           }
                         }
@@ -311,34 +349,10 @@ public class MainActivity extends BaseActivity
     }
   }
 
-  class MainTabAdapter extends FragmentPagerAdapter {
-    private List<Fragment> listFragment;
-    private List<String> listTitle;
-
-    public MainTabAdapter(FragmentManager fm, List<Fragment> listFragment,
-        List<String> listTitle) {
-      super(fm);
-      this.listFragment = listFragment;
-      this.listTitle = listTitle;
-    }
-
-    @Override public Fragment getItem(int position) {
-      return listFragment.get(position);
-    }
-
-    @Override public int getCount() {
-      return listFragment.size();
-    }
-
-    @Override public CharSequence getPageTitle(int position) {
-      return listTitle.get(position);
-    }
-  }
-
   @Override public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()){
+    switch (item.getItemId()) {
       case R.id.action_settings:
-        JUtils.Log(TAG,"xiaolu mama entry");
+        JUtils.Log(TAG, "xiaolu mama entry");
         if (!LoginUtils.checkLoginState(getApplicationContext())) {
             /*未登录进入登录界面*/
           JUtils.Log(TAG, "need login");
@@ -348,8 +362,7 @@ public class MainActivity extends BaseActivity
           intent.putExtras(bundle);
           startActivity(intent);
           //startActivity(new Intent(MainActivity.this, LoginActivity.class));
-        }
-        else {
+        } else {
           checkMamaInfo();
         }
         break;
@@ -360,7 +373,7 @@ public class MainActivity extends BaseActivity
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.mainframe_menu,menu);
+    getMenuInflater().inflate(R.menu.mainframe_menu, menu);
     return super.onCreateOptionsMenu(menu);
   }
 
@@ -370,58 +383,55 @@ public class MainActivity extends BaseActivity
     model.getUserInfo()
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<UserInfoBean>() {
-          @Override
-          public void onNext(UserInfoBean user) {
-            if((user.getResults().get(0).getXiaolumm() != null)
-                && (user.getResults().get(0).getXiaolumm().getId() != 0)){
-              JUtils.Log(TAG, "i am xiaolumama, id="+ user.getResults().get(0).getXiaolumm().getId());
+          @Override public void onNext(UserInfoBean user) {
+            if ((user.getResults().get(0).getXiaolumm() != null) && (user.getResults()
+                .get(0)
+                .getXiaolumm()
+                .getId() != 0)) {
+              JUtils.Log(TAG, "i am xiaolumama, id=" + user.getResults()
+                  .get(0)
+                  .getXiaolumm()
+                  .getId());
               Intent intent = new Intent(MainActivity.this, MamaInfoActivity.class);
               startActivity(intent);
-            }
-            else{
+            } else {
               JUtils.Toast("您还不是小鹿妈妈，赶紧加入我们吧！");
             }
           }
 
-          @Override
-          public void onCompleted() {
+          @Override public void onCompleted() {
             super.onCompleted();
           }
 
-          @Override
-          public void onError(Throwable e) {
+          @Override public void onError(Throwable e) {
 
-            Log.e(TAG, "getUserInfo error: "   + e.getLocalizedMessage());
+            Log.e(TAG, "getUserInfo error: " + e.getLocalizedMessage());
             super.onError(e);
           }
         });
-
   }
 
   private void getUserInfo() {
     model.getUserInfo()
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<UserInfoBean>() {
-          @Override
-          public void onNext(UserInfoBean user) {
+          @Override public void onNext(UserInfoBean user) {
             userInfoBean = user;
           }
-          @Override
-          public void onCompleted() {
+
+          @Override public void onCompleted() {
             super.onCompleted();
           }
 
-          @Override
-          public void onError(Throwable e) {
+          @Override public void onError(Throwable e) {
 
-            Log.e(TAG, "getUserInfo error1: "   + e.getLocalizedMessage());
+            Log.e(TAG, "getUserInfo error1: " + e.getLocalizedMessage());
             super.onError(e);
           }
         });
   }
 
-  @Override
-  protected void onResume() {
+  @Override protected void onResume() {
     super.onResume();
 
     //显示购物车数量
@@ -441,11 +451,12 @@ public class MainActivity extends BaseActivity
     getUserInfo();
 
     if (LoginUtils.checkLoginState(getApplicationContext()) && (tvNickname != null)) {
-      if((userInfoBean != null)  && (userInfoBean.getResults() != null)
-              && (userInfoBean.getResults().size() > 0) && (! userInfoBean.getResults().get(0).getNick().isEmpty())){
+      if ((userInfoBean != null)
+          && (userInfoBean.getResults() != null)
+          && (userInfoBean.getResults().size() > 0)
+          && (!userInfoBean.getResults().get(0).getNick().isEmpty())) {
         tvNickname.setText(userInfoBean.getResults().get(0).getNick());
-      }
-      else {
+      } else {
         tvNickname.setText("小鹿妈妈");
       }
     }
@@ -483,5 +494,29 @@ public class MainActivity extends BaseActivity
 
   public UserInfoBean getUserInfoBean() {
     return userInfoBean;
+  }
+
+  class MainTabAdapter extends FragmentPagerAdapter {
+    private List<Fragment> listFragment;
+    private List<String> listTitle;
+
+    public MainTabAdapter(FragmentManager fm, List<Fragment> listFragment,
+        List<String> listTitle) {
+      super(fm);
+      this.listFragment = listFragment;
+      this.listTitle = listTitle;
+    }
+
+    @Override public Fragment getItem(int position) {
+      return listFragment.get(position);
+    }
+
+    @Override public int getCount() {
+      return listFragment.size();
+    }
+
+    @Override public CharSequence getPageTitle(int position) {
+      return listTitle.get(position);
+    }
   }
 }

@@ -41,6 +41,7 @@ import com.jimei.xiaolumeimei.entities.SmsLoginUserBean;
 import com.jimei.xiaolumeimei.entities.UserAccountBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.entities.UserNewBean;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.entities.WxLogininfoBean;
 import com.squareup.okhttp.ResponseBody;
@@ -322,6 +323,11 @@ public interface XlmmService {
     //获取用户积分信息
     @GET(XlmmApi.MEMBERSHIPPOINT_URL)
     Observable<MembershipPointBean> getMembershipPointBean();
+
+
+    //获取用户信息
+    @GET("users/profile")
+    Observable<UserNewBean> getProfile();
 
     //获取用户积分记录信息
     @GET(XlmmApi.MEMBERSHIPPOINTLOG_URL)

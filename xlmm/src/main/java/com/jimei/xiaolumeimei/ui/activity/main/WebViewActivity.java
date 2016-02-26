@@ -25,7 +25,6 @@ import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-import butterknife.Bind;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
@@ -65,6 +64,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   //    "http://m.xiaolumeimei.com/sale/promotion/xlsampleorder/";
   private static final String URL = "http://m.xiaolumeimei.com/";
   private static final String TAG = WebViewActivity.class.getSimpleName();
+  LinearLayout ll_actwebview;
   //private static final String URL =
   //    "http://192.168.1.31:9000/sale/promotion/xlsampleorder/";
   private Toolbar mToolbar;
@@ -74,8 +74,6 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   private String actlink;
   private ActivityBean shareInfo;
   private String domain;
-
-  LinearLayout ll_actwebview;
 
   @Override protected void setListener() {
     mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -87,20 +85,19 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initData() {
-    JUtils.Log(TAG,"initData");
+    JUtils.Log(TAG, "initData");
     runOnUiThread(new Runnable() {
       @Override public void run() {
-        JUtils.Log(TAG,"initData--"+actlink);
+        JUtils.Log(TAG, "initData--" + actlink);
         //syncCookie(WebViewActivity.this, actlink);
         try {
           mWebView.loadUrl(actlink);
-        }catch (Exception e){
+        } catch (Exception e) {
           e.printStackTrace();
-          JUtils.Log(TAG,"loadUrl--");
+          JUtils.Log(TAG, "loadUrl--");
         }
       }
     });
-
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -109,7 +106,8 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
       domain = extras.getString("domain");
       actlink = extras.getString("actlink");
       domain = extras.getString("domain");
-      JUtils.Log(TAG, "GET cookie:"+cookies + " actlink:"+actlink + " domain:"+domain);
+      JUtils.Log(TAG,
+          "GET cookie:" + cookies + " actlink:" + actlink + " domain:" + domain);
     }
   }
 
@@ -118,13 +116,11 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   }
 
   @SuppressLint("JavascriptInterface") @Override protected void initViews() {
-    JUtils.Log(TAG,"initViews");
-
+    JUtils.Log(TAG, "initViews");
 
     //syncCookie(WebViewActivity.this);
 
-
-    ll_actwebview = (LinearLayout) findViewById(R.id.ll_actwebview) ;
+    ll_actwebview = (LinearLayout) findViewById(R.id.ll_actwebview);
     mProgressBar = (ProgressBar) findViewById(R.id.pb_view);
     mWebView = (WebView) findViewById(R.id.wb_view);
     mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -132,7 +128,6 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     setSupportActionBar(mToolbar);
     mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
 
     try {
       if (Build.VERSION.SDK_INT >= 19) {
@@ -144,14 +139,16 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
       mWebView.getSettings().setJavaScriptEnabled(true);
       mWebView.addJavascriptInterface(new AndroidJsBridge(this), "AndroidBridge");
 
-      mWebView.getSettings().setAllowFileAccess(true);
+      //mWebView.getSettings().setAllowFileAccess(true);
       //如果访问的页面中有Javascript，则webview必须设置支持Javascript
       //mWebView.getSettings().setUserAgentString(MyApplication.getUserAgent());
-      mWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-      mWebView.getSettings().setAllowFileAccess(true);
-      mWebView.getSettings().setAppCacheEnabled(true);
-      mWebView.getSettings().setDomStorageEnabled(true);
-      mWebView.getSettings().setDatabaseEnabled(true);
+      //mWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+      //mWebView.getSettings().setAllowFileAccess(true);
+      //mWebView.getSettings().setAppCacheEnabled(true);
+      //mWebView.getSettings().setDomStorageEnabled(true);
+      //mWebView.getSettings().setDatabaseEnabled(true);
+      //mWebView.getSettings().setLoadWithOverviewMode(true);
+      //mWebView.getSettings().setUseWideViewPort(true);
 
       mWebView.setWebChromeClient(new WebChromeClient() {
         @Override public void onProgressChanged(WebView view, int newProgress) {
@@ -162,7 +159,6 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
           } else {
             mProgressBar.setVisibility(View.VISIBLE);
           }
-
         }
       });
 
@@ -171,12 +167,13 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
         @Override public void onPageFinished(WebView view, String url) {
           JUtils.Log(TAG, "onPageFinished:" + url);
 
-          if (!mWebView.getSettings().getLoadsImagesAutomatically()) {
-            mWebView.getSettings().setLoadsImagesAutomatically(true);
-          }
+          //if (!mWebView.getSettings().getLoadsImagesAutomatically()) {
+          //  mWebView.getSettings().setLoadsImagesAutomatically(true);
+          //}
         }
 
-        @Override public void onReceivedHttpAuthRequest(WebView view, HttpAuthHandler handler,
+        @Override
+        public void onReceivedHttpAuthRequest(WebView view, HttpAuthHandler handler,
             String host, String realm) {
           JUtils.Log(TAG, "onReceivedHttpAuthRequest");
           view.reload();
@@ -197,7 +194,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
           //handleMessage(Message msg); 其他处理
         }
       });
-    }catch (Exception e){
+    } catch (Exception e) {
       e.printStackTrace();
       JUtils.Log(TAG, "set webview err");
     }
@@ -244,19 +241,17 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void onDestroy() {
-    JUtils.Log(TAG,"onDestroy");
+    JUtils.Log(TAG, "onDestroy");
     super.onDestroy();
     ll_actwebview.removeView(mWebView);
     mWebView.removeAllViews();
     mWebView.destroy();
-
   }
 
   @Override protected void onStop() {
     super.onStop();
     ShareSDK.stopSDK(this);
   }
-
 
   //public void syncCookie(Context context, String url) {
   //  try {
@@ -274,7 +269,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   public void syncCookie(Context context) {
 
     try {
-      JUtils.Log(TAG,"syncCookie bgn");
+      JUtils.Log(TAG, "syncCookie bgn");
       CookieSyncManager.createInstance(context);
       CookieManager cookieManager = CookieManager.getInstance();
 
@@ -287,10 +282,10 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
       cookieManager.setCookie(domain, cookies);
 
       CookieSyncManager.getInstance().sync();
-      JUtils.Log(TAG,"syncCookie end");
+      JUtils.Log(TAG, "syncCookie end");
     } catch (Exception e) {
       e.printStackTrace();
-      JUtils.Log(TAG,"syncCookie err:"+ e.toString());
+      JUtils.Log(TAG, "syncCookie err:" + e.toString());
     }
   }
 

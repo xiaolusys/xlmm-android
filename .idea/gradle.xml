@@ -13,13 +13,6 @@
             <option value="$PROJECT_DIR$/xlmm" />
           </set>
         </option>
-        <option name="myModules">
-          <set>
-            <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/library" />
-            <option value="$PROJECT_DIR$/xlmm" />
-          </set>
-        </option>
       </GradleProjectSettings>
     </option>
   </component>

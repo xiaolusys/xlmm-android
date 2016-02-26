@@ -16,13 +16,9 @@ import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.utils.NetWorkUtil;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
-import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.zhy.autolayout.config.AutoLayoutConifg;
-import java.io.IOException;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.util.List;
@@ -38,12 +34,15 @@ public class XlmmApp extends Application {
 
   public static OkHttpClient client;
   private static Context mContext;
-  private SharedPreferences cookiePrefs;
-
   private static XiaoMiMessageReceiver.XiaoMiPushHandler handler = null;
+  private SharedPreferences cookiePrefs;
 
   public static Context getInstance() {
     return mContext;
+  }
+
+  public static XiaoMiMessageReceiver.XiaoMiPushHandler getHandler() {
+    return handler;
   }
 
   @Override public void onCreate() {
@@ -59,11 +58,12 @@ public class XlmmApp extends Application {
     ShareSDK.initSDK(this);
     AutoLayoutConifg.getInstance().useDeviceSize();
     //CustomActivityOnCrash.install(this);
-
+    //Stetho.initializeWithDefaults(this);
     //初始化push推送服务
-    if(shouldInit()) {
+    if (shouldInit()) {
       JUtils.Log("XlmmApp", "reg xiaomi push");
-      MiPushClient.registerPush(getApplicationContext(), XlmmConst.XIAOMI_APP_ID, XlmmConst.XIAOMI_APP_KEY);
+      MiPushClient.registerPush(getApplicationContext(), XlmmConst.XIAOMI_APP_ID,
+          XlmmConst.XIAOMI_APP_KEY);
     }
 
     if (handler == null) {
@@ -71,7 +71,7 @@ public class XlmmApp extends Application {
     }
 
     //获取用户信息失败，说明要重新登陆
-    UserModel model =  new UserModel();
+    UserModel model = new UserModel();
     if (NetWorkUtil.isNetWorkConnected(this)) {
 
       model.getUserInfo()
@@ -92,8 +92,6 @@ public class XlmmApp extends Application {
             }
           });
     }
-
-
   }
 
   //初始化OkHttpClient
@@ -109,8 +107,6 @@ public class XlmmApp extends Application {
     //        CookiePolicy.ACCEPT_ALL));
     //httpClient.interceptors().add(receivedCookiesInterceptor);
 
-    SharedPreferences.Editor editor = cookiePrefs.edit();
-
     CookieManager cookieManager =
         new CookieManager(new PersistentCookieStore(getApplicationContext()),
             CookiePolicy.ACCEPT_ALL);
@@ -119,28 +115,31 @@ public class XlmmApp extends Application {
     httpClient.setConnectTimeout(10 * 1000, TimeUnit.MILLISECONDS);
     httpClient.setWriteTimeout(30 * 1000, TimeUnit.MILLISECONDS);
     httpClient.setWriteTimeout(30 * 1000, TimeUnit.MILLISECONDS);
-    httpClient.interceptors().add(new Interceptor() {
-      @Override public Response intercept(Chain chain) throws IOException {
-        Request request = chain.request()
-            .newBuilder()
-            .addHeader("Content-Type", "application/json;charset=utf-8")
-            .build();
+    //httpClient.interceptors().add(new Interceptor() {
+    //  @Override public Response intercept(Chain chain) throws IOException {
+    //    Request request = chain.request()
+    //        .newBuilder()
+    //        .addHeader("Content-Type", "application/json;charset=utf-8")
+    //        .build();
+    //
+    //    Response originalResponse = chain.proceed(request);
+    //
+    //    List<String> cookieList = originalResponse.headers("Set-Cookie");
+    //    if (cookieList != null) {
+    //      //JUtils.Log("XLMMAPP", cookieList.get(0));
+    //      for (String s : cookieList) {//Cookie的格式为:cookieName=cookieValue;path=xxx
+    //        //保存你需要的cookie数据
+    //        JUtils.Log("XLMMAPP", cookieList.get(0));
+    //        editor.putString("Cookies", s);
+    //        editor.apply();
+    //      }
+    //    }
+    //    return originalResponse;
+    //  }
+    //});
 
-        Response originalResponse = chain.proceed(request);
+    //httpClient.networkInterceptors().add(new StethoInterceptor());
 
-        List<String> cookieList = originalResponse.headers("Set-Cookie");
-        if (cookieList != null) {
-          //JUtils.Log("XLMMAPP", cookieList.get(0));
-          for (String s : cookieList) {//Cookie的格式为:cookieName=cookieValue;path=xxx
-            //保存你需要的cookie数据
-            JUtils.Log("XLMMAPP", cookieList.get(0));
-            editor.putString("Cookies", s);
-            editor.apply();
-          }
-        }
-        return originalResponse;
-      }
-    });
     httpClient.setCookieHandler(cookieManager);
     return httpClient;
   }
@@ -152,7 +151,8 @@ public class XlmmApp extends Application {
 
   private boolean shouldInit() {
     ActivityManager am = ((ActivityManager) getSystemService(Context.ACTIVITY_SERVICE));
-    List<ActivityManager.RunningAppProcessInfo> processInfos = am.getRunningAppProcesses();
+    List<ActivityManager.RunningAppProcessInfo> processInfos =
+        am.getRunningAppProcesses();
     String mainProcessName = getPackageName();
     int myPid = android.os.Process.myPid();
     for (ActivityManager.RunningAppProcessInfo info : processInfos) {
@@ -162,9 +162,4 @@ public class XlmmApp extends Application {
     }
     return false;
   }
-
-  public static XiaoMiMessageReceiver.XiaoMiPushHandler getHandler() {
-    return handler;
-  }
-
 }
