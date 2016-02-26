@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Picture;
+import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -16,12 +17,15 @@ import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.HttpAuthHandler;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import butterknife.Bind;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
@@ -69,6 +73,9 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   private String cookies;
   private String actlink;
   private ActivityBean shareInfo;
+  private String domain;
+
+  LinearLayout ll_actwebview;
 
   @Override protected void setListener() {
     mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -80,13 +87,28 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initData() {
-    mWebView.loadUrl(actlink);
+    JUtils.Log(TAG,"initData");
+    runOnUiThread(new Runnable() {
+      @Override public void run() {
+        JUtils.Log(TAG,"initData--"+actlink);
+        //syncCookie(WebViewActivity.this, actlink);
+        try {
+          mWebView.loadUrl(actlink);
+        }catch (Exception e){
+          e.printStackTrace();
+          JUtils.Log(TAG,"loadUrl--");
+        }
+      }
+    });
+
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
     if (extras != null) {
       cookies = extras.getString("cookies");
       actlink = extras.getString("actlink");
+      domain = extras.getString("domain");
+      JUtils.Log(TAG, "GET cookie:"+cookies + " actlink:"+actlink + " domain:"+domain);
     }
   }
 
@@ -95,9 +117,11 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   }
 
   @SuppressLint("JavascriptInterface") @Override protected void initViews() {
+    JUtils.Log(TAG,"initViews");
 
-    syncCookie(WebViewActivity.this, actlink);
 
+
+    ll_actwebview = (LinearLayout) findViewById(R.id.ll_actwebview) ;
     mProgressBar = (ProgressBar) findViewById(R.id.pb_view);
     mWebView = (WebView) findViewById(R.id.wb_view);
     mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -105,55 +129,76 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     setSupportActionBar(mToolbar);
     mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    if (Build.VERSION.SDK_INT >= 19) {
-      mWebView.getSettings().setLoadsImagesAutomatically(true);
-    } else {
-      mWebView.getSettings().setLoadsImagesAutomatically(false);
+
+    try {
+      if (Build.VERSION.SDK_INT >= 19) {
+        mWebView.getSettings().setLoadsImagesAutomatically(true);
+      } else {
+        mWebView.getSettings().setLoadsImagesAutomatically(false);
+      }
+
+      mWebView.getSettings().setJavaScriptEnabled(true);
+      mWebView.addJavascriptInterface(new AndroidJsBridge(this), "AndroidBridge");
+
+      mWebView.getSettings().setAllowFileAccess(true);
+      //如果访问的页面中有Javascript，则webview必须设置支持Javascript
+      //mWebView.getSettings().setUserAgentString(MyApplication.getUserAgent());
+      mWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+      mWebView.getSettings().setAllowFileAccess(true);
+      mWebView.getSettings().setAppCacheEnabled(true);
+      mWebView.getSettings().setDomStorageEnabled(true);
+      mWebView.getSettings().setDatabaseEnabled(true);
+
+      mWebView.setWebChromeClient(new WebChromeClient() {
+        @Override public void onProgressChanged(WebView view, int newProgress) {
+          JUtils.Log(TAG, "process:" + newProgress);
+          mProgressBar.setProgress(newProgress);
+          if (newProgress == 100) {
+            mProgressBar.setVisibility(View.GONE);
+          } else {
+            mProgressBar.setVisibility(View.VISIBLE);
+          }
+        }
+      });
+
+      mWebView.setWebViewClient(new WebViewClient() {
+
+        @Override public void onPageFinished(WebView view, String url) {
+          JUtils.Log(TAG, "onPageFinished:" + url);
+
+          if (!mWebView.getSettings().getLoadsImagesAutomatically()) {
+            mWebView.getSettings().setLoadsImagesAutomatically(true);
+          }
+        }
+
+        @Override public void onReceivedHttpAuthRequest(WebView view, HttpAuthHandler handler,
+            String host, String realm) {
+          JUtils.Log(TAG, "onReceivedHttpAuthRequest");
+          view.reload();
+        }
+
+        @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
+          JUtils.Log(TAG, "shouldOverrideUrlLoading:" + url);
+          view.loadUrl(url);
+          return super.shouldOverrideUrlLoading(view, url);
+        }
+
+        public void onReceivedSslError(WebView view, SslErrorHandler handler,
+            SslError error) {
+          JUtils.Log(TAG, "onReceivedSslError:");
+          //handler.cancel(); 默认的处理方式，WebView变成空白页
+          //                        //接受证书
+          handler.proceed();
+          //handleMessage(Message msg); 其他处理
+        }
+      });
+    }catch (Exception e){
+      e.printStackTrace();
+      JUtils.Log(TAG, "set webview err");
     }
 
-
-    mWebView.getSettings().setJavaScriptEnabled(true);
-    mWebView.addJavascriptInterface(new AndroidJsBridge(this), "AndroidBridge");
-
-    mWebView.getSettings().setAllowFileAccess(true);
-    //如果访问的页面中有Javascript，则webview必须设置支持Javascript
-    //mWebView.getSettings().setUserAgentString(MyApplication.getUserAgent());
-    mWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-    mWebView.getSettings().setAllowFileAccess(true);
-    mWebView.getSettings().setAppCacheEnabled(true);
-    mWebView.getSettings().setDomStorageEnabled(true);
-    mWebView.getSettings().setDatabaseEnabled(true);
-
-    mWebView.setWebChromeClient(new WebChromeClient() {
-      @Override public void onProgressChanged(WebView view, int newProgress) {
-        mProgressBar.setProgress(newProgress);
-        if (newProgress == 100) {
-          mProgressBar.setVisibility(View.GONE);
-        } else {
-          mProgressBar.setVisibility(View.VISIBLE);
-        }
-      }
-    });
-
-    mWebView.setWebViewClient(new WebViewClient() {
-
-      @Override public void onPageFinished(WebView view, String url) {
-        if (!mWebView.getSettings().getLoadsImagesAutomatically()) {
-          mWebView.getSettings().setLoadsImagesAutomatically(true);
-        }
-      }
-
-      @Override
-      public void onReceivedHttpAuthRequest(WebView view, HttpAuthHandler handler,
-          String host, String realm) {
-        view.reload();
-      }
-
-      @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
-        view.loadUrl(url);
-        return true;
-      }
-    });
+    syncCookie(WebViewActivity.this, actlink);
+    //syncCookie(WebViewActivity.this, "http://m.xiaolumeimei.com");
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
@@ -192,8 +237,12 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void onDestroy() {
+    JUtils.Log(TAG,"onDestroy");
     super.onDestroy();
+    ll_actwebview.removeView(mWebView);
+    mWebView.removeAllViews();
     mWebView.destroy();
+
   }
 
   @Override protected void onStop() {
@@ -202,16 +251,21 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   }
 
   public void syncCookie(Context context, String url) {
+
     try {
+      JUtils.Log(TAG,"syncCookie bgn");
       CookieSyncManager.createInstance(context);
       CookieManager cookieManager = CookieManager.getInstance();
-      cookieManager.setAcceptCookie(true);
+
       cookieManager.removeSessionCookie();// 移除
       cookieManager.removeAllCookie();
-
+      cookieManager.setAcceptCookie(true);
       cookieManager.setCookie(url, cookies);
       CookieSyncManager.getInstance().sync();
+      JUtils.Log(TAG,"syncCookie end");
     } catch (Exception e) {
+      e.printStackTrace();
+      JUtils.Log(TAG,"syncCookie err:"+ e.toString());
     }
   }
 
