@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.ui.activity.main;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -47,6 +48,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 import rx.schedulers.Schedulers;
 
 /**
@@ -74,6 +76,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   private String actlink;
   private ActivityBean shareInfo;
   private String domain;
+  private String sessionid;
 
   LinearLayout ll_actwebview;
 
@@ -93,11 +96,18 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
         JUtils.Log(TAG,"initData--"+actlink);
         //syncCookie(WebViewActivity.this, actlink);
         try {
-          mWebView.loadUrl(actlink);
+          //mWebView.loadUrl(actlink);
+          Map<String,String> extraHeaders = new HashMap<String, String>();
+
+          extraHeaders.put("Cookie", sessionid);
+
+          mWebView.loadUrl(actlink, extraHeaders);
         }catch (Exception e){
           e.printStackTrace();
-          JUtils.Log(TAG,"loadUrl--");
+          JUtils.Log(TAG,"loadUrl--error");
         }
+
+        JUtils.Log(TAG,"loadUrl--end");
       }
     });
 
@@ -108,8 +118,9 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
       cookies = extras.getString("cookies");
       domain = extras.getString("domain");
       actlink = extras.getString("actlink");
-      domain = extras.getString("domain");
-      JUtils.Log(TAG, "GET cookie:"+cookies + " actlink:"+actlink + " domain:"+domain);
+      sessionid = extras.getString("Cookie");
+      JUtils.Log(TAG, "GET cookie:"+cookies + " actlink:"+actlink + " domain:"+domain +
+          " sessionid:"+sessionid);
     }
   }
 
@@ -202,7 +213,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
       JUtils.Log(TAG, "set webview err");
     }
 
-    syncCookie(WebViewActivity.this);
+   syncCookie(WebViewActivity.this);
     //syncCookie(WebViewActivity.this, "http://m.xiaolumeimei.com");
   }
 
@@ -275,18 +286,19 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
 
     try {
       JUtils.Log(TAG,"syncCookie bgn");
-      CookieSyncManager.createInstance(context);
+      //CookieSyncManager.createInstance(context);
       CookieManager cookieManager = CookieManager.getInstance();
 
-      cookieManager.removeSessionCookie();// 移除
+      //cookieManager.removeSessionCookie();// 移除
       cookieManager.removeAllCookie();
 
-      cookieManager.setAcceptCookie(true);
+      //cookieManager.setAcceptCookie(true);
 
-      JUtils.Log(TAG, domain + "=====" + cookies);
-      cookieManager.setCookie(domain, cookies);
+      //JUtils.Log(TAG, "acceptCookie:"+cookieManager.acceptCookie());
+      //JUtils.Log(TAG, "domain:"+domain + "=====" + cookies);
+      //cookieManager.setCookie(domain, cookies);
 
-      CookieSyncManager.getInstance().sync();
+      //CookieSyncManager.getInstance().sync();
       JUtils.Log(TAG,"syncCookie end");
     } catch (Exception e) {
       e.printStackTrace();

@@ -94,10 +94,11 @@ public class PersistentCookieStore implements CookieStore {
         + cookie.getValue()
         + "; domain="
         + cookie.getDomain()
+        //+ ".xiaolumeimei"
         + "; path="
         + cookie.getPath());
     editor.putString("cookiesDomain", cookie.getDomain());
-
+    editor.putString("Cookie",cookie.getName()+ "="+cookie.getValue());
     editor.apply();
   }
 
