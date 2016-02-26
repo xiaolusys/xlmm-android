@@ -214,10 +214,12 @@ public class TodayFragment extends BaseFragment {
                                 Context.MODE_PRIVATE);
                         cookies = sharedPreferences.getString("cookiesString", "");
                         domain = sharedPreferences.getString("cookiesDomain", "");
+
                         Bundle bundle = new Bundle();
                         bundle.putString("cookies", cookies);
                         bundle.putString("domain", domain);
-
+                        bundle.putString("Cookie", sharedPreferences.getString
+                            ("Cookie", ""));
                         bundle.putString("actlink", postBean.getActivity().getActLink());
                         intent.putExtras(bundle);
                         startActivity(intent);
