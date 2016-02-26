@@ -33,6 +33,16 @@ public class CartsPayinfoBean {
   @SerializedName("weixin_payable") private boolean mWeixinPayable;
   @SerializedName("coupon_ticket") private Object mCouponTicket;
   @SerializedName("uuid") private String mUuid;
+
+  public String getmCoupon_message() {
+    return mCoupon_message;
+  }
+
+  public void setmCoupon_message(String mCoupon_message) {
+    this.mCoupon_message = mCoupon_message;
+  }
+
+  @SerializedName("coupon_message") private String mCoupon_message;
   @SerializedName("alipay_payable") private boolean mAlipayPayable;
   @SerializedName("discount_fee") private double mDiscountFee;
   @SerializedName("cart_ids") private String mCartIds;

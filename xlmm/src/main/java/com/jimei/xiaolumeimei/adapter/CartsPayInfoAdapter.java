@@ -30,6 +30,12 @@ public class CartsPayInfoAdapter
     notifyDataSetChanged();
   }
 
+  public void updateWithClear(List<CartsPayinfoBean.CartListEntity> list) {
+    mList.clear();
+    mList.addAll(list);
+    notifyDataSetChanged();
+  }
+
   @Override public View getView(int position, View convertView, ViewGroup parent) {
 
     CommonViewHolder holder =
@@ -64,8 +70,7 @@ public class CartsPayInfoAdapter
     holder.setText(R.id.tx_good_size, "尺码:" + cartListEntity.getSkuName());
 
     holder.setText(R.id.tv_num, "x" + cartListEntity.getNum() + "");
-    holder.setText(R.id.price_tv, "¥"+cartListEntity.getPrice());
+    holder.setText(R.id.price_tv, "¥" + cartListEntity.getPrice());
     return holder.getConvertView();
   }
-
 }

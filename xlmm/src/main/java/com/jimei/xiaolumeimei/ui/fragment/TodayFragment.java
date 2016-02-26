@@ -75,6 +75,7 @@ public class TodayFragment extends BaseFragment {
   //private long l;
   private SharedPreferences sharedPreferences;
   private String cookies;
+  private String domain;
 
   @Override protected int provideContentViewId() {
     return R.layout.today_fragment;
@@ -201,12 +202,22 @@ public class TodayFragment extends BaseFragment {
                           && !(((MainActivity)getActivity()).getUserInfoBean()
                           .getResults().get(0).getMobile().isEmpty())) {
                         Intent intent = new Intent(getActivity(), WebViewActivity.class);
+                        //sharedPreferences =
+                        //    getActivity().getSharedPreferences("COOKIESxlmm",
+                        //        Context.MODE_PRIVATE);
+                        //String cookies = sharedPreferences.getString("Cookies", "");
+                        //Bundle bundle = new Bundle();
+                        //bundle.putString("cookies", cookies);
+
                         sharedPreferences =
-                            getActivity().getSharedPreferences("COOKIESxlmm",
+                            getActivity().getSharedPreferences("xlmmCookiesAxiba",
                                 Context.MODE_PRIVATE);
-                        String cookies = sharedPreferences.getString("Cookies", "");
+                        cookies = sharedPreferences.getString("cookiesString", "");
+                        domain = sharedPreferences.getString("cookiesDomain", "");
                         Bundle bundle = new Bundle();
                         bundle.putString("cookies", cookies);
+                        bundle.putString("domain", domain);
+
                         bundle.putString("actlink", postBean.getActivity().getActLink());
                         intent.putExtras(bundle);
                         startActivity(intent);
@@ -242,12 +253,20 @@ public class TodayFragment extends BaseFragment {
                       }
                     } else {
                       Intent intent = new Intent(getActivity(), WebViewActivity.class);
+                      //sharedPreferences =
+                      //    getActivity().getSharedPreferences("COOKIESxlmm",
+                      //        Context.MODE_PRIVATE);
+                      //cookies = sharedPreferences.getString("Cookies", "");
+
                       sharedPreferences =
-                          getActivity().getSharedPreferences("COOKIESxlmm",
+                          getActivity().getSharedPreferences("xlmmCookiesAxiba",
                               Context.MODE_PRIVATE);
-                      cookies = sharedPreferences.getString("Cookies", "");
+                      cookies = sharedPreferences.getString("cookiesString", "");
+                      domain = sharedPreferences.getString("cookiesDomain", "");
                       Bundle bundle = new Bundle();
                       bundle.putString("cookies", cookies);
+                      bundle.putString("domain", domain);
+
                       bundle.putString("actlink", postBean.getActivity().getActLink());
                       intent.putExtras(bundle);
                       startActivity(intent);

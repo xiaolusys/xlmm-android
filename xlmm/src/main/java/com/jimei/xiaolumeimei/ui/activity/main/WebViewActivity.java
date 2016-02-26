@@ -106,6 +106,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   @Override protected void getBundleExtras(Bundle extras) {
     if (extras != null) {
       cookies = extras.getString("cookies");
+      domain = extras.getString("domain");
       actlink = extras.getString("actlink");
       domain = extras.getString("domain");
       JUtils.Log(TAG, "GET cookie:"+cookies + " actlink:"+actlink + " domain:"+domain);
@@ -120,6 +121,8 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     JUtils.Log(TAG,"initViews");
 
 
+    //syncCookie(WebViewActivity.this);
+
 
     ll_actwebview = (LinearLayout) findViewById(R.id.ll_actwebview) ;
     mProgressBar = (ProgressBar) findViewById(R.id.pb_view);
@@ -129,6 +132,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     setSupportActionBar(mToolbar);
     mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
     try {
       if (Build.VERSION.SDK_INT >= 19) {
@@ -158,6 +162,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
           } else {
             mProgressBar.setVisibility(View.VISIBLE);
           }
+
         }
       });
 
@@ -197,7 +202,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
       JUtils.Log(TAG, "set webview err");
     }
 
-    syncCookie(WebViewActivity.this, actlink);
+    syncCookie(WebViewActivity.this);
     //syncCookie(WebViewActivity.this, "http://m.xiaolumeimei.com");
   }
 
@@ -227,11 +232,13 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void onPause() {
     super.onPause();
+    CookieSyncManager.getInstance().stopSync();
     mWebView.onPause();
   }
 
   @Override protected void onResume() {
     super.onResume();
+    CookieSyncManager.getInstance().startSync();
     mWebView.onResume();
     ShareSDK.initSDK(this);
   }
@@ -250,7 +257,21 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     ShareSDK.stopSDK(this);
   }
 
-  public void syncCookie(Context context, String url) {
+
+  //public void syncCookie(Context context, String url) {
+  //  try {
+  //    CookieSyncManager.createInstance(context);
+  //    CookieManager cookieManager = CookieManager.getInstance();
+  //    cookieManager.setAcceptCookie(true);
+  //    cookieManager.removeSessionCookie();// 移除
+  //    cookieManager.removeAllCookie();
+  //
+  //    cookieManager.setCookie(url, cookies);
+  //    CookieSyncManager.getInstance().sync();
+  //  } catch (Exception e) {
+  //  }
+  //}
+  public void syncCookie(Context context) {
 
     try {
       JUtils.Log(TAG,"syncCookie bgn");
@@ -259,8 +280,12 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
 
       cookieManager.removeSessionCookie();// 移除
       cookieManager.removeAllCookie();
+
       cookieManager.setAcceptCookie(true);
-      cookieManager.setCookie(url, cookies);
+
+      JUtils.Log(TAG, domain + "=====" + cookies);
+      cookieManager.setCookie(domain, cookies);
+
       CookieSyncManager.getInstance().sync();
       JUtils.Log(TAG,"syncCookie end");
     } catch (Exception e) {
