@@ -14,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -253,6 +254,7 @@ public class MainActivity extends BaseActivity
 
     badge = new BadgeView(this);
     badge.setTargetView(carts);
+    badge.setBadgeGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
   }
 
   @Override public boolean onNavigationItemSelected(MenuItem item) {
