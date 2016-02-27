@@ -14,6 +14,8 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.model.UserModel;
+import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
+import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import rx.schedulers.Schedulers;
@@ -22,7 +24,6 @@ public class EditPasswordActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener {
   String TAG = "SettingPasswordActivity";
   @Bind(R.id.toolbar) Toolbar toolbar;
-  UserModel model = new UserModel();
   @Bind(R.id.set_password) EditText etPassword;
   @Bind(R.id.set_password2) EditText etPassword2;
   @Bind(R.id.set_commit_button) Button commit_button;
@@ -74,23 +75,21 @@ public class EditPasswordActivity extends BaseSwipeBackCompatActivity
 
         if (checkBox.isChecked()) {
           if (checkInput(password1) && checkInput(password2)) {
-            changePassword(username, valid_code, password1, password2);
-          } else {
-            Toast.makeText(mContext, "密码长度或者字符错误,请检查", Toast.LENGTH_SHORT).show();
+            if (checkInputSame(password1, password2)) {
+              changePassword(username, valid_code, password1, password2);
+            }
           }
         } else {
           JUtils.Toast("请选择是否同意条款");
         }
 
         break;
-
-
     }
   }
 
   private boolean checkInput(String name) {
     if (name.length() < 4 || name.length() > 20) {
-      JUtils.Toast("请输入6-16位昵称");
+      JUtils.Toast("请输入6-16位密码");
       return false;
     }
 
@@ -99,7 +98,8 @@ public class EditPasswordActivity extends BaseSwipeBackCompatActivity
 
   private void changePassword(String username, String valid_code, String password1,
       String password2) {
-    model.changePassword(username, valid_code, password1, password2)
+    UserModel.getInstance()
+        .changePassword(username, valid_code, password1, password2)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<UserBean>() {
           @Override public void onNext(UserBean user) {
@@ -109,10 +109,25 @@ public class EditPasswordActivity extends BaseSwipeBackCompatActivity
                 + user.getResult());
 
             if (user.getCode() == 0) {
-              Toast.makeText(mContext, "恭喜你注册成功", Toast.LENGTH_SHORT).show();
-              Intent intent = new Intent(mContext, LoginActivity.class);
-              startActivity(intent);
-              finish();
+              UserModel.getInstance()
+                  .login(username, password1)
+                  .subscribeOn(Schedulers.newThread())
+                  .subscribe(new ServiceResponse<UserBean>() {
+                    @Override public void onNext(UserBean user) {
+                      Log.d(TAG, "user.getCode() "
+                          + user.getCode()
+                          + ", user.getResult() "
+                          + user.getResult());
+                      if (user.getCode() == 0 && user.getResult().equals("login")) {
+                        LoginUtils.saveLoginInfo(true, getApplicationContext(), username,
+                            password1);
+                        Toast.makeText(mContext, "注册成功,已经登录", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(mContext, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                      }
+                    }
+                  });
             } else {
 
               Toast.makeText(mContext, "修改失败", Toast.LENGTH_SHORT).show();
@@ -123,5 +138,14 @@ public class EditPasswordActivity extends BaseSwipeBackCompatActivity
             super.onCompleted();
           }
         });
+  }
+
+  private boolean checkInputSame(String pass1, String pass2) {
+    if (!pass1.equals(pass2)) {
+      JUtils.Toast("两次密码不一致");
+      return false;
+    }
+
+    return true;
   }
 }

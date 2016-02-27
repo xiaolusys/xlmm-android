@@ -25,6 +25,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseActivity;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
+import com.jimei.xiaolumeimei.entities.CouponBean;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.UserNewBean;
@@ -40,6 +41,7 @@ import com.jimei.xiaolumeimei.ui.activity.user.CouponActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.MembershipPointActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.SettingActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.WalletActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaInfoActivity;
 import com.jimei.xiaolumeimei.ui.fragment.ChildListFragment;
 import com.jimei.xiaolumeimei.ui.fragment.LadyListFragment;
@@ -75,11 +77,11 @@ public class MainActivity extends BaseActivity
 
   List<Fragment> fragments;
   List<String> titles;
-  UserModel model = new UserModel();
   UserInfoBean userInfoBean = new UserInfoBean();
   private CartsModel cartsModel = new CartsModel();
   private int num;
   private BadgeView badge;
+  private double budgetCash;
 
   @Override protected int provideContentViewId() {
     return R.layout.activity_main;
@@ -97,18 +99,6 @@ public class MainActivity extends BaseActivity
     initTabLayout();
 
     getUserInfo();
-
-    UserNewModel.getInstance()
-        .getProfile()
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<UserNewBean>() {
-          @Override public void onNext(UserNewBean userNewBean) {
-            if (userNewBean != null) {
-              int score = userNewBean.getScore();
-              double budgetCash = userNewBean.getUserBudget().getBudgetCash();
-            }
-          }
-        });
   }
 
   private void initTabLayout() {
@@ -164,7 +154,8 @@ public class MainActivity extends BaseActivity
             } else {
               if ((tvNickname != null)
                   && (userInfoBean != null)
-                  && (userInfoBean.getResults() != null)) {
+                  && (userInfoBean.getResults() != null)
+                  && (userInfoBean.getResults().size() > 0)) {
                 tvNickname.setText(userInfoBean.getResults().get(0).getNick());
               }
             }
@@ -179,14 +170,19 @@ public class MainActivity extends BaseActivity
 
     View llayout = navigationView.getHeaderView(0);
 
-    //tvCoupon = llayout.findViewById(R.id.)
+    tvCoupon = (TextView) llayout.findViewById(R.id.tvDiscount);
+    tvMoney = (TextView) llayout.findViewById(R.id.tvMoney);
+    tvPoint = (TextView) llayout.findViewById(R.id.tvScore);
 
     imaMoney = (ImageView) llayout.findViewById(R.id.imgMoney);
     imaMoney.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
 
         if (LoginUtils.checkLoginState(getApplicationContext())) {
-          Intent intent = new Intent(MainActivity.this, MembershipPointActivity.class);
+          Intent intent = new Intent(MainActivity.this, WalletActivity.class);
+          Bundle bundle = new Bundle();
+          bundle.putString("money", budgetCash + "");
+          intent.putExtras(bundle);
           startActivity(intent);
         } else {
           Intent intent = new Intent(MainActivity.this, LoginActivity.class);
@@ -203,9 +199,6 @@ public class MainActivity extends BaseActivity
       @Override public void onClick(View v) {
         if (LoginUtils.checkLoginState(getApplicationContext())) {
           Intent intent = new Intent(MainActivity.this, MembershipPointActivity.class);
-          Bundle bundle = new Bundle();
-          bundle.putString("money", "point");
-          intent.putExtras(bundle);
           startActivity(intent);
         } else {
           Intent intent = new Intent(MainActivity.this, LoginActivity.class);
@@ -294,7 +287,8 @@ public class MainActivity extends BaseActivity
               @Override public void onPositive(MaterialDialog dialog) {
                 final String finalAccount = LoginUtils.getUserAccount(MainActivity.this);
                 LoginUtils.delLoginInfo(getApplicationContext());
-                model.customer_logout()
+                UserModel.getInstance()
+                    .customer_logout()
                     .subscribeOn(Schedulers.io())
                     .subscribe(new ServiceResponse<LogOutBean>() {
                       @Override public void onNext(LogOutBean responseBody) {
@@ -382,7 +376,8 @@ public class MainActivity extends BaseActivity
   private void checkMamaInfo() {
     JUtils.Log(TAG, "check mama userinfo");
 
-    model.getUserInfo()
+    UserModel.getInstance()
+        .getUserInfo()
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<UserInfoBean>() {
           @Override public void onNext(UserInfoBean user) {
@@ -414,7 +409,8 @@ public class MainActivity extends BaseActivity
   }
 
   private void getUserInfo() {
-    model.getUserInfo()
+    UserModel.getInstance()
+        .getUserInfo()
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<UserInfoBean>() {
           @Override public void onNext(UserInfoBean user) {
@@ -462,6 +458,33 @@ public class MainActivity extends BaseActivity
         tvNickname.setText("小鹿妈妈");
       }
     }
+
+    UserNewModel.getInstance()
+        .getProfile()
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<UserNewBean>() {
+          @Override public void onNext(UserNewBean userNewBean) {
+            if (userNewBean != null) {
+              int score = userNewBean.getScore();
+              if (null != userNewBean.getUserBudget()) {
+                budgetCash = userNewBean.getUserBudget().getBudgetCash();
+              }
+              tvPoint.setText(score + "");
+              tvMoney.setText(budgetCash + "");
+            }
+          }
+        });
+
+    UserModel.getInstance()
+        .getUnusedCouponBean()
+        .subscribeOn(Schedulers.newThread())
+        .subscribe(new ServiceResponse<CouponBean>() {
+          @Override public void onNext(CouponBean couponBean) {
+            if (couponBean != null) {
+              tvCoupon.setText(couponBean.getCount() + "");
+            }
+          }
+        });
   }
 
   @Override protected void onDestroy() {

@@ -27,7 +27,6 @@ public class RegisterActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.register_password) EditText editTextInvalid_code;
   @Bind(R.id.register_button) Button register_button;
   @Bind(R.id.toolbar) Toolbar toolbar;
-  UserModel model = new UserModel();
   @Bind(R.id.getCheckCode) Button getCheckCode;
   private String mobile, invalid_code;
 
@@ -100,22 +99,25 @@ public class RegisterActivity extends BaseSwipeBackCompatActivity
         mobile = editTextMobile.getText().toString().trim();
         if (checkMobileInput(mobile)) {
 
-
           RxCountDown.countdown(60).doOnSubscribe(new Action0() {
             @Override public void call() {
               getCheckCode.setClickable(false);
               getCheckCode.setBackgroundColor(Color.parseColor("#f3f3f4"));
 
-              model.getRegisterCheckCode(mobile)
+              UserModel.getInstance()
+                  .getRegisterCheckCode(mobile)
                   .subscribeOn(Schedulers.io())
                   .subscribe(new ServiceResponse<RegisterBean>() {
                     @Override public void onNext(RegisterBean registerBean) {
-                      super.onNext(registerBean);
-                      String result = registerBean.getResult();
-                      if (result.equals("0")) {
-                        JUtils.Toast("已经注册过该手机号");
-                      } else if (result.equals("OK")) {
-                        JUtils.Toast("获取验证码成功");
+                      if (registerBean != null) {
+                        String result = registerBean.getResult();
+                        if (result.equals("0")) {
+                          JUtils.Toast("已经注册过该手机号");
+                        } else if (result.equals("OK")) {
+                          JUtils.Toast("获取验证码成功");
+                        } else if (result.equals("2")) {
+                          JUtils.Toast("验证次数达到上限");
+                        }
                       }
                     }
                   });
@@ -135,7 +137,6 @@ public class RegisterActivity extends BaseSwipeBackCompatActivity
               getCheckCode.setText(integer + "s后重新获取");
             }
           });
-
         }
 
         break;
@@ -144,7 +145,8 @@ public class RegisterActivity extends BaseSwipeBackCompatActivity
         invalid_code = editTextInvalid_code.getText().toString().trim();
 
         if (checkInput(mobile, invalid_code)) {
-          model.check_code_user(mobile, invalid_code)
+          UserModel.getInstance()
+              .check_code_user(mobile, invalid_code)
               .subscribeOn(Schedulers.io())
               .subscribe(new ServiceResponse<RegisterBean>() {
                 @Override public void onNext(RegisterBean registerBean) {
@@ -152,11 +154,10 @@ public class RegisterActivity extends BaseSwipeBackCompatActivity
                   String result = registerBean.getResult();
                   if (result.equals("0")) {
                     Intent intent =
-                        new Intent(RegisterActivity.this, SettingPasswordActivity.class);
+                        new Intent(RegisterActivity.this, EditPasswordActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("username", mobile);
                     bundle.putString("valid_code", invalid_code);
-
                     intent.putExtras(bundle);
                     startActivity(intent);
                     finish();
@@ -166,7 +167,6 @@ public class RegisterActivity extends BaseSwipeBackCompatActivity
         }
 
         break;
-
     }
   }
 }

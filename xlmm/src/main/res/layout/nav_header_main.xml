@@ -52,7 +52,7 @@
       <TextView
           android:textStyle="bold"
           android:textSize="15sp"
-          android:layout_marginLeft="14dp"
+          android:layout_marginLeft="7dp"
           android:id="@+id/tvMoney"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
@@ -79,7 +79,7 @@
       <TextView
           android:textStyle="bold"
           android:textSize="15sp"
-          android:layout_marginLeft="14dp"
+          android:layout_marginLeft="10dp"
           android:id="@+id/tvScore"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"

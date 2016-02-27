@@ -24,7 +24,6 @@ public class ComplainActvity extends BaseSwipeBackCompatActivity
   @Bind(R.id.tijiao) Button confirm;
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.complain_text) EditText complainText;
-  UserModel model = new UserModel();
 
   @Override protected void setListener() {
     confirm.setOnClickListener(this);
@@ -61,7 +60,7 @@ public class ComplainActvity extends BaseSwipeBackCompatActivity
     if (v.getId() == R.id.tijiao) {
       String text = complainText.getText().toString().trim();
 
-      model.complain(text)
+      UserModel.getInstance().complain(text)
           .subscribeOn(Schedulers.io())
           .subscribe(new ServiceResponse<AddressResultBean>() {
             @Override public void onNext(AddressResultBean responseBody) {

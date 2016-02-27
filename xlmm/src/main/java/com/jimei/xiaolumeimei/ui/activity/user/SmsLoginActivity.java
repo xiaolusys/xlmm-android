@@ -1,10 +1,9 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
-import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,7 +14,6 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
 import com.jimei.xiaolumeimei.entities.SmsLoginBean;
 import com.jimei.xiaolumeimei.entities.SmsLoginUserBean;
-import com.jimei.xiaolumeimei.entities.UserAccountBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.rx.RxCountDown;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
@@ -36,7 +34,6 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener {
   private static final String TAG = SmsLoginActivity.class.getSimpleName();
 
-  UserModel model = new UserModel();
   @Bind(R.id.tx_title) TextView txTitle;
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.register_name) ClearEditText registerName;
@@ -89,7 +86,7 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
               getCheckCode.setClickable(false);
               getCheckCode.setBackgroundColor(Color.parseColor("#f3f3f4"));
 
-              model.getSmsCheckCode(mobile)
+              UserModel.getInstance().getSmsCheckCode(mobile)
                   .subscribeOn(Schedulers.io())
                   .subscribe(new ServiceResponse<SmsLoginBean>() {
                     @Override public void onNext(SmsLoginBean registerBean) {
@@ -126,7 +123,7 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
         mobile = registerName.getText().toString().trim();
         invalid_code = checkcode.getText().toString().trim();
         if (checkInput(mobile, invalid_code)) {
-          model.smsLogin(mobile, invalid_code)
+          UserModel.getInstance().smsLogin(mobile, invalid_code)
               .subscribeOn(Schedulers.io())
               .subscribe(new ServiceResponse<SmsLoginUserBean>() {
                 @Override public void onNext(SmsLoginUserBean registerBean) {
@@ -134,7 +131,8 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                   int code = registerBean.getCode();
 
                   if (code == 0) {
-                    model.need_set_info()
+
+                    UserModel.getInstance().need_set_info()
                         .subscribeOn(Schedulers.io())
                         .subscribe(new ServiceResponse<NeedSetInfoBean>() {
                           @Override public void onNext(NeedSetInfoBean needSetInfoBean) {
@@ -150,7 +148,9 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                               finish();
                             } else if (1 == codeInfo) {
                               //Intent intent = new Intent(SmsLoginActivity.this,);
-                              JUtils.Toast("验证码过期或超次");
+                              //JUtils.Toast("验证码过期或超次");
+                              Intent intent = new Intent();
+
                             } else if (2 == codeInfo) {
 
                             }

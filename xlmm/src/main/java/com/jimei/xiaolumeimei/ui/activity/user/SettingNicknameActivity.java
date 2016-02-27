@@ -26,7 +26,6 @@ public class SettingNicknameActivity extends BaseSwipeBackCompatActivity impleme
     @Bind(R.id.toolbar)    Toolbar toolbar;
     @Bind(R.id.set_nick_name)    EditText nameEditText;
     @Bind(R.id.set_save_button)    Button save_button;
-    UserModel model = new UserModel();
     UserInfoBean userinfo;
     NicknameBean nicknameBean = new NicknameBean();
     String nick_name_value;
@@ -108,7 +107,7 @@ public class SettingNicknameActivity extends BaseSwipeBackCompatActivity impleme
     }
 
     private void setNickname() {
-        model.setNickname(userid, nicknameBean)
+        UserModel.getInstance().setNickname(userid, nicknameBean)
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(new ServiceResponse<UserBean>() {
                     @Override
@@ -141,8 +140,7 @@ public class SettingNicknameActivity extends BaseSwipeBackCompatActivity impleme
     }
 
     private void getUserInfo() {
-        UserModel model = new UserModel();
-        model.getUserInfo()
+        UserModel.getInstance().getUserInfo()
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(new ServiceResponse<UserInfoBean>() {
                     @Override

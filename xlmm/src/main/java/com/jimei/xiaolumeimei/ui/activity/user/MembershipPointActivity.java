@@ -30,7 +30,6 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity impleme
     @Bind(R.id.btn_jump)    Button btn_jump;
     @Bind(R.id.rlayout_order_empty) RelativeLayout rlayout_order_empty;
 
-    UserModel model = new UserModel();
     private MembershipPointListAdapter mPointAdapter;
     TextView  tx_point;
 
@@ -67,7 +66,7 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity impleme
     }
     //从server端获得所有订单数据，可能要查询几次
     @Override protected void initData() {
-        model.getMembershipPointBean()
+        UserModel.getInstance().getMembershipPointBean()
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(new ServiceResponse<MembershipPointBean>() {
                     @Override public void onNext(MembershipPointBean pointBean) {
@@ -83,7 +82,7 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity impleme
                     }
                 });
 
-        model.getPointLogBean()
+        UserModel.getInstance().getPointLogBean()
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(new ServiceResponse<PointLogBean>() {
                     @Override public void onNext(PointLogBean pointLogBean) {

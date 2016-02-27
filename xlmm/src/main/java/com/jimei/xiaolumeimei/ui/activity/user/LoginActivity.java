@@ -58,7 +58,6 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.set_login_password) PasswordEditText passEditText;
   @Bind(R.id.set_login_button) Button login_button;
   @Bind(R.id.set_register_button) Button set_register;
-  UserModel model = new UserModel();
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.forgetTextView) TextView forGetTextView;
   @Bind(R.id.wx_login) ImageView wx;
@@ -113,6 +112,11 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
     //wxHandler.;
     sharedPreferences =
         getApplicationContext().getSharedPreferences("login_info", Context.MODE_PRIVATE);
+    String[] loginInfo = LoginUtils.getLoginInfo(getApplicationContext());
+
+    JUtils.Log(TAG, loginInfo[0] + "=====" + loginInfo[1]);
+    nameEditText.setText(loginInfo[0]);
+    passEditText.setText(loginInfo[1]);
   }
 
   @Override public boolean onOptionsItemSelected(MenuItem item) {
@@ -156,7 +160,8 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
         login_pass_value = passEditText.getText().toString().trim();
 
         if (checkInput(login_name_value, login_pass_value)) {
-          model.login(login_name_value, login_pass_value)
+          UserModel.getInstance()
+              .login(login_name_value, login_pass_value)
               .subscribeOn(Schedulers.newThread())
               .subscribe(new ServiceResponse<UserBean>() {
                 @Override public void onNext(UserBean user) {
@@ -174,8 +179,13 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                     //set xiaomi push useraccount
                     LoginUtils.setPushUserAccount(LoginActivity.this,
                         MiPushClient.getRegId(getApplicationContext()));
+                    String login;
+                    if (null != getIntent()) {
+                      login = getIntent().getExtras().getString("login");
+                    } else {
+                      return;
+                    }
 
-                    String login = getIntent().getExtras().getString("login");
                     assert login != null;
                     if (login.equals("cart")) {
                       Intent intent = new Intent(mContext, CartActivity.class);
@@ -187,6 +197,10 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                       finish();
                     } else if (login.equals("point")) {
                       Intent intent = new Intent(mContext, MembershipPointActivity.class);
+                      startActivity(intent);
+                      finish();
+                    } else if (login.equals("money")) {
+                      Intent intent = new Intent(mContext, WalletActivity.class);
                       startActivity(intent);
                       finish();
                     } else if (login.equals("axiba")) {
@@ -318,8 +332,8 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
         JUtils.Log(TAG, "------nickname---------" + nickname);
         JUtils.Log(TAG, "------openid---------" + openid);
         JUtils.Log(TAG, "------unionid---------" + unionid);
-        model.wxapp_login(noncestr, timestamp, sign, headimgurl, nickname, openid,
-            unionid)
+        UserModel.getInstance()
+            .wxapp_login(noncestr, timestamp, sign, headimgurl, nickname, openid, unionid)
             .subscribeOn(Schedulers.io())
             .subscribe(new ServiceResponse<WxLogininfoBean>() {
               @Override public void onNext(WxLogininfoBean wxLogininfoBean) {
@@ -329,7 +343,8 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                   int code = wxLogininfoBean.getCode();
                   if (0 == code) {
 
-                    model.need_set_info()
+                    UserModel.getInstance()
+                        .need_set_info()
                         .subscribeOn(Schedulers.io())
                         .subscribe(new ServiceResponse<NeedSetInfoBean>() {
                           @Override public void onNext(NeedSetInfoBean needSetInfoBean) {

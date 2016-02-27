@@ -1,6 +1,5 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -46,7 +45,6 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.getCheckCode) Button getCheckCode;
   @Bind(R.id.next) Button next;
   @Bind(R.id.pass) Button pass;
-  UserModel model = new UserModel();
   private String mobile, invalid_code;
   private String headimgurl;
   private String nickname;
@@ -77,7 +75,7 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
       nickname = extras.getString("nickname");
     }
     else{
-      model.getUserInfo()
+      UserModel.getInstance().getUserInfo()
           .subscribeOn(Schedulers.newThread())
           .subscribe(new ServiceResponse<UserInfoBean>() {
             @Override public void onNext(UserInfoBean user) {
@@ -156,7 +154,7 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
               getCheckCode.setClickable(false);
               getCheckCode.setBackgroundColor(Color.parseColor("#f3f3f4"));
 
-              model.bang_mobile_code(mobile)
+              UserModel.getInstance().bang_mobile_code(mobile)
                   .subscribeOn(Schedulers.io())
                   .subscribe(new ServiceResponse<BindInfoBean>() {
                     @Override public void onNext(BindInfoBean responseBody) {
@@ -232,7 +230,7 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
   private void bindMobilePhone(String username, String valid_code) {
 
     JUtils.Log(TAG, "username=" + username + " valid_code=" + valid_code);
-    model.bang_mobile_unpassword(username,   valid_code)
+    UserModel.getInstance().bang_mobile_unpassword(username, valid_code)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<BindInfoBean>() {
           @Override public void onNext(BindInfoBean bindInfoBean) {

@@ -34,7 +34,6 @@ public class CouponSelectActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.btn_jump) Button btn_jump;
   @Bind(R.id.rlayout_order_empty) RelativeLayout rl_empty;
   @Bind(R.id.sv_frame_coupon) ScrollView sv_frame_coupon;
-  UserModel model = new UserModel();
   int unused_num = 0;
   List<CouponBean.ResultsEntity> list = new ArrayList<>();
   private CouponListAdapter mCouponAdapter;
@@ -95,7 +94,7 @@ public class CouponSelectActivity extends BaseSwipeBackCompatActivity
 
   //从server端获得所有订单数据，可能要查询几次
   @Override protected void initData() {
-    model.getUnusedCouponBean()
+    UserModel.getInstance().getUnusedCouponBean()
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<CouponBean>() {
           @Override public void onNext(CouponBean couponBean) {
@@ -107,7 +106,7 @@ public class CouponSelectActivity extends BaseSwipeBackCompatActivity
               mCouponAdapter.update(results, XlmmConst.UNUSED_COUPON);
             }
 
-            model.getPastCouponBean()
+            UserModel.getInstance().getPastCouponBean()
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(new ServiceResponse<CouponBean>() {
                   @Override public void onNext(CouponBean couponBean) {

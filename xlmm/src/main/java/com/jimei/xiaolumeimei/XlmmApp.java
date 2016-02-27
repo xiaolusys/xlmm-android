@@ -71,10 +71,9 @@ public class XlmmApp extends Application {
     }
 
     //获取用户信息失败，说明要重新登陆
-    UserModel model = new UserModel();
     if (NetWorkUtil.isNetWorkConnected(this)) {
 
-      model.getUserInfo()
+      UserModel.getInstance().getUserInfo()
           .subscribeOn(Schedulers.newThread())
           .subscribe(new ServiceResponse<UserInfoBean>() {
             @Override public void onNext(UserInfoBean user) {

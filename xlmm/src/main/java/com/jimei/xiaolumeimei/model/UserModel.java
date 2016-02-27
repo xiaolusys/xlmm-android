@@ -17,7 +17,6 @@ import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.WxLogininfoBean;
 import com.jimei.xiaolumeimei.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
-import com.squareup.okhttp.ResponseBody;
 import rx.Observable;
 
 /**
@@ -26,6 +25,15 @@ import rx.Observable;
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class UserModel {
+
+  private static UserModel ourInstance = new UserModel();
+
+  private UserModel() {
+  }
+
+  public static UserModel getInstance() {
+    return ourInstance;
+  }
 
   public Observable<UserBean> login(String name, String password) {
     return XlmmRetrofitClient.getService()
@@ -169,15 +177,15 @@ public class UserModel {
         .compose(new DefaultTransform<>());
   }
 
-  public Observable<BindInfoBean> bang_mobile_unpassword(String username, String valid_code) {
+  public Observable<BindInfoBean> bang_mobile_unpassword(String username,
+      String valid_code) {
     return XlmmRetrofitClient.getService()
         .bang_mobile_unpassword(username, valid_code)
         .compose(new DefaultTransform<>());
   }
 
   //get push useraccount
-  public Observable<UserAccountBean> getUserAccount(String platform,
-      String regid,
+  public Observable<UserAccountBean> getUserAccount(String platform, String regid,
       String device_id) {
     return XlmmRetrofitClient.getService()
         .getUserAccount(platform, regid, device_id)

@@ -122,9 +122,9 @@ public class LoginUtils {
     JUtils.Log("XlmmApp", "regid: " + mRegId
         + " devid:"+((TelephonyManager) context.getSystemService( Context.TELEPHONY_SERVICE ))
         .getDeviceId());
-    new UserModel().getUserAccount("android", mRegId,
-        ((TelephonyManager)context.getSystemService( Context.TELEPHONY_SERVICE ))
-            .getDeviceId())
+    UserModel.getInstance().getUserAccount("android", mRegId,
+        ((TelephonyManager) context.getSystemService(
+            Context.TELEPHONY_SERVICE)).getDeviceId())
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<UserAccountBean>() {
           @Override public void onNext(UserAccountBean user) {

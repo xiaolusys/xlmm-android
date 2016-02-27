@@ -10,6 +10,7 @@ import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.entities.AllowanceBean;
 import com.jimei.xiaolumeimei.entities.BindInfoBean;
+import com.jimei.xiaolumeimei.entities.BudgetdetailBean;
 import com.jimei.xiaolumeimei.entities.CarryLogListBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
@@ -568,7 +569,7 @@ public interface XlmmService {
       @Query("days") String day);
 
   //获得商品详情共享页面信息
-  @GET( "share/product")
+  @GET("share/product")
   Observable<ShareProductBean> getProductShareInfo(
       @Query("product_id") String product_id);
 
@@ -580,4 +581,7 @@ public interface XlmmService {
       @Field("regid")String regid,
       @Field("device_id")String device_id
   );
+
+   @GET("users/get_budget_detail")
+  Observable<BudgetdetailBean> budGetdetailBean();
 }

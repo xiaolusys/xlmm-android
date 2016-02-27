@@ -26,7 +26,6 @@ public class VerifyPhoneForgetActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.register_name) EditText editTextMobile;
   @Bind(R.id.register_password) EditText editTextInvalid_code;
   @Bind(R.id.register_button) Button register_button;
-  UserModel model = new UserModel();
   @Bind(R.id.getCheckCode) Button getCheckCode;
   private String mobile, invalid_code;
 
@@ -108,7 +107,7 @@ public class VerifyPhoneForgetActivity extends BaseSwipeBackCompatActivity
               getCheckCode.setClickable(false);
               getCheckCode.setBackgroundColor(Color.parseColor("#f3f3f4"));
 
-              model.getChgPasswordCheckCode(mobile)
+              UserModel.getInstance().getChgPasswordCheckCode(mobile)
                   .subscribeOn(Schedulers.io())
                   .subscribe(new ServiceResponse<RegisterBean>() {
                     @Override public void onNext(RegisterBean registerBean) {
@@ -148,7 +147,7 @@ public class VerifyPhoneForgetActivity extends BaseSwipeBackCompatActivity
         invalid_code = editTextInvalid_code.getText().toString().trim();
 
         if (checkInput(mobile, invalid_code)) {
-          model.check_code_user(mobile, invalid_code)
+          UserModel.getInstance().check_code_user(mobile, invalid_code)
               .subscribeOn(Schedulers.io())
               .subscribe(new ServiceResponse<RegisterBean>() {
                 @Override public void onNext(RegisterBean registerBean) {

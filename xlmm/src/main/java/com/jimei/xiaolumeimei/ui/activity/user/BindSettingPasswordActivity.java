@@ -20,7 +20,6 @@ public class BindSettingPasswordActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener {
   String TAG = "SettingPasswordActivity";
   @Bind(R.id.toolbar) Toolbar toolbar;
-  UserModel model = new UserModel();
   @Bind(R.id.set_password) EditText etPassword;
   @Bind(R.id.set_password2) EditText etPassword2;
   @Bind(R.id.set_commit_button) Button commit_button;
@@ -105,7 +104,7 @@ public class BindSettingPasswordActivity extends BaseSwipeBackCompatActivity
       String password2) {
 
     JUtils.Log(TAG, "username=" + username + " valid_code=" + valid_code);
-    model.bang_mobile(username,  password1, password2, valid_code)
+    UserModel.getInstance().bang_mobile(username, password1, password2, valid_code)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<BindInfoBean>() {
           @Override public void onNext(BindInfoBean bindInfoBean) {

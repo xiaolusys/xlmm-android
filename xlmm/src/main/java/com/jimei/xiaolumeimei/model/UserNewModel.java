@@ -1,5 +1,6 @@
 package com.jimei.xiaolumeimei.model;
 
+import com.jimei.xiaolumeimei.entities.BudgetdetailBean;
 import com.jimei.xiaolumeimei.entities.UserNewBean;
 import com.jimei.xiaolumeimei.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
@@ -23,5 +24,12 @@ public class UserNewModel {
   //得到用户信息
   public Observable<UserNewBean> getProfile() {
     return XlmmRetrofitClient.getService().getProfile().compose(new DefaultTransform<>());
+  }
+
+  //得到用户信息
+  public Observable<BudgetdetailBean> budGetdetailBean() {
+    return XlmmRetrofitClient.getService()
+        .budGetdetailBean()
+        .compose(new DefaultTransform<>());
   }
 }

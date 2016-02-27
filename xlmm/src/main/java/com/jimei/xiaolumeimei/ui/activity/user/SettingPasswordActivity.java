@@ -22,7 +22,6 @@ public class SettingPasswordActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener {
   String TAG = "SettingPasswordActivity";
   @Bind(R.id.toolbar) Toolbar toolbar;
-  UserModel model = new UserModel();
   @Bind(R.id.set_password) EditText etPassword;
   @Bind(R.id.set_password2) EditText etPassword2;
   @Bind(R.id.set_commit_button) Button commit_button;
@@ -80,8 +79,6 @@ public class SettingPasswordActivity extends BaseSwipeBackCompatActivity
             if (checkInputSame(password1, password2)) {
               changePassword(username, valid_code, password1, password2);
             }
-          } else {
-            Toast.makeText(mContext, "密码长度或者字符错误,请检查", Toast.LENGTH_SHORT).show();
           }
         } else {
           JUtils.Toast("请选择是否同意条款");
@@ -112,7 +109,7 @@ public class SettingPasswordActivity extends BaseSwipeBackCompatActivity
 
   private void changePassword(String username, String valid_code, String password1,
       String password2) {
-    model.changePassword(username, valid_code, password1, password2)
+    UserModel.getInstance().changePassword(username, valid_code, password1, password2)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<UserBean>() {
           @Override public void onNext(UserBean user) {

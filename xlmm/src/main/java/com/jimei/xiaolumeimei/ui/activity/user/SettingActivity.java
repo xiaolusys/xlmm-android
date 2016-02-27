@@ -39,8 +39,7 @@ public class SettingActivity extends BaseSwipeBackCompatActivity {
   }
 
   @Override protected void initData() {
-    UserModel model = new UserModel();
-    model.getUserInfo()
+    UserModel.getInstance().getUserInfo()
             .subscribeOn(Schedulers.newThread())
             .subscribe(new ServiceResponse<UserInfoBean>() {
               @Override
