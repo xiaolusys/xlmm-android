@@ -16,7 +16,7 @@ import com.jimei.xiaolumeimei.adapter.UserWalletAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.BudgetdetailBean;
 import com.jimei.xiaolumeimei.model.UserNewModel;
-import com.jimei.xiaolumeimei.ui.activity.xiaolumama.WithdrawCashHistoryActivity;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaWithdrawCashHistoryActivity;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
@@ -110,7 +110,7 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
     switch (item.getItemId()) {
       case R.id.action_withdraw:
         JUtils.Log(TAG, "withdraw cash entry");
-        startActivity(new Intent(this, WithdrawCashHistoryActivity.class));
+        startActivity(new Intent(this, UserWithdrawCashActivity.class));
         break;
       default:
         break;

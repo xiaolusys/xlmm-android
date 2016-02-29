@@ -186,7 +186,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         break;
       case R.id.imgUser:
         if(mamaAgentInfo != null) {
-          intent = new Intent(MamaInfoActivity.this, WithdrawCashActivity.class);
+          intent = new Intent(MamaInfoActivity.this, MamaWithdrawCashActivity.class);
           intent.putExtra("cash", mamaAgentInfo.getCash());
 
           startActivity(intent);

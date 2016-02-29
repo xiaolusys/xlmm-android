@@ -320,15 +320,15 @@
         android:theme="@style/AppTheme.TransparentActivity"
         />
 
-    <activity android:name=".ui.activity.xiaolumama.WithdrawCashActivity"
+    <activity android:name=".ui.activity.xiaolumama.MamaWithdrawCashActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
 
-    <activity android:name=".ui.activity.xiaolumama.WithdrawCashHistoryActivity"
+    <activity android:name=".ui.activity.xiaolumama.MamaWithdrawCashHistoryActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
 
-    <activity android:name=".ui.activity.xiaolumama.WithdrawCashResultActivity"
+    <activity android:name=".ui.activity.xiaolumama.MamaWithdrawCashResultActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
 
@@ -359,6 +359,10 @@
         android:theme="@style/AppTheme.TransparentActivity"
         />
     <activity android:name=".ui.activity.xiaolumama.MMCarryLogListActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
+
+    <activity android:name=".ui.activity.user.UserWithdrawCashActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
 

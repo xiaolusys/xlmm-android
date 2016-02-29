@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    style="@style/AppTheme.AppBarOverlay">
+
+  <android.support.design.widget.AppBarLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:id="@+id/app_bar_layout"
+      android:theme="@style/AppTheme.AppBarOverlay">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#fdb916"
+        app:popupTheme="@style/AppTheme.PopupOverlay" >
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerInParent="true"
+          android:layout_gravity="center"
+          android:text="提现"
+          android:textColor="@android:color/white"
+          android:textSize="16sp"
+          />
+    </android.support.v7.widget.Toolbar>>
+
+  </android.support.design.widget.AppBarLayout>
+
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="300px"
+      android:layout_below="@+id/app_bar_layout"
+      android:layout_centerHorizontal="true"
+      android:id="@+id/rl_accountinfo">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rl_account_remainder">
+    <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="账户余额"
+        android:id="@+id/tv_Point"
+        android:gravity="center"
+        android:layout_centerVertical="true"
+        android:textSize="15sp"
+        android:layout_marginTop="40px"
+        />
+
+    <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:id="@+id/tv_reminder"
+        android:text="0"
+        android:textSize="15sp"
+        android:layout_gravity="center"
+        android:textColor="@color/colorAccent"
+        android:layout_alignBottom="@id/tv_Point"
+        android:layout_alignParentRight="true"
+        android:padding="8dp"/>
+      </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rl_wxaccount"
+        android:layout_below="@id/rl_account_remainder">
+      <TextView
+          android:id="@+id/tv_wxaccount"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:gravity="center"
+          android:layout_centerVertical="true"
+          android:text="微信账号"
+          android:textSize="15sp"
+          android:layout_marginTop="40px"
+          />
+
+      <TextView android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerVertical="true"
+          android:id="@+id/tv_wxnickname"
+          android:text=""
+          android:textSize="15sp"
+          android:layout_gravity="center"
+          android:textColor="@color/colorAccent"
+          android:layout_alignBottom="@id/tv_wxaccount"
+          android:layout_alignParentRight="true"
+          android:padding="8dp"/>
+
+      <Button android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerVertical="true"
+          android:id="@+id/btn_bindwx"
+          android:text="绑定微信"
+          android:textSize="15sp"
+          android:layout_gravity="center"
+          android:background="@drawable/text_frame"
+          android:textColor="@color/colorAccent"
+          android:layout_alignBottom="@id/tv_wxaccount"
+          android:layout_alignParentRight="true"
+          android:padding="8dp"/>
+      </RelativeLayout>
+  </RelativeLayout>
+
+  <FrameLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_below="@+id/rl_accountinfo">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rl_has_cash"
+        android:layout_marginTop="8px"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/text_frame"
+        android:padding="4dp"
+        >
+
+      <TextView
+          android:id="@+id/tv_order1"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:gravity="center_horizontal"
+          android:layout_marginLeft="100px"
+          android:text="@string/withdrawcash"
+          />
+
+      <ImageView
+          android:id="@+id/img_red_packet1"
+          android:layout_width="330px"
+          android:layout_height="200px"
+          android:layout_marginLeft="200px"
+          android:layout_marginTop="40px"
+          android:clickable="true"
+          android:src="@drawable/img_redpacket100_1"
+          android:layout_below="@+id/tv_order1"/>
+
+      <ImageView
+          android:id="@+id/img_red_packet2"
+          android:layout_width="330px"
+          android:layout_height="200px"
+          android:layout_gravity="center"
+          android:textSize="15sp"
+          android:layout_below="@+id/img_red_packet1"
+          android:layout_marginLeft="200px"
+          android:layout_marginTop="40px"
+          android:src="@drawable/img_redpacket200_1"
+          />
+
+      <Button
+          android:id="@+id/btn_withdraw"
+          android:layout_width="660px"
+          android:layout_height="80px"
+          android:layout_alignParentBottom="true"
+          android:layout_centerHorizontal="true"
+          android:text="马上提现"
+          android:textColor="@color/white"
+          android:textSize="15sp"
+          android:background="@drawable/shape_common"
+          />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rl_has_no_cash"
+        android:layout_marginTop="8px"
+        android:background="@drawable/text_frame"
+        android:padding="4dp"
+        >
+
+      <ImageView
+          android:id="@+id/img_gray_packet1"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="200px"
+          android:layout_marginTop="40px"
+          android:src="@drawable/img_graypacket100"
+          />
+
+      <ImageView
+          android:id="@+id/img_gray_packet2"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:textSize="15sp"
+          android:background="@drawable/text_frame"
+          android:layout_below="@+id/img_gray_packet1"
+          android:layout_marginLeft="200px"
+          android:layout_marginTop="40px"
+          android:src="@drawable/img_graypacket200"
+          />
+
+      <TextView
+          android:id="@+id/tv_info2"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:gravity="center_horizontal"
+          android:layout_marginLeft="150px"
+          android:layout_marginTop="20px"
+          android:text="@string/not_enough_cash"
+          android:background="@drawable/text_frame"
+          android:layout_below="@+id/img_gray_packet2"
+          />
+
+      <Button
+          android:id="@+id/btn_jump"
+          android:layout_width="190px"
+          android:layout_height="80px"
+          android:layout_centerHorizontal="true"
+          android:layout_marginTop="20px"
+
+          android:padding="10px"
+          android:text="发布产品"
+          android:textColor="@color/white"
+          android:textSize="15sp"
+          android:background="@drawable/shape_common"
+          android:layout_below="@+id/tv_info2"
+          />
+    </RelativeLayout>
+  </FrameLayout>
+
+
+</RelativeLayout>

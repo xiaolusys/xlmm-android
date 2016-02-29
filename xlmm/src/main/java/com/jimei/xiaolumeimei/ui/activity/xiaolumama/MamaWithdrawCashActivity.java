@@ -24,9 +24,9 @@ import rx.schedulers.Schedulers;
 /**
  * Created by wulei on 2016/2/4.
  */
-public class WithdrawCashActivity extends BaseSwipeBackCompatActivity
+public class MamaWithdrawCashActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener {
-  String TAG = "WithdrawCashActivity";
+  String TAG = "MamaWithdrawCashActivity";
 
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.btn_jump) Button btn_jump;
@@ -94,7 +94,7 @@ public class WithdrawCashActivity extends BaseSwipeBackCompatActivity
     switch (v.getId()) {
       case R.id.btn_jump:
         JUtils.Log(TAG, "withdraw cash now");
-        //startActivity(new Intent(WithdrawCashActivity.this, MainActivity.class));
+        //startActivity(new Intent(MamaWithdrawCashActivity.this, MainActivity.class));
         finish();
         break;
       case R.id.btn_withdraw:
@@ -142,7 +142,7 @@ public class WithdrawCashActivity extends BaseSwipeBackCompatActivity
     switch (item.getItemId()) {
       case R.id.action_history:
         JUtils.Log(TAG, "withdraw cash history entry");
-        startActivity(new Intent(this, WithdrawCashHistoryActivity.class));
+        startActivity(new Intent(this, MamaWithdrawCashHistoryActivity.class));
         break;
       default:
         break;
@@ -175,7 +175,8 @@ public class WithdrawCashActivity extends BaseSwipeBackCompatActivity
             @Override public void onNext(ResponseBody resp) {
               JUtils.Log(TAG, "ResponseBody11=" + resp.toString());
               Intent intent =
-                  new Intent(WithdrawCashActivity.this, WithdrawCashResultActivity.class);
+                  new Intent(MamaWithdrawCashActivity.this, MamaWithdrawCashResultActivity
+                      .class);
               intent.putExtra("cash", fund);
               startActivity(intent);
             }
