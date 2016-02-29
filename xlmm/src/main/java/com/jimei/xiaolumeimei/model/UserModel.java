@@ -14,6 +14,7 @@ import com.jimei.xiaolumeimei.entities.SmsLoginUserBean;
 import com.jimei.xiaolumeimei.entities.UserAccountBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.entities.UserWithdrawResult;
 import com.jimei.xiaolumeimei.entities.WxLogininfoBean;
 import com.jimei.xiaolumeimei.entities.WxPubAuthInfo;
 import com.jimei.xiaolumeimei.rx.DefaultTransform;
@@ -202,7 +203,7 @@ public class UserModel {
   }
 
   //普通用户提现
-  public Observable<ResponseBody> user_withdraw_cash(String amount) {
+  public Observable<UserWithdrawResult> user_withdraw_cash(String amount) {
     return XlmmRetrofitClient.getService()
         .user_withdraw_cash(amount)
         .compose(new DefaultTransform<>());

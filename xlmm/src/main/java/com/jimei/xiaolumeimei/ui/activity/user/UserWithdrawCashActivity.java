@@ -15,6 +15,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AgentInfoBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.entities.UserWithdrawResult;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.model.UserNewModel;
@@ -47,6 +48,7 @@ public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.img_dec) ImageView img_dec;
   @Bind(R.id.img_inc) ImageView img_inc;
   @Bind(R.id.tv_wxnickname) TextView tv_wxnickname;
+  @Bind(R.id.tv_num) TextView tv_num;
 
   double money;
   double withdraw_cash_fund = 0;
@@ -93,7 +95,7 @@ public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
               if (null != userNewBean.getUserBudget()) {
                 money = userNewBean.getUserBudget().getBudgetCash();
               }
-              tv_reminder.setText(Math.round(money *100)/100 + "");
+              tv_reminder.setText((float)(Math.round(money *100))/100 + "元");
 
               if(userNewBean.getIsAttentionPublic() == 1) {
                 btn_bindwx.setVisibility(View.INVISIBLE);
@@ -151,6 +153,7 @@ public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
         JUtils.Log(TAG, "inc now");
         if(Math.round(money / MAX_WITHDROW_MONEY_EACH_TIME) > withdraw_packet_num) {
           withdraw_packet_num++;
+          tv_num.setText(""+withdraw_packet_num);
         }
 
         break;
@@ -159,6 +162,7 @@ public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
         JUtils.Log(TAG, "dec now");
         if(withdraw_packet_num > 1){
           withdraw_packet_num--;
+          tv_num.setText(""+withdraw_packet_num);
         }
 
         break;
@@ -173,9 +177,24 @@ public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
       subscribe = UserModel.getInstance()
           .user_withdraw_cash(Float.toString(fund))
           .subscribeOn(Schedulers.newThread())
-          .subscribe(new ServiceResponse<ResponseBody>() {
-            @Override public void onNext(ResponseBody resp) {
-              JUtils.Log(TAG, "ResponseBody11=" + resp.toString());
+          .subscribe(new ServiceResponse<UserWithdrawResult>() {
+            @Override public void onNext(UserWithdrawResult resp) {
+              switch (resp.getCode()){
+                case 0:
+                  JUtils.Log(TAG, "SUCCESS");
+                  JUtils.Toast(resp.getMessage());
+                  finish();
+                  break;
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                  JUtils.Log(TAG, "failed:"+resp.getCode());
+                  JUtils.Toast(resp.getMessage());
+                  break;
+
+              }
 
             }
           });

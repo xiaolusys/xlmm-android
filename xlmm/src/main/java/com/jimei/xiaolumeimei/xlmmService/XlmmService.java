@@ -43,6 +43,7 @@ import com.jimei.xiaolumeimei.entities.SmsLoginUserBean;
 import com.jimei.xiaolumeimei.entities.UserAccountBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.entities.UserWithdrawResult;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.entities.WxLogininfoBean;
 import com.jimei.xiaolumeimei.entities.WxPubAuthInfo;
@@ -595,6 +596,6 @@ public interface XlmmService {
   //创建提款信息
   @FormUrlEncoded
   @POST("users/budget_cash_out")
-  Observable<ResponseBody> user_withdraw_cash(
+  Observable<UserWithdrawResult> user_withdraw_cash(
       @Field("cashout_amount") String amount );
 }

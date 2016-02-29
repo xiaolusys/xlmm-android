@@ -462,7 +462,7 @@ public class MainActivity extends BaseActivity
                 budgetCash = userNewBean.getUserBudget().getBudgetCash();
               }
               tvPoint.setText(score + "");
-              tvMoney.setText(Math.round(budgetCash *100)/100 + "");
+              tvMoney.setText((float)(Math.round(budgetCash *100))/100 + "");
             }
           }
         });
