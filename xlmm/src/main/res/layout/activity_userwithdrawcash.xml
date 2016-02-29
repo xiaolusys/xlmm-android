@@ -274,11 +274,11 @@
 
       <ImageView
           android:id="@+id/img_gray_packet1"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginLeft="200px"
+          android:layout_width="404px"
+          android:layout_height="210px"
+          android:layout_marginLeft="150px"
           android:layout_marginTop="240px"
-          android:src="@drawable/img_graypacket100"
+          android:src="@drawable/img_redpacket2"
           />
 
       <TextView
@@ -290,7 +290,7 @@
           android:textSize="25sp"
           android:layout_below="@+id/img_gray_packet1"
           android:layout_marginLeft="200px"
-          android:layout_marginTop="20px"
+          android:layout_marginTop="15px"
           android:layout_centerHorizontal="true"
           />
 

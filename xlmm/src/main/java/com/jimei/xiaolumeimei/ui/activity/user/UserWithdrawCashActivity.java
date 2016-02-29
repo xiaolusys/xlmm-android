@@ -46,6 +46,7 @@ public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.btn_withdraw) Button btn_withdraw;
   @Bind(R.id.img_dec) ImageView img_dec;
   @Bind(R.id.img_inc) ImageView img_inc;
+  @Bind(R.id.tv_wxnickname) TextView tv_wxnickname;
 
   double money;
   double withdraw_cash_fund = 0;
@@ -96,6 +97,7 @@ public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
 
               if(userNewBean.getIsAttentionPublic() == 1) {
                 btn_bindwx.setVisibility(View.INVISIBLE);
+                tv_wxnickname.setText("已关注");
                 if (Double.compare(money, MAX_WITHDROW_MONEY_EACH_TIME) > 0) {
                   rl_unbindwx.setVisibility(View.INVISIBLE);
                   rl_not_enough_cash.setVisibility(View.INVISIBLE);
