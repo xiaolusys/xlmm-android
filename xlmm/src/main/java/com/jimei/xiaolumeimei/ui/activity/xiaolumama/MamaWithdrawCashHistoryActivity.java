@@ -19,8 +19,9 @@ import rx.schedulers.Schedulers;
 /**
  * Created by wulei on 2016/2/4.
  */
-public class WithdrawCashHistoryActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener{
-  String TAG = "WithdrawCashHistoryActivity";
+public class MamaWithdrawCashHistoryActivity extends BaseSwipeBackCompatActivity
+    implements View.OnClickListener{
+  String TAG = "MamaWithdrawCashHistoryActivity";
 
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.lv_withdrawcash_his) ListView lv_withdrawcash_his;

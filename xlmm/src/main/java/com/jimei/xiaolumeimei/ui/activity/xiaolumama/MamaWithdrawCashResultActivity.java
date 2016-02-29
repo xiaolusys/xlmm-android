@@ -20,8 +20,9 @@ import rx.schedulers.Schedulers;
 /**
  * Created by wulei on 2016/2/4.
  */
-public class WithdrawCashResultActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener{
-  String TAG = "WithdrawCashResultActivity";
+public class MamaWithdrawCashResultActivity extends BaseSwipeBackCompatActivity implements
+    View.OnClickListener{
+  String TAG = "MamaWithdrawCashResultActivity";
 
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.btn_jump) Button btn_jump;
@@ -76,7 +77,7 @@ public class WithdrawCashResultActivity extends BaseSwipeBackCompatActivity impl
     switch (v.getId()) {
       case R.id.btn_jump:
         JUtils.Log(TAG,"publish now");
-        //startActivity(new Intent(WithdrawCashActivity.this, MainActivity.class));
+        //startActivity(new Intent(MamaWithdrawCashActivity.this, MainActivity.class));
         finish();
         break;
 
@@ -87,7 +88,7 @@ public class WithdrawCashResultActivity extends BaseSwipeBackCompatActivity impl
     switch (item.getItemId()){
       case R.id.action_history:
         JUtils.Log(TAG,"withdraw cash history entry");
-        startActivity(new Intent(this, WithdrawCashHistoryActivity.class));
+        startActivity(new Intent(this, MamaWithdrawCashHistoryActivity.class));
         break;
       default:
         break;

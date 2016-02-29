@@ -38,7 +38,7 @@
       android:layout_height="150dp">
     <TextView android:layout_width="wrap_content"
         android:textSize="32sp"
-        android:id="@+id/tv_momey"
+        android:id="@+id/tv_money"
         android:textColor="@color/colorPrimary"
         android:layout_marginTop="30dp"
         android:layout_height="wrap_content"
@@ -56,18 +56,34 @@
   </LinearLayout>
   <FrameLayout android:layout_width="match_parent"
       android:layout_height="match_parent">
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/ll_wallet_empty"
         android:visibility="invisible"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+      <ImageView
+          android:id="@+id/img_wallet"
+          android:layout_width="150px"
+          android:layout_height="165px"
+          android:layout_marginLeft="280px"
+          android:layout_marginTop="280px"
+          android:src="@drawable/img_wallet"
+          />
+
       <TextView
           android:layout_width="wrap_content"
           android:text="你的钱包空空如也"
-          android:layout_height="wrap_content"/>
-    </LinearLayout>
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/img_wallet"
+          android:layout_marginLeft="255px"
+          android:layout_marginTop="10px"/>
+    </RelativeLayout>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/wallet_rcv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        />
   </FrameLayout>
 </LinearLayout>

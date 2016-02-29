@@ -28,7 +28,6 @@ import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CouponBean;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
-import com.jimei.xiaolumeimei.entities.UserNewBean;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.model.UserNewModel;
@@ -54,6 +53,8 @@ import com.jude.utils.JUtils;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import java.util.ArrayList;
 import java.util.List;
+import rx.Subscriber;
+import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseActivity
@@ -82,6 +83,7 @@ public class MainActivity extends BaseActivity
   private int num;
   private BadgeView badge;
   private double budgetCash;
+  private Subscription subscribe;
 
   @Override protected int provideContentViewId() {
     return R.layout.activity_main;
@@ -153,10 +155,8 @@ public class MainActivity extends BaseActivity
               }
             } else {
               if ((tvNickname != null)
-                  && (userInfoBean != null)
-                  && (userInfoBean.getResults() != null)
-                  && (userInfoBean.getResults().size() > 0)) {
-                tvNickname.setText(userInfoBean.getResults().get(0).getNick());
+                  && (userInfoBean != null)) {
+                tvNickname.setText(userInfoBean.getNick());
               }
             }
             invalidateOptionsMenu();
@@ -181,7 +181,7 @@ public class MainActivity extends BaseActivity
         if (LoginUtils.checkLoginState(getApplicationContext())) {
           Intent intent = new Intent(MainActivity.this, WalletActivity.class);
           Bundle bundle = new Bundle();
-          bundle.putString("money", budgetCash + "");
+          bundle.putDouble("money", budgetCash);
           intent.putExtras(bundle);
           startActivity(intent);
         } else {
@@ -381,14 +381,8 @@ public class MainActivity extends BaseActivity
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<UserInfoBean>() {
           @Override public void onNext(UserInfoBean user) {
-            if ((user.getResults().get(0).getXiaolumm() != null) && (user.getResults()
-                .get(0)
-                .getXiaolumm()
-                .getId() != 0)) {
-              JUtils.Log(TAG, "i am xiaolumama, id=" + user.getResults()
-                  .get(0)
-                  .getXiaolumm()
-                  .getId());
+            if ((user.getXiaolumm() != null) && (user.getXiaolumm().getId() != 0)) {
+              JUtils.Log(TAG, "i am xiaolumama, id=" + user.getXiaolumm().getId());
               Intent intent = new Intent(MainActivity.this, MamaInfoActivity.class);
               startActivity(intent);
             } else {
@@ -449,28 +443,26 @@ public class MainActivity extends BaseActivity
     getUserInfo();
 
     if (LoginUtils.checkLoginState(getApplicationContext()) && (tvNickname != null)) {
-      if ((userInfoBean != null)
-          && (userInfoBean.getResults() != null)
-          && (userInfoBean.getResults().size() > 0)
-          && (!userInfoBean.getResults().get(0).getNick().isEmpty())) {
-        tvNickname.setText(userInfoBean.getResults().get(0).getNick());
+      if ((userInfoBean != null) && (userInfoBean.getNick() != null)
+          && (!userInfoBean.getNick().isEmpty())) {
+        tvNickname.setText(userInfoBean.getNick());
       } else {
         tvNickname.setText("小鹿妈妈");
       }
     }
 
-    UserNewModel.getInstance()
+    subscribe = UserNewModel.getInstance()
         .getProfile()
         .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<UserNewBean>() {
-          @Override public void onNext(UserNewBean userNewBean) {
+        .subscribe(new ServiceResponse<UserInfoBean>() {
+          @Override public void onNext(UserInfoBean userNewBean) {
             if (userNewBean != null) {
               int score = userNewBean.getScore();
               if (null != userNewBean.getUserBudget()) {
                 budgetCash = userNewBean.getUserBudget().getBudgetCash();
               }
               tvPoint.setText(score + "");
-              tvMoney.setText(budgetCash + "");
+              tvMoney.setText(Math.round(budgetCash *100)/100 + "");
             }
           }
         });
@@ -478,7 +470,15 @@ public class MainActivity extends BaseActivity
     UserModel.getInstance()
         .getUnusedCouponBean()
         .subscribeOn(Schedulers.newThread())
-        .subscribe(new ServiceResponse<CouponBean>() {
+        .unsafeSubscribe(new Subscriber<CouponBean>() {
+          @Override public void onCompleted() {
+
+          }
+
+          @Override public void onError(Throwable e) {
+
+          }
+
           @Override public void onNext(CouponBean couponBean) {
             if (couponBean != null) {
               tvCoupon.setText(couponBean.getCount() + "");
@@ -515,6 +515,10 @@ public class MainActivity extends BaseActivity
   @Override protected void onStop() {
     JUtils.Log(TAG, "stop");
     super.onStop();
+
+    if (subscribe != null && subscribe.isUnsubscribed()) {
+      subscribe.unsubscribe();
+    }
   }
 
   public UserInfoBean getUserInfoBean() {

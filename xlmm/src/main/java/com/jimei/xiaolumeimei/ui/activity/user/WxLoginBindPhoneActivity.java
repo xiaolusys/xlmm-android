@@ -81,10 +81,10 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
           .subscribeOn(Schedulers.newThread())
           .subscribe(new ServiceResponse<UserInfoBean>() {
             @Override public void onNext(UserInfoBean user) {
-              Log.d(TAG, "getUserInfo:, " + user.getResults().get(0).toString());
-              if ((user.getResults() != null) && (user.getResults().get(0) != null)) {
-                headimgurl = user.getResults().get(0).getThumbnail();
-                nickname = user.getResults().get(0).getNick();
+              Log.d(TAG, "getUserInfo:, " + user.toString());
+              if ((user != null) ) {
+                headimgurl = user.getThumbnail();
+                nickname = user.getNick();
               }
             }
 

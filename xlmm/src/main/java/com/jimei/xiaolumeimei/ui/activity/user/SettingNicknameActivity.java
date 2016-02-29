@@ -139,12 +139,12 @@ public class SettingNicknameActivity extends BaseSwipeBackCompatActivity
         .subscribe(new ServiceResponse<UserInfoBean>() {
           @Override public void onNext(UserInfoBean user) {
             userinfo = user;
-            Log.d(TAG, "getUserInfo:, " + userinfo.getResults().get(0).toString());
+            Log.d(TAG, "getUserInfo:, " + userinfo.toString());
 
-            nameEditText.setText(userinfo.getResults().get(0).getNick());
-            userid = userinfo.getResults().get(0).getId();
+            nameEditText.setText(userinfo.getNick());
+            userid = userinfo.getId();
             Log.d(TAG, "getUserInfo nick "
-                + userinfo.getResults().get(0).getNick()
+                + userinfo.getNick()
                 + " userid "
                 + userid);
           }

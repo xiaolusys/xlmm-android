@@ -79,7 +79,7 @@ public class XlmmApp extends Application {
           .subscribeOn(Schedulers.newThread())
           .subscribe(new ServiceResponse<UserInfoBean>() {
             @Override public void onNext(UserInfoBean user) {
-              Log.d("XlmmApp", "getUserInfo:, " + user.getResults().get(0).toString());
+              Log.d("XlmmApp", "getUserInfo:, " + user.toString());
             }
 
             @Override public void onCompleted() {
