@@ -25,6 +25,7 @@ public class UserInfoBean {
    * xiaolumm : {"id":2,"cash":10000,"agencylevel":2,"created":"2015-05-12T17:03:25","status":"effect"}
    * has_usable_password : true
    * user_budget : {"budget_cash":10}
+   * "is_attention_public": 1,
    * score : 150
    */
 
@@ -55,6 +56,7 @@ public class UserInfoBean {
    */
 
   @SerializedName("user_budget") private UserBudgetEntity mUserBudget;
+  @SerializedName("is_attention_public") private int mIsAttentionPublic;
   @SerializedName("score") private int mScore;
 
   public void setId(int id) {
@@ -115,6 +117,10 @@ public class UserInfoBean {
 
   public void setUserBudget(UserBudgetEntity userBudget) {
     this.mUserBudget = userBudget;
+  }
+
+  public void setIsAttentionPublic(int mIsAttentionPublic) {
+    this.mIsAttentionPublic = mIsAttentionPublic;
   }
 
   public void setScore(int score) {
@@ -179,6 +185,10 @@ public class UserInfoBean {
 
   public UserBudgetEntity getUserBudget() {
     return mUserBudget;
+  }
+
+  public int getIsAttentionPublic() {
+    return mIsAttentionPublic;
   }
 
   public int getScore() {
@@ -262,6 +272,7 @@ public class UserInfoBean {
         ", mXiaolumm=" + mXiaolumm +
         ", mHasUsablePassword=" + mHasUsablePassword +
         ", mUserBudget=" + mUserBudget +
+        ", mIsAttentionPublic=" + mIsAttentionPublic +
         ", mScore=" + mScore +
         '}';
   }

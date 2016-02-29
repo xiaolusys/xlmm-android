@@ -140,7 +140,12 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
     switch (item.getItemId()) {
       case R.id.action_withdraw:
         JUtils.Log(TAG, "withdraw cash entry");
-        startActivity(new Intent(this, UserWithdrawCashActivity.class));
+        Intent intent = new Intent(this, UserWithdrawCashActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putDouble("money", money);
+        intent.putExtras(bundle);
+        startActivity(intent);
+        finish();
         break;
       default:
         break;

@@ -14,13 +14,16 @@ import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AgentInfoBean;
+import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
+import com.jimei.xiaolumeimei.model.UserNewModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaWithdrawCashHistoryActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaWithdrawCashResultActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.squareup.okhttp.ResponseBody;
+import rx.Subscriber;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -30,16 +33,17 @@ import rx.schedulers.Schedulers;
 public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener {
   String TAG = "UserWithdrawCashActivity";
+  static double MAX_WITHDROW_MONEY_EACH_TIME = 8.88;
 
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.btn_bindwx) Button btn_bindwx;
   @Bind(R.id.btn_buy) Button btn_buy;
   @Bind(R.id.rl_unbindwx) RelativeLayout rl_unbindwx;
   @Bind(R.id.rl_has_cash) RelativeLayout rl_has_cash;
-  @Bind(R.id.rl_has_no_cash) RelativeLayout rl_has_no_cash;
+  @Bind(R.id.rl_not_enough_cash) RelativeLayout rl_not_enough_cash;
   @Bind(R.id.tv_reminder) TextView tv_reminder;
 
-  double cash;
+  double money;
   float withdraw_cash_fund = 0;
   boolean click_cash100 = false;
   boolean click_cash200 = false;
@@ -52,24 +56,64 @@ public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
+    if(null != extras) {
+      money = extras.getDouble("money");
+      tv_reminder.setText(Math.round(money *100)/100 + "");
 
+    }
+    else{
+      UserNewModel.getInstance()
+          .getProfile()
+          .subscribeOn(Schedulers.io())
+          .unsafeSubscribe(new Subscriber<UserInfoBean>() {
+            @Override public void onCompleted() {
+
+            }
+
+            @Override public void onError(Throwable e) {
+
+            }
+
+            @Override public void onNext(UserInfoBean userNewBean) {
+              if (userNewBean != null) {
+                if (null != userNewBean.getUserBudget()) {
+                  money = userNewBean.getUserBudget().getBudgetCash();
+                }
+                tv_reminder.setText(Math.round(money *100)/100 + "");
+
+                if(userNewBean.getIsAttentionPublic() == 1) {
+                  if (Double.compare(money, MAX_WITHDROW_MONEY_EACH_TIME) > 0) {
+                    rl_unbindwx.setVisibility(View.INVISIBLE);
+                    rl_not_enough_cash.setVisibility(View.INVISIBLE);
+                    rl_has_cash.setVisibility(View.VISIBLE);
+                  } else {
+                    rl_unbindwx.setVisibility(View.INVISIBLE);
+                    rl_not_enough_cash.setVisibility(View.VISIBLE);
+                    rl_has_cash.setVisibility(View.INVISIBLE);
+                  }
+                }
+                else {
+                  rl_unbindwx.setVisibility(View.VISIBLE);
+                  rl_not_enough_cash.setVisibility(View.INVISIBLE);
+                  rl_has_cash.setVisibility(View.INVISIBLE);
+                }
+              }
+            }
+          });
+
+    }
   }
 
   @Override protected int getContentViewLayoutID() {
-    return R.layout.activity_withdrawcash;
+    return R.layout.activity_userwithdrawcash;
   }
 
   @Override protected void initViews() {
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
     finishBack(toolbar);
-    cash = getIntent().getExtras().getDouble("cash");
-    tv_reminder.setText(Double.toString(Math.round((cash * 100) / 100)));
-    if (Double.compare(cash, 0) > 0) {
-      rl_has_no_cash.setVisibility(View.INVISIBLE);
-    } else {
-      rl_has_cash.setVisibility(View.INVISIBLE);
-    }
+
+
   }
 
   @Override protected void initData() {
