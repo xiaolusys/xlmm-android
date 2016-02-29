@@ -60,7 +60,6 @@ public class TodayFragment extends BaseFragment {
   private static final String TAG = TodayFragment.class.getSimpleName();
 
   int page_size = 10;
-  ProductModel model = new ProductModel();
   private XRecyclerView xRecyclerView;
   private TodayAdapter mTodayAdapter;
   private ImageView post2;
@@ -76,6 +75,7 @@ public class TodayFragment extends BaseFragment {
   private SharedPreferences sharedPreferences;
   private String cookies;
   private String domain;
+  private Subscription subscribe;
 
   @Override protected int provideContentViewId() {
     return R.layout.today_fragment;
@@ -83,7 +83,8 @@ public class TodayFragment extends BaseFragment {
 
   @Override protected void initData() {
     loading.start();
-    model.getTodayList(1, 10)
+    subscribe = ProductModel.getInstance()
+        .getTodayList(1, 10)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ProductListBean>() {
           @Override public void onNext(ProductListBean productListBean) {
@@ -135,7 +136,8 @@ public class TodayFragment extends BaseFragment {
 
     xRecyclerView.addHeaderView(head);
 
-    model.getTodayPost()
+    subscribe = ProductModel.getInstance()
+        .getTodayPost()
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<PostBean>() {
           @Override public void onNext(PostBean postBean) {
@@ -186,8 +188,8 @@ public class TodayFragment extends BaseFragment {
 
                 Glide.with(getActivity())
                     .load(postBean.getActivity().getActImg())
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .placeholder(R.drawable.header)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(
+                    R.drawable.header)
                     //.centerCrop()
                     .into(post2);
 
@@ -198,9 +200,13 @@ public class TodayFragment extends BaseFragment {
 
                     if (postBean.getActivity().isLoginRequired()) {
                       if (LoginUtils.checkLoginState(getActivity())
-                          && (null != ((MainActivity)getActivity()).getUserInfoBean())
-                          && !(((MainActivity)getActivity()).getUserInfoBean()
-                          .getResults().get(0).getMobile().isEmpty())) {
+                          && (null
+                          != ((MainActivity) getActivity()).getUserInfoBean())
+                          && !(((MainActivity) getActivity()).getUserInfoBean()
+                          .getResults()
+                          .get(0)
+                          .getMobile()
+                          .isEmpty())) {
                         Intent intent = new Intent(getActivity(), WebViewActivity.class);
                         //sharedPreferences =
                         //    getActivity().getSharedPreferences("COOKIESxlmm",
@@ -218,8 +224,8 @@ public class TodayFragment extends BaseFragment {
                         Bundle bundle = new Bundle();
                         bundle.putString("cookies", cookies);
                         bundle.putString("domain", domain);
-                        bundle.putString("Cookie", sharedPreferences.getString
-                            ("Cookie", ""));
+                        bundle.putString("Cookie",
+                            sharedPreferences.getString("Cookie", ""));
                         bundle.putString("actlink", postBean.getActivity().getActLink());
                         intent.putExtras(bundle);
                         startActivity(intent);
@@ -233,21 +239,22 @@ public class TodayFragment extends BaseFragment {
                           bundle.putString("login", "main");
                           intent.putExtras(bundle);
                           startActivity(intent);
-                        }
-                        else{
+                        } else {
                           JUtils.Toast("登录成功,前往绑定手机号后才可参加活动");
-                          Intent intent = new Intent(getContext(),
-                              WxLoginBindPhoneActivity.class);
-                          if(null != ((MainActivity)getActivity()).getUserInfoBean()) {
+                          Intent intent =
+                              new Intent(getContext(), WxLoginBindPhoneActivity.class);
+                          if (null != ((MainActivity) getActivity()).getUserInfoBean()) {
                             Bundle bundle = new Bundle();
-                            bundle.putString("headimgurl", ((MainActivity) getActivity()).getUserInfoBean()
-                                .getResults()
-                                .get(0)
-                                .getThumbnail());
-                            bundle.putString("nickname", ((MainActivity) getActivity()).getUserInfoBean()
-                                .getResults()
-                                .get(0)
-                                .getNick());
+                            bundle.putString("headimgurl",
+                                ((MainActivity) getActivity()).getUserInfoBean()
+                                    .getResults()
+                                    .get(0)
+                                    .getThumbnail());
+                            bundle.putString("nickname",
+                                ((MainActivity) getActivity()).getUserInfoBean()
+                                    .getResults()
+                                    .get(0)
+                                    .getNick());
                             intent.putExtras(bundle);
                           }
                           startActivity(intent);
@@ -291,7 +298,8 @@ public class TodayFragment extends BaseFragment {
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
       @Override public void onRefresh() {
-        model.getTodayList(1, page * page_size)
+        subscribe = ProductModel.getInstance()
+            .getTodayList(1, page * page_size)
             .subscribeOn(Schedulers.newThread())
             .subscribe(new ServiceResponse<ProductListBean>() {
               @Override public void onNext(ProductListBean productListBean) {
@@ -321,7 +329,8 @@ public class TodayFragment extends BaseFragment {
 
   private void loadMoreData(int page, int page_size) {
 
-    model.getTodayList(page, page_size)
+    subscribe = ProductModel.getInstance()
+        .getTodayList(page, page_size)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<ProductListBean>() {
           @Override public void onNext(ProductListBean productListBean) {
@@ -385,8 +394,12 @@ public class TodayFragment extends BaseFragment {
 
   @Override public void onStop() {
     super.onStop();
-    if (subscription != null) {
+    if (subscription != null && subscription.isUnsubscribed()) {
       subscription.unsubscribe();
+    }
+
+    if (subscribe != null && subscribe.isUnsubscribed()) {
+      subscribe.unsubscribe();
     }
   }
 
@@ -403,5 +416,6 @@ public class TodayFragment extends BaseFragment {
     } catch (Exception e) {
     }
   }
+
 }
 

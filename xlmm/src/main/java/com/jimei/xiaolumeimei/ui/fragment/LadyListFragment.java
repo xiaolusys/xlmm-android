@@ -13,6 +13,7 @@ import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.victor.loading.rotate.RotateLoading;
 import java.util.List;
+import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 /**
@@ -21,13 +22,13 @@ import rx.schedulers.Schedulers;
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class LadyListFragment extends BaseFragment {
+  int page_size = 10;
   private int page = 2;
   private int totalPages;//总的分页数
-  int page_size = 10;
-  ProductModel model = new ProductModel();
   private XRecyclerView xRecyclerView;
   private LadyListAdapter mLadyListAdapter;
   private RotateLoading loading;
+  private Subscription subscribe;
 
   @Override protected int provideContentViewId() {
     return R.layout.ladylist_fragment;
@@ -36,7 +37,8 @@ public class LadyListFragment extends BaseFragment {
   @Override protected void initData() {
     loading.start();
 
-    model.getLadyList(1,10)
+    subscribe = ProductModel.getInstance()
+        .getLadyList(1, 10)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<LadyListBean>() {
           @Override public void onNext(LadyListBean ladyListBean) {
@@ -81,7 +83,8 @@ public class LadyListFragment extends BaseFragment {
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
       @Override public void onRefresh() {
-        model.getLadyList(1, page * page_size)
+        subscribe = ProductModel.getInstance()
+            .getLadyList(1, page * page_size)
             .subscribeOn(Schedulers.newThread())
             .subscribe(new ServiceResponse<LadyListBean>() {
               @Override public void onNext(LadyListBean ladyListBean) {
@@ -110,7 +113,8 @@ public class LadyListFragment extends BaseFragment {
 
   private void loadMoreData(int page, int page_size) {
 
-    model.getLadyList(page, page_size)
+    subscribe = ProductModel.getInstance()
+        .getLadyList(page, page_size)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<LadyListBean>() {
           @Override public void onNext(LadyListBean productListBean) {
@@ -123,5 +127,12 @@ public class LadyListFragment extends BaseFragment {
             xRecyclerView.post(xRecyclerView::loadMoreComplete);
           }
         });
+  }
+
+  @Override public void onStop() {
+    super.onStop();
+    if (subscribe != null && subscribe.isUnsubscribed()) {
+      subscribe.unsubscribe();
+    }
   }
 }

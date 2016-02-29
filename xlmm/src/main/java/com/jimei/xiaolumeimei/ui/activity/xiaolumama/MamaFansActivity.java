@@ -13,6 +13,7 @@ import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import java.util.List;
+import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 /**
@@ -25,6 +26,7 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity implements Vie
   @Bind(R.id.lv_mamafans) ListView lv_fans;
 
   private MamaFansAdapter mAdapter;
+  private Subscription subscribe;
 
   @Override protected void setListener() {
     toolbar.setOnClickListener(this);
@@ -46,22 +48,20 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity implements Vie
   }
 
   @Override protected void initData() {
-    MamaInfoModel.getInstance().getMamaFans()
+     subscribe = MamaInfoModel.getInstance()
+        .getMamaFans()
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<List<MamaFansBean>>() {
           @Override public void onNext(List<MamaFansBean> fansBeen) {
-            JUtils.Log(TAG,"size ="+ fansBeen.size());
+            JUtils.Log(TAG, "size =" + fansBeen.size());
 
             if (0 == fansBeen.size()) {
               JUtils.Log(TAG, "results.size()=0");
-
             } else {
               mAdapter.update(fansBeen);
             }
           }
         });
-
-
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
@@ -80,5 +80,10 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity implements Vie
     }
   }
 
-
+  @Override protected void onStop() {
+    super.onStop();
+    if (subscribe != null && subscribe.isUnsubscribed()) {
+      subscribe.unsubscribe();
+    }
+  }
 }

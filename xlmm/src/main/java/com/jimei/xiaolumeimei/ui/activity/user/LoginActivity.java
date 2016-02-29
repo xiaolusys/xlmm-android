@@ -40,6 +40,7 @@ import com.xiaomi.mipush.sdk.MiPushClient;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 public class LoginActivity extends BaseSwipeBackCompatActivity
@@ -72,6 +73,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
   private String nickname;
   private String openid;
   private String unionid;
+  private Subscription subscribe;
 
   public static String getRandomString(int length) {
     //length表示生成字符串的长度
@@ -160,7 +162,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
         login_pass_value = passEditText.getText().toString().trim();
 
         if (checkInput(login_name_value, login_pass_value)) {
-          UserModel.getInstance()
+           subscribe = UserModel.getInstance()
               .login(login_name_value, login_pass_value)
               .subscribeOn(Schedulers.newThread())
               .subscribe(new ServiceResponse<UserBean>() {
@@ -332,7 +334,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
         JUtils.Log(TAG, "------nickname---------" + nickname);
         JUtils.Log(TAG, "------openid---------" + openid);
         JUtils.Log(TAG, "------unionid---------" + unionid);
-        UserModel.getInstance()
+         subscribe = UserModel.getInstance()
             .wxapp_login(noncestr, timestamp, sign, headimgurl, nickname, openid, unionid)
             .subscribeOn(Schedulers.io())
             .subscribe(new ServiceResponse<WxLogininfoBean>() {
@@ -343,7 +345,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                   int code = wxLogininfoBean.getCode();
                   if (0 == code) {
 
-                    UserModel.getInstance()
+                    subscribe = UserModel.getInstance()
                         .need_set_info()
                         .subscribeOn(Schedulers.io())
                         .subscribe(new ServiceResponse<NeedSetInfoBean>() {

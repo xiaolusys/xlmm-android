@@ -47,6 +47,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 /**
@@ -76,6 +77,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   private ActivityBean shareInfo;
   private String domain;
   private String sessionid;
+  private Subscription subscribe;
 
   @Override protected void setListener() {
     mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -95,18 +97,17 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
         try {
 
           //mWebView.loadUrl(actlink);
-          Map<String,String> extraHeaders = new HashMap<String, String>();
+          Map<String, String> extraHeaders = new HashMap<String, String>();
 
           extraHeaders.put("Cookie", sessionid);
 
           mWebView.loadUrl(actlink, extraHeaders);
-        }catch (Exception e){
+        } catch (Exception e) {
           e.printStackTrace();
-          JUtils.Log(TAG,"loadUrl--error");
-
+          JUtils.Log(TAG, "loadUrl--error");
         }
 
-        JUtils.Log(TAG,"loadUrl--end");
+        JUtils.Log(TAG, "loadUrl--end");
       }
     });
   }
@@ -118,9 +119,9 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
       actlink = extras.getString("actlink");
 
       sessionid = extras.getString("Cookie");
-      JUtils.Log(TAG, "GET cookie:"+cookies + " actlink:"+actlink + " domain:"+domain +
-          " sessionid:"+sessionid);
-
+      JUtils.Log(TAG,
+          "GET cookie:" + cookies + " actlink:" + actlink + " domain:" + domain +
+              " sessionid:" + sessionid);
     }
   }
 
@@ -212,7 +213,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
       JUtils.Log(TAG, "set webview err");
     }
 
-   syncCookie(WebViewActivity.this);
+    syncCookie(WebViewActivity.this);
     //syncCookie(WebViewActivity.this, "http://m.xiaolumeimei.com");
   }
 
@@ -264,6 +265,9 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   @Override protected void onStop() {
     super.onStop();
     ShareSDK.stopSDK(this);
+    if (subscribe != null && subscribe.isUnsubscribed()) {
+      subscribe.unsubscribe();
+    }
   }
 
   //public void syncCookie(Context context, String url) {
@@ -298,7 +302,6 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
 
       CookieSyncManager.getInstance().sync();
       JUtils.Log(TAG, "syncCookie end");
-
     } catch (Exception e) {
       e.printStackTrace();
       JUtils.Log(TAG, "syncCookie err:" + e.toString());
@@ -307,7 +310,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
 
   public void getPromotionParams(String uform, String share_link) {
 
-    ActivityModel.getInstance()
+    subscribe = ActivityModel.getInstance()
         .get_share_content(uform)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ActivityBean>() {
@@ -453,7 +456,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   }
 
   public void get_share_content(String ufrom) {
-    ActivityModel.getInstance()
+    subscribe = ActivityModel.getInstance()
         .get_share_content(ufrom)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ActivityBean>() {
@@ -537,7 +540,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     if ((shareInfo == null)
         || (shareInfo.getQrcodeLink() == null)
         || (shareInfo.getQrcodeLink().equals(""))) {
-      ActivityModel.getInstance()
+      subscribe = ActivityModel.getInstance()
           .get_share_content("wxapp")
           .subscribeOn(Schedulers.io())
           .subscribe(new ServiceResponse<ActivityBean>() {

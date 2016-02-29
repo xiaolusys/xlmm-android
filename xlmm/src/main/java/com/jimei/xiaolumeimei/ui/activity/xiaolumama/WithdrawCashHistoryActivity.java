@@ -13,6 +13,7 @@ import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import java.util.List;
+import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 /**
@@ -25,6 +26,7 @@ public class WithdrawCashHistoryActivity extends BaseSwipeBackCompatActivity imp
   @Bind(R.id.lv_withdrawcash_his) ListView lv_withdrawcash_his;
 
   private WithdrawCashHisAdapter mHisAdapter;
+  private Subscription subscribe;
 
   @Override protected void setListener() {
     toolbar.setOnClickListener(this);
@@ -47,23 +49,21 @@ public class WithdrawCashHistoryActivity extends BaseSwipeBackCompatActivity imp
   }
 
   @Override protected void initData() {
-    MamaInfoModel.getInstance().getWithdrawCashHis()
+     subscribe = MamaInfoModel.getInstance()
+        .getWithdrawCashHis()
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<WithdrawCashHisBean>() {
           @Override public void onNext(WithdrawCashHisBean pointBean) {
-            JUtils.Log(TAG,"WithdrawCashHisBean="+ pointBean.toString());
+            JUtils.Log(TAG, "WithdrawCashHisBean=" + pointBean.toString());
             List<WithdrawCashHisBean.WithdrawCashRecord> results = pointBean.getResults();
 
             if (0 == results.size()) {
               JUtils.Log(TAG, "results.size()=0");
-
             } else {
               mHisAdapter.update(results);
             }
           }
         });
-
-
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
@@ -82,5 +82,10 @@ public class WithdrawCashHistoryActivity extends BaseSwipeBackCompatActivity imp
     }
   }
 
-
+  @Override protected void onStop() {
+    super.onStop();
+    if (subscribe != null && subscribe.isUnsubscribed()) {
+      subscribe.unsubscribe();
+    }
+  }
 }

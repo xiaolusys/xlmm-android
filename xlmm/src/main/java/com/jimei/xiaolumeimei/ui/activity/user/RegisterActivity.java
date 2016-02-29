@@ -17,6 +17,7 @@ import com.jimei.xiaolumeimei.widget.ClearEditText;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.functions.Action0;
 import rx.schedulers.Schedulers;
 
@@ -29,6 +30,7 @@ public class RegisterActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.getCheckCode) Button getCheckCode;
   private String mobile, invalid_code;
+  private Subscription subscribe;
 
   @Override protected void setListener() {
     getCheckCode.setOnClickListener(this);
@@ -104,7 +106,7 @@ public class RegisterActivity extends BaseSwipeBackCompatActivity
               getCheckCode.setClickable(false);
               getCheckCode.setBackgroundColor(Color.parseColor("#f3f3f4"));
 
-              UserModel.getInstance()
+              subscribe = UserModel.getInstance()
                   .getRegisterCheckCode(mobile)
                   .subscribeOn(Schedulers.io())
                   .subscribe(new ServiceResponse<RegisterBean>() {
@@ -145,7 +147,7 @@ public class RegisterActivity extends BaseSwipeBackCompatActivity
         invalid_code = editTextInvalid_code.getText().toString().trim();
 
         if (checkInput(mobile, invalid_code)) {
-          UserModel.getInstance()
+          subscribe = UserModel.getInstance()
               .check_code_user(mobile, invalid_code)
               .subscribeOn(Schedulers.io())
               .subscribe(new ServiceResponse<RegisterBean>() {
@@ -167,6 +169,13 @@ public class RegisterActivity extends BaseSwipeBackCompatActivity
         }
 
         break;
+    }
+  }
+
+  @Override protected void onStop() {
+    super.onStop();
+    if (subscribe != null && subscribe.isUnsubscribed()) {
+      subscribe.unsubscribe();
     }
   }
 }

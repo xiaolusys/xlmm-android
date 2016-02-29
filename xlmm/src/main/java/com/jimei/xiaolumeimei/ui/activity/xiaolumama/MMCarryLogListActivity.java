@@ -6,7 +6,6 @@ import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
@@ -16,6 +15,7 @@ import com.jimei.xiaolumeimei.entities.CarryLogListBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 /**
@@ -30,6 +30,7 @@ public class MMCarryLogListActivity extends BaseSwipeBackCompatActivity {
   @Bind(R.id.carryloglist_xry) XRecyclerView carryloglistXry;
   private CarryLogListAdapter adapter;
   private int page = 2;
+  private Subscription subscribe;
 
   @Override protected void setListener() {
 
@@ -89,7 +90,7 @@ public class MMCarryLogListActivity extends BaseSwipeBackCompatActivity {
       }
 
       private void loadMoreData(String page) {
-        MMProductModel.getInstance()
+         subscribe = MMProductModel.getInstance()
             .getCarryLogList(page)
             .subscribeOn(Schedulers.io())
             .subscribe(new ServiceResponse<CarryLogListBean>() {
@@ -122,9 +123,10 @@ public class MMCarryLogListActivity extends BaseSwipeBackCompatActivity {
     return null;
   }
 
-  @Override protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    // TODO: add setContentView(...) invocation
-    ButterKnife.bind(this);
+  @Override protected void onStop() {
+    super.onStop();
+    if (subscribe != null && subscribe.isUnsubscribed()) {
+      subscribe.unsubscribe();
+    }
   }
 }

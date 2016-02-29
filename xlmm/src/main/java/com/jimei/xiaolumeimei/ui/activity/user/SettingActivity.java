@@ -18,6 +18,7 @@ import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.utils.AppUtils;
 import com.jimei.xiaolumeimei.utils.DataClearManager;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 /**
@@ -33,37 +34,39 @@ public class SettingActivity extends BaseSwipeBackCompatActivity {
   UserInfoBean userinfo;
   static String nickName;
   static String mobile;
+  private Subscription subscribe;
 
   @Override protected void setListener() {
 
   }
 
   @Override protected void initData() {
-    UserModel.getInstance().getUserInfo()
-            .subscribeOn(Schedulers.newThread())
-            .subscribe(new ServiceResponse<UserInfoBean>() {
-              @Override
-              public void onNext(UserInfoBean user) {
-                userinfo = user;
-                Log.d(TAG, "getUserInfo:, "   + userinfo.getResults().get(0).toString());
-                nickName = userinfo.getResults().get(0).getNick();
-                mobile = userinfo.getResults().get(0).getMobile();
-                Log.d(TAG, "getUserInfo nick "+userinfo.getResults().get(0).getNick() + " phone " + userinfo.getResults().get(0).getMobile() );
-                settingFragment.updatePref();
-              }
+     subscribe = UserModel.getInstance()
+        .getUserInfo()
+        .subscribeOn(Schedulers.newThread())
+        .subscribe(new ServiceResponse<UserInfoBean>() {
+          @Override public void onNext(UserInfoBean user) {
+            userinfo = user;
+            Log.d(TAG, "getUserInfo:, " + userinfo.getResults().get(0).toString());
+            nickName = userinfo.getResults().get(0).getNick();
+            mobile = userinfo.getResults().get(0).getMobile();
+            Log.d(TAG, "getUserInfo nick "
+                + userinfo.getResults().get(0).getNick()
+                + " phone "
+                + userinfo.getResults().get(0).getMobile());
+            settingFragment.updatePref();
+          }
 
-              @Override
-              public void onCompleted() {
-                super.onCompleted();
-              }
+          @Override public void onCompleted() {
+            super.onCompleted();
+          }
 
-              @Override
-              public void onError(Throwable e) {
+          @Override public void onError(Throwable e) {
 
-                Log.e(TAG, "error:, "   + e.toString());
-                super.onError(e);
-              }
-            });
+            Log.e(TAG, "error:, " + e.toString());
+            super.onError(e);
+          }
+        });
   }
 
   @Override protected void getBundleExtras(Bundle extras) {

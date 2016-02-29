@@ -6,7 +6,6 @@ package com.jimei.xiaolumeimei.data;
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class XlmmApi {
-
   public static final String URL_BASE = "http://m.xiaolumeimei.com/rest/v1/";
   //public static final String URL_BASE = "http://dev.xiaolumeimei.com/rest/v1/";
   //public static final String URL_BASE = "http://192.168.1.57:8000/rest/v1/";
@@ -46,7 +45,8 @@ public class XlmmApi {
   public static final String USERINFO_URL = URL_BASE + "users";
 
   //用户修改密码
-  public static final String CHANGE_USER_PASSWORD_URL = URL_BASE + "register/change_user_pwd";
+  public static final String CHANGE_USER_PASSWORD_URL =
+      URL_BASE + "register/change_user_pwd";
 
   //用户积分
   public static final String MEMBERSHIPPOINT_URL = URL_BASE + "integral";
@@ -58,12 +58,13 @@ public class XlmmApi {
   public static final String COUPON_URL = URL_BASE + "usercoupons";
 
   //获取待支付订单
-  public static  final String WAITPAY_URL = URL_BASE+"trades/waitpay";
+  public static final String WAITPAY_URL = URL_BASE + "trades/waitpay";
 
   //获取待发货订单
-  public static  final String WAITSEND_URL = URL_BASE+"trades/waitsend";
+  public static final String WAITSEND_URL = URL_BASE + "trades/waitsend";
 
-  public static  final String QINIU_UPLOAD_URL_BASE = "http://7xkyoy.com2.z0.glb.qiniucdn.com/";
+  public static final String QINIU_UPLOAD_URL_BASE =
+      "http://7xkyoy.com2.z0.glb.qiniucdn.com/";
 
   public static final String SETTINGMYINFO_URL =
       URL_BASE + "/xueZhang/servlet/AndroidInfoSev";
@@ -83,7 +84,6 @@ public class XlmmApi {
     public static final int ANALYSIS_ERROR = -1;
     public static final int NET_INVALID = -2;
 
-
     public static final int SMS_ERROR = 1;
     public static final int RONG_ERROR = 2;
     public static final int QINIU_ERROR = 3;
@@ -92,10 +92,9 @@ public class XlmmApi {
 
     public static final int SERVER_ERROR = 100;
 
-    public static final int LOGIN_INVALID= 400;
+    public static final int LOGIN_INVALID = 400;
     public static final int PERMISSION_DENIED = 401;
 
     public static final int USER_INVALID = 1001;
-
   }
 }

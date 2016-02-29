@@ -56,6 +56,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import okhttp3.Call;
+import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 /**
@@ -68,7 +69,6 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
     TagFlowLayout.OnTagClickListener {
   public static String TAG = "ProductDetailActvity";
 
-  ProductModel model = new ProductModel();
   @Bind(R.id.shopping_button) Button button_shop;
   @Bind(R.id.dot_cart) FrameLayout frameLayout;
   @Bind(R.id.rv_cart) RelativeLayout rv_cart;
@@ -92,6 +92,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
   private CountdownView countdownView;
   private BadgeView badge;
   private List<String> list = new ArrayList<>();
+  private Subscription subscribe;
 
   @Override protected void setListener() {
     rv_cart.setOnClickListener(this);
@@ -100,7 +101,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
 
   @Override protected void initData() {
 
-    model.getProductDetails(productId)
+    subscribe = ProductModel.getInstance().getProductDetails(productId)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ProductDetailBean>() {
 
@@ -328,7 +329,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
           }
         });
 
-    model.getProductShareInfo(productId)
+    subscribe = ProductModel.getInstance().getProductShareInfo(productId)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ShareProductBean>() {
 
@@ -450,7 +451,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
         } else {
           JUtils.Log(sku_id + "这尺寸可以");
 
-          cartsModel.addCarts(item_id, sku_id)
+          subscribe = cartsModel.addCarts(item_id, sku_id)
               .subscribeOn(Schedulers.newThread())
               .subscribe(new ServiceResponse<AddCartsBean>() {
 
@@ -523,7 +524,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
 
       case R.id.look_size:
 
-        //startActivity(new Intent(ProductDetailActvity.this, SizeActivity.class));
+        startActivity(new Intent(ProductDetailActvity.this, SizeActivity.class));
 
         break;
 
@@ -677,6 +678,13 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
 
     // 启动分享GUI
     oks.show(this);
+  }
+
+  @Override protected void onStop() {
+    super.onStop();
+    if (subscribe != null && subscribe.isUnsubscribed()) {
+      subscribe.unsubscribe();
+    }
   }
 }
 

@@ -13,6 +13,7 @@ import com.jimei.xiaolumeimei.entities.BudgetdetailBean;
 import com.jimei.xiaolumeimei.model.UserNewModel;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 /**
@@ -26,6 +27,7 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
   @Bind(R.id.wallet_rcv) RecyclerView walletRcv;
   private String money;
   private UserWalletAdapter adapter;
+  private Subscription subscribe;
 
   @Override protected void setListener() {
 
@@ -33,7 +35,7 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
 
   @Override protected void initData() {
 
-    UserNewModel.getInstance()
+    subscribe = UserNewModel.getInstance()
         .budGetdetailBean()
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<BudgetdetailBean>() {
@@ -48,6 +50,13 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
 
   @Override protected void getBundleExtras(Bundle extras) {
     money = extras.getString("money");
+  }
+
+  @Override protected void onStop() {
+    super.onStop();
+    if (subscribe != null && subscribe.isUnsubscribed()) {
+      subscribe.unsubscribe();
+    }
   }
 
   @Override protected int getContentViewLayoutID() {

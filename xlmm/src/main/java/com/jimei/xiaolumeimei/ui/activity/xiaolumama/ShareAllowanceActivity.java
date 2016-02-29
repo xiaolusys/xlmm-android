@@ -4,22 +4,20 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.Toast;
 import butterknife.Bind;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.AllowanceAdapter;
-import com.jimei.xiaolumeimei.adapter.WithdrawCashHisAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AllowanceBean;
-import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import java.util.List;
+import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 /**
@@ -33,6 +31,7 @@ public class ShareAllowanceActivity extends BaseSwipeBackCompatActivity implemen
 
   private int page = 2;
   private AllowanceAdapter mAdapter;
+  private Subscription subscribe;
 
   @Override protected void setListener() {
     toolbar.setOnClickListener(this);
@@ -76,7 +75,7 @@ public class ShareAllowanceActivity extends BaseSwipeBackCompatActivity implemen
       }
 
       private void loadMoreData(String page) {
-        MamaInfoModel.getInstance()
+         subscribe = MamaInfoModel.getInstance()
             .getAllowance(page)
             .subscribeOn(Schedulers.io())
             .subscribe(new ServiceResponse<AllowanceBean>() {
@@ -102,23 +101,21 @@ public class ShareAllowanceActivity extends BaseSwipeBackCompatActivity implemen
     });
   }
   @Override protected void initData() {
-    MamaInfoModel.getInstance().getAllowance("1")
+     subscribe = MamaInfoModel.getInstance()
+        .getAllowance("1")
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<AllowanceBean>() {
           @Override public void onNext(AllowanceBean pointBean) {
-            JUtils.Log(TAG,"AllowanceBean="+ pointBean.toString());
+            JUtils.Log(TAG, "AllowanceBean=" + pointBean.toString());
             List<AllowanceBean.AllowanceEntity> results = pointBean.getAllowances();
 
             if (0 == results.size()) {
               JUtils.Log(TAG, "results.size()=0");
-
             } else {
               mAdapter.update(results);
             }
           }
         });
-
-
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
@@ -137,5 +134,10 @@ public class ShareAllowanceActivity extends BaseSwipeBackCompatActivity implemen
     }
   }
 
-
+  @Override protected void onStop() {
+    super.onStop();
+    if (subscribe != null && subscribe.isUnsubscribed()) {
+      subscribe.unsubscribe();
+    }
+  }
 }

@@ -15,6 +15,7 @@ import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.victor.loading.rotate.RotateLoading;
 import java.util.List;
+import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 /**
@@ -25,12 +26,12 @@ import rx.schedulers.Schedulers;
 public class ChildListActivity extends BaseSwipeBackCompatActivity {
 
   int page_size = 10;
-  ProductModel model = new ProductModel();
   private int page = 2;
   private int totalPages;//总的分页数
   private XRecyclerView xRecyclerView;
   private ChildListAdapter mChildListAdapter;
   private RotateLoading loading;
+  private Subscription subscribe;
 
   @Override protected void setListener() {
 
@@ -38,7 +39,8 @@ public class ChildListActivity extends BaseSwipeBackCompatActivity {
 
   @Override protected void initData() {
     loading.start();
-    model.getChildList(1, 10)
+    subscribe = ProductModel.getInstance()
+        .getChildList(1, 10)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<ChildListBean>() {
           @Override public void onNext(ChildListBean childListBean) {
@@ -102,7 +104,8 @@ public class ChildListActivity extends BaseSwipeBackCompatActivity {
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
       @Override public void onRefresh() {
-        model.getChildList(1, page * page_size)
+        subscribe = ProductModel.getInstance()
+            .getChildList(1, page * page_size)
             .subscribeOn(Schedulers.newThread())
             .subscribe(new ServiceResponse<ChildListBean>() {
               @Override public void onNext(ChildListBean childListBean) {
@@ -132,7 +135,8 @@ public class ChildListActivity extends BaseSwipeBackCompatActivity {
 
   private void loadMoreData(int page, int page_size) {
 
-    model.getChildList(page, page_size)
+    subscribe = ProductModel.getInstance()
+        .getChildList(page, page_size)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<ChildListBean>() {
           @Override public void onNext(ChildListBean productListBean) {
@@ -145,5 +149,12 @@ public class ChildListActivity extends BaseSwipeBackCompatActivity {
             xRecyclerView.post(xRecyclerView::loadMoreComplete);
           }
         });
+  }
+
+  @Override protected void onStop() {
+    super.onStop();
+    if (subscribe != null && subscribe.isUnsubscribed()) {
+      subscribe.unsubscribe();
+    }
   }
 }

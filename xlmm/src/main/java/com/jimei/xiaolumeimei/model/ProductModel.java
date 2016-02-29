@@ -20,6 +20,15 @@ import rx.Observable;
  */
 public class ProductModel {
 
+  private static ProductModel ourInstance = new ProductModel();
+
+  private ProductModel() {
+  }
+
+  public static ProductModel getInstance() {
+    return ourInstance;
+  }
+
   //得到儿童数据列表
   public Observable<ChildListBean> getChildList() {
 
@@ -35,6 +44,7 @@ public class ProductModel {
         .getTodayList(page, page_size)
         .compose(new DefaultTransform<>());
   }
+
   //得到昨日分页数据
   public Observable<ProductListBean> getPreviousList(int page, int page_size) {
 
@@ -42,6 +52,7 @@ public class ProductModel {
         .getPreviousList(page, page_size)
         .compose(new DefaultTransform<>());
   }
+
   //得到儿童分页数据
   public Observable<ChildListBean> getChildList(int page, int page_size) {
 
@@ -49,6 +60,7 @@ public class ProductModel {
         .getChildList(page, page_size)
         .compose(new DefaultTransform<>());
   }
+
   //得到女装分页数据
   public Observable<LadyListBean> getLadyList(int page, int page_size) {
 

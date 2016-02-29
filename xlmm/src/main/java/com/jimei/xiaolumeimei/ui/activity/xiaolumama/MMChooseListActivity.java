@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 /**
@@ -46,6 +47,7 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.loading) RotateLoading loading;
   private MMChooseAdapter mmChooseAdapter;
   private boolean isAll, isLady, isChild;
+  private Subscription subscribe;
 
   @Override protected void setListener() {
     spinnerChoose.setOnItemSelectedListener(this);
@@ -71,8 +73,7 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
         new String[] { "chooselist" }, new int[] { R.id.choose_tv });
     spinnerChoose.setAdapter(adapter);
 
-
-    MMProductModel.getInstance()
+     subscribe = MMProductModel.getInstance()
         .getMMChooseList()
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<List<MMChooselistBean>>() {
@@ -159,7 +160,7 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
 
     MaterialDialog show = content.show();
 
-    MMProductModel.getInstance()
+     subscribe = MMProductModel.getInstance()
         .getMMChooseList()
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<List<MMChooselistBean>>() {
@@ -191,7 +192,7 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
 
     MaterialDialog show = content.show();
 
-    MMProductModel.getInstance()
+     subscribe = MMProductModel.getInstance()
         .getMMChooseSortList(sortfeild)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<List<MMChooselistBean>>() {
@@ -224,7 +225,7 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
 
     MaterialDialog show = content.show();
 
-    MMProductModel.getInstance()
+     subscribe = MMProductModel.getInstance()
         .getMMChooseLadyOrChildList(choice)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<List<MMChooselistBean>>() {
@@ -257,7 +258,7 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
 
     MaterialDialog show = content.show();
 
-    MMProductModel.getInstance()
+     subscribe = MMProductModel.getInstance()
         .getMMChooseLadyOrChildSortListSort(sortfeild, category)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<List<MMChooselistBean>>() {
@@ -316,6 +317,13 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
         }
 
         break;
+    }
+  }
+
+  @Override protected void onStop() {
+    super.onStop();
+    if (subscribe != null && subscribe.isUnsubscribed()) {
+      subscribe.unsubscribe();
     }
   }
 }

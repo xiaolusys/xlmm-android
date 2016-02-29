@@ -366,19 +366,18 @@
                 </RelativeLayout>
             </RelativeLayout>
 
+            <Button
+                android:id="@+id/btn_jump"
+                android:layout_width="660px"
+                android:layout_height="80px"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="30px"
+                android:background="@drawable/shape_common"
+                android:text="发布产品"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
         </RelativeLayout>
     </ScrollView>
 
-    <Button
-        android:id="@+id/btn_jump"
-        android:layout_width="660px"
-        android:layout_height="80px"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10px"
-        android:layout_marginLeft="30px"
-        android:background="@drawable/shape_common"
-        android:text="发布产品"
-        android:textColor="@color/white"
-        android:textSize="15sp" />
 
 </RelativeLayout>

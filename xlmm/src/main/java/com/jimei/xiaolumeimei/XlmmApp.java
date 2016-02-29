@@ -16,6 +16,7 @@ import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.utils.NetWorkUtil;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import com.squareup.leakcanary.LeakCanary;
 import com.squareup.okhttp.OkHttpClient;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.zhy.autolayout.config.AutoLayoutConifg;
@@ -47,6 +48,7 @@ public class XlmmApp extends Application {
 
   @Override public void onCreate() {
     super.onCreate();
+    LeakCanary.install(this);
     mContext = this;
     cookiePrefs = getSharedPreferences("COOKIESxlmm", 0);
     client = initOkHttpClient();

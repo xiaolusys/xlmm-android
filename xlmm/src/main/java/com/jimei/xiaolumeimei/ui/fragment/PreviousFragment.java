@@ -39,7 +39,6 @@ import rx.schedulers.Schedulers;
 public class PreviousFragment extends BaseFragment {
 
   int page_size = 10;
-  ProductModel model = new ProductModel();
   private int page = 2;
   private int totalPages;//总的分页数
   private XRecyclerView xRecyclerView;
@@ -51,6 +50,7 @@ public class PreviousFragment extends BaseFragment {
   private CountdownView countTime;
   private Subscription subscription;
   private TextView tv_tomorrow;
+  private Subscription subscribe;
 
   @Override protected int provideContentViewId() {
     return R.layout.previous_fragment;
@@ -59,7 +59,8 @@ public class PreviousFragment extends BaseFragment {
   @Override protected void initData() {
 
     loading.start();
-    model.getPreviousList(1, 10)
+    subscribe = ProductModel.getInstance()
+        .getPreviousList(1, 10)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ProductListBean>() {
           @Override public void onNext(ProductListBean productListBean) {
@@ -112,8 +113,12 @@ public class PreviousFragment extends BaseFragment {
 
   @Override public void onStop() {
     super.onStop();
-    if (subscription != null) {
+    if (subscription != null && subscription.isUnsubscribed()) {
       subscription.unsubscribe();
+    }
+
+    if (subscribe != null && subscribe.isUnsubscribed()) {
+      subscribe.unsubscribe();
     }
   }
 
@@ -158,7 +163,8 @@ public class PreviousFragment extends BaseFragment {
     tv_tomorrow = (TextView) head.findViewById(R.id.tv_tomorrow);
     xRecyclerView.addHeaderView(head);
 
-    model.getYestdayPost()
+    subscribe = ProductModel.getInstance()
+        .getYestdayPost()
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<PostBean>() {
                      @Override public void onNext(PostBean postBean) {
@@ -193,7 +199,8 @@ public class PreviousFragment extends BaseFragment {
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
                                        @Override public void onRefresh() {
-                                         model.getTodayList(1, page * page_size)
+                                         subscribe = ProductModel.getInstance()
+                                             .getTodayList(1, page * page_size)
                                              .subscribeOn(Schedulers.newThread())
                                              .subscribe(
                                                  new ServiceResponse<ProductListBean>() {
@@ -233,7 +240,8 @@ public class PreviousFragment extends BaseFragment {
 
   private void loadMoreData(int page, int page_size) {
 
-    model.getPreviousList(page, page_size)
+    subscribe = ProductModel.getInstance()
+        .getPreviousList(page, page_size)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<ProductListBean>() {
           @Override public void onNext(ProductListBean productListBean) {

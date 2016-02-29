@@ -16,6 +16,7 @@ import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 public class SettingPasswordForgetActivity extends BaseSwipeBackCompatActivity
@@ -28,6 +29,7 @@ public class SettingPasswordForgetActivity extends BaseSwipeBackCompatActivity
   String username;
   String valid_code;
   private boolean isShow = true;
+  private Subscription subscribe;
 
   @Override protected void setListener() {
     commit_button.setOnClickListener(this);
@@ -91,7 +93,7 @@ public class SettingPasswordForgetActivity extends BaseSwipeBackCompatActivity
 
   private void changePassword(String username, String valid_code, String password1,
       String password2) {
-    UserModel.getInstance()
+     subscribe = UserModel.getInstance()
         .changePassword(username, valid_code, password1, password2)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<UserBean>() {
@@ -125,5 +127,12 @@ public class SettingPasswordForgetActivity extends BaseSwipeBackCompatActivity
     }
 
     return true;
+  }
+
+  @Override protected void onStop() {
+    super.onStop();
+    if (subscribe != null && subscribe.isUnsubscribed()) {
+      subscribe.unsubscribe();
+    }
   }
 }

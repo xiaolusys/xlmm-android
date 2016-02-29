@@ -15,6 +15,7 @@ import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.victor.loading.rotate.RotateLoading;
 import java.util.List;
+import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 /**
@@ -28,10 +29,10 @@ public class TongkuanActivity extends BaseSwipeBackCompatActivity {
   @Bind(R.id.tool_bar) Toolbar toolbar;
   @Bind(R.id.tongkuan_recyclerview) RecyclerView recyclerView;
   @Bind(R.id.loading) RotateLoading loading;
-  ProductModel model = new ProductModel();
   private TongkuanAdapter mTongkuanAdapter;
   private int model_id;
   private String name = null;
+  private Subscription subscribe;
 
   @Override protected void setListener() {
 
@@ -39,7 +40,8 @@ public class TongkuanActivity extends BaseSwipeBackCompatActivity {
 
   @Override protected void initData() {
     loading.start();
-    model.getTongkuanList(model_id)
+     subscribe = ProductModel.getInstance()
+        .getTongkuanList(model_id)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<List<ProductBean>>() {
           @Override public void onNext(List<ProductBean> productBeans) {
@@ -93,5 +95,13 @@ public class TongkuanActivity extends BaseSwipeBackCompatActivity {
 
   @Override protected TransitionMode getOverridePendingTransitionMode() {
     return null;
+  }
+
+  @Override protected void onStop() {
+    super.onStop();
+    if (subscribe != null && subscribe.isUnsubscribed()) {
+      subscribe.unsubscribe();
+
+    }
   }
 }

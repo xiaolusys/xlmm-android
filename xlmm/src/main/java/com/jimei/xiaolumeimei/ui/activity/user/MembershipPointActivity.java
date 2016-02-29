@@ -20,6 +20,7 @@ import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import java.util.List;
+import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 
@@ -32,6 +33,7 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity impleme
 
     private MembershipPointListAdapter mPointAdapter;
     TextView  tx_point;
+    private Subscription subscribe;
 
     @Override protected void setListener() {
         btn_jump.setOnClickListener(this);
@@ -66,39 +68,37 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity impleme
     }
     //从server端获得所有订单数据，可能要查询几次
     @Override protected void initData() {
-        UserModel.getInstance().getMembershipPointBean()
-                .subscribeOn(Schedulers.newThread())
-                .subscribe(new ServiceResponse<MembershipPointBean>() {
-                    @Override public void onNext(MembershipPointBean pointBean) {
-                        List<MembershipPointBean.ResultsEntity> results = pointBean.getResults();
-                        if (0 != results.size())
-                        {
-                            tx_point.setText(results.get(0).getIntegral_value());
-                            Log.d(TAG, "point " + results.get(0).getIntegral_value());
-                        }
-                        else{
-                            Log.d(TAG, "point record not exist. ");
-                        }
+         subscribe = UserModel.getInstance()
+            .getMembershipPointBean()
+            .subscribeOn(Schedulers.newThread())
+            .subscribe(new ServiceResponse<MembershipPointBean>() {
+                @Override public void onNext(MembershipPointBean pointBean) {
+                    List<MembershipPointBean.ResultsEntity> results =
+                        pointBean.getResults();
+                    if (0 != results.size()) {
+                        tx_point.setText(results.get(0).getIntegral_value());
+                        Log.d(TAG, "point " + results.get(0).getIntegral_value());
+                    } else {
+                        Log.d(TAG, "point record not exist. ");
                     }
-                });
+                }
+            });
 
-        UserModel.getInstance().getPointLogBean()
-                .subscribeOn(Schedulers.newThread())
-                .subscribe(new ServiceResponse<PointLogBean>() {
-                    @Override public void onNext(PointLogBean pointLogBean) {
-                        List<PointLogBean.ResultsEntity> results = pointLogBean.getResults();
-                        if (0 == results.size()){
-                            Log.d(TAG, "pointlog 0 " );
-                            rlayout_order_empty.setVisibility(View.VISIBLE);
-                        }
-                        else
-                        {
-                            Log.d(TAG, "pointlog " + results.get(0).toString());
-                            mPointAdapter.update(results);
-                        }
-
+         subscribe = UserModel.getInstance()
+            .getPointLogBean()
+            .subscribeOn(Schedulers.newThread())
+            .subscribe(new ServiceResponse<PointLogBean>() {
+                @Override public void onNext(PointLogBean pointLogBean) {
+                    List<PointLogBean.ResultsEntity> results = pointLogBean.getResults();
+                    if (0 == results.size()) {
+                        Log.d(TAG, "pointlog 0 ");
+                        rlayout_order_empty.setVisibility(View.VISIBLE);
+                    } else {
+                        Log.d(TAG, "pointlog " + results.get(0).toString());
+                        mPointAdapter.update(results);
                     }
-                });
+                }
+            });
     }
 
     @Override protected boolean toggleOverridePendingTransition() {
@@ -118,6 +118,13 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity impleme
                 finish();
                 break;
 
+        }
+    }
+
+    @Override protected void onStop() {
+        super.onStop();
+        if (subscribe != null && subscribe.isUnsubscribed()) {
+            subscribe.unsubscribe();
         }
     }
 }

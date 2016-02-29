@@ -15,6 +15,7 @@ import com.jimei.xiaolumeimei.entities.ShoppingListBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 /**
@@ -28,6 +29,7 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
   @Bind(R.id.shoppinglist_xry) XRecyclerView shoppinglistXry;
   private int page = 2;
   private ShoppingListAdapter adapter;
+  private Subscription subscribe;
 
   @Override protected void setListener() {
 
@@ -35,7 +37,7 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
 
   @Override protected void initData() {
 
-    MMProductModel.getInstance()
+     subscribe = MMProductModel.getInstance()
         .getShoppingList("1")
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ShoppingListBean>() {
@@ -89,7 +91,7 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
       }
 
       private void loadMoreData(String page) {
-        MMProductModel.getInstance()
+         subscribe = MMProductModel.getInstance()
             .getShoppingList(page)
             .subscribeOn(Schedulers.io())
             .subscribe(new ServiceResponse<ShoppingListBean>() {
@@ -121,5 +123,12 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
 
   @Override protected TransitionMode getOverridePendingTransitionMode() {
     return null;
+  }
+
+  @Override protected void onStop() {
+    super.onStop();
+    if (subscribe != null && subscribe.isUnsubscribed()) {
+      subscribe.unsubscribe();
+    }
   }
 }
