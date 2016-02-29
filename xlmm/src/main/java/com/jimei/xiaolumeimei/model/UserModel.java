@@ -15,6 +15,7 @@ import com.jimei.xiaolumeimei.entities.UserAccountBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.WxLogininfoBean;
+import com.jimei.xiaolumeimei.entities.WxPubAuthInfo;
 import com.jimei.xiaolumeimei.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 import rx.Observable;
@@ -189,6 +190,13 @@ public class UserModel {
       String device_id) {
     return XlmmRetrofitClient.getService()
         .getUserAccount(platform, regid, device_id)
+        .compose(new DefaultTransform<>());
+  }
+
+  //get 微信公众号验证信息
+  public Observable<WxPubAuthInfo> getWxPubAuthInfo() {
+    return XlmmRetrofitClient.getService()
+        .getWxPubAuthInfo()
         .compose(new DefaultTransform<>());
   }
 }

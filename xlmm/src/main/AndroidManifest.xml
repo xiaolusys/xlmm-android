@@ -372,6 +372,10 @@
         android:theme="@style/AppTheme.TransparentActivity"
         />
 
+    <activity android:name=".ui.activity.user.WxPubTwoDimenCodeActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
+
     <service
         android:enabled="true"
         android:process=":pushservice"

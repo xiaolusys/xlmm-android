@@ -45,8 +45,6 @@ public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
 
   double money;
   float withdraw_cash_fund = 0;
-  boolean click_cash100 = false;
-  boolean click_cash200 = false;
   private Subscription subscribe;
 
   @Override protected void setListener() {
@@ -78,18 +76,10 @@ public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void initData() {
 
-    UserNewModel.getInstance()
+    Subscription subscribe1 =UserNewModel.getInstance()
         .getProfile()
         .subscribeOn(Schedulers.io())
-        .unsafeSubscribe(new Subscriber<UserInfoBean>() {
-          @Override public void onCompleted() {
-
-          }
-
-          @Override public void onError(Throwable e) {
-
-          }
-
+        .subscribe(new ServiceResponse<UserInfoBean>() {
           @Override public void onNext(UserInfoBean userNewBean) {
             if (userNewBean != null) {
               if (null != userNewBean.getUserBudget()) {
@@ -116,6 +106,7 @@ public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
             }
           }
         });
+    addSubscription(subscribe1);
 
   }
 

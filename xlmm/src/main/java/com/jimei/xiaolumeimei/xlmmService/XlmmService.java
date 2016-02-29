@@ -45,6 +45,7 @@ import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.entities.WxLogininfoBean;
+import com.jimei.xiaolumeimei.entities.WxPubAuthInfo;
 import com.squareup.okhttp.ResponseBody;
 import java.util.List;
 import retrofit.http.Body;
@@ -587,4 +588,7 @@ public interface XlmmService {
 
   @GET("pmt/ninepic")
   Observable<List<NinePicBean>> getNinepic();
+
+  @GET("users/get_wxpub_authinfo")
+  Observable<WxPubAuthInfo> getWxPubAuthInfo();
 }
