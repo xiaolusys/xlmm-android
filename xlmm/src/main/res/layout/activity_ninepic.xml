@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+  <android.support.design.widget.AppBarLayout
+      android:id="@+id/app_bar_layout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:theme="@style/AppTheme.AppBarOverlay">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:popupTheme="@style/AppTheme.PopupOverlay">
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerInParent="true"
+          android:layout_gravity="center"
+          android:text="发布产品"
+          android:textColor="@android:color/white"
+          android:textSize="16sp"
+          />
+
+    </android.support.v7.widget.Toolbar>
+
+  </android.support.design.widget.AppBarLayout>
+  <com.jimei.xiaolumeimei.widget.timecircleview.TickCircleProgress
+      android:layout_marginTop="100dp"
+      android:layout_below="@id/app_bar_layout"
+      android:id="@+id/myTickCircleProgress3"
+      android:layout_width="150dp"
+      android:layout_height="150dp"
+      android:layout_centerHorizontal="true"
+      app:bgColor="#30888888"
+      app:currProgress="160"
+      app:foreEndColor="@color/colorPrimary"
+      app:foreStartColor="@color/colorPrimary"
+      app:maxProgress="360"
+      android:visibility="gone"
+      app:progressInitialPosition="90"
+      app:progressWidth="12dp"
+      app:tickColor="#30888888"
+      app:tickMarkHeight="10dp"
+      app:tickWidth="1dp"
+      app:useAnimation="true"/>
+  <android.support.v4.widget.SwipeRefreshLayout
+      android:layout_below="@id/app_bar_layout"
+      android:id="@+id/mRefreshLayout"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+
+    <ListView
+        android:id="@+id/circleLv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="#dadada"
+        android:dividerHeight="1px"
+        android:fadingEdge="none"
+        android:fadingEdgeLength="0dp"
+        android:focusable="true"
+        android:transcriptMode="normal"
+        android:listSelector="@android:color/transparent">
+    </ListView>
+
+  </android.support.v4.widget.SwipeRefreshLayout>
+</RelativeLayout>

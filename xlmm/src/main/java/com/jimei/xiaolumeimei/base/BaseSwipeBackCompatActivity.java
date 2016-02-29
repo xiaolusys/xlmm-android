@@ -24,10 +24,32 @@ import com.jimei.xiaolumeimei.swipeback.SwipeBackActivityHelper;
 import com.jimei.xiaolumeimei.swipeback.SwipeBackLayout;
 import com.jimei.xiaolumeimei.swipeback.Utils;
 import com.umeng.analytics.MobclickAgent;
+import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
 
 public abstract class BaseSwipeBackCompatActivity extends BaseAppCompatActivity
     implements SwipeBackActivityBase {
   private SwipeBackActivityHelper mHelper;
+
+  private CompositeSubscription mCompositeSubscription;
+
+
+  public CompositeSubscription getCompositeSubscription() {
+    if (this.mCompositeSubscription == null) {
+      this.mCompositeSubscription = new CompositeSubscription();
+    }
+
+    return this.mCompositeSubscription;
+  }
+
+
+  public void addSubscription(Subscription s) {
+    if (this.mCompositeSubscription == null) {
+      this.mCompositeSubscription = new CompositeSubscription();
+    }
+
+    this.mCompositeSubscription.add(s);
+  }
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -73,5 +95,12 @@ public abstract class BaseSwipeBackCompatActivity extends BaseAppCompatActivity
     super.onPause();
     MobclickAgent.onPause(this);
 
+  }
+
+  @Override protected void onStop() {
+    super.onStop();
+    if (this.mCompositeSubscription != null) {
+      this.mCompositeSubscription.unsubscribe();
+    }
   }
 }

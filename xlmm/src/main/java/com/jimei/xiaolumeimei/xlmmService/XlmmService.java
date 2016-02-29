@@ -26,6 +26,7 @@ import com.jimei.xiaolumeimei.entities.MamaFansBean;
 import com.jimei.xiaolumeimei.entities.MembershipPointBean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
 import com.jimei.xiaolumeimei.entities.NicknameBean;
+import com.jimei.xiaolumeimei.entities.NinePicBean;
 import com.jimei.xiaolumeimei.entities.OneDayAgentOrdersBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.PointLogBean;
@@ -584,4 +585,7 @@ public interface XlmmService {
 
    @GET("users/get_budget_detail")
   Observable<BudgetdetailBean> budGetdetailBean();
+
+  @GET("pmt/ninepic")
+  Observable<List<NinePicBean>> getNinepic();
 }

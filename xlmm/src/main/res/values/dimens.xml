@@ -2787,4 +2787,8 @@
     <dimen name="sp254">86.4sp</dimen>
     <dimen name="sp255">86.7sp</dimen>
     <dimen name="sp256">87sp</dimen>
+
+    <dimen name="gudieview_width">6dp</dimen>
+    <dimen name="gudieview_heigh">6dp</dimen>
+
 </resources>

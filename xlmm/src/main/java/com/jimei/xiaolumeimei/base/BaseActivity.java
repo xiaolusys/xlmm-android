@@ -9,6 +9,8 @@ import com.jimei.xiaolumeimei.R;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
 import com.zhy.autolayout.AutoLayoutActivity;
+import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by 优尼世界 on 15/12/29.
@@ -18,6 +20,26 @@ import com.zhy.autolayout.AutoLayoutActivity;
 public abstract class BaseActivity extends AutoLayoutActivity {
 
   abstract protected int provideContentViewId();
+
+  private CompositeSubscription mCompositeSubscription;
+
+
+  public CompositeSubscription getCompositeSubscription() {
+    if (this.mCompositeSubscription == null) {
+      this.mCompositeSubscription = new CompositeSubscription();
+    }
+
+    return this.mCompositeSubscription;
+  }
+
+
+  public void addSubscription(Subscription s) {
+    if (this.mCompositeSubscription == null) {
+      this.mCompositeSubscription = new CompositeSubscription();
+    }
+
+    this.mCompositeSubscription.add(s);
+  }
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -66,5 +88,12 @@ public abstract class BaseActivity extends AutoLayoutActivity {
         finish();
       }
     });
+  }
+
+  @Override protected void onStop() {
+    super.onStop();
+    if (this.mCompositeSubscription != null) {
+      this.mCompositeSubscription.unsubscribe();
+    }
   }
 }

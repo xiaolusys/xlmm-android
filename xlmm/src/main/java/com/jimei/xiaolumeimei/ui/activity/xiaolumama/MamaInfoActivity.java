@@ -173,7 +173,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     Intent intent;
     switch (v.getId()) {
       case R.id.btn_jump:
-        startActivity(new Intent(MamaInfoActivity.this, MMNNinePicActivity.class));
+        startActivity(new Intent(MamaInfoActivity.this, MMNinePicActivity.class));
         finish();
         break;
       case R.id.rl_two_dimen:

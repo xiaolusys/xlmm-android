@@ -361,6 +361,12 @@
     <activity android:name=".ui.activity.xiaolumama.MMCarryLogListActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
+    <activity android:name=".ui.activity.xiaolumama.MMNinePicActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
+    <activity android:name=".ui.activity.xiaolumama.ImagePagerActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+        />
 
     <service
         android:enabled="true"

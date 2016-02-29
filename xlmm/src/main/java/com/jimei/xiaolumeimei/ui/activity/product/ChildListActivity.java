@@ -104,7 +104,7 @@ public class ChildListActivity extends BaseSwipeBackCompatActivity {
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
       @Override public void onRefresh() {
-        subscribe = ProductModel.getInstance()
+        Subscription subscribe = ProductModel.getInstance()
             .getChildList(1, page * page_size)
             .subscribeOn(Schedulers.newThread())
             .subscribe(new ServiceResponse<ChildListBean>() {
@@ -118,6 +118,7 @@ public class ChildListActivity extends BaseSwipeBackCompatActivity {
                 xRecyclerView.post(xRecyclerView::refreshComplete);
               }
             });
+        addSubscription(subscribe);
       }
 
       @Override public void onLoadMore() {
