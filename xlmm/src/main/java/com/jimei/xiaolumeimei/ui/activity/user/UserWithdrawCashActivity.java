@@ -15,6 +15,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AgentInfoBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
+import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaWithdrawCashHistoryActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaWithdrawCashResultActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -31,12 +32,11 @@ public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
   String TAG = "UserWithdrawCashActivity";
 
   @Bind(R.id.toolbar) Toolbar toolbar;
-  @Bind(R.id.btn_jump) Button btn_jump;
-  @Bind(R.id.btn_withdraw) Button btn_withdraw;
+  @Bind(R.id.btn_bindwx) Button btn_bindwx;
+  @Bind(R.id.btn_buy) Button btn_buy;
+  @Bind(R.id.rl_unbindwx) RelativeLayout rl_unbindwx;
   @Bind(R.id.rl_has_cash) RelativeLayout rl_has_cash;
   @Bind(R.id.rl_has_no_cash) RelativeLayout rl_has_no_cash;
-  @Bind(R.id.img_red_packet1) ImageView img_red_packet1;
-  @Bind(R.id.img_red_packet2) ImageView img_red_packet2;
   @Bind(R.id.tv_reminder) TextView tv_reminder;
 
   double cash;
@@ -46,10 +46,9 @@ public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
   private Subscription subscribe;
 
   @Override protected void setListener() {
-    btn_jump.setOnClickListener(this);
-    btn_withdraw.setOnClickListener(this);
-    img_red_packet1.setOnClickListener(this);
-    img_red_packet2.setOnClickListener(this);
+    btn_bindwx.setOnClickListener(this);
+    btn_buy.setOnClickListener(this);
+
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -94,68 +93,20 @@ public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
 
   @Override public void onClick(View v) {
     switch (v.getId()) {
-      case R.id.btn_jump:
-        JUtils.Log(TAG, "withdraw cash now");
+      case R.id.btn_bindwx:
+        JUtils.Log(TAG, "bind wx now");
         //startActivity(new Intent(MamaWithdrawCashActivity.this, MainActivity.class));
         finish();
         break;
-      case R.id.btn_withdraw:
-        JUtils.Log(TAG, "withdraw cash now");
-        withdraw_cash(withdraw_cash_fund);
+      case R.id.btn_buy:
+        JUtils.Log(TAG, "buy now");
+        startActivity(new Intent(UserWithdrawCashActivity.this, MainActivity.class));
+        finish();
         break;
-      case R.id.img_red_packet1:
-        if (click_cash100) {
-          click_cash100 = false;
-          withdraw_cash_fund = 0;
-          img_red_packet1.setImageResource(R.drawable.img_redpacket100_1);
-        } else {
-          if (Double.compare(cash, 100) > 0) {
-            click_cash100 = true;
-            withdraw_cash_fund = 100;
-            img_red_packet1.setImageResource(R.drawable.img_redpacket100_2);
-          }
-        }
-        if (click_cash200) {
-          img_red_packet2.setImageResource(R.drawable.img_redpacket200_1);
-        }
 
-        break;
-      case R.id.img_red_packet2:
-        if (click_cash200) {
-          click_cash200 = false;
-          withdraw_cash_fund = 0;
-          img_red_packet2.setImageResource(R.drawable.img_redpacket200_1);
-        } else {
-          if (Double.compare(cash, 200) > 0) {
-            click_cash200 = true;
-            withdraw_cash_fund = 200;
-            img_red_packet2.setImageResource(R.drawable.img_redpacket200_2);
-          }
-        }
-        if (click_cash100) {
-          img_red_packet1.setImageResource(R.drawable.img_redpacket100_1);
-        }
-
-        break;
     }
   }
 
-  @Override public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-      case R.id.action_history:
-        JUtils.Log(TAG, "withdraw cash history entry");
-        startActivity(new Intent(this, MamaWithdrawCashHistoryActivity.class));
-        break;
-      default:
-        break;
-    }
-    return super.onOptionsItemSelected(item);
-  }
-
-  @Override public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.menu_withdrawcash, menu);
-    return super.onCreateOptionsMenu(menu);
-  }
 
   private void withdraw_cash(float fund) {
     String fund_type = "";
