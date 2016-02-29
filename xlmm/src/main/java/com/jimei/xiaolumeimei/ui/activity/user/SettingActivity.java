@@ -47,13 +47,13 @@ public class SettingActivity extends BaseSwipeBackCompatActivity {
         .subscribe(new ServiceResponse<UserInfoBean>() {
           @Override public void onNext(UserInfoBean user) {
             userinfo = user;
-            Log.d(TAG, "getUserInfo:, " + userinfo.getResults().get(0).toString());
-            nickName = userinfo.getResults().get(0).getNick();
-            mobile = userinfo.getResults().get(0).getMobile();
+            Log.d(TAG, "getUserInfo:, " + userinfo.toString());
+            nickName = userinfo.getNick();
+            mobile = userinfo.getMobile();
             Log.d(TAG, "getUserInfo nick "
-                + userinfo.getResults().get(0).getNick()
+                + userinfo.getNick()
                 + " phone "
-                + userinfo.getResults().get(0).getMobile());
+                + userinfo.getMobile());
             settingFragment.updatePref();
           }
 

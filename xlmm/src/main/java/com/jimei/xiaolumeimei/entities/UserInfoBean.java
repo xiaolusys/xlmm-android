@@ -1,292 +1,268 @@
 package com.jimei.xiaolumeimei.entities;
 
-import java.util.List;
+import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by wulei on 2016/1/20.
+ * Created by itxuye(www.itxuye.com) on 2016/02/26.
+ *
+ * Copyright 2016年 上海己美. All rights reserved.
  */
 public class UserInfoBean {
 
-    /**
-     * count : 1
-     * next : null
-     * previous : null
-     * results : [{"id":1,"url":"http://dev.xiaolumeimei.com/rest/v1/users/1","user_id":"1","username":"xiuqing.mei","nick":"meron","mobile":"18621623915","email":"","phone":"","status":1,"created":"2015-04-18T18:40:33","modified":"2015-10-22T13:06:46","xiaolumm":{"id":1,"cash":100000,"agencylevel":1,"created":"2015-05-12T10:04:07","status":"effect"},"has_usable_password":true}]
-     */
+  /**
+   * id : 29
+   * url : http://dev.xiaolumeimei.com/rest/v1/users/29
+   * user_id : 115
+   * username : chongyang.chen
+   * nick : 笑嘻嘻
+   * mobile : 13816404857
+   * email :
+   * phone : 1
+   * thumbnail :
+   * status : 1
+   * created : 2015-08-20T15:31:45
+   * modified : 2016-01-31T12:53:06
+   * xiaolumm : {"id":2,"cash":10000,"agencylevel":2,"created":"2015-05-12T17:03:25","status":"effect"}
+   * has_usable_password : true
+   * user_budget : {"budget_cash":10}
+   * score : 150
+   */
 
-    private int count;
-    private Object next;
-    private Object previous;
-    /**
-     * id : 1
-     * url : http://dev.xiaolumeimei.com/rest/v1/users/1
-     * user_id : 1
-     * username : xiuqing.mei
-     * nick : meron
-     * mobile : 18621623915
-     * email :
-     * phone :
-     * "thumbnail": "http://7xogkj.com2.z0.glb.qiniucdn.com/222-ohmydeer.png",
-     * status : 1
-     * created : 2015-04-18T18:40:33
-     * modified : 2015-10-22T13:06:46
-     * xiaolumm : {"id":1,"cash":100000,"agencylevel":1,"created":"2015-05-12T10:04:07","status":"effect"}
-     * has_usable_password : true
-     */
+  @SerializedName("id") private int mId;
+  @SerializedName("url") private String mUrl;
+  @SerializedName("user_id") private String mUserId;
+  @SerializedName("username") private String mUsername;
+  @SerializedName("nick") private String mNick;
+  @SerializedName("mobile") private String mMobile;
+  @SerializedName("email") private String mEmail;
+  @SerializedName("phone") private String mPhone;
+  @SerializedName("thumbnail") private String mThumbnail;
+  @SerializedName("status") private int mStatus;
+  @SerializedName("created") private String mCreated;
+  @SerializedName("modified") private String mModified;
+  /**
+   * id : 2
+   * cash : 10000
+   * agencylevel : 2
+   * created : 2015-05-12T17:03:25
+   * status : effect
+   */
 
-    private List<ResultsEntity> results;
+  @SerializedName("xiaolumm") private XiaolummEntity mXiaolumm;
+  @SerializedName("has_usable_password") private boolean mHasUsablePassword;
+  /**
+   * budget_cash : 10.0
+   */
 
-    public void setCount(int count) {
-        this.count = count;
+  @SerializedName("user_budget") private UserBudgetEntity mUserBudget;
+  @SerializedName("score") private int mScore;
+
+  public void setId(int id) {
+    this.mId = id;
+  }
+
+  public void setUrl(String url) {
+    this.mUrl = url;
+  }
+
+  public void setUserId(String userId) {
+    this.mUserId = userId;
+  }
+
+  public void setUsername(String username) {
+    this.mUsername = username;
+  }
+
+  public void setNick(String nick) {
+    this.mNick = nick;
+  }
+
+  public void setMobile(String mobile) {
+    this.mMobile = mobile;
+  }
+
+  public void setEmail(String email) {
+    this.mEmail = email;
+  }
+
+  public void setPhone(String phone) {
+    this.mPhone = phone;
+  }
+
+  public void setThumbnail(String thumbnail) {
+    this.mThumbnail = thumbnail;
+  }
+
+  public void setStatus(int status) {
+    this.mStatus = status;
+  }
+
+  public void setCreated(String created) {
+    this.mCreated = created;
+  }
+
+  public void setModified(String modified) {
+    this.mModified = modified;
+  }
+
+  public void setXiaolumm(XiaolummEntity xiaolumm) {
+    this.mXiaolumm = xiaolumm;
+  }
+
+  public void setHasUsablePassword(boolean hasUsablePassword) {
+    this.mHasUsablePassword = hasUsablePassword;
+  }
+
+  public void setUserBudget(UserBudgetEntity userBudget) {
+    this.mUserBudget = userBudget;
+  }
+
+  public void setScore(int score) {
+    this.mScore = score;
+  }
+
+  public int getId() {
+    return mId;
+  }
+
+  public String getUrl() {
+    return mUrl;
+  }
+
+  public String getUserId() {
+    return mUserId;
+  }
+
+  public String getUsername() {
+    return mUsername;
+  }
+
+  public String getNick() {
+    return mNick;
+  }
+
+  public String getMobile() {
+    return mMobile;
+  }
+
+  public String getEmail() {
+    return mEmail;
+  }
+
+  public String getPhone() {
+    return mPhone;
+  }
+
+  public String getThumbnail() {
+    return mThumbnail;
+  }
+
+  public int getStatus() {
+    return mStatus;
+  }
+
+  public String getCreated() {
+    return mCreated;
+  }
+
+  public String getModified() {
+    return mModified;
+  }
+
+  public XiaolummEntity getXiaolumm() {
+    return mXiaolumm;
+  }
+
+  public boolean isHasUsablePassword() {
+    return mHasUsablePassword;
+  }
+
+  public UserBudgetEntity getUserBudget() {
+    return mUserBudget;
+  }
+
+  public int getScore() {
+    return mScore;
+  }
+
+  public static class XiaolummEntity {
+    @SerializedName("id") private int mId;
+    @SerializedName("cash") private int mCash;
+    @SerializedName("agencylevel") private int mAgencylevel;
+    @SerializedName("created") private String mCreated;
+    @SerializedName("status") private String mStatus;
+
+    public void setId(int id) {
+      this.mId = id;
     }
 
-    public void setNext(Object next) {
-        this.next = next;
+    public void setCash(int cash) {
+      this.mCash = cash;
     }
 
-    public void setPrevious(Object previous) {
-        this.previous = previous;
+    public void setAgencylevel(int agencylevel) {
+      this.mAgencylevel = agencylevel;
     }
 
-    public void setResults(List<ResultsEntity> results) {
-        this.results = results;
+    public void setCreated(String created) {
+      this.mCreated = created;
     }
 
-    public int getCount() {
-        return count;
+    public void setStatus(String status) {
+      this.mStatus = status;
     }
 
-    public Object getNext() {
-        return next;
+    public int getId() {
+      return mId;
     }
 
-    public Object getPrevious() {
-        return previous;
+    public int getCash() {
+      return mCash;
     }
 
-    public List<ResultsEntity> getResults() {
-        return results;
+    public int getAgencylevel() {
+      return mAgencylevel;
     }
 
-    public static class ResultsEntity {
-        private int id;
-        private String url;
-        private String user_id;
-        private String username;
-        private String nick;
-        private String mobile;
-        private String email;
-        private String phone;
-        private String thumbnail;
-        private int status;
-        private String created;
-        private String modified;
-        /**
-         * id : 1
-         * cash : 100000
-         * agencylevel : 1
-         * created : 2015-05-12T10:04:07
-         * status : effect
-         */
-
-        private XiaolummEntity xiaolumm;
-        private boolean has_usable_password;
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public void setUrl(String url) {
-            this.url = url;
-        }
-
-        public void setUser_id(String user_id) {
-            this.user_id = user_id;
-        }
-
-        public void setUsername(String username) {
-            this.username = username;
-        }
-
-        public void setNick(String nick) {
-            this.nick = nick;
-        }
-
-        public void setMobile(String mobile) {
-            this.mobile = mobile;
-        }
-
-        public void setEmail(String email) {
-            this.email = email;
-        }
-
-        public void setPhone(String phone) {
-            this.phone = phone;
-        }
-
-        public void setThumbnail(String thumbnail) {
-            this.thumbnail = thumbnail;
-        }
-
-        public void setStatus(int status) {
-            this.status = status;
-        }
-
-        public void setCreated(String created) {
-            this.created = created;
-        }
-
-        public void setModified(String modified) {
-            this.modified = modified;
-        }
-
-        public void setXiaolumm(XiaolummEntity xiaolumm) {
-            this.xiaolumm = xiaolumm;
-        }
-
-        public void setHas_usable_password(boolean has_usable_password) {
-            this.has_usable_password = has_usable_password;
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public String getUrl() {
-            return url;
-        }
-
-        public String getUser_id() {
-            return user_id;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public String getNick() {
-            return nick;
-        }
-
-        public String getMobile() {
-            return mobile;
-        }
-
-        public String getEmail() {
-            return email;
-        }
-
-        public String getPhone() {
-            return phone;
-        }
-
-        public String getThumbnail() {
-            return thumbnail;
-        }
-
-        public int getStatus() {
-            return status;
-        }
-
-        public String getCreated() {
-            return created;
-        }
-
-        public String getModified() {
-            return modified;
-        }
-
-        public XiaolummEntity getXiaolumm() {
-            return xiaolumm;
-        }
-
-        public boolean isHas_usable_password() {
-            return has_usable_password;
-        }
-
-        public static class XiaolummEntity {
-            private int id;
-            private float cash;
-            private int agencylevel;
-            private String created;
-            private String status;
-
-            public void setId(int id) {
-                this.id = id;
-            }
-
-            public void setCash(float cash) {
-                this.cash = cash;
-            }
-
-            public void setAgencylevel(int agencylevel) {
-                this.agencylevel = agencylevel;
-            }
-
-            public void setCreated(String created) {
-                this.created = created;
-            }
-
-            public void setStatus(String status) {
-                this.status = status;
-            }
-
-            public int getId() {
-                return id;
-            }
-
-            public float getCash() {
-                return cash;
-            }
-
-            public int getAgencylevel() {
-                return agencylevel;
-            }
-
-            public String getCreated() {
-                return created;
-            }
-
-            public String getStatus() {
-                return status;
-            }
-
-            @Override public String toString() {
-                return "XiaolummEntity{" +
-                    "id=" + id +
-                    ", cash=" + cash +
-                    ", agencylevel=" + agencylevel +
-                    ", created='" + created + '\'' +
-                    ", status='" + status + '\'' +
-                    '}';
-            }
-        }
-
-        @Override public String toString() {
-            return "ResultsEntity{" +
-                "id=" + id +
-                ", url='" + url + '\'' +
-                ", user_id='" + user_id + '\'' +
-                ", username='" + username + '\'' +
-                ", nick='" + nick + '\'' +
-                ", mobile='" + mobile + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                ", status=" + status +
-                ", created='" + created + '\'' +
-                ", modified='" + modified + '\'' +
-                ", xiaolumm=" + xiaolumm +
-                ", has_usable_password=" + has_usable_password +
-                '}';
-        }
+    public String getCreated() {
+      return mCreated;
     }
 
-    @Override public String toString() {
-        return "UserInfoBean{" +
-            "count=" + count +
-            ", next=" + next +
-            ", previous=" + previous +
-            ", results=" + results +
-            '}';
+    public String getStatus() {
+      return mStatus;
     }
+  }
+
+  public static class UserBudgetEntity {
+    @SerializedName("budget_cash") private double mBudgetCash;
+
+    public void setBudgetCash(double budgetCash) {
+      this.mBudgetCash = budgetCash;
+    }
+
+    public double getBudgetCash() {
+      return mBudgetCash;
+    }
+  }
+
+  @Override public String toString() {
+    return "UserInfoBean{" +
+        "mId=" + mId +
+        ", mUrl='" + mUrl + '\'' +
+        ", mUserId='" + mUserId + '\'' +
+        ", mUsername='" + mUsername + '\'' +
+        ", mNick='" + mNick + '\'' +
+        ", mMobile='" + mMobile + '\'' +
+        ", mEmail='" + mEmail + '\'' +
+        ", mPhone='" + mPhone + '\'' +
+        ", mThumbnail='" + mThumbnail + '\'' +
+        ", mStatus=" + mStatus +
+        ", mCreated='" + mCreated + '\'' +
+        ", mModified='" + mModified + '\'' +
+        ", mXiaolumm=" + mXiaolumm +
+        ", mHasUsablePassword=" + mHasUsablePassword +
+        ", mUserBudget=" + mUserBudget +
+        ", mScore=" + mScore +
+        '}';
+  }
 }

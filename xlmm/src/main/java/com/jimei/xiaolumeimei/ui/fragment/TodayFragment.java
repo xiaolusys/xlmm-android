@@ -203,8 +203,6 @@ public class TodayFragment extends BaseFragment {
                           && (null
                           != ((MainActivity) getActivity()).getUserInfoBean())
                           && !(((MainActivity) getActivity()).getUserInfoBean()
-                          .getResults()
-                          .get(0)
                           .getMobile()
                           .isEmpty())) {
                         Intent intent = new Intent(getActivity(), WebViewActivity.class);
@@ -247,13 +245,9 @@ public class TodayFragment extends BaseFragment {
                             Bundle bundle = new Bundle();
                             bundle.putString("headimgurl",
                                 ((MainActivity) getActivity()).getUserInfoBean()
-                                    .getResults()
-                                    .get(0)
                                     .getThumbnail());
                             bundle.putString("nickname",
                                 ((MainActivity) getActivity()).getUserInfoBean()
-                                    .getResults()
-                                    .get(0)
                                     .getNick());
                             intent.putExtras(bundle);
                           }

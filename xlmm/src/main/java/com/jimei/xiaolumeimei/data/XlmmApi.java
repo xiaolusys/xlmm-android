@@ -42,7 +42,7 @@ public class XlmmApi {
   //购物车
   public static final String CARTS_URL = URL_BASE + "carts";
   //用户信息
-  public static final String USERINFO_URL = URL_BASE + "users";
+  public static final String USERINFO_URL = URL_BASE + "users/profile";
 
   //用户修改密码
   public static final String CHANGE_USER_PASSWORD_URL =

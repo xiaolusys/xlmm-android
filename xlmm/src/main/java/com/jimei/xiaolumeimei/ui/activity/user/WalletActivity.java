@@ -15,11 +15,12 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.UserWalletAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.BudgetdetailBean;
+import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.model.UserNewModel;
-import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaWithdrawCashHistoryActivity;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import rx.Subscriber;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -32,10 +33,10 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
   String TAG = "WalletActivity";
 
   @Bind(R.id.toolbar) Toolbar toolbar;
-  @Bind(R.id.tv_momey) TextView tvMomey;
+  @Bind(R.id.tv_money) TextView tvMoney;
   @Bind(R.id.wallet_rcv) RecyclerView walletRcv;
   @Bind(R.id.ll_wallet_empty) LinearLayout ll_wallet_empty;
-  private String money;
+  private Double money;
   private UserWalletAdapter adapter;
   private Subscription subscribe;
 
@@ -54,6 +55,8 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
             if ((budgetdetailBean != null)
                 && (budgetdetailBean.getResults() != null)
                 && (budgetdetailBean.getResults().size() > 0)) {
+              walletRcv.setVisibility(View.VISIBLE);
+              ll_wallet_empty.setVisibility(View.INVISIBLE);
               adapter.update(budgetdetailBean.getResults());
             }
             else{
@@ -65,7 +68,34 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
-    money = extras.getString("money");
+    if(null != extras) {
+      money = extras.getDouble("money");
+      tvMoney.setText(Math.round(money *100)/100 + "");
+    }
+    else{
+      UserNewModel.getInstance()
+          .getProfile()
+          .subscribeOn(Schedulers.io())
+          .unsafeSubscribe(new Subscriber<UserInfoBean>() {
+            @Override public void onCompleted() {
+
+            }
+
+            @Override public void onError(Throwable e) {
+
+            }
+
+            @Override public void onNext(UserInfoBean userNewBean) {
+              if (userNewBean != null) {
+                if (null != userNewBean.getUserBudget()) {
+                  money = userNewBean.getUserBudget().getBudgetCash();
+                }
+                tvMoney.setText(Math.round(money *100)/100 + "");
+              }
+            }
+          });
+
+    }
   }
 
   @Override protected void onStop() {
@@ -84,7 +114,7 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
     setSupportActionBar(toolbar);
     finishBack(toolbar);
 
-    tvMomey.setText(money);
+
 
     initRecyclerView();
   }
