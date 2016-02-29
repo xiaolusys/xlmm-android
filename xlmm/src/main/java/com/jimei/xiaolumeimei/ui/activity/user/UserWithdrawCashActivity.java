@@ -48,7 +48,7 @@ public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.img_dec) ImageView img_dec;
   @Bind(R.id.img_inc) ImageView img_inc;
   @Bind(R.id.tv_wxnickname) TextView tv_wxnickname;
-  @Bind(R.id.tv_num) TextView tv_num;
+  @Bind(R.id.tx_num) TextView tv_num;
 
   double money;
   double withdraw_cash_fund = 0;

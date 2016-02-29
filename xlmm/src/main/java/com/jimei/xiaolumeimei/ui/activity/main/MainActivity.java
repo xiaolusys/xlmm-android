@@ -177,7 +177,7 @@ public class MainActivity extends BaseActivity
     imaMoney = (ImageView) llayout.findViewById(R.id.imgMoney);
     imaMoney.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
-
+        drawer.closeDrawers();
         if (LoginUtils.checkLoginState(getApplicationContext())) {
           Intent intent = new Intent(MainActivity.this, WalletActivity.class);
           Bundle bundle = new Bundle();
@@ -197,6 +197,7 @@ public class MainActivity extends BaseActivity
     imgPoint = (ImageView) llayout.findViewById(R.id.imgPoint);
     imgPoint.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
+        drawer.closeDrawers();
         if (LoginUtils.checkLoginState(getApplicationContext())) {
           Intent intent = new Intent(MainActivity.this, MembershipPointActivity.class);
           startActivity(intent);
@@ -213,6 +214,7 @@ public class MainActivity extends BaseActivity
     imgCoupon = (ImageView) llayout.findViewById(R.id.imgCoupon);
     imgCoupon.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
+        drawer.closeDrawers();
         if (LoginUtils.checkLoginState(getApplicationContext())) {
           Intent intent = new Intent(MainActivity.this, CouponActivity.class);
           startActivity(intent);
@@ -229,6 +231,7 @@ public class MainActivity extends BaseActivity
     imgUser = (ImageView) llayout.findViewById(R.id.imgUser);
     imgUser.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
+
         if (!(LoginUtils.checkLoginState(getApplicationContext()))) {
           Intent intent = new Intent(MainActivity.this, LoginActivity.class);
           Bundle bundle = new Bundle();
