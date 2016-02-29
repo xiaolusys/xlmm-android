@@ -295,7 +295,7 @@ public interface XlmmService {
             @Field("com_content") String com_content);
 
     //设置用户昵称
-    @PATCH(XlmmApi.USERINFO_URL + "/{id}")
+    @PATCH("users" + "/{id}")
     Observable<UserBean> setNickname(
             @Path("id") int id,
             @Body NicknameBean nickname);
@@ -591,4 +591,10 @@ public interface XlmmService {
 
   @GET("users/get_wxpub_authinfo")
   Observable<WxPubAuthInfo> getWxPubAuthInfo();
+
+  //创建提款信息
+  @FormUrlEncoded
+  @POST("users/budget_cash_out")
+  Observable<ResponseBody> user_withdraw_cash(
+      @Field("cashout_amount") String amount );
 }

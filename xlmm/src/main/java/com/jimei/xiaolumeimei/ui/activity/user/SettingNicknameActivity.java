@@ -30,7 +30,6 @@ public class SettingNicknameActivity extends BaseSwipeBackCompatActivity
   NicknameBean nicknameBean = new NicknameBean();
   String nick_name_value;
   int userid;
-  private Subscription subscribe;
 
   @Override protected void setListener() {
     save_button.setOnClickListener(this);
@@ -99,7 +98,7 @@ public class SettingNicknameActivity extends BaseSwipeBackCompatActivity
   }
 
   private void setNickname() {
-    subscribe = UserModel.getInstance()
+    Subscription subscribe = UserModel.getInstance()
         .setNickname(userid, nicknameBean)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<UserBean>() {
@@ -130,10 +129,11 @@ public class SettingNicknameActivity extends BaseSwipeBackCompatActivity
             super.onError(e);
           }
         });
+    addSubscription(subscribe);
   }
 
   private void getUserInfo() {
-    subscribe = UserModel.getInstance()
+    Subscription subscribe = UserModel.getInstance()
         .getUserInfo()
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<UserInfoBean>() {
@@ -159,12 +159,11 @@ public class SettingNicknameActivity extends BaseSwipeBackCompatActivity
             super.onError(e);
           }
         });
+    addSubscription(subscribe);
   }
 
   @Override protected void onStop() {
     super.onStop();
-    if (subscribe != null && subscribe.isUnsubscribed()) {
-      subscribe.unsubscribe();
-    }
+
   }
 }
