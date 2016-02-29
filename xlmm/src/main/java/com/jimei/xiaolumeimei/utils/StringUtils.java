@@ -120,4 +120,9 @@ public final class StringUtils {
   public static String addHtmlRedFlag(String string) {
     return "<font color=\"red\">" + string + "</font>";
   }
+
+  //public static long formatDouble(long number){
+  //  DecimalFormat df = new DecimalFormat("#.00");
+  //  return Double.parseDouble(df.format(number));
+  //}
 }

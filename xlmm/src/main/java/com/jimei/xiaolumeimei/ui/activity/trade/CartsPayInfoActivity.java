@@ -34,6 +34,7 @@ import com.jude.utils.JUtils;
 import com.pingplusplus.android.PaymentActivity;
 import com.squareup.okhttp.ResponseBody;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import rx.schedulers.Schedulers;
@@ -269,8 +270,12 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   }
 
   private void payWithCoupon(String pay_method) {
-    tradeModel.shoppingcart_create_with_coupon(cart_ids, addr_id, pay_method, payment,
-        post_fee, discount_fee, total_fee, uuid, coupon_id)
+
+    BigDecimal bd = new BigDecimal((paymentInfo - coupon_price));
+    double bigDecimal = bd.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+
+    tradeModel.shoppingcart_create_with_coupon(cart_ids, addr_id, pay_method,
+        bigDecimal + "", post_fee, discount_fee, total_fee, uuid, coupon_id)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ResponseBody>() {
           @Override public void onNext(ResponseBody responseBody) {
@@ -329,9 +334,14 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         coupon_id = data.getStringExtra("coupon_id");
         coupon_price = data.getDoubleExtra("coupon_price", 0);
 
-        totalPrice.setText("¥" + Math.round((paymentInfo - coupon_price) * 100) / 100);
-        totalPrice_all.setText(
-            "合计: ¥" + Math.round((total_feeInfo - coupon_price) * 100) / 100);
+        BigDecimal bd = new BigDecimal((paymentInfo - coupon_price));
+        double bigDecimal = bd.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+
+        BigDecimal bd1 = new BigDecimal((total_feeInfo - coupon_price));
+        double bigDecimal1 = bd1.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+
+        totalPrice.setText("¥" + bigDecimal);
+        totalPrice_all.setText("合计: ¥" + bigDecimal1);
         jiehsneg.setText("已节省" + coupon_price);
 
         JUtils.Log(TAG, coupon_id);

@@ -17,9 +17,13 @@ import com.jimei.xiaolumeimei.utils.NetWorkUtil;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.squareup.leakcanary.LeakCanary;
+import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.zhy.autolayout.config.AutoLayoutConifg;
+import java.io.IOException;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.util.List;
@@ -140,6 +144,18 @@ public class XlmmApp extends Application {
     //});
 
     //httpClient.networkInterceptors().add(new StethoInterceptor());
+
+    httpClient.interceptors().add(new Interceptor() {
+      @Override public Response intercept(Chain chain) throws IOException {
+        Request request = chain.request();
+        Response response = chain.proceed(request);
+        int code = response.code();//status code
+        if (403 == code) {
+
+        }
+        return response;
+      }
+    });
 
     httpClient.setCookieHandler(cookieManager);
     return httpClient;
