@@ -37,7 +37,9 @@
   <string name="refreshing">正在刷新…</string>
   <string name="complete">刷新完成</string>
   <string name="withdrawcash">亲爱的小鹿妈妈们，\n系统升级中暂时只能用微信红包提现哦~</string>
+  <string name="withdrawcash1">亲爱的小鹿er，您还未绑定微信哦\n系统升级中暂时只能用微信红包提现哦~</string>
   <string name="not_enough_cash">您的余额不足，不能提现\n快去发布产品赚取更多返利吧~</string>
+  <string name="not_enough_cash1">您的余额不足，不能提现哦</string>
   <string name="publish_info">发布产品就会\n有机会获得更多的返利现金哦~</string>
   <string name="chooselist">选品列表</string>
   <string name="complaininfo">请输入您的建议,以便我们更好的服务于您</string>
