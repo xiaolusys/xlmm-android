@@ -121,6 +121,13 @@
 }
 
 -dontwarn android.support.**
+#如果引用了v4或者v7包
+# Keep the support library
+-keep class android.support.v4.** { *; }
+-keep interface android.support.v4.** { *; }
+# Keep the support library
+-keep class android.support.v7.** { *; }
+-keep interface android.support.v7.** { *; }
 ##--- End android默认 ---
 
 -keepclassmembers enum * {

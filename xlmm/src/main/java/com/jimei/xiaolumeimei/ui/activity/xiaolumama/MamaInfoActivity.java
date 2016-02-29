@@ -32,7 +32,6 @@ import com.jimei.xiaolumeimei.entities.OneDayAgentOrdersBean;
 import com.jimei.xiaolumeimei.entities.ShoppingListBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
-import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import java.util.ArrayList;
@@ -174,7 +173,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     Intent intent;
     switch (v.getId()) {
       case R.id.btn_jump:
-        startActivity(new Intent(MamaInfoActivity.this, MainActivity.class));
+        startActivity(new Intent(MamaInfoActivity.this, MMNNinePicActivity.class));
         finish();
         break;
       case R.id.rl_two_dimen:
