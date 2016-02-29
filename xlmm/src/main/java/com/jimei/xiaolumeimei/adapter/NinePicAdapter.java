@@ -1,7 +1,6 @@
 package com.jimei.xiaolumeimei.adapter;
 
 import android.content.Context;
-import android.os.Environment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
@@ -16,7 +15,6 @@ import com.jimei.xiaolumeimei.rx.RXDownLoadImage;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.ImagePagerActivity;
 import com.jimei.xiaolumeimei.widget.ninepicimagview.MultiImageView;
 import com.jude.utils.JUtils;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import rx.android.schedulers.AndroidSchedulers;
@@ -140,10 +138,10 @@ public class NinePicAdapter extends BaseAdapter {
             mImageTitle)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(uri -> {
-                File appDir = new File(Environment.getExternalStorageDirectory(), "XlMMImage");
-                //String msg = String.format(""),
+                //File appDir = new File(Environment.getExternalStorageDirectory(), "XlMMImage");
+                //String msg = String.format(("图片已经保存到"),
                 //        appDir.getAbsolutePath());
-                //ToastUtils.showShort(msg);
+                //JUtils.Toast(msg);
             }, error -> JUtils.Toast(error.getMessage() + "\n再试试..."));
         // @formatter:on
     //addSubscription(s);
