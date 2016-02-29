@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
@@ -35,10 +36,11 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.tv_money) TextView tvMoney;
   @Bind(R.id.wallet_rcv) RecyclerView walletRcv;
-  @Bind(R.id.ll_wallet_empty) LinearLayout ll_wallet_empty;
+  @Bind(R.id.ll_wallet_empty) RelativeLayout ll_wallet_empty;
   private Double money;
   private UserWalletAdapter adapter;
-  private Subscription subscribe;
+
+  private boolean get_money = false;
 
   @Override protected void setListener() {
 
@@ -46,7 +48,7 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
 
   @Override protected void initData() {
 
-    subscribe = UserNewModel.getInstance()
+    Subscription subscribe = UserNewModel.getInstance()
         .budGetdetailBean()
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<BudgetdetailBean>() {
@@ -65,44 +67,42 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
             }
           }
         });
+    addSubscription(subscribe);
+
+    tvMoney.setText(Math.round(money *100)/100 + "");
+
+    if(!get_money){
+      Subscription subscribe1 = UserNewModel.getInstance()
+          .getProfile()
+          .subscribeOn(Schedulers.io())
+          .subscribe(new ServiceResponse<UserInfoBean>() {
+          @Override public void onNext(UserInfoBean userNewBean) {
+
+            if (userNewBean != null) {
+              if (null != userNewBean.getUserBudget()) {
+                money = userNewBean.getUserBudget().getBudgetCash();
+              }
+              tvMoney.setText(Math.round(money *100)/100 + "");
+            }
+          }
+        });
+      addSubscription(subscribe1);
+
+    }
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
     if(null != extras) {
       money = extras.getDouble("money");
-      tvMoney.setText(Math.round(money *100)/100 + "");
+      JUtils.Log(TAG, "money:"+money);
+      get_money = true;
     }
-    else{
-      UserNewModel.getInstance()
-          .getProfile()
-          .subscribeOn(Schedulers.io())
-          .unsafeSubscribe(new Subscriber<UserInfoBean>() {
-            @Override public void onCompleted() {
 
-            }
-
-            @Override public void onError(Throwable e) {
-
-            }
-
-            @Override public void onNext(UserInfoBean userNewBean) {
-              if (userNewBean != null) {
-                if (null != userNewBean.getUserBudget()) {
-                  money = userNewBean.getUserBudget().getBudgetCash();
-                }
-                tvMoney.setText(Math.round(money *100)/100 + "");
-              }
-            }
-          });
-
-    }
   }
 
   @Override protected void onStop() {
     super.onStop();
-    if (subscribe != null && subscribe.isUnsubscribed()) {
-      subscribe.unsubscribe();
-    }
+
   }
 
   @Override protected int getContentViewLayoutID() {

@@ -58,50 +58,10 @@ public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
   @Override protected void getBundleExtras(Bundle extras) {
     if(null != extras) {
       money = extras.getDouble("money");
-      tv_reminder.setText(Math.round(money *100)/100 + "");
 
     }
-    else{
-      UserNewModel.getInstance()
-          .getProfile()
-          .subscribeOn(Schedulers.io())
-          .unsafeSubscribe(new Subscriber<UserInfoBean>() {
-            @Override public void onCompleted() {
 
-            }
 
-            @Override public void onError(Throwable e) {
-
-            }
-
-            @Override public void onNext(UserInfoBean userNewBean) {
-              if (userNewBean != null) {
-                if (null != userNewBean.getUserBudget()) {
-                  money = userNewBean.getUserBudget().getBudgetCash();
-                }
-                tv_reminder.setText(Math.round(money *100)/100 + "");
-
-                if(userNewBean.getIsAttentionPublic() == 1) {
-                  if (Double.compare(money, MAX_WITHDROW_MONEY_EACH_TIME) > 0) {
-                    rl_unbindwx.setVisibility(View.INVISIBLE);
-                    rl_not_enough_cash.setVisibility(View.INVISIBLE);
-                    rl_has_cash.setVisibility(View.VISIBLE);
-                  } else {
-                    rl_unbindwx.setVisibility(View.INVISIBLE);
-                    rl_not_enough_cash.setVisibility(View.VISIBLE);
-                    rl_has_cash.setVisibility(View.INVISIBLE);
-                  }
-                }
-                else {
-                  rl_unbindwx.setVisibility(View.VISIBLE);
-                  rl_not_enough_cash.setVisibility(View.INVISIBLE);
-                  rl_has_cash.setVisibility(View.INVISIBLE);
-                }
-              }
-            }
-          });
-
-    }
   }
 
   @Override protected int getContentViewLayoutID() {
@@ -117,14 +77,46 @@ public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initData() {
-    subscribe = MamaInfoModel.getInstance()
-        .getAgentInfoBean()
-        .subscribeOn(Schedulers.newThread())
-        .subscribe(new ServiceResponse<AgentInfoBean>() {
-          @Override public void onNext(AgentInfoBean pointBean) {
-            JUtils.Log(TAG, "AgentInfoBean=" + pointBean.toString());
+
+    UserNewModel.getInstance()
+        .getProfile()
+        .subscribeOn(Schedulers.io())
+        .unsafeSubscribe(new Subscriber<UserInfoBean>() {
+          @Override public void onCompleted() {
+
+          }
+
+          @Override public void onError(Throwable e) {
+
+          }
+
+          @Override public void onNext(UserInfoBean userNewBean) {
+            if (userNewBean != null) {
+              if (null != userNewBean.getUserBudget()) {
+                money = userNewBean.getUserBudget().getBudgetCash();
+              }
+              tv_reminder.setText(Math.round(money *100)/100 + "");
+
+              if(userNewBean.getIsAttentionPublic() == 1) {
+                if (Double.compare(money, MAX_WITHDROW_MONEY_EACH_TIME) > 0) {
+                  rl_unbindwx.setVisibility(View.INVISIBLE);
+                  rl_not_enough_cash.setVisibility(View.INVISIBLE);
+                  rl_has_cash.setVisibility(View.VISIBLE);
+                } else {
+                  rl_unbindwx.setVisibility(View.INVISIBLE);
+                  rl_not_enough_cash.setVisibility(View.VISIBLE);
+                  rl_has_cash.setVisibility(View.INVISIBLE);
+                }
+              }
+              else {
+                rl_unbindwx.setVisibility(View.VISIBLE);
+                rl_not_enough_cash.setVisibility(View.INVISIBLE);
+                rl_has_cash.setVisibility(View.INVISIBLE);
+              }
+            }
           }
         });
+
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
