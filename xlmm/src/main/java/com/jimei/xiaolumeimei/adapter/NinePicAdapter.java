@@ -114,7 +114,9 @@ public class NinePicAdapter extends BaseAdapter {
         assert picArry != null;
         for (int i = 0; i < picArry.size(); i++) {
 
-          saveImageToGallery(picArry.get(i), picArry.get(i));
+          saveImageToGallery(
+              picArry.get(i) + "?imageMogr2/thumbnail/578/format/jpg/quality/90",
+              picArry.get(i));
         }
 
         new MaterialDialog.Builder(mcontext).
