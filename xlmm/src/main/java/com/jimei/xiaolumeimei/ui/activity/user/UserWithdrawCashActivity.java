@@ -94,13 +94,14 @@ public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
             if (userNewBean != null) {
               if (null != userNewBean.getUserBudget()) {
                 money = userNewBean.getUserBudget().getBudgetCash();
+                JUtils.Log(TAG, "money:"+money);
               }
               tv_reminder.setText((float)(Math.round(money *100))/100 + "元");
 
               if(userNewBean.getIsAttentionPublic() == 1) {
                 btn_bindwx.setVisibility(View.INVISIBLE);
                 tv_wxnickname.setText("已关注");
-                if (Double.compare(money, MAX_WITHDROW_MONEY_EACH_TIME) > 0) {
+                if (Double.compare(money, MAX_WITHDROW_MONEY_EACH_TIME) >= 0) {
                   rl_unbindwx.setVisibility(View.INVISIBLE);
                   rl_not_enough_cash.setVisibility(View.INVISIBLE);
                   rl_has_cash.setVisibility(View.VISIBLE);
@@ -111,6 +112,8 @@ public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
                 }
               }
               else {
+                JUtils.Log(TAG,"unbind wx");
+                btn_bindwx.setVisibility(View.VISIBLE);
                 rl_unbindwx.setVisibility(View.VISIBLE);
                 rl_not_enough_cash.setVisibility(View.INVISIBLE);
                 rl_has_cash.setVisibility(View.INVISIBLE);

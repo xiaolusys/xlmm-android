@@ -555,7 +555,17 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
 
       case R.id.img_share:
         JUtils.Log(TAG, "share productdetail");
-        share_productdetail();
+        if (LoginUtils.checkLoginState(getApplicationContext())) {
+           share_productdetail();
+        }
+        else {
+          JUtils.Log(TAG, "need login");
+          Intent intent = new Intent(ProductDetailActvity.this, LoginActivity.class);
+          Bundle bundle = new Bundle();
+          bundle.putString("login", "productdetail");
+          intent.putExtras(bundle);
+          startActivity(intent);
+        }
         break;
     }
   }

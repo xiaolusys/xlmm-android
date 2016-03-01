@@ -110,8 +110,8 @@ public class SettingNicknameActivity extends BaseSwipeBackCompatActivity
 
             if (user.getCode() == 0) {
               Toast.makeText(mContext, "修改成功", Toast.LENGTH_SHORT).show();
-              Intent intent = new Intent(mContext, SettingActivity.class);
-              startActivity(intent);
+              //Intent intent = new Intent(mContext, SettingActivity.class);
+              //startActivity(intent);
               finish();
             } else {
 
