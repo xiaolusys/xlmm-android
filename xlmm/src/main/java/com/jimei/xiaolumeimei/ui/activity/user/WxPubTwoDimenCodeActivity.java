@@ -150,7 +150,7 @@ public class WxPubTwoDimenCodeActivity extends BaseSwipeBackCompatActivity imple
   public Bitmap getNewBitMap(Bitmap bmp,String text) {
     Bitmap newBitmap = Bitmap.createBitmap(500,500, Bitmap.Config.ARGB_4444);
     Canvas canvas = new Canvas(newBitmap);
-    canvas.drawBitmap(bmp, 0, 50, null);
+    canvas.drawBitmap(bmp, 50, 0, null);
     TextPaint textPaint = new TextPaint();
     textPaint.setAntiAlias(true);
     textPaint.setTextSize(30.0F);

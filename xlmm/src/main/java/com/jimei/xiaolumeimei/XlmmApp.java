@@ -52,7 +52,9 @@ public class XlmmApp extends Application {
 
   @Override public void onCreate() {
     super.onCreate();
+
     //LeakCanary.install(this);
+
     mContext = this;
     cookiePrefs = getSharedPreferences("COOKIESxlmm", 0);
     client = initOkHttpClient();
