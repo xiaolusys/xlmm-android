@@ -69,10 +69,10 @@
           android:src="@drawable/ic_wallet"/>
 
       <TextView
-          android:textSize="12sp"
+          android:textSize="11sp"
           android:id="@+id/tvMoney1"
           android:layout_width="wrap_content"
-          android:layout_height="40px"
+          android:layout_height="wrap_content"
           android:layout_toRightOf="@+id/imgMoney"
           android:layout_alignTop="@+id/imgMoney"
           android:gravity="center_vertical"

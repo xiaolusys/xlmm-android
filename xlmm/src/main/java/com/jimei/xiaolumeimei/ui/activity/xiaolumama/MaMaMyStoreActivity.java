@@ -12,7 +12,6 @@ import com.jimei.xiaolumeimei.entities.MMChooselistBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.victor.loading.rotate.RotateLoading;
 import java.util.List;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
@@ -25,9 +24,7 @@ import rx.schedulers.Schedulers;
 public class MaMaMyStoreActivity extends BaseSwipeBackCompatActivity {
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.store_rcyView) RecyclerView storeRcyView;
-  @Bind(R.id.loading) RotateLoading loading;
   private MaMaStoreAdapter maMaStoreAdapter;
-  private Subscription subscribe;
 
   @Override protected void setListener() {
 
@@ -35,7 +32,7 @@ public class MaMaMyStoreActivity extends BaseSwipeBackCompatActivity {
 
   @Override protected void initData() {
 
-     subscribe = MMProductModel.getInstance()
+    Subscription subscribe = MMProductModel.getInstance()
         .getMMStoreList()
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<List<MMChooselistBean>>() {
@@ -57,6 +54,8 @@ public class MaMaMyStoreActivity extends BaseSwipeBackCompatActivity {
             super.onError(e);
           }
         });
+
+    addSubscription(subscribe);
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -93,8 +92,5 @@ public class MaMaMyStoreActivity extends BaseSwipeBackCompatActivity {
 
   @Override protected void onStop() {
     super.onStop();
-    if (subscribe != null && subscribe.isUnsubscribed()) {
-      subscribe.unsubscribe();
-    }
   }
 }
