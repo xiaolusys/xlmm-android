@@ -2,7 +2,6 @@ package com.jimei.xiaolumeimei.ui.activity.main;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -14,11 +13,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -63,7 +62,9 @@ public class MainActivity extends BaseActivity
   @Bind(R.id.tab_layout) TabLayout mTabLayout;
   @Bind(R.id.view_pager) ViewPager mViewPager;
   @Bind(R.id.tool_bar) Toolbar toolbar;
-  @Bind(R.id.fab) FloatingActionButton carts;
+  //@Bind(R.id.fab) FloatingActionButton carts;
+  @Bind(R.id.rv_cart) RelativeLayout carts;
+
   DrawerLayout drawer;
   TextView tvNickname;
 
@@ -247,7 +248,7 @@ public class MainActivity extends BaseActivity
 
     badge = new BadgeView(this);
     badge.setTargetView(carts);
-    badge.setBadgeGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
+    //badge.setBadgeGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
   }
 
   @Override public boolean onNavigationItemSelected(MenuItem item) {

@@ -92,7 +92,6 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
   private CountdownView countdownView;
   private BadgeView badge;
   private List<String> list = new ArrayList<>();
-  private Subscription subscribe;
 
   @Override protected void setListener() {
     rv_cart.setOnClickListener(this);
@@ -101,7 +100,8 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
 
   @Override protected void initData() {
 
-    subscribe = ProductModel.getInstance().getProductDetails(productId)
+    Subscription subscribeSubscription = ProductModel.getInstance()
+        .getProductDetails(productId)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ProductDetailBean>() {
 
@@ -329,7 +329,10 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
           }
         });
 
-    subscribe = ProductModel.getInstance().getProductShareInfo(productId)
+    addSubscription(subscribeSubscription);
+
+    Subscription subscribe = ProductModel.getInstance()
+        .getProductShareInfo(productId)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ShareProductBean>() {
 
@@ -337,6 +340,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
             shareProductBean = productBean;
           }
         });
+    addSubscription(subscribe);
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -451,7 +455,7 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
         } else {
           JUtils.Log(sku_id + "这尺寸可以");
 
-          subscribe = cartsModel.addCarts(item_id, sku_id)
+          Subscription subscribe = cartsModel.addCarts(item_id, sku_id)
               .subscribeOn(Schedulers.newThread())
               .subscribe(new ServiceResponse<AddCartsBean>() {
 
@@ -518,6 +522,8 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
                   badge.setBadgeCount(num);
                 }
               });
+
+          addSubscription(subscribe);
         }
 
         break;
@@ -682,9 +688,6 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
 
   @Override protected void onStop() {
     super.onStop();
-    if (subscribe != null && subscribe.isUnsubscribed()) {
-      subscribe.unsubscribe();
-    }
   }
 }
 

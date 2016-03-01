@@ -38,14 +38,34 @@
       app:layout_behavior="@string/appbar_scrolling_view_behavior"></android.support.v4.view.ViewPager>
 
 
-  <android.support.design.widget.FloatingActionButton
-      android:id="@+id/fab"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="bottom|start"
+  <!--<android.support.design.widget.FloatingActionButton-->
+  <!--android:id="@+id/fab"-->
+  <!--android:layout_width="wrap_content"-->
+  <!--android:layout_height="wrap_content"-->
+  <!--android:layout_gravity="bottom|start"-->
+  <!--android:layout_margin="16dp"-->
+  <!--android:src="@drawable/cart"-->
+  <!--android:adjustViewBounds="false"-->
+  <!--app:layout_behavior="com.jimei.xiaolumeimei.behavior.ScrollingFabBehavior"/>-->
+
+
+  <RelativeLayout
+      app:layout_behavior="com.jimei.xiaolumeimei.behavior.ScrollingFabBehavior"
       android:layout_margin="16dp"
-      android:src="@drawable/cart"
-      android:adjustViewBounds="false"
-      app:layout_behavior="com.jimei.xiaolumeimei.behavior.ScrollingFabBehavior"/>
+      android:layout_gravity="bottom|start"
+      android:id="@+id/rv_cart"
+      android:layout_width="120px"
+      android:layout_height="80px"
+      android:background="@drawable/shape_carts"
+      >
+    <ImageView
+        android:layout_centerInParent="true"
+        android:id="@+id/text_1"
+        android:src="@drawable/cart2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+  </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

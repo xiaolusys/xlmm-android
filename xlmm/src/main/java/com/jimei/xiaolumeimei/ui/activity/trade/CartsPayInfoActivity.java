@@ -150,12 +150,12 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
               jiehsneg.setText("已节省" + cartsPayinfoBean.getDiscountFee() + "");
               //}
 
-              if (Double.parseDouble(total_fee) < 150) {
-                coupon_layout.setOnClickListener(null);
-                tv_coupon.setText("无可用优惠券");
-              } else {
-                coupon_layout.setOnClickListener(CartsPayInfoActivity.this);
-              }
+              //if (Double.parseDouble(total_fee) < 150) {
+              //  coupon_layout.setOnClickListener(null);
+              //  tv_coupon.setText("无可用优惠券");
+              //} else {
+              coupon_layout.setOnClickListener(CartsPayInfoActivity.this);
+              //}
             } else {
               emptyContent.setVisibility(View.VISIBLE);
               goMain.setOnClickListener(new View.OnClickListener() {
@@ -343,6 +343,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         totalPrice.setText("¥" + bigDecimal);
         totalPrice_all.setText("合计: ¥" + bigDecimal1);
         jiehsneg.setText("已节省" + coupon_price);
+        tv_coupon.setText("已经选择" + coupon_price + "元优惠券");
 
         JUtils.Log(TAG, coupon_id);
         model.getCartsInfoList(ids, coupon_id)
