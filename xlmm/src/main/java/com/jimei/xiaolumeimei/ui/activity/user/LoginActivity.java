@@ -21,6 +21,7 @@ import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.wechat.friends.Wechat;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
@@ -73,7 +74,6 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
   private String nickname;
   private String openid;
   private String unionid;
-  private Subscription subscribe;
 
   public static String getRandomString(int length) {
     //length表示生成字符串的长度
@@ -162,7 +162,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
         login_pass_value = passEditText.getText().toString().trim();
 
         if (checkInput(login_name_value, login_pass_value)) {
-           subscribe = UserModel.getInstance()
+          Subscription subscribe = UserModel.getInstance()
               .login(login_name_value, login_pass_value)
               .subscribeOn(Schedulers.newThread())
               .subscribe(new ServiceResponse<UserBean>() {
@@ -229,6 +229,8 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                   super.onCompleted();
                 }
               });
+
+          addSubscription(subscribe);
         }
         break;
       case R.id.set_register_button:
@@ -294,6 +296,12 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
   }
 
   private void authorize(Platform plat) {
+
+    MaterialDialog.Builder content =
+        new MaterialDialog.Builder(this).content("正在加载.....");
+
+    MaterialDialog show = content.show();
+
     if (plat == null) {
       return;
     }
@@ -309,7 +317,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
     plat.setPlatformActionListener(new PlatformActionListener() {
       @Override
       public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
-
+        show.dismiss();
         if (i == Platform.ACTION_USER_INFOR) {
           UIHandler.sendEmptyMessage(MSG_AUTH_COMPLETE, LoginActivity.this);
           login(platform.getName(), platform.getDb().getUserId(), hashMap);
@@ -334,24 +342,42 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
         JUtils.Log(TAG, "------nickname---------" + nickname);
         JUtils.Log(TAG, "------openid---------" + openid);
         JUtils.Log(TAG, "------unionid---------" + unionid);
-         subscribe = UserModel.getInstance()
+
+        //MaterialDialog.Builder content =
+        //    new MaterialDialog.Builder(LoginActivity.this).content("正在加载.....");
+        //
+        //MaterialDialog show = content.show();
+
+        Subscription subscription = UserModel.getInstance()
             .wxapp_login(noncestr, timestamp, sign, headimgurl, nickname, openid, unionid)
             .subscribeOn(Schedulers.io())
             .subscribe(new ServiceResponse<WxLogininfoBean>() {
+
+              @Override public void onCompleted() {
+                super.onCompleted();
+              }
+
+              @Override public void onError(Throwable e) {
+                super.onError(e);
+                show.dismiss();
+              }
+
               @Override public void onNext(WxLogininfoBean wxLogininfoBean) {
 
-                super.onNext(wxLogininfoBean);
                 if (wxLogininfoBean != null) {
                   int code = wxLogininfoBean.getCode();
                   if (0 == code) {
-
-                    subscribe = UserModel.getInstance()
+                    Subscription subscribe = UserModel.getInstance()
                         .need_set_info()
                         .subscribeOn(Schedulers.io())
                         .subscribe(new ServiceResponse<NeedSetInfoBean>() {
-                          @Override public void onNext(NeedSetInfoBean needSetInfoBean) {
-                            super.onNext(needSetInfoBean);
 
+                          @Override public void onError(Throwable e) {
+                            super.onError(e);
+                            show.dismiss();
+                          }
+
+                          @Override public void onNext(NeedSetInfoBean needSetInfoBean) {
                             //set xiaomi push useraccount
                             LoginUtils.setPushUserAccount(LoginActivity.this,
                                 MiPushClient.getRegId(getApplicationContext()));
@@ -369,19 +395,20 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                               LoginUtils.saveLoginSuccess(true, getApplicationContext());
                               JUtils.Toast("登录成功，已绑定手机号");
                               JUtils.Log(TAG, "code=1,login succ,need reset pwd");
-                              /*Intent intent = new Intent(LoginActivity.this,
-                                  WxLoginBindPhoneActivity.class);
-                              Bundle bundle = new Bundle();
-                              bundle.putString("headimgurl", headimgurl);
-                              bundle.putString("nickname", nickname);
-                              intent.putExtras(bundle);
-                              startActivity(intent);*/
+                /*Intent intent = new Intent(LoginActivity.this,
+                    WxLoginBindPhoneActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("headimgurl", headimgurl);
+                bundle.putString("nickname", nickname);
+                intent.putExtras(bundle);
+                startActivity(intent);*/
                               Intent intent =
                                   new Intent(LoginActivity.this, MainActivity.class);
                               startActivity(intent);
 
                               finish();
                             } else if (2 == codeInfo) {
+                              show.dismiss();
                               LoginUtils.saveLoginSuccess(true, getApplicationContext());
                               JUtils.Toast("登录成功,前往绑定手机");
                               Intent intent = new Intent(LoginActivity.this,
@@ -396,6 +423,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                             }
                           }
                         });
+
                   } else if (1 == code) {
                     JUtils.Toast("签名错误");
                   } else if (2 == code) {
@@ -404,14 +432,15 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                 }
               }
             });
+        //show.dismiss();
       }
 
       @Override public void onError(Platform platform, int i, Throwable throwable) {
-
+        show.dismiss();
       }
 
       @Override public void onCancel(Platform platform, int i) {
-
+        show.dismiss();
       }
     });
     plat.SSOSetting(true);
@@ -421,7 +450,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
   public boolean handleMessage(Message msg) {
     switch (msg.what) {
       case MSG_USERID_FOUND: {
-        Toast.makeText(this, R.string.userid_found, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, R.string.userid_found, Toast.LENGTH_SHORT).show();
       }
       break;
       case MSG_LOGIN: {

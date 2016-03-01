@@ -21,6 +21,7 @@ import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
+import com.tencent.bugly.crashreport.CrashReport;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.zhy.autolayout.config.AutoLayoutConifg;
 import java.io.IOException;
@@ -53,6 +54,7 @@ public class XlmmApp extends Application {
   @Override public void onCreate() {
     super.onCreate();
     LeakCanary.install(this);
+    CrashReport.initCrashReport(getApplicationContext(),"900020489", false);
     mContext = this;
     cookiePrefs = getSharedPreferences("COOKIESxlmm", 0);
     client = initOkHttpClient();
