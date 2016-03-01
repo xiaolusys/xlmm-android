@@ -10,26 +10,27 @@
 
   <RelativeLayout
       android:layout_width="wrap_content"
-      android:layout_height="160px"
+      android:layout_height="wrap_content"
       android:layout_marginTop="40px"
       android:layout_centerHorizontal="true"
       android:id="@+id/rl_head">
 
     <ImageView
         android:id="@+id/imgUser"
-        android:layout_width="116px"
-        android:layout_height="116px"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:clickable="true"
         android:src="@drawable/img_head"/>
 
     <TextView
+        android:layout_centerHorizontal="true"
         android:layout_below="@id/imgUser"
         android:gravity="center"
         android:id="@+id/tvNickname"
         android:layout_width="wrap_content"
-        android:layout_height="34px"
-        android:layout_marginTop="5px"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10px"
         android:text="小鹿妈妈"
         />
   </RelativeLayout>

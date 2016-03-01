@@ -1680,7 +1680,7 @@ public final class BitmapUtil {
     }
     try {
       FileOutputStream out = new FileOutputStream(f);
-      bm.compress(Bitmap.CompressFormat.PNG, 90, out);
+      bm.compress(Bitmap.CompressFormat.JPEG, 90, out);
       out.flush();
       out.close();
     } catch (FileNotFoundException e) {

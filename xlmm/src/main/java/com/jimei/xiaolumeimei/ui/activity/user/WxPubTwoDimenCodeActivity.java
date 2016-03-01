@@ -121,6 +121,7 @@ public class WxPubTwoDimenCodeActivity extends BaseSwipeBackCompatActivity imple
         + "/Camera/"
         + R.string.wxpub_2dimen_pic_name
         + ".jpg";
+    JUtils.Log(TAG,"filename:"+fileName);
     BitmapUtil.saveBitmap(bitmap, fileName);
     Toast.makeText(WxPubTwoDimenCodeActivity.this, "保存成功，"+wxPubAuthInfo.getAuthMsg(),
         Toast.LENGTH_SHORT).show();
