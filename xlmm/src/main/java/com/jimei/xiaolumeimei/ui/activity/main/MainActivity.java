@@ -76,6 +76,7 @@ public class MainActivity extends BaseActivity
   TextView tvPoint;
   TextView tvCoupon;
   TextView tvMoney;
+  TextView tvMoney1;
 
   List<Fragment> fragments;
   List<String> titles;
@@ -177,6 +178,26 @@ public class MainActivity extends BaseActivity
 
     imaMoney = (ImageView) llayout.findViewById(R.id.imgMoney);
     imaMoney.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        drawer.closeDrawers();
+        if (LoginUtils.checkLoginState(getApplicationContext())) {
+          Intent intent = new Intent(MainActivity.this, WalletActivity.class);
+          Bundle bundle = new Bundle();
+          bundle.putDouble("money", budgetCash);
+          intent.putExtras(bundle);
+          startActivity(intent);
+        } else {
+          Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+          Bundle bundle = new Bundle();
+          bundle.putString("login", "money");
+          intent.putExtras(bundle);
+          startActivity(intent);
+        }
+      }
+    });
+
+    tvMoney1 = (TextView) llayout.findViewById(R.id.tvMoney1);
+    tvMoney1.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
         drawer.closeDrawers();
         if (LoginUtils.checkLoginState(getApplicationContext())) {

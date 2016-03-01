@@ -38,6 +38,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
 import com.jimei.xiaolumeimei.model.ActivityModel;
+import com.jimei.xiaolumeimei.utils.BitmapUtil;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.mob.tools.utils.UIHandler;
@@ -684,7 +685,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
                 + "/Camera/"
                 + R.string.share_2dimen_pic_name
                 + ".jpg";
-            saveBitmap(b, fileName);
+            BitmapUtil.saveBitmap(b, fileName);
             Toast.makeText(WebViewActivity.this, R.string.share_2dimen_pic_tips,
                 Toast.LENGTH_SHORT).show();
           }
@@ -707,24 +708,5 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     return b;
   }
 
-  /** 保存方法 */
-  public void saveBitmap(Bitmap bm, String fileName) {
 
-    File f = new File(fileName);
-    if (f.exists()) {
-      f.delete();
-    }
-    try {
-      FileOutputStream out = new FileOutputStream(f);
-      bm.compress(Bitmap.CompressFormat.PNG, 90, out);
-      out.flush();
-      out.close();
-    } catch (FileNotFoundException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-  }
 }

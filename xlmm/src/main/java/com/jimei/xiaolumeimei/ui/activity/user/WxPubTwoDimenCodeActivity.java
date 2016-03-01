@@ -1,28 +1,27 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.widget.Toolbar;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 import butterknife.Bind;
-import cn.sharesdk.onekeyshare.OnekeyShare;
+import com.github.yoojia.zxing.qrcode.Encoder;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.data.FilePara;
-import com.jimei.xiaolumeimei.data.XlmmApi;
-import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.WxPubAuthInfo;
 import com.jimei.xiaolumeimei.model.UserModel;
-import com.jimei.xiaolumeimei.model.UserNewModel;
-import com.jimei.xiaolumeimei.okhttp.callback.FileParaCallback;
-import com.jimei.xiaolumeimei.utils.ViewUtils;
+import com.jimei.xiaolumeimei.utils.BitmapUtil;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
-import com.zhy.http.okhttp.OkHttpUtils;
-import java.io.File;
-import okhttp3.Call;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -36,8 +35,10 @@ public class WxPubTwoDimenCodeActivity extends BaseSwipeBackCompatActivity imple
   @Bind(R.id.img_2dimen) ImageView img_2dimen;
   @Bind(R.id.btn_save) Button btn_save;
 
-  String myurl ="";
   WxPubAuthInfo wxPubAuthInfo;
+  private Encoder mEncoder;
+  private DecodeTask mDecodeTask;
+  Bitmap bitmap;
 
   @Override protected void setListener() {
     btn_save.setOnClickListener(this);
@@ -60,6 +61,16 @@ public class WxPubTwoDimenCodeActivity extends BaseSwipeBackCompatActivity imple
   }
 
   @Override protected void initData() {
+    final int dimension = 400;
+    mEncoder = new Encoder.Builder()
+        .setBackgroundColor(0xFFFFFF) // 指定背景颜色，默认为白色
+        .setCodeColor(0xFF000000) // 指定编码块颜色，默认为黑色
+        .setOutputBitmapWidth(dimension) // 生成图片宽度
+        .setOutputBitmapHeight(dimension) // 生成图片高度
+        .setOutputBitmapPadding(0) // 设置为没有白边
+        .build();
+    mDecodeTask = new WxPubTwoDimenCodeActivity.DecodeTask();
+
     Subscription subscribe1 = UserModel.getInstance()
         .getWxPubAuthInfo()
         .subscribeOn(Schedulers.io())
@@ -67,7 +78,15 @@ public class WxPubTwoDimenCodeActivity extends BaseSwipeBackCompatActivity imple
           @Override public void onNext(WxPubAuthInfo wxpub) {
 
             if (wxpub != null) {
+              JUtils.Log(TAG,"wxPubAuthInfo:"+wxpub.toString());
               wxPubAuthInfo = wxpub;
+
+
+              JUtils.Log(TAG,"execute decode task");
+              //mDecodeTask.execute(wxPubAuthInfo.getAuthLink());
+              bitmap=mEncoder.encode(wxPubAuthInfo.getAuthLink());
+              bitmap = getNewBitMap(bitmap, wxPubAuthInfo.getAuthMsg());
+              img_2dimen.setImageBitmap(bitmap);
             }
           }
         });
@@ -88,7 +107,7 @@ public class WxPubTwoDimenCodeActivity extends BaseSwipeBackCompatActivity imple
   public void onClick(View v) {
     switch (v.getId()) {
       case R.id.btn_save:
-        JUtils.Log(TAG,"save 2 dimen code");
+        JUtils.Log(TAG,"btn_save save 2 dimen code");
         save_2dimencode();
         finish();
         break;
@@ -96,6 +115,48 @@ public class WxPubTwoDimenCodeActivity extends BaseSwipeBackCompatActivity imple
   }
 
   private void save_2dimencode(){
-
+    String fileName = Environment.getExternalStorageDirectory()
+        + "/"
+        + Environment.DIRECTORY_DCIM
+        + "/Camera/"
+        + R.string.wxpub_2dimen_pic_name
+        + ".jpg";
+    BitmapUtil.saveBitmap(bitmap, fileName);
+    Toast.makeText(WxPubTwoDimenCodeActivity.this, "保存成功，"+wxPubAuthInfo.getAuthMsg(),
+        Toast.LENGTH_SHORT).show();
   }
+
+  @Override
+  protected void onPostResume() {
+    super.onPostResume();
+    //mDecodeTask.execute(wxPubAuthInfo.getAuthLink());
+  }
+
+  private class DecodeTask extends AsyncTask<String, Void, Bitmap> {
+
+    @Override
+    protected Bitmap doInBackground(String... params) {
+      JUtils.Log(TAG,"encode");
+      return mEncoder.encode(params[0]);
+    }
+
+    @Override
+    protected void onPostExecute(Bitmap bitmap) {
+      JUtils.Log(TAG,"setImageBitmap");
+      img_2dimen.setImageBitmap(bitmap);
+    }
+  }
+
+  public Bitmap getNewBitMap(Bitmap bmp,String text) {
+    Bitmap newBitmap = Bitmap.createBitmap(500,500, Bitmap.Config.ARGB_4444);
+    Canvas canvas = new Canvas(newBitmap);
+    canvas.drawBitmap(bmp, 0, 50, null);
+    TextPaint textPaint = new TextPaint();
+    textPaint.setAntiAlias(true);
+    textPaint.setTextSize(30.0F);
+      StaticLayout sl= new StaticLayout(text, textPaint, newBitmap.getWidth()-8, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+      canvas.translate(6, 410);
+      sl.draw(canvas);
+      return newBitmap;
+    }
 }
