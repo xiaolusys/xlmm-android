@@ -343,7 +343,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         totalPrice.setText("¥" + bigDecimal);
         totalPrice_all.setText("合计: ¥" + bigDecimal1);
         jiehsneg.setText("已节省" + coupon_price);
-        tv_coupon.setText("已经选择" + coupon_price + "元优惠券");
+        tv_coupon.setText(coupon_price + "元优惠券");
 
         JUtils.Log(TAG, coupon_id);
         model.getCartsInfoList(ids, coupon_id)
