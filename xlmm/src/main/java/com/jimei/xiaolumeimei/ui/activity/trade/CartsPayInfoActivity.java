@@ -425,7 +425,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
     super.onResume();
 
-    if (isSelectAddress) {
+    if (isSelectAddress && chooseAddress != null) {
 
       chooseAddress.setVisibility(View.INVISIBLE);
 
@@ -444,7 +444,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
           .subscribe(new ServiceResponse<List<AddressBean>>() {
             @Override public void onNext(List<AddressBean> list) {
               super.onNext(list);
-              if (list != null) {
+              if (list != null && chooseAddress != null) {
                 chooseAddress.setVisibility(View.INVISIBLE);
 
                 name.setVisibility(View.VISIBLE);
@@ -472,7 +472,9 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
             @Override public void onError(Throwable e) {
               super.onError(e);
-              chooseAddress.setVisibility(View.VISIBLE);
+              if (chooseAddress != null) {
+                chooseAddress.setVisibility(View.VISIBLE);
+              }
               name.setVisibility(View.INVISIBLE);
               phone.setVisibility(View.INVISIBLE);
               addressDetails.setVisibility(View.INVISIBLE);
