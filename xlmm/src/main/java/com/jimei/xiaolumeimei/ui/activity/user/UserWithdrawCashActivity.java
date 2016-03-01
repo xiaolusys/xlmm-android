@@ -15,7 +15,9 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AgentInfoBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.entities.UserWithdrawResult;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
+import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.model.UserNewModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaWithdrawCashHistoryActivity;
@@ -42,15 +44,23 @@ public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.rl_has_cash) RelativeLayout rl_has_cash;
   @Bind(R.id.rl_not_enough_cash) RelativeLayout rl_not_enough_cash;
   @Bind(R.id.tv_reminder) TextView tv_reminder;
+  @Bind(R.id.btn_withdraw) Button btn_withdraw;
+  @Bind(R.id.img_dec) ImageView img_dec;
+  @Bind(R.id.img_inc) ImageView img_inc;
+  @Bind(R.id.tv_wxnickname) TextView tv_wxnickname;
+  @Bind(R.id.tx_num) TextView tv_num;
 
   double money;
-  float withdraw_cash_fund = 0;
+  double withdraw_cash_fund = 0;
+  int withdraw_packet_num = 1;
   private Subscription subscribe;
 
   @Override protected void setListener() {
     btn_bindwx.setOnClickListener(this);
     btn_buy.setOnClickListener(this);
-
+    btn_withdraw.setOnClickListener(this);
+    img_dec.setOnClickListener(this);
+    img_inc.setOnClickListener(this);
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -85,9 +95,11 @@ public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
               if (null != userNewBean.getUserBudget()) {
                 money = userNewBean.getUserBudget().getBudgetCash();
               }
-              tv_reminder.setText(Math.round(money *100)/100 + "");
+              tv_reminder.setText((float)(Math.round(money *100))/100 + "元");
 
               if(userNewBean.getIsAttentionPublic() == 1) {
+                btn_bindwx.setVisibility(View.INVISIBLE);
+                tv_wxnickname.setText("已关注");
                 if (Double.compare(money, MAX_WITHDROW_MONEY_EACH_TIME) > 0) {
                   rl_unbindwx.setVisibility(View.INVISIBLE);
                   rl_not_enough_cash.setVisibility(View.INVISIBLE);
@@ -122,7 +134,7 @@ public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
     switch (v.getId()) {
       case R.id.btn_bindwx:
         JUtils.Log(TAG, "bind wx now");
-        //startActivity(new Intent(MamaWithdrawCashActivity.this, MainActivity.class));
+        startActivity(new Intent(UserWithdrawCashActivity.this, WxPubTwoDimenCodeActivity.class));
         finish();
         break;
       case R.id.btn_buy:
@@ -130,38 +142,63 @@ public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
         startActivity(new Intent(UserWithdrawCashActivity.this, MainActivity.class));
         finish();
         break;
+      case R.id.btn_withdraw:
+        JUtils.Log(TAG, "withdraw now");
+        withdraw_cash_fund = withdraw_packet_num * MAX_WITHDROW_MONEY_EACH_TIME;
+        withdraw_cash((float)withdraw_cash_fund);
+
+        break;
+
+      case R.id.img_inc:
+        JUtils.Log(TAG, "inc now");
+        if(Math.round(money / MAX_WITHDROW_MONEY_EACH_TIME) > withdraw_packet_num) {
+          withdraw_packet_num++;
+          tv_num.setText(""+withdraw_packet_num);
+        }
+
+        break;
+
+      case R.id.img_dec:
+        JUtils.Log(TAG, "dec now");
+        if(withdraw_packet_num > 1){
+          withdraw_packet_num--;
+          tv_num.setText(""+withdraw_packet_num);
+        }
+
+        break;
 
     }
   }
 
 
   private void withdraw_cash(float fund) {
-    String fund_type = "";
 
     JUtils.Log(TAG, "withdraw cash =" + fund);
-    if ((Float.compare(fund, 100) != 0) && (Float.compare(fund, 200) != 0)) {
-      JUtils.Toast("提现金额不够。");
-    } else {
-      if (Float.compare(fund, 100) == 0) {
-        fund_type = "c1";
-      } else if (Float.compare(fund, 200) == 0) {
-        fund_type = "c2";
-      }
-
-      subscribe = MamaInfoModel.getInstance()
-          .withdraw_cash(fund_type)
+      subscribe = UserModel.getInstance()
+          .user_withdraw_cash(Float.toString(fund))
           .subscribeOn(Schedulers.newThread())
-          .subscribe(new ServiceResponse<ResponseBody>() {
-            @Override public void onNext(ResponseBody resp) {
-              JUtils.Log(TAG, "ResponseBody11=" + resp.toString());
-              Intent intent =
-                  new Intent(UserWithdrawCashActivity.this, MamaWithdrawCashResultActivity
-                      .class);
-              intent.putExtra("cash", fund);
-              startActivity(intent);
+          .subscribe(new ServiceResponse<UserWithdrawResult>() {
+            @Override public void onNext(UserWithdrawResult resp) {
+              switch (resp.getCode()){
+                case 0:
+                  JUtils.Log(TAG, "SUCCESS");
+                  JUtils.Toast(resp.getMessage());
+                  finish();
+                  break;
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                  JUtils.Log(TAG, "failed:"+resp.getCode());
+                  JUtils.Toast(resp.getMessage());
+                  break;
+
+              }
+
             }
           });
-    }
+      addSubscription(subscribe);
   }
 
   @Override protected void onStop() {

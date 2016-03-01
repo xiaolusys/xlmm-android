@@ -14,10 +14,12 @@ import com.jimei.xiaolumeimei.entities.SmsLoginUserBean;
 import com.jimei.xiaolumeimei.entities.UserAccountBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.entities.UserWithdrawResult;
 import com.jimei.xiaolumeimei.entities.WxLogininfoBean;
 import com.jimei.xiaolumeimei.entities.WxPubAuthInfo;
 import com.jimei.xiaolumeimei.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
+import com.squareup.okhttp.ResponseBody;
 import rx.Observable;
 
 /**
@@ -197,6 +199,13 @@ public class UserModel {
   public Observable<WxPubAuthInfo> getWxPubAuthInfo() {
     return XlmmRetrofitClient.getService()
         .getWxPubAuthInfo()
+        .compose(new DefaultTransform<>());
+  }
+
+  //普通用户提现
+  public Observable<UserWithdrawResult> user_withdraw_cash(String amount) {
+    return XlmmRetrofitClient.getService()
+        .user_withdraw_cash(amount)
         .compose(new DefaultTransform<>());
   }
 }
