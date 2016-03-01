@@ -505,8 +505,11 @@ public class MainActivity extends BaseActivity
           }
 
           @Override public void onNext(CouponBean couponBean) {
-            if (couponBean != null) {
+            if ((couponBean != null) && (tvCoupon != null)) {
               tvCoupon.setText(couponBean.getCount() + "");
+            }
+            else{
+              JUtils.Log(TAG, "err:" + (tvCoupon == null));
             }
           }
         });
