@@ -215,8 +215,6 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                       startActivity(intent);
                       finish();
                     }else if (login.equals("productdetail")) {
-                      Intent intent = new Intent(mContext, ProductDetailActvity.class);
-                      startActivity(intent);
                       finish();
                     }
                   } else if (2 == user.getCode()) {
