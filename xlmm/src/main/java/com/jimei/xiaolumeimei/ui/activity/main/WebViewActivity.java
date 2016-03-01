@@ -2,9 +2,11 @@ package com.jimei.xiaolumeimei.ui.activity.main;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Picture;
+import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
@@ -683,11 +685,17 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
                 + "/"
                 + Environment.DIRECTORY_DCIM
                 + "/Camera/"
-                + R.string.share_2dimen_pic_name
+                + getResources().getString(R.string.share_2dimen_pic_name)
                 + ".jpg";
             BitmapUtil.saveBitmap(b, fileName);
             Toast.makeText(WebViewActivity.this, R.string.share_2dimen_pic_tips,
                 Toast.LENGTH_SHORT).show();
+
+            File file = new File(fileName);
+            Uri uri = Uri.fromFile(file);
+            // 通知图库更新
+            Intent scannerIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
+            sendBroadcast(scannerIntent);
           }
         });
         w.setPictureListener(new WebView.PictureListener() {

@@ -2,6 +2,8 @@ package com.jimei.xiaolumeimei.ui.activity.user;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -19,6 +21,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.WxPubAuthInfo;
 import com.jimei.xiaolumeimei.model.UserModel;
+import com.jimei.xiaolumeimei.rx.RXDownLoadImage;
 import com.jimei.xiaolumeimei.utils.BitmapUtil;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
@@ -108,8 +111,13 @@ public class WxPubTwoDimenCodeActivity extends BaseSwipeBackCompatActivity imple
     switch (v.getId()) {
       case R.id.btn_save:
         JUtils.Log(TAG,"btn_save save 2 dimen code");
-        save_2dimencode();
-        finish();
+        //RXDownLoadImage.saveImage2File(this, bitmap);
+
+            save_2dimencode();
+
+        Toast.makeText(WxPubTwoDimenCodeActivity.this, "保存成功，"+wxPubAuthInfo
+          .getAuthMsg(), Toast.LENGTH_SHORT).show();
+
         break;
     }
   }
@@ -119,12 +127,11 @@ public class WxPubTwoDimenCodeActivity extends BaseSwipeBackCompatActivity imple
         + "/"
         + Environment.DIRECTORY_DCIM
         + "/Camera/"
-        + R.string.wxpub_2dimen_pic_name
+        + getResources().getString(R.string.wxpub_2dimen_pic_name)
         + ".jpg";
     JUtils.Log(TAG,"filename:"+fileName);
     BitmapUtil.saveBitmap(bitmap, fileName);
-    Toast.makeText(WxPubTwoDimenCodeActivity.this, "保存成功，"+wxPubAuthInfo.getAuthMsg(),
-        Toast.LENGTH_SHORT).show();
+
   }
 
   @Override
@@ -149,8 +156,12 @@ public class WxPubTwoDimenCodeActivity extends BaseSwipeBackCompatActivity imple
   }
 
   public Bitmap getNewBitMap(Bitmap bmp,String text) {
+    Paint paint = new Paint();
+    paint.setColor(Color.WHITE);
+
     Bitmap newBitmap = Bitmap.createBitmap(500,500, Bitmap.Config.ARGB_4444);
     Canvas canvas = new Canvas(newBitmap);
+    canvas.drawRect(0, 0, 500, 500, paint);
     canvas.drawBitmap(bmp, 50, 0, null);
     TextPaint textPaint = new TextPaint();
     textPaint.setAntiAlias(true);

@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
+import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.utils.BitmapUtil;
+import com.jude.utils.JUtils;
 import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -37,7 +40,7 @@ public class RXDownLoadImage {
         subscriber.onCompleted();
       }
     }).flatMap(bitmap -> {
-      File appDir = new File(Environment.getExternalStorageDirectory(), "XlMMImage");
+      File appDir = new File(Environment.getExternalStorageDirectory(), "xlmm/img");
       if (!appDir.exists()) {
         appDir.mkdir();
       }
@@ -60,4 +63,5 @@ public class RXDownLoadImage {
       return Observable.just(uri);
     }).subscribeOn(Schedulers.io());
   }
+
 }
