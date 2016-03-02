@@ -29,7 +29,6 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
   @Bind(R.id.shoppinglist_xry) XRecyclerView shoppinglistXry;
   private int page = 2;
   private ShoppingListAdapter adapter;
-  private Subscription subscribe;
 
   @Override protected void setListener() {
 
@@ -37,7 +36,7 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
 
   @Override protected void initData() {
 
-     subscribe = MMProductModel.getInstance()
+  Subscription  subscribe = MMProductModel.getInstance()
         .getShoppingList("1")
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ShoppingListBean>() {
@@ -50,6 +49,7 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
             }
           }
         });
+    addSubscription(subscribe);
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -91,7 +91,7 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
       }
 
       private void loadMoreData(String page) {
-         subscribe = MMProductModel.getInstance()
+        Subscription subscribe = MMProductModel.getInstance()
             .getShoppingList(page)
             .subscribeOn(Schedulers.io())
             .subscribe(new ServiceResponse<ShoppingListBean>() {
@@ -113,8 +113,10 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
                 shoppinglistXry.post(shoppinglistXry::loadMoreComplete);
               }
             });
+        addSubscription(subscribe);
       }
     });
+
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
@@ -127,8 +129,6 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
 
   @Override protected void onStop() {
     super.onStop();
-    if (subscribe != null && subscribe.isUnsubscribed()) {
-      subscribe.unsubscribe();
-    }
+
   }
 }

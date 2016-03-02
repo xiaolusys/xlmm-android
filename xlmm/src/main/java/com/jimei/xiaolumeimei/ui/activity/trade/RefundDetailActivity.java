@@ -25,6 +25,7 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import java.util.ArrayList;
 import java.util.List;
+import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 public class RefundDetailActivity extends BaseSwipeBackCompatActivity
@@ -105,7 +106,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
   //从server端获得所有订单数据，可能要查询几次
   @Override protected void initData() {
     JUtils.Log(TAG, "initData goods_id "+ goods_id);
-    model.getRefundDetailBean(goods_id)
+  Subscription subscription = model.getRefundDetailBean(goods_id)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<AllRefundsBean.ResultsEntity>() {
           @Override public void onNext(AllRefundsBean.ResultsEntity refundDetailBean) {
@@ -140,6 +141,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
             super.onError(e);
           }
         });
+    addSubscription(subscription);
   }
 
   @Override protected boolean toggleOverridePendingTransition() {

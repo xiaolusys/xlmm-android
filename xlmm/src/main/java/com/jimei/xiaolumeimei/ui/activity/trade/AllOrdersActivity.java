@@ -20,6 +20,7 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 
 import java.util.List;
+import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 public class AllOrdersActivity extends BaseSwipeBackCompatActivity
@@ -65,7 +66,7 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity
 
   //从server端获得所有订单数据，可能要查询几次
   private void initOrderData() {
-    model.getAlloderBean()
+   Subscription subscription = model.getAlloderBean()
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<AllOrdersBean>() {
           @Override public void onNext(AllOrdersBean allOrdersBean) {
@@ -93,6 +94,7 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity
             super.onError(e);
           }
         });
+    addSubscription(subscription);
   }
 
   @Override protected boolean toggleOverridePendingTransition() {

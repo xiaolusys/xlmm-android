@@ -10,7 +10,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
  *
  * Copyright 2015年 上海己美. All rights reserved.
  */
-public class WashingIntrductionActivity extends BaseSwipeBackCompatActivity{
+public class WashingIntrductionActivity extends BaseSwipeBackCompatActivity {
 
   @Override protected void setListener() {
 

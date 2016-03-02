@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 /**
@@ -111,7 +112,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   }
 
   private void downLoadCartsInfo() {
-    model.getCartsInfoList(ids)
+   Subscription subscription =  model.getCartsInfoList(ids)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<CartsPayinfoBean>() {
           @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
@@ -168,6 +169,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             }
           }
         });
+    addSubscription(subscription);
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -246,8 +248,9 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             payment + "    " + post_fee + "    " +
             discount_fee + "    " + total_fee + "    " + uuid);
 
-    tradeModel.shoppingcart_create(cart_ids, addr_id, pay_method, payment, post_fee,
-        discount_fee, total_fee, uuid)
+   Subscription subscription =  tradeModel.shoppingcart_create(cart_ids, addr_id,
+        pay_method, payment,
+        post_fee, discount_fee, total_fee, uuid)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ResponseBody>() {
           @Override public void onNext(ResponseBody responseBody) {
@@ -267,6 +270,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             }
           }
         });
+    addSubscription(subscription);
   }
 
   private void payWithCoupon(String pay_method) {
@@ -274,7 +278,9 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     BigDecimal bd = new BigDecimal((paymentInfo - coupon_price));
     double bigDecimal = bd.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 
-    tradeModel.shoppingcart_create_with_coupon(cart_ids, addr_id, pay_method,
+  Subscription subscription =   tradeModel.shoppingcart_create_with_coupon(cart_ids,
+        addr_id,
+        pay_method,
         bigDecimal + "", post_fee, discount_fee, total_fee, uuid, coupon_id)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ResponseBody>() {
@@ -298,6 +304,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             super.onError(e);
           }
         });
+    addSubscription(subscription);
   }
 
   @Override
@@ -346,7 +353,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         tv_coupon.setText(coupon_price + "元优惠券");
 
         JUtils.Log(TAG, coupon_id);
-        model.getCartsInfoList(ids, coupon_id)
+       Subscription subscription = model.getCartsInfoList(ids, coupon_id)
             .subscribeOn(Schedulers.newThread())
             .subscribe(new ServiceResponse<CartsPayinfoBean>() {
               @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
@@ -373,6 +380,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 }
               }
             });
+        addSubscription(subscription);
       }
     }
 
@@ -439,7 +447,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
       addr_id = addr_idSelect;
     } else {
-      addressModel.getAddressList()
+     Subscription subscription = addressModel.getAddressList()
           .subscribeOn(Schedulers.io())
           .subscribe(new ServiceResponse<List<AddressBean>>() {
             @Override public void onNext(List<AddressBean> list) {
@@ -481,6 +489,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
               isHaveAddress = false;
             }
           });
+      addSubscription(subscription);
     }
   }
 }

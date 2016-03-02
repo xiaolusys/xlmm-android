@@ -28,7 +28,6 @@ public class ChildListFragment extends BaseFragment {
   private XRecyclerView xRecyclerView;
   private ChildListAdapter mChildListAdapter;
   private RotateLoading loading;
-  private Subscription subscribe;
   //private TextView mNormal, mOrder;
 
   @Override protected int provideContentViewId() {
@@ -37,7 +36,7 @@ public class ChildListFragment extends BaseFragment {
 
   @Override protected void initData() {
     loading.start();
-    subscribe = ProductModel.getInstance()
+    Subscription subscribe = ProductModel.getInstance()
         .getChildList(1, 10)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<ChildListBean>() {
@@ -59,6 +58,8 @@ public class ChildListFragment extends BaseFragment {
             loading.post(loading::stop);
           }
         });
+
+    addSubscription(subscribe);
   }
 
   @Override protected void initViews() {
@@ -85,7 +86,7 @@ public class ChildListFragment extends BaseFragment {
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
       @Override public void onRefresh() {
-        subscribe = ProductModel.getInstance()
+        Subscription subscribe = ProductModel.getInstance()
             .getChildList(1, page * page_size)
             .subscribeOn(Schedulers.newThread())
             .subscribe(new ServiceResponse<ChildListBean>() {
@@ -99,6 +100,8 @@ public class ChildListFragment extends BaseFragment {
                 xRecyclerView.post(xRecyclerView::refreshComplete);
               }
             });
+
+        addSubscription(subscribe);
       }
 
       @Override public void onLoadMore() {
@@ -115,7 +118,7 @@ public class ChildListFragment extends BaseFragment {
 
   private void loadMoreData(int page, int page_size) {
 
-    subscribe = ProductModel.getInstance()
+    Subscription subscribe = ProductModel.getInstance()
         .getChildList(page, page_size)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<ChildListBean>() {
@@ -129,12 +132,11 @@ public class ChildListFragment extends BaseFragment {
             xRecyclerView.post(xRecyclerView::loadMoreComplete);
           }
         });
+
+    addSubscription(subscribe);
   }
 
   @Override public void onStop() {
     super.onStop();
-    if (subscribe != null && subscribe.isUnsubscribed()) {
-      subscribe.unsubscribe();
-    }
   }
 }

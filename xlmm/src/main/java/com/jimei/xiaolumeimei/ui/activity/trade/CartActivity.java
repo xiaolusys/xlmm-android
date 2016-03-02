@@ -31,6 +31,7 @@ import com.zhy.autolayout.utils.AutoUtils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 /**
@@ -178,7 +179,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
   @Override protected void onResume() {
     super.onResume();
 
-    model.getCartsList()
+  Subscription subscription =  model.getCartsList()
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
           @Override public void onNext(List<CartsinfoBean> cartsinfoBeans) {
@@ -200,7 +201,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                 s = apendString(sb);
               }
 
-              model.getCartsInfoList(s)
+            Subscription subscription1 =   model.getCartsInfoList(s)
                   .subscribeOn(Schedulers.newThread())
                   .subscribe(new ServiceResponse<CartsPayinfoBean>() {
                     @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
@@ -219,6 +220,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                       }
                     }
                   });
+              addSubscription(subscription1);
             } else {
               emptyContent.setVisibility(View.VISIBLE);
               goMain.setOnClickListener(new View.OnClickListener() {
@@ -230,6 +232,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
             }
           }
         });
+    addSubscription(subscription);
   }
 
   //内部Recycler Adapter类
@@ -282,7 +285,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
       holder.add.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View v) {
 
-          model.plus_product_carts(cartsinfoBean.getId())
+        Subscription subscription =   model.plus_product_carts(cartsinfoBean.getId())
               .subscribeOn(Schedulers.io())
               .subscribe(new ServiceResponse<ResponseBody>() {
                 @Override public void onNext(ResponseBody responseBody) {
@@ -301,6 +304,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                   JUtils.Toast("该商品库存已经不足");
                 }
               });
+          addSubscription(subscription);
         }
       });
 
@@ -309,7 +313,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
           @Override public void onClick(View v) {
             if (Integer.parseInt(cartsinfoBean.getNum()) > 1) {
 
-              model.minus_product_carts(cartsinfoBean.getId())
+              Subscription subscription = model.minus_product_carts(cartsinfoBean.getId())
                   .subscribeOn(Schedulers.io())
                   .subscribe(new ServiceResponse<ResponseBody>() {
                     @Override public void onNext(ResponseBody responseBody) {
@@ -318,6 +322,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                       getCartsInfo(position);
                     }
                   });
+              addSubscription(subscription);
             } else {
               new MaterialDialog.Builder(CartActivity.this).
                   title("删除商品").
@@ -326,16 +331,18 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                   negativeText("取消").
                   callback(new MaterialDialog.ButtonCallback() {
                     @Override public void onPositive(MaterialDialog dialog) {
-                      model.delete_carts(cartsinfoBean.getId())
-                          .subscribeOn(Schedulers.io())
-                          .subscribe(new ServiceResponse<ResponseBody>() {
-                            @Override public void onNext(ResponseBody responseBody) {
-                              super.onNext(responseBody);
-                              removeAt(position);
+                      Subscription subscription =
+                          model.delete_carts(cartsinfoBean.getId())
+                              .subscribeOn(Schedulers.io())
+                              .subscribe(new ServiceResponse<ResponseBody>() {
+                                @Override public void onNext(ResponseBody responseBody) {
+                                  super.onNext(responseBody);
+                                  removeAt(position);
 
-                              getCartsInfo();
-                            }
-                          });
+                                  getCartsInfo();
+                                }
+                              });
+                      addSubscription(subscription);
                       dialog.dismiss();
 
                       startActivity(new Intent(CartActivity.this, CartActivity.class));
@@ -354,7 +361,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
           @Override public void onClick(View v) {
             if (Integer.parseInt(cartsinfoBean.getNum()) > 1) {
 
-              model.minus_product_carts(cartsinfoBean.getId())
+            Subscription subscription  =  model.minus_product_carts(cartsinfoBean.getId())
                   .subscribeOn(Schedulers.io())
                   .subscribe(new ServiceResponse<ResponseBody>() {
                     @Override public void onNext(ResponseBody responseBody) {
@@ -363,6 +370,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                       getCartsInfo(position);
                     }
                   });
+              addSubscription(subscription);
             } else {
               oneDelete();
             }
@@ -376,7 +384,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                 negativeText("取消").
                 callback(new MaterialDialog.ButtonCallback() {
                   @Override public void onPositive(MaterialDialog dialog) {
-                    model.delete_carts(cartsinfoBean.getId())
+                  Subscription subscription =  model.delete_carts(cartsinfoBean.getId())
                         .subscribeOn(Schedulers.io())
                         .subscribe(new ServiceResponse<ResponseBody>() {
                           @Override public void onNext(ResponseBody responseBody) {
@@ -386,6 +394,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                             getCartsInfo();
                           }
                         });
+                    addSubscription(subscription);
                     dialog.dismiss();
                   }
 
@@ -399,7 +408,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
     }
 
     private void getCartsInfo(int position) {
-      model.getCartsList()
+     Subscription subscription = model.getCartsList()
           .subscribeOn(Schedulers.io())
           .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
             @Override public void onNext(List<CartsinfoBean> list) {
@@ -413,7 +422,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                 s = apendString(sb);
               }
 
-              model.getCartsInfoList(s)
+             Subscription subscription1 =  model.getCartsInfoList(s)
                   .subscribeOn(Schedulers.newThread())
                   .subscribe(new ServiceResponse<CartsPayinfoBean>() {
                     @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
@@ -435,13 +444,15 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                     }
                   });
 
+              addSubscription(subscription1);
               notifyItemChanged(position);
             }
           });
+      addSubscription(subscription);
     }
 
     private void getCartsInfo() {
-      model.getCartsList()
+     Subscription subscription = model.getCartsList()
           .subscribeOn(Schedulers.io())
           .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
             @Override public void onNext(List<CartsinfoBean> list) {
@@ -478,6 +489,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                   });
             }
           });
+      addSubscription(subscription);
     }
 
     @Override public int getItemCount() {
