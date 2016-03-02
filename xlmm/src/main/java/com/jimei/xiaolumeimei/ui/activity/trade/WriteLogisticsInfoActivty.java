@@ -16,6 +16,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.squareup.okhttp.ResponseBody;
+import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 /**
@@ -109,8 +110,8 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity imple
     Log.i(TAG,"commit_logistics_info goods_id  "+ goods_id + " "+company +" "
         + ""+et_logistics_number.getText().toString
         ().trim());
-    model.commit_logistics_info(goods_id, company,et_logistics_number.getText().toString
-        ().trim() )
+  Subscription subscription = model.commit_logistics_info(goods_id, company,
+        et_logistics_number.getText().toString().trim())
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<ResponseBody>() {
           @Override public void onNext(ResponseBody resp) {

@@ -32,7 +32,6 @@ public class TongkuanActivity extends BaseSwipeBackCompatActivity {
   private TongkuanAdapter mTongkuanAdapter;
   private int model_id;
   private String name = null;
-  private Subscription subscribe;
 
   @Override protected void setListener() {
 
@@ -40,7 +39,7 @@ public class TongkuanActivity extends BaseSwipeBackCompatActivity {
 
   @Override protected void initData() {
     loading.start();
-     subscribe = ProductModel.getInstance()
+   Subscription  subscribe = ProductModel.getInstance()
         .getTongkuanList(model_id)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<List<ProductBean>>() {
@@ -59,6 +58,8 @@ public class TongkuanActivity extends BaseSwipeBackCompatActivity {
             loading.post(loading::stop);
           }
         });
+
+    addSubscription(subscribe);
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -99,9 +100,5 @@ public class TongkuanActivity extends BaseSwipeBackCompatActivity {
 
   @Override protected void onStop() {
     super.onStop();
-    if (subscribe != null && subscribe.isUnsubscribed()) {
-      subscribe.unsubscribe();
-
-    }
   }
 }

@@ -699,5 +699,10 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
   @Override protected void onStop() {
     super.onStop();
   }
+
+  @Override protected void onDestroy() {
+    super.onDestroy();
+    JUtils.Log(TAG, "onDestroy()");
+  }
 }
 

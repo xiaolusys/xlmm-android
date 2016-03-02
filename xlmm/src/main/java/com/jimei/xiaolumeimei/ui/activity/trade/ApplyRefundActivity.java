@@ -22,6 +22,7 @@ import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.squareup.okhttp.ResponseBody;
+import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
@@ -154,9 +155,10 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
   }
 
   private void commit_apply(){
-    model.refund_create(goods_info.getId(), XlmmConst.get_reason_num(reason), num,
-        apply_fee, desc,
-        proof_pic)
+   Subscription subscription = model.refund_create(goods_info.getId(), XlmmConst
+            .get_reason_num
+            (reason),
+        num, apply_fee, desc, proof_pic)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<ResponseBody>() {
           @Override public void onNext(ResponseBody resp) {
@@ -177,6 +179,7 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
             super.onError(e);
           }
         });
+    addSubscription(subscription);
   }
 
   private void chooseReason(){

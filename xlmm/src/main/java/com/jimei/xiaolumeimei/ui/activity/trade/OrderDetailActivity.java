@@ -30,6 +30,7 @@ import com.squareup.okhttp.ResponseBody;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 public class OrderDetailActivity extends BaseSwipeBackCompatActivity
@@ -77,7 +78,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     order_id = getIntent().getExtras().getInt("orderinfo");
     source = getIntent().getExtras().getString("source");
 
-    tradeModel.getOrderDetailBean(order_id)
+  Subscription subscription = tradeModel.getOrderDetailBean(order_id)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<OrderDetailBean>() {
           @Override public void onNext(OrderDetailBean orderDetailBean) {
@@ -101,6 +102,8 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
             super.onError(e);
           }
         });
+    addSubscription(subscription);
+
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
@@ -234,7 +237,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
 
 
   private void payNow(){
-    tradeModel.shoppingcart_paynow(order_id)
+  Subscription subscription =  tradeModel.shoppingcart_paynow(order_id)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ResponseBody>() {
           @Override public void onNext(ResponseBody responseBody) {
@@ -267,12 +270,12 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
             super.onError(e);
           }
         });
-
+addSubscription(subscription);
   }
 
   private void cancel_order(){
     JUtils.Log(TAG,"cancel_order " + order_id);
-    tradeModel.delRefund(order_id)
+  Subscription subscription =  tradeModel.delRefund(order_id)
             .subscribeOn(Schedulers.io())
             .subscribe(new ServiceResponse<ResponseBody>() {
               @Override public void onNext(ResponseBody responseBody) {
@@ -297,7 +300,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                 super.onError(e);
               }
             });
-
+addSubscription(subscription);
   }
 
   @Override

@@ -41,6 +41,7 @@ import com.squareup.okhttp.ResponseBody;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import org.json.JSONObject;
+import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener{
@@ -258,9 +259,22 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
   }
 
   private void commit_apply(){
-    Log.i(TAG,"commit_apply "+ goods_info.getId() + " " + reason + " "+ num + " "+ apply_fee
-          + " " + desc + " "+ proof_pic);
-    model.refund_create(goods_info.getId(), XlmmConst.get_reason_num(reason), num, apply_fee, desc, proof_pic)
+    Log.i(TAG, "commit_apply "
+        + goods_info.getId()
+        + " "
+        + reason
+        + " "
+        + num
+        + " "
+        + apply_fee
+        + " "
+        + desc
+        + " "
+        + proof_pic);
+   Subscription subscription =  model.refund_create(goods_info.getId(), XlmmConst
+            .get_reason_num
+            (reason),
+        num, apply_fee, desc, proof_pic)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<ResponseBody>() {
           @Override public void onNext(ResponseBody resp) {
@@ -282,6 +296,7 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
             super.onError(e);
           }
         });
+    addSubscription(subscription);
   }
 
   private void chooseReason(){
@@ -468,7 +483,7 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
   }
 
   private void getQiniuToken(){
-    model.getQiniuToken()
+   Subscription subscription =  model.getQiniuToken()
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<QiniuTokenBean>() {
           @Override public void onNext(QiniuTokenBean resp) {
@@ -488,6 +503,7 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
             super.onError(e);
           }
         });
+    addSubscription(subscription);
   }
 
   private void uploadFile(File file){

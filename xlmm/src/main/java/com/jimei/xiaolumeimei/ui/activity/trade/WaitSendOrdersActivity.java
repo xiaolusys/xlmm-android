@@ -23,6 +23,7 @@ import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jude.utils.JUtils;
 
 import butterknife.Bind;
+import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 
@@ -66,7 +67,7 @@ public class WaitSendOrdersActivity extends BaseSwipeBackCompatActivity implemen
     }
     //从server端获得所有订单数据，可能要查询几次
     private  void initOrderData() {
-        model.getWaitSendOrdersBean()
+     Subscription subscription =  model.getWaitSendOrdersBean()
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(new ServiceResponse<AllOrdersBean>() {
                     @Override public void onNext(AllOrdersBean allOrdersBean) {
@@ -94,6 +95,7 @@ public class WaitSendOrdersActivity extends BaseSwipeBackCompatActivity implemen
                         super.onError(e);
                     }
                 });
+        addSubscription(subscription);
     }
 
     @Override protected boolean toggleOverridePendingTransition() {

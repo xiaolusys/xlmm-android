@@ -75,7 +75,6 @@ public class TodayFragment extends BaseFragment {
   private SharedPreferences sharedPreferences;
   private String cookies;
   private String domain;
-  private Subscription subscribe;
 
   @Override protected int provideContentViewId() {
     return R.layout.today_fragment;
@@ -83,7 +82,7 @@ public class TodayFragment extends BaseFragment {
 
   @Override protected void initData() {
     loading.start();
-    subscribe = ProductModel.getInstance()
+    Subscription subscribe1 = ProductModel.getInstance()
         .getTodayList(1, 10)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ProductListBean>() {
@@ -105,6 +104,8 @@ public class TodayFragment extends BaseFragment {
             loading.post(loading::stop);
           }
         });
+
+    addSubscription(subscribe1);
     if (null != countTime) {
       long remainTime = countTime.getRemainTime();
       JUtils.Log(TAG, remainTime + "");
@@ -136,7 +137,7 @@ public class TodayFragment extends BaseFragment {
 
     xRecyclerView.addHeaderView(head);
 
-    subscribe = ProductModel.getInstance()
+    Subscription subscribe2 = ProductModel.getInstance()
         .getTodayPost()
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<PostBean>() {
@@ -287,12 +288,14 @@ public class TodayFragment extends BaseFragment {
           }
         });
 
+    addSubscription(subscribe2);
+
     mTodayAdapter = new TodayAdapter(getActivity());
     xRecyclerView.setAdapter(mTodayAdapter);
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
       @Override public void onRefresh() {
-        subscribe = ProductModel.getInstance()
+        Subscription subscribe3 = ProductModel.getInstance()
             .getTodayList(1, page * page_size)
             .subscribeOn(Schedulers.newThread())
             .subscribe(new ServiceResponse<ProductListBean>() {
@@ -307,6 +310,7 @@ public class TodayFragment extends BaseFragment {
                 xRecyclerView.post(xRecyclerView::refreshComplete);
               }
             });
+        addSubscription(subscribe3);
       }
 
       @Override public void onLoadMore() {
@@ -323,7 +327,7 @@ public class TodayFragment extends BaseFragment {
 
   private void loadMoreData(int page, int page_size) {
 
-    subscribe = ProductModel.getInstance()
+    Subscription subscribe4 = ProductModel.getInstance()
         .getTodayList(page, page_size)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<ProductListBean>() {
@@ -337,6 +341,8 @@ public class TodayFragment extends BaseFragment {
             xRecyclerView.post(xRecyclerView::loadMoreComplete);
           }
         });
+
+    addSubscription(subscribe4);
   }
 
   @Override public void onDestroy() {
@@ -371,7 +377,7 @@ public class TodayFragment extends BaseFragment {
     super.onResume();
     countTime = (CountdownView) head.findViewById(R.id.countTime);
 
-    subscription = Observable.timer(1, 1, TimeUnit.SECONDS)
+    Subscription subscription = Observable.timer(1, 1, TimeUnit.SECONDS)
         .map(aLong -> calcLeftTime())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribeOn(Schedulers.io())
@@ -384,16 +390,14 @@ public class TodayFragment extends BaseFragment {
             }
           }
         });
+
+    addSubscription(subscription);
   }
 
   @Override public void onStop() {
     super.onStop();
     if (subscription != null && subscription.isUnsubscribed()) {
       subscription.unsubscribe();
-    }
-
-    if (subscribe != null && subscribe.isUnsubscribed()) {
-      subscribe.unsubscribe();
     }
   }
 
@@ -410,6 +414,5 @@ public class TodayFragment extends BaseFragment {
     } catch (Exception e) {
     }
   }
-
 }
 

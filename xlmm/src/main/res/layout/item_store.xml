@@ -59,13 +59,28 @@
       android:layout_height="wrap_content"
       />
   <Button
+      android:layout_marginLeft="8dp"
+      android:layout_toRightOf="@id/image_chooselist"
+      android:layout_below="@id/image_chooselist"
       android:id="@+id/remove"
       android:textColor="@color/colorPrimary"
       android:background="@drawable/shape_chooselist"
       android:layout_centerVertical="true"
-      android:layout_alignParentRight="true"
       android:layout_width="136px"
       android:layout_height="49px"
       android:text="下架"
+      />
+
+  <Button
+      android:layout_marginLeft="50dp"
+      android:layout_toRightOf="@id/remove"
+      android:layout_below="@id/image_chooselist"
+      android:id="@+id/btn_share"
+      android:textColor="@color/colorPrimary"
+      android:background="@drawable/shape_chooselist"
+      android:layout_centerVertical="true"
+      android:layout_width="136px"
+      android:layout_height="49px"
+      android:text="分享"
       />
 </RelativeLayout>

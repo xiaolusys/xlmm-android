@@ -31,7 +31,6 @@ public class ChildListActivity extends BaseSwipeBackCompatActivity {
   private XRecyclerView xRecyclerView;
   private ChildListAdapter mChildListAdapter;
   private RotateLoading loading;
-  private Subscription subscribe;
 
   @Override protected void setListener() {
 
@@ -39,7 +38,7 @@ public class ChildListActivity extends BaseSwipeBackCompatActivity {
 
   @Override protected void initData() {
     loading.start();
-    subscribe = ProductModel.getInstance()
+   Subscription subscribe = ProductModel.getInstance()
         .getChildList(1, 10)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<ChildListBean>() {
@@ -61,6 +60,7 @@ public class ChildListActivity extends BaseSwipeBackCompatActivity {
             loading.post(loading::stop);
           }
         });
+    addSubscription(subscribe);
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -136,7 +136,7 @@ public class ChildListActivity extends BaseSwipeBackCompatActivity {
 
   private void loadMoreData(int page, int page_size) {
 
-    subscribe = ProductModel.getInstance()
+   Subscription subscribe = ProductModel.getInstance()
         .getChildList(page, page_size)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<ChildListBean>() {
@@ -150,12 +150,11 @@ public class ChildListActivity extends BaseSwipeBackCompatActivity {
             xRecyclerView.post(xRecyclerView::loadMoreComplete);
           }
         });
+    addSubscription(subscribe);
   }
 
   @Override protected void onStop() {
     super.onStop();
-    if (subscribe != null && subscribe.isUnsubscribed()) {
-      subscribe.unsubscribe();
-    }
+
   }
 }

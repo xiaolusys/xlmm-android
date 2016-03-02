@@ -30,14 +30,13 @@ public class MMCarryLogListActivity extends BaseSwipeBackCompatActivity {
   @Bind(R.id.carryloglist_xry) XRecyclerView carryloglistXry;
   private CarryLogListAdapter adapter;
   private int page = 2;
-  private Subscription subscribe;
 
   @Override protected void setListener() {
 
   }
 
   @Override protected void initData() {
-    MMProductModel.getInstance()
+    Subscription subscription = MMProductModel.getInstance()
         .getCarryLogList("1")
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<CarryLogListBean>() {
@@ -48,6 +47,7 @@ public class MMCarryLogListActivity extends BaseSwipeBackCompatActivity {
             }
           }
         });
+    addSubscription(subscription);
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -90,7 +90,7 @@ public class MMCarryLogListActivity extends BaseSwipeBackCompatActivity {
       }
 
       private void loadMoreData(String page) {
-         subscribe = MMProductModel.getInstance()
+        Subscription subscription = MMProductModel.getInstance()
             .getCarryLogList(page)
             .subscribeOn(Schedulers.io())
             .subscribe(new ServiceResponse<CarryLogListBean>() {
@@ -111,6 +111,7 @@ public class MMCarryLogListActivity extends BaseSwipeBackCompatActivity {
                 carryloglistXry.post(carryloglistXry::loadMoreComplete);
               }
             });
+        addSubscription(subscription);
       }
     });
   }
@@ -125,8 +126,5 @@ public class MMCarryLogListActivity extends BaseSwipeBackCompatActivity {
 
   @Override protected void onStop() {
     super.onStop();
-    if (subscribe != null && subscribe.isUnsubscribed()) {
-      subscribe.unsubscribe();
-    }
   }
 }
