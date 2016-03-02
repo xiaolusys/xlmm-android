@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.ui.activity.main;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,6 +16,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
@@ -30,6 +33,7 @@ import android.widget.Toast;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
 import cn.sharesdk.sina.weibo.SinaWeibo;
 import cn.sharesdk.tencent.qq.QQ;
 import cn.sharesdk.tencent.qzone.QZone;
@@ -40,7 +44,9 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
 import com.jimei.xiaolumeimei.model.ActivityModel;
+import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.utils.BitmapUtil;
+import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.mob.tools.utils.UIHandler;
@@ -78,9 +84,10 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   private String cookies;
   private String actlink;
   private ActivityBean shareInfo;
+  private ActivityBean partyShareInfo;
   private String domain;
   private String sessionid;
-  private Subscription subscribe;
+
 
   @Override protected void setListener() {
     mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -113,6 +120,8 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
         JUtils.Log(TAG, "loadUrl--end");
       }
     });
+
+    get_party_share_content();
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -244,6 +253,23 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     return super.onKeyDown(keyCode, event);
   }
 
+  @Override public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      case R.id.action_share:
+        JUtils.Log(TAG, "party share");
+        sharePartyInfo();
+        break;
+      default:
+        break;
+    }
+    return super.onOptionsItemSelected(item);
+  }
+
+  @Override public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.menu_shareproduct, menu);
+    return super.onCreateOptionsMenu(menu);
+  }
+
   @Override protected void onPause() {
     super.onPause();
     CookieSyncManager.getInstance().stopSync();
@@ -268,9 +294,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   @Override protected void onStop() {
     super.onStop();
     ShareSDK.stopSDK(this);
-    if (subscribe != null && subscribe.isUnsubscribed()) {
-      subscribe.unsubscribe();
-    }
+
   }
 
   //public void syncCookie(Context context, String url) {
@@ -313,7 +337,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
 
   public void getPromotionParams(String uform, String share_link) {
 
-    subscribe = ActivityModel.getInstance()
+    Subscription subscribe = ActivityModel.getInstance()
         .get_share_content(uform)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ActivityBean>() {
@@ -352,6 +376,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
             }
           }
         });
+    addSubscription(subscribe);
   }
 
   private void share_wxapp(String myurl, String ufrom) {
@@ -427,18 +452,6 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     qzone.share(sp);
   }
 
-  private void share_2dimencode(String myurl, String ufrom) {
-
-    SinaWeibo.ShareParams sp = new SinaWeibo.ShareParams();
-    sp.setText("小鹿美美");
-    sp.setUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
-
-    Platform weibo = ShareSDK.getPlatform(WebViewActivity.this, SinaWeibo.NAME);
-    //weibo.setPlatformActionListener(paListener); // 设置分享事件回调
-    // 执行图文分享
-    weibo.share(sp);
-  }
-
   private void share_sina(String myurl, String ufrom) {
     get_share_content(ufrom);
     SinaWeibo.ShareParams sp = new SinaWeibo.ShareParams();
@@ -449,7 +462,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
         + myurl
         + "&ufrom="
         + ufrom);
-    //sp.setImageUrl(linkQrcode);
+    sp.setImageUrl(shareInfo.getShareImg());
     sp.setSiteUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
 
     Platform weibo = ShareSDK.getPlatform(WebViewActivity.this, SinaWeibo.NAME);
@@ -459,7 +472,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   }
 
   public void get_share_content(String ufrom) {
-    subscribe = ActivityModel.getInstance()
+    Subscription subscribe = ActivityModel.getInstance()
         .get_share_content(ufrom)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ActivityBean>() {
@@ -479,6 +492,31 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
             }
           }
         });
+    addSubscription(subscribe);
+  }
+
+  public void get_party_share_content() {
+    Subscription subscribe = ActivityModel.getInstance()
+        .get_party_share_content()
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<ActivityBean>() {
+          @Override public void onNext(ActivityBean activityBean) {
+
+            if (null != activityBean) {
+              partyShareInfo = activityBean;
+              partyShareInfo.setLinkQrcode(URL + activityBean.getLinkQrcode());
+
+              JUtils.Log(TAG, "partyShareInfo: desc="
+                  + partyShareInfo.getActiveDec()
+                  + " "
+                  + "qrcode="
+                  + partyShareInfo.getLinkQrcode()
+                  + " title="
+                  + partyShareInfo.getTitle());
+            }
+          }
+        });
+    addSubscription(subscribe);
   }
 
   @Override public void onCancel(Platform platform, int action) {
@@ -543,7 +581,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     if ((shareInfo == null)
         || (shareInfo.getQrcodeLink() == null)
         || (shareInfo.getQrcodeLink().equals(""))) {
-      subscribe = ActivityModel.getInstance()
+      Subscription subscribe = ActivityModel.getInstance()
           .get_share_content("wxapp")
           .subscribeOn(Schedulers.io())
           .subscribe(new ServiceResponse<ActivityBean>() {
@@ -600,6 +638,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
               }
             }
           });
+      addSubscription(subscribe);
     } else {
       JUtils.Log(TAG, "saveTowDimenCode : Qrcodelink=" + shareInfo.getQrcodeLink());
       try {
@@ -716,5 +755,41 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     return b;
   }
 
+  private void sharePartyInfo() {
+    JUtils.Log(TAG, " title =" + partyShareInfo.getTitle());
+    JUtils.Log(TAG, " desc="
+        + partyShareInfo.getActiveDec()
+        + " url="
+        + partyShareInfo.getShareLink());
 
+    OnekeyShare oks = new OnekeyShare();
+    //关闭sso授权
+    oks.disableSSOWhenAuthorize();
+
+    // 分享时Notification的图标和文字  2.5.9以后的版本不调用此方法
+    //oks.setNotification(R.drawable.ic_launcher, getString(R.string.app_name));
+    // title标题，印象笔记、邮箱、信息、微信、人人网和QQ空间使用
+    oks.setTitle(partyShareInfo.getTitle());
+    // titleUrl是标题的网络链接，仅在人人网和QQ空间使用
+    oks.setTitleUrl(partyShareInfo.getShareLink());
+    // text是分享文本，所有平台都需要这个字段
+    oks.setText(partyShareInfo.getActiveDec());
+    // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
+    //oks.setImagePath(filePara.getFilePath());//确保SDcard下面存在此张图片
+    //oks.setImageUrl("http://f1.sharesdk.cn/imgs/2014/02/26/owWpLZo_638x960.jpg");
+    oks.setImageUrl(partyShareInfo.getShareImg());
+    oks.setUrl(partyShareInfo.getShareLink());
+
+    // url仅在微信（包括好友和朋友圈）中使用
+    //oks.setUrl(myurl);
+    // comment是我对这条分享的评论，仅在人人网和QQ空间使用
+    //oks.setComment("我是测试评论文本");
+    // site是分享此内容的网站名称，仅在QQ空间使用
+    //oks.setSite(getString(R.string.app_name));
+    // siteUrl是分享此内容的网站地址，仅在QQ空间使用
+    //oks.setSiteUrl("http://sharesdk.cn");
+
+    // 启动分享GUI
+    oks.show(this);
+  }
 }

@@ -26,4 +26,11 @@ public class ActivityModel {
         .get_share_content(ufrom)
         .compose(new DefaultTransform<>());
   }
+
+  //活动内容分享
+  public Observable<ActivityBean> get_party_share_content() {
+    return XlmmRetrofitClient.getService()
+        .get_party_share_content()
+        .compose(new DefaultTransform<>());
+  }
 }

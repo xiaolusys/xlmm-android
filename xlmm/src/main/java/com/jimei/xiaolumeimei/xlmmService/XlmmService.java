@@ -565,6 +565,10 @@ public interface XlmmService {
     @Field("ufrom")String ufrom
   );
 
+  //活动内容分享
+  @GET("pmt/free_order/get_share_content")
+  Observable<ActivityBean> get_party_share_content(  );
+
   //获得one day小鹿妈妈订单记录
   @GET( "pmt/shopping/shops_by_day")
   Observable<OneDayAgentOrdersBean> getOneDayAgentOrders(
@@ -598,4 +602,5 @@ public interface XlmmService {
   @POST("users/budget_cash_out")
   Observable<UserWithdrawResult> user_withdraw_cash(
       @Field("cashout_amount") String amount );
+
 }
