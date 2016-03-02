@@ -576,6 +576,11 @@ public interface XlmmService {
   Observable<OneDayAgentOrdersBean> getOneDayAgentOrders(
       @Query("days") String day);
 
+  //获得one day小鹿妈妈订单记录
+  @GET( "pmt/shopping/days_num")
+  Observable<List<Integer>> getLatestAgentOrders(
+      @Query("days") String day);
+
   //获得商品详情共享页面信息
   @GET("share/product")
   Observable<ShareProductBean> getProductShareInfo(

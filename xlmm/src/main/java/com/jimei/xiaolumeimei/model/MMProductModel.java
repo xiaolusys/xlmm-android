@@ -97,6 +97,13 @@ public class MMProductModel {
         .compose(new DefaultTransform<>());
   }
 
+  //MM latest day订单number
+  public Observable<List<Integer>> getLatestAgentOrders(int day) {
+    return XlmmRetrofitClient.getService()
+        .getLatestAgentOrders(Integer.toString(day))
+        .compose(new DefaultTransform<>());
+  }
+
   public Observable<List<NinePicBean>> getNinePic() {
 
     return XlmmRetrofitClient.getService().getNinepic().compose(new DefaultTransform<>());

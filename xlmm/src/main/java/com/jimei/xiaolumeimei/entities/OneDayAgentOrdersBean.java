@@ -28,6 +28,7 @@ public class OneDayAgentOrdersBean {
    * get_status_display : 已付款
    * pic_path : http://image.xiaolu.so/MG_14555252520451.png
    * time_display : 10:22
+   *  "dayly_amount": 65.7
    */
 
   private List<ShopsEntity> shops;
@@ -69,6 +70,7 @@ public class OneDayAgentOrdersBean {
     private String get_status_display;
     private String pic_path;
     private String time_display;
+    private double dayly_amount;
 
     public void setLinkid(int linkid) {
       this.linkid = linkid;
@@ -118,6 +120,10 @@ public class OneDayAgentOrdersBean {
       this.time_display = time_display;
     }
 
+    public void setDayly_amount(double dayly_amount) {
+      this.dayly_amount = dayly_amount;
+    }
+
     public int getLinkid() {
       return linkid;
     }
@@ -164,6 +170,10 @@ public class OneDayAgentOrdersBean {
 
     public String getTime_display() {
       return time_display;
+    }
+
+    public double getDayly_amount() {
+      return dayly_amount;
     }
   }
 }

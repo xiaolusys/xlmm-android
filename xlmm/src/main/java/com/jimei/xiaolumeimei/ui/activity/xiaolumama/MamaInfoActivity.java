@@ -409,9 +409,38 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         + ", high: "
         + mChart.getHighestVisibleXIndex());
     tv_today_order2.setText(Integer.toString((int) (e.getVal())));
-    tv_today_fund2.setText(Float.toString(
-        (float) (Math.round(show_his_refund.get(e.getXIndex()).getRefund() * 100)
-            / 100)));
+    if (Double.compare(show_his_refund.get(e.getXIndex()).getRefund(), 0) == 0) {
+      tv_today_fund2.setText(Float.toString(
+          (float) (Math.round(show_his_refund.get(e.getXIndex()).getRefund() * 100)) / 100));
+
+      Subscription subscribe = MMProductModel.getInstance()
+          .getOneDayAgentOrders(MAX_RECENT_DAYS - 1 - e.getXIndex())
+          .subscribeOn(Schedulers.io())
+          .subscribe(new ServiceResponse<OneDayAgentOrdersBean>() {
+            @Override public void onNext(OneDayAgentOrdersBean oneDayBean) {
+              super.onNext(oneDayBean);
+              if (oneDayBean != null) {
+                  show_his_refund.get(e.getXIndex()).setRefund(oneDayBean.getShops().get(0)
+                      .getDayly_amount());
+
+                JUtils.Log(TAG,"incom= " + oneDayBean.getShops().get(e.getXIndex())
+                    .getDayly_amount());
+                if ((show_his_refund.get(e.getXIndex()) != null)) {
+                  tv_today_order2.setText(
+                      Float.toString(show_his_refund.get(e.getXIndex()).getOrder_num()));
+                  tv_today_fund2.setText(Float.toString(
+                      (float) (Math.round(show_his_refund.get(e.getXIndex()).getRefund() * 100))
+                          / 100));
+                }
+              }
+
+            }
+          });
+      addSubscription(subscribe);
+    } else {
+      tv_today_fund2.setText(Float.toString(
+          (float) (Math.round(show_his_refund.get(e.getXIndex()).getRefund() * 100)) / 100));
+    }
   }
 
   @Override public void onNothingSelected() {
@@ -426,59 +455,77 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
       show_his_refund.add(i, hisRefund);
     }
 
-    for (int i = 0; i < MAX_RECENT_DAYS; i++) {
-      JUtils.Log(TAG, " day  =" + (MAX_RECENT_DAYS - 1 - i));
-      final int finalI = i;
+    Subscription subscribe = MMProductModel.getInstance()
+        .getLatestAgentOrders(MAX_RECENT_DAYS)
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<List<Integer>>() {
+          @Override public void onNext(List<Integer> oneDayBean) {
+            super.onNext(oneDayBean);
+            if (oneDayBean != null) {
+              for(int i=0;i<MAX_RECENT_DAYS;i++) {
+                show_his_refund.get(MAX_RECENT_DAYS-1-i).setOrder_num(oneDayBean.get(i));
+              }
 
-      Subscription subscribe = MMProductModel.getInstance()
-          .getOneDayAgentOrders(MAX_RECENT_DAYS - 1 - i)
-          .subscribeOn(Schedulers.io())
-          .subscribe(new ServiceResponse<OneDayAgentOrdersBean>() {
-            @Override public void onNext(OneDayAgentOrdersBean oneDayBean) {
-              super.onNext(oneDayBean);
-              if (oneDayBean != null) {
-                int count = oneDayBean.getShops().size();
-                HisRefund hisRefund = new HisRefund();
-                hisRefund.setOrder_num(count);
-                hisRefund.setRefund(calc_refund(oneDayBean.getShops()));
-                JUtils.Log(TAG, "finalI="
-                    + finalI
-                    + " one day  orders num ="
-                    + hisRefund.getOrder_num()
-                    + " "
-                    + "refund= "
-                    + hisRefund.getRefund());
+              JUtils.Log(TAG,
+                  "get_num =" + get_num + " " + "size= " + show_his_refund.size());
+              if ( (show_his_refund.size() > 0)) {
+                init_chart();
+                setData(MAX_RECENT_DAYS);
+                mChart.setVisibility(View.VISIBLE);
 
-                synchronized (this) {
-                  show_his_refund.set(finalI, hisRefund);
-                  get_num++;
+                mChart.animateX(2500, Easing.EasingOption.EaseInOutQuart);
+                mChart.setVisibleXRangeMaximum(6);
+
+                if (show_his_refund.size() > 7) {
+                  mChart.moveViewToX(MAX_RECENT_DAYS - 6);
                 }
-                JUtils.Log(TAG,
-                    "get_num =" + get_num + " " + "size= " + show_his_refund.size());
-                if ((get_num == MAX_RECENT_DAYS - 1) && (show_his_refund.size() > 0)) {
-                  init_chart();
-                  setData(MAX_RECENT_DAYS);
-                  mChart.setVisibility(View.VISIBLE);
-
-                  mChart.animateX(2500, Easing.EasingOption.EaseInOutQuart);
-                  mChart.setVisibleXRangeMaximum(6);
-
-                  if (show_his_refund.size() > 7) {
-                    mChart.moveViewToX(MAX_RECENT_DAYS - 6);
-                  }
-                  if (show_his_refund.get(0) != null) {
-                    tv_today_order2.setText(
-                        Float.toString(show_his_refund.get(0).getOrder_num()));
-                    tv_today_fund2.setText(Float.toString(
-                        (float) (Math.round(show_his_refund.get(0).getRefund() * 100)
-                            / 100)));
-                  }
+                if (show_his_refund.get(0) != null) {
+                  tv_today_order2.setText(
+                      Float.toString(show_his_refund.get(0).getOrder_num()));
+                  tv_today_fund2.setText(Float.toString(
+                      (float) (Math.round(show_his_refund.get(0).getRefund() * 100))
+                          / 100));
                 }
               }
             }
-          });
-      addSubscription(subscribe);
+          }
+        });
+    addSubscription(subscribe);
+
+    for (int i = 0; i < MAX_RECENT_DAYS; i++) {
+      JUtils.Log(TAG, " day  =" + (MAX_RECENT_DAYS - 1 - i));
+      get_his_one_day_refund(i);
     }
+  }
+
+  void get_his_one_day_refund(int day){
+    final int finalI = day;
+    Subscription subscribe = MMProductModel.getInstance()
+        .getOneDayAgentOrders(MAX_RECENT_DAYS - 1 - day)
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<OneDayAgentOrdersBean>() {
+          @Override public void onNext(OneDayAgentOrdersBean oneDayBean) {
+            super.onNext(oneDayBean);
+            if (oneDayBean != null) {
+              synchronized (this) {
+                show_his_refund.get(finalI).setRefund(oneDayBean.getShops().get(0)
+                    .getDayly_amount());
+
+              }
+              JUtils.Log(TAG,"incom= " + oneDayBean.getShops().get(0)
+                  .getDayly_amount());
+              if ((show_his_refund.get(0) != null) && (finalI == 0)) {
+                tv_today_order2.setText(
+                    Float.toString(show_his_refund.get(0).getOrder_num()));
+                tv_today_fund2.setText(Float.toString(
+                    (float) (Math.round(show_his_refund.get(0).getRefund() * 100))
+                        / 100));
+              }
+            }
+
+          }
+        });
+    addSubscription(subscribe);
   }
 
   float calc_refund(List<OneDayAgentOrdersBean.ShopsEntity> list) {
@@ -496,7 +543,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
 
   final static class HisRefund {
     int order_num;
-    float refund;
+    double refund;
 
     public int getOrder_num() {
       return order_num;
@@ -506,11 +553,11 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
       this.order_num = order_num;
     }
 
-    public float getRefund() {
+    public double getRefund() {
       return refund;
     }
 
-    public void setRefund(float refund) {
+    public void setRefund(double refund) {
       this.refund = refund;
     }
   }
