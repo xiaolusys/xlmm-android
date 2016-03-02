@@ -463,7 +463,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
         + "&ufrom="
         + ufrom);
     sp.setImageUrl(shareInfo.getShareImg());
-    sp.setSiteUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
+    sp.setUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
 
     Platform weibo = ShareSDK.getPlatform(WebViewActivity.this, SinaWeibo.NAME);
     weibo.setPlatformActionListener(this); // 设置分享事件回调
@@ -773,7 +773,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     // titleUrl是标题的网络链接，仅在人人网和QQ空间使用
     oks.setTitleUrl(partyShareInfo.getShareLink());
     // text是分享文本，所有平台都需要这个字段
-    oks.setText(partyShareInfo.getActiveDec());
+    oks.setText(partyShareInfo.getActiveDec() + partyShareInfo.getShareLink());
     // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
     //oks.setImagePath(filePara.getFilePath());//确保SDcard下面存在此张图片
     //oks.setImageUrl("http://f1.sharesdk.cn/imgs/2014/02/26/owWpLZo_638x960.jpg");
