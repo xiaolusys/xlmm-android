@@ -108,10 +108,9 @@
 
 </RelativeLayout>
   <TextView
+      android:layout_gravity="center_horizontal"
       android:textSize="12sp"
       android:text="第三方登录"
-      android:layout_marginRight="294px"
-      android:layout_marginLeft="300px"
       android:layout_marginTop="150px"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"

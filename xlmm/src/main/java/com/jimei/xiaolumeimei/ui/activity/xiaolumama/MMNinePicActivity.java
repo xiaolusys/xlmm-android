@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.ListView;
 import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
@@ -11,7 +12,10 @@ import com.jimei.xiaolumeimei.adapter.NinePicAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.NinePicBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
+import com.jimei.xiaolumeimei.widget.timecircleview.TickCircleProgress;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import rx.schedulers.Schedulers;
 
@@ -26,6 +30,7 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.circleLv) ListView circleLv;
   @Bind(R.id.mRefreshLayout) SwipeRefreshLayout mRefreshLayout;
+  @Bind(R.id.myTickCircleProgress) TickCircleProgress myTickCircleProgress;
 
   private NinePicAdapter mAdapter;
 
@@ -39,18 +44,27 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
   }
 
   private void loadData() {
-    MMProductModel.getInstance()
-        .getNinePic()
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<List<NinePicBean>>() {
-          @Override public void onNext(List<NinePicBean> ninePicBean) {
-            if (ninePicBean != null) {
 
-              mAdapter.setDatas(ninePicBean);
-              mAdapter.notifyDataSetChanged();
+    if (calcLeftTime() > 0) {
+      myTickCircleProgress.setVisibility(View.VISIBLE);
+    } else {
+
+      myTickCircleProgress.setVisibility(View.GONE);
+      MMProductModel.getInstance()
+          .getNinePic()
+          .subscribeOn(Schedulers.io())
+          .subscribe(new ServiceResponse<List<NinePicBean>>() {
+            @Override public void onNext(List<NinePicBean> ninePicBean) {
+              if (ninePicBean != null) {
+
+                mAdapter.setDatas(ninePicBean);
+                mAdapter.notifyDataSetChanged();
+              } else {
+                myTickCircleProgress.setVisibility(View.VISIBLE);
+              }
             }
-          }
-        });
+          });
+    }
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -90,5 +104,45 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
         mRefreshLayout.setRefreshing(false);
       }
     }, 2000);
+  }
+
+  private long calcLeftTime() {
+
+    Date now = new Date();
+    Date nextDay14PM = new Date();
+    Calendar calendar = Calendar.getInstance();
+
+    calendar.setTime(nextDay14PM);
+    calendar.set(Calendar.HOUR_OF_DAY, 10);
+    calendar.set(Calendar.MINUTE, 0);
+    calendar.set(Calendar.SECOND, 0);
+    calendar.set(Calendar.MILLISECOND, 0);
+
+    nextDay14PM = calendar.getTime();
+
+    return nextDay14PM.getTime() - now.getTime();
+  }
+
+  private long calcLeftTimeZ() {
+
+    Date now = new Date();
+    Date nextDay14PM = new Date();
+    Calendar calendar = Calendar.getInstance();
+
+    calendar.setTime(nextDay14PM);
+    calendar.set(Calendar.HOUR_OF_DAY, 10);
+    calendar.set(Calendar.MINUTE, 0);
+    calendar.set(Calendar.SECOND, 0);
+    calendar.set(Calendar.MILLISECOND, 0);
+
+    nextDay14PM = calendar.getTime();
+
+    long left;
+    if (nextDay14PM.getTime() - now.getTime() > 0) {
+      left = nextDay14PM.getTime() - now.getTime();
+      return left;
+    } else {
+      return 0;
+    }
   }
 }

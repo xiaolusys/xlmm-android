@@ -80,6 +80,7 @@ public class TodayFragment extends BaseFragment {
   }
 
   @Override protected void initData() {
+    head.setVisibility(View.INVISIBLE);
     loading.start();
     Subscription subscribe1 = ProductModel.getInstance()
         .getTodayList(1, 10)
@@ -101,6 +102,7 @@ public class TodayFragment extends BaseFragment {
           @Override public void onCompleted() {
             super.onCompleted();
             loading.post(loading::stop);
+            head.setVisibility(View.VISIBLE);
           }
         });
 

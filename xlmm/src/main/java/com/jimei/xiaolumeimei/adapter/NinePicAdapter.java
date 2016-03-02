@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
@@ -61,7 +60,7 @@ public class NinePicAdapter extends BaseAdapter {
       holder = new ViewHolder();
       convertView = View.inflate(mcontext, R.layout.item_ninepic, null);
 
-      holder.headIv = (ImageView) convertView.findViewById(R.id.headIv);
+      holder.numTv = (TextView) convertView.findViewById(R.id.num);
       holder.urlTipTv = (TextView) convertView.findViewById(R.id.urlTipTv);
       holder.contentTv = (TextView) convertView.findViewById(R.id.contentTv);
       holder.save = (Button) convertView.findViewById(R.id.save);
@@ -83,14 +82,9 @@ public class NinePicAdapter extends BaseAdapter {
 
     holder.contentTv.setText(mlist.get(position).getDescription());
     holder.urlTipTv.setText(mlist.get(position).getStartTime().replace("T", " "));
-
+    holder.numTv.setText(mlist.get(position).getTurnsNum() + "轮");
     //final List<String> photos = circleItem.getPhotos();
     List<String> picArry = mlist.get(position).getPicArry();
-
-    //for (String pic : picArry) {
-    //  String pica = pic + "?imageMogr2/thumbnail/578/format/jpg/quality/90";
-    //  imageLists.add(pica);
-    //}
 
     if (picArry != null && picArry.size() > 0) {
       holder.multiImageView.setVisibility(View.VISIBLE);
@@ -151,9 +145,9 @@ public class NinePicAdapter extends BaseAdapter {
 
   class ViewHolder {
     MultiImageView multiImageView;
-    ImageView headIv;
     TextView urlTipTv;
     TextView contentTv;
+    TextView numTv;
     Button save;
   }
 }
