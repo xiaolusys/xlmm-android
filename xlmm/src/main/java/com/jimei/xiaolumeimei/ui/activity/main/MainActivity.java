@@ -481,7 +481,8 @@ public class MainActivity extends BaseActivity
           @Override public void onNext(UserInfoBean userNewBean) {
             if (userNewBean != null) {
               userInfoBean = userNewBean;
-              if(!userNewBean.getThumbnail().isEmpty()) {
+              if((LoginUtils.checkLoginState(getApplicationContext()))
+                  &&(!userNewBean.getThumbnail().isEmpty())) {
                 ViewUtils.loadImgToImgView(MainActivity.this, imgUser, userNewBean.getThumbnail());
               }
 
