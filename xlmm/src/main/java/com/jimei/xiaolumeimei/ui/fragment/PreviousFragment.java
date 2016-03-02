@@ -102,6 +102,7 @@ public class PreviousFragment extends BaseFragment {
     Subscription subscription2 = Observable.timer(1, 1, TimeUnit.SECONDS)
         .map(aLong -> calcLeftTime())
         .observeOn(AndroidSchedulers.mainThread())
+        .onBackpressureDrop()
         .subscribeOn(Schedulers.io())
         .subscribe(new Action1<Long>() {
           @Override public void call(Long aLong) {

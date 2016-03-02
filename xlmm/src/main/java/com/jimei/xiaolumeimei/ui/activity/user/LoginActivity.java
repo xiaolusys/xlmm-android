@@ -29,7 +29,6 @@ import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.WxLogininfoBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
-import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActvity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.utils.SHA1Utils;
@@ -435,6 +434,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                 }
               }
             });
+        addSubscription(subscription);
         //show.dismiss();
       }
 

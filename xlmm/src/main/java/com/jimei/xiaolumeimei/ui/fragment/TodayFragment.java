@@ -70,7 +70,6 @@ public class TodayFragment extends BaseFragment {
   private SliderLayout mSliderLayout;
   private PagerIndicator mPagerIndicator;
   private View head;
-  private Subscription subscription;
   //private long l;
   private SharedPreferences sharedPreferences;
   private String cookies;
@@ -380,6 +379,7 @@ public class TodayFragment extends BaseFragment {
     Subscription subscription = Observable.timer(1, 1, TimeUnit.SECONDS)
         .map(aLong -> calcLeftTime())
         .observeOn(AndroidSchedulers.mainThread())
+        .onBackpressureDrop()
         .subscribeOn(Schedulers.io())
         .subscribe(new Action1<Long>() {
           @Override public void call(Long aLong) {
@@ -396,9 +396,6 @@ public class TodayFragment extends BaseFragment {
 
   @Override public void onStop() {
     super.onStop();
-    if (subscription != null && subscription.isUnsubscribed()) {
-      subscription.unsubscribe();
-    }
   }
 
   public void syncCookie(Context context, String url) {
