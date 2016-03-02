@@ -116,7 +116,7 @@ public class WxPubTwoDimenCodeActivity extends BaseSwipeBackCompatActivity imple
 
         Toast.makeText(WxPubTwoDimenCodeActivity.this, "保存成功，"+wxPubAuthInfo
           .getAuthMsg(), Toast.LENGTH_SHORT).show();
-
+        finish();
         break;
     }
   }

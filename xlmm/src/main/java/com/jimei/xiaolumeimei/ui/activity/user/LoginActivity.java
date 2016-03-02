@@ -29,6 +29,7 @@ import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.WxLogininfoBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
+import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActvity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.utils.SHA1Utils;
@@ -212,6 +213,8 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                     } else if (login.equals("coupon")) {
                       Intent intent = new Intent(mContext, CouponActivity.class);
                       startActivity(intent);
+                      finish();
+                    }else if (login.equals("productdetail")) {
                       finish();
                     }
                   } else if (2 == user.getCode()) {
