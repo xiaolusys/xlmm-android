@@ -1,7 +1,6 @@
 package com.jimei.xiaolumeimei.base;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,8 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.davemorrissey.labs.subscaleview.ImageSource;
-import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 
 /**
  * Author  : itxuye(itxuye@gmail.com)|(http://itxuye.com)
@@ -109,12 +106,12 @@ public class CommonViewHolder {
   }
 
 
-  public CommonViewHolder setImageFromBitmap(int viewId, Bitmap bitmap) {
-    SubsamplingScaleImageView imageView = findViewById(viewId);
-    imageView.setImage(ImageSource.bitmap(bitmap));
-
-    return this;
-  }
+  //public CommonViewHolder setImageFromBitmap(int viewId, Bitmap bitmap) {
+  //  SubsamplingScaleImageView imageView = findViewById(viewId);
+  //  imageView.setImage(ImageSource.bitmap(bitmap));
+  //
+  //  return this;
+  //}
 
   public CommonViewHolder setClickListener(int viewId, View.OnClickListener listener) {
     View view = findViewById(viewId);

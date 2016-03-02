@@ -81,6 +81,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   AgentInfoBean mamaAgentInfo;
   private Subscription subscribe;
 
+
   @Override protected void setListener() {
     toolbar.setOnClickListener(this);
     imgUser.setOnClickListener(this);
@@ -112,7 +113,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initData() {
-    subscribe = MamaInfoModel.getInstance()
+    Subscription subscribe = MamaInfoModel.getInstance()
         .getAgentInfoBean()
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<AgentInfoBean>() {
@@ -131,7 +132,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
             JUtils.Log(TAG, "fans num =" + pointBean.getFansNum());
           }
         });
-
+    addSubscription(subscribe);
     /*MamaInfoModel.getInstance().getMamaFans()
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<List<MamaFansBean>>() {
@@ -142,7 +143,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
           }
         });*/
 
-    subscribe = MMProductModel.getInstance()
+    Subscription subscribe1 = MMProductModel.getInstance()
         .getShoppingList("1")
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ShoppingListBean>() {
@@ -155,8 +156,8 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
             }
           }
         });
-
     get_his_refund();
+    addSubscription(subscribe1);
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
@@ -491,9 +492,6 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void onStop() {
     super.onStop();
-    if (subscribe != null && subscribe.isUnsubscribed()) {
-      subscribe.unsubscribe();
-    }
   }
 
   final static class HisRefund {

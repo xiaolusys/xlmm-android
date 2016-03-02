@@ -16,7 +16,6 @@ import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.utils.NetWorkUtil;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
-//import com.squareup.leakcanary.LeakCanary;
 import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -29,6 +28,8 @@ import java.net.CookiePolicy;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import rx.schedulers.Schedulers;
+
+//import com.squareup.leakcanary.LeakCanary;
 
 /**
  * Created by ye.xu on 15/12/29.
@@ -81,7 +82,8 @@ public class XlmmApp extends Application {
     //获取用户信息失败，说明要重新登陆
     if (NetWorkUtil.isNetWorkConnected(this)) {
 
-      UserModel.getInstance().getUserInfo()
+      UserModel.getInstance()
+          .getUserInfo()
           .subscribeOn(Schedulers.newThread())
           .subscribe(new ServiceResponse<UserInfoBean>() {
             @Override public void onNext(UserInfoBean user) {

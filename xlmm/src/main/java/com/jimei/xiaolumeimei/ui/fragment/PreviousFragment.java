@@ -54,8 +54,9 @@ public class PreviousFragment extends BaseFragment {
   }
 
   @Override protected void initData() {
-
+    head.setVisibility(View.INVISIBLE);
     loading.start();
+
     Subscription subscribe1 = ProductModel.getInstance()
         .getPreviousList(1, 10)
         .subscribeOn(Schedulers.io())
@@ -79,6 +80,7 @@ public class PreviousFragment extends BaseFragment {
           @Override public void onCompleted() {
             super.onCompleted();
             loading.post(loading::stop);
+            head.setVisibility(View.VISIBLE);
           }
         });
 
@@ -149,15 +151,23 @@ public class PreviousFragment extends BaseFragment {
                          post1.post(new Runnable() {
                            @Override public void run() {
 
-                             ViewUtils.loadImgToImgViewPost(getActivity(), post1,
-                                 picLink);
+                             try {
+                               ViewUtils.loadImgToImgViewPost(getActivity(), post1,
+                                   picLink);
+                             } catch (Exception e) {
+                               e.printStackTrace();
+                             }
                            }
                          });
 
                          post2.post(new Runnable() {
                            @Override public void run() {
-                             ViewUtils.loadImgToImgViewPost(getActivity(), post2,
-                                 picLink1);
+                             try {
+                               ViewUtils.loadImgToImgViewPost(getActivity(), post2,
+                                   picLink1);
+                             } catch (Exception e) {
+                               e.printStackTrace();
+                             }
                            }
                          });
                        } catch (NullPointerException ex) {
