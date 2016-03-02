@@ -15,7 +15,7 @@
       android:layout_centerHorizontal="true"
       android:id="@+id/rl_head">
 
-    <ImageView
+    <com.jimei.xiaolumeimei.widget.CircleImageView
         android:id="@+id/imgUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

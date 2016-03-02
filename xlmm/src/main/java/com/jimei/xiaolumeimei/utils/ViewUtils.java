@@ -229,12 +229,8 @@ public final class ViewUtils {
 
   public static void loadImgToImgView(Context context, ImageView img, String picPath) {
     if (null == picPath) return;
-    if (picPath.startsWith("https://mmbiz.qlogo.cn")
-        || picPath.startsWith(XlmmApi.TWO_DIMEN_URL_BASE)) {
-      Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
-          //.placeholder(R.drawable.parceholder)
-          .centerCrop().into(img);
-    } else  {
+
+    if (picPath.startsWith("http://image.xiaolu.so")){
       String[] temp = picPath.split("http://image.xiaolu.so/");
       String head_img = "";
       if (temp.length > 1) {
@@ -248,6 +244,11 @@ public final class ViewUtils {
       }
 
       Glide.with(context).load(head_img).diskCacheStrategy(DiskCacheStrategy.ALL)
+          //.placeholder(R.drawable.parceholder)
+          .centerCrop().into(img);
+    }
+    else {
+      Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
           //.placeholder(R.drawable.parceholder)
           .centerCrop().into(img);
     }

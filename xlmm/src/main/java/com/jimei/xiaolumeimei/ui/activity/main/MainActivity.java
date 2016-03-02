@@ -46,6 +46,7 @@ import com.jimei.xiaolumeimei.ui.fragment.LadyListFragment;
 import com.jimei.xiaolumeimei.ui.fragment.PreviousFragment;
 import com.jimei.xiaolumeimei.ui.fragment.TodayFragment;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
+import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.badgelib.BadgeView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
@@ -159,6 +160,10 @@ public class MainActivity extends BaseActivity
               if ((tvNickname != null)
                   && (userInfoBean != null)) {
                 tvNickname.setText(userInfoBean.getNick());
+              }
+
+              if((userInfoBean != null) && (!userInfoBean.getThumbnail().isEmpty())) {
+                ViewUtils.loadImgToImgView(MainActivity.this, imgUser, userInfoBean.getThumbnail());
               }
             }
             invalidateOptionsMenu();
@@ -467,14 +472,7 @@ public class MainActivity extends BaseActivity
     JUtils.Log(TAG, "resume");
     getUserInfo();
 
-    if (LoginUtils.checkLoginState(getApplicationContext()) && (tvNickname != null)) {
-      if ((userInfoBean != null) && (userInfoBean.getNick() != null)
-          && (!userInfoBean.getNick().isEmpty())) {
-        tvNickname.setText(userInfoBean.getNick());
-      } else {
-        tvNickname.setText("小鹿妈妈");
-      }
-    }
+
 
     subscribe = UserNewModel.getInstance()
         .getProfile()
@@ -482,6 +480,11 @@ public class MainActivity extends BaseActivity
         .subscribe(new ServiceResponse<UserInfoBean>() {
           @Override public void onNext(UserInfoBean userNewBean) {
             if (userNewBean != null) {
+              userInfoBean = userNewBean;
+              if(!userNewBean.getThumbnail().isEmpty()) {
+                ViewUtils.loadImgToImgView(MainActivity.this, imgUser, userNewBean.getThumbnail());
+              }
+
               int score = userNewBean.getScore();
               if (null != userNewBean.getUserBudget()) {
                 budgetCash = userNewBean.getUserBudget().getBudgetCash();
@@ -495,6 +498,15 @@ public class MainActivity extends BaseActivity
             }
           }
         });
+
+    if (LoginUtils.checkLoginState(getApplicationContext()) && (tvNickname != null)) {
+      if ((userInfoBean != null) && (userInfoBean.getNick() != null)
+          && (!userInfoBean.getNick().isEmpty())) {
+        tvNickname.setText(userInfoBean.getNick());
+      } else {
+        tvNickname.setText("小鹿妈妈");
+      }
+    }
 
     UserModel.getInstance()
         .getUnusedCouponBean()
