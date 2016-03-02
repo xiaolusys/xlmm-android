@@ -65,9 +65,12 @@ public class MMChooseAdapter extends RecyclerView.Adapter<MMChooseAdapter.MMChoo
     holder.name.setText(mmChooselistBean.getName());
     ViewUtils.loadImgToImgView(mContext, holder.imageChooselist,
         mmChooselistBean.getPicPath());
-    holder.agentPrice.setText("¥" + mmChooselistBean.getAgentPrice());
-    holder.stdSalePrice.setText("/¥" + mmChooselistBean.getStdSalePrice());
-    holder.rebetAmount.setText("¥" + mmChooselistBean.getRebetAmount());
+    holder.agentPrice.setText(
+        "¥" + (float) (Math.round(mmChooselistBean.getAgentPrice() * 100)) / 100);
+    holder.stdSalePrice.setText(
+        "/¥" + (float) (Math.round(mmChooselistBean.getStdSalePrice() * 100)) / 100);
+    holder.rebetAmount.setText(
+        "¥" + (float) (Math.round(mmChooselistBean.getRebetAmount() * 100)) / 100);
     holder.lockNum.setText("累积销量 " + mmChooselistBean.getLockNum() + "件");
 
     int inCustomerShop = mmChooselistBean.getInCustomerShop();

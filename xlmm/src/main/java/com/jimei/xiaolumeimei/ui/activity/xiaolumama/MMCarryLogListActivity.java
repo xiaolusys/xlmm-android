@@ -88,31 +88,6 @@ public class MMCarryLogListActivity extends BaseSwipeBackCompatActivity {
         loadMoreData(page + "");
         page++;
       }
-
-      private void loadMoreData(String page) {
-        Subscription subscription = MMProductModel.getInstance()
-            .getCarryLogList(page)
-            .subscribeOn(Schedulers.io())
-            .subscribe(new ServiceResponse<CarryLogListBean>() {
-              @Override public void onNext(CarryLogListBean carryLogListBean) {
-                if (carryLogListBean != null) {
-                  if (null != carryLogListBean.getNext()) {
-                    adapter.update(carryLogListBean.getResults());
-                  } else {
-                    Toast.makeText(MMCarryLogListActivity.this, "没有更多了",
-                        Toast.LENGTH_SHORT).show();
-                    carryloglistXry.post(carryloglistXry::loadMoreComplete);
-                  }
-                }
-              }
-
-              @Override public void onCompleted() {
-                super.onCompleted();
-                carryloglistXry.post(carryloglistXry::loadMoreComplete);
-              }
-            });
-        addSubscription(subscription);
-      }
     });
   }
 
@@ -126,5 +101,30 @@ public class MMCarryLogListActivity extends BaseSwipeBackCompatActivity {
 
   @Override protected void onStop() {
     super.onStop();
+  }
+
+  private void loadMoreData(String page) {
+    Subscription subscription = MMProductModel.getInstance()
+        .getCarryLogList(page)
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<CarryLogListBean>() {
+          @Override public void onNext(CarryLogListBean carryLogListBean) {
+            if (carryLogListBean != null) {
+              if (null != carryLogListBean.getNext()) {
+                adapter.update(carryLogListBean.getResults());
+              } else {
+                Toast.makeText(MMCarryLogListActivity.this, "没有更多了", Toast.LENGTH_SHORT)
+                    .show();
+                carryloglistXry.post(carryloglistXry::loadMoreComplete);
+              }
+            }
+          }
+
+          @Override public void onCompleted() {
+            super.onCompleted();
+            carryloglistXry.post(carryloglistXry::loadMoreComplete);
+          }
+        });
+    addSubscription(subscription);
   }
 }

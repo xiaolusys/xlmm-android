@@ -89,34 +89,34 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
         loadMoreData(page + "");
         page++;
       }
-
-      private void loadMoreData(String page) {
-        Subscription subscribe = MMProductModel.getInstance()
-            .getShoppingList(page)
-            .subscribeOn(Schedulers.io())
-            .subscribe(new ServiceResponse<ShoppingListBean>() {
-              @Override public void onNext(ShoppingListBean shoppingListBean) {
-                super.onNext(shoppingListBean);
-                if (shoppingListBean != null) {
-                  if (null != shoppingListBean.getNext()) {
-                    adapter.update(shoppingListBean.getResults());
-                  } else {
-                    Toast.makeText(MMShoppingListActivity.this, "没有更多了",
-                        Toast.LENGTH_SHORT).show();
-                    shoppinglistXry.post(shoppinglistXry::loadMoreComplete);
-                  }
-                }
-              }
-
-              @Override public void onCompleted() {
-                super.onCompleted();
-                shoppinglistXry.post(shoppinglistXry::loadMoreComplete);
-              }
-            });
-        addSubscription(subscribe);
-      }
     });
 
+  }
+
+  private void loadMoreData(String page) {
+    Subscription subscribe = MMProductModel.getInstance()
+        .getShoppingList(page)
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<ShoppingListBean>() {
+          @Override public void onNext(ShoppingListBean shoppingListBean) {
+            super.onNext(shoppingListBean);
+            if (shoppingListBean != null) {
+              if (null != shoppingListBean.getNext()) {
+                adapter.update(shoppingListBean.getResults());
+              } else {
+                Toast.makeText(MMShoppingListActivity.this, "没有更多了",
+                    Toast.LENGTH_SHORT).show();
+                shoppinglistXry.post(shoppinglistXry::loadMoreComplete);
+              }
+            }
+          }
+
+          @Override public void onCompleted() {
+            super.onCompleted();
+            shoppinglistXry.post(shoppinglistXry::loadMoreComplete);
+          }
+        });
+    addSubscription(subscribe);
   }
 
   @Override protected boolean toggleOverridePendingTransition() {

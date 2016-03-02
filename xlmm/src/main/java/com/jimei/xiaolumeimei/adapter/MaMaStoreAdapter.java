@@ -68,7 +68,8 @@ public class MaMaStoreAdapter extends RecyclerView.Adapter<MaMaStoreAdapter.MaMa
         mmChooselistBean.getPicPath());
     holder.agentPrice.setText("¥" + mmChooselistBean.getAgentPrice());
     holder.stdSalePrice.setText("/¥" + mmChooselistBean.getStdSalePrice());
-    holder.rebetAmount.setText("¥" + mmChooselistBean.getRebetAmount());
+    holder.rebetAmount.setText(
+        "¥" + (float) (Math.round(mmChooselistBean.getRebetAmount() * 100)) / 100);
     holder.lockNum.setText("累积销量 " + mmChooselistBean.getLockNum() + "件");
 
     holder.remove.setOnClickListener(new View.OnClickListener() {
