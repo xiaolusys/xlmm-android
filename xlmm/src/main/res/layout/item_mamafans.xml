@@ -1,33 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-	android:id="@+id/llayout_order_item">
+	android:id="@+id/llayout_fans_item">
 
-	<RelativeLayout
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:orientation="horizontal" >
+	<ImageView
+			android:id="@+id/img_fans"
+			android:layout_width="120px"
+			android:layout_height="120px"
+			android:src="@drawable/img_emptypic"
+			android:padding="4dp"/>
+
 		<TextView
 			android:id="@+id/tx_nickname"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="0"
+				android:layout_toRightOf="@+id/img_fans"
+				android:layout_marginTop="10px"
+				android:layout_marginLeft="10px"
+			android:text="小鹿妈妈"
 			android:textSize="15sp"
 				android:padding="4dp"/>
 
-
-	</RelativeLayout>
-
-	<TextView
-			android:id="@+id/tx_url"
+	<!--TextView
+			android:id="@+id/tv_id"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:text=""
 			android:textSize="15sp"
-			android:layout_alignParentLeft="true"
 			android:padding="4dp"
- />
+			android:layout_marginTop="10px"
+			android:layout_toRightOf="@+id/img_fans"
+			android:layout_below="@+id/tx_nickname"
+ 			/-->
 
-</LinearLayout>
+</RelativeLayout>

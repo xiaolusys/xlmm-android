@@ -458,8 +458,10 @@ public interface XlmmService {
   @GET("pmt/cashout")
   Observable<WithdrawCashHisBean> getWithdrawCashHis();
 
-  @GET("pmt/fanlist")
-  Observable<List<MamaFansBean>> getMamaFans();
+  @GET("pmt/xlmm/get_fans_list")
+  Observable<MamaFansBean> getMamaFans(
+      @Query("page")String page
+  );
 
   //创建提款单信息
   @FormUrlEncoded

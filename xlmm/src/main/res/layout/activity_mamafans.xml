@@ -38,11 +38,11 @@
     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" >
-        <ListView
-            android:id="@+id/lv_mamafans"
+        <com.jcodecraeer.xrecyclerview.XRecyclerView
+            android:id="@+id/xrv_mamafans"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" >
-        </ListView>
+        </com.jcodecraeer.xrecyclerview.XRecyclerView>
 
     </FrameLayout>
 

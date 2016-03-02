@@ -51,9 +51,9 @@ public class MamaInfoModel {
   }
 
   //得到妈妈粉丝列表
-  public Observable<List<MamaFansBean>> getMamaFans() {
+  public Observable<MamaFansBean> getMamaFans(String page) {
     return XlmmRetrofitClient.getService()
-        .getMamaFans()
+        .getMamaFans(page)
         .compose(new DefaultTransform<>());
   }
 
