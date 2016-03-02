@@ -51,49 +51,50 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   int get_num = 0;
 
   @Bind(R.id.toolbar) Toolbar toolbar;
-  @Bind(R.id.btn_jump) Button btn_jump;
   @Bind(R.id.imgUser) ImageView imgUser;
   @Bind(R.id.btn_two_dimen) TextView btn_two_dimen;
-  @Bind(R.id.tv_fansnum) TextView tv_fansnum;
   @Bind(R.id.tv_cash) TextView tv_cash;
   @Bind(R.id.btn_chooselist) TextView btn_chooselist;
-  @Bind(R.id.btn_store) TextView btn_store;
   @Bind(R.id.chart1) LineChart mChart;
+  @Bind(R.id.tv_today_order2) TextView tv_today_order2;
+  @Bind(R.id.tv_today_fund2) TextView tv_today_fund2;
 
-  AgentInfoBean mamaAgentInfo;
-  @Bind(R.id.app_bar_layout) AppBarLayout appBarLayout;
-  @Bind(R.id.tv_Point) TextView tvPoint;
   @Bind(R.id.rl_mama_info) RelativeLayout rlMamaInfo;
   @Bind(R.id.tv_order1) TextView tvOrder1;
   @Bind(R.id.tv_order2) TextView tvOrder2;
   @Bind(R.id.tv_fund1) TextView tvFund1;
   @Bind(R.id.tv_fund2) TextView tv_fund2;
   @Bind(R.id.rl_order) RelativeLayout rlOrder;
-  @Bind(R.id.rl_two_dimen) RelativeLayout rlTwoDimen;
-  @Bind(R.id.btn_share) TextView btnShare;
-  @Bind(R.id.rl_share) RelativeLayout rlShare;
+
   @Bind(R.id.rl_chooselist) RelativeLayout rlChooselist;
-  @Bind(R.id.rl_store) RelativeLayout rlStore;
-  @Bind(R.id.rl_btn) RelativeLayout rlBtn;
-  @Bind(R.id.tv_today_order2) TextView tv_today_order2;
-  @Bind(R.id.tv_today_fund2) TextView tv_today_fund2;
+  @Bind(R.id.rl_party) RelativeLayout rl_party;
+  @Bind(R.id.rl_push) RelativeLayout rl_push;
+  @Bind(R.id.rl_shop) RelativeLayout rl_shop;
+
+  @Bind(R.id.rl_two_dimen) RelativeLayout rlTwoDimen;
+  @Bind(R.id.tv_two_dimen) TextView tv_two_dimen;
+  @Bind(R.id.rl_fans) RelativeLayout rl_fans;
+  @Bind(R.id.tv_fansnum) TextView tv_fansnum;
+  @Bind(R.id.rl_orderlist) RelativeLayout rl_orderlist;
+  @Bind(R.id.rl_income) RelativeLayout rl_income;
+
+  AgentInfoBean mamaAgentInfo;
   private Subscription subscribe;
 
   @Override protected void setListener() {
-    btn_jump.setOnClickListener(this);
     toolbar.setOnClickListener(this);
     imgUser.setOnClickListener(this);
 
     rlTwoDimen.setOnClickListener(this);
-    rlShare.setOnClickListener(this);
-    btn_two_dimen.setOnClickListener(this);
-    tv_fansnum.setOnClickListener(this);
-    btnShare.setOnClickListener(this);
+    rl_fans.setOnClickListener(this);
+    rl_orderlist.setOnClickListener(this);
+    rl_income.setOnClickListener(this);
 
-    btn_chooselist.setOnClickListener(this);
-    btn_store.setOnClickListener(this);
-    tvOrder1.setOnClickListener(this);
-    tvFund1.setOnClickListener(this);
+    rlChooselist.setOnClickListener(this);
+    rl_party.setOnClickListener(this);
+    rl_push.setOnClickListener(this);
+    rl_shop.setOnClickListener(this);
+
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -169,18 +170,11 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   @Override public void onClick(View v) {
     Intent intent;
     switch (v.getId()) {
-      case R.id.btn_jump:
-        startActivity(new Intent(MamaInfoActivity.this, MMNinePicActivity.class));
-        finish();
-        break;
-      case R.id.rl_two_dimen:
-      case R.id.btn_two_dimen:
-        if (mamaAgentInfo != null) {
-          intent = new Intent(MamaInfoActivity.this, TwoDimenCodeActivity.class);
-          intent.putExtra("myurl", mamaAgentInfo.getShareMmcode());
-          startActivity(intent);
-        }
-        break;
+      //case R.id.btn_jump:
+      //  startActivity(new Intent(MamaInfoActivity.this, MMNinePicActivity.class));
+      //  finish();
+      //  break;
+
       case R.id.imgUser:
         if (mamaAgentInfo != null) {
           intent = new Intent(MamaInfoActivity.this, MamaWithdrawCashActivity.class);
@@ -189,28 +183,40 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
           startActivity(intent);
         }
         break;
-      case R.id.tv_fansnum:
-        startActivity(new Intent(MamaInfoActivity.this, MamaFansActivity.class));
-        break;
-
-      case R.id.rl_share:
-      case R.id.btn_share:
-        startActivity(new Intent(MamaInfoActivity.this, ShareAllowanceActivity.class));
-        break;
-
-      case R.id.btn_chooselist:
+      case R.id.rl_chooselist:
         startActivity(new Intent(MamaInfoActivity.this, MMChooseListActivity.class));
         break;
-
-      case R.id.btn_store:
+      case R.id.rl_party:
+        //startActivity(new Intent(MamaInfoActivity.this, MaMaMyStoreActivity.class));
+        break;
+      case R.id.rl_push:
+        //startActivity(new Intent(MamaInfoActivity.this, MaMaMyStoreActivity.class));
+        break;
+      case R.id.rl_shop:
         startActivity(new Intent(MamaInfoActivity.this, MaMaMyStoreActivity.class));
         break;
-      case R.id.tv_order1:
+      case R.id.rl_two_dimen:
+        if (mamaAgentInfo != null) {
+          intent = new Intent(MamaInfoActivity.this, TwoDimenCodeActivity.class);
+          intent.putExtra("myurl", mamaAgentInfo.getShareMmcode());
+          startActivity(intent);
+        }
+        break;
+      case R.id.rl_fans:
+        startActivity(new Intent(MamaInfoActivity.this, MamaFansActivity.class));
+        break;
+      case R.id.rl_orderlist:
         startActivity(new Intent(MamaInfoActivity.this, MMShoppingListActivity.class));
         break;
-      case R.id.tv_fund1:
+      case R.id.rl_income:
         startActivity(new Intent(MamaInfoActivity.this, MMCarryLogListActivity.class));
         break;
+      //case R.id.rl_share:
+      //  startActivity(new Intent(MamaInfoActivity.this, ShareAllowanceActivity.class));
+      //  break;
+
+
+
     }
   }
 
