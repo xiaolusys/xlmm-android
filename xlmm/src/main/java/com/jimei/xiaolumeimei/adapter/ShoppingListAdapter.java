@@ -76,7 +76,8 @@ public class ShoppingListAdapter
     holder.wxordernick.setText(resultsEntity.getWxordernick());
     holder.timeDisplay.setText(resultsEntity.getTimeDisplay());
     holder.tichengCash.setText(resultsEntity.getTichengCash() + "");
-    holder.totalCash.setText("总收益 "+ (float)(Math.round(resultsEntity.getDaylyAmount()*100)/100));
+    holder.totalCash.setText(
+        "总收益 " + (float) (Math.round(resultsEntity.getDaylyAmount() * 100)) / 100);
   }
 
   private void showCategory(ShoppingListVH holder) {
@@ -86,7 +87,6 @@ public class ShoppingListAdapter
   private void hideCategory(ShoppingListVH holder) {
     if (isVisibleOf(holder.category)) holder.category.setVisibility(View.GONE);
   }
-
 
   private boolean isVisibleOf(View view) {
     return view.getVisibility() == View.VISIBLE;

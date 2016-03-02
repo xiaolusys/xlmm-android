@@ -71,9 +71,8 @@ public class CarryLogListAdapter
       showCategory(holder);
     } else {
       boolean theCategoryOfLastEqualsToThis = mList.get(position - 1)
-          .getCreated()
-          .substring(1, 10)
-          .equals(mList.get(position).getCreated().substring(1, 10));
+          .getCarryDate()
+          .equals(mList.get(position).getCarryDate());
       if (!theCategoryOfLastEqualsToThis) {
         showCategory(holder);
       } else {
@@ -84,7 +83,7 @@ public class CarryLogListAdapter
     holder.shoptime.setText(resultsEntity.getCreated().substring(0, 10));
     //holder.picPath.setImageResource(R.drawable.carrylog_image);
     holder.totalCash.setText(
-        "总收益 " + (float) (Math.round(resultsEntity.getDaylyInAmount() * 100) / 100));
+        "总收益 " + (float) (Math.round(resultsEntity.getDaylyInAmount() * 100)) / 100);
     holder.tichengCash.setText("+" + resultsEntity.getValueMoney());
     holder.timeDisplay.setText(resultsEntity.getGetLogTypeDisplay());
     holder.wxordernick.setText(resultsEntity.getDesc());

@@ -39,7 +39,6 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initData() {
-
     loadData();
   }
 
@@ -48,7 +47,6 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
     if (calcLeftTime() > 0) {
       myTickCircleProgress.setVisibility(View.VISIBLE);
     } else {
-
       myTickCircleProgress.setVisibility(View.GONE);
       MMProductModel.getInstance()
           .getNinePic()
@@ -56,7 +54,6 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
           .subscribe(new ServiceResponse<List<NinePicBean>>() {
             @Override public void onNext(List<NinePicBean> ninePicBean) {
               if (ninePicBean != null) {
-
                 mAdapter.setDatas(ninePicBean);
                 mAdapter.notifyDataSetChanged();
               } else {
