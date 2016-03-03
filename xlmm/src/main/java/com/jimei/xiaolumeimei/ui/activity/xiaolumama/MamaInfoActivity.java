@@ -63,14 +63,11 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.pb_hook) ProgressBar mProgressBar;
 
   @Bind(R.id.chart1) LineChart mChart;
+  @Bind(R.id.tv_visit2) TextView tv_today_visit2;
   @Bind(R.id.tv_today_order2) TextView tv_today_order2;
   @Bind(R.id.tv_today_fund2) TextView tv_today_fund2;
 
   @Bind(R.id.rl_mama_info) RelativeLayout rlMamaInfo;
-  @Bind(R.id.tv_order1) TextView tvOrder1;
-  @Bind(R.id.tv_order2) TextView tvOrder2;
-  @Bind(R.id.tv_fund1) TextView tvFund1;
-  @Bind(R.id.tv_fund2) TextView tv_fund2;
   @Bind(R.id.rl_order) RelativeLayout rlOrder;
 
   @Bind(R.id.rl_chooselist) RelativeLayout rlChooselist;
@@ -83,7 +80,9 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.rl_fans) RelativeLayout rl_fans;
   @Bind(R.id.tv_fansnum) TextView tv_fansnum;
   @Bind(R.id.rl_orderlist) RelativeLayout rl_orderlist;
+  @Bind(R.id.tv_order) TextView tv_order;
   @Bind(R.id.rl_income) RelativeLayout rl_income;
+  @Bind(R.id.tv_fund) TextView tv_fund;
 
   AgentInfoBean mamaAgentInfo;
   private Subscription subscribe;
@@ -131,9 +130,10 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
             JUtils.Log(TAG,
                 "cash =" + pointBean.getCash() + " all fund=" + pointBean.getMmclog()
                     .getMci());
-            tv_cash.setText(Double.toString(pointBean.getCash()));
-            tv_fund2.setText(Double.toString(
-                (float) (Math.round(pointBean.getMmclog().getMci() * 100) / 100)));
+            tv_cash.setText(Double.toString(
+                (double) (Math.round(pointBean.getCash() * 100)) / 100));
+            tv_fund.setText("账户余额"+ Double.toString(
+                (double) (Math.round(pointBean.getCash() * 100)) / 100));
 
             tv_fansnum.setText("我的粉丝 " + pointBean.getFansNum());
             JUtils.Log(TAG, "fans num =" + pointBean.getFansNum());
@@ -159,9 +159,8 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
           @Override public void onNext(ShoppingListBean shoppingListBean) {
             super.onNext(shoppingListBean);
             if (shoppingListBean != null) {
-              int count = shoppingListBean.getCount();
               JUtils.Log(TAG, "all orders num =" + shoppingListBean.getCount());
-              tvOrder2.setText(Integer.toString(shoppingListBean.getCount()));
+              tv_order.setText(Integer.toString(shoppingListBean.getCount())+"个订单");
             }
           }
         });

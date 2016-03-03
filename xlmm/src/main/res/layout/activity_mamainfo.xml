@@ -47,7 +47,6 @@
           android:id="@+id/rl_mama_info"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:background="@color/colorAccent"
           android:layout_centerHorizontal="true">
 
         <ImageView
@@ -143,45 +142,6 @@
           android:layout_marginTop="8px"
           android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tv_today_order1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="70px"
-            android:clickable="true"
-            android:text="今日订单"/>
-
-        <TextView
-            android:id="@+id/tv_today_order2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:layout_toRightOf="@+id/tv_today_order1"
-            android:gravity="center"
-            android:text="0"
-            android:textColor="@color/colorAccent"/>
-
-        <TextView
-            android:id="@+id/tv_today_fund1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="200px"
-            android:layout_toRightOf="@+id/tv_today_order1"
-            android:text="今日收入(元)"
-            android:textSize="15sp"/>
-
-        <TextView
-            android:id="@+id/tv_today_fund2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:layout_gravity="center"
-            android:layout_toRightOf="@+id/tv_today_fund1"
-            android:text="0"
-            android:textColor="@color/colorAccent"
-            android:textSize="15sp"/>
-
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/chart1"
             android:layout_width="match_parent"
@@ -202,40 +162,59 @@
           android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tv_order1"
+            android:id="@+id/tv_visit1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="70px"
             android:clickable="true"
-            android:text="订单记录"/>
+            android:text="今日访客"/>
 
         <TextView
-            android:id="@+id/tv_order2"
+            android:id="@+id/tv_visit2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dp"
-            android:layout_toRightOf="@+id/tv_order1"
+            android:layout_toRightOf="@+id/tv_visit1"
             android:gravity="center"
             android:text="0"
             android:textColor="@color/colorAccent"/>
 
         <TextView
-            android:id="@+id/tv_fund1"
+            android:id="@+id/tv_today_order1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="70px"
+            android:layout_toRightOf="@+id/tv_visit1"
+            android:clickable="true"
+            android:text="今日订单"/>
+
+        <TextView
+            android:id="@+id/tv_today_order2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_toRightOf="@+id/tv_today_order1"
+            android:gravity="center"
+            android:text="0"
+            android:textColor="@color/colorAccent"/>
+
+        <TextView
+            android:id="@+id/tv_today_fund1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="200px"
-            android:layout_toRightOf="@+id/tv_order1"
-            android:text="积累收益"
+            android:layout_marginLeft="70px"
+            android:layout_toRightOf="@+id/tv_today_order1"
+            android:text="今日收益"
             android:textSize="15sp"/>
 
         <TextView
-            android:id="@+id/tv_fund2"
+            android:id="@+id/tv_today_fund2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dp"
             android:layout_gravity="center"
-            android:layout_toRightOf="@+id/tv_fund1"
+            android:layout_toRightOf="@+id/tv_today_fund1"
             android:text="0"
             android:textColor="@color/colorAccent"
             android:textSize="15sp"/>
@@ -409,7 +388,7 @@
               android:layout_alignLeft="@id/btn_two_dimen"
               android:text="邀请小鹿妈妈"
               android:textColor="@color/divider"
-              android:textSize="15sp"/>
+              android:textSize="12sp"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -451,7 +430,7 @@
               android:layout_alignLeft="@id/btn_fans"
               android:text="粉丝数"
               android:textColor="@color/divider"
-              android:textSize="15sp"/>
+              android:textSize="12sp"/>
         </RelativeLayout>
         >
 
@@ -482,6 +461,7 @@
               android:textSize="15sp"/>
 
           <TextView
+              android:id="@+id/tv_order"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_gravity="center"
@@ -491,7 +471,7 @@
               android:layout_alignLeft="@id/btn_orderlist"
               android:text="订单个数"
               android:textColor="@color/divider"
-              android:textSize="15sp"/>
+              android:textSize="12sp"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -508,7 +488,7 @@
               android:layout_height="42px"
               android:layout_marginLeft="55px"
               android:layout_marginTop="50px"
-              android:src="@drawable/img_emptypoint"/>
+              android:src="@drawable/ic_coin2"/>
 
           <TextView
               android:id="@+id/btn_income"
@@ -522,6 +502,7 @@
               android:textSize="15sp"/>
 
           <TextView
+              android:id="@+id/tv_fund"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_gravity="center"
@@ -531,7 +512,7 @@
               android:layout_alignLeft="@id/btn_income"
               android:text="账户余额"
               android:textColor="@color/divider"
-              android:textSize="15sp"/>
+              android:textSize="12sp"/>
         </RelativeLayout>
       </RelativeLayout>
 
