@@ -11,7 +11,13 @@ import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.UserAccountBean;
 import com.jimei.xiaolumeimei.entities.XiaoMiPushContent;
 import com.jimei.xiaolumeimei.model.UserModel;
+import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.ui.activity.main.WebViewActivity;
+import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActvity;
+import com.jimei.xiaolumeimei.ui.activity.product.TongkuanActivity;
+import com.jimei.xiaolumeimei.ui.activity.trade.OrderDetailActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.CouponActivity;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaInfoActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
@@ -283,10 +289,65 @@ public class XiaoMiMessageReceiver extends PushMessageReceiver {
       return;
 
     JumpInfo jumpInfo = get_jump_info(recvContent);
-
+    Intent intent;
     switch (jumpInfo.getType()){
+      case XlmmConst.JUMP_PROMOTE_TODAY:
+        intent = new Intent(context, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("fragment", 1);
+        context.startActivity(intent);
+        break;
+      case XlmmConst.JUMP_PROMOTE_PREVIOUS:
+        intent = new Intent(context, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("fragment", 2);
+        context.startActivity(intent);
+        break;
+      case XlmmConst.JUMP_PRODUCT_CHILDLIST:
+        intent = new Intent(context, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("fragment", 3);
+        context.startActivity(intent);
+        break;
+      case XlmmConst.JUMP_PRODUCT_LADYLIST:
+        intent = new Intent(context, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("fragment", 4);
+        context.startActivity(intent);
+        break;
+      case XlmmConst.JUMP_PRODUCT_MODELLIST:
+        String  model_id = get_jump_arg("model_id",jumpInfo.getUrl() );
+
+        intent = new Intent(context, TongkuanActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("model_id", model_id);
+        intent.putExtra("name", "同款");
+        context.startActivity(intent);
+        break;
+      case XlmmConst.JUMP_PRODUCT_DETAIL:
+        String  product_id = get_jump_arg("product_id",jumpInfo.getUrl() );
+
+        intent = new Intent(context, ProductDetailActvity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("product_id", product_id);
+        context.startActivity(intent);
+        break;
+      case XlmmConst.JUMP_TRADE_DETAIL:
+        String  trade_id = get_jump_arg("trade_id",jumpInfo.getUrl() );
+        intent = new Intent(context, OrderDetailActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("orderinfo", trade_id);
+        intent.putExtra("source", "Main");
+        Log.d(TAG, "LinearLayout transfer orderid  " + trade_id + " to OrderDetailActivity");
+        context.startActivity(intent);
+        break;
+      case XlmmConst.JUMP_USER_COUPON:
+        intent = new Intent(context, CouponActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+        break;
       case XlmmConst.JUMP_WEBVIEW:
-        Intent intent = new Intent(context, WebViewActivity.class);
+        intent = new Intent(context, WebViewActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         SharedPreferences sharedPreferences =
             context.getSharedPreferences("COOKIESxlmm",
@@ -296,6 +357,11 @@ public class XiaoMiMessageReceiver extends PushMessageReceiver {
         bundle.putString("cookies", cookies);
         bundle.putString("actlink", jumpInfo.getUrl());
         intent.putExtras(bundle);
+        context.startActivity(intent);
+        break;
+      case XlmmConst.JUMP_XIAOLUMAMA:
+        intent = new Intent(context, MamaInfoActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
         break;
     }
@@ -360,6 +426,18 @@ public class XiaoMiMessageReceiver extends PushMessageReceiver {
 
     JUtils.Log(TAG, jumpInfo.toString());
     return  jumpInfo;
+  }
+
+  private String get_jump_arg(String prefix, String recvContent){
+    String[] temp = recvContent.split(prefix + "=");
+    if (temp.length > 1) {
+      return temp[2];
+    }
+    else{
+      return null;
+    }
+
+
   }
 
   class JumpInfo{

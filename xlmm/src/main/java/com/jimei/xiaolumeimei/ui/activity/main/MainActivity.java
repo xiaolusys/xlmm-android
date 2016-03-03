@@ -459,6 +459,8 @@ public class MainActivity extends BaseActivity
   @Override protected void onResume() {
     super.onResume();
 
+    swith_fragment();
+
     //显示购物车数量
     cartsModel.show_carts_num()
         .subscribeOn(Schedulers.io())
@@ -572,6 +574,18 @@ public class MainActivity extends BaseActivity
     return userInfoBean;
   }
 
+  public void swith_fragment(){
+    int tabid = getIntent().getExtras().getInt("fragment");
+    if ((tabid>=1) && (tabid <=4)){
+      try {
+        mTabLayout.setScrollPosition(tabid-1,0,true);
+        mViewPager.setCurrentItem(tabid-1);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+  }
+
   class MainTabAdapter extends FragmentPagerAdapter {
     private List<Fragment> listFragment;
     private List<String> listTitle;
@@ -595,4 +609,5 @@ public class MainActivity extends BaseActivity
       return listTitle.get(position);
     }
   }
+
 }
