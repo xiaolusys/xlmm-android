@@ -47,23 +47,34 @@
           android:id="@+id/rl_mama_info"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
+          android:background="@color/colorAccent"
           android:layout_centerHorizontal="true">
 
         <ImageView
-            android:id="@+id/imgUser"
+            android:id="@+id/imgCircleStar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10px"
             android:layout_centerHorizontal="true"
             android:clickable="true"
-            android:src="@drawable/img_crown"/>
+            android:src="@drawable/img_circlestar"/>
+
+        <ImageView
+            android:id="@+id/imgUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20px"
+            android:layout_centerHorizontal="true"
+            android:clickable="true"
+            android:src="@drawable/img_diamond"/>
 
         <TextView
             android:id="@+id/tv_Point"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/imgUser"
+            android:layout_below="@id/imgCircleStar"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="10px"
             android:gravity="center"
             android:text="账户余额（元）"
             android:textSize="15sp"/>
