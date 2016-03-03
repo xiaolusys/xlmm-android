@@ -28,7 +28,7 @@
         android:id="@+id/tx_order_state"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="交易关闭"
+        android:text=""
         android:textSize="13sp"
         android:textColor="@color/colorAccent"
         android:gravity="center_vertical"

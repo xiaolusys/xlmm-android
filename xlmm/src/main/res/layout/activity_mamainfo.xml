@@ -78,6 +78,49 @@
             android:text="0"
             android:textColor="@color/colorAccent"
             android:textSize="20sp"/>
+
+        <TextView
+          android:id="@+id/tv_liveness"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_below="@id/tv_cash"
+          android:layout_marginLeft="4dp"
+          android:layout_marginTop="10px"
+          android:layout_gravity="center"
+          android:text="活跃度"
+          android:textSize="15sp"/>
+
+        <ProgressBar
+            android:id="@+id/pb_hook"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="8px"
+            android:layout_below="@id/tv_liveness"
+            android:layout_marginLeft="4dp"
+
+            />
+
+        <!--ImageView
+            android:id="@+id/img_hook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_liveness"
+            android:layout_marginLeft="4dp"
+            android:layout_gravity="center"
+            android:src="@drawable/img_hook"
+            /-->
+
+        <com.jimei.xiaolumeimei.widget.RotateTextView
+            android:id="@+id/img_liveness"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/tv_liveness"
+            android:layout_marginLeft="436px"
+            android:gravity="center"
+            android:background="@drawable/img_liveness"
+            android:text="77%"
+            android:textSize="9sp"
+            />
       </RelativeLayout>
 
       <RelativeLayout
@@ -204,8 +247,8 @@
 
           <ImageView
               android:id="@+id/img_choose"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
+              android:layout_width="60px"
+              android:layout_height="60px"
               android:layout_centerHorizontal="true"
               android:layout_marginTop="20px"
               android:src="@drawable/ic_choose"/>
@@ -232,8 +275,8 @@
 
           <ImageView
               android:id="@+id/img_star"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
+              android:layout_width="60px"
+              android:layout_height="60px"
               android:layout_centerHorizontal="true"
               android:layout_marginTop="20px"
               android:src="@drawable/ic_choice"/>
@@ -260,8 +303,8 @@
 
           <ImageView
               android:id="@+id/img_timer"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
+              android:layout_width="60px"
+              android:layout_height="60px"
               android:layout_centerHorizontal="true"
               android:layout_marginTop="20px"
               android:src="@drawable/ic_choice"/>
@@ -288,11 +331,11 @@
 
           <ImageView
               android:id="@+id/img_shop"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
+              android:layout_width="60px"
+              android:layout_height="60px"
               android:layout_centerHorizontal="true"
               android:layout_marginTop="20px"
-              android:src="@drawable/ic_choice"/>
+              android:src="@drawable/ic_shop"/>
 
           <TextView
               android:id="@+id/btn_mychoose"
@@ -330,7 +373,7 @@
               android:layout_height="wrap_content"
               android:layout_marginLeft="55px"
               android:layout_marginTop="50px"
-              android:src="@drawable/ic_twodimen"/>
+              android:src="@drawable/ic_qrcode"/>
 
           <TextView
               android:id="@+id/btn_two_dimen"
@@ -341,6 +384,7 @@
               android:layout_toRightOf="@id/img_two_dimen"
               android:clickable="true"
               android:text="我的邀请"
+              android:textSize="15sp"
               />
 
           <TextView
@@ -371,7 +415,7 @@
               android:layout_height="wrap_content"
               android:layout_marginLeft="55px"
               android:layout_marginTop="50px"
-              android:src="@drawable/ic_coin"/>
+              android:src="@drawable/ic_fans"/>
 
           <TextView
               android:id="@+id/btn_fans"
@@ -382,7 +426,8 @@
               android:layout_toRightOf="@id/img_share"
               android:gravity="center"
               android:text="我的粉丝"
-              android:textColor="@color/colorAccent"/>
+              android:textSize="15sp"
+              />
 
           <TextView
               android:id="@+id/tv_fansnum"
@@ -412,7 +457,7 @@
               android:layout_height="wrap_content"
               android:layout_marginLeft="55px"
               android:layout_marginTop="50px"
-              android:src="@drawable/ic_choose"/>
+              android:src="@drawable/ic_order"/>
 
           <TextView
               android:id="@+id/btn_orderlist"
@@ -448,11 +493,11 @@
 
           <ImageView
               android:id="@+id/img_income"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
+              android:layout_width="42px"
+              android:layout_height="42px"
               android:layout_marginLeft="55px"
               android:layout_marginTop="50px"
-              android:src="@drawable/ic_coin"/>
+              android:src="@drawable/img_emptypoint"/>
 
           <TextView
               android:id="@+id/btn_income"

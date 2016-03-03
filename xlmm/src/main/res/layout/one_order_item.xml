@@ -30,7 +30,7 @@
           android:id="@+id/tx_good_name"
           android:layout_width="wrap_content"
           android:layout_height="match_parent"
-          android:text="@string/productname"
+          android:text=""
           android:textSize="15sp"
           />
 
@@ -39,7 +39,7 @@
           android:id="@+id/tx_good_price"
           android:layout_width="wrap_content"
           android:layout_height="match_parent"
-          android:text="@string/productprice"
+          android:text=""
           android:textSize="15sp"
           android:layout_alignParentRight="true"
           android:layout_alignParentEnd="true"/>
@@ -54,7 +54,7 @@
           android:id="@+id/tx_good_size"
           android:layout_width="wrap_content"
           android:layout_height="match_parent"
-          android:text="尺码：XL"
+          android:text="尺码："
           android:textSize="15sp"
           android:gravity="bottom"/>
 

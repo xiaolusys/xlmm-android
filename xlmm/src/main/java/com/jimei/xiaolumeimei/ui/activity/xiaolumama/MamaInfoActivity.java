@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
@@ -34,6 +35,7 @@ import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import com.zhy.autolayout.AutoRelativeLayout;
 import java.util.ArrayList;
 import java.util.List;
 import rx.Subscription;
@@ -55,6 +57,11 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.btn_two_dimen) TextView btn_two_dimen;
   @Bind(R.id.tv_cash) TextView tv_cash;
   @Bind(R.id.btn_chooselist) TextView btn_chooselist;
+
+  //@Bind(R.id.img_hook) ImageView img_hook;
+  @Bind(R.id.img_liveness) com.jimei.xiaolumeimei.widget.RotateTextView img_liveness;
+  @Bind(R.id.pb_hook) ProgressBar mProgressBar;
+
   @Bind(R.id.chart1) LineChart mChart;
   @Bind(R.id.tv_today_order2) TextView tv_today_order2;
   @Bind(R.id.tv_today_fund2) TextView tv_today_fund2;
@@ -130,6 +137,8 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
 
             tv_fansnum.setText("我的粉丝 " + pointBean.getFansNum());
             JUtils.Log(TAG, "fans num =" + pointBean.getFansNum());
+
+            show_liveness(90);
           }
         });
     addSubscription(subscribe);
@@ -539,6 +548,35 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void onStop() {
     super.onStop();
+  }
+
+  private  void show_liveness(int liveness){
+    img_liveness.setText(Integer.toString(liveness)+"%");
+    mProgressBar.setProgress(liveness);
+    mProgressBar.setVisibility(View.VISIBLE);
+
+    /*AutoRelativeLayout.LayoutParams laParams=(AutoRelativeLayout.LayoutParams)img_hook
+        .getLayoutParams();
+    laParams.width= getWindowManager().getDefaultDisplay().getWidth() *
+    liveness/ 100;
+    img_hook.setLayoutParams(laParams);*/
+
+    //AutoRelativeLayout.LayoutParams laParams1=(AutoRelativeLayout.LayoutParams)
+    //    img_liveness.getLayoutParams();
+    AutoRelativeLayout.LayoutParams laParams1=new AutoRelativeLayout.LayoutParams
+        (AutoRelativeLayout.LayoutParams.WRAP_CONTENT,AutoRelativeLayout.LayoutParams
+        .WRAP_CONTENT);
+    JUtils.Log(TAG,""+laParams1.leftMargin + " "+ laParams1.height);
+    JUtils.Log(TAG,"show_liveness left:"+getWindowManager().getDefaultDisplay().getWidth
+        () * liveness/ 100 + "width:"+img_liveness.getWidth());
+    //laParams1.leftMargin = getWindowManager().getDefaultDisplay().getWidth() *
+    //    liveness/ 100 - laParams1.width;
+
+    laParams1.setMargins(getWindowManager().getDefaultDisplay().getWidth() *
+            liveness/ 100 - img_liveness.getWidth(),rlMamaInfo.getHeight()-img_liveness
+        .getHeight(),0,0);
+
+    img_liveness.setLayoutParams(laParams1);
   }
 
   final static class HisRefund {

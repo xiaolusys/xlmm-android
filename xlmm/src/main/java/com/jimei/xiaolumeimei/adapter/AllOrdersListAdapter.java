@@ -71,7 +71,6 @@ public class AllOrdersListAdapter extends BaseAdapter {
       crtTime = list.get(i).getCreated();
 
       picpath = list.get(i).getOrderPic();
-
       map.put("payment", Float.toString(payment));
       map.put("orderState", orderState);
       map.put("state", Integer.toString(state));

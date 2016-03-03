@@ -95,7 +95,7 @@
             android:id="@+id/tx_custom_name"
             android:layout_marginLeft="8dp"
             android:layout_toRightOf="@id/image_location"
-            android:text="xiaolumama"
+            android:text=""
             />
 
         <TextView
@@ -104,7 +104,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_toRightOf="@id/image_location"
-            android:text="上海杨浦区内环十八街东西瓜区测试地址"
+            android:text=""
             android:layout_alignParentBottom="true"
             />
         <TextView
