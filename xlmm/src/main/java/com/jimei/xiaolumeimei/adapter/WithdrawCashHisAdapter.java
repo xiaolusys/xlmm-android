@@ -86,7 +86,7 @@ public class WithdrawCashHisAdapter extends BaseAdapter {
     if (null != record) {
       holder.tx_withdraw_fund.setText(String.valueOf(Math.round(record.getValue_money()*100)/100) + "元");
       holder.tx_withdraw_state.setText(record.getGet_status_display());
-      holder.tx_time.setText(record.getCreated());
+      holder.tx_time.setText(record.getCreated().replace("T"," "));
     }
 
 

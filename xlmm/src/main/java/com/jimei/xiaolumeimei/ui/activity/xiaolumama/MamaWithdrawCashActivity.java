@@ -63,7 +63,7 @@ public class MamaWithdrawCashActivity extends BaseSwipeBackCompatActivity
     setSupportActionBar(toolbar);
     finishBack(toolbar);
     cash = getIntent().getExtras().getDouble("cash");
-    tv_reminder.setText(Double.toString(Math.round((cash * 100) / 100)));
+    tv_reminder.setText(Double.toString((double)(Math.round(cash * 100)) / 100));
     if (Double.compare(cash, 0) > 0) {
       rl_has_no_cash.setVisibility(View.INVISIBLE);
     } else {

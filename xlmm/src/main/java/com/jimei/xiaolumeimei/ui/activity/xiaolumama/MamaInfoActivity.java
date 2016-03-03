@@ -489,7 +489,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
                 }
                 if (show_his_refund.get(0) != null) {
                   tv_today_order2.setText(
-                      Float.toString(show_his_refund.get(0).getOrder_num()));
+                      Integer.toString(show_his_refund.get(0).getOrder_num()));
                   tv_today_fund2.setText(Float.toString(
                       (float) (Math.round(show_his_refund.get(0).getRefund() * 100))
                           / 100));
@@ -524,7 +524,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
                   .getDayly_amount());
               if ((show_his_refund.get(0) != null) && (finalI == 0)) {
                 tv_today_order2.setText(
-                    Float.toString(show_his_refund.get(0).getOrder_num()));
+                    Integer.toString(show_his_refund.get(0).getOrder_num()));
                 tv_today_fund2.setText(Float.toString(
                     (float) (Math.round(show_his_refund.get(0).getRefund() * 100))
                         / 100));

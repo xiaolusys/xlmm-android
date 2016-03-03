@@ -185,7 +185,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     //TextView tx_refund_reason = (TextView) findViewById(R.id.tx_refund_reason);
     tx_refund_reason.setText(refundDetailBean.getReason());
 
-    tx_order_crttime.setText(refundDetailBean.getCreated());
+    tx_order_crttime.setText(refundDetailBean.getCreated().replace("T"," "));
     JUtils.Log(TAG,"crt time "+refundDetailBean.getCreated());
 
   }
