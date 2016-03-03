@@ -1,19 +1,30 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import cn.sharesdk.framework.ShareSDK;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.MaMaStoreAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.MMChooselistBean;
+import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
+import com.jimei.xiaolumeimei.model.UserNewModel;
+import com.jimei.xiaolumeimei.widget.CircleImageView;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.victor.loading.rotate.RotateLoading;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.BitmapCallback;
 import java.util.List;
+import okhttp3.Call;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -25,6 +36,9 @@ import rx.schedulers.Schedulers;
 public class MaMaMyStoreActivity extends BaseSwipeBackCompatActivity {
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.store_rcyView) RecyclerView storeRcyView;
+  @Bind(R.id.collapsing_toolbar_layout) CollapsingToolbarLayout collapsingToolbarLayout;
+  @Bind(R.id.loading) RotateLoading loading;
+  @Bind(R.id.titleiamge) CircleImageView titleiamge;
   private MaMaStoreAdapter maMaStoreAdapter;
 
   @Override protected void setListener() {
@@ -38,7 +52,6 @@ public class MaMaMyStoreActivity extends BaseSwipeBackCompatActivity {
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<List<MMChooselistBean>>() {
           @Override public void onNext(List<MMChooselistBean> mmChooselistBeans) {
-            super.onNext(mmChooselistBeans);
             try {
               if (mmChooselistBeans != null) {
                 maMaStoreAdapter.update(mmChooselistBeans);
@@ -68,9 +81,39 @@ public class MaMaMyStoreActivity extends BaseSwipeBackCompatActivity {
   }
 
   @Override protected void initViews() {
-    toolbar.setTitle("");
+    toolbar.setTitle("小鹿妈妈de精选集");
     setSupportActionBar(toolbar);
     finishBack(toolbar);
+
+    collapsingToolbarLayout.setTitle("小鹿妈妈de精选集");
+
+    UserNewModel.getInstance()
+        .getProfile()
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<UserInfoBean>() {
+          @Override public void onNext(UserInfoBean userInfoBean) {
+            if (userInfoBean != null) {
+              if (!TextUtils.isEmpty(userInfoBean.getThumbnail())
+                  && !userInfoBean.getThumbnail().equals("")) {
+                OkHttpUtils.get()
+                    .url(userInfoBean.getThumbnail())
+                    .build()
+                    .execute(new BitmapCallback() {
+                      @Override public void onError(Call call, Exception e) {
+
+                      }
+
+                      @Override public void onResponse(Bitmap response) {
+                        if (response != null) {
+                          titleiamge.setImageBitmap(response);
+                        }
+                      }
+                    });
+              }
+            }
+          }
+        });
+
     initRecyclerView();
   }
 
@@ -94,5 +137,11 @@ public class MaMaMyStoreActivity extends BaseSwipeBackCompatActivity {
   @Override protected void onStop() {
     super.onStop();
     ShareSDK.stopSDK();
+  }
+
+  @Override protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    // TODO: add setContentView(...) invocation
+    ButterKnife.bind(this);
   }
 }
