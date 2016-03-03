@@ -450,80 +450,83 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
           intent.putExtras(bundle);
           startActivity(intent);
           //startActivity(new Intent(ProductDetailActvity.this, LoginActivity.class));
-        } else if (sku_id == null) {
-          JUtils.Toast("请选择尺码");
         } else {
-          JUtils.Log(sku_id + "这尺寸可以");
 
-          Subscription subscribe = cartsModel.addCarts(item_id, sku_id)
-              .subscribeOn(Schedulers.newThread())
-              .subscribe(new ServiceResponse<AddCartsBean>() {
+          if (isSelect) {
+            JUtils.Log(sku_id + "这尺寸可以");
 
-                @Override public void onError(Throwable e) {
-                  super.onError(e);
-                  JUtils.Toast("商品库存不足,选择其它看看吧");
-                }
+            Subscription subscribe = cartsModel.addCarts(item_id, sku_id)
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(new ServiceResponse<AddCartsBean>() {
 
-                @Override public void onNext(AddCartsBean addCartsBean) {
-                  super.onNext(addCartsBean);
+                  @Override public void onError(Throwable e) {
+                    super.onError(e);
+                    JUtils.Toast("商品库存不足,选择其它看看吧");
+                  }
 
-                  //int[] location = new int[2];
-                  //if (endP == null) {
-                  //  frameLayout.getLocationOnScreen(location);
-                  //  baseP = new PointF(location[0], location[1]);
-                  //  endP = new PointF();
-                  //  endP.x = 0;
-                  //  endP.y = frameLayout.getMeasuredHeight();
-                  //}
-                  //
-                  ////final int viewW, viewH;
-                  ////viewW = v.getMeasuredWidth();
-                  ////viewH = v.getMeasuredHeight();
-                  //v.getLocationOnScreen(location);
-                  //startP = new PointF(location[0] - baseP.x, location[1] - baseP.y);
-                  //
-                  //final View animView =
-                  //    getLayoutInflater().inflate(R.layout.item_cart, frameLayout, false);
-                  //ValueAnimator valueAnimator =
-                  //    ValueAnimator.ofObject(new BezierEvaluator(), startP, endP);
-                  //valueAnimator.addUpdateListener(
-                  //    new ValueAnimator.AnimatorUpdateListener() {
-                  //      @Override public void onAnimationUpdate(ValueAnimator animation) {
-                  //        PointF pointF = (PointF) animation.getAnimatedValue();
-                  //        animView.setX(pointF.x);
-                  //        animView.setY(pointF.y);
-                  //      }
-                  //    });
-                  //valueAnimator.addListener(new Animator.AnimatorListener() {
-                  //  public void onAnimationStart(Animator animation) {
-                  //    frameLayout.addView(animView);
-                  //  }
-                  //
-                  //  public void onAnimationEnd(Animator animation) {
-                  //    frameLayout.removeView(animView);
-                  //    animView.destroyDrawingCache();
-                  //  }
-                  //
-                  //  public void onAnimationCancel(Animator animation) {
-                  //  }
-                  //
-                  //  public void onAnimationRepeat(Animator animation) {
-                  //  }
-                  //});
-                  //
-                  //AnimatorSet animatorSet = new AnimatorSet();
-                  //animatorSet.playTogether(
-                  //    ObjectAnimator.ofFloat(animView, "scaleX", 0.3f, 1f),
-                  //    ObjectAnimator.ofFloat(animView, "scaleY", 0.3f, 1f),
-                  //    valueAnimator);
-                  //animatorSet.setDuration(1000);
-                  //animatorSet.start();
-                  num++;
-                  badge.setBadgeCount(num);
-                }
-              });
+                  @Override public void onNext(AddCartsBean addCartsBean) {
+                    super.onNext(addCartsBean);
 
-          addSubscription(subscribe);
+                    //int[] location = new int[2];
+                    //if (endP == null) {
+                    //  frameLayout.getLocationOnScreen(location);
+                    //  baseP = new PointF(location[0], location[1]);
+                    //  endP = new PointF();
+                    //  endP.x = 0;
+                    //  endP.y = frameLayout.getMeasuredHeight();
+                    //}
+                    //
+                    ////final int viewW, viewH;
+                    ////viewW = v.getMeasuredWidth();
+                    ////viewH = v.getMeasuredHeight();
+                    //v.getLocationOnScreen(location);
+                    //startP = new PointF(location[0] - baseP.x, location[1] - baseP.y);
+                    //
+                    //final View animView =
+                    //    getLayoutInflater().inflate(R.layout.item_cart, frameLayout, false);
+                    //ValueAnimator valueAnimator =
+                    //    ValueAnimator.ofObject(new BezierEvaluator(), startP, endP);
+                    //valueAnimator.addUpdateListener(
+                    //    new ValueAnimator.AnimatorUpdateListener() {
+                    //      @Override public void onAnimationUpdate(ValueAnimator animation) {
+                    //        PointF pointF = (PointF) animation.getAnimatedValue();
+                    //        animView.setX(pointF.x);
+                    //        animView.setY(pointF.y);
+                    //      }
+                    //    });
+                    //valueAnimator.addListener(new Animator.AnimatorListener() {
+                    //  public void onAnimationStart(Animator animation) {
+                    //    frameLayout.addView(animView);
+                    //  }
+                    //
+                    //  public void onAnimationEnd(Animator animation) {
+                    //    frameLayout.removeView(animView);
+                    //    animView.destroyDrawingCache();
+                    //  }
+                    //
+                    //  public void onAnimationCancel(Animator animation) {
+                    //  }
+                    //
+                    //  public void onAnimationRepeat(Animator animation) {
+                    //  }
+                    //});
+                    //
+                    //AnimatorSet animatorSet = new AnimatorSet();
+                    //animatorSet.playTogether(
+                    //    ObjectAnimator.ofFloat(animView, "scaleX", 0.3f, 1f),
+                    //    ObjectAnimator.ofFloat(animView, "scaleY", 0.3f, 1f),
+                    //    valueAnimator);
+                    //animatorSet.setDuration(1000);
+                    //animatorSet.start();
+                    num++;
+                    badge.setBadgeCount(num);
+                  }
+                });
+
+            addSubscription(subscribe);
+          } else {
+            JUtils.Toast("请选择尺码");
+          }
         }
 
         break;
@@ -556,9 +559,8 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
       case R.id.img_share:
         JUtils.Log(TAG, "share productdetail");
         if (LoginUtils.checkLoginState(getApplicationContext())) {
-           share_productdetail();
-        }
-        else {
+          share_productdetail();
+        } else {
           JUtils.Log(TAG, "need login");
           Intent intent = new Intent(ProductDetailActvity.this, LoginActivity.class);
           Bundle bundle = new Bundle();
@@ -570,16 +572,18 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
     }
   }
 
-  @Override public void onSelected(Set<Integer> selectPosSet) {
+  @Override public void onSelected(Set<Integer> selectPosSet, int position) {
     if (selectPosSet.isEmpty()) {
       isSelect = false;
     } else {
       isSelect = true;
     }
+
+    sku_id = normalSkus.get(position).getId();
   }
 
   @Override public boolean onTagClick(View view, int position, FlowLayout parent) {
-    sku_id = normalSkus.get(position).getId();
+    //sku_id = normalSkus.get(position).getId();
     //JUtils.Toast(sku_id + "   ,...." + item_id);
     return true;
   }

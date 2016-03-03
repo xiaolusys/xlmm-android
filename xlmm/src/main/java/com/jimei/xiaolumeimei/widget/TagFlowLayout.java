@@ -15,7 +15,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-
 public class TagFlowLayout extends FlowLayout
     implements TagAdapter.OnDataChangedListener {
   private static final String TAG = "TagFlowLayout";
@@ -170,7 +169,7 @@ public class TagFlowLayout extends FlowLayout
         mSelectedView.remove(position);
       }
       if (mOnSelectListener != null) {
-        mOnSelectListener.onSelected(new HashSet<Integer>(mSelectedView));
+        mOnSelectListener.onSelected(new HashSet<Integer>(mSelectedView), position);
       }
     }
   }
@@ -238,7 +237,7 @@ public class TagFlowLayout extends FlowLayout
   }
 
   public interface OnSelectListener {
-    void onSelected(Set<Integer> selectPosSet);
+    void onSelected(Set<Integer> selectPosSet, int posposition);
   }
 
   public interface OnTagClickListener {

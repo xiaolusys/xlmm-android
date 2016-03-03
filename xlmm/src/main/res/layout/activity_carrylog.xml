@@ -60,40 +60,44 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"/>
     </LinearLayout>
-      <include layout="@layout/common_gap"/>
-<LinearLayout android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:weightSum="4"
-    android:background="@color/white"
-    >
-    <TextView
-        android:text="全部"
-        android:textSize="18sp"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"/>
-    <TextView
-        android:text="全部"
-        android:textSize="18sp"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"/>
-    <TextView
-        android:text="全部"
-        android:textSize="18sp"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"/>
-    <TextView
-        android:text="全部"
-        android:textSize="18sp"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"/>
-</LinearLayout>
+    <include layout="@layout/common_gap"/>
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        android:background="@color/white"
+        >
+      <TextView
+          android:layout_marginLeft="48dp"
+          android:id="@+id/all"
+          android:text="全部"
+          android:textSize="18sp"
+          android:layout_width="0dp"
+          android:layout_weight="1"
+          android:layout_height="wrap_content"/>
+      <TextView
+          android:text="佣金"
+          android:id="@+id/commission"
+          android:textSize="18sp"
+          android:layout_width="0dp"
+          android:layout_weight="1"
+          android:layout_height="wrap_content"/>
+      <TextView
+          android:id="@+id/cashback"
+          android:text="返现"
+          android:textSize="18sp"
+          android:layout_width="0dp"
+          android:layout_weight="1"
+          android:layout_height="wrap_content"/>
+      <TextView
+          android:id="@+id/bonus"
+          android:text="奖金"
+          android:textSize="18sp"
+          android:layout_width="0dp"
+          android:layout_weight="1"
+          android:layout_height="wrap_content"/>
+    </LinearLayout>
     <com.jcodecraeer.xrecyclerview.XRecyclerView
-
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:id="@+id/carryloglist_xry"
         android:layout_width="match_parent"

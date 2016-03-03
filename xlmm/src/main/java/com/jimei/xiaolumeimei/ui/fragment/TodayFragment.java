@@ -8,8 +8,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 import cn.iwgang.countdownview.CountdownView;
@@ -74,6 +72,11 @@ public class TodayFragment extends BaseFragment {
   private SharedPreferences sharedPreferences;
   private String cookies;
   private String domain;
+  private Subscription subscribe1;
+  private Subscription subscribe2;
+  private Subscription subscribe3;
+  private Subscription subscribe4;
+  private Subscription subscription5;
 
   @Override protected int provideContentViewId() {
     return R.layout.today_fragment;
@@ -82,7 +85,7 @@ public class TodayFragment extends BaseFragment {
   @Override protected void initData() {
     head.setVisibility(View.INVISIBLE);
     loading.start();
-    Subscription subscribe1 = ProductModel.getInstance()
+    subscribe1 = ProductModel.getInstance()
         .getTodayList(1, 10)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ProductListBean>() {
@@ -106,7 +109,6 @@ public class TodayFragment extends BaseFragment {
           }
         });
 
-    addSubscription(subscribe1);
     if (null != countTime) {
       long remainTime = countTime.getRemainTime();
       JUtils.Log(TAG, remainTime + "");
@@ -138,7 +140,7 @@ public class TodayFragment extends BaseFragment {
 
     xRecyclerView.addHeaderView(head);
 
-    Subscription subscribe2 = ProductModel.getInstance()
+    subscribe2 = ProductModel.getInstance()
         .getTodayPost()
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<PostBean>() {
@@ -202,6 +204,8 @@ public class TodayFragment extends BaseFragment {
 
                     if (postBean.getActivity().isLoginRequired()) {
                       if (LoginUtils.checkLoginState(getActivity())
+                          && (null
+                          != getActivity())
                           && (null
                           != ((MainActivity) getActivity()).getUserInfoBean())
                           && !(((MainActivity) getActivity()).getUserInfoBean()
@@ -289,14 +293,12 @@ public class TodayFragment extends BaseFragment {
           }
         });
 
-    addSubscription(subscribe2);
-
     mTodayAdapter = new TodayAdapter(getActivity());
     xRecyclerView.setAdapter(mTodayAdapter);
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
       @Override public void onRefresh() {
-        Subscription subscribe3 = ProductModel.getInstance()
+        subscribe3 = ProductModel.getInstance()
             .getTodayList(1, page * page_size)
             .subscribeOn(Schedulers.newThread())
             .subscribe(new ServiceResponse<ProductListBean>() {
@@ -311,7 +313,6 @@ public class TodayFragment extends BaseFragment {
                 xRecyclerView.post(xRecyclerView::refreshComplete);
               }
             });
-        addSubscription(subscribe3);
       }
 
       @Override public void onLoadMore() {
@@ -328,7 +329,7 @@ public class TodayFragment extends BaseFragment {
 
   private void loadMoreData(int page, int page_size) {
 
-    Subscription subscribe4 = ProductModel.getInstance()
+    subscribe4 = ProductModel.getInstance()
         .getTodayList(page, page_size)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<ProductListBean>() {
@@ -342,8 +343,6 @@ public class TodayFragment extends BaseFragment {
             xRecyclerView.post(xRecyclerView::loadMoreComplete);
           }
         });
-
-    addSubscription(subscribe4);
   }
 
   @Override public void onDestroy() {
@@ -378,7 +377,7 @@ public class TodayFragment extends BaseFragment {
     super.onResume();
     countTime = (CountdownView) head.findViewById(R.id.countTime);
 
-    Subscription subscription = Observable.timer(1, 1, TimeUnit.SECONDS)
+    subscription5 = Observable.timer(1, 1, TimeUnit.SECONDS)
         .map(aLong -> calcLeftTime())
         .observeOn(AndroidSchedulers.mainThread())
         .onBackpressureDrop()
@@ -392,25 +391,24 @@ public class TodayFragment extends BaseFragment {
             }
           }
         });
-
-    addSubscription(subscription);
   }
 
   @Override public void onStop() {
     super.onStop();
-  }
-
-  public void syncCookie(Context context, String url) {
-    try {
-      CookieSyncManager.createInstance(context);
-      CookieManager cookieManager = CookieManager.getInstance();
-      cookieManager.setAcceptCookie(true);
-      cookieManager.removeSessionCookie();// 移除
-      cookieManager.removeAllCookie();
-
-      cookieManager.setCookie(url, cookies);
-      CookieSyncManager.getInstance().sync();
-    } catch (Exception e) {
+    if (subscribe1 != null && subscribe1.isUnsubscribed()) {
+      subscribe1.unsubscribe();
+    }
+    if (subscribe2 != null && subscribe2.isUnsubscribed()) {
+      subscribe2.unsubscribe();
+    }
+    if (subscribe3 != null && subscribe3.isUnsubscribed()) {
+      subscribe3.unsubscribe();
+    }
+    if (subscribe4 != null && subscribe4.isUnsubscribed()) {
+      subscribe4.unsubscribe();
+    }
+    if (subscription5 != null && subscription5.isUnsubscribed()) {
+      subscription5.unsubscribe();
     }
   }
 }

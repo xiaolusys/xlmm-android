@@ -7,8 +7,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import cn.sharesdk.framework.ShareSDK;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.MaMaStoreAdapter;
@@ -139,9 +140,21 @@ public class MaMaMyStoreActivity extends BaseSwipeBackCompatActivity {
     ShareSDK.stopSDK();
   }
 
-  @Override protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    // TODO: add setContentView(...) invocation
-    ButterKnife.bind(this);
+  @Override public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.menu_store, menu);
+    return super.onCreateOptionsMenu(menu);
+  }
+
+  @Override public boolean onOptionsItemSelected(MenuItem item) {
+
+    if (item.getItemId() == R.id.action_eye) {
+
+    }
+
+    if (item.getItemId() == R.id.action_share) {
+
+    }
+
+    return super.onOptionsItemSelected(item);
   }
 }

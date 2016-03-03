@@ -48,6 +48,11 @@ public class PreviousFragment extends BaseFragment {
   private View head;
   private CountdownView countTime;
   private TextView tv_tomorrow;
+  private Subscription subscribe1;
+  private Subscription subscription2;
+  private Subscription subscribe3;
+  private Subscription subscribe4;
+  private Subscription subscribe5;
 
   @Override protected int provideContentViewId() {
     return R.layout.previous_fragment;
@@ -57,7 +62,7 @@ public class PreviousFragment extends BaseFragment {
     head.setVisibility(View.INVISIBLE);
     loading.start();
 
-    Subscription subscribe1 = ProductModel.getInstance()
+    subscribe1 = ProductModel.getInstance()
         .getPreviousList(1, 10)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ProductListBean>() {
@@ -83,8 +88,6 @@ public class PreviousFragment extends BaseFragment {
             head.setVisibility(View.VISIBLE);
           }
         });
-
-    addSubscription(subscribe1);
   }
 
   @Override protected void initViews() {
@@ -94,6 +97,22 @@ public class PreviousFragment extends BaseFragment {
 
   @Override public void onStop() {
     super.onStop();
+
+    if (subscribe1 != null && subscribe1.isUnsubscribed()) {
+      subscribe1.unsubscribe();
+    }
+    if (subscription2 != null && subscription2.isUnsubscribed()) {
+      subscription2.unsubscribe();
+    }
+    if (subscribe3 != null && subscribe3.isUnsubscribed()) {
+      subscribe3.unsubscribe();
+    }
+    if (subscribe4 != null && subscribe4.isUnsubscribed()) {
+      subscribe4.unsubscribe();
+    }
+    if (subscribe5 != null && subscribe5.isUnsubscribed()) {
+      subscribe5.unsubscribe();
+    }
   }
 
   @Override public void onResume() {
@@ -101,7 +120,7 @@ public class PreviousFragment extends BaseFragment {
 
     countTime = (CountdownView) head.findViewById(R.id.countTime);
 
-    Subscription subscription2 = Observable.timer(1, 1, TimeUnit.SECONDS)
+    subscription2 = Observable.timer(1, 1, TimeUnit.SECONDS)
         .map(aLong -> calcLeftTime())
         .observeOn(AndroidSchedulers.mainThread())
         .onBackpressureDrop()
@@ -117,7 +136,6 @@ public class PreviousFragment extends BaseFragment {
           }
         }, throwable -> {
         });
-    addSubscription(subscription2);
   }
 
   private void initRecyclerView() {
@@ -139,7 +157,7 @@ public class PreviousFragment extends BaseFragment {
     tv_tomorrow = (TextView) head.findViewById(R.id.tv_tomorrow);
     xRecyclerView.addHeaderView(head);
 
-    Subscription subscribe = ProductModel.getInstance()
+    subscribe3 = ProductModel.getInstance()
         .getYestdayPost()
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<PostBean>() {
@@ -177,36 +195,32 @@ public class PreviousFragment extends BaseFragment {
                    }
 
         );
-    addSubscription(subscribe);
 
     mPreviousAdapter = new PreviousAdapter(getActivity());
     xRecyclerView.setAdapter(mPreviousAdapter);
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
                                        @Override public void onRefresh() {
-                                         Subscription subscribe =
-                                             ProductModel.getInstance()
-                                                 .getTodayList(1, page * page_size)
-                                                 .subscribeOn(Schedulers.newThread())
-                                                 .subscribe(
-                                                     new ServiceResponse<ProductListBean>() {
-                                                       @Override public void onNext(
-                                                           ProductListBean productListBean) {
-                                                         List<ProductListBean.ResultsEntity>
-                                                             results =
-                                                             productListBean.getResults();
-                                                         mPreviousAdapter.updateWithClear(
-                                                             results);
-                                                       }
+                                         subscribe4 = ProductModel.getInstance()
+                                             .getTodayList(1, page * page_size)
+                                             .subscribeOn(Schedulers.newThread())
+                                             .subscribe(
+                                                 new ServiceResponse<ProductListBean>() {
+                                                   @Override public void onNext(
+                                                       ProductListBean productListBean) {
+                                                     List<ProductListBean.ResultsEntity>
+                                                         results =
+                                                         productListBean.getResults();
+                                                     mPreviousAdapter.updateWithClear(
+                                                         results);
+                                                   }
 
-                                                       @Override
-                                                       public void onCompleted() {
-                                                         super.onCompleted();
-                                                         xRecyclerView.post(
-                                                             xRecyclerView::refreshComplete);
-                                                       }
-                                                     });
-                                         addSubscription(subscribe);
+                                                   @Override public void onCompleted() {
+                                                     super.onCompleted();
+                                                     xRecyclerView.post(
+                                                         xRecyclerView::refreshComplete);
+                                                   }
+                                                 });
                                        }
 
                                        @Override public void onLoadMore() {
@@ -228,7 +242,7 @@ public class PreviousFragment extends BaseFragment {
 
   private void loadMoreData(int page, int page_size) {
 
-    Subscription subscribe = ProductModel.getInstance()
+    subscribe5 = ProductModel.getInstance()
         .getPreviousList(page, page_size)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<ProductListBean>() {
@@ -242,8 +256,6 @@ public class PreviousFragment extends BaseFragment {
             xRecyclerView.post(xRecyclerView::loadMoreComplete);
           }
         });
-
-    addSubscription(subscribe);
   }
 
   private long calcLeftTime() {
