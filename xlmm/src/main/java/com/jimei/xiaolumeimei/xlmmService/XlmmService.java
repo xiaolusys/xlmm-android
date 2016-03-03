@@ -16,6 +16,7 @@ import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.CartsinfoBean;
 import com.jimei.xiaolumeimei.entities.ChildListBean;
+import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.CouponBean;
 import com.jimei.xiaolumeimei.entities.IndexBean;
@@ -616,4 +617,6 @@ public interface XlmmService {
   Observable<UserWithdrawResult> user_withdraw_cash(
       @Field("cashout_amount") String amount );
 
+   @GET("pmt/cushop/customer_shop")
+  Observable<MMShoppingBean> getShareShopping();
 }

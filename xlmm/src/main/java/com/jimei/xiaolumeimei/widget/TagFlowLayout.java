@@ -200,7 +200,9 @@ public class TagFlowLayout extends FlowLayout
           mSelectedView.add(index);
 
           TagView tagView = (TagView) getChildAt(index);
-          tagView.setChecked(true);
+          if (null != tagView) {
+            tagView.setChecked(true);
+          }
         }
       }
       super.onRestoreInstanceState(bundle.getParcelable(KEY_DEFAULT));

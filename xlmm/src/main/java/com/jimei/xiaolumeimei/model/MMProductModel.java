@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.model;
 
 import com.jimei.xiaolumeimei.entities.CarryLogListBean;
+import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.MMChooselistBean;
 import com.jimei.xiaolumeimei.entities.NinePicBean;
@@ -107,5 +108,10 @@ public class MMProductModel {
   public Observable<List<NinePicBean>> getNinePic() {
 
     return XlmmRetrofitClient.getService().getNinepic().compose(new DefaultTransform<>());
+  }
+
+  public Observable<MMShoppingBean> getShareShopping() {
+
+    return XlmmRetrofitClient.getService().getShareShopping();
   }
 }
