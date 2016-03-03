@@ -49,6 +49,12 @@
   </Preference>
   <Preference
       android:layout="@layout/preference_list_item"
+      android:key="@string/update"
+      android:title="@string/update"
+      android:summary="">
+  </Preference>
+  <Preference
+      android:layout="@layout/preference_list_item"
       android:key="关于小鹿美美"
       android:title="关于小鹿美美"
       android:summary="">

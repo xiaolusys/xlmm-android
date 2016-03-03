@@ -50,6 +50,7 @@ import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.badgelib.BadgeView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import com.umeng.update.UmengUpdateAgent;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import java.util.ArrayList;
 import java.util.List;
@@ -104,6 +105,8 @@ public class MainActivity extends BaseActivity
     initTabLayout();
 
     getUserInfo();
+
+    UmengUpdateAgent.update(this);
   }
 
   private void initTabLayout() {
@@ -157,13 +160,13 @@ public class MainActivity extends BaseActivity
                 tvNickname.setText("点击登录");
               }
             } else {
-              if ((tvNickname != null)
-                  && (userInfoBean != null)) {
+              if ((tvNickname != null) && (userInfoBean != null)) {
                 tvNickname.setText(userInfoBean.getNick());
               }
 
-              if((userInfoBean != null) && (!userInfoBean.getThumbnail().isEmpty())) {
-                ViewUtils.loadImgToImgView(MainActivity.this, imgUser, userInfoBean.getThumbnail());
+              if ((userInfoBean != null) && (!userInfoBean.getThumbnail().isEmpty())) {
+                ViewUtils.loadImgToImgView(MainActivity.this, imgUser,
+                    userInfoBean.getThumbnail());
               }
             }
             invalidateOptionsMenu();
@@ -472,8 +475,6 @@ public class MainActivity extends BaseActivity
     JUtils.Log(TAG, "resume");
     getUserInfo();
 
-
-
     subscribe = UserNewModel.getInstance()
         .getProfile()
         .subscribeOn(Schedulers.io())
@@ -481,19 +482,20 @@ public class MainActivity extends BaseActivity
           @Override public void onNext(UserInfoBean userNewBean) {
             if (userNewBean != null) {
               userInfoBean = userNewBean;
-              if((LoginUtils.checkLoginState(getApplicationContext()))
-                  &&(!userNewBean.getThumbnail().isEmpty())) {
-                ViewUtils.loadImgToImgView(MainActivity.this, imgUser, userNewBean.getThumbnail());
+              if ((LoginUtils.checkLoginState(getApplicationContext()))
+                  && (!userNewBean.getThumbnail().isEmpty())) {
+                ViewUtils.loadImgToImgView(MainActivity.this, imgUser,
+                    userNewBean.getThumbnail());
               }
 
               int score = userNewBean.getScore();
               if (null != userNewBean.getUserBudget()) {
                 budgetCash = userNewBean.getUserBudget().getBudgetCash();
               }
-              if(tvPoint != null) {
+              if (tvPoint != null) {
                 tvPoint.setText(score + "");
               }
-              if(tvMoney != null) {
+              if (tvMoney != null) {
                 tvMoney.setText((float) (Math.round(budgetCash * 100)) / 100 + "");
               }
             }
@@ -501,7 +503,8 @@ public class MainActivity extends BaseActivity
         });
 
     if (LoginUtils.checkLoginState(getApplicationContext()) && (tvNickname != null)) {
-      if ((userInfoBean != null) && (userInfoBean.getNick() != null)
+      if ((userInfoBean != null)
+          && (userInfoBean.getNick() != null)
           && (!userInfoBean.getNick().isEmpty())) {
         tvNickname.setText(userInfoBean.getNick());
       } else {
@@ -524,8 +527,7 @@ public class MainActivity extends BaseActivity
           @Override public void onNext(CouponBean couponBean) {
             if ((couponBean != null) && (tvCoupon != null)) {
               tvCoupon.setText(couponBean.getCount() + "");
-            }
-            else{
+            } else {
               JUtils.Log(TAG, "err:" + (tvCoupon == null));
             }
           }

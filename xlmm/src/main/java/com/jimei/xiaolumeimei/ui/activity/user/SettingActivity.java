@@ -18,6 +18,11 @@ import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.utils.AppUtils;
 import com.jimei.xiaolumeimei.utils.DataClearManager;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jude.utils.JUtils;
+import com.umeng.update.UmengUpdateAgent;
+import com.umeng.update.UmengUpdateListener;
+import com.umeng.update.UpdateResponse;
+import com.umeng.update.UpdateStatus;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -27,21 +32,20 @@ import rx.schedulers.Schedulers;
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class SettingActivity extends BaseSwipeBackCompatActivity {
+  static String nickName;
+  static String mobile;
   String TAG = "SettingActivity";
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.container_setting) FrameLayout containerSetting;
-  private SettingFragment settingFragment;
   UserInfoBean userinfo;
-  static String nickName;
-  static String mobile;
-  private Subscription subscribe;
+  private SettingFragment settingFragment;
 
   @Override protected void setListener() {
 
   }
 
   @Override protected void initData() {
-     subscribe = UserModel.getInstance()
+    Subscription subscribe = UserModel.getInstance()
         .getUserInfo()
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<UserInfoBean>() {
@@ -67,6 +71,7 @@ public class SettingActivity extends BaseSwipeBackCompatActivity {
             super.onError(e);
           }
         });
+    addSubscription(subscribe);
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -100,6 +105,7 @@ public class SettingActivity extends BaseSwipeBackCompatActivity {
 
     private View view;
     private Preference clearCache;
+    private Preference updateVersion;
     private Preference setNickname;
     private Preference bindPhone;
 
@@ -109,10 +115,10 @@ public class SettingActivity extends BaseSwipeBackCompatActivity {
       addPreferencesFromResource(R.xml.setting);
 
       clearCache = findPreference(getResources().getString(R.string.clear_cache));
+      updateVersion = findPreference(getResources().getString(R.string.update));
       clearCache.setOnPreferenceClickListener(this);
+      updateVersion.setOnPreferenceClickListener(this);
       updateCache();
-
-
 
       return view;
     }
@@ -120,25 +126,36 @@ public class SettingActivity extends BaseSwipeBackCompatActivity {
     void updateCache() {
       clearCache.setSummary(
           DataClearManager.getApplicationDataSize(XlmmApp.getInstance()));
-
     }
 
     @Override public boolean onPreferenceClick(Preference preference) {
       if (preference.equals(clearCache)) {
         DataClearManager.cleanApplicationData(XlmmApp.getInstance());
         updateCache();
-        AppUtils.showSnackBar(view,R.string.update_cache);
+        AppUtils.showSnackBar(view, R.string.update_cache);
       }
 
+      if (preference.equals(updateVersion)) {
+        UmengUpdateAgent.forceUpdate(XlmmApp.getInstance());
+
+        UmengUpdateAgent.setUpdateListener(new UmengUpdateListener() {
+          @Override public void onUpdateReturned(int i, UpdateResponse updateResponse) {
+            if (i == UpdateStatus.No) {
+              JUtils.Toast("已经是最新版本");
+            } else if (i == UpdateStatus.Yes) {
+
+            }
+          }
+        });
+      }
       return false;
     }
 
-    public void updatePref()
-    {
+    public void updatePref() {
       setNickname = findPreference(getResources().getString(R.string.set_nick));
       bindPhone = findPreference(getResources().getString(R.string.bind_phone));
       setNickname.setSummary(nickName);
-      bindPhone.setSummary(mobile.substring(0,3)+"****"+mobile.substring(7));
+      bindPhone.setSummary(mobile.substring(0, 3) + "****" + mobile.substring(7));
     }
   }
 }
