@@ -6,7 +6,9 @@ import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.entities.AllowanceBean;
 import com.jimei.xiaolumeimei.entities.MamaFansBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
+import com.jimei.xiaolumeimei.entities.PayReturnBean;
 import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
+import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.rx.DefaultTransform;
@@ -58,9 +60,16 @@ public class MamaInfoModel {
   }
 
   //创建提款单信息
-  public Observable<ResponseBody> withdraw_cash(String fund_type) {
+  public Observable<ResponseResultBean> withdraw_cash(String fund_type) {
     return XlmmRetrofitClient.getService()
         .withdraw_cash(fund_type)
+        .compose(new DefaultTransform<>());
+  }
+
+  //cancel提款单信息
+  public Observable<ResponseResultBean> cancel_withdraw_cash(String id) {
+    return XlmmRetrofitClient.getService()
+        .cancel_withdraw_cash(id)
         .compose(new DefaultTransform<>());
   }
 

@@ -14,6 +14,7 @@ import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AgentInfoBean;
+import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
@@ -171,9 +172,24 @@ public class MamaWithdrawCashActivity extends BaseSwipeBackCompatActivity
       subscribe = MamaInfoModel.getInstance()
           .withdraw_cash(fund_type)
           .subscribeOn(Schedulers.newThread())
-          .subscribe(new ServiceResponse<ResponseBody>() {
-            @Override public void onNext(ResponseBody resp) {
-              JUtils.Log(TAG, "ResponseBody11=" + resp.toString());
+          .subscribe(new ServiceResponse<ResponseResultBean>() {
+            @Override public void onNext(ResponseResultBean resp) {
+              JUtils.Log(TAG, "ResponseBody11=" + resp.getCode());
+              switch (resp.getCode()){
+                case 0:
+                  JUtils.Toast("提现成功，待审核通过");
+                  break;
+                case 1:
+                  JUtils.Toast("参数错误");
+                  break;
+                case 2:
+                  JUtils.Toast("不足提现金额");
+                  break;
+                case 3:
+                  JUtils.Toast("有待审核记录不予再次提现 ");
+                  break;
+              }
+
               Intent intent =
                   new Intent(MamaWithdrawCashActivity.this, MamaWithdrawCashResultActivity
                       .class);

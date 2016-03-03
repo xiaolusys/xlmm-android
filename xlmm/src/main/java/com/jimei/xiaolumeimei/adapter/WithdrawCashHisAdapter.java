@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,15 +21,26 @@ import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
+import com.jimei.xiaolumeimei.entities.PayReturnBean;
+import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
+import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.ui.activity.trade.OrderDetailActivity;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaWithdrawCashHistoryActivity;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaWithdrawCashResultActivity;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.MyHorizontalScrollView;
+import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jude.utils.JUtils;
+import com.squareup.okhttp.ResponseBody;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import rx.Subscription;
+import rx.schedulers.Schedulers;
 
 public class WithdrawCashHisAdapter extends BaseAdapter {
   private static final String TAG = "WithdrawCashHisAdapter";
@@ -87,6 +99,38 @@ public class WithdrawCashHisAdapter extends BaseAdapter {
       holder.tx_withdraw_fund.setText(String.valueOf(Math.round(record.getValue_money()*100)/100) + "元");
       holder.tx_withdraw_state.setText(record.getGet_status_display());
       holder.tx_time.setText(record.getCreated().replace("T"," "));
+
+      if(record.getGet_status_display().equals("待审核")){
+        holder.btn_cancel.setVisibility(View.VISIBLE);
+        holder.btn_cancel.setOnClickListener(new View.OnClickListener() {
+          @Override public void onClick(View v) {
+            Subscription subscribe = MamaInfoModel.getInstance()
+                .cancel_withdraw_cash(Integer.toString(record.getId()))
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(new ServiceResponse<ResponseResultBean>() {
+                  @Override public void onNext(ResponseResultBean resp) {
+                    try {
+                      JUtils.Log(TAG, "ResponseBody11=" + resp.getCode());
+                      switch (resp.getCode()){
+                        case 0:
+                          JUtils.Toast("取消成功");
+                          break;
+                        case 1:
+                          JUtils.Toast("取消失败");
+                          break;
+                        case 2:
+                          JUtils.Toast("提现记录不存在");
+                          break;
+                      }
+                    } catch (Exception e) {
+                      e.printStackTrace();
+                    }
+                  }
+                });
+            ((MamaWithdrawCashHistoryActivity)context).addSubscription(subscribe);
+          }
+        });
+      }
     }
 
 
@@ -99,6 +143,7 @@ public class WithdrawCashHisAdapter extends BaseAdapter {
     @Bind(R.id.tx_withdraw_fund) TextView tx_withdraw_fund;
     @Bind(R.id.tx_withdraw_state) TextView tx_withdraw_state;
     @Bind(R.id.tx_time) TextView tx_time;
+    @Bind(R.id.btn_cancel) Button btn_cancel;
 
     public ViewHolder(View itemView) {
       card = itemView;

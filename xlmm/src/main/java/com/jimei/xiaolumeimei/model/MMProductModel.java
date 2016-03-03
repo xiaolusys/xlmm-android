@@ -1,7 +1,7 @@
 package com.jimei.xiaolumeimei.model;
 
 import com.jimei.xiaolumeimei.entities.CarryLogListBean;
-import com.jimei.xiaolumeimei.entities.ChooseResponseBean;
+import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.MMChooselistBean;
 import com.jimei.xiaolumeimei.entities.NinePicBean;
 import com.jimei.xiaolumeimei.entities.OneDayAgentOrdersBean;
@@ -63,14 +63,14 @@ public class MMProductModel {
   }
 
   //MM上架商品到商铺
-  public Observable<ChooseResponseBean> add_pro_to_shop(String product) {
+  public Observable<ResponseResultBean> add_pro_to_shop(String product) {
     return XlmmRetrofitClient.getService()
         .add_pro_to_shop(product)
         .compose(new DefaultTransform<>());
   }
 
   //MM下架商品
-  public Observable<ChooseResponseBean> remove_pro_from_shop(String product) {
+  public Observable<ResponseResultBean> remove_pro_from_shop(String product) {
     return XlmmRetrofitClient.getService()
         .remove_pro_from_shop(product)
         .compose(new DefaultTransform<>());

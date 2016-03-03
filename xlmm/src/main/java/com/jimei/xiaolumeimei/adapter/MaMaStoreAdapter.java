@@ -13,7 +13,7 @@ import butterknife.ButterKnife;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.entities.ChooseResponseBean;
+import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.MMChooselistBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
@@ -83,11 +83,11 @@ public class MaMaStoreAdapter extends RecyclerView.Adapter<MaMaStoreAdapter.MaMa
         MMProductModel.getInstance()
             .remove_pro_from_shop(mmChooselistBean.getId() + "")
             .subscribeOn(Schedulers.newThread())
-            .subscribe(new ServiceResponse<ChooseResponseBean>() {
-              @Override public void onNext(ChooseResponseBean chooseResponseBean) {
-                super.onNext(chooseResponseBean);
-                if (chooseResponseBean != null) {
-                  if (0 == chooseResponseBean.getCode()) {
+            .subscribe(new ServiceResponse<ResponseResultBean>() {
+              @Override public void onNext(ResponseResultBean responseResultBean) {
+                super.onNext(responseResultBean);
+                if (responseResultBean != null) {
+                  if (0 == responseResultBean.getCode()) {
                     removeAt(position);
                   }
                 }

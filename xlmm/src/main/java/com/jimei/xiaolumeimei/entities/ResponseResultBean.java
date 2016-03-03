@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  *
  * Copyright 2016年 上海己美. All rights reserved.
  */
-public class ChooseResponseBean {
+public class ResponseResultBean {
 
   /**
    * code : 0

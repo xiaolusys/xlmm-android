@@ -16,7 +16,7 @@ import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.CartsinfoBean;
 import com.jimei.xiaolumeimei.entities.ChildListBean;
-import com.jimei.xiaolumeimei.entities.ChooseResponseBean;
+import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.CouponBean;
 import com.jimei.xiaolumeimei.entities.IndexBean;
 import com.jimei.xiaolumeimei.entities.LadyListBean;
@@ -466,8 +466,14 @@ public interface XlmmService {
   //创建提款单信息
   @FormUrlEncoded
   @POST("pmt/cashout")
-  Observable<ResponseBody> withdraw_cash(
+  Observable<ResponseResultBean> withdraw_cash(
       @Field("choice") String fund_type );
+
+  //cancel提款单信息
+  @FormUrlEncoded
+  @POST("pmt/cashout")
+  Observable<ResponseResultBean> cancel_withdraw_cash(
+      @Field("id") String id );
 
   //选品默认列表
     @GET("products/my_choice_pro")
@@ -500,14 +506,14 @@ public interface XlmmService {
   //MM上架商品到商铺
   @FormUrlEncoded
   @POST("pmt/cushoppros/add_pro_to_shop")
-  Observable<ChooseResponseBean> add_pro_to_shop(
+  Observable<ResponseResultBean> add_pro_to_shop(
        @Field("product")String product
   );
 
   //MM下架商品
   @FormUrlEncoded
   @POST("pmt/cushoppros/remove_pro_from_shop")
-  Observable<ChooseResponseBean> remove_pro_from_shop (
+  Observable<ResponseResultBean> remove_pro_from_shop (
         @Field("product")String product
   );
 

@@ -30,14 +30,34 @@
 				/>
 	</RelativeLayout>
 
+	<RelativeLayout
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			android:padding="4dp">
 	<TextView
 			android:id="@+id/tx_time"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:padding="4dp"
-			android:text=""
+			android:text="11"
 			android:textSize="15sp"
 			android:layout_alignParentLeft="true"
  />
+
+	<Button
+			android:id="@+id/btn_cancel"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="取消"
+			android:textSize="15sp"
+			android:background="@drawable/text_frame"
+			android:layout_alignParentTop="true"
+			android:layout_alignParentRight="true"
+			android:layout_alignParentEnd="true"
+			android:padding="4dp"
+			android:visibility="invisible"
+			/>
+	</RelativeLayout>
 
 </LinearLayout>

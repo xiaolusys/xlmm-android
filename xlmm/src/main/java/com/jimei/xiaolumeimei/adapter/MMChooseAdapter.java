@@ -12,7 +12,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.entities.ChooseResponseBean;
+import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.MMChooselistBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
@@ -91,11 +91,11 @@ public class MMChooseAdapter extends RecyclerView.Adapter<MMChooseAdapter.MMChoo
           MMProductModel.getInstance()
               .add_pro_to_shop(mmChooselistBean.getId() + "")
               .subscribeOn(Schedulers.newThread())
-              .subscribe(new ServiceResponse<ChooseResponseBean>() {
-                @Override public void onNext(ChooseResponseBean chooseResponseBean) {
-                  super.onNext(chooseResponseBean);
-                  if (chooseResponseBean != null) {
-                    if (0 == chooseResponseBean.getCode()) {
+              .subscribe(new ServiceResponse<ResponseResultBean>() {
+                @Override public void onNext(ResponseResultBean responseResultBean) {
+                  super.onNext(responseResultBean);
+                  if (responseResultBean != null) {
+                    if (0 == responseResultBean.getCode()) {
                       holder.add.setVisibility(View.INVISIBLE);
                       holder.remove.setVisibility(View.VISIBLE);
                       holder.add.setClickable(false);
@@ -135,11 +135,11 @@ public class MMChooseAdapter extends RecyclerView.Adapter<MMChooseAdapter.MMChoo
           MMProductModel.getInstance()
               .remove_pro_from_shop(mmChooselistBean.getId() + "")
               .subscribeOn(Schedulers.newThread())
-              .subscribe(new ServiceResponse<ChooseResponseBean>() {
-                @Override public void onNext(ChooseResponseBean chooseResponseBean) {
-                  super.onNext(chooseResponseBean);
-                  if (chooseResponseBean != null) {
-                    if (0 == chooseResponseBean.getCode()) {
+              .subscribe(new ServiceResponse<ResponseResultBean>() {
+                @Override public void onNext(ResponseResultBean responseResultBean) {
+                  super.onNext(responseResultBean);
+                  if (responseResultBean != null) {
+                    if (0 == responseResultBean.getCode()) {
                       holder.add.setVisibility(View.VISIBLE);
                       holder.remove.setVisibility(View.INVISIBLE);
                       holder.add.setClickable(true);
