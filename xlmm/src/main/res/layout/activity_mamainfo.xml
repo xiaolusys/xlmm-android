@@ -15,7 +15,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#fdb916"
+        android:background="@color/colorAccent"
         app:popupTheme="@style/AppTheme.PopupOverlay">
 
       <TextView
@@ -63,7 +63,7 @@
             android:id="@+id/imgUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20px"
+            android:layout_marginTop="24px"
             android:layout_centerHorizontal="true"
             android:clickable="true"
             android:src="@drawable/img_diamond"/>
@@ -318,7 +318,7 @@
               android:layout_height="60px"
               android:layout_centerHorizontal="true"
               android:layout_marginTop="20px"
-              android:src="@drawable/ic_choice"/>
+              android:src="@drawable/img_timer"/>
 
           <TextView
               android:id="@+id/btn_push"
