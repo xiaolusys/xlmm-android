@@ -221,25 +221,37 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
                           JUtils.Log("ProductDetail", "use glide width chg =" + 640 * (
                               2048
                                   / response.getHeight()));
-                          Glide.with(ProductDetailActvity.this)
-                              .load(finalHead_img)
-                              .diskCacheStrategy(DiskCacheStrategy.ALL)
-                              .override((int) (response.getWidth() * scale_size),
-                                  (int) (response.getHeight() * scale_size))
-                              .centerCrop()
-                              .placeholder(R.drawable.img_emptypic)
-                              .into(viewList.get(finalI1));
+
+                          if (IsNowActivityExit()) {
+                            Glide.with(ProductDetailActvity.this)
+                                .load(finalHead_img)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .override((int) (response.getWidth() * scale_size),
+                                    (int) (response.getHeight() * scale_size))
+                                .centerCrop()
+                                .placeholder(R.drawable.img_emptypic)
+                                .into(viewList.get(finalI1));
+                          }
+
                         } else {
                           JUtils.Log("ProductDetail", "use glide height chg="
                               + response.getHeight() * scale_size);
-                          Glide.with(ProductDetailActvity.this)
-                              .load(finalHead_img)
-                              .diskCacheStrategy(DiskCacheStrategy.ALL)
-                              .override((int) (response.getWidth() * scale_size),
-                                  (int) (response.getHeight() * scale_size))
-                              .centerCrop()
-                              .placeholder(R.drawable.img_emptypic)
-                              .into(viewList.get(finalI1));
+
+                          Intent intent = new Intent();
+                          intent.setClassName(
+                              "com.jimei.xiaolumeimei.ui.activity.product",
+                              "ProductDetailActvity");
+                          if (null != getPackageManager().resolveActivity(intent, 0)) {
+                            // 说明系统中存在这个activity
+                            Glide.with(ProductDetailActvity.this)
+                                .load(finalHead_img)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .override((int) (response.getWidth() * scale_size),
+                                    (int) (response.getHeight() * scale_size))
+                                .centerCrop()
+                                .placeholder(R.drawable.img_emptypic)
+                                .into(viewList.get(finalI1));
+                          }
                         }
                       }
 
@@ -708,5 +720,17 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
     super.onDestroy();
     JUtils.Log(TAG, "onDestroy()");
   }
+
+  public boolean IsNowActivityExit(){
+    Intent intent = new Intent();
+    intent.setClassName(
+        "com.jimei.xiaolumeimei.ui.activity.product",
+        "ProductDetailActvity");
+    if (null != getPackageManager().resolveActivity(intent, 0)) {
+      return true;
+    }
+    return false;
+  }
+
 }
 
