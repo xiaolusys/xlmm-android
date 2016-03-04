@@ -309,18 +309,18 @@ public class ProductDetailActvity extends BaseSwipeBackCompatActivity
 
             normalSkus.addAll(productDetailBean.getNormalSkus());
 
-            for (int i = 0; i < normalSkus.size(); i++) {
-              //JUtils.Log(TAG, normalSkus.get(i).getSizeOfSku().getResult().toString());
-
-              String string = normalSkus.get(i).getSizeOfSku().getResult().toString();
-              String replace = string.replace("{", "").replace("}", "");
-              String[] split = replace.split(",");
-              for (int j = 0; j < split.length; j++) {
-                //JUtils.Log(TAG, split[j]);
-                String[] split1 = split[j].split("=");
-                JUtils.Log(TAG, split1[0] + "====" + split1[1]);
-              }
-            }
+            //for (int i = 0; i < normalSkus.size(); i++) {
+            //  //JUtils.Log(TAG, normalSkus.get(i).getSizeOfSku().getResult().toString());
+            //
+            //  String string = normalSkus.get(i).getSizeOfSku().getResult().toString();
+            //  String replace = string.replace("{", "").replace("}", "");
+            //  String[] split = replace.split(",");
+            //  for (int j = 0; j < split.length; j++) {
+            //    //JUtils.Log(TAG, split[j]);
+            //    String[] split1 = split[j].split("=");
+            //    JUtils.Log(TAG, split1[0] + "====" + split1[1]);
+            //  }
+            //}
 
             tagFlowLayout.setAdapter(
                 new TagAdapter<ProductDetailBean.NormalSkusEntity>(normalSkus) {
