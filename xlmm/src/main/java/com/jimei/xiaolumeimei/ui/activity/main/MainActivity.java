@@ -577,7 +577,8 @@ public class MainActivity extends BaseActivity
   public void swith_fragment(){
     int tabid = 0;
     if(getIntent().getExtras() != null) {
-      getIntent().getExtras().getInt("fragment");
+      tabid = getIntent().getExtras().getInt("fragment");
+      JUtils.Log(TAG,"jump to fragment:"+tabid);
       if ((tabid >= 1) && (tabid <= 4)) {
         try {
           mTabLayout.setScrollPosition(tabid - 1, 0, true);

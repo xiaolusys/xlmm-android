@@ -316,30 +316,44 @@ public class XiaoMiMessageReceiver extends PushMessageReceiver {
         context.startActivity(intent);
         break;
       case XlmmConst.JUMP_PRODUCT_MODELLIST:
+        JUtils.Log(TAG,"jump to tongkuan");
         String  model_id = get_jump_arg("model_id",jumpInfo.getUrl() );
-
-        intent = new Intent(context, TongkuanActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra("model_id", model_id);
-        intent.putExtra("name", "同款");
-        context.startActivity(intent);
+        JUtils.Log(TAG,"jump to tongkuan:"+model_id);
+        if(null != model_id) {
+          try {
+            intent = new Intent(context, TongkuanActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra("model_id", Integer.valueOf(model_id));
+            intent.putExtra("name", "同款");
+            context.startActivity(intent);
+          } catch (NumberFormatException e) {
+            e.printStackTrace();
+          }
+        }
         break;
       case XlmmConst.JUMP_PRODUCT_DETAIL:
         String  product_id = get_jump_arg("product_id",jumpInfo.getUrl() );
-
-        intent = new Intent(context, ProductDetailActvity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra("product_id", product_id);
-        context.startActivity(intent);
+        if(null != product_id) {
+          intent = new Intent(context, ProductDetailActvity.class);
+          intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+          intent.putExtra("product_id", product_id);
+          context.startActivity(intent);
+        }
         break;
       case XlmmConst.JUMP_TRADE_DETAIL:
         String  trade_id = get_jump_arg("trade_id",jumpInfo.getUrl() );
-        intent = new Intent(context, OrderDetailActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra("orderinfo", trade_id);
-        intent.putExtra("source", "Main");
-        Log.d(TAG, "LinearLayout transfer orderid  " + trade_id + " to OrderDetailActivity");
-        context.startActivity(intent);
+        if(null != trade_id) {
+          try {
+            intent = new Intent(context, OrderDetailActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra("orderinfo", Integer.valueOf(trade_id));
+            intent.putExtra("source", "Main");
+            Log.d(TAG, "LinearLayout transfer orderid  " + trade_id + " to OrderDetailActivity");
+            context.startActivity(intent);
+          } catch (NumberFormatException e) {
+            e.printStackTrace();
+          }
+        }
         break;
       case XlmmConst.JUMP_USER_COUPON:
         intent = new Intent(context, CouponActivity.class);
@@ -431,7 +445,7 @@ public class XiaoMiMessageReceiver extends PushMessageReceiver {
   private String get_jump_arg(String prefix, String recvContent){
     String[] temp = recvContent.split(prefix + "=");
     if (temp.length > 1) {
-      return temp[2];
+      return temp[1];
     }
     else{
       return null;
