@@ -103,10 +103,8 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     runOnUiThread(new Runnable() {
       @Override public void run() {
         JUtils.Log(TAG, "initData--" + actlink);
-        //syncCookie(WebViewActivity.this, actlink);
-        try {
 
-          //mWebView.loadUrl(actlink);
+        try {
           Map<String, String> extraHeaders = new HashMap<String, String>();
 
           extraHeaders.put("Cookie", sessionid);
@@ -143,8 +141,6 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
 
   @SuppressLint("JavascriptInterface") @Override protected void initViews() {
     JUtils.Log(TAG, "initViews");
-
-    //syncCookie(WebViewActivity.this);
 
     ll_actwebview = (LinearLayout) findViewById(R.id.ll_actwebview);
     mProgressBar = (ProgressBar) findViewById(R.id.pb_view);
@@ -226,7 +222,6 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     }
 
     syncCookie(WebViewActivity.this);
-    //syncCookie(WebViewActivity.this, "http://m.xiaolumeimei.com");
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
@@ -272,12 +267,14 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void onPause() {
     super.onPause();
+    CookieSyncManager.createInstance(WebViewActivity.this);
     CookieSyncManager.getInstance().stopSync();
     mWebView.onPause();
   }
 
   @Override protected void onResume() {
     super.onResume();
+    CookieSyncManager.createInstance(WebViewActivity.this);
     CookieSyncManager.getInstance().startSync();
     mWebView.onResume();
     ShareSDK.initSDK(this);

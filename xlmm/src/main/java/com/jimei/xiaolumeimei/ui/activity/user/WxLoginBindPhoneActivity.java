@@ -65,7 +65,9 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
         }
 
         @Override public void onResponse(Bitmap response) {
-          headimage.setImageBitmap(response);
+          if((headimage != null) && (response != null)) {
+            headimage.setImageBitmap(response);
+          }
         }
       });
     }
