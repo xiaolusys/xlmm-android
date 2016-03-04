@@ -1,5 +1,6 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
@@ -18,7 +20,6 @@ import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.utils.AppUtils;
 import com.jimei.xiaolumeimei.utils.DataClearManager;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import com.umeng.update.UmengUpdateAgent;
 import com.umeng.update.UmengUpdateListener;
 import com.umeng.update.UpdateResponse;
@@ -100,7 +101,7 @@ public class SettingActivity extends BaseSwipeBackCompatActivity {
     return null;
   }
 
-  public static class SettingFragment extends PreferenceFragment
+  @SuppressLint("ValidFragment") public class SettingFragment extends PreferenceFragment
       implements Preference.OnPreferenceClickListener {
 
     private View view;
@@ -136,17 +137,42 @@ public class SettingActivity extends BaseSwipeBackCompatActivity {
       }
 
       if (preference.equals(updateVersion)) {
-        UmengUpdateAgent.forceUpdate(XlmmApp.getInstance());
+        //UmengUpdateAgent.forceUpdate(XlmmApp.getInstance());
+        //
+        //UmengUpdateAgent.setUpdateListener(new UmengUpdateListener() {
+        //  @Override public void onUpdateReturned(int i, UpdateResponse updateResponse) {
+        //    if (i == UpdateStatus.No) {
+        //      JUtils.Toast("已经是最新版本");
+        //    } else if (i == UpdateStatus.Yes) {
+        //
+        //    }
+        //  }
+        //});
 
+        UmengUpdateAgent.setUpdateAutoPopup(false);
         UmengUpdateAgent.setUpdateListener(new UmengUpdateListener() {
-          @Override public void onUpdateReturned(int i, UpdateResponse updateResponse) {
-            if (i == UpdateStatus.No) {
-              JUtils.Toast("已经是最新版本");
-            } else if (i == UpdateStatus.Yes) {
-
+          @Override
+          public void onUpdateReturned(int updateStatus, UpdateResponse updateInfo) {
+            switch (updateStatus) {
+              case UpdateStatus.Yes: // has update
+                UmengUpdateAgent.showUpdateDialog(SettingActivity.this, updateInfo);
+                break;
+              case UpdateStatus.No: // has no update
+                Toast.makeText(SettingActivity.this, "已经是最新版本", Toast.LENGTH_SHORT)
+                    .show();
+                break;
+              case UpdateStatus.NoneWifi: // none wifi
+                Toast.makeText(SettingActivity.this, "没有wifi连接， 只在wifi下更新",
+                    Toast.LENGTH_SHORT).show();
+                break;
+              case UpdateStatus.Timeout: // time out
+                Toast.makeText(SettingActivity.this, "连接超时,请检查网络设置", Toast.LENGTH_SHORT)
+                    .show();
+                break;
             }
           }
         });
+        UmengUpdateAgent.update(SettingActivity.this);
       }
       return false;
     }
