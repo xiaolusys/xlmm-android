@@ -30,6 +30,7 @@ public class MMCarryLogListActivity extends BaseSwipeBackCompatActivity {
   @Bind(R.id.carryloglist_xry) XRecyclerView carryloglistXry;
   private CarryLogListAdapter adapter;
   private int page = 2;
+  private String carrylogMoney;
 
   @Override protected void setListener() {
 
@@ -51,7 +52,7 @@ public class MMCarryLogListActivity extends BaseSwipeBackCompatActivity {
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
-
+    carrylogMoney = extras.getString("carrylogMoney");
   }
 
   @Override protected int getContentViewLayoutID() {
@@ -63,6 +64,9 @@ public class MMCarryLogListActivity extends BaseSwipeBackCompatActivity {
     setSupportActionBar(toolbar);
     finishBack(toolbar);
     initRecyclerView();
+
+    tvCount.setText(carrylogMoney);
+
   }
 
   private void initRecyclerView() {
