@@ -362,6 +362,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     isCoupon = true;
                   } else {
                     isCoupon = false;
+                    tv_coupon.setText("");
                     new MaterialDialog.Builder(CartsPayInfoActivity.this).
                         content(cartsPayinfoBean.getmCoupon_message()).
                         positiveText("OK").
