@@ -69,8 +69,6 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
         });
     addSubscription(subscribe);
 
-    tvMoney.setText((float)(Math.round(money *100))/100 + "");
-
     if(!get_money){
       Subscription subscribe1 = UserNewModel.getInstance()
           .getProfile()
@@ -88,6 +86,9 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
         });
       addSubscription(subscribe1);
 
+    }
+    else {
+      tvMoney.setText((float)(Math.round(money *100))/100 + "");
     }
   }
 

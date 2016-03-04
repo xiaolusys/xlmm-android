@@ -11,7 +11,7 @@
   <RelativeLayout
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginTop="40px"
+      android:layout_marginTop="30dp"
       android:layout_centerHorizontal="true"
       android:id="@+id/rl_head">
 
@@ -30,7 +30,7 @@
         android:id="@+id/tvNickname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10px"
+        android:layout_marginTop="8dp"
         android:text="小鹿妈妈"
         />
   </RelativeLayout>
@@ -39,7 +39,7 @@
   <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginTop="50px"
+      android:layout_marginTop="20dp"
       android:weightSum="3"
       android:layout_below="@+id/rl_head"
       android:orientation="horizontal">
@@ -64,7 +64,7 @@
           android:layout_below="@id/tvMoney"
           android:id="@+id/imgMoney"
           android:layout_width="wrap_content"
-          android:layout_height="40px"
+          android:layout_height="24dp"
           android:clickable="true"
           android:src="@drawable/ic_wallet"/>
 
@@ -74,7 +74,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_toRightOf="@+id/imgMoney"
-          android:layout_alignTop="@+id/imgMoney"
+          android:layout_alignBottom="@+id/imgMoney"
           android:gravity="center_vertical"
           android:text="余额(元)"/>
 
@@ -101,7 +101,7 @@
           android:layout_below="@id/tvScore"
           android:id="@+id/imgPoint"
           android:layout_width="wrap_content"
-          android:layout_height="40px"
+          android:layout_height="24dp"
           android:clickable="true"
           android:src="@drawable/ic_point"/>
 
@@ -125,7 +125,7 @@
           android:text="0"/>
       <ImageView
           android:layout_below="@id/tvDiscount"
-          android:layout_height="40px"
+          android:layout_height="24dp"
           android:layout_alignParentLeft="true"
           android:id="@+id/imgCoupon"
           android:layout_width="wrap_content"
