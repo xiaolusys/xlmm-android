@@ -575,13 +575,16 @@ public class MainActivity extends BaseActivity
   }
 
   public void swith_fragment(){
-    int tabid = getIntent().getExtras().getInt("fragment");
-    if ((tabid>=1) && (tabid <=4)){
-      try {
-        mTabLayout.setScrollPosition(tabid-1,0,true);
-        mViewPager.setCurrentItem(tabid-1);
-      } catch (Exception e) {
-        e.printStackTrace();
+    int tabid = 0;
+    if(getIntent().getExtras() != null) {
+      getIntent().getExtras().getInt("fragment");
+      if ((tabid >= 1) && (tabid <= 4)) {
+        try {
+          mTabLayout.setScrollPosition(tabid - 1, 0, true);
+          mViewPager.setCurrentItem(tabid - 1);
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
       }
     }
   }
