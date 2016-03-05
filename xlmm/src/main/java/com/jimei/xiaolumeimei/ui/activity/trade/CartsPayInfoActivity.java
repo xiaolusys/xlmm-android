@@ -471,7 +471,9 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     + addressBean.getReceiverAddress());
                 isHaveAddress = true;
               } else {
-                chooseAddress.setVisibility(View.VISIBLE);
+                if (chooseAddress != null) {
+                  chooseAddress.setVisibility(View.VISIBLE);
+                }
                 name.setVisibility(View.INVISIBLE);
                 phone.setVisibility(View.INVISIBLE);
                 addressDetails.setVisibility(View.INVISIBLE);

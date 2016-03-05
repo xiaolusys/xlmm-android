@@ -75,34 +75,34 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
 
   //从server端获得所有订单数据，可能要查询几次
   @Override protected void initData() {
-    order_id = getIntent().getExtras().getInt("orderinfo");
-    source = getIntent().getExtras().getString("source");
+    if((getIntent() != null) && (getIntent().getExtras() != null)) {
+      order_id = getIntent().getExtras().getInt("orderinfo");
+      source = getIntent().getExtras().getString("source");
 
-  Subscription subscription = tradeModel.getOrderDetailBean(order_id)
-        .subscribeOn(Schedulers.newThread())
-        .subscribe(new ServiceResponse<OrderDetailBean>() {
-          @Override public void onNext(OrderDetailBean orderDetailBean) {
+      Subscription subscription = tradeModel.getOrderDetailBean(order_id)
+          .subscribeOn(Schedulers.newThread())
+          .subscribe(new ServiceResponse<OrderDetailBean>() {
+            @Override public void onNext(OrderDetailBean orderDetailBean) {
 
-            orderDetail = orderDetailBean;
-            fillDataToView(orderDetailBean);
-            showProcBtn(orderDetailBean);
+              orderDetail = orderDetailBean;
+              fillDataToView(orderDetailBean);
+              showProcBtn(orderDetailBean);
 
-            Log.i(TAG,"order_id "+order_id + " " + orderDetailBean.toString());
-          }
+              Log.i(TAG, "order_id " + order_id + " " + orderDetailBean.toString());
+            }
 
-          @Override
-          public void onCompleted() {
-            super.onCompleted();
-          }
+            @Override public void onCompleted() {
+              super.onCompleted();
+            }
 
-          @Override
-          public void onError(Throwable e) {
+            @Override public void onError(Throwable e) {
 
-            Log.e(TAG, " error:, "   + e.toString());
-            super.onError(e);
-          }
-        });
-    addSubscription(subscription);
+              Log.e(TAG, " error:, " + e.toString());
+              super.onError(e);
+            }
+          });
+      addSubscription(subscription);
+    }
 
   }
 
