@@ -171,7 +171,6 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
       mWebView.getSettings().setDatabaseEnabled(true);
       mWebView.getSettings().setLoadWithOverviewMode(true);
       mWebView.getSettings().setUseWideViewPort(true);
-      mWebView.getSettings().setBlockNetworkImage(false);
 
       mWebView.setWebChromeClient(new WebChromeClient() {
         @Override public void onProgressChanged(WebView view, int newProgress) {

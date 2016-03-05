@@ -1,18 +1,25 @@
 package com.jimei.xiaolumeimei.ui.fragment;
 
+import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.HttpAuthHandler;
+import android.webkit.SslErrorHandler;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.widget.doubleview.CustWebView;
+import com.jude.utils.JUtils;
 
 public class VerticalFragmentWeb extends Fragment {
-
+  private static final String TAG ="VerticalFragmentWeb";
   private static final String url = "http://m.xiaolumeimei.com/mm/pdetail/";
   private View progressBar;
   private CustWebView webview;
@@ -41,6 +48,46 @@ public class VerticalFragmentWeb extends Fragment {
     webview.getSettings().setDatabaseEnabled(true);
     webview.getSettings().setLoadWithOverviewMode(true);
     webview.getSettings().setUseWideViewPort(true);
+
+    webview.setWebChromeClient(new WebChromeClient() {
+      @Override public void onProgressChanged(WebView view, int newProgress) {
+        JUtils.Log(TAG, "process:" + newProgress);
+
+      }
+    });
+
+    webview.setWebViewClient(new WebViewClient() {
+
+      @Override public void onPageFinished(WebView view, String url) {
+        JUtils.Log(TAG, "onPageFinished:" + url);
+
+        if (!webview.getSettings().getLoadsImagesAutomatically()) {
+          webview.getSettings().setLoadsImagesAutomatically(true);
+        }
+      }
+
+      @Override
+      public void onReceivedHttpAuthRequest(WebView view, HttpAuthHandler handler,
+          String host, String realm) {
+        JUtils.Log(TAG, "onReceivedHttpAuthRequest");
+        view.reload();
+      }
+
+      @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
+        JUtils.Log(TAG, "shouldOverrideUrlLoading:" + url);
+        view.loadUrl(url);
+        return super.shouldOverrideUrlLoading(view, url);
+      }
+
+      public void onReceivedSslError(WebView view, SslErrorHandler handler,
+          SslError error) {
+        JUtils.Log(TAG, "onReceivedSslError:");
+        //handler.cancel(); 默认的处理方式，WebView变成空白页
+        //                        //接受证书
+        handler.proceed();
+        //handleMessage(Message msg); 其他处理
+      }
+    });
 
     ButterKnife.bind(this, rootView);
     return rootView;
