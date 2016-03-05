@@ -20,6 +20,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.CartsPayInfoAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AddressBean;
+import com.jimei.xiaolumeimei.entities.BudgetPayBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.model.CartsModel;
@@ -97,6 +98,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   private double paymentInfo;
   private double discount_feeInfo;
   private double total_feeInfo;
+  private boolean budget_payable;
 
   @Override protected void setListener() {
     adress.setOnClickListener(this);
@@ -116,7 +118,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<CartsPayinfoBean>() {
           @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
-            super.onNext(cartsPayinfoBean);
             if (cartsPayinfoBean != null) {
               mAdapter.updateWithClear(cartsPayinfoBean.getCartList());
               cart_ids = cartsPayinfoBean.getCartIds();
@@ -150,6 +151,8 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
               totalPrice_all.setText("合计: ¥" + cartsPayinfoBean.getTotalFee() + "");
               jiehsneg.setText("已节省" + cartsPayinfoBean.getDiscountFee() + "");
               //}
+
+              budget_payable = cartsPayinfoBean.isBudget_payable();
 
               //if (Double.parseDouble(total_fee) < 150) {
               //  coupon_layout.setOnClickListener(null);
@@ -221,7 +224,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
           } else if (isAlipay) {
             payWithCoupon("alipay");
           } else if (isBudget) {
-            payWithCoupon("budget");
+            payWithBudgetCoupon("budget");
           } else {
             JUtils.Toast("请选择支付方式");
           }
@@ -231,7 +234,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
           } else if (isWx) {
             payWithNoCoupon("wx");
           } else if (isBudget) {
-            payWithNoCoupon("budget");
+            payWithBudget("budget");
           } else {
             JUtils.Toast("请选择支付方式");
           }
@@ -272,6 +275,58 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 } catch (IOException e) {
                   e.printStackTrace();
                 }
+              }
+            });
+    addSubscription(subscription);
+  }
+
+  private void payWithBudget(String pay_method) {
+    JUtils.Log("CartsPayinfo",
+        cart_ids + "    " + addr_id + "    " + pay_method + "    " +
+            payment + "    " + post_fee + "    " +
+            discount_fee + "    " + total_fee + "    " + uuid);
+
+    Subscription subscription =
+        tradeModel.shoppingcart_createBudget(cart_ids, addr_id, pay_method, payment,
+            post_fee, discount_fee, total_fee, uuid)
+            .subscribeOn(Schedulers.io())
+            .subscribe(new ServiceResponse<BudgetPayBean>() {
+              @Override public void onNext(BudgetPayBean responseBody) {
+                if (responseBody != null) {
+                  boolean success = responseBody.isSuccess();
+                  if (success) {
+                    JUtils.Toast("支付成功");
+                  } else {
+                    JUtils.Toast(responseBody.getInfo());
+                  }
+                }
+              }
+            });
+    addSubscription(subscription);
+  }
+
+  private void payWithBudgetCoupon(String pay_method) {
+    BigDecimal bd = new BigDecimal((paymentInfo - coupon_price));
+    double bigDecimal = bd.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+
+    Subscription subscription =
+        tradeModel.shoppingcart_createBudget_with_coupon(cart_ids, addr_id, pay_method,
+            bigDecimal + "", post_fee, discount_fee, total_fee, uuid, coupon_id)
+            .subscribeOn(Schedulers.io())
+            .subscribe(new ServiceResponse<BudgetPayBean>() {
+              @Override public void onNext(BudgetPayBean responseBody) {
+                if (responseBody != null) {
+                  boolean success = responseBody.isSuccess();
+                  if (success) {
+                    JUtils.Toast("支付成功");
+                  } else {
+                    JUtils.Toast(responseBody.getInfo());
+                  }
+                }
+              }
+
+              @Override public void onError(Throwable e) {
+                super.onError(e);
               }
             });
     addSubscription(subscription);
@@ -355,9 +410,8 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         jiehsneg.setText("已节省" + coupon_price);
         tv_coupon.setText(coupon_price + "元优惠券");
 
-
-        JUtils.Log(TAG, "coupon_id:"+coupon_id);
-       Subscription subscription = model.getCartsInfoList(ids, coupon_id)
+        JUtils.Log(TAG, "coupon_id:" + coupon_id);
+        Subscription subscription = model.getCartsInfoList(ids, coupon_id)
 
             .subscribeOn(Schedulers.newThread())
             .subscribe(new ServiceResponse<CartsPayinfoBean>() {
@@ -437,7 +491,12 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     } else if (checkedId == R.id.budget) {
       isWx = false;
       isAlipay = false;
-      isBudget = true;
+      if (budget_payable) {
+        isBudget = true;
+      } else {
+        JUtils.Toast("钱包不可用,请选择其他支付方式");
+        isBudget = false;
+      }
     }
   }
 

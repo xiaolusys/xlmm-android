@@ -33,6 +33,25 @@ public class CartsPayinfoBean {
   @SerializedName("weixin_payable") private boolean mWeixinPayable;
   @SerializedName("coupon_ticket") private Object mCouponTicket;
   @SerializedName("uuid") private String mUuid;
+  @SerializedName("budget_cash") private String budget_cash;
+
+  public boolean isBudget_payable() {
+    return budget_payable;
+  }
+
+  public void setBudget_payable(boolean budget_payable) {
+    this.budget_payable = budget_payable;
+  }
+
+  public String getBudget_cash() {
+    return budget_cash;
+  }
+
+  public void setBudget_cash(String budget_cash) {
+    this.budget_cash = budget_cash;
+  }
+
+  @SerializedName("budget_payable") private boolean budget_payable;
 
   public String getmCoupon_message() {
     return mCoupon_message;

@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.model;
 
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
+import com.jimei.xiaolumeimei.entities.BudgetPayBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
@@ -34,6 +35,16 @@ public class TradeModel {
         .compose(new DefaultTransform<>());
   }
 
+  //创建订单
+  public Observable<BudgetPayBean> shoppingcart_createBudget(String cart_ids, String addr_id,
+      String channel, String payment, String post_fee, String discount_fee,
+      String total_fee, String uuid) {
+    return XlmmRetrofitClient.getService()
+        .shoppingcart_createBudget(cart_ids, addr_id, channel, payment, post_fee,
+            discount_fee, total_fee, uuid)
+        .compose(new DefaultTransform<>());
+  }
+
   //创建订单,使用优惠券
   public Observable<ResponseBody> shoppingcart_create_with_coupon(String cart_ids,
       String addr_id, String channel, String payment, String post_fee,
@@ -41,6 +52,15 @@ public class TradeModel {
     return XlmmRetrofitClient.getService()
         .shoppingcart_create_with_coupon(cart_ids, addr_id, channel, payment, post_fee,
             discount_fee, total_fee, uuid, coupon_id)
+        .compose(new DefaultTransform<>());
+  }
+  //创建订单,使用优惠券
+  public Observable<BudgetPayBean> shoppingcart_createBudget_with_coupon(String cart_ids,
+      String addr_id, String channel, String payment, String post_fee,
+      String discount_fee, String total_fee, String uuid, String coupon_id) {
+    return XlmmRetrofitClient.getService()
+        .shoppingcart_createBudget_with_coupon(cart_ids, addr_id, channel, payment,
+            post_fee, discount_fee, total_fee, uuid, coupon_id)
         .compose(new DefaultTransform<>());
   }
 

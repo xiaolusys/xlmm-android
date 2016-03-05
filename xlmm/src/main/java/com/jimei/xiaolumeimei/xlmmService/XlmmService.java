@@ -10,19 +10,19 @@ import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.entities.AllowanceBean;
 import com.jimei.xiaolumeimei.entities.BindInfoBean;
+import com.jimei.xiaolumeimei.entities.BudgetPayBean;
 import com.jimei.xiaolumeimei.entities.BudgetdetailBean;
 import com.jimei.xiaolumeimei.entities.CarryLogListBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.CartsinfoBean;
 import com.jimei.xiaolumeimei.entities.ChildListBean;
-import com.jimei.xiaolumeimei.entities.MMShoppingBean;
-import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.CouponBean;
 import com.jimei.xiaolumeimei.entities.IndexBean;
 import com.jimei.xiaolumeimei.entities.LadyListBean;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.entities.MMChooselistBean;
+import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.MamaFansBean;
 import com.jimei.xiaolumeimei.entities.MembershipPointBean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
@@ -37,6 +37,7 @@ import com.jimei.xiaolumeimei.entities.ProductDetailBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
 import com.jimei.xiaolumeimei.entities.RegisterBean;
+import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.ShareProductBean;
 import com.jimei.xiaolumeimei.entities.ShoppingListBean;
 import com.jimei.xiaolumeimei.entities.SmsLoginBean;
@@ -182,10 +183,38 @@ public interface XlmmService {
             @Field("uuid") String uuid
     );
 
+    @FormUrlEncoded
+    @POST("trades/shoppingcart_create")
+    Observable<BudgetPayBean> shoppingcart_createBudget(
+            @Field("cart_ids") String cart_ids,
+            @Field("addr_id") String addr_id,
+            @Field("channel") String channel,
+            @Field("payment") String payment,
+            @Field("post_fee") String post_fee,
+            @Field("discount_fee") String discount_fee,
+            @Field("total_fee") String total_fee,
+            @Field("uuid") String uuid
+    );
+
   //使用优惠券
     @FormUrlEncoded
     @POST("trades/shoppingcart_create")
     Observable<ResponseBody> shoppingcart_create_with_coupon(
+            @Field("cart_ids") String cart_ids,
+            @Field("addr_id") String addr_id,
+            @Field("channel") String channel,
+            @Field("payment") String payment,
+            @Field("post_fee") String post_fee,
+            @Field("discount_fee") String discount_fee,
+            @Field("total_fee") String total_fee,
+            @Field("uuid") String uuid,
+            @Field("coupon_id") String coupon_id
+    );
+
+  //使用优惠券
+    @FormUrlEncoded
+    @POST("trades/shoppingcart_create")
+    Observable<BudgetPayBean> shoppingcart_createBudget_with_coupon(
             @Field("cart_ids") String cart_ids,
             @Field("addr_id") String addr_id,
             @Field("channel") String channel,
