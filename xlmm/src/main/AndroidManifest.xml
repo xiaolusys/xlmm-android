@@ -91,9 +91,9 @@
         android:theme="@style/AppTheme.TransparentActivity"
         android:name=".ui.activity.product.ProductDetailActvity"/>
 
-    <!--<activity-->
-    <!--android:theme="@style/AppTheme.TransparentActivity"-->
-    <!--android:name=".ui.activity.product.ProductDetailActvity1"/>-->
+    <activity
+    android:theme="@style/AppTheme.TransparentActivity"
+    android:name=".ui.activity.product.ProductDetailActvityWeb"/>
 
     <activity android:name=".ui.activity.trade.CartActivity"
         android:theme="@style/AppTheme.TransparentActivity"

@@ -13,7 +13,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.ChildListBean;
-import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActvity;
+import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActvityWeb;
 import com.jimei.xiaolumeimei.ui.activity.product.TongkuanActivity;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.zhy.autolayout.utils.AutoUtils;
@@ -168,7 +168,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Chil
         bundle.putString("name", name.split("/")[0]);
       }
       if (mList.get(position).getProductModel().isIsSingleSpec()) {
-        Intent intent = new Intent(mContext, ProductDetailActvity.class);
+        Intent intent = new Intent(mContext, ProductDetailActvityWeb.class);
         intent.putExtras(bundle);
         mContext.startActivity(intent);
       } else {
