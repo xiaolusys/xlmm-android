@@ -1,0 +1,238 @@
+<resources>
+
+    <!-- Declare custom theme attributes that allow changing which styles are
+         used for button bars depending on the API level.
+         ?android:attr/buttonBarStyle is new as of API 11 so this is
+         necessary to support previous API levels. -->
+    <declare-styleable name="ButtonBarContainerTheme">
+        <attr name="metaButtonBarStyle" format="reference" />
+        <attr name="metaButtonBarButtonStyle" format="reference" />
+    </declare-styleable>
+
+  <!-- SwipeBackLayout -->
+  <declare-styleable name="SwipeBackLayout">
+    <attr name="edge_size" format="dimension"/>
+    <attr name="edge_flag">
+      <enum name="left" value="0"/>
+      <enum name="right" value="1"/>
+      <enum name="bottom" value="2"/>
+      <enum name="all" value="3"/>
+    </attr>
+    <attr name="shadow_left" format="reference"/>
+    <attr name="shadow_right" format="reference"/>
+    <attr name="shadow_bottom" format="reference"/>
+  </declare-styleable>
+
+  <attr name="SwipeBackLayoutStyle" format="reference"/>
+
+  <declare-styleable name="CountdownView">
+    <attr name="isHideTimeBackground" format="boolean" />
+    <attr name="isShowTimeBgDivisionLine" format="boolean" />
+    <attr name="timeBgDivisionLineColor" format="color" />
+    <attr name="timeBgDivisionLineSize" format="dimension" />
+    <attr name="timeBgColor" format="color" />
+    <attr name="timeBgSize" format="dimension" />
+    <attr name="timeBgRadius" format="dimension" />
+
+    <attr name="isTimeTextBold" format="boolean" />
+    <attr name="timeTextSize" format="dimension" />
+    <attr name="timeTextColor" format="color" />
+    <attr name="isShowDay" format="boolean" />
+    <attr name="isShowHour" format="boolean" />
+    <attr name="isShowMinute" format="boolean" />
+    <attr name="isShowSecond" format="boolean" />
+    <attr name="isShowMillisecond" format="boolean" />
+
+    <attr name="isSuffixTextBold" format="boolean" />
+    <attr name="suffixTextSize" format="dimension" />
+    <attr name="suffixTextColor" format="color" />
+    <attr name="suffix" format="string" />
+    <attr name="suffixDay" format="string" />
+    <attr name="suffixHour" format="string" />
+    <attr name="suffixMinute" format="string" />
+    <attr name="suffixSecond" format="string" />
+    <attr name="suffixMillisecond" format="string" />
+    <attr name="suffixGravity">
+      <enum name="top" value="0" />
+      <enum name="center" value="1" />
+      <enum name="bottom" value="2" />
+    </attr>
+    <attr name="suffixLRMargin" format="dimension" />
+    <attr name="suffixDayLeftMargin" format="dimension" />
+    <attr name="suffixDayRightMargin" format="dimension" />
+    <attr name="suffixHourLeftMargin" format="dimension" />
+    <attr name="suffixHourRightMargin" format="dimension" />
+    <attr name="suffixMinuteLeftMargin" format="dimension" />
+    <attr name="suffixMinuteRightMargin" format="dimension" />
+    <attr name="suffixSecondLeftMargin" format="dimension" />
+    <attr name="suffixSecondRightMargin" format="dimension" />
+    <attr name="suffixMillisecondLeftMargin" format="dimension" />
+  </declare-styleable>
+
+
+  <declare-styleable name="TagFlowLayout">
+    <attr name="auto_select_effect" format="boolean"></attr>
+    <attr name="max_select" format="integer"></attr>
+    <attr name="gravity">
+      <enum name="left" value="-1" />
+      <enum name="center" value="0" />
+      <enum name="right" value="1" />
+    </attr>
+  </declare-styleable>
+
+  <declare-styleable name="NumberPicker">
+    <attr name="normalTextColor" format="color" />
+    <attr name="normalTextSize" format="dimension" />
+    <attr name="selecredTextColor" format="color" />
+    <attr name="selecredTextSize" format="dimension" />
+    <attr name="unitHight" format="dimension" />
+    <attr name="itemNumber" format="integer"/>
+    <attr name="lineColor" format="color" />
+    <attr name="maskHight" format="dimension"/>
+    <attr name="noEmpty" format="boolean"/>
+    <attr name="isEnable" format="boolean"/>
+  </declare-styleable>
+
+  <declare-styleable name="ClearEditText">
+    <!-- 清除按钮的图标 -->
+    <attr name="iconClear" format="reference"/>
+  </declare-styleable>
+
+  <declare-styleable name="PasswordEditText">
+    <attr name="iconShow" format="integer" />
+    <attr name="iconHide" format="integer" />
+  </declare-styleable>
+
+  <declare-styleable name="SmoothCheckBox">
+    <attr name="duration" format="integer"/>
+    <attr name="stroke_width" format="dimension"/>
+    <attr name="color_tick" format="color"/>
+    <attr name="color_checked" format="color"/>
+    <attr name="color_unchecked" format="color"/>
+    <attr name="color_unchecked_stroke" format="color"/>
+  </declare-styleable>
+
+  <declare-styleable name="SliderLayout">
+
+    <!-- indicator visibility -->
+    <attr name="indicator_visibility" format="enum">
+      <enum name="visible" value="0"/>
+      <enum name="invisible" value="1"/>
+    </attr>
+
+    <attr name="auto_cycle" format="boolean"/>
+
+    <!-- page animation -->
+    <attr name="pager_animation" format="enum">
+      <enum name="Default" value="0">Default</enum>
+      <enum name="Accordion" value="1">Accordion</enum>
+      <enum name="Background2Foreground" value="2">Background2Foreground</enum>
+      <enum name="CubeIn" value="3">CubeIn</enum>
+      <enum name="DepthPage" value="4">DepthPage</enum>
+      <enum name="Fade" value="5">Fade</enum>
+      <enum name="FlipHorizontal" value="6">FlipHorizontal</enum>
+      <enum name="FlipPage" value="7">FlipPage</enum>
+      <enum name="Foreground2Background" value="8">Foreground2Background</enum>
+      <enum name="RotateDown" value="9">RotateDown</enum>
+      <enum name="RotateUp" value="10">RotateUp</enum>
+      <enum name="Stack" value="11">Stack</enum>
+      <enum name="Tablet" value="12">Tablet</enum>
+      <enum name="ZoomIn" value="13">ZoomIn</enum>
+      <enum name="ZoomOutSlide" value="14">ZoomOutSlide</enum>
+      <enum name="ZoomOut" value="15">ZoomOut</enum>
+    </attr>
+
+    <!-- page animation time span -->
+    <attr name="pager_animation_span" format="integer"/>
+
+  </declare-styleable>
+
+  <declare-styleable name="PagerIndicator">
+    <!-- indicator visibility -->
+    <attr name="visibility" format="enum">
+      <enum name="visible" value="0"/>
+      <enum name="invisible" value="1"/>
+    </attr>
+
+    <attr name="shape" format="enum">
+      <enum value="0" name="oval"/>
+      <enum value="1" name="rect"/>
+    </attr>
+
+    <attr name="selected_color" format="color"/>
+    <attr name="unselected_color" format="color"/>
+
+    <!-- indicator style -->
+    <attr name="selected_drawable" format="reference"/>
+    <attr name="unselected_drawable" format="reference"/>
+
+    <attr name="selected_width" format="dimension"/>
+    <attr name="selected_height" format="dimension"/>
+
+    <attr name="unselected_width" format="dimension"/>
+    <attr name="unselected_height" format="dimension"/>
+
+    <attr name="padding_left" format="dimension"/>
+    <attr name="padding_right" format="dimension"/>
+    <attr name="padding_top" format="dimension"/>
+    <attr name="padding_bottom" format="dimension"/>
+
+    <attr name="selected_padding_left" format="dimension"/>
+    <attr name="selected_padding_right" format="dimension"/>
+    <attr name="selected_padding_top" format="dimension"/>
+    <attr name="selected_padding_bottom" format="dimension"/>
+
+    <attr name="unselected_padding_left" format="dimension"/>
+    <attr name="unselected_padding_right" format="dimension"/>
+    <attr name="unselected_padding_top" format="dimension"/>
+    <attr name="unselected_padding_bottom" format="dimension"/>
+
+
+  </declare-styleable>
+
+  <declare-styleable name="Themes">
+    <attr name="SliderStyle" format="reference"/>
+    <attr name="PagerIndicatorStyle" format="reference"/>
+  </declare-styleable>
+
+  <declare-styleable name="CircleImageView">
+    <attr name="civ_border_width" format="dimension" />
+    <attr name="civ_border_color" format="color" />
+    <attr name="civ_border_overlay" format="boolean" />
+    <attr name="civ_fill_color" format="color" />
+  </declare-styleable>
+
+  <declare-styleable name="CircleProgress">
+    <!-- 进度条的背景色-->
+    <attr name="bgColor" format="color" />
+    <!-- 进度条的前景色 起始颜色-->
+    <attr name="foreStartColor" format="color" />
+    <!-- 进度条的前景色 结束颜色-->
+    <attr name="foreEndColor" format="color" />
+    <!-- 进度条的大小-->
+    <attr name="progressWidth" format="dimension" />
+    <!-- 最大进度-->
+    <attr name="maxProgress" format="integer" />
+    <!-- 现在的进度-->
+    <attr name="currProgress" format="integer" />
+    <!-- 进度条的起始位置-->
+    <attr name="progressInitialPosition" format="integer" />
+    <!-- 是否使用动画-->
+    <attr name="useAnimation" format="boolean" />
+    <!-- 使用渐变-->
+    <attr name="useGradient" format="boolean" />
+    <!-- 边角是否是圆的-->
+    <attr name="isCircleCorner" format="boolean" />
+    <!-- 是否是实心的-->
+    <attr name="isSolid" format="boolean" />
+  </declare-styleable>
+
+  <declare-styleable name="TickCircleProgress">
+    <!-- 刻度条的粗细-->
+    <attr name="tickWidth" format="dimension" />
+    <!-- 刻度的颜色-->
+    <attr name="tickColor" format="color" />
+    <!-- 刻度条的高度-->
+    <attr name="tickMarkHeight" format="dimension" />
+  </declare-styleable>
+</resources>

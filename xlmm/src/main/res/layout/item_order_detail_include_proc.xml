@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="80dp"
+	android:orientation="horizontal"
+	android:id="@+id/rlayout_order_lefttime"
+	>
+	<LinearLayout
+		android:layout_width="300dp"
+		android:layout_height="80dp"
+		android:orientation="horizontal"
+		>
+		<include layout = "@layout/one_order_item" />
+	</LinearLayout>>
+
+	<Button
+		android:id="@+id/btn_order_proc"
+		android:layout_width="48dp"
+		android:layout_height="wrap_content"
+		android:text="申请退款"
+		android:textColor="@color/colorAccent"
+		android:background="@drawable/text_frame"
+		android:textSize="10sp"
+        android:gravity="center"
+		android:layout_gravity="center" />
+
+
+</LinearLayout>

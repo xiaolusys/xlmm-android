@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+	android:id="@+id/llayout_fans_item">
+
+	<ImageView
+			android:id="@+id/img_fans"
+			android:layout_width="120px"
+			android:layout_height="120px"
+			android:src="@drawable/img_emptypic"
+			android:padding="4dp"/>
+
+		<TextView
+			android:id="@+id/tx_nickname"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+				android:layout_toRightOf="@+id/img_fans"
+				android:layout_marginTop="10px"
+				android:layout_marginLeft="10px"
+			android:text="小鹿妈妈"
+			android:textSize="15sp"
+				android:padding="4dp"/>
+
+	<!--TextView
+			android:id="@+id/tv_id"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text=""
+			android:textSize="15sp"
+			android:padding="4dp"
+			android:layout_marginTop="10px"
+			android:layout_toRightOf="@+id/img_fans"
+			android:layout_below="@+id/tx_nickname"
+ 			/-->
+
+</RelativeLayout>

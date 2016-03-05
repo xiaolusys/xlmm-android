@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+  <android.support.design.widget.AppBarLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:theme="@style/AppTheme.AppBarOverlay">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:popupTheme="@style/AppTheme.PopupOverlay">
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerInParent="true"
+          android:layout_gravity="center"
+          android:text="@string/login"
+          android:textColor="@android:color/white"
+          android:textSize="16sp"
+          />
+
+    </android.support.v7.widget.Toolbar>
+
+  </android.support.design.widget.AppBarLayout>
+
+  <include layout="@layout/common_gap" />
+
+  <EditText
+      android:id="@+id/set_nick_name"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:singleLine="true"
+      android:paddingLeft="10sp"
+      android:paddingRight="10sp"
+      android:paddingTop="10sp"
+      android:paddingBottom="10sp"
+      android:background="@drawable/text_frame"
+      android:hint="请输入新昵称"/>
+
+
+  <include layout="@layout/common_gap" />
+
+  <TextView
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:singleLine="true"
+      android:paddingLeft="10sp"
+      android:paddingRight="10sp"
+      android:paddingTop="10sp"
+      android:paddingBottom="10sp"
+      android:background="@drawable/text_frame"
+      android:text="4-20个字符，可由中英文、数字、“-”组成"/>
+
+  <include layout="@layout/common_gap" />
+
+  <Button
+      android:layout_marginTop="8dp"
+      android:background="@drawable/forget_pass"
+      android:id="@+id/set_save_button"
+      android:layout_width="260dp"
+      android:layout_height="wrap_content"
+      android:layout_marginRight="8dp"
+      android:text="保存"
+      android:textColor="@color/book_loading_book"
+      android:textSize="16sp"
+      android:gravity="center"
+      android:layout_gravity="center" />
+
+
+
+
+</LinearLayout>

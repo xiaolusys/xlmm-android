@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/sv_frame_coupon"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+    <LinearLayout
+    android:id="@+id/llayout_frame_coupon"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+
+    <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/nav_header_vertical_spacing"
+        android:text="可用优惠券"
+        android:layout_gravity="left"
+         />
+
+    <com.jimei.xiaolumeimei.widget.NestedListView
+        android:id="@+id/lv_unused_coupon"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+    </com.jimei.xiaolumeimei.widget.NestedListView>
+
+    <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/nav_header_vertical_spacing"
+        android:text="已过期优惠券"
+        android:layout_gravity="left"
+        />
+
+    <com.jimei.xiaolumeimei.widget.NestedListView
+        android:id="@+id/lv_timeout_coupon"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+    </com.jimei.xiaolumeimei.widget.NestedListView>
+
+    </LinearLayout>
+</ScrollView>

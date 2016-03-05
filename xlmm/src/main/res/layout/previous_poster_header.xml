@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:id="@+id/head_today"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+  <ImageView
+      android:id="@+id/post_1"
+      android:layout_width="match_parent"
+      android:layout_height="309px"/>
+
+  <ImageView
+      android:id="@+id/post_2"
+      android:layout_width="match_parent"
+      android:layout_height="309px"
+      android:layout_marginTop="20px"
+      />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/nvzhuangText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="14dp"
+            android:layout_marginTop="12dp"
+            android:text="昨日特卖"
+            android:textColor="#615f5f"
+            android:textSize="18dp" />
+
+        <cn.iwgang.countdownview.CountdownView
+            android:layout_marginTop="6dp"
+            android:id="@+id/countTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/nvzhuangText"
+            app:isShowDay="true"
+            app:isShowHour="true"
+            app:isShowMinute="true"
+            app:isShowSecond="true"
+            app:timeTextColor="@color/colorAccent"
+            app:timeTextSize="22sp"
+            app:suffixGravity="bottom"
+            app:suffixTextColor="@color/colorAccent"
+            app:suffixTextSize="12sp"
+            app:suffixDay="天"
+            app:suffixHour="时"
+            app:suffixMinute="分"
+            app:suffixSecond="秒"
+            />
+
+        <TextView
+            android:id="@+id/tv_tomorrow"
+            android:textSize="16sp"
+            android:layout_marginTop="3dp"
+            android:text="敬请期待明日上新"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
+            android:visibility="invisible"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/nvzhuangText"
+            />
+    </RelativeLayout>
+</LinearLayout>

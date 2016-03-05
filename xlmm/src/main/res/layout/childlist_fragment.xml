@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:background="#f3f3f4"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+  <!--<LinearLayout-->
+      <!--android:layout_marginTop="20px"-->
+      <!--android:gravity="center"-->
+      <!--android:weightSum="2"-->
+      <!--android:orientation="horizontal"-->
+      <!--android:layout_width="match_parent"-->
+      <!--android:layout_height="wrap_content">-->
+    <!--<LinearLayout-->
+        <!--android:gravity="center"-->
+        <!--android:layout_weight="1"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content">-->
+      <!--<TextView-->
+          <!--android:textSize="30px"-->
+          <!--android:text="推荐排序"-->
+          <!--android:id="@+id/normal"-->
+          <!--android:layout_width="wrap_content"-->
+          <!--android:layout_height="wrap_content"-->
+          <!--/>-->
+    <!--</LinearLayout>-->
+
+    <!--<LinearLayout-->
+        <!--android:gravity="center"-->
+        <!--android:layout_weight="1"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content">-->
+      <!--<TextView-->
+          <!--android:textSize="30px"-->
+          <!--android:layout_width="wrap_content"-->
+          <!--android:text="价格排序"-->
+          <!--android:id="@+id/order"-->
+          <!--android:layout_height="wrap_content"-->
+          <!--/>-->
+    <!--</LinearLayout>-->
+
+
+  <!--</LinearLayout>-->
+  <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      android:orientation="vertical"
+
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+    <include layout="@layout/common_loading"/>
+    <com.jcodecraeer.xrecyclerview.XRecyclerView
+        android:id="@+id/childlist_recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+  </FrameLayout>
+</LinearLayout>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="60dp"
+    android:id="@+id/rlayout_order_lefttime"
+    android:background="#ffffff"
+    android:layout_gravity="bottom"
+    android:visibility="invisible"
+    android:padding="4dp"
+    >
+
+  <LinearLayout
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:id="@+id/llayout_order_lefttime"
+      android:orientation="vertical"
+      android:gravity="center"
+      android:visibility="invisible"
+      >
+
+    <TextView
+        android:id="@+id/tx_order_left_paytime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="付款剩余时间"
+        android:textSize="12sp"
+        android:gravity="center"
+        android:layout_alignParentTop="false"
+        android:layout_toLeftOf="@+id/cv_lefttime"
+        android:layout_toStartOf="@+id/cv_lefttime"
+        android:layout_alignParentBottom="true"
+        />
+
+    <cn.iwgang.countdownview.CountdownView
+        android:id="@+id/cv_lefttime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_vertical"
+        app:isShowMinute="true"
+        app:isShowSecond="true"
+        app:isShowMillisecond="false"
+        app:suffixGravity="center"
+        app:suffixTextColor="#000000"
+        app:suffixTextSize="12sp"
+        app:timeTextColor="@color/colorAccent"
+        app:timeTextSize="12sp"
+        app:isHideTimeBackground="false"
+        app:timeBgColor="@color/white"
+        app:isShowTimeBgDivisionLine="false"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        />
+
+  </LinearLayout>
+
+  <Button
+      android:id="@+id/btn_order_cancel"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="取消订单"
+      android:textColor="@color/colorAccent"
+      android:textSize="10sp"
+      android:gravity="center"
+      android:background="@drawable/text_frame"
+      android:layout_alignParentTop="true"
+      android:layout_toLeftOf="@+id/btn_order_proc"
+      android:layout_toStartOf="@+id/btn_order_proc"
+      />
+
+  <Button
+      android:id="@+id/btn_order_proc"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="立即支付"
+      android:textColor="@color/white"
+      android:textSize="10sp"
+      android:gravity="center"
+      android:layout_marginLeft="8dp"
+      android:background="@drawable/shape_common"
+      android:layout_alignParentTop="true"
+      android:layout_alignParentRight="true"
+      android:layout_alignParentEnd="true"/>
+
+
+</RelativeLayout>

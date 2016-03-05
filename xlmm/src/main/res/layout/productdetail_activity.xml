@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/productdetail_coordinatorlayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+  <FrameLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+    <com.ecloud.pulltozoomview.PullToZoomScrollViewEx
+      android:id="@+id/pulltoZoomScrollView"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/img_share"
+        android:src="@drawable/ic_share"
+        android:layout_marginLeft="640px"
+        android:layout_marginRight="8px"
+        android:layout_marginTop="56px"
+        />
+  </FrameLayout>
+
+  <LinearLayout
+      android:layout_alignParentBottom="true"
+      android:padding="8dp"
+      android:layout_width="match_parent"
+      android:orientation="horizontal"
+      android:background="@color/white"
+      android:layout_height="wrap_content">
+    <!--<com.jimei.xiaolumeimei.widget.badgelib.BadgeFrameLayout-->
+    <!--android:id="@+id/badge_layout"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!-->-->
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        >
+      <RelativeLayout
+          android:id="@+id/rv_cart"
+          android:layout_width="200px"
+          android:layout_height="100px"
+          android:background="@drawable/shape_cart"
+          >
+        <ImageView
+        android:layout_centerInParent="true"
+            android:id="@+id/text_1"
+            android:src="@drawable/cart2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+      </RelativeLayout>
+
+      <Button
+          android:layout_alignParentRight="true"
+          android:layout_marginLeft="100px"
+          android:layout_height="100px"
+          android:textColor="@color/white"
+          android:text="加入购物车"
+          android:layout_gravity="end"
+          android:background="@drawable/shape_common"
+          android:id="@+id/shopping_button"
+          android:layout_width="458px"
+          />
+    </RelativeLayout>
+    <!--</com.jimei.xiaolumeimei.widget.badgelib.BadgeFrameLayout>-->
+  </LinearLayout>
+
+
+
+  <FrameLayout
+      android:id="@+id/dot_cart"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"/>
+
+
+</RelativeLayout>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            <TextView
+                android:id="@+id/tx_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:text="填写物流信息"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"/>
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <EditText
+        android:id="@+id/et_logistics_company"
+        android:layout_width="match_parent"
+        android:layout_height="110px"
+        android:singleLine="true"
+        android:paddingLeft="10sp"
+        android:paddingRight="10sp"
+        android:paddingTop="10sp"
+        android:paddingBottom="10sp"
+        android:background="@drawable/text_frame"
+        android:hint="请输入物流公司">
+    </EditText>
+
+
+    <EditText
+
+        android:id="@+id/et_logistics_number"
+        android:layout_width="match_parent"
+        android:layout_height="110px"
+        android:singleLine="true"
+        android:paddingLeft="10sp"
+        android:paddingRight="10sp"
+        android:paddingTop="10sp"
+        android:paddingBottom="10sp"
+        android:background="@drawable/text_frame"
+        android:hint="请输入快递单号"/>
+
+
+
+    <Button
+        android:textColor="@color/white"
+        android:layout_marginTop="80px"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/btn_commit"
+        android:layout_width="656px"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_login"
+        android:text="提交"
+        >
+    </Button>
+
+</LinearLayout>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/llayout_allorders"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    style="@style/AppTheme.AppBarOverlay"
+    >
+
+  <android.support.design.widget.AppBarLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:theme="@style/AppTheme.AppBarOverlay"
+      >
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#fdb916"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        >
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerInParent="true"
+          android:layout_gravity="center"
+          android:text="分享补贴"
+          android:textColor="@android:color/white"
+          android:textSize="16sp"
+          />
+
+    </android.support.v7.widget.Toolbar>
+    >
+
+  </android.support.design.widget.AppBarLayout>
+
+  <RelativeLayout
+      android:id="@+id/rl_allowance"
+      android:layout_width="match_parent"
+      android:layout_height="250px"
+      android:layout_below="@id/app_bar_layout"
+      android:layout_centerHorizontal="true"
+      >
+
+    <TextView
+        android:id="@+id/tv_today_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="48px"
+        android:gravity="center"
+        android:text="今日补贴"
+        />
+
+    <TextView
+        android:id="@+id/tv_today_allowance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_today_title"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="0.00"
+        android:textColor="@color/colorAccent"
+        android:textSize="30sp"
+        />
+
+    <TextView
+        android:id="@+id/tv_his_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_today_allowance"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="270px"
+        android:text="历史累积"
+        android:textSize="15sp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_today_allowance"
+        android:layout_toRightOf="@id/tv_his_title"
+        android:layout_marginLeft="8px"
+        android:text="0.00"
+        android:textSize="15sp"
+        android:layout_margin="4px"
+        />
+
+  </RelativeLayout>
+
+  <FrameLayout
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:layout_below="@id/rl_allowance"
+      >
+    <com.jcodecraeer.xrecyclerview.XRecyclerView
+        android:id="@+id/lv_allowance"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:padding="4dp"
+        >
+    </com.jcodecraeer.xrecyclerview.XRecyclerView>
+
+  </FrameLayout>
+
+</LinearLayout>

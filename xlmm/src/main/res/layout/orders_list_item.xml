@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:padding="4dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:id="@+id/llayout_order_item">
+
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/tx1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="订单状态"
+        android:textSize="13sp"
+        android:gravity="center_vertical"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="false"
+        android:padding="4dp"
+        />
+
+    <TextView
+        android:id="@+id/tx_order_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="13sp"
+        android:textColor="@color/colorAccent"
+        android:gravity="center_vertical"
+        android:layout_toRightOf="@+id/tx1"
+        android:padding="4dp"
+        />
+
+    <TextView
+        android:id="@+id/tx_order_left_paytime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="剩余时间"
+        android:textSize="13sp"
+        android:textColor="@color/colorAccent"
+        android:gravity="center_vertical"
+        android:padding="4dp"
+        android:layout_marginLeft="275px"
+        android:layout_alignParentTop="false"
+        android:layout_toRightOf="@+id/tx_order_state"
+        android:visibility="invisible"
+        />
+
+    <cn.iwgang.countdownview.CountdownView
+        android:id="@+id/cv_lefttime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_vertical"
+        app:isShowMinute="true"
+        app:isShowSecond="true"
+        app:isShowMillisecond="false"
+        app:suffixGravity="center"
+        app:suffixTextColor="#000000"
+        app:suffixTextSize="12sp"
+        app:timeTextColor="@color/colorAccent"
+        app:timeTextSize="12sp"
+        app:isShowTimeBgDivisionLine="false"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_toRightOf="@+id/tx_order_left_paytime"
+        android:visibility="invisible"
+        />
+
+
+
+  </RelativeLayout>
+
+</LinearLayout>

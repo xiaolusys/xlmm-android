@@ -1,0 +1,112 @@
+package com.jimei.xiaolumeimei.entities;
+
+import com.google.gson.annotations.SerializedName;
+import java.util.List;
+
+/**
+ * Created by itxuye(www.itxuye.com) on 2016/02/26.
+ *
+ * Copyright 2016年 上海己美. All rights reserved.
+ */
+public class BudgetdetailBean {
+
+  /**
+   * count : 2
+   * next : null
+   * previous : null
+   * results : [{"budget_type":0,"budget_log_type":"envelop","budget_date":"2016-02-26","status":0,"budeget_detail_cash":2},{"budget_type":1,"budget_log_type":"consum","budget_date":"2016-02-26","status":0,"budeget_detail_cash":5}]
+   */
+
+  @SerializedName("count") private int mCount;
+  @SerializedName("next") private Object mNext;
+  @SerializedName("previous") private Object mPrevious;
+  /**
+   * budget_type : 0
+   * budget_log_type : envelop
+   * budget_date : 2016-02-26
+   * status : 0
+   * budeget_detail_cash : 2.0
+   */
+
+  @SerializedName("results") private List<ResultsEntity> mResults;
+
+  public void setCount(int count) {
+    this.mCount = count;
+  }
+
+  public void setNext(Object next) {
+    this.mNext = next;
+  }
+
+  public void setPrevious(Object previous) {
+    this.mPrevious = previous;
+  }
+
+  public void setResults(List<ResultsEntity> results) {
+    this.mResults = results;
+  }
+
+  public int getCount() {
+    return mCount;
+  }
+
+  public Object getNext() {
+    return mNext;
+  }
+
+  public Object getPrevious() {
+    return mPrevious;
+  }
+
+  public List<ResultsEntity> getResults() {
+    return mResults;
+  }
+
+  public static class ResultsEntity {
+    @SerializedName("budget_type") private int mBudgetType;
+    @SerializedName("budget_log_type") private String mBudgetLogType;
+    @SerializedName("budget_date") private String mBudgetDate;
+    @SerializedName("status") private int mStatus;
+    @SerializedName("budeget_detail_cash") private double mBudegetDetailCash;
+
+    public void setBudgetType(int budgetType) {
+      this.mBudgetType = budgetType;
+    }
+
+    public void setBudgetLogType(String budgetLogType) {
+      this.mBudgetLogType = budgetLogType;
+    }
+
+    public void setBudgetDate(String budgetDate) {
+      this.mBudgetDate = budgetDate;
+    }
+
+    public void setStatus(int status) {
+      this.mStatus = status;
+    }
+
+    public void setBudegetDetailCash(double budegetDetailCash) {
+      this.mBudegetDetailCash = budegetDetailCash;
+    }
+
+    public int getBudgetType() {
+      return mBudgetType;
+    }
+
+    public String getBudgetLogType() {
+      return mBudgetLogType;
+    }
+
+    public String getBudgetDate() {
+      return mBudgetDate;
+    }
+
+    public int getStatus() {
+      return mStatus;
+    }
+
+    public double getBudegetDetailCash() {
+      return mBudegetDetailCash;
+    }
+  }
+}
