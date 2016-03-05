@@ -161,16 +161,17 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
       mWebView.getSettings().setJavaScriptEnabled(true);
       mWebView.addJavascriptInterface(new AndroidJsBridge(this), "AndroidBridge");
 
-      //mWebView.getSettings().setAllowFileAccess(true);
+      mWebView.getSettings().setAllowFileAccess(true);
       //如果访问的页面中有Javascript，则webview必须设置支持Javascript
       //mWebView.getSettings().setUserAgentString(MyApplication.getUserAgent());
-      //mWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-      //mWebView.getSettings().setAllowFileAccess(true);
-      //mWebView.getSettings().setAppCacheEnabled(true);
-      //mWebView.getSettings().setDomStorageEnabled(true);
-      //mWebView.getSettings().setDatabaseEnabled(true);
-      //mWebView.getSettings().setLoadWithOverviewMode(true);
-      //mWebView.getSettings().setUseWideViewPort(true);
+      mWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+      mWebView.getSettings().setAllowFileAccess(true);
+      mWebView.getSettings().setAppCacheEnabled(true);
+      mWebView.getSettings().setDomStorageEnabled(true);
+      mWebView.getSettings().setDatabaseEnabled(true);
+      mWebView.getSettings().setLoadWithOverviewMode(true);
+      mWebView.getSettings().setUseWideViewPort(true);
+      mWebView.getSettings().setBlockNetworkImage(false);
 
       mWebView.setWebChromeClient(new WebChromeClient() {
         @Override public void onProgressChanged(WebView view, int newProgress) {
@@ -189,9 +190,9 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
         @Override public void onPageFinished(WebView view, String url) {
           JUtils.Log(TAG, "onPageFinished:" + url);
 
-          //if (!mWebView.getSettings().getLoadsImagesAutomatically()) {
-          //  mWebView.getSettings().setLoadsImagesAutomatically(true);
-          //}
+          if (!mWebView.getSettings().getLoadsImagesAutomatically()) {
+            mWebView.getSettings().setLoadsImagesAutomatically(true);
+          }
         }
 
         @Override
