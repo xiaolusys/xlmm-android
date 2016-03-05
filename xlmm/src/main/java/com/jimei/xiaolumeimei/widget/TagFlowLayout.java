@@ -239,7 +239,7 @@ public class TagFlowLayout extends FlowLayout
   }
 
   public interface OnSelectListener {
-    void onSelected(Set<Integer> selectPosSet, int posposition);
+    void onSelected(Set<Integer> selectPosSet, int position);
   }
 
   public interface OnTagClickListener {

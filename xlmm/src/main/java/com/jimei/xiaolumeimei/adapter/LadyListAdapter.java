@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.LadyListBean;
-import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActvity;
+import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActvityWeb;
 import com.jimei.xiaolumeimei.ui.activity.product.TongkuanActivity;
 import com.zhy.autolayout.utils.AutoUtils;
 import java.io.UnsupportedEncodingException;
@@ -164,7 +164,7 @@ public class LadyListAdapter extends RecyclerView.Adapter<LadyListAdapter.LadyLi
         bundle.putString("name", name.split("/")[0]);
       }
       if (mList.get(position).getProductModel().isIsSingleSpec()) {
-        Intent intent = new Intent(mContext, ProductDetailActvity.class);
+        Intent intent = new Intent(mContext, ProductDetailActvityWeb.class);
         intent.putExtras(bundle);
         mContext.startActivity(intent);
       } else {

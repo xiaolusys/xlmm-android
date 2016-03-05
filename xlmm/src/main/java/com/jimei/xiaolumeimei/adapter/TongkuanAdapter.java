@@ -14,7 +14,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.ProductBean;
-import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActvity;
+import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActvityWeb;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.zhy.autolayout.utils.AutoUtils;
 import java.util.ArrayList;
@@ -125,7 +125,7 @@ public class TongkuanAdapter extends RecyclerView.Adapter<TongkuanAdapter.Tongku
       bundle = new Bundle();
       bundle.putString("product_id", product_id);
       Log.i("laopo jiaowo lai xunshan", product_id);
-      Intent intent = new Intent(mContext, ProductDetailActvity.class);
+      Intent intent = new Intent(mContext, ProductDetailActvityWeb.class);
       intent.putExtras(bundle);
       mContext.startActivity(intent);
     });

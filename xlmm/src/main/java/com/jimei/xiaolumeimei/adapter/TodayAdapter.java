@@ -14,7 +14,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
-import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActvity;
+import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActvityWeb;
 import com.jimei.xiaolumeimei.ui.activity.product.TongkuanActivity;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.zhy.autolayout.utils.AutoUtils;
@@ -146,7 +146,7 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.TodayVH> {
 
       try {
         if (mList.get(position).getProductModel().isIsSingleSpec()) {
-          Intent intent = new Intent(mContext, ProductDetailActvity.class);
+          Intent intent = new Intent(mContext, ProductDetailActvityWeb.class);
           intent.putExtras(bundle);
           mContext.startActivity(intent);
         } else {

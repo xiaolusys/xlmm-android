@@ -74,7 +74,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   List<CartsPayinfoBean.CartListEntity> list;
   @Bind(R.id.go_main) Button goMain;
   @Bind(R.id.empty_content) RelativeLayout emptyContent;
-  private boolean isAlipay, isWx;
+  private boolean isAlipay, isWx, isBudget;
   //@Bind(R.id.payinfo_recyclerview) RecyclerView payinfoRecyclerview;
   private String ids;
   private String cart_ids;
@@ -112,7 +112,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   }
 
   private void downLoadCartsInfo() {
-   Subscription subscription =  model.getCartsInfoList(ids)
+    Subscription subscription = model.getCartsInfoList(ids)
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<CartsPayinfoBean>() {
           @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
@@ -220,6 +220,8 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             payWithCoupon("wx");
           } else if (isAlipay) {
             payWithCoupon("alipay");
+          } else if (isBudget) {
+            payWithCoupon("budget");
           } else {
             JUtils.Toast("请选择支付方式");
           }
@@ -228,6 +230,8 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             payWithNoCoupon("alipay");
           } else if (isWx) {
             payWithNoCoupon("wx");
+          } else if (isBudget) {
+            payWithNoCoupon("budget");
           } else {
             JUtils.Toast("请选择支付方式");
           }
@@ -248,28 +252,28 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             payment + "    " + post_fee + "    " +
             discount_fee + "    " + total_fee + "    " + uuid);
 
-   Subscription subscription =  tradeModel.shoppingcart_create(cart_ids, addr_id,
-        pay_method, payment,
-        post_fee, discount_fee, total_fee, uuid)
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<ResponseBody>() {
-          @Override public void onNext(ResponseBody responseBody) {
-            super.onNext(responseBody);
-            try {
-              String string = responseBody.string();
-              Log.i("charge", string);
-              Intent intent = new Intent();
-              String packageName = getPackageName();
-              ComponentName componentName = new ComponentName(packageName,
-                  packageName + ".wxapi.WXPayEntryActivity");
-              intent.setComponent(componentName);
-              intent.putExtra(PaymentActivity.EXTRA_CHARGE, string);
-              startActivityForResult(intent, REQUEST_CODE_PAYMENT);
-            } catch (IOException e) {
-              e.printStackTrace();
-            }
-          }
-        });
+    Subscription subscription =
+        tradeModel.shoppingcart_create(cart_ids, addr_id, pay_method, payment, post_fee,
+            discount_fee, total_fee, uuid)
+            .subscribeOn(Schedulers.io())
+            .subscribe(new ServiceResponse<ResponseBody>() {
+              @Override public void onNext(ResponseBody responseBody) {
+                super.onNext(responseBody);
+                try {
+                  String string = responseBody.string();
+                  Log.i("charge", string);
+                  Intent intent = new Intent();
+                  String packageName = getPackageName();
+                  ComponentName componentName = new ComponentName(packageName,
+                      packageName + ".wxapi.WXPayEntryActivity");
+                  intent.setComponent(componentName);
+                  intent.putExtra(PaymentActivity.EXTRA_CHARGE, string);
+                  startActivityForResult(intent, REQUEST_CODE_PAYMENT);
+                } catch (IOException e) {
+                  e.printStackTrace();
+                }
+              }
+            });
     addSubscription(subscription);
   }
 
@@ -278,32 +282,31 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     BigDecimal bd = new BigDecimal((paymentInfo - coupon_price));
     double bigDecimal = bd.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 
-  Subscription subscription =   tradeModel.shoppingcart_create_with_coupon(cart_ids,
-        addr_id,
-        pay_method,
-        bigDecimal + "", post_fee, discount_fee, total_fee, uuid, coupon_id)
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<ResponseBody>() {
-          @Override public void onNext(ResponseBody responseBody) {
-            try {
-              String string = responseBody.string();
-              Log.i("charge", string);
-              Intent intent = new Intent();
-              String packageName = getPackageName();
-              ComponentName componentName = new ComponentName(packageName,
-                  packageName + ".wxapi.WXPayEntryActivity");
-              intent.setComponent(componentName);
-              intent.putExtra(PaymentActivity.EXTRA_CHARGE, string);
-              startActivityForResult(intent, REQUEST_CODE_PAYMENT);
-            } catch (IOException e) {
-              e.printStackTrace();
-            }
-          }
+    Subscription subscription =
+        tradeModel.shoppingcart_create_with_coupon(cart_ids, addr_id, pay_method,
+            bigDecimal + "", post_fee, discount_fee, total_fee, uuid, coupon_id)
+            .subscribeOn(Schedulers.io())
+            .subscribe(new ServiceResponse<ResponseBody>() {
+              @Override public void onNext(ResponseBody responseBody) {
+                try {
+                  String string = responseBody.string();
+                  Log.i("charge", string);
+                  Intent intent = new Intent();
+                  String packageName = getPackageName();
+                  ComponentName componentName = new ComponentName(packageName,
+                      packageName + ".wxapi.WXPayEntryActivity");
+                  intent.setComponent(componentName);
+                  intent.putExtra(PaymentActivity.EXTRA_CHARGE, string);
+                  startActivityForResult(intent, REQUEST_CODE_PAYMENT);
+                } catch (IOException e) {
+                  e.printStackTrace();
+                }
+              }
 
-          @Override public void onError(Throwable e) {
-            super.onError(e);
-          }
-        });
+              @Override public void onError(Throwable e) {
+                super.onError(e);
+              }
+            });
     addSubscription(subscription);
   }
 
@@ -353,7 +356,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         tv_coupon.setText(coupon_price + "元优惠券");
 
         JUtils.Log(TAG, coupon_id);
-       Subscription subscription = model.getCartsInfoList(ids, coupon_id)
+        Subscription subscription = model.getCartsInfoList(ids, coupon_id)
             .subscribeOn(Schedulers.newThread())
             .subscribe(new ServiceResponse<CartsPayinfoBean>() {
               @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
@@ -424,9 +427,15 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     if (checkedId == R.id.alipay) {
       isAlipay = true;
       isWx = false;
+      isBudget = false;
     } else if (checkedId == R.id.wx) {
       isWx = true;
       isAlipay = false;
+      isBudget = false;
+    } else if (checkedId == R.id.budget) {
+      isWx = false;
+      isAlipay = false;
+      isBudget = true;
     }
   }
 
@@ -448,7 +457,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
       addr_id = addr_idSelect;
     } else {
-     Subscription subscription = addressModel.getAddressList()
+      Subscription subscription = addressModel.getAddressList()
           .subscribeOn(Schedulers.io())
           .subscribe(new ServiceResponse<List<AddressBean>>() {
             @Override public void onNext(List<AddressBean> list) {

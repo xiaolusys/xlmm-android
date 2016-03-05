@@ -171,23 +171,42 @@
           android:background="@color/white"
           android:padding="8dp"
           android:layout_width="match_parent"
-          android:layout_height="176px">
+          android:layout_height="264px">
         <TextView
+            android:layout_marginTop="12px"
             android:id="@+id/tv_alipay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="支付宝"
             />
         <View
-            android:layout_centerVertical="true"
+            android:layout_marginTop="70px"
+            android:id="@+id/v1"
             android:layout_width="match_parent"
             android:layout_height="1dip"
             android:background="@color/greytow"/>
         <TextView
-            android:layout_alignParentBottom="true"
+            android:id="@+id/tv22"
+            android:layout_below="@id/v1"
+            android:layout_marginTop="8dp"
+            android:layout_centerVertical="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="微信"
+            />
+        <View
+            android:layout_marginTop="30px"
+            android:layout_below="@+id/tv22"
+            android:id="@+id/v2"
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:background="@color/greytow"/>
+        <TextView
+            android:layout_below="@id/v2"
+            android:layout_marginTop="30px"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="小鹿钱包"
             />
 
         <RadioGroup
@@ -203,6 +222,11 @@
               android:layout_height="wrap_content"/>
           <android.support.v7.widget.AppCompatRadioButton
               android:id="@+id/wx"
+              android:layout_marginTop="8dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"/>
+          <android.support.v7.widget.AppCompatRadioButton
+              android:id="@+id/budget"
               android:layout_marginTop="8dp"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"/>

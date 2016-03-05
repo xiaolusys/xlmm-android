@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+  <com.jimei.xiaolumeimei.widget.doubleview.DragLayout
+      android:id="@+id/draglayout"
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_weight="1">
+
+    <FrameLayout
+        android:id="@+id/first"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"/>
+
+    <FrameLayout
+        android:id="@+id/second"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"/>
+  </com.jimei.xiaolumeimei.widget.doubleview.DragLayout>
+
+  <View
+      android:layout_width="fill_parent"
+      android:layout_height="1px"
+      android:background="#aaa"/>
+
+  <RelativeLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      >
+    <RelativeLayout
+        android:id="@+id/rv_cart"
+        android:layout_width="200px"
+        android:layout_height="100px"
+        android:background="@drawable/shape_cart"
+        >
+      <ImageView
+          android:layout_centerInParent="true"
+          android:id="@+id/text_1"
+          android:src="@drawable/cart2"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          />
+
+    </RelativeLayout>
+
+    <Button
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="100px"
+        android:layout_height="100px"
+        android:textColor="@color/white"
+        android:text="加入购物车"
+        android:layout_gravity="end"
+        android:background="@drawable/shape_common"
+        android:id="@+id/shopping_button"
+        android:layout_width="458px"
+        />
+  </RelativeLayout>
+</LinearLayout>
