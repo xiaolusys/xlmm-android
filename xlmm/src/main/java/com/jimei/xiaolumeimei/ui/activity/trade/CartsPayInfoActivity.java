@@ -355,8 +355,10 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         jiehsneg.setText("已节省" + coupon_price);
         tv_coupon.setText(coupon_price + "元优惠券");
 
-        JUtils.Log(TAG, coupon_id);
-        Subscription subscription = model.getCartsInfoList(ids, coupon_id)
+
+        JUtils.Log(TAG, "coupon_id:"+coupon_id);
+       Subscription subscription = model.getCartsInfoList(ids, coupon_id)
+
             .subscribeOn(Schedulers.newThread())
             .subscribe(new ServiceResponse<CartsPayinfoBean>() {
               @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
@@ -480,7 +482,9 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     + addressBean.getReceiverAddress());
                 isHaveAddress = true;
               } else {
-                chooseAddress.setVisibility(View.VISIBLE);
+                if (chooseAddress != null) {
+                  chooseAddress.setVisibility(View.VISIBLE);
+                }
                 name.setVisibility(View.INVISIBLE);
                 phone.setVisibility(View.INVISIBLE);
                 addressDetails.setVisibility(View.INVISIBLE);

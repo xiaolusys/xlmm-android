@@ -125,6 +125,7 @@ public class AllRefundsBean {
         private int status;
         private double refund_fee;
         private String status_display;
+        private String return_address;
 
         public void setId(int id) {
             this.id = id;
@@ -250,6 +251,10 @@ public class AllRefundsBean {
             this.status_display = status_display;
         }
 
+        public void setReturn_address(String return_address) {
+            this.return_address = return_address;
+        }
+
         public int getId() {
             return id;
         }
@@ -372,6 +377,10 @@ public class AllRefundsBean {
 
         public String getStatus_display() {
             return status_display;
+        }
+
+        public String getReturn_address() {
+            return return_address;
         }
 
         @Override public String toString() {

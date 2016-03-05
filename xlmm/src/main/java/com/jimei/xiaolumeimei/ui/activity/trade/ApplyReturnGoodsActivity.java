@@ -179,7 +179,9 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
 
   //从server端获得所有订单数据，可能要查询几次
   @Override protected void initData() {
-    goods_info = getIntent().getExtras().getParcelable("goods_info");
+    if((getIntent() != null) && (getIntent().getExtras() != null)) {
+      goods_info = getIntent().getExtras().getParcelable("goods_info");
+    }
     fillDataToView(goods_info);
     getQiniuToken();
   }
@@ -193,6 +195,9 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
     }
 
   private void fillDataToView(AllOrdersBean.ResultsEntity.OrdersEntity goods) {
+    if((goods == null))
+      return;
+
     ViewUtils.loadImgToImgView(this, img_good, goods.getPicPath());
 
     tx_good_name.setText(goods.getTitle());

@@ -62,17 +62,18 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected int getContentViewLayoutID() {
-    refund_state = getIntent().getExtras().getInt("refund_state");
+    if((getIntent() != null) && (getIntent().getExtras() != null)) {
+      refund_state = getIntent().getExtras().getInt("refund_state");
+    }
     Log.d(TAG, "refund_state " + refund_state);
     if (refund_state == XlmmConst.REFUND_STATE_SELLER_AGREED) {
       return R.layout.activity_refund_detail3;
-    }
-    else if (refund_state == XlmmConst.REFUND_STATE_BUYER_APPLY){
+    } else if (refund_state == XlmmConst.REFUND_STATE_BUYER_APPLY) {
       return R.layout.activity_refund_detail2;
-    }
-    else {
+    } else {
       return R.layout.activity_refund_detail;
     }
+
   }
 
   @Override protected void initViews() {
@@ -193,8 +194,11 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
   @Override public void onClick(View v) {
     switch (v.getId()) {
       case R.id.btn_return_addr:
-        new AlertDialog.Builder(this).setTitle("")
-            .setMessage(R.string.return_addr).show();
+        if(! refundDetail.getReturn_address().isEmpty()) {
+          new AlertDialog.Builder(this).setTitle("").setMessage(
+              refundDetail.getReturn_address()+getResources().getString(R.string.return_addr))
+              .show();
+        }
         break;
     }
   }
