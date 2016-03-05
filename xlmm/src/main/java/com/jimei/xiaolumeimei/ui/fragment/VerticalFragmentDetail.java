@@ -2,7 +2,6 @@ package com.jimei.xiaolumeimei.ui.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -79,7 +78,7 @@ public class VerticalFragmentDetail extends Fragment implements View.OnClickList
     color = (TextView) rootView.findViewById(R.id.kexuanyanse);
     beizhu = (TextView) rootView.findViewById(R.id.shangpinnbeizhu);
     //look_chima = (TextView) rootView.findViewById(R.id.look_size);
-    xidi = (TextView) rootView.findViewById(R.id.look_xidi);
+    //xidi = (TextView) rootView.findViewById(R.id.look_xidi);
 
     name = (TextView) rootView.findViewById(R.id.name);
     price1 = (TextView) rootView.findViewById(R.id.price1);
@@ -87,7 +86,7 @@ public class VerticalFragmentDetail extends Fragment implements View.OnClickList
     countdownView = (CountdownView) rootView.findViewById(R.id.cv_countdownView);
 
     //look_chima.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
-    xidi.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
+    //xidi.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
 
     img_share.setOnClickListener(this);
     return rootView;

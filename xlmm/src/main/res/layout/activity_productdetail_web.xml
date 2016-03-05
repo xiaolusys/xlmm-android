@@ -22,12 +22,8 @@
         android:layout_height="fill_parent"/>
   </com.jimei.xiaolumeimei.widget.doubleview.DragLayout>
 
-  <View
-      android:layout_width="fill_parent"
-      android:layout_height="1px"
-      android:background="#aaa"/>
-
   <RelativeLayout
+      android:background="@color/white"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       >

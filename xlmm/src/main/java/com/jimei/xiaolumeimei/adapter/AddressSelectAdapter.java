@@ -2,15 +2,18 @@ package com.jimei.xiaolumeimei.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.AddressBean;
+import com.jimei.xiaolumeimei.ui.activity.user.ChanggeSelectAddressActivity;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,11 +50,11 @@ public class AddressSelectAdapter extends RecyclerView.Adapter<RecyclerView.View
     View view;
     if (viewType == 0) {
       view = LayoutInflater.from(parent.getContext())
-          .inflate(R.layout.item_default_address, parent, false);
+          .inflate(R.layout.item_default_address_select, parent, false);
       return new AddressDefaultVH(view);
     } else if (viewType == 1) {
       view = LayoutInflater.from(parent.getContext())
-          .inflate(R.layout.item_add, parent, false);
+          .inflate(R.layout.item_add_select, parent, false);
       return new AddressVH(view);
     }
 
@@ -79,6 +82,12 @@ public class AddressSelectAdapter extends RecyclerView.Adapter<RecyclerView.View
           setBundle(addressBean);
         }
       });
+
+      ((AddressDefaultVH) holder).change.setOnClickListener(new View.OnClickListener() {
+        @Override public void onClick(View v) {
+          setBundle1(addressBean);
+        }
+      });
     } else if (holder instanceof AddressVH) {
 
       AddressVH addressVH = (AddressVH) holder;
@@ -98,6 +107,13 @@ public class AddressSelectAdapter extends RecyclerView.Adapter<RecyclerView.View
       ((AddressVH) holder).card.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View v) {
           setBundle(addressBean);
+        }
+      });
+
+      ((AddressVH) holder).change.setOnClickListener(new View.OnClickListener() {
+        @Override public void onClick(View v) {
+
+          setBundle1(addressBean);
         }
       });
     }
@@ -130,6 +146,24 @@ public class AddressSelectAdapter extends RecyclerView.Adapter<RecyclerView.View
     context.finish();
   }
 
+  private void setBundle1(AddressBean addressBean) {
+    Intent intent = new Intent(context, ChanggeSelectAddressActivity.class);
+    Bundle bundle = new Bundle();
+    bundle.putString("receiver_state", addressBean.getReceiverState());
+    bundle.putString("receiver_district", addressBean.getReceiverDistrict());
+    bundle.putString("receiver_city", addressBean.getReceiverCity());
+
+    bundle.putString("receiver_name", addressBean.getReceiverName());
+    bundle.putString("id", addressBean.getId());
+    bundle.putString("mobile", addressBean.getReceiverMobile());
+    bundle.putString("address1", addressBean.getReceiverState()
+        + addressBean.getReceiverCity()
+        + addressBean.getReceiverDistrict());
+    bundle.putString("address2", addressBean.getReceiverAddress());
+    intent.putExtras(bundle);
+    context.startActivity(intent);
+  }
+
   @Override public int getItemCount() {
     return mList == null ? 0 : mList.size();
   }
@@ -149,6 +183,7 @@ public class AddressSelectAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Bind(R.id.receiver_name) TextView receiverName;
     @Bind(R.id.receiver_mobile) TextView receiverMobile;
     @Bind(R.id.receiver_address) TextView receiverAddress;
+    @Bind(R.id.change) Button change;
 
     View card;
 
@@ -163,6 +198,7 @@ public class AddressSelectAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Bind(R.id.receiver_name) TextView receiverName;
     @Bind(R.id.receiver_mobile) TextView receiverMobile;
     @Bind(R.id.receiver_address) TextView receiverAddress;
+    @Bind(R.id.change) Button change;
     View card;
 
     public AddressVH(View itemView) {
