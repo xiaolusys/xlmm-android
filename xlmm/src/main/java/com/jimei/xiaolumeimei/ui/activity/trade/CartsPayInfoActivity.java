@@ -383,6 +383,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         assert result != null;
         if (result.equals("cancel")) {
           //wexin alipay already showmsg
+          JUtils.Toast("你已取消支付!");
         } else if (result.equals("success")) {
           JUtils.Toast("支付成功！");
           startActivity(new Intent(CartsPayInfoActivity.this, MainActivity.class));
