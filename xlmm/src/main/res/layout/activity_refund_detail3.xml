@@ -88,9 +88,10 @@
           android:text="退货地址信息"
           android:textSize="15sp"
           android:textColor="@color/colorAccent"
-          android:background="@drawable/text_frame"
+          android:background="@drawable/shape_chooselist"
           android:layout_gravity="right"
           android:layout_margin="4dp"
+          android:padding="4dp"
           />
       <include layout="@layout/common_gap"/>
       <EditText

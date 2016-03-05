@@ -15,6 +15,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jude.utils.JUtils;
 import com.squareup.okhttp.ResponseBody;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
@@ -115,7 +116,7 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity imple
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<ResponseBody>() {
           @Override public void onNext(ResponseBody resp) {
-
+            JUtils.Toast("提交物流信息成功，收货后我们会尽快为您处理退款！");
             Log.i(TAG,"commit_logistics_info "+ resp.toString());
             finish();
           }
@@ -127,10 +128,12 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity imple
 
           @Override
           public void onError(Throwable e) {
-
-            Log.e(TAG, " error:, "   + e.toString());
+            e.printStackTrace();
+            Log.e(TAG, " error:commit_logistics_info "   + e.toString());
+            JUtils.Toast("网络异常，提交信息失败，请重试！");
             super.onError(e);
           }
         });
+    addSubscription(subscription);
   }
 }
