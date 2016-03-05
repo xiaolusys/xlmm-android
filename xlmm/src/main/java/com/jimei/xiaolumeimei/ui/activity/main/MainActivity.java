@@ -336,7 +336,7 @@ public class MainActivity extends BaseActivity
                           if ((!finalAccount.isEmpty())) {
                             MiPushClient.unsetUserAccount(getApplicationContext(),
                                 finalAccount, null);
-                            JUtils.Log("XlmmApp", "unset useraccount: " + finalAccount);
+                            JUtils.Log(TAG, "unset useraccount: " + finalAccount);
                           }
                         }
                       }
@@ -449,8 +449,8 @@ public class MainActivity extends BaseActivity
           }
 
           @Override public void onError(Throwable e) {
-
-            Log.e(TAG, "getUserInfo error1: " + e.getLocalizedMessage());
+            e.printStackTrace();
+            Log.e(TAG, "getUserInfo error1 ");
             super.onError(e);
           }
         });

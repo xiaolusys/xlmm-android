@@ -87,7 +87,7 @@ public class XlmmApp extends Application {
           .subscribeOn(Schedulers.newThread())
           .subscribe(new ServiceResponse<UserInfoBean>() {
             @Override public void onNext(UserInfoBean user) {
-              Log.d("XlmmApp", "getUserInfo:, " + user.toString());
+              Log.d("XlmmApp", "getUserInfo: " + user.toString());
             }
 
             @Override public void onCompleted() {
@@ -96,7 +96,8 @@ public class XlmmApp extends Application {
 
             @Override public void onError(Throwable e) {
               LoginUtils.delLoginInfo(mContext);
-              Log.e("XlmmApp", "error:, " + e.toString());
+              e.printStackTrace();
+              Log.e("XlmmApp", "error getUserInfo" );
               super.onError(e);
             }
           });

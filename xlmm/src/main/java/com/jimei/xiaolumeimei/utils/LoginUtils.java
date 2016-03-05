@@ -119,7 +119,7 @@ public class LoginUtils {
 
   public static void setPushUserAccount(Context context, String mRegId){
     //register xiaomi push
-    JUtils.Log("XlmmApp", "regid: " + mRegId
+    JUtils.Log(TAG, "regid: " + mRegId
         + " devid:"+((TelephonyManager) context.getSystemService( Context.TELEPHONY_SERVICE ))
         .getDeviceId());
     UserModel.getInstance().getUserAccount("android", mRegId,
@@ -128,11 +128,11 @@ public class LoginUtils {
         .subscribeOn(Schedulers.newThread())
         .subscribe(new ServiceResponse<UserAccountBean>() {
           @Override public void onNext(UserAccountBean user) {
-            JUtils.Log("XlmmApp", "UserAccountBean:, " + user.toString());
+            JUtils.Log(TAG, "UserAccountBean:, " + user.toString());
             if((!getUserAccount(context).isEmpty())
                 && (!getUserAccount(context).equals(user.getUserAccount()))) {
               MiPushClient.unsetUserAccount(context.getApplicationContext(), getUserAccount(context), null);
-              JUtils.Log("XlmmApp", "unset useraccount: " + getUserAccount(context));
+              JUtils.Log(TAG, "unset useraccount: " + getUserAccount(context));
             }
             MiPushClient.setUserAccount(context.getApplicationContext(), user.getUserAccount(), null);
           }
@@ -142,7 +142,8 @@ public class LoginUtils {
           }
 
           @Override public void onError(Throwable e) {
-            Log.e("XlmmApp", "error:, " + e.toString());
+            e.printStackTrace();
+            Log.e(TAG, "error: getUserAccount");
             super.onError(e);
           }
         });
