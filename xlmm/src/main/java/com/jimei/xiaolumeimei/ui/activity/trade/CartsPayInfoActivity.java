@@ -352,7 +352,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         jiehsneg.setText("已节省" + coupon_price);
         tv_coupon.setText(coupon_price + "元优惠券");
 
-        JUtils.Log(TAG, coupon_id);
+        JUtils.Log(TAG, "coupon_id:"+coupon_id);
        Subscription subscription = model.getCartsInfoList(ids, coupon_id)
             .subscribeOn(Schedulers.newThread())
             .subscribe(new ServiceResponse<CartsPayinfoBean>() {

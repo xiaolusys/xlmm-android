@@ -283,9 +283,13 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   @Override protected void onDestroy() {
     JUtils.Log(TAG, "onDestroy");
     super.onDestroy();
-    ll_actwebview.removeView(mWebView);
-    mWebView.removeAllViews();
-    mWebView.destroy();
+    if(ll_actwebview != null) {
+      ll_actwebview.removeView(mWebView);
+    }
+    if(mWebView != null) {
+      mWebView.removeAllViews();
+      mWebView.destroy();
+    }
   }
 
   @Override protected void onStop() {
