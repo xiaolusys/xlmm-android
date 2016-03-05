@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="okhttputils">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/xlmm/libs/okhttputils.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
