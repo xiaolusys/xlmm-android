@@ -18,6 +18,7 @@
   <string name="set_nick">账户昵称</string>
   <string name="bind_phone">绑定手机</string>
   <string name="clear_cache">清理缓存</string>
+  <string name="about_company">关于小鹿美美</string>
   <string name="update_cache">缓存已经清理</string>
   <string name="next">下一步</string>
   <string name="delete">一</string>
