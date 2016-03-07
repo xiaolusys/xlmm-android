@@ -390,7 +390,7 @@ public class TodayFragment extends BaseFragment {
               countTime.setVisibility(View.INVISIBLE);
             }
           }
-        });
+        }, Throwable::printStackTrace);
   }
 
   @Override public void onStop() {

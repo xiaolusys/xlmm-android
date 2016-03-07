@@ -134,8 +134,7 @@ public class PreviousFragment extends BaseFragment {
               tv_tomorrow.setVisibility(View.VISIBLE);
             }
           }
-        }, throwable -> {
-        });
+        }, Throwable::printStackTrace);
   }
 
   private void initRecyclerView() {

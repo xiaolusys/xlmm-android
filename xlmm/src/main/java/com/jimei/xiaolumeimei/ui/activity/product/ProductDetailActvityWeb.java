@@ -253,6 +253,15 @@ public class ProductDetailActvityWeb extends BaseSwipeBackCompatActivity
                                         + "");
                                 cvLefttime.start(
                                     calcLefttowTime(cartsNumResultBean.getLastCreated()));
+                                cvLefttime.setOnCountdownEndListener(
+                                    new CountdownView.OnCountdownEndListener() {
+                                      @Override public void onEnd(CountdownView cv) {
+                                        imageView1.setVisibility(View.VISIBLE);
+                                        imageView2.setVisibility(View.INVISIBLE);
+                                        cvLefttime.setVisibility(View.INVISIBLE);
+                                        badge.setBadgeCount(0);
+                                      }
+                                    });
                               } else {
                                 imageView1.setVisibility(View.VISIBLE);
                                 imageView2.setVisibility(View.INVISIBLE);
@@ -301,6 +310,16 @@ public class ProductDetailActvityWeb extends BaseSwipeBackCompatActivity
               cvLefttime.setVisibility(View.VISIBLE);
 
               cvLefttime.start(calcLefttowTime(cartsNumResultBean.getLastCreated()));
+              cvLefttime.setOnCountdownEndListener(
+                  new CountdownView.OnCountdownEndListener() {
+                    @Override public void onEnd(CountdownView cv) {
+                      imageView1.setVisibility(View.VISIBLE);
+                      imageView2.setVisibility(View.INVISIBLE);
+                      cvLefttime.setVisibility(View.INVISIBLE);
+                      badge.setBadgeCount(0);
+                    }
+                  });
+
             } else {
               imageView1.setVisibility(View.VISIBLE);
               imageView2.setVisibility(View.INVISIBLE);
