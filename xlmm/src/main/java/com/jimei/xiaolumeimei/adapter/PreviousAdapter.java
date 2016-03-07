@@ -85,7 +85,7 @@ public class PreviousAdapter extends RecyclerView.Adapter<PreviousAdapter.Previo
         holder.childlistName.setText(productModel.getName().substring(0, 8) + "...");
       }
 
-      holder.childlistAgentPrice.setText("¥" + products.getAgentPrice());
+      holder.childlistAgentPrice.setText("¥" + products.getProductLowestPrice());
       holder.childlistStdsalePrice.setText("/¥" + products.getStdSalePrice());
     } catch (Exception e) {
       e.printStackTrace();

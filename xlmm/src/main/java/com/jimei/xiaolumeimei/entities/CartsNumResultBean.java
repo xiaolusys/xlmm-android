@@ -15,13 +15,13 @@ public class CartsNumResultBean {
    */
 
   @SerializedName("result") private int mResult;
-  @SerializedName("last_created") private double mLastCreated;
+  @SerializedName("last_created") private long mLastCreated;
 
   public void setResult(int result) {
     this.mResult = result;
   }
 
-  public void setLastCreated(double lastCreated) {
+  public void setLastCreated(long lastCreated) {
     this.mLastCreated = lastCreated;
   }
 
@@ -29,7 +29,7 @@ public class CartsNumResultBean {
     return mResult;
   }
 
-  public double getLastCreated() {
+  public long getLastCreated() {
     return mLastCreated;
   }
 }

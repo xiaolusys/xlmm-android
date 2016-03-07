@@ -1,6 +1,5 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -97,7 +96,7 @@ public class SettingActivity extends BaseSwipeBackCompatActivity {
     return null;
   }
 
-  @SuppressLint("ValidFragment") public class SettingFragment extends PreferenceFragment
+  public static class SettingFragment extends PreferenceFragment
       implements Preference.OnPreferenceClickListener {
 
     private View view;

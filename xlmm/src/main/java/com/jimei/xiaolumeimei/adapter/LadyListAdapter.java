@@ -116,7 +116,7 @@ public class LadyListAdapter extends RecyclerView.Adapter<LadyListAdapter.LadyLi
 
 
 
-    holder.childlistAgentPrice.setText("¥" + resultsEntity.getAgentPrice());
+    holder.childlistAgentPrice.setText("¥" + resultsEntity.getProductLowestPrice());
     holder.childlistStdsalePrice.setText("/¥" + resultsEntity.getStdSalePrice());
 
     String[] temp = headImg.split("http://image.xiaolu.so/");

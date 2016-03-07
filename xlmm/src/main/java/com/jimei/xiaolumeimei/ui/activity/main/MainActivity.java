@@ -12,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -164,7 +165,8 @@ public class MainActivity extends BaseActivity
                 tvNickname.setText(userInfoBean.getNick());
               }
 
-              if ((userInfoBean != null) && (!userInfoBean.getThumbnail().isEmpty())) {
+              if ((userInfoBean != null) && (!TextUtils.isEmpty(
+                  userInfoBean.getThumbnail()))) {
                 ViewUtils.loadImgToImgView(MainActivity.this, imgUser,
                     userInfoBean.getThumbnail());
               }
@@ -574,11 +576,11 @@ public class MainActivity extends BaseActivity
     return userInfoBean;
   }
 
-  public void swith_fragment(){
+  public void swith_fragment() {
     int tabid = 0;
-    if(getIntent().getExtras() != null) {
+    if (getIntent().getExtras() != null) {
       tabid = getIntent().getExtras().getInt("fragment");
-      JUtils.Log(TAG,"jump to fragment:"+tabid);
+      JUtils.Log(TAG, "jump to fragment:" + tabid);
       if ((tabid >= 1) && (tabid <= 4)) {
         try {
           mTabLayout.setScrollPosition(tabid - 1, 0, true);
@@ -613,5 +615,4 @@ public class MainActivity extends BaseActivity
       return listTitle.get(position);
     }
   }
-
 }

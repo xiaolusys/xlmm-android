@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 import butterknife.Bind;
+import cn.iwgang.countdownview.CountdownView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AddCartsBean;
@@ -30,6 +31,8 @@ import com.jimei.xiaolumeimei.widget.badgelib.BadgeView;
 import com.jimei.xiaolumeimei.widget.doubleview.DragLayout;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -40,20 +43,21 @@ import rx.schedulers.Schedulers;
  */
 public class ProductDetailActvityWeb extends BaseSwipeBackCompatActivity
     implements View.OnClickListener, setSkuidListener {
+  private static final String TAG = ProductDetailActvityWeb.class.getSimpleName();
   @Bind(R.id.first) FrameLayout first;
   @Bind(R.id.second) FrameLayout second;
   @Bind(R.id.draglayout) DragLayout dragLayout;
-  @Bind(R.id.text_1) ImageView text1;
+  @Bind(R.id.image_1) ImageView imageView1;
+  @Bind(R.id.image_2) ImageView imageView2;
   @Bind(R.id.rv_cart) RelativeLayout rvCart;
   @Bind(R.id.shopping_button) Button button_shop;
   CartsModel cartsModel = new CartsModel();
   int num = 0;
+  @Bind(R.id.cv_lefttime) CountdownView cvLefttime;
   private String item_id;
   private String sku_id;
   private BadgeView badge;
-
   private String productId;
-
   private VerticalFragmentDetail fragment1;
   private VerticalFragmentWeb fragment3;
   private boolean isSelectzz;
@@ -228,8 +232,34 @@ public class ProductDetailActvityWeb extends BaseSwipeBackCompatActivity
                     //animatorSet.start();
 
                     if (addCartsBean != null) {
-                      num++;
-                      badge.setBadgeCount(num);
+                      //num++;
+                      //badge.setBadgeCount(num);
+
+                      cartsModel.show_carts_num()
+                          .subscribeOn(Schedulers.io())
+                          .subscribe(new ServiceResponse<CartsNumResultBean>() {
+                            @Override
+                            public void onNext(CartsNumResultBean cartsNumResultBean) {
+                              if (cartsNumResultBean != null
+                                  && cartsNumResultBean.getResult() != 0) {
+                                num = cartsNumResultBean.getResult();
+                                badge.setBadgeCount(num);
+                                imageView1.setVisibility(View.INVISIBLE);
+                                imageView2.setVisibility(View.VISIBLE);
+                                cvLefttime.setVisibility(View.VISIBLE);
+
+                                JUtils.Log(TAG,
+                                    calcLefttowTime(cartsNumResultBean.getLastCreated())
+                                        + "");
+                                cvLefttime.start(
+                                    calcLefttowTime(cartsNumResultBean.getLastCreated()));
+                              } else {
+                                imageView1.setVisibility(View.VISIBLE);
+                                imageView2.setVisibility(View.INVISIBLE);
+                                cvLefttime.setVisibility(View.INVISIBLE);
+                              }
+                            }
+                          });
                     }
                   }
                 });
@@ -263,10 +293,18 @@ public class ProductDetailActvityWeb extends BaseSwipeBackCompatActivity
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<CartsNumResultBean>() {
           @Override public void onNext(CartsNumResultBean cartsNumResultBean) {
-            super.onNext(cartsNumResultBean);
-            if (cartsNumResultBean != null) {
+            if (cartsNumResultBean != null && cartsNumResultBean.getResult() != 0) {
               num = cartsNumResultBean.getResult();
               badge.setBadgeCount(num);
+              imageView1.setVisibility(View.INVISIBLE);
+              imageView2.setVisibility(View.VISIBLE);
+              cvLefttime.setVisibility(View.VISIBLE);
+
+              cvLefttime.start(calcLefttowTime(cartsNumResultBean.getLastCreated()));
+            } else {
+              imageView1.setVisibility(View.VISIBLE);
+              imageView2.setVisibility(View.INVISIBLE);
+              cvLefttime.setVisibility(View.INVISIBLE);
             }
           }
         });
@@ -275,6 +313,35 @@ public class ProductDetailActvityWeb extends BaseSwipeBackCompatActivity
   @Override public void setSkuid(String skuid, boolean isSelect) {
     sku_id = skuid;
     isSelectzz = isSelect;
+  }
+
+  private long calcLeftTime(String crtTime) {
+    long left = 0;
+    Date now = new Date();
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    try {
+      crtTime = crtTime.replace("T", " ");
+      Date crtdate = format.parse(crtTime);
+      if (crtdate.getTime() + 20 * 60 * 1000 - now.getTime() > 0) {
+        left = crtdate.getTime() + 20 * 60 * 1000 - now.getTime();
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return left;
+  }
+
+  private long calcLefttowTime(long crtTime) {
+    long left = 0;
+    Date now = new Date();
+    try {
+      if (crtTime * 1000 - now.getTime() > 0) {
+        left = crtTime * 1000 - now.getTime();
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return left;
   }
 }
 

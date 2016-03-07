@@ -117,7 +117,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Chil
         holder.childlistName.setText(productModel.getName().substring(0, 8) + "...");
       }
 
-      holder.childlistAgentPrice.setText("¥" + resultsEntity.getAgentPrice());
+      holder.childlistAgentPrice.setText("¥" + resultsEntity.getProductLowestPrice());
       holder.childlistStdsalePrice.setText("/¥" + resultsEntity.getStdSalePrice());
     } catch (Exception e) {
       e.printStackTrace();

@@ -230,7 +230,7 @@
                 >
                 <ImageView
                     android:layout_centerInParent="true"
-                    android:id="@+id/text_1"
+                    android:id="@+id/image_1"
                     android:src="@drawable/cart2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

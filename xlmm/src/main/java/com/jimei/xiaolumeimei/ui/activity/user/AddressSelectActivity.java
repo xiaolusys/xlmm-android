@@ -95,8 +95,7 @@ public class AddressSelectActivity extends BaseSwipeBackCompatActivity
     switch (v.getId()) {
       case R.id.addAdress:
 
-        startActivity(new Intent(AddressSelectActivity.this, AddAddressActivity.class));
-        AddressSelectActivity.this.finish();
+        startActivity(new Intent(AddressSelectActivity.this, AddNoAddressActivity.class));
         break;
     }
   }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -34,13 +35,45 @@
         android:background="@drawable/shape_cart"
         >
       <ImageView
+          android:visibility="invisible"
           android:layout_centerInParent="true"
-          android:id="@+id/text_1"
+          android:id="@+id/image_1"
           android:src="@drawable/cart2"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           />
 
+      <ImageView
+          android:layout_marginLeft="8dp"
+          android:layout_alignParentLeft="true"
+          android:layout_centerVertical="true"
+          android:id="@+id/image_2"
+          android:src="@drawable/cart2"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          />
+
+      <cn.iwgang.countdownview.CountdownView
+          android:id="@+id/cv_lefttime"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_horizontal"
+          android:gravity="center_vertical"
+          app:isShowMinute="true"
+          app:isShowSecond="true"
+          app:isShowMillisecond="false"
+          app:suffixGravity="center"
+          app:suffixTextColor="#000000"
+          app:suffixTextSize="12sp"
+          app:timeTextColor="@color/colorAccent"
+          app:timeTextSize="12sp"
+          app:isHideTimeBackground="false"
+          app:timeBgColor="@color/white"
+          app:isShowTimeBgDivisionLine="false"
+          android:layout_centerVertical="true"
+          android:layout_toRightOf="@id/image_2"
+          android:layout_marginLeft="8dp"
+          />
     </RelativeLayout>
 
     <Button
