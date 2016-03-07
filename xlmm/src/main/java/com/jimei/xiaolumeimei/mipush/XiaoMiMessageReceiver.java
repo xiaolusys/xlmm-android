@@ -102,7 +102,7 @@ public class XiaoMiMessageReceiver extends PushMessageReceiver {
     JUtils.Log(TAG,"content:"+ message.getContent());
 
     XiaoMiPushContent miPushContent = null;
-    if (!message.getContent().isEmpty()) {
+    if ((message.getContent() != null)&& (!message.getContent().isEmpty())) {
       try {
         Gson mgson = new Gson();
         miPushContent = mgson.fromJson(
@@ -114,7 +114,9 @@ public class XiaoMiMessageReceiver extends PushMessageReceiver {
       }
     }
 
-    if((miPushContent!= null) && (!miPushContent.getTargetUrl().isEmpty())) {
+    if((miPushContent!= null)
+        && (miPushContent.getTargetUrl() != null)
+        && (!miPushContent.getTargetUrl().isEmpty())) {
       push_jump_proc(context, miPushContent.getTargetUrl());
     }
 
@@ -284,9 +286,11 @@ public class XiaoMiMessageReceiver extends PushMessageReceiver {
 
   private void push_jump_proc(Context context,String recvContent){
     JUtils.Log(TAG, "push_jump_proc:" + recvContent);
-    JUtils.Log(TAG, "push_jump_proc:" + (recvContent== null) + " " +  (recvContent.isEmpty()));
+
     if((recvContent== null) || (recvContent.isEmpty()))
       return;
+
+    JUtils.Log(TAG, "push_jump_proc:" + (recvContent== null) + " " +  (recvContent.isEmpty()));
 
     JumpInfo jumpInfo = get_jump_info(recvContent);
     Intent intent;

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,7 @@ import com.jimei.xiaolumeimei.widget.banner.SliderTypes.DefaultSliderView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.victor.loading.rotate.RotateLoading;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -204,13 +206,12 @@ public class TodayFragment extends BaseFragment {
 
                     if (postBean.getActivity().isLoginRequired()) {
                       if (LoginUtils.checkLoginState(getActivity())
-                          && (null
-                          != getActivity())
-                          && (null
-                          != ((MainActivity) getActivity()).getUserInfoBean())
-                          && !(((MainActivity) getActivity()).getUserInfoBean()
-                          .getMobile()
-                          .isEmpty())) {
+                          && (null != getActivity())
+                          && (null != ((MainActivity) getActivity()).getUserInfoBean())
+                          && (null != ((MainActivity) getActivity()).getUserInfoBean()
+                          .getMobile())
+                          && ! (((MainActivity) getActivity()).getUserInfoBean()
+                          .getMobile().isEmpty())) {
                         Intent intent = new Intent(getActivity(), WebViewActivity.class);
                         //sharedPreferences =
                         //    getActivity().getSharedPreferences("COOKIESxlmm",

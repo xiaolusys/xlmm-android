@@ -335,7 +335,7 @@ public class MainActivity extends BaseActivity
                             tvNickname.setText("点击登录");
                           }
 
-                          if ((!finalAccount.isEmpty())) {
+                          if ((finalAccount != null)&& ((!finalAccount.isEmpty()))) {
                             MiPushClient.unsetUserAccount(getApplicationContext(),
                                 finalAccount, null);
                             JUtils.Log(TAG, "unset useraccount: " + finalAccount);
@@ -487,6 +487,7 @@ public class MainActivity extends BaseActivity
             if (userNewBean != null) {
               userInfoBean = userNewBean;
               if ((LoginUtils.checkLoginState(getApplicationContext()))
+                  && (userNewBean.getThumbnail() != null)
                   && (!userNewBean.getThumbnail().isEmpty())) {
                 ViewUtils.loadImgToImgView(MainActivity.this, imgUser,
                     userNewBean.getThumbnail());

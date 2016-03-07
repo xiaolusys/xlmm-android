@@ -129,7 +129,7 @@ public class LoginUtils {
         .subscribe(new ServiceResponse<UserAccountBean>() {
           @Override public void onNext(UserAccountBean user) {
             JUtils.Log(TAG, "UserAccountBean:, " + user.toString());
-            if((!getUserAccount(context).isEmpty())
+            if((getUserAccount(context) != null) && ((!getUserAccount(context).isEmpty()))
                 && (!getUserAccount(context).equals(user.getUserAccount()))) {
               MiPushClient.unsetUserAccount(context.getApplicationContext(), getUserAccount(context), null);
               JUtils.Log(TAG, "unset useraccount: " + getUserAccount(context));
