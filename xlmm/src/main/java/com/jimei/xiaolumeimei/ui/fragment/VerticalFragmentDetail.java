@@ -117,8 +117,11 @@ public class VerticalFragmentDetail extends Fragment implements View.OnClickList
               beizhu.setText(productDetailBean.getDetails().getNote());
 
               name.setText(productDetailBean.getName());
-              price1.setText("¥" + productDetailBean.getAgentPrice());
-              price2.setText("/¥" + productDetailBean.getStdSalePrice());
+              price1.setText("¥"
+                  + (float) (Math.round(productDetailBean.getAgentPrice() * 100)) / 100);
+              price2.setText("/¥"
+                  + (float) (Math.round(productDetailBean.getStdSalePrice() * 100))
+                  / 100);
 
               if ((null == productDetailBean.getOffshelfTime())
                   || (productDetailBean.getOffshelfTime().equals(""))) {
