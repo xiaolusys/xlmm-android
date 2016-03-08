@@ -3,16 +3,16 @@ package com.jimei.xiaolumeimei.ui.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import cn.iwgang.countdownview.CountdownView;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
@@ -37,12 +37,15 @@ import com.jimei.xiaolumeimei.widget.banner.SliderTypes.DefaultSliderView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.victor.loading.rotate.RotateLoading;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.BitmapCallback;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import okhttp3.Call;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -77,6 +80,11 @@ public class TodayFragment extends BaseFragment {
   private Subscription subscribe3;
   private Subscription subscribe4;
   private Subscription subscription5;
+
+  public static int dp2px(Context context, int dp) {
+    float scale = context.getResources().getDisplayMetrics().density;
+    return (int) (dp * scale + 0.5f);
+  }
 
   @Override protected int provideContentViewId() {
     return R.layout.today_fragment;
@@ -239,12 +247,39 @@ public class TodayFragment extends BaseFragment {
                 post2.setVisibility(View.VISIBLE);
                 post2.setClickable(true);
 
-                Glide.with(getActivity())
-                    .load(postBean.getActivity().getActImg())
-                    .diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(
-                    R.drawable.header)
-                    //.centerCrop()
-                    .into(post2);
+                //Glide.with(getActivity())
+                //    .load(postBean.getActivity().getActImg())
+                //    .diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(
+                //    R.drawable.header)
+                //    //.centerCrop()
+                //    .into(post2);
+
+                OkHttpUtils.get()
+                    .url(postBean.getActivity().getActImg())
+                    .build()
+                    .execute(new BitmapCallback() {
+                      @Override public void onError(Call call, Exception e) {
+
+                      }
+
+                      @Override public void onResponse(Bitmap response) {
+                        int maxHeight = dp2px(getActivity(), 300);
+
+                        if (response != null) {
+                          int height =
+                              (int) ((float) view.getWidth() / response.getWidth()
+                                  * response.getHeight());
+                          if (height > maxHeight) height = maxHeight;
+                          LinearLayout.LayoutParams layoutParams =
+                              new LinearLayout.LayoutParams(
+                                  LinearLayout.LayoutParams.MATCH_PARENT, height);
+                          layoutParams.setMargins(0, dp2px(getActivity(), 10
+                          ), 0, 0);
+                          post2.setLayoutParams(layoutParams);
+                          post2.setImageBitmap(response);
+                        }
+                      }
+                    });
 
                 post2.setOnClickListener(new View.OnClickListener() {
                   @Override public void onClick(View v) {
