@@ -13,6 +13,7 @@ import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.utils.AppUtils;
@@ -104,6 +105,7 @@ public class SettingActivity extends BaseSwipeBackCompatActivity {
     private Preference updateVersion;
     private Preference setNickname;
     private Preference bindPhone;
+    private Preference about_company;
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
@@ -178,6 +180,9 @@ public class SettingActivity extends BaseSwipeBackCompatActivity {
       bindPhone = findPreference(getResources().getString(R.string.bind_phone));
       setNickname.setSummary(nickName);
       bindPhone.setSummary(mobile.substring(0, 3) + "****" + mobile.substring(7));
+
+      about_company = findPreference(getResources().getString(R.string.about_company));
+      about_company.setSummary(XlmmConst.VERSION);
     }
   }
 }

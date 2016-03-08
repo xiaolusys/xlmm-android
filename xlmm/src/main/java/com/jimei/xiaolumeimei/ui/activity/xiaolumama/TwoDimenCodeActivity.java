@@ -120,7 +120,9 @@ public class TwoDimenCodeActivity extends BaseSwipeBackCompatActivity implements
     // text是分享文本，所有平台都需要这个字段
     oks.setText("分享我的二维码");
     // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
-    if(filePara != null && (!filePara.getFilePath().isEmpty())) {
+    if((filePara != null)
+        && (filePara.getFilePath() != null)
+        && (!filePara.getFilePath().isEmpty())) {
       oks.setImagePath(filePara.getFilePath());//确保SDcard下面存在此张图片
       JUtils.Log(TAG, "local pic " + filePara.getFilePath());
     }

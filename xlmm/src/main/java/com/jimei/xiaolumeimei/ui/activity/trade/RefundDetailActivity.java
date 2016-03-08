@@ -194,7 +194,8 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
   @Override public void onClick(View v) {
     switch (v.getId()) {
       case R.id.btn_return_addr:
-        if(! refundDetail.getReturn_address().isEmpty()) {
+        if((refundDetail.getReturn_address() != null)
+            && (! refundDetail.getReturn_address().isEmpty())) {
           new AlertDialog.Builder(this).setTitle("").setMessage(
               refundDetail.getReturn_address()+getResources().getString(R.string.return_addr))
               .show();

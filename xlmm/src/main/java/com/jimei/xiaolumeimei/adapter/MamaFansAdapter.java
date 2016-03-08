@@ -65,10 +65,10 @@ public class MamaFansAdapter extends RecyclerView.Adapter<MamaFansAdapter.ViewHo
     MamaFansBean.FansEntity record = mList.get(position);
     if (null != record) {
       JUtils.Log(TAG, "record.getNick() = "+record.getNick() );
-      if(!record.getThumbnail().isEmpty()) {
+      if((record.getThumbnail() != null) && (!record.getThumbnail().isEmpty())) {
         ViewUtils.loadImgToImgView(context, holder.img_fans, record.getThumbnail());
       }
-      if(!record.getNick().isEmpty()) {
+      if((record.getNick() != null) && (!record.getNick().isEmpty())) {
         holder.tx_nickname.setText((record.getNick()));
       }
       //holder.tv_id.setText(record.getId());

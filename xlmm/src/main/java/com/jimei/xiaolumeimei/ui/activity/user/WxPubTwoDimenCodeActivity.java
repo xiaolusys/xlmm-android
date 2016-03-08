@@ -129,7 +129,9 @@ public class WxPubTwoDimenCodeActivity extends BaseSwipeBackCompatActivity imple
         + getResources().getString(R.string.wxpub_2dimen_pic_name)
         + ".jpg";
     JUtils.Log(TAG,"filename:"+fileName);
-    BitmapUtil.saveBitmap(bitmap, fileName);
+    if(null != bitmap) {
+      BitmapUtil.saveBitmap(bitmap, fileName);
+    }
 
   }
 
