@@ -35,11 +35,22 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
   }
 
   @Override protected void initData() {
-
-  Subscription  subscribe = MMProductModel.getInstance()
+    showIndeterminateProgressDialog(false);
+    Subscription subscribe = MMProductModel.getInstance()
         .getShoppingList("1")
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ShoppingListBean>() {
+
+          @Override public void onCompleted() {
+            super.onCompleted();
+            hideIndeterminateProgressDialog();
+          }
+
+          @Override public void onError(Throwable e) {
+            super.onError(e);
+            e.printStackTrace();
+          }
+
           @Override public void onNext(ShoppingListBean shoppingListBean) {
             super.onNext(shoppingListBean);
             if (shoppingListBean != null) {
@@ -90,7 +101,6 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
         page++;
       }
     });
-
   }
 
   private void loadMoreData(String page) {
@@ -104,8 +114,8 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
               if (null != shoppingListBean.getNext()) {
                 adapter.update(shoppingListBean.getResults());
               } else {
-                Toast.makeText(MMShoppingListActivity.this, "没有更多了",
-                    Toast.LENGTH_SHORT).show();
+                Toast.makeText(MMShoppingListActivity.this, "没有更多了", Toast.LENGTH_SHORT)
+                    .show();
                 shoppinglistXry.post(shoppinglistXry::loadMoreComplete);
               }
             }
@@ -129,6 +139,5 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
 
   @Override protected void onStop() {
     super.onStop();
-
   }
 }

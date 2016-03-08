@@ -36,6 +36,7 @@ public class MaMaStoreAdapter extends RecyclerView.Adapter<MaMaStoreAdapter.MaMa
 
   private List<MMChooselistBean> mList;
   private Context mContext;
+  private MaterialDialog materialDialog;
 
   public MaMaStoreAdapter(Context context) {
     this.mContext = context;
@@ -77,11 +78,7 @@ public class MaMaStoreAdapter extends RecyclerView.Adapter<MaMaStoreAdapter.MaMa
     holder.remove.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
 
-        MaterialDialog.Builder content =
-            new MaterialDialog.Builder(mContext).content("正在下架.....");
-
-        MaterialDialog show = content.show();
-
+       showIndeterminateProgressDialog(false);
         MMProductModel.getInstance()
             .remove_pro_from_shop(mmChooselistBean.getId() + "")
             .subscribeOn(Schedulers.io())
@@ -97,13 +94,15 @@ public class MaMaStoreAdapter extends RecyclerView.Adapter<MaMaStoreAdapter.MaMa
 
               @Override public void onCompleted() {
                 super.onCompleted();
-                show.dismiss();
+                hideIndeterminateProgressDialog();
               }
 
               @Override public void onError(Throwable e) {
                 super.onError(e);
-                show.dismiss();
+                e.printStackTrace();
+                hideIndeterminateProgressDialog();
               }
+
             });
       }
     });
@@ -169,5 +168,18 @@ public class MaMaStoreAdapter extends RecyclerView.Adapter<MaMaStoreAdapter.MaMa
       super(itemView);
       ButterKnife.bind(this, itemView);
     }
+  }
+
+  public void showIndeterminateProgressDialog(boolean horizontal) {
+    materialDialog = new MaterialDialog.Builder(mContext)
+        //.title(R.string.progress_dialog)
+        .content(R.string.please_wait)
+        .progress(true, 0)
+        .progressIndeterminateStyle(horizontal)
+        .show();
+  }
+
+  public void hideIndeterminateProgressDialog() {
+    materialDialog.dismiss();
   }
 }

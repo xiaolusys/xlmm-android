@@ -254,12 +254,23 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         cart_ids + "    " + addr_id + "    " + pay_method + "    " +
             payment + "    " + post_fee + "    " +
             discount_fee + "    " + total_fee + "    " + uuid);
-
+    showIndeterminateProgressDialog(false);
     Subscription subscription =
         tradeModel.shoppingcart_create(cart_ids, addr_id, pay_method, payment, post_fee,
             discount_fee, total_fee, uuid)
             .subscribeOn(Schedulers.io())
             .subscribe(new ServiceResponse<ResponseBody>() {
+
+              @Override public void onCompleted() {
+                super.onCompleted();
+                hideIndeterminateProgressDialog();
+              }
+
+              @Override public void onError(Throwable e) {
+                super.onError(e);
+                e.printStackTrace();
+              }
+
               @Override public void onNext(ResponseBody responseBody) {
                 super.onNext(responseBody);
                 try {
@@ -285,12 +296,22 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         cart_ids + "    " + addr_id + "    " + pay_method + "    " +
             payment + "    " + post_fee + "    " +
             discount_fee + "    " + total_fee + "    " + uuid);
-
+    showIndeterminateProgressDialog(false);
     Subscription subscription =
         tradeModel.shoppingcart_createBudget(cart_ids, addr_id, pay_method, payment,
             post_fee, discount_fee, total_fee, uuid)
             .subscribeOn(Schedulers.io())
             .subscribe(new ServiceResponse<BudgetPayBean>() {
+              @Override public void onCompleted() {
+                super.onCompleted();
+                hideIndeterminateProgressDialog();
+              }
+
+              @Override public void onError(Throwable e) {
+                super.onError(e);
+                e.printStackTrace();
+              }
+
               @Override public void onNext(BudgetPayBean responseBody) {
                 if (responseBody != null) {
                   boolean success = responseBody.isSuccess();
@@ -308,12 +329,13 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   private void payWithBudgetCoupon(String pay_method) {
     BigDecimal bd = new BigDecimal((paymentInfo - coupon_price));
     double bigDecimal = bd.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-
+    showIndeterminateProgressDialog(false);
     Subscription subscription =
         tradeModel.shoppingcart_createBudget_with_coupon(cart_ids, addr_id, pay_method,
             bigDecimal + "", post_fee, discount_fee, total_fee, uuid, coupon_id)
             .subscribeOn(Schedulers.io())
             .subscribe(new ServiceResponse<BudgetPayBean>() {
+
               @Override public void onNext(BudgetPayBean responseBody) {
                 if (responseBody != null) {
                   boolean success = responseBody.isSuccess();
@@ -325,8 +347,14 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 }
               }
 
+              @Override public void onCompleted() {
+                super.onCompleted();
+                hideIndeterminateProgressDialog();
+              }
+
               @Override public void onError(Throwable e) {
                 super.onError(e);
+                e.printStackTrace();
               }
             });
     addSubscription(subscription);
@@ -336,7 +364,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
     BigDecimal bd = new BigDecimal((paymentInfo - coupon_price));
     double bigDecimal = bd.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-
+    showIndeterminateProgressDialog(false);
     Subscription subscription =
         tradeModel.shoppingcart_create_with_coupon(cart_ids, addr_id, pay_method,
             bigDecimal + "", post_fee, discount_fee, total_fee, uuid, coupon_id)
@@ -358,8 +386,14 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 }
               }
 
+              @Override public void onCompleted() {
+                super.onCompleted();
+                hideIndeterminateProgressDialog();
+              }
+
               @Override public void onError(Throwable e) {
                 super.onError(e);
+                e.printStackTrace();
               }
             });
     addSubscription(subscription);

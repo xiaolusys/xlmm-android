@@ -13,6 +13,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.iwgang.countdownview.CountdownView;
 import cn.sharesdk.onekeyshare.OnekeyShare;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
@@ -50,6 +51,7 @@ public class VerticalFragmentDetail extends Fragment implements View.OnClickList
   private TagFlowLayout tagFlowLayout;
   private LayoutInflater mInflater;
   private Subscription Subscription, subscription2;
+  private MaterialDialog materialDialog;
 
   public void setListener(setSkuidListener listener) {
     this.listener = listener;
@@ -100,10 +102,22 @@ public class VerticalFragmentDetail extends Fragment implements View.OnClickList
 
   public void initView(String pid) {
 
+    //showIndeterminateProgressDialog(true);
+
     Subscription = ProductModel.getInstance()
         .getProductDetails(pid)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ProductDetailBean>() {
+
+          @Override public void onCompleted() {
+            super.onCompleted();
+            //hideIndeterminateProgressDialog();
+          }
+
+          @Override public void onError(Throwable e) {
+            super.onError(e);
+            e.printStackTrace();
+          }
 
           @Override public void onNext(ProductDetailBean productDetailBean) {
 
@@ -309,5 +323,18 @@ public class VerticalFragmentDetail extends Fragment implements View.OnClickList
     if (subscription2 != null && subscription2.isUnsubscribed()) {
       subscription2.unsubscribe();
     }
+  }
+
+  public void showIndeterminateProgressDialog(boolean horizontal) {
+    materialDialog = new MaterialDialog.Builder(getActivity())
+        //.title(R.string.progress_dialog)
+        .content(R.string.please_wait)
+        .progress(true, 0)
+        .progressIndeterminateStyle(horizontal)
+        .show();
+  }
+
+  public void hideIndeterminateProgressDialog() {
+    materialDialog.dismiss();
   }
 }

@@ -83,7 +83,6 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.tv_fund) TextView tv_fund;
 
   AgentInfoBean mamaAgentInfo;
-  private Subscription subscribe;
   private double carrylogMoney;
 
   @Override protected void setListener() {

@@ -37,10 +37,22 @@ public class MMCarryLogListActivity extends BaseSwipeBackCompatActivity {
   }
 
   @Override protected void initData() {
+    showIndeterminateProgressDialog(false);
     Subscription subscription = MMProductModel.getInstance()
         .getCarryLogList("1")
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<CarryLogListBean>() {
+
+          @Override public void onCompleted() {
+            super.onCompleted();
+            hideIndeterminateProgressDialog();
+          }
+
+          @Override public void onError(Throwable e) {
+            super.onError(e);
+            e.printStackTrace();
+          }
+
           @Override public void onNext(CarryLogListBean carryLogListBean) {
             if (carryLogListBean != null) {
 
@@ -66,7 +78,6 @@ public class MMCarryLogListActivity extends BaseSwipeBackCompatActivity {
     initRecyclerView();
 
     tvCount.setText(carrylogMoney);
-
   }
 
   private void initRecyclerView() {
@@ -108,6 +119,7 @@ public class MMCarryLogListActivity extends BaseSwipeBackCompatActivity {
   }
 
   private void loadMoreData(String page) {
+
     Subscription subscription = MMProductModel.getInstance()
         .getCarryLogList(page)
         .subscribeOn(Schedulers.io())

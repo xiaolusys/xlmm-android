@@ -20,18 +20,18 @@ import rx.schedulers.Schedulers;
  * Created by wulei on 2016/2/4.
  */
 public class MamaWithdrawCashHistoryActivity extends BaseSwipeBackCompatActivity
-    implements View.OnClickListener{
+    implements View.OnClickListener {
   String TAG = "MamaWithdrawCashHistoryActivity";
 
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.lv_withdrawcash_his) ListView lv_withdrawcash_his;
 
   private WithdrawCashHisAdapter mHisAdapter;
-  private Subscription subscribe;
 
   @Override protected void setListener() {
     toolbar.setOnClickListener(this);
   }
+
   @Override protected void getBundleExtras(Bundle extras) {
 
   }
@@ -50,10 +50,21 @@ public class MamaWithdrawCashHistoryActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initData() {
-     subscribe = MamaInfoModel.getInstance()
+    showIndeterminateProgressDialog(false);
+    Subscription subscribe = MamaInfoModel.getInstance()
         .getWithdrawCashHis()
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<WithdrawCashHisBean>() {
+          @Override public void onError(Throwable e) {
+            super.onError(e);
+            e.printStackTrace();
+          }
+
+          @Override public void onCompleted() {
+            super.onCompleted();
+            hideIndeterminateProgressDialog();
+          }
+
           @Override public void onNext(WithdrawCashHisBean pointBean) {
             JUtils.Log(TAG, "WithdrawCashHisBean=" + pointBean.toString());
             List<WithdrawCashHisBean.WithdrawCashRecord> results = pointBean.getResults();
@@ -65,6 +76,7 @@ public class MamaWithdrawCashHistoryActivity extends BaseSwipeBackCompatActivity
             }
           }
         });
+    addSubscription(subscribe);
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
@@ -75,18 +87,13 @@ public class MamaWithdrawCashHistoryActivity extends BaseSwipeBackCompatActivity
     return null;
   }
 
-  @Override
-  public void onClick(View v) {
+  @Override public void onClick(View v) {
     switch (v.getId()) {
-
 
     }
   }
 
   @Override protected void onStop() {
     super.onStop();
-    if (subscribe != null && subscribe.isUnsubscribed()) {
-      subscribe.unsubscribe();
-    }
   }
 }

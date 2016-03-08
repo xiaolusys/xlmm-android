@@ -11,7 +11,6 @@ import android.widget.AdapterView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import butterknife.Bind;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.MMChooseAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -47,7 +46,6 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.loading) RotateLoading loading;
   private MMChooseAdapter mmChooseAdapter;
   private boolean isAll, isLady, isChild;
-  private Subscription subscribe;
 
   @Override protected void setListener() {
     spinnerChoose.setOnItemSelectedListener(this);
@@ -73,7 +71,7 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
         new String[] { "chooselist" }, new int[] { R.id.choose_tv });
     spinnerChoose.setAdapter(adapter);
 
-     subscribe = MMProductModel.getInstance()
+    Subscription subscribe = MMProductModel.getInstance()
         .getMMChooseList()
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<List<MMChooselistBean>>() {
@@ -95,6 +93,7 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
             super.onError(e);
           }
         });
+    addSubscription(subscribe);
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -155,12 +154,9 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
   }
 
   private void getchooseList() {
-    MaterialDialog.Builder content =
-        new MaterialDialog.Builder(this).content("正在加载.....");
+    showIndeterminateProgressDialog(false);
 
-    MaterialDialog show = content.show();
-
-     subscribe = MMProductModel.getInstance()
+    Subscription subscribe = MMProductModel.getInstance()
         .getMMChooseList()
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<List<MMChooselistBean>>() {
@@ -176,23 +172,22 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
 
           @Override public void onCompleted() {
             super.onCompleted();
-            show.dismiss();
+            hideIndeterminateProgressDialog();
           }
 
           @Override public void onError(Throwable e) {
             super.onError(e);
-            show.dismiss();
+            e.printStackTrace();
+            hideIndeterminateProgressDialog();
           }
         });
+    addSubscription(subscribe);
   }
 
   private void getchooseSortList(String sortfeild) {
-    MaterialDialog.Builder content =
-        new MaterialDialog.Builder(this).content("正在加载.....");
+    showIndeterminateProgressDialog(false);
 
-    MaterialDialog show = content.show();
-
-     subscribe = MMProductModel.getInstance()
+    Subscription subscribe = MMProductModel.getInstance()
         .getMMChooseSortList(sortfeild)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<List<MMChooselistBean>>() {
@@ -208,24 +203,22 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
 
           @Override public void onCompleted() {
             super.onCompleted();
-            show.dismiss();
+            hideIndeterminateProgressDialog();
           }
 
           @Override public void onError(Throwable e) {
             super.onError(e);
-            show.dismiss();
+            e.printStackTrace();
+            hideIndeterminateProgressDialog();
           }
         });
+    addSubscription(subscribe);
   }
 
   private void getChooseListLadyorChild(String choice) {
+    showIndeterminateProgressDialog(false);
 
-    MaterialDialog.Builder content =
-        new MaterialDialog.Builder(this).content("正在加载.....");
-
-    MaterialDialog show = content.show();
-
-     subscribe = MMProductModel.getInstance()
+    Subscription subscribe = MMProductModel.getInstance()
         .getMMChooseLadyOrChildList(choice)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<List<MMChooselistBean>>() {
@@ -241,24 +234,23 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
 
           @Override public void onCompleted() {
             super.onCompleted();
-            show.dismiss();
+            hideIndeterminateProgressDialog();
           }
 
           @Override public void onError(Throwable e) {
             super.onError(e);
-            show.dismiss();
+            e.printStackTrace();
+            hideIndeterminateProgressDialog();
           }
         });
+
+    addSubscription(subscribe);
   }
 
   private void getChooseListLadyorChildSort(String sortfeild, String category) {
 
-    MaterialDialog.Builder content =
-        new MaterialDialog.Builder(this).content("正在加载.....");
-
-    MaterialDialog show = content.show();
-
-     subscribe = MMProductModel.getInstance()
+    showIndeterminateProgressDialog(false);
+    Subscription subscribe = MMProductModel.getInstance()
         .getMMChooseLadyOrChildSortListSort(sortfeild, category)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<List<MMChooselistBean>>() {
@@ -274,14 +266,15 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
 
           @Override public void onCompleted() {
             super.onCompleted();
-            show.dismiss();
+            hideIndeterminateProgressDialog();
           }
 
           @Override public void onError(Throwable e) {
             super.onError(e);
-            show.dismiss();
+            e.printStackTrace();
           }
         });
+    addSubscription(subscribe);
   }
 
   @Override public void onNothingSelected(AdapterView<?> parent) {
@@ -322,8 +315,5 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void onStop() {
     super.onStop();
-    if (subscribe != null && subscribe.isUnsubscribed()) {
-      subscribe.unsubscribe();
-    }
   }
 }

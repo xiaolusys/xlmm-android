@@ -351,7 +351,6 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
 
               @Override public void onError(Throwable e) {
                 super.onError(e);
-                hideIndeterminateProgressDialog();
               }
 
               @Override public void onNext(WxLogininfoBean wxLogininfoBean) {
@@ -366,7 +365,6 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
 
                           @Override public void onError(Throwable e) {
                             super.onError(e);
-                            hideIndeterminateProgressDialog();
                           }
 
                           @Override public void onNext(NeedSetInfoBean needSetInfoBean) {
@@ -376,6 +374,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
 
                             int codeInfo = needSetInfoBean.getCode();
                             if (0 == codeInfo) {
+                              hideIndeterminateProgressDialog();
                               LoginUtils.saveLoginSuccess(true, getApplicationContext());
                               JUtils.Toast("登录成功");
                               Intent intent =
@@ -384,6 +383,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
 
                               finish();
                             } else if (1 == codeInfo) {
+                              hideIndeterminateProgressDialog();
                               LoginUtils.saveLoginSuccess(true, getApplicationContext());
                               JUtils.Toast("登录成功，已绑定手机号");
                               JUtils.Log(TAG, "code=1,login succ,need reset pwd");
@@ -417,8 +417,10 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                         });
                     addSubscription(subscribe);
                   } else if (1 == code) {
+                    hideIndeterminateProgressDialog();
                     JUtils.Toast("签名错误");
                   } else if (2 == code) {
+                    hideIndeterminateProgressDialog();
                     JUtils.Toast("非法用户");
                   }
                 }
@@ -429,7 +431,6 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
       }
 
       @Override public void onError(Platform platform, int i, Throwable throwable) {
-        hideIndeterminateProgressDialog();
       }
 
       @Override public void onCancel(Platform platform, int i) {

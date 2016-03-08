@@ -16,6 +16,7 @@ import com.jimei.xiaolumeimei.widget.ninepicimagview.MultiImageView;
 import com.jude.utils.JUtils;
 import java.util.ArrayList;
 import java.util.List;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 
 /**
@@ -130,7 +131,7 @@ public class NinePicAdapter extends BaseAdapter {
 
   private void saveImageToGallery(String url, String mImageTitle) {
     // @formatter:off
-      RXDownLoadImage.saveImageAndGetPathObservable(mcontext, url,
+    Subscription subscribe = RXDownLoadImage.saveImageAndGetPathObservable(mcontext, url,
             mImageTitle)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(uri -> {

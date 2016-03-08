@@ -11,6 +11,7 @@ import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jude.utils.JUtils;
 import com.victor.loading.rotate.RotateLoading;
 import java.util.List;
 import rx.Subscription;
@@ -43,6 +44,13 @@ public class ChildListFragment extends BaseFragment {
         .getChildList(1, 10)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ChildListBean>() {
+          @Override public void onError(Throwable e) {
+            super.onError(e);
+            e.printStackTrace();
+            JUtils.Toast("请检查网络状况,尝试下拉刷新");
+            loading.stop();
+          }
+
           @Override public void onNext(ChildListBean childListBean) {
 
             try {

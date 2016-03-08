@@ -48,10 +48,23 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
       myTickCircleProgress.setVisibility(View.VISIBLE);
     } else {
       myTickCircleProgress.setVisibility(View.GONE);
+      showIndeterminateProgressDialog(false);
       MMProductModel.getInstance()
           .getNinePic()
           .subscribeOn(Schedulers.io())
           .subscribe(new ServiceResponse<List<NinePicBean>>() {
+
+            @Override public void onCompleted() {
+              super.onCompleted();
+              hideIndeterminateProgressDialog();
+            }
+
+            @Override public void onError(Throwable e) {
+              super.onError(e);
+              e.printStackTrace();
+            }
+
+
             @Override public void onNext(List<NinePicBean> ninePicBean) {
               if (ninePicBean != null) {
                 mAdapter.setDatas(ninePicBean);

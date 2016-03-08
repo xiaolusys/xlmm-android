@@ -22,7 +22,8 @@ import rx.schedulers.Schedulers;
 /**
  * Created by wulei on 2016/2/4.
  */
-public class MamaFansActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener{
+public class MamaFansActivity extends BaseSwipeBackCompatActivity
+    implements View.OnClickListener {
   String TAG = "MamaFansActivity";
 
   @Bind(R.id.toolbar) Toolbar toolbar;
@@ -34,6 +35,7 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity implements Vie
   @Override protected void setListener() {
     toolbar.setOnClickListener(this);
   }
+
   @Override protected void getBundleExtras(Bundle extras) {
 
   }
@@ -47,15 +49,25 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity implements Vie
     setSupportActionBar(toolbar);
     finishBack(toolbar);
 
-
     initRecyclerView();
   }
 
   @Override protected void initData() {
-     subscribe = MamaInfoModel.getInstance()
+    showIndeterminateProgressDialog(false);
+    subscribe = MamaInfoModel.getInstance()
         .getMamaFans("1")
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<MamaFansBean>() {
+          @Override public void onCompleted() {
+            super.onCompleted();
+            hideIndeterminateProgressDialog();
+          }
+
+          @Override public void onError(Throwable e) {
+            super.onError(e);
+            e.printStackTrace();
+          }
+
           @Override public void onNext(MamaFansBean fansBeen) {
             JUtils.Log(TAG, "size =" + fansBeen.getCount());
 
@@ -102,8 +114,8 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity implements Vie
                   if (null != fansBeen.getNext()) {
                     mAdapter.update(fansBeen.getFans());
                   } else {
-                    Toast.makeText(MamaFansActivity.this, "没有更多了",
-                        Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MamaFansActivity.this, "没有更多了", Toast.LENGTH_SHORT)
+                        .show();
                     xrv_mamafans.post(xrv_mamafans::loadMoreComplete);
                   }
                 }
@@ -117,7 +129,6 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity implements Vie
         addSubscription(subscribe);
       }
     });
-
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
@@ -128,10 +139,8 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity implements Vie
     return null;
   }
 
-  @Override
-  public void onClick(View v) {
+  @Override public void onClick(View v) {
     switch (v.getId()) {
-
 
     }
   }

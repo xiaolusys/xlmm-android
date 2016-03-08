@@ -50,11 +50,13 @@ public class MaMaMyStoreActivity extends BaseSwipeBackCompatActivity {
   }
 
   @Override protected void initData() {
+    showIndeterminateProgressDialog(false);
 
     Subscription subscribe = MMProductModel.getInstance()
         .getMMStoreList()
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<List<MMChooselistBean>>() {
+
           @Override public void onNext(List<MMChooselistBean> mmChooselistBeans) {
             try {
               if (mmChooselistBeans != null) {
@@ -66,10 +68,12 @@ public class MaMaMyStoreActivity extends BaseSwipeBackCompatActivity {
 
           @Override public void onCompleted() {
             super.onCompleted();
+            hideIndeterminateProgressDialog();
           }
 
           @Override public void onError(Throwable e) {
             super.onError(e);
+            e.printStackTrace();
           }
         });
 
