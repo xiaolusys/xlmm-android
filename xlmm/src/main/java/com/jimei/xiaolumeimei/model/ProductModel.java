@@ -8,7 +8,7 @@ import com.jimei.xiaolumeimei.entities.ProductBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.entities.ShareProductBean;
-import com.jimei.xiaolumeimei.rx.DefaultTransform;
+import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 import java.util.List;
 import rx.Observable;

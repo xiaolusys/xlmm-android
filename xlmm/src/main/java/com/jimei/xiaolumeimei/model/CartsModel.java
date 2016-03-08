@@ -4,7 +4,7 @@ import com.jimei.xiaolumeimei.entities.AddCartsBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.CartsinfoBean;
-import com.jimei.xiaolumeimei.rx.DefaultTransform;
+import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 import com.squareup.okhttp.ResponseBody;
 import java.util.List;

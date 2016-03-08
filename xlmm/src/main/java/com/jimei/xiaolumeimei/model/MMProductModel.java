@@ -7,7 +7,7 @@ import com.jimei.xiaolumeimei.entities.MMChooselistBean;
 import com.jimei.xiaolumeimei.entities.NinePicBean;
 import com.jimei.xiaolumeimei.entities.OneDayAgentOrdersBean;
 import com.jimei.xiaolumeimei.entities.ShoppingListBean;
-import com.jimei.xiaolumeimei.rx.DefaultTransform;
+import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 import java.util.List;
 import rx.Observable;

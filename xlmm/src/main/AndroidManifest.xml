@@ -43,7 +43,7 @@
         android:value="${CHANNEL_NAME}"/>
 
 
-    <!--<meta-data android:name="com.jimei.xiaolumeimei.glidemoudle.GlideConfig"-->
+    <!--<meta-data android:name="GlideConfig"-->
     <!--android:value="GlideModule"-->
     <!--/>-->
     <meta-data
@@ -87,9 +87,6 @@
     <activity android:name=".ui.activity.product.TongkuanActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         />
-    <activity
-        android:theme="@style/AppTheme.TransparentActivity"
-        android:name=".ui.activity.product.ProductDetailActvity"/>
 
     <activity
         android:theme="@style/AppTheme.TransparentActivity"

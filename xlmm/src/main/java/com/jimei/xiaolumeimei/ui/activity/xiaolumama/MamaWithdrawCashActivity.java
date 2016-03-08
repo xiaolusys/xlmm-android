@@ -18,7 +18,6 @@ import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
-import com.squareup.okhttp.ResponseBody;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 

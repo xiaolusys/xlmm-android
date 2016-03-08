@@ -12,7 +12,6 @@ import com.zhy.http.okhttp.utils.Exceptions;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.io.OutputStream;
 import okhttp3.Response;
 

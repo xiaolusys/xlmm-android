@@ -34,14 +34,12 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.data.XlmmApi;
-import com.jimei.xiaolumeimei.glidemoudle.GlideRoundTransform;
+import com.jimei.library.glidemoudle.GlideRoundTransform;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
-import retrofit.http.HEAD;
 
 /**
  * ViewUtils

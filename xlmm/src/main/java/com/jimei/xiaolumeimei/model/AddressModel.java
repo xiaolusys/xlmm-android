@@ -2,7 +2,7 @@ package com.jimei.xiaolumeimei.model;
 
 import com.jimei.xiaolumeimei.entities.AddressBean;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
-import com.jimei.xiaolumeimei.rx.DefaultTransform;
+import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 import java.util.List;
 import rx.Observable;

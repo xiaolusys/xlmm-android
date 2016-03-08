@@ -4,8 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
-import com.jimei.xiaolumeimei.event.NetWorkEvent;
-import com.jimei.xiaolumeimei.rx.RxNetWorkBus;
+import com.jimei.library.event.NetWorkEvent;
+import com.jimei.library.rx.RxNetWorkBus;
 import com.jimei.xiaolumeimei.utils.NetWorkUtil;
 
 /**

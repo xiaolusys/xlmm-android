@@ -8,8 +8,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import butterknife.Bind;
 import cn.sharesdk.onekeyshare.OnekeyShare;
-import com.jimei.xiaolumeimei.utils.FileUtils;
-import com.jimei.xiaolumeimei.widget.citypicker.FileUtil;
 import java.io.File;
 import okhttp3.Call;
 

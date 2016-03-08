@@ -1,46 +1,36 @@
 package com.jimei.xiaolumeimei.mipush;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
+import android.os.Handler;
+import android.os.Message;
+import android.text.TextUtils;
+import android.util.Log;
 import com.google.gson.Gson;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.data.XlmmConst;
-import com.jimei.xiaolumeimei.entities.UserAccountBean;
 import com.jimei.xiaolumeimei.entities.XiaoMiPushContent;
-import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.ui.activity.main.WebViewActivity;
-import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActvity;
 import com.jimei.xiaolumeimei.ui.activity.product.TongkuanActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.OrderDetailActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.CouponActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaInfoActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.os.Handler;
-import android.os.Message;
-import android.text.TextUtils;
-import android.util.Log;
-import android.widget.Toast;
-
 import com.xiaomi.mipush.sdk.ErrorCode;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.xiaomi.mipush.sdk.MiPushCommandMessage;
 import com.xiaomi.mipush.sdk.MiPushMessage;
 import com.xiaomi.mipush.sdk.PushMessageReceiver;
-import rx.schedulers.Schedulers;
+import java.net.URLDecoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 1、PushMessageReceiver是个抽象类，该类继承了BroadcastReceiver。
@@ -337,12 +327,12 @@ public class XiaoMiMessageReceiver extends PushMessageReceiver {
         break;
       case XlmmConst.JUMP_PRODUCT_DETAIL:
         String  product_id = get_jump_arg("product_id",jumpInfo.getUrl() );
-        if(null != product_id) {
-          intent = new Intent(context, ProductDetailActvity.class);
-          intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-          intent.putExtra("product_id", product_id);
-          context.startActivity(intent);
-        }
+        //if(null != product_id) {
+        //  intent = new Intent(context, ProductDetailActvity.class);
+        //  intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        //  intent.putExtra("product_id", product_id);
+        //  context.startActivity(intent);
+        //}
         break;
       case XlmmConst.JUMP_TRADE_DETAIL:
         String  trade_id = get_jump_arg("trade_id",jumpInfo.getUrl() );

@@ -6,7 +6,7 @@ import com.jimei.xiaolumeimei.entities.BudgetPayBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
-import com.jimei.xiaolumeimei.rx.DefaultTransform;
+import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 import com.squareup.okhttp.ResponseBody;
 import rx.Observable;

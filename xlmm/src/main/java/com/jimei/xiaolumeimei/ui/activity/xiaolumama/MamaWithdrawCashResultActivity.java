@@ -11,11 +11,7 @@ import android.widget.ImageView;
 import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.model.MamaInfoModel;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
-import com.squareup.okhttp.ResponseBody;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by wulei on 2016/2/4.

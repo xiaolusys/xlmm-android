@@ -33,7 +33,6 @@ public abstract class BaseSwipeBackCompatActivity extends BaseAppCompatActivity
 
   private CompositeSubscription mCompositeSubscription;
 
-
   public CompositeSubscription getCompositeSubscription() {
     if (this.mCompositeSubscription == null) {
       this.mCompositeSubscription = new CompositeSubscription();
@@ -41,7 +40,6 @@ public abstract class BaseSwipeBackCompatActivity extends BaseAppCompatActivity
 
     return this.mCompositeSubscription;
   }
-
 
   public void addSubscription(Subscription s) {
     if (this.mCompositeSubscription == null) {
@@ -55,8 +53,6 @@ public abstract class BaseSwipeBackCompatActivity extends BaseAppCompatActivity
     super.onCreate(savedInstanceState);
     mHelper = new SwipeBackActivityHelper(this);
     mHelper.onActivityCreate();
-
-
   }
 
   @Override protected void onPostCreate(Bundle savedInstanceState) {
@@ -83,18 +79,15 @@ public abstract class BaseSwipeBackCompatActivity extends BaseAppCompatActivity
     getSwipeBackLayout().scrollToFinishActivity();
   }
 
-  @Override
-  protected void onResume() {
+  @Override protected void onResume() {
     super.onResume();
     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     MobclickAgent.onResume(this);
-
   }
 
   @Override protected void onPause() {
     super.onPause();
     MobclickAgent.onPause(this);
-
   }
 
   @Override protected void onStop() {

@@ -1,1 +1,1 @@
-include ':library', ':xlmm'
+include ':xlmm', ':xlmmlibrary'

@@ -19,7 +19,7 @@ import com.jimei.xiaolumeimei.widget.doubleview.CustWebView;
 import com.jude.utils.JUtils;
 
 public class VerticalFragmentWeb extends Fragment {
-  private static final String TAG ="VerticalFragmentWeb";
+  private static final String TAG = "VerticalFragmentWeb";
   private static final String url = "http://m.xiaolumeimei.com/mm/pdetail/";
   private View progressBar;
   private CustWebView webview;
@@ -52,7 +52,6 @@ public class VerticalFragmentWeb extends Fragment {
     webview.setWebChromeClient(new WebChromeClient() {
       @Override public void onProgressChanged(WebView view, int newProgress) {
         JUtils.Log(TAG, "process:" + newProgress);
-
       }
     });
 

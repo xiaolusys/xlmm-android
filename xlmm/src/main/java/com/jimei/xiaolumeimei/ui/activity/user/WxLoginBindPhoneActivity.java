@@ -15,7 +15,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.BindInfoBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.model.UserModel;
-import com.jimei.xiaolumeimei.rx.RxCountDown;
+import com.jimei.library.rx.RxCountDown;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.widget.CircleImageView;
 import com.jimei.xiaolumeimei.widget.ClearEditText;

@@ -45,11 +45,11 @@ public class VerticalFragmentDetail extends Fragment implements View.OnClickList
   List<ProductDetailBean.NormalSkusEntity> normalSkus = new ArrayList<>();
   ShareProductBean shareProductBean = new ShareProductBean();
   setSkuidListener listener;
-  private String sku_id;
-  private TextView bianhao, caizhi, color, beizhu, name, price1, price2, xidi;
+  private TextView bianhao, caizhi, color, beizhu, name, price1, price2;
   private CountdownView countdownView;
   private TagFlowLayout tagFlowLayout;
   private LayoutInflater mInflater;
+  private Subscription Subscription, subscription2;
 
   public void setListener(setSkuidListener listener) {
     this.listener = listener;
@@ -60,7 +60,8 @@ public class VerticalFragmentDetail extends Fragment implements View.OnClickList
     try {
       listener = (setSkuidListener) activity;
     } catch (ClassCastException e) {
-      throw new ClassCastException(activity.toString() + " must implement IndexListener");
+      throw new ClassCastException(
+          activity.toString() + " must implement setSkuidListener");
     }
   }
 
@@ -99,7 +100,7 @@ public class VerticalFragmentDetail extends Fragment implements View.OnClickList
 
   public void initView(String pid) {
 
-    Subscription Subscription1 = ProductModel.getInstance()
+    Subscription = ProductModel.getInstance()
         .getProductDetails(pid)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ProductDetailBean>() {
@@ -198,7 +199,7 @@ public class VerticalFragmentDetail extends Fragment implements View.OnClickList
           }
         });
 
-    Subscription subscription2 = ProductModel.getInstance()
+    subscription2 = ProductModel.getInstance()
         .getProductShareInfo(pid)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ShareProductBean>() {
@@ -297,6 +298,16 @@ public class VerticalFragmentDetail extends Fragment implements View.OnClickList
           startActivity(intent);
         }
         break;
+    }
+  }
+
+  @Override public void onStop() {
+    super.onStop();
+    if (Subscription != null && Subscription.isUnsubscribed()) {
+      Subscription.unsubscribe();
+    }
+    if (subscription2 != null && subscription2.isUnsubscribed()) {
+      subscription2.unsubscribe();
     }
   }
 }

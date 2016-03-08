@@ -72,4 +72,5 @@
   <string name="set_accept_time_fail"> Set accept time fail for %1$s.</string>
   <string name="update">检查更新</string>
   <string name="update_version">已经是最新版本</string>
+  <string name="please_wait">正在加载</string>
 </resources>

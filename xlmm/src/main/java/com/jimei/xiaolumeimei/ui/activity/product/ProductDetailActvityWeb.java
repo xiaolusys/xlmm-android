@@ -31,7 +31,6 @@ import com.jimei.xiaolumeimei.widget.badgelib.BadgeView;
 import com.jimei.xiaolumeimei.widget.doubleview.DragLayout;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
@@ -94,6 +93,7 @@ public class ProductDetailActvityWeb extends BaseSwipeBackCompatActivity
             }
           }
         });
+    addSubscription(subscribeSubscription);
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -319,7 +319,6 @@ public class ProductDetailActvityWeb extends BaseSwipeBackCompatActivity
                       badge.setBadgeCount(0);
                     }
                   });
-
             } else {
               imageView1.setVisibility(View.VISIBLE);
               imageView2.setVisibility(View.INVISIBLE);
@@ -332,22 +331,6 @@ public class ProductDetailActvityWeb extends BaseSwipeBackCompatActivity
   @Override public void setSkuid(String skuid, boolean isSelect) {
     sku_id = skuid;
     isSelectzz = isSelect;
-  }
-
-  private long calcLeftTime(String crtTime) {
-    long left = 0;
-    Date now = new Date();
-    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    try {
-      crtTime = crtTime.replace("T", " ");
-      Date crtdate = format.parse(crtTime);
-      if (crtdate.getTime() + 20 * 60 * 1000 - now.getTime() > 0) {
-        left = crtdate.getTime() + 20 * 60 * 1000 - now.getTime();
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    return left;
   }
 
   private long calcLefttowTime(long crtTime) {

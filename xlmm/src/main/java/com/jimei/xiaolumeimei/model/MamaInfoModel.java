@@ -1,20 +1,12 @@
 package com.jimei.xiaolumeimei.model;
 
 import com.jimei.xiaolumeimei.entities.AgentInfoBean;
-import com.jimei.xiaolumeimei.entities.AllOrdersBean;
-import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.entities.AllowanceBean;
 import com.jimei.xiaolumeimei.entities.MamaFansBean;
-import com.jimei.xiaolumeimei.entities.OrderDetailBean;
-import com.jimei.xiaolumeimei.entities.PayReturnBean;
-import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
-import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
-import com.jimei.xiaolumeimei.rx.DefaultTransform;
+import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
-import com.squareup.okhttp.ResponseBody;
-import java.util.List;
 import rx.Observable;
 
 /**

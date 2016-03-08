@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.NinePicBean;
-import com.jimei.xiaolumeimei.rx.RXDownLoadImage;
+import com.jimei.library.rx.RXDownLoadImage;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.ImagePagerActivity;
 import com.jimei.xiaolumeimei.widget.ninepicimagview.MultiImageView;
 import com.jude.utils.JUtils;

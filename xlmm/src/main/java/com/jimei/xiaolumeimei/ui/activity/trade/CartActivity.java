@@ -179,7 +179,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
   @Override protected void onResume() {
     super.onResume();
 
-  Subscription subscription =  model.getCartsList()
+    Subscription subscription = model.getCartsList()
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
           @Override public void onNext(List<CartsinfoBean> cartsinfoBeans) {
@@ -201,7 +201,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                 s = apendString(sb);
               }
 
-            Subscription subscription1 =   model.getCartsInfoList(s)
+              Subscription subscription1 = model.getCartsInfoList(s)
                   .subscribeOn(Schedulers.io())
                   .subscribe(new ServiceResponse<CartsPayinfoBean>() {
                     @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
@@ -274,8 +274,10 @@ public class CartActivity extends BaseSwipeBackCompatActivity
       holder.title.setText(cartsinfoBean.getTitle());
       holder.skuName.setText("尺码:" + cartsinfoBean.getSkuName());
       //holder.color.setText(cartsinfoBean.get);
-      holder.price1.setText("¥" + cartsinfoBean.getPrice() + "");
-      holder.price2.setText("/¥" + cartsinfoBean.getStdSalePrice() + "");
+      holder.price1.setText(
+          "¥" + (float) (Math.round(cartsinfoBean.getPrice() * 100)) / 100);
+      holder.price2.setText(
+          "/¥" + (float) (Math.round(cartsinfoBean.getStdSalePrice() * 100)) / 100);
       holder.count.setText(cartsinfoBean.getNum() + "");
 
       String headImg = cartsinfoBean.getPicPath();
@@ -285,7 +287,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
       holder.add.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View v) {
 
-        Subscription subscription =   model.plus_product_carts(cartsinfoBean.getId())
+          Subscription subscription = model.plus_product_carts(cartsinfoBean.getId())
               .subscribeOn(Schedulers.io())
               .subscribe(new ServiceResponse<ResponseBody>() {
                 @Override public void onNext(ResponseBody responseBody) {
@@ -361,7 +363,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
           @Override public void onClick(View v) {
             if (Integer.parseInt(cartsinfoBean.getNum()) > 1) {
 
-            Subscription subscription  =  model.minus_product_carts(cartsinfoBean.getId())
+              Subscription subscription = model.minus_product_carts(cartsinfoBean.getId())
                   .subscribeOn(Schedulers.io())
                   .subscribe(new ServiceResponse<ResponseBody>() {
                     @Override public void onNext(ResponseBody responseBody) {
@@ -384,7 +386,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                 negativeText("取消").
                 callback(new MaterialDialog.ButtonCallback() {
                   @Override public void onPositive(MaterialDialog dialog) {
-                  Subscription subscription =  model.delete_carts(cartsinfoBean.getId())
+                    Subscription subscription = model.delete_carts(cartsinfoBean.getId())
                         .subscribeOn(Schedulers.io())
                         .subscribe(new ServiceResponse<ResponseBody>() {
                           @Override public void onNext(ResponseBody responseBody) {
@@ -408,7 +410,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
     }
 
     private void getCartsInfo(int position) {
-     Subscription subscription = model.getCartsList()
+      Subscription subscription = model.getCartsList()
           .subscribeOn(Schedulers.io())
           .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
             @Override public void onNext(List<CartsinfoBean> list) {
@@ -422,7 +424,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                 s = apendString(sb);
               }
 
-             Subscription subscription1 =  model.getCartsInfoList(s)
+              Subscription subscription1 = model.getCartsInfoList(s)
                   .subscribeOn(Schedulers.io())
                   .subscribe(new ServiceResponse<CartsPayinfoBean>() {
                     @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
@@ -452,7 +454,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
     }
 
     private void getCartsInfo() {
-     Subscription subscription = model.getCartsList()
+      Subscription subscription = model.getCartsList()
           .subscribeOn(Schedulers.io())
           .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
             @Override public void onNext(List<CartsinfoBean> list) {

@@ -21,7 +21,6 @@ import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.wechat.friends.Wechat;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
@@ -162,6 +161,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
         login_pass_value = passEditText.getText().toString().trim();
 
         if (checkInput(login_name_value, login_pass_value)) {
+          showIndeterminateProgressDialog(false);
           Subscription subscribe = UserModel.getInstance()
               .login(login_name_value, login_pass_value)
               .subscribeOn(Schedulers.io())
@@ -172,7 +172,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                       + ", user.getResult() "
                       + user.getResult());
                   if (user.getCode() == 0 && user.getResult().equals("login")) {
-
+                    hideIndeterminateProgressDialog();
                     LoginUtils.saveLoginInfo(true, getApplicationContext(),
                         login_name_value, login_pass_value);
 
@@ -213,15 +213,16 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                       Intent intent = new Intent(mContext, CouponActivity.class);
                       startActivity(intent);
                       finish();
-                    }else if (login.equals("productdetail")) {
+                    } else if (login.equals("productdetail")) {
                       finish();
                     }
                   } else if (2 == user.getCode()) {
-
+                    hideIndeterminateProgressDialog();
                     LoginUtils.saveLoginInfo(false, getApplicationContext(), "", "");
 
                     Toast.makeText(mContext, "用户名或者密码错误,请检查", Toast.LENGTH_SHORT).show();
                   } else if (5 == user.getCode()) {
+                    hideIndeterminateProgressDialog();
                     LoginUtils.saveLoginInfo(false, getApplicationContext(), "", "");
                     JUtils.Toast("未设置密码,请选择短信登陆");
                   }
@@ -298,12 +299,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
   }
 
   private void authorize(Platform plat) {
-
-    MaterialDialog.Builder content =
-        new MaterialDialog.Builder(this).content("正在加载.....");
-
-    MaterialDialog show = content.show();
-
+    showIndeterminateProgressDialog(false);
     if (plat == null) {
       return;
     }
@@ -319,7 +315,6 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
     plat.setPlatformActionListener(new PlatformActionListener() {
       @Override
       public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
-        show.dismiss();
         if (i == Platform.ACTION_USER_INFOR) {
           UIHandler.sendEmptyMessage(MSG_AUTH_COMPLETE, LoginActivity.this);
           login(platform.getName(), platform.getDb().getUserId(), hashMap);
@@ -345,11 +340,6 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
         JUtils.Log(TAG, "------openid---------" + openid);
         JUtils.Log(TAG, "------unionid---------" + unionid);
 
-        //MaterialDialog.Builder content =
-        //    new MaterialDialog.Builder(LoginActivity.this).content("正在加载.....");
-        //
-        //MaterialDialog show = content.show();
-
         Subscription subscription = UserModel.getInstance()
             .wxapp_login(noncestr, timestamp, sign, headimgurl, nickname, openid, unionid)
             .subscribeOn(Schedulers.io())
@@ -361,7 +351,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
 
               @Override public void onError(Throwable e) {
                 super.onError(e);
-                show.dismiss();
+                hideIndeterminateProgressDialog();
               }
 
               @Override public void onNext(WxLogininfoBean wxLogininfoBean) {
@@ -376,7 +366,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
 
                           @Override public void onError(Throwable e) {
                             super.onError(e);
-                            show.dismiss();
+                            hideIndeterminateProgressDialog();
                           }
 
                           @Override public void onNext(NeedSetInfoBean needSetInfoBean) {
@@ -410,7 +400,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
 
                               finish();
                             } else if (2 == codeInfo) {
-                              show.dismiss();
+                              hideIndeterminateProgressDialog();
                               LoginUtils.saveLoginSuccess(true, getApplicationContext());
                               JUtils.Toast("登录成功,前往绑定手机");
                               Intent intent = new Intent(LoginActivity.this,
@@ -425,7 +415,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                             }
                           }
                         });
-
+                    addSubscription(subscribe);
                   } else if (1 == code) {
                     JUtils.Toast("签名错误");
                   } else if (2 == code) {
@@ -439,11 +429,11 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
       }
 
       @Override public void onError(Platform platform, int i, Throwable throwable) {
-        show.dismiss();
+        hideIndeterminateProgressDialog();
       }
 
       @Override public void onCancel(Platform platform, int i) {
-        show.dismiss();
+        hideIndeterminateProgressDialog();
       }
     });
     plat.SSOSetting(true);

@@ -26,7 +26,7 @@ import android.view.ViewGroup;
   /* 上下两个frameLayout，在Activity中注入fragment */
   private View frameView1, frameView2;
   private int viewHeight;
-      // 单位是像素，当上下滑动速度不够时，通过这个阈值来判定是应该粘到顶部还是底部
+  // 单位是像素，当上下滑动速度不够时，通过这个阈值来判定是应该粘到顶部还是底部
   private int downTop1; // 手指按下的时候，frameView1的getTop值
   private ShowNextPageNotifier nextPageListener; // 手指松开是否加载下一页的notifier
 
@@ -72,6 +72,7 @@ import android.view.ViewGroup;
   }
 
   @Override protected void onFinishInflate() {
+    super.onFinishInflate();
     // 跟findviewbyId一样，初始化上下两个view
     frameView1 = getChildAt(0);
     frameView2 = getChildAt(1);

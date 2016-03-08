@@ -8,8 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import butterknife.ButterKnife;
-import rx.Subscription;
-import rx.subscriptions.CompositeSubscription;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.jimei.xiaolumeimei.R;
 
 /**
  * Created by 优尼世界 on 15/12/29.
@@ -20,26 +20,10 @@ public abstract class BaseFragment extends Fragment {
 
   public Activity activity;
   public View view;
-
-  private CompositeSubscription mCompositeSubscription;
-
-  public CompositeSubscription getCompositeSubscription() {
-    if (this.mCompositeSubscription == null) {
-      this.mCompositeSubscription = new CompositeSubscription();
-    }
-
-    return this.mCompositeSubscription;
-  }
-
-  public void addSubscription(Subscription s) {
-    if (this.mCompositeSubscription == null) {
-      this.mCompositeSubscription = new CompositeSubscription();
-    }
-
-    this.mCompositeSubscription.add(s);
-  }
+  private MaterialDialog materialDialog;
 
   abstract protected int provideContentViewId();
+
 
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -69,8 +53,17 @@ public abstract class BaseFragment extends Fragment {
 
   @Override public void onStop() {
     super.onStop();
-    if (this.mCompositeSubscription != null) {
-      this.mCompositeSubscription.unsubscribe();
-    }
+  }
+  private void showIndeterminateProgressDialog(boolean horizontal) {
+    materialDialog = new MaterialDialog.Builder(activity)
+        //.title(R.string.progress_dialog)
+        .content(R.string.please_wait)
+        .progress(true, 0)
+        .progressIndeterminateStyle(horizontal)
+        .show();
+  }
+
+  private void hideIndeterminateProgressDialog(boolean horizontal) {
+    materialDialog.dismiss();
   }
 }

@@ -29,6 +29,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import butterknife.ButterKnife;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.utils.CommonUtils;
 import com.jimei.xiaolumeimei.utils.SmartBarUtils;
@@ -53,6 +54,7 @@ public abstract class BaseAppCompatActivity extends AutoLayoutActivity {
    */
   protected Context mContext = null;
   private SharedPreferences sharedPreferences;
+  private MaterialDialog materialDialog;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     if (toggleOverridePendingTransition()) {
@@ -270,13 +272,6 @@ public abstract class BaseAppCompatActivity extends AutoLayoutActivity {
     }
   }
 
-  /**
-   * overridePendingTransition mode
-   */
-  public enum TransitionMode {
-    LEFT, RIGHT, TOP, BOTTOM, SCALE, FADE
-  }
-
   public boolean IsLogined() {
 
     sharedPreferences =
@@ -295,4 +290,23 @@ public abstract class BaseAppCompatActivity extends AutoLayoutActivity {
     });
   }
 
+  public void showIndeterminateProgressDialog(boolean horizontal) {
+    materialDialog = new MaterialDialog.Builder(this)
+        //.title(R.string.progress_dialog)
+        .content(R.string.please_wait)
+        .progress(true, 0)
+        .progressIndeterminateStyle(horizontal)
+        .show();
+  }
+
+  public void hideIndeterminateProgressDialog() {
+    materialDialog.dismiss();
+  }
+
+  /**
+   * overridePendingTransition mode
+   */
+  public enum TransitionMode {
+    LEFT, RIGHT, TOP, BOTTOM, SCALE, FADE
+  }
 }
