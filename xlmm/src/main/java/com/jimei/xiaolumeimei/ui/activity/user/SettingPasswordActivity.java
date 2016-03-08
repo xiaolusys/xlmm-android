@@ -113,7 +113,7 @@ public class SettingPasswordActivity extends BaseSwipeBackCompatActivity
       String password2) {
      subscribe = UserModel.getInstance()
         .changePassword(username, valid_code, password1, password2)
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<UserBean>() {
           @Override public void onNext(UserBean user) {
             Log.d(TAG, "user.getCode() "

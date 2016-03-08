@@ -202,7 +202,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
               }
 
             Subscription subscription1 =   model.getCartsInfoList(s)
-                  .subscribeOn(Schedulers.newThread())
+                  .subscribeOn(Schedulers.io())
                   .subscribe(new ServiceResponse<CartsPayinfoBean>() {
                     @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
                       super.onNext(cartsPayinfoBean);
@@ -423,7 +423,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
               }
 
              Subscription subscription1 =  model.getCartsInfoList(s)
-                  .subscribeOn(Schedulers.newThread())
+                  .subscribeOn(Schedulers.io())
                   .subscribe(new ServiceResponse<CartsPayinfoBean>() {
                     @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
                       super.onNext(cartsPayinfoBean);
@@ -467,7 +467,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
               }
 
               model.getCartsInfoList(s)
-                  .subscribeOn(Schedulers.newThread())
+                  .subscribeOn(Schedulers.io())
                   .subscribe(new ServiceResponse<CartsPayinfoBean>() {
                     @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
                       super.onNext(cartsPayinfoBean);

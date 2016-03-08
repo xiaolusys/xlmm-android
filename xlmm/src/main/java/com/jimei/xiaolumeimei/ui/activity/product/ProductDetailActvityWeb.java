@@ -169,7 +169,7 @@ public class ProductDetailActvityWeb extends BaseSwipeBackCompatActivity
             JUtils.Log(sku_id + "这尺寸可以");
 
             Subscription subscribe = cartsModel.addCarts(item_id, sku_id)
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<AddCartsBean>() {
 
                   @Override public void onError(Throwable e) {

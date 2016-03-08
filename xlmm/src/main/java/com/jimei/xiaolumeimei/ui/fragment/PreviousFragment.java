@@ -121,10 +121,9 @@ public class PreviousFragment extends BaseFragment {
     countTime = (CountdownView) head.findViewById(R.id.countTime);
 
     subscription2 = Observable.timer(1, 1, TimeUnit.SECONDS)
+        .onBackpressureDrop()
         .map(aLong -> calcLeftTime())
         .observeOn(AndroidSchedulers.mainThread())
-        .onBackpressureDrop()
-        .subscribeOn(Schedulers.io())
         .subscribe(new Action1<Long>() {
           @Override public void call(Long aLong) {
             if (aLong > 0) {
@@ -158,7 +157,7 @@ public class PreviousFragment extends BaseFragment {
 
     subscribe3 = ProductModel.getInstance()
         .getYestdayPost()
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<PostBean>() {
                      @Override public void onNext(PostBean postBean) {
                        try {
@@ -202,7 +201,7 @@ public class PreviousFragment extends BaseFragment {
                                        @Override public void onRefresh() {
                                          subscribe4 = ProductModel.getInstance()
                                              .getTodayList(1, page * page_size)
-                                             .subscribeOn(Schedulers.newThread())
+                                             .subscribeOn(Schedulers.io())
                                              .subscribe(
                                                  new ServiceResponse<ProductListBean>() {
                                                    @Override public void onNext(
@@ -243,7 +242,7 @@ public class PreviousFragment extends BaseFragment {
 
     subscribe5 = ProductModel.getInstance()
         .getPreviousList(page, page_size)
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ProductListBean>() {
           @Override public void onNext(ProductListBean productListBean) {
             List<ProductListBean.ResultsEntity> results = productListBean.getResults();

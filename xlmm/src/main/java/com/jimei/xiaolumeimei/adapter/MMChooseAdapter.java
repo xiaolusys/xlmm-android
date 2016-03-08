@@ -90,7 +90,7 @@ public class MMChooseAdapter extends RecyclerView.Adapter<MMChooseAdapter.MMChoo
 
           MMProductModel.getInstance()
               .add_pro_to_shop(mmChooselistBean.getId() + "")
-              .subscribeOn(Schedulers.newThread())
+              .subscribeOn(Schedulers.io())
               .subscribe(new ServiceResponse<ResponseResultBean>() {
                 @Override public void onNext(ResponseResultBean responseResultBean) {
                   super.onNext(responseResultBean);
@@ -134,7 +134,7 @@ public class MMChooseAdapter extends RecyclerView.Adapter<MMChooseAdapter.MMChoo
 
           MMProductModel.getInstance()
               .remove_pro_from_shop(mmChooselistBean.getId() + "")
-              .subscribeOn(Schedulers.newThread())
+              .subscribeOn(Schedulers.io())
               .subscribe(new ServiceResponse<ResponseResultBean>() {
                 @Override public void onNext(ResponseResultBean responseResultBean) {
                   super.onNext(responseResultBean);

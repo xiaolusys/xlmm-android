@@ -280,7 +280,7 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
             .get_reason_num
             (reason),
         num, apply_fee, desc, proof_pic)
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ResponseBody>() {
           @Override public void onNext(ResponseBody resp) {
 
@@ -489,7 +489,7 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
 
   private void getQiniuToken(){
    Subscription subscription =  model.getQiniuToken()
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<QiniuTokenBean>() {
           @Override public void onNext(QiniuTokenBean resp) {
             uptoken = resp.getUptoken();

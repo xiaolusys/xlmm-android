@@ -103,7 +103,7 @@ public class ShareAllowanceActivity extends BaseSwipeBackCompatActivity implemen
   @Override protected void initData() {
      subscribe = MamaInfoModel.getInstance()
         .getAllowance("1")
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<AllowanceBean>() {
           @Override public void onNext(AllowanceBean pointBean) {
             JUtils.Log(TAG, "AllowanceBean=" + pointBean.toString());

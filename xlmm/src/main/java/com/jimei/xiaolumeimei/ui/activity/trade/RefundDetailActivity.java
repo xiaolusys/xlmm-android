@@ -108,7 +108,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
   @Override protected void initData() {
     JUtils.Log(TAG, "initData goods_id "+ goods_id);
   Subscription subscription = model.getRefundDetailBean(goods_id)
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<AllRefundsBean.ResultsEntity>() {
           @Override public void onNext(AllRefundsBean.ResultsEntity refundDetailBean) {
             JUtils.Log(TAG,"getRefundDetailBean success ");

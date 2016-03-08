@@ -80,7 +80,7 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
     } else {
       subscribe = UserModel.getInstance()
           .getUserInfo()
-          .subscribeOn(Schedulers.newThread())
+          .subscribeOn(Schedulers.io())
           .subscribe(new ServiceResponse<UserInfoBean>() {
             @Override public void onNext(UserInfoBean user) {
               Log.d(TAG, "getUserInfo:, " + user.toString());
@@ -237,7 +237,7 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
     JUtils.Log(TAG, "username=" + username + " valid_code=" + valid_code);
     subscribe = UserModel.getInstance()
         .bang_mobile_unpassword(username, valid_code)
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<BindInfoBean>() {
           @Override public void onNext(BindInfoBean bindInfoBean) {
             JUtils.Log(TAG, bindInfoBean.toString());

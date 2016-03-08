@@ -125,7 +125,7 @@ public class LoginUtils {
     UserModel.getInstance().getUserAccount("android", mRegId,
         ((TelephonyManager) context.getSystemService(
             Context.TELEPHONY_SERVICE)).getDeviceId())
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<UserAccountBean>() {
           @Override public void onNext(UserAccountBean user) {
             JUtils.Log(TAG, "UserAccountBean:, " + user.toString());

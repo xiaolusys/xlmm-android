@@ -41,7 +41,7 @@ public class LadyListActivity extends BaseSwipeBackCompatActivity {
 
     Subscription subscribe = ProductModel.getInstance()
         .getLadyList(1, 10)
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<LadyListBean>() {
           @Override public void onNext(LadyListBean ladyListBean) {
 
@@ -99,7 +99,7 @@ public class LadyListActivity extends BaseSwipeBackCompatActivity {
       @Override public void onRefresh() {
         Subscription subscribe = ProductModel.getInstance()
             .getLadyList(1, page * page_size)
-            .subscribeOn(Schedulers.newThread())
+            .subscribeOn(Schedulers.io())
             .subscribe(new ServiceResponse<LadyListBean>() {
               @Override public void onNext(LadyListBean ladyListBean) {
                 List<LadyListBean.ResultsEntity> results = ladyListBean.getResults();
@@ -138,7 +138,7 @@ public class LadyListActivity extends BaseSwipeBackCompatActivity {
 
     Subscription subscribe = ProductModel.getInstance()
         .getLadyList(page, page_size)
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<LadyListBean>() {
           @Override public void onNext(LadyListBean productListBean) {
             List<LadyListBean.ResultsEntity> results = productListBean.getResults();

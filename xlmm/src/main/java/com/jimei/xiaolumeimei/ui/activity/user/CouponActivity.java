@@ -93,7 +93,7 @@ public class CouponActivity extends BaseSwipeBackCompatActivity
   //从server端获得所有订单数据，可能要查询几次
   @Override protected void initData() {
     UserModel.getInstance().getUnusedCouponBean()
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<CouponBean>() {
           @Override public void onNext(CouponBean couponBean) {
             List<CouponBean.ResultsEntity> results = couponBean.getResults();
@@ -105,7 +105,7 @@ public class CouponActivity extends BaseSwipeBackCompatActivity
             }
 
             UserModel.getInstance().getPastCouponBean()
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<CouponBean>() {
                   @Override public void onNext(CouponBean couponBean) {
                     List<CouponBean.ResultsEntity> results = couponBean.getResults();

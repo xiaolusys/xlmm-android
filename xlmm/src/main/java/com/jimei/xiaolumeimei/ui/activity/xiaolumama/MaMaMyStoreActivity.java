@@ -53,7 +53,7 @@ public class MaMaMyStoreActivity extends BaseSwipeBackCompatActivity {
 
     Subscription subscribe = MMProductModel.getInstance()
         .getMMStoreList()
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<List<MMChooselistBean>>() {
           @Override public void onNext(List<MMChooselistBean> mmChooselistBeans) {
             try {

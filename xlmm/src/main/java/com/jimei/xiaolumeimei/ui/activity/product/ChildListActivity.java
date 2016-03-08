@@ -40,7 +40,7 @@ public class ChildListActivity extends BaseSwipeBackCompatActivity {
     loading.start();
    Subscription subscribe = ProductModel.getInstance()
         .getChildList(1, 10)
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ChildListBean>() {
           @Override public void onNext(ChildListBean childListBean) {
 
@@ -106,7 +106,7 @@ public class ChildListActivity extends BaseSwipeBackCompatActivity {
       @Override public void onRefresh() {
         Subscription subscribe = ProductModel.getInstance()
             .getChildList(1, page * page_size)
-            .subscribeOn(Schedulers.newThread())
+            .subscribeOn(Schedulers.io())
             .subscribe(new ServiceResponse<ChildListBean>() {
               @Override public void onNext(ChildListBean childListBean) {
                 List<ChildListBean.ResultsEntity> results = childListBean.getResults();
@@ -138,7 +138,7 @@ public class ChildListActivity extends BaseSwipeBackCompatActivity {
 
    Subscription subscribe = ProductModel.getInstance()
         .getChildList(page, page_size)
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ChildListBean>() {
           @Override public void onNext(ChildListBean productListBean) {
             List<ChildListBean.ResultsEntity> results = productListBean.getResults();

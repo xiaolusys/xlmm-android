@@ -93,7 +93,7 @@ public class EditPasswordForgetActivity extends BaseSwipeBackCompatActivity
   private void changePassword(String username, String valid_code, String password1,
       String password2) {
     UserModel.getInstance().changePassword(username, valid_code, password1, password2)
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<UserBean>() {
           @Override public void onNext(UserBean user) {
             Log.d(TAG, "user.getCode() "
@@ -105,7 +105,7 @@ public class EditPasswordForgetActivity extends BaseSwipeBackCompatActivity
 
               UserModel.getInstance()
                   .login(username, password1)
-                  .subscribeOn(Schedulers.newThread())
+                  .subscribeOn(Schedulers.io())
                   .subscribe(new ServiceResponse<UserBean>() {
                     @Override public void onNext(UserBean user) {
                       Log.d(TAG, "user.getCode() "

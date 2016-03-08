@@ -164,7 +164,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
         if (checkInput(login_name_value, login_pass_value)) {
           Subscription subscribe = UserModel.getInstance()
               .login(login_name_value, login_pass_value)
-              .subscribeOn(Schedulers.newThread())
+              .subscribeOn(Schedulers.io())
               .subscribe(new ServiceResponse<UserBean>() {
                 @Override public void onNext(UserBean user) {
                   Log.d(TAG, "user.getCode() "

@@ -75,7 +75,7 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
 
      subscribe = MMProductModel.getInstance()
         .getMMChooseList()
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<List<MMChooselistBean>>() {
           @Override public void onNext(List<MMChooselistBean> mmChooselistBeans) {
             super.onNext(mmChooselistBeans);
@@ -162,7 +162,7 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
 
      subscribe = MMProductModel.getInstance()
         .getMMChooseList()
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<List<MMChooselistBean>>() {
           @Override public void onNext(List<MMChooselistBean> mmChooselistBeans) {
             super.onNext(mmChooselistBeans);
@@ -194,7 +194,7 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
 
      subscribe = MMProductModel.getInstance()
         .getMMChooseSortList(sortfeild)
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<List<MMChooselistBean>>() {
           @Override public void onNext(List<MMChooselistBean> mmChooselistBeans) {
             super.onNext(mmChooselistBeans);
@@ -227,7 +227,7 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
 
      subscribe = MMProductModel.getInstance()
         .getMMChooseLadyOrChildList(choice)
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<List<MMChooselistBean>>() {
           @Override public void onNext(List<MMChooselistBean> mmChooselistBeans) {
             super.onNext(mmChooselistBeans);
@@ -260,7 +260,7 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
 
      subscribe = MMProductModel.getInstance()
         .getMMChooseLadyOrChildSortListSort(sortfeild, category)
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<List<MMChooselistBean>>() {
           @Override public void onNext(List<MMChooselistBean> mmChooselistBeans) {
             super.onNext(mmChooselistBeans);

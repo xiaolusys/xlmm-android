@@ -52,7 +52,7 @@ public class MamaWithdrawCashHistoryActivity extends BaseSwipeBackCompatActivity
   @Override protected void initData() {
      subscribe = MamaInfoModel.getInstance()
         .getWithdrawCashHis()
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<WithdrawCashHisBean>() {
           @Override public void onNext(WithdrawCashHisBean pointBean) {
             JUtils.Log(TAG, "WithdrawCashHisBean=" + pointBean.toString());

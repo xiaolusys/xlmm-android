@@ -84,7 +84,7 @@ public class XlmmApp extends Application {
 
       UserModel.getInstance()
           .getUserInfo()
-          .subscribeOn(Schedulers.newThread())
+          .subscribeOn(Schedulers.io())
           .subscribe(new ServiceResponse<UserInfoBean>() {
             @Override public void onNext(UserInfoBean user) {
               Log.d("XlmmApp", "getUserInfo: " + user.toString());
@@ -97,7 +97,7 @@ public class XlmmApp extends Application {
             @Override public void onError(Throwable e) {
               LoginUtils.delLoginInfo(mContext);
               e.printStackTrace();
-              Log.e("XlmmApp", "error getUserInfo" );
+              Log.e("XlmmApp", "error getUserInfo");
               super.onError(e);
             }
           });

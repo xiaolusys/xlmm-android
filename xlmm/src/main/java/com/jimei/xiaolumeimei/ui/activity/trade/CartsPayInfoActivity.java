@@ -115,7 +115,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
   private void downLoadCartsInfo() {
     Subscription subscription = model.getCartsInfoList(ids)
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<CartsPayinfoBean>() {
           @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
             if (cartsPayinfoBean != null) {
@@ -414,7 +414,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         JUtils.Log(TAG, "coupon_id:" + coupon_id);
         Subscription subscription = model.getCartsInfoList(ids, coupon_id)
 
-            .subscribeOn(Schedulers.newThread())
+            .subscribeOn(Schedulers.io())
             .subscribe(new ServiceResponse<CartsPayinfoBean>() {
               @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
                 if (cartsPayinfoBean != null) {

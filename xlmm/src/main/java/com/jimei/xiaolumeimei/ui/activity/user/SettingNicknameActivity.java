@@ -1,6 +1,5 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -100,7 +99,7 @@ public class SettingNicknameActivity extends BaseSwipeBackCompatActivity
   private void setNickname() {
     Subscription subscribe = UserModel.getInstance()
         .setNickname(userid, nicknameBean)
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<UserBean>() {
           @Override public void onNext(UserBean user) {
             Log.d(TAG, "user.getCode() "
@@ -135,7 +134,7 @@ public class SettingNicknameActivity extends BaseSwipeBackCompatActivity
   private void getUserInfo() {
     Subscription subscribe = UserModel.getInstance()
         .getUserInfo()
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<UserInfoBean>() {
           @Override public void onNext(UserInfoBean user) {
             userinfo = user;

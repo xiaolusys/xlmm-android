@@ -413,7 +413,7 @@ public class MainActivity extends BaseActivity
 
     UserModel.getInstance()
         .getUserInfo()
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<UserInfoBean>() {
           @Override public void onNext(UserInfoBean user) {
             if ((user.getXiaolumm() != null) && (user.getXiaolumm().getId() != 0)) {
@@ -440,7 +440,7 @@ public class MainActivity extends BaseActivity
   private void getUserInfo() {
     UserModel.getInstance()
         .getUserInfo()
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<UserInfoBean>() {
           @Override public void onNext(UserInfoBean user) {
             userInfoBean = user;
@@ -518,7 +518,7 @@ public class MainActivity extends BaseActivity
 
     UserModel.getInstance()
         .getUnusedCouponBean()
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .unsafeSubscribe(new Subscriber<CouponBean>() {
           @Override public void onCompleted() {
 

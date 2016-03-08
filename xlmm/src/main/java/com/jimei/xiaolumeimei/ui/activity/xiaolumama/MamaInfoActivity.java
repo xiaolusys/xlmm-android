@@ -118,7 +118,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   @Override protected void initData() {
     Subscription subscribe = MamaInfoModel.getInstance()
         .getAgentInfoBean()
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<AgentInfoBean>() {
           @Override public void onNext(AgentInfoBean pointBean) {
             JUtils.Log(TAG, "AgentInfoBean=" + pointBean.toString());

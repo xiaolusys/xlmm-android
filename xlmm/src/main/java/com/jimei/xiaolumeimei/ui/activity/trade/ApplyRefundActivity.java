@@ -159,7 +159,7 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
             .get_reason_num
             (reason),
         num, apply_fee, desc, proof_pic)
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ResponseBody>() {
           @Override public void onNext(ResponseBody resp) {
 

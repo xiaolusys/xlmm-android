@@ -80,7 +80,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
       source = getIntent().getExtras().getString("source");
 
       Subscription subscription = tradeModel.getOrderDetailBean(order_id)
-          .subscribeOn(Schedulers.newThread())
+          .subscribeOn(Schedulers.io())
           .subscribe(new ServiceResponse<OrderDetailBean>() {
             @Override public void onNext(OrderDetailBean orderDetailBean) {
 

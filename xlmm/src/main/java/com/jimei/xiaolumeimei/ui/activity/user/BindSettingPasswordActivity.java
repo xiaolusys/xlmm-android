@@ -105,7 +105,7 @@ public class BindSettingPasswordActivity extends BaseSwipeBackCompatActivity
 
     JUtils.Log(TAG, "username=" + username + " valid_code=" + valid_code);
     UserModel.getInstance().bang_mobile(username, password1, password2, valid_code)
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<BindInfoBean>() {
           @Override public void onNext(BindInfoBean bindInfoBean) {
             JUtils.Log(TAG, bindInfoBean.toString());

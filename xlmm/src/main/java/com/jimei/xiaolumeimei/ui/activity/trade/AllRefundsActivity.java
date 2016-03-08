@@ -79,7 +79,7 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity
   //从server端获得所有订单数据，可能要查询几次
   @Override protected void initData() {
     Subscription subscription = model.getRefundsBean()
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<AllRefundsBean>() {
           @Override public void onNext(AllRefundsBean allRefundsBean) {
             List<AllRefundsBean.ResultsEntity> results = allRefundsBean.getResults();

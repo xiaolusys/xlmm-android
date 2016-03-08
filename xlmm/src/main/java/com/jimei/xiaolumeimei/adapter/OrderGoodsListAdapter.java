@@ -247,7 +247,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
   private void receive_goods(int id) {
     TradeModel model = new TradeModel();
     model.receiveGoods(id)
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<UserBean>() {
           @Override public void onNext(UserBean userBean) {
             Log.d(TAG, "returncode " + userBean.getCode());

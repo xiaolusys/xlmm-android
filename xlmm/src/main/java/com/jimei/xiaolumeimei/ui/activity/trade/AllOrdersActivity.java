@@ -67,7 +67,7 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity
   //从server端获得所有订单数据，可能要查询几次
   private void initOrderData() {
    Subscription subscription = model.getAlloderBean()
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<AllOrdersBean>() {
           @Override public void onNext(AllOrdersBean allOrdersBean) {
             List<AllOrdersBean.ResultsEntity> results = allOrdersBean.getResults();

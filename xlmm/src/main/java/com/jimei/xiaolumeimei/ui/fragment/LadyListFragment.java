@@ -41,7 +41,7 @@ public class LadyListFragment extends BaseFragment {
 
     subscribe1 = ProductModel.getInstance()
         .getLadyList(1, 10)
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<LadyListBean>() {
           @Override public void onNext(LadyListBean ladyListBean) {
 
@@ -87,7 +87,7 @@ public class LadyListFragment extends BaseFragment {
       @Override public void onRefresh() {
         subscribe2 = ProductModel.getInstance()
             .getLadyList(1, page * page_size)
-            .subscribeOn(Schedulers.newThread())
+            .subscribeOn(Schedulers.io())
             .subscribe(new ServiceResponse<LadyListBean>() {
               @Override public void onNext(LadyListBean ladyListBean) {
                 List<LadyListBean.ResultsEntity> results = ladyListBean.getResults();
@@ -117,7 +117,7 @@ public class LadyListFragment extends BaseFragment {
 
     subscribe3 = ProductModel.getInstance()
         .getLadyList(page, page_size)
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<LadyListBean>() {
           @Override public void onNext(LadyListBean productListBean) {
             List<LadyListBean.ResultsEntity> results = productListBean.getResults();

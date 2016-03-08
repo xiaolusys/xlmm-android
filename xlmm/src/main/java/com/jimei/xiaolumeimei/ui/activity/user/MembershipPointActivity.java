@@ -70,7 +70,7 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity impleme
     @Override protected void initData() {
          subscribe = UserModel.getInstance()
             .getMembershipPointBean()
-            .subscribeOn(Schedulers.newThread())
+            .subscribeOn(Schedulers.io())
             .subscribe(new ServiceResponse<MembershipPointBean>() {
                 @Override public void onNext(MembershipPointBean pointBean) {
                     List<MembershipPointBean.ResultsEntity> results =
@@ -86,7 +86,7 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity impleme
 
          subscribe = UserModel.getInstance()
             .getPointLogBean()
-            .subscribeOn(Schedulers.newThread())
+            .subscribeOn(Schedulers.io())
             .subscribe(new ServiceResponse<PointLogBean>() {
                 @Override public void onNext(PointLogBean pointLogBean) {
                     List<PointLogBean.ResultsEntity> results = pointLogBean.getResults();

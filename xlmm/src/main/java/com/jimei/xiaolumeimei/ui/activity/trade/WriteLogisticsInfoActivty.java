@@ -113,7 +113,7 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity imple
         ().trim());
   Subscription subscription = model.commit_logistics_info(goods_id, company,
         et_logistics_number.getText().toString().trim())
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ResponseBody>() {
           @Override public void onNext(ResponseBody resp) {
             JUtils.Toast("提交物流信息成功，收货后我们会尽快为您处理退款！");

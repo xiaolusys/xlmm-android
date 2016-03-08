@@ -142,7 +142,7 @@ public class TodayFragment extends BaseFragment {
 
     subscribe2 = ProductModel.getInstance()
         .getTodayPost()
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<PostBean>() {
           @Override public void onNext(PostBean postBean) {
             try {
@@ -300,7 +300,7 @@ public class TodayFragment extends BaseFragment {
       @Override public void onRefresh() {
         subscribe3 = ProductModel.getInstance()
             .getTodayList(1, page * page_size)
-            .subscribeOn(Schedulers.newThread())
+            .subscribeOn(Schedulers.io())
             .subscribe(new ServiceResponse<ProductListBean>() {
               @Override public void onNext(ProductListBean productListBean) {
                 List<ProductListBean.ResultsEntity> results =
@@ -331,7 +331,7 @@ public class TodayFragment extends BaseFragment {
 
     subscribe4 = ProductModel.getInstance()
         .getTodayList(page, page_size)
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ProductListBean>() {
           @Override public void onNext(ProductListBean productListBean) {
             List<ProductListBean.ResultsEntity> results = productListBean.getResults();
@@ -378,10 +378,9 @@ public class TodayFragment extends BaseFragment {
     countTime = (CountdownView) head.findViewById(R.id.countTime);
 
     subscription5 = Observable.timer(1, 1, TimeUnit.SECONDS)
+        .onBackpressureDrop()
         .map(aLong -> calcLeftTime())
         .observeOn(AndroidSchedulers.mainThread())
-        .onBackpressureDrop()
-        .subscribeOn(Schedulers.io())
         .subscribe(new Action1<Long>() {
           @Override public void call(Long aLong) {
             if (aLong > 0) {

@@ -54,7 +54,7 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity implements Vie
   @Override protected void initData() {
      subscribe = MamaInfoModel.getInstance()
         .getMamaFans("1")
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<MamaFansBean>() {
           @Override public void onNext(MamaFansBean fansBeen) {
             JUtils.Log(TAG, "size =" + fansBeen.getCount());

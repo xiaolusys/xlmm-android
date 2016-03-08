@@ -75,7 +75,7 @@ public class MamaWithdrawCashActivity extends BaseSwipeBackCompatActivity
   @Override protected void initData() {
     subscribe = MamaInfoModel.getInstance()
         .getAgentInfoBean()
-        .subscribeOn(Schedulers.newThread())
+        .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<AgentInfoBean>() {
           @Override public void onNext(AgentInfoBean pointBean) {
             JUtils.Log(TAG, "AgentInfoBean=" + pointBean.toString());
@@ -171,7 +171,7 @@ public class MamaWithdrawCashActivity extends BaseSwipeBackCompatActivity
 
       subscribe = MamaInfoModel.getInstance()
           .withdraw_cash(fund_type)
-          .subscribeOn(Schedulers.newThread())
+          .subscribeOn(Schedulers.io())
           .subscribe(new ServiceResponse<ResponseResultBean>() {
             @Override public void onNext(ResponseResultBean resp) {
               JUtils.Log(TAG, "ResponseBody11=" + resp.getCode());
