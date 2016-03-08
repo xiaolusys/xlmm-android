@@ -12,8 +12,7 @@ import rx.android.schedulers.AndroidSchedulers;
 public class DefaultTransform<T> implements Observable.Transformer<T, T> {
   @Override public Observable<T> call(Observable<T> tObservable) {
     return tObservable.doOnError(throwable -> JUtils.Log(throwable.getLocalizedMessage()))
-        .observeOn(AndroidSchedulers.mainThread())
-        .onBackpressureDrop();
+        .observeOn(AndroidSchedulers.mainThread());
   }
 }
 
