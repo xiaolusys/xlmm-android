@@ -37,7 +37,8 @@ public class RXDownLoadImage {
         subscriber.onCompleted();
       }
     }).flatMap(bitmap -> {
-      File appDir = new File(Environment.getExternalStorageDirectory(), "xlmm/img");
+      File appDir = new File(Environment.getExternalStorageDirectory(),
+          "xlmm/xiaolumeimei");
       if (!appDir.exists()) {
         appDir.mkdir();
       }

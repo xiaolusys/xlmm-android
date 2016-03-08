@@ -100,7 +100,6 @@ public class MaMaStoreAdapter extends RecyclerView.Adapter<MaMaStoreAdapter.MaMa
               @Override public void onError(Throwable e) {
                 super.onError(e);
                 e.printStackTrace();
-                hideIndeterminateProgressDialog();
               }
 
             });
