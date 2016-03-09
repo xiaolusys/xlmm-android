@@ -145,6 +145,7 @@ public class NinePicAdapter extends BaseAdapter {
                   @Override public void onResponse(FilePara response) {
                     if (response != null) {
                       bflag[0] = true;
+                      JUtils.Log("NinePic", "download "+finalI +" finished.");
                       try {
                         if(picArry.size() - 1 == finalI) {
                           Uri uri = Uri.fromFile(new File(response.getFilePath()));
