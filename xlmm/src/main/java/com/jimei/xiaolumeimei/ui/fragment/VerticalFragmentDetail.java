@@ -203,9 +203,10 @@ public class VerticalFragmentDetail extends Fragment implements View.OnClickList
             tagFlowLayout.setOnSelectListener(new TagFlowLayout.OnSelectListener() {
               @Override public void onSelected(Set<Integer> selectPosSet, int position) {
 
-                if (!selectPosSet.isEmpty()) {
+                if (!selectPosSet.isEmpty() && listener != null) {
                   listener.setSkuid(normalSkus.get(position).getId(), true);
                 } else {
+                  assert listener != null;
                   listener.setSkuid("", false);
                 }
               }

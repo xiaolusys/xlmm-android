@@ -54,7 +54,6 @@ import javax.security.auth.x500.X500Principal;
 /**
  * APP工具类
  * APP相关信息工具类。获取版本信息
- *
  */
 public final class AppUtils {
 
@@ -62,12 +61,21 @@ public final class AppUtils {
   private static final String TAG = "AppUtils";
   private final static X500Principal DEBUG_DN =
       new X500Principal("CN=Android Debug,O=Android,C=US");
+  private final static int SPACE_TIME = 500;
+  private static long lastClickTime;
 
-  public static void showSnackBar(View view,int id) {
-    Resources resources  = XlmmApp.getInstance().getResources();
+  /**
+   * Don't let anyone instantiate this class.
+   */
+  private AppUtils() {
+    throw new Error("Do not need instantiate!");
+  }
+
+  public static void showSnackBar(View view, int id) {
+    Resources resources = XlmmApp.getInstance().getResources();
     Snackbar sb = Snackbar.make(view, resources.getString(id), Snackbar.LENGTH_SHORT);
     setSnackbarMessageTextColor(sb);
-    sb.getView().setBackgroundColor(resources.getColor( R.color.white));
+    sb.getView().setBackgroundColor(resources.getColor(R.color.white));
     sb.show();
   }
 
@@ -75,13 +83,6 @@ public final class AppUtils {
     View view = snackbar.getView();
     ((TextView) view.findViewById(R.id.snackbar_text)).setTextColor(
         Color.parseColor("#448AFF"));
-  }
-
-  /**
-   * Don't let anyone instantiate this class.
-   */
-  private AppUtils() {
-    throw new Error("Do not need instantiate!");
   }
 
   /**
@@ -122,7 +123,7 @@ public final class AppUtils {
    * 安装apk
    *
    * @param context 上下文
-   * @param file    APK文件
+   * @param file APK文件
    */
   public static void installApk(Context context, File file) {
     Intent intent = new Intent();
@@ -136,7 +137,7 @@ public final class AppUtils {
    * 安装apk
    *
    * @param context 上下文
-   * @param file    APK文件uri
+   * @param file APK文件uri
    */
   public static void installApk(Context context, Uri file) {
     Intent intent = new Intent();
@@ -149,7 +150,7 @@ public final class AppUtils {
   /**
    * 卸载apk
    *
-   * @param context     上下文
+   * @param context 上下文
    * @param packageName 包名
    */
   public static void uninstallApk(Context context, String packageName) {
@@ -162,7 +163,7 @@ public final class AppUtils {
   /**
    * 检测服务是否运行
    *
-   * @param context   上下文
+   * @param context 上下文
    * @param className 类名
    * @return 是否运行的状态
    */
@@ -183,7 +184,7 @@ public final class AppUtils {
   /**
    * 停止运行服务
    *
-   * @param context   上下文
+   * @param context 上下文
    * @param className 类名
    * @return 是否执行成功
    */
@@ -226,7 +227,7 @@ public final class AppUtils {
   /**
    * whether this process is named with processName
    *
-   * @param context     上下文
+   * @param context 上下文
    * @param processName 进程名
    * @return <ul>
    * return whether this process is named with processName
@@ -491,9 +492,6 @@ public final class AppUtils {
 
   /**
    * 检测当前应用是否是Debug版本
-   *
-   * @param ctx
-   * @return
    */
   public static boolean isDebuggable(Context ctx) {
     boolean debuggable = false;
@@ -513,5 +511,18 @@ public final class AppUtils {
     } catch (CertificateException e) {
     }
     return debuggable;
+  }
+
+  /**
+   * 防止重复点击
+   */
+  public static boolean isFastDoubleClick() {
+    long time = System.currentTimeMillis();
+    long timeD = time - lastClickTime;
+    if (0 < timeD && timeD < 2000) {
+      return true;
+    }
+    lastClickTime = time;
+    return false;
   }
 }

@@ -7,10 +7,9 @@ import android.view.ViewStub;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-import com.afollestad.materialdialogs.MaterialDialog;
+import com.jimei.library.rx.RXDownLoadImage;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.NinePicBean;
-import com.jimei.library.rx.RXDownLoadImage;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.ImagePagerActivity;
 import com.jimei.xiaolumeimei.widget.ninepicimagview.MultiImageView;
 import com.jude.utils.JUtils;
@@ -25,11 +24,16 @@ import rx.android.schedulers.AndroidSchedulers;
  * Copyright 2016年 上海己美. All rights reserved.
  */
 public class NinePicAdapter extends BaseAdapter {
+  setOnclickSaveListener onclickSaveListener;
   private Context mcontext;
   private List<NinePicBean> mlist = new ArrayList<>();
 
   public NinePicAdapter(Context mcontext) {
     this.mcontext = mcontext;
+  }
+
+  public void setOnclickSaveListener(setOnclickSaveListener onclickSaveListener) {
+    this.onclickSaveListener = onclickSaveListener;
   }
 
   public List<NinePicBean> getDatas() {
@@ -106,23 +110,26 @@ public class NinePicAdapter extends BaseAdapter {
     holder.save.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
 
-        assert picArry != null;
-        for (int i = 0; i < picArry.size(); i++) {
-
-          saveImageToGallery(
-              picArry.get(i) + "?imageMogr2/thumbnail/578/format/jpg/quality/90",
-              picArry.get(i));
+        //assert picArry != null;
+        //for (int i = 0; i < picArry.size(); i++) {
+        //
+        //  saveImageToGallery(
+        //      picArry.get(i) + "?imageMogr2/thumbnail/578/format/jpg/quality/90",
+        //      picArry.get(i));
+        //}
+        //
+        //new MaterialDialog.Builder(mcontext).
+        //    content("图片已经保存，前往分享吧").
+        //    positiveText("OK").
+        //    callback(new MaterialDialog.ButtonCallback() {
+        //      @Override public void onPositive(MaterialDialog dialog) {
+        //        super.onPositive(dialog);
+        //        dialog.dismiss();
+        //      }
+        //    }).show();
+        if (onclickSaveListener != null) {
+          onclickSaveListener.save(picArry, position);
         }
-
-        new MaterialDialog.Builder(mcontext).
-            content("图片已经保存，前往分享吧").
-            positiveText("OK").
-            callback(new MaterialDialog.ButtonCallback() {
-              @Override public void onPositive(MaterialDialog dialog) {
-                super.onPositive(dialog);
-                dialog.dismiss();
-              }
-            }).show();
       }
     });
 
@@ -142,6 +149,10 @@ public class NinePicAdapter extends BaseAdapter {
             }, error -> JUtils.Toast(error.getMessage() + "\n再试试..."));
         // @formatter:on
     //addSubscription(s);
+  }
+
+  public interface setOnclickSaveListener {
+    void save(List<String> list, int position);
   }
 
   class ViewHolder {

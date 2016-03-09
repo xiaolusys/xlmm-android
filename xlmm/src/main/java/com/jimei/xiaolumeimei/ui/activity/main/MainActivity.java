@@ -108,6 +108,11 @@ public class MainActivity extends BaseActivity
     getUserInfo();
 
     UmengUpdateAgent.update(this);
+
+    //Uri uri = Uri.parse("market://details?id=" + getPackageName());
+    //Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+    //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    //startActivity(intent);
   }
 
   private void initTabLayout() {
@@ -335,7 +340,7 @@ public class MainActivity extends BaseActivity
                             tvNickname.setText("点击登录");
                           }
 
-                          if ((finalAccount != null)&& ((!finalAccount.isEmpty()))) {
+                          if ((finalAccount != null) && ((!finalAccount.isEmpty()))) {
                             MiPushClient.unsetUserAccount(getApplicationContext(),
                                 finalAccount, null);
                             JUtils.Log(TAG, "unset useraccount: " + finalAccount);
