@@ -141,10 +141,10 @@ public class ImagePagerActivity extends BaseSwipeBackCompatActivity {
       if (view != null) {
         final ImageView imageView = (ImageView) view.findViewById(R.id.image);
         //预览imageView
-        final ImageView smallImageView = new ImageView(context);
-
-        smallImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        ((FrameLayout) view).addView(smallImageView);
+        //final ImageView smallImageView = new ImageView(context);
+        //
+        //smallImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        //((FrameLayout) view).addView(smallImageView);
         //loading
         final ProgressBar loading = new ProgressBar(context);
         FrameLayout.LayoutParams loadingLayoutParams =
@@ -157,11 +157,11 @@ public class ImagePagerActivity extends BaseSwipeBackCompatActivity {
         final String imgurl = datas.get(position);
 
         Picasso.with(context)
-            .load(imgurl + "?imageMogr2/thumbnail/578/format/jpg/quality/90")
+            .load(imgurl + "?imageMogr2/thumbnail/350/format/jpg/quality/70")
             .into(imageView, new Callback() {
               @Override public void onSuccess() {
                 loading.setVisibility(View.GONE);
-                smallImageView.setVisibility(View.GONE);
+                //smallImageView.setVisibility(View.GONE);
               }
 
               @Override public void onError() {

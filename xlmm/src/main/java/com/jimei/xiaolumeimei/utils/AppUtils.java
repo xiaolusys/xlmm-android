@@ -519,7 +519,7 @@ public final class AppUtils {
   public static boolean isFastDoubleClick() {
     long time = System.currentTimeMillis();
     long timeD = time - lastClickTime;
-    if (0 < timeD && timeD < 2000) {
+    if (0 < timeD && timeD < 50000) {
       return true;
     }
     lastClickTime = time;

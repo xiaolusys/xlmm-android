@@ -143,7 +143,7 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
   private void saveImageToGallery(String url, String mImageTitle) {
 
     Subscription subscribe =
-        RXDownLoadImage.saveImageAndGetPathObservableFile(this, url, mImageTitle)
+        RXDownLoadImage.saveImageAndGetPathObservable(this, url, mImageTitle)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(uri -> {
               //File appDir = new File(Environment.getExternalStorageDirectory(), "XlMMImage");
