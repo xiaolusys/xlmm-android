@@ -1,5 +1,7 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.widget.Toolbar;
@@ -8,6 +10,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import butterknife.Bind;
 import cn.sharesdk.onekeyshare.OnekeyShare;
+import com.jimei.xiaolumeimei.utils.CameraUtils;
 import java.io.File;
 import okhttp3.Call;
 
@@ -73,9 +76,18 @@ public class TwoDimenCodeActivity extends BaseSwipeBackCompatActivity implements
                 if (response != null) {
                   filePara = response;
                   try {
+                    String newName = Environment.getExternalStorageDirectory() +
+                        CameraUtils.XLMM_IMG_PATH + "我的推荐二维码.jpg";
                     new File(response.getFilePath()).renameTo(
-                        new File(Environment.getExternalStorageDirectory() +
-                            "/xlmm/img/" + "我的推荐二维码.jpg"));
+                        new File(newName));
+
+                    Uri uri = Uri.fromFile(new File(newName));
+                    // 通知图库更新
+                    Intent scannerIntent =
+                        new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
+                    scannerIntent.setData(uri);
+
+                    TwoDimenCodeActivity.this.sendBroadcast(scannerIntent);
                   }
                   catch (Exception e){
                     e.printStackTrace();

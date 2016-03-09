@@ -177,8 +177,8 @@ public class MultiImageView extends LinearLayout {
   }
 
   private ImageView createImageView(int position, final boolean isMultiImage) {
-    String url =
-        imagesList.get(position) + "?imageMogr2/thumbnail/578/format/jpg/quality/90";
+    String url = imagesList.get(position)
+        + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
     ImageView imageView = new ColorFilterImageView(getContext());
     if (isMultiImage) {
       imageView.setScaleType(ScaleType.CENTER_CROP);

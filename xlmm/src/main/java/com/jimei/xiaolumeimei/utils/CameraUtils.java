@@ -21,6 +21,7 @@ import android.util.Log;
 public class CameraUtils
 {
 
+  public static String XLMM_IMG_PATH = "/xlmm/xiaolumeimei";
   public static File Copy_sourceLocation;
   public static File Paste_Target_Location;
   public static File MY_IMG_DIR, Default_DIR;
@@ -143,7 +144,7 @@ public class CameraUtils
     {
       // Get SD Card path & your folder name
       MY_IMG_DIR = new File(Environment.getExternalStorageDirectory(),
-          "/xlmm/xiaolumeimei/");
+          XLMM_IMG_PATH);
 
       // check if exist
       if (!MY_IMG_DIR.exists())

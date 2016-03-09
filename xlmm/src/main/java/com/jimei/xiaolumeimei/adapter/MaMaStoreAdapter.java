@@ -78,7 +78,7 @@ public class MaMaStoreAdapter extends RecyclerView.Adapter<MaMaStoreAdapter.MaMa
     holder.remove.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
 
-       showIndeterminateProgressDialog(false);
+        showIndeterminateProgressDialog(false);
         MMProductModel.getInstance()
             .remove_pro_from_shop(mmChooselistBean.getId() + "")
             .subscribeOn(Schedulers.io())
@@ -100,9 +100,7 @@ public class MaMaStoreAdapter extends RecyclerView.Adapter<MaMaStoreAdapter.MaMa
               @Override public void onError(Throwable e) {
                 super.onError(e);
                 e.printStackTrace();
-                hideIndeterminateProgressDialog();
               }
-
             });
       }
     });
@@ -152,6 +150,19 @@ public class MaMaStoreAdapter extends RecyclerView.Adapter<MaMaStoreAdapter.MaMa
     notifyItemRangeChanged(position, mList.size());
   }
 
+  public void showIndeterminateProgressDialog(boolean horizontal) {
+    materialDialog = new MaterialDialog.Builder(mContext)
+        //.title(R.string.progress_dialog)
+        .content(R.string.please_wait)
+        .progress(true, 0)
+        .progressIndeterminateStyle(horizontal)
+        .show();
+  }
+
+  public void hideIndeterminateProgressDialog() {
+    materialDialog.dismiss();
+  }
+
   static class MaMaStoreVH extends RecyclerView.ViewHolder {
 
     int id = R.layout.item_store;
@@ -168,18 +179,5 @@ public class MaMaStoreAdapter extends RecyclerView.Adapter<MaMaStoreAdapter.MaMa
       super(itemView);
       ButterKnife.bind(this, itemView);
     }
-  }
-
-  public void showIndeterminateProgressDialog(boolean horizontal) {
-    materialDialog = new MaterialDialog.Builder(mContext)
-        //.title(R.string.progress_dialog)
-        .content(R.string.please_wait)
-        .progress(true, 0)
-        .progressIndeterminateStyle(horizontal)
-        .show();
-  }
-
-  public void hideIndeterminateProgressDialog() {
-    materialDialog.dismiss();
   }
 }

@@ -5,47 +5,49 @@
     android:id="@+id/head_today"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <FrameLayout
+  <FrameLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical">
+
+    <com.jimei.xiaolumeimei.widget.banner.SliderLayout
+        android:id="@+id/slider"
+        app:auto_cycle="true"
         android:layout_width="match_parent"
+        android:layout_height="309px"
+        />
+
+    <com.jimei.xiaolumeimei.widget.banner.Indicators.PagerIndicator
+        android:id="@+id/pi_header"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <com.jimei.xiaolumeimei.widget.banner.SliderLayout
-            android:id="@+id/slider"
-            app:auto_cycle="true"
-            android:layout_width="match_parent"
-            android:layout_height="309px"
-            />
-
-        <com.jimei.xiaolumeimei.widget.banner.Indicators.PagerIndicator
-            android:id="@+id/pi_header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="10dp"
-            android:gravity="center"
-            app:selected_color="@color/colorPrimary"
-            app:selected_height="8dp"
-            app:selected_padding_left="4dp"
-            app:selected_padding_right="4dp"
-            app:selected_width="8dp"
-            app:shape="oval"
-            app:unselected_color="#fff"
-            app:unselected_height="6dp"
-            app:unselected_padding_left="4dp"
-            app:unselected_padding_right="4dp"
-            app:unselected_width="6dp"
-            />
-    </FrameLayout>
+        android:layout_gravity="bottom|center"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        app:selected_color="@color/colorPrimary"
+        app:selected_height="8dp"
+        app:selected_padding_left="4dp"
+        app:selected_padding_right="4dp"
+        app:selected_width="8dp"
+        app:shape="oval"
+        app:unselected_color="#fff"
+        app:unselected_height="6dp"
+        app:unselected_padding_left="4dp"
+        app:unselected_padding_right="4dp"
+        app:unselected_width="6dp"
+        />
+  </FrameLayout>
 
   <ImageView
+      android:adjustViewBounds="true"
       android:id="@+id/post_2"
+      android:scaleType="centerCrop"
       android:layout_width="match_parent"
-      android:layout_height="309px"
-      android:layout_marginTop="15px"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
       />
 
   <RelativeLayout
