@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/llayout_coupon"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    style="@style/AppTheme.AppBarOverlay"
+    >
+
+  <android.support.design.widget.AppBarLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:theme="@style/AppTheme.AppBarOverlay"
+      >
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#fdb916"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        >
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerInParent="true"
+          android:layout_gravity="center"
+          android:text="优惠券"
+          android:textColor="@android:color/white"
+          android:textSize="16sp"
+          />
+    </android.support.v7.widget.Toolbar>
+
+  </android.support.design.widget.AppBarLayout>
+
+  <FrameLayout
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        >
+    <include layout="@layout/frame_coupon"/>
+
+      <Button
+          android:layout_width="690px"
+          android:layout_height="80px"
+          android:text="不使用优惠券"
+          android:textColor="@color/white"
+          android:textSize="15sp"
+          android:id="@+id/btn_cancel_coupon"
+          android:layout_marginBottom="10dp"
+          android:layout_alignParentBottom="true"
+          android:layout_centerHorizontal="true"
+          android:background="@color/colorAccent"
+          />
+    </RelativeLayout>
+
+    <include layout="@layout/orders_emptyinfo"/>
+  </FrameLayout>
+
+</LinearLayout>

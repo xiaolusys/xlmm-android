@@ -32,6 +32,7 @@ public class CouponSelectActivity extends BaseSwipeBackCompatActivity
 
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.btn_jump) Button btn_jump;
+  @Bind(R.id.btn_cancel_coupon) Button btn_cancel_coupon;
   @Bind(R.id.rlayout_order_empty) RelativeLayout rl_empty;
   @Bind(R.id.sv_frame_coupon) ScrollView sv_frame_coupon;
   int unused_num = 0;
@@ -61,6 +62,7 @@ public class CouponSelectActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void setListener() {
+    btn_cancel_coupon.setOnClickListener(this);
     btn_jump.setOnClickListener(this);
     toolbar.setOnClickListener(this);
     lv_unused_coupon.setOnItemClickListener(this);
@@ -71,7 +73,7 @@ public class CouponSelectActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected int getContentViewLayoutID() {
-    return R.layout.activity_coupon;
+    return R.layout.activity_selectcoupon;
   }
 
   @Override protected void initViews() {
@@ -137,10 +139,19 @@ public class CouponSelectActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override public void onClick(View v) {
+    Intent intent;
     switch (v.getId()) {
       case R.id.btn_jump:
-        Intent intent = new Intent(CouponSelectActivity.this, MainActivity.class);
+        intent = new Intent(CouponSelectActivity.this, MainActivity.class);
         startActivity(intent);
+        finish();
+        break;
+
+      case R.id.btn_cancel_coupon:
+        intent = new Intent();
+        intent.putExtra("coupon_id", "");
+        intent.putExtra("coupon_price", (double) 0);
+        setResult(RESULT_OK, intent);
         finish();
         break;
     }

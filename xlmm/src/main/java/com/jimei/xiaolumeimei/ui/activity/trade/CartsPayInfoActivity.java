@@ -453,7 +453,15 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
               @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
                 if (cartsPayinfoBean != null) {
                   if (TextUtils.isEmpty(cartsPayinfoBean.getmCoupon_message())) {
-                    isCoupon = true;
+                    if((coupon_id == null) || coupon_id.isEmpty()
+                        || (0 == Double.compare(coupon_price, 0)))
+                    {
+                      isCoupon = false;
+                      tv_coupon.setText("");
+                    }
+                    else {
+                      isCoupon = true;
+                    }
                   } else {
                     isCoupon = false;
                     tv_coupon.setText("");
