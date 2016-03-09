@@ -129,7 +129,7 @@ public class NinePicAdapter extends BaseAdapter {
             {
 
               try {
-                while (!bflag[0]) Thread.sleep(200);
+                while (!bflag[0]) Thread.sleep(100);
                 JUtils.Log("NinePic", "download "+ picArry.get(picArry.size() - 1 - i));
               } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -154,6 +154,7 @@ public class NinePicAdapter extends BaseAdapter {
                           scannerIntent.setData(uri);
 
                           mcontext.sendBroadcast(scannerIntent);
+                          JUtils.Log("NinePic", "download finished");
                           JUtils.Toast("商品图片保存完成");
                         }
 
