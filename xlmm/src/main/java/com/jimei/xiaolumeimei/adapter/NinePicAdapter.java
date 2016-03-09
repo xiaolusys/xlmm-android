@@ -1,6 +1,9 @@
 package com.jimei.xiaolumeimei.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Environment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
@@ -9,13 +12,18 @@ import android.widget.Button;
 import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.data.FilePara;
 import com.jimei.xiaolumeimei.entities.NinePicBean;
 import com.jimei.library.rx.RXDownLoadImage;
+import com.jimei.xiaolumeimei.okhttp.callback.FileParaCallback;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.ImagePagerActivity;
 import com.jimei.xiaolumeimei.widget.ninepicimagview.MultiImageView;
 import com.jude.utils.JUtils;
+import com.zhy.http.okhttp.OkHttpUtils;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import okhttp3.Call;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 
@@ -107,12 +115,55 @@ public class NinePicAdapter extends BaseAdapter {
       @Override public void onClick(View v) {
 
         assert picArry != null;
-        for (int i = 0; i < picArry.size(); i++) {
 
-          saveImageToGallery(
-              picArry.get(i) + "?imageMogr2/thumbnail/578/format/jpg/quality/90",
-              picArry.get(i));
-        }
+        new Thread(new Runnable() {
+          @Override public void run() {
+            JUtils.Log("NinePic", "new thread ,pic size " + picArry.size());
+            final boolean[] bflag = { true };
+            for(  int i = 0;  i<picArry.size();i++)
+            {
+
+              try {
+                while (!bflag[0]) Thread.sleep(200);
+                JUtils.Log("NinePic", "download "+ picArry.get(picArry.size() - 1 - i));
+              } catch (InterruptedException e) {
+                e.printStackTrace();
+              }
+              if (bflag[0]) {
+                OkHttpUtils.get().url(picArry.get(picArry.size() - 1 - i)).build().execute
+                    (new FileParaCallback() {
+                  @Override public void onError(Call call, Exception e) {
+                    bflag[0] = true;
+                  }
+
+                  @Override public void onResponse(FilePara response) {
+                    if (response != null) {
+                      bflag[0] = true;
+                      try {
+
+                        Uri uri = Uri.fromFile(new File(response.getFilePath()));
+                        // 通知图库更新
+                        Intent scannerIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
+                        scannerIntent.setData(uri);
+
+                        mcontext.sendBroadcast(scannerIntent);
+
+                      } catch (Exception e) {
+                        e.printStackTrace();
+                      }
+                    }
+                  }
+                });
+              }
+              bflag[0] = false;
+              //saveImageToGallery(picArry.get(i) +
+               // "?imageMogr2/thumbnail/578/format/jpg/quality/90",
+               //   picArry.get(i));
+            }
+
+
+          }
+        }).start();
 
         new MaterialDialog.Builder(mcontext).
             content("图片已经保存，前往分享吧").

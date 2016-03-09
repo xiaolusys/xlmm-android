@@ -23,12 +23,13 @@ public abstract class FileParaCallback extends Callback<FilePara> {
     @Override
     public FilePara parseNetworkResponse(Response response) throws Exception
     {
-      BitmapFactory.Options optins = new BitmapFactory.Options();
+      //BitmapFactory.Options optins = new BitmapFactory.Options();
       File Target_Location = null;
       try {
         CameraUtils.Create_MY_IMAGES_DIR();
-        Target_Location = new File("" + Environment.getExternalStorageDirectory() + "/xlmm/img" + "/" +
-                CameraUtils.Get_Random_File_Name() + ".jpgtemp");
+        Target_Location = new File("" + Environment.getExternalStorageDirectory() +
+            "/xlmm/xiaolumeimei" + "/" +
+                CameraUtils.Get_Random_File_Name() + ".jpg");
 
         JUtils.Log("FileParaCallback", "Target_Location= " + Target_Location.getAbsolutePath());
         Target_Location.createNewFile();
@@ -43,8 +44,9 @@ public abstract class FileParaCallback extends Callback<FilePara> {
         response.body().byteStream().close();
 
 
-        optins.inJustDecodeBounds = true;
-        Bitmap bmp = BitmapFactory.decodeFile(Target_Location.getAbsolutePath(), optins);
+        //optins.inJustDecodeBounds = true;
+        //Bitmap bmp = BitmapFactory.decodeFile(Target_Location.getAbsolutePath(),
+        // optins);
       }
       catch (Exception e){
         e.printStackTrace();
@@ -53,9 +55,10 @@ public abstract class FileParaCallback extends Callback<FilePara> {
       if(Target_Location != null) {
         filePara.setFilePath(Target_Location.getAbsolutePath());
       }
-      filePara.setHeight(optins.outHeight);
-      filePara.setWidth(optins.outWidth);
-      JUtils.Log("FileParaCallback", " height= "+optins.outHeight +"width= " + optins.outWidth);
+      //filePara.setHeight(optins.outHeight);
+      //filePara.setWidth(optins.outWidth);
+      //JUtils.Log("FileParaCallback", " height= "+optins.outHeight +"width= " + optins
+      //  .outWidth);
       return filePara;
 
     }
