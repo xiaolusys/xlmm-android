@@ -2,21 +2,11 @@ package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Picture;
-import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
@@ -28,42 +18,19 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.onekeyshare.OnekeyShare;
-import cn.sharesdk.sina.weibo.SinaWeibo;
-import cn.sharesdk.tencent.qq.QQ;
-import cn.sharesdk.tencent.qzone.QZone;
-import cn.sharesdk.wechat.friends.Wechat;
-import cn.sharesdk.wechat.moments.WechatMoments;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.entities.ActivityBean;
-import com.jimei.xiaolumeimei.model.ActivityModel;
-import com.jimei.xiaolumeimei.utils.BitmapUtil;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
-import com.mob.tools.utils.UIHandler;
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 /**
- * Created by itxuye(www.itxuye.com) on 2016/02/04.
+ * Created by itxuye(www.itxuye.com) on 2016/03/10.
  *
  * Copyright 2015年 上海己美. All rights reserved.
  */
-public class MMWebViewActivity extends BaseSwipeBackCompatActivity
-    implements PlatformActionListener, Handler.Callback {
-
-  private static final int MSG_TOAST = 1;
-  private static final int MSG_ACTION_CCALLBACK = 2;
-  private static final int MSG_CANCEL_NOTIFY = 3;
-
+public class MMWebViewActivity extends BaseSwipeBackCompatActivity {
   //private static final String URL =
   //    "http://m.xiaolumeimei.com/sale/promotion/xlsampleorder/";
   private static final String URL = "http://m.xiaolumeimei.com/";
@@ -76,11 +43,8 @@ public class MMWebViewActivity extends BaseSwipeBackCompatActivity
   private ProgressBar mProgressBar;
   private String cookies;
   private String actlink;
-  private ActivityBean shareInfo;
-  private ActivityBean partyShareInfo;
   private String domain;
   private String sessionid;
-
 
   @Override protected void setListener() {
     mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -111,15 +75,13 @@ public class MMWebViewActivity extends BaseSwipeBackCompatActivity
         JUtils.Log(TAG, "loadUrl--end");
       }
     });
-
-    get_party_share_content();
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
     if (extras != null) {
       cookies = extras.getString("cookies");
       domain = extras.getString("domain");
-      actlink = extras.getString("actlink");
+      actlink = extras.getString("link");
 
       sessionid = extras.getString("Cookie");
       JUtils.Log(TAG,
@@ -203,10 +165,7 @@ public class MMWebViewActivity extends BaseSwipeBackCompatActivity
         public void onReceivedSslError(WebView view, SslErrorHandler handler,
             SslError error) {
           JUtils.Log(TAG, "onReceivedSslError:");
-          //handler.cancel(); 默认的处理方式，WebView变成空白页
-          //                        //接受证书
           handler.proceed();
-          //handleMessage(Message msg); 其他处理
         }
       });
     } catch (Exception e) {
@@ -241,23 +200,6 @@ public class MMWebViewActivity extends BaseSwipeBackCompatActivity
     return super.onKeyDown(keyCode, event);
   }
 
-  @Override public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-      case R.id.action_share:
-        JUtils.Log(TAG, "party share");
-        sharePartyInfo();
-        break;
-      default:
-        break;
-    }
-    return super.onOptionsItemSelected(item);
-  }
-
-  @Override public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.menu_shareproduct, menu);
-    return super.onCreateOptionsMenu(menu);
-  }
-
   @Override protected void onPause() {
     super.onPause();
     CookieSyncManager.createInstance(MMWebViewActivity.this);
@@ -276,10 +218,10 @@ public class MMWebViewActivity extends BaseSwipeBackCompatActivity
   @Override protected void onDestroy() {
     JUtils.Log(TAG, "onDestroy");
     super.onDestroy();
-    if(ll_actwebview != null) {
+    if (ll_actwebview != null) {
       ll_actwebview.removeView(mWebView);
     }
-    if(mWebView != null) {
+    if (mWebView != null) {
       mWebView.removeAllViews();
       mWebView.destroy();
     }
@@ -287,503 +229,20 @@ public class MMWebViewActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void onStop() {
     super.onStop();
-    ShareSDK.stopSDK(this);
-
   }
 
-  //public void syncCookie(Context context, String url) {
-  //  try {
-  //    CookieSyncManager.createInstance(context);
-  //    CookieManager cookieManager = CookieManager.getInstance();
-  //    cookieManager.setAcceptCookie(true);
-  //    cookieManager.removeSessionCookie();// 移除
-  //    cookieManager.removeAllCookie();
-  //
-  //    cookieManager.setCookie(url, cookies);
-  //    CookieSyncManager.getInstance().sync();
-  //  } catch (Exception e) {
-  //  }
-  //}
   public void syncCookie(Context context) {
 
     try {
       JUtils.Log(TAG, "syncCookie bgn");
       CookieSyncManager.createInstance(context);
-
       CookieManager cookieManager = CookieManager.getInstance();
-
-      //cookieManager.removeSessionCookie();// 移除
       cookieManager.removeAllCookie();
-
-      //cookieManager.setAcceptCookie(true);
-
-      //JUtils.Log(TAG, "acceptCookie:"+cookieManager.acceptCookie());
-      //JUtils.Log(TAG, "domain:"+domain + "=====" + cookies);
-      //cookieManager.setCookie(domain, cookies);
-
       CookieSyncManager.getInstance().sync();
       JUtils.Log(TAG, "syncCookie end");
     } catch (Exception e) {
       e.printStackTrace();
       JUtils.Log(TAG, "syncCookie err:" + e.toString());
     }
-  }
-
-  public void getPromotionParams(String uform, String share_link) {
-
-    Subscription subscribe = ActivityModel.getInstance()
-        .get_share_content(uform)
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<ActivityBean>() {
-          @Override public void onNext(ActivityBean activityBean) {
-
-            if (null != activityBean) {
-              shareInfo = activityBean;
-              shareInfo.setLinkQrcode(URL + activityBean.getLinkQrcode());
-              JUtils.Log(TAG, "getPromotionParams get_share_content: activeDec="
-                  +
-                  shareInfo.getActiveDec()
-                  + " linkQrcode="
-                  + shareInfo.getLinkQrcode()
-                  + " "
-                  + "title="
-                  + shareInfo.getTitle());
-              JUtils.Log(TAG, "getPromotionParams get_share_content: uform="
-                  + uform
-                  + " share_link="
-                  + share_link);
-
-              if (uform.equals("wxapp")) {
-                share_wxapp(share_link, uform);
-              } else if (uform.equals("pyq")) {
-                share_pyq(share_link, uform);
-              } else if (uform.equals("qq")) {
-
-                share_qq(share_link, uform);
-              } else if (uform.equals("qqspa")) {
-                share_qqspa(share_link, uform);
-              } else if (uform.equals("sinawb")) {
-                share_sina(share_link, uform);
-              } else if (uform.equals("web")) {
-                saveTwoDimenCode();
-              }
-            }
-          }
-        });
-    addSubscription(subscribe);
-  }
-
-  private void share_wxapp(String myurl, String ufrom) {
-    Platform.ShareParams sp = new Platform.ShareParams();
-
-    sp.setTitle(shareInfo.getTitle());
-    sp.setText(shareInfo.getActiveDec()
-        + " http://m.xiaolumeimei.com/"
-        + myurl
-        + "&ufrom="
-        + ufrom);
-
-    sp.setUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
-    sp.setShareType(Platform.SHARE_WEBPAGE);
-    sp.setImageUrl(shareInfo.getShareImg());
-    JUtils.Log(TAG, "wxapp: http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
-
-    Platform wx = ShareSDK.getPlatform(MMWebViewActivity.this, Wechat.NAME);
-    wx.setPlatformActionListener(this); // 设置分享事件回调
-    // 执行图文分享
-    wx.share(sp);
-  }
-
-  private void share_pyq(String myurl, String ufrom) {
-
-    WechatMoments.ShareParams sp = new WechatMoments.ShareParams();
-    //sp.setImageUrl(linkQrcode);
-    sp.setTitle(shareInfo.getTitle());
-    //sp.setText(shareInfo.getActiveDec() + " http://m.xiaolumeimei.com/" + myurl +
-    //    "&ufrom=" + ufrom);
-    //sp.setTitleUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
-    sp.setShareType(Platform.SHARE_WEBPAGE);
-    sp.setImageUrl(shareInfo.getShareImg());
-    sp.setUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
-
-    Platform pyq = ShareSDK.getPlatform(MMWebViewActivity.this, WechatMoments.NAME);
-    pyq.setPlatformActionListener(this); // 设置分享事件回调
-    // 执行图文分享
-    pyq.share(sp);
-  }
-
-  private void share_qq(String myurl, String ufrom) {
-
-    get_share_content(ufrom);
-    QQ.ShareParams sp = new QQ.ShareParams();
-    sp.setTitle(shareInfo.getTitle());
-
-    sp.setText(shareInfo.getActiveDec());
-    sp.setImageUrl(shareInfo.getShareImg());
-
-    sp.setTitleUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
-
-    Platform qq = ShareSDK.getPlatform(MMWebViewActivity.this, QQ.NAME);
-    qq.setPlatformActionListener(this); // 设置分享事件回调
-    // 执行图文分享
-    qq.share(sp);
-  }
-
-  private void share_qqspa(String myurl, String ufrom) {
-    get_share_content(ufrom);
-    QZone.ShareParams sp = new QZone.ShareParams();
-    sp.setTitle(shareInfo.getTitle());
-    // 标题的超链接
-    sp.setTitleUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
-    sp.setText(shareInfo.getActiveDec());
-    sp.setImageUrl(shareInfo.getShareImg());
-    //sp.setSite("发布分享的网站名称");
-    sp.setSiteUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
-
-    Platform qzone = ShareSDK.getPlatform(MMWebViewActivity.this, QZone.NAME);
-    qzone.setPlatformActionListener(this); // 设置分享事件回调
-    // 执行图文分享
-    qzone.share(sp);
-  }
-
-  private void share_sina(String myurl, String ufrom) {
-    get_share_content(ufrom);
-    SinaWeibo.ShareParams sp = new SinaWeibo.ShareParams();
-    //sp.setTitle(title);
-    //sp.setTitleUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
-    sp.setText(shareInfo.getActiveDec()
-        + " http://m.xiaolumeimei.com/"
-        + myurl
-        + "&ufrom="
-        + ufrom);
-    sp.setImageUrl(shareInfo.getShareImg());
-    sp.setUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
-
-    Platform weibo = ShareSDK.getPlatform(MMWebViewActivity.this, SinaWeibo.NAME);
-    weibo.setPlatformActionListener(this); // 设置分享事件回调
-    // 执行图文分享
-    weibo.share(sp);
-  }
-
-  public void get_share_content(String ufrom) {
-    Subscription subscribe = ActivityModel.getInstance()
-        .get_share_content(ufrom)
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<ActivityBean>() {
-          @Override public void onNext(ActivityBean activityBean) {
-
-            if (null != activityBean) {
-              shareInfo = activityBean;
-              shareInfo.setLinkQrcode(URL + activityBean.getLinkQrcode());
-
-              JUtils.Log(TAG, "get_share_content: desc="
-                  + shareInfo.getActiveDec()
-                  + " "
-                  + "qrcode="
-                  + shareInfo.getLinkQrcode()
-                  + " title="
-                  + shareInfo.getTitle());
-            }
-          }
-        });
-    addSubscription(subscribe);
-  }
-
-  public void get_party_share_content() {
-    Subscription subscribe = ActivityModel.getInstance()
-        .get_party_share_content()
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<ActivityBean>() {
-          @Override public void onNext(ActivityBean activityBean) {
-
-            if (null != activityBean) {
-              partyShareInfo = activityBean;
-              partyShareInfo.setLinkQrcode(URL + activityBean.getLinkQrcode());
-
-              JUtils.Log(TAG, "partyShareInfo: desc="
-                  + partyShareInfo.getActiveDec()
-                  + " "
-                  + "qrcode="
-                  + partyShareInfo.getLinkQrcode()
-                  + " title="
-                  + partyShareInfo.getTitle());
-            }
-          }
-        });
-    addSubscription(subscribe);
-  }
-
-  @Override public void onCancel(Platform platform, int action) {
-    // 取消
-    Message msg = new Message();
-    msg.what = MSG_ACTION_CCALLBACK;
-    msg.arg1 = 3;
-    msg.arg2 = action;
-    msg.obj = platform;
-    UIHandler.sendMessage(msg, this);
-  }
-
-  @Override
-  public void onComplete(Platform platform, int action, HashMap<String, Object> arg2) {
-    // 成功
-    Message msg = new Message();
-    msg.what = MSG_ACTION_CCALLBACK;
-    msg.arg1 = 1;
-    msg.arg2 = action;
-    msg.obj = platform;
-    UIHandler.sendMessage(msg, this);
-  }
-
-  @Override public void onError(Platform platform, int action, Throwable t) {
-    // 失敗
-    //打印错误信息,print the error msg
-    t.printStackTrace();
-    //错误监听,handle the error msg
-    Message msg = new Message();
-    msg.what = MSG_ACTION_CCALLBACK;
-    msg.arg1 = 2;
-    msg.arg2 = action;
-    msg.obj = t;
-    UIHandler.sendMessage(msg, this);
-  }
-
-  public boolean handleMessage(Message msg) {
-    switch (msg.arg1) {
-      case 1: {
-        // 成功
-        Toast.makeText(MMWebViewActivity.this, "分享成功", Toast.LENGTH_SHORT).show();
-        JUtils.Log(TAG, "分享回调成功------------");
-      }
-      break;
-      case 2: {
-        // 失败
-        Toast.makeText(MMWebViewActivity.this, "分享失败", Toast.LENGTH_SHORT).show();
-      }
-      break;
-      case 3: {
-        // 取消
-        Toast.makeText(MMWebViewActivity.this, "分享取消", Toast.LENGTH_SHORT).show();
-      }
-      break;
-    }
-
-    return false;
-  }
-
-  public void saveTwoDimenCode() {
-
-    if ((shareInfo == null)
-        || (shareInfo.getQrcodeLink() == null)
-        || (shareInfo.getQrcodeLink().equals(""))) {
-      Subscription subscribe = ActivityModel.getInstance()
-          .get_share_content("wxapp")
-          .subscribeOn(Schedulers.io())
-          .subscribe(new ServiceResponse<ActivityBean>() {
-            @Override public void onNext(ActivityBean activityBean) {
-
-              if (null != activityBean) {
-
-                JUtils.Log(TAG,
-                    "saveTowDimenCode : Qrcodelink=" + shareInfo.getQrcodeLink());
-
-                try {
-                  WebView webView = new WebView(MMWebViewActivity.this);
-                  webView.setLayoutParams(
-                      new Toolbar.LayoutParams(Toolbar.LayoutParams.MATCH_PARENT,
-                          Toolbar.LayoutParams.MATCH_PARENT));
-                  webView.getSettings().setJavaScriptEnabled(true);
-
-                  webView.getSettings().setAllowFileAccess(true);
-                  //如果访问的页面中有Javascript，则webview必须设置支持Javascript
-                  //mWebView.getSettings().setUserAgentString(MyApplication.getUserAgent());
-                  webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-                  webView.getSettings().setAllowFileAccess(true);
-                  webView.getSettings().setAppCacheEnabled(true);
-                  webView.getSettings().setDomStorageEnabled(true);
-                  webView.getSettings().setDatabaseEnabled(true);
-
-                  webView.setWebChromeClient(new WebChromeClient() {
-                    @Override
-                    public void onProgressChanged(WebView view, int newProgress) {
-
-                    }
-                  });
-                  webView.setWebViewClient(new WebViewClient() {
-                    @Override
-                    public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                      view.loadUrl(url);
-                      return true;
-                    }
-                  });
-                  webView.loadUrl(shareInfo.getQrcodeLink());
-                  View cv = getWindow().getDecorView();
-                  Bitmap bmp = catchWebScreenshot(webView, cv.getWidth(), cv.getHeight(),
-                      shareInfo.getQrcodeLink(), null);
-              /*Bitmap bmp= captureWebView(webView);
-              String fileName = Environment.getExternalStorageDirectory()
-                  + "/"
-                  + Environment.DIRECTORY_DCIM
-                  + "/Camera/小鹿美美活动二维码.jpg";
-              saveBitmap(bmp, fileName);*/
-
-                } catch (Exception e) {
-                  e.printStackTrace();
-                }
-              }
-            }
-          });
-      addSubscription(subscribe);
-    } else {
-      JUtils.Log(TAG, "saveTowDimenCode : Qrcodelink=" + shareInfo.getQrcodeLink());
-      try {
-        WebView webView = new WebView(MMWebViewActivity.this);
-        webView.setLayoutParams(
-            new Toolbar.LayoutParams(Toolbar.LayoutParams.MATCH_PARENT,
-                Toolbar.LayoutParams.MATCH_PARENT));
-        webView.getSettings().setJavaScriptEnabled(true);
-
-        webView.getSettings().setAllowFileAccess(true);
-        //如果访问的页面中有Javascript，则webview必须设置支持Javascript
-        //mWebView.getSettings().setUserAgentString(MyApplication.getUserAgent());
-        webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-        webView.getSettings().setAllowFileAccess(true);
-        webView.getSettings().setAppCacheEnabled(true);
-        webView.getSettings().setDomStorageEnabled(true);
-        webView.getSettings().setDatabaseEnabled(true);
-
-        webView.setWebChromeClient(new WebChromeClient() {
-          @Override public void onProgressChanged(WebView view, int newProgress) {
-
-          }
-        });
-        webView.setWebViewClient(new WebViewClient() {
-          @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            view.loadUrl(url);
-            return true;
-          }
-        });
-
-        webView.loadUrl(shareInfo.getQrcodeLink());
-        //Bitmap bmp= captureWebView(webView);
-        View cv = getWindow().getDecorView();
-        Bitmap bmp = catchWebScreenshot(webView, cv.getWidth(), cv.getHeight(),
-            shareInfo.getQrcodeLink(), null);
-        /*String fileName = Environment.getExternalStorageDirectory()
-            + "/"
-            + Environment.DIRECTORY_DCIM
-            + "/Camera/小鹿美美活动二维码.jpg";
-        saveBitmap(bmp, fileName);*/
-
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    }
-  }
-
-  /**
-   * 截取webView快照(webView加载的整个内容的大小)
-   */
-  private Bitmap captureWebView(WebView webView) {
-    //Picture snapShot = webView.capturePicture();
-    View cv = getWindow().getDecorView();
-    //Bitmap bmp = Bitmap.createBitmap(snapShot.getWidth(),snapShot.getHeight(), Bitmap
-    //    .Config.ARGB_8888);
-
-    Bitmap bmp =
-        Bitmap.createBitmap(cv.getWidth(), cv.getHeight(), Bitmap.Config.ARGB_8888);
-    Canvas canvas = new Canvas(bmp);
-    webView.draw(canvas);
-    return bmp;
-  }
-
-  /**
-   * 抓取WEB界面的截屏
-   *
-   * @param containerWidth 截屏宽度，也就放置WebView的宽度
-   * @param containerHeight 截屏高度，也就放置WebView的高度
-   * @param baseUrl Base Url
-   * @param content 加载的内容
-   */
-  public Bitmap catchWebScreenshot(final WebView w, final int containerWidth,
-      final int containerHeight, final String baseUrl, final String content) {
-    final Bitmap b =
-        Bitmap.createBitmap(containerWidth, containerHeight, Bitmap.Config.ARGB_8888);
-    w.post(new Runnable() {
-      public void run() {
-        w.setWebViewClient(new WebViewClient() {
-          @Override public void onPageFinished(WebView view, String url) {
-            JUtils.Log(TAG, "onPageFinished URL=" + url);
-
-            String fileName = Environment.getExternalStorageDirectory()
-                + "/"
-                + Environment.DIRECTORY_DCIM
-                + "/Camera/"
-                + getResources().getString(R.string.share_2dimen_pic_name)
-                + ".jpg";
-            BitmapUtil.saveBitmap(b, fileName);
-            Toast.makeText(MMWebViewActivity.this, R.string.share_2dimen_pic_tips,
-                Toast.LENGTH_SHORT).show();
-
-            File file = new File(fileName);
-            Uri uri = Uri.fromFile(file);
-            // 通知图库更新
-            Intent scannerIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
-            sendBroadcast(scannerIntent);
-          }
-        });
-        w.setPictureListener(new WebView.PictureListener() {
-          public void onNewPicture(WebView view, Picture picture) {
-            JUtils.Log(TAG, "onNewPicture ");
-            final Canvas c = new Canvas(b);
-            view.draw(c);
-            //w.setPictureListener(null);
-
-          }
-        });
-        w.layout(0, 0, containerWidth, containerHeight);
-        w.loadUrl(baseUrl);
-        //              w.loadDataWithBaseURL(baseUrl, content, "text/html", "UTF-8", null);
-      }
-    });
-
-    return b;
-  }
-
-  private void sharePartyInfo() {
-    JUtils.Log(TAG, " title =" + partyShareInfo.getTitle());
-    JUtils.Log(TAG, " desc="
-        + partyShareInfo.getActiveDec()
-        + " url="
-        + partyShareInfo.getShareLink());
-
-    OnekeyShare oks = new OnekeyShare();
-    //关闭sso授权
-    oks.disableSSOWhenAuthorize();
-
-    // 分享时Notification的图标和文字  2.5.9以后的版本不调用此方法
-    //oks.setNotification(R.drawable.ic_launcher, getString(R.string.app_name));
-    // title标题，印象笔记、邮箱、信息、微信、人人网和QQ空间使用
-    oks.setTitle(partyShareInfo.getTitle());
-    // titleUrl是标题的网络链接，仅在人人网和QQ空间使用
-    oks.setTitleUrl(partyShareInfo.getShareLink());
-    // text是分享文本，所有平台都需要这个字段
-    oks.setText(partyShareInfo.getActiveDec() + partyShareInfo.getShareLink());
-    // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
-    //oks.setImagePath(filePara.getFilePath());//确保SDcard下面存在此张图片
-    //oks.setImageUrl("http://f1.sharesdk.cn/imgs/2014/02/26/owWpLZo_638x960.jpg");
-    oks.setImageUrl(partyShareInfo.getShareImg());
-    oks.setUrl(partyShareInfo.getShareLink());
-
-    // url仅在微信（包括好友和朋友圈）中使用
-    //oks.setUrl(myurl);
-    // comment是我对这条分享的评论，仅在人人网和QQ空间使用
-    //oks.setComment("我是测试评论文本");
-    // site是分享此内容的网站名称，仅在QQ空间使用
-    //oks.setSite(getString(R.string.app_name));
-    // siteUrl是分享此内容的网站地址，仅在QQ空间使用
-    //oks.setSiteUrl("http://sharesdk.cn");
-
-    // 启动分享GUI
-    oks.show(this);
   }
 }

@@ -45,7 +45,7 @@
 
     <meta-data android:name="com.jimei.xiaolumeimei.glidemoudle.GlideConfig"
         android:value="GlideModule"
-        />
+    />
     <meta-data
         android:name="com.bumptech.glide.integration.okhttp.OkHttpGlideModule"
         android:value="GlideModule"/>
@@ -80,13 +80,13 @@
     <activity android:name=".ui.activity.main.MainActivity"/>
     <activity android:name=".ui.activity.user.LoginActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
     <activity android:name=".ui.activity.user.RegisterActivity"
         android:theme="@style/AppTheme.TransparentActivity"/>
 
     <activity android:name=".ui.activity.product.TongkuanActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
 
     <activity
         android:theme="@style/AppTheme.TransparentActivity"
@@ -94,16 +94,16 @@
 
     <activity android:name=".ui.activity.trade.CartActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
     <activity android:name=".ui.activity.trade.CartsPayInfoActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
     <activity android:name=".ui.activity.user.ChanggeAddressActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
     <activity android:name=".ui.activity.user.ChanggeSelectAddressActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
 
     <!-- Ping++ sdk -->
     <activity
@@ -133,138 +133,138 @@
         android:name=".ui.activity.trade.AllOrdersActivity"
         android:label="@string/title_activity_allorders"
         android:theme="@style/AppTheme.TransparentActivity"
-        >
+    >
     </activity>
 
     <activity
         android:name=".ui.activity.trade.OrderDetailActivity"
         android:label="@string/title_activity_orderdetail"
         android:theme="@style/AppTheme.TransparentActivity"
-        >
+    >
     </activity>
 
     <activity
         android:name=".ui.activity.trade.AllRefundsActivity"
         android:label="@string/title_activity_refunds"
         android:theme="@style/AppTheme.TransparentActivity"
-        >
+    >
     </activity>
 
     <activity
         android:name=".ui.activity.trade.RefundDetailActivity"
         android:label="@string/title_activity_refunddetail"
         android:theme="@style/AppTheme.TransparentActivity"
-        >
+    >
     </activity>
     <activity
         android:name=".ui.activity.trade.WaitPayOrdersActivity"
         android:label="@string/title_activity_waitsend"
         android:theme="@style/AppTheme.TransparentActivity"
-        >
+    >
     </activity>
 
     <activity
         android:name=".ui.activity.trade.WaitSendOrdersActivity"
         android:label="@string/title_activity_waitsend"
         android:theme="@style/AppTheme.TransparentActivity"
-        >
+    >
     </activity>
 
     <activity android:name=".ui.activity.user.SettingActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
 
     <activity android:name=".ui.activity.user.AddressActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         android:windowSoftInputMode="adjustResize|stateHidden"
-        />
+    />
     <activity android:name=".ui.activity.user.AddAddressActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
     <activity android:name=".ui.activity.user.WalletActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
     <activity android:name=".ui.activity.user.AddNoAddressActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
     <activity android:name=".ui.activity.user.AddressSelectActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
 
     <activity android:name=".ui.activity.user.SettingNicknameActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
     <activity android:name=".ui.activity.user.SettingPasswordActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
     <activity android:name=".ui.activity.user.SettingPasswordForgetActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
 
     <activity android:name=".ui.activity.main.ComplainActvity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
 
     <activity android:name=".ui.activity.user.VerifyPhoneActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
     <activity android:name=".ui.activity.user.EditPasswordActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
 
     <activity android:name=".ui.activity.user.CouponActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
     <activity android:name=".ui.activity.user.CouponSelectActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
     <activity android:name=".ui.activity.user.VerifyPhoneForgetActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
     <activity android:name=".ui.activity.user.EditPasswordForgetActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
 
     <activity android:name=".ui.activity.user.MembershipPointActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
 
     <activity android:name=".ui.activity.main.CompanyInfoActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
     <activity android:name=".ui.activity.user.SmsLoginActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
     <activity android:name=".ui.activity.trade.ApplyRefundActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         android:windowSoftInputMode="adjustResize|stateHidden"
-        />
+    />
     <activity android:name=".ui.activity.trade.ApplyReturnGoodsActivity"
         android:theme="@style/AppTheme.TransparentActivity"
         android:windowSoftInputMode="adjustResize|stateHidden"
-        />
+    />
     <activity android:name=".ui.activity.trade.ChooseLogisticsCompanyActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
     <activity android:name=".ui.activity.trade.WriteLogisticsInfoActivty"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
     <activity android:name=".ui.activity.product.SizeActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
 
     <activity android:name=".ui.activity.product.WashingIntrductionActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
     <activity android:name=".ui.activity.product.ChildListActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
     <activity android:name=".ui.activity.product.LadyListActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
     <activity android:name=".ui.activity.main.WebViewActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
 
     <activity
         android:name="com.mob.tools.MobUIShell"
@@ -319,63 +319,66 @@
 
     <activity android:name=".ui.activity.xiaolumama.MamaInfoActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
 
     <activity android:name=".ui.activity.xiaolumama.MamaWithdrawCashActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
 
     <activity android:name=".ui.activity.xiaolumama.MamaWithdrawCashHistoryActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
 
     <activity android:name=".ui.activity.xiaolumama.MamaWithdrawCashResultActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
 
     <activity android:name=".ui.activity.xiaolumama.TwoDimenCodeActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
 
     <activity android:name=".ui.activity.xiaolumama.MamaFansActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
     <activity android:name=".ui.activity.xiaolumama.MMChooseListActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
     <activity android:name=".ui.activity.xiaolumama.MaMaMyStoreActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
     <activity android:name=".ui.activity.xiaolumama.ShareAllowanceActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
 
     <activity android:name=".ui.activity.user.WxLoginBindPhoneActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
     <activity android:name=".ui.activity.user.BindSettingPasswordActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
     <activity android:name=".ui.activity.xiaolumama.MMShoppingListActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
     <activity android:name=".ui.activity.xiaolumama.MMCarryLogListActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
     <activity android:name=".ui.activity.xiaolumama.MMNinePicActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
     <activity android:name=".ui.activity.xiaolumama.ImagePagerActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
 
     <activity android:name=".ui.activity.user.UserWithdrawCashActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
 
     <activity android:name=".ui.activity.user.WxPubTwoDimenCodeActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
+    <activity android:name=".ui.activity.xiaolumama.MMWebViewActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+    />
 
     <service
         android:enabled="true"

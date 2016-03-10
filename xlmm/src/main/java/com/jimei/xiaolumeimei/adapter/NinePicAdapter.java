@@ -1,5 +1,6 @@
 package com.jimei.xiaolumeimei.adapter;
 
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -17,7 +18,6 @@ import com.jimei.xiaolumeimei.data.FilePara;
 import com.jimei.xiaolumeimei.entities.NinePicBean;
 import com.jimei.xiaolumeimei.okhttp.callback.FileParaCallback;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.ImagePagerActivity;
-import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMNinePicActivity;
 import com.jimei.xiaolumeimei.utils.CameraUtils;
 import com.jimei.xiaolumeimei.utils.FileUtils;
 import com.jimei.xiaolumeimei.widget.ninepicimagview.MultiImageView;
@@ -42,6 +42,13 @@ public class NinePicAdapter extends BaseAdapter {
 
   public NinePicAdapter(Context mcontext) {
     this.mcontext = mcontext;
+  }
+
+  public void copy(String content, Context context) {
+    // 得到剪贴板管理器
+    ClipboardManager cmb =
+        (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+    cmb.setText(content.trim());
   }
 
   public void setOnclickSaveListener(setOnclickSaveListener onclickSaveListener) {
@@ -128,70 +135,72 @@ public class NinePicAdapter extends BaseAdapter {
           @Override public void run() {
             JUtils.Log("NinePic", "new thread ,pic size " + picArry.size());
             final boolean[] bflag = { true };
-            for(  int i = 0;  i<picArry.size();i++)
-            {
+            for (int i = 0; i < picArry.size(); i++) {
 
               try {
                 while (!bflag[0]) Thread.sleep(100);
-                JUtils.Log("NinePic", "download "+ picArry.get(picArry.size() - 1 - i));
+                JUtils.Log("NinePic", "download " + picArry.get(picArry.size() - 1 - i));
               } catch (InterruptedException e) {
                 e.printStackTrace();
               }
               if (bflag[0]) {
                 final int finalI = i;
-                OkHttpUtils.get().url(picArry.get(picArry.size() - 1 - i)
-                    +"?imageMogr2/thumbnail/580/format/jpg").build()
-                    .execute
-                    (new FileParaCallback() {
-                  @Override public void onError(Call call, Exception e) {
-                    bflag[0] = true;
-                  }
-
-                  @Override public void onResponse(FilePara response) {
-                    if (response != null) {
-                      bflag[0] = true;
-                      JUtils.Log("NinePic", "download "+finalI +" finished.");
-                      try {
-                        String pic_indicate_name = picArry.get(picArry.size() - 1 - finalI).substring(picArry.get(picArry.size() - 1 - finalI).lastIndexOf('/'));
-                        String newName = Environment.getExternalStorageDirectory() +
-                                CameraUtils.XLMM_IMG_PATH + pic_indicate_name +".jpg";
-                        JUtils.Log("NinePic","newName="+newName);
-                        if(FileUtils.isFileExist(newName)){
-                          JUtils.Log("NinePic","newName has existed,delete");
-                          FileUtils.deleteFile(newName);
-                        }
-                        new File(response.getFilePath()).renameTo(
-                                new File(newName));
-
-                          Uri uri = Uri.fromFile(new File(newName));
-                          // 通知图库更新
-                          Intent scannerIntent =
-                              new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
-                          scannerIntent.setData(uri);
-                          mcontext.sendBroadcast(scannerIntent);
-                          if(picArry.size() - 1 == finalI){
-                            JUtils.Log("NinePic", "download finished");
-                            JUtils .Toast("商品图片保存完成");
-                          }
-
-                      } catch (Exception e) {
-                        e.printStackTrace();
+                OkHttpUtils.get()
+                    .url(picArry.get(picArry.size() - 1 - i)
+                        + "?imageMogr2/thumbnail/580/format/jpg")
+                    .build()
+                    .execute(new FileParaCallback() {
+                      @Override public void onError(Call call, Exception e) {
+                        bflag[0] = true;
                       }
-                    }
-                  }
-                });
+
+                      @Override public void onResponse(FilePara response) {
+                        if (response != null) {
+                          bflag[0] = true;
+                          JUtils.Log("NinePic", "download " + finalI + " finished.");
+                          try {
+                            String pic_indicate_name =
+                                picArry.get(picArry.size() - 1 - finalI)
+                                    .substring(picArry.get(picArry.size() - 1 - finalI)
+                                        .lastIndexOf('/'));
+                            String newName = Environment.getExternalStorageDirectory() +
+                                CameraUtils.XLMM_IMG_PATH + pic_indicate_name + ".jpg";
+                            JUtils.Log("NinePic", "newName=" + newName);
+                            if (FileUtils.isFileExist(newName)) {
+                              JUtils.Log("NinePic", "newName has existed,delete");
+                              FileUtils.deleteFile(newName);
+                            }
+                            new File(response.getFilePath()).renameTo(new File(newName));
+
+                            Uri uri = Uri.fromFile(new File(newName));
+                            // 通知图库更新
+                            Intent scannerIntent =
+                                new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
+                            scannerIntent.setData(uri);
+                            mcontext.sendBroadcast(scannerIntent);
+                            if (picArry.size() - 1 == finalI) {
+                              JUtils.Log("NinePic", "download finished");
+                              JUtils.Toast("商品图片保存完成");
+                            }
+                          } catch (Exception e) {
+                            e.printStackTrace();
+                          }
+                        }
+                      }
+                    });
               }
               bflag[0] = false;
               //saveImageToGallery(picArry.get(i) +
-               // "?imageMogr2/thumbnail/578/format/jpg/quality/90",
-               //   picArry.get(i));
+              // "?imageMogr2/thumbnail/578/format/jpg/quality/90",
+              //   picArry.get(i));
             }
-
           }
         }).start();
 
+        copy(mlist.get(position).getDescription(), mcontext);
+
         new MaterialDialog.Builder(mcontext).
-            content("商品图片正在后台保存，请稍后前往分享吧").
+            content("文字已经复制,商品图片正在后台保存，请稍后前往分享吧").
             positiveText("OK").
             callback(new MaterialDialog.ButtonCallback() {
               @Override public void onPositive(MaterialDialog dialog) {
@@ -199,7 +208,6 @@ public class NinePicAdapter extends BaseAdapter {
                 dialog.dismiss();
               }
             }).show();
-
       }
     });
 

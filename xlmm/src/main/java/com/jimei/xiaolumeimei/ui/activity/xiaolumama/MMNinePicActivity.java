@@ -84,6 +84,35 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
     }
   }
 
+  private void loadDataRefresh() {
+
+    showIndeterminateProgressDialog(false);
+    MMProductModel.getInstance()
+        .getNinePic()
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<List<NinePicBean>>() {
+
+          @Override public void onCompleted() {
+            super.onCompleted();
+            hideIndeterminateProgressDialog();
+          }
+
+          @Override public void onError(Throwable e) {
+            super.onError(e);
+            e.printStackTrace();
+          }
+
+          @Override public void onNext(List<NinePicBean> ninePicBean) {
+            if (ninePicBean != null) {
+              mAdapter.setDatas(ninePicBean);
+              mAdapter.notifyDataSetChanged();
+            } else {
+              myTickCircleProgress.setVisibility(View.VISIBLE);
+            }
+          }
+        });
+  }
+
   @Override protected void getBundleExtras(Bundle extras) {
 
   }
@@ -117,7 +146,7 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
   @Override public void onRefresh() {
     new Handler().postDelayed(new Runnable() {
       @Override public void run() {
-        loadData();
+        loadDataRefresh();
         mRefreshLayout.setRefreshing(false);
       }
     }, 2000);

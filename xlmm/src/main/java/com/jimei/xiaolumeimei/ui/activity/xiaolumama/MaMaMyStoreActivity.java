@@ -1,5 +1,8 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -44,6 +47,9 @@ public class MaMaMyStoreActivity extends BaseSwipeBackCompatActivity {
   @Bind(R.id.titleiamge) CircleImageView titleiamge;
   private MaMaStoreAdapter maMaStoreAdapter;
   private String title, sharelink, desc, shareimg;
+  private SharedPreferences sharedPreferences;
+  private String cookies;
+  private String domain;
 
   @Override protected void setListener() {
 
@@ -171,7 +177,18 @@ public class MaMaMyStoreActivity extends BaseSwipeBackCompatActivity {
   @Override public boolean onOptionsItemSelected(MenuItem item) {
 
     if (item.getItemId() == R.id.action_eye) {
+      Intent intent = new Intent(this, MMWebViewActivity.class);
+      sharedPreferences = getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+      cookies = sharedPreferences.getString("cookiesString", "");
+      domain = sharedPreferences.getString("cookiesDomain", "");
 
+      Bundle bundle = new Bundle();
+      bundle.putString("cookies", cookies);
+      bundle.putString("domain", domain);
+      bundle.putString("Cookie", sharedPreferences.getString("Cookie", ""));
+      bundle.putString("link", sharelink);
+      intent.putExtras(bundle);
+      startActivity(intent);
     }
 
     if (item.getItemId() == R.id.action_share) {
