@@ -17,6 +17,7 @@ import com.jimei.xiaolumeimei.data.FilePara;
 import com.jimei.xiaolumeimei.entities.NinePicBean;
 import com.jimei.xiaolumeimei.okhttp.callback.FileParaCallback;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.ImagePagerActivity;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMNinePicActivity;
 import com.jimei.xiaolumeimei.widget.ninepicimagview.MultiImageView;
 import com.jude.utils.JUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -152,9 +153,11 @@ public class NinePicAdapter extends BaseAdapter {
                           Intent scannerIntent =
                               new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
                           scannerIntent.setData(uri);
-
                           mcontext.sendBroadcast(scannerIntent);
-
+                          if(picArry.size() - 1 == finalI){
+                            JUtils.Log("NinePic", "download finished");
+                            JUtils .Toast("商品图片保存完成");
+                          }
 
                       } catch (Exception e) {
                         e.printStackTrace();
@@ -168,8 +171,6 @@ public class NinePicAdapter extends BaseAdapter {
                // "?imageMogr2/thumbnail/578/format/jpg/quality/90",
                //   picArry.get(i));
             }
-            JUtils.Log("NinePic", "download finished");
-            JUtils.Toast("商品图片保存完成");
 
           }
         }).start();
