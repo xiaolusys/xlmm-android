@@ -154,8 +154,7 @@ public class NinePicAdapter extends BaseAdapter {
                           scannerIntent.setData(uri);
 
                           mcontext.sendBroadcast(scannerIntent);
-                          JUtils.Log("NinePic", "download finished");
-                          JUtils.Toast("商品图片保存完成");
+
 
                       } catch (Exception e) {
                         e.printStackTrace();
@@ -169,7 +168,8 @@ public class NinePicAdapter extends BaseAdapter {
                // "?imageMogr2/thumbnail/578/format/jpg/quality/90",
                //   picArry.get(i));
             }
-
+            JUtils.Log("NinePic", "download finished");
+            JUtils.Toast("商品图片保存完成");
 
           }
         }).start();
