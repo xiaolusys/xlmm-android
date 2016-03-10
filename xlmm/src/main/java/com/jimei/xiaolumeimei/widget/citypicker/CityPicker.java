@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
@@ -13,14 +14,13 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.jimei.xiaolumeimei.R;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 城市Picker
- *
  */
 public class CityPicker extends LinearLayout {
   /** 刷新界面 */
@@ -51,10 +51,10 @@ public class CityPicker extends LinearLayout {
   private int tempCounyIndex = -1;
   private Context context;
   private List<Cityinfo> province_list = new ArrayList<Cityinfo>();
-  private HashMap<String, List<Cityinfo>> city_map =
-      new HashMap<String, List<Cityinfo>>();
-  private HashMap<String, List<Cityinfo>> couny_map =
-      new HashMap<String, List<Cityinfo>>();
+  private ConcurrentHashMap<String, List<Cityinfo>> city_map =
+      new ConcurrentHashMap<String, List<Cityinfo>>();
+  private ConcurrentHashMap<String, List<Cityinfo>> couny_map =
+      new ConcurrentHashMap<String, List<Cityinfo>>();
   private CitycodeUtil citycodeUtil;
   private String city_code_string;
   private String receiver_state;
@@ -107,11 +107,9 @@ public class CityPicker extends LinearLayout {
     provincePicker.setOnSelectListener(new ScrollerNumberPicker.OnSelectListener() {
 
       @Override public void endSelect(int id, String text) {
-        // TODO Auto-generated method stub
-        System.out.println("id-->" + id + "text----->" + text);
-        if (text.equals("") || text == null) return;
+        if (TextUtils.isEmpty(text)) return;
         if (tempProvinceIndex != id) {
-          System.out.println("endselect");
+
           String selectDay = cityPicker.getSelectedText();
           if (selectDay == null || selectDay.equals("")) return;
           String selectMonth = counyPicker.getSelectedText();
@@ -121,7 +119,7 @@ public class CityPicker extends LinearLayout {
               citycodeUtil.getProvince_list_code().get(id)));
           cityPicker.setDefault(1);
           counyPicker.setData(
-              citycodeUtil.getCouny(couny_map, citycodeUtil.getCity_list_code().get(1)));
+              citycodeUtil.getCouny(couny_map, citycodeUtil.getCity_list_code().get(0)));
           counyPicker.setDefault(1);
           int lastDay = Integer.valueOf(provincePicker.getListSize());
           if (id > lastDay) {
@@ -260,9 +258,10 @@ public class CityPicker extends LinearLayout {
       return list;
     }
 
-    public HashMap<String, List<Cityinfo>> getJSONParserResultArray(String JSONString,
-        String key) {
-      HashMap<String, List<Cityinfo>> hashMap = new HashMap<String, List<Cityinfo>>();
+    public ConcurrentHashMap<String, List<Cityinfo>> getJSONParserResultArray(
+        String JSONString, String key) {
+      ConcurrentHashMap<String, List<Cityinfo>> hashMap =
+          new ConcurrentHashMap<String, List<Cityinfo>>();
       JsonObject result =
           new JsonParser().parse(JSONString).getAsJsonObject().getAsJsonObject(key);
 

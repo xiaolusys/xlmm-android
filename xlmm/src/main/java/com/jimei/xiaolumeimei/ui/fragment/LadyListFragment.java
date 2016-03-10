@@ -88,7 +88,7 @@ public class LadyListFragment extends BaseFragment {
     xRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
     xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
 
-    mLadyListAdapter = new LadyListAdapter(getActivity());
+    mLadyListAdapter = new LadyListAdapter(getActivity(),LadyListFragment.this);
     xRecyclerView.setAdapter(mLadyListAdapter);
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {

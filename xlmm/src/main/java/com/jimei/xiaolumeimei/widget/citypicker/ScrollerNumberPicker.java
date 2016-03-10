@@ -15,6 +15,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import com.jimei.xiaolumeimei.R;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 
 /**
  * 
@@ -264,12 +265,17 @@ public class ScrollerNumberPicker extends View {
 	 * @param move
 	 */
 	private void actionThreadMove(int move) {
-		for (ItemObject item : itemList) {
-			item.move(move);
+		try {
+			for (ItemObject item : itemList) {
+				item.move(move);
+			}
+			Message rMessage = new Message();
+			rMessage.what = REFRESH_VIEW;
+			handler.sendMessage(rMessage);
+		} catch (ConcurrentModificationException e) {
+			e.printStackTrace();
+
 		}
-		Message rMessage = new Message();
-		rMessage.what = REFRESH_VIEW;
-		handler.sendMessage(rMessage);
 	}
 
 	/**

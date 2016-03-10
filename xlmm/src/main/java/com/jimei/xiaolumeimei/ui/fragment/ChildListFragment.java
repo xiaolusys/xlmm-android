@@ -90,7 +90,7 @@ public class ChildListFragment extends BaseFragment {
     xRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
     xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
 
-    mChildListAdapter = new ChildListAdapter(getActivity());
+    mChildListAdapter = new ChildListAdapter(ChildListFragment.this, getActivity());
     xRecyclerView.setAdapter(mChildListAdapter);
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {

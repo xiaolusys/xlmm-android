@@ -3,7 +3,6 @@ package com.jimei.xiaolumeimei.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,18 +28,17 @@ import java.util.List;
  *
  * Copyright 2015年 上海己美. All rights reserved.
  */
-public class LadyListAdapter extends RecyclerView.Adapter<LadyListAdapter.LadyListVH> {
+public class LadyListActivityAdapter
+    extends RecyclerView.Adapter<LadyListActivityAdapter.LadyListVH> {
 
   private List<LadyListBean.ResultsEntity> mList;
 
   private Context mContext;
-  private Fragment context;
 
   private onItemClickListener listener;
 
-  public LadyListAdapter(Context mContext, Fragment context) {
+  public LadyListActivityAdapter(Context mContext) {
     this.mContext = mContext;
-    this.context = context;
     mList = new ArrayList<>();
   }
 
@@ -105,19 +103,14 @@ public class LadyListAdapter extends RecyclerView.Adapter<LadyListAdapter.LadyLi
         holder.saleout.setVisibility(View.VISIBLE);
       }
 
-
       if (productModel.getName().length() <= 9) {
         holder.childlistName.setText(productModel.getName());
       } else {
-        holder.childlistName.setText(productModel.getName().substring(0,8)+"...");
+        holder.childlistName.setText(productModel.getName().substring(0, 8) + "...");
       }
-
     } catch (Exception ex) {
 
     }
-
-
-
 
     holder.childlistAgentPrice.setText("¥" + resultsEntity.getProductLowestPrice());
     holder.childlistStdsalePrice.setText("/¥" + resultsEntity.getStdSalePrice());
@@ -135,7 +128,7 @@ public class LadyListAdapter extends RecyclerView.Adapter<LadyListAdapter.LadyLi
     }
 
     holder.card.setTag(new Object());
-    Glide.with(context)
+    Glide.with(mContext)
         .load(head_img)
         .diskCacheStrategy(DiskCacheStrategy.ALL)
         .placeholder(R.drawable.parceholder)

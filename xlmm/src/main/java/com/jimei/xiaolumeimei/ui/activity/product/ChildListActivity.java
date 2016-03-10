@@ -7,7 +7,7 @@ import android.widget.Toast;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.ChildListAdapter;
+import com.jimei.xiaolumeimei.adapter.ChildListActivityAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
@@ -29,7 +29,7 @@ public class ChildListActivity extends BaseSwipeBackCompatActivity {
   private int page = 2;
   private int totalPages;//总的分页数
   private XRecyclerView xRecyclerView;
-  private ChildListAdapter mChildListAdapter;
+  private ChildListActivityAdapter mChildListAdapter;
   private RotateLoading loading;
 
   @Override protected void setListener() {
@@ -99,7 +99,7 @@ public class ChildListActivity extends BaseSwipeBackCompatActivity {
     xRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
     xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
 
-    mChildListAdapter = new ChildListAdapter(ChildListActivity.this);
+    mChildListAdapter = new ChildListActivityAdapter(ChildListActivity.this);
     xRecyclerView.setAdapter(mChildListAdapter);
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {

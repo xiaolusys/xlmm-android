@@ -19,6 +19,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Paint;
 import android.graphics.Paint.FontMetrics;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -34,7 +35,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.library.glidemoudle.GlideRoundTransform;
+import com.jimei.xiaolumeimei.glidemoudle.GlideRoundTransform;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.net.URLEncoder;
@@ -253,6 +254,40 @@ public final class ViewUtils {
   }
 
   public static void loadImgToImgViewWithPlaceholder(Context context, ImageView img,
+      String picPath) {
+    if (null == picPath) return;
+
+    if (picPath.startsWith("http://image.xiaolu.so")){
+      String[] temp = picPath.split("http://image.xiaolu.so/");
+      String head_img = "";
+      if (temp.length > 1) {
+        try {
+          head_img = "http://image.xiaolu.so/"
+              + URLEncoder.encode(temp[1], "utf-8")
+              + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
+        } catch (UnsupportedEncodingException e) {
+          e.printStackTrace();
+        }
+      }
+
+      Glide.with(context)
+          .load(head_img)
+          .diskCacheStrategy(DiskCacheStrategy.ALL)
+          .placeholder(R.drawable.parceholder)
+          .centerCrop()
+          .into(img);
+    }
+    else{
+      //if (picPath.startsWith("https://mmbiz.qlogo.cn")) {
+        Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
+            //.placeholder(R.drawable.parceholder)
+            .centerCrop().into(img);
+
+    }
+  }
+
+  public static void loadImgToImgViewWithPlaceholderFragment(Fragment context, ImageView
+      img,
       String picPath) {
     if (null == picPath) return;
 

@@ -1,4 +1,4 @@
-package com.jimei.library.glidemoudle;
+package com.jimei.xiaolumeimei.glidemoudle;
 
 import android.content.Context;
 import android.content.res.Resources;
