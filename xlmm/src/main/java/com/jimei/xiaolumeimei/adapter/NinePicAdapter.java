@@ -137,7 +137,9 @@ public class NinePicAdapter extends BaseAdapter {
               }
               if (bflag[0]) {
                 final int finalI = i;
-                OkHttpUtils.get().url(picArry.get(picArry.size() - 1 - i)).build().execute
+                OkHttpUtils.get().url(picArry.get(picArry.size() - 1 - i)
+                    +"?imageMogr2/thumbnail/580/format/jpg").build()
+                    .execute
                     (new FileParaCallback() {
                   @Override public void onError(Call call, Exception e) {
                     bflag[0] = true;
