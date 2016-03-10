@@ -3,6 +3,7 @@ package com.jimei.xiaolumeimei.model;
 import com.jimei.xiaolumeimei.entities.AgentInfoBean;
 import com.jimei.xiaolumeimei.entities.AllowanceBean;
 import com.jimei.xiaolumeimei.entities.MamaFansBean;
+import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.library.rx.DefaultTransform;
@@ -70,5 +71,12 @@ public class MamaInfoModel {
     return XlmmRetrofitClient.getService()
         .getAllowance(page)
         .compose(new DefaultTransform<>());
+  }
+
+  //得到妈妈财富
+  public Observable<MamaFortune> getMamaFortune() {
+    return XlmmRetrofitClient.getService()
+            .getMamaFortune()
+            .compose(new DefaultTransform<>());
   }
 }

@@ -27,6 +27,7 @@ import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AgentInfoBean;
+import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.OneDayAgentOrdersBean;
 import com.jimei.xiaolumeimei.entities.ShoppingListBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
@@ -120,6 +121,21 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initData() {
+    Subscription subscribe3 = MamaInfoModel.getInstance()
+            .getMamaFortune()
+            .subscribeOn(Schedulers.io())
+            .subscribe(new ServiceResponse<MamaFortune>() {
+              @Override public void onNext(MamaFortune fortune) {
+                JUtils.Log(TAG, "fortune=" + fortune.toString());
+
+                JUtils.Log(TAG,
+                        "cash =" + fortune.getMama_fortune().getCash_value() + " all fund=" + fortune.getMama_fortune()
+                                .getCarry_value());
+
+              }
+            });
+    addSubscription(subscribe3);
+
     Subscription subscribe = MamaInfoModel.getInstance()
         .getAgentInfoBean()
         .subscribeOn(Schedulers.io())
@@ -146,15 +162,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
           }
         });
     addSubscription(subscribe);
-    /*MamaInfoModel.getInstance().getMamaFans()
-        .subscribeOn(Schedulers.newThread())
-        .subscribe(new ServiceResponse<List<MamaFansBean>>() {
-          @Override public void onNext(List<MamaFansBean> fansBeen) {
-            JUtils.Log(TAG,"size ="+ fansBeen.size());
-            tv_fansnum.setText("我的粉丝 " + fansBeen.size());
-            JUtils.Log(TAG, "fans num =" + fansBeen.size());
-          }
-        });*/
+
 
     Subscription subscribe1 = MMProductModel.getInstance()
         .getShoppingList("1")
