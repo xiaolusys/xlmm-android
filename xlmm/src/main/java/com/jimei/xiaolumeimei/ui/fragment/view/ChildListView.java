@@ -67,7 +67,6 @@ public class ChildListView extends ViewImpl {
     mChildListAdapter = new ChildListAdapter(fragment, context);
     xRecyclerView.setAdapter(mChildListAdapter);
 
-
     loading.start();
     subscribe1 = ProductModel.getInstance()
         .getChildList(1, 10)
