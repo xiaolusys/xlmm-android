@@ -74,7 +74,8 @@ public class CitycodeUtil {
     return province_list;
   }
 
-  public ArrayList<String> getCity(ConcurrentHashMap<String, List<Cityinfo>> cityHashMap,
+  public ArrayList<String> getCity(ConcurrentHashMap<String, List<Cityinfo>>
+      cityHashMap,
       String provicecode) {
     if (city_list_code.size() > 0) {
       city_list_code.clear();

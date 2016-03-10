@@ -1,12 +1,15 @@
-package com.jimei.xiaolumeimei.ui.fragment;
+package com.jimei.xiaolumeimei.ui.fragment.view;
 
+import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.widget.Toast;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.ChildListAdapter;
-import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
@@ -18,27 +21,53 @@ import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by itxuye(www.itxuye.com) on 15/12/29.
+ * Created by itxuye(www.itxuye.com) on 2016/03/10.
  *
- * Copyright 2015年 上海己美. All rights reserved.
+ * Copyright 2016年 上海己美. All rights reserved.
  */
-public class ChildListFragment extends BaseFragment {
+public class ChildListView extends ViewImpl {
+  @Bind(R.id.loading) RotateLoading loading;
+  @Bind(R.id.childlist_recyclerView) XRecyclerView xRecyclerView;
+
   int page_size = 10;
   private int page = 2;
   private int totalPages;//总的分页数
-  private XRecyclerView xRecyclerView;
   private ChildListAdapter mChildListAdapter;
-  private RotateLoading loading;
   //private TextView mNormal, mOrder;
   private Subscription subscribe1;
   private Subscription subscribe2;
   private Subscription subscribe3;
 
-  @Override protected int provideContentViewId() {
+  @Override public int getLayoutId() {
     return R.layout.childlist_fragment;
   }
 
-  @Override protected void initData() {
+  @Override public void destroy() {
+    ButterKnife.unbind(this);
+    if (subscribe1 != null && subscribe1.isUnsubscribed()) {
+      subscribe1.unsubscribe();
+    }
+    if (subscribe2 != null && subscribe2.isUnsubscribed()) {
+      subscribe2.unsubscribe();
+    }
+    if (subscribe3 != null && subscribe3.isUnsubscribed()) {
+      subscribe3.unsubscribe();
+    }
+  }
+
+  public void initViews(Fragment fragment, Context context) {
+    xRecyclerView.setLayoutManager(new GridLayoutManager(context, 2));
+
+    xRecyclerView.addItemDecoration(new SpaceItemDecoration(10));
+
+    xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
+    xRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
+    xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
+
+    mChildListAdapter = new ChildListAdapter(fragment, context);
+    xRecyclerView.setAdapter(mChildListAdapter);
+
+
     loading.start();
     subscribe1 = ProductModel.getInstance()
         .getChildList(1, 10)
@@ -69,29 +98,6 @@ public class ChildListFragment extends BaseFragment {
             loading.post(loading::stop);
           }
         });
-  }
-
-  @Override protected void initViews() {
-    //mNormal = (TextView) view.findViewById(R.id.normal);
-    //mOrder = (TextView) view.findViewById(R.id.order);
-
-    loading = (RotateLoading) view.findViewById(R.id.loading);
-    initRecyclerView();
-  }
-
-  private void initRecyclerView() {
-
-    xRecyclerView = (XRecyclerView) view.findViewById(R.id.childlist_recyclerView);
-    xRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-
-    xRecyclerView.addItemDecoration(new SpaceItemDecoration(10));
-
-    xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-    xRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
-    xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
-
-    mChildListAdapter = new ChildListAdapter(ChildListFragment.this, getActivity());
-    xRecyclerView.setAdapter(mChildListAdapter);
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
       @Override public void onRefresh() {
@@ -116,7 +122,7 @@ public class ChildListFragment extends BaseFragment {
           loadMoreData(page, 10);
           page++;
         } else {
-          Toast.makeText(activity, "没有更多了拉,去购物吧", Toast.LENGTH_SHORT).show();
+          Toast.makeText(context, "没有更多了拉,去购物吧", Toast.LENGTH_SHORT).show();
           xRecyclerView.post(xRecyclerView::loadMoreComplete);
         }
       }
@@ -139,18 +145,5 @@ public class ChildListFragment extends BaseFragment {
             xRecyclerView.post(xRecyclerView::loadMoreComplete);
           }
         });
-  }
-
-  @Override public void onStop() {
-    super.onStop();
-    if (subscribe1 != null && subscribe1.isUnsubscribed()) {
-      subscribe1.unsubscribe();
-    }
-    if (subscribe2 != null && subscribe2.isUnsubscribed()) {
-      subscribe2.unsubscribe();
-    }
-    if (subscribe3 != null && subscribe3.isUnsubscribed()) {
-      subscribe3.unsubscribe();
-    }
   }
 }

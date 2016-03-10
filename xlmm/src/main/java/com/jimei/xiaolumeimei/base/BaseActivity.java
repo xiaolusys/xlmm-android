@@ -18,10 +18,9 @@ import rx.subscriptions.CompositeSubscription;
  */
 public abstract class BaseActivity extends AutoLayoutActivity {
 
-  abstract protected int provideContentViewId();
-
   private CompositeSubscription mCompositeSubscription;
 
+  abstract protected int provideContentViewId();
 
   public CompositeSubscription getCompositeSubscription() {
     if (this.mCompositeSubscription == null) {
@@ -30,7 +29,6 @@ public abstract class BaseActivity extends AutoLayoutActivity {
 
     return this.mCompositeSubscription;
   }
-
 
   public void addSubscription(Subscription s) {
     if (this.mCompositeSubscription == null) {
@@ -46,13 +44,10 @@ public abstract class BaseActivity extends AutoLayoutActivity {
     setContentView(provideContentViewId());
     ButterKnife.bind(this);
 
-    if (savedInstanceState == null) {
-      initView();
+    initView();
+    initData();
 
-      initData();
-
-      setListener();
-    }
+    setListener();
   }
 
   protected abstract void setListener();//设置监听
@@ -66,8 +61,7 @@ public abstract class BaseActivity extends AutoLayoutActivity {
     ButterKnife.unbind(this);
   }
 
-  @Override
-  protected void onResume() {
+  @Override protected void onResume() {
     super.onResume();
     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     MobclickAgent.onResume(this);
