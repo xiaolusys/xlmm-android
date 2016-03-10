@@ -24,6 +24,7 @@ import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.entities.MMChooselistBean;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.MamaFansBean;
+import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.MembershipPointBean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
 import com.jimei.xiaolumeimei.entities.NicknameBean;
@@ -648,4 +649,7 @@ public interface XlmmService {
 
    @GET("pmt/cushop/customer_shop")
   Observable<MMShoppingBean> getShareShopping();
+
+  @GET(XlmmApi.APP_BASE_URL+"/rest/v2/mama/fortune")
+  Observable<MamaFortune> getMamaFortune();
 }

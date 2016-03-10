@@ -6,12 +6,14 @@ package com.jimei.xiaolumeimei.data;
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class XlmmApi {
-  public static final String URL_BASE = "http://m.xiaolumeimei.com/rest/v1/";
+  public static final String APP_BASE_URL = "http://m.xiaolumeimei.com";
+
+  public static final String URL_BASE = APP_BASE_URL + "/rest/v1/";
   //public static final String URL_BASE = "http://dev.xiaolumeimei.com/rest/v1/";
   //public static final String URL_BASE = "http://192.168.1.57:8000/rest/v1/";
   //public static final String URL_BASE = "http://192.168.1.31:9000/rest/v1/";
 
-  public static final String TWO_DIMEN_URL_BASE = "http://m.xiaolumeimei.com";
+  public static final String TWO_DIMEN_URL_BASE = APP_BASE_URL;
 
   //注册链接
   public static final String LOGIN_URL = URL_BASE + "register/customer_login";
@@ -65,12 +67,6 @@ public class XlmmApi {
 
   public static final String QINIU_UPLOAD_URL_BASE =
       "http://7xkyoy.com2.z0.glb.qiniucdn.com/";
-
-  public static final String SETTINGMYINFO_URL =
-      URL_BASE + "/xueZhang/servlet/AndroidInfoSev";
-
-  public static final String SETTINGREGISTER_URL =
-      URL_BASE + "/xueZhang/servlet/AndroidRegisterSev";
 
   public static class WRAPPER {
     public static final String STATUS = "status";
