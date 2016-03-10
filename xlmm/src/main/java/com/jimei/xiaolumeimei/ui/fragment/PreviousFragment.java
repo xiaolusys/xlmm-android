@@ -166,7 +166,7 @@ public class PreviousFragment extends BaseFragment {
 
     initPost();
 
-    mPreviousAdapter = new PreviousAdapter(getActivity());
+    mPreviousAdapter = new PreviousAdapter(PreviousFragment.this, getActivity());
     xRecyclerView.setAdapter(mPreviousAdapter);
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {

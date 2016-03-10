@@ -3,9 +3,7 @@ package com.jimei.xiaolumeimei.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +12,7 @@ import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.entities.ProductListBean;
+import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActvityWeb;
 import com.jimei.xiaolumeimei.ui.activity.product.TongkuanActivity;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
@@ -27,48 +25,70 @@ import java.util.List;
  *
  * Copyright 2015年 上海己美. All rights reserved.
  */
-public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.TodayVH> {
+public class ChildListActivityAdapter
+    extends RecyclerView.Adapter<ChildListActivityAdapter.ChildListVH> {
 
-  private List<ProductListBean.ResultsEntity> mList;
-  private Fragment context;
+  private List<ChildListBean.ResultsEntity> mList;
+
   private Context mContext;
 
-  public TodayAdapter(Fragment mContext, Context context) {
+  private onItemClickListener listener;
+
+  public ChildListActivityAdapter(Context mContext) {
+    this.mContext = mContext;
     mList = new ArrayList<>();
-    this.context = mContext;
-    this.mContext = context;
   }
 
-  public void updateWithClear(List<ProductListBean.ResultsEntity> femallist) {
+  public void setOnItemClickListener(onItemClickListener listener) {
+    this.listener = listener;
+  }
+
+  public void updateWithClear(List<ChildListBean.ResultsEntity> list) {
     mList.clear();
-    mList.addAll(femallist);
+    mList.addAll(list);
     notifyDataSetChanged();
   }
 
-  public void update(List<ProductListBean.ResultsEntity> femallist) {
+  public void update(List<ChildListBean.ResultsEntity> list) {
 
-    mList.addAll(femallist);
+    mList.addAll(list);
     notifyDataSetChanged();
   }
 
-  @Override public TodayVH onCreateViewHolder(ViewGroup parent, int viewType) {
-    View view;
+  public void updateStart(List<ChildListBean.ResultsEntity> list) {
 
-    view = LayoutInflater.from(parent.getContext())
-        .inflate(R.layout.item_todaylist, parent, false);
+    mList.addAll(0, list);
+    notifyDataSetChanged();
+  }
+
+  public ChildListBean.ResultsEntity getData(int postion) {
+
+    return mList.get(postion);
+  }
+
+  @Override public ChildListVH onCreateViewHolder(ViewGroup parent, int viewType) {
+
+    View view = LayoutInflater.from(parent.getContext())
+        .inflate(R.layout.item_childlist, parent, false);
     AutoUtils.autoSize(view);
-    return new TodayVH(view);
+    return new ChildListVH(view);
   }
 
-  @Override public void onBindViewHolder(final TodayVH holder, int position) {
+  @Override public void onViewRecycled(ChildListVH holder) {
+    super.onViewRecycled(holder);
+  }
 
-    ProductListBean.ResultsEntity products = mList.get(position);
+  @Override public void onBindViewHolder(final ChildListVH holder, int position) {
 
-    ProductListBean.ResultsEntity.ProductModelEntity productModel =
-        products.getProductModel();
+    final ChildListBean.ResultsEntity resultsEntity = mList.get(position);
+    //ChildListBean.ResultsEntity.CategoryEntity category = resultsEntity.getCategory();
+    ChildListBean.ResultsEntity.ProductModelEntity productModel =
+        resultsEntity.getProductModel();
 
-    boolean isSaleopen = products.isIsSaleopen();
+    boolean isSaleopen = resultsEntity.isIsSaleopen();
+
     try {
+
       if (isSaleopen) {
 
         boolean isSaleOut = productModel.isIsSaleOut();
@@ -82,28 +102,30 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.TodayVH> {
       } else {
         holder.saleout.setVisibility(View.VISIBLE);
       }
+    } catch (NullPointerException ex) {
 
+    }
+
+    String headImg = resultsEntity.getHeadImg();
+
+    try {
       if (productModel.getName().length() <= 9) {
         holder.childlistName.setText(productModel.getName());
       } else {
         holder.childlistName.setText(productModel.getName().substring(0, 8) + "...");
       }
 
-      holder.childlistAgentPrice.setText("¥" + products.getProductLowestPrice());
-      holder.childlistStdsalePrice.setText("/¥" + products.getStdSalePrice());
+      holder.childlistAgentPrice.setText("¥" + resultsEntity.getProductLowestPrice());
+      holder.childlistStdsalePrice.setText("/¥" + resultsEntity.getStdSalePrice());
     } catch (Exception e) {
       e.printStackTrace();
     }
 
-    String headImg = products.getHeadImg();
-
     //String[] temp = headImg.split("http://image.xiaolu.so/");
-    //
     //String head_img = "";
-    //
     //if (temp.length > 1) {
     //  try {
-    //    head_img = "http://image.xiaolu.so/"
+    //    head_img += "http://image.xiaolu.so/"
     //        + URLEncoder.encode(temp[1], "utf-8")
     //        + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
     //  } catch (UnsupportedEncodingException e) {
@@ -121,10 +143,8 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.TodayVH> {
     //    .getSize((width, height) -> {
     //      if (!holder.card.isShown()) holder.card.setVisibility(View.VISIBLE);
     //    });
-
-    ViewUtils.loadImgToImgViewWithPlaceholderFragment(context, holder.childlistImage,
+    ViewUtils.loadImgToImgViewWithPlaceholder(mContext, holder.childlistImage,
         headImg);
-
     holder.card.setOnClickListener(v -> {
 
       String product_id = null;
@@ -134,7 +154,6 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.TodayVH> {
 
       try {
         product_id = mList.get(position).getId();
-        Log.i("dawang jiaowo lai xunshan", product_id);
         model_id = mList.get(position).getModelId();
         name = mList.get(position).getProductModel().getName();
       } catch (Exception e) {
@@ -147,39 +166,46 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.TodayVH> {
       if (name != null) {
         bundle.putString("name", name.split("/")[0]);
       }
-
-      try {
-        if (mList.get(position).getProductModel().isIsSingleSpec()) {
-          Intent intent = new Intent(mContext, ProductDetailActvityWeb.class);
-          intent.putExtras(bundle);
-          mContext.startActivity(intent);
-        } else {
-          Intent intent = new Intent(mContext, TongkuanActivity.class);
-          intent.putExtras(bundle);
-          mContext.startActivity(intent);
-        }
-      } catch (Exception e) {
-        e.printStackTrace();
+      if (mList.get(position).getProductModel().isIsSingleSpec()) {
+        Intent intent = new Intent(mContext, ProductDetailActvityWeb.class);
+        intent.putExtras(bundle);
+        mContext.startActivity(intent);
+      } else {
+        Intent intent = new Intent(mContext, TongkuanActivity.class);
+        intent.putExtras(bundle);
+        mContext.startActivity(intent);
       }
     });
   }
 
   @Override public int getItemCount() {
-    return mList.size();
+    return mList == null ? 0 : mList.size();
   }
 
-  static class TodayVH extends RecyclerView.ViewHolder {
+  public interface onItemClickListener {
+    void itemClick(View view, int position);
+  }
+
+  static class ChildListVH extends RecyclerView.ViewHolder
+      implements View.OnClickListener {
+    //int id = R.layout.item_childlist;
     View card;
     @Bind(R.id.childlist_image) ImageView childlistImage;
     @Bind(R.id.childlist_name) TextView childlistName;
     @Bind(R.id.childlist_agent_price) TextView childlistAgentPrice;
     @Bind(R.id.childlist_stdsale_price) TextView childlistStdsalePrice;
     @Bind(R.id.saleout) TextView saleout;
+    private onItemClickListener listener;//点击事件
 
-    public TodayVH(View itemView) {
+    public ChildListVH(View itemView) {
       super(itemView);
       card = itemView;
       ButterKnife.bind(this, itemView);
+      itemView.setOnClickListener(this);
+    }
+
+    @Override public void onClick(View v) {
+
     }
   }
 }

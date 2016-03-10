@@ -3,6 +3,7 @@ package com.jimei.xiaolumeimei.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,11 +30,13 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Chil
 
   private List<ChildListBean.ResultsEntity> mList;
 
+  private Fragment context;
   private Context mContext;
 
   private onItemClickListener listener;
 
-  public ChildListAdapter(Context mContext) {
+  public ChildListAdapter(Fragment context, Context mContext) {
+    this.context = context;
     this.mContext = mContext;
     mList = new ArrayList<>();
   }
@@ -84,7 +87,6 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Chil
     ChildListBean.ResultsEntity.ProductModelEntity productModel =
         resultsEntity.getProductModel();
 
-
     boolean isSaleopen = resultsEntity.isIsSaleopen();
 
     try {
@@ -102,11 +104,9 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Chil
       } else {
         holder.saleout.setVisibility(View.VISIBLE);
       }
-
     } catch (NullPointerException ex) {
 
     }
-
 
     String headImg = resultsEntity.getHeadImg();
 
@@ -145,7 +145,8 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Chil
     //    .getSize((width, height) -> {
     //      if (!holder.card.isShown()) holder.card.setVisibility(View.VISIBLE);
     //    });
-    ViewUtils.loadImgToImgViewWithPlaceholder(mContext, holder.childlistImage, headImg);
+    ViewUtils.loadImgToImgViewWithPlaceholderFragment(context, holder.childlistImage,
+        headImg);
     holder.card.setOnClickListener(v -> {
 
       String product_id = null;

@@ -17,6 +17,7 @@
 
     <com.jimei.xiaolumeimei.widget.CircleImageView
         android:id="@+id/imgUser"
+        android:layout_centerHorizontal="true"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_alignParentTop="true"

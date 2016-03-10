@@ -3,6 +3,7 @@ package com.jimei.xiaolumeimei.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,10 +29,12 @@ import java.util.List;
 public class PreviousAdapter extends RecyclerView.Adapter<PreviousAdapter.PreviousVH> {
 
   private List<ProductListBean.ResultsEntity> mList;
+  private Fragment context;
   private Context mContext;
 
-  public PreviousAdapter(Context context) {
-    this.mContext = context;
+  public PreviousAdapter(Fragment context, Context mContext) {
+    this.context = context;
+    this.mContext = mContext;
     mList = new ArrayList<>();
   }
 
@@ -114,7 +117,8 @@ public class PreviousAdapter extends RecyclerView.Adapter<PreviousAdapter.Previo
     //    .getSize((width, height) -> {
     //      if (!holder.card.isShown()) holder.card.setVisibility(View.VISIBLE);
     //    });
-    ViewUtils.loadImgToImgViewWithPlaceholder(mContext, holder.childlistImage, headImg);
+    ViewUtils.loadImgToImgViewWithPlaceholderFragment(context, holder.childlistImage,
+        headImg);
 
     holder.card.setOnClickListener(v -> {
 

@@ -158,7 +158,7 @@ public class TodayFragment extends BaseFragment {
 
     initPost();
 
-    mTodayAdapter = new TodayAdapter(getActivity());
+    mTodayAdapter = new TodayAdapter(TodayFragment.this, getActivity());
     xRecyclerView.setAdapter(mTodayAdapter);
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
@@ -273,8 +273,7 @@ public class TodayFragment extends BaseFragment {
                           LinearLayout.LayoutParams layoutParams =
                               new LinearLayout.LayoutParams(
                                   LinearLayout.LayoutParams.MATCH_PARENT, height);
-                          layoutParams.setMargins(0, dp2px(getActivity(), 10
-                          ), 0, 0);
+                          layoutParams.setMargins(0, dp2px(getActivity(), 10), 0, 0);
                           post2.setLayoutParams(layoutParams);
                           post2.setImageBitmap(response);
                         }

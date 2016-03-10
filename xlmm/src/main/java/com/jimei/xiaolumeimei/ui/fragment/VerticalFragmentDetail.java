@@ -173,7 +173,7 @@ public class VerticalFragmentDetail extends Fragment implements View.OnClickList
                     JUtils.Log("ProductDetail", "head_img2 encode: " + head_img);
 
                     final String finalHead_img = head_img;
-                    Glide.with(getActivity())
+                    Glide.with(VerticalFragmentDetail.this)
                         .load(finalHead_img)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .centerCrop()
