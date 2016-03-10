@@ -155,7 +155,11 @@ import android.view.ViewGroup;
 
   @Override public boolean onTouchEvent(MotionEvent e) {
     // 统一交给mDragHelper处理，由DragHelperCallback实现拖动效果
-    mDragHelper.processTouchEvent(e); // 该行代码可能会抛异常，正式发布时请将这行代码加上try catch
+    try {
+      mDragHelper.processTouchEvent(e); // 该行代码可能会抛异常，正式发布时请将这行代码加上try catch
+    } catch (IllegalArgumentException ex) {
+      ex.printStackTrace();
+    }
     return true;
   }
 
