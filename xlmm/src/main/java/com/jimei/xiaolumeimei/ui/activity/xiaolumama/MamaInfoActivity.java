@@ -53,10 +53,11 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.imgUser) ImageView imgUser;
   @Bind(R.id.btn_two_dimen) TextView btn_two_dimen;
+  @Bind(R.id.tv_cashinfo) TextView tv_cashinfo;
   @Bind(R.id.tv_cash) TextView tv_cash;
   @Bind(R.id.btn_chooselist) TextView btn_chooselist;
 
-  //@Bind(R.id.img_hook) ImageView img_hook;
+  @Bind(R.id.tv_liveness) TextView tv_liveness;
   @Bind(R.id.img_liveness) com.jimei.xiaolumeimei.widget.RotateTextView img_liveness;
   @Bind(R.id.pb_hook) ProgressBar mProgressBar;
 
@@ -87,7 +88,11 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void setListener() {
     toolbar.setOnClickListener(this);
-    imgUser.setOnClickListener(this);
+    tv_cashinfo.setOnClickListener(this);
+    tv_cash.setOnClickListener(this);
+
+    tv_liveness.setOnClickListener(this);
+    img_liveness.setOnClickListener(this);
 
     rlTwoDimen.setOnClickListener(this);
     rl_fans.setOnClickListener(this);
@@ -178,18 +183,17 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   @Override public void onClick(View v) {
     Intent intent;
     switch (v.getId()) {
-      //case R.id.btn_jump:
-      //  startActivity(new Intent(MamaInfoActivity.this, MMNinePicActivity.class));
-      //  finish();
-      //  break;
-
-      case R.id.imgUser:
+      case R.id.tv_cash:
+      case R.id.tv_cashinfo:
         if (mamaAgentInfo != null) {
           intent = new Intent(MamaInfoActivity.this, MamaWithdrawCashActivity.class);
           intent.putExtra("cash", mamaAgentInfo.getCash());
 
           startActivity(intent);
         }
+        break;
+      case R.id.tv_liveness:
+      case R.id.img_liveness:
         break;
       case R.id.rl_chooselist:
         startActivity(new Intent(MamaInfoActivity.this, MMChooseListActivity.class));
