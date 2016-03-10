@@ -42,8 +42,8 @@ import com.jimei.xiaolumeimei.ui.activity.user.MembershipPointActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.SettingActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.WalletActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaInfoActivity;
-import com.jimei.xiaolumeimei.ui.fragment.ChildListFragment;
-import com.jimei.xiaolumeimei.ui.fragment.LadyListFragment;
+import com.jimei.xiaolumeimei.ui.fragment.ChildFragment;
+import com.jimei.xiaolumeimei.ui.fragment.LadyFragment;
 import com.jimei.xiaolumeimei.ui.fragment.PreviousFragment;
 import com.jimei.xiaolumeimei.ui.fragment.TodayFragment;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
@@ -139,10 +139,10 @@ public class MainActivity extends BaseActivity
 
   private void initFragment() {
     fragments = new ArrayList<>();
-    fragments.add(new TodayFragment());
-    fragments.add(new PreviousFragment());
-    fragments.add(new ChildListFragment());
-    fragments.add(new LadyListFragment());
+    fragments.add(TodayFragment.newInstance("今日上新"));
+    fragments.add(PreviousFragment.newInstance("昨日特卖"));
+    fragments.add(ChildFragment.newInstance("萌娃专区"));
+    fragments.add(LadyFragment.newInstance("时尚女装"));
   }
 
   @Override protected void initView() {

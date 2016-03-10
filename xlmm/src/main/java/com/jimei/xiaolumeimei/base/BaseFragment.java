@@ -24,7 +24,6 @@ public abstract class BaseFragment extends Fragment {
 
   abstract protected int provideContentViewId();
 
-
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     activity = getActivity();
@@ -34,15 +33,12 @@ public abstract class BaseFragment extends Fragment {
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
 
-    if (null == view) {
-      view = inflater.inflate(provideContentViewId(), container, false);
-
+    view = inflater.inflate(provideContentViewId(), container, false);
+    ButterKnife.bind(this, view);
+    if (view == null) {
       initViews();
-
       initData();
     }
-
-    ButterKnife.bind(this, view);
 
     return view;
   }
@@ -54,6 +50,7 @@ public abstract class BaseFragment extends Fragment {
   @Override public void onStop() {
     super.onStop();
   }
+
   private void showIndeterminateProgressDialog(boolean horizontal) {
     materialDialog = new MaterialDialog.Builder(activity)
         //.title(R.string.progress_dialog)
