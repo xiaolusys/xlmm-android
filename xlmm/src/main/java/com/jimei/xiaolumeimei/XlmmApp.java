@@ -107,16 +107,6 @@ public class XlmmApp extends Application {
   //初始化OkHttpClient
   private OkHttpClient initOkHttpClient() {
 
-    //OkHttpClient httpClient = OkHttpClientManager.getInstance().getOkHttpClient();
-    //httpClient.setConnectTimeout(10 * 1000, TimeUnit.MILLISECONDS);
-    //httpClient.setWriteTimeout(30 * 1000, TimeUnit.MILLISECONDS);
-    //httpClient.setWriteTimeout(30 * 1000, TimeUnit.MILLISECONDS);
-    //
-    //httpClient.setCookieHandler(
-    //    new CookieManager(new PersistentCookieStore(getApplicationContext()),
-    //        CookiePolicy.ACCEPT_ALL));
-    //httpClient.interceptors().add(receivedCookiesInterceptor);
-
     CookieManager cookieManager =
         new CookieManager(new PersistentCookieStore(getApplicationContext()),
             CookiePolicy.ACCEPT_ALL);

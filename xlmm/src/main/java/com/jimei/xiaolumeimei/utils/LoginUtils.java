@@ -5,19 +5,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-
-import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.entities.UserAccountBean;
-import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.model.UserModel;
-import com.jimei.xiaolumeimei.okhttp.callback.OkHttpCallback;
-import com.jimei.xiaolumeimei.okhttp.request.OkHttpRequest;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import rx.schedulers.Schedulers;
 
@@ -61,26 +54,26 @@ public class LoginUtils {
   }
 
   //登录
-  public static void doLogin(String name, String password) {
-    new OkHttpRequest.Builder().url(XlmmApi.LOGIN_URL)
-        .addParams("username", name)
-        .addParams("password", password)
-        .post(new OkHttpCallback<UserBean>() {
-
-          @Override public void onError(Request request, Exception e) {
-
-          }
-
-          @Override public void onResponse(Response response, UserBean data) {
-            if (data.getCode() == 0 && data.getResult().equals("login")) {
-              //Toast.makeText(context, "登录成功", Toast.LENGTH_SHORT).show();
-              Log.i("Login", "登录成功");
-            } else {
-
-            }
-          }
-        });
-  }
+  //public static void doLogin(String name, String password) {
+  //  new OkHttpRequest.Builder().url(XlmmApi.LOGIN_URL)
+  //      .addParams("username", name)
+  //      .addParams("password", password)
+  //      .post(new OkHttpCallback<UserBean>() {
+  //
+  //        @Override public void onError(Request request, Exception e) {
+  //
+  //        }
+  //
+  //        @Override public void onResponse(Response response, UserBean data) {
+  //          if (data.getCode() == 0 && data.getResult().equals("login")) {
+  //            //Toast.makeText(context, "登录成功", Toast.LENGTH_SHORT).show();
+  //            Log.i("Login", "登录成功");
+  //          } else {
+  //
+  //          }
+  //        }
+  //      });
+  //}
 
   //获取用户信息
   public static String[] getLoginInfo(Context context) {
