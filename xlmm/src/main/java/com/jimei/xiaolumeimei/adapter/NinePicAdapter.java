@@ -18,6 +18,8 @@ import com.jimei.xiaolumeimei.entities.NinePicBean;
 import com.jimei.xiaolumeimei.okhttp.callback.FileParaCallback;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.ImagePagerActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMNinePicActivity;
+import com.jimei.xiaolumeimei.utils.CameraUtils;
+import com.jimei.xiaolumeimei.utils.FileUtils;
 import com.jimei.xiaolumeimei.widget.ninepicimagview.MultiImageView;
 import com.jude.utils.JUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -150,7 +152,18 @@ public class NinePicAdapter extends BaseAdapter {
                       bflag[0] = true;
                       JUtils.Log("NinePic", "download "+finalI +" finished.");
                       try {
-                          Uri uri = Uri.fromFile(new File(response.getFilePath()));
+                        String pic_indicate_name = picArry.get(picArry.size() - 1 - finalI).substring(picArry.get(picArry.size() - 1 - finalI).lastIndexOf('/'));
+                        String newName = Environment.getExternalStorageDirectory() +
+                                CameraUtils.XLMM_IMG_PATH + pic_indicate_name +".jpg";
+                        JUtils.Log("NinePic","newName="+newName);
+                        if(FileUtils.isFileExist(newName)){
+                          JUtils.Log("NinePic","newName has existed,delete");
+                          FileUtils.deleteFile(newName);
+                        }
+                        new File(response.getFilePath()).renameTo(
+                                new File(newName));
+
+                          Uri uri = Uri.fromFile(new File(newName));
                           // 通知图库更新
                           Intent scannerIntent =
                               new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
