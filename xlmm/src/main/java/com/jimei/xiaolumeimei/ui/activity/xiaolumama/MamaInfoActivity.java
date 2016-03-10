@@ -57,7 +57,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.tv_cash) TextView tv_cash;
   @Bind(R.id.btn_chooselist) TextView btn_chooselist;
 
-  @Bind(R.id.tv_liveness) ImageView tv_liveness;
+  @Bind(R.id.tv_liveness) TextView tv_liveness;
   @Bind(R.id.img_liveness) com.jimei.xiaolumeimei.widget.RotateTextView img_liveness;
   @Bind(R.id.pb_hook) ProgressBar mProgressBar;
 
