@@ -147,7 +147,6 @@ public class NinePicAdapter extends BaseAdapter {
                       bflag[0] = true;
                       JUtils.Log("NinePic", "download "+finalI +" finished.");
                       try {
-                        if(picArry.size() - 1 == finalI) {
                           Uri uri = Uri.fromFile(new File(response.getFilePath()));
                           // 通知图库更新
                           Intent scannerIntent =
@@ -157,7 +156,6 @@ public class NinePicAdapter extends BaseAdapter {
                           mcontext.sendBroadcast(scannerIntent);
                           JUtils.Log("NinePic", "download finished");
                           JUtils.Toast("商品图片保存完成");
-                        }
 
                       } catch (Exception e) {
                         e.printStackTrace();
