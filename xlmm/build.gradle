@@ -187,15 +187,12 @@ android {
 
 dependencies {
   compile fileTree(include: ['*.jar'], dir: 'libs')
-
   compile files('libs/alipaySDK-20150818.jar')
   compile files('libs/libammsdk.jar')
   compile files('libs/libpingpp-2.0.6.jar')
   compile files('libs/UPPayAssistEx.jar')
   compile files('libs/UPPayPluginEx.jar')
-
   compile files('libs/commons-lang3-3.4.jar')
-
   compile files('libs/ShareSDK-Core-2.6.6.jar')
   compile files('libs/ShareSDK-QQ-2.6.6.jar')
   compile files('libs/ShareSDK-QZone-2.6.6.jar')
@@ -204,9 +201,7 @@ dependencies {
   compile files('libs/ShareSDK-Wechat-Core-2.6.6.jar')
   compile files('libs/ShareSDK-Wechat-Favorite-2.6.6.jar')
   compile files('libs/ShareSDK-Wechat-Moments-2.6.6.jar')
-
   compile files('libs/MiPush_SDK_Client_2_2_21.jar')
   compile files('libs/umeng-update-v2.6.0.1.jar')
-
   compile project(':xlmmlibrary')
 }
