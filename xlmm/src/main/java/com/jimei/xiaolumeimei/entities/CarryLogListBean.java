@@ -19,6 +19,15 @@ public class CarryLogListBean {
 
   @SerializedName("count") private int mCount;
   @SerializedName("next") private String mNext;
+
+  @Override public String toString() {
+    return "CarryLogListBean{" +
+        "mCount=" + mCount +
+        ", mNext='" + mNext + '\'' +
+        ", mResults=" + mResults +
+        '}';
+  }
+
   /**
    * mama_id : 5
    * carry_value : 36.0
@@ -140,6 +149,20 @@ public class CarryLogListBean {
 
     public String getCreated() {
       return mCreated;
+    }
+
+    @Override public String toString() {
+      return "ResultsEntity{" +
+          "mMamaId=" + mMamaId +
+          ", mCarryValue=" + mCarryValue +
+          ", mCarryType=" + mCarryType +
+          ", mCarryTypeName='" + mCarryTypeName + '\'' +
+          ", mStatus=" + mStatus +
+          ", mStatusDisplay='" + mStatusDisplay + '\'' +
+          ", mTodayCarry=" + mTodayCarry +
+          ", mModified='" + mModified + '\'' +
+          ", mCreated='" + mCreated + '\'' +
+          '}';
     }
   }
 }

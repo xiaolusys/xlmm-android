@@ -7,10 +7,11 @@ package com.jimei.xiaolumeimei.data;
  */
 public class XlmmApi {
   public static final String APP_BASE_URL = "http://m.xiaolumeimei.com";
+  public static final String APP_BASE_URL_DEV= "http://dev.xiaolumeimei.com";
 
-  public static final String URL_BASE = APP_BASE_URL + "/rest/v1/";
+  //public static final String URL_BASE = APP_BASE_URL + "/rest/v1/";
   public static final String URL_BASE_V2 = APP_BASE_URL + "/rest/v2/";
-  //public static final String URL_BASE = "http://dev.xiaolumeimei.com/rest/v1/";
+  public static final String URL_BASE = "http://dev.xiaolumeimei.com/rest/v1/";
   //public static final String URL_BASE = "http://192.168.1.57:8000/rest/v1/";
   //public static final String URL_BASE = "http://192.168.1.31:9000/rest/v1/";
 

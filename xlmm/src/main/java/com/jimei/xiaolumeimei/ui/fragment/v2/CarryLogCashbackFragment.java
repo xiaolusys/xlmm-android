@@ -28,20 +28,23 @@ import rx.schedulers.Schedulers;
  *
  * Copyright 2016年 上海己美. All rights reserved.
  */
-public class CarryLogAllFragment extends Fragment {
+public class CarryLogCashbackFragment extends Fragment {
+
+  public static CarryLogCashbackFragment newInstance(String title) {
+    CarryLogCashbackFragment carryLogAllFragment = new CarryLogCashbackFragment();
+    Bundle bundle = new Bundle();
+    bundle.putString("keyword", title);
+    carryLogAllFragment.setArguments(bundle);
+    return carryLogAllFragment;
+  }
+
   @Bind(R.id.carrylogall_xry) XRecyclerView xRecyclerView;
   private CarryLogAllAdapter adapter;
   private int page = 2;
   private Subscription subscription1;
   private Subscription subscription2;
 
-  public static CarryLogAllFragment newInstance(String title) {
-    CarryLogAllFragment carryLogAllFragment = new CarryLogAllFragment();
-    Bundle bundle = new Bundle();
-    bundle.putString("keyword", title);
-    carryLogAllFragment.setArguments(bundle);
-    return carryLogAllFragment;
-  }
+
 
   @Override public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);

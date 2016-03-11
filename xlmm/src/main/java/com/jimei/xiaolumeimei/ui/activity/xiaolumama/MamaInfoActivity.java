@@ -229,7 +229,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         startActivity(new Intent(MamaInfoActivity.this, MMShoppingListActivity.class));
         break;
       case R.id.rl_income:
-        Intent intent1 = new Intent(MamaInfoActivity.this, MMCarryLogListActivity.class);
+        Intent intent1 = new Intent(MamaInfoActivity.this, MMcarryLogActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString("carrylogMoney", carrylogMoney + "");
         intent1.putExtras(bundle);

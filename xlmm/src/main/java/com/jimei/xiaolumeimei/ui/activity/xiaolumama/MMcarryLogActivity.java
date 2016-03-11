@@ -13,6 +13,10 @@ import android.view.View;
 import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.ui.fragment.v2.CarryLogAllFragment;
+import com.jimei.xiaolumeimei.ui.fragment.v2.CarryLogBounsFragment;
+import com.jimei.xiaolumeimei.ui.fragment.v2.CarryLogCashbackFragment;
+import com.jimei.xiaolumeimei.ui.fragment.v2.CarryLogCommissionFragment;
 import com.jimei.xiaolumeimei.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +64,10 @@ public class MMcarryLogActivity extends BaseSwipeBackCompatActivity
     setUpCommonBackTooblBar(toolbar, "收益记录");
 
     List<Fragment> fragments = new ArrayList<>();
-    //fragments.add()
+    fragments.add(CarryLogAllFragment.newInstance("全部"));
+    fragments.add(CarryLogCommissionFragment.newInstance("佣金"));
+    fragments.add(CarryLogCashbackFragment.newInstance("返现"));
+    fragments.add(CarryLogBounsFragment.newInstance("奖金"));
 
     List<String> titles = new ArrayList<>();
     titles.add("全部");
@@ -75,10 +82,10 @@ public class MMcarryLogActivity extends BaseSwipeBackCompatActivity
     MainTabAdapter mAdapter =
         new MainTabAdapter(getSupportFragmentManager(), fragments, titles);
     viewPager.setAdapter(mAdapter);
+    viewPager.setOffscreenPageLimit(3);
     tabLayout.setupWithViewPager(viewPager);
     //mTabLayout.setTabsFromPagerAdapter(mAdapter);
     tabLayout.setTabMode(TabLayout.MODE_FIXED);
-
   }
 
   @Override protected boolean toggleOverridePendingTransition() {

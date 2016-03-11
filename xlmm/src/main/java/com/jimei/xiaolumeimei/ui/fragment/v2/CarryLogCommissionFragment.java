@@ -28,20 +28,24 @@ import rx.schedulers.Schedulers;
  *
  * Copyright 2016年 上海己美. All rights reserved.
  */
-public class CarryLogAllFragment extends Fragment {
+public class CarryLogCommissionFragment
+    extends Fragment {
+
+  public static CarryLogCommissionFragment newInstance(String title) {
+    CarryLogCommissionFragment carryLogAllFragment = new CarryLogCommissionFragment();
+    Bundle bundle = new Bundle();
+    bundle.putString("keyword", title);
+    carryLogAllFragment.setArguments(bundle);
+    return carryLogAllFragment;
+  }
+
   @Bind(R.id.carrylogall_xry) XRecyclerView xRecyclerView;
   private CarryLogAllAdapter adapter;
   private int page = 2;
   private Subscription subscription1;
   private Subscription subscription2;
 
-  public static CarryLogAllFragment newInstance(String title) {
-    CarryLogAllFragment carryLogAllFragment = new CarryLogAllFragment();
-    Bundle bundle = new Bundle();
-    bundle.putString("keyword", title);
-    carryLogAllFragment.setArguments(bundle);
-    return carryLogAllFragment;
-  }
+
 
   @Override public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -81,10 +85,10 @@ public class CarryLogAllFragment extends Fragment {
 
   @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-    initViews(view);
+    initViews();
   }
 
-  private void initViews(View view) {
+  private void initViews() {
     xRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     xRecyclerView.addItemDecoration(
         new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));

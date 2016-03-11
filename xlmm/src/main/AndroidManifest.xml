@@ -379,6 +379,9 @@
     <activity android:name=".ui.activity.xiaolumama.MMWebViewActivity"
         android:theme="@style/AppTheme.TransparentActivity"
     />
+    <activity android:name=".ui.activity.xiaolumama.MMcarryLogActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+    />
 
     <service
         android:enabled="true"
