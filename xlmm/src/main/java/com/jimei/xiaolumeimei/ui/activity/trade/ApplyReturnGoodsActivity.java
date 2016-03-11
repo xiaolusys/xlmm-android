@@ -1,5 +1,6 @@
 package com.jimei.xiaolumeimei.ui.activity.trade;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -21,6 +22,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.Bind;
+
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmApi;
@@ -38,6 +41,8 @@ import com.qiniu.android.storage.UpProgressHandler;
 import com.qiniu.android.storage.UploadManager;
 import com.qiniu.android.storage.UploadOptions;
 import com.squareup.okhttp.ResponseBody;
+import com.tbruyelle.rxpermissions.RxPermissions;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import org.json.JSONObject;
@@ -258,7 +263,18 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
 
       case R.id.imgbtn_camera_pic:
         Log.i(TAG,"camera ");
-        Image_Picker_Dialog();
+        RxPermissions.getInstance(this)
+                .request(Manifest.permission.CAMERA)
+                .subscribe(granted -> {
+                  if (granted) { // Always true pre-M
+                    // I can control the camera now
+                    Image_Picker_Dialog();
+                  } else {
+                    // Oups permission denied
+                    JUtils.Toast("小鹿美美需要照相机和相册权限,请再次点击保存并打开权限许可.");
+                  }
+                });
+
         break;
     }
   }

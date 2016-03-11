@@ -1,5 +1,6 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
+import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,6 +11,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import butterknife.Bind;
 import cn.sharesdk.onekeyshare.OnekeyShare;
+
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.utils.CameraUtils;
 import java.io.File;
 import okhttp3.Call;
@@ -21,6 +24,7 @@ import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.okhttp.callback.FileParaCallback;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jude.utils.JUtils;
+import com.tbruyelle.rxpermissions.RxPermissions;
 import com.zhy.http.okhttp.OkHttpUtils;
 
 /**
@@ -64,37 +68,49 @@ public class TwoDimenCodeActivity extends BaseSwipeBackCompatActivity implements
       JUtils.Log(TAG,"myurl " + myurl);
     }
 
-    OkHttpUtils.get()
-            .url(myurl)
-            .build()
-            .execute(new FileParaCallback() {
-              @Override public void onError(Call call, Exception e) {
+    RxPermissions.getInstance(this)
+      .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+      .subscribe(granted -> {
+        if (granted) { // Always true pre-M
+          // I can control the camera now
+          OkHttpUtils.get()
+                  .url(myurl)
+                  .build()
+                  .execute(new FileParaCallback() {
+                    @Override public void onError(Call call, Exception e) {
 
-              }
+                    }
 
-              @Override public void onResponse(FilePara response) {
-                if (response != null) {
-                  filePara = response;
-                  try {
-                    String newName = Environment.getExternalStorageDirectory() +
-                        CameraUtils.XLMM_IMG_PATH + "我的推荐二维码.jpg";
-                    new File(response.getFilePath()).renameTo(
-                        new File(newName));
+                    @Override public void onResponse(FilePara response) {
+                      if (response != null) {
+                        filePara = response;
+                        try {
+                          String newName = Environment.getExternalStorageDirectory() +
+                                  CameraUtils.XLMM_IMG_PATH + "我的推荐二维码.jpg";
+                          new File(response.getFilePath()).renameTo(
+                                  new File(newName));
 
-                    Uri uri = Uri.fromFile(new File(newName));
-                    // 通知图库更新
-                    Intent scannerIntent =
-                        new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
-                    scannerIntent.setData(uri);
+                          Uri uri = Uri.fromFile(new File(newName));
+                          // 通知图库更新
+                          Intent scannerIntent =
+                                  new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
+                          scannerIntent.setData(uri);
 
-                    TwoDimenCodeActivity.this.sendBroadcast(scannerIntent);
-                  }
-                  catch (Exception e){
-                    e.printStackTrace();
-                  }
-                }
-              }
-            });
+                          TwoDimenCodeActivity.this.sendBroadcast(scannerIntent);
+                        }
+                        catch (Exception e){
+                          e.printStackTrace();
+                        }
+                      }
+                    }
+                  });
+        } else {
+          // Oups permission denied
+          JUtils.Toast("小鹿美美需要存储权限存储图片,请再次点击保存并打开权限许可.");
+        }
+      });
+
+
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
