@@ -655,5 +655,6 @@ public interface XlmmService {
   Observable<MamaFortune> getMamaFortune();
 
   @GET(XlmmApi.APP_BASE_URL+"/rest/v2/mama/activevalue")
-  Observable<MamaLivenessBean> getMamaLiveness();
+  Observable<MamaLivenessBean> getMamaLiveness(
+          @Query("page")String page);
 }
