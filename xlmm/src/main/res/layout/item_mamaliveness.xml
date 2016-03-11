@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rlayout_order_lefttime"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:id="@+id/rl_sum"
+      >
+    <TextView
+        android:id="@+id/tv_day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8px"
+        android:text=""
+        android:textSize="15sp"
+        />
+
+  </RelativeLayout>
+
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:id="@+id/rl_info"
+      android:padding="8dp"
+      >
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_value_type"
+        android:text=""
+        android:textSize="10sp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_status_info"
+        android:layout_toRightOf="@id/img_tip"
+        android:layout_below="@id/tv_time"
+        android:padding="8px"
+        android:text=""
+        android:textSize="12sp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_one_liveness"
+        android:padding="8px"
+        android:layout_alignParentRight="true"
+        android:text="+ 0.00"
+        android:textSize="15sp"
+        />
+  </RelativeLayout>
+
+
+</LinearLayout>

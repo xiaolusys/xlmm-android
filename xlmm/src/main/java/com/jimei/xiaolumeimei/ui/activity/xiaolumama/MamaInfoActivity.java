@@ -202,6 +202,10 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         break;
       case R.id.tv_liveness:
       case R.id.img_liveness:
+        intent = new Intent(MamaInfoActivity.this, MamaLivenessActivity.class);
+        intent.putExtra("liveness", 90);
+
+        startActivity(intent);
         break;
       case R.id.rl_chooselist:
         startActivity(new Intent(MamaInfoActivity.this, MMChooseListActivity.class));

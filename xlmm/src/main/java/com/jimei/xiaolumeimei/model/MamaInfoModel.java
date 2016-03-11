@@ -82,9 +82,9 @@ public class MamaInfoModel {
   }
 
   //得到妈妈活跃值
-  public Observable<MamaLivenessBean> getMamaLiveness() {
+  public Observable<MamaLivenessBean> getMamaLiveness(String page) {
     return XlmmRetrofitClient.getService()
-            .getMamaLiveness()
+            .getMamaLiveness(page)
             .compose(new DefaultTransform<>());
   }
 }
