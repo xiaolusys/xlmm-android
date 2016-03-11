@@ -50,6 +50,16 @@ public class MMcarryLogActivity extends BaseSwipeBackCompatActivity
     return R.layout.activity_mmcarrylog;
   }
 
+  @Override protected void onResume() {
+    super.onResume();
+    appBarLayout.addOnOffsetChangedListener(this);
+  }
+
+  @Override protected void onPause() {
+    super.onPause();
+    appBarLayout.removeOnOffsetChangedListener(this);
+  }
+
   @Override protected void initViews() {
 
     collapseToolbar.setTitleEnabled(false);

@@ -5,7 +5,7 @@
     android:foreground="?attr/selectableItemBackground"
     android:background="@drawable/shot_item_background"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="582px">
 
   <RelativeLayout android:layout_width="wrap_content"
       android:layout_height="wrap_content">
@@ -13,7 +13,7 @@
         android:scaleType="centerCrop"
         android:id="@+id/childlist_image"
         android:layout_width="match_parent"
-        android:layout_height="420px"/>
+        android:layout_height="465px"/>
 
     <include
         layout="@layout/item_saleout"/>
@@ -24,7 +24,7 @@
       android:layout_marginTop="26px"
       android:gravity="center"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content">
+      android:layout_height="37px">
     <TextView
         android:textColor="#4a4a4a"
         android:textSize="12sp"

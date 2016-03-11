@@ -39,7 +39,7 @@
           android:background="@color/white"
           app:tabIndicatorColor="@color/colorPrimary"
           app:tabSelectedTextColor="@color/colorPrimaryDark"
-          app:tabTextColor="@color/colorPrimary"/>
+          app:tabTextColor="@color/black_overlay"/>
 
     </android.support.design.widget.CollapsingToolbarLayout>
 

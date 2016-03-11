@@ -305,11 +305,20 @@ public class ProductDetailActvityWeb extends BaseSwipeBackCompatActivity
             if (cartsNumResultBean != null && cartsNumResultBean.getResult() != 0) {
               num = cartsNumResultBean.getResult();
               badge.setBadgeCount(num);
-              imageView1.setVisibility(View.INVISIBLE);
-              imageView2.setVisibility(View.VISIBLE);
-              cvLefttime.setVisibility(View.VISIBLE);
+
+              if (calcLefttowTime(cartsNumResultBean.getLastCreated()) != 0) {
+                imageView1.setVisibility(View.INVISIBLE);
+                imageView2.setVisibility(View.VISIBLE);
+                cvLefttime.setVisibility(View.VISIBLE);
+              } else {
+                imageView1.setVisibility(View.VISIBLE);
+                imageView2.setVisibility(View.INVISIBLE);
+                cvLefttime.setVisibility(View.INVISIBLE);
+                badge.setBadgeCount(0);
+              }
 
               cvLefttime.start(calcLefttowTime(cartsNumResultBean.getLastCreated()));
+
               cvLefttime.setOnCountdownEndListener(
                   new CountdownView.OnCountdownEndListener() {
                     @Override public void onEnd(CountdownView cv) {

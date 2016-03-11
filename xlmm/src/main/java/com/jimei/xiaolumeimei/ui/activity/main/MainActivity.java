@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.ui.activity.main;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -14,6 +15,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -54,6 +56,7 @@ import com.jude.utils.JUtils;
 import com.umeng.update.UmengUpdateAgent;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import rx.Subscriber;
 import rx.Subscription;
@@ -84,6 +87,9 @@ public class MainActivity extends BaseActivity
   List<Fragment> fragments;
   List<String> titles;
   UserInfoBean userInfoBean = new UserInfoBean();
+  @Bind(R.id.image_1) ImageView image1;
+  @Bind(R.id.image_2) ImageView image2;
+  //@Bind(R.id.cv_lefttime) CountdownView cvLefttime;
   private CartsModel cartsModel = new CartsModel();
   private int num;
   private BadgeView badge;
@@ -287,7 +293,11 @@ public class MainActivity extends BaseActivity
     }
 
     badge = new BadgeView(this);
-    badge.setTargetView(carts);
+    badge.setTextSizeOff(5);
+    badge.setBackground(2, Color.parseColor("#d3321b"));
+    badge.setGravity(Gravity.RIGHT | Gravity.TOP);
+    badge.setPadding(dip2Px(2), dip2Px(1), dip2Px(2), dip2Px(1));
+    badge.setTargetView(image2);
     //badge.setBadgeGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
   }
 
@@ -470,14 +480,52 @@ public class MainActivity extends BaseActivity
     swith_fragment();
 
     //显示购物车数量
+    //cartsModel.show_carts_num()
+    //    .subscribeOn(Schedulers.io())
+    //    .subscribe(new ServiceResponse<CartsNumResultBean>() {
+    //      @Override public void onNext(CartsNumResultBean cartsNumResultBean) {
+    //        super.onNext(cartsNumResultBean);
+    //        if (cartsNumResultBean != null) {
+    //          num = cartsNumResultBean.getResult();
+    //          badge.setBadgeCount(num);
+    //        }
+    //      }
+    //    });
+
     cartsModel.show_carts_num()
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<CartsNumResultBean>() {
           @Override public void onNext(CartsNumResultBean cartsNumResultBean) {
-            super.onNext(cartsNumResultBean);
-            if (cartsNumResultBean != null) {
+            if (cartsNumResultBean != null && cartsNumResultBean.getResult() != 0) {
               num = cartsNumResultBean.getResult();
               badge.setBadgeCount(num);
+
+              if (calcLefttowTime(cartsNumResultBean.getLastCreated()) != 0) {
+                image1.setVisibility(View.INVISIBLE);
+                image2.setVisibility(View.VISIBLE);
+                //cvLefttime.setVisibility(View.VISIBLE);
+              } else {
+                image1.setVisibility(View.VISIBLE);
+                image2.setVisibility(View.INVISIBLE);
+                //cvLefttime.setVisibility(View.INVISIBLE);
+                badge.setBadgeCount(0);
+              }
+
+              //cvLefttime.start(calcLefttowTime(cartsNumResultBean.getLastCreated()));
+
+              //cvLefttime.setOnCountdownEndListener(
+              //    new CountdownView.OnCountdownEndListener() {
+              //      @Override public void onEnd(CountdownView cv) {
+              //        image1.setVisibility(View.VISIBLE);
+              //        image2.setVisibility(View.INVISIBLE);
+              //        cvLefttime.setVisibility(View.INVISIBLE);
+              //        badge.setBadgeCount(0);
+              //      }
+              //    });
+            } else {
+              image1.setVisibility(View.VISIBLE);
+              image2.setVisibility(View.INVISIBLE);
+              //cvLefttime.setVisibility(View.INVISIBLE);
             }
           }
         });
@@ -583,6 +631,7 @@ public class MainActivity extends BaseActivity
     return userInfoBean;
   }
 
+  //MIpush跳转
   public void swith_fragment() {
     int tabid = 0;
     if (getIntent().getExtras() != null) {
@@ -597,6 +646,23 @@ public class MainActivity extends BaseActivity
         }
       }
     }
+  }
+
+  private long calcLefttowTime(long crtTime) {
+    long left = 0;
+    Date now = new Date();
+    try {
+      if (crtTime * 1000 - now.getTime() > 0) {
+        left = crtTime * 1000 - now.getTime();
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return left;
+  }
+
+  private int dip2Px(float dip) {
+    return (int) (dip * getResources().getDisplayMetrics().density + 0.5f);
   }
 
   class MainTabAdapter extends FragmentPagerAdapter {

@@ -13,7 +13,6 @@ import com.jimei.xiaolumeimei.adapter.ShoppingListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ShoppingListBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
-import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
@@ -81,8 +80,8 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
   private void initRecyclerView() {
 
     shoppinglistXry.setLayoutManager(new LinearLayoutManager(this));
-    shoppinglistXry.addItemDecoration(
-        new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+    //shoppinglistXry.addItemDecoration(
+    //    new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
     shoppinglistXry.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
     shoppinglistXry.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
     shoppinglistXry.setArrowImageView(R.drawable.iconfont_downgrey);
