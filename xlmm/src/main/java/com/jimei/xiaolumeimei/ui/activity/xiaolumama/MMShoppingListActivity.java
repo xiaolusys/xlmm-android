@@ -79,6 +79,7 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
   }
 
   private void initRecyclerView() {
+
     shoppinglistXry.setLayoutManager(new LinearLayoutManager(this));
     shoppinglistXry.addItemDecoration(
         new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));

@@ -42,10 +42,10 @@ import com.jimei.xiaolumeimei.ui.activity.user.MembershipPointActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.SettingActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.WalletActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaInfoActivity;
-import com.jimei.xiaolumeimei.ui.fragment.ChildFragment;
-import com.jimei.xiaolumeimei.ui.fragment.LadyFragment;
-import com.jimei.xiaolumeimei.ui.fragment.PreviousFragment;
-import com.jimei.xiaolumeimei.ui.fragment.TodayFragment;
+import com.jimei.xiaolumeimei.ui.fragment.v1.ChildFragment;
+import com.jimei.xiaolumeimei.ui.fragment.v1.LadyFragment;
+import com.jimei.xiaolumeimei.ui.fragment.v1.PreviousFragment;
+import com.jimei.xiaolumeimei.ui.fragment.v1.TodayFragment;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.badgelib.BadgeView;
@@ -124,6 +124,7 @@ public class MainActivity extends BaseActivity
     MainTabAdapter mAdapter =
         new MainTabAdapter(getSupportFragmentManager(), fragments, titles);
     mViewPager.setAdapter(mAdapter);
+    mViewPager.setOffscreenPageLimit(3);
     mTabLayout.setupWithViewPager(mViewPager);
     //mTabLayout.setTabsFromPagerAdapter(mAdapter);
     mTabLayout.setTabMode(TabLayout.MODE_FIXED);

@@ -19,7 +19,6 @@ public class ProductListBean {
 
   @SerializedName("count") private int mCount;
   @SerializedName("next") private Object mNext;
-  @SerializedName("previous") private Object mPrevious;
   /**
    * id : 12171
    * url : http://m.xiaolu.so/rest/v1/products/12171.json
@@ -55,9 +54,6 @@ public class ProductListBean {
     this.mNext = next;
   }
 
-  public void setPrevious(Object previous) {
-    this.mPrevious = previous;
-  }
 
   public void setResults(List<ResultsEntity> results) {
     this.mResults = results;
@@ -71,9 +67,6 @@ public class ProductListBean {
     return mNext;
   }
 
-  public Object getPrevious() {
-    return mPrevious;
-  }
 
   public List<ResultsEntity> getResults() {
     return mResults;

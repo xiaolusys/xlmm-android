@@ -56,7 +56,6 @@ public class PreviousAdapter extends RecyclerView.Adapter<PreviousAdapter.Previo
 
     view = LayoutInflater.from(parent.getContext())
         .inflate(R.layout.item_todaylist, parent, false);
-    AutoUtils.autoSize(view);
     return new PreviousVH(view);
   }
 
@@ -168,6 +167,7 @@ public class PreviousAdapter extends RecyclerView.Adapter<PreviousAdapter.Previo
     public PreviousVH(View itemView) {
       super(itemView);
       card = itemView;
+      AutoUtils.autoSize(itemView);
       ButterKnife.bind(this, itemView);
     }
   }

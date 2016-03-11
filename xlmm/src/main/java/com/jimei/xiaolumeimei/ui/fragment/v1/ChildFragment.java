@@ -1,18 +1,18 @@
-package com.jimei.xiaolumeimei.ui.fragment;
+package com.jimei.xiaolumeimei.ui.fragment.v1;
 
 import android.os.Bundle;
 import com.jimei.xiaolumeimei.ui.fragment.presenter.FragmentPresenter;
-import com.jimei.xiaolumeimei.ui.fragment.view.LadyListView;
+import com.jimei.xiaolumeimei.ui.fragment.v1.view.ChildListView;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/03/10.
  *
  * Copyright 2016年 上海己美. All rights reserved.
  */
-public class LadyFragment extends FragmentPresenter<LadyListView> {
+public class ChildFragment extends FragmentPresenter<ChildListView> {
 
-  public static LadyFragment newInstance(String title) {
-    LadyFragment todayFragment = new LadyFragment();
+  public static ChildFragment newInstance(String title) {
+    ChildFragment todayFragment = new ChildFragment();
     Bundle bundle = new Bundle();
     bundle.putString("keyword", title);
     todayFragment.setArguments(bundle);
@@ -21,6 +21,6 @@ public class LadyFragment extends FragmentPresenter<LadyListView> {
 
   @Override protected void lazyData() {
     super.lazyData();
-    mView.initViews(LadyFragment.this, getActivity());
+    mView.initViews(ChildFragment.this, getActivity());
   }
 }

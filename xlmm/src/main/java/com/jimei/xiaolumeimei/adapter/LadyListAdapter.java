@@ -204,6 +204,7 @@ public class LadyListAdapter extends RecyclerView.Adapter<LadyListAdapter.LadyLi
     public LadyListVH(View itemView) {
       super(itemView);
       card = itemView;
+      AutoUtils.autoSize(itemView);
       ButterKnife.bind(this, itemView);
       itemView.setOnClickListener(this);
     }

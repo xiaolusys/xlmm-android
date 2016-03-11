@@ -1,4 +1,4 @@
-package com.jimei.xiaolumeimei.ui.fragment.view;
+package com.jimei.xiaolumeimei.ui.fragment.v1.view;
 
 import android.content.Context;
 import android.content.Intent;
@@ -29,6 +29,7 @@ import com.jimei.xiaolumeimei.ui.activity.product.ChildListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.LadyListActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.WxLoginBindPhoneActivity;
+import com.jimei.xiaolumeimei.ui.fragment.view.ViewImpl;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;

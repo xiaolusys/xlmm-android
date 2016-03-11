@@ -1,19 +1,18 @@
-package com.jimei.xiaolumeimei.ui.fragment;
+package com.jimei.xiaolumeimei.ui.fragment.v1;
 
 import android.os.Bundle;
 import com.jimei.xiaolumeimei.ui.fragment.presenter.FragmentPresenter;
-import com.jimei.xiaolumeimei.ui.fragment.view.PreviousListView;
-import com.jimei.xiaolumeimei.ui.fragment.view.TodayListView;
+import com.jimei.xiaolumeimei.ui.fragment.v1.view.TodayListView;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/03/10.
  *
  * Copyright 2016年 上海己美. All rights reserved.
  */
-public class PreviousFragment extends FragmentPresenter<PreviousListView> {
+public class TodayFragment extends FragmentPresenter<TodayListView> {
 
-  public static PreviousFragment newInstance(String title) {
-    PreviousFragment todayFragment = new PreviousFragment();
+  public static TodayFragment newInstance(String title) {
+    TodayFragment todayFragment = new TodayFragment();
     Bundle bundle = new Bundle();
     bundle.putString("keyword", title);
     todayFragment.setArguments(bundle);
@@ -22,6 +21,6 @@ public class PreviousFragment extends FragmentPresenter<PreviousListView> {
 
   @Override protected void lazyData() {
     super.lazyData();
-    mView.initViews(PreviousFragment.this, getActivity());
+    mView.initViews(TodayFragment.this, getActivity());
   }
 }

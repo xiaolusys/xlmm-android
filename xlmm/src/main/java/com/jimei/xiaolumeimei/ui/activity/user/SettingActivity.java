@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
@@ -20,6 +21,9 @@ import com.jimei.xiaolumeimei.utils.AppUtils;
 import com.jimei.xiaolumeimei.utils.DataClearManager;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.update.UmengUpdateAgent;
+import com.umeng.update.UmengUpdateListener;
+import com.umeng.update.UpdateResponse;
+import com.umeng.update.UpdateStatus;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -134,43 +138,30 @@ public class SettingActivity extends BaseSwipeBackCompatActivity {
       }
 
       if (preference.equals(updateVersion)) {
-        UmengUpdateAgent.forceUpdate(XlmmApp.getInstance());
-        //
-        //UmengUpdateAgent.setUpdateListener(new UmengUpdateListener() {
-        //  @Override public void onUpdateReturned(int i, UpdateResponse updateResponse) {
-        //    if (i == UpdateStatus.No) {
-        //      JUtils.Toast("已经是最新版本");
-        //    } else if (i == UpdateStatus.Yes) {
-        //
-        //    }
-        //  }
-        //});
 
-        //UmengUpdateAgent.setUpdateAutoPopup(false);
-        //UmengUpdateAgent.setUpdateListener(new UmengUpdateListener() {
-        //  @Override
-        //  public void onUpdateReturned(int updateStatus, UpdateResponse updateInfo) {
-        //    switch (updateStatus) {
-        //      case UpdateStatus.Yes: // has update
-        //        UmengUpdateAgent.showUpdateDialog(SettingActivity.this, updateInfo);
-        //        break;
-        //      case UpdateStatus.No: // has no update
-        //        //Toast.makeText(SettingActivity.this, "已经是最新版本", Toast.LENGTH_SHORT)
-        //        //    .show();
-        //        AppUtils.showSnackBar(view, R.string.update_version);
-        //        break;
-        //      case UpdateStatus.NoneWifi: // none wifi
-        //        Toast.makeText(SettingActivity.this, "没有wifi连接， 只在wifi下更新",
-        //            Toast.LENGTH_SHORT).show();
-        //        break;
-        //      case UpdateStatus.Timeout: // time out
-        //        Toast.makeText(SettingActivity.this, "连接超时,请检查网络设置", Toast.LENGTH_SHORT)
-        //            .show();
-        //        break;
-        //    }
-        //  }
-        //});
-        //UmengUpdateAgent.update(SettingActivity.this);
+        UmengUpdateAgent.setUpdateAutoPopup(false);
+        UmengUpdateAgent.setUpdateListener(new UmengUpdateListener() {
+          @Override
+          public void onUpdateReturned(int updateStatus, UpdateResponse updateInfo) {
+            switch (updateStatus) {
+              case UpdateStatus.Yes: // has update
+                UmengUpdateAgent.showUpdateDialog(XlmmApp.getInstance(), updateInfo);
+                break;
+              case UpdateStatus.No: // has no update
+                Toast.makeText(XlmmApp.getInstance(), "当前已是最新版本", Toast.LENGTH_LONG)
+                    .show();
+                break;
+              case UpdateStatus.NoneWifi: // none wifi
+                Toast.makeText(XlmmApp.getInstance(), "温馨提示，当前无wifi连接， 只在wifi下更新",
+                    Toast.LENGTH_LONG).show();
+                break;
+              case UpdateStatus.Timeout: // time out
+                Toast.makeText(XlmmApp.getInstance(), "网络不给力", Toast.LENGTH_LONG).show();
+                break;
+            }
+          }
+        });
+        UmengUpdateAgent.update(XlmmApp.getInstance());
       }
       return false;
     }

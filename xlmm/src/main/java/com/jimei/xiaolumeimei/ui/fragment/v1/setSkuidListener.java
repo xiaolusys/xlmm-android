@@ -1,4 +1,4 @@
-package com.jimei.xiaolumeimei.ui.fragment;
+package com.jimei.xiaolumeimei.ui.fragment.v1;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/03/05.

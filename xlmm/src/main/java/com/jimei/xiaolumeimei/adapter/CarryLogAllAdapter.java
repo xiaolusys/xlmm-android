@@ -12,6 +12,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.CarryLogListBean;
+import com.zhy.autolayout.utils.AutoUtils;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,15 +21,15 @@ import java.util.List;
  *
  * Copyright 2016年 上海己美. All rights reserved.
  */
-public class CarryLogListAdapter
-    extends RecyclerView.Adapter<CarryLogListAdapter.CarryLogListVH> {
+public class CarryLogAllAdapter
+    extends RecyclerView.Adapter<CarryLogAllAdapter.CarryLogListVH> {
 
   private static final String TAG = MMChooseAdapter.class.getSimpleName();
 
   private List<CarryLogListBean.ResultsEntity> mList;
   private Context mContext;
 
-  public CarryLogListAdapter(Context context) {
+  public CarryLogAllAdapter(Context context) {
     this.mContext = context;
     mList = new ArrayList<>();
   }
@@ -70,9 +71,8 @@ public class CarryLogListAdapter
     if (position == 0) {
       showCategory(holder);
     } else {
-      boolean theCategoryOfLastEqualsToThis = mList.get(position - 1)
-          .getCarryDate()
-          .equals(mList.get(position).getCarryDate());
+      boolean theCategoryOfLastEqualsToThis =
+          mList.get(position - 1).getCreated().equals(mList.get(position).getCreated());
       if (!theCategoryOfLastEqualsToThis) {
         showCategory(holder);
       } else {
@@ -83,10 +83,13 @@ public class CarryLogListAdapter
     holder.shoptime.setText(resultsEntity.getCreated().substring(0, 10));
     //holder.picPath.setImageResource(R.drawable.carrylog_image);
     holder.totalCash.setText(
-        "总收益 " + (float) (Math.round(resultsEntity.getDaylyInAmount() * 100)) / 100);
-    holder.tichengCash.setText("+" + resultsEntity.getValueMoney());
-    holder.timeDisplay.setText(resultsEntity.getGetLogTypeDisplay());
-    holder.wxordernick.setText(resultsEntity.getDesc());
+        "总收益 " + (float) (Math.round(resultsEntity.getCarryValue() * 100)) / 100);
+
+    assert resultsEntity.getTodayCarry() != null;
+    holder.tichengCash.setText("+" + resultsEntity.getTodayCarry());
+
+    holder.timeDisplay.setText(resultsEntity.getCarryTypeName());
+    holder.wxordernick.setText(resultsEntity.getStatusDisplay());
   }
 
   @Override public int getItemCount() {
@@ -106,6 +109,7 @@ public class CarryLogListAdapter
 
     public CarryLogListVH(View itemView) {
       super(itemView);
+      AutoUtils.autoSize(itemView);
       ButterKnife.bind(this, itemView);
     }
   }

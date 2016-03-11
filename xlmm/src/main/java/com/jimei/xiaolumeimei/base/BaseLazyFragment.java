@@ -20,14 +20,24 @@ public abstract class BaseLazyFragment extends Fragment {
 
   private boolean isFirstLoad = true;
 
+  @Override public void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setRetainInstance(true);
+  }
+
   @Nullable @Override
   public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
     isFirstLoad = true;
     View view = initViews(inflater, container, savedInstanceState);
     isPrepared = true;
-    lazyLoad();
+    //lazyLoad();
     return view;
+  }
+
+  @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    //isPrepared = true;
+    lazyLoad();
   }
 
   @Override public void setUserVisibleHint(boolean isVisibleToUser) {

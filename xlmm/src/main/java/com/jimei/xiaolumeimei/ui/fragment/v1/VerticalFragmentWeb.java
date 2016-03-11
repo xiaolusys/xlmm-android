@@ -1,4 +1,4 @@
-package com.jimei.xiaolumeimei.ui.fragment;
+package com.jimei.xiaolumeimei.ui.fragment.v1;
 
 import android.net.http.SslError;
 import android.os.Build;

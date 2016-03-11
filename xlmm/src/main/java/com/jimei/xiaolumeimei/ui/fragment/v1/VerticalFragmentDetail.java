@@ -1,8 +1,9 @@
-package com.jimei.xiaolumeimei.ui.fragment;
+package com.jimei.xiaolumeimei.ui.fragment.v1;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,32 +68,36 @@ public class VerticalFragmentDetail extends Fragment implements View.OnClickList
     }
   }
 
-  @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
-      Bundle savedInstanceState) {
-    View rootView = inflater.inflate(R.layout.fragment_product_detail, null);
-    ButterKnife.bind(this, rootView);
+  @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    tagFlowLayout = (TagFlowLayout) view.findViewById(R.id.id_flowlayout);
 
-    mInflater = LayoutInflater.from(getActivity());
+    bianhao = (TextView) view.findViewById(R.id.shangpinbianhao);
+    caizhi = (TextView) view.findViewById(R.id.shagpincaizhi);
+    color = (TextView) view.findViewById(R.id.kexuanyanse);
+    beizhu = (TextView) view.findViewById(R.id.shangpinnbeizhu);
+    //look_chima = (TextView) view.findViewById(R.id.look_size);
+    //xidi = (TextView) view.findViewById(R.id.look_xidi);
 
-    tagFlowLayout = (TagFlowLayout) rootView.findViewById(R.id.id_flowlayout);
-
-    bianhao = (TextView) rootView.findViewById(R.id.shangpinbianhao);
-    caizhi = (TextView) rootView.findViewById(R.id.shagpincaizhi);
-    color = (TextView) rootView.findViewById(R.id.kexuanyanse);
-    beizhu = (TextView) rootView.findViewById(R.id.shangpinnbeizhu);
-    //look_chima = (TextView) rootView.findViewById(R.id.look_size);
-    //xidi = (TextView) rootView.findViewById(R.id.look_xidi);
-
-    name = (TextView) rootView.findViewById(R.id.name);
-    price1 = (TextView) rootView.findViewById(R.id.price1);
-    price2 = (TextView) rootView.findViewById(R.id.price2);
-    countdownView = (CountdownView) rootView.findViewById(R.id.cv_countdownView);
+    name = (TextView) view.findViewById(R.id.name);
+    price1 = (TextView) view.findViewById(R.id.price1);
+    price2 = (TextView) view.findViewById(R.id.price2);
+    countdownView = (CountdownView) view.findViewById(R.id.cv_countdownView);
 
     //look_chima.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
     //xidi.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
 
     img_share.setOnClickListener(this);
-    return rootView;
+  }
+
+  @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
+      Bundle savedInstanceState) {
+    View view = inflater.inflate(R.layout.fragment_product_detail, null);
+    ButterKnife.bind(this, view);
+
+    mInflater = LayoutInflater.from(getActivity());
+
+
+    return view;
   }
 
   @Override public void onDestroyView() {

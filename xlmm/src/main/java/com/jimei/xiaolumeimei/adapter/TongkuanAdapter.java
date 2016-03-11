@@ -54,7 +54,6 @@ public class TongkuanAdapter extends RecyclerView.Adapter<TongkuanAdapter.Tongku
 
     view = LayoutInflater.from(parent.getContext())
         .inflate(R.layout.item_todaylist, parent, false);
-    AutoUtils.autoSize(view);
     return new TongkuanVH(view);
   }
 
@@ -146,6 +145,7 @@ public class TongkuanAdapter extends RecyclerView.Adapter<TongkuanAdapter.Tongku
     public TongkuanVH(View itemView) {
       super(itemView);
       card = itemView;
+      AutoUtils.autoSize(itemView);
       ButterKnife.bind(this, itemView);
     }
   }
