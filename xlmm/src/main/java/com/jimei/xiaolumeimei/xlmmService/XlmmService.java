@@ -25,6 +25,7 @@ import com.jimei.xiaolumeimei.entities.MMChooselistBean;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.MamaFansBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
+import com.jimei.xiaolumeimei.entities.MamaLivenessBean;
 import com.jimei.xiaolumeimei.entities.MembershipPointBean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
 import com.jimei.xiaolumeimei.entities.NicknameBean;
@@ -652,4 +653,7 @@ public interface XlmmService {
 
   @GET(XlmmApi.APP_BASE_URL+"/rest/v2/mama/fortune")
   Observable<MamaFortune> getMamaFortune();
+
+  @GET(XlmmApi.APP_BASE_URL+"/rest/v2/mama/activevalue")
+  Observable<MamaLivenessBean> getMamaLiveness();
 }
