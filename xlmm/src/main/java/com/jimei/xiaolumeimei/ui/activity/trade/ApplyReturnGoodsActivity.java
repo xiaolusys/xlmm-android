@@ -264,7 +264,7 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
       case R.id.imgbtn_camera_pic:
         Log.i(TAG,"camera ");
         RxPermissions.getInstance(this)
-                .request(Manifest.permission.CAMERA)
+                .request(Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .subscribe(granted -> {
                   if (granted) { // Always true pre-M
                     // I can control the camera now
@@ -389,6 +389,10 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
   protected void onActivityResult(int requestCode, int resultCode, Intent data)
   {
     File b = null;
+    if(data == null ){
+      JUtils.Log(TAG, "choose no pic");
+      return;
+    }
     super.onActivityResult(requestCode, resultCode, data);
     if (requestCode == CameraUtils.GALLERY_PICTURE)
     {
@@ -401,18 +405,20 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
       b = Image_Photo_Task(data);
     }
 
-    if(picNum <= 2) {
-      tmpPic[picNum] = b;
-      uploadPic[picNum] = b.getName();
-      picNum++;
-    }
-    else {
-      tmpPic[picNum - 1] = b;
-      uploadPic[picNum - 1] = b.getName();
-    }
+    if(b != null) {
+      if (picNum <= 2) {
+        tmpPic[picNum] = b;
+        uploadPic[picNum] = b.getName();
+        picNum++;
+      } else {
+        tmpPic[picNum - 1] = b;
+        uploadPic[picNum - 1] = b.getName();
+      }
 
-    showPic();
-    uploadFile(b);
+
+      showPic();
+      uploadFile(b);
+    }
   }
 
   public File Image_Selecting_Task(Intent data)
@@ -476,6 +482,7 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
     // User had pick an image.
     Cursor cursor = getContentResolver().query(CameraUtils.uri, new String[]
             { android.provider.MediaStore.Images.ImageColumns.DATA }, null, null, null);
+    if(cursor == null) return null;
     cursor.moveToFirst();
     // Link to the image
     final String imageFilePath = cursor.getString(0);
