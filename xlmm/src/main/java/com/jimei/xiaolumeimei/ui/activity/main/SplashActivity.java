@@ -23,11 +23,12 @@ public class SplashActivity extends Activity {//loading 页面
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_splash);
 
-    ImageView view = new ImageView(this);
+    /*ImageView view = new ImageView(this);
     view.setBackgroundResource(R.drawable.loading);
     setContentView(view, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-        ViewGroup.LayoutParams.MATCH_PARENT));
+        ViewGroup.LayoutParams.MATCH_PARENT));*/
 
     Window window = getWindow();
     //4.4版本及以上
