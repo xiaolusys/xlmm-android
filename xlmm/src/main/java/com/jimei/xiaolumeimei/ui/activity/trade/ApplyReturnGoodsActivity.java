@@ -271,7 +271,7 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity implem
                     Image_Picker_Dialog();
                   } else {
                     // Oups permission denied
-                    JUtils.Toast("小鹿美美需要照相机和相册权限,请再次点击保存并打开权限许可.");
+                    JUtils.Toast("小鹿美美需要照相机和相册权限,请再次点击并打开权限许可.");
                   }
                 });
 
