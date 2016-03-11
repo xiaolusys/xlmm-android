@@ -655,15 +655,14 @@ public interface XlmmService {
   Observable<MamaFortune> getMamaFortune();
 
   @GET(XlmmApi.APP_BASE_URL+"/rest/v2/mama/activevalue")
-<<<<<<< HEAD
-  Observable<MamaLivenessBean> getMamaLiveness();
+  Observable<MamaLivenessBean> getMamaLiveness(
+          @Query("page")String page);
 
   @GET(XlmmApi.APP_BASE_URL_DEV+"/rest/v2/mama/carry")
   Observable<CarryLogListBean> getMamaAllCarryLogs(
        @Query("page")String page
   );
-=======
-  Observable<MamaLivenessBean> getMamaLiveness(
-          @Query("page")String page);
->>>>>>> origin/jimei
+
+
+
 }
