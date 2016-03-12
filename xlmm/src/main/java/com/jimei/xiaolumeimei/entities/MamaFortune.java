@@ -140,7 +140,7 @@ public class MamaFortune {
     @Override
     public String toString() {
         return "MamaFortune{" +
-                "mama_fortune=" + mama_fortune +
+                "mama_fortune=" + mama_fortune.toString() +
                 '}';
     }
 }

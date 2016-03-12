@@ -378,7 +378,7 @@
               />
 
           <TextView
-              android:id="@+id/tv_two_dimen"
+              android:id="@+id/tv_invite_num"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_gravity="center"
