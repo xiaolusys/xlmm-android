@@ -28,7 +28,45 @@ import butterknife.Bind;
  */
 public class SplashActivity extends BaseSwipeBackCompatActivity {//loading 页面
 
-  @Bind(R.id.rl_splash)  RelativeLayout rl_splash;
+  //@Bind(R.id.rl_splash)  RelativeLayout rl_splash;
+
+
+  @Override
+  protected void initViews() {
+
+    /*ImageView view = new ImageView(this);
+    view.setBackgroundResource(R.drawable.loading);
+    setContentView(view, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams.MATCH_PARENT));*/
+
+
+    Window window = getWindow();
+    //4.4版本及以上
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+      window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+              WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+    }
+    //5.0版本及以上
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+              | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+      window.getDecorView()
+              .setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                      | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                      | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+      window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+      window.setStatusBarColor(Color.TRANSPARENT);
+      window.setNavigationBarColor(Color.TRANSPARENT);
+    }
+
+    new Timer().schedule(new TimerTask() {
+      @Override public void run() {
+        startActivity(new Intent(SplashActivity.this, MainActivity.class));
+        finish();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+      }
+    }, 2000);
+  }
 
   @Override
   protected void setListener() {
@@ -50,42 +88,6 @@ public class SplashActivity extends BaseSwipeBackCompatActivity {//loading 页�
     return R.layout.activity_splash;
   }
 
-  @Override
-  protected void initViews() {
-/*ImageView view = new ImageView(this);
-    view.setBackgroundResource(R.drawable.loading);
-    setContentView(view, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-        ViewGroup.LayoutParams.MATCH_PARENT));*/
-    rl_splash.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-    rl_splash.setBackgroundResource(R.color.colorAccent);
-
-    /*Window window = getWindow();
-    //4.4版本及以上
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-      window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-              WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-    }
-    //5.0版本及以上
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
-              | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-      window.getDecorView()
-              .setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                      | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                      | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-      window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-      window.setStatusBarColor(Color.TRANSPARENT);
-      window.setNavigationBarColor(Color.TRANSPARENT);
-    }*/
-
-    new Timer().schedule(new TimerTask() {
-      @Override public void run() {
-        startActivity(new Intent(SplashActivity.this, MainActivity.class));
-        finish();
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-      }
-    }, 2000);
-  }
 
   @Override
   protected boolean toggleOverridePendingTransition() {
@@ -96,4 +98,6 @@ public class SplashActivity extends BaseSwipeBackCompatActivity {//loading 页�
   protected TransitionMode getOverridePendingTransitionMode() {
     return null;
   }
+
+
 }
