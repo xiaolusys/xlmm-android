@@ -5,7 +5,6 @@ import android.content.Context;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.CookieManager;
@@ -38,7 +37,7 @@ public class MMWebViewActivity extends BaseSwipeBackCompatActivity {
   LinearLayout ll_actwebview;
   //private static final String URL =
   //    "http://192.168.1.31:9000/sale/promotion/xlsampleorder/";
-  private Toolbar mToolbar;
+  //private Toolbar mToolbar;
   private WebView mWebView;
   private ProgressBar mProgressBar;
   private String cookies;
@@ -47,12 +46,12 @@ public class MMWebViewActivity extends BaseSwipeBackCompatActivity {
   private String sessionid;
 
   @Override protected void setListener() {
-    mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        JUtils.Log(TAG, "setNavigationOnClickListener finish");
-        finish();
-      }
-    });
+    //mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+    //  @Override public void onClick(View v) {
+    //    JUtils.Log(TAG, "setNavigationOnClickListener finish");
+    //    finish();
+    //  }
+    //});
   }
 
   @Override protected void initData() {
@@ -100,11 +99,11 @@ public class MMWebViewActivity extends BaseSwipeBackCompatActivity {
     ll_actwebview = (LinearLayout) findViewById(R.id.ll_actwebview);
     mProgressBar = (ProgressBar) findViewById(R.id.pb_view);
     mWebView = (WebView) findViewById(R.id.wb_view);
-    mToolbar = (Toolbar) findViewById(R.id.toolbar);
-    mToolbar.setTitle("");
-    setSupportActionBar(mToolbar);
-    mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    //mToolbar = (Toolbar) findViewById(R.id.toolbar);
+    //mToolbar.setTitle("");
+    //setSupportActionBar(mToolbar);
+    //mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+    //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     try {
       if (Build.VERSION.SDK_INT >= 19) {
