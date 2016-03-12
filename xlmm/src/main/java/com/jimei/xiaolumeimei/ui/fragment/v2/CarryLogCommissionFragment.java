@@ -19,6 +19,8 @@ import com.jimei.xiaolumeimei.entities.CarryLogListBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import java.util.ArrayList;
+import java.util.List;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -27,8 +29,13 @@ import rx.schedulers.Schedulers;
  *
  * Copyright 2016年 上海己美. All rights reserved.
  */
-public class CarryLogCommissionFragment
-    extends Fragment {
+public class CarryLogCommissionFragment extends Fragment {
+  List<CarryLogListBean.ResultsEntity> list = new ArrayList<>();
+  @Bind(R.id.carrylogall_xry) XRecyclerView xRecyclerView;
+  private CarryLogAllAdapter adapter;
+  private int page = 2;
+  private Subscription subscription1;
+  private Subscription subscription2;
 
   public static CarryLogCommissionFragment newInstance(String title) {
     CarryLogCommissionFragment carryLogAllFragment = new CarryLogCommissionFragment();
@@ -38,14 +45,6 @@ public class CarryLogCommissionFragment
     return carryLogAllFragment;
   }
 
-  @Bind(R.id.carrylogall_xry) XRecyclerView xRecyclerView;
-  private CarryLogAllAdapter adapter;
-  private int page = 2;
-  private Subscription subscription1;
-  private Subscription subscription2;
-
-
-
   @Override public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setRetainInstance(true);
@@ -53,7 +52,7 @@ public class CarryLogCommissionFragment
 
   @Override public void setUserVisibleHint(boolean isVisibleToUser) {
     super.setUserVisibleHint(isVisibleToUser);
-    if (isVisibleToUser) {
+    if (isVisibleToUser && list.size() == 0) {
       load();
     }
   }
@@ -75,8 +74,9 @@ public class CarryLogCommissionFragment
 
           @Override public void onNext(CarryLogListBean carryLogListBean) {
             if (carryLogListBean != null) {
-              adapter.update(carryLogListBean.getResults());
-              JUtils.Log("carrylog",carryLogListBean.toString());
+              list.addAll(carryLogListBean.getResults());
+              adapter.update(list);
+              JUtils.Log("carrylog", carryLogListBean.toString());
             }
           }
         });
@@ -89,8 +89,6 @@ public class CarryLogCommissionFragment
 
   private void initViews() {
     xRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-    //xRecyclerView.addItemDecoration(
-    //    new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
     xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
     xRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
     xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);

@@ -19,6 +19,8 @@ import com.jimei.xiaolumeimei.entities.CarryLogListBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import java.util.ArrayList;
+import java.util.List;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -29,6 +31,7 @@ import rx.schedulers.Schedulers;
  */
 public class CarryLogAllFragment extends Fragment {
   @Bind(R.id.carrylogall_xry) XRecyclerView xRecyclerView;
+  List<CarryLogListBean.ResultsEntity> list = new ArrayList<>();
   private CarryLogAllAdapter adapter;
   private int page = 2;
   private Subscription subscription1;
@@ -49,7 +52,7 @@ public class CarryLogAllFragment extends Fragment {
 
   @Override public void setUserVisibleHint(boolean isVisibleToUser) {
     super.setUserVisibleHint(isVisibleToUser);
-    if (isVisibleToUser) {
+    if (isVisibleToUser && list.size() == 0) {
       load();
     }
   }
@@ -71,8 +74,9 @@ public class CarryLogAllFragment extends Fragment {
 
           @Override public void onNext(CarryLogListBean carryLogListBean) {
             if (carryLogListBean != null) {
-              adapter.update(carryLogListBean.getResults());
-              JUtils.Log("carrylog",carryLogListBean.toString());
+              list.addAll(carryLogListBean.getResults());
+              adapter.update(list);
+              JUtils.Log("carrylog", carryLogListBean.toString());
             }
           }
         });
