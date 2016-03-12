@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.TextView;
 import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -17,7 +18,6 @@ import com.jimei.xiaolumeimei.ui.fragment.v2.CarryLogAllFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.CarryLogBounsFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.CarryLogCashbackFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.CarryLogCommissionFragment;
-import com.jimei.xiaolumeimei.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,13 +26,19 @@ import java.util.List;
  *
  * Copyright 2016年 上海己美. All rights reserved.
  */
-public class MMcarryLogActivity extends BaseSwipeBackCompatActivity
-    implements AppBarLayout.OnOffsetChangedListener {
+public class MMcarryLogActivity extends BaseSwipeBackCompatActivity {
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.tab_layout) TabLayout tabLayout;
-  @Bind(R.id.collapse_toolbar) CollapsingToolbarLayout collapseToolbar;
+  @Bind(R.id.collapsing_toolbar_layout) CollapsingToolbarLayout collapseToolbar;
   @Bind(R.id.appBarLayout) AppBarLayout appBarLayout;
   @Bind(R.id.view_pager) ViewPager viewPager;
+  @Bind(R.id.tv_leiji) TextView tvLeiji;
+  @Bind(R.id.tv_num) TextView tvNum;
+  //@Bind(R.id.toolbar) Toolbar toolbar;
+  //@Bind(R.id.tab_layout) TabLayout tabLayout;
+  //@Bind(R.id.collapse_toolbar) CollapsingToolbarLayout collapseToolbar;
+  //@Bind(R.id.appBarLayout) AppBarLayout appBarLayout;
+  //@Bind(R.id.view_pager) ViewPager viewPager;
 
   @Override protected void setListener() {
 
@@ -52,26 +58,32 @@ public class MMcarryLogActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void onResume() {
     super.onResume();
-    appBarLayout.addOnOffsetChangedListener(this);
+    //appBarLayout.addOnOffsetChangedListener(this);
   }
 
   @Override protected void onPause() {
     super.onPause();
-    appBarLayout.removeOnOffsetChangedListener(this);
+    //appBarLayout.removeOnOffsetChangedListener(this);
   }
 
   @Override protected void initViews() {
 
-    collapseToolbar.setTitleEnabled(false);
-    appBarLayout.addOnOffsetChangedListener(this);
+    //collapseToolbar.setTitleEnabled(false);
+    //appBarLayout.addOnOffsetChangedListener(this);
+    //
+    //int toolbar_hight = Utils.getToolbarHeight(this) * 2;
+    //CollapsingToolbarLayout.LayoutParams params =
+    //    (CollapsingToolbarLayout.LayoutParams) toolbar.getLayoutParams();
+    //params.height = toolbar_hight;
+    //toolbar.setLayoutParams(params);
 
-    int toolbar_hight = Utils.getToolbarHeight(this) * 2;
-    CollapsingToolbarLayout.LayoutParams params =
-        (CollapsingToolbarLayout.LayoutParams) toolbar.getLayoutParams();
-    params.height = toolbar_hight;
-    toolbar.setLayoutParams(params);
+    toolbar.setTitle("收益记录");
+    setSupportActionBar(toolbar);
+    finishBack(toolbar);
 
-    setUpCommonBackTooblBar(toolbar, "收益记录");
+    collapseToolbar.setTitle("");
+    tvLeiji.setText("累计收益");
+    tvNum.setText("66666");
 
     List<Fragment> fragments = new ArrayList<>();
     fragments.add(CarryLogAllFragment.newInstance("全部"));
@@ -104,13 +116,6 @@ public class MMcarryLogActivity extends BaseSwipeBackCompatActivity
 
   @Override protected TransitionMode getOverridePendingTransitionMode() {
     return null;
-  }
-
-  @Override public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-    float alpha =
-        (float) Math.abs(verticalOffset) / (float) appBarLayout.getTotalScrollRange()
-            * 1.0f;
-    toolbar.setAlpha(alpha);
   }
 
   protected void setUpCommonBackTooblBar(Toolbar toolbar, String title) {
