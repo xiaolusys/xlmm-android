@@ -20,6 +20,7 @@ import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.victor.loading.rotate.RotateLoading;
+import java.util.ArrayList;
 import java.util.List;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
@@ -35,6 +36,7 @@ public class ChildFragment extends Fragment {
   @Bind(R.id.childlist_recyclerView) XRecyclerView xRecyclerView;
 
   int page_size = 10;
+  List<ChildListBean.ResultsEntity> list = new ArrayList<>();
   private int page = 2;
   private int totalPages;//总的分页数
   private ChildListAdapter mChildListAdapter;
@@ -58,7 +60,7 @@ public class ChildFragment extends Fragment {
 
   @Override public void setUserVisibleHint(boolean isVisibleToUser) {
     super.setUserVisibleHint(isVisibleToUser);
-    if (isVisibleToUser) {
+    if (isVisibleToUser && list.size()== 0) {
       load();
     }
   }
@@ -83,7 +85,8 @@ public class ChildFragment extends Fragment {
               if (childListBean != null) {
                 List<ChildListBean.ResultsEntity> results = childListBean.getResults();
                 totalPages = childListBean.getCount() / page_size;
-                mChildListAdapter.update(results);
+                list.addAll(results);
+                mChildListAdapter.update(list);
               }
             } catch (Exception ex) {
             }

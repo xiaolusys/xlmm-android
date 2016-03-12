@@ -20,6 +20,7 @@ import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.victor.loading.rotate.RotateLoading;
+import java.util.ArrayList;
 import java.util.List;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
@@ -35,6 +36,7 @@ public class LadyFragment extends Fragment {
   @Bind(R.id.childlist_recyclerView) XRecyclerView xRecyclerView;
 
   int page_size = 10;
+  List<LadyListBean.ResultsEntity> lists = new ArrayList<>();
   private int page = 2;
   private int totalPages;//总的分页数
   private LadyListAdapter mLadyListAdapter;
@@ -106,14 +108,13 @@ public class LadyFragment extends Fragment {
 
   @Override public void setUserVisibleHint(boolean isVisibleToUser) {
     super.setUserVisibleHint(isVisibleToUser);
-    if (isVisibleToUser) {
+    if (isVisibleToUser && lists.size() == 0) {
       load();
     }
   }
 
   private void load() {
     loading.start();
-
     subscribe1 = ProductModel.getInstance()
         .getLadyList(1, 10)
         .subscribeOn(Schedulers.io())
@@ -131,7 +132,8 @@ public class LadyFragment extends Fragment {
               if (ladyListBean != null) {
                 List<LadyListBean.ResultsEntity> results = ladyListBean.getResults();
                 totalPages = ladyListBean.getCount() / page_size;
-                mLadyListAdapter.update(results);
+                lists.addAll(results);
+                mLadyListAdapter.update(lists);
               }
             } catch (Exception ex) {
             }
