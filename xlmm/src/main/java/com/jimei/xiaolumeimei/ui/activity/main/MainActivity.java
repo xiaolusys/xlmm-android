@@ -293,10 +293,10 @@ public class MainActivity extends BaseActivity
     }
 
     badge = new BadgeView(this);
-    badge.setTextSizeOff(5);
+    badge.setTextSizeOff(7);
     badge.setBackground(4, Color.parseColor("#d3321b"));
     badge.setGravity(Gravity.END | Gravity.TOP);
-    badge.setPadding(dip2Px(3), dip2Px(1), dip2Px(3), dip2Px(1));
+    badge.setPadding(dip2Px(4), dip2Px(1), dip2Px(4), dip2Px(1));
     badge.setTargetView(image2);
     //badge.setBadgeGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
   }
