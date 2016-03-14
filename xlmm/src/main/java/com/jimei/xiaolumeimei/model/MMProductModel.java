@@ -1,10 +1,13 @@
 package com.jimei.xiaolumeimei.model;
 
 import com.jimei.library.rx.DefaultTransform;
+import com.jimei.xiaolumeimei.entities.AwardCarryBean;
 import com.jimei.xiaolumeimei.entities.CarryLogListBean;
+import com.jimei.xiaolumeimei.entities.ClickcarryBean;
 import com.jimei.xiaolumeimei.entities.MMChooselistBean;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.NinePicBean;
+import com.jimei.xiaolumeimei.entities.OderCarryBean;
 import com.jimei.xiaolumeimei.entities.OneDayAgentOrdersBean;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.ShoppingListBean;
@@ -114,11 +117,33 @@ public class MMProductModel {
 
     return XlmmRetrofitClient.getService().getShareShopping();
   }
+
   //得到全部历史收益
-  public Observable<CarryLogListBean> getMamaAllCarryLogs(String page){
+  public Observable<CarryLogListBean> getMamaAllCarryLogs(String page) {
 
     return XlmmRetrofitClient.getService()
         .getMamaAllCarryLogs(page)
+        .compose(new DefaultTransform<>());
+  }
+
+  public Observable<OderCarryBean> getMamaAllOderCarryLogs(String page) {
+
+    return XlmmRetrofitClient.getService()
+        .getMamaAllOderCarryLogs(page)
+        .compose(new DefaultTransform<>());
+  }
+
+  public Observable<AwardCarryBean> getMamaAllAwardCarryLogs(String page) {
+
+    return XlmmRetrofitClient.getService()
+        .getMamaAllAwardCarryLogs(page)
+        .compose(new DefaultTransform<>());
+  }
+
+  public Observable<ClickcarryBean> getMamaAllClickCarryLogs(String page) {
+
+    return XlmmRetrofitClient.getService()
+        .getMamaAllClickCarryLogs(page)
         .compose(new DefaultTransform<>());
   }
 }

@@ -19,15 +19,6 @@ public class CarryLogListBean {
 
   @SerializedName("count") private int mCount;
   @SerializedName("next") private String mNext;
-
-  @Override public String toString() {
-    return "CarryLogListBean{" +
-        "mCount=" + mCount +
-        ", mNext='" + mNext + '\'' +
-        ", mResults=" + mResults +
-        '}';
-  }
-
   /**
    * mama_id : 5
    * carry_value : 36.0
@@ -42,30 +33,36 @@ public class CarryLogListBean {
 
   @SerializedName("results") private List<ResultsEntity> mResults;
 
-  public void setCount(int count) {
-    this.mCount = count;
-  }
-
-  public void setNext(String next) {
-    this.mNext = next;
-  }
-
-
-  public void setResults(List<ResultsEntity> results) {
-    this.mResults = results;
+  @Override public String toString() {
+    return "CarryLogListBean{" +
+        "mCount=" + mCount +
+        ", mNext='" + mNext + '\'' +
+        ", mResults=" + mResults +
+        '}';
   }
 
   public int getCount() {
     return mCount;
   }
 
+  public void setCount(int count) {
+    this.mCount = count;
+  }
+
   public String getNext() {
     return mNext;
   }
 
+  public void setNext(String next) {
+    this.mNext = next;
+  }
 
   public List<ResultsEntity> getResults() {
     return mResults;
+  }
+
+  public void setResults(List<ResultsEntity> results) {
+    this.mResults = results;
   }
 
   public static class ResultsEntity {
@@ -74,81 +71,90 @@ public class CarryLogListBean {
     @SerializedName("carry_type") private int mCarryType;
     @SerializedName("carry_type_name") private String mCarryTypeName;
     @SerializedName("status") private int mStatus;
+    @SerializedName("carry_description") private String mCarryDescription;
     @SerializedName("status_display") private String mStatusDisplay;
-    @SerializedName("today_carry") private Object mTodayCarry;
+    @SerializedName("today_carry") private double mTodayCarry;
     @SerializedName("modified") private String mModified;
     @SerializedName("created") private String mCreated;
 
-    public void setMamaId(int mamaId) {
-      this.mMamaId = mamaId;
+    public String getmCarryDescription() {
+      return mCarryDescription;
     }
 
-    public void setCarryValue(double carryValue) {
-      this.mCarryValue = carryValue;
-    }
-
-    public void setCarryType(int carryType) {
-      this.mCarryType = carryType;
-    }
-
-    public void setCarryTypeName(String carryTypeName) {
-      this.mCarryTypeName = carryTypeName;
-    }
-
-    public void setStatus(int status) {
-      this.mStatus = status;
-    }
-
-    public void setStatusDisplay(String statusDisplay) {
-      this.mStatusDisplay = statusDisplay;
-    }
-
-    public void setTodayCarry(Object todayCarry) {
-      this.mTodayCarry = todayCarry;
-    }
-
-    public void setModified(String modified) {
-      this.mModified = modified;
-    }
-
-    public void setCreated(String created) {
-      this.mCreated = created;
+    public void setmCarryDescription(String mCarryDescription) {
+      this.mCarryDescription = mCarryDescription;
     }
 
     public int getMamaId() {
       return mMamaId;
     }
 
+    public void setMamaId(int mamaId) {
+      this.mMamaId = mamaId;
+    }
+
     public double getCarryValue() {
       return mCarryValue;
+    }
+
+    public void setCarryValue(double carryValue) {
+      this.mCarryValue = carryValue;
     }
 
     public int getCarryType() {
       return mCarryType;
     }
 
+    public void setCarryType(int carryType) {
+      this.mCarryType = carryType;
+    }
+
     public String getCarryTypeName() {
       return mCarryTypeName;
+    }
+
+    public void setCarryTypeName(String carryTypeName) {
+      this.mCarryTypeName = carryTypeName;
     }
 
     public int getStatus() {
       return mStatus;
     }
 
+    public void setStatus(int status) {
+      this.mStatus = status;
+    }
+
     public String getStatusDisplay() {
       return mStatusDisplay;
     }
 
-    public Object getTodayCarry() {
+    public void setStatusDisplay(String statusDisplay) {
+      this.mStatusDisplay = statusDisplay;
+    }
+
+    public double getTodayCarry() {
       return mTodayCarry;
+    }
+
+    public void setTodayCarry(double todayCarry) {
+      this.mTodayCarry = todayCarry;
     }
 
     public String getModified() {
       return mModified;
     }
 
+    public void setModified(String modified) {
+      this.mModified = modified;
+    }
+
     public String getCreated() {
       return mCreated;
+    }
+
+    public void setCreated(String created) {
+      this.mCreated = created;
     }
 
     @Override public String toString() {

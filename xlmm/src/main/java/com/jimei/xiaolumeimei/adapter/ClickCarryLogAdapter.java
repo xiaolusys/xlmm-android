@@ -11,7 +11,7 @@ import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.entities.CarryLogListBean;
+import com.jimei.xiaolumeimei.entities.ClickcarryBean;
 import com.zhy.autolayout.utils.AutoUtils;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,26 +21,26 @@ import java.util.List;
  *
  * Copyright 2016年 上海己美. All rights reserved.
  */
-public class CarryLogAllAdapter
-    extends RecyclerView.Adapter<CarryLogAllAdapter.CarryLogListVH> {
+public class ClickCarryLogAdapter
+    extends RecyclerView.Adapter<ClickCarryLogAdapter.CarryLogListVH> {
 
   private static final String TAG = MMChooseAdapter.class.getSimpleName();
 
-  private List<CarryLogListBean.ResultsEntity> mList;
+  private List<ClickcarryBean.ResultsEntity> mList;
   private Context mContext;
 
-  public CarryLogAllAdapter(Context context) {
+  public ClickCarryLogAdapter(Context context) {
     this.mContext = context;
     mList = new ArrayList<>();
   }
 
-  public void updateWithClear(List<CarryLogListBean.ResultsEntity> list) {
+  public void updateWithClear(List<ClickcarryBean.ResultsEntity> list) {
     mList.clear();
     mList.addAll(list);
     notifyDataSetChanged();
   }
 
-  public void update(List<CarryLogListBean.ResultsEntity> list) {
+  public void update(List<ClickcarryBean.ResultsEntity> list) {
 
     mList.addAll(list);
     notifyDataSetChanged();
@@ -66,7 +66,7 @@ public class CarryLogAllAdapter
 
   @Override public void onBindViewHolder(CarryLogListVH holder, int position) {
 
-    CarryLogListBean.ResultsEntity resultsEntity = mList.get(position);
+    ClickcarryBean.ResultsEntity resultsEntity = mList.get(position);
 
     if (position == 0) {
       showCategory(holder);
@@ -81,23 +81,14 @@ public class CarryLogAllAdapter
     }
 
     holder.shoptime.setText(resultsEntity.getCreated().substring(0, 10));
-    //holder.picPath.setImageResource(R.drawable.carrylog_image);
-    int carryType = resultsEntity.getCarryType();
-    if (carryType == 3) {
-      holder.picPath.setImageResource(R.drawable.img_jiang);
-    } else if (carryType == 1) {
-      holder.picPath.setImageResource(R.drawable.img_yellowreturn);
-    } else if (carryType == 2) {
-      holder.picPath.setImageResource(R.drawable.carrylog_image);
-    }
-
+    holder.picPath.setImageResource(R.drawable.img_yellowreturn);
     holder.totalCash.setText(
-        "总收益 " + (float) (Math.round(resultsEntity.getCarryValue() * 100)) / 100);
+        "总收益 " + (float) (Math.round(resultsEntity.getTotalValue() * 100)) / 100);
 
     holder.tichengCash.setText("+" + resultsEntity.getTodayCarry());
 
     holder.timeDisplay.setText(resultsEntity.getCreated().substring(11, 19));
-    holder.wxordernick.setText(resultsEntity.getmCarryDescription());
+    holder.wxordernick.setText(resultsEntity.getCarryDescription());
   }
 
   @Override public int getItemCount() {

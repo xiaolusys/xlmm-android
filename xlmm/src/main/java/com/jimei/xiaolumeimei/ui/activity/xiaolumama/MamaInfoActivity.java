@@ -29,7 +29,6 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AgentInfoBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.OneDayAgentOrdersBean;
-import com.jimei.xiaolumeimei.entities.ShoppingListBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -123,37 +122,44 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void initData() {
     Subscription subscribe3 = MamaInfoModel.getInstance()
-            .getMamaFortune()
-            .subscribeOn(Schedulers.io())
-            .subscribe(new ServiceResponse<MamaFortune>() {
-              @Override public void onNext(MamaFortune fortune) {
-                JUtils.Log(TAG, "fortune=" + fortune.toString());
+        .getMamaFortune()
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<MamaFortune>() {
+          @Override public void onNext(MamaFortune fortune) {
+            JUtils.Log(TAG, "fortune=" + fortune.toString());
 
-                JUtils.Log(TAG,
-                        "cash =" + fortune.getMama_fortune().getCash_value() + " all fund=" + fortune.getMama_fortune()
-                                .getCarry_value());
+            JUtils.Log(TAG, "cash ="
+                + fortune.getMama_fortune().getCash_value()
+                + " all fund="
+                + fortune.getMama_fortune().getCarry_value());
 
-                mamaFortune = fortune;
-                tv_cash.setText(
-                        Double.toString((double) (Math.round(fortune.getMama_fortune().getCash_value() * 100)) / 100));
-                tv_fund.setText("账户余额" + Double.toString(
-                        (double) (Math.round(fortune.getMama_fortune().getCash_value() * 100)) / 100));
+            mamaFortune = fortune;
+            tv_cash.setText(Double.toString(
+                (double) (Math.round(fortune.getMama_fortune().getCash_value() * 100))
+                    / 100));
+            tv_fund.setText("账户余额" + Double.toString(
+                (double) (Math.round(fortune.getMama_fortune().getCash_value() * 100))
+                    / 100));
 
-                tv_today_visit2.setText(Integer.toString(fortune.getMama_fortune().getToday_visitor_num()));
+            tv_today_visit2.setText(
+                Integer.toString(fortune.getMama_fortune().getToday_visitor_num()));
 
-                carrylogMoney =
-                        ((double) (Math.round(fortune.getMama_fortune().getCarry_value() * 100)) / 100);
+            carrylogMoney =
+                ((double) (Math.round(fortune.getMama_fortune().getCarry_value() * 100))
+                    / 100);
 
-                tv_invite_num.setText("邀请"+fortune.getMama_fortune().getInvite_num()+"位小鹿妈妈");
-                tv_fansnum.setText("我的粉丝 " + fortune.getMama_fortune().getFans_num());
-                JUtils.Log(TAG, "fans num =" + fortune.getMama_fortune().getFans_num());
+            tv_invite_num.setText(
+                "邀请" + fortune.getMama_fortune().getInvite_num() + "位小鹿妈妈");
+            tv_fansnum.setText("我的粉丝 " + fortune.getMama_fortune().getFans_num());
+            JUtils.Log(TAG, "fans num =" + fortune.getMama_fortune().getFans_num());
 
-                show_liveness(fortune.getMama_fortune().getActive_value_num());
-                JUtils.Log(TAG, "all orders num =" + fortune.getMama_fortune().getOrder_num());
-                tv_order.setText(Integer.toString(fortune.getMama_fortune().getOrder_num()) + "个订单");
-
-              }
-            });
+            show_liveness(fortune.getMama_fortune().getActive_value_num());
+            JUtils.Log(TAG,
+                "all orders num =" + fortune.getMama_fortune().getOrder_num());
+            tv_order.setText(
+                Integer.toString(fortune.getMama_fortune().getOrder_num()) + "个订单");
+          }
+        });
     addSubscription(subscribe3);
 
     Subscription subscribe = MamaInfoModel.getInstance()
@@ -163,7 +169,6 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
           @Override public void onNext(AgentInfoBean pointBean) {
             JUtils.Log(TAG, "AgentInfoBean=" + pointBean.toString());
             mamaAgentInfo = pointBean;
-
           }
         });
     addSubscription(subscribe);

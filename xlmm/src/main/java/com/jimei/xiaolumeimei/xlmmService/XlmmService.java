@@ -9,6 +9,7 @@ import com.jimei.xiaolumeimei.entities.AgentInfoBean;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.entities.AllowanceBean;
+import com.jimei.xiaolumeimei.entities.AwardCarryBean;
 import com.jimei.xiaolumeimei.entities.BindInfoBean;
 import com.jimei.xiaolumeimei.entities.BudgetPayBean;
 import com.jimei.xiaolumeimei.entities.BudgetdetailBean;
@@ -17,6 +18,7 @@ import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.CartsinfoBean;
 import com.jimei.xiaolumeimei.entities.ChildListBean;
+import com.jimei.xiaolumeimei.entities.ClickcarryBean;
 import com.jimei.xiaolumeimei.entities.CouponBean;
 import com.jimei.xiaolumeimei.entities.IndexBean;
 import com.jimei.xiaolumeimei.entities.LadyListBean;
@@ -30,6 +32,7 @@ import com.jimei.xiaolumeimei.entities.MembershipPointBean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
 import com.jimei.xiaolumeimei.entities.NicknameBean;
 import com.jimei.xiaolumeimei.entities.NinePicBean;
+import com.jimei.xiaolumeimei.entities.OderCarryBean;
 import com.jimei.xiaolumeimei.entities.OneDayAgentOrdersBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.PointLogBean;
@@ -663,15 +666,15 @@ public interface XlmmService {
        @Query("page")String page
   );
   @GET(XlmmApi.APP_BASE_URL+"/rest/v2/mama/ordercarry")
-  Observable<CarryLogListBean> getMamaAllOderCarryLogs(
+  Observable<OderCarryBean> getMamaAllOderCarryLogs(
        @Query("page")String page
   );
   @GET(XlmmApi.APP_BASE_URL+"/rest/v2/mama/awardcarry")
-  Observable<CarryLogListBean> getMamaAllAwardCarryLogs(
+  Observable<AwardCarryBean> getMamaAllAwardCarryLogs(
        @Query("page")String page
   );
   @GET(XlmmApi.APP_BASE_URL+"/rest/v2/mama/clickcarry")
-  Observable<CarryLogListBean> getMamaAllClickCarryLogs(
+  Observable<ClickcarryBean> getMamaAllClickCarryLogs(
        @Query("page")String page
   );
 

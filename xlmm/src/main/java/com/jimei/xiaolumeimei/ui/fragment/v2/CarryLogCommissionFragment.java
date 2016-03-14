@@ -11,11 +11,12 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.CarryLogAllAdapter;
-import com.jimei.xiaolumeimei.entities.CarryLogListBean;
+import com.jimei.xiaolumeimei.adapter.OderCarryLogAdapter;
+import com.jimei.xiaolumeimei.entities.OderCarryBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
@@ -30,12 +31,13 @@ import rx.schedulers.Schedulers;
  * Copyright 2016年 上海己美. All rights reserved.
  */
 public class CarryLogCommissionFragment extends Fragment {
-  List<CarryLogListBean.ResultsEntity> list = new ArrayList<>();
+  List<OderCarryBean.ResultsEntity> list = new ArrayList<>();
   @Bind(R.id.carrylogall_xry) XRecyclerView xRecyclerView;
-  private CarryLogAllAdapter adapter;
+  private OderCarryLogAdapter adapter;
   private int page = 2;
   private Subscription subscription1;
   private Subscription subscription2;
+  private MaterialDialog materialDialog;
 
   public static CarryLogCommissionFragment newInstance(String title) {
     CarryLogCommissionFragment carryLogAllFragment = new CarryLogCommissionFragment();
@@ -58,13 +60,15 @@ public class CarryLogCommissionFragment extends Fragment {
   }
 
   private void load() {
+    showIndeterminateProgressDialog(false);
     subscription1 = MMProductModel.getInstance()
-        .getMamaAllCarryLogs("1")
+        .getMamaAllOderCarryLogs("1")
         .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<CarryLogListBean>() {
+        .subscribe(new ServiceResponse<OderCarryBean>() {
 
           @Override public void onCompleted() {
             super.onCompleted();
+            hideIndeterminateProgressDialog();
           }
 
           @Override public void onError(Throwable e) {
@@ -72,7 +76,7 @@ public class CarryLogCommissionFragment extends Fragment {
             e.printStackTrace();
           }
 
-          @Override public void onNext(CarryLogListBean carryLogListBean) {
+          @Override public void onNext(OderCarryBean carryLogListBean) {
             if (carryLogListBean != null) {
               list.addAll(carryLogListBean.getResults());
               adapter.update(list);
@@ -95,7 +99,7 @@ public class CarryLogCommissionFragment extends Fragment {
     xRecyclerView.setPullRefreshEnabled(false);
     xRecyclerView.setLoadingMoreEnabled(true);
 
-    adapter = new CarryLogAllAdapter(getActivity());
+    adapter = new OderCarryLogAdapter(getActivity());
     xRecyclerView.setAdapter(adapter);
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
@@ -126,10 +130,10 @@ public class CarryLogCommissionFragment extends Fragment {
   private void loadMoreData(String page, Context context) {
 
     subscription2 = MMProductModel.getInstance()
-        .getMamaAllCarryLogs(page)
+        .getMamaAllOderCarryLogs(page)
         .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<CarryLogListBean>() {
-          @Override public void onNext(CarryLogListBean carryLogListBean) {
+        .subscribe(new ServiceResponse<OderCarryBean>() {
+          @Override public void onNext(OderCarryBean carryLogListBean) {
             if (carryLogListBean != null) {
               if (null != carryLogListBean.getNext()) {
                 adapter.update(carryLogListBean.getResults());
@@ -155,5 +159,18 @@ public class CarryLogCommissionFragment extends Fragment {
     if (subscription2 != null && subscription2.isUnsubscribed()) {
       subscription2.unsubscribe();
     }
+  }
+
+  public void showIndeterminateProgressDialog(boolean horizontal) {
+    materialDialog = new MaterialDialog.Builder(getActivity())
+        //.title(R.string.progress_dialog)
+        .content(R.string.please_wait)
+        .progress(true, 0)
+        .progressIndeterminateStyle(horizontal)
+        .show();
+  }
+
+  public void hideIndeterminateProgressDialog() {
+    materialDialog.dismiss();
   }
 }

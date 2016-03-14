@@ -8,16 +8,17 @@
   <android.support.design.widget.AppBarLayout
       android:id="@+id/app_bar_layout"
       android:layout_width="match_parent"
+      app:elevation="0dp"
       android:layout_height="wrap_content"
-      android:theme="@style/AppTheme.AppBarOverlay">
+     >
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
+
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorAccent"
         app:popupTheme="@style/AppTheme.PopupOverlay">
-
       <TextView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
@@ -27,7 +28,6 @@
           android:textColor="@android:color/white"
           android:textSize="16sp"/>
     </android.support.v7.widget.Toolbar>
-    >
 
   </android.support.design.widget.AppBarLayout>
 
@@ -41,9 +41,10 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerHorizontal="true">
+    >
 
       <RelativeLayout
+          android:background="@color/colorAccent"
           android:id="@+id/rl_mama_info"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -68,6 +69,7 @@
             android:src="@drawable/img_diamond"/>
 
         <TextView
+            android:textColor="@color/white"
             android:id="@+id/tv_cashinfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -86,10 +88,11 @@
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
             android:text="0"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/white"
             android:textSize="20sp"/>
 
         <TextView
+            android:textColor="@color/white"
             android:id="@+id/tv_liveness"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
