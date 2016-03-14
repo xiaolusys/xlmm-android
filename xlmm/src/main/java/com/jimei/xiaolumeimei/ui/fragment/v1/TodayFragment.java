@@ -1,8 +1,8 @@
-package com.jimei.xiaolumeimei.ui.fragment;
+package com.jimei.xiaolumeimei.ui.fragment.v1;
 
 import android.os.Bundle;
 import com.jimei.xiaolumeimei.ui.fragment.presenter.FragmentPresenter;
-import com.jimei.xiaolumeimei.ui.fragment.view.TodayListView;
+import com.jimei.xiaolumeimei.ui.fragment.v1.view.TodayListView;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/03/10.

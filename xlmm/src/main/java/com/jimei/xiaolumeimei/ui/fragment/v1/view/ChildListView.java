@@ -1,4 +1,4 @@
-package com.jimei.xiaolumeimei.ui.fragment.view;
+package com.jimei.xiaolumeimei.ui.fragment.v1.view;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
@@ -9,9 +9,10 @@ import butterknife.ButterKnife;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.LadyListAdapter;
-import com.jimei.xiaolumeimei.entities.LadyListBean;
+import com.jimei.xiaolumeimei.adapter.ChildListAdapter;
+import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
+import com.jimei.xiaolumeimei.ui.fragment.view.ViewImpl;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
@@ -25,21 +26,21 @@ import rx.schedulers.Schedulers;
  *
  * Copyright 2016年 上海己美. All rights reserved.
  */
-public class LadyListView extends ViewImpl {
-
+public class ChildListView extends ViewImpl {
   @Bind(R.id.loading) RotateLoading loading;
   @Bind(R.id.childlist_recyclerView) XRecyclerView xRecyclerView;
 
   int page_size = 10;
   private int page = 2;
   private int totalPages;//总的分页数
-  private LadyListAdapter mLadyListAdapter;
+  private ChildListAdapter mChildListAdapter;
+  //private TextView mNormal, mOrder;
   private Subscription subscribe1;
   private Subscription subscribe2;
   private Subscription subscribe3;
 
   @Override public int getLayoutId() {
-    return R.layout.ladylist_fragment;
+    return R.layout.childlist_fragment;
   }
 
   @Override public void destroy() {
@@ -56,9 +57,7 @@ public class LadyListView extends ViewImpl {
   }
 
   public void initViews(Fragment fragment, Context context) {
-    GridLayoutManager layoutManager = new GridLayoutManager(context, 2);
-
-    xRecyclerView.setLayoutManager(layoutManager);
+    xRecyclerView.setLayoutManager(new GridLayoutManager(context, 2));
 
     xRecyclerView.addItemDecoration(new SpaceItemDecoration(10));
 
@@ -66,15 +65,14 @@ public class LadyListView extends ViewImpl {
     xRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
     xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
 
-    mLadyListAdapter = new LadyListAdapter(context, fragment);
-    xRecyclerView.setAdapter(mLadyListAdapter);
+    mChildListAdapter = new ChildListAdapter(fragment, context);
+    xRecyclerView.setAdapter(mChildListAdapter);
 
     loading.start();
-
     subscribe1 = ProductModel.getInstance()
-        .getLadyList(1, 10)
+        .getChildList(1, 10)
         .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<LadyListBean>() {
+        .subscribe(new ServiceResponse<ChildListBean>() {
           @Override public void onError(Throwable e) {
             super.onError(e);
             e.printStackTrace();
@@ -82,13 +80,14 @@ public class LadyListView extends ViewImpl {
             loading.stop();
           }
 
-          @Override public void onNext(LadyListBean ladyListBean) {
+          @Override public void onNext(ChildListBean childListBean) {
 
             try {
-              if (ladyListBean != null) {
-                List<LadyListBean.ResultsEntity> results = ladyListBean.getResults();
-                totalPages = ladyListBean.getCount() / page_size;
-                mLadyListAdapter.update(results);
+
+              if (childListBean != null) {
+                List<ChildListBean.ResultsEntity> results = childListBean.getResults();
+                totalPages = childListBean.getCount() / page_size;
+                mChildListAdapter.update(results);
               }
             } catch (Exception ex) {
             }
@@ -103,12 +102,12 @@ public class LadyListView extends ViewImpl {
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
       @Override public void onRefresh() {
         subscribe2 = ProductModel.getInstance()
-            .getLadyList(1, page * page_size)
+            .getChildList(1, page * page_size)
             .subscribeOn(Schedulers.io())
-            .subscribe(new ServiceResponse<LadyListBean>() {
-              @Override public void onNext(LadyListBean ladyListBean) {
-                List<LadyListBean.ResultsEntity> results = ladyListBean.getResults();
-                mLadyListAdapter.updateWithClear(results);
+            .subscribe(new ServiceResponse<ChildListBean>() {
+              @Override public void onNext(ChildListBean childListBean) {
+                List<ChildListBean.ResultsEntity> results = childListBean.getResults();
+                mChildListAdapter.updateWithClear(results);
               }
 
               @Override public void onCompleted() {
@@ -133,12 +132,12 @@ public class LadyListView extends ViewImpl {
   private void loadMoreData(int page, int page_size) {
 
     subscribe3 = ProductModel.getInstance()
-        .getLadyList(page, page_size)
+        .getChildList(page, page_size)
         .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<LadyListBean>() {
-          @Override public void onNext(LadyListBean productListBean) {
-            List<LadyListBean.ResultsEntity> results = productListBean.getResults();
-            mLadyListAdapter.update(results);
+        .subscribe(new ServiceResponse<ChildListBean>() {
+          @Override public void onNext(ChildListBean productListBean) {
+            List<ChildListBean.ResultsEntity> results = productListBean.getResults();
+            mChildListAdapter.update(results);
           }
 
           @Override public void onCompleted() {

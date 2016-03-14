@@ -1,8 +1,12 @@
-package com.jimei.xiaolumeimei.ui.fragment.view;
+package com.jimei.xiaolumeimei.ui.fragment.v1;
 
-import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -16,6 +20,7 @@ import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.victor.loading.rotate.RotateLoading;
+import java.util.ArrayList;
 import java.util.List;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
@@ -25,11 +30,13 @@ import rx.schedulers.Schedulers;
  *
  * Copyright 2016年 上海己美. All rights reserved.
  */
-public class ChildListView extends ViewImpl {
+public class ChildFragment extends Fragment {
+
   @Bind(R.id.loading) RotateLoading loading;
   @Bind(R.id.childlist_recyclerView) XRecyclerView xRecyclerView;
 
   int page_size = 10;
+  List<ChildListBean.ResultsEntity> list = new ArrayList<>();
   private int page = 2;
   private int totalPages;//总的分页数
   private ChildListAdapter mChildListAdapter;
@@ -38,35 +45,27 @@ public class ChildListView extends ViewImpl {
   private Subscription subscribe2;
   private Subscription subscribe3;
 
-  @Override public int getLayoutId() {
-    return R.layout.childlist_fragment;
+  public static ChildFragment newInstance(String title) {
+    ChildFragment todayFragment = new ChildFragment();
+    Bundle bundle = new Bundle();
+    bundle.putString("keyword", title);
+    todayFragment.setArguments(bundle);
+    return todayFragment;
   }
 
-  @Override public void destroy() {
-    ButterKnife.unbind(this);
-    if (subscribe1 != null && subscribe1.isUnsubscribed()) {
-      subscribe1.unsubscribe();
-    }
-    if (subscribe2 != null && subscribe2.isUnsubscribed()) {
-      subscribe2.unsubscribe();
-    }
-    if (subscribe3 != null && subscribe3.isUnsubscribed()) {
-      subscribe3.unsubscribe();
+  @Override public void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setRetainInstance(true);
+  }
+
+  @Override public void setUserVisibleHint(boolean isVisibleToUser) {
+    super.setUserVisibleHint(isVisibleToUser);
+    if (isVisibleToUser && list.size()== 0) {
+      load();
     }
   }
 
-  public void initViews(Fragment fragment, Context context) {
-    xRecyclerView.setLayoutManager(new GridLayoutManager(context, 2));
-
-    xRecyclerView.addItemDecoration(new SpaceItemDecoration(10));
-
-    xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-    xRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
-    xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
-
-    mChildListAdapter = new ChildListAdapter(fragment, context);
-    xRecyclerView.setAdapter(mChildListAdapter);
-
+  private void load() {
     loading.start();
     subscribe1 = ProductModel.getInstance()
         .getChildList(1, 10)
@@ -86,7 +85,8 @@ public class ChildListView extends ViewImpl {
               if (childListBean != null) {
                 List<ChildListBean.ResultsEntity> results = childListBean.getResults();
                 totalPages = childListBean.getCount() / page_size;
-                mChildListAdapter.update(results);
+                list.addAll(results);
+                mChildListAdapter.update(list);
               }
             } catch (Exception ex) {
             }
@@ -97,6 +97,25 @@ public class ChildListView extends ViewImpl {
             loading.post(loading::stop);
           }
         });
+  }
+
+  @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+    initViews(view);
+  }
+
+  private void initViews(View view) {
+
+    xRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+
+    xRecyclerView.addItemDecoration(new SpaceItemDecoration(10));
+
+    xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
+    xRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
+    xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
+
+    mChildListAdapter = new ChildListAdapter(ChildFragment.this, getActivity());
+    xRecyclerView.setAdapter(mChildListAdapter);
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
       @Override public void onRefresh() {
@@ -121,11 +140,37 @@ public class ChildListView extends ViewImpl {
           loadMoreData(page, 10);
           page++;
         } else {
-          Toast.makeText(context, "没有更多了拉,去购物吧", Toast.LENGTH_SHORT).show();
+          Toast.makeText(getActivity(), "没有更多了拉,去购物吧", Toast.LENGTH_SHORT).show();
           xRecyclerView.post(xRecyclerView::loadMoreComplete);
         }
       }
     });
+  }
+
+  @Override public void onStop() {
+    super.onStop();
+    if (subscribe1 != null && subscribe1.isUnsubscribed()) {
+      subscribe1.unsubscribe();
+    }
+    if (subscribe2 != null && subscribe2.isUnsubscribed()) {
+      subscribe2.unsubscribe();
+    }
+    if (subscribe3 != null && subscribe3.isUnsubscribed()) {
+      subscribe3.unsubscribe();
+    }
+  }
+
+  @Nullable @Override
+  public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+      @Nullable Bundle savedInstanceState) {
+    View view = inflater.inflate(R.layout.childlist_fragment, container, false);
+    ButterKnife.bind(this, view);
+    return view;
+  }
+
+  @Override public void onDestroyView() {
+    super.onDestroyView();
+    ButterKnife.unbind(this);
   }
 
   private void loadMoreData(int page, int page_size) {

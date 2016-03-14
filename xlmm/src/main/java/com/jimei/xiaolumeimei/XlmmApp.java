@@ -1,10 +1,10 @@
 package com.jimei.xiaolumeimei;
 
 import android.app.ActivityManager;
-import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 import cn.sharesdk.framework.ShareSDK;
 import com.jimei.xiaolumeimei.data.XlmmConst;
@@ -36,7 +36,7 @@ import rx.schedulers.Schedulers;
  *
  * Copyright 2015年 上海己美. All rights reser.
  */
-public class XlmmApp extends Application {
+public class XlmmApp extends MultiDexApplication {
 
   public static OkHttpClient client;
   private static Context mContext;

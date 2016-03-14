@@ -9,7 +9,7 @@ import butterknife.Bind;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.CarryLogListAdapter;
+import com.jimei.xiaolumeimei.adapter.CarryLogAllAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CarryLogListBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
@@ -28,7 +28,7 @@ public class MMCarryLogListActivity extends BaseSwipeBackCompatActivity {
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.tv_count) TextView tvCount;
   @Bind(R.id.carryloglist_xry) XRecyclerView carryloglistXry;
-  private CarryLogListAdapter adapter;
+  private CarryLogAllAdapter adapter;
   private int page = 2;
   private String carrylogMoney;
 
@@ -91,7 +91,7 @@ public class MMCarryLogListActivity extends BaseSwipeBackCompatActivity {
     carryloglistXry.setPullRefreshEnabled(false);
     carryloglistXry.setLoadingMoreEnabled(true);
 
-    adapter = new CarryLogListAdapter(this);
+    adapter = new CarryLogAllAdapter(this);
     carryloglistXry.setAdapter(adapter);
 
     carryloglistXry.setLoadingListener(new XRecyclerView.LoadingListener() {

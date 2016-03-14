@@ -60,7 +60,6 @@ public class MaMaStoreAdapter extends RecyclerView.Adapter<MaMaStoreAdapter.MaMa
 
     view = LayoutInflater.from(parent.getContext())
         .inflate(R.layout.item_store, parent, false);
-    AutoUtils.autoSize(view);
     return new MaMaStoreVH(view);
   }
 
@@ -177,6 +176,7 @@ public class MaMaStoreAdapter extends RecyclerView.Adapter<MaMaStoreAdapter.MaMa
 
     public MaMaStoreVH(View itemView) {
       super(itemView);
+      AutoUtils.autoSize(itemView);
       ButterKnife.bind(this, itemView);
     }
   }

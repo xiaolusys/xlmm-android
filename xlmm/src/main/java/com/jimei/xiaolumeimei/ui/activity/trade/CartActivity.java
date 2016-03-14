@@ -512,9 +512,9 @@ public class CartActivity extends BaseSwipeBackCompatActivity
       @Bind(R.id.sku_name) TextView skuName;
       @Bind(R.id.price1) TextView price1;
       @Bind(R.id.price2) TextView price2;
-      @Bind(R.id.delete) TextView delete;
+      @Bind(R.id.delete) ImageView delete;
       @Bind(R.id.count) TextView count;
-      @Bind(R.id.add) TextView add;
+      @Bind(R.id.add) ImageView add;
 
       public CartsVH(View itemView) {
         super(itemView);

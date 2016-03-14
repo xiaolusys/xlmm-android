@@ -16,6 +16,7 @@ import com.jude.utils.JUtils;
  */
 public class CompanyInfoActivity extends BaseSwipeBackCompatActivity {
 
+  @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.tv_version) TextView tv_version;
 
   @Override protected void setListener() {
@@ -35,6 +36,10 @@ public class CompanyInfoActivity extends BaseSwipeBackCompatActivity {
   }
 
   @Override protected void initViews() {
+
+    toolbar.setTitle("");
+    setSupportActionBar(toolbar);
+    finishBack(toolbar);
     tv_version.setText(XlmmConst.VERSION);
   }
 

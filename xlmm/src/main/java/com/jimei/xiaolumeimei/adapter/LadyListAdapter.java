@@ -75,7 +75,6 @@ public class LadyListAdapter extends RecyclerView.Adapter<LadyListAdapter.LadyLi
 
     View view = LayoutInflater.from(parent.getContext())
         .inflate(R.layout.item_childlist, parent, false);
-    AutoUtils.autoSize(view);
     return new LadyListVH(view);
   }
 
@@ -105,19 +104,14 @@ public class LadyListAdapter extends RecyclerView.Adapter<LadyListAdapter.LadyLi
         holder.saleout.setVisibility(View.VISIBLE);
       }
 
-
       if (productModel.getName().length() <= 9) {
         holder.childlistName.setText(productModel.getName());
       } else {
-        holder.childlistName.setText(productModel.getName().substring(0,8)+"...");
+        holder.childlistName.setText(productModel.getName().substring(0, 8) + "...");
       }
-
     } catch (Exception ex) {
 
     }
-
-
-
 
     holder.childlistAgentPrice.setText("¥" + resultsEntity.getProductLowestPrice());
     holder.childlistStdsalePrice.setText("/¥" + resultsEntity.getStdSalePrice());
@@ -204,6 +198,7 @@ public class LadyListAdapter extends RecyclerView.Adapter<LadyListAdapter.LadyLi
     public LadyListVH(View itemView) {
       super(itemView);
       card = itemView;
+      AutoUtils.autoSize(itemView);
       ButterKnife.bind(this, itemView);
       itemView.setOnClickListener(this);
     }

@@ -23,9 +23,9 @@ import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
-import com.jimei.xiaolumeimei.ui.fragment.VerticalFragmentDetail;
-import com.jimei.xiaolumeimei.ui.fragment.VerticalFragmentWeb;
-import com.jimei.xiaolumeimei.ui.fragment.setSkuidListener;
+import com.jimei.xiaolumeimei.ui.fragment.v1.VerticalFragmentDetail;
+import com.jimei.xiaolumeimei.ui.fragment.v1.VerticalFragmentWeb;
+import com.jimei.xiaolumeimei.ui.fragment.v1.setSkuidListener;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.widget.badgelib.BadgeView;
 import com.jimei.xiaolumeimei.widget.doubleview.DragLayout;
@@ -57,8 +57,8 @@ public class ProductDetailActvityWeb extends BaseSwipeBackCompatActivity
   private String sku_id;
   private BadgeView badge;
   private String productId;
-  private VerticalFragmentDetail fragment1;
-  private VerticalFragmentWeb fragment3;
+  private VerticalFragmentDetail fragmentDetail;
+  private VerticalFragmentWeb fragmnetWeb;
   private boolean isSelectzz;
 
   @Override protected void setListener() {
@@ -67,7 +67,7 @@ public class ProductDetailActvityWeb extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initData() {
-    fragment1.initView(productId);
+    fragmentDetail.initView(productId);
 
     Subscription subscribeSubscription = ProductModel.getInstance()
         .getProductDetails(productId)
@@ -127,17 +127,17 @@ public class ProductDetailActvityWeb extends BaseSwipeBackCompatActivity
     badge = new BadgeView(this);
     badge.setTargetView(target);
 
-    fragment1 = new VerticalFragmentDetail();
-    fragment3 = new VerticalFragmentWeb();
+    fragmentDetail = new VerticalFragmentDetail();
+    fragmnetWeb = new VerticalFragmentWeb();
 
     getSupportFragmentManager().beginTransaction()
-        .add(R.id.first, fragment1)
-        .add(R.id.second, fragment3)
+        .add(R.id.first, fragmentDetail)
+        .add(R.id.second, fragmnetWeb)
         .commit();
 
     DragLayout.ShowNextPageNotifier nextIntf = new DragLayout.ShowNextPageNotifier() {
       @Override public void onDragNext() {
-        fragment3.initView(productId);
+        fragmnetWeb.initView(productId);
       }
     };
     dragLayout.setNextPageListener(nextIntf);
@@ -305,11 +305,20 @@ public class ProductDetailActvityWeb extends BaseSwipeBackCompatActivity
             if (cartsNumResultBean != null && cartsNumResultBean.getResult() != 0) {
               num = cartsNumResultBean.getResult();
               badge.setBadgeCount(num);
-              imageView1.setVisibility(View.INVISIBLE);
-              imageView2.setVisibility(View.VISIBLE);
-              cvLefttime.setVisibility(View.VISIBLE);
+
+              if (calcLefttowTime(cartsNumResultBean.getLastCreated()) != 0) {
+                imageView1.setVisibility(View.INVISIBLE);
+                imageView2.setVisibility(View.VISIBLE);
+                cvLefttime.setVisibility(View.VISIBLE);
+              } else {
+                imageView1.setVisibility(View.VISIBLE);
+                imageView2.setVisibility(View.INVISIBLE);
+                cvLefttime.setVisibility(View.INVISIBLE);
+                badge.setBadgeCount(0);
+              }
 
               cvLefttime.start(calcLefttowTime(cartsNumResultBean.getLastCreated()));
+
               cvLefttime.setOnCountdownEndListener(
                   new CountdownView.OnCountdownEndListener() {
                     @Override public void onEnd(CountdownView cv) {

@@ -19,7 +19,6 @@ public class ShoppingListBean {
 
   @SerializedName("count") private int mCount;
   @SerializedName("next") private String mNext;
-  @SerializedName("previous") private Object mPrevious;
   /**
    * linkid : 44
    * linkname : 小鹿美美特卖服务号
@@ -46,9 +45,6 @@ public class ShoppingListBean {
     this.mNext = next;
   }
 
-  public void setPrevious(Object previous) {
-    this.mPrevious = previous;
-  }
 
   public void setResults(List<ResultsEntity> results) {
     this.mResults = results;
@@ -62,9 +58,6 @@ public class ShoppingListBean {
     return mNext;
   }
 
-  public Object getPrevious() {
-    return mPrevious;
-  }
 
   public List<ResultsEntity> getResults() {
     return mResults;

@@ -76,7 +76,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.rl_shop) RelativeLayout rl_shop;
 
   @Bind(R.id.rl_two_dimen) RelativeLayout rlTwoDimen;
-  @Bind(R.id.tv_two_dimen) TextView tv_two_dimen;
+  @Bind(R.id.tv_invite_num) TextView tv_invite_num;
   @Bind(R.id.rl_fans) RelativeLayout rl_fans;
   @Bind(R.id.tv_fansnum) TextView tv_fansnum;
   @Bind(R.id.rl_orderlist) RelativeLayout rl_orderlist;
@@ -85,6 +85,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.tv_fund) TextView tv_fund;
 
   AgentInfoBean mamaAgentInfo;
+  MamaFortune mamaFortune;
   private double carrylogMoney;
 
   @Override protected void setListener() {
@@ -132,6 +133,25 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
                         "cash =" + fortune.getMama_fortune().getCash_value() + " all fund=" + fortune.getMama_fortune()
                                 .getCarry_value());
 
+                mamaFortune = fortune;
+                tv_cash.setText(
+                        Double.toString((double) (Math.round(fortune.getMama_fortune().getCash_value() * 100)) / 100));
+                tv_fund.setText("账户余额" + Double.toString(
+                        (double) (Math.round(fortune.getMama_fortune().getCash_value() * 100)) / 100));
+
+                tv_today_visit2.setText(Integer.toString(fortune.getMama_fortune().getToday_visitor_num()));
+
+                carrylogMoney =
+                        ((double) (Math.round(fortune.getMama_fortune().getCarry_value() * 100)) / 100);
+
+                tv_invite_num.setText("邀请"+fortune.getMama_fortune().getInvite_num()+"位小鹿妈妈");
+                tv_fansnum.setText("我的粉丝 " + fortune.getMama_fortune().getFans_num());
+                JUtils.Log(TAG, "fans num =" + fortune.getMama_fortune().getFans_num());
+
+                show_liveness(fortune.getMama_fortune().getActive_value_num());
+                JUtils.Log(TAG, "all orders num =" + fortune.getMama_fortune().getOrder_num());
+                tv_order.setText(Integer.toString(fortune.getMama_fortune().getOrder_num()) + "个订单");
+
               }
             });
     addSubscription(subscribe3);
@@ -144,27 +164,12 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
             JUtils.Log(TAG, "AgentInfoBean=" + pointBean.toString());
             mamaAgentInfo = pointBean;
 
-            JUtils.Log(TAG,
-                "cash =" + pointBean.getCash() + " all fund=" + pointBean.getMmclog()
-                    .getMci());
-            tv_cash.setText(
-                Double.toString((double) (Math.round(pointBean.getCash() * 100)) / 100));
-            tv_fund.setText("账户余额" + Double.toString(
-                (double) (Math.round(pointBean.getCash() * 100)) / 100));
-
-            carrylogMoney =
-                ((double) (Math.round(pointBean.getMmclog().getMci() * 100)) / 100);
-
-            tv_fansnum.setText("我的粉丝 " + pointBean.getFansNum());
-            JUtils.Log(TAG, "fans num =" + pointBean.getFansNum());
-
-            show_liveness(90);
           }
         });
     addSubscription(subscribe);
 
 
-    Subscription subscribe1 = MMProductModel.getInstance()
+    /*Subscription subscribe1 = MMProductModel.getInstance()
         .getShoppingList("1")
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ShoppingListBean>() {
@@ -177,7 +182,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
           }
         });
     get_his_refund();
-    addSubscription(subscribe1);
+    addSubscription(subscribe1);*/
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
@@ -193,15 +198,19 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     switch (v.getId()) {
       case R.id.tv_cash:
       case R.id.tv_cashinfo:
-        if (mamaAgentInfo != null) {
+        if (mamaFortune != null) {
           intent = new Intent(MamaInfoActivity.this, MamaWithdrawCashActivity.class);
-          intent.putExtra("cash", mamaAgentInfo.getCash());
+          intent.putExtra("cash", mamaFortune.getMama_fortune().getCash_value());
 
           startActivity(intent);
         }
         break;
       case R.id.tv_liveness:
       case R.id.img_liveness:
+        intent = new Intent(MamaInfoActivity.this, MamaLivenessActivity.class);
+        intent.putExtra("liveness", 90);
+
+        startActivity(intent);
         break;
       case R.id.rl_chooselist:
         startActivity(new Intent(MamaInfoActivity.this, MMChooseListActivity.class));
@@ -229,7 +238,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         startActivity(new Intent(MamaInfoActivity.this, MMShoppingListActivity.class));
         break;
       case R.id.rl_income:
-        Intent intent1 = new Intent(MamaInfoActivity.this, MMCarryLogListActivity.class);
+        Intent intent1 = new Intent(MamaInfoActivity.this, MMcarryLogActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString("carrylogMoney", carrylogMoney + "");
         intent1.putExtras(bundle);

@@ -42,8 +42,7 @@ public class BadgeView extends TextView {
   private void init() {
     if (!(getLayoutParams() instanceof LayoutParams)) {
       LayoutParams layoutParams =
-          new LayoutParams(
-              android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+          new LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
               android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
               Gravity.RIGHT | Gravity.TOP);
       setLayoutParams(layoutParams);
@@ -52,7 +51,7 @@ public class BadgeView extends TextView {
     // set default font
     setTextColor(Color.WHITE);
     setTypeface(Typeface.DEFAULT_BOLD);
-    setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);
+    setTextSizeOff(11);
     setPadding(dip2Px(5), dip2Px(1), dip2Px(5), dip2Px(1));
 
     // set default background
@@ -65,9 +64,14 @@ public class BadgeView extends TextView {
     setBadgeCount(0);
   }
 
+  public void setTextSizeOff(int num) {
+    setTextSize(TypedValue.COMPLEX_UNIT_SP, num);
+  }
+
   public void setBackground(int dipRadius, int badgeColor) {
     int radius = dip2Px(dipRadius);
-    float[] radiusArray = new float[] { radius, radius, radius, radius, radius, radius, radius, radius };
+    float[] radiusArray =
+        new float[] { radius, radius, radius, radius, radius, radius, radius, radius };
 
     RoundRectShape roundRect = new RoundRectShape(radiusArray, null, null);
     ShapeDrawable bgDrawable = new ShapeDrawable(roundRect);
@@ -95,18 +99,13 @@ public class BadgeView extends TextView {
    *
    * @see android.widget.TextView#setText(java.lang.CharSequence, android.widget.TextView.BufferType)
    */
-  @Override
-  public void setText(CharSequence text, BufferType type) {
+  @Override public void setText(CharSequence text, BufferType type) {
     if (isHideOnNull() && (text == null || text.toString().equalsIgnoreCase("0"))) {
       setVisibility(View.GONE);
     } else {
       setVisibility(View.VISIBLE);
     }
     super.setText(text, type);
-  }
-
-  public void setBadgeCount(int count) {
-    setText(String.valueOf(count));
   }
 
   public Integer getBadgeCount() {
@@ -122,10 +121,8 @@ public class BadgeView extends TextView {
     }
   }
 
-  public void setBadgeGravity(int gravity) {
-    FrameLayout.LayoutParams params = (LayoutParams) getLayoutParams();
-    params.gravity = gravity;
-    setLayoutParams(params);
+  public void setBadgeCount(int count) {
+    setText(String.valueOf(count));
   }
 
   public int getBadgeGravity() {
@@ -133,11 +130,14 @@ public class BadgeView extends TextView {
     return params.gravity;
   }
 
-  public void setBadgeMargin(int dipMargin) {
-    setBadgeMargin(dipMargin, dipMargin, dipMargin, dipMargin);
+  public void setBadgeGravity(int gravity) {
+    FrameLayout.LayoutParams params = (LayoutParams) getLayoutParams();
+    params.gravity = gravity;
+    setLayoutParams(params);
   }
 
-  public void setBadgeMargin(int leftDipMargin, int topDipMargin, int rightDipMargin, int bottomDipMargin) {
+  public void setBadgeMargin(int leftDipMargin, int topDipMargin, int rightDipMargin,
+      int bottomDipMargin) {
     FrameLayout.LayoutParams params = (LayoutParams) getLayoutParams();
     params.leftMargin = dip2Px(leftDipMargin);
     params.topMargin = dip2Px(topDipMargin);
@@ -148,7 +148,13 @@ public class BadgeView extends TextView {
 
   public int[] getBadgeMargin() {
     FrameLayout.LayoutParams params = (LayoutParams) getLayoutParams();
-    return new int[] { params.leftMargin, params.topMargin, params.rightMargin, params.bottomMargin };
+    return new int[] {
+        params.leftMargin, params.topMargin, params.rightMargin, params.bottomMargin
+    };
+  }
+
+  public void setBadgeMargin(int dipMargin) {
+    setBadgeMargin(dipMargin, dipMargin, dipMargin, dipMargin);
   }
 
   public void incrementBadgeCount(int increment) {
@@ -192,7 +198,6 @@ public class BadgeView extends TextView {
 
     if (target.getParent() instanceof FrameLayout) {
       ((FrameLayout) target.getParent()).addView(this);
-
     } else if (target.getParent() instanceof ViewGroup) {
       // use a new Framelayout container for adding badge
       ViewGroup parentContainer = (ViewGroup) target.getParent();
@@ -203,8 +208,9 @@ public class BadgeView extends TextView {
       ViewGroup.LayoutParams parentLayoutParams = target.getLayoutParams();
 
       badgeContainer.setLayoutParams(parentLayoutParams);
-      target.setLayoutParams(new ViewGroup.LayoutParams(
-          ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+      target.setLayoutParams(
+          new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+              ViewGroup.LayoutParams.MATCH_PARENT));
 
       parentContainer.addView(badgeContainer, groupIndex, parentLayoutParams);
       badgeContainer.addView(target);
@@ -213,7 +219,6 @@ public class BadgeView extends TextView {
     } else if (target.getParent() == null) {
       Log.e(getClass().getSimpleName(), "ParentView is needed");
     }
-
   }
 
   /*

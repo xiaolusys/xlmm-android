@@ -1,4 +1,4 @@
-package com.jimei.xiaolumeimei.ui.fragment.view;
+package com.jimei.xiaolumeimei.ui.fragment.v1.view;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
@@ -19,6 +19,7 @@ import com.jimei.xiaolumeimei.adapter.PreviousAdapter;
 import com.jimei.xiaolumeimei.entities.PostBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
+import com.jimei.xiaolumeimei.ui.fragment.view.ViewImpl;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;

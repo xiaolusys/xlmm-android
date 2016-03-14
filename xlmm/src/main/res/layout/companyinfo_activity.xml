@@ -65,6 +65,17 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="微信公众号:小鹿美美"
+        android:gravity="center"
+        android:id="@+id/tv_wx"
+        android:layout_below="@+id/tv_version"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="12dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:hint="上海己美网络科技有限公司"
         android:gravity="center"
         android:layout_above="@+id/textView3"
@@ -78,5 +89,6 @@
         android:layout_gravity="center"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/textView3" />
+        android:id="@+id/textView3"
+        android:padding="8dp"/>
 </RelativeLayout>

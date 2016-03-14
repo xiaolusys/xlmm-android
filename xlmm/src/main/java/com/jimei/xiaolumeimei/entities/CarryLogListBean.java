@@ -11,28 +11,33 @@ import java.util.List;
 public class CarryLogListBean {
 
   /**
-   * count : 119
-   * next : http://api.xiaolumeimei.com/rest/v1/pmt/carrylog?page=2
+   * count : 12
+   * next : http://dev.xiaolumeimei.com/rest/v2/mama/carry?page=2
    * previous : null
-   * results : [{"id":1186694,"carry_type":"in","xlmm":44,"value_money":2217.75,"carry_type_name":"收入","log_type":"thousand","carry_date":"2016-03-01","created":"2016-03-01T04:00:01","dayly_in_amount":2217.75,"dayly_clk_amount":0,"desc":"待确认","get_log_type_display":"千元提成"},{"id":1186325,"carry_type":"in","xlmm":44,"value_money":510.67,"carry_type_name":"收入","log_type":"rebeta","carry_date":"2016-02-29","created":"2016-03-01T00:44:00","dayly_in_amount":510.67,"dayly_clk_amount":0,"desc":"哇！好厉害，今天又有205个订单,收益待确认","get_log_type_display":"订单返利"},{"id":1183383,"carry_type":"in","xlmm":44,"value_money":297.4,"carry_type_name":"收入","log_type":"rebeta","carry_date":"2016-02-28","created":"2016-02-29T00:41:36","dayly_in_amount":297.4,"dayly_clk_amount":0,"desc":"哇！好厉害，今天又有29个订单,收益待确认","get_log_type_display":"订单返利"},{"id":1180161,"carry_type":"in","xlmm":44,"value_money":299.52,"carry_type_name":"收入","log_type":"rebeta","carry_date":"2016-02-27","created":"2016-02-28T00:44:11","dayly_in_amount":299.52,"dayly_clk_amount":0,"desc":"哇！好厉害，今天又有363个订单,收益待确认","get_log_type_display":"订单返利"},{"id":1176604,"carry_type":"in","xlmm":44,"value_money":302.42,"carry_type_name":"收入","log_type":"rebeta","carry_date":"2016-02-26","created":"2016-02-27T01:14:28","dayly_in_amount":302.42,"dayly_clk_amount":0,"desc":"哇！好厉害，今天又有211个订单,收益待确认","get_log_type_display":"订单返利"},{"id":1172011,"carry_type":"in","xlmm":44,"value_money":334.74,"carry_type_name":"收入","log_type":"rebeta","carry_date":"2016-02-25","created":"2016-02-26T00:16:25","dayly_in_amount":334.74,"dayly_clk_amount":0,"desc":"大王，今天有来了537订单,收益待确认","get_log_type_display":"订单返利"},{"id":1172248,"carry_type":"in","xlmm":44,"value_money":212.64,"carry_type_name":"收入","log_type":"rebeta","carry_date":"2016-02-24","created":"2016-02-26T00:28:17","dayly_in_amount":212.64,"dayly_clk_amount":0,"desc":"哇！好厉害，今天又有228个订单,收益待确认","get_log_type_display":"订单返利"},{"id":1165980,"carry_type":"in","xlmm":44,"value_money":472.22,"carry_type_name":"收入","log_type":"rebeta","carry_date":"2016-02-23","created":"2016-02-24T00:43:43","dayly_in_amount":472.22,"dayly_clk_amount":0,"desc":"哇！好厉害，今天又有105个订单,收益待确认","get_log_type_display":"订单返利"},{"id":1162791,"carry_type":"in","xlmm":44,"value_money":776.19,"carry_type_name":"收入","log_type":"rebeta","carry_date":"2016-02-22","created":"2016-02-23T00:45:23","dayly_in_amount":776.19,"dayly_clk_amount":0,"desc":"哇！好厉害，今天又有121个订单,收益待确认","get_log_type_display":"订单返利"},{"id":1160189,"carry_type":"in","xlmm":44,"value_money":20.35,"carry_type_name":"收入","log_type":"rebeta","carry_date":"2016-02-21","created":"2016-02-22T00:41:12","dayly_in_amount":20.35,"dayly_clk_amount":0,"desc":"哇！好厉害，今天又有5个订单,收益待确认","get_log_type_display":"订单返利"}]
+   * results : [{"mama_id":5,"carry_value":36,"carry_type":2,"carry_type_name":"佣金","status":3,"status_display":"取消","today_carry":null,"modified":"2016-03-10T18:39:56","created":"2016-03-10T18:26:19"},{"mama_id":5,"carry_value":31.2,"carry_type":2,"carry_type_name":"佣金","status":3,"status_display":"取消","today_carry":null,"modified":"2016-03-09T18:00:27","created":"2016-03-09T17:28:32"},{"mama_id":5,"carry_value":17.9,"carry_type":1,"carry_type_name":"返现","status":1,"status_display":"待确定","today_carry":null,"modified":"2016-03-08T12:37:53","created":"2016-03-08T12:37:53"},{"mama_id":5,"carry_value":2.19,"carry_type":3,"carry_type_name":"奖金","status":2,"status_display":"已确定","today_carry":null,"modified":"2016-03-08T12:03:32","created":"2016-03-08T12:01:11"},{"mama_id":5,"carry_value":2.39,"carry_type":2,"carry_type_name":"佣金","status":1,"status_display":"待确定","today_carry":null,"modified":"2016-03-08T11:20:33","created":"2016-03-08T11:20:33"},{"mama_id":5,"carry_value":2.19,"carry_type":2,"carry_type_name":"佣金","status":1,"status_display":"待确定","today_carry":null,"modified":"2016-03-08T10:25:21","created":"2016-03-08T10:25:21"},{"mama_id":5,"carry_value":9.19,"carry_type":2,"carry_type_name":"佣金","status":3,"status_display":"取消","today_carry":null,"modified":"2016-03-08T10:48:44","created":"2016-03-08T10:20:05"},{"mama_id":5,"carry_value":6.29,"carry_type":2,"carry_type_name":"佣金","status":1,"status_display":"待确定","today_carry":null,"modified":"2016-03-08T10:07:10","created":"2016-03-08T10:07:10"},{"mama_id":5,"carry_value":5.79,"carry_type":2,"carry_type_name":"佣金","status":1,"status_display":"待确定","today_carry":null,"modified":"2016-03-08T10:06:36","created":"2016-03-08T10:06:36"},{"mama_id":5,"carry_value":1.39,"carry_type":2,"carry_type_name":"佣金","status":1,"status_display":"待确定","today_carry":null,"modified":"2016-03-08T09:57:58","created":"2016-03-08T09:57:58"}]
    */
 
   @SerializedName("count") private int mCount;
   @SerializedName("next") private String mNext;
-  @SerializedName("previous") private Object mPrevious;
+
+  @Override public String toString() {
+    return "CarryLogListBean{" +
+        "mCount=" + mCount +
+        ", mNext='" + mNext + '\'' +
+        ", mResults=" + mResults +
+        '}';
+  }
+
   /**
-   * id : 1186694
-   * carry_type : in
-   * xlmm : 44
-   * value_money : 2217.75
-   * carry_type_name : 收入
-   * log_type : thousand
-   * carry_date : 2016-03-01
-   * created : 2016-03-01T04:00:01
-   * dayly_in_amount : 2217.75
-   * dayly_clk_amount : 0.0
-   * desc : 待确认
-   * get_log_type_display : 千元提成
+   * mama_id : 5
+   * carry_value : 36.0
+   * carry_type : 2
+   * carry_type_name : 佣金
+   * status : 3
+   * status_display : 取消
+   * today_carry : null
+   * modified : 2016-03-10T18:39:56
+   * created : 2016-03-10T18:26:19
    */
 
   @SerializedName("results") private List<ResultsEntity> mResults;
@@ -45,9 +50,6 @@ public class CarryLogListBean {
     this.mNext = next;
   }
 
-  public void setPrevious(Object previous) {
-    this.mPrevious = previous;
-  }
 
   public void setResults(List<ResultsEntity> results) {
     this.mResults = results;
@@ -61,122 +63,106 @@ public class CarryLogListBean {
     return mNext;
   }
 
-  public Object getPrevious() {
-    return mPrevious;
-  }
 
   public List<ResultsEntity> getResults() {
     return mResults;
   }
 
   public static class ResultsEntity {
-    @SerializedName("id") private int mId;
-    @SerializedName("carry_type") private String mCarryType;
-    @SerializedName("xlmm") private int mXlmm;
-    @SerializedName("value_money") private double mValueMoney;
+    @SerializedName("mama_id") private int mMamaId;
+    @SerializedName("carry_value") private double mCarryValue;
+    @SerializedName("carry_type") private int mCarryType;
     @SerializedName("carry_type_name") private String mCarryTypeName;
-    @SerializedName("log_type") private String mLogType;
-    @SerializedName("carry_date") private String mCarryDate;
+    @SerializedName("status") private int mStatus;
+    @SerializedName("status_display") private String mStatusDisplay;
+    @SerializedName("today_carry") private Object mTodayCarry;
+    @SerializedName("modified") private String mModified;
     @SerializedName("created") private String mCreated;
-    @SerializedName("dayly_in_amount") private double mDaylyInAmount;
-    @SerializedName("dayly_clk_amount") private double mDaylyClkAmount;
-    @SerializedName("desc") private String mDesc;
-    @SerializedName("get_log_type_display") private String mGetLogTypeDisplay;
 
-    public void setId(int id) {
-      this.mId = id;
+    public void setMamaId(int mamaId) {
+      this.mMamaId = mamaId;
     }
 
-    public void setCarryType(String carryType) {
+    public void setCarryValue(double carryValue) {
+      this.mCarryValue = carryValue;
+    }
+
+    public void setCarryType(int carryType) {
       this.mCarryType = carryType;
-    }
-
-    public void setXlmm(int xlmm) {
-      this.mXlmm = xlmm;
-    }
-
-    public void setValueMoney(double valueMoney) {
-      this.mValueMoney = valueMoney;
     }
 
     public void setCarryTypeName(String carryTypeName) {
       this.mCarryTypeName = carryTypeName;
     }
 
-    public void setLogType(String logType) {
-      this.mLogType = logType;
+    public void setStatus(int status) {
+      this.mStatus = status;
     }
 
-    public void setCarryDate(String carryDate) {
-      this.mCarryDate = carryDate;
+    public void setStatusDisplay(String statusDisplay) {
+      this.mStatusDisplay = statusDisplay;
+    }
+
+    public void setTodayCarry(Object todayCarry) {
+      this.mTodayCarry = todayCarry;
+    }
+
+    public void setModified(String modified) {
+      this.mModified = modified;
     }
 
     public void setCreated(String created) {
       this.mCreated = created;
     }
 
-    public void setDaylyInAmount(double daylyInAmount) {
-      this.mDaylyInAmount = daylyInAmount;
+    public int getMamaId() {
+      return mMamaId;
     }
 
-    public void setDaylyClkAmount(double daylyClkAmount) {
-      this.mDaylyClkAmount = daylyClkAmount;
+    public double getCarryValue() {
+      return mCarryValue;
     }
 
-    public void setDesc(String desc) {
-      this.mDesc = desc;
-    }
-
-    public void setGetLogTypeDisplay(String getLogTypeDisplay) {
-      this.mGetLogTypeDisplay = getLogTypeDisplay;
-    }
-
-    public int getId() {
-      return mId;
-    }
-
-    public String getCarryType() {
+    public int getCarryType() {
       return mCarryType;
-    }
-
-    public int getXlmm() {
-      return mXlmm;
-    }
-
-    public double getValueMoney() {
-      return mValueMoney;
     }
 
     public String getCarryTypeName() {
       return mCarryTypeName;
     }
 
-    public String getLogType() {
-      return mLogType;
+    public int getStatus() {
+      return mStatus;
     }
 
-    public String getCarryDate() {
-      return mCarryDate;
+    public String getStatusDisplay() {
+      return mStatusDisplay;
+    }
+
+    public Object getTodayCarry() {
+      return mTodayCarry;
+    }
+
+    public String getModified() {
+      return mModified;
     }
 
     public String getCreated() {
       return mCreated;
     }
 
-    public double getDaylyInAmount() {
-      return mDaylyInAmount;
-    }
-
-    public double getDaylyClkAmount() {
-      return mDaylyClkAmount;
-    }
-
-    public String getDesc() {
-      return mDesc;
-    }
-
-    public String getGetLogTypeDisplay() {
-      return mGetLogTypeDisplay;
+    @Override public String toString() {
+      return "ResultsEntity{" +
+          "mMamaId=" + mMamaId +
+          ", mCarryValue=" + mCarryValue +
+          ", mCarryType=" + mCarryType +
+          ", mCarryTypeName='" + mCarryTypeName + '\'' +
+          ", mStatus=" + mStatus +
+          ", mStatusDisplay='" + mStatusDisplay + '\'' +
+          ", mTodayCarry=" + mTodayCarry +
+          ", mModified='" + mModified + '\'' +
+          ", mCreated='" + mCreated + '\'' +
+          '}';
     }
   }
 }

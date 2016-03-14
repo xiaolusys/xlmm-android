@@ -49,21 +49,73 @@
   <!--app:layout_behavior="com.jimei.xiaolumeimei.behavior.ScrollingFabBehavior"/>-->
 
 
+  <!--<RelativeLayout-->
+  <!--android:layout_margin="16dp"-->
+  <!--android:layout_gravity="bottom|start"-->
+  <!--android:id="@+id/rv_cart"-->
+  <!--android:layout_width="200px"-->
+  <!--android:layout_height="100px"-->
+  <!--android:background="@drawable/shape_carts"-->
+  <!--&gt;-->
+  <!--<ImageView-->
+  <!--android:visibility="invisible"-->
+  <!--android:layout_centerInParent="true"-->
+  <!--android:id="@+id/image_1"-->
+  <!--android:src="@drawable/cart2"-->
+  <!--android:layout_width="wrap_content"-->
+  <!--android:layout_height="wrap_content"-->
+  <!--/>-->
+  <!--</RelativeLayout>-->
+
   <RelativeLayout
-      android:layout_margin="16dp"
+      android:layout_margin="8dp"
       android:layout_gravity="bottom|start"
       android:id="@+id/rv_cart"
-      android:layout_width="140px"
-      android:layout_height="100px"
-      android:background="@drawable/shape_carts"
-      >
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:background="@drawable/shape_maincarts"
+  >
+
     <ImageView
+        android:visibility="invisible"
         android:layout_centerInParent="true"
         android:id="@+id/image_1"
         android:src="@drawable/cart2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        />
+    />
+
+    <ImageView
+        android:layout_marginLeft="8dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:id="@+id/image_2"
+        android:src="@drawable/cart2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+    />
+
+    <!--<cn.iwgang.countdownview.CountdownView-->
+        <!--android:id="@+id/cv_lefttime"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:gravity="center_vertical"-->
+        <!--app:isShowMinute="true"-->
+        <!--app:isShowSecond="true"-->
+        <!--app:isShowMillisecond="false"-->
+        <!--app:suffixGravity="center"-->
+        <!--app:suffixTextColor="#000000"-->
+        <!--app:suffixTextSize="12sp"-->
+        <!--app:timeTextColor="@color/colorAccent"-->
+        <!--app:timeTextSize="12sp"-->
+        <!--app:isHideTimeBackground="false"-->
+        <!--app:timeBgColor="@android:color/transparent"-->
+        <!--app:isShowTimeBgDivisionLine="false"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_toRightOf="@id/image_2"-->
+        <!--android:layout_marginLeft="8dp"-->
+    <!--/>-->
 
   </RelativeLayout>
 
