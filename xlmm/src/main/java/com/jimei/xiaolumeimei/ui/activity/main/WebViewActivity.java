@@ -751,6 +751,8 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   }
 
   private void sharePartyInfo() {
+    if(partyShareInfo == null) return;
+
     JUtils.Log(TAG, " title =" + partyShareInfo.getTitle());
     JUtils.Log(TAG, " desc="
         + partyShareInfo.getActiveDec()
