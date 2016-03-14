@@ -57,8 +57,8 @@ public class ProductDetailActvityWeb extends BaseSwipeBackCompatActivity
   private String sku_id;
   private BadgeView badge;
   private String productId;
-  private VerticalFragmentDetail fragment1;
-  private VerticalFragmentWeb fragment3;
+  private VerticalFragmentDetail fragmentDetail;
+  private VerticalFragmentWeb fragmnetWeb;
   private boolean isSelectzz;
 
   @Override protected void setListener() {
@@ -67,7 +67,7 @@ public class ProductDetailActvityWeb extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initData() {
-    fragment1.initView(productId);
+    fragmentDetail.initView(productId);
 
     Subscription subscribeSubscription = ProductModel.getInstance()
         .getProductDetails(productId)
@@ -127,17 +127,17 @@ public class ProductDetailActvityWeb extends BaseSwipeBackCompatActivity
     badge = new BadgeView(this);
     badge.setTargetView(target);
 
-    fragment1 = new VerticalFragmentDetail();
-    fragment3 = new VerticalFragmentWeb();
+    fragmentDetail = new VerticalFragmentDetail();
+    fragmnetWeb = new VerticalFragmentWeb();
 
     getSupportFragmentManager().beginTransaction()
-        .add(R.id.first, fragment1)
-        .add(R.id.second, fragment3)
+        .add(R.id.first, fragmentDetail)
+        .add(R.id.second, fragmnetWeb)
         .commit();
 
     DragLayout.ShowNextPageNotifier nextIntf = new DragLayout.ShowNextPageNotifier() {
       @Override public void onDragNext() {
-        fragment3.initView(productId);
+        fragmnetWeb.initView(productId);
       }
     };
     dragLayout.setNextPageListener(nextIntf);
