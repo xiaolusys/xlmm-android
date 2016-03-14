@@ -14,6 +14,7 @@ import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.AddressBean;
 import com.jimei.xiaolumeimei.ui.activity.user.ChanggeSelectAddressActivity;
+import com.zhy.autolayout.utils.AutoUtils;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -112,7 +113,6 @@ public class AddressSelectAdapter extends RecyclerView.Adapter<RecyclerView.View
 
       ((AddressVH) holder).change.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View v) {
-
           setBundle1(addressBean);
         }
       });
@@ -121,18 +121,6 @@ public class AddressSelectAdapter extends RecyclerView.Adapter<RecyclerView.View
 
   private void setBundle(AddressBean addressBean) {
     Intent intent = new Intent();
-    //Bundle bundle = new Bundle();
-    //bundle.putString("receiver_state", addressBean.getReceiverState());
-    //bundle.putString("receiver_district", addressBean.getReceiverDistrict());
-    //bundle.putString("receiver_city", addressBean.getReceiverCity());
-    //
-    //bundle.putString("receiver_name", addressBean.getReceiverName());
-    //bundle.putString("id", addressBean.getId());
-    //bundle.putString("mobile", addressBean.getReceiverMobile());
-    //bundle.putString("address1", addressBean.getReceiverState()
-    //    + addressBean.getReceiverCity()
-    //    + addressBean.getReceiverDistrict());
-    //bundle.putString("address2", addressBean.getReceiverAddress());
 
     intent.putExtra("name", addressBean.getReceiverName());
     intent.putExtra("addr_id", addressBean.getId());
@@ -190,6 +178,7 @@ public class AddressSelectAdapter extends RecyclerView.Adapter<RecyclerView.View
     public AddressDefaultVH(View itemView) {
       super(itemView);
       card = itemView;
+      AutoUtils.auto(itemView);
       ButterKnife.bind(this, itemView);
     }
   }
@@ -204,6 +193,7 @@ public class AddressSelectAdapter extends RecyclerView.Adapter<RecyclerView.View
     public AddressVH(View itemView) {
       super(itemView);
       card = itemView;
+      AutoUtils.auto(itemView);
       ButterKnife.bind(this, itemView);
     }
   }

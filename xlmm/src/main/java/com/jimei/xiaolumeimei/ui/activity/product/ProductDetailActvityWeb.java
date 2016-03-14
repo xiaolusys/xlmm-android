@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.ui.activity.product;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PointF;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -60,6 +61,7 @@ public class ProductDetailActvityWeb extends BaseSwipeBackCompatActivity
   private VerticalFragmentDetail fragmentDetail;
   private VerticalFragmentWeb fragmnetWeb;
   private boolean isSelectzz;
+  private PointF endP;
 
   @Override protected void setListener() {
     button_shop.setOnClickListener(this);

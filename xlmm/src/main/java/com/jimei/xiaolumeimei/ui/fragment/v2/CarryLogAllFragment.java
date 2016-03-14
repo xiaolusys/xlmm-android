@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
@@ -36,6 +37,7 @@ public class CarryLogAllFragment extends Fragment {
   private int page = 2;
   private Subscription subscription1;
   private Subscription subscription2;
+  private MaterialDialog materialDialog;
 
   public static CarryLogAllFragment newInstance(String title) {
     CarryLogAllFragment carryLogAllFragment = new CarryLogAllFragment();
@@ -58,6 +60,7 @@ public class CarryLogAllFragment extends Fragment {
   }
 
   private void load() {
+    showIndeterminateProgressDialog(false);
     subscription1 = MMProductModel.getInstance()
         .getMamaAllCarryLogs("1")
         .subscribeOn(Schedulers.io())
@@ -65,6 +68,7 @@ public class CarryLogAllFragment extends Fragment {
 
           @Override public void onCompleted() {
             super.onCompleted();
+            hideIndeterminateProgressDialog();
           }
 
           @Override public void onError(Throwable e) {
@@ -157,5 +161,18 @@ public class CarryLogAllFragment extends Fragment {
     if (subscription2 != null && subscription2.isUnsubscribed()) {
       subscription2.unsubscribe();
     }
+  }
+
+  public void showIndeterminateProgressDialog(boolean horizontal) {
+    materialDialog = new MaterialDialog.Builder(getActivity())
+        //.title(R.string.progress_dialog)
+        .content(R.string.please_wait)
+        .progress(true, 0)
+        .progressIndeterminateStyle(horizontal)
+        .show();
+  }
+
+  public void hideIndeterminateProgressDialog() {
+    materialDialog.dismiss();
   }
 }

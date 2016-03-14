@@ -17,6 +17,7 @@ import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.ui.activity.user.ChanggeAddressActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.zhy.autolayout.utils.AutoUtils;
 import java.util.ArrayList;
 import java.util.List;
 import rx.schedulers.Schedulers;
@@ -231,6 +232,7 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public AddressDefaultVH(View itemView) {
       super(itemView);
       card = itemView;
+      AutoUtils.auto(itemView);
       ButterKnife.bind(this, itemView);
     }
   }
@@ -244,6 +246,7 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public AddressVH(View itemView) {
       super(itemView);
       card = itemView;
+      AutoUtils.auto(itemView);
       ButterKnife.bind(this, itemView);
     }
   }

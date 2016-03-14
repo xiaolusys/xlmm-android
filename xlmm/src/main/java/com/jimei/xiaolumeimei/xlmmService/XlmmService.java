@@ -658,8 +658,20 @@ public interface XlmmService {
   Observable<MamaLivenessBean> getMamaLiveness(
           @Query("page")String page);
 
-  @GET(XlmmApi.APP_BASE_URL_DEV+"/rest/v2/mama/carry")
+  @GET(XlmmApi.APP_BASE_URL+"/rest/v2/mama/carry")
   Observable<CarryLogListBean> getMamaAllCarryLogs(
+       @Query("page")String page
+  );
+  @GET(XlmmApi.APP_BASE_URL+"/rest/v2/mama/ordercarry")
+  Observable<CarryLogListBean> getMamaAllOderCarryLogs(
+       @Query("page")String page
+  );
+  @GET(XlmmApi.APP_BASE_URL+"/rest/v2/mama/awardcarry")
+  Observable<CarryLogListBean> getMamaAllAwardCarryLogs(
+       @Query("page")String page
+  );
+  @GET(XlmmApi.APP_BASE_URL+"/rest/v2/mama/clickcarry")
+  Observable<CarryLogListBean> getMamaAllClickCarryLogs(
        @Query("page")String page
   );
 

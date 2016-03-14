@@ -1,5 +1,6 @@
 package com.jimei.xiaolumeimei.ui.fragment.v1.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,6 +8,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,18 +22,17 @@ import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.TodayAdapter;
+import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.PostBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.ui.activity.main.WebViewActivity;
-import com.jimei.xiaolumeimei.ui.activity.product.ChildListActivity;
-import com.jimei.xiaolumeimei.ui.activity.product.LadyListActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.WxLoginBindPhoneActivity;
 import com.jimei.xiaolumeimei.ui.fragment.view.ViewImpl;
+import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
-import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.widget.banner.Indicators.PagerIndicator;
 import com.jimei.xiaolumeimei.widget.banner.SliderLayout;
@@ -42,6 +43,7 @@ import com.jude.utils.JUtils;
 import com.victor.loading.rotate.RotateLoading;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -62,11 +64,13 @@ import rx.schedulers.Schedulers;
  */
 public class TodayListView extends ViewImpl {
 
+  private static final String POST_URL = "?imageMogr2/format/jpg/quality/90";
   @Bind(R.id.xrecyclerView) XRecyclerView xRecyclerView;
   @Bind(R.id.loading) RotateLoading loading;
+  List<String> postString = new ArrayList<>();
+  List<String> appString = new ArrayList<>();
   private View head;
   private TodayAdapter mTodayAdapter;
-
   private ImageView post2;
   private int page = 2;
   private int page_size = 10;
@@ -77,7 +81,6 @@ public class TodayListView extends ViewImpl {
   private Subscription subscribe1;
   private Subscription subscribe3;
   private Subscription subscribe2;
-
   private String cookies;
   private String domain;
   private SharedPreferences sharedPreferences;
@@ -93,7 +96,7 @@ public class TodayListView extends ViewImpl {
     return R.layout.today_fragment;
   }
 
-  public void initViews(Fragment fragment, Context context) {
+  public void initViews(Fragment fragment, Activity context) {
     head = LayoutInflater.from(context)
         .inflate(R.layout.today_poster_header,
             (ViewGroup) mRootView.findViewById(R.id.head_today), false);
@@ -200,7 +203,7 @@ public class TodayListView extends ViewImpl {
     });
   }
 
-  private void initPost(Context context) {
+  private void initPost(Activity context) {
     subscribe2 = ProductModel.getInstance()
         .getTodayPost()
         .subscribeOn(Schedulers.io())
@@ -208,24 +211,36 @@ public class TodayListView extends ViewImpl {
           @Override public void onNext(PostBean postBean) {
             try {
 
-              String picLink =
-                  ViewUtils.getDecodeUrl(postBean.getWemPosters().get(0).getPicLink());
-              String picLink1 =
-                  ViewUtils.getDecodeUrl(postBean.getmChdPosters().get(0).getPicLink());
+              List<PostBean.WemPostersEntity> wemPosters = postBean.getWemPosters();
+              List<PostBean.WemPostersEntity> wemPostersEntities =
+                  postBean.getmChdPosters();
+
+              for (PostBean.WemPostersEntity str : wemPosters) {
+                postString.add(str.getPicLink() + POST_URL);
+                appString.add(str.getAppLink());
+              }
+
+              for (PostBean.WemPostersEntity str : wemPostersEntities) {
+                postString.add(str.getPicLink() + POST_URL);
+                appString.add(str.getAppLink());
+              }
 
               Map<String, String> map = new HashMap<>();
-              map.put("post1", picLink);
-              map.put("post2", picLink1);
+
+              for (int i = 0; i < postString.size(); i++) {
+
+                map.put(postString.get(i), appString.get(i));
+              }
 
               for (String name : map.keySet()) {
                 DefaultSliderView textSliderView = new DefaultSliderView(context);
                 // initialize a SliderLayout
-                textSliderView.image(map.get(name))
+                textSliderView.image(name)
                     .setScaleType(BaseSliderView.ScaleType.CenterCrop);
 
                 //add your extra information
                 textSliderView.bundle(new Bundle());
-                textSliderView.getBundle().putString("extra", name);
+                textSliderView.getBundle().putString("extra", map.get(name));
                 mSliderLayout.addSlider(textSliderView);
                 mSliderLayout.setDuration(3000);
                 mSliderLayout.setCustomIndicator(mPagerIndicator);
@@ -233,14 +248,51 @@ public class TodayListView extends ViewImpl {
                     new BaseSliderView.OnSliderClickListener() {
                       @Override public void onSliderClick(BaseSliderView slider) {
 
-                        String extra = slider.getBundle().getString("extra");
-                        assert extra != null;
-                        if (extra.equals("post2")) {
-                          context.startActivity(
-                              new Intent(context, ChildListActivity.class));
-                        } else if (extra.equals("post1")) {
-                          context.startActivity(
-                              new Intent(context, LadyListActivity.class));
+                        //String extra = slider.getBundle().getString("extra");
+                        //assert extra != null;
+                        //if (extra.equals("post2")) {
+                        //  context.startActivity(
+                        //      new Intent(context, ChildListActivity.class));
+                        //} else if (extra.equals("post1")) {
+                        //  context.startActivity(
+                        //      new Intent(context, LadyListActivity.class));
+                        //}
+                        Intent intent;
+                        if (slider.getBundle() != null) {
+                          String extra = slider.getBundle().getString("extra");
+                          if (!TextUtils.isEmpty(extra)) {
+                            JumpUtils.JumpInfo jump_info = JumpUtils.get_jump_info(extra);
+                            if (jump_info.getType() == XlmmConst.JUMP_PROMOTE_TODAY) {
+                              intent = new Intent(context, MainActivity.class);
+                              intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                              intent.putExtra("fragment", 1);
+                              context.startActivity(intent);
+                              context.finish();
+                            } else if (jump_info.getType()
+                                == XlmmConst.JUMP_PROMOTE_PREVIOUS) {
+                              intent = new Intent(context, MainActivity.class);
+                              intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                              intent.putExtra("fragment", 2);
+                              context.startActivity(intent);
+                              context.finish();
+                            } else if (jump_info.getType()
+                                == XlmmConst.JUMP_PRODUCT_CHILDLIST) {
+                              intent = new Intent(context, MainActivity.class);
+                              intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                              intent.putExtra("fragment", 3);
+                              context.startActivity(intent);
+                              context.finish();
+                            } else if (jump_info.getType()
+                                == XlmmConst.JUMP_PRODUCT_LADYLIST) {
+                              intent = new Intent(context, MainActivity.class);
+                              intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                              intent.putExtra("fragment", 4);
+                              context.startActivity(intent);
+                              context.finish();
+                            }
+                          } else {
+                            JumpUtils.push_jump_proc(context, extra);
+                          }
                         }
                       }
                     });
