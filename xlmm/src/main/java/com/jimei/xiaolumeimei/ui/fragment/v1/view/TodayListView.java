@@ -248,50 +248,56 @@ public class TodayListView extends ViewImpl {
                     new BaseSliderView.OnSliderClickListener() {
                       @Override public void onSliderClick(BaseSliderView slider) {
 
-                        //String extra = slider.getBundle().getString("extra");
-                        //assert extra != null;
-                        //if (extra.equals("post2")) {
-                        //  context.startActivity(
-                        //      new Intent(context, ChildListActivity.class));
-                        //} else if (extra.equals("post1")) {
-                        //  context.startActivity(
-                        //      new Intent(context, LadyListActivity.class));
-                        //}
                         Intent intent;
                         if (slider.getBundle() != null) {
                           String extra = slider.getBundle().getString("extra");
                           if (!TextUtils.isEmpty(extra)) {
                             JumpUtils.JumpInfo jump_info = JumpUtils.get_jump_info(extra);
-                            if (jump_info.getType() == XlmmConst.JUMP_PROMOTE_TODAY) {
-                              intent = new Intent(context, MainActivity.class);
-                              intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                              intent.putExtra("fragment", 1);
+
+                            if (extra.startsWith("http://")) {
+                              intent = new Intent(context, WebViewActivity.class);
+                              //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                              SharedPreferences sharedPreferences =
+                                  context.getSharedPreferences("COOKIESxlmm",
+                                      Context.MODE_PRIVATE);
+                              String cookies = sharedPreferences.getString("Cookies", "");
+                              Bundle bundle = new Bundle();
+                              bundle.putString("cookies", cookies);
+                              bundle.putString("actlink", extra);
+                              intent.putExtras(bundle);
                               context.startActivity(intent);
-                              context.finish();
-                            } else if (jump_info.getType()
-                                == XlmmConst.JUMP_PROMOTE_PREVIOUS) {
-                              intent = new Intent(context, MainActivity.class);
-                              intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                              intent.putExtra("fragment", 2);
-                              context.startActivity(intent);
-                              context.finish();
-                            } else if (jump_info.getType()
-                                == XlmmConst.JUMP_PRODUCT_CHILDLIST) {
-                              intent = new Intent(context, MainActivity.class);
-                              intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                              intent.putExtra("fragment", 3);
-                              context.startActivity(intent);
-                              context.finish();
-                            } else if (jump_info.getType()
-                                == XlmmConst.JUMP_PRODUCT_LADYLIST) {
-                              intent = new Intent(context, MainActivity.class);
-                              intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                              intent.putExtra("fragment", 4);
-                              context.startActivity(intent);
-                              context.finish();
+                            } else {
+                              if (jump_info.getType() == XlmmConst.JUMP_PROMOTE_TODAY) {
+                                intent = new Intent(context, MainActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                intent.putExtra("fragment", 1);
+                                context.startActivity(intent);
+                                context.finish();
+                              } else if (jump_info.getType()
+                                  == XlmmConst.JUMP_PROMOTE_PREVIOUS) {
+                                intent = new Intent(context, MainActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                intent.putExtra("fragment", 2);
+                                context.startActivity(intent);
+                                context.finish();
+                              } else if (jump_info.getType()
+                                  == XlmmConst.JUMP_PRODUCT_CHILDLIST) {
+                                intent = new Intent(context, MainActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                intent.putExtra("fragment", 3);
+                                context.startActivity(intent);
+                                context.finish();
+                              } else if (jump_info.getType()
+                                  == XlmmConst.JUMP_PRODUCT_LADYLIST) {
+                                intent = new Intent(context, MainActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                intent.putExtra("fragment", 4);
+                                context.startActivity(intent);
+                                context.finish();
+                              } else {
+                                JumpUtils.push_jump_proc(context, extra);
+                              }
                             }
-                          } else {
-                            JumpUtils.push_jump_proc(context, extra);
                           }
                         }
                       }
