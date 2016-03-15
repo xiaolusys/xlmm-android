@@ -244,6 +244,9 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
       case R.id.coupon_layout:
         Intent intent = new Intent(CartsPayInfoActivity.this, CouponSelectActivity.class);
+        if((coupon_id != null) && (! coupon_id.isEmpty())){
+          intent.putExtra("coupon_id", coupon_id);
+        }
         startActivityForResult(intent, REQUEST_CODE_COUPONT);
         break;
     }

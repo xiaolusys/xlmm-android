@@ -28,7 +28,7 @@ import rx.schedulers.Schedulers;
 
 public class CouponSelectActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener, AdapterView.OnItemClickListener {
-  String TAG = "CouponActivity";
+  String TAG = "CouponSelectActivity";
 
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.btn_jump) Button btn_jump;
@@ -40,6 +40,7 @@ public class CouponSelectActivity extends BaseSwipeBackCompatActivity
   private CouponListAdapter mCouponAdapter;
   private CouponListAdapter mPastCouponAdapter;
   private ListView lv_unused_coupon;
+  String selected_couponid;
 
   public static void setListViewHeightBasedOnChildren(ListView listView) {
     ListAdapter listAdapter = listView.getAdapter();
@@ -69,6 +70,7 @@ public class CouponSelectActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
+    selected_couponid = extras.getString("coupon_id");
 
   }
 
@@ -105,7 +107,7 @@ public class CouponSelectActivity extends BaseSwipeBackCompatActivity
             unused_num = results.size();
             if (0 != results.size()) {
               rl_empty.setVisibility(View.INVISIBLE);
-              mCouponAdapter.update(results, XlmmConst.UNUSED_COUPON);
+              mCouponAdapter.update(results, XlmmConst.UNUSED_COUPON,selected_couponid);
             }
 
             UserModel.getInstance().getPastCouponBean()
@@ -120,7 +122,7 @@ public class CouponSelectActivity extends BaseSwipeBackCompatActivity
                       }
                     } else {
                       rl_empty.setVisibility(View.INVISIBLE);
-                      mPastCouponAdapter.update(results, XlmmConst.PAST_COUPON);
+                      mPastCouponAdapter.update(results, XlmmConst.PAST_COUPON,"");
                     }
 
                     Log.i(TAG, "过期的" + couponBean.toString());
