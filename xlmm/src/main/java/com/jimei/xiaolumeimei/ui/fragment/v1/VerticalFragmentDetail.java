@@ -96,7 +96,6 @@ public class VerticalFragmentDetail extends Fragment implements View.OnClickList
 
     mInflater = LayoutInflater.from(getActivity());
 
-
     return view;
   }
 
@@ -193,17 +192,25 @@ public class VerticalFragmentDetail extends Fragment implements View.OnClickList
               normalSkus.addAll(productDetailBean.getNormalSkus());
             }
 
-            tagFlowLayout.setAdapter(
+            TagAdapter<ProductDetailBean.NormalSkusEntity> tagAdapter =
                 new TagAdapter<ProductDetailBean.NormalSkusEntity>(normalSkus) {
 
                   @Override public View getView(FlowLayout parent, int position,
                       ProductDetailBean.NormalSkusEntity normalSkusEntity) {
                     TextView tv =
                         (TextView) mInflater.inflate(R.layout.tv, tagFlowLayout, false);
+
                     tv.setText(normalSkus.get(position).getName());
                     return tv;
                   }
-                });
+                };
+
+            tagFlowLayout.setAdapter(tagAdapter);
+
+            if (normalSkus.size() == 1) {
+              tagAdapter.setSelectedList(0);
+              listener.setSkuid(normalSkus.get(0).getId(), true);
+            }
 
             tagFlowLayout.setOnSelectListener(new TagFlowLayout.OnSelectListener() {
               @Override public void onSelected(Set<Integer> selectPosSet, int position) {
