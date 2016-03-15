@@ -139,10 +139,10 @@
       <RelativeLayout
           android:id="@+id/rl_chart"
           android:layout_width="match_parent"
-          android:layout_height="235px"
+          android:layout_height="250px"
           android:layout_below="@id/rl_mama_info"
           android:layout_centerHorizontal="true"
-          android:layout_marginTop="8px"
+          android:layout_marginTop="1px"
           android:orientation="horizontal">
 
         <com.github.mikephil.charting.charts.LineChart
@@ -153,29 +153,32 @@
         />
       </RelativeLayout>
 
-      <include layout="@layout/common_gap"/>
 
-      <RelativeLayout
+      <LinearLayout
           android:id="@+id/rl_order"
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
+          android:layout_height="90px"
           android:layout_below="@+id/rl_chart"
           android:layout_centerHorizontal="true"
-          android:layout_marginTop="8px"
+          android:layout_marginTop="1px"
           android:orientation="horizontal">
 
         <LinearLayout
             android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
             android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:layout_weight="1">
           <TextView
               android:id="@+id/tv_visit1"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_marginLeft="50px"
+              android:layout_gravity="center"
               android:clickable="true"
-              android:text="今日访客"/>
+              android:text="今日访客"
+              android:textSize="15sp"/>
 
           <TextView
               android:id="@+id/tv_visit2"
@@ -183,8 +186,9 @@
               android:layout_height="wrap_content"
               android:layout_marginLeft="4dp"
               android:layout_toRightOf="@+id/tv_visit1"
-              android:gravity="center"
+              android:layout_gravity="center"
               android:text="0"
+              android:textSize="15sp"
               android:textColor="@color/colorAccent"/>
         </LinearLayout>
 
@@ -192,14 +196,16 @@
             android:layout_centerInParent="true"
             android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:layout_weight="1">
           <TextView
               android:id="@+id/tv_today_order1"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:layout_marginLeft="40px"
+              android:layout_gravity="center"
               android:clickable="true"
-              android:text="今日订单"/>
+              android:text="今日订单"
+              android:textSize="15sp"/>
 
           <TextView
               android:id="@+id/tv_today_order2"
@@ -207,16 +213,18 @@
               android:layout_height="wrap_content"
               android:layout_marginLeft="4dp"
               android:layout_toRightOf="@+id/tv_today_order1"
-              android:gravity="center"
+              android:layout_gravity="center"
               android:text="0"
+              android:textSize="15sp"
               android:textColor="@color/colorAccent"/>
         </LinearLayout>
         <LinearLayout
-            android:layout_marginRight="50px"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:layout_weight="1">
           <TextView
               android:id="@+id/tv_today_fund1"
               android:layout_width="wrap_content"
@@ -236,7 +244,7 @@
               android:textColor="@color/colorAccent"
               android:textSize="15sp"/>
         </LinearLayout>
-      </RelativeLayout>
+      </LinearLayout>
 
       <LinearLayout
           android:id="@+id/ll_shop"
@@ -244,7 +252,7 @@
           android:layout_height="150px"
           android:layout_below="@+id/rl_order"
           android:orientation="horizontal"
-          android:layout_marginTop="8px">
+          android:layout_marginTop="10px">
 
         <RelativeLayout
             android:id="@+id/rl_chooselist"
@@ -366,13 +374,13 @@
           android:layout_height="match_parent"
           android:layout_below="@+id/ll_shop"
           android:gravity="center"
-          android:layout_marginTop="8px">
+          android:layout_marginTop="10px">
 
         <RelativeLayout
             android:id="@+id/rl_two_dimen"
             android:layout_width="360px"
-            android:layout_height="120px"
-            android:layout_marginTop="8px"
+            android:layout_height="140px"
+            android:layout_marginTop="1px"
             android:background="@drawable/text_frame">
 
           <ImageView
@@ -412,8 +420,8 @@
         <RelativeLayout
             android:id="@+id/rl_fans"
             android:layout_width="360px"
-            android:layout_height="120px"
-            android:layout_marginTop="8px"
+            android:layout_height="140px"
+            android:layout_marginTop="1px"
             android:layout_toRightOf="@id/rl_two_dimen"
             android:background="@drawable/text_frame">
 
@@ -455,7 +463,7 @@
         <RelativeLayout
             android:id="@+id/rl_orderlist"
             android:layout_width="360px"
-            android:layout_height="120px"
+            android:layout_height="140px"
             android:layout_below="@id/rl_two_dimen"
             android:background="@drawable/text_frame">
 
@@ -495,7 +503,7 @@
         <RelativeLayout
             android:id="@+id/rl_income"
             android:layout_width="360px"
-            android:layout_height="120px"
+            android:layout_height="140px"
             android:layout_below="@id/rl_fans"
             android:layout_toRightOf="@id/rl_orderlist"
             android:background="@drawable/text_frame">

@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -68,7 +69,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.tv_today_fund2) TextView tv_today_fund2;
 
   @Bind(R.id.rl_mama_info) RelativeLayout rlMamaInfo;
-  @Bind(R.id.rl_order) RelativeLayout rlOrder;
+  @Bind(R.id.rl_order)  LinearLayout rlOrder;
 
   @Bind(R.id.rl_chooselist) RelativeLayout rlChooselist;
   @Bind(R.id.rl_party) RelativeLayout rl_party;
@@ -214,10 +215,10 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         break;
       case R.id.tv_liveness:
       case R.id.img_liveness:
-        intent = new Intent(MamaInfoActivity.this, MamaLivenessActivity.class);
-        intent.putExtra("liveness", 90);
+        //intent = new Intent(MamaInfoActivity.this, MamaLivenessActivity.class);
+        //intent.putExtra("liveness", 90);
 
-        startActivity(intent);
+        //startActivity(intent);
         break;
       case R.id.rl_chooselist:
         startActivity(new Intent(MamaInfoActivity.this, MMChooseListActivity.class));
