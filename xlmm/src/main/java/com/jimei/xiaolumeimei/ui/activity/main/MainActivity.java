@@ -115,6 +115,7 @@ public class MainActivity extends BaseActivity
 
     getUserInfo();
 
+    //UmengUpdateAgent.setUpdateCheckConfig(false);
     UmengUpdateAgent.update(this);
 
     //Uri uri = Uri.parse("market://details?id=" + getPackageName());
