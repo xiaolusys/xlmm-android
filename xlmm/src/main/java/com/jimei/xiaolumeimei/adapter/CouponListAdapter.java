@@ -57,12 +57,6 @@ public class CouponListAdapter extends BaseAdapter {
     }
 
     public void update(List<CouponBean.ResultsEntity> list, int coupon_type, String selected_couponid) {
-        float coupon_value = 0;
-        String usestate = "";
-        String crttime = "";
-        String deadline = "";
-        String usescope = "";
-        String coupon_no= "";
 
         Log.d(TAG,"dataSource.size "+ list.size());
         mCouponTyp = coupon_type;
