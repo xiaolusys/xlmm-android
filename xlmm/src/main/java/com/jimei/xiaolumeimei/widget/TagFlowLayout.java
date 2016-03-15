@@ -83,7 +83,7 @@ public class TagFlowLayout extends FlowLayout
   private void changeAdapter() {
     removeAllViews();
     TagAdapter adapter = mTagAdapter;
-    TagView tagViewContainer = null;
+    TagView tagViewContainer;
     HashSet preCheckedList = mTagAdapter.getPreCheckedList();
     for (int i = 0; i < adapter.getCount(); i++) {
       View tagView = adapter.getView(this, i, adapter.getItem(i));
@@ -147,7 +147,7 @@ public class TagFlowLayout extends FlowLayout
     return new HashSet<Integer>(mSelectedView);
   }
 
-  private void doSelect(TagView child, int position) {
+  public void doSelect(TagView child, int position) {
     if (mAutoSelectEffect) {
       if (!child.isChecked()) {
         //处理max_select=1的情况

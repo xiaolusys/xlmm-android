@@ -63,7 +63,7 @@ public class TwoDimenCodeActivity extends BaseSwipeBackCompatActivity implements
   @Override protected void initData() {
     myurl = getIntent().getExtras().getString("myurl");
     if(false == myurl.equals("")){
-      myurl = XlmmApi.TWO_DIMEN_URL_BASE + myurl;
+      //myurl = XlmmApi.TWO_DIMEN_URL_BASE + myurl;
       ViewUtils.loadImgToImgView(this, img_2dimen, myurl);
       JUtils.Log(TAG,"myurl " + myurl);
     }

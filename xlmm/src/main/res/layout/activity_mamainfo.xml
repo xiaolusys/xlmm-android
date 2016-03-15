@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,8 +9,9 @@
   <android.support.design.widget.AppBarLayout
       android:id="@+id/app_bar_layout"
       android:layout_width="match_parent"
+      app:elevation="0dp"
       android:layout_height="wrap_content"
-      android:theme="@style/AppTheme.AppBarOverlay">
+  >
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -17,7 +19,6 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorAccent"
         app:popupTheme="@style/AppTheme.PopupOverlay">
-
       <TextView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
@@ -27,23 +28,23 @@
           android:textColor="@android:color/white"
           android:textSize="16sp"/>
     </android.support.v7.widget.Toolbar>
-    >
 
   </android.support.design.widget.AppBarLayout>
 
   <ScrollView
+      app:layout_behavior="@string/appbar_scrolling_view_behavior"
       android:id="@+id/sc"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_below="@id/app_bar_layout"
-      android:layout_centerHorizontal="true">
+  >
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerHorizontal="true">
+        android:layout_height="wrap_content"
+    >
 
       <RelativeLayout
+          android:background="@color/white"
           android:id="@+id/rl_mama_info"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -68,6 +69,7 @@
             android:src="@drawable/img_diamond"/>
 
         <TextView
+            android:textColor="@color/black"
             android:id="@+id/tv_cashinfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -90,15 +92,16 @@
             android:textSize="20sp"/>
 
         <TextView
-          android:id="@+id/tv_liveness"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_below="@id/tv_cash"
-          android:layout_marginLeft="4dp"
-          android:layout_marginTop="10px"
-          android:layout_gravity="center"
-          android:text="活跃度"
-          android:textSize="15sp"/>
+            android:textColor="@color/colorAccent"
+            android:id="@+id/tv_liveness"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_cash"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="10px"
+            android:layout_gravity="center"
+            android:text="活跃度"
+            android:textSize="15sp"/>
 
         <ProgressBar
             android:id="@+id/pb_hook"
@@ -108,7 +111,7 @@
             android:layout_below="@id/tv_liveness"
             android:layout_marginLeft="4dp"
 
-            />
+        />
 
         <!--ImageView
             android:id="@+id/img_hook"
@@ -130,7 +133,7 @@
             android:background="@drawable/img_liveness"
             android:text="77%"
             android:textSize="9sp"
-            />
+        />
       </RelativeLayout>
 
       <RelativeLayout
@@ -147,7 +150,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="invisible"
-            />
+        />
       </RelativeLayout>
 
       <include layout="@layout/common_gap"/>
@@ -161,63 +164,78 @@
           android:layout_marginTop="8px"
           android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tv_visit1"
+        <LinearLayout
+            android:layout_alignParentLeft="true"
+            android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="70px"
-            android:clickable="true"
-            android:text="今日访客"/>
+            android:layout_height="wrap_content">
+          <TextView
+              android:id="@+id/tv_visit1"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="50px"
+              android:clickable="true"
+              android:text="今日访客"/>
 
-        <TextView
-            android:id="@+id/tv_visit2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:layout_toRightOf="@+id/tv_visit1"
-            android:gravity="center"
-            android:text="0"
-            android:textColor="@color/colorAccent"/>
+          <TextView
+              android:id="@+id/tv_visit2"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="4dp"
+              android:layout_toRightOf="@+id/tv_visit1"
+              android:gravity="center"
+              android:text="0"
+              android:textColor="@color/colorAccent"/>
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_today_order1"
+        <LinearLayout
+            android:layout_centerInParent="true"
+            android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="70px"
-            android:layout_toRightOf="@+id/tv_visit1"
-            android:clickable="true"
-            android:text="今日订单"/>
+            android:layout_height="wrap_content">
+          <TextView
+              android:id="@+id/tv_today_order1"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="40px"
+              android:clickable="true"
+              android:text="今日订单"/>
 
-        <TextView
-            android:id="@+id/tv_today_order2"
+          <TextView
+              android:id="@+id/tv_today_order2"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="4dp"
+              android:layout_toRightOf="@+id/tv_today_order1"
+              android:gravity="center"
+              android:text="0"
+              android:textColor="@color/colorAccent"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginRight="50px"
+            android:layout_alignParentRight="true"
+            android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:layout_toRightOf="@+id/tv_today_order1"
-            android:gravity="center"
-            android:text="0"
-            android:textColor="@color/colorAccent"/>
+            android:layout_height="wrap_content">
+          <TextView
+              android:id="@+id/tv_today_fund1"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:text="今日收益"
+              android:textSize="15sp"/>
 
-        <TextView
-            android:id="@+id/tv_today_fund1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="70px"
-            android:layout_toRightOf="@+id/tv_today_order1"
-            android:text="今日收益"
-            android:textSize="15sp"/>
-
-        <TextView
-            android:id="@+id/tv_today_fund2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:layout_gravity="center"
-            android:layout_toRightOf="@+id/tv_today_fund1"
-            android:text="0"
-            android:textColor="@color/colorAccent"
-            android:textSize="15sp"/>
+          <TextView
+              android:id="@+id/tv_today_fund2"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="4dp"
+              android:layout_gravity="center"
+              android:layout_toRightOf="@+id/tv_today_fund1"
+              android:text="0"
+              android:textColor="@color/colorAccent"
+              android:textSize="15sp"/>
+        </LinearLayout>
       </RelativeLayout>
 
       <LinearLayout
@@ -347,7 +365,7 @@
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:layout_below="@+id/ll_shop"
-          android:layout_centerHorizontal="true"
+          android:gravity="center"
           android:layout_marginTop="8px">
 
         <RelativeLayout
@@ -375,7 +393,7 @@
               android:clickable="true"
               android:text="我的邀请"
               android:textSize="15sp"
-              />
+          />
 
           <TextView
               android:id="@+id/tv_invite_num"
@@ -417,7 +435,7 @@
               android:gravity="center"
               android:text="我的粉丝"
               android:textSize="15sp"
-              />
+          />
 
           <TextView
               android:id="@+id/tv_fansnum"
@@ -528,4 +546,4 @@
       android:textSize="15sp" android:layout_alignParentBottom="true"
       android:layout_centerHorizontal="true"/-->
 
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

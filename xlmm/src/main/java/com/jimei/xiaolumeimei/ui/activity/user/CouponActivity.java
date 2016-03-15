@@ -101,7 +101,7 @@ public class CouponActivity extends BaseSwipeBackCompatActivity
             unused_num = results.size();
             if (0 != results.size()) {
               rl_empty.setVisibility(View.INVISIBLE);
-              mCouponAdapter.update(results, XlmmConst.UNUSED_COUPON);
+              mCouponAdapter.update(results, XlmmConst.UNUSED_COUPON,"");
             }
 
             UserModel.getInstance().getPastCouponBean()
@@ -116,7 +116,7 @@ public class CouponActivity extends BaseSwipeBackCompatActivity
                       }
                     } else {
                       rl_empty.setVisibility(View.INVISIBLE);
-                      mPastCouponAdapter.update(results, XlmmConst.PAST_COUPON);
+                      mPastCouponAdapter.update(results, XlmmConst.PAST_COUPON,"");
                     }
 
                     Log.i(TAG, "过期的" + couponBean.toString());

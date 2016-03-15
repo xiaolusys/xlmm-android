@@ -5,7 +5,6 @@ import android.view.View;
 import android.widget.Checkable;
 import android.widget.FrameLayout;
 
-
 public class TagView extends FrameLayout implements Checkable {
   private static final int[] CHECK_STATE = new int[] { android.R.attr.state_checked };
   private boolean isChecked;

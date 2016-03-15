@@ -34,6 +34,7 @@ public class MMcarryLogActivity extends BaseSwipeBackCompatActivity {
   @Bind(R.id.view_pager) ViewPager viewPager;
   @Bind(R.id.tv_leiji) TextView tvLeiji;
   @Bind(R.id.tv_num) TextView tvNum;
+  private String carrylogMoney;
   //@Bind(R.id.toolbar) Toolbar toolbar;
   //@Bind(R.id.tab_layout) TabLayout tabLayout;
   //@Bind(R.id.collapse_toolbar) CollapsingToolbarLayout collapseToolbar;
@@ -49,7 +50,7 @@ public class MMcarryLogActivity extends BaseSwipeBackCompatActivity {
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
-
+     carrylogMoney = extras.getString("carrylogMoney");
   }
 
   @Override protected int getContentViewLayoutID() {
@@ -83,7 +84,7 @@ public class MMcarryLogActivity extends BaseSwipeBackCompatActivity {
 
     collapseToolbar.setTitle("");
     tvLeiji.setText("累计收益");
-    tvNum.setText("66666");
+    tvNum.setText(carrylogMoney);
 
     List<Fragment> fragments = new ArrayList<>();
     fragments.add(CarryLogAllFragment.newInstance("全部"));

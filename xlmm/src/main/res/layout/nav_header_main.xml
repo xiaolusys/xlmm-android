@@ -55,11 +55,12 @@
       <TextView
           android:textStyle="bold"
           android:textSize="15sp"
-          android:layout_marginLeft="7dp"
+          android:layout_marginLeft="8dp"
           android:id="@+id/tvMoney"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="0"/>
+          android:text="0"
+          />
 
       <ImageView
           android:layout_below="@id/tvMoney"
@@ -106,6 +107,16 @@
           android:clickable="true"
           android:src="@drawable/ic_point"/>
 
+      <TextView
+          android:textSize="11sp"
+          android:id="@+id/tvPoint1"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_toRightOf="@+id/imgPoint"
+          android:layout_alignBottom="@+id/imgPoint"
+          android:gravity="center_vertical"
+          android:text="积分"/>
+
 
     </RelativeLayout>
 
@@ -122,7 +133,7 @@
           android:id="@+id/tvDiscount"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginLeft="24dp"
+          android:layout_marginLeft="10dp"
           android:text="0"/>
       <ImageView
           android:layout_below="@id/tvDiscount"
@@ -132,6 +143,16 @@
           android:layout_width="wrap_content"
           android:clickable="true"
           android:src="@drawable/ic_coupon"/>
+
+      <TextView
+          android:textSize="11sp"
+          android:id="@+id/tvCoupon1"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_toRightOf="@+id/imgCoupon"
+          android:layout_alignBottom="@+id/imgCoupon"
+          android:gravity="center_vertical"
+          android:text="优惠券"/>
 
 
     </RelativeLayout>

@@ -36,16 +36,17 @@ import java.util.List;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.ui.activity.trade.OrderDetailActivity;
+import com.jude.utils.JUtils;
 
 public class CouponListAdapter extends BaseAdapter {
     private static final String TAG = "CouponListAdapter";
     private Context context;
-    List<HashMap<String, String>> data;
     private List<CouponBean.ResultsEntity> mList;
+    private int mCouponTyp;
+    private String mSelecteCouponid;
 
     public CouponListAdapter(Context context) {
         mList = new ArrayList<CouponBean.ResultsEntity>();
-        this.data = new ArrayList<HashMap<String, String>>();
         this.context = context;
     }
 
@@ -55,48 +56,24 @@ public class CouponListAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    public void update(List<CouponBean.ResultsEntity> list, int coupon_type) {
-        float coupon_value = 0;
-        String usestate = "";
-        String crttime = "";
-        String deadline = "";
-        String usescope = "";
-        String coupon_no= "";
+    public void update(List<CouponBean.ResultsEntity> list, int coupon_type, String selected_couponid) {
 
         Log.d(TAG,"dataSource.size "+ list.size());
-        for (int i = 0; i < list.size(); i++) {
-            HashMap<String, String> map = new HashMap<String, String>();
-            coupon_value = (float)list.get(i).getCoupon_value();
-            usestate = list.get(i).getTitle();
+        mCouponTyp = coupon_type;
+        mSelecteCouponid = selected_couponid;
 
-            crttime = list.get(i).getCreated();
-            deadline = list.get(i).getDeadline();
-            usescope = list.get(i).getCoupon_type_display();
-
-            coupon_no = list.get(i).getCoupon_no();
-
-            map.put("coupon_type", Integer.toString(coupon_type) );
-            map.put("coupon_value", Float.toString(coupon_value) );
-            map.put("usestate", usestate);
-            map.put("crttime", crttime);
-            map.put("deadline", deadline);
-            map.put("usescope", usescope);
-            map.put("coupon_no", coupon_no);
-
-            data.add(map);
-        }
         mList.addAll(list);
         notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        return data.size();
+        return mList == null ? 0 : mList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return data.get(position);
+        return mList.get(position);
     }
 
     @Override
@@ -108,31 +85,58 @@ public class CouponListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         Log.d(TAG,"getView ");
 
+        ViewHolder holder;
+
         if (convertView == null) {
+            holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.item_coupon, null);
-            if(Integer.parseInt(data.get(position).get("coupon_type")) == XlmmConst.UNUSED_COUPON) {
+            if(mCouponTyp == XlmmConst.UNUSED_COUPON) {
                 convertView.setBackgroundResource(R.drawable.bg_img_coupon);
             }
-            else if(Integer.parseInt(data.get(position).get("coupon_type")) == XlmmConst.PAST_COUPON){
+            else if(mCouponTyp == XlmmConst.PAST_COUPON){
                 convertView.setBackgroundResource(R.drawable.bg_img_pastcoupon);
             }
+
+            holder.tv_coupon_value = (TextView) convertView.findViewById(R.id.tv_coupon_value);
+            holder.tv_coupon_info = (TextView) convertView.findViewById(R.id.tv_coupon_info);
+            holder.tv_coupon_crttime = (TextView) convertView.findViewById(R.id.tv_coupon_crttime);
+            holder.tv_coupon_deadline = (TextView) convertView.findViewById(R.id.tv_coupon_deadline);
+            holder.tv_coupon_type = (TextView) convertView.findViewById(R.id.tv_coupon_type);
+            holder.tv_coupon_no = (TextView) convertView.findViewById(R.id.tv_coupon_no);
+            holder.img_selected= (ImageView) convertView.findViewById(R.id.img_selected);
+
+            convertView.setTag(holder);
+        }
+        else{
+            holder = (ViewHolder) convertView.getTag();
         }
 
-        TextView tv_coupon_value = (TextView) convertView.findViewById(R.id.tv_coupon_value);
-        TextView tv_coupon_info = (TextView) convertView.findViewById(R.id.tv_coupon_info);
-        TextView tv_coupon_crttime = (TextView) convertView.findViewById(R.id.tv_coupon_crttime);
-        TextView tv_coupon_deadline = (TextView) convertView.findViewById(R.id.tv_coupon_deadline);
-        TextView tv_coupon_type = (TextView) convertView.findViewById(R.id.tv_coupon_type);
-        TextView tv_coupon_no = (TextView) convertView.findViewById(R.id.tv_coupon_no);
-
-        tv_coupon_value.setText("￥"+data.get(position).get("coupon_value"));
-        tv_coupon_info.setText(data.get(position).get("usestate"));
-        tv_coupon_crttime.setText("使用期限"+data.get(position).get("crttime"));
-        tv_coupon_deadline.setText("至"+data.get(position).get("deadline"));
-        tv_coupon_type.setText("使用范围"+data.get(position).get("usescope"));
-        tv_coupon_no.setText("优惠编码"+data.get(position).get("coupon_no"));
+        holder.tv_coupon_value.setText("￥"+ Math.round(mList.get(position).getCoupon_value()*100)/100);
+        holder.tv_coupon_info.setText(mList.get(position).getTitle());
+        holder.tv_coupon_crttime.setText("使用期限"+mList.get(position).getCreated().replace("T"," "));
+        holder.tv_coupon_deadline.setText("至"+mList.get(position).getDeadline().replace("T"," "));
+        holder.tv_coupon_type.setText("使用范围"+mList.get(position).getCoupon_type_display());
+        holder.tv_coupon_no.setText("优惠编码"+mList.get(position).getCoupon_no());
+        JUtils.Log(TAG, "couponno= "+ mList.get(position).getId() + " selected couponno="+mSelecteCouponid);
+        if((mSelecteCouponid != null) && (! mSelecteCouponid.isEmpty())
+                && mSelecteCouponid.equals(Integer.toString(mList.get(position).getId()))){
+            holder.img_selected.setVisibility(View.VISIBLE);
+        }
+        else{
+            holder.img_selected.setVisibility(View.INVISIBLE);
+        }
 
         return convertView;
+    }
+
+    class ViewHolder {
+        TextView tv_coupon_value;
+        TextView tv_coupon_info;
+        TextView tv_coupon_crttime;
+        TextView tv_coupon_deadline;
+        TextView tv_coupon_type;
+        TextView tv_coupon_no;
+        ImageView img_selected;
     }
 
 

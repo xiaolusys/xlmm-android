@@ -10,6 +10,7 @@ public class AgentInfoBean {
   /**
    * share_mmcode : /media/mm/mm-9.jpg
    * recommend_num : 1
+   * "share_qrcode": "http://7xrst8.com2.z0.glb.qiniucdn.com/qrcode/xiaolumm/mm-44.jpg",
    * xlmm : 9
    * mama_link : http://xiaolu.so/m/9/
    * clk_num : 0
@@ -24,6 +25,7 @@ public class AgentInfoBean {
 
   @SerializedName("share_mmcode") private String shareMmcode;
   @SerializedName("recommend_num") private int recommendNum;
+  @SerializedName("share_qrcode") private String shareQrcode;
   @SerializedName("xlmm") private int xlmm;
   @SerializedName("mama_link") private String mamaLink;
   @SerializedName("clk_num") private int clkNum;
@@ -51,6 +53,10 @@ public class AgentInfoBean {
 
   public void setRecommendNum(int recommendNum) {
     this.recommendNum = recommendNum;
+  }
+
+  public void setShareQrcode(String shareQrcode) {
+    this.shareQrcode = shareQrcode;
   }
 
   public void setXlmm(int xlmm) {
@@ -99,6 +105,10 @@ public class AgentInfoBean {
 
   public int getRecommendNum() {
     return recommendNum;
+  }
+
+  public String getShareQrcode() {
+    return shareQrcode;
   }
 
   public int getXlmm() {
@@ -207,20 +217,22 @@ public class AgentInfoBean {
     }
   }
 
-  @Override public String toString() {
+  @Override
+  public String toString() {
     return "AgentInfoBean{" +
-        "shareMmcode='" + shareMmcode + '\'' +
-        ", recommendNum=" + recommendNum +
-        ", xlmm=" + xlmm +
-        ", mamaLink='" + mamaLink + '\'' +
-        ", clkNum=" + clkNum +
-        ", fansNum=" + fansNum +
-        ", mobile='" + mobile + '\'' +
-        ", cash=" + cash +
-        ", clkMoney=" + clkMoney +
-        ", shopNum=" + shopNum +
-        ", mmclog=" + mmclog +
-        ", allShopNum=" + allShopNum +
-        '}';
+            "shareMmcode='" + shareMmcode + '\'' +
+            ", recommendNum=" + recommendNum +
+            ", shareQrcode='" + shareQrcode + '\'' +
+            ", xlmm=" + xlmm +
+            ", mamaLink='" + mamaLink + '\'' +
+            ", clkNum=" + clkNum +
+            ", fansNum=" + fansNum +
+            ", mobile='" + mobile + '\'' +
+            ", cash=" + cash +
+            ", clkMoney=" + clkMoney +
+            ", shopNum=" + shopNum +
+            ", mmclog=" + mmclog +
+            ", allShopNum=" + allShopNum +
+            '}';
   }
 }

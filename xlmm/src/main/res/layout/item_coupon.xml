@@ -35,6 +35,15 @@
 			android:layout_marginLeft="10px"/>
 	</RelativeLayout>
 
+	<ImageView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:id="@+id/img_selected"
+		android:src="@drawable/img_mark_selected_coupon"
+		android:layout_alignParentRight="true"
+		android:padding="4dp"
+		android:visibility="invisible"/>
+
 	<LinearLayout
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"

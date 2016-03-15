@@ -9,6 +9,7 @@ import com.jimei.xiaolumeimei.entities.AgentInfoBean;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.entities.AllowanceBean;
+import com.jimei.xiaolumeimei.entities.AwardCarryBean;
 import com.jimei.xiaolumeimei.entities.BindInfoBean;
 import com.jimei.xiaolumeimei.entities.BudgetPayBean;
 import com.jimei.xiaolumeimei.entities.BudgetdetailBean;
@@ -17,6 +18,7 @@ import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.CartsinfoBean;
 import com.jimei.xiaolumeimei.entities.ChildListBean;
+import com.jimei.xiaolumeimei.entities.ClickcarryBean;
 import com.jimei.xiaolumeimei.entities.CouponBean;
 import com.jimei.xiaolumeimei.entities.IndexBean;
 import com.jimei.xiaolumeimei.entities.LadyListBean;
@@ -30,6 +32,7 @@ import com.jimei.xiaolumeimei.entities.MembershipPointBean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
 import com.jimei.xiaolumeimei.entities.NicknameBean;
 import com.jimei.xiaolumeimei.entities.NinePicBean;
+import com.jimei.xiaolumeimei.entities.OderCarryBean;
 import com.jimei.xiaolumeimei.entities.OneDayAgentOrdersBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.PointLogBean;
@@ -38,6 +41,7 @@ import com.jimei.xiaolumeimei.entities.ProductBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
+import com.jimei.xiaolumeimei.entities.RecentCarryBean;
 import com.jimei.xiaolumeimei.entities.RegisterBean;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.ShareProductBean;
@@ -658,10 +662,28 @@ public interface XlmmService {
   Observable<MamaLivenessBean> getMamaLiveness(
           @Query("page")String page);
 
-  @GET(XlmmApi.APP_BASE_URL_DEV+"/rest/v2/mama/carry")
+  @GET(XlmmApi.APP_BASE_URL+"/rest/v2/mama/carry")
   Observable<CarryLogListBean> getMamaAllCarryLogs(
        @Query("page")String page
   );
+  @GET(XlmmApi.APP_BASE_URL+"/rest/v2/mama/ordercarry")
+  Observable<OderCarryBean> getMamaAllOderCarryLogs(
+       @Query("page")String page
+  );
+  @GET(XlmmApi.APP_BASE_URL+"/rest/v2/mama/awardcarry")
+  Observable<AwardCarryBean> getMamaAllAwardCarryLogs(
+       @Query("page")String page
+  );
+  @GET(XlmmApi.APP_BASE_URL+"/rest/v2/mama/clickcarry")
+  Observable<ClickcarryBean> getMamaAllClickCarryLogs(
+       @Query("page")String page
+  );
+
+  //获得recent days小鹿妈妈订单和收益记录
+  @GET( XlmmApi.APP_BASE_URL+"/rest/v2/mama/order_carry_visitor")
+  Observable<List<RecentCarryBean>> getRecentCarry(
+          @Query("from") String from,
+          @Query("days") String day);
 
 
 

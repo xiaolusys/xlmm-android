@@ -66,7 +66,7 @@ public class ChildFragment extends Fragment {
   }
 
   private void load() {
-    loading.start();
+
     subscribe1 = ProductModel.getInstance()
         .getChildList(1, 10)
         .subscribeOn(Schedulers.io())
@@ -116,6 +116,8 @@ public class ChildFragment extends Fragment {
 
     mChildListAdapter = new ChildListAdapter(ChildFragment.this, getActivity());
     xRecyclerView.setAdapter(mChildListAdapter);
+
+    loading.start();
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
       @Override public void onRefresh() {

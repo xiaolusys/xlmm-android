@@ -43,7 +43,6 @@ import rx.schedulers.Schedulers;
 public class PreviousListView extends ViewImpl {
   @Bind(R.id.loading) RotateLoading loading;
   @Bind(R.id.previous_xrv) XRecyclerView xRecyclerView;
-
   int page_size = 10;
   private int page = 2;
   private int totalPages;//总的分页数
@@ -166,24 +165,19 @@ public class PreviousListView extends ViewImpl {
                                          subscribe4 = ProductModel.getInstance()
                                              .getTodayList(1, page * page_size)
                                              .subscribeOn(Schedulers.io())
-                                             .subscribe(
-                                                 new ServiceResponse<ProductListBean>() {
-                                                   @Override public void onNext(
-                                                       ProductListBean productListBean) {
-                                                     List<ProductListBean.ResultsEntity>
-                                                         results =
-                                                         productListBean.getResults();
-                                                     mPreviousAdapter.updateWithClear(
-                                                         results);
-                                                   }
+                                             .subscribe(new ServiceResponse<ProductListBean>() {
+                                               @Override public void onNext(ProductListBean productListBean) {
+                                                 List<ProductListBean.ResultsEntity> results =
+                                                     productListBean.getResults();
+                                                 mPreviousAdapter.updateWithClear(results);
+                                               }
 
-                                                   @Override public void onCompleted() {
-                                                     super.onCompleted();
-                                                     head.setVisibility(View.VISIBLE);
-                                                     xRecyclerView.post(
-                                                         xRecyclerView::refreshComplete);
-                                                   }
-                                                 });
+                                               @Override public void onCompleted() {
+                                                 super.onCompleted();
+                                                 head.setVisibility(View.VISIBLE);
+                                                 xRecyclerView.post(xRecyclerView::refreshComplete);
+                                               }
+                                             });
                                        }
 
                                        @Override public void onLoadMore() {
@@ -192,10 +186,8 @@ public class PreviousListView extends ViewImpl {
                                            loadMoreData(page, 10);
                                            page++;
                                          } else {
-                                           Toast.makeText(context, "没有更多了拉,去购物吧",
-                                               Toast.LENGTH_SHORT).show();
-                                           xRecyclerView.post(
-                                               xRecyclerView::loadMoreComplete);
+                                           Toast.makeText(context, "没有更多了拉,去购物吧", Toast.LENGTH_SHORT).show();
+                                           xRecyclerView.post(xRecyclerView::loadMoreComplete);
                                          }
                                        }
                                      }

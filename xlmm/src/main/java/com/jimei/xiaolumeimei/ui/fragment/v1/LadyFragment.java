@@ -75,7 +75,7 @@ public class LadyFragment extends Fragment {
 
     mLadyListAdapter = new LadyListAdapter(getActivity(), LadyFragment.this);
     xRecyclerView.setAdapter(mLadyListAdapter);
-
+    loading.start();
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
       @Override public void onRefresh() {
         subscribe2 = ProductModel.getInstance()
@@ -114,7 +114,7 @@ public class LadyFragment extends Fragment {
   }
 
   private void load() {
-    loading.start();
+
     subscribe1 = ProductModel.getInstance()
         .getLadyList(1, 10)
         .subscribeOn(Schedulers.io())

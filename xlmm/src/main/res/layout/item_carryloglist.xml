@@ -38,7 +38,7 @@
 <TextView
     android:id="@+id/time_display"
     android:layout_marginTop="16dp"
-    android:textColor="@color/black"
+    android:textColor="@color/c8c8c8"
     android:layout_marginLeft="8dp"
     android:layout_toRightOf="@id/pic_path"
     android:layout_width="wrap_content"
@@ -58,7 +58,8 @@
     android:layout_alignParentBottom="true"
     android:id="@+id/wxordernick"
     android:layout_marginTop="16dp"
-    android:textColor="@color/c8c8c8"
+
+    android:textColor="@color/black"
     android:layout_marginLeft="8dp"
     android:layout_toRightOf="@id/pic_path"
     android:layout_width="wrap_content"

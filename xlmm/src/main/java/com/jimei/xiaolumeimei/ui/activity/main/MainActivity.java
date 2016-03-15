@@ -80,7 +80,9 @@ public class MainActivity extends BaseActivity
   ImageView imaMoney;
 
   TextView tvPoint;
+  TextView tvPoint1;
   TextView tvCoupon;
+  TextView tvCoupon1;
   TextView tvMoney;
   TextView tvMoney1;
 
@@ -113,6 +115,7 @@ public class MainActivity extends BaseActivity
 
     getUserInfo();
 
+    //UmengUpdateAgent.setUpdateCheckConfig(false);
     UmengUpdateAgent.update(this);
 
     //Uri uri = Uri.parse("market://details?id=" + getPackageName());
@@ -255,8 +258,42 @@ public class MainActivity extends BaseActivity
       }
     });
 
+    tvPoint1 = (TextView) llayout.findViewById(R.id.tvPoint1);
+    tvPoint1.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        drawer.closeDrawers();
+        if (LoginUtils.checkLoginState(getApplicationContext())) {
+          Intent intent = new Intent(MainActivity.this, MembershipPointActivity.class);
+          startActivity(intent);
+        } else {
+          Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+          Bundle bundle = new Bundle();
+          bundle.putString("login", "point");
+          intent.putExtras(bundle);
+          startActivity(intent);
+        }
+      }
+    });
+
     imgCoupon = (ImageView) llayout.findViewById(R.id.imgCoupon);
     imgCoupon.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        drawer.closeDrawers();
+        if (LoginUtils.checkLoginState(getApplicationContext())) {
+          Intent intent = new Intent(MainActivity.this, CouponActivity.class);
+          startActivity(intent);
+        } else {
+          Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+          Bundle bundle = new Bundle();
+          bundle.putString("login", "coupon");
+          intent.putExtras(bundle);
+          startActivity(intent);
+        }
+      }
+    });
+
+    tvCoupon1 = (TextView) llayout.findViewById(R.id.tvCoupon1);
+    tvCoupon1.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
         drawer.closeDrawers();
         if (LoginUtils.checkLoginState(getApplicationContext())) {

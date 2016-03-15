@@ -29,7 +29,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AgentInfoBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.OneDayAgentOrdersBean;
-import com.jimei.xiaolumeimei.entities.ShoppingListBean;
+import com.jimei.xiaolumeimei.entities.RecentCarryBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -48,7 +48,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     OnChartValueSelectedListener {
   private static final int MAX_RECENT_DAYS = 15;
   String TAG = "MamaInfoActivity";
-  List<HisRefund> show_his_refund = new ArrayList<HisRefund>();
+  List<RecentCarryBean> show_his_refund = new ArrayList<RecentCarryBean>();
   int get_num = 0;
 
   @Bind(R.id.toolbar) Toolbar toolbar;
@@ -123,37 +123,44 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void initData() {
     Subscription subscribe3 = MamaInfoModel.getInstance()
-            .getMamaFortune()
-            .subscribeOn(Schedulers.io())
-            .subscribe(new ServiceResponse<MamaFortune>() {
-              @Override public void onNext(MamaFortune fortune) {
-                JUtils.Log(TAG, "fortune=" + fortune.toString());
+        .getMamaFortune()
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<MamaFortune>() {
+          @Override public void onNext(MamaFortune fortune) {
+            JUtils.Log(TAG, "fortune=" + fortune.toString());
 
-                JUtils.Log(TAG,
-                        "cash =" + fortune.getMama_fortune().getCash_value() + " all fund=" + fortune.getMama_fortune()
-                                .getCarry_value());
+            JUtils.Log(TAG, "cash ="
+                + fortune.getMama_fortune().getCash_value()
+                + " all fund="
+                + fortune.getMama_fortune().getCarry_value());
 
-                mamaFortune = fortune;
-                tv_cash.setText(
-                        Double.toString((double) (Math.round(fortune.getMama_fortune().getCash_value() * 100)) / 100));
-                tv_fund.setText("账户余额" + Double.toString(
-                        (double) (Math.round(fortune.getMama_fortune().getCash_value() * 100)) / 100));
+            mamaFortune = fortune;
+            tv_cash.setText(Double.toString(
+                (double) (Math.round(fortune.getMama_fortune().getCash_value() * 100))
+                    / 100));
+            tv_fund.setText("账户余额" + Double.toString(
+                (double) (Math.round(fortune.getMama_fortune().getCash_value() * 100))
+                    / 100));
 
-                tv_today_visit2.setText(Integer.toString(fortune.getMama_fortune().getToday_visitor_num()));
+            tv_today_visit2.setText(
+                Integer.toString(fortune.getMama_fortune().getToday_visitor_num()));
 
-                carrylogMoney =
-                        ((double) (Math.round(fortune.getMama_fortune().getCarry_value() * 100)) / 100);
+            carrylogMoney =
+                ((double) (Math.round(fortune.getMama_fortune().getCarry_value() * 100))
+                    / 100);
 
-                tv_invite_num.setText("邀请"+fortune.getMama_fortune().getInvite_num()+"位小鹿妈妈");
-                tv_fansnum.setText("我的粉丝 " + fortune.getMama_fortune().getFans_num());
-                JUtils.Log(TAG, "fans num =" + fortune.getMama_fortune().getFans_num());
+            tv_invite_num.setText(
+                "邀请" + fortune.getMama_fortune().getInvite_num() + "位小鹿妈妈");
+            tv_fansnum.setText("我的粉丝 " + fortune.getMama_fortune().getFans_num());
+            JUtils.Log(TAG, "fans num =" + fortune.getMama_fortune().getFans_num());
 
-                show_liveness(fortune.getMama_fortune().getActive_value_num());
-                JUtils.Log(TAG, "all orders num =" + fortune.getMama_fortune().getOrder_num());
-                tv_order.setText(Integer.toString(fortune.getMama_fortune().getOrder_num()) + "个订单");
-
-              }
-            });
+            show_liveness(fortune.getMama_fortune().getActive_value_num());
+            JUtils.Log(TAG,
+                "all orders num =" + fortune.getMama_fortune().getOrder_num());
+            tv_order.setText(
+                Integer.toString(fortune.getMama_fortune().getOrder_num()) + "个订单");
+          }
+        });
     addSubscription(subscribe3);
 
     Subscription subscribe = MamaInfoModel.getInstance()
@@ -163,7 +170,6 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
           @Override public void onNext(AgentInfoBean pointBean) {
             JUtils.Log(TAG, "AgentInfoBean=" + pointBean.toString());
             mamaAgentInfo = pointBean;
-
           }
         });
     addSubscription(subscribe);
@@ -181,8 +187,9 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
             }
           }
         });
-    get_his_refund();
+
     addSubscription(subscribe1);*/
+    get_his_refund();
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
@@ -227,7 +234,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
       case R.id.rl_two_dimen:
         if (mamaAgentInfo != null) {
           intent = new Intent(MamaInfoActivity.this, TwoDimenCodeActivity.class);
-          intent.putExtra("myurl", mamaAgentInfo.getShareMmcode());
+          intent.putExtra("myurl", mamaAgentInfo.getShareQrcode());
           startActivity(intent);
         }
         break;
@@ -351,7 +358,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
       //float val = (float) (Math.random() * 100) + 3;
       float val = 0;
       if (show_his_refund.size() > 0) {
-        val = show_his_refund.get(i).getOrder_num();
+        val = show_his_refund.get(i).getOrderNum();
       }
       yVals.add(new Entry(val, i));
     }
@@ -439,8 +446,12 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         + mChart.getLowestVisibleXIndex()
         + ", high: "
         + mChart.getHighestVisibleXIndex());
+    tv_today_visit2.setText(Integer.toString(show_his_refund.get(e.getXIndex()).getVisitorNum()));
     tv_today_order2.setText(Integer.toString((int) (e.getVal())));
-    if (Double.compare(show_his_refund.get(e.getXIndex()).getRefund(), 0) == 0) {
+    tv_today_fund2.setText(Double.toString((double) (Math.round(
+            show_his_refund.get(e.getXIndex()).getCarry() * 100)) / 100));
+
+    /*if (Double.compare(show_his_refund.get(e.getXIndex()).getRefund(), 0) == 0) {
       tv_today_fund2.setText(Float.toString(
           (float) (Math.round(show_his_refund.get(e.getXIndex()).getRefund() * 100))
               / 100));
@@ -472,7 +483,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
       tv_today_fund2.setText(Float.toString(
           (float) (Math.round(show_his_refund.get(e.getXIndex()).getRefund() * 100))
               / 100));
-    }
+    }*/
   }
 
   @Override public void onNothingSelected() {
@@ -481,6 +492,50 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
 
   void get_his_refund() {
     for (int i = 0; i < MAX_RECENT_DAYS; i++) {
+      RecentCarryBean hisRefund = new RecentCarryBean();
+      hisRefund.setVisitorNum(0);
+      hisRefund.setOrderNum(0);
+      hisRefund.setCarry(0.0);
+      show_his_refund.add(i, hisRefund);
+    }
+
+    Subscription subscribe = MMProductModel.getInstance()
+            .getRecentCarry("0", Integer.toString(MAX_RECENT_DAYS))
+            .subscribeOn(Schedulers.io())
+            .subscribe(new ServiceResponse<List<RecentCarryBean>>() {
+              @Override public void onNext(List<RecentCarryBean> recentDayBean) {
+                super.onNext(recentDayBean);
+                if (recentDayBean != null) {
+
+                  show_his_refund.clear();
+                  show_his_refund.addAll( recentDayBean);
+
+                  JUtils.Log(TAG,
+                          "get_num =" + get_num + " " + "size= " + show_his_refund.size());
+                  if ((show_his_refund.size() > 0)) {
+                    init_chart();
+                    setData(MAX_RECENT_DAYS);
+                    mChart.setVisibility(View.VISIBLE);
+
+                    mChart.animateX(2500, Easing.EasingOption.EaseInOutQuart);
+                    mChart.setVisibleXRangeMaximum(6);
+
+                    if (show_his_refund.size() > 7) {
+                      mChart.moveViewToX(MAX_RECENT_DAYS - 6);
+                    }
+                    if (show_his_refund.get(0) != null) {
+                      tv_today_visit2.setText(Integer.toString(show_his_refund.get(show_his_refund.size()-1).getVisitorNum()));
+                      tv_today_order2.setText(Integer.toString(show_his_refund.get(show_his_refund.size()-1).getOrderNum()));
+                      tv_today_fund2.setText(Double.toString(
+                              (double) (Math.round(show_his_refund.get(show_his_refund.size()-1).getCarry() * 100))
+                                      / 100));
+                    }
+                  }
+                }
+              }
+            });
+    addSubscription(subscribe);
+    /*for (int i = 0; i < MAX_RECENT_DAYS; i++) {
       HisRefund hisRefund = new HisRefund();
       hisRefund.setOrder_num(0);
       hisRefund.setRefund(0);
@@ -528,10 +583,10 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     for (int i = 0; i < MAX_RECENT_DAYS; i++) {
       JUtils.Log(TAG, " day  =" + (MAX_RECENT_DAYS - 1 - i));
       get_his_one_day_refund(i);
-    }
+    }*/
   }
 
-  void get_his_one_day_refund(int day) {
+  /*void get_his_one_day_refund(int day) {
     final int finalI = day;
     Subscription subscribe = MMProductModel.getInstance()
         .getOneDayAgentOrders(MAX_RECENT_DAYS - 1 - day)
@@ -565,7 +620,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
       sum += list.get(i).getTicheng_cash();
     }
     return sum;
-  }
+  }*/
 
   @Override protected void onStop() {
     super.onStop();
@@ -603,24 +658,4 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     img_liveness.setLayoutParams(laParams1);
   }
 
-  final static class HisRefund {
-    int order_num;
-    double refund;
-
-    public int getOrder_num() {
-      return order_num;
-    }
-
-    public void setOrder_num(int order_num) {
-      this.order_num = order_num;
-    }
-
-    public double getRefund() {
-      return refund;
-    }
-
-    public void setRefund(double refund) {
-      this.refund = refund;
-    }
-  }
 }
