@@ -9,6 +9,7 @@ import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.NinePicBean;
 import com.jimei.xiaolumeimei.entities.OderCarryBean;
 import com.jimei.xiaolumeimei.entities.OneDayAgentOrdersBean;
+import com.jimei.xiaolumeimei.entities.RecentCarryBean;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.ShoppingListBean;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
@@ -145,5 +146,12 @@ public class MMProductModel {
     return XlmmRetrofitClient.getService()
         .getMamaAllClickCarryLogs(page)
         .compose(new DefaultTransform<>());
+  }
+
+  //MM recent days carry
+  public Observable<List<RecentCarryBean>> getRecentCarry(String from, String day) {
+    return XlmmRetrofitClient.getService()
+            .getRecentCarry(from,day)
+            .compose(new DefaultTransform<>());
   }
 }

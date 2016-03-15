@@ -41,6 +41,7 @@ import com.jimei.xiaolumeimei.entities.ProductBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
+import com.jimei.xiaolumeimei.entities.RecentCarryBean;
 import com.jimei.xiaolumeimei.entities.RegisterBean;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.ShareProductBean;
@@ -677,6 +678,12 @@ public interface XlmmService {
   Observable<ClickcarryBean> getMamaAllClickCarryLogs(
        @Query("page")String page
   );
+
+  //获得recent days小鹿妈妈订单和收益记录
+  @GET( XlmmApi.APP_BASE_URL+"/rest/v2/mama/order_carry_visitor")
+  Observable<List<RecentCarryBean>> getRecentCarry(
+          @Query("from") String from,
+          @Query("days") String day);
 
 
 
