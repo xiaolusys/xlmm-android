@@ -127,8 +127,8 @@ public class CouponListAdapter extends BaseAdapter {
 
         tv_coupon_value.setText("￥"+data.get(position).get("coupon_value"));
         tv_coupon_info.setText(data.get(position).get("usestate"));
-        tv_coupon_crttime.setText("使用期限"+data.get(position).get("crttime"));
-        tv_coupon_deadline.setText("至"+data.get(position).get("deadline"));
+        tv_coupon_crttime.setText("使用期限"+data.get(position).get("crttime").replace("T"," "));
+        tv_coupon_deadline.setText("至"+data.get(position).get("deadline").replace("T"," "));
         tv_coupon_type.setText("使用范围"+data.get(position).get("usescope"));
         tv_coupon_no.setText("优惠编码"+data.get(position).get("coupon_no"));
 
