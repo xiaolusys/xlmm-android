@@ -13,7 +13,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.jimei.library.rx.RXDownLoadImage;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.data.FilePara;
 import com.jimei.xiaolumeimei.entities.NinePicBean;
@@ -29,8 +28,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import okhttp3.Call;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/02/29.
@@ -38,7 +35,6 @@ import rx.android.schedulers.AndroidSchedulers;
  * Copyright 2016年 上海己美. All rights reserved.
  */
 public class NinePicAdapter extends BaseAdapter {
-  setOnclickSaveListener onclickSaveListener;
   private Context mcontext;
   private List<NinePicBean> mlist = new ArrayList<>();
 
@@ -51,10 +47,6 @@ public class NinePicAdapter extends BaseAdapter {
     ClipboardManager cmb =
         (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
     cmb.setText(content.trim());
-  }
-
-  public void setOnclickSaveListener(setOnclickSaveListener onclickSaveListener) {
-    this.onclickSaveListener = onclickSaveListener;
   }
 
   public List<NinePicBean> getDatas() {
@@ -162,21 +154,6 @@ public class NinePicAdapter extends BaseAdapter {
     return convertView;
   }
 
-  private void saveImageToGallery(String url, String mImageTitle) {
-    // @formatter:off
-    Subscription subscribe = RXDownLoadImage.saveImageAndGetPathObservable(mcontext, url,
-            mImageTitle)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(uri -> {
-                //File appDir = new File(Environment.getExternalStorageDirectory(), "XlMMImage");
-                //String msg = String.format(("图片已经保存到"),
-                //        appDir.getAbsolutePath());
-                //JUtils.Toast(msg);
-            }, error -> JUtils.Toast(error.getMessage() + "\n再试试..."));
-        // @formatter:on
-    //addSubscription(s);
-  }
-
   private void downloadNinepic(List<String> picArry) {
     new Thread(new Runnable() {
       @Override public void run() {
@@ -240,10 +217,6 @@ public class NinePicAdapter extends BaseAdapter {
         }
       }
     }).start();
-  }
-
-  public interface setOnclickSaveListener {
-    void save(List<String> list, int position);
   }
 
   class ViewHolder {
