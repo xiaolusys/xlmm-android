@@ -90,7 +90,7 @@ public class MMWebViewActivity extends BaseSwipeBackCompatActivity {
   }
 
   @Override protected int getContentViewLayoutID() {
-    return R.layout.activity_actwebview;
+    return R.layout.activity_mmwebview;
   }
 
   @SuppressLint("JavascriptInterface") @Override protected void initViews() {
