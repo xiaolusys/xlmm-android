@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -285,7 +286,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     //mChart.setPinchZoom(true);
 
     // set an alternative background color
-    // mChart.setBackgroundColor(Color.GRAY);
+    mChart.setBackgroundColor(Color.WHITE);
 
     // create a custom MarkerView (extend MarkerView) and specify the layout
     // to use for it
@@ -372,12 +373,15 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     // set the line to be drawn like this "- - - - - -"
     set1.enableDashedLine(20f, 5f, 0f);
     set1.enableDashedHighlightLine(20f, 5f, 0f);
-    set1.setColor(R.color.colorAccent);
-    set1.setCircleColor(R.color.colorAccent);
+    set1.setColor(Color.parseColor("#F5B123"));
+    set1.setCircleColor(Color.parseColor("#F5B123"));
     set1.setLineWidth(1f);
-    set1.setCircleRadius(3f);
+    set1.setCircleRadius(2f);
     set1.setDrawCircleHole(false);
     set1.setValueTextSize(9f);
+
+    set1.setLineWidth(1.75f); // 线宽
+    set1.setHighLightColor(Color.parseColor("#F5B123")); // 高亮的线的颜色
     //Drawable drawable = ContextCompat.getDrawable(this, R.drawable.fade_red);
     //set1.setFillDrawable(drawable);
     //set1.setDrawFilled(true);

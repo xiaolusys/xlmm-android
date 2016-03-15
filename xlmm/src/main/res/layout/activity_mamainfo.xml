@@ -107,10 +107,10 @@
             android:id="@+id/pb_hook"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
-            android:layout_height="8px"
+            android:layout_height="2px"
             android:layout_below="@id/tv_liveness"
             android:layout_marginLeft="4dp"
-
+            android:background="@color/grey50"
         />
 
         <!--ImageView
