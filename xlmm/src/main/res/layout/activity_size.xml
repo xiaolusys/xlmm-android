@@ -23,7 +23,7 @@
           android:text="@string/size"
           android:textColor="@android:color/white"
           android:textSize="16sp"
-          />
+      />
 
     </android.support.v7.widget.Toolbar>
 
@@ -37,11 +37,10 @@
       <RelativeLayout android:layout_width="match_parent"
           android:layout_height="match_parent"/>
       <com.jimei.xiaolumeimei.widget.NestedListView
-
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:id="@+id/longimageview_list"
-          />
+      />
     </LinearLayout>
   </ScrollView>
 
