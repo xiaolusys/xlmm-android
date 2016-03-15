@@ -138,7 +138,6 @@ public class SettingActivity extends BaseSwipeBackCompatActivity {
       }
 
       if (preference.equals(updateVersion)) {
-
         UmengUpdateAgent.setUpdateAutoPopup(false);
         UmengUpdateAgent.setUpdateListener(new UmengUpdateListener() {
           @Override
@@ -148,7 +147,7 @@ public class SettingActivity extends BaseSwipeBackCompatActivity {
                 UmengUpdateAgent.showUpdateDialog(XlmmApp.getInstance(), updateInfo);
                 break;
               case UpdateStatus.No: // has no update
-                Toast.makeText(XlmmApp.getInstance(), "当前已是最新版本", Toast.LENGTH_LONG)
+                Toast.makeText(XlmmApp.getInstance(), "当前已是最新版本", Toast.LENGTH_SHORT)
                     .show();
                 break;
               case UpdateStatus.NoneWifi: // none wifi
@@ -174,6 +173,12 @@ public class SettingActivity extends BaseSwipeBackCompatActivity {
 
       about_company = findPreference(getResources().getString(R.string.about_company));
       about_company.setSummary(XlmmConst.VERSION);
+    }
+
+    @Override public void onStop() {
+      super.onStop();
+
+      UmengUpdateAgent.setUpdateListener(null);
     }
   }
 }

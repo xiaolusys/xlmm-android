@@ -56,18 +56,14 @@ public class XlmmApp extends MultiDexApplication {
 
     //LeakCanary.install(this);
 
-    mContext = this;
+    mContext = getApplicationContext();
     cookiePrefs = getSharedPreferences("COOKIESxlmm", 0);
     client = initOkHttpClient();
-    //receivedCookiesInterceptor =
-    //   new ReceivedCookiesInterceptor();
     JUtils.initialize(this);
     JUtils.setDebug(true, "xlmm");
     //CrashWoodpecker.fly(false).to(this);
     ShareSDK.initSDK(this);
     AutoLayoutConifg.getInstance().useDeviceSize();
-    //CustomActivityOnCrash.install(this);
-    //Stetho.initializeWithDefaults(this);
     //初始化push推送服务
     if (shouldInit()) {
       JUtils.Log("XlmmApp", "reg xiaomi push");

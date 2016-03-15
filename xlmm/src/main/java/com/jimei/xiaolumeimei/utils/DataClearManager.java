@@ -12,7 +12,7 @@ import java.io.File;
  */
 public class DataClearManager {
   private static final String newsCacheurl =
-      Environment.getExternalStorageDirectory().getAbsolutePath() + "/xlmm";
+      Environment.getExternalStorageDirectory().getAbsolutePath() + "/xiaolumeimei";
   private static double dirSizeAll = 0;
 
   /**
@@ -66,13 +66,13 @@ public class DataClearManager {
     cleanExternalCache(context);
     //cleanSharedPreference(context);
     for (String filePath : filepath) {
-      Log.d("DataClear", "filePath "+filePath);
+      Log.d("DataClear", "filePath " + filePath);
       cleanCustomCache(filePath);
     }
   }
 
   public static void cleanApplicationData(Context context) {
-    Log.d("cleanApplicationData",newsCacheurl);
+    Log.d("cleanApplicationData", newsCacheurl);
     cleanApplicationData(context, newsCacheurl);
   }
 
