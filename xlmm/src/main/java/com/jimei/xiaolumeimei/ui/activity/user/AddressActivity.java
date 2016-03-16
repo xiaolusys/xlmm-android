@@ -16,6 +16,7 @@ import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import java.util.List;
+import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 /**
@@ -29,7 +30,6 @@ public class AddressActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.address_recyclerView) RecyclerView addressRecyclerView;
   @Bind(R.id.addAdress) Button addAdress;
-  AddressModel model = new AddressModel();
   private AddressAdapter adapter;
 
   @Override protected void setListener() {
@@ -52,7 +52,8 @@ public class AddressActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void onResume() {
     super.onResume();
-    model.getAddressList()
+    Subscription subscribe = AddressModel.getInstance()
+        .getAddressList()
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<List<AddressBean>>() {
           @Override public void onNext(List<AddressBean> list) {
@@ -62,6 +63,7 @@ public class AddressActivity extends BaseSwipeBackCompatActivity
             }
           }
         });
+    addSubscription(subscribe);
   }
 
   @Override protected void getBundleExtras(Bundle extras) {

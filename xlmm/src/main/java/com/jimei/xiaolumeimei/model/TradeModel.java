@@ -18,6 +18,16 @@ import rx.Observable;
  */
 public class TradeModel {
 
+  private static TradeModel ourInstance = new TradeModel();
+
+  private TradeModel() {
+  }
+
+  public static TradeModel getInstance() {
+    return ourInstance;
+  }
+
+
   //得到全部订单数据列表
   public Observable<AllOrdersBean> getAlloderBean() {
     return XlmmRetrofitClient.getService()

@@ -95,7 +95,6 @@ public class MainActivity extends BaseActivity
   @Bind(R.id.image_1) ImageView image1;
   @Bind(R.id.image_2) ImageView image2;
   //@Bind(R.id.cv_lefttime) CountdownView cvLefttime;
-  private CartsModel cartsModel = new CartsModel();
   private int num;
   private BadgeView badge;
   private double budgetCash;
@@ -191,70 +190,72 @@ public class MainActivity extends BaseActivity
             }
 
             //获得待支付和待收货数目
-            android.support.design.widget.NavigationView navigationView = (android.support.design.widget.NavigationView)drawer.findViewById(R.id.nav_view);
-            LinearLayout nav_tobepaid = (LinearLayout) navigationView.getMenu().findItem(R.id.nav_tobepaid).getActionView();
-            TextView msg1= (TextView) nav_tobepaid.findViewById(R.id.msg);
-            LinearLayout nav_tobereceived = (LinearLayout) navigationView.getMenu().findItem(R.id.nav_tobereceived).getActionView();
-            TextView msg2= (TextView) nav_tobereceived.findViewById(R.id.msg);
-            TradeModel model = new TradeModel();
-            Subscription subscription= model.getWaitPayOrdersBean()
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(new ServiceResponse<AllOrdersBean>() {
-                      @Override public void onNext(AllOrdersBean allOrdersBean) {
-                        List<AllOrdersBean.ResultsEntity> results = allOrdersBean.getResults();
+            android.support.design.widget.NavigationView navigationView =
+                (android.support.design.widget.NavigationView) drawer.findViewById(
+                    R.id.nav_view);
+            LinearLayout nav_tobepaid = (LinearLayout) navigationView.getMenu()
+                .findItem(R.id.nav_tobepaid)
+                .getActionView();
+            TextView msg1 = (TextView) nav_tobepaid.findViewById(R.id.msg);
+            LinearLayout nav_tobereceived = (LinearLayout) navigationView.getMenu()
+                .findItem(R.id.nav_tobereceived)
+                .getActionView();
+            TextView msg2 = (TextView) nav_tobereceived.findViewById(R.id.msg);
+            Subscription subscription = TradeModel.getInstance()
+                .getWaitPayOrdersBean()
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ServiceResponse<AllOrdersBean>() {
+                  @Override public void onNext(AllOrdersBean allOrdersBean) {
+                    List<AllOrdersBean.ResultsEntity> results =
+                        allOrdersBean.getResults();
 
-                        if (0 != results.size()) {
-                          msg1.setVisibility(View.VISIBLE);
-                          msg1.setText(Integer.toString(results.size()));
-                        }
-                        else{
-                          msg1.setVisibility(View.INVISIBLE);
-                        }
+                    if (0 != results.size()) {
+                      msg1.setVisibility(View.VISIBLE);
+                      msg1.setText(Integer.toString(results.size()));
+                    } else {
+                      msg1.setVisibility(View.INVISIBLE);
+                    }
 
-                        Log.i(TAG, ""+results.size());
-                      }
+                    Log.i(TAG, "" + results.size());
+                  }
 
-                      @Override
-                      public void onCompleted() {
-                        super.onCompleted();
-                      }
+                  @Override public void onCompleted() {
+                    super.onCompleted();
+                  }
 
-                      @Override
-                      public void onError(Throwable e) {
+                  @Override public void onError(Throwable e) {
 
-                        Log.e(TAG, " error:, "   + e.toString());
-                        super.onError(e);
-                      }
-                    });
+                    Log.e(TAG, " error:, " + e.toString());
+                    super.onError(e);
+                  }
+                });
             addSubscription(subscription);
 
-            Subscription subscription1 =  model.getWaitSendOrdersBean()
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(new ServiceResponse<AllOrdersBean>() {
-                      @Override public void onNext(AllOrdersBean allOrdersBean) {
-                        List<AllOrdersBean.ResultsEntity> results = allOrdersBean.getResults();
-                        if (0 != results.size()) {
-                          msg2.setVisibility(View.VISIBLE);
-                          msg2.setText(Integer.toString(results.size()));
-                        }
-                        else{
-                          msg2.setVisibility(View.INVISIBLE);
-                        }
+            Subscription subscription1 = TradeModel.getInstance()
+                .getWaitSendOrdersBean()
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ServiceResponse<AllOrdersBean>() {
+                  @Override public void onNext(AllOrdersBean allOrdersBean) {
+                    List<AllOrdersBean.ResultsEntity> results =
+                        allOrdersBean.getResults();
+                    if (0 != results.size()) {
+                      msg2.setVisibility(View.VISIBLE);
+                      msg2.setText(Integer.toString(results.size()));
+                    } else {
+                      msg2.setVisibility(View.INVISIBLE);
+                    }
+                  }
 
-                      }
+                  @Override public void onCompleted() {
+                    super.onCompleted();
+                  }
 
-                      @Override
-                      public void onCompleted() {
-                        super.onCompleted();
-                      }
+                  @Override public void onError(Throwable e) {
 
-                      @Override
-                      public void onError(Throwable e) {
-
-                        Log.e(TAG, " error:, "   + e.toString());
-                        super.onError(e);
-                      }
-                    });
+                    Log.e(TAG, " error:, " + e.toString());
+                    super.onError(e);
+                  }
+                });
             addSubscription(subscription1);
 
             invalidateOptionsMenu();
@@ -600,7 +601,8 @@ public class MainActivity extends BaseActivity
     //      }
     //    });
 
-    cartsModel.show_carts_num()
+    Subscription subscribe = CartsModel.getInstance()
+        .show_carts_num()
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<CartsNumResultBean>() {
           @Override public void onNext(CartsNumResultBean cartsNumResultBean) {
@@ -637,11 +639,12 @@ public class MainActivity extends BaseActivity
             }
           }
         });
+    addSubscription(subscribe);
 
     JUtils.Log(TAG, "resume");
     getUserInfo();
 
-    subscribe = UserNewModel.getInstance()
+    this.subscribe = UserNewModel.getInstance()
         .getProfile()
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<UserInfoBean>() {

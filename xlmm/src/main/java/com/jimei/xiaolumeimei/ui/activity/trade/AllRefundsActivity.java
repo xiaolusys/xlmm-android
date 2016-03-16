@@ -30,7 +30,6 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.rlayout_order_empty) RelativeLayout rl_empty;
 
-  TradeModel model = new TradeModel();
   private AllRefundsListAdapter mAllRefundsAdapter;
 
   @Override protected void setListener() {
@@ -78,7 +77,8 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity
 
   //从server端获得所有订单数据，可能要查询几次
   @Override protected void initData() {
-    Subscription subscription = model.getRefundsBean()
+    Subscription subscription = TradeModel.getInstance()
+        .getRefundsBean()
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<AllRefundsBean>() {
           @Override public void onNext(AllRefundsBean allRefundsBean) {

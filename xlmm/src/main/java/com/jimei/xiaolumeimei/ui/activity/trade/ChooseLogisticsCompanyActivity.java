@@ -13,32 +13,26 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.MyAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.LogisticsCompanyInfo;
-import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.widget.SideBar;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener {
+  final List<LogisticsCompanyInfo> company_list = new ArrayList<LogisticsCompanyInfo>();
   String TAG = "ChooseLogisticsCompanyActivity";
-
   @Bind(R.id.lv_logistics_company) ListView lv_logistics_company;
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.sideBar) SideBar sideBar;
-
-  TradeModel model = new TradeModel();
-  private MyAdapter mCompanyAdapter;
   /**
    * 显示字母的TextView
    */
   @Bind(R.id.dialog) TextView dialog;
-
-  final List<LogisticsCompanyInfo> company_list = new ArrayList<LogisticsCompanyInfo>();
+  private MyAdapter mCompanyAdapter;
 
   @Override protected void setListener() {
 
     toolbar.setOnClickListener(this);
-
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -60,14 +54,14 @@ public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
     lv_logistics_company.setAdapter(mCompanyAdapter);
     lv_logistics_company.setOnItemClickListener(new AdapterView.OnItemClickListener() {
       @Override
-      public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,long arg3) {
+      public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
         // TODO Auto-generated method stub
-          Log.d(TAG,"onItemClick "+ arg2 + " "+company_list.get(arg2).getName());
-          Intent intent = new Intent(ChooseLogisticsCompanyActivity.this,
-              WriteLogisticsInfoActivty.class);
-          intent.putExtra("company", company_list.get(arg2).getName());
-          setResult(1, intent);
-          finish();
+        Log.d(TAG, "onItemClick " + arg2 + " " + company_list.get(arg2).getName());
+        Intent intent = new Intent(ChooseLogisticsCompanyActivity.this,
+            WriteLogisticsInfoActivty.class);
+        intent.putExtra("company", company_list.get(arg2).getName());
+        setResult(1, intent);
+        finish();
       }
     });
   }
@@ -101,11 +95,8 @@ public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
   @Override public void onClick(View v) {
     switch (v.getId()) {
 
-
     }
   }
-
-
 
   private void fillCompanyInfo() {
     company_list.add(new LogisticsCompanyInfo("A", "安信达快递"));
@@ -164,6 +155,5 @@ public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
     company_list.add(new LogisticsCompanyInfo("Z", "中通速递"));
     company_list.add(new LogisticsCompanyInfo("Z", "中外运"));
     company_list.add(new LogisticsCompanyInfo("Z", "中驿快递"));
-
   }
 }

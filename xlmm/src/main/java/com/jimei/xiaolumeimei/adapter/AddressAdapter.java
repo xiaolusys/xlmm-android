@@ -30,7 +30,6 @@ import rx.schedulers.Schedulers;
 public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
   private static final String TAG = AddressAdapter.class.getSimpleName();
-  AddressModel model = new AddressModel();
   private List<AddressBean> mList;
   private Context context;
 
@@ -101,7 +100,8 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                   callback(new MaterialDialog.ButtonCallback() {
                     @Override public void onPositive(MaterialDialog dialog) {
 
-                      model.delete_address(addressBean.getId())
+                      AddressModel.getInstance()
+                          .delete_address(addressBean.getId())
                           .subscribeOn(Schedulers.io())
                           .subscribe(new ServiceResponse<AddressResultBean>() {
                             @Override
@@ -157,7 +157,8 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
               callback(new MaterialDialog.ButtonCallback() {
                 @Override public void onPositive(MaterialDialog dialog) {
 
-                  model.delete_address(addressBean.getId())
+                  AddressModel.getInstance()
+                      .delete_address(addressBean.getId())
                       .subscribeOn(Schedulers.io())
                       .subscribe(new ServiceResponse<AddressResultBean>() {
                         @Override

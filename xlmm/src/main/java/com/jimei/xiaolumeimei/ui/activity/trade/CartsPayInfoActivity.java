@@ -52,9 +52,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   private static final int REQUEST_CODE_COUPONT = 2;
   private static final int REQUEST_CODE_ADDRESS = 3;
   String TAG = "CartsPayInfoActivity";
-  CartsModel model = new CartsModel();
-  TradeModel tradeModel = new TradeModel();
-  AddressModel addressModel = new AddressModel();
   CartsPayInfoAdapter mAdapter;
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.app_bar_layout) AppBarLayout appBarLayout;
@@ -114,7 +111,8 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   }
 
   private void downLoadCartsInfo() {
-    Subscription subscription = model.getCartsInfoList(ids)
+    Subscription subscription = CartsModel.getInstance()
+        .getCartsInfoList(ids)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<CartsPayinfoBean>() {
           @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
@@ -244,7 +242,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
       case R.id.coupon_layout:
         Intent intent = new Intent(CartsPayInfoActivity.this, CouponSelectActivity.class);
-        if((coupon_id != null) && (! coupon_id.isEmpty())){
+        if ((coupon_id != null) && (!coupon_id.isEmpty())) {
           intent.putExtra("coupon_id", coupon_id);
         }
         startActivityForResult(intent, REQUEST_CODE_COUPONT);
@@ -258,39 +256,39 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             payment + "    " + post_fee + "    " +
             discount_fee + "    " + total_fee + "    " + uuid);
     showIndeterminateProgressDialog(false);
-    Subscription subscription =
-        tradeModel.shoppingcart_create(cart_ids, addr_id, pay_method, payment, post_fee,
+    Subscription subscription = TradeModel.getInstance()
+        .shoppingcart_create(cart_ids, addr_id, pay_method, payment, post_fee,
             discount_fee, total_fee, uuid)
-            .subscribeOn(Schedulers.io())
-            .subscribe(new ServiceResponse<ResponseBody>() {
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<ResponseBody>() {
 
-              @Override public void onCompleted() {
-                super.onCompleted();
-                hideIndeterminateProgressDialog();
-              }
+          @Override public void onCompleted() {
+            super.onCompleted();
+            hideIndeterminateProgressDialog();
+          }
 
-              @Override public void onError(Throwable e) {
-                super.onError(e);
-                e.printStackTrace();
-              }
+          @Override public void onError(Throwable e) {
+            super.onError(e);
+            e.printStackTrace();
+          }
 
-              @Override public void onNext(ResponseBody responseBody) {
-                super.onNext(responseBody);
-                try {
-                  String string = responseBody.string();
-                  Log.i("charge", string);
-                  Intent intent = new Intent();
-                  String packageName = getPackageName();
-                  ComponentName componentName = new ComponentName(packageName,
-                      packageName + ".wxapi.WXPayEntryActivity");
-                  intent.setComponent(componentName);
-                  intent.putExtra(PaymentActivity.EXTRA_CHARGE, string);
-                  startActivityForResult(intent, REQUEST_CODE_PAYMENT);
-                } catch (IOException e) {
-                  e.printStackTrace();
-                }
-              }
-            });
+          @Override public void onNext(ResponseBody responseBody) {
+            super.onNext(responseBody);
+            try {
+              String string = responseBody.string();
+              Log.i("charge", string);
+              Intent intent = new Intent();
+              String packageName = getPackageName();
+              ComponentName componentName = new ComponentName(packageName,
+                  packageName + ".wxapi.WXPayEntryActivity");
+              intent.setComponent(componentName);
+              intent.putExtra(PaymentActivity.EXTRA_CHARGE, string);
+              startActivityForResult(intent, REQUEST_CODE_PAYMENT);
+            } catch (IOException e) {
+              e.printStackTrace();
+            }
+          }
+        });
     addSubscription(subscription);
   }
 
@@ -300,32 +298,32 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             payment + "    " + post_fee + "    " +
             discount_fee + "    " + total_fee + "    " + uuid);
     showIndeterminateProgressDialog(false);
-    Subscription subscription =
-        tradeModel.shoppingcart_createBudget(cart_ids, addr_id, pay_method, payment,
-            post_fee, discount_fee, total_fee, uuid)
-            .subscribeOn(Schedulers.io())
-            .subscribe(new ServiceResponse<BudgetPayBean>() {
-              @Override public void onCompleted() {
-                super.onCompleted();
-                hideIndeterminateProgressDialog();
-              }
+    Subscription subscription = TradeModel.getInstance()
+        .shoppingcart_createBudget(cart_ids, addr_id, pay_method, payment, post_fee,
+            discount_fee, total_fee, uuid)
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<BudgetPayBean>() {
+          @Override public void onCompleted() {
+            super.onCompleted();
+            hideIndeterminateProgressDialog();
+          }
 
-              @Override public void onError(Throwable e) {
-                super.onError(e);
-                e.printStackTrace();
-              }
+          @Override public void onError(Throwable e) {
+            super.onError(e);
+            e.printStackTrace();
+          }
 
-              @Override public void onNext(BudgetPayBean responseBody) {
-                if (responseBody != null) {
-                  boolean success = responseBody.isSuccess();
-                  if (success) {
-                    JUtils.Toast("支付成功");
-                  } else {
-                    JUtils.Toast(responseBody.getInfo());
-                  }
-                }
+          @Override public void onNext(BudgetPayBean responseBody) {
+            if (responseBody != null) {
+              boolean success = responseBody.isSuccess();
+              if (success) {
+                JUtils.Toast("支付成功");
+              } else {
+                JUtils.Toast(responseBody.getInfo());
               }
-            });
+            }
+          }
+        });
     addSubscription(subscription);
   }
 
@@ -333,33 +331,33 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     BigDecimal bd = new BigDecimal((paymentInfo - coupon_price));
     double bigDecimal = bd.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
     showIndeterminateProgressDialog(false);
-    Subscription subscription =
-        tradeModel.shoppingcart_createBudget_with_coupon(cart_ids, addr_id, pay_method,
+    Subscription subscription = TradeModel.getInstance()
+        .shoppingcart_createBudget_with_coupon(cart_ids, addr_id, pay_method,
             bigDecimal + "", post_fee, discount_fee, total_fee, uuid, coupon_id)
-            .subscribeOn(Schedulers.io())
-            .subscribe(new ServiceResponse<BudgetPayBean>() {
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<BudgetPayBean>() {
 
-              @Override public void onNext(BudgetPayBean responseBody) {
-                if (responseBody != null) {
-                  boolean success = responseBody.isSuccess();
-                  if (success) {
-                    JUtils.Toast("支付成功");
-                  } else {
-                    JUtils.Toast(responseBody.getInfo());
-                  }
-                }
+          @Override public void onNext(BudgetPayBean responseBody) {
+            if (responseBody != null) {
+              boolean success = responseBody.isSuccess();
+              if (success) {
+                JUtils.Toast("支付成功");
+              } else {
+                JUtils.Toast(responseBody.getInfo());
               }
+            }
+          }
 
-              @Override public void onCompleted() {
-                super.onCompleted();
-                hideIndeterminateProgressDialog();
-              }
+          @Override public void onCompleted() {
+            super.onCompleted();
+            hideIndeterminateProgressDialog();
+          }
 
-              @Override public void onError(Throwable e) {
-                super.onError(e);
-                e.printStackTrace();
-              }
-            });
+          @Override public void onError(Throwable e) {
+            super.onError(e);
+            e.printStackTrace();
+          }
+        });
     addSubscription(subscription);
   }
 
@@ -368,37 +366,37 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     BigDecimal bd = new BigDecimal((paymentInfo - coupon_price));
     double bigDecimal = bd.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
     showIndeterminateProgressDialog(false);
-    Subscription subscription =
-        tradeModel.shoppingcart_create_with_coupon(cart_ids, addr_id, pay_method,
-            bigDecimal + "", post_fee, discount_fee, total_fee, uuid, coupon_id)
-            .subscribeOn(Schedulers.io())
-            .subscribe(new ServiceResponse<ResponseBody>() {
-              @Override public void onNext(ResponseBody responseBody) {
-                try {
-                  String string = responseBody.string();
-                  Log.i("charge", string);
-                  Intent intent = new Intent();
-                  String packageName = getPackageName();
-                  ComponentName componentName = new ComponentName(packageName,
-                      packageName + ".wxapi.WXPayEntryActivity");
-                  intent.setComponent(componentName);
-                  intent.putExtra(PaymentActivity.EXTRA_CHARGE, string);
-                  startActivityForResult(intent, REQUEST_CODE_PAYMENT);
-                } catch (IOException e) {
-                  e.printStackTrace();
-                }
-              }
+    Subscription subscription = TradeModel.getInstance()
+        .shoppingcart_create_with_coupon(cart_ids, addr_id, pay_method, bigDecimal + "",
+            post_fee, discount_fee, total_fee, uuid, coupon_id)
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<ResponseBody>() {
+          @Override public void onNext(ResponseBody responseBody) {
+            try {
+              String string = responseBody.string();
+              Log.i("charge", string);
+              Intent intent = new Intent();
+              String packageName = getPackageName();
+              ComponentName componentName = new ComponentName(packageName,
+                  packageName + ".wxapi.WXPayEntryActivity");
+              intent.setComponent(componentName);
+              intent.putExtra(PaymentActivity.EXTRA_CHARGE, string);
+              startActivityForResult(intent, REQUEST_CODE_PAYMENT);
+            } catch (IOException e) {
+              e.printStackTrace();
+            }
+          }
 
-              @Override public void onCompleted() {
-                super.onCompleted();
-                hideIndeterminateProgressDialog();
-              }
+          @Override public void onCompleted() {
+            super.onCompleted();
+            hideIndeterminateProgressDialog();
+          }
 
-              @Override public void onError(Throwable e) {
-                super.onError(e);
-                e.printStackTrace();
-              }
-            });
+          @Override public void onError(Throwable e) {
+            super.onError(e);
+            e.printStackTrace();
+          }
+        });
     addSubscription(subscription);
   }
 
@@ -449,43 +447,43 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         tv_coupon.setText(coupon_price + "元优惠券");
 
         JUtils.Log(TAG, "coupon_id:" + coupon_id);
-        Subscription subscription = model.getCartsInfoList(ids, coupon_id)
+        Subscription subscription =
+            CartsModel.getInstance()
+                .getCartsInfoList(ids, coupon_id)
 
-            .subscribeOn(Schedulers.io())
-            .subscribe(new ServiceResponse<CartsPayinfoBean>() {
-              @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
-                if (cartsPayinfoBean != null) {
-                  if (TextUtils.isEmpty(cartsPayinfoBean.getmCoupon_message())) {
-                    if((coupon_id == null) || coupon_id.isEmpty()
-                        || (0 == Double.compare(coupon_price, 0)))
-                    {
-                      isCoupon = false;
-                      tv_coupon.setText("");
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ServiceResponse<CartsPayinfoBean>() {
+                  @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
+                    if (cartsPayinfoBean != null) {
+                      if (TextUtils.isEmpty(cartsPayinfoBean.getmCoupon_message())) {
+                        if ((coupon_id == null) || coupon_id.isEmpty() || (0
+                            == Double.compare(coupon_price, 0))) {
+                          isCoupon = false;
+                          tv_coupon.setText("");
+                        } else {
+                          isCoupon = true;
+                        }
+                      } else {
+                        isCoupon = false;
+                        tv_coupon.setText("");
+                        new MaterialDialog.Builder(CartsPayInfoActivity.this).
+                            content(cartsPayinfoBean.getmCoupon_message()).
+                            positiveText("OK").
+                            callback(new MaterialDialog.ButtonCallback() {
+                              @Override public void onPositive(MaterialDialog dialog) {
+                                downLoadCartsInfo();
+
+                                dialog.dismiss();
+                              }
+
+                              @Override public void onNegative(MaterialDialog dialog) {
+                                dialog.dismiss();
+                              }
+                            }).show();
+                      }
                     }
-                    else {
-                      isCoupon = true;
-                    }
-                  } else {
-                    isCoupon = false;
-                    tv_coupon.setText("");
-                    new MaterialDialog.Builder(CartsPayInfoActivity.this).
-                        content(cartsPayinfoBean.getmCoupon_message()).
-                        positiveText("OK").
-                        callback(new MaterialDialog.ButtonCallback() {
-                          @Override public void onPositive(MaterialDialog dialog) {
-                            downLoadCartsInfo();
-
-                            dialog.dismiss();
-                          }
-
-                          @Override public void onNegative(MaterialDialog dialog) {
-                            dialog.dismiss();
-                          }
-                        }).show();
                   }
-                }
-              }
-            });
+                });
         addSubscription(subscription);
       }
     }
@@ -564,7 +562,8 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
       addr_id = addr_idSelect;
     } else {
-      Subscription subscription = addressModel.getAddressList()
+      Subscription subscription = AddressModel.getInstance()
+          .getAddressList()
           .subscribeOn(Schedulers.io())
           .subscribe(new ServiceResponse<List<AddressBean>>() {
             @Override public void onNext(List<AddressBean> list) {

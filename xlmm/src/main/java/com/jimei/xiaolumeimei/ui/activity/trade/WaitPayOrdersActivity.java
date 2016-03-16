@@ -16,7 +16,6 @@ import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
-
 import java.util.List;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
@@ -29,7 +28,6 @@ public class WaitPayOrdersActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.rlayout_order_empty) RelativeLayout rl_empty;
 
-  TradeModel model = new TradeModel();
   private WaitPayOrdersListAdapter mAllOrderAdapter;
 
   @Override protected void setListener() {
@@ -60,11 +58,12 @@ public class WaitPayOrdersActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void initData() {
 
-
   }
+
   //从server端获得所有订单数据，可能要查询几次
   private void initOrderData() {
-   Subscription subscription= model.getWaitPayOrdersBean()
+    Subscription subscription = TradeModel.getInstance()
+        .getWaitPayOrdersBean()
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<AllOrdersBean>() {
           @Override public void onNext(AllOrdersBean allOrdersBean) {
@@ -78,15 +77,13 @@ public class WaitPayOrdersActivity extends BaseSwipeBackCompatActivity
             Log.i(TAG, allOrdersBean.toString());
           }
 
-          @Override
-          public void onCompleted() {
+          @Override public void onCompleted() {
             super.onCompleted();
           }
 
-          @Override
-          public void onError(Throwable e) {
+          @Override public void onError(Throwable e) {
 
-            Log.e(TAG, " error:, "   + e.toString());
+            Log.e(TAG, " error:, " + e.toString());
             super.onError(e);
           }
         });
@@ -107,12 +104,10 @@ public class WaitPayOrdersActivity extends BaseSwipeBackCompatActivity
         //startActivity(intent);
         finish();
         break;
-
     }
   }
 
-  @Override
-  protected void onResume() {
+  @Override protected void onResume() {
     JUtils.Log(TAG, "onresume init orderdata");
     super.onResume();
     initOrderData();

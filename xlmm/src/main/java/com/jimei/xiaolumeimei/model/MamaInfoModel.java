@@ -1,5 +1,6 @@
 package com.jimei.xiaolumeimei.model;
 
+import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.entities.AgentInfoBean;
 import com.jimei.xiaolumeimei.entities.AllowanceBean;
 import com.jimei.xiaolumeimei.entities.MamaFansBean;
@@ -7,7 +8,6 @@ import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.MamaLivenessBean;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
-import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 import rx.Observable;
 
@@ -19,12 +19,14 @@ import rx.Observable;
 public class MamaInfoModel {
 
   private volatile static MamaInfoModel single_model;
-  private MamaInfoModel(){}
 
-  public static MamaInfoModel getInstance(){
-    if(single_model == null){
-      synchronized (MamaInfoModel.class){
-        if(single_model == null){
+  private MamaInfoModel() {
+  }
+
+  public static MamaInfoModel getInstance() {
+    if (single_model == null) {
+      synchronized (MamaInfoModel.class) {
+        if (single_model == null) {
           single_model = new MamaInfoModel();
         }
       }
@@ -77,14 +79,14 @@ public class MamaInfoModel {
   //得到妈妈财富
   public Observable<MamaFortune> getMamaFortune() {
     return XlmmRetrofitClient.getService()
-            .getMamaFortune()
-            .compose(new DefaultTransform<>());
+        .getMamaFortune()
+        .compose(new DefaultTransform<>());
   }
 
   //得到妈妈活跃值
   public Observable<MamaLivenessBean> getMamaLiveness(String page) {
     return XlmmRetrofitClient.getService()
-            .getMamaLiveness(page)
-            .compose(new DefaultTransform<>());
+        .getMamaLiveness(page)
+        .compose(new DefaultTransform<>());
   }
 }

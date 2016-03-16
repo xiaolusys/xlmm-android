@@ -26,6 +26,16 @@ public class MMChooselistBean {
   @SerializedName("std_sale_price") private double mStdSalePrice;
   @SerializedName("lock_num") private int mLockNum;
   @SerializedName("pic_path") private String mPicPath;
+
+  public int getmSaleNum() {
+    return mSaleNum;
+  }
+
+  public void setmSaleNum(int mSaleNum) {
+    this.mSaleNum = mSaleNum;
+  }
+
+  @SerializedName("sale_num") private int mSaleNum;
   @SerializedName("id") private int mId;
   @SerializedName("rebet_amount") private double mRebetAmount;
 
