@@ -135,6 +135,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
 
   @SuppressLint("JavascriptInterface") @Override protected void initViews() {
     JUtils.Log(TAG, "initViews");
+    ShareSDK.initSDK(this);
 
     ll_actwebview = (LinearLayout) findViewById(R.id.ll_actwebview);
     mProgressBar = (ProgressBar) findViewById(R.id.pb_view);

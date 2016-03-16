@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
-import cn.sharesdk.framework.ShareSDK;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.mipush.XiaoMiMessageReceiver;
@@ -62,7 +61,7 @@ public class XlmmApp extends MultiDexApplication {
     JUtils.initialize(this);
     JUtils.setDebug(true, "xlmm");
     //CrashWoodpecker.fly(false).to(this);
-    ShareSDK.initSDK(this);
+    //ShareSDK.initSDK(this);
     AutoLayoutConifg.getInstance().useDeviceSize();
     //初始化push推送服务
     if (shouldInit()) {

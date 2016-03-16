@@ -111,6 +111,7 @@ public class MaMaMyStoreActivity extends BaseSwipeBackCompatActivity {
   }
 
   @Override protected void initViews() {
+    ShareSDK.initSDK(this);
     toolbar.setTitle("小鹿妈妈de精选集");
     setSupportActionBar(toolbar);
     finishBack(toolbar);
