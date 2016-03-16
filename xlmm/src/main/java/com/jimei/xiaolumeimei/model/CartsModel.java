@@ -1,10 +1,10 @@
 package com.jimei.xiaolumeimei.model;
 
+import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.entities.AddCartsBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.CartsinfoBean;
-import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 import com.squareup.okhttp.ResponseBody;
 import java.util.List;
@@ -16,6 +16,15 @@ import rx.Observable;
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class CartsModel {
+
+  private static CartsModel ourInstance = new CartsModel();
+
+  private CartsModel() {
+  }
+
+  public static CartsModel getInstance() {
+    return ourInstance;
+  }
 
   //添加购物车
   public Observable<AddCartsBean> addCarts(String itemId, String skuId) {

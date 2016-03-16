@@ -35,9 +35,8 @@ import rx.schedulers.Schedulers;
 
 public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener {
-  String TAG = "OrderDetailActivity";
   private static final int REQUEST_CODE_PAYMENT = 1;
-
+  String TAG = "OrderDetailActivity";
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.btn_order_proc) Button btn_proc;
   @Bind(R.id.btn_order_cancel) Button btn_order_cancel;
@@ -45,10 +44,9 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
 
   int order_id = 0;
   OrderDetailBean orderDetail;
-  TradeModel tradeModel = new TradeModel();
-  private OrderGoodsListAdapter mGoodsAdapter;
   PayRightNowInfo pay_info = new PayRightNowInfo();
   String source;
+  private OrderGoodsListAdapter mGoodsAdapter;
 
   @Override protected void setListener() {
     btn_proc.setOnClickListener(this);
@@ -75,11 +73,12 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
 
   //从server端获得所有订单数据，可能要查询几次
   @Override protected void initData() {
-    if((getIntent() != null) && (getIntent().getExtras() != null)) {
+    if ((getIntent() != null) && (getIntent().getExtras() != null)) {
       order_id = getIntent().getExtras().getInt("orderinfo");
       source = getIntent().getExtras().getString("source");
 
-      Subscription subscription = tradeModel.getOrderDetailBean(order_id)
+      Subscription subscription = TradeModel.getInstance()
+          .getOrderDetailBean(order_id)
           .subscribeOn(Schedulers.io())
           .subscribe(new ServiceResponse<OrderDetailBean>() {
             @Override public void onNext(OrderDetailBean orderDetailBean) {
@@ -103,7 +102,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
           });
       addSubscription(subscription);
     }
-
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
@@ -128,10 +126,10 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     tx_custom_address.setText("地址：" + orderDetailBean.getReceiver_address());
 
     TextView tx_order_crttime = (TextView) findViewById(R.id.tx_order_crttime);
-    tx_order_crttime.setText("时间：" + orderDetailBean.getCreated().replace("T"," "));
+    tx_order_crttime.setText("时间：" + orderDetailBean.getCreated().replace("T", " "));
     TextView tx_order_crtstate = (TextView) findViewById(R.id.tx_order_crtstate);
     tx_order_crtstate.setText("订单创建成功");
-    JUtils.Log(TAG,"crt time "+orderDetailBean.getCreated());
+    JUtils.Log(TAG, "crt time " + orderDetailBean.getCreated());
 
     mGoodsAdapter.update(orderDetailBean.getOrders());
 
@@ -161,22 +159,19 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
               (LinearLayout) findViewById(R.id.llayout_order_lefttime);
           llayout_order_lefttime.setVisibility(View.VISIBLE);
           cn.iwgang.countdownview.CountdownView cv_lefttime =
-                  (cn.iwgang.countdownview.CountdownView) findViewById(
-                          R.id.cv_lefttime);
+              (cn.iwgang.countdownview.CountdownView) findViewById(R.id.cv_lefttime);
 
-          if(calcLeftTime(orderDetailBean.getCreated()) > 0) {
+          if (calcLeftTime(orderDetailBean.getCreated()) > 0) {
             cv_lefttime.start(calcLeftTime(orderDetailBean.getCreated()));
-            cv_lefttime.setOnCountdownEndListener(new CountdownView.OnCountdownEndListener() {
-              @Override
-              public void onEnd(CountdownView cv) {
-                JUtils.Log(TAG, "timeout");
-                btn_proc.setClickable(false);
-                btn_proc.setBackgroundColor(Color.parseColor("#f3f3f4"));
-              }
-
-            });
-          }
-          else {
+            cv_lefttime.setOnCountdownEndListener(
+                new CountdownView.OnCountdownEndListener() {
+                  @Override public void onEnd(CountdownView cv) {
+                    JUtils.Log(TAG, "timeout");
+                    btn_proc.setClickable(false);
+                    btn_proc.setBackgroundColor(Color.parseColor("#f3f3f4"));
+                  }
+                });
+          } else {
             JUtils.Log(TAG, "left time 0");
             btn_proc.setClickable(false);
             btn_proc.setBackgroundColor(Color.parseColor("#f3f3f4"));
@@ -200,9 +195,9 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     Date now = new Date();
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     try {
-      crtTime = crtTime.replace("T"," ");
+      crtTime = crtTime.replace("T", " ");
       Date crtdate = format.parse(crtTime);
-      Log.d(TAG, " crtdate  " + crtdate.getTime() + "now "+now.getTime());
+      Log.d(TAG, " crtdate  " + crtdate.getTime() + "now " + now.getTime());
       if (crtdate.getTime() + 20 * 60 * 1000 - now.getTime() > 0) {
         left = crtdate.getTime() + 20 * 60 * 1000 - now.getTime();
       }
@@ -219,10 +214,9 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
   @Override public void onClick(View v) {
     switch (v.getId()) {
       case R.id.btn_order_proc:
-        if(orderDetail.getStatus() == XlmmConst.ORDER_STATE_WAITPAY){
+        if (orderDetail.getStatus() == XlmmConst.ORDER_STATE_WAITPAY) {
           JUtils.Log(TAG, "onClick paynow");
           payNow();
-
         }
 
         break;
@@ -234,10 +228,9 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     }
   }
 
-
-
-  private void payNow(){
-  Subscription subscription =  tradeModel.shoppingcart_paynow(order_id)
+  private void payNow() {
+    Subscription subscription = TradeModel.getInstance()
+        .shoppingcart_paynow(order_id)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ResponseBody>() {
           @Override public void onNext(ResponseBody responseBody) {
@@ -258,49 +251,46 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
             }
           }
 
-          @Override
-          public void onCompleted() {
+          @Override public void onCompleted() {
             super.onCompleted();
           }
 
-          @Override
-          public void onError(Throwable e) {
+          @Override public void onError(Throwable e) {
 
-            Log.e(TAG, " error:, "   + e.toString());
+            Log.e(TAG, " error:, " + e.toString());
             super.onError(e);
           }
         });
-addSubscription(subscription);
+    addSubscription(subscription);
   }
 
-  private void cancel_order(){
-    JUtils.Log(TAG,"cancel_order " + order_id);
-  Subscription subscription =  tradeModel.delRefund(order_id)
-            .subscribeOn(Schedulers.io())
-            .subscribe(new ServiceResponse<ResponseBody>() {
-              @Override public void onNext(ResponseBody responseBody) {
-                super.onNext(responseBody);
-                try {
+  private void cancel_order() {
+    JUtils.Log(TAG, "cancel_order " + order_id);
+    Subscription subscription = TradeModel.getInstance()
+        .delRefund(order_id)
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<ResponseBody>() {
+          @Override public void onNext(ResponseBody responseBody) {
+            super.onNext(responseBody);
+            try {
 
-                  finish();
-                } catch (Exception e) {
-                  e.printStackTrace();
-                }
-              }
+              finish();
+            } catch (Exception e) {
+              e.printStackTrace();
+            }
+          }
 
-              @Override
-              public void onCompleted() {
-                super.onCompleted();
-              }
+          @Override public void onCompleted() {
+            super.onCompleted();
+          }
 
-              @Override
-              public void onError(Throwable e) {
+          @Override public void onError(Throwable e) {
 
-                Log.e(TAG, "delRefund error:, "   + e.toString());
-                super.onError(e);
-              }
-            });
-addSubscription(subscription);
+            Log.e(TAG, "delRefund error:, " + e.toString());
+            super.onError(e);
+          }
+        });
+    addSubscription(subscription);
   }
 
   @Override
@@ -318,17 +308,14 @@ addSubscription(subscription);
              */
         String errorMsg = data.getExtras().getString("error_msg"); // 错误信息
         String extraMsg = data.getExtras().getString("extra_msg"); // 错误信息
-        if(result.equals( "cancel")) {
+        if (result.equals("cancel")) {
           //wexin alipay already showmsg
-        }
-        else if(result.equals( "success")){
+        } else if (result.equals("success")) {
           JUtils.Toast("支付成功！");
           finish();
-        }
-        else{
+        } else {
           showMsg(result, errorMsg, extraMsg);
         }
-
       }
     }
   }
@@ -342,11 +329,10 @@ addSubscription(subscription);
       str += "\n" + msg2;
     }
     Log.i(TAG, "charge result" + str);
-    if(title.equals( "fail")){
-      str ="支付失败，请重试！";
-    }
-    else if(title.equals( "invalid")){
-      str ="支付失败，支付软件未安装完整！";
+    if (title.equals("fail")) {
+      str = "支付失败，请重试！";
+    } else if (title.equals("invalid")) {
+      str = "支付失败，支付软件未安装完整！";
     }
 
     AlertDialog.Builder builder = new AlertDialog.Builder(OrderDetailActivity.this);

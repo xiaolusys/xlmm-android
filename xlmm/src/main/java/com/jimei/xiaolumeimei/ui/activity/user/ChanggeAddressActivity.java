@@ -23,6 +23,7 @@ import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.widget.citypicker.CityPicker;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 /**
@@ -34,7 +35,6 @@ public class ChanggeAddressActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
   private static final String TAG = ChanggeAddressActivity.class.getSimpleName();
-  AddressModel model = new AddressModel();
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.name) EditText name;
   @Bind(R.id.mobile) EditText mobile;
@@ -147,15 +147,17 @@ public class ChanggeAddressActivity extends BaseSwipeBackCompatActivity
                 clearaddressa + "====" + receiver_name);
 
         if (checkInput(receiver_name, receiver_mobile, city_string, clearaddressa)) {
-          model.update_address(id, receiver_state, receiver_city, receiver_district,
-              clearaddressa, receiver_name, receiver_mobile)
+          Subscription subscribe = AddressModel.getInstance()
+              .update_address(id, receiver_state, receiver_city, receiver_district,
+                  clearaddressa, receiver_name, receiver_mobile)
               .subscribeOn(Schedulers.io())
               .subscribe(new ServiceResponse<AddressResultBean>() {
                 @Override public void onNext(AddressResultBean addressResultBean) {
                   if (addressResultBean != null) {
                     if (addressResultBean.isRet()) {
                       if (isDefault) {
-                        model.change_default(id)
+                        Subscription subscribe1 = AddressModel.getInstance()
+                            .change_default(id)
                             .subscribeOn(Schedulers.io())
                             .subscribe(new ServiceResponse<AddressResultBean>() {
                               @Override
@@ -168,6 +170,7 @@ public class ChanggeAddressActivity extends BaseSwipeBackCompatActivity
                                 }
                               }
                             });
+                        addSubscription(subscribe1);
                       } else {
                         //startActivity(new Intent(ChanggeAddressActivity.this,
                         //    AddressActivity.class));
@@ -177,13 +180,15 @@ public class ChanggeAddressActivity extends BaseSwipeBackCompatActivity
                   }
                 }
               });
+          addSubscription(subscribe);
         }
 
         break;
 
       case R.id.delete:
 
-        model.delete_address(id)
+        Subscription subscribe = AddressModel.getInstance()
+            .delete_address(id)
             .subscribeOn(Schedulers.io())
             .subscribe(new ServiceResponse<AddressResultBean>() {
               @Override public void onNext(AddressResultBean addressResultBean) {
@@ -192,6 +197,7 @@ public class ChanggeAddressActivity extends BaseSwipeBackCompatActivity
                 }
               }
             });
+        addSubscription(subscribe);
 
         break;
     }

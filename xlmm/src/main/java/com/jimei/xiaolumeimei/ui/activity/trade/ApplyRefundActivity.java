@@ -28,7 +28,7 @@ import rx.schedulers.Schedulers;
 public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener {
   String TAG = "ApplyRefundActivity";
-  String slect_reason[]  = new String[] { "七天无理由退换", "缺货","错拍","没有发货","与描述不符" ,"其他"};
+  String slect_reason[] = new String[] { "七天无理由退换", "缺货", "错拍", "没有发货", "与描述不符", "其他" };
 
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.img_good) ImageView img_good;
@@ -45,12 +45,11 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.btn_commit) Button btn_commit;
 
   AllOrdersBean.ResultsEntity.OrdersEntity goods_info;
-  TradeModel model = new TradeModel();
   String reason = "";
   int num = 0;
   double apply_fee = 0;
   String desc = "";
-  String proof_pic="";
+  String proof_pic = "";
 
   @Override protected void setListener() {
     toolbar.setOnClickListener(this);
@@ -58,10 +57,10 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
     add.setOnClickListener(this);
     delete.setOnClickListener(this);
     et_refund_info.setOnClickListener(this);
-    et_refund_reason.setOnTouchListener(new View.OnTouchListener(){
-      public boolean onTouch(View v, MotionEvent event){
+    et_refund_reason.setOnTouchListener(new View.OnTouchListener() {
+      public boolean onTouch(View v, MotionEvent event) {
         //et_refund_reason.setInputType(InputType.TYPE_NULL); //关闭软键盘
-        if(MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
+        if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
           Log.d(TAG, "choose reason");
           chooseReason();
         }
@@ -79,7 +78,6 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
-
 
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
@@ -111,7 +109,6 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
     num = goods.getNum();
     tx_refund_num.setText(Integer.toString(num));
     tx_refundfee.setText("￥" + apply_fee);
-
   }
 
   @Override public void onClick(View v) {
@@ -121,16 +118,15 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
         break;
       case R.id.btn_commit:
         desc = et_refund_info.getText().toString().trim();
-        if(reason.equals("")){
+        if (reason.equals("")) {
           JUtils.Toast("请选择退货原因！");
-        }
-        else {
+        } else {
           commit_apply();
         }
 
         break;
       case R.id.et_refund_info:
-        Log.i(TAG,"click et_refund_info ");
+        Log.i(TAG, "click et_refund_info ");
         et_refund_info.setCursorVisible(true);
         et_refund_info.setFocusable(true);
         et_refund_info.setFocusableInTouchMode(true);
@@ -138,15 +134,15 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
         //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         break;
       case R.id.add:
-        Log.i(TAG,"add ");
-        if(goods_info.getNum() > num) {
+        Log.i(TAG, "add ");
+        if (goods_info.getNum() > num) {
           num++;
         }
         tx_refund_num.setText(Integer.toString(num));
         break;
       case R.id.delete:
-        Log.i(TAG,"delete ");
-        if(num > 1) {
+        Log.i(TAG, "delete ");
+        if (num > 1) {
           num--;
         }
         tx_refund_num.setText(Integer.toString(num));
@@ -154,49 +150,46 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
     }
   }
 
-  private void commit_apply(){
-   Subscription subscription = model.refund_create(goods_info.getId(), XlmmConst
-            .get_reason_num
-            (reason),
-        num, apply_fee, desc, proof_pic)
+  private void commit_apply() {
+    Subscription subscription = TradeModel.getInstance()
+        .refund_create(goods_info.getId(), XlmmConst.get_reason_num(reason), num,
+            apply_fee, desc, proof_pic)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ResponseBody>() {
           @Override public void onNext(ResponseBody resp) {
 
-            Log.i(TAG,"commit_apply success "+ resp.toString());
+            Log.i(TAG, "commit_apply success " + resp.toString());
             finish();
           }
 
-          @Override
-          public void onCompleted() {
+          @Override public void onCompleted() {
             super.onCompleted();
           }
 
-          @Override
-          public void onError(Throwable e) {
+          @Override public void onError(Throwable e) {
 
-            Log.e(TAG, " error:, "   + e.toString());
+            Log.e(TAG, " error:, " + e.toString());
             super.onError(e);
           }
         });
     addSubscription(subscription);
   }
 
-  private void chooseReason(){
+  private void chooseReason() {
     new AlertDialog.Builder(this).setTitle("")
-          .setItems(slect_reason, new DialogInterface.OnClickListener(){
+        .setItems(slect_reason, new DialogInterface.OnClickListener() {
 
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+          @Override public void onClick(DialogInterface dialog, int which) {
             /*
             * ad变量用final关键字定义，因为在隐式实现的Runnable接口 的run()方法中 需要访问final变量。
              */
-              Log.d(TAG, "你选择的是：" + which + ": " + slect_reason[which]);
-              reason = slect_reason[which];
-              et_refund_reason.setText(reason);
-              dialog.dismiss();
-            }
-          })
-          .setNegativeButton("取消", null).show();
+            Log.d(TAG, "你选择的是：" + which + ": " + slect_reason[which]);
+            reason = slect_reason[which];
+            et_refund_reason.setText(reason);
+            dialog.dismiss();
+          }
+        })
+        .setNegativeButton("取消", null)
+        .show();
   }
 }
