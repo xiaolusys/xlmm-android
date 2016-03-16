@@ -61,7 +61,7 @@ public class AllRefundsListAdapter extends BaseAdapter {
       HashMap<String, String> map = new HashMap<String, String>();
       refund_no = list.get(i).getRefund_no();
       refund_State = list.get(i).getStatus_display();
-      refund_fee = (float) list.get(i).getPayment();
+      refund_fee = (float) list.get(i).getRefund_fee();
       img_url = list.get(i).getPic_path();
       title = list.get(i).getTitle();
       std_sale_price = (float) list.get(i).getTotal_fee();
@@ -137,9 +137,9 @@ public class AllRefundsListAdapter extends BaseAdapter {
       tx_good_name.setText(data.get(position).get("title"));
     }
     tx_good_price.setText("¥" + data.get(position).get("pay_price"));
-    tx_good_size.setText(data.get(position).get("model_id"));
-    tx_good_num.setText("x"+data.get(position).get("num"));
-
+    tx_good_size.setText("尺码:"+data.get(position).get("model_id"));
+    //tx_good_num.setText("x"+data.get(position).get("num"));
+    tx_good_num.setText("");
 
 
     return convertView;
