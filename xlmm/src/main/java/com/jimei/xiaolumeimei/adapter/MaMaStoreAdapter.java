@@ -13,7 +13,7 @@ import butterknife.ButterKnife;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.entities.MMChooselistBean;
+import com.jimei.xiaolumeimei.entities.MMStoreBean;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.ShareProductBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
@@ -34,7 +34,7 @@ public class MaMaStoreAdapter extends RecyclerView.Adapter<MaMaStoreAdapter.MaMa
 
   private static final String TAG = MMChooseAdapter.class.getSimpleName();
 
-  private List<MMChooselistBean> mList;
+  private List<MMStoreBean> mList;
   private Context mContext;
   private MaterialDialog materialDialog;
 
@@ -43,13 +43,13 @@ public class MaMaStoreAdapter extends RecyclerView.Adapter<MaMaStoreAdapter.MaMa
     mList = new ArrayList<>();
   }
 
-  public void updateWithClear(List<MMChooselistBean> list) {
+  public void updateWithClear(List<MMStoreBean> list) {
     mList.clear();
     mList.addAll(list);
     notifyDataSetChanged();
   }
 
-  public void update(List<MMChooselistBean> list) {
+  public void update(List<MMStoreBean> list) {
 
     mList.addAll(list);
     notifyDataSetChanged();
@@ -64,7 +64,7 @@ public class MaMaStoreAdapter extends RecyclerView.Adapter<MaMaStoreAdapter.MaMa
   }
 
   @Override public void onBindViewHolder(MaMaStoreVH holder, int position) {
-    MMChooselistBean mmChooselistBean = mList.get(position);
+    MMStoreBean mmChooselistBean = mList.get(position);
     holder.name.setText(mmChooselistBean.getName());
     ViewUtils.loadImgToImgView(mContext, holder.imageChooselist,
         mmChooselistBean.getPicPath());
@@ -72,7 +72,7 @@ public class MaMaStoreAdapter extends RecyclerView.Adapter<MaMaStoreAdapter.MaMa
     holder.stdSalePrice.setText("/¥" + mmChooselistBean.getStdSalePrice());
     holder.rebetAmount.setText(
         "¥" + (float) (Math.round(mmChooselistBean.getRebetAmount() * 100)) / 100);
-    holder.lockNum.setText("累积销量 " + mmChooselistBean.getLockNum() + "件");
+    holder.lockNum.setText("累积销量 " + mmChooselistBean.getSaleNum() + "件");
 
     holder.remove.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {

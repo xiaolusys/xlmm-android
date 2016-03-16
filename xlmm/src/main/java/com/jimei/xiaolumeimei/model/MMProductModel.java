@@ -6,6 +6,7 @@ import com.jimei.xiaolumeimei.entities.CarryLogListBean;
 import com.jimei.xiaolumeimei.entities.ClickcarryBean;
 import com.jimei.xiaolumeimei.entities.MMChooselistBean;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
+import com.jimei.xiaolumeimei.entities.MMStoreBean;
 import com.jimei.xiaolumeimei.entities.NinePicBean;
 import com.jimei.xiaolumeimei.entities.OderCarryBean;
 import com.jimei.xiaolumeimei.entities.OneDayAgentOrdersBean;
@@ -39,7 +40,7 @@ public class MMProductModel {
   }
 
   //得到MM店铺列表
-  public Observable<List<MMChooselistBean>> getMMStoreList() {
+  public Observable<List<MMStoreBean>> getMMStoreList() {
     return XlmmRetrofitClient.getService()
         .getMMStoreList()
         .compose(new DefaultTransform<>());

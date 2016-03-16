@@ -25,6 +25,7 @@ import com.jimei.xiaolumeimei.entities.LadyListBean;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.entities.MMChooselistBean;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
+import com.jimei.xiaolumeimei.entities.MMStoreBean;
 import com.jimei.xiaolumeimei.entities.MamaFansBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.MamaLivenessBean;
@@ -517,7 +518,7 @@ public interface XlmmService {
 
   //我的店铺列表
     @GET("pmt/cushoppros")
-    Observable<List<MMChooselistBean>> getMMStoreList();
+    Observable<List<MMStoreBean>> getMMStoreList();
 
   //选品默认列表排序
     @GET("products/my_choice_pro")

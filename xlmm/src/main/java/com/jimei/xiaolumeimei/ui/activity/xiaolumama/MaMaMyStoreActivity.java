@@ -20,6 +20,7 @@ import com.jimei.xiaolumeimei.adapter.MaMaStoreAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.MMChooselistBean;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
+import com.jimei.xiaolumeimei.entities.MMStoreBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.model.UserNewModel;
@@ -61,9 +62,9 @@ public class MaMaMyStoreActivity extends BaseSwipeBackCompatActivity {
     Subscription subscribe = MMProductModel.getInstance()
         .getMMStoreList()
         .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<List<MMChooselistBean>>() {
+        .subscribe(new ServiceResponse<List<MMStoreBean>>() {
 
-          @Override public void onNext(List<MMChooselistBean> mmChooselistBeans) {
+          @Override public void onNext(List<MMStoreBean> mmChooselistBeans) {
             try {
               if (mmChooselistBeans != null) {
                 maMaStoreAdapter.update(mmChooselistBeans);
