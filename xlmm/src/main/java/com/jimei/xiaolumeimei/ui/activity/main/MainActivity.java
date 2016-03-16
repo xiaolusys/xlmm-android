@@ -20,17 +20,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseActivity;
+import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CouponBean;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.model.CartsModel;
+import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.model.UserNewModel;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllOrdersActivity;
@@ -186,6 +189,74 @@ public class MainActivity extends BaseActivity
                     userInfoBean.getThumbnail());
               }
             }
+
+            //获得待支付和待收货数目
+            android.support.design.widget.NavigationView navigationView = (android.support.design.widget.NavigationView)drawer.findViewById(R.id.nav_view);
+            LinearLayout nav_tobepaid = (LinearLayout) navigationView.getMenu().findItem(R.id.nav_tobepaid).getActionView();
+            TextView msg1= (TextView) nav_tobepaid.findViewById(R.id.msg);
+            LinearLayout nav_tobereceived = (LinearLayout) navigationView.getMenu().findItem(R.id.nav_tobereceived).getActionView();
+            TextView msg2= (TextView) nav_tobereceived.findViewById(R.id.msg);
+            TradeModel model = new TradeModel();
+            Subscription subscription= model.getWaitPayOrdersBean()
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(new ServiceResponse<AllOrdersBean>() {
+                      @Override public void onNext(AllOrdersBean allOrdersBean) {
+                        List<AllOrdersBean.ResultsEntity> results = allOrdersBean.getResults();
+
+                        if (0 != results.size()) {
+                          msg1.setVisibility(View.VISIBLE);
+                          msg1.setText(Integer.toString(results.size()));
+                        }
+                        else{
+                          msg1.setVisibility(View.INVISIBLE);
+                        }
+
+                        Log.i(TAG, ""+results.size());
+                      }
+
+                      @Override
+                      public void onCompleted() {
+                        super.onCompleted();
+                      }
+
+                      @Override
+                      public void onError(Throwable e) {
+
+                        Log.e(TAG, " error:, "   + e.toString());
+                        super.onError(e);
+                      }
+                    });
+            addSubscription(subscription);
+
+            Subscription subscription1 =  model.getWaitSendOrdersBean()
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(new ServiceResponse<AllOrdersBean>() {
+                      @Override public void onNext(AllOrdersBean allOrdersBean) {
+                        List<AllOrdersBean.ResultsEntity> results = allOrdersBean.getResults();
+                        if (0 != results.size()) {
+                          msg2.setVisibility(View.VISIBLE);
+                          msg2.setText(Integer.toString(results.size()));
+                        }
+                        else{
+                          msg2.setVisibility(View.INVISIBLE);
+                        }
+
+                      }
+
+                      @Override
+                      public void onCompleted() {
+                        super.onCompleted();
+                      }
+
+                      @Override
+                      public void onError(Throwable e) {
+
+                        Log.e(TAG, " error:, "   + e.toString());
+                        super.onError(e);
+                      }
+                    });
+            addSubscription(subscription1);
+
             invalidateOptionsMenu();
           }
         };

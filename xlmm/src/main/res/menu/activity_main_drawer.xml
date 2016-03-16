@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:actionLayout="@layout/nav_badge">
+
+
 
   <group android:checkableBehavior="single" android:id="@+id/group_1">
 
-    <item android:id="@+id/nav_tobepaid" android:icon="@drawable/ic_menu_waitpay"
-        android:title="待支付"/>
-    <item android:id="@+id/nav_tobereceived"
+    <item
+        app:actionLayout="@layout/nav_badge"
+        android:id="@+id/nav_tobepaid"
+        android:icon="@drawable/ic_menu_waitpay"
+        android:title="待支付"
+    />
+    <item
+        app:actionLayout="@layout/nav_badge"
+        android:id="@+id/nav_tobereceived"
         android:icon="@drawable/ic_menu_car"
         android:title="待收货"/>
     <item android:id="@+id/nav_returned"
