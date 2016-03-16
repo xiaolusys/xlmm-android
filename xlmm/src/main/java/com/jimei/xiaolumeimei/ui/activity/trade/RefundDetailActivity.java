@@ -168,7 +168,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
       tx_good_name.setText(refundDetailBean.getTitle());
     }
     //TextView tx_good_price = (TextView) findViewById(R.id.tx_good_price);
-    tx_good_price.setText("¥" + refundDetailBean.getTotal_fee());
+    tx_good_price.setText("¥" + refundDetailBean.getPayment());
 
     //TextView tx_good_size = (TextView) findViewById(R.id.tx_good_size);
     tx_good_size.setText("尺码：" + refundDetailBean.getSku_name());
