@@ -26,7 +26,7 @@
           android:text="确认订单"
           android:textColor="@android:color/white"
           android:textSize="16sp"
-          />
+      />
     </android.support.v7.widget.Toolbar>
 
   </android.support.design.widget.AppBarLayout>
@@ -51,7 +51,7 @@
             android:id="@+id/image_location"
             android:layout_height="wrap_content"
             android:src="@drawable/location"
-            />
+        />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
             android:layout_marginLeft="8dp"
             android:layout_toRightOf="@id/image_location"
             android:text=""
-            />
+        />
 
         <TextView android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
             android:layout_marginLeft="8dp"
             android:layout_toRightOf="@id/name"
             android:text=""
-            />
+        />
         <TextView
             android:id="@+id/address_details"
             android:layout_width="wrap_content"
@@ -76,7 +76,7 @@
             android:layout_toRightOf="@id/image_location"
             android:text=""
             android:layout_alignParentBottom="true"
-            />
+        />
         <TextView
             android:visibility="invisible"
             android:id="@+id/choose_address"
@@ -86,13 +86,13 @@
             android:layout_toRightOf="@id/image_location"
             android:text="填写收货地址"
             android:layout_alignBottom="@id/image_location"
-            />
+        />
         <ImageView android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:src="@mipmap/common_icon_right_arrow"
-            />
+        />
       </RelativeLayout>
       <include layout="@layout/common_gap"/>
       <com.jimei.xiaolumeimei.widget.NestedListView
@@ -113,7 +113,7 @@
         <TextView android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="可用优惠券"
-            />
+        />
 
         <TextView
             android:layout_marginRight="8dp"
@@ -121,7 +121,7 @@
             android:id="@+id/tv_coupon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            />
+        />
 
         <ImageView
             android:id="@+id/common_icon_right_arrow"
@@ -130,7 +130,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
 
-            />
+        />
 
       </RelativeLayout>
       <include layout="@layout/common_gap"/>
@@ -145,15 +145,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="运费"
-            />
+        />
         <TextView
             android:id="@+id/post_fee"
             android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0"
-            />
-
+        />
+      </RelativeLayout>
+      <include layout="@layout/common_gap"/>
+      <RelativeLayout
+          android:padding="8dp"
+          android:background="@color/white"
+          android:layout_width="match_parent"
+          android:orientation="horizontal"
+          android:layout_height="88px">
+        <TextView
+            android:layout_alignParentRight="true"
+            android:id="@+id/pay_extra"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+        />
       </RelativeLayout>
 
       <TextView
@@ -165,7 +178,7 @@
           android:layout_height="wrap_content"
           android:text=""
           android:padding="8dp"
-          />
+      />
       <include
           layout="@layout/common_gap"/>
       <RelativeLayout
@@ -179,7 +192,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="支付宝"
-            />
+        />
         <View
             android:layout_marginTop="70px"
             android:id="@+id/v1"
@@ -194,7 +207,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="微信"
-            />
+        />
         <View
             android:layout_marginTop="30px"
             android:layout_below="@+id/tv22"
@@ -208,7 +221,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="小鹿钱包"
-            />
+        />
 
         <RadioGroup
             android:id="@+id/pay_rg"
@@ -216,7 +229,7 @@
             android:orientation="vertical"
             android:layout_alignParentRight="true"
             android:layout_height="wrap_content"
-            >
+        >
           <android.support.v7.widget.AppCompatRadioButton
               android:id="@+id/alipay"
               android:layout_width="wrap_content"
@@ -249,7 +262,7 @@
       android:layout_height="match_parent"
       android:background="#cccccc"
 
-      >
+  >
     <ImageView
         android:layout_marginBottom="24dp"
         android:layout_above="@+id/tv2"
@@ -257,7 +270,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/cart"
-        />
+    />
 
     <TextView
         android:id="@+id/tv2"
@@ -285,6 +298,6 @@
         android:background="@drawable/shape_common"
         android:layout_height="wrap_content"
         android:text="随便逛逛"
-        />
+    />
   </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

@@ -202,6 +202,7 @@ public interface XlmmService {
             @Field("post_fee") String post_fee,
             @Field("discount_fee") String discount_fee,
             @Field("total_fee") String total_fee,
+            @Field("pay_extras")String pay_extras,
             @Field("uuid") String uuid
     );
 
@@ -216,8 +217,8 @@ public interface XlmmService {
             @Field("post_fee") String post_fee,
             @Field("discount_fee") String discount_fee,
             @Field("total_fee") String total_fee,
-            @Field("uuid") String uuid,
             @Field("pay_extras")String pay_extras,
+            @Field("uuid") String uuid,
             @Field("coupon_id") String coupon_id
     );
 
@@ -232,8 +233,8 @@ public interface XlmmService {
             @Field("post_fee") String post_fee,
             @Field("discount_fee") String discount_fee,
             @Field("total_fee") String total_fee,
-            @Field("uuid") String uuid,
             @Field("pay_extras")String pay_extras,
+            @Field("uuid") String uuid,
             @Field("coupon_id") String coupon_id
     );
 

@@ -69,6 +69,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.post_fee) TextView tv_postfee;
   @Bind(R.id.coupon_layout) RelativeLayout coupon_layout;
   @Bind(R.id.tv_coupon) TextView tv_coupon;
+  @Bind(R.id.pay_extra) TextView pay_extra;
   List<CartsPayinfoBean.CartListEntity> list;
   @Bind(R.id.go_main) Button goMain;
   @Bind(R.id.empty_content) RelativeLayout emptyContent;
@@ -96,6 +97,8 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   private double discount_feeInfo;
   private double total_feeInfo;
   private boolean budget_payable;
+  private String pay_extras;
+  private double jieshengjine;
 
   @Override protected void setListener() {
     adress.setOnClickListener(this);
@@ -121,19 +124,30 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
               cart_ids = cartsPayinfoBean.getCartIds();
               channel = "alipay";
 
+              CartsPayinfoBean.PayExtrasEntity payExtrasEntity =
+                  cartsPayinfoBean.getmPayExtras().get(0);
+
+              pay_extras = "pid:"
+                  + payExtrasEntity.getPid()
+                  + ":value:"
+                  + payExtrasEntity.getValue();
+
               payment = cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
-                  - cartsPayinfoBean.getDiscountFee() + "";
+                  - cartsPayinfoBean.getDiscountFee()
+                  - payExtrasEntity.getValue() + "";
 
               paymentInfo = cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
-                  - cartsPayinfoBean.getDiscountFee();
+                  - cartsPayinfoBean.getDiscountFee()
+                  - payExtrasEntity.getValue();
 
               post_fee = cartsPayinfoBean.getPostFee() + "";
 
               discount_fee = cartsPayinfoBean.getDiscountFee() + "";
               discount_feeInfo = cartsPayinfoBean.getDiscountFee();
-              total_fee = cartsPayinfoBean.getTotalFee() + "";
+              total_fee =
+                  (cartsPayinfoBean.getTotalFee() - payExtrasEntity.getValue()) + "";
 
-              total_feeInfo = cartsPayinfoBean.getTotalFee();
+              total_feeInfo = cartsPayinfoBean.getTotalFee() - payExtrasEntity.getValue();
 
               uuid = cartsPayinfoBean.getUuid();
 
@@ -145,9 +159,17 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
               //  jiehsneg.setText(
               //      "已节省" + (cartsPayinfoBean.getDiscountFee() + coupon_price) + "");
               //} else {
+              pay_extra.setText(payExtrasEntity.getName());
               totalPrice.setText("¥" + payment);
-              totalPrice_all.setText("合计: ¥" + cartsPayinfoBean.getTotalFee() + "");
-              jiehsneg.setText("已节省" + cartsPayinfoBean.getDiscountFee() + "");
+              totalPrice_all.setText("合计: ¥"
+                  + (cartsPayinfoBean.getTotalFee() - payExtrasEntity.getValue())
+                  +
+                  "");
+              jieshengjine =
+                  cartsPayinfoBean.getDiscountFee() + payExtrasEntity.getValue();
+              jiehsneg.setText("已节省"
+                  + (cartsPayinfoBean.getDiscountFee() + payExtrasEntity.getValue())
+                  + "");
               //}
 
               budget_payable = cartsPayinfoBean.isBudget_payable();
@@ -258,7 +280,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     showIndeterminateProgressDialog(false);
     Subscription subscription = TradeModel.getInstance()
         .shoppingcart_create(cart_ids, addr_id, pay_method, payment, post_fee,
-            discount_fee, total_fee, uuid)
+            discount_fee, total_fee, pay_extras, uuid)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ResponseBody>() {
 
@@ -300,7 +322,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     showIndeterminateProgressDialog(false);
     Subscription subscription = TradeModel.getInstance()
         .shoppingcart_createBudget(cart_ids, addr_id, pay_method, payment, post_fee,
-            discount_fee, total_fee, uuid)
+            discount_fee, total_fee, pay_extras, uuid)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<BudgetPayBean>() {
           @Override public void onCompleted() {
@@ -333,7 +355,8 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     showIndeterminateProgressDialog(false);
     Subscription subscription = TradeModel.getInstance()
         .shoppingcart_createBudget_with_coupon(cart_ids, addr_id, pay_method,
-            bigDecimal + "", post_fee, discount_fee, total_fee, uuid, coupon_id)
+            bigDecimal + "", post_fee, discount_fee, total_fee, pay_extras, uuid,
+            coupon_id)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<BudgetPayBean>() {
 
@@ -368,7 +391,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     showIndeterminateProgressDialog(false);
     Subscription subscription = TradeModel.getInstance()
         .shoppingcart_create_with_coupon(cart_ids, addr_id, pay_method, bigDecimal + "",
-            post_fee, discount_fee, total_fee, uuid, coupon_id)
+            post_fee, discount_fee, total_fee, pay_extras, uuid, coupon_id)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ResponseBody>() {
           @Override public void onNext(ResponseBody responseBody) {
@@ -443,7 +466,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
         totalPrice.setText("¥" + bigDecimal);
         totalPrice_all.setText("合计: ¥" + bigDecimal1);
-        jiehsneg.setText("已节省" + coupon_price);
+        jiehsneg.setText("已节省" + (coupon_price + jieshengjine));
         tv_coupon.setText(coupon_price + "元优惠券");
 
         JUtils.Log(TAG, "coupon_id:" + coupon_id);
