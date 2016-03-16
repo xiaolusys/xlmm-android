@@ -145,7 +145,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
               discount_fee = cartsPayinfoBean.getDiscountFee() + "";
               discount_feeInfo = cartsPayinfoBean.getDiscountFee();
               total_fee =
-                  (cartsPayinfoBean.getTotalFee() - payExtrasEntity.getValue()) + "";
+                  cartsPayinfoBean.getTotalFee()  + "";
 
               total_feeInfo = cartsPayinfoBean.getTotalFee() - payExtrasEntity.getValue();
 
