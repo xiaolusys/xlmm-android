@@ -108,7 +108,7 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
 
     num = goods.getNum();
     tx_refund_num.setText(Integer.toString(num));
-    tx_refundfee.setText("￥" + apply_fee);
+    tx_refundfee.setText("￥" + goods.getPayment());
   }
 
   @Override public void onClick(View v) {

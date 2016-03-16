@@ -179,7 +179,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     tx_refund_num.setText(Integer.toString(refundDetailBean.getRefund_num()));
 
     //TextView tx_refundfee = (TextView) findViewById(R.id.tx_refundfee);
-    tx_refundfee.setText("¥" + refundDetailBean.getRefund_fee());
+    tx_refundfee.setText("¥" + refundDetailBean.getPayment());
 
     //TextView tx_refund_reason = (TextView) findViewById(R.id.tx_refund_reason);
     tx_refund_reason.setText(refundDetailBean.getReason());

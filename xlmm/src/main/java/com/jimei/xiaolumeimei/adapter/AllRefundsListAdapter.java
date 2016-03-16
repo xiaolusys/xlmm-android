@@ -61,7 +61,7 @@ public class AllRefundsListAdapter extends BaseAdapter {
       HashMap<String, String> map = new HashMap<String, String>();
       refund_no = list.get(i).getRefund_no();
       refund_State = list.get(i).getStatus_display();
-      refund_fee = (float) list.get(i).getRefund_fee();
+      refund_fee = (float) list.get(i).getPayment();
       img_url = list.get(i).getPic_path();
       title = list.get(i).getTitle();
       std_sale_price = (float) list.get(i).getTotal_fee();
