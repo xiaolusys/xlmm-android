@@ -83,9 +83,10 @@ public class ClickCarryLogAdapter
     holder.shoptime.setText(resultsEntity.getCreated().substring(0, 10));
     holder.picPath.setImageResource(R.drawable.img_yellowreturn);
     holder.totalCash.setText(
-        "总收益 " + (float) (Math.round(resultsEntity.getTotalValue() * 100)) / 100);
+        "总收益 " + (float) (Math.round(resultsEntity.getTodayCarry() * 100)) / 100);
 
-    holder.tichengCash.setText("+" + resultsEntity.getTodayCarry());
+    holder.tichengCash.setText(
+        "+" + (float) (Math.round(resultsEntity.getTotalValue() * 100)) / 100);
 
     holder.timeDisplay.setText(resultsEntity.getCreated().substring(11, 19));
     holder.wxordernick.setText(resultsEntity.getCarryDescription());
