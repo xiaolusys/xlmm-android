@@ -11,7 +11,7 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.ShoppingListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.entities.ShoppingListBean;
+import com.jimei.xiaolumeimei.entities.OderCarryBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import rx.Subscription;
@@ -36,9 +36,9 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
   @Override protected void initData() {
     showIndeterminateProgressDialog(false);
     Subscription subscribe = MMProductModel.getInstance()
-        .getShoppingList("1")
+        .getMamaAllOderCarryLogs("direct", "1")
         .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<ShoppingListBean>() {
+        .subscribe(new ServiceResponse<OderCarryBean>() {
 
           @Override public void onCompleted() {
             super.onCompleted();
@@ -50,7 +50,7 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
             e.printStackTrace();
           }
 
-          @Override public void onNext(ShoppingListBean shoppingListBean) {
+          @Override public void onNext(OderCarryBean shoppingListBean) {
             super.onNext(shoppingListBean);
             if (shoppingListBean != null) {
               int count = shoppingListBean.getCount();
@@ -105,10 +105,10 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
 
   private void loadMoreData(String page) {
     Subscription subscribe = MMProductModel.getInstance()
-        .getShoppingList(page)
+        .getMamaAllOderCarryLogs("direct", page)
         .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<ShoppingListBean>() {
-          @Override public void onNext(ShoppingListBean shoppingListBean) {
+        .subscribe(new ServiceResponse<OderCarryBean>() {
+          @Override public void onNext(OderCarryBean shoppingListBean) {
             super.onNext(shoppingListBean);
             if (shoppingListBean != null) {
               if (null != shoppingListBean.getNext()) {

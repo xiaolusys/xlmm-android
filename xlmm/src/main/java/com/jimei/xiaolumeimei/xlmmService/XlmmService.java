@@ -676,6 +676,12 @@ public interface XlmmService {
   Observable<OderCarryBean> getMamaAllOderCarryLogs(
        @Query("page")String page
   );
+
+  @GET(XlmmApi.APP_BASE_URL+"/rest/v2/mama/ordercarry")
+  Observable<OderCarryBean> getMamaAllOderCarryLogs(
+       @Query("carry_type")String carry_type,
+       @Query("page")String page
+  );
   @GET(XlmmApi.APP_BASE_URL+"/rest/v2/mama/awardcarry")
   Observable<AwardCarryBean> getMamaAllAwardCarryLogs(
        @Query("page")String page

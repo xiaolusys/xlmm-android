@@ -11,7 +11,7 @@ import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.entities.ShoppingListBean;
+import com.jimei.xiaolumeimei.entities.OderCarryBean;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,7 @@ public class ShoppingListAdapter
 
   private static final String TAG = MMChooseAdapter.class.getSimpleName();
 
-  private List<ShoppingListBean.ResultsEntity> mList;
+  private List<OderCarryBean.ResultsEntity> mList;
   private Context mContext;
 
   public ShoppingListAdapter(Context context) {
@@ -34,13 +34,13 @@ public class ShoppingListAdapter
     mList = new ArrayList<>();
   }
 
-  public void updateWithClear(List<ShoppingListBean.ResultsEntity> list) {
+  public void updateWithClear(List<OderCarryBean.ResultsEntity> list) {
     mList.clear();
     mList.addAll(list);
     notifyDataSetChanged();
   }
 
-  public void update(List<ShoppingListBean.ResultsEntity> list) {
+  public void update(List<OderCarryBean.ResultsEntity> list) {
 
     mList.addAll(list);
     notifyDataSetChanged();
@@ -54,15 +54,14 @@ public class ShoppingListAdapter
 
   @Override public void onBindViewHolder(ShoppingListVH holder, int position) {
 
-    ShoppingListBean.ResultsEntity resultsEntity = mList.get(position);
+    OderCarryBean.ResultsEntity resultsEntity = mList.get(position);
 
     if (position == 0) {
       showCategory(holder);
     } else {
       boolean theCategoryOfLastEqualsToThis = mList.get(position - 1)
-          .getShoptime()
-          .substring(1, 10)
-          .equals(mList.get(position).getShoptime().substring(1, 10));
+         .getDateField()
+          .equals(mList.get(position).getDateField());
       if (!theCategoryOfLastEqualsToThis) {
         showCategory(holder);
       } else {
@@ -70,14 +69,16 @@ public class ShoppingListAdapter
       }
     }
 
-    holder.shoptime.setText(resultsEntity.getShoptime().substring(0, 10));
-    ViewUtils.loadImgToImgView(mContext, holder.picPath, resultsEntity.getPicPath());
-    holder.getStatusDisplay.setText(resultsEntity.getGetStatusDisplay());
-    holder.wxordernick.setText(resultsEntity.getWxordernick());
-    holder.timeDisplay.setText(resultsEntity.getTimeDisplay());
-    holder.tichengCash.setText(resultsEntity.getTichengCash() + "");
+    holder.shoptime.setText(resultsEntity.getCreated().substring(0, 10));
+    ViewUtils.loadImgToImgView(mContext, holder.picPath,
+        resultsEntity.getContributorImg());
+    holder.getStatusDisplay.setText(resultsEntity.getStatusDisplay());
+    holder.wxordernick.setText(resultsEntity.getContributorNick());
+    holder.timeDisplay.setText(resultsEntity.getCreated().substring(11, 19));
+    holder.tichengCash.setText(
+        (float) (Math.round(resultsEntity.getCarryNum() * 100)) / 100 + "");
     holder.totalCash.setText(
-        "总收益 " + (float) (Math.round(resultsEntity.getDaylyAmount() * 100)) / 100);
+        "总收益 " + (float) (Math.round(resultsEntity.getTodayCarry() * 100)) / 100);
   }
 
   private void showCategory(ShoppingListVH holder) {

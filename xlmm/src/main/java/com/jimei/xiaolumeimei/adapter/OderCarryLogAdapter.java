@@ -71,8 +71,9 @@ public class OderCarryLogAdapter
     if (position == 0) {
       showCategory(holder);
     } else {
-      boolean theCategoryOfLastEqualsToThis =
-          mList.get(position - 1).getCreated().equals(mList.get(position).getCreated());
+      boolean theCategoryOfLastEqualsToThis = mList.get(position - 1)
+          .getDateField()
+          .equals(mList.get(position).getDateField());
       if (!theCategoryOfLastEqualsToThis) {
         showCategory(holder);
       } else {
