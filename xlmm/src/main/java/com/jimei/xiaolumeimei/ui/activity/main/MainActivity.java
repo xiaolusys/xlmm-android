@@ -704,30 +704,6 @@ public class MainActivity extends BaseActivity
         });
   }
 
-  @Override protected void onDestroy() {
-    JUtils.Log(TAG, "destroy");
-    super.onDestroy();
-  }
-
-  @Override protected void onPause() {
-    JUtils.Log(TAG, "pause");
-    super.onPause();
-  }
-
-  @Override protected void onRestart() {
-    JUtils.Log(TAG, "restart");
-    super.onRestart();
-  }
-
-  @Override protected void onResumeFragments() {
-    JUtils.Log(TAG, "resume fragments");
-    super.onResumeFragments();
-  }
-
-  @Override protected void onStart() {
-    JUtils.Log(TAG, "start");
-    super.onStart();
-  }
 
   @Override protected void onStop() {
     JUtils.Log(TAG, "stop");
@@ -799,4 +775,5 @@ public class MainActivity extends BaseActivity
       return listTitle.get(position);
     }
   }
+
 }

@@ -135,8 +135,12 @@ public class MaMaMyStoreActivity extends BaseSwipeBackCompatActivity {
                       }
 
                       @Override public void onResponse(Bitmap response) {
-                        if (response != null) {
-                          titleiamge.setImageBitmap(response);
+                        try {
+                          if (null != response) {
+                            titleiamge.setImageBitmap(response);
+                          }
+                        } catch (NullPointerException ex) {
+                          ex.printStackTrace();
                         }
                       }
                     });

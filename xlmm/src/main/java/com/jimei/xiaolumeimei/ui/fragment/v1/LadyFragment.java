@@ -20,6 +20,7 @@ import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.victor.loading.rotate.RotateLoading;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import rx.Subscription;
@@ -188,5 +189,18 @@ public class LadyFragment extends Fragment {
             xRecyclerView.post(xRecyclerView::loadMoreComplete);
           }
         });
+  }
+  @Override public void onDetach() {
+    super.onDetach();
+    try {
+      Field childFragmentManager =
+          Fragment.class.getDeclaredField("mChildFragmentManager");
+      childFragmentManager.setAccessible(true);
+      childFragmentManager.set(this, null);
+    } catch (NoSuchFieldException e) {
+      throw new RuntimeException(e);
+    } catch (IllegalAccessException e) {
+      throw new RuntimeException(e);
+    }
   }
 }

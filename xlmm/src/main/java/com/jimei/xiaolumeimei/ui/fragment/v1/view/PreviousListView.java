@@ -160,37 +160,37 @@ public class PreviousListView extends ViewImpl {
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
                                        @Override public void onRefresh() {
 
-                                         initPost(context);
+     initPost(context);
 
-                                         subscribe4 = ProductModel.getInstance()
-                                             .getTodayList(1, page * page_size)
-                                             .subscribeOn(Schedulers.io())
-                                             .subscribe(new ServiceResponse<ProductListBean>() {
-                                               @Override public void onNext(ProductListBean productListBean) {
-                                                 List<ProductListBean.ResultsEntity> results =
-                                                     productListBean.getResults();
-                                                 mPreviousAdapter.updateWithClear(results);
-                                               }
+     subscribe4 = ProductModel.getInstance()
+         .getTodayList(1, page * page_size)
+         .subscribeOn(Schedulers.io())
+         .subscribe(new ServiceResponse<ProductListBean>() {
+           @Override public void onNext(ProductListBean productListBean) {
+             List<ProductListBean.ResultsEntity> results =
+                 productListBean.getResults();
+             mPreviousAdapter.updateWithClear(results);
+           }
 
-                                               @Override public void onCompleted() {
-                                                 super.onCompleted();
-                                                 head.setVisibility(View.VISIBLE);
-                                                 xRecyclerView.post(xRecyclerView::refreshComplete);
-                                               }
-                                             });
-                                       }
+           @Override public void onCompleted() {
+             super.onCompleted();
+             head.setVisibility(View.VISIBLE);
+             xRecyclerView.post(xRecyclerView::refreshComplete);
+           }
+         });
+   }
 
-                                       @Override public void onLoadMore() {
+   @Override public void onLoadMore() {
 
-                                         if (page <= totalPages) {
-                                           loadMoreData(page, 10);
-                                           page++;
-                                         } else {
-                                           Toast.makeText(context, "没有更多了拉,去购物吧", Toast.LENGTH_SHORT).show();
-                                           xRecyclerView.post(xRecyclerView::loadMoreComplete);
-                                         }
-                                       }
-                                     }
+     if (page <= totalPages) {
+       loadMoreData(page, 10);
+       page++;
+     } else {
+       Toast.makeText(context, "没有更多了拉,去购物吧", Toast.LENGTH_SHORT).show();
+       xRecyclerView.post(xRecyclerView::loadMoreComplete);
+     }
+   }
+  }
 
     );
   }

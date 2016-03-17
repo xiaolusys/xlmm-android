@@ -20,6 +20,7 @@ import com.jimei.xiaolumeimei.entities.AwardCarryBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import rx.Subscription;
@@ -45,6 +46,20 @@ public class CarryLogBounsFragment extends Fragment {
     bundle.putString("keyword", title);
     carryLogAllFragment.setArguments(bundle);
     return carryLogAllFragment;
+  }
+
+  @Override public void onDetach() {
+    super.onDetach();
+    try {
+      Field childFragmentManager =
+          Fragment.class.getDeclaredField("mChildFragmentManager");
+      childFragmentManager.setAccessible(true);
+      childFragmentManager.set(this, null);
+    } catch (NoSuchFieldException e) {
+      throw new RuntimeException(e);
+    } catch (IllegalAccessException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   @Override public void onCreate(@Nullable Bundle savedInstanceState) {
