@@ -71,8 +71,9 @@ public class AwardCarryLogAdapter
     if (position == 0) {
       showCategory(holder);
     } else {
-      boolean theCategoryOfLastEqualsToThis =
-          mList.get(position - 1).getCreated().equals(mList.get(position).getCreated());
+      boolean theCategoryOfLastEqualsToThis = mList.get(position - 1)
+          .getmDate_field()
+          .equals(mList.get(position).getmDate_field());
       if (!theCategoryOfLastEqualsToThis) {
         showCategory(holder);
       } else {
@@ -80,7 +81,7 @@ public class AwardCarryLogAdapter
       }
     }
 
-    holder.shoptime.setText(resultsEntity.getCreated().substring(0, 10));
+    holder.shoptime.setText(resultsEntity.getmDate_field());
     holder.picPath.setImageResource(R.drawable.img_jiang);
     holder.totalCash.setText(
         "总收益 " + (float) (Math.round(resultsEntity.getTodayCarry() * 100)) / 100);
@@ -90,6 +91,7 @@ public class AwardCarryLogAdapter
 
     holder.timeDisplay.setText(resultsEntity.getCreated().substring(11, 19));
     holder.wxordernick.setText(resultsEntity.getmCarryDescription());
+    holder.tvStatus.setText(resultsEntity.getStatusDisplay());
   }
 
   @Override public int getItemCount() {
@@ -106,6 +108,7 @@ public class AwardCarryLogAdapter
     @Bind(R.id.wxordernick) TextView wxordernick;
     @Bind(R.id.ticheng_cash) TextView tichengCash;
     @Bind(R.id.content) RelativeLayout content;
+    @Bind(R.id.tv_status) TextView tvStatus;
 
     public CarryLogListVH(View itemView) {
       super(itemView);

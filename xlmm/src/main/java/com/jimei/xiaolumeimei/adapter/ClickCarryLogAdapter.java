@@ -80,7 +80,7 @@ public class ClickCarryLogAdapter
       }
     }
 
-    holder.shoptime.setText(resultsEntity.getCreated().substring(0, 10));
+    holder.shoptime.setText(resultsEntity.getDateField());
     holder.picPath.setImageResource(R.drawable.img_yellowreturn);
     holder.totalCash.setText(
         "总收益 " + (float) (Math.round(resultsEntity.getTodayCarry() * 100)) / 100);
@@ -90,6 +90,7 @@ public class ClickCarryLogAdapter
 
     holder.timeDisplay.setText(resultsEntity.getCreated().substring(11, 19));
     holder.wxordernick.setText(resultsEntity.getCarryDescription());
+    holder.tvStatus.setText(resultsEntity.getStatusDisplay());
   }
 
   @Override public int getItemCount() {
@@ -106,6 +107,7 @@ public class ClickCarryLogAdapter
     @Bind(R.id.wxordernick) TextView wxordernick;
     @Bind(R.id.ticheng_cash) TextView tichengCash;
     @Bind(R.id.content) RelativeLayout content;
+    @Bind(R.id.tv_status) TextView tvStatus;
 
     public CarryLogListVH(View itemView) {
       super(itemView);

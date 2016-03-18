@@ -60,7 +60,7 @@ public class ShoppingListAdapter
       showCategory(holder);
     } else {
       boolean theCategoryOfLastEqualsToThis = mList.get(position - 1)
-         .getDateField()
+          .getDateField()
           .equals(mList.get(position).getDateField());
       if (!theCategoryOfLastEqualsToThis) {
         showCategory(holder);
@@ -69,9 +69,8 @@ public class ShoppingListAdapter
       }
     }
 
-    holder.shoptime.setText(resultsEntity.getCreated().substring(0, 10));
-    ViewUtils.loadImgToImgView(mContext, holder.picPath,
-        resultsEntity.getContributorImg());
+    holder.shoptime.setText(resultsEntity.getDateField());
+    ViewUtils.loadImgToImgView(mContext, holder.picPath, resultsEntity.getSkuImg());
     holder.getStatusDisplay.setText(resultsEntity.getStatusDisplay());
     holder.wxordernick.setText(resultsEntity.getContributorNick());
     holder.timeDisplay.setText(resultsEntity.getCreated().substring(11, 19));

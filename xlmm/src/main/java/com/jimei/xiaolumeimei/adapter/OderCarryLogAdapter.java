@@ -12,6 +12,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.OderCarryBean;
+import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.zhy.autolayout.utils.AutoUtils;
 import java.util.ArrayList;
 import java.util.List;
@@ -81,16 +82,19 @@ public class OderCarryLogAdapter
       }
     }
 
-    holder.shoptime.setText(resultsEntity.getCreated().substring(0, 10));
-    holder.picPath.setImageResource(R.drawable.carrylog_image);
+    holder.shoptime.setText(resultsEntity.getDateField());
+    //holder.picPath.setImageResource(R.drawable.carrylog_image);
+    ViewUtils.loadImgToImgView(mContext, holder.picPath,
+        resultsEntity.getContributorImg());
     holder.totalCash.setText(
         "总收益 " + (float) (Math.round(resultsEntity.getTodayCarry() * 100)) / 100);
 
     holder.tichengCash.setText(
         "+" + (float) (Math.round(resultsEntity.getCarryNum() * 100)) / 100);
 
-    holder.timeDisplay.setText(resultsEntity.getCreated().substring(11, 19));
-    holder.wxordernick.setText(resultsEntity.getmCarryDescription());
+    holder.timeDisplay.setText(resultsEntity.getContributorNick());
+    holder.wxordernick.setText(resultsEntity.getCarryPlanName());
+    holder.tvStatus.setText(resultsEntity.getStatusDisplay());
   }
 
   @Override public int getItemCount() {
@@ -107,6 +111,7 @@ public class OderCarryLogAdapter
     @Bind(R.id.wxordernick) TextView wxordernick;
     @Bind(R.id.ticheng_cash) TextView tichengCash;
     @Bind(R.id.content) RelativeLayout content;
+    @Bind(R.id.tv_status) TextView tvStatus;
 
     public CarryLogListVH(View itemView) {
       super(itemView);
