@@ -44,12 +44,10 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initData() {
-    goods_id = getIntent().getExtras().getInt("goods_id");
-    Log.d(TAG, "goods_id " + goods_id);
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
-
+    goods_id = extras.getInt("goods_id");
   }
 
   @Override protected int getContentViewLayoutID() {

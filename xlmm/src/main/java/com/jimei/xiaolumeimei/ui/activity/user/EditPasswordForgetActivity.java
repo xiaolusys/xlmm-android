@@ -36,12 +36,12 @@ public class EditPasswordForgetActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initData() {
-    username = getIntent().getExtras().getString("username");
-    valid_code = getIntent().getExtras().getString("valid_code");
+
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
-
+    username = extras.getString("username");
+    valid_code = extras.getString("valid_code");
   }
 
   @Override protected int getContentViewLayoutID() {
@@ -77,7 +77,6 @@ public class EditPasswordForgetActivity extends BaseSwipeBackCompatActivity
           }
         }
         break;
-
     }
   }
 
@@ -92,7 +91,8 @@ public class EditPasswordForgetActivity extends BaseSwipeBackCompatActivity
 
   private void changePassword(String username, String valid_code, String password1,
       String password2) {
-    UserModel.getInstance().changePassword(username, valid_code, password1, password2)
+    UserModel.getInstance()
+        .changePassword(username, valid_code, password1, password2)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<UserBean>() {
           @Override public void onNext(UserBean user) {
@@ -115,7 +115,8 @@ public class EditPasswordForgetActivity extends BaseSwipeBackCompatActivity
                       if (user.getCode() == 0 && user.getResult().equals("login")) {
                         LoginUtils.saveLoginInfo(true, getApplicationContext(), username,
                             password1);
-                        Toast.makeText(mContext, "密码重置成功,登录成功", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, "密码重置成功,登录成功", Toast.LENGTH_SHORT)
+                            .show();
                         Intent intent = new Intent(mContext, MainActivity.class);
                         startActivity(intent);
                         finish();

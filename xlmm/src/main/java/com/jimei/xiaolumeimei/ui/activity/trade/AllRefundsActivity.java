@@ -63,9 +63,10 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity
         int goods_id = mAllRefundsAdapter.getGoodsId(arg2);
         int refund_state = mAllRefundsAdapter.getRefundStatus(arg2);
         Intent intent = new Intent(AllRefundsActivity.this, RefundDetailActivity.class);
-
-        intent.putExtra("goods_id", goods_id);
-        intent.putExtra("refund_state", refund_state);
+        Bundle bundle = new Bundle();
+        bundle.putInt("goods_id", goods_id);
+        bundle.putInt("refund_state", refund_state);
+        intent.putExtras(bundle);
         Log.d(TAG, "transfer goods_id  " + goods_id + " to RefundDetailActivity");
         startActivity(intent);
       }

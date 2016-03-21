@@ -64,7 +64,7 @@ import rx.schedulers.Schedulers;
  */
 public class TodayListView extends ViewImpl {
 
-  private static final String POST_URL = "?imageMogr2/format/jpg/quality/90";
+  private static final String POST_URL = "?imageMogr2/format/jpg/quality/80";
   @Bind(R.id.xrecyclerView) XRecyclerView xRecyclerView;
   @Bind(R.id.loading) RotateLoading loading;
   List<String> postString = new ArrayList<>();

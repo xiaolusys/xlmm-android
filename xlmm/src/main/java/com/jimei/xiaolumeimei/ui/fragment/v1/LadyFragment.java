@@ -33,6 +33,8 @@ import rx.schedulers.Schedulers;
  */
 public class LadyFragment extends Fragment {
 
+  private static final String TAG = LadyFragment.class.getSimpleName();
+
   @Bind(R.id.loading) RotateLoading loading;
   @Bind(R.id.childlist_recyclerView) XRecyclerView xRecyclerView;
 
@@ -44,6 +46,7 @@ public class LadyFragment extends Fragment {
   private Subscription subscribe1;
   private Subscription subscribe2;
   private Subscription subscribe3;
+  private boolean isSuccessful;
 
   public static LadyFragment newInstance(String title) {
     LadyFragment todayFragment = new LadyFragment();
@@ -56,10 +59,12 @@ public class LadyFragment extends Fragment {
   @Override public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setRetainInstance(true);
+    JUtils.Log(TAG, "onCreate");
   }
 
   @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
+    JUtils.Log(TAG, "onViewCreated");
     initViews(view);
   }
 
@@ -77,6 +82,7 @@ public class LadyFragment extends Fragment {
     mLadyListAdapter = new LadyListAdapter(getActivity(), LadyFragment.this);
     xRecyclerView.setAdapter(mLadyListAdapter);
     loading.start();
+
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
       @Override public void onRefresh() {
         subscribe2 = ProductModel.getInstance()
@@ -109,13 +115,15 @@ public class LadyFragment extends Fragment {
 
   @Override public void setUserVisibleHint(boolean isVisibleToUser) {
     super.setUserVisibleHint(isVisibleToUser);
+    JUtils.Log(TAG, "setUserVisibleHint");
     if (isVisibleToUser && lists.size() == 0) {
+      JUtils.Log(TAG, "isVisibleToUser");
       load();
     }
   }
 
   private void load() {
-
+    JUtils.Log(TAG, "load");
     subscribe1 = ProductModel.getInstance()
         .getLadyList(1, 10)
         .subscribeOn(Schedulers.io())
@@ -124,7 +132,7 @@ public class LadyFragment extends Fragment {
             super.onError(e);
             e.printStackTrace();
             JUtils.Toast("请检查网络状况,尝试下拉刷新");
-            loading.stop();
+            loading.post(loading::stop);
           }
 
           @Override public void onNext(LadyListBean ladyListBean) {
@@ -163,6 +171,7 @@ public class LadyFragment extends Fragment {
   @Nullable @Override
   public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
+    JUtils.Log(TAG, "onCreateView");
     View view = inflater.inflate(R.layout.ladylist_fragment, container, false);
     ButterKnife.bind(this, view);
     return view;
@@ -185,11 +194,16 @@ public class LadyFragment extends Fragment {
           }
 
           @Override public void onCompleted() {
-            super.onCompleted();
-            xRecyclerView.post(xRecyclerView::loadMoreComplete);
+            try {
+              super.onCompleted();
+              xRecyclerView.post(xRecyclerView::loadMoreComplete);
+            } catch (NullPointerException e) {
+              e.printStackTrace();
+            }
           }
         });
   }
+
   @Override public void onDetach() {
     super.onDetach();
     try {

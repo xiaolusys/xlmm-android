@@ -536,7 +536,7 @@ public class MainActivity extends BaseActivity
   private void checkMamaInfo() {
     JUtils.Log(TAG, "check mama userinfo");
 
-    UserModel.getInstance()
+    Subscription subscribe = UserModel.getInstance()
         .getUserInfo()
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<UserInfoBean>() {
@@ -560,10 +560,11 @@ public class MainActivity extends BaseActivity
             super.onError(e);
           }
         });
+    addSubscription(subscribe);
   }
 
   private void getUserInfo() {
-    UserModel.getInstance()
+    Subscription subscribe = UserModel.getInstance()
         .getUserInfo()
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<UserInfoBean>() {
@@ -581,6 +582,7 @@ public class MainActivity extends BaseActivity
             super.onError(e);
           }
         });
+    addSubscription(subscribe);
   }
 
   @Override protected void onResume() {
@@ -682,7 +684,7 @@ public class MainActivity extends BaseActivity
       }
     }
 
-    UserModel.getInstance()
+    Subscription subscription = UserModel.getInstance()
         .getUnusedCouponBean()
         .subscribeOn(Schedulers.io())
         .unsafeSubscribe(new Subscriber<CouponBean>() {
@@ -702,6 +704,7 @@ public class MainActivity extends BaseActivity
             }
           }
         });
+    addSubscription(subscription);
   }
 
 

@@ -85,7 +85,9 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
 
   //从server端获得所有订单数据，可能要查询几次
   @Override protected void initData() {
-    goods_info = getIntent().getExtras().getParcelable("goods_info");
+    if (null != getIntent() && null != getIntent().getExtras()) {
+      goods_info = getIntent().getExtras().getParcelable("goods_info");
+    }
     fillDataToView(goods_info);
   }
 

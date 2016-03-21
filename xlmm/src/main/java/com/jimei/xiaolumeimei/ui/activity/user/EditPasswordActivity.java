@@ -38,12 +38,11 @@ public class EditPasswordActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initData() {
-    username = getIntent().getExtras().getString("username");
-    valid_code = getIntent().getExtras().getString("valid_code");
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
-
+    username = extras.getString("username");
+    valid_code = extras.getString("valid_code");
   }
 
   @Override protected int getContentViewLayoutID() {

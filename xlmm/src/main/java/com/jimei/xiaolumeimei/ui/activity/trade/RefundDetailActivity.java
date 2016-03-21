@@ -57,7 +57,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
-
+    goods_id =extras.getInt("goods_id");
   }
 
   @Override protected int getContentViewLayoutID() {
@@ -79,7 +79,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     setSupportActionBar(toolbar);
     finishBack(toolbar);
 
-    goods_id = getIntent().getExtras().getInt("goods_id");
+
     Log.d(TAG, "goods_id " + goods_id);
 
     if (refund_state == XlmmConst.REFUND_STATE_SELLER_AGREED) {
