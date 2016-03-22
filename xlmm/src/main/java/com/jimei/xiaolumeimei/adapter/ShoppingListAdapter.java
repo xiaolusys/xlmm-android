@@ -73,11 +73,14 @@ public class ShoppingListAdapter
     ViewUtils.loadImgToImgView(mContext, holder.picPath, resultsEntity.getSkuImg());
     holder.getStatusDisplay.setText(resultsEntity.getStatusDisplay());
     holder.wxordernick.setText(resultsEntity.getContributorNick());
-    holder.timeDisplay.setText(resultsEntity.getCreated().substring(11, 19));
+    holder.timeDisplay.setText(resultsEntity.getCreated().substring(11, 16));
     holder.tichengCash.setText(
-        (float) (Math.round(resultsEntity.getCarryNum() * 100)) / 100 + "");
+        "+" + (float) (Math.round(resultsEntity.getCarryNum() * 100)) / 100);
     holder.totalCash.setText(
         "总收益 " + (float) (Math.round(resultsEntity.getTodayCarry() * 100)) / 100);
+    holder.carryTypeName.setText(resultsEntity.getCarryTypeName());
+    holder.shifu.setText(
+        "实付" + (float) (Math.round(resultsEntity.getOrderValue() * 100)) / 100);
   }
 
   private void showCategory(ShoppingListVH holder) {
@@ -107,6 +110,8 @@ public class ShoppingListAdapter
     @Bind(R.id.ticheng_cash) TextView tichengCash;
     @Bind(R.id.category) RelativeLayout category;
     @Bind(R.id.content) RelativeLayout content;
+    @Bind(R.id.carry_type_name) TextView carryTypeName;
+    @Bind(R.id.shifu) TextView shifu;
 
     public ShoppingListVH(View itemView) {
       super(itemView);

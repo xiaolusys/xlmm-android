@@ -98,7 +98,7 @@ public class CarryLogAllAdapter
     holder.tichengCash.setText(
         "+" + (float) (Math.round(resultsEntity.getCarryValue() * 100)) / 100);
 
-    holder.timeDisplay.setText(resultsEntity.getCreated().substring(11, 19));
+    holder.timeDisplay.setText(resultsEntity.getCreated().substring(11, 16));
     holder.wxordernick.setText(resultsEntity.getCarryDescription());
     holder.tvStatus.setText(resultsEntity.getStatusDisplay());
   }

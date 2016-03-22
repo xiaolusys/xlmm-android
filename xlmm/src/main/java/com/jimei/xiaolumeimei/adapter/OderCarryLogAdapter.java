@@ -61,7 +61,7 @@ public class OderCarryLogAdapter
 
   @Override public CarryLogListVH onCreateViewHolder(ViewGroup parent, int viewType) {
     View v = LayoutInflater.from(parent.getContext())
-        .inflate(R.layout.item_carryloglist, parent, false);
+        .inflate(R.layout.item_ordercarry, parent, false);
     return new CarryLogListVH(v);
   }
 
@@ -84,7 +84,7 @@ public class OderCarryLogAdapter
 
     holder.shoptime.setText(resultsEntity.getDateField());
     //holder.picPath.setImageResource(R.drawable.carrylog_image);
-    ViewUtils.loadImgToImgView(mContext, holder.picPath,
+    ViewUtils.loadImgToImgViewWithTransformCircle(mContext, holder.picPath,
         resultsEntity.getContributorImg());
     holder.totalCash.setText(
         "总收益 " + (float) (Math.round(resultsEntity.getTodayCarry() * 100)) / 100);
@@ -93,7 +93,7 @@ public class OderCarryLogAdapter
         "+" + (float) (Math.round(resultsEntity.getCarryNum() * 100)) / 100);
 
     holder.timeDisplay.setText(resultsEntity.getContributorNick());
-    holder.wxordernick.setText(resultsEntity.getCarryPlanName());
+    holder.wxordernick.setText(resultsEntity.getCarryTypeName());
     holder.tvStatus.setText(resultsEntity.getStatusDisplay());
   }
 

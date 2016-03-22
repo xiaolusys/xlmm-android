@@ -30,7 +30,6 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AgentInfoBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
-import com.jimei.xiaolumeimei.entities.OneDayAgentOrdersBean;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
@@ -70,7 +69,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.tv_today_fund2) TextView tv_today_fund2;
 
   @Bind(R.id.rl_mama_info) RelativeLayout rlMamaInfo;
-  @Bind(R.id.rl_order)  LinearLayout rlOrder;
+  @Bind(R.id.rl_order) LinearLayout rlOrder;
 
   @Bind(R.id.rl_chooselist) RelativeLayout rlChooselist;
   @Bind(R.id.rl_party) RelativeLayout rl_party;
@@ -89,6 +88,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   AgentInfoBean mamaAgentInfo;
   MamaFortune mamaFortune;
   private double carrylogMoney;
+  private String s;
 
   @Override protected void setListener() {
     toolbar.setOnClickListener(this);
@@ -159,8 +159,8 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
             show_liveness(fortune.getMama_fortune().getActive_value_num());
             JUtils.Log(TAG,
                 "all orders num =" + fortune.getMama_fortune().getOrder_num());
-            tv_order.setText(
-                Integer.toString(fortune.getMama_fortune().getOrder_num()) + "个订单");
+            s = Integer.toString(fortune.getMama_fortune().getOrder_num());
+            tv_order.setText(s + "个订单");
           }
         });
     addSubscription(subscribe3);
@@ -244,7 +244,11 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         startActivity(new Intent(MamaInfoActivity.this, MamaFansActivity.class));
         break;
       case R.id.rl_orderlist:
-        startActivity(new Intent(MamaInfoActivity.this, MMShoppingListActivity.class));
+        Intent intent2 = new Intent(MamaInfoActivity.this, MMShoppingListActivity.class);
+        Bundle bundle1 = new Bundle();
+        bundle1.putString("order", s);
+        intent2.putExtras(bundle1);
+        startActivity(intent2);
         break;
       case R.id.rl_income:
         Intent intent1 = new Intent(MamaInfoActivity.this, MMcarryLogActivity.class);
@@ -451,10 +455,12 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         + mChart.getLowestVisibleXIndex()
         + ", high: "
         + mChart.getHighestVisibleXIndex());
-    tv_today_visit2.setText(Integer.toString(show_his_refund.get(e.getXIndex()).getVisitorNum()));
+    tv_today_visit2.setText(
+        Integer.toString(show_his_refund.get(e.getXIndex()).getVisitorNum()));
     tv_today_order2.setText(Integer.toString((int) (e.getVal())));
-    tv_today_fund2.setText(Double.toString((double) (Math.round(
-            show_his_refund.get(e.getXIndex()).getCarry() * 100)) / 100));
+    tv_today_fund2.setText(Double.toString(
+        (double) (Math.round(show_his_refund.get(e.getXIndex()).getCarry() * 100))
+            / 100));
 
     /*if (Double.compare(show_his_refund.get(e.getXIndex()).getRefund(), 0) == 0) {
       tv_today_fund2.setText(Float.toString(
@@ -505,40 +511,42 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     }
 
     Subscription subscribe = MMProductModel.getInstance()
-            .getRecentCarry("0", Integer.toString(MAX_RECENT_DAYS))
-            .subscribeOn(Schedulers.io())
-            .subscribe(new ServiceResponse<List<RecentCarryBean>>() {
-              @Override public void onNext(List<RecentCarryBean> recentDayBean) {
-                super.onNext(recentDayBean);
-                if (recentDayBean != null) {
+        .getRecentCarry("0", Integer.toString(MAX_RECENT_DAYS))
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<List<RecentCarryBean>>() {
+          @Override public void onNext(List<RecentCarryBean> recentDayBean) {
+            super.onNext(recentDayBean);
+            if (recentDayBean != null) {
 
-                  show_his_refund.clear();
-                  show_his_refund.addAll( recentDayBean);
+              show_his_refund.clear();
+              show_his_refund.addAll(recentDayBean);
 
-                  JUtils.Log(TAG,
-                          "get_num =" + get_num + " " + "size= " + show_his_refund.size());
-                  if ((show_his_refund.size() > 0)) {
-                    init_chart();
-                    setData(MAX_RECENT_DAYS);
-                    mChart.setVisibility(View.VISIBLE);
+              JUtils.Log(TAG,
+                  "get_num =" + get_num + " " + "size= " + show_his_refund.size());
+              if ((show_his_refund.size() > 0)) {
+                init_chart();
+                setData(MAX_RECENT_DAYS);
+                mChart.setVisibility(View.VISIBLE);
 
-                    mChart.animateX(2500, Easing.EasingOption.EaseInOutQuart);
-                    mChart.setVisibleXRangeMaximum(6);
+                mChart.animateX(2500, Easing.EasingOption.EaseInOutQuart);
+                mChart.setVisibleXRangeMaximum(6);
 
-                    if (show_his_refund.size() > 7) {
-                      mChart.moveViewToX(MAX_RECENT_DAYS - 6);
-                    }
-                    if (show_his_refund.get(0) != null) {
-                      tv_today_visit2.setText(Integer.toString(show_his_refund.get(show_his_refund.size()-1).getVisitorNum()));
-                      tv_today_order2.setText(Integer.toString(show_his_refund.get(show_his_refund.size()-1).getOrderNum()));
-                      tv_today_fund2.setText(Double.toString(
-                              (double) (Math.round(show_his_refund.get(show_his_refund.size()-1).getCarry() * 100))
-                                      / 100));
-                    }
-                  }
+                if (show_his_refund.size() > 7) {
+                  mChart.moveViewToX(MAX_RECENT_DAYS - 6);
+                }
+                if (show_his_refund.get(0) != null) {
+                  tv_today_visit2.setText(Integer.toString(
+                      show_his_refund.get(show_his_refund.size() - 1).getVisitorNum()));
+                  tv_today_order2.setText(Integer.toString(
+                      show_his_refund.get(show_his_refund.size() - 1).getOrderNum()));
+                  tv_today_fund2.setText(Double.toString((double) (Math.round(
+                      show_his_refund.get(show_his_refund.size() - 1).getCarry() * 100))
+                      / 100));
                 }
               }
-            });
+            }
+          }
+        });
     addSubscription(subscribe);
     /*for (int i = 0; i < MAX_RECENT_DAYS; i++) {
       HisRefund hisRefund = new HisRefund();
@@ -662,5 +670,4 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
 
     img_liveness.setLayoutParams(laParams1);
   }
-
 }
