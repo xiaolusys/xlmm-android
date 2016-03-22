@@ -62,8 +62,10 @@ public class MamaWithdrawCashActivity extends BaseSwipeBackCompatActivity
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
     finishBack(toolbar);
-    cash = getIntent().getExtras().getDouble("cash");
-    tv_reminder.setText(Double.toString((double)(Math.round(cash * 100)) / 100));
+    if (null != getIntent() && null != getIntent().getExtras()) {
+      cash = getIntent().getExtras().getDouble("cash");
+    }
+    tv_reminder.setText(Double.toString((double) (Math.round(cash * 100)) / 100));
     if (Double.compare(cash, 0) > 0) {
       rl_has_no_cash.setVisibility(View.INVISIBLE);
     } else {
@@ -174,7 +176,7 @@ public class MamaWithdrawCashActivity extends BaseSwipeBackCompatActivity
           .subscribe(new ServiceResponse<ResponseResultBean>() {
             @Override public void onNext(ResponseResultBean resp) {
               JUtils.Log(TAG, "ResponseBody11=" + resp.getCode());
-              switch (resp.getCode()){
+              switch (resp.getCode()) {
                 case 0:
                   JUtils.Toast("提现成功，待审核通过");
                   break;
@@ -189,9 +191,8 @@ public class MamaWithdrawCashActivity extends BaseSwipeBackCompatActivity
                   break;
               }
 
-              Intent intent =
-                  new Intent(MamaWithdrawCashActivity.this, MamaWithdrawCashResultActivity
-                      .class);
+              Intent intent = new Intent(MamaWithdrawCashActivity.this,
+                  MamaWithdrawCashResultActivity.class);
               intent.putExtra("cash", fund);
               startActivity(intent);
             }

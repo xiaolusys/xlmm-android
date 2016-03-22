@@ -69,17 +69,21 @@ public class OderCarryLogAdapter
 
     OderCarryBean.ResultsEntity resultsEntity = mList.get(position);
 
-    if (position == 0) {
-      showCategory(holder);
-    } else {
-      boolean theCategoryOfLastEqualsToThis = mList.get(position - 1)
-          .getDateField()
-          .equals(mList.get(position).getDateField());
-      if (!theCategoryOfLastEqualsToThis) {
+    try {
+      if (position == 0) {
         showCategory(holder);
       } else {
-        hideCategory(holder);
+        boolean theCategoryOfLastEqualsToThis = mList.get(position - 1)
+            .getDateField()
+            .equals(mList.get(position).getDateField());
+        if (!theCategoryOfLastEqualsToThis) {
+          showCategory(holder);
+        } else {
+          hideCategory(holder);
+        }
       }
+    } catch (NullPointerException e) {
+      e.printStackTrace();
     }
 
     holder.shoptime.setText(resultsEntity.getDateField());

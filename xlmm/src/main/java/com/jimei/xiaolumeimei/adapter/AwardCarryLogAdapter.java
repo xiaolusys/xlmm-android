@@ -68,17 +68,21 @@ public class AwardCarryLogAdapter
 
     AwardCarryBean.ResultsEntity resultsEntity = mList.get(position);
 
-    if (position == 0) {
-      showCategory(holder);
-    } else {
-      boolean theCategoryOfLastEqualsToThis = mList.get(position - 1)
-          .getmDate_field()
-          .equals(mList.get(position).getmDate_field());
-      if (!theCategoryOfLastEqualsToThis) {
+    try {
+      if (position == 0) {
         showCategory(holder);
       } else {
-        hideCategory(holder);
+        boolean theCategoryOfLastEqualsToThis = mList.get(position - 1)
+            .getmDate_field()
+            .equals(mList.get(position).getmDate_field());
+        if (!theCategoryOfLastEqualsToThis) {
+          showCategory(holder);
+        } else {
+          hideCategory(holder);
+        }
       }
+    } catch (NullPointerException e) {
+      e.printStackTrace();
     }
 
     holder.shoptime.setText(resultsEntity.getmDate_field());

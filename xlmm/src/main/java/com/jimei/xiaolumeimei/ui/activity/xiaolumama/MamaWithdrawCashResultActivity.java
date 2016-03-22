@@ -16,8 +16,8 @@ import com.jude.utils.JUtils;
 /**
  * Created by wulei on 2016/2/4.
  */
-public class MamaWithdrawCashResultActivity extends BaseSwipeBackCompatActivity implements
-    View.OnClickListener{
+public class MamaWithdrawCashResultActivity extends BaseSwipeBackCompatActivity
+    implements View.OnClickListener {
   String TAG = "MamaWithdrawCashResultActivity";
 
   @Bind(R.id.toolbar) Toolbar toolbar;
@@ -31,8 +31,8 @@ public class MamaWithdrawCashResultActivity extends BaseSwipeBackCompatActivity 
 
   @Override protected void setListener() {
     btn_jump.setOnClickListener(this);
-
   }
+
   @Override protected void getBundleExtras(Bundle extras) {
 
   }
@@ -45,15 +45,15 @@ public class MamaWithdrawCashResultActivity extends BaseSwipeBackCompatActivity 
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
     finishBack(toolbar);
-
-    cash = getIntent().getExtras().getFloat("cash");
-    if(Float.compare(cash , 100) == 0){
-      img_red_packet1.setImageResource(R.drawable.img_redpacket100_1);
+    if (null != getIntent() && null != getIntent().getExtras()) {
+      cash = getIntent().getExtras().getFloat("cash");
     }
-    else if(Float.compare(cash , 200) == 0){
+
+    if (Float.compare(cash, 100) == 0) {
+      img_red_packet1.setImageResource(R.drawable.img_redpacket100_1);
+    } else if (Float.compare(cash, 200) == 0) {
       img_red_packet1.setImageResource(R.drawable.img_redpacket200_1);
     }
-
   }
 
   @Override protected void initData() {
@@ -68,22 +68,20 @@ public class MamaWithdrawCashResultActivity extends BaseSwipeBackCompatActivity 
     return null;
   }
 
-  @Override
-  public void onClick(View v) {
+  @Override public void onClick(View v) {
     switch (v.getId()) {
       case R.id.btn_jump:
-        JUtils.Log(TAG,"publish now");
+        JUtils.Log(TAG, "publish now");
         //startActivity(new Intent(MamaWithdrawCashActivity.this, MainActivity.class));
         finish();
         break;
-
     }
   }
 
   @Override public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()){
+    switch (item.getItemId()) {
       case R.id.action_history:
-        JUtils.Log(TAG,"withdraw cash history entry");
+        JUtils.Log(TAG, "withdraw cash history entry");
         startActivity(new Intent(this, MamaWithdrawCashHistoryActivity.class));
         break;
       default:
@@ -93,8 +91,7 @@ public class MamaWithdrawCashResultActivity extends BaseSwipeBackCompatActivity 
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.menu_withdrawcash,menu);
+    getMenuInflater().inflate(R.menu.menu_withdrawcash, menu);
     return super.onCreateOptionsMenu(menu);
   }
-
 }

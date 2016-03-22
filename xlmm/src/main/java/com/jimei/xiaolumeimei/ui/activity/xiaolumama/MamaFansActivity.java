@@ -74,7 +74,7 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity
             if (0 == fansBeen.getCount()) {
               JUtils.Log(TAG, "results.size()=0");
             } else {
-              mAdapter.update(fansBeen.getFans());
+              mAdapter.update(fansBeen.getResults());
             }
           }
         });
@@ -112,7 +112,7 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity
                 super.onNext(fansBeen);
                 if (fansBeen != null) {
                   if (null != fansBeen.getNext()) {
-                    mAdapter.update(fansBeen.getFans());
+                    mAdapter.update(fansBeen.getResults());
                   } else {
                     Toast.makeText(MamaFansActivity.this, "没有更多了", Toast.LENGTH_SHORT)
                         .show();

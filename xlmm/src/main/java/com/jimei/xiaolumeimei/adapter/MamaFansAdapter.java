@@ -7,43 +7,46 @@ package com.jimei.xiaolumeimei.adapter;
 
 import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.MamaFansBean;
+import com.jimei.xiaolumeimei.glidemoudle.CropCircleTransformation;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jude.utils.JUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MamaFansAdapter extends RecyclerView.Adapter<MamaFansAdapter.ViewHolder>  {
+public class MamaFansAdapter extends RecyclerView.Adapter<MamaFansAdapter.ViewHolder> {
   private static final String TAG = "MamaFansAdapter";
   private Activity context;
-  private List<MamaFansBean.FansEntity> mList;
+  private List<MamaFansBean.ResultsEntity> mList;
 
   public MamaFansAdapter(Activity context) {
-    mList = new ArrayList<MamaFansBean.FansEntity>();
+    mList = new ArrayList<MamaFansBean.ResultsEntity>();
     this.context = context;
   }
 
-
-  public void updateWithClear(List<MamaFansBean.FansEntity> list) {
+  public void updateWithClear(List<MamaFansBean.ResultsEntity> list) {
     mList.clear();
     mList.addAll(list);
     notifyDataSetChanged();
   }
 
-  public void update(List<MamaFansBean.FansEntity> list) {
+  public void update(List<MamaFansBean.ResultsEntity> list) {
 
     mList.addAll(list);
     notifyDataSetChanged();
   }
-
 
   @Override public long getItemId(int position) {
     return position;
@@ -58,36 +61,40 @@ public class MamaFansAdapter extends RecyclerView.Adapter<MamaFansAdapter.ViewHo
   @Override public void onBindViewHolder(ViewHolder holder, int position) {
     JUtils.Log(TAG, "getView ");
 
+    MamaFansBean.ResultsEntity resultsEntity = mList.get(position);
 
-    MamaFansBean.FansEntity record = mList.get(position);
-    if (null != record) {
-      JUtils.Log(TAG, "record.getNick() = "+record.getNick() );
-      if((record.getThumbnail() != null) && (!record.getThumbnail().isEmpty())) {
-        ViewUtils.loadImgToImgView(context, holder.img_fans, record.getThumbnail());
-      }
-      if((record.getNick() != null) && (!record.getNick().isEmpty())) {
-        holder.tx_nickname.setText((record.getNick()));
-      }
-      //holder.tv_id.setText(record.getId());
+    holder.tvFans.setText(resultsEntity.getFansNick());
+    holder.tvInfo.setText(resultsEntity.getFansDescription());
+    holder.tvTime.setText(resultsEntity.getCreated().substring(6, 10));
+    if (TextUtils.isEmpty(resultsEntity.getFansThumbnail())) {
+      Glide.with(context)
+          .load(R.mipmap.ic_launcher)
+          .diskCacheStrategy(DiskCacheStrategy.ALL)
+          .bitmapTransform(new CropCircleTransformation(context))
+          .into(holder.imgFans);
+    } else {
+
+      ViewUtils.loadImgToImgViewWithTransformCircle(context, holder.imgFans,
+          resultsEntity.getFansThumbnail());
     }
-
   }
 
   @Override public int getItemCount() {
     return mList.size();
   }
 
-  public static class ViewHolder extends RecyclerView.ViewHolder{
+  public static class ViewHolder extends RecyclerView.ViewHolder {
     int id = R.layout.item_mamafans;
-    @Bind(R.id.img_fans) ImageView img_fans;
-    @Bind(R.id.tx_nickname) TextView tx_nickname;
-    //@Bind(R.id.tv_id) TextView tv_id;
+    @Bind(R.id.img_fans) ImageView imgFans;
+    @Bind(R.id.tv_fans) TextView tvFans;
+    @Bind(R.id.tv_info) TextView tvInfo;
+    @Bind(R.id.tv_time) TextView tvTime;
+    @Bind(R.id.llayout_fans_item) RelativeLayout llayoutFansItem;
 
     public ViewHolder(View itemView) {
       super(itemView);
       ButterKnife.bind(this, itemView);
     }
-
   }
 }
 

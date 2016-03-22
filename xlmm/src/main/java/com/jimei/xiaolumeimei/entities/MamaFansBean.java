@@ -9,82 +9,92 @@ import java.util.List;
 public class MamaFansBean {
 
   /**
-   * count : 2071
-   * next : http://m.xiaolumeimei.com/rest/v1/pmt/xlmm/get_fans_list?page=2
+   * count : 18
+   * next : http://192.168.1.13:8000/rest/v2/mama/fans?page=2
    * previous : null
-   * results : [{"nick":"","id":842057,"thumbnail":""},{"nick":"","id":842061,"thumbnail":""},{"nick":"Hixb","id":842086,"thumbnail":"http://wx.qlogo.cn/mmopen/Q3auHgzwzM770QstXrQ96q9NWztxnufEHg5vdyYOyZ3ibpC9vHsQ87Cl680ibFAbE8vBdzzRk8JebDv1RHUko0gxxKDUToT8wQkYG2FThm8RQ/0"},{"nick":"","id":842101,"thumbnail":""},{"nick":"朦胧的眼睛","id":842107,"thumbnail":"http://wx.qlogo.cn/mmopen/F8wmNnQLXwl0Z8icWzHkfnJpxThDxtibT9DWBYWGNTSKTpc6wf5zDQBxOicickTib9ETmPPbvkWdwu5VnEjtDZ4pPm2xiafiaWfWzqG/0"},{"nick":"","id":842120,"thumbnail":""},{"nick":"YANYAN","id":842176,"thumbnail":"http://wx.qlogo.cn/mmopen/pf11h2zpf4BzV9VvDvY35zULcMgJibShbB8MO3oibwSprO994yhNk6KmialSO7A0niayRwsicUYaGxdewN1ReR8EK7bicItxAOoUWic/0"},{"nick":"芳儿","id":842231,"thumbnail":"http://wx.qlogo.cn/mmopen/pf11h2zpf4Dl3UEZCK9MDdW06uoRMwY5TuI7BqcicJNfuTjmvXu2Bcbn8fZRrgJtTicubbQATib4ylStFeDll0c9vSQaVfyg0vz/0"},{"nick":"","id":842256,"thumbnail":"http://wx.qlogo.cn/mmopen/jfpC8E6yr8eAicOVqlBHXZqiakQaUsjRQKukRv359vSbc4AKxlGyic9OH4cJIWW1iaL0fiaYybrbUPMBy1vjPBpMHSPepibScoRFCK/0"},{"nick":"","id":842312,"thumbnail":""}]
+   * results : [{"fans_nick":"","fans_thumbnail":"","fans_description":"来自好友的分享","created":"2016-03-19T22:44:16"},{"fans_nick":"","fans_thumbnail":"","fans_description":"通过您的分享成为粉丝","created":"2016-03-15T17:26:18"},{"fans_nick":"","fans_thumbnail":"","fans_description":"通过您的分享成为粉丝","created":"2016-03-15T17:24:07"},{"fans_nick":"","fans_thumbnail":"","fans_description":"通过您的分享成为粉丝","created":"2016-03-15T17:23:16"},{"fans_nick":"","fans_thumbnail":"","fans_description":"通过您的分享成为粉丝","created":"2016-03-15T16:53:27"},{"fans_nick":"","fans_thumbnail":"","fans_description":"通过您的分享成为粉丝","created":"2016-03-15T16:50:36"},{"fans_nick":"","fans_thumbnail":"","fans_description":"通过您的分享成为粉丝","created":"2016-03-15T16:29:50"},{"fans_nick":"","fans_thumbnail":"","fans_description":"通过您的分享成为粉丝","created":"2016-03-15T16:28:14"},{"fans_nick":"","fans_thumbnail":"","fans_description":"通过您的分享成为粉丝","created":"2016-03-14T15:47:42"},{"fans_nick":"","fans_thumbnail":"","fans_description":"通过您的分享成为粉丝","created":"2016-03-14T15:47:11"}]
    */
 
-  @SerializedName("count") private int count;
-  @SerializedName("next") private String next;
-  @SerializedName("previous") private Object previous;
+  @SerializedName("count") private int mCount;
+  @SerializedName("next") private String mNext;
+  @SerializedName("previous") private Object mPrevious;
   /**
-   * nick :
-   * id : 842057
-   * thumbnail :
+   * fans_nick :
+   * fans_thumbnail :
+   * fans_description : 来自好友的分享
+   * created : 2016-03-19T22:44:16
    */
 
-  @SerializedName("results") private List<FansEntity> fans;
-
-  public void setCount(int count) {
-    this.count = count;
-  }
-
-  public void setNext(String next) {
-    this.next = next;
-  }
-
-  public void setPrevious(Object previous) {
-    this.previous = previous;
-  }
-
-  public void setFans(List<FansEntity> fans) {
-    this.fans = fans;
-  }
+  @SerializedName("results") private List<ResultsEntity> mResults;
 
   public int getCount() {
-    return count;
+    return mCount;
+  }
+
+  public void setCount(int count) {
+    mCount = count;
   }
 
   public String getNext() {
-    return next;
+    return mNext;
+  }
+
+  public void setNext(String next) {
+    mNext = next;
   }
 
   public Object getPrevious() {
-    return previous;
+    return mPrevious;
   }
 
-  public List<FansEntity> getFans() {
-    return fans;
+  public void setPrevious(Object previous) {
+    mPrevious = previous;
   }
 
-  public static class FansEntity {
-    @SerializedName("nick") private String nick;
-    @SerializedName("id") private int id;
-    @SerializedName("thumbnail") private String thumbnail;
+  public List<ResultsEntity> getResults() {
+    return mResults;
+  }
 
-    public void setNick(String nick) {
-      this.nick = nick;
+  public void setResults(List<ResultsEntity> results) {
+    mResults = results;
+  }
+
+  public static class ResultsEntity {
+    @SerializedName("fans_nick") private String mFansNick;
+    @SerializedName("fans_thumbnail") private String mFansThumbnail;
+    @SerializedName("fans_description") private String mFansDescription;
+    @SerializedName("created") private String mCreated;
+
+    public String getFansNick() {
+      return mFansNick;
     }
 
-    public void setId(int id) {
-      this.id = id;
+    public void setFansNick(String fansNick) {
+      mFansNick = fansNick;
     }
 
-    public void setThumbnail(String thumbnail) {
-      this.thumbnail = thumbnail;
+    public String getFansThumbnail() {
+      return mFansThumbnail;
     }
 
-    public String getNick() {
-      return nick;
+    public void setFansThumbnail(String fansThumbnail) {
+      mFansThumbnail = fansThumbnail;
     }
 
-    public int getId() {
-      return id;
+    public String getFansDescription() {
+      return mFansDescription;
     }
 
-    public String getThumbnail() {
-      return thumbnail;
+    public void setFansDescription(String fansDescription) {
+      mFansDescription = fansDescription;
+    }
+
+    public String getCreated() {
+      return mCreated;
+    }
+
+    public void setCreated(String created) {
+      mCreated = created;
     }
   }
 }

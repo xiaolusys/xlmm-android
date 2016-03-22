@@ -67,7 +67,6 @@ public class CarryLogAllFragment extends Fragment {
         .getMamaAllCarryLogs("1")
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<CarryLogListBean>() {
-
           @Override public void onCompleted() {
             super.onCompleted();
             hideIndeterminateProgressDialog();
@@ -177,6 +176,7 @@ public class CarryLogAllFragment extends Fragment {
   public void hideIndeterminateProgressDialog() {
     materialDialog.dismiss();
   }
+
   @Override public void onDetach() {
     super.onDetach();
     try {
