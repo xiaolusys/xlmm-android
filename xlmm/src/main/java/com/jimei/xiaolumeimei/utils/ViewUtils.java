@@ -275,7 +275,7 @@ public final class ViewUtils {
           .diskCacheStrategy(DiskCacheStrategy.ALL)
           .bitmapTransform(new CropCircleTransformation(context))
           //.placeholder(R.drawable.parceholder)
-          .centerCrop()
+          //.centerCrop()
           .into(img);
     } else {
       Glide.with(context)
@@ -284,7 +284,7 @@ public final class ViewUtils {
           .bitmapTransform(new CropCircleTransformation(context))
 
           //.placeholder(R.drawable.parceholder)
-          .centerCrop()
+          //.centerCrop()
           .into(img);
     }
   }

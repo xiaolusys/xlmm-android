@@ -18,6 +18,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.CarryLogAllAdapter;
 import com.jimei.xiaolumeimei.entities.CarryLogListBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
+import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import java.lang.reflect.Field;
@@ -94,8 +95,8 @@ public class CarryLogAllFragment extends Fragment {
 
   private void initViews(View view) {
     xRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-    //xRecyclerView.addItemDecoration(
-    //    new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+    xRecyclerView.addItemDecoration(
+        new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
     xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
     xRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
     xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);

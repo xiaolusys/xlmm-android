@@ -9,45 +9,42 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.entities.AllowanceBean;
 import com.jimei.xiaolumeimei.entities.MamaLivenessBean;
 import com.jude.utils.JUtils;
 import com.zhy.autolayout.utils.AutoUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
-public class MamaLivenessAdapter extends RecyclerView.Adapter<MamaLivenessAdapter.LivenessVH>  {
+public class MamaLivenessAdapter
+    extends RecyclerView.Adapter<MamaLivenessAdapter.LivenessVH> {
   private static final String TAG = "MamaLivenessAdapter";
-  private List<MamaLivenessBean.LivenessEntity> mList = null;
+  private List<MamaLivenessBean.ResultsEntity> mList = null;
   private Context mContext;
 
   public MamaLivenessAdapter(Context mContext) {
     this.mContext = mContext;
-    mList = new ArrayList<MamaLivenessBean.LivenessEntity>();
+    mList = new ArrayList<MamaLivenessBean.ResultsEntity>();
   }
 
-  public MamaLivenessAdapter(Context mContext, List<MamaLivenessBean.LivenessEntity> list) {
+  public MamaLivenessAdapter(Context mContext,
+      List<MamaLivenessBean.ResultsEntity> list) {
     this.mContext = mContext;
     this.mList = list;
-
   }
 
-  public void updateWithClear(List<MamaLivenessBean.LivenessEntity> list) {
+  public void updateWithClear(List<MamaLivenessBean.ResultsEntity> list) {
     mList.clear();
     mList.addAll(list);
     notifyDataSetChanged();
   }
 
-  public void update(List<MamaLivenessBean.LivenessEntity> list) {
+  public void update(List<MamaLivenessBean.ResultsEntity> list) {
     JUtils.Log(TAG, "dataSource.size " + list.size());
 
     mList.clear();
@@ -55,13 +52,13 @@ public class MamaLivenessAdapter extends RecyclerView.Adapter<MamaLivenessAdapte
     notifyDataSetChanged();
   }
 
-  public void updateStart(List<MamaLivenessBean.LivenessEntity> list) {
+  public void updateStart(List<MamaLivenessBean.ResultsEntity> list) {
 
     mList.addAll(0, list);
     notifyDataSetChanged();
   }
 
-  public MamaLivenessBean.LivenessEntity getData(int postion) {
+  public MamaLivenessBean.ResultsEntity getData(int postion) {
 
     return mList.get(postion);
   }
@@ -76,15 +73,14 @@ public class MamaLivenessAdapter extends RecyclerView.Adapter<MamaLivenessAdapte
 
   @Override public void onBindViewHolder(final LivenessVH holder, int position) {
 
-    final MamaLivenessBean.LivenessEntity resultsEntity = mList.get(position);
+    final MamaLivenessBean.ResultsEntity resultsEntity = mList.get(position);
 
     if (position == 0) {
       showCategory(holder);
     } else {
       boolean theCategoryOfLastEqualsToThis = mList.get(position - 1)
           .getDateField()
-          .substring(1, 10)
-          .equals(mList.get(position).getDateField().substring(1, 10));
+          .equals(mList.get(position).getDateField());
       if (!theCategoryOfLastEqualsToThis) {
         showCategory(holder);
       } else {
@@ -92,21 +88,22 @@ public class MamaLivenessAdapter extends RecyclerView.Adapter<MamaLivenessAdapte
       }
     }
 
-    holder.tv_day.setText(resultsEntity.getDateField().substring(0, 10));
+    holder.tvDay.setText(resultsEntity.getDateField());
     //holder.tv_time.setText(resultsEntity.getCreated().replace("T"," "));
-    holder.tv_value_type.setText(resultsEntity.getValueTypeName());
-    holder.tv_status_info.setText(resultsEntity.getStatusDisplay());
-    holder.tv_one_liveness.setText("+ " + resultsEntity.getValueNum());
+    holder.todayActive.setText("日活跃" + resultsEntity.getTodayCarry());
+    holder.tvTime.setText(resultsEntity.getCreated().substring(11, 16));
+    holder.tvStatusInfo.setText(resultsEntity.getStatusDisplay());
+    holder.tvInfo.setText(resultsEntity.getValueDescription());
+    holder.tvOneLiveness.setText("+" + resultsEntity.getValueNum());
   }
 
   private void showCategory(LivenessVH holder) {
-    if (!isVisibleOf(holder.rl_sum)) holder.rl_sum.setVisibility(View.VISIBLE);
+    if (!isVisibleOf(holder.rlSum)) holder.rlSum.setVisibility(View.VISIBLE);
   }
 
   private void hideCategory(LivenessVH holder) {
-    if (isVisibleOf(holder.rl_sum)) holder.rl_sum.setVisibility(View.GONE);
+    if (isVisibleOf(holder.rlSum)) holder.rlSum.setVisibility(View.GONE);
   }
-
 
   private boolean isVisibleOf(View view) {
     return view.getVisibility() == View.VISIBLE;
@@ -122,15 +119,17 @@ public class MamaLivenessAdapter extends RecyclerView.Adapter<MamaLivenessAdapte
 
   static class LivenessVH extends RecyclerView.ViewHolder
       implements View.OnClickListener {
-    //int id = R.layout.item_childlist;
+    int id = R.layout.item_mamaliveness;
     View card;
-
-    @Bind(R.id.tv_day) TextView tv_day;
-    @Bind(R.id.tv_value_type) TextView tv_value_type;
-    @Bind(R.id.tv_status_info) TextView tv_status_info;
-    @Bind(R.id.tv_one_liveness) TextView tv_one_liveness;
-    @Bind(R.id.rl_sum) RelativeLayout rl_sum;
-    @Bind(R.id.rl_info) RelativeLayout rl_info;
+    @Bind(R.id.tv_day) TextView tvDay;
+    @Bind(R.id.today_active) TextView todayActive;
+    @Bind(R.id.rl_sum) RelativeLayout rlSum;
+    @Bind(R.id.tv_time) TextView tvTime;
+    @Bind(R.id.tv_status_info) TextView tvStatusInfo;
+    @Bind(R.id.tv_info) TextView tvInfo;
+    @Bind(R.id.tv_one_liveness) TextView tvOneLiveness;
+    @Bind(R.id.rl_info) RelativeLayout rlInfo;
+    @Bind(R.id.rlayout_order_lefttime) LinearLayout rlayoutOrderLefttime;
 
     public LivenessVH(View itemView) {
       super(itemView);
