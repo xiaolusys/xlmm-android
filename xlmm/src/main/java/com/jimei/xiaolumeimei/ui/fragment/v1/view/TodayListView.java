@@ -42,9 +42,11 @@ import com.jimei.xiaolumeimei.widget.banner.SliderTypes.BaseSliderView;
 import com.jimei.xiaolumeimei.widget.banner.SliderTypes.DefaultSliderView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import com.squareup.okhttp.ResponseBody;
 import com.victor.loading.rotate.RotateLoading;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -89,6 +91,8 @@ public class TodayListView extends ViewImpl {
   private SharedPreferences sharedPreferences;
   private Subscription subscribe4;
   private Subscription subscription5;
+  private Subscription subscribe6;
+  private Subscription subscribe7;
 
   public static int dp2px(Context context, int dp) {
     float scale = context.getResources().getDisplayMetrics().density;
@@ -432,7 +436,7 @@ public class TodayListView extends ViewImpl {
           }
         });
 
-    ActivityModel.getInstance()
+    subscribe6 = ActivityModel.getInstance()
         .getPostActivity()
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<List<PostActivityBean>>() {
@@ -472,30 +476,87 @@ public class TodayListView extends ViewImpl {
                             imageViewList.get(finalI).setLayoutParams(layoutParams);
                             imageViewList.get(finalI).setImageBitmap(response);
 
-                            imageViewList.get(finalI)
-                                .setOnClickListener(new View.OnClickListener() {
-                                  @Override public void onClick(View v) {
-                                    //syncCookie(getActivity(), postBean.getActivity().getActLink());
-                                    if (postActivityBean.get(finalI).isLoginRequired()) {
-                                      if (LoginUtils.checkLoginState(context)
-                                          && (null
-                                          != context)
-                                          && (null
-                                          != ((MainActivity) context).getUserInfoBean())
-                                          && (null
-                                          != ((MainActivity) context).getUserInfoBean()
-                                          .getMobile())
-                                          && !(((MainActivity) context).getUserInfoBean()
-                                          .getMobile()
-                                          .isEmpty())) {
+                            if (postActivityBean.get(finalI)
+                                .getActType()
+                                .equals("webview")) {
+                              imageViewList.get(finalI)
+                                  .setOnClickListener(new View.OnClickListener() {
+                                    @Override public void onClick(View v) {
+                                      //syncCookie(getActivity(), postBean.getActivity().getActLink());
+                                      if (postActivityBean.get(finalI)
+                                          .isLoginRequired()) {
+                                        if (LoginUtils.checkLoginState(context)
+                                            && (null
+                                            != context)
+                                            && (null
+                                            != ((MainActivity) context).getUserInfoBean())
+                                            && (null
+                                            != ((MainActivity) context).getUserInfoBean()
+                                            .getMobile())
+                                            && !(((MainActivity) context).getUserInfoBean()
+                                            .getMobile()
+                                            .isEmpty())) {
+                                          Intent intent =
+                                              new Intent(context, WebViewActivity.class);
+                                          //sharedPreferences =
+                                          //    getActivity().getSharedPreferences("COOKIESxlmm",
+                                          //        Context.MODE_PRIVATE);
+                                          //String cookies = sharedPreferences.getString("Cookies", "");
+                                          //Bundle bundle = new Bundle();
+                                          //bundle.putString("cookies", cookies);
+                                          sharedPreferences =
+                                              context.getSharedPreferences(
+                                                  "xlmmCookiesAxiba",
+                                                  Context.MODE_PRIVATE);
+                                          cookies =
+                                              sharedPreferences.getString("cookiesString",
+                                                  "");
+                                          domain =
+                                              sharedPreferences.getString("cookiesDomain",
+                                                  "");
+                                          Bundle bundle = new Bundle();
+                                          bundle.putString("cookies", cookies);
+                                          bundle.putString("domain", domain);
+                                          bundle.putString("Cookie",
+                                              sharedPreferences.getString("Cookie", ""));
+                                          bundle.putString("actlink",
+                                              postActivityBean.get(finalI).getActLink());
+                                          intent.putExtras(bundle);
+                                          context.startActivity(intent);
+                                        } else {
+                                          if (!LoginUtils.checkLoginState(context)) {
+                                            JUtils.Toast("登录并绑定手机号后才可参加活动");
+                                            Intent intent =
+                                                new Intent(context, LoginActivity.class);
+                                            Bundle bundle = new Bundle();
+                                            bundle.putString("login", "main");
+                                            intent.putExtras(bundle);
+                                            context.startActivity(intent);
+                                          } else {
+                                            JUtils.Toast("登录成功,前往绑定手机号后才可参加活动");
+                                            Intent intent = new Intent(context,
+                                                WxLoginBindPhoneActivity.class);
+                                            if (null
+                                                != ((MainActivity) context).getUserInfoBean()) {
+                                              Bundle bundle = new Bundle();
+                                              bundle.putString("headimgurl",
+                                                  ((MainActivity) context).getUserInfoBean()
+                                                      .getThumbnail());
+                                              bundle.putString("nickname",
+                                                  ((MainActivity) context).getUserInfoBean()
+                                                      .getNick());
+                                              intent.putExtras(bundle);
+                                            }
+                                            context.startActivity(intent);
+                                          }
+                                        }
+                                      } else {
                                         Intent intent =
                                             new Intent(context, WebViewActivity.class);
                                         //sharedPreferences =
                                         //    getActivity().getSharedPreferences("COOKIESxlmm",
                                         //        Context.MODE_PRIVATE);
-                                        //String cookies = sharedPreferences.getString("Cookies", "");
-                                        //Bundle bundle = new Bundle();
-                                        //bundle.putString("cookies", cookies);
+                                        //cookies = sharedPreferences.getString("Cookies", "");
                                         sharedPreferences = context.getSharedPreferences(
                                             "xlmmCookiesAxiba", Context.MODE_PRIVATE);
                                         cookies =
@@ -507,65 +568,41 @@ public class TodayListView extends ViewImpl {
                                         Bundle bundle = new Bundle();
                                         bundle.putString("cookies", cookies);
                                         bundle.putString("domain", domain);
-                                        bundle.putString("Cookie",
-                                            sharedPreferences.getString("Cookie", ""));
                                         bundle.putString("actlink",
                                             postActivityBean.get(finalI).getActLink());
                                         intent.putExtras(bundle);
                                         context.startActivity(intent);
-                                      } else {
-                                        if (!LoginUtils.checkLoginState(context)) {
-                                          JUtils.Toast("登录并绑定手机号后才可参加活动");
-                                          Intent intent =
-                                              new Intent(context, LoginActivity.class);
-                                          Bundle bundle = new Bundle();
-                                          bundle.putString("login", "main");
-                                          intent.putExtras(bundle);
-                                          context.startActivity(intent);
-                                        } else {
-                                          JUtils.Toast("登录成功,前往绑定手机号后才可参加活动");
-                                          Intent intent = new Intent(context,
-                                              WxLoginBindPhoneActivity.class);
-                                          if (null
-                                              != ((MainActivity) context).getUserInfoBean()) {
-                                            Bundle bundle = new Bundle();
-                                            bundle.putString("headimgurl",
-                                                ((MainActivity) context).getUserInfoBean()
-                                                    .getThumbnail());
-                                            bundle.putString("nickname",
-                                                ((MainActivity) context).getUserInfoBean()
-                                                    .getNick());
-                                            intent.putExtras(bundle);
-                                          }
-                                          context.startActivity(intent);
-                                        }
                                       }
-                                    } else {
-                                      Intent intent =
-                                          new Intent(context, WebViewActivity.class);
-                                      //sharedPreferences =
-                                      //    getActivity().getSharedPreferences("COOKIESxlmm",
-                                      //        Context.MODE_PRIVATE);
-                                      //cookies = sharedPreferences.getString("Cookies", "");
-                                      sharedPreferences =
-                                          context.getSharedPreferences("xlmmCookiesAxiba",
-                                              Context.MODE_PRIVATE);
-                                      cookies =
-                                          sharedPreferences.getString("cookiesString",
-                                              "");
-                                      domain =
-                                          sharedPreferences.getString("cookiesDomain",
-                                              "");
-                                      Bundle bundle = new Bundle();
-                                      bundle.putString("cookies", cookies);
-                                      bundle.putString("domain", domain);
-                                      bundle.putString("actlink",
-                                          postActivityBean.get(finalI).getActLink());
-                                      intent.putExtras(bundle);
-                                      context.startActivity(intent);
                                     }
-                                  }
-                                });
+                                  });
+                            } else if (postActivityBean.get(finalI)
+                                .getActType()
+                                .equals("coupon")) {
+                              imageViewList.get(finalI)
+                                  .setOnClickListener(new View.OnClickListener() {
+                                    @Override public void onClick(View v) {
+
+                                      subscribe7 = ActivityModel.getInstance()
+                                          .getUsercoupons(postActivityBean.get(finalI)
+                                              .getExtras()
+                                              .getTemplateId())
+                                          .subscribeOn(Schedulers.io())
+                                          .subscribe(new ServiceResponse<ResponseBody>() {
+                                            @Override public void onNext(
+                                                ResponseBody responseBody) {
+                                              if (null != responseBody) {
+                                                try {
+                                                  JUtils.Log("TodayListView",
+                                                      responseBody.string());
+                                                } catch (IOException e) {
+                                                  e.printStackTrace();
+                                                }
+                                              }
+                                            }
+                                          });
+                                    }
+                                  });
+                            }
                           }
                         }
                       });
@@ -639,6 +676,12 @@ public class TodayListView extends ViewImpl {
     }
     if (subscription5 != null && subscription5.isUnsubscribed()) {
       subscription5.unsubscribe();
+    }
+    if (subscribe6 != null && subscribe6.isUnsubscribed()) {
+      subscribe6.unsubscribe();
+    }
+    if (subscribe7 != null && subscribe7.isUnsubscribed()) {
+      subscribe7.unsubscribe();
     }
   }
 }
