@@ -76,6 +76,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_toRightOf="@+id/imgMoney"
+          android:layout_below="@id/tvMoney"
           android:layout_alignBottom="@+id/imgMoney"
           android:gravity="center_vertical"
           android:text="余额(元)"/>
@@ -113,6 +114,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_toRightOf="@+id/imgPoint"
+          android:layout_below="@id/tvScore"
           android:layout_alignBottom="@+id/imgPoint"
           android:gravity="center_vertical"
           android:text="积分"/>
@@ -150,6 +152,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_toRightOf="@+id/imgCoupon"
+          android:layout_below="@id/tvDiscount"
           android:layout_alignBottom="@+id/imgCoupon"
           android:gravity="center_vertical"
           android:text="优惠券"/>
