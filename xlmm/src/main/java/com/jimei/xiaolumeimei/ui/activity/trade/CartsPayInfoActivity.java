@@ -144,8 +144,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
               discount_fee = cartsPayinfoBean.getDiscountFee() + "";
               discount_feeInfo = cartsPayinfoBean.getDiscountFee();
-              total_fee =
-                  cartsPayinfoBean.getTotalFee()  + "";
+              total_fee = cartsPayinfoBean.getTotalFee() + "";
 
               total_feeInfo = cartsPayinfoBean.getTotalFee() - payExtrasEntity.getValue();
 
@@ -237,27 +236,30 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         break;
 
       case R.id.confirm:
-
-        if (isCoupon) {
-          if (isWx) {
-            payWithCoupon("wx");
-          } else if (isAlipay) {
-            payWithCoupon("alipay");
-          } else if (isBudget) {
-            payWithBudgetCoupon("budget");
+        if (isHaveAddress) {
+          if (isCoupon) {
+            if (isWx) {
+              payWithCoupon("wx");
+            } else if (isAlipay) {
+              payWithCoupon("alipay");
+            } else if (isBudget) {
+              payWithBudgetCoupon("budget");
+            } else {
+              JUtils.Toast("请选择支付方式");
+            }
           } else {
-            JUtils.Toast("请选择支付方式");
+            if (isAlipay) {
+              payWithNoCoupon("alipay");
+            } else if (isWx) {
+              payWithNoCoupon("wx");
+            } else if (isBudget) {
+              payWithBudget("budget");
+            } else {
+              JUtils.Toast("请选择支付方式");
+            }
           }
         } else {
-          if (isAlipay) {
-            payWithNoCoupon("alipay");
-          } else if (isWx) {
-            payWithNoCoupon("wx");
-          } else if (isBudget) {
-            payWithBudget("budget");
-          } else {
-            JUtils.Toast("请选择支付方式");
-          }
+          JUtils.Toast("你还未设置地址");
         }
 
         break;

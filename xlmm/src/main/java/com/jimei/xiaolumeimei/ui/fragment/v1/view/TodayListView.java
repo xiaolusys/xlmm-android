@@ -23,8 +23,10 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.TodayAdapter;
 import com.jimei.xiaolumeimei.data.XlmmConst;
+import com.jimei.xiaolumeimei.entities.PostActivityBean;
 import com.jimei.xiaolumeimei.entities.PostBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
+import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.ui.activity.main.WebViewActivity;
@@ -72,6 +74,7 @@ public class TodayListView extends ViewImpl {
   private View head;
   private TodayAdapter mTodayAdapter;
   private ImageView post2;
+  private LinearLayout post_activity_layout;
   private int page = 2;
   private int page_size = 10;
   private int totalPages;//总的分页数
@@ -107,7 +110,8 @@ public class TodayListView extends ViewImpl {
     xRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
     xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
 
-    post2 = (ImageView) head.findViewById(R.id.post_2);
+    //post2 = (ImageView) head.findViewById(R.id.post_2);
+    post_activity_layout = (LinearLayout) head.findViewById(R.id.post_activity);
     countTime = (CountdownView) head.findViewById(R.id.countTime);
     mSliderLayout = (SliderLayout) head.findViewById(R.id.slider);
     mPagerIndicator = (PagerIndicator) head.findViewById(R.id.pi_header);
@@ -304,126 +308,273 @@ public class TodayListView extends ViewImpl {
                     });
               }
 
-              if (null != postBean.getActivity()) {
-
-                post2.setVisibility(View.VISIBLE);
-                post2.setClickable(true);
-                OkHttpUtils.get()
-                    .url(postBean.getActivity().getActImg())
-                    .build()
-                    .execute(new BitmapCallback() {
-                      @Override public void onError(Call call, Exception e) {
-
-                      }
-
-                      @Override public void onResponse(Bitmap response) {
-                        int maxHeight = dp2px(context, 300);
-
-                        if (response != null) {
-                          int height =
-                              (int) ((float) mRootView.getWidth() / response.getWidth()
-                                  * response.getHeight());
-                          if (height > maxHeight) height = maxHeight;
-                          LinearLayout.LayoutParams layoutParams =
-                              new LinearLayout.LayoutParams(
-                                  LinearLayout.LayoutParams.MATCH_PARENT, height);
-                          layoutParams.setMargins(0, dp2px(context, 10), 0, 0);
-                          post2.setLayoutParams(layoutParams);
-                          post2.setImageBitmap(response);
-                        }
-                      }
-                    });
-
-                post2.setOnClickListener(new View.OnClickListener() {
-                  @Override public void onClick(View v) {
-
-                    //syncCookie(getActivity(), postBean.getActivity().getActLink());
-
-                    if (postBean.getActivity().isLoginRequired()) {
-                      if (LoginUtils.checkLoginState(context)
-                          && (null != context)
-                          && (null
-                          != ((MainActivity) context).getUserInfoBean())
-                          && (null
-                          != ((MainActivity) context).getUserInfoBean().getMobile())
-                          && !(((MainActivity) context).getUserInfoBean()
-                          .getMobile()
-                          .isEmpty())) {
-                        Intent intent = new Intent(context, WebViewActivity.class);
-                        //sharedPreferences =
-                        //    getActivity().getSharedPreferences("COOKIESxlmm",
-                        //        Context.MODE_PRIVATE);
-                        //String cookies = sharedPreferences.getString("Cookies", "");
-                        //Bundle bundle = new Bundle();
-                        //bundle.putString("cookies", cookies);
-
-                        sharedPreferences =
-                            context.getSharedPreferences("xlmmCookiesAxiba",
-                                Context.MODE_PRIVATE);
-                        cookies = sharedPreferences.getString("cookiesString", "");
-                        domain = sharedPreferences.getString("cookiesDomain", "");
-
-                        Bundle bundle = new Bundle();
-                        bundle.putString("cookies", cookies);
-                        bundle.putString("domain", domain);
-                        bundle.putString("Cookie",
-                            sharedPreferences.getString("Cookie", ""));
-                        bundle.putString("actlink", postBean.getActivity().getActLink());
-                        intent.putExtras(bundle);
-                        context.startActivity(intent);
-                      } else {
-
-                        if (!LoginUtils.checkLoginState(context)) {
-                          JUtils.Toast("登录并绑定手机号后才可参加活动");
-                          Intent intent = new Intent(context, LoginActivity.class);
-                          Bundle bundle = new Bundle();
-                          bundle.putString("login", "main");
-                          intent.putExtras(bundle);
-                          context.startActivity(intent);
-                        } else {
-                          JUtils.Toast("登录成功,前往绑定手机号后才可参加活动");
-                          Intent intent =
-                              new Intent(context, WxLoginBindPhoneActivity.class);
-                          if (null != ((MainActivity) context).getUserInfoBean()) {
-                            Bundle bundle = new Bundle();
-                            bundle.putString("headimgurl",
-                                ((MainActivity) context).getUserInfoBean()
-                                    .getThumbnail());
-                            bundle.putString("nickname",
-                                ((MainActivity) context).getUserInfoBean().getNick());
-                            intent.putExtras(bundle);
-                          }
-                          context.startActivity(intent);
-                        }
-                      }
-                    } else {
-                      Intent intent = new Intent(context, WebViewActivity.class);
-                      //sharedPreferences =
-                      //    getActivity().getSharedPreferences("COOKIESxlmm",
-                      //        Context.MODE_PRIVATE);
-                      //cookies = sharedPreferences.getString("Cookies", "");
-
-                      sharedPreferences = context.getSharedPreferences("xlmmCookiesAxiba",
-                          Context.MODE_PRIVATE);
-                      cookies = sharedPreferences.getString("cookiesString", "");
-                      domain = sharedPreferences.getString("cookiesDomain", "");
-                      Bundle bundle = new Bundle();
-                      bundle.putString("cookies", cookies);
-                      bundle.putString("domain", domain);
-
-                      bundle.putString("actlink", postBean.getActivity().getActLink());
-                      intent.putExtras(bundle);
-                      context.startActivity(intent);
-                    }
-                  }
-                });
-              } else {
-
-                post2.setVisibility(View.GONE);
-                post2.setClickable(false);
-              }
+              //if (null != postBean.getActivity()) {
+              //
+              //  post2.setVisibility(View.VISIBLE);
+              //  post2.setClickable(true);
+              //  OkHttpUtils.get()
+              //      .url(postBean.getActivity().getActImg())
+              //      .build()
+              //      .execute(new BitmapCallback() {
+              //        @Override public void onError(Call call, Exception e) {
+              //
+              //        }
+              //
+              //        @Override public void onResponse(Bitmap response) {
+              //          int maxHeight = dp2px(context, 300);
+              //
+              //          if (response != null) {
+              //            int height =
+              //                (int) ((float) mRootView.getWidth() / response.getWidth()
+              //                    * response.getHeight());
+              //            if (height > maxHeight) height = maxHeight;
+              //            LinearLayout.LayoutParams layoutParams =
+              //                new LinearLayout.LayoutParams(
+              //                    LinearLayout.LayoutParams.MATCH_PARENT, height);
+              //            layoutParams.setMargins(0, dp2px(context, 10), 0, 0);
+              //            post2.setLayoutParams(layoutParams);
+              //            post2.setImageBitmap(response);
+              //          }
+              //        }
+              //      });
+              //
+              //  post2.setOnClickListener(new View.OnClickListener() {
+              //    @Override public void onClick(View v) {
+              //
+              //      //syncCookie(getActivity(), postBean.getActivity().getActLink());
+              //
+              //      if (postBean.getActivity().isLoginRequired()) {
+              //        if (LoginUtils.checkLoginState(context)
+              //            && (null != context)
+              //            && (null
+              //            != ((MainActivity) context).getUserInfoBean())
+              //            && (null
+              //            != ((MainActivity) context).getUserInfoBean().getMobile())
+              //            && !(((MainActivity) context).getUserInfoBean()
+              //            .getMobile()
+              //            .isEmpty())) {
+              //          Intent intent = new Intent(context, WebViewActivity.class);
+              //          //sharedPreferences =
+              //          //    getActivity().getSharedPreferences("COOKIESxlmm",
+              //          //        Context.MODE_PRIVATE);
+              //          //String cookies = sharedPreferences.getString("Cookies", "");
+              //          //Bundle bundle = new Bundle();
+              //          //bundle.putString("cookies", cookies);
+              //
+              //          sharedPreferences =
+              //              context.getSharedPreferences("xlmmCookiesAxiba",
+              //                  Context.MODE_PRIVATE);
+              //          cookies = sharedPreferences.getString("cookiesString", "");
+              //          domain = sharedPreferences.getString("cookiesDomain", "");
+              //
+              //          Bundle bundle = new Bundle();
+              //          bundle.putString("cookies", cookies);
+              //          bundle.putString("domain", domain);
+              //          bundle.putString("Cookie",
+              //              sharedPreferences.getString("Cookie", ""));
+              //          bundle.putString("actlink", postBean.getActivity().getActLink());
+              //          intent.putExtras(bundle);
+              //          context.startActivity(intent);
+              //        } else {
+              //
+              //          if (!LoginUtils.checkLoginState(context)) {
+              //            JUtils.Toast("登录并绑定手机号后才可参加活动");
+              //            Intent intent = new Intent(context, LoginActivity.class);
+              //            Bundle bundle = new Bundle();
+              //            bundle.putString("login", "main");
+              //            intent.putExtras(bundle);
+              //            context.startActivity(intent);
+              //          } else {
+              //            JUtils.Toast("登录成功,前往绑定手机号后才可参加活动");
+              //            Intent intent =
+              //                new Intent(context, WxLoginBindPhoneActivity.class);
+              //            if (null != ((MainActivity) context).getUserInfoBean()) {
+              //              Bundle bundle = new Bundle();
+              //              bundle.putString("headimgurl",
+              //                  ((MainActivity) context).getUserInfoBean()
+              //                      .getThumbnail());
+              //              bundle.putString("nickname",
+              //                  ((MainActivity) context).getUserInfoBean().getNick());
+              //              intent.putExtras(bundle);
+              //            }
+              //            context.startActivity(intent);
+              //          }
+              //        }
+              //      } else {
+              //        Intent intent = new Intent(context, WebViewActivity.class);
+              //        //sharedPreferences =
+              //        //    getActivity().getSharedPreferences("COOKIESxlmm",
+              //        //        Context.MODE_PRIVATE);
+              //        //cookies = sharedPreferences.getString("Cookies", "");
+              //
+              //        sharedPreferences = context.getSharedPreferences("xlmmCookiesAxiba",
+              //            Context.MODE_PRIVATE);
+              //        cookies = sharedPreferences.getString("cookiesString", "");
+              //        domain = sharedPreferences.getString("cookiesDomain", "");
+              //        Bundle bundle = new Bundle();
+              //        bundle.putString("cookies", cookies);
+              //        bundle.putString("domain", domain);
+              //
+              //        bundle.putString("actlink", postBean.getActivity().getActLink());
+              //        intent.putExtras(bundle);
+              //        context.startActivity(intent);
+              //      }
+              //    }
+              //  });
+              //} else {
+              //
+              //  post2.setVisibility(View.GONE);
+              //  post2.setClickable(false);
+              //}
             } catch (NullPointerException ex) {
               ex.printStackTrace();
+            }
+          }
+        });
+
+    ActivityModel.getInstance()
+        .getPostActivity()
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<List<PostActivityBean>>() {
+          @Override public void onNext(List<PostActivityBean> postActivityBean) {
+            try {
+              if (null != postActivityBean) {
+
+                post_activity_layout.setVisibility(View.VISIBLE);
+                ImageView imageView;
+                List<ImageView> imageViewList = new ArrayList<>();
+                for (int i = 0; i < postActivityBean.size(); i++) {
+                  imageView = new ImageView(context);
+                  imageViewList.add(imageView);
+                  post_activity_layout.addView(imageView);
+                }
+
+                for (int i = 0; i < postActivityBean.size(); i++) {
+                  final int finalI = i;
+                  OkHttpUtils.get()
+                      .url(postActivityBean.get(i).getActImg())
+                      .build()
+                      .execute(new BitmapCallback() {
+                        @Override public void onError(Call call, Exception e) {
+                        }
+
+                        @Override public void onResponse(Bitmap response) {
+                          int maxHeight = dp2px(context, 300);
+                          if (response != null) {
+                            int height =
+                                (int) ((float) mRootView.getWidth() / response.getWidth()
+                                    * response.getHeight());
+                            if (height > maxHeight) height = maxHeight;
+                            LinearLayout.LayoutParams layoutParams =
+                                new LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.MATCH_PARENT, height);
+                            layoutParams.setMargins(0, dp2px(context, 10), 0, 0);
+                            imageViewList.get(finalI).setLayoutParams(layoutParams);
+                            imageViewList.get(finalI).setImageBitmap(response);
+
+                            imageViewList.get(finalI)
+                                .setOnClickListener(new View.OnClickListener() {
+                                  @Override public void onClick(View v) {
+                                    //syncCookie(getActivity(), postBean.getActivity().getActLink());
+                                    if (postActivityBean.get(finalI).isLoginRequired()) {
+                                      if (LoginUtils.checkLoginState(context)
+                                          && (null
+                                          != context)
+                                          && (null
+                                          != ((MainActivity) context).getUserInfoBean())
+                                          && (null
+                                          != ((MainActivity) context).getUserInfoBean()
+                                          .getMobile())
+                                          && !(((MainActivity) context).getUserInfoBean()
+                                          .getMobile()
+                                          .isEmpty())) {
+                                        Intent intent =
+                                            new Intent(context, WebViewActivity.class);
+                                        //sharedPreferences =
+                                        //    getActivity().getSharedPreferences("COOKIESxlmm",
+                                        //        Context.MODE_PRIVATE);
+                                        //String cookies = sharedPreferences.getString("Cookies", "");
+                                        //Bundle bundle = new Bundle();
+                                        //bundle.putString("cookies", cookies);
+                                        sharedPreferences = context.getSharedPreferences(
+                                            "xlmmCookiesAxiba", Context.MODE_PRIVATE);
+                                        cookies =
+                                            sharedPreferences.getString("cookiesString",
+                                                "");
+                                        domain =
+                                            sharedPreferences.getString("cookiesDomain",
+                                                "");
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString("cookies", cookies);
+                                        bundle.putString("domain", domain);
+                                        bundle.putString("Cookie",
+                                            sharedPreferences.getString("Cookie", ""));
+                                        bundle.putString("actlink",
+                                            postActivityBean.get(finalI).getActLink());
+                                        intent.putExtras(bundle);
+                                        context.startActivity(intent);
+                                      } else {
+                                        if (!LoginUtils.checkLoginState(context)) {
+                                          JUtils.Toast("登录并绑定手机号后才可参加活动");
+                                          Intent intent =
+                                              new Intent(context, LoginActivity.class);
+                                          Bundle bundle = new Bundle();
+                                          bundle.putString("login", "main");
+                                          intent.putExtras(bundle);
+                                          context.startActivity(intent);
+                                        } else {
+                                          JUtils.Toast("登录成功,前往绑定手机号后才可参加活动");
+                                          Intent intent = new Intent(context,
+                                              WxLoginBindPhoneActivity.class);
+                                          if (null
+                                              != ((MainActivity) context).getUserInfoBean()) {
+                                            Bundle bundle = new Bundle();
+                                            bundle.putString("headimgurl",
+                                                ((MainActivity) context).getUserInfoBean()
+                                                    .getThumbnail());
+                                            bundle.putString("nickname",
+                                                ((MainActivity) context).getUserInfoBean()
+                                                    .getNick());
+                                            intent.putExtras(bundle);
+                                          }
+                                          context.startActivity(intent);
+                                        }
+                                      }
+                                    } else {
+                                      Intent intent =
+                                          new Intent(context, WebViewActivity.class);
+                                      //sharedPreferences =
+                                      //    getActivity().getSharedPreferences("COOKIESxlmm",
+                                      //        Context.MODE_PRIVATE);
+                                      //cookies = sharedPreferences.getString("Cookies", "");
+                                      sharedPreferences =
+                                          context.getSharedPreferences("xlmmCookiesAxiba",
+                                              Context.MODE_PRIVATE);
+                                      cookies =
+                                          sharedPreferences.getString("cookiesString",
+                                              "");
+                                      domain =
+                                          sharedPreferences.getString("cookiesDomain",
+                                              "");
+                                      Bundle bundle = new Bundle();
+                                      bundle.putString("cookies", cookies);
+                                      bundle.putString("domain", domain);
+                                      bundle.putString("actlink",
+                                          postActivityBean.get(finalI).getActLink());
+                                      intent.putExtras(bundle);
+                                      context.startActivity(intent);
+                                    }
+                                  }
+                                });
+                          }
+                        }
+                      });
+                }
+              } else {
+                post_activity_layout.setVisibility(View.INVISIBLE);
+              }
+            } catch (NullPointerException e) {
+              e.printStackTrace();
             }
           }
         });

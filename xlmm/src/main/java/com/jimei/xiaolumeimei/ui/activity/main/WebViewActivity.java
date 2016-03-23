@@ -44,8 +44,8 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
 import com.jimei.xiaolumeimei.model.ActivityModel;
-import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActvityWeb;
 import com.jimei.xiaolumeimei.utils.BitmapUtil;
+import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.mob.tools.utils.UIHandler;
@@ -101,7 +101,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
         JUtils.Log(TAG, "initData--" + actlink);
 
         try {
-          Map<String, String> extraHeaders = new HashMap<String, String>();
+          Map<String, String> extraHeaders = new HashMap<>();
 
           extraHeaders.put("Cookie", sessionid);
 
@@ -792,13 +792,14 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     oks.show(this);
   }
 
-  public void getProductId(String id) {
-    if (!TextUtils.isEmpty(id)) {
-      Bundle bundle = new Bundle();
-      bundle.putString("product_id", id);
-      Intent intent = new Intent(mContext, ProductDetailActvityWeb.class);
-      intent.putExtras(bundle);
-      startActivity(intent);
+  public void jumpToJSLocation(String url) {
+    if (!TextUtils.isEmpty(url)) {
+      //Bundle bundle = new Bundle();
+      //bundle.putString("product_id", url);
+      //Intent intent = new Intent(mContext, ProductDetailActvityWeb.class);
+      //intent.putExtras(bundle);
+      //startActivity(intent);
+      JumpUtils.push_jump_proc(this, url);
     }
   }
 }

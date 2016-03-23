@@ -1,8 +1,10 @@
 package com.jimei.xiaolumeimei.model;
 
-import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.library.rx.DefaultTransform;
+import com.jimei.xiaolumeimei.entities.ActivityBean;
+import com.jimei.xiaolumeimei.entities.PostActivityBean;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
+import java.util.List;
 import rx.Observable;
 
 /**
@@ -31,6 +33,13 @@ public class ActivityModel {
   public Observable<ActivityBean> get_party_share_content() {
     return XlmmRetrofitClient.getService()
         .get_party_share_content()
+        .compose(new DefaultTransform<>());
+  }
+
+  //活动海报
+  public Observable<List<PostActivityBean>> getPostActivity() {
+    return XlmmRetrofitClient.getService()
+        .getPostActivity()
         .compose(new DefaultTransform<>());
   }
 }

@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +11,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.OderCarryBean;
+import com.jimei.xiaolumeimei.glidemoudle.CropCircleTransformation;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.zhy.autolayout.utils.AutoUtils;
 import java.util.ArrayList;
@@ -88,8 +92,20 @@ public class OderCarryLogAdapter
 
     holder.shoptime.setText(resultsEntity.getDateField());
     //holder.picPath.setImageResource(R.drawable.carrylog_image);
-    ViewUtils.loadImgToImgViewWithTransformCircle(mContext, holder.picPath,
-        resultsEntity.getContributorImg());
+
+    if (TextUtils.isEmpty(resultsEntity.getContributorImg())) {
+      Glide.with(mContext)
+          .load(R.mipmap.ic_launcher)
+          .diskCacheStrategy(DiskCacheStrategy.ALL)
+          .bitmapTransform(new CropCircleTransformation(mContext))
+          //.placeholder(R.drawable.parceholder)
+          //.centerCrop()
+          .into(holder.picPath);
+    } else {
+      ViewUtils.loadImgToImgViewWithTransformCircle(mContext, holder.picPath,
+          resultsEntity.getContributorImg());
+    }
+
     holder.totalCash.setText(
         "总收益 " + (float) (Math.round(resultsEntity.getTodayCarry() * 100)) / 100);
 

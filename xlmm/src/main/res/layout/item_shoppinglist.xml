@@ -31,8 +31,8 @@
       android:layout_height="wrap_content">
     <ImageView
         android:id="@+id/pic_path"
-        android:layout_width="190px"
-        android:layout_height="190px"
+        android:layout_width="160px"
+        android:layout_height="160px"
     />
     <TextView
         android:id="@+id/wxordernick"

@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.OderCarryBean;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
@@ -74,7 +77,17 @@ public class ShoppingListAdapter
     }
 
     holder.shoptime.setText(resultsEntity.getDateField());
-    ViewUtils.loadImgToImgView(mContext, holder.picPath, resultsEntity.getSkuImg());
+    if (TextUtils.isEmpty(resultsEntity.getSkuImg())) {
+      Glide.with(mContext)
+          .load(R.mipmap.ic_launcher)
+          .diskCacheStrategy(DiskCacheStrategy.ALL)
+          //.placeholder(R.drawable.parceholder)
+          .centerCrop()
+          .into(holder.picPath);
+    } else {
+      ViewUtils.loadImgToImgView(mContext, holder.picPath, resultsEntity.getSkuImg());
+    }
+
     holder.getStatusDisplay.setText(resultsEntity.getStatusDisplay());
     holder.wxordernick.setText(resultsEntity.getContributorNick());
     holder.timeDisplay.setText(resultsEntity.getCreated().substring(11, 16));

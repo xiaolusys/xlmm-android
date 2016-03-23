@@ -38,6 +38,7 @@ import com.jimei.xiaolumeimei.entities.OderCarryBean;
 import com.jimei.xiaolumeimei.entities.OneDayAgentOrdersBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.PointLogBean;
+import com.jimei.xiaolumeimei.entities.PostActivityBean;
 import com.jimei.xiaolumeimei.entities.PostBean;
 import com.jimei.xiaolumeimei.entities.ProductBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
@@ -705,6 +706,8 @@ public interface XlmmService {
           @Query("from") String from,
           @Query("days") String day);
 
-
+  @GET("activitys")
+  Observable<List<PostActivityBean>> getPostActivity(
+  );
 
 }

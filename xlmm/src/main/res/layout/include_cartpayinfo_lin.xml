@@ -11,7 +11,7 @@
   <LinearLayout android:layout_width="match_parent"
       android:orientation="horizontal"
       android:gravity="center"
-      android:layout_height="wrap_content"
+      android:layout_height="80px"
       >
     <TextView
         android:textColor="#26262e"
@@ -38,12 +38,11 @@
         />
   </LinearLayout>
   <Button
-      android:layout_marginBottom="30px"
+      android:layout_marginBottom="10px"
       android:textSize="20sp"
       android:textColor="@color/white"
       android:text="提交订单"
       android:id="@+id/confirm"
-
       android:layout_width="660px"
       android:background="@drawable/shape_common"
       android:layout_height="80px"

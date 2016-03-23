@@ -22,12 +22,17 @@ public class AndroidJsBridge {
     webViewActivity.getPromotionParams(uform, share_link);
   }
 
+  @JavascriptInterface public void getNativeShareWidget(String uform, String share_link) {
+    JUtils.Log("WebViewActivity", uform + "======" + share_link);
+    webViewActivity.getPromotionParams(uform, share_link);
+  }
+
   @JavascriptInterface public void saveTwoDimenCode() {
     JUtils.Log("WebViewActivity", "saveTowDimenCode");
     webViewActivity.saveTwoDimenCode();
   }
 
-  @JavascriptInterface public void getProductId(String id) {
-    webViewActivity.getProductId(id);
+  @JavascriptInterface public void jumpToJSLocation(String url) {
+    webViewActivity.jumpToJSLocation(url);
   }
 }
