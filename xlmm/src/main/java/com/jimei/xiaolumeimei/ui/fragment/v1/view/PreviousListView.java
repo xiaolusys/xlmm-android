@@ -12,6 +12,7 @@ import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.iwgang.countdownview.CountdownView;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
@@ -57,6 +58,7 @@ public class PreviousListView extends ViewImpl {
   private Subscription subscribe3;
   private Subscription subscribe4;
   private Subscription subscribe5;
+  private MaterialDialog materialDialog;
 
   @Override public int getLayoutId() {
     return R.layout.previous_fragment;
@@ -106,8 +108,8 @@ public class PreviousListView extends ViewImpl {
     xRecyclerView.setAdapter(mPreviousAdapter);
 
     head.setVisibility(View.INVISIBLE);
-    loading.start();
-
+    //loading.start();
+    showIndeterminateProgressDialog(false, context);
     subscription2 = Observable.timer(1, 1, TimeUnit.SECONDS)
         .onBackpressureDrop()
         .map(aLong -> calcLeftTime())
@@ -130,7 +132,8 @@ public class PreviousListView extends ViewImpl {
             super.onError(e);
             e.printStackTrace();
 
-            loading.stop();
+            //loading.stop();
+            hideIndeterminateProgressDialog();
             JUtils.Toast("请检查网络状况,尝试下拉刷新");
           }
 
@@ -152,7 +155,8 @@ public class PreviousListView extends ViewImpl {
 
           @Override public void onCompleted() {
             super.onCompleted();
-            loading.post(loading::stop);
+            //loading.post(loading::stop);
+            hideIndeterminateProgressDialog();
             head.setVisibility(View.VISIBLE);
           }
         });
@@ -273,5 +277,19 @@ public class PreviousListView extends ViewImpl {
     } else {
       return 0;
     }
+  }
+
+  public void showIndeterminateProgressDialog(boolean horizontal, Context context) {
+    materialDialog = new MaterialDialog.Builder(context)
+        //.title(R.string.progress_dialog)
+        .content(R.string.please_wait)
+        .progress(true, 0)
+        .widgetColorRes(R.color.colorAccent)
+        .progressIndeterminateStyle(horizontal)
+        .show();
+  }
+
+  public void hideIndeterminateProgressDialog() {
+    materialDialog.dismiss();
   }
 }

@@ -128,8 +128,8 @@ public class ProductDetailActvityWeb extends BaseSwipeBackCompatActivity
     badge = new BadgeView(this);
     badge.setTargetView(target);
 
-    fragmentDetail = new VerticalFragmentDetail();
-    fragmnetWeb = new VerticalFragmentWeb();
+    fragmentDetail = VerticalFragmentDetail.newInstance("detail");
+    fragmnetWeb = VerticalFragmentWeb.newInstance("webview");
 
     getSupportFragmentManager().beginTransaction()
         .add(R.id.first, fragmentDetail)

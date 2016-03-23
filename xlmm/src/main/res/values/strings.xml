@@ -32,8 +32,8 @@
   </string>
   <string name="xidi">洗涤说明</string>
 
-  <string name="loading">正在加载…</string>
-  <string name="refreshing">正在刷新…</string>
+  <string name="loading">正在加载......</string>
+  <string name="refreshing">正在刷新......</string>
   <string name="complete">刷新完成</string>
   <string name="withdrawcash">亲爱的小鹿妈妈们，\n系统升级中暂时只能用微信红包提现哦~</string>
   <string name="withdrawcash1">亲爱的小鹿er，您还未绑定微信哦\n系统升级中暂时只能用微信红包提现哦~</string>
@@ -72,5 +72,5 @@
   <string name="set_accept_time_fail"> Set accept time fail for %1$s.</string>
   <string name="update">检查更新</string>
   <string name="update_version">已经是最新版本</string>
-  <string name="please_wait">正在加载</string>
+  <string name="please_wait">正在加载......</string>
 </resources>

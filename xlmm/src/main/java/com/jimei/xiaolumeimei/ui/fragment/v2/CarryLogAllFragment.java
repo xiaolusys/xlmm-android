@@ -166,9 +166,11 @@ public class CarryLogAllFragment extends Fragment {
 
   public void showIndeterminateProgressDialog(boolean horizontal) {
     materialDialog = new MaterialDialog.Builder(getActivity())
+
         //.title(R.string.progress_dialog)
         .content(R.string.please_wait)
         .progress(true, 0)
+        .widgetColorRes(R.color.colorAccent)
         .progressIndeterminateStyle(horizontal)
         .show();
   }

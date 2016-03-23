@@ -178,7 +178,7 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
           @Override public void onError(Throwable e) {
             super.onError(e);
             e.printStackTrace();
-            hideIndeterminateProgressDialog();
+            //hideIndeterminateProgressDialog();
           }
         });
     addSubscription(subscribe);
@@ -209,7 +209,7 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
           @Override public void onError(Throwable e) {
             super.onError(e);
             e.printStackTrace();
-            hideIndeterminateProgressDialog();
+            //hideIndeterminateProgressDialog();
           }
         });
     addSubscription(subscribe);
@@ -240,7 +240,7 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
           @Override public void onError(Throwable e) {
             super.onError(e);
             e.printStackTrace();
-            hideIndeterminateProgressDialog();
+            //hideIndeterminateProgressDialog();
           }
         });
 

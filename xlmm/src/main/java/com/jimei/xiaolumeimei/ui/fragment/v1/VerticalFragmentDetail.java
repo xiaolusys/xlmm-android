@@ -58,6 +58,16 @@ public class VerticalFragmentDetail extends Fragment implements View.OnClickList
   @Override public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     ShareSDK.initSDK(getActivity());
+    setRetainInstance(true);
+
+  }
+
+  public static VerticalFragmentDetail newInstance(String title) {
+    VerticalFragmentDetail todayFragment = new VerticalFragmentDetail();
+    Bundle bundle = new Bundle();
+    bundle.putString("keyword", title);
+    todayFragment.setArguments(bundle);
+    return todayFragment;
   }
 
   public void setListener(setSkuidListener listener) {
@@ -350,6 +360,7 @@ public class VerticalFragmentDetail extends Fragment implements View.OnClickList
         //.title(R.string.progress_dialog)
         .content(R.string.please_wait)
         .progress(true, 0)
+        .widgetColorRes(R.color.colorAccent)
         .progressIndeterminateStyle(horizontal)
         .show();
   }

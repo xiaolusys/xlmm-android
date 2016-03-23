@@ -18,6 +18,7 @@ import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.iwgang.countdownview.CountdownView;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
@@ -93,6 +94,7 @@ public class TodayListView extends ViewImpl {
   private Subscription subscription5;
   private Subscription subscribe6;
   private Subscription subscribe7;
+  private MaterialDialog materialDialog;
 
   public static int dp2px(Context context, int dp) {
     float scale = context.getResources().getDisplayMetrics().density;
@@ -122,59 +124,12 @@ public class TodayListView extends ViewImpl {
 
     xRecyclerView.addHeaderView(head);
 
-    initPost(context);
-
     mTodayAdapter = new TodayAdapter(fragment, context);
     xRecyclerView.setAdapter(mTodayAdapter);
-
     head.setVisibility(View.INVISIBLE);
-    loading.start();
-
-    subscription5 = Observable.timer(1, 1, TimeUnit.SECONDS)
-        .onBackpressureDrop()
-        .map(aLong -> calcLeftTime())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new Action1<Long>() {
-          @Override public void call(Long aLong) {
-            if (aLong > 0) {
-              countTime.updateShow(aLong);
-            } else {
-              countTime.setVisibility(View.INVISIBLE);
-            }
-          }
-        }, Throwable::printStackTrace);
-
-    subscribe1 = ProductModel.getInstance()
-        .getTodayList(1, 10)
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<ProductListBean>() {
-          @Override public void onError(Throwable e) {
-            super.onError(e);
-            e.printStackTrace();
-
-            JUtils.Toast("请检查网络状况,尝试下拉刷新");
-            loading.stop();
-          }
-
-          @Override public void onNext(ProductListBean productListBean) {
-
-            try {
-              if (productListBean != null) {
-                List<ProductListBean.ResultsEntity> results =
-                    productListBean.getResults();
-                totalPages = productListBean.getCount() / page_size;
-                mTodayAdapter.update(results);
-              }
-            } catch (NullPointerException ex) {
-            }
-          }
-
-          @Override public void onCompleted() {
-            super.onCompleted();
-            loading.post(loading::stop);
-            head.setVisibility(View.VISIBLE);
-          }
-        });
+    //loading.start();
+    showIndeterminateProgressDialog(false, context);
+    initData(context);
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
       @Override public void onRefresh() {
@@ -209,6 +164,58 @@ public class TodayListView extends ViewImpl {
         }
       }
     });
+  }
+
+  private void initData(Activity context) {
+    initPost(context);
+
+    subscription5 = Observable.timer(1, 1, TimeUnit.SECONDS)
+        .onBackpressureDrop()
+        .map(aLong -> calcLeftTime())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Action1<Long>() {
+          @Override public void call(Long aLong) {
+            if (aLong > 0) {
+              countTime.updateShow(aLong);
+            } else {
+              countTime.setVisibility(View.INVISIBLE);
+            }
+          }
+        }, Throwable::printStackTrace);
+
+    subscribe1 = ProductModel.getInstance()
+        .getTodayList(1, 10)
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<ProductListBean>() {
+          @Override public void onError(Throwable e) {
+            super.onError(e);
+            e.printStackTrace();
+
+            JUtils.Toast("请检查网络状况,尝试下拉刷新");
+            //loading.stop();
+            hideIndeterminateProgressDialog();
+          }
+
+          @Override public void onNext(ProductListBean productListBean) {
+
+            try {
+              if (productListBean != null) {
+                List<ProductListBean.ResultsEntity> results =
+                    productListBean.getResults();
+                totalPages = productListBean.getCount() / page_size;
+                mTodayAdapter.update(results);
+              }
+            } catch (NullPointerException ex) {
+            }
+          }
+
+          @Override public void onCompleted() {
+            super.onCompleted();
+            //loading.post(loading::stop);
+            hideIndeterminateProgressDialog();
+            head.setVisibility(View.VISIBLE);
+          }
+        });
   }
 
   private void initPost(Activity context) {
@@ -683,5 +690,19 @@ public class TodayListView extends ViewImpl {
     if (subscribe7 != null && subscribe7.isUnsubscribed()) {
       subscribe7.unsubscribe();
     }
+  }
+
+  public void showIndeterminateProgressDialog(boolean horizontal, Context context) {
+    materialDialog = new MaterialDialog.Builder(context)
+        //.title(R.string.progress_dialog)
+        .content(R.string.please_wait)
+        .progress(true, 0)
+        .widgetColorRes(R.color.colorAccent)
+        .progressIndeterminateStyle(horizontal)
+        .show();
+  }
+
+  public void hideIndeterminateProgressDialog() {
+    materialDialog.dismiss();
   }
 }
