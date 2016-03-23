@@ -411,27 +411,41 @@ public class MainActivity extends BaseActivity
   }
 
   @Override public boolean onNavigationItemSelected(MenuItem item) {
+    Intent intent;
+    Bundle bundle;
 
     int id = item.getItemId();
 
     if (!LoginUtils.checkLoginState(getApplicationContext())) {
             /*未登录进入登录界面*/
 
-      Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-      Bundle bundle = new Bundle();
+      intent = new Intent(MainActivity.this, LoginActivity.class);
+      bundle = new Bundle();
       bundle.putString("login", "main");
       intent.putExtras(bundle);
       startActivity(intent);
       //startActivity(new Intent(MainActivity.this, LoginActivity.class));
     } else {
       if (id == R.id.nav_tobepaid) {
-        startActivity(new Intent(MainActivity.this, WaitPayOrdersActivity.class));
+        intent = new Intent(MainActivity.this, AllOrdersActivity.class);
+        bundle = new Bundle();
+        bundle.putInt("fragment", 2);
+        intent.putExtras(bundle);
+        startActivity(intent);
       } else if (id == R.id.nav_tobereceived) {
-        startActivity(new Intent(MainActivity.this, WaitSendOrdersActivity.class));
+        intent = new Intent(MainActivity.this, AllOrdersActivity.class);
+        bundle = new Bundle();
+        bundle.putInt("fragment", 3);
+        intent.putExtras(bundle);
+        startActivity(intent);
       } else if (id == R.id.nav_returned) {
         startActivity(new Intent(MainActivity.this, AllRefundsActivity.class));
       } else if (id == R.id.nav_orders) {
-        startActivity(new Intent(MainActivity.this, AllOrdersActivity.class));
+        intent = new Intent(MainActivity.this, AllOrdersActivity.class);
+        bundle = new Bundle();
+        bundle.putInt("fragment", 1);
+        intent.putExtras(bundle);
+        startActivity(intent);
       } else if (id == R.id.nav_setting) {
         startActivity(new Intent(MainActivity.this, SettingActivity.class));
       } else if (id == R.id.nav_complain) {

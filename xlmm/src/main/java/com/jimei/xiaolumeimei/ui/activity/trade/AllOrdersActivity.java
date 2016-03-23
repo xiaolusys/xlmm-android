@@ -83,6 +83,8 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity
 
     initTabLayout();
 
+    swith_fragment();
+
   }
 
   private void initTabLayout() {
@@ -163,6 +165,22 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity
     super.onResume();
     initOrderData();
   }*/
+
+  public void swith_fragment() {
+    int tabid = 0;
+    if (getIntent().getExtras() != null) {
+      tabid = getIntent().getExtras().getInt("fragment");
+      JUtils.Log(TAG, "jump to fragment:" + tabid);
+      if ((tabid >= 1) && (tabid <= 3)) {
+        try {
+          mTabLayout.setScrollPosition(tabid - 1, 0, true);
+          mViewPager.setCurrentItem(tabid - 1);
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      }
+    }
+  }
 
   class MainTabAdapter extends FragmentPagerAdapter {
     private List<Fragment> listFragment;
