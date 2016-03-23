@@ -26,4 +26,8 @@ public class AndroidJsBridge {
     JUtils.Log("WebViewActivity", "saveTowDimenCode");
     webViewActivity.saveTwoDimenCode();
   }
+
+  @JavascriptInterface public void getProductId(String id) {
+    webViewActivity.getProductId(id);
+  }
 }

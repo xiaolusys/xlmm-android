@@ -92,6 +92,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   MamaFortune mamaFortune;
   private double carrylogMoney;
   private String s;
+  private String from;
 
   @Override protected void setListener() {
     toolbar.setOnClickListener(this);
@@ -283,7 +284,12 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
       //  break;
 
       case R.id.tv_visit1:
-        startActivity(new Intent(MamaInfoActivity.this, ShareAllowanceActivity.class));
+        Intent intent5 =
+            new Intent(new Intent(MamaInfoActivity.this, MamaVisitorActivity.class));
+        Bundle bundle2 = new Bundle();
+        bundle2.putString("from", from);
+        intent5.putExtras(bundle2);
+        startActivity(intent5);
         break;
     }
   }
@@ -480,6 +486,8 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         + mChart.getHighestVisibleXIndex());
     tv_today_visit2.setText(
         Integer.toString(show_his_refund.get(e.getXIndex()).getVisitorNum()));
+    from = (MAX_RECENT_DAYS - 1 - e.getXIndex()) + "";
+    JUtils.Log(TAG, "第" + e.getXIndex() + "几个");
     tv_today_order2.setText(Integer.toString((int) (e.getVal())));
     tv_today_fund2.setText(Double.toString(
         (double) (Math.round(show_his_refund.get(e.getXIndex()).getCarry() * 100))

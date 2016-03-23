@@ -14,6 +14,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,6 +44,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
 import com.jimei.xiaolumeimei.model.ActivityModel;
+import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActvityWeb;
 import com.jimei.xiaolumeimei.utils.BitmapUtil;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
@@ -68,6 +70,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   //private static final String URL =
   //    "http://m.xiaolumeimei.com/sale/promotion/xlsampleorder/";
   private static final String URL = "http://m.xiaolumeimei.com/";
+  //private static final String URL = "http://dev.xiaolumeimei.com";
   private static final String TAG = WebViewActivity.class.getSimpleName();
   LinearLayout ll_actwebview;
   //private static final String URL =
@@ -81,7 +84,6 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   private ActivityBean partyShareInfo;
   private String domain;
   private String sessionid;
-
 
   @Override protected void setListener() {
     mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -278,10 +280,10 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   @Override protected void onDestroy() {
     JUtils.Log(TAG, "onDestroy");
     super.onDestroy();
-    if(ll_actwebview != null) {
+    if (ll_actwebview != null) {
       ll_actwebview.removeView(mWebView);
     }
-    if(mWebView != null) {
+    if (mWebView != null) {
       mWebView.removeAllViews();
       mWebView.destroy();
     }
@@ -290,7 +292,6 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   @Override protected void onStop() {
     super.onStop();
     ShareSDK.stopSDK(this);
-
   }
 
   //public void syncCookie(Context context, String url) {
@@ -752,7 +753,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   }
 
   private void sharePartyInfo() {
-    if(partyShareInfo == null) return;
+    if (partyShareInfo == null) return;
 
     JUtils.Log(TAG, " title =" + partyShareInfo.getTitle());
     JUtils.Log(TAG, " desc="
@@ -789,5 +790,15 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
 
     // 启动分享GUI
     oks.show(this);
+  }
+
+  public void getProductId(String id) {
+    if (!TextUtils.isEmpty(id)) {
+      Bundle bundle = new Bundle();
+      bundle.putString("product_id", id);
+      Intent intent = new Intent(mContext, ProductDetailActvityWeb.class);
+      intent.putExtras(bundle);
+      startActivity(intent);
+    }
   }
 }

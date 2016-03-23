@@ -26,6 +26,7 @@ import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.entities.MMChooselistBean;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.MMStoreBean;
+import com.jimei.xiaolumeimei.entities.MMVisitorsBean;
 import com.jimei.xiaolumeimei.entities.MamaFansBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.MamaLivenessBean;
@@ -500,8 +501,15 @@ public interface XlmmService {
   @GET("pmt/cashout")
   Observable<WithdrawCashHisBean> getWithdrawCashHis();
 
-  @GET("pmt/xlmm/get_fans_list")
+  //获取粉丝列表
+  @GET(XlmmApi.APP_BASE_URL+ "/rest/v2/mama/fans")
   Observable<MamaFansBean> getMamaFans(
+      @Query("page")String page
+  );
+  //获取访客列表
+  @GET(XlmmApi.APP_BASE_URL+ "/rest/v2/mama/visitor")
+  Observable<MMVisitorsBean> getMamavisitor(
+      @Query("from")String from,
       @Query("page")String page
   );
 

@@ -337,7 +337,7 @@
         android:theme="@style/AppTheme.TransparentActivity"
     />
 
-    <activity android:name=".ui.activity.xiaolumama.MamaFansActivity"
+    <activity android:name=".ui.activity.xiaolumama.MamaVisitorActivity"
         android:theme="@style/AppTheme.TransparentActivity"
     />
     <activity android:name=".ui.activity.xiaolumama.MMChooseListActivity"
@@ -386,7 +386,10 @@
 
     <activity android:name=".ui.activity.xiaolumama.MamaLivenessActivity"
         android:theme="@style/AppTheme.TransparentActivity"
-        />
+    />
+    <activity android:name=".ui.activity.xiaolumama.MamaFansActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+    />
 
 
     <service

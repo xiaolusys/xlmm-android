@@ -3,43 +3,44 @@ package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.Toast;
 import butterknife.Bind;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.MamaFansAdapter;
+import com.jimei.xiaolumeimei.adapter.MMVisitorsAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.entities.MamaFansBean;
+import com.jimei.xiaolumeimei.entities.MMVisitorsBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by itxuye(www.itxuye.com) on 2016/03/22.
- *
- * Copyright 2016年 上海己美. All rights reserved.
+ * Created by wulei on 2016/2/4.
  */
-public class MamaFansActivity extends BaseSwipeBackCompatActivity {
-  private static final String TAG = MamaFansActivity.class.getSimpleName();
+public class MamaVisitorActivity extends BaseSwipeBackCompatActivity
+    implements View.OnClickListener {
+
   @Bind(R.id.toolbar) Toolbar toolbar;
-  @Bind(R.id.xrv_mmvisitors) XRecyclerView xrvMmvisitors;
+  @Bind(R.id.xrv_mamafans) XRecyclerView xrv_mamafans;
   private int page = 2;
-  private MamaFansAdapter mAdapter;
+  private MMVisitorsAdapter mAdapter;
   private Subscription subscribe;
+  private String from;
 
   @Override protected void setListener() {
+    toolbar.setOnClickListener(this);
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
-
+    from = extras.getString("from");
   }
 
   @Override protected int getContentViewLayoutID() {
-    return R.layout.activity_mmvisitor;
+    return R.layout.activity_mamafans;
   }
 
   @Override protected void initViews() {
@@ -53,9 +54,9 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity {
   @Override protected void initData() {
     showIndeterminateProgressDialog(false);
     subscribe = MamaInfoModel.getInstance()
-        .getMamaFans("1")
+        .getMamaVisitor(from, "1")
         .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<MamaFansBean>() {
+        .subscribe(new ServiceResponse<MMVisitorsBean>() {
           @Override public void onCompleted() {
             super.onCompleted();
             hideIndeterminateProgressDialog();
@@ -66,11 +67,9 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity {
             e.printStackTrace();
           }
 
-          @Override public void onNext(MamaFansBean fansBeen) {
-            JUtils.Log(TAG, "size =" + fansBeen.getCount());
+          @Override public void onNext(MMVisitorsBean fansBeen) {
 
             if (0 == fansBeen.getCount()) {
-              JUtils.Log(TAG, "results.size()=0");
             } else {
               mAdapter.update(fansBeen.getResults());
             }
@@ -79,19 +78,19 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity {
   }
 
   private void initRecyclerView() {
-    xrvMmvisitors.setLayoutManager(new LinearLayoutManager(this));
-    xrvMmvisitors.addItemDecoration(
+    xrv_mamafans.setLayoutManager(new LinearLayoutManager(this));
+    xrv_mamafans.addItemDecoration(
         new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
-    xrvMmvisitors.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-    xrvMmvisitors.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
-    xrvMmvisitors.setArrowImageView(R.drawable.iconfont_downgrey);
-    xrvMmvisitors.setPullRefreshEnabled(false);
-    xrvMmvisitors.setLoadingMoreEnabled(true);
+    xrv_mamafans.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
+    xrv_mamafans.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
+    xrv_mamafans.setArrowImageView(R.drawable.iconfont_downgrey);
+    xrv_mamafans.setPullRefreshEnabled(false);
+    xrv_mamafans.setLoadingMoreEnabled(true);
 
-    mAdapter = new MamaFansAdapter(this);
-    xrvMmvisitors.setAdapter(mAdapter);
+    mAdapter = new MMVisitorsAdapter(this);
+    xrv_mamafans.setAdapter(mAdapter);
 
-    xrvMmvisitors.setLoadingListener(new XRecyclerView.LoadingListener() {
+    xrv_mamafans.setLoadingListener(new XRecyclerView.LoadingListener() {
       @Override public void onRefresh() {
 
       }
@@ -103,25 +102,25 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity {
 
       private void loadMoreData(String page) {
         Subscription subscribe = MamaInfoModel.getInstance()
-            .getMamaFans(page)
+            .getMamaVisitor(from, page)
             .subscribeOn(Schedulers.io())
-            .subscribe(new ServiceResponse<MamaFansBean>() {
-              @Override public void onNext(MamaFansBean fansBeen) {
+            .subscribe(new ServiceResponse<MMVisitorsBean>() {
+              @Override public void onNext(MMVisitorsBean fansBeen) {
                 super.onNext(fansBeen);
                 if (fansBeen != null) {
                   if (null != fansBeen.getNext()) {
                     mAdapter.update(fansBeen.getResults());
                   } else {
-                    Toast.makeText(MamaFansActivity.this, "没有更多了", Toast.LENGTH_SHORT)
+                    Toast.makeText(MamaVisitorActivity.this, "没有更多了", Toast.LENGTH_SHORT)
                         .show();
-                    xrvMmvisitors.post(xrvMmvisitors::loadMoreComplete);
+                    xrv_mamafans.post(xrv_mamafans::loadMoreComplete);
                   }
                 }
               }
 
               @Override public void onCompleted() {
                 super.onCompleted();
-                xrvMmvisitors.post(xrvMmvisitors::loadMoreComplete);
+                xrv_mamafans.post(xrv_mamafans::loadMoreComplete);
               }
             });
         addSubscription(subscribe);
@@ -135,6 +134,12 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity {
 
   @Override protected TransitionMode getOverridePendingTransitionMode() {
     return null;
+  }
+
+  @Override public void onClick(View v) {
+    switch (v.getId()) {
+
+    }
   }
 
   @Override protected void onStop() {
