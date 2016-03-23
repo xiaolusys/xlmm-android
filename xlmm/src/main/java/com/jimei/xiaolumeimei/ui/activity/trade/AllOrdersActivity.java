@@ -2,6 +2,11 @@ package com.jimei.xiaolumeimei.ui.activity.trade;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -16,24 +21,37 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
+import com.jimei.xiaolumeimei.ui.fragment.AllOrdersFragment;
+import com.jimei.xiaolumeimei.ui.fragment.WaitPayOrdersFragment;
+import com.jimei.xiaolumeimei.ui.fragment.WaitSendOrdersFragment;
+import com.jimei.xiaolumeimei.ui.fragment.v1.ChildFragment;
+import com.jimei.xiaolumeimei.ui.fragment.v1.LadyFragment;
+import com.jimei.xiaolumeimei.ui.fragment.v1.PreviousFragment;
+import com.jimei.xiaolumeimei.ui.fragment.v1.TodayFragment;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+
+import java.util.ArrayList;
 import java.util.List;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 public class AllOrdersActivity extends BaseSwipeBackCompatActivity
-    implements View.OnClickListener {
+        implements View.OnClickListener {
   String TAG = "AllOrdersActivity";
-  @Bind(R.id.btn_jump) Button btn_jump;
-  @Bind(R.id.all_orders_listview) ListView all_orders_listview;
+  //@Bind(R.id.btn_jump) Button btn_jump;
+  //@Bind(R.id.all_orders_listview) ListView all_orders_listview;
+  @Bind(R.id.tab_layout)  TabLayout mTabLayout;
+  @Bind(R.id.view_pager)  ViewPager mViewPager;
   @Bind(R.id.toolbar) Toolbar toolbar;
-  @Bind(R.id.rlayout_order_empty) RelativeLayout rl_empty;
+  //@Bind(R.id.rlayout_order_empty) RelativeLayout rl_empty;
 
-  private AllOrdersListAdapter mAllOrderAdapter;
+  //private AllOrdersListAdapter mAllOrderAdapter;
+  List<Fragment> fragments;
+  List<String> titles;
 
   @Override protected void setListener() {
-    btn_jump.setOnClickListener(this);
+    //btn_jump.setOnClickListener(this);
     toolbar.setOnClickListener(this);
   }
 
@@ -51,19 +69,53 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity
     finishBack(toolbar);
     //ListView all_orders_listview = (ListView) findViewById(R.id.all_orders_listview);
 
-    mAllOrderAdapter = new AllOrdersListAdapter(this);
-    all_orders_listview.setAdapter(mAllOrderAdapter);
+    //mAllOrderAdapter = new AllOrdersListAdapter(this);
+    //all_orders_listview.setAdapter(mAllOrderAdapter);
 
-    TextView tx_info = (TextView) findViewById(R.id.tx_info);
-    tx_info.setText("亲，您暂时还没有订单哦~快去看看吧！");
+    //TextView tx_info = (TextView) findViewById(R.id.tx_info);
+    //tx_info.setText("亲，您暂时还没有订单哦~快去看看吧！");
   }
 
   @Override protected void initData() {
+    initFragment();
+
+    initTitles();
+
+    initTabLayout();
+
+  }
+
+  private void initTabLayout() {
+    mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(0)));
+    mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(1)));
+    mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(2)));
+
+    MainTabAdapter mAdapter =
+            new MainTabAdapter(getSupportFragmentManager(), fragments, titles);
+    mViewPager.setAdapter(mAdapter);
+    mViewPager.setOffscreenPageLimit(3);
+    mTabLayout.setupWithViewPager(mViewPager);
+    //mTabLayout.setTabsFromPagerAdapter(mAdapter);
+    mTabLayout.setTabMode(TabLayout.MODE_FIXED);
+  }
+
+  private void initTitles() {
+    titles = new ArrayList<>();
+    titles.add("所有订单");
+    titles.add("待付款");
+    titles.add("待收货");
+  }
+
+  private void initFragment() {
+    fragments = new ArrayList<>();
+    fragments.add(AllOrdersFragment.newInstance("所有订单"));
+    fragments.add(WaitPayOrdersFragment.newInstance("待付款"));
+    fragments.add(WaitSendOrdersFragment.newInstance("待收货"));
 
   }
 
   //从server端获得所有订单数据，可能要查询几次
-  private void initOrderData() {
+  /*private void initOrderData() {
     Subscription subscription = TradeModel.getInstance()
         .getAlloderBean()
         .subscribeOn(Schedulers.io())
@@ -92,7 +144,7 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity
           }
         });
     addSubscription(subscription);
-  }
+  }*/
 
   @Override protected boolean toggleOverridePendingTransition() {
     return false;
@@ -103,18 +155,36 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override public void onClick(View v) {
-    switch (v.getId()) {
-      case R.id.btn_jump:
-        Intent intent = new Intent(AllOrdersActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
-        break;
-    }
+
   }
 
-  @Override protected void onResume() {
+  /*@Override protected void onResume() {
     JUtils.Log(TAG, "onResume init orderdata");
     super.onResume();
     initOrderData();
+  }*/
+
+  class MainTabAdapter extends FragmentPagerAdapter {
+    private List<Fragment> listFragment;
+    private List<String> listTitle;
+
+    public MainTabAdapter(FragmentManager fm, List<Fragment> listFragment,
+                          List<String> listTitle) {
+      super(fm);
+      this.listFragment = listFragment;
+      this.listTitle = listTitle;
+    }
+
+    @Override public Fragment getItem(int position) {
+      return listFragment.get(position);
+    }
+
+    @Override public int getCount() {
+      return listFragment.size();
+    }
+
+    @Override public CharSequence getPageTitle(int position) {
+      return listTitle.get(position);
+    }
   }
 }

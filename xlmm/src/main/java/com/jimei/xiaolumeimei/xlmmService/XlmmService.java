@@ -139,7 +139,8 @@ public interface XlmmService {
 
     //获取所有订单
     @GET(XlmmApi.ALL_ORDERS_URL)
-    Observable<AllOrdersBean> getAllOdersList();
+    Observable<AllOrdersBean> getAllOdersList(
+            @Query("page") String page);
 
 
     //获得商品详情页面数据
@@ -255,15 +256,18 @@ public interface XlmmService {
 
     //获取所有待支付订单
     @GET(XlmmApi.WAITPAY_URL)
-    Observable<AllOrdersBean> getWaitPayOrdersBean();
+    Observable<AllOrdersBean> getWaitPayOrdersBean(
+            @Query("page")String page);
 
     //获取所有待发货订单
     @GET(XlmmApi.WAITSEND_URL)
-    Observable<AllOrdersBean> getWaitSendOrdersBean();
+    Observable<AllOrdersBean> getWaitSendOrdersBean(
+            @Query("page")String page);
 
     //获取所有退货订单
     @GET(XlmmApi.ALL_REFUNDS_URL)
-    Observable<AllRefundsBean> getAllRedundsList();
+    Observable<AllRefundsBean> getAllRedundsList(
+            @Query("page")String page);
 
 
     //获取注册验证码

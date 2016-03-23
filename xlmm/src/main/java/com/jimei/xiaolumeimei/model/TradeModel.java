@@ -28,9 +28,9 @@ public class TradeModel {
   }
 
   //得到全部订单数据列表
-  public Observable<AllOrdersBean> getAlloderBean() {
+  public Observable<AllOrdersBean> getAlloderBean(String page) {
     return XlmmRetrofitClient.getService()
-        .getAllOdersList()
+        .getAllOdersList(page)
         .compose(new DefaultTransform<>());
   }
 
@@ -91,23 +91,23 @@ public class TradeModel {
   }
 
   //得到全部退货单数据列表
-  public Observable<AllRefundsBean> getRefundsBean() {
+  public Observable<AllRefundsBean> getRefundsBean(String page) {
     return XlmmRetrofitClient.getService()
-        .getAllRedundsList()
+        .getAllRedundsList(page)
         .compose(new DefaultTransform<>());
   }
 
   //得到全部待支付订单数据列表
-  public Observable<AllOrdersBean> getWaitPayOrdersBean() {
+  public Observable<AllOrdersBean> getWaitPayOrdersBean(String page) {
     return XlmmRetrofitClient.getService()
-        .getWaitPayOrdersBean()
+        .getWaitPayOrdersBean(page)
         .compose(new DefaultTransform<>());
   }
 
   //得到全部待发货订单数据列表
-  public Observable<AllOrdersBean> getWaitSendOrdersBean() {
+  public Observable<AllOrdersBean> getWaitSendOrdersBean(String page) {
     return XlmmRetrofitClient.getService()
-        .getWaitSendOrdersBean()
+        .getWaitSendOrdersBean(page)
         .compose(new DefaultTransform<>());
   }
 

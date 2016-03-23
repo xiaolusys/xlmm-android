@@ -64,7 +64,7 @@ public class WaitSendOrdersActivity extends BaseSwipeBackCompatActivity
   //从server端获得所有订单数据，可能要查询几次
   private void initOrderData() {
     Subscription subscription = TradeModel.getInstance()
-        .getWaitSendOrdersBean()
+        .getWaitSendOrdersBean("1")
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<AllOrdersBean>() {
           @Override public void onNext(AllOrdersBean allOrdersBean) {

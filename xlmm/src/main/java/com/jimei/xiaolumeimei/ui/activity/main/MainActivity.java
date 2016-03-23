@@ -202,7 +202,7 @@ public class MainActivity extends BaseActivity
                 .getActionView();
             TextView msg2 = (TextView) nav_tobereceived.findViewById(R.id.msg);
             Subscription subscription = TradeModel.getInstance()
-                .getWaitPayOrdersBean()
+                .getWaitPayOrdersBean("1")
                 .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<AllOrdersBean>() {
                   @Override public void onNext(AllOrdersBean allOrdersBean) {
@@ -211,7 +211,7 @@ public class MainActivity extends BaseActivity
 
                     if (0 != results.size()) {
                       msg1.setVisibility(View.VISIBLE);
-                      msg1.setText(Integer.toString(results.size()));
+                      msg1.setText(Integer.toString(allOrdersBean.getCount()));
                     } else {
                       msg1.setVisibility(View.INVISIBLE);
                     }
@@ -232,7 +232,7 @@ public class MainActivity extends BaseActivity
             addSubscription(subscription);
 
             Subscription subscription1 = TradeModel.getInstance()
-                .getWaitSendOrdersBean()
+                .getWaitSendOrdersBean("1")
                 .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<AllOrdersBean>() {
                   @Override public void onNext(AllOrdersBean allOrdersBean) {
@@ -240,7 +240,7 @@ public class MainActivity extends BaseActivity
                         allOrdersBean.getResults();
                     if (0 != results.size()) {
                       msg2.setVisibility(View.VISIBLE);
-                      msg2.setText(Integer.toString(results.size()));
+                      msg2.setText(Integer.toString(allOrdersBean.getCount()));
                     } else {
                       msg2.setVisibility(View.INVISIBLE);
                     }
