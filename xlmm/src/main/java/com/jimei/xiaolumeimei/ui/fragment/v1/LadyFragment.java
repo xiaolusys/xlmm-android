@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
@@ -47,6 +48,7 @@ public class LadyFragment extends Fragment {
   private Subscription subscribe2;
   private Subscription subscribe3;
   private boolean isSuccessful;
+  private MaterialDialog materialDialog;
 
   public static LadyFragment newInstance(String title) {
     LadyFragment todayFragment = new LadyFragment();
@@ -81,7 +83,7 @@ public class LadyFragment extends Fragment {
 
     mLadyListAdapter = new LadyListAdapter(getActivity(), LadyFragment.this);
     xRecyclerView.setAdapter(mLadyListAdapter);
-    loading.start();
+    //loading.start();
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
       @Override public void onRefresh() {
@@ -124,6 +126,7 @@ public class LadyFragment extends Fragment {
 
   private void load() {
     JUtils.Log(TAG, "load");
+    showIndeterminateProgressDialog(false);
     subscribe1 = ProductModel.getInstance()
         .getLadyList(1, 10)
         .subscribeOn(Schedulers.io())
@@ -150,7 +153,7 @@ public class LadyFragment extends Fragment {
 
           @Override public void onCompleted() {
             super.onCompleted();
-            loading.post(loading::stop);
+         hideIndeterminateProgressDialog();
           }
         });
   }
@@ -216,5 +219,18 @@ public class LadyFragment extends Fragment {
     } catch (IllegalAccessException e) {
       throw new RuntimeException(e);
     }
+  }
+  public void showIndeterminateProgressDialog(boolean horizontal) {
+    materialDialog = new MaterialDialog.Builder(getActivity())
+        //.title(R.string.progress_dialog)
+        .content(R.string.please_wait)
+        .progress(true, 0)
+        .widgetColorRes(R.color.colorAccent)
+        .progressIndeterminateStyle(horizontal)
+        .show();
+  }
+
+  public void hideIndeterminateProgressDialog() {
+    materialDialog.dismiss();
   }
 }

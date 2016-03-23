@@ -104,6 +104,7 @@ public class MamaLivenessActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initData() {
+    showIndeterminateProgressDialog(false);
     subscribe = MamaInfoModel.getInstance()
         .getMamaLiveness("1")
         .subscribeOn(Schedulers.io())
@@ -117,6 +118,11 @@ public class MamaLivenessActivity extends BaseSwipeBackCompatActivity
             } else {
               mAdapter.update(results);
             }
+          }
+
+          @Override public void onCompleted() {
+            super.onCompleted();
+            hideIndeterminateProgressDialog();
           }
         });
     addSubscription(subscribe);

@@ -185,6 +185,7 @@ public class CarryLogCommissionFragment extends Fragment {
         //.title(R.string.progress_dialog)
         .content(R.string.please_wait)
         .progress(true, 0)
+        .widgetColorRes(R.color.colorAccent)
         .progressIndeterminateStyle(horizontal)
         .show();
   }

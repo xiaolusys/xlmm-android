@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
@@ -45,6 +46,7 @@ public class ChildFragment extends Fragment {
   private Subscription subscribe1;
   private Subscription subscribe2;
   private Subscription subscribe3;
+  private MaterialDialog materialDialog;
 
   public static ChildFragment newInstance(String title) {
     ChildFragment todayFragment = new ChildFragment();
@@ -67,7 +69,7 @@ public class ChildFragment extends Fragment {
   }
 
   private void load() {
-
+    showIndeterminateProgressDialog(false);
     subscribe1 = ProductModel.getInstance()
         .getChildList(1, 10)
         .subscribeOn(Schedulers.io())
@@ -95,7 +97,8 @@ public class ChildFragment extends Fragment {
 
           @Override public void onCompleted() {
             super.onCompleted();
-            loading.post(loading::stop);
+            //loading.post(loading::stop);
+            hideIndeterminateProgressDialog();
           }
         });
   }
@@ -118,7 +121,7 @@ public class ChildFragment extends Fragment {
     mChildListAdapter = new ChildListAdapter(ChildFragment.this, getActivity());
     xRecyclerView.setAdapter(mChildListAdapter);
 
-    loading.start();
+    //loading.start();
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
       @Override public void onRefresh() {
@@ -206,5 +209,19 @@ public class ChildFragment extends Fragment {
     } catch (IllegalAccessException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  public void showIndeterminateProgressDialog(boolean horizontal) {
+    materialDialog = new MaterialDialog.Builder(getActivity())
+        //.title(R.string.progress_dialog)
+        .content(R.string.please_wait)
+        .progress(true, 0)
+        .widgetColorRes(R.color.colorAccent)
+        .progressIndeterminateStyle(horizontal)
+        .show();
+  }
+
+  public void hideIndeterminateProgressDialog() {
+    materialDialog.dismiss();
   }
 }

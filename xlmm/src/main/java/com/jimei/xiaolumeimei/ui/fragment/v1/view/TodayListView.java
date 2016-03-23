@@ -18,6 +18,7 @@ import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.iwgang.countdownview.CountdownView;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
@@ -42,9 +43,11 @@ import com.jimei.xiaolumeimei.widget.banner.SliderTypes.BaseSliderView;
 import com.jimei.xiaolumeimei.widget.banner.SliderTypes.DefaultSliderView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import com.squareup.okhttp.ResponseBody;
 import com.victor.loading.rotate.RotateLoading;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -89,6 +92,9 @@ public class TodayListView extends ViewImpl {
   private SharedPreferences sharedPreferences;
   private Subscription subscribe4;
   private Subscription subscription5;
+  private Subscription subscribe6;
+  private Subscription subscribe7;
+  private MaterialDialog materialDialog;
 
   public static int dp2px(Context context, int dp) {
     float scale = context.getResources().getDisplayMetrics().density;
@@ -118,59 +124,12 @@ public class TodayListView extends ViewImpl {
 
     xRecyclerView.addHeaderView(head);
 
-    initPost(context);
-
     mTodayAdapter = new TodayAdapter(fragment, context);
     xRecyclerView.setAdapter(mTodayAdapter);
-
     head.setVisibility(View.INVISIBLE);
-    loading.start();
-
-    subscription5 = Observable.timer(1, 1, TimeUnit.SECONDS)
-        .onBackpressureDrop()
-        .map(aLong -> calcLeftTime())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new Action1<Long>() {
-          @Override public void call(Long aLong) {
-            if (aLong > 0) {
-              countTime.updateShow(aLong);
-            } else {
-              countTime.setVisibility(View.INVISIBLE);
-            }
-          }
-        }, Throwable::printStackTrace);
-
-    subscribe1 = ProductModel.getInstance()
-        .getTodayList(1, 10)
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<ProductListBean>() {
-          @Override public void onError(Throwable e) {
-            super.onError(e);
-            e.printStackTrace();
-
-            JUtils.Toast("请检查网络状况,尝试下拉刷新");
-            loading.stop();
-          }
-
-          @Override public void onNext(ProductListBean productListBean) {
-
-            try {
-              if (productListBean != null) {
-                List<ProductListBean.ResultsEntity> results =
-                    productListBean.getResults();
-                totalPages = productListBean.getCount() / page_size;
-                mTodayAdapter.update(results);
-              }
-            } catch (NullPointerException ex) {
-            }
-          }
-
-          @Override public void onCompleted() {
-            super.onCompleted();
-            loading.post(loading::stop);
-            head.setVisibility(View.VISIBLE);
-          }
-        });
+    //loading.start();
+    showIndeterminateProgressDialog(false, context);
+    initData(context);
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
       @Override public void onRefresh() {
@@ -205,6 +164,58 @@ public class TodayListView extends ViewImpl {
         }
       }
     });
+  }
+
+  private void initData(Activity context) {
+    initPost(context);
+
+    subscription5 = Observable.timer(1, 1, TimeUnit.SECONDS)
+        .onBackpressureDrop()
+        .map(aLong -> calcLeftTime())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Action1<Long>() {
+          @Override public void call(Long aLong) {
+            if (aLong > 0) {
+              countTime.updateShow(aLong);
+            } else {
+              countTime.setVisibility(View.INVISIBLE);
+            }
+          }
+        }, Throwable::printStackTrace);
+
+    subscribe1 = ProductModel.getInstance()
+        .getTodayList(1, 10)
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<ProductListBean>() {
+          @Override public void onError(Throwable e) {
+            super.onError(e);
+            e.printStackTrace();
+
+            JUtils.Toast("请检查网络状况,尝试下拉刷新");
+            //loading.stop();
+            hideIndeterminateProgressDialog();
+          }
+
+          @Override public void onNext(ProductListBean productListBean) {
+
+            try {
+              if (productListBean != null) {
+                List<ProductListBean.ResultsEntity> results =
+                    productListBean.getResults();
+                totalPages = productListBean.getCount() / page_size;
+                mTodayAdapter.update(results);
+              }
+            } catch (NullPointerException ex) {
+            }
+          }
+
+          @Override public void onCompleted() {
+            super.onCompleted();
+            //loading.post(loading::stop);
+            hideIndeterminateProgressDialog();
+            head.setVisibility(View.VISIBLE);
+          }
+        });
   }
 
   private void initPost(Activity context) {
@@ -432,7 +443,7 @@ public class TodayListView extends ViewImpl {
           }
         });
 
-    ActivityModel.getInstance()
+    subscribe6 = ActivityModel.getInstance()
         .getPostActivity()
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<List<PostActivityBean>>() {
@@ -472,30 +483,87 @@ public class TodayListView extends ViewImpl {
                             imageViewList.get(finalI).setLayoutParams(layoutParams);
                             imageViewList.get(finalI).setImageBitmap(response);
 
-                            imageViewList.get(finalI)
-                                .setOnClickListener(new View.OnClickListener() {
-                                  @Override public void onClick(View v) {
-                                    //syncCookie(getActivity(), postBean.getActivity().getActLink());
-                                    if (postActivityBean.get(finalI).isLoginRequired()) {
-                                      if (LoginUtils.checkLoginState(context)
-                                          && (null
-                                          != context)
-                                          && (null
-                                          != ((MainActivity) context).getUserInfoBean())
-                                          && (null
-                                          != ((MainActivity) context).getUserInfoBean()
-                                          .getMobile())
-                                          && !(((MainActivity) context).getUserInfoBean()
-                                          .getMobile()
-                                          .isEmpty())) {
+                            if (postActivityBean.get(finalI)
+                                .getActType()
+                                .equals("webview")) {
+                              imageViewList.get(finalI)
+                                  .setOnClickListener(new View.OnClickListener() {
+                                    @Override public void onClick(View v) {
+                                      //syncCookie(getActivity(), postBean.getActivity().getActLink());
+                                      if (postActivityBean.get(finalI)
+                                          .isLoginRequired()) {
+                                        if (LoginUtils.checkLoginState(context)
+                                            && (null
+                                            != context)
+                                            && (null
+                                            != ((MainActivity) context).getUserInfoBean())
+                                            && (null
+                                            != ((MainActivity) context).getUserInfoBean()
+                                            .getMobile())
+                                            && !(((MainActivity) context).getUserInfoBean()
+                                            .getMobile()
+                                            .isEmpty())) {
+                                          Intent intent =
+                                              new Intent(context, WebViewActivity.class);
+                                          //sharedPreferences =
+                                          //    getActivity().getSharedPreferences("COOKIESxlmm",
+                                          //        Context.MODE_PRIVATE);
+                                          //String cookies = sharedPreferences.getString("Cookies", "");
+                                          //Bundle bundle = new Bundle();
+                                          //bundle.putString("cookies", cookies);
+                                          sharedPreferences =
+                                              context.getSharedPreferences(
+                                                  "xlmmCookiesAxiba",
+                                                  Context.MODE_PRIVATE);
+                                          cookies =
+                                              sharedPreferences.getString("cookiesString",
+                                                  "");
+                                          domain =
+                                              sharedPreferences.getString("cookiesDomain",
+                                                  "");
+                                          Bundle bundle = new Bundle();
+                                          bundle.putString("cookies", cookies);
+                                          bundle.putString("domain", domain);
+                                          bundle.putString("Cookie",
+                                              sharedPreferences.getString("Cookie", ""));
+                                          bundle.putString("actlink",
+                                              postActivityBean.get(finalI).getActLink());
+                                          intent.putExtras(bundle);
+                                          context.startActivity(intent);
+                                        } else {
+                                          if (!LoginUtils.checkLoginState(context)) {
+                                            JUtils.Toast("登录并绑定手机号后才可参加活动");
+                                            Intent intent =
+                                                new Intent(context, LoginActivity.class);
+                                            Bundle bundle = new Bundle();
+                                            bundle.putString("login", "main");
+                                            intent.putExtras(bundle);
+                                            context.startActivity(intent);
+                                          } else {
+                                            JUtils.Toast("登录成功,前往绑定手机号后才可参加活动");
+                                            Intent intent = new Intent(context,
+                                                WxLoginBindPhoneActivity.class);
+                                            if (null
+                                                != ((MainActivity) context).getUserInfoBean()) {
+                                              Bundle bundle = new Bundle();
+                                              bundle.putString("headimgurl",
+                                                  ((MainActivity) context).getUserInfoBean()
+                                                      .getThumbnail());
+                                              bundle.putString("nickname",
+                                                  ((MainActivity) context).getUserInfoBean()
+                                                      .getNick());
+                                              intent.putExtras(bundle);
+                                            }
+                                            context.startActivity(intent);
+                                          }
+                                        }
+                                      } else {
                                         Intent intent =
                                             new Intent(context, WebViewActivity.class);
                                         //sharedPreferences =
                                         //    getActivity().getSharedPreferences("COOKIESxlmm",
                                         //        Context.MODE_PRIVATE);
-                                        //String cookies = sharedPreferences.getString("Cookies", "");
-                                        //Bundle bundle = new Bundle();
-                                        //bundle.putString("cookies", cookies);
+                                        //cookies = sharedPreferences.getString("Cookies", "");
                                         sharedPreferences = context.getSharedPreferences(
                                             "xlmmCookiesAxiba", Context.MODE_PRIVATE);
                                         cookies =
@@ -507,65 +575,41 @@ public class TodayListView extends ViewImpl {
                                         Bundle bundle = new Bundle();
                                         bundle.putString("cookies", cookies);
                                         bundle.putString("domain", domain);
-                                        bundle.putString("Cookie",
-                                            sharedPreferences.getString("Cookie", ""));
                                         bundle.putString("actlink",
                                             postActivityBean.get(finalI).getActLink());
                                         intent.putExtras(bundle);
                                         context.startActivity(intent);
-                                      } else {
-                                        if (!LoginUtils.checkLoginState(context)) {
-                                          JUtils.Toast("登录并绑定手机号后才可参加活动");
-                                          Intent intent =
-                                              new Intent(context, LoginActivity.class);
-                                          Bundle bundle = new Bundle();
-                                          bundle.putString("login", "main");
-                                          intent.putExtras(bundle);
-                                          context.startActivity(intent);
-                                        } else {
-                                          JUtils.Toast("登录成功,前往绑定手机号后才可参加活动");
-                                          Intent intent = new Intent(context,
-                                              WxLoginBindPhoneActivity.class);
-                                          if (null
-                                              != ((MainActivity) context).getUserInfoBean()) {
-                                            Bundle bundle = new Bundle();
-                                            bundle.putString("headimgurl",
-                                                ((MainActivity) context).getUserInfoBean()
-                                                    .getThumbnail());
-                                            bundle.putString("nickname",
-                                                ((MainActivity) context).getUserInfoBean()
-                                                    .getNick());
-                                            intent.putExtras(bundle);
-                                          }
-                                          context.startActivity(intent);
-                                        }
                                       }
-                                    } else {
-                                      Intent intent =
-                                          new Intent(context, WebViewActivity.class);
-                                      //sharedPreferences =
-                                      //    getActivity().getSharedPreferences("COOKIESxlmm",
-                                      //        Context.MODE_PRIVATE);
-                                      //cookies = sharedPreferences.getString("Cookies", "");
-                                      sharedPreferences =
-                                          context.getSharedPreferences("xlmmCookiesAxiba",
-                                              Context.MODE_PRIVATE);
-                                      cookies =
-                                          sharedPreferences.getString("cookiesString",
-                                              "");
-                                      domain =
-                                          sharedPreferences.getString("cookiesDomain",
-                                              "");
-                                      Bundle bundle = new Bundle();
-                                      bundle.putString("cookies", cookies);
-                                      bundle.putString("domain", domain);
-                                      bundle.putString("actlink",
-                                          postActivityBean.get(finalI).getActLink());
-                                      intent.putExtras(bundle);
-                                      context.startActivity(intent);
                                     }
-                                  }
-                                });
+                                  });
+                            } else if (postActivityBean.get(finalI)
+                                .getActType()
+                                .equals("coupon")) {
+                              imageViewList.get(finalI)
+                                  .setOnClickListener(new View.OnClickListener() {
+                                    @Override public void onClick(View v) {
+
+                                      subscribe7 = ActivityModel.getInstance()
+                                          .getUsercoupons(postActivityBean.get(finalI)
+                                              .getExtras()
+                                              .getTemplateId())
+                                          .subscribeOn(Schedulers.io())
+                                          .subscribe(new ServiceResponse<ResponseBody>() {
+                                            @Override public void onNext(
+                                                ResponseBody responseBody) {
+                                              if (null != responseBody) {
+                                                try {
+                                                  JUtils.Log("TodayListView",
+                                                      responseBody.string());
+                                                } catch (IOException e) {
+                                                  e.printStackTrace();
+                                                }
+                                              }
+                                            }
+                                          });
+                                    }
+                                  });
+                            }
                           }
                         }
                       });
@@ -640,5 +684,25 @@ public class TodayListView extends ViewImpl {
     if (subscription5 != null && subscription5.isUnsubscribed()) {
       subscription5.unsubscribe();
     }
+    if (subscribe6 != null && subscribe6.isUnsubscribed()) {
+      subscribe6.unsubscribe();
+    }
+    if (subscribe7 != null && subscribe7.isUnsubscribed()) {
+      subscribe7.unsubscribe();
+    }
+  }
+
+  public void showIndeterminateProgressDialog(boolean horizontal, Context context) {
+    materialDialog = new MaterialDialog.Builder(context)
+        //.title(R.string.progress_dialog)
+        .content(R.string.please_wait)
+        .progress(true, 0)
+        .widgetColorRes(R.color.colorAccent)
+        .progressIndeterminateStyle(horizontal)
+        .show();
+  }
+
+  public void hideIndeterminateProgressDialog() {
+    materialDialog.dismiss();
   }
 }

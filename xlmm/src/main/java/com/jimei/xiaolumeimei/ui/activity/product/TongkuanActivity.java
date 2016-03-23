@@ -38,7 +38,8 @@ public class TongkuanActivity extends BaseSwipeBackCompatActivity {
   }
 
   @Override protected void initData() {
-    loading.start();
+    //loading.start();
+    showIndeterminateProgressDialog(false);
    Subscription  subscribe = ProductModel.getInstance()
         .getTongkuanList(model_id)
         .subscribeOn(Schedulers.io())
@@ -55,7 +56,8 @@ public class TongkuanActivity extends BaseSwipeBackCompatActivity {
 
           @Override public void onCompleted() {
             super.onCompleted();
-            loading.post(loading::stop);
+            //loading.post(loading::stop);
+            hideIndeterminateProgressDialog();
           }
         });
 

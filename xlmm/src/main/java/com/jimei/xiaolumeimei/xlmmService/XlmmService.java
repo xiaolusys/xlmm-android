@@ -714,4 +714,12 @@ public interface XlmmService {
   Observable<List<PostActivityBean>> getPostActivity(
   );
 
+  @FormUrlEncoded
+  @POST("usercoupons")
+  Observable<ResponseBody> getUsercoupons(
+      @Field("template_id")String template_id
+  );
+
+
+
 }

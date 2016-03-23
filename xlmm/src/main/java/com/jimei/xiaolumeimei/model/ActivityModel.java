@@ -4,6 +4,7 @@ import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.entities.PostActivityBean;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
+import com.squareup.okhttp.ResponseBody;
 import java.util.List;
 import rx.Observable;
 
@@ -40,6 +41,13 @@ public class ActivityModel {
   public Observable<List<PostActivityBean>> getPostActivity() {
     return XlmmRetrofitClient.getService()
         .getPostActivity()
+        .compose(new DefaultTransform<>());
+  }
+
+  //领取优惠券
+  public Observable<ResponseBody> getUsercoupons(String template_id) {
+    return XlmmRetrofitClient.getService()
+        .getUsercoupons(template_id)
         .compose(new DefaultTransform<>());
   }
 }
