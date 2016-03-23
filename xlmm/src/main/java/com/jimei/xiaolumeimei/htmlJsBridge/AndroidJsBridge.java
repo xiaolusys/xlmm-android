@@ -32,7 +32,8 @@ public class AndroidJsBridge {
     webViewActivity.saveTwoDimenCode();
   }
 
-  @JavascriptInterface public void jumpToJSLocation(String url) {
-    webViewActivity.jumpToJSLocation(url);
+  @JavascriptInterface public void jumpToNativeLocation(String url) {
+    JUtils.Log("WebViewActivity", url);
+    webViewActivity.jumpToNativeLocation(url);
   }
 }

@@ -14,7 +14,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -792,14 +791,15 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     oks.show(this);
   }
 
-  public void jumpToJSLocation(String url) {
-    if (!TextUtils.isEmpty(url)) {
-      //Bundle bundle = new Bundle();
-      //bundle.putString("product_id", url);
-      //Intent intent = new Intent(mContext, ProductDetailActvityWeb.class);
-      //intent.putExtras(bundle);
-      //startActivity(intent);
-      JumpUtils.push_jump_proc(this, url);
-    }
+  public void jumpToNativeLocation(String url) {
+    //if (!TextUtils.isEmpty(url)) {
+    //Bundle bundle = new Bundle();
+    //bundle.putString("product_id", url);
+    //Intent intent = new Intent(mContext, ProductDetailActvityWeb.class);
+    //intent.putExtras(bundle);
+    //startActivity(intent);
+    //JUtils.Log(TAG, url+"aaaa");
+    JumpUtils.push_jump_proc(this, url);
+    //}
   }
 }
