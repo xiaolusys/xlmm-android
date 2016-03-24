@@ -174,6 +174,10 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
                   walletRcv.setVisibility(View.VISIBLE);
                   ll_wallet_empty.setVisibility(View.INVISIBLE);
                   adapter.update(budgetdetailBean.getResults());
+                  if(budgetdetailBean.getNext() == null){
+                    Toast.makeText(WalletActivity.this, "没有更多了", Toast.LENGTH_SHORT).show();
+                    walletRcv.post(walletRcv::loadMoreComplete);
+                  }
                 }
 
               }
