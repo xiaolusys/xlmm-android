@@ -177,7 +177,7 @@
               android:layout_marginLeft="50px"
               android:layout_gravity="center"
               android:clickable="true"
-              android:text="今日访客"
+              android:text="访客"
               android:textSize="15sp"/>
 
           <TextView
@@ -204,7 +204,7 @@
               android:layout_height="wrap_content"
               android:layout_gravity="center"
               android:clickable="true"
-              android:text="今日订单"
+              android:text="订单"
               android:textSize="15sp"/>
 
           <TextView
@@ -230,7 +230,7 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_gravity="center"
-              android:text="今日收益"
+              android:text="收益"
               android:textSize="15sp"/>
 
           <TextView

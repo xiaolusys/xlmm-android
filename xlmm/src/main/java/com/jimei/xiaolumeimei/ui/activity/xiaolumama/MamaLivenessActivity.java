@@ -99,6 +99,7 @@ public class MamaLivenessActivity extends BaseSwipeBackCompatActivity
                     Toast.makeText(MamaLivenessActivity.this, "没有更多了", Toast.LENGTH_SHORT)
                         .show();
                     lv_liveness.post(lv_liveness::loadMoreComplete);
+                    lv_liveness.setLoadingMoreEnabled(false);
                   }
                 }
               }
@@ -126,6 +127,13 @@ public class MamaLivenessActivity extends BaseSwipeBackCompatActivity
               JUtils.Log(TAG, "results.size()=0");
             } else {
               mAdapter.update(results);
+            }
+
+            if (null == pointBean.getNext()) {
+              Toast.makeText(MamaLivenessActivity.this, "没有更多了", Toast.LENGTH_SHORT)
+                      .show();
+              lv_liveness.post(lv_liveness::loadMoreComplete);
+              lv_liveness.setLoadingMoreEnabled(false);
             }
           }
 

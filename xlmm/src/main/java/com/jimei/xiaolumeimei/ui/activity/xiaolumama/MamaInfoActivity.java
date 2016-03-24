@@ -37,6 +37,7 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.zhy.autolayout.AutoRelativeLayout;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
@@ -372,20 +373,21 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     mChart.getAxisLeft().setDrawGridLines(false);
     mChart.getAxisRight().setDrawGridLines(false);
     mChart.getXAxis().setDrawGridLines(false);
-    mChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+    mChart.getXAxis().setPosition(XAxis.XAxisPosition.TOP);
 
-    mChart.getXAxis().setEnabled(false);
+    //mChart.getXAxis().setEnabled(false);
     mChart.getAxisRight().setEnabled(false);
-
+    mChart.getAxisLeft().setEnabled(false);
     // add data
 
   }
 
   private void setData(int count) {
 
-    ArrayList<String> xVals = new ArrayList<String>();
+
+    ArrayList<String> xVals = new ArrayList<String>(Arrays.asList("日","一","二","三","四","五","六","日","一","二","三","四","五","六","日"));
     for (int i = 0; i < count; i++) {
-      xVals.add((i) + "");
+      //Vals.add((i) + "");
     }
 
     ArrayList<Entry> yVals = new ArrayList<Entry>();
@@ -406,8 +408,8 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     // set1.setFillColor(Color.RED);
 
     // set the line to be drawn like this "- - - - - -"
-    set1.enableDashedLine(20f, 5f, 0f);
-    set1.enableDashedHighlightLine(20f, 5f, 0f);
+    //set1.enableDashedLine(20f, 5f, 0f);
+    //set1.enableDashedHighlightLine(20f, 5f, 0f);
     set1.setColor(Color.parseColor("#F5B123"));
     set1.setCircleColor(Color.parseColor("#F5B123"));
     set1.setLineWidth(1f);
@@ -674,8 +676,8 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
 
   private void show_liveness(int liveness) {
     JUtils.Log(TAG,"liveness:"+liveness);
-    if(liveness > 100) liveness = 100;
     img_liveness.setText(Integer.toString(liveness));
+    if(liveness > 100) liveness = 100;
     mProgressBar.setProgress(liveness);
     mProgressBar.setVisibility(View.VISIBLE);
 
