@@ -38,6 +38,7 @@ import com.jude.utils.JUtils;
 import com.zhy.autolayout.AutoRelativeLayout;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
@@ -50,7 +51,8 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     OnChartValueSelectedListener {
   private static final int MAX_RECENT_DAYS = 15;
   String TAG = "MamaInfoActivity";
-  List<RecentCarryBean> show_his_refund = new ArrayList<RecentCarryBean>();
+  List<RecentCarryBean> his_refund = new ArrayList<RecentCarryBean>();
+  List<RecentCarryBean> show_refund = new ArrayList<RecentCarryBean>();
   int get_num = 0;
 
   @Bind(R.id.toolbar) Toolbar toolbar;
@@ -65,6 +67,10 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.pb_hook) ProgressBar mProgressBar;
 
   @Bind(R.id.chart1) LineChart mChart;
+  @Bind(R.id.img_left) ImageView img_left;
+  @Bind(R.id.img_right) ImageView img_right;
+  @Bind(R.id.rl_empty_chart) RelativeLayout rl_empty_chart;
+
   @Bind(R.id.tv_visit2) TextView tv_today_visit2;
   @Bind(R.id.tv_visit1) TextView tv_today_visit1;
   @Bind(R.id.tv_today_order2) TextView tv_today_order2;
@@ -102,6 +108,9 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
 
     tv_liveness.setOnClickListener(this);
     img_liveness.setOnClickListener(this);
+
+    img_left.setOnClickListener(this);
+    img_right.setOnClickListener(this);
 
     rlTwoDimen.setOnClickListener(this);
     rl_fans.setOnClickListener(this);
@@ -230,6 +239,24 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
           startActivity(intent);
         }
         break;
+      case R.id.img_left:
+        mChart.clear();
+        setDataOfPreviousWeek();
+        tv_today_visit2.setText(
+                Integer.toString(show_refund.get(show_refund.size()-1).getVisitorNum()));
+        tv_today_order2.setText(Integer.toString((int) (show_refund.get(show_refund.size()-1).getOrderNum())));
+        tv_today_fund2.setText(Double.toString(
+                (double) (Math.round(show_refund.get(show_refund.size()-1).getCarry() * 100)) / 100));
+        break;
+      case R.id.img_right:
+        mChart.clear();
+        setDataOfThisWeek();
+        tv_today_visit2.setText(
+                Integer.toString(show_refund.get(show_refund.size()-1).getVisitorNum()));
+        tv_today_order2.setText(Integer.toString((int) (show_refund.get(show_refund.size()-1).getOrderNum())));
+        tv_today_fund2.setText(Double.toString(
+                (double) (Math.round(show_refund.get(show_refund.size()-1).getCarry() * 100)) / 100));
+        break;
       case R.id.rl_chooselist:
         startActivity(new Intent(MamaInfoActivity.this, MMChooseListActivity.class));
         break;
@@ -336,11 +363,23 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     llXAxis.setLineWidth(4f);
     llXAxis.enableDashedLine(10f, 10f, 0f);
     llXAxis.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
-    llXAxis.setTextSize(10f);
+    llXAxis.setTextSize(10f);*/
 
     XAxis xAxis = mChart.getXAxis();
+    xAxis.setEnabled(true);     //是否显示X坐标轴 及 对应的刻度竖线，默认是true
+        xAxis.setDrawAxisLine(true); //是否绘制坐标轴的线，即含有坐标的那条线，默认是true
+        xAxis.setDrawGridLines(true); //是否显示X坐标轴上的刻度竖线，默认是true
+        xAxis.setDrawLabels(true); //是否显示X坐标轴上的刻度，默认是true
 
-    Typeface tf = Typeface.createFromAsset(getAssets(), "OpenSans-Regular.ttf");
+        xAxis.setTextColor(Color.parseColor("#F5B123")); //X轴上的刻度的颜色
+        xAxis.setTextSize(9f); //X轴上的刻度的字的大小 单位dp
+//      xAxis.setTypeface(Typeface tf); //X轴上的刻度的字体
+        xAxis.setGridColor(Color.parseColor("#F5B123")); //X轴上的刻度竖线的颜色
+        xAxis.setGridLineWidth(1); //X轴上的刻度竖线的宽 float类型
+        xAxis.enableGridDashedLine(3, 8, 0); //虚线表示X轴上的刻度竖线(float lineLength, float spaceLength, float phase)三个参数，1.线长，2.虚线间距，3.虚线开始坐标
+
+
+    /*Typeface tf = Typeface.createFromAsset(getAssets(), "OpenSans-Regular.ttf");
 
     LimitLine ll1 = new LimitLine(130f, "Upper Limit");
     ll1.setLineWidth(4f);
@@ -372,35 +411,22 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     mChart.getLegend().setEnabled(false);
     mChart.getAxisLeft().setDrawGridLines(false);
     mChart.getAxisRight().setDrawGridLines(false);
-    mChart.getXAxis().setDrawGridLines(false);
+
     mChart.getXAxis().setPosition(XAxis.XAxisPosition.TOP);
 
+
+    //x y 坐标是否显示
     //mChart.getXAxis().setEnabled(false);
     mChart.getAxisRight().setEnabled(false);
     mChart.getAxisLeft().setEnabled(false);
+
+
     // add data
 
   }
 
-  private void setData(int count) {
+  private void setData(ArrayList<String> xVals, ArrayList<Entry> yVals) {
 
-
-    ArrayList<String> xVals = new ArrayList<String>(Arrays.asList("日","一","二","三","四","五","六","日","一","二","三","四","五","六","日"));
-    for (int i = 0; i < count; i++) {
-      //Vals.add((i) + "");
-    }
-
-    ArrayList<Entry> yVals = new ArrayList<Entry>();
-
-    for (int i = 0; i < count; i++) {
-
-      //float val = (float) (Math.random() * 100) + 3;
-      float val = 0;
-      if (show_his_refund.size() > 0) {
-        val = show_his_refund.get(i).getOrderNum();
-      }
-      yVals.add(new Entry(val, i));
-    }
 
     // create a dataset and give it a type
     LineDataSet set1 = new LineDataSet(yVals, "");
@@ -417,16 +443,18 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     set1.setDrawCircleHole(false);
     set1.setValueTextSize(9f);
 
-    set1.setLineWidth(1.75f); // 线宽
+    set1.setHighlightLineWidth(1.75f); // 线宽
     set1.setHighLightColor(Color.parseColor("#F5B123")); // 高亮的线的颜色
     //Drawable drawable = ContextCompat.getDrawable(this, R.drawable.fade_red);
     //set1.setFillDrawable(drawable);
     //set1.setDrawFilled(true);
+    set1.setDrawHorizontalHighlightIndicator(false);
+    set1.setDrawValues(true);
 
     set1.setValueFormatter(new ValueFormatter() {
       @Override
       public String getFormattedValue(float value, Entry entry, int dataSetIndex,
-          ViewPortHandler viewPortHandler) {
+                                      ViewPortHandler viewPortHandler) {
         return "";
       }
     });
@@ -439,6 +467,100 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
 
     // set data
     mChart.setData(data);
+    mChart.setVisibility(View.VISIBLE);
+
+    mChart.animateX(2500, Easing.EasingOption.EaseInOutQuart);
+    mChart.setVisibleXRangeMaximum(6);
+
+    /*if (show_his_refund.size() > 7) {
+      mChart.moveViewToX(MAX_RECENT_DAYS - 6);
+    }
+    Calendar cal= Calendar.getInstance();
+    JUtils.Log(TAG, "DAY_OF_WEEK:"+ cal.get(Calendar.DAY_OF_WEEK));
+    if(cal.get(Calendar.DAY_OF_WEEK) == 1) {
+      mChart.moveViewToX(MAX_RECENT_DAYS - 6);
+    }
+    else{
+      mChart.moveViewToX(MAX_RECENT_DAYS - 6 + 8 - cal.get(Calendar.DAY_OF_WEEK));
+    }*/
+  }
+
+  private void setDataOfThisWeek() {
+
+
+    ArrayList<String> xVals = new ArrayList<String>(Arrays.asList("一","二","三","四","五","六","日"));
+
+    Calendar cal= Calendar.getInstance();
+    int  days = 0;
+    if(cal.get(Calendar.DAY_OF_WEEK) == 1){
+      days = 7;
+    }
+    else{
+      days = cal.get(Calendar.DAY_OF_WEEK) - 1;
+    }
+    JUtils.Log(TAG, "DAY_OF_WEEK:"+ cal.get(Calendar.DAY_OF_WEEK)+ " ,get days " +days);
+
+    show_refund.clear();
+    ArrayList<Entry> yVals = new ArrayList<Entry>();
+    for (int i = 0; i < days; i++) {
+      float val = 0;
+      if (his_refund.size() > 0) {
+        val = (float)his_refund.get(MAX_RECENT_DAYS - days + i).getCarry();
+        show_refund.add(his_refund.get(MAX_RECENT_DAYS - days + i));
+      }
+      yVals.add(new Entry(val, i));
+    }
+
+    // set data
+    if(!isEmptyData(show_refund)) {
+      setData(xVals, yVals);
+    }
+    else{
+      rl_empty_chart.setVisibility(View.VISIBLE);
+    }
+  }
+
+  private void setDataOfPreviousWeek() {
+
+    Calendar cal= Calendar.getInstance();
+    int month=cal.get(Calendar.MONTH)+1;//得到月，因为从0开始的，所以要加1
+    int day=cal.get(Calendar.DAY_OF_MONTH);//得到天
+    int  days = 0;
+    if(cal.get(Calendar.DAY_OF_WEEK) == 1){
+      days = 7;
+    }
+    else{
+      days = cal.get(Calendar.DAY_OF_WEEK) - 1;
+    }
+    JUtils.Log(TAG, "DAY_OF_WEEK:"+ cal.get(Calendar.DAY_OF_WEEK)+ " ,get days " +days);
+    cal.add(Calendar.DAY_OF_YEAR,0-days +1);//日期减days天数
+
+    ArrayList<String> xVals = new ArrayList<String>();
+    for(int i =0; i < 7;i++){
+      cal.add(Calendar.DAY_OF_YEAR,0-1);//日期减1
+      xVals.add(""+(cal.get(Calendar.MONTH)+1)+"/"+cal.get(Calendar.DAY_OF_MONTH));
+      JUtils.Log(TAG, "DAY: "+ (cal.get(Calendar.MONTH)+1)+"/"+cal.get(Calendar.DAY_OF_MONTH));
+    }
+
+    show_refund.clear();
+    ArrayList<Entry> yVals = new ArrayList<Entry>();
+    for (int i = 0; i < 7; i++) {
+      float val = 0;
+      if (his_refund.size() > 0) {
+        val = (float)his_refund.get(MAX_RECENT_DAYS - days + i - 7).getCarry();
+        show_refund.add(his_refund.get(MAX_RECENT_DAYS - days + i - 7));
+      }
+      yVals.add(new Entry(val, i));
+    }
+
+
+    // set data
+    if(!isEmptyData(show_refund)) {
+      setData(xVals, yVals);
+    }
+    else{
+      rl_empty_chart.setVisibility(View.VISIBLE);
+    }
   }
 
   @Override public void onChartGestureStart(MotionEvent me,
@@ -484,17 +606,17 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
 
   @Override public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
     Log.i("Entry selected", e.toString());
-    Log.i("", "low: "
+    Log.i("Entry selected", "low: "
         + mChart.getLowestVisibleXIndex()
         + ", high: "
         + mChart.getHighestVisibleXIndex());
     tv_today_visit2.setText(
-        Integer.toString(show_his_refund.get(e.getXIndex()).getVisitorNum()));
+        Integer.toString(show_refund.get(e.getXIndex()).getVisitorNum()));
     from = (MAX_RECENT_DAYS - 1 - e.getXIndex()) + "";
-    JUtils.Log(TAG, "第" + e.getXIndex() + "几个");
+    JUtils.Log(TAG, "第" + e.getXIndex() + "个");
     tv_today_order2.setText(Integer.toString((int) (e.getVal())));
     tv_today_fund2.setText(Double.toString(
-        (double) (Math.round(show_his_refund.get(e.getXIndex()).getCarry() * 100))
+        (double) (Math.round(show_refund.get(e.getXIndex()).getCarry() * 100))
             / 100));
 
     /*if (Double.compare(show_his_refund.get(e.getXIndex()).getRefund(), 0) == 0) {
@@ -542,7 +664,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
       hisRefund.setVisitorNum(0);
       hisRefund.setOrderNum(0);
       hisRefund.setCarry(0.0);
-      show_his_refund.add(i, hisRefund);
+      his_refund.add(i, hisRefund);
     }
 
     Subscription subscribe = MMProductModel.getInstance()
@@ -553,29 +675,23 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
             super.onNext(recentDayBean);
             if (recentDayBean != null) {
 
-              show_his_refund.clear();
-              show_his_refund.addAll(recentDayBean);
+              his_refund.clear();
+              his_refund.addAll(recentDayBean);
 
               JUtils.Log(TAG,
-                  "get_num =" + get_num + " " + "size= " + show_his_refund.size());
-              if ((show_his_refund.size() > 0)) {
+                  "get_num =" + get_num + " " + "size= " + his_refund.size());
+              if ((his_refund.size() > 0)) {
                 init_chart();
-                setData(MAX_RECENT_DAYS);
-                mChart.setVisibility(View.VISIBLE);
+                setDataOfThisWeek();
 
-                mChart.animateX(2500, Easing.EasingOption.EaseInOutQuart);
-                mChart.setVisibleXRangeMaximum(6);
 
-                if (show_his_refund.size() > 7) {
-                  mChart.moveViewToX(MAX_RECENT_DAYS - 6);
-                }
-                if (show_his_refund.get(0) != null) {
+                if (his_refund.get(0) != null) {
                   tv_today_visit2.setText(Integer.toString(
-                      show_his_refund.get(show_his_refund.size() - 1).getVisitorNum()));
+                          his_refund.get(his_refund.size() - 1).getVisitorNum()));
                   tv_today_order2.setText(Integer.toString(
-                      show_his_refund.get(show_his_refund.size() - 1).getOrderNum()));
+                          his_refund.get(his_refund.size() - 1).getOrderNum()));
                   tv_today_fund2.setText(Double.toString((double) (Math.round(
-                      show_his_refund.get(show_his_refund.size() - 1).getCarry() * 100))
+                          his_refund.get(his_refund.size() - 1).getCarry() * 100))
                       / 100));
                 }
               }
@@ -706,5 +822,18 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         0, 0);
 
     img_liveness.setLayoutParams(laParams1);
+  }
+
+  private boolean isEmptyData(List<RecentCarryBean> list_refund){
+    boolean result = true;
+    if(list_refund != null) {
+      for (int i = 0; i < list_refund.size(); i++) {
+        if(Double.compare(list_refund.get(i).getCarry(), 0) != 0 ){
+          result = false;
+          break;
+        }
+      }
+    }
+    return result;
   }
 }
