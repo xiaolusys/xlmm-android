@@ -2,11 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/llayout_navhead"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/y125"
-    android:paddingLeft="@dimen/x14"
-    android:paddingRight="@dimen/x14"
-    android:paddingTop="@dimen/y10"
-    android:paddingBottom="@dimen/y10"
+    android:layout_height="@dimen/y80"
     android:background="@drawable/side_nav_bar"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
 >
@@ -14,15 +10,15 @@
   <RelativeLayout
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginTop="@dimen/y19"
+      android:layout_marginTop="@dimen/y16"
       android:layout_centerHorizontal="true"
       android:id="@+id/rl_head">
 
     <com.jimei.xiaolumeimei.widget.CircleImageView
         android:id="@+id/imgUser"
         android:layout_centerHorizontal="true"
-        android:layout_width="@dimen/x54"
-        android:layout_height="@dimen/y38"
+        android:layout_width="@dimen/x52"
+        android:layout_height="@dimen/y36"
         android:layout_alignParentTop="true"
         android:clickable="true"
         android:src="@drawable/img_head"/>
@@ -34,7 +30,7 @@
         android:id="@+id/tvNickname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/x7"
+        android:layout_marginTop="@dimen/y3"
         android:text="小鹿妈妈"
     />
   </RelativeLayout>
@@ -43,7 +39,7 @@
   <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginTop="@dimen/y13"
+      android:layout_marginTop="@dimen/y11"
       android:weightSum="3"
       android:layout_below="@+id/rl_head"
       android:orientation="horizontal">

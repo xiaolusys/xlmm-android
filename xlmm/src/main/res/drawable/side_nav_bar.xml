@@ -6,4 +6,5 @@
         android:endColor="@color/colorAccent"
         android:type="linear"
         android:angle="135"/>
+    <!--<size android:width="@dimen/x263" android:height="@dimen/y106"/>-->
 </shape>
