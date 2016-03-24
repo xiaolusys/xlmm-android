@@ -14,12 +14,14 @@
         android:id="@+id/shoptime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
     />
     <TextView
         android:layout_alignParentRight="true"
         android:id="@+id/total_cash"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginRight="4dp"
     />
   </RelativeLayout>
   <RelativeLayout
@@ -65,7 +67,7 @@
         android:layout_alignParentBottom="true"
         android:id="@+id/wxordernick"
         android:layout_marginTop="16dp"
-        android:textColor="@color/black"
+
         android:layout_marginLeft="16dp"
         android:layout_toRightOf="@id/pic_path"
         android:layout_width="wrap_content"

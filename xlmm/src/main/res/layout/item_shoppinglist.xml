@@ -70,7 +70,7 @@
         android:layout_marginRight="8dp"
         android:id="@+id/carry_type_name"
         android:layout_marginTop="16dp"
-        android:layout_toLeftOf="@+id/ticheng_cash"
+        android:layout_toLeftOf="@+id/shifu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
