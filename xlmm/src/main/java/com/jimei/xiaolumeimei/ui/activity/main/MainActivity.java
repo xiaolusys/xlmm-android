@@ -201,62 +201,33 @@ public class MainActivity extends BaseActivity
                 .findItem(R.id.nav_tobereceived)
                 .getActionView();
             TextView msg2 = (TextView) nav_tobereceived.findViewById(R.id.msg);
-            Subscription subscription = TradeModel.getInstance()
-                .getWaitPayOrdersBean("1")
-                .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<AllOrdersBean>() {
-                  @Override public void onNext(AllOrdersBean allOrdersBean) {
-                    List<AllOrdersBean.ResultsEntity> results =
-                        allOrdersBean.getResults();
+            LinearLayout nav_refund = (LinearLayout) navigationView.getMenu()
+                    .findItem(R.id.nav_returned)
+                    .getActionView();
+            TextView msg3 = (TextView) nav_refund.findViewById(R.id.msg);
 
-                    if (0 != results.size()) {
-                      msg1.setVisibility(View.VISIBLE);
-                      msg1.setText(Integer.toString(allOrdersBean.getCount()));
-                    } else {
-                      msg1.setVisibility(View.INVISIBLE);
-                    }
+            if ((null != userInfoBean) && (userInfoBean.getWaitpayNum() > 0)) {
+              msg1.setVisibility(View.VISIBLE);
+              msg1.setText(Integer.toString(userInfoBean.getWaitpayNum()));
+            } else {
+              msg1.setVisibility(View.INVISIBLE);
+            }
 
-                    Log.i(TAG, "" + results.size());
-                  }
+            Log.i(TAG, "" + userInfoBean.getWaitpayNum());
 
-                  @Override public void onCompleted() {
-                    super.onCompleted();
-                  }
+            if ((null != userInfoBean) && (userInfoBean.getWaitgoodsNum() > 0)) {
+              msg2.setVisibility(View.VISIBLE);
+              msg2.setText(Integer.toString(userInfoBean.getWaitgoodsNum()));
+            } else {
+              msg2.setVisibility(View.INVISIBLE);
+            }
 
-                  @Override public void onError(Throwable e) {
-
-                    Log.e(TAG, " error:, " + e.toString());
-                    super.onError(e);
-                  }
-                });
-            addSubscription(subscription);
-
-            Subscription subscription1 = TradeModel.getInstance()
-                .getWaitSendOrdersBean("1")
-                .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<AllOrdersBean>() {
-                  @Override public void onNext(AllOrdersBean allOrdersBean) {
-                    List<AllOrdersBean.ResultsEntity> results =
-                        allOrdersBean.getResults();
-                    if (0 != results.size()) {
-                      msg2.setVisibility(View.VISIBLE);
-                      msg2.setText(Integer.toString(allOrdersBean.getCount()));
-                    } else {
-                      msg2.setVisibility(View.INVISIBLE);
-                    }
-                  }
-
-                  @Override public void onCompleted() {
-                    super.onCompleted();
-                  }
-
-                  @Override public void onError(Throwable e) {
-
-                    Log.e(TAG, " error:, " + e.toString());
-                    super.onError(e);
-                  }
-                });
-            addSubscription(subscription1);
+            if ((null != userInfoBean) && (userInfoBean.getRefundsNum() > 0)) {
+              msg3.setVisibility(View.VISIBLE);
+              msg3.setText(Integer.toString(userInfoBean.getRefundsNum()));
+            } else {
+              msg3.setVisibility(View.INVISIBLE);
+            }
 
             invalidateOptionsMenu();
           }
@@ -550,31 +521,45 @@ public class MainActivity extends BaseActivity
   private void checkMamaInfo() {
     JUtils.Log(TAG, "check mama userinfo");
 
-    Subscription subscribe = UserModel.getInstance()
-        .getUserInfo()
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<UserInfoBean>() {
-          @Override public void onNext(UserInfoBean user) {
-            if ((user.getXiaolumm() != null) && (user.getXiaolumm().getId() != 0)) {
-              JUtils.Log(TAG, "i am xiaolumama, id=" + user.getXiaolumm().getId());
-              Intent intent = new Intent(MainActivity.this, MamaInfoActivity.class);
-              startActivity(intent);
-            } else {
-              JUtils.Toast("您还不是小鹿妈妈，赶紧加入我们吧！");
-            }
-          }
+    if(userInfoBean != null){
+      if ((userInfoBean.getXiaolumm() != null) && (userInfoBean.getXiaolumm().getId() != 0)) {
+        JUtils.Log(TAG, "1 i am xiaolumama, id=" + userInfoBean.getXiaolumm().getId());
+        Intent intent = new Intent(MainActivity.this, MamaInfoActivity.class);
+        startActivity(intent);
+      } else {
+        JUtils.Toast("您还不是小鹿妈妈，赶紧关注小鹿美美公众号了解信息并加入我们吧！");
+      }
+    }
+    else {
+      Subscription subscribe = UserModel.getInstance()
+              .getUserInfo()
+              .subscribeOn(Schedulers.io())
+              .subscribe(new ServiceResponse<UserInfoBean>() {
+                @Override
+                public void onNext(UserInfoBean user) {
+                  if ((user.getXiaolumm() != null) && (user.getXiaolumm().getId() != 0)) {
+                    JUtils.Log(TAG, "2 i am xiaolumama, id=" + user.getXiaolumm().getId());
+                    Intent intent = new Intent(MainActivity.this, MamaInfoActivity.class);
+                    startActivity(intent);
+                  } else {
+                    JUtils.Toast("您还不是小鹿妈妈，赶紧关注小鹿美美公众号了解信息并加入我们吧！");
+                  }
+                }
 
-          @Override public void onCompleted() {
-            super.onCompleted();
-          }
+                @Override
+                public void onCompleted() {
+                  super.onCompleted();
+                }
 
-          @Override public void onError(Throwable e) {
+                @Override
+                public void onError(Throwable e) {
 
-            Log.e(TAG, "getUserInfo error: " + e.getLocalizedMessage());
-            super.onError(e);
-          }
-        });
-    addSubscription(subscribe);
+                  Log.e(TAG, "getUserInfo error: " + e.getLocalizedMessage());
+                  super.onError(e);
+                }
+              });
+      addSubscription(subscribe);
+    }
   }
 
   private void getUserInfo() {
@@ -684,6 +669,10 @@ public class MainActivity extends BaseActivity
               if (tvMoney != null) {
                 tvMoney.setText((float) (Math.round(budgetCash * 100)) / 100 + "");
               }
+
+              if(tvCoupon != null) {
+                tvCoupon.setText(userNewBean.getCouponNum() + "");
+              }
             }
           }
         });
@@ -698,27 +687,7 @@ public class MainActivity extends BaseActivity
       }
     }
 
-    Subscription subscription = UserModel.getInstance()
-        .getUnusedCouponBean()
-        .subscribeOn(Schedulers.io())
-        .unsafeSubscribe(new Subscriber<CouponBean>() {
-          @Override public void onCompleted() {
 
-          }
-
-          @Override public void onError(Throwable e) {
-
-          }
-
-          @Override public void onNext(CouponBean couponBean) {
-            if ((couponBean != null) && (tvCoupon != null)) {
-              tvCoupon.setText(couponBean.getCount() + "");
-            } else {
-              JUtils.Log(TAG, "err:" + (tvCoupon == null));
-            }
-          }
-        });
-    addSubscription(subscription);
   }
 
 
