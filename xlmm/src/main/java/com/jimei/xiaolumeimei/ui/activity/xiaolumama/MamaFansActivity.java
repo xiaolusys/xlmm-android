@@ -3,6 +3,7 @@ package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.Toast;
 import butterknife.Bind;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
@@ -52,6 +53,7 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity {
 
   @Override protected void initData() {
     showIndeterminateProgressDialog(false);
+    xrvMmvisitors.setVisibility(View.INVISIBLE);
     subscribe = MamaInfoModel.getInstance()
         .getMamaFans("1")
         .subscribeOn(Schedulers.io())
@@ -59,6 +61,7 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity {
           @Override public void onCompleted() {
             super.onCompleted();
             hideIndeterminateProgressDialog();
+            xrvMmvisitors.setVisibility(View.VISIBLE);
           }
 
           @Override public void onError(Throwable e) {
@@ -67,12 +70,17 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity {
           }
 
           @Override public void onNext(MamaFansBean fansBeen) {
-            JUtils.Log(TAG, "size =" + fansBeen.getCount());
-
-            if (0 == fansBeen.getCount()) {
-              JUtils.Log(TAG, "results.size()=0");
-            } else {
-              mAdapter.update(fansBeen.getResults());
+            if (fansBeen != null) {
+              if (0 == fansBeen.getCount()) {
+                JUtils.Log(TAG, "results.size()=0");
+              } else {
+                mAdapter.update(fansBeen.getResults());
+              }
+              if (null == fansBeen.getNext()) {
+                //Toast.makeText(MamaFansActivity.this, "没有更多了", Toast.LENGTH_SHORT).show();
+                //xrvMmvisitors.post(xrvMmvisitors::loadMoreComplete);
+                xrvMmvisitors.setLoadingMoreEnabled(false);
+              }
             }
           }
         });
@@ -102,6 +110,7 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity {
       }
 
       private void loadMoreData(String page) {
+        JUtils.Log(TAG, "第" + page);
         Subscription subscribe = MamaInfoModel.getInstance()
             .getMamaFans(page)
             .subscribeOn(Schedulers.io())
@@ -109,8 +118,8 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity {
               @Override public void onNext(MamaFansBean fansBeen) {
                 super.onNext(fansBeen);
                 if (fansBeen != null) {
+                  mAdapter.update(fansBeen.getResults());
                   if (null != fansBeen.getNext()) {
-                    mAdapter.update(fansBeen.getResults());
                   } else {
                     Toast.makeText(MamaFansActivity.this, "没有更多了", Toast.LENGTH_SHORT)
                         .show();

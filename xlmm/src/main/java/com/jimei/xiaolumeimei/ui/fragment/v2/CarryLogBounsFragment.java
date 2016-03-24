@@ -96,6 +96,9 @@ public class CarryLogBounsFragment extends Fragment {
             if (carryLogListBean != null) {
               list.addAll(carryLogListBean.getResults());
               adapter.update(list);
+              if (null == carryLogListBean.getNext()) {
+                xRecyclerView.setLoadingMoreEnabled(false);
+              }
               JUtils.Log("carrylog", carryLogListBean.toString());
             }
           }
@@ -153,8 +156,8 @@ public class CarryLogBounsFragment extends Fragment {
         .subscribe(new ServiceResponse<AwardCarryBean>() {
           @Override public void onNext(AwardCarryBean carryLogListBean) {
             if (carryLogListBean != null) {
+              adapter.update(carryLogListBean.getResults());
               if (null != carryLogListBean.getNext()) {
-                adapter.update(carryLogListBean.getResults());
               } else {
                 Toast.makeText(context, "没有更多了", Toast.LENGTH_SHORT).show();
                 xRecyclerView.post(xRecyclerView::loadMoreComplete);

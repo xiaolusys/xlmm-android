@@ -26,6 +26,15 @@ public class MMChooselistBean {
   @SerializedName("std_sale_price") private double mStdSalePrice;
   @SerializedName("lock_num") private int mLockNum;
   @SerializedName("pic_path") private String mPicPath;
+  /**
+   * remain_num : 50
+   * rebet_amount_des : 佣 ￥13.98
+   * sale_num_des : 956人在卖
+   */
+
+  @SerializedName("remain_num") private int mRemainNum;
+  @SerializedName("rebet_amount_des") private String mRebetAmountDes;
+  @SerializedName("sale_num_des") private String mSaleNumDes;
 
   public int getmSaleNum() {
     return mSaleNum;
@@ -101,5 +110,29 @@ public class MMChooselistBean {
 
   public double getRebetAmount() {
     return mRebetAmount;
+  }
+
+  public int getRemainNum() {
+    return mRemainNum;
+  }
+
+  public void setRemainNum(int remainNum) {
+    mRemainNum = remainNum;
+  }
+
+  public String getRebetAmountDes() {
+    return mRebetAmountDes;
+  }
+
+  public void setRebetAmountDes(String rebetAmountDes) {
+    mRebetAmountDes = rebetAmountDes;
+  }
+
+  public String getSaleNumDes() {
+    return mSaleNumDes;
+  }
+
+  public void setSaleNumDes(String saleNumDes) {
+    mSaleNumDes = saleNumDes;
   }
 }

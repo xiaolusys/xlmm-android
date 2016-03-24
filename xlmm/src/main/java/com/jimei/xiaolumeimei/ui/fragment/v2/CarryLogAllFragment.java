@@ -81,6 +81,11 @@ public class CarryLogAllFragment extends Fragment {
             if (carryLogListBean != null) {
               list.addAll(carryLogListBean.getResults());
               adapter.update(list);
+
+              if (null == carryLogListBean.getNext()) {
+                xRecyclerView.setLoadingMoreEnabled(false);
+              }
+
               JUtils.Log("carrylog", carryLogListBean.toString());
             }
           }

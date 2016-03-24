@@ -59,6 +59,9 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
             super.onNext(shoppingListBean);
             if (shoppingListBean != null) {
               adapter.update(shoppingListBean.getResults());
+              if (null == shoppingListBean.getNext()) {
+                shoppinglistXry.setLoadingMoreEnabled(false);
+              }
             }
           }
         });
@@ -66,7 +69,7 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
-     order = extras.getString("order");
+    order = extras.getString("order");
   }
 
   @Override protected int getContentViewLayoutID() {
@@ -112,10 +115,9 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<OderCarryBean>() {
           @Override public void onNext(OderCarryBean shoppingListBean) {
-            super.onNext(shoppingListBean);
             if (shoppingListBean != null) {
+              adapter.update(shoppingListBean.getResults());
               if (null != shoppingListBean.getNext()) {
-                adapter.update(shoppingListBean.getResults());
               } else {
                 Toast.makeText(MMShoppingListActivity.this, "没有更多了", Toast.LENGTH_SHORT)
                     .show();

@@ -69,9 +69,18 @@ public class MamaVisitorActivity extends BaseSwipeBackCompatActivity
 
           @Override public void onNext(MMVisitorsBean fansBeen) {
 
-            if (0 == fansBeen.getCount()) {
-            } else {
-              mAdapter.update(fansBeen.getResults());
+            if (fansBeen != null) {
+              if (0 == fansBeen.getCount()) {
+              } else {
+                mAdapter.update(fansBeen.getResults());
+              }
+
+              if (null == fansBeen.getNext()) {
+                //Toast.makeText(MamaVisitorActivity.this, "没有更多了", Toast.LENGTH_SHORT)
+                //    .show();
+                //xrv_mamafans.post(xrv_mamafans::loadMoreComplete);
+                xrv_mamafans.setLoadingMoreEnabled(false);
+              }
             }
           }
         });
@@ -106,10 +115,9 @@ public class MamaVisitorActivity extends BaseSwipeBackCompatActivity
             .subscribeOn(Schedulers.io())
             .subscribe(new ServiceResponse<MMVisitorsBean>() {
               @Override public void onNext(MMVisitorsBean fansBeen) {
-                super.onNext(fansBeen);
                 if (fansBeen != null) {
+                  mAdapter.update(fansBeen.getResults());
                   if (null != fansBeen.getNext()) {
-                    mAdapter.update(fansBeen.getResults());
                   } else {
                     Toast.makeText(MamaVisitorActivity.this, "没有更多了", Toast.LENGTH_SHORT)
                         .show();
