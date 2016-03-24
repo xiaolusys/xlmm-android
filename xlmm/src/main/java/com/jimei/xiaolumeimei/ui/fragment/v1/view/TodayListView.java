@@ -573,6 +573,8 @@ public class TodayListView extends ViewImpl {
                                             sharedPreferences.getString("cookiesDomain",
                                                 "");
                                         Bundle bundle = new Bundle();
+                                        bundle.putInt("id",
+                                            postActivityBean.get(finalI).getId());
                                         bundle.putString("cookies", cookies);
                                         bundle.putString("domain", domain);
                                         bundle.putString("actlink",

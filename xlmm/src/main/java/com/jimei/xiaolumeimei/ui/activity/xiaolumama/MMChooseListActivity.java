@@ -46,7 +46,7 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.tv_sales) TextView tvSales;
   @Bind(R.id.chooselist_xey) RecyclerView chooselistXey;
   @Bind(R.id.loading) RotateLoading loading;
-  @Bind(R.id.choosenum) TextView choosenum;
+  //@Bind(R.id.choosenum) TextView choosenum;
   private MMChooseAdapter mmChooseAdapter;
   private boolean isAll, isLady, isChild;
   private int chooseNum;
@@ -328,7 +328,7 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void onResume() {
     super.onResume();
-    choosenum.setText(getChooseNum());
+    //choosenum.setText(getChooseNum());
   }
 
   public int getChooseNum() {

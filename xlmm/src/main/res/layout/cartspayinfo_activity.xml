@@ -48,7 +48,7 @@
             android:padding="8dp"
             android:layout_width="match_parent"
             android:background="@color/white"
-            android:layout_height="145px">
+            android:layout_height="@dimen/y45">
           <ImageView android:layout_width="wrap_content"
               android:layout_centerVertical="true"
               android:id="@+id/image_location"
@@ -59,7 +59,7 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:id="@+id/name"
-              android:layout_marginLeft="8dp"
+              android:layout_marginLeft="@dimen/x7"
               android:layout_toRightOf="@id/image_location"
               android:text=""
           />
@@ -67,7 +67,7 @@
           <TextView android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:id="@+id/phone"
-              android:layout_marginLeft="8dp"
+              android:layout_marginLeft="@dimen/x7"
               android:layout_toRightOf="@id/name"
               android:text=""
           />
@@ -75,7 +75,7 @@
               android:id="@+id/address_details"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:layout_marginLeft="8dp"
+              android:layout_marginLeft="@dimen/x7"
               android:layout_toRightOf="@id/image_location"
               android:text=""
               android:layout_alignParentBottom="true"
@@ -85,7 +85,7 @@
               android:id="@+id/choose_address"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:layout_marginLeft="8dp"
+              android:layout_marginLeft="@dimen/x7"
               android:layout_toRightOf="@id/image_location"
               android:text="填写收货地址"
               android:layout_alignBottom="@id/image_location"
@@ -101,8 +101,8 @@
         <com.jimei.xiaolumeimei.widget.NestedListView
             android:id="@+id/payinfo_listview"
             android:layout_width="match_parent"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginTop="@dimen/y10"
+            android:layout_marginBottom="@dimen/y10"
             android:layout_height="match_parent">
 
         </com.jimei.xiaolumeimei.widget.NestedListView>
@@ -112,14 +112,14 @@
             android:padding="8dp"
             android:background="@color/white"
             android:layout_width="match_parent"
-            android:layout_height="88px">
+            android:layout_height="@dimen/y28">
           <TextView android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:text="可用优惠券"
           />
 
           <TextView
-              android:layout_marginRight="8dp"
+              android:layout_marginRight="@dimen/x7"
               android:layout_toLeftOf="@+id/common_icon_right_arrow"
               android:id="@+id/tv_coupon"
               android:layout_width="wrap_content"
@@ -142,7 +142,7 @@
             android:background="@color/white"
             android:layout_width="match_parent"
             android:orientation="horizontal"
-            android:layout_height="88px">
+            android:layout_height="@dimen/y28">
           <TextView
 
               android:layout_width="wrap_content"
@@ -163,7 +163,7 @@
             android:background="@color/white"
             android:layout_width="match_parent"
             android:orientation="horizontal"
-            android:layout_height="88px">
+            android:layout_height="@dimen/y28">
           <TextView
               android:layout_alignParentRight="true"
               android:id="@+id/pay_extra"
@@ -174,8 +174,8 @@
 
         <TextView
             android:id="@+id/total_price_all"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginTop="@dimen/y5"
+            android:layout_marginBottom="@dimen/y5"
             android:layout_gravity="end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -188,16 +188,16 @@
             android:background="@color/white"
             android:padding="8dp"
             android:layout_width="match_parent"
-            android:layout_height="264px">
+            android:layout_height="@dimen/y83">
           <TextView
-              android:layout_marginTop="12px"
+              android:layout_marginTop="@dimen/y4"
               android:id="@+id/tv_alipay"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:text="支付宝"
           />
           <View
-              android:layout_marginTop="70px"
+              android:layout_marginTop="@dimen/y22"
               android:id="@+id/v1"
               android:layout_width="match_parent"
               android:layout_height="1dip"
@@ -205,14 +205,14 @@
           <TextView
               android:id="@+id/tv22"
               android:layout_below="@id/v1"
-              android:layout_marginTop="8dp"
+              android:layout_marginTop="@dimen/y5"
               android:layout_centerVertical="true"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:text="微信"
           />
           <View
-              android:layout_marginTop="30px"
+              android:layout_marginTop="@dimen/y10"
               android:layout_below="@+id/tv22"
               android:id="@+id/v2"
               android:layout_width="match_parent"
@@ -220,7 +220,7 @@
               android:background="@color/greytow"/>
           <TextView
               android:layout_below="@id/v2"
-              android:layout_marginTop="30px"
+              android:layout_marginTop="@dimen/y10"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:text="小鹿钱包"
@@ -253,7 +253,7 @@
         <include layout="@layout/common_gap"/>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="250px"/>
+            android:layout_height="@dimen/y78"/>
       </LinearLayout>
     </ScrollView>
     <include layout="@layout/include_cartpayinfo_lin"/>

@@ -83,6 +83,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   private ActivityBean partyShareInfo;
   private String domain;
   private String sessionid;
+  private int id;
 
   @Override protected void setListener() {
     mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -114,7 +115,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
       }
     });
 
-    get_party_share_content();
+    get_party_share_content(id + "");
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -122,7 +123,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
       cookies = extras.getString("cookies");
       domain = extras.getString("domain");
       actlink = extras.getString("actlink");
-
+      id = extras.getInt("id");
       sessionid = extras.getString("Cookie");
       JUtils.Log(TAG,
           "GET cookie:" + cookies + " actlink:" + actlink + " domain:" + domain +
@@ -341,12 +342,12 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
 
             if (null != activityBean) {
               shareInfo = activityBean;
-              shareInfo.setLinkQrcode(URL + activityBean.getLinkQrcode());
+              shareInfo.setQrcodeLink(activityBean.getQrcodeLink());
               JUtils.Log(TAG, "getPromotionParams get_share_content: activeDec="
                   +
                   shareInfo.getActiveDec()
                   + " linkQrcode="
-                  + shareInfo.getLinkQrcode()
+                  + shareInfo.getQrcodeLink()
                   + " "
                   + "title="
                   + shareInfo.getTitle());
@@ -387,7 +388,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
 
     sp.setUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
     sp.setShareType(Platform.SHARE_WEBPAGE);
-    sp.setImageUrl(shareInfo.getShareImg());
+    sp.setImageUrl(shareInfo.getShareIcon());
     JUtils.Log(TAG, "wxapp: http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
 
     Platform wx = ShareSDK.getPlatform(WebViewActivity.this, Wechat.NAME);
@@ -405,7 +406,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     //    "&ufrom=" + ufrom);
     //sp.setTitleUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
     sp.setShareType(Platform.SHARE_WEBPAGE);
-    sp.setImageUrl(shareInfo.getShareImg());
+    sp.setImageUrl(shareInfo.getShareIcon());
     sp.setUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
 
     Platform pyq = ShareSDK.getPlatform(WebViewActivity.this, WechatMoments.NAME);
@@ -421,7 +422,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     sp.setTitle(shareInfo.getTitle());
 
     sp.setText(shareInfo.getActiveDec());
-    sp.setImageUrl(shareInfo.getShareImg());
+    sp.setImageUrl(shareInfo.getShareIcon());
 
     sp.setTitleUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
 
@@ -438,7 +439,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     // 标题的超链接
     sp.setTitleUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
     sp.setText(shareInfo.getActiveDec());
-    sp.setImageUrl(shareInfo.getShareImg());
+    sp.setImageUrl(shareInfo.getShareIcon());
     //sp.setSite("发布分享的网站名称");
     sp.setSiteUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
 
@@ -458,7 +459,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
         + myurl
         + "&ufrom="
         + ufrom);
-    sp.setImageUrl(shareInfo.getShareImg());
+    sp.setImageUrl(shareInfo.getShareIcon());
     sp.setUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
 
     Platform weibo = ShareSDK.getPlatform(WebViewActivity.this, SinaWeibo.NAME);
@@ -476,13 +477,13 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
 
             if (null != activityBean) {
               shareInfo = activityBean;
-              shareInfo.setLinkQrcode(URL + activityBean.getLinkQrcode());
+              shareInfo.setQrcodeLink(activityBean.getQrcodeLink());
 
               JUtils.Log(TAG, "get_share_content: desc="
                   + shareInfo.getActiveDec()
                   + " "
                   + "qrcode="
-                  + shareInfo.getLinkQrcode()
+                  + shareInfo.getQrcodeLink()
                   + " title="
                   + shareInfo.getTitle());
             }
@@ -491,22 +492,22 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     addSubscription(subscribe);
   }
 
-  public void get_party_share_content() {
+  public void get_party_share_content(String id) {
     Subscription subscribe = ActivityModel.getInstance()
-        .get_party_share_content()
+        .get_party_share_content(id)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ActivityBean>() {
           @Override public void onNext(ActivityBean activityBean) {
 
             if (null != activityBean) {
               partyShareInfo = activityBean;
-              partyShareInfo.setLinkQrcode(URL + activityBean.getLinkQrcode());
+              partyShareInfo.setQrcodeLink(activityBean.getQrcodeLink());
 
               JUtils.Log(TAG, "partyShareInfo: desc="
                   + partyShareInfo.getActiveDec()
                   + " "
                   + "qrcode="
-                  + partyShareInfo.getLinkQrcode()
+                  + partyShareInfo.getQrcodeLink()
                   + " title="
                   + partyShareInfo.getTitle());
             }
@@ -775,7 +776,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
     //oks.setImagePath(filePara.getFilePath());//确保SDcard下面存在此张图片
     //oks.setImageUrl("http://f1.sharesdk.cn/imgs/2014/02/26/owWpLZo_638x960.jpg");
-    oks.setImageUrl(partyShareInfo.getShareImg());
+    oks.setImageUrl(partyShareInfo.getShareIcon());
     oks.setUrl(partyShareInfo.getShareLink());
 
     // url仅在微信（包括好友和朋友圈）中使用

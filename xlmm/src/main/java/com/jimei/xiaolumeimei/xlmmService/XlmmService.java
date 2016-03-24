@@ -629,8 +629,8 @@ public interface XlmmService {
   );
 
   //活动内容分享
-  @GET("pmt/free_order/get_share_content")
-  Observable<ActivityBean> get_party_share_content(  );
+  @GET("activitys/{id}/get_share_params")
+  Observable<ActivityBean> get_party_share_content( @Path("id")String id );
 
   //获得one day小鹿妈妈订单记录
   @GET( "pmt/shopping/shops_by_day")

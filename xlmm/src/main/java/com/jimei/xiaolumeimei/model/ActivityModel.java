@@ -31,9 +31,9 @@ public class ActivityModel {
   }
 
   //活动内容分享
-  public Observable<ActivityBean> get_party_share_content() {
+  public Observable<ActivityBean> get_party_share_content(String id) {
     return XlmmRetrofitClient.getService()
-        .get_party_share_content()
+        .get_party_share_content(id)
         .compose(new DefaultTransform<>());
   }
 
