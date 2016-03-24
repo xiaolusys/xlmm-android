@@ -59,14 +59,14 @@ public class UserWalletAdapter
     BudgetdetailBean.ResultsEntity resultsEntity = mList.get(position);
 
     holder.tvTime.setText(resultsEntity.getBudgetDate());
-    holder.tvPerson.setText(resultsEntity.getBudgetDate());
+    holder.tvPerson.setText(resultsEntity.getDesc());
 
     if (0 == resultsEntity.getBudgetType()) {
 
-      holder.tvMoneychange.setText(resultsEntity.getBudegetDetailCash() + "元");
+      holder.tvMoneychange.setText("+ "+resultsEntity.getBudegetDetailCash() + "元");
       holder.tvMoneychange.setTextColor(Color.parseColor("#F5B123"));
     } else if (1 == resultsEntity.getBudgetType()) {
-      holder.tvMoneychange.setText("-" + resultsEntity.getBudegetDetailCash());
+      holder.tvMoneychange.setText("- " + resultsEntity.getBudegetDetailCash() + "元");
     }
   }
 

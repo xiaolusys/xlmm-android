@@ -168,7 +168,6 @@
           android:layout_marginLeft="150px"
           android:layout_marginTop="20px"
           android:text="@string/not_enough_cash"
-          android:background="@drawable/text_frame"
           android:layout_below="@+id/img_gray_packet2"
           />
 

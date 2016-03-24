@@ -2,24 +2,37 @@ package com.jimei.xiaolumeimei.ui.activity.user;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import butterknife.Bind;
+
+import com.jcodecraeer.xrecyclerview.ProgressStyle;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.UserWalletAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.BudgetdetailBean;
+import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.model.UserNewModel;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
+import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+
+import java.util.List;
+
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -33,12 +46,14 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
 
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.tv_money) TextView tvMoney;
-  @Bind(R.id.wallet_rcv) RecyclerView walletRcv;
+  @Bind(R.id.wallet_rcv)  XRecyclerView walletRcv;
   @Bind(R.id.ll_wallet_empty) RelativeLayout ll_wallet_empty;
   private Double money;
   private UserWalletAdapter adapter;
 
   private boolean get_money = false;
+  private int page = 2;
+  private int totalPages;//总的分页数
 
   @Override protected void setListener() {
 
@@ -47,7 +62,7 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
   @Override protected void initData() {
 
     Subscription subscribe = UserNewModel.getInstance()
-        .budGetdetailBean()
+        .budGetdetailBean("1")
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<BudgetdetailBean>() {
           @Override public void onNext(BudgetdetailBean budgetdetailBean) {
@@ -119,12 +134,56 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
   }
 
   private void initRecyclerView() {
+
+    walletRcv.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
+    walletRcv.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
+    walletRcv.setArrowImageView(R.drawable.iconfont_downgrey);
     walletRcv.setLayoutManager(new LinearLayoutManager(this));
     walletRcv.addItemDecoration(
-        new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+            new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+    walletRcv.setPullRefreshEnabled(false);
 
     adapter = new UserWalletAdapter(this);
     walletRcv.setAdapter(adapter);
+
+    walletRcv.setLoadingListener(new XRecyclerView.LoadingListener() {
+      @Override public void onRefresh() {
+
+      }
+
+      @Override public void onLoadMore() {
+          loadMoreData(page);
+          page++;
+
+      }
+    });
+  }
+
+  private void loadMoreData(int page) {
+    JUtils.Log(TAG,"load page "+page);
+
+    Subscription subscribe = UserNewModel.getInstance()
+            .budGetdetailBean(Integer.toString(page))
+            .subscribeOn(Schedulers.io())
+            .subscribe(new ServiceResponse<BudgetdetailBean>() {
+              @Override public void onNext(BudgetdetailBean budgetdetailBean) {
+
+                if ((budgetdetailBean != null)
+                        && (budgetdetailBean.getResults() != null)
+                        && (budgetdetailBean.getResults().size() > 0)) {
+                  walletRcv.setVisibility(View.VISIBLE);
+                  ll_wallet_empty.setVisibility(View.INVISIBLE);
+                  adapter.update(budgetdetailBean.getResults());
+                }
+
+              }
+
+              @Override public void onCompleted() {
+                super.onCompleted();
+                walletRcv.post(walletRcv::loadMoreComplete);
+              }
+            });
+    addSubscription(subscribe);
   }
 
   @Override protected boolean toggleOverridePendingTransition() {

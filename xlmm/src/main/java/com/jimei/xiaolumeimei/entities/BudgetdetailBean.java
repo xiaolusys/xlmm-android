@@ -21,6 +21,7 @@ public class BudgetdetailBean {
   @SerializedName("next") private Object mNext;
   @SerializedName("previous") private Object mPrevious;
   /**
+   * "desc": "您通过红包收入1137.12元.",
    * budget_type : 0
    * budget_log_type : envelop
    * budget_date : 2016-02-26
@@ -63,11 +64,16 @@ public class BudgetdetailBean {
   }
 
   public static class ResultsEntity {
+    @SerializedName("desc") private String mDesc;
     @SerializedName("budget_type") private int mBudgetType;
     @SerializedName("budget_log_type") private String mBudgetLogType;
     @SerializedName("budget_date") private String mBudgetDate;
     @SerializedName("status") private int mStatus;
     @SerializedName("budeget_detail_cash") private double mBudegetDetailCash;
+
+    public void setDesc(String desc) {
+      this.mDesc = desc;
+    }
 
     public void setBudgetType(int budgetType) {
       this.mBudgetType = budgetType;
@@ -87,6 +93,10 @@ public class BudgetdetailBean {
 
     public void setBudegetDetailCash(double budegetDetailCash) {
       this.mBudegetDetailCash = budegetDetailCash;
+    }
+
+    public String getDesc() {
+      return mDesc;
     }
 
     public int getBudgetType() {

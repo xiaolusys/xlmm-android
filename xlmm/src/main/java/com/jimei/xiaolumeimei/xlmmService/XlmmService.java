@@ -657,7 +657,9 @@ public interface XlmmService {
   );
 
    @GET("users/get_budget_detail")
-  Observable<BudgetdetailBean> budGetdetailBean();
+  Observable<BudgetdetailBean> budGetdetailBean(
+           @Query("page")String page
+   );
 
   @GET("pmt/ninepic")
   Observable<List<NinePicBean>> getNinepic();

@@ -80,7 +80,7 @@
           android:layout_marginLeft="255px"
           android:layout_marginTop="10px"/>
     </RelativeLayout>
-    <android.support.v7.widget.RecyclerView
+    <com.jcodecraeer.xrecyclerview.XRecyclerView
         android:id="@+id/wallet_rcv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

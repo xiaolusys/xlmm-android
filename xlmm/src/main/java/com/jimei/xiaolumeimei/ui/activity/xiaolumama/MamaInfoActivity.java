@@ -223,7 +223,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
       case R.id.tv_liveness:
       case R.id.img_liveness:
         intent = new Intent(MamaInfoActivity.this, MamaLivenessActivity.class);
-        intent.putExtra("liveness", 90);
+        intent.putExtra("liveness", mamaFortune.getMama_fortune().getActive_value_num());
 
         startActivity(intent);
         break;
