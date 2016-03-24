@@ -222,10 +222,12 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         break;
       case R.id.tv_liveness:
       case R.id.img_liveness:
-        intent = new Intent(MamaInfoActivity.this, MamaLivenessActivity.class);
-        intent.putExtra("liveness", mamaFortune.getMama_fortune().getActive_value_num());
+        if (mamaFortune != null) {
+          intent = new Intent(MamaInfoActivity.this, MamaLivenessActivity.class);
+          intent.putExtra("liveness", mamaFortune.getMama_fortune().getActive_value_num());
 
-        startActivity(intent);
+          startActivity(intent);
+        }
         break;
       case R.id.rl_chooselist:
         startActivity(new Intent(MamaInfoActivity.this, MMChooseListActivity.class));
@@ -671,6 +673,8 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   }
 
   private void show_liveness(int liveness) {
+    JUtils.Log(TAG,"liveness:"+liveness);
+    if(liveness > 100) liveness = 100;
     img_liveness.setText(Integer.toString(liveness));
     mProgressBar.setProgress(liveness);
     mProgressBar.setVisibility(View.VISIBLE);

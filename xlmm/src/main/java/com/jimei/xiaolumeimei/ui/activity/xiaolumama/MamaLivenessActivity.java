@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.Bind;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
@@ -29,10 +30,12 @@ public class MamaLivenessActivity extends BaseSwipeBackCompatActivity
 
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.lv_liveness) XRecyclerView lv_liveness;
+  @Bind(R.id.tv_liveness)  TextView tv_liveness;
 
   private int page = 2;
   private MamaLivenessAdapter mAdapter;
   private Subscription subscribe;
+  int liveness = 0;
 
   @Override protected void setListener() {
     toolbar.setOnClickListener(this);
@@ -40,6 +43,10 @@ public class MamaLivenessActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void getBundleExtras(Bundle extras) {
 
+    if(null != extras){
+      liveness = extras.getInt("liveness");
+
+    }
   }
 
   @Override protected int getContentViewLayoutID() {
@@ -51,6 +58,8 @@ public class MamaLivenessActivity extends BaseSwipeBackCompatActivity
     setSupportActionBar(toolbar);
     finishBack(toolbar);
     initRecyclerView();
+
+    tv_liveness.setText(liveness + "");
   }
 
   private void initRecyclerView() {
@@ -84,9 +93,9 @@ public class MamaLivenessActivity extends BaseSwipeBackCompatActivity
               @Override public void onNext(MamaLivenessBean livenessBean) {
                 super.onNext(livenessBean);
                 if (livenessBean != null) {
-                  if (null != livenessBean.getNext()) {
-                    mAdapter.update(livenessBean.getResults());
-                  } else {
+
+                  mAdapter.update(livenessBean.getResults());
+                  if (null == livenessBean.getNext()) {
                     Toast.makeText(MamaLivenessActivity.this, "没有更多了", Toast.LENGTH_SHORT)
                         .show();
                     lv_liveness.post(lv_liveness::loadMoreComplete);
@@ -110,7 +119,7 @@ public class MamaLivenessActivity extends BaseSwipeBackCompatActivity
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<MamaLivenessBean>() {
           @Override public void onNext(MamaLivenessBean pointBean) {
-            JUtils.Log(TAG, "AllowanceBean=" + pointBean.toString());
+            JUtils.Log(TAG, "MamaLivenessBean=" + pointBean.toString());
             List<MamaLivenessBean.ResultsEntity> results = pointBean.getResults();
 
             if (0 == results.size()) {
