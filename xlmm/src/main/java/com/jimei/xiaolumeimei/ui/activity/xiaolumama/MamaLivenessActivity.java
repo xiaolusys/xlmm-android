@@ -120,20 +120,19 @@ public class MamaLivenessActivity extends BaseSwipeBackCompatActivity
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<MamaLivenessBean>() {
           @Override public void onNext(MamaLivenessBean pointBean) {
-            JUtils.Log(TAG, "MamaLivenessBean=" + pointBean.toString());
-            List<MamaLivenessBean.ResultsEntity> results = pointBean.getResults();
+            if(pointBean != null) {
+              JUtils.Log(TAG, "MamaLivenessBean=" + pointBean.toString());
+              List<MamaLivenessBean.ResultsEntity> results = pointBean.getResults();
 
-            if (0 == results.size()) {
-              JUtils.Log(TAG, "results.size()=0");
-            } else {
-              mAdapter.update(results);
-            }
+              if (0 == results.size()) {
+                JUtils.Log(TAG, "results.size()=0");
+              } else {
+                mAdapter.update(results);
+              }
 
-            if (null == pointBean.getNext()) {
-              Toast.makeText(MamaLivenessActivity.this, "没有更多了", Toast.LENGTH_SHORT)
-                      .show();
-              lv_liveness.post(lv_liveness::loadMoreComplete);
-              lv_liveness.setLoadingMoreEnabled(false);
+              if (null == pointBean.getNext()) {
+                lv_liveness.setLoadingMoreEnabled(false);
+              }
             }
           }
 

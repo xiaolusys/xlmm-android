@@ -81,16 +81,17 @@ public class WaitSendOrdersFragment extends Fragment {
             .subscribeOn(Schedulers.io())
             .subscribe(new ServiceResponse<AllOrdersBean>() {
               @Override public void onNext(AllOrdersBean allOrdersBean) {
-                List<AllOrdersBean.ResultsEntity> results = allOrdersBean.getResults();
+                if(allOrdersBean != null) {
+                  List<AllOrdersBean.ResultsEntity> results = allOrdersBean.getResults();
+                  JUtils.Log(TAG, "results.size()=" + results.size());
+                  if (0 == results.size()) {
+                    rl_empty.setVisibility(View.VISIBLE);
+                  } else {
+                    adapter.update(results);
+                  }
 
-                if (0 == results.size()) {
-                  JUtils.Log(TAG, "results.size()=0");
-                  rl_empty.setVisibility(View.VISIBLE);
-                } else {
-                  adapter.update(results);
+                  Log.i(TAG, allOrdersBean.toString());
                 }
-
-                Log.i(TAG, allOrdersBean.toString());
               }
 
               @Override public void onCompleted() {
@@ -167,9 +168,9 @@ public class WaitSendOrdersFragment extends Fragment {
             .subscribe(new ServiceResponse<AllOrdersBean>() {
               @Override public void onNext(AllOrdersBean allOrdersBean) {
                 if (allOrdersBean != null) {
-                  if (null != allOrdersBean.getNext()) {
-                    adapter.update(allOrdersBean.getResults());
-                  } else {
+
+                  adapter.update(allOrdersBean.getResults());
+                  if (null == allOrdersBean.getNext()) {
                     Toast.makeText(context, "没有更多了", Toast.LENGTH_SHORT).show();
 
                   }

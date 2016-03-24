@@ -179,9 +179,9 @@ public class AllOrdersFragment extends Fragment {
             .subscribe(new ServiceResponse<AllOrdersBean>() {
               @Override public void onNext(AllOrdersBean allOrdersBean) {
                 if (allOrdersBean != null) {
-                  if (null != allOrdersBean.getNext()) {
-                    adapter.update(allOrdersBean.getResults());
-                  } else {
+
+                  adapter.update(allOrdersBean.getResults());
+                  if (null == allOrdersBean.getNext()) {
                     Toast.makeText(context, "没有更多了", Toast.LENGTH_SHORT).show();
 
                   }
