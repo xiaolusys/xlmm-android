@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/llayout_navhead"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/y80"
+    android:layout_height="210dp"
+    android:padding="16dp"
     android:background="@drawable/side_nav_bar"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
 >
@@ -10,15 +11,15 @@
   <RelativeLayout
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginTop="@dimen/y16"
+      android:layout_marginTop="30dp"
       android:layout_centerHorizontal="true"
       android:id="@+id/rl_head">
 
     <com.jimei.xiaolumeimei.widget.CircleImageView
         android:id="@+id/imgUser"
         android:layout_centerHorizontal="true"
-        android:layout_width="@dimen/x52"
-        android:layout_height="@dimen/y36"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_alignParentTop="true"
         android:clickable="true"
         android:src="@drawable/img_head"/>
@@ -30,7 +31,7 @@
         android:id="@+id/tvNickname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/y3"
+        android:layout_marginTop="8dp"
         android:text="小鹿妈妈"
     />
   </RelativeLayout>
@@ -39,10 +40,11 @@
   <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginTop="@dimen/y11"
+      android:layout_marginTop="20dp"
       android:weightSum="3"
       android:layout_below="@+id/rl_head"
       android:orientation="horizontal">
+
 
     <RelativeLayout
         android:gravity="center"
@@ -53,7 +55,7 @@
       <TextView
           android:textStyle="bold"
           android:textSize="15sp"
-          android:layout_marginLeft="@dimen/x7"
+          android:layout_marginLeft="8dp"
           android:id="@+id/tvMoney"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
@@ -64,7 +66,7 @@
           android:layout_below="@id/tvMoney"
           android:id="@+id/imgMoney"
           android:layout_width="wrap_content"
-          android:layout_height="@dimen/y15"
+          android:layout_height="24dp"
           android:clickable="true"
           android:src="@drawable/ic_wallet"/>
 
@@ -91,7 +93,7 @@
       <TextView
           android:textStyle="bold"
           android:textSize="15sp"
-          android:layout_marginLeft="@dimen/x9"
+          android:layout_marginLeft="10dp"
           android:id="@+id/tvScore"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
@@ -102,7 +104,7 @@
           android:layout_below="@id/tvScore"
           android:id="@+id/imgPoint"
           android:layout_width="wrap_content"
-          android:layout_height="@dimen/y15"
+          android:layout_height="24dp"
           android:clickable="true"
           android:src="@drawable/ic_point"/>
 
@@ -126,17 +128,18 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
     >
+
       <TextView
           android:textStyle="bold"
           android:textSize="15sp"
           android:id="@+id/tvDiscount"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginLeft="@dimen/x8"
+          android:layout_marginLeft="18dp"
           android:text="0"/>
       <ImageView
           android:layout_below="@id/tvDiscount"
-          android:layout_height="@dimen/y15"
+          android:layout_height="24dp"
           android:layout_alignParentLeft="true"
           android:id="@+id/imgCoupon"
           android:layout_width="wrap_content"
@@ -151,6 +154,7 @@
           android:layout_toRightOf="@+id/imgCoupon"
           android:layout_below="@id/tvDiscount"
           android:layout_alignBottom="@+id/imgCoupon"
+          android:gravity="center_vertical"
           android:text="优惠券"/>
 
 

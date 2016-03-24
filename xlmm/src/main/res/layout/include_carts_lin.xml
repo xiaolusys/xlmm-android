@@ -2,18 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/y63"
+    android:layout_height="@dimen/y53"
     android:layout_gravity="bottom"
     android:background="#ffffff"
     android:orientation="vertical"
     android:gravity="center"
     app:layout_behavior=".behavior.QuickHideBehavior">
   <LinearLayout
-      android:layout_marginTop="@dimen/y7"
+      android:layout_marginTop="@dimen/y5"
       android:layout_width="match_parent"
       android:orientation="horizontal"
       android:gravity="center"
-      android:layout_height="@dimen/y22"
+      android:layout_height="@dimen/y15"
   >
     <TextView
         android:textColor="#26262e"
@@ -31,13 +31,13 @@
     />
   </LinearLayout>
   <Button
-      android:layout_marginBottom="@dimen/y3"
+      android:layout_marginBottom="@dimen/y6"
       android:textSize="20sp"
       android:textColor="@color/white"
       android:text="购买"
       android:id="@+id/confirm"
       android:layout_width="@dimen/x296"
       android:background="@drawable/shape_common"
-      android:layout_height="@dimen/y25"
+      android:layout_height="@dimen/y24"
   />
 </LinearLayout>
