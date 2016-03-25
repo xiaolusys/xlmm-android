@@ -265,6 +265,9 @@
     <activity android:name=".ui.activity.main.WebViewActivity"
         android:theme="@style/AppTheme.TransparentActivity"
     />
+    <activity android:name=".ui.activity.xiaolumama.BoutiqueWebviewActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+    />
 
     <activity
         android:name="com.mob.tools.MobUIShell"

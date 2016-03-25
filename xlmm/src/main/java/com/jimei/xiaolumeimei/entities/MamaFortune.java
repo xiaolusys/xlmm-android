@@ -1,9 +1,206 @@
 package com.jimei.xiaolumeimei.entities;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by wulei on 3/10/16.
  */
 public class MamaFortune {
+    ///**
+    // * mama_id : 44
+    // * mama_name :
+    // * mama_level : 0
+    // * mama_level_display : 新手妈妈
+    // * cash_value : 19175.12
+    // * fans_num : 2107
+    // * invite_num : 0
+    // * order_num : 9104
+    // * carry_value : 19437.88
+    // * active_value_num : 4254
+    // * carry_pending_display : 262.76
+    // * carry_confirmed_display : 19175.12
+    // * carry_cashout_display : 0.0
+    // * mama_event_link : http://m.xiaolumeimei.com
+    // * history_last_day : null
+    // * today_visitor_num : 0
+    // * modified : 2016-03-25T19:42:05
+    // * created : 2016-03-17T14:57:40
+    // */
+    //
+    //@SerializedName("mama_fortune") private MamaFortuneEntity mMamaFortune;
+    //
+    //public MamaFortuneEntity getMamaFortune() {
+    //    return mMamaFortune;
+    //}
+    //
+    //public void setMamaFortune(MamaFortuneEntity mamaFortune) {
+    //    mMamaFortune = mamaFortune;
+    //}
+    //
+    //public static class MamaFortuneEntity {
+    //    @SerializedName("mama_id") private int mMamaId;
+    //    @SerializedName("mama_name") private String mMamaName;
+    //    @SerializedName("mama_level") private int mMamaLevel;
+    //    @SerializedName("mama_level_display") private String mMamaLevelDisplay;
+    //    @SerializedName("cash_value") private double mCashValue;
+    //    @SerializedName("fans_num") private int mFansNum;
+    //    @SerializedName("invite_num") private int mInviteNum;
+    //    @SerializedName("order_num") private int mOrderNum;
+    //    @SerializedName("carry_value") private double mCarryValue;
+    //    @SerializedName("active_value_num") private int mActiveValueNum;
+    //    @SerializedName("carry_pending_display") private double mCarryPendingDisplay;
+    //    @SerializedName("carry_confirmed_display") private double mCarryConfirmedDisplay;
+    //    @SerializedName("carry_cashout_display") private double mCarryCashoutDisplay;
+    //    @SerializedName("mama_event_link") private String mMamaEventLink;
+    //    @SerializedName("history_last_day") private Object mHistoryLastDay;
+    //    @SerializedName("today_visitor_num") private int mTodayVisitorNum;
+    //    @SerializedName("modified") private String mModified;
+    //    @SerializedName("created") private String mCreated;
+    //
+    //    public int getMamaId() {
+    //        return mMamaId;
+    //    }
+    //
+    //    public void setMamaId(int mamaId) {
+    //        mMamaId = mamaId;
+    //    }
+    //
+    //    public String getMamaName() {
+    //        return mMamaName;
+    //    }
+    //
+    //    public void setMamaName(String mamaName) {
+    //        mMamaName = mamaName;
+    //    }
+    //
+    //    public int getMamaLevel() {
+    //        return mMamaLevel;
+    //    }
+    //
+    //    public void setMamaLevel(int mamaLevel) {
+    //        mMamaLevel = mamaLevel;
+    //    }
+    //
+    //    public String getMamaLevelDisplay() {
+    //        return mMamaLevelDisplay;
+    //    }
+    //
+    //    public void setMamaLevelDisplay(String mamaLevelDisplay) {
+    //        mMamaLevelDisplay = mamaLevelDisplay;
+    //    }
+    //
+    //    public double getCashValue() {
+    //        return mCashValue;
+    //    }
+    //
+    //    public void setCashValue(double cashValue) {
+    //        mCashValue = cashValue;
+    //    }
+    //
+    //    public int getFansNum() {
+    //        return mFansNum;
+    //    }
+    //
+    //    public void setFansNum(int fansNum) {
+    //        mFansNum = fansNum;
+    //    }
+    //
+    //    public int getInviteNum() {
+    //        return mInviteNum;
+    //    }
+    //
+    //    public void setInviteNum(int inviteNum) {
+    //        mInviteNum = inviteNum;
+    //    }
+    //
+    //    public int getOrderNum() {
+    //        return mOrderNum;
+    //    }
+    //
+    //    public void setOrderNum(int orderNum) {
+    //        mOrderNum = orderNum;
+    //    }
+    //
+    //    public double getCarryValue() {
+    //        return mCarryValue;
+    //    }
+    //
+    //    public void setCarryValue(double carryValue) {
+    //        mCarryValue = carryValue;
+    //    }
+    //
+    //    public int getActiveValueNum() {
+    //        return mActiveValueNum;
+    //    }
+    //
+    //    public void setActiveValueNum(int activeValueNum) {
+    //        mActiveValueNum = activeValueNum;
+    //    }
+    //
+    //    public double getCarryPendingDisplay() {
+    //        return mCarryPendingDisplay;
+    //    }
+    //
+    //    public void setCarryPendingDisplay(double carryPendingDisplay) {
+    //        mCarryPendingDisplay = carryPendingDisplay;
+    //    }
+    //
+    //    public double getCarryConfirmedDisplay() {
+    //        return mCarryConfirmedDisplay;
+    //    }
+    //
+    //    public void setCarryConfirmedDisplay(double carryConfirmedDisplay) {
+    //        mCarryConfirmedDisplay = carryConfirmedDisplay;
+    //    }
+    //
+    //    public double getCarryCashoutDisplay() {
+    //        return mCarryCashoutDisplay;
+    //    }
+    //
+    //    public void setCarryCashoutDisplay(double carryCashoutDisplay) {
+    //        mCarryCashoutDisplay = carryCashoutDisplay;
+    //    }
+    //
+    //    public String getMamaEventLink() {
+    //        return mMamaEventLink;
+    //    }
+    //
+    //    public void setMamaEventLink(String mamaEventLink) {
+    //        mMamaEventLink = mamaEventLink;
+    //    }
+    //
+    //    public Object getHistoryLastDay() {
+    //        return mHistoryLastDay;
+    //    }
+    //
+    //    public void setHistoryLastDay(Object historyLastDay) {
+    //        mHistoryLastDay = historyLastDay;
+    //    }
+    //
+    //    public int getTodayVisitorNum() {
+    //        return mTodayVisitorNum;
+    //    }
+    //
+    //    public void setTodayVisitorNum(int todayVisitorNum) {
+    //        mTodayVisitorNum = todayVisitorNum;
+    //    }
+    //
+    //    public String getModified() {
+    //        return mModified;
+    //    }
+    //
+    //    public void setModified(String modified) {
+    //        mModified = modified;
+    //    }
+    //
+    //    public String getCreated() {
+    //        return mCreated;
+    //    }
+    //
+    //    public void setCreated(String created) {
+    //        mCreated = created;
+    //    }
+    //}
 
     /**
      * mama_id : 5
@@ -39,6 +236,16 @@ public class MamaFortune {
         private double carry_value;
         private int active_value_num;
         private int today_visitor_num;
+
+        public String getmMamaEventLink() {
+            return mMamaEventLink;
+        }
+
+        public void setmMamaEventLink(String mMamaEventLink) {
+            this.mMamaEventLink = mMamaEventLink;
+        }
+
+        @SerializedName("mama_event_link") private String mMamaEventLink;
 
         public void setMama_id(int mama_id) {
             this.mama_id = mama_id;
@@ -143,4 +350,6 @@ public class MamaFortune {
                 "mama_fortune=" + mama_fortune.toString() +
                 '}';
     }
+
+
 }

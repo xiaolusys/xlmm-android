@@ -38,6 +38,6 @@
       android:id="@+id/confirm"
       android:layout_width="@dimen/x296"
       android:background="@drawable/shape_common"
-      android:layout_height="@dimen/y24"
+      android:layout_height="@dimen/y18"
   />
 </LinearLayout>
