@@ -440,6 +440,13 @@ public class MainActivity extends BaseActivity
                           JUtils.Toast("退出成功");
 
                           try {
+
+                            imgUser.setImageResource(R.drawable.img_head);
+
+                            msg1.setVisibility(View.INVISIBLE);
+                            msg2.setVisibility(View.INVISIBLE);
+                            msg3.setVisibility(View.INVISIBLE);
+
                             if (tvNickname != null) {
                               tvNickname.setText("点击登录");
                             }
@@ -691,12 +698,6 @@ public class MainActivity extends BaseActivity
               if (tvCoupon != null) {
                 tvCoupon.setText(userNewBean.getCouponNum() + "");
               }
-
-              imgUser.setImageResource(R.drawable.img_head);
-
-              msg1.setVisibility(View.INVISIBLE);
-              msg2.setVisibility(View.INVISIBLE);
-              msg3.setVisibility(View.INVISIBLE);
             }
           }
         });
