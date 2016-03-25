@@ -158,7 +158,7 @@ public class MMProductModel {
   }
 
   //MM recent days carry
-  public Observable<List<RecentCarryBean>> getRecentCarry(String from, String day) {
+  public Observable<RecentCarryBean> getRecentCarry(String from, String day) {
     return XlmmRetrofitClient.getService()
         .getRecentCarry(from, day)
         .compose(new DefaultTransform<>());
