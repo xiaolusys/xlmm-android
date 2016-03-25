@@ -533,11 +533,11 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
       days = cal.get(Calendar.DAY_OF_WEEK) - 1;
     }
     JUtils.Log(TAG, "DAY_OF_WEEK:"+ cal.get(Calendar.DAY_OF_WEEK)+ " ,get days " +days);
-    cal.add(Calendar.DAY_OF_YEAR,0-days +1);//日期减days天数
+    cal.add(Calendar.DAY_OF_YEAR,0-days -7);//日期减days天数
 
     ArrayList<String> xVals = new ArrayList<String>();
     for(int i =0; i < 7;i++){
-      cal.add(Calendar.DAY_OF_YEAR,0-1);//日期减1
+      cal.add(Calendar.DAY_OF_YEAR,1);//日期+1
       xVals.add(""+(cal.get(Calendar.MONTH)+1)+"/"+cal.get(Calendar.DAY_OF_MONTH));
       JUtils.Log(TAG, "DAY: "+ (cal.get(Calendar.MONTH)+1)+"/"+cal.get(Calendar.DAY_OF_MONTH));
     }
@@ -614,7 +614,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         Integer.toString(show_refund.get(e.getXIndex()).getVisitorNum()));
     from = (MAX_RECENT_DAYS - 1 - e.getXIndex()) + "";
     JUtils.Log(TAG, "第" + e.getXIndex() + "个");
-    tv_today_order2.setText(Integer.toString((int) (e.getVal())));
+    tv_today_order2.setText(Integer.toString((int) (show_refund.get(e.getXIndex()).getOrderNum())));
     tv_today_fund2.setText(Double.toString(
         (double) (Math.round(show_refund.get(e.getXIndex()).getCarry() * 100))
             / 100));
