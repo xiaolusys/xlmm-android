@@ -51,8 +51,8 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     OnChartValueSelectedListener {
   private static final int MAX_RECENT_DAYS = 15;
   String TAG = "MamaInfoActivity";
-  List<RecentCarryBean> his_refund = new ArrayList<RecentCarryBean>();
-  List<RecentCarryBean> show_refund = new ArrayList<RecentCarryBean>();
+  List<RecentCarryBean> his_refund = new ArrayList<>();
+  List<RecentCarryBean> show_refund = new ArrayList<>();
   int get_num = 0;
 
   @Bind(R.id.toolbar) Toolbar toolbar;

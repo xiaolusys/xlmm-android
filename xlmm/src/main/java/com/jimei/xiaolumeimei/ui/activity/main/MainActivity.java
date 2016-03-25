@@ -27,20 +27,15 @@ import butterknife.Bind;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseActivity;
-import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
-import com.jimei.xiaolumeimei.entities.CouponBean;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.model.CartsModel;
-import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.model.UserNewModel;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllOrdersActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
-import com.jimei.xiaolumeimei.ui.activity.trade.WaitPayOrdersActivity;
-import com.jimei.xiaolumeimei.ui.activity.trade.WaitSendOrdersActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.CouponActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.MembershipPointActivity;
@@ -61,7 +56,6 @@ import com.xiaomi.mipush.sdk.MiPushClient;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import rx.Subscriber;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -99,6 +93,9 @@ public class MainActivity extends BaseActivity
   private BadgeView badge;
   private double budgetCash;
   private Subscription subscribe;
+  private TextView msg1;
+  private TextView msg2;
+  private TextView msg3;
 
   @Override protected int provideContentViewId() {
     return R.layout.activity_main;
@@ -196,15 +193,15 @@ public class MainActivity extends BaseActivity
             LinearLayout nav_tobepaid = (LinearLayout) navigationView.getMenu()
                 .findItem(R.id.nav_tobepaid)
                 .getActionView();
-            TextView msg1 = (TextView) nav_tobepaid.findViewById(R.id.msg);
+            msg1 = (TextView) nav_tobepaid.findViewById(R.id.msg);
             LinearLayout nav_tobereceived = (LinearLayout) navigationView.getMenu()
                 .findItem(R.id.nav_tobereceived)
                 .getActionView();
-            TextView msg2 = (TextView) nav_tobereceived.findViewById(R.id.msg);
+            msg2 = (TextView) nav_tobereceived.findViewById(R.id.msg);
             LinearLayout nav_refund = (LinearLayout) navigationView.getMenu()
-                    .findItem(R.id.nav_returned)
-                    .getActionView();
-            TextView msg3 = (TextView) nav_refund.findViewById(R.id.msg);
+                .findItem(R.id.nav_returned)
+                .getActionView();
+            msg3 = (TextView) nav_refund.findViewById(R.id.msg);
 
             if ((null != userInfoBean) && (userInfoBean.getWaitpayNum() > 0)) {
               msg1.setVisibility(View.VISIBLE);
@@ -441,8 +438,23 @@ public class MainActivity extends BaseActivity
 
                         if (responseBody.getCode() == 0) {
                           JUtils.Toast("退出成功");
-                          if (tvNickname != null) {
-                            tvNickname.setText("点击登录");
+
+                          try {
+                            if (tvNickname != null) {
+                              tvNickname.setText("点击登录");
+                            }
+                            if (tvPoint != null) {
+                              tvPoint.setText(0 + "");
+                            }
+                            if (tvMoney != null) {
+                              tvMoney.setText(0 + "");
+                            }
+
+                            if (tvCoupon != null) {
+                              tvCoupon.setText(0 + "");
+                            }
+                          } catch (NullPointerException e) {
+                            e.printStackTrace();
                           }
 
                           if ((finalAccount != null) && ((!finalAccount.isEmpty()))) {
@@ -515,49 +527,55 @@ public class MainActivity extends BaseActivity
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.mainframe_menu, menu);
-    return super.onCreateOptionsMenu(menu);
+    MenuItem item = menu.findItem(R.id.action_settings);
+    if (userInfoBean != null) {
+      if ((userInfoBean.getXiaolumm() != null) && (userInfoBean.getXiaolumm().getId()
+          != 0)) {
+        item.setVisible(true);
+      } else {
+        item.setVisible(false);
+      }
+    }
+    return true;
   }
 
   private void checkMamaInfo() {
     JUtils.Log(TAG, "check mama userinfo");
 
-    if(userInfoBean != null){
-      if ((userInfoBean.getXiaolumm() != null) && (userInfoBean.getXiaolumm().getId() != 0)) {
+    if (userInfoBean != null) {
+      if ((userInfoBean.getXiaolumm() != null) && (userInfoBean.getXiaolumm().getId()
+          != 0)) {
         JUtils.Log(TAG, "1 i am xiaolumama, id=" + userInfoBean.getXiaolumm().getId());
         Intent intent = new Intent(MainActivity.this, MamaInfoActivity.class);
         startActivity(intent);
       } else {
         JUtils.Toast("您还不是小鹿妈妈，赶紧关注小鹿美美公众号了解信息并加入我们吧！");
       }
-    }
-    else {
+    } else {
       Subscription subscribe = UserModel.getInstance()
-              .getUserInfo()
-              .subscribeOn(Schedulers.io())
-              .subscribe(new ServiceResponse<UserInfoBean>() {
-                @Override
-                public void onNext(UserInfoBean user) {
-                  if ((user.getXiaolumm() != null) && (user.getXiaolumm().getId() != 0)) {
-                    JUtils.Log(TAG, "2 i am xiaolumama, id=" + user.getXiaolumm().getId());
-                    Intent intent = new Intent(MainActivity.this, MamaInfoActivity.class);
-                    startActivity(intent);
-                  } else {
-                    JUtils.Toast("您还不是小鹿妈妈，赶紧关注小鹿美美公众号了解信息并加入我们吧！");
-                  }
-                }
+          .getUserInfo()
+          .subscribeOn(Schedulers.io())
+          .subscribe(new ServiceResponse<UserInfoBean>() {
+            @Override public void onNext(UserInfoBean user) {
+              if ((user.getXiaolumm() != null) && (user.getXiaolumm().getId() != 0)) {
+                JUtils.Log(TAG, "2 i am xiaolumama, id=" + user.getXiaolumm().getId());
+                Intent intent = new Intent(MainActivity.this, MamaInfoActivity.class);
+                startActivity(intent);
+              } else {
+                JUtils.Toast("您还不是小鹿妈妈，赶紧关注小鹿美美公众号了解信息并加入我们吧！");
+              }
+            }
 
-                @Override
-                public void onCompleted() {
-                  super.onCompleted();
-                }
+            @Override public void onCompleted() {
+              super.onCompleted();
+            }
 
-                @Override
-                public void onError(Throwable e) {
+            @Override public void onError(Throwable e) {
 
-                  Log.e(TAG, "getUserInfo error: " + e.getLocalizedMessage());
-                  super.onError(e);
-                }
-              });
+              Log.e(TAG, "getUserInfo error: " + e.getLocalizedMessage());
+              super.onError(e);
+            }
+          });
       addSubscription(subscribe);
     }
   }
@@ -670,9 +688,15 @@ public class MainActivity extends BaseActivity
                 tvMoney.setText((float) (Math.round(budgetCash * 100)) / 100 + "");
               }
 
-              if(tvCoupon != null) {
+              if (tvCoupon != null) {
                 tvCoupon.setText(userNewBean.getCouponNum() + "");
               }
+
+              imgUser.setImageResource(R.drawable.img_head);
+
+              msg1.setVisibility(View.INVISIBLE);
+              msg2.setVisibility(View.INVISIBLE);
+              msg3.setVisibility(View.INVISIBLE);
             }
           }
         });
@@ -686,10 +710,7 @@ public class MainActivity extends BaseActivity
         tvNickname.setText("小鹿妈妈");
       }
     }
-
-
   }
-
 
   @Override protected void onStop() {
     JUtils.Log(TAG, "stop");
@@ -761,5 +782,4 @@ public class MainActivity extends BaseActivity
       return listTitle.get(position);
     }
   }
-
 }

@@ -40,7 +40,7 @@ public class MamaVisitorActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected int getContentViewLayoutID() {
-    return R.layout.activity_mamafans;
+    return R.layout.activity_mamavisitor;
   }
 
   @Override protected void initViews() {
