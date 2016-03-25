@@ -13,7 +13,7 @@ import rx.subjects.Subject;
  */
 
 public class RxNetWorkBus {
-
+private static final String rx = "test";
   private static final Subject<NetWorkEvent, NetWorkEvent> bus =
       new SerializedSubject<>(PublishSubject.create());
 

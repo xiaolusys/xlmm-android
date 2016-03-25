@@ -157,7 +157,7 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity {
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.menu_fans,menu);
+    getMenuInflater().inflate(R.menu.menu_fans, menu);
     return super.onCreateOptionsMenu(menu);
   }
 
@@ -169,7 +169,6 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity {
         startActivity(intent);
 
         break;
-
     }
 
     return super.onOptionsItemSelected(item);
