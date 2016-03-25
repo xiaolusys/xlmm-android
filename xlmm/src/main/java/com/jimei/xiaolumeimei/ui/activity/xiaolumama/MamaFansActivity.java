@@ -1,8 +1,11 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 import butterknife.Bind;
@@ -151,5 +154,24 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity {
     if (subscribe != null && subscribe.isUnsubscribed()) {
       subscribe.unsubscribe();
     }
+  }
+
+  @Override public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.menu_fans,menu);
+    return super.onCreateOptionsMenu(menu);
+  }
+
+  @Override public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+
+      case R.id.action_fans:
+        Intent intent = new Intent(this, FansWebViewActivity.class);
+        startActivity(intent);
+
+        break;
+
+    }
+
+    return super.onOptionsItemSelected(item);
   }
 }

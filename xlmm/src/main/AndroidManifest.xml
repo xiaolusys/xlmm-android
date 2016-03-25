@@ -390,7 +390,9 @@
     <activity android:name=".ui.activity.xiaolumama.MamaFansActivity"
         android:theme="@style/AppTheme.TransparentActivity"
     />
-
+    <activity android:name=".ui.activity.xiaolumama.FansWebViewActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+    />
 
     <service
         android:enabled="true"
