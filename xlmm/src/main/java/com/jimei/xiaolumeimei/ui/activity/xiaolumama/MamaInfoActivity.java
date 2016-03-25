@@ -100,6 +100,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   private double carrylogMoney;
   private String s;
   private String from;
+  private String actlink;
 
   @Override protected void setListener() {
     toolbar.setOnClickListener(this);
@@ -152,7 +153,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
                 + fortune.getMama_fortune().getCash_value()
                 + " all fund="
                 + fortune.getMama_fortune().getCarry_value());
-
+            actlink = fortune.getMama_fortune().getmMamaEventLink();
             mamaFortune = fortune;
             tv_cash.setText(Double.toString(
                 (double) (Math.round(fortune.getMama_fortune().getCash_value() * 100))
@@ -175,8 +176,9 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
             show_liveness(fortune.getMama_fortune().getActive_value_num());
             JUtils.Log(TAG,
                 "all orders num =" + fortune.getMama_fortune().getOrder_num());
-            s = Integer.toString(fortune.getMama_fortune().getOrder_num());
-            tv_order.setText(s + "个");
+            MamaInfoActivity.this.s =
+                Integer.toString(fortune.getMama_fortune().getOrder_num());
+            tv_order.setText(MamaInfoActivity.this.s + "个");
           }
         });
     addSubscription(subscribe3);
@@ -234,7 +236,8 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
       case R.id.img_liveness:
         if (mamaFortune != null) {
           intent = new Intent(MamaInfoActivity.this, MamaLivenessActivity.class);
-          intent.putExtra("liveness", mamaFortune.getMama_fortune().getActive_value_num());
+          intent.putExtra("liveness",
+              mamaFortune.getMama_fortune().getActive_value_num());
 
           startActivity(intent);
         }
@@ -243,25 +246,31 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         mChart.clear();
         setDataOfPreviousWeek();
         tv_today_visit2.setText(
-                Integer.toString(show_refund.get(show_refund.size()-1).getVisitorNum()));
-        tv_today_order2.setText(Integer.toString((int) (show_refund.get(show_refund.size()-1).getOrderNum())));
-        tv_today_fund2.setText(Double.toString(
-                (double) (Math.round(show_refund.get(show_refund.size()-1).getCarry() * 100)) / 100));
+            Integer.toString(show_refund.get(show_refund.size() - 1).getVisitorNum()));
+        tv_today_order2.setText(Integer.toString(
+            (int) (show_refund.get(show_refund.size() - 1).getOrderNum())));
+        tv_today_fund2.setText(Double.toString((double) (Math.round(
+            show_refund.get(show_refund.size() - 1).getCarry() * 100)) / 100));
         break;
       case R.id.img_right:
         mChart.clear();
         setDataOfThisWeek();
         tv_today_visit2.setText(
-                Integer.toString(show_refund.get(show_refund.size()-1).getVisitorNum()));
-        tv_today_order2.setText(Integer.toString((int) (show_refund.get(show_refund.size()-1).getOrderNum())));
-        tv_today_fund2.setText(Double.toString(
-                (double) (Math.round(show_refund.get(show_refund.size()-1).getCarry() * 100)) / 100));
+            Integer.toString(show_refund.get(show_refund.size() - 1).getVisitorNum()));
+        tv_today_order2.setText(Integer.toString(
+            (int) (show_refund.get(show_refund.size() - 1).getOrderNum())));
+        tv_today_fund2.setText(Double.toString((double) (Math.round(
+            show_refund.get(show_refund.size() - 1).getCarry() * 100)) / 100));
         break;
       case R.id.rl_chooselist:
         startActivity(new Intent(MamaInfoActivity.this, MMChooseListActivity.class));
         break;
       case R.id.rl_party:
-        //startActivity(new Intent(MamaInfoActivity.this, MaMaMyStoreActivity.class));
+        intent = new Intent(this, BoutiqueWebviewActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("actlink", actlink);
+        intent.putExtras(bundle);
+        startActivity(intent);
         break;
       case R.id.rl_push:
         startActivity(new Intent(MamaInfoActivity.this, MMNinePicActivity.class));
@@ -295,9 +304,9 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         break;
       case R.id.rl_income:
         Intent intent1 = new Intent(MamaInfoActivity.this, MMcarryLogActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("carrylogMoney", carrylogMoney + "");
-        intent1.putExtras(bundle);
+        Bundle bundlerl_income = new Bundle();
+        bundlerl_income.putString("carrylogMoney", carrylogMoney + "");
+        intent1.putExtras(bundlerl_income);
         startActivity(intent1);
         //startActivity(new Intent(MamaInfoActivity.this, MMCarryLogListActivity.class));
         break;
@@ -367,16 +376,17 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
 
     XAxis xAxis = mChart.getXAxis();
     xAxis.setEnabled(true);     //是否显示X坐标轴 及 对应的刻度竖线，默认是true
-        xAxis.setDrawAxisLine(true); //是否绘制坐标轴的线，即含有坐标的那条线，默认是true
-        xAxis.setDrawGridLines(true); //是否显示X坐标轴上的刻度竖线，默认是true
-        xAxis.setDrawLabels(true); //是否显示X坐标轴上的刻度，默认是true
+    xAxis.setDrawAxisLine(true); //是否绘制坐标轴的线，即含有坐标的那条线，默认是true
+    xAxis.setDrawGridLines(true); //是否显示X坐标轴上的刻度竖线，默认是true
+    xAxis.setDrawLabels(true); //是否显示X坐标轴上的刻度，默认是true
 
-        xAxis.setTextColor(Color.parseColor("#F5B123")); //X轴上的刻度的颜色
-        xAxis.setTextSize(9f); //X轴上的刻度的字的大小 单位dp
-//      xAxis.setTypeface(Typeface tf); //X轴上的刻度的字体
-        xAxis.setGridColor(Color.parseColor("#F5B123")); //X轴上的刻度竖线的颜色
-        xAxis.setGridLineWidth(1); //X轴上的刻度竖线的宽 float类型
-        xAxis.enableGridDashedLine(3, 8, 0); //虚线表示X轴上的刻度竖线(float lineLength, float spaceLength, float phase)三个参数，1.线长，2.虚线间距，3.虚线开始坐标
+    xAxis.setTextColor(Color.parseColor("#F5B123")); //X轴上的刻度的颜色
+    xAxis.setTextSize(9f); //X轴上的刻度的字的大小 单位dp
+    //      xAxis.setTypeface(Typeface tf); //X轴上的刻度的字体
+    xAxis.setGridColor(Color.parseColor("#F5B123")); //X轴上的刻度竖线的颜色
+    xAxis.setGridLineWidth(1); //X轴上的刻度竖线的宽 float类型
+    xAxis.enableGridDashedLine(3, 8,
+        0); //虚线表示X轴上的刻度竖线(float lineLength, float spaceLength, float phase)三个参数，1.线长，2.虚线间距，3.虚线开始坐标
 
 
     /*Typeface tf = Typeface.createFromAsset(getAssets(), "OpenSans-Regular.ttf");
@@ -414,19 +424,16 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
 
     mChart.getXAxis().setPosition(XAxis.XAxisPosition.TOP);
 
-
     //x y 坐标是否显示
     //mChart.getXAxis().setEnabled(false);
     mChart.getAxisRight().setEnabled(false);
     mChart.getAxisLeft().setEnabled(false);
-
 
     // add data
 
   }
 
   private void setData(ArrayList<String> xVals, ArrayList<Entry> yVals) {
-
 
     // create a dataset and give it a type
     LineDataSet set1 = new LineDataSet(yVals, "");
@@ -454,7 +461,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     set1.setValueFormatter(new ValueFormatter() {
       @Override
       public String getFormattedValue(float value, Entry entry, int dataSetIndex,
-                                      ViewPortHandler viewPortHandler) {
+          ViewPortHandler viewPortHandler) {
         return "";
       }
     });
@@ -487,59 +494,60 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
 
   private void setDataOfThisWeek() {
 
+    ArrayList<String> xVals =
+        new ArrayList<String>(Arrays.asList("一", "二", "三", "四", "五", "六", "日"));
 
-    ArrayList<String> xVals = new ArrayList<String>(Arrays.asList("一","二","三","四","五","六","日"));
-
-    Calendar cal= Calendar.getInstance();
-    int  days = 0;
-    if(cal.get(Calendar.DAY_OF_WEEK) == 1){
+    Calendar cal = Calendar.getInstance();
+    int days = 0;
+    if (cal.get(Calendar.DAY_OF_WEEK) == 1) {
       days = 7;
-    }
-    else{
+    } else {
       days = cal.get(Calendar.DAY_OF_WEEK) - 1;
     }
-    JUtils.Log(TAG, "DAY_OF_WEEK:"+ cal.get(Calendar.DAY_OF_WEEK)+ " ,get days " +days);
+    JUtils.Log(TAG,
+        "DAY_OF_WEEK:" + cal.get(Calendar.DAY_OF_WEEK) + " ,get days " + days);
 
     show_refund.clear();
     ArrayList<Entry> yVals = new ArrayList<Entry>();
     for (int i = 0; i < days; i++) {
       float val = 0;
       if (his_refund.size() > 0) {
-        val = (float)his_refund.get(MAX_RECENT_DAYS - days + i).getCarry();
+        val = (float) his_refund.get(MAX_RECENT_DAYS - days + i).getCarry();
         show_refund.add(his_refund.get(MAX_RECENT_DAYS - days + i));
       }
       yVals.add(new Entry(val, i));
     }
 
     // set data
-    if(!isEmptyData(show_refund)) {
+    if (!isEmptyData(show_refund)) {
       setData(xVals, yVals);
-    }
-    else{
+    } else {
       rl_empty_chart.setVisibility(View.VISIBLE);
     }
   }
 
   private void setDataOfPreviousWeek() {
 
-    Calendar cal= Calendar.getInstance();
-    int month=cal.get(Calendar.MONTH)+1;//得到月，因为从0开始的，所以要加1
-    int day=cal.get(Calendar.DAY_OF_MONTH);//得到天
-    int  days = 0;
-    if(cal.get(Calendar.DAY_OF_WEEK) == 1){
+    Calendar cal = Calendar.getInstance();
+    int month = cal.get(Calendar.MONTH) + 1;//得到月，因为从0开始的，所以要加1
+    int day = cal.get(Calendar.DAY_OF_MONTH);//得到天
+    int days = 0;
+    if (cal.get(Calendar.DAY_OF_WEEK) == 1) {
       days = 7;
-    }
-    else{
+    } else {
       days = cal.get(Calendar.DAY_OF_WEEK) - 1;
     }
-    JUtils.Log(TAG, "DAY_OF_WEEK:"+ cal.get(Calendar.DAY_OF_WEEK)+ " ,get days " +days);
-    cal.add(Calendar.DAY_OF_YEAR,0-days -7);//日期减days天数
+    JUtils.Log(TAG,
+        "DAY_OF_WEEK:" + cal.get(Calendar.DAY_OF_WEEK) + " ,get days " + days);
+    cal.add(Calendar.DAY_OF_YEAR, 0 - days - 7);//日期减days天数
 
     ArrayList<String> xVals = new ArrayList<String>();
-    for(int i =0; i < 7;i++){
-      cal.add(Calendar.DAY_OF_YEAR,1);//日期+1
-      xVals.add(""+(cal.get(Calendar.MONTH)+1)+"/"+cal.get(Calendar.DAY_OF_MONTH));
-      JUtils.Log(TAG, "DAY: "+ (cal.get(Calendar.MONTH)+1)+"/"+cal.get(Calendar.DAY_OF_MONTH));
+    for (int i = 0; i < 7; i++) {
+      cal.add(Calendar.DAY_OF_YEAR, 1);//日期+1
+      xVals.add(
+          "" + (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.DAY_OF_MONTH));
+      JUtils.Log(TAG,
+          "DAY: " + (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.DAY_OF_MONTH));
     }
 
     show_refund.clear();
@@ -547,18 +555,16 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     for (int i = 0; i < 7; i++) {
       float val = 0;
       if (his_refund.size() > 0) {
-        val = (float)his_refund.get(MAX_RECENT_DAYS - days + i - 7).getCarry();
+        val = (float) his_refund.get(MAX_RECENT_DAYS - days + i - 7).getCarry();
         show_refund.add(his_refund.get(MAX_RECENT_DAYS - days + i - 7));
       }
       yVals.add(new Entry(val, i));
     }
 
-
     // set data
-    if(!isEmptyData(show_refund)) {
+    if (!isEmptyData(show_refund)) {
       setData(xVals, yVals);
-    }
-    else{
+    } else {
       rl_empty_chart.setVisibility(View.VISIBLE);
     }
   }
@@ -614,10 +620,10 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         Integer.toString(show_refund.get(e.getXIndex()).getVisitorNum()));
     from = (MAX_RECENT_DAYS - 1 - e.getXIndex()) + "";
     JUtils.Log(TAG, "第" + e.getXIndex() + "个");
-    tv_today_order2.setText(Integer.toString((int) (show_refund.get(e.getXIndex()).getOrderNum())));
+    tv_today_order2.setText(
+        Integer.toString((int) (show_refund.get(e.getXIndex()).getOrderNum())));
     tv_today_fund2.setText(Double.toString(
-        (double) (Math.round(show_refund.get(e.getXIndex()).getCarry() * 100))
-            / 100));
+        (double) (Math.round(show_refund.get(e.getXIndex()).getCarry() * 100)) / 100));
 
     /*if (Double.compare(show_his_refund.get(e.getXIndex()).getRefund(), 0) == 0) {
       tv_today_fund2.setText(Float.toString(
@@ -678,21 +684,18 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
               his_refund.clear();
               his_refund.addAll(recentDayBean);
 
-              JUtils.Log(TAG,
-                  "get_num =" + get_num + " " + "size= " + his_refund.size());
+              JUtils.Log(TAG, "get_num =" + get_num + " " + "size= " + his_refund.size());
               if ((his_refund.size() > 0)) {
                 init_chart();
                 setDataOfThisWeek();
 
-
                 if (his_refund.get(0) != null) {
                   tv_today_visit2.setText(Integer.toString(
-                          his_refund.get(his_refund.size() - 1).getVisitorNum()));
+                      his_refund.get(his_refund.size() - 1).getVisitorNum()));
                   tv_today_order2.setText(Integer.toString(
-                          his_refund.get(his_refund.size() - 1).getOrderNum()));
+                      his_refund.get(his_refund.size() - 1).getOrderNum()));
                   tv_today_fund2.setText(Double.toString((double) (Math.round(
-                          his_refund.get(his_refund.size() - 1).getCarry() * 100))
-                      / 100));
+                      his_refund.get(his_refund.size() - 1).getCarry() * 100)) / 100));
                 }
               }
             }
@@ -791,9 +794,9 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   }
 
   private void show_liveness(int liveness) {
-    JUtils.Log(TAG,"liveness:"+liveness);
+    JUtils.Log(TAG, "liveness:" + liveness);
     img_liveness.setText(Integer.toString(liveness));
-    if(liveness > 100) liveness = 100;
+    if (liveness > 100) liveness = 100;
     mProgressBar.setProgress(liveness);
     mProgressBar.setVisibility(View.VISIBLE);
 
@@ -824,11 +827,11 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     img_liveness.setLayoutParams(laParams1);
   }
 
-  private boolean isEmptyData(List<RecentCarryBean> list_refund){
+  private boolean isEmptyData(List<RecentCarryBean> list_refund) {
     boolean result = true;
-    if(list_refund != null) {
+    if (list_refund != null) {
       for (int i = 0; i < list_refund.size(); i++) {
-        if(Double.compare(list_refund.get(i).getCarry(), 0) != 0 ){
+        if (Double.compare(list_refund.get(i).getCarry(), 0) != 0) {
           result = false;
           break;
         }
