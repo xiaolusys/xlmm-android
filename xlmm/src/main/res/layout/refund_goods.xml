@@ -24,6 +24,7 @@
         android:layout_alignParentTop="true"
         android:text="申请数量："
         android:textSize="15sp"
+        android:layout_marginLeft="16px"
         />
 
     <TextView
@@ -35,6 +36,7 @@
         android:layout_alignParentTop="true"
         android:text="1"
         android:textSize="15sp"
+        android:layout_marginRight="16px"
         />
   </RelativeLayout>
 
@@ -54,6 +56,7 @@
         android:layout_alignParentTop="true"
         android:text="可退金额："
         android:textSize="15sp"
+        android:layout_marginLeft="16px"
         />
 
     <TextView
@@ -66,6 +69,7 @@
         android:text="￥0"
         android:textColor="@color/colorAccent"
         android:textSize="15sp"
+        android:layout_marginRight="16px"
         />
   </RelativeLayout>
 
@@ -83,6 +87,7 @@
         android:layout_alignParentTop="true"
         android:text="退款原因"
         android:textSize="15sp"
+        android:layout_marginLeft="16px"
         />
 
     <TextView
@@ -94,6 +99,7 @@
         android:layout_alignParentTop="true"
         android:text="其他"
         android:textSize="15sp"
+        android:layout_marginRight="16px"
         />
   </RelativeLayout>
 
@@ -113,6 +119,7 @@
         android:layout_weight="1"
         android:text="时间："
         android:textSize="15sp"
+        android:layout_marginLeft="16px"
         />
 
     <TextView
@@ -122,6 +129,7 @@
         android:layout_weight="1"
         android:text="申请退款"
         android:textSize="15sp"
+        android:layout_marginLeft="16px"
         />
 
   </LinearLayout>
