@@ -136,6 +136,16 @@
         />
       </RelativeLayout>
 
+      <FrameLayout
+          android:id="@+id/fl_chart"
+          android:layout_width="match_parent"
+          android:layout_height="250px"
+          android:layout_below="@id/rl_mama_info"
+          android:layout_centerHorizontal="true"
+          android:layout_marginTop="1px"
+          android:orientation="horizontal"
+          android:background="@color/white">
+
       <RelativeLayout
           android:id="@+id/rl_chart"
           android:layout_width="match_parent"
@@ -145,20 +155,69 @@
           android:layout_marginTop="1px"
           android:orientation="horizontal">
 
-        <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/chart1"
+        <ImageView
+            android:id="@+id/img_left"
+            android:layout_width="22px"
+            android:layout_height="46px"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="17px"
+            android:src="@drawable/img_left"
+            />
+
+          <com.github.mikephil.charting.charts.LineChart
+              android:id="@+id/chart1"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_toRightOf="@+id/img_left"
+              android:layout_toLeftOf="@+id/img_right"
+              android:layout_marginLeft="40px"
+              android:layout_marginRight="40px"
+              android:visibility="invisible"
+          />
+
+        <ImageView
+            android:id="@+id/img_right"
+            android:layout_width="22px"
+            android:layout_height="46px"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="17px"
+            android:src="@drawable/img_right"
+            />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_empty_chart"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="invisible"
-        />
-      </RelativeLayout>
+            android:visibility="invisible">
+          <ImageView
+              android:id="@+id/img_pig"
+              android:layout_width="110px"
+              android:layout_height="90px"
+              android:layout_centerInParent="true"
+              android:src="@drawable/img_pig"
+          />
+
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="本周暂无收益"
+              android:layout_below="@+id/img_pig"
+              android:layout_centerHorizontal="true"
+              android:layout_marginTop="8dp"
+              />
+
+        </RelativeLayout>
+      </FrameLayout>
 
 
       <LinearLayout
           android:id="@+id/rl_order"
           android:layout_width="match_parent"
           android:layout_height="90px"
-          android:layout_below="@+id/rl_chart"
+          android:layout_below="@+id/fl_chart"
           android:layout_centerHorizontal="true"
           android:layout_marginTop="1px"
           android:orientation="horizontal">
