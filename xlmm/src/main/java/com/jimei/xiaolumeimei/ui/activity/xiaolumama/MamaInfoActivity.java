@@ -51,8 +51,8 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     OnChartValueSelectedListener {
   private static final int MAX_RECENT_DAYS = 15;
   String TAG = "MamaInfoActivity";
-  List<RecentCarryBean> his_refund = new ArrayList<>();
-  List<RecentCarryBean> show_refund = new ArrayList<>();
+  List<RecentCarryBean.ResultsEntity> his_refund = new ArrayList<>();
+  List<RecentCarryBean.ResultsEntity> show_refund = new ArrayList<>();
   int get_num = 0;
 
   @Bind(R.id.toolbar) Toolbar toolbar;
@@ -666,7 +666,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
 
   void get_his_refund() {
     for (int i = 0; i < MAX_RECENT_DAYS; i++) {
-      RecentCarryBean hisRefund = new RecentCarryBean();
+      RecentCarryBean.ResultsEntity hisRefund = new RecentCarryBean.ResultsEntity();
       hisRefund.setVisitorNum(0);
       hisRefund.setOrderNum(0);
       hisRefund.setCarry(0.0);
@@ -676,13 +676,13 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     Subscription subscribe = MMProductModel.getInstance()
         .getRecentCarry("0", Integer.toString(MAX_RECENT_DAYS))
         .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<List<RecentCarryBean>>() {
-          @Override public void onNext(List<RecentCarryBean> recentDayBean) {
+        .subscribe(new ServiceResponse<RecentCarryBean>() {
+          @Override public void onNext(RecentCarryBean recentDayBean) {
             super.onNext(recentDayBean);
             if (recentDayBean != null) {
 
               his_refund.clear();
-              his_refund.addAll(recentDayBean);
+              his_refund.addAll(recentDayBean.getResults());
 
               JUtils.Log(TAG, "get_num =" + get_num + " " + "size= " + his_refund.size());
               if ((his_refund.size() > 0)) {
@@ -827,7 +827,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     img_liveness.setLayoutParams(laParams1);
   }
 
-  private boolean isEmptyData(List<RecentCarryBean> list_refund) {
+  private boolean isEmptyData(List<RecentCarryBean.ResultsEntity> list_refund) {
     boolean result = true;
     if (list_refund != null) {
       for (int i = 0; i < list_refund.size(); i++) {
