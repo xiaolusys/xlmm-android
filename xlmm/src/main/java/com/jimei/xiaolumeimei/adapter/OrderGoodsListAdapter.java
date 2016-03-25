@@ -128,63 +128,63 @@ public class OrderGoodsListAdapter extends BaseAdapter {
     Log.d(TAG, " setBtnInfo" + state + " " + refund_state);
 
     Button btn = (Button) convertView.findViewById(R.id.btn_order_proc);
+    TextView tv_order_state = (TextView) convertView.findViewById(R.id.tv_order_state);
     switch (state) {
-      case XlmmConst.ORDER_STATE_PAYED: {
+      case XlmmConst.ORDER_STATE_PAYED:
+      case XlmmConst.ORDER_STATE_CONFIRM_RECEIVE:{
         if (kill_title) {
           btn.setVisibility(View.INVISIBLE);
         } else {
           if (refund_state != XlmmConst.REFUND_STATE_NO_REFUND) {
             btn.setVisibility(View.INVISIBLE);
+            tv_order_state.setVisibility(View.VISIBLE);
+            switch (refund_state) {
+
+              case XlmmConst.REFUND_STATE_BUYER_APPLY: {
+                tv_order_state.setText("已经申请退款");
+                break;
+              }
+              case XlmmConst.REFUND_STATE_SELLER_AGREED: {
+                tv_order_state.setText("卖家同意退款");
+                break;
+              }
+              case XlmmConst.REFUND_STATE_BUYER_RETURNED_GOODS: {
+                tv_order_state.setText("已经退货");
+                break;
+              }
+              case XlmmConst.REFUND_STATE_SELLER_REJECTED: {
+                tv_order_state.setText("卖家拒绝退款");
+                break;
+              }
+              case XlmmConst.REFUND_STATE_WAIT_RETURN_FEE: {
+                tv_order_state.setText("退款中");
+                break;
+              }
+              case XlmmConst.REFUND_STATE_REFUND_CLOSE: {
+                tv_order_state.setText("退款关闭");
+                break;
+              }
+              case XlmmConst.REFUND_STATE_REFUND_SUCCESS: {
+                tv_order_state.setText("退款成功");
+                break;
+              }
+              default:
+                break;
+            }
           } else {
             btn.setText("申请退款");
+            tv_order_state.setVisibility(View.INVISIBLE);
           }
         }
         break;
       }
       case XlmmConst.ORDER_STATE_SENDED: {
         btn.setText("确认收货");
+        tv_order_state.setVisibility(View.INVISIBLE);
         break;
       }
-      case XlmmConst.ORDER_STATE_CONFIRM_RECEIVE: {
-        switch (refund_state) {
-          case XlmmConst.REFUND_STATE_NO_REFUND: {
-            if (kill_title) {
-              btn.setVisibility(View.INVISIBLE);
-            } else {
-              btn.setText("退货退款");
-            }
-            break;
-          }
-          case XlmmConst.REFUND_STATE_BUYER_APPLY: {
-            btn.setText("已经申请退款");
-            break;
-          }
-          case XlmmConst.REFUND_STATE_SELLER_AGREED: {
-            btn.setText("卖家同意退款");
-            break;
-          }
-          case XlmmConst.REFUND_STATE_BUYER_RETURNED_GOODS: {
-            btn.setText("已经退货");
-            break;
-          }
-          case XlmmConst.REFUND_STATE_SELLER_REJECTED: {
-            btn.setText("卖家拒绝退款");
-            break;
-          }
-          case XlmmConst.REFUND_STATE_WAIT_RETURN_FEE: {
-            btn.setText("退款中");
-            break;
-          }
-          case XlmmConst.REFUND_STATE_REFUND_CLOSE: {
-            btn.setText("退款关闭");
-            break;
-          }
-          case XlmmConst.REFUND_STATE_REFUND_SUCCESS: {
-            btn.setText("退款成功");
-            break;
-          }
-        }
-      }
+      default:
+        break;
     }
   }
 
@@ -193,18 +193,24 @@ public class OrderGoodsListAdapter extends BaseAdapter {
     Button btn = (Button) convertView.findViewById(R.id.btn_order_proc);
     switch (state) {
       case XlmmConst.ORDER_STATE_PAYED: {
-        btn.setOnClickListener(new View.OnClickListener() {
-          @Override public void onClick(View v) {
-            //enter apply refund
-            Log.d(TAG, "enter apply refund ");
-            Intent intent = new Intent(context, ApplyRefundActivity.class);
-            intent.putExtra("goods_info", goods_info);
-            Log.d(TAG,
-                "transfer good  " + goods_info.getId() + " to " + "ApplyRefundActivity");
-            context.startActivity(intent);
-            ((Activity) context).finish();
+        switch (refund_state) {
+          case XlmmConst.REFUND_STATE_NO_REFUND: {
+            btn.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                //enter apply refund
+                Log.d(TAG, "enter apply refund ");
+                Intent intent = new Intent(context, ApplyRefundActivity.class);
+                intent.putExtra("goods_info", goods_info);
+                Log.d(TAG,
+                        "transfer good  " + goods_info.getId() + " to " + "ApplyRefundActivity");
+                context.startActivity(intent);
+                ((Activity) context).finish();
+              }
+            });
+            break;
           }
-        });
+        }
         break;
       }
       case XlmmConst.ORDER_STATE_SENDED: {
@@ -239,6 +245,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
           }
         }
       }
+      break;
     }
   }
 
