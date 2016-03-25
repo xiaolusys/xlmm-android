@@ -10,76 +10,76 @@ import com.google.gson.annotations.SerializedName;
 public class ActivityBean {
 
   /**
-   * active_dec : 开年活动－开年有好礼，红包不停发，免费等你拿！
+   * active_dec : 免费送出1000个空气棉恒温睡袋！全国包邮免费送！
    * share_type : link
-   * title : 开年活动－红包不停发
-   * share_img : http://7xogkj.com2.z0.glb.qiniucdn.com/222-share-pyq2.png
-   * qrcode_link : http://m.xiaolumeimei.com/sale/promotion/ercode/
-   * link_qrcode : /media/pmt/custm-1-None.jpg
-   * share_link : http://m.xiaolumeimei.com/sale/promotion/xlsampleapply/?from_customer=1&ufrom=None
+   * title : 免费试用活动
+   * qrcode_link : http://192.168.1.11:9000/sale/promotion/ercode/
+   * id : 1
+   * share_link : http://dev.xiaolumeimei.com/sale/promotion/activity/
+   * share_icon : http://7xogkj.com2.z0.glb.qiniucdn.com/dress_%E5%88%86%E4%BA%AB%E5%9B%BE%E7%89%87.png
    */
 
-  @SerializedName("active_dec") private String activeDec;
-  @SerializedName("share_type") private String shareType;
-  @SerializedName("title") private String title;
-  @SerializedName("share_img") private String shareImg;
-  @SerializedName("qrcode_link") private String qrcodeLink;
-  @SerializedName("link_qrcode") private String linkQrcode;
-  @SerializedName("share_link") private String shareLink;
-
-  public void setActiveDec(String activeDec) {
-    this.activeDec = activeDec;
-  }
-
-  public void setShareType(String shareType) {
-    this.shareType = shareType;
-  }
-
-  public void setTitle(String title) {
-    this.title = title;
-  }
-
-  public void setShareImg(String shareImg) {
-    this.shareImg = shareImg;
-  }
-
-  public void setQrcodeLink(String qrcodeLink) {
-    this.qrcodeLink = qrcodeLink;
-  }
-
-  public void setLinkQrcode(String linkQrcode) {
-    this.linkQrcode = linkQrcode;
-  }
-
-  public void setShareLink(String shareLink) {
-    this.shareLink = shareLink;
-  }
+  @SerializedName("active_dec") private String mActiveDec;
+  @SerializedName("share_type") private String mShareType;
+  @SerializedName("title") private String mTitle;
+  @SerializedName("qrcode_link") private String mQrcodeLink;
+  @SerializedName("id") private int mId;
+  @SerializedName("share_link") private String mShareLink;
+  @SerializedName("share_icon") private String mShareIcon;
 
   public String getActiveDec() {
-    return activeDec;
+    return mActiveDec;
+  }
+
+  public void setActiveDec(String activeDec) {
+    mActiveDec = activeDec;
   }
 
   public String getShareType() {
-    return shareType;
+    return mShareType;
+  }
+
+  public void setShareType(String shareType) {
+    mShareType = shareType;
   }
 
   public String getTitle() {
-    return title;
+    return mTitle;
   }
 
-  public String getShareImg() {
-    return shareImg;
+  public void setTitle(String title) {
+    mTitle = title;
   }
 
   public String getQrcodeLink() {
-    return qrcodeLink;
+    return mQrcodeLink;
   }
 
-  public String getLinkQrcode() {
-    return linkQrcode;
+  public void setQrcodeLink(String qrcodeLink) {
+    mQrcodeLink = qrcodeLink;
+  }
+
+  public int getId() {
+    return mId;
+  }
+
+  public void setId(int id) {
+    mId = id;
   }
 
   public String getShareLink() {
-    return shareLink;
+    return mShareLink;
+  }
+
+  public void setShareLink(String shareLink) {
+    mShareLink = shareLink;
+  }
+
+  public String getShareIcon() {
+    return mShareIcon;
+  }
+
+  public void setShareIcon(String shareIcon) {
+    mShareIcon = shareIcon;
   }
 }

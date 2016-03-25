@@ -2,11 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/llayout_navhead"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="210dp"
     android:padding="16dp"
     android:background="@drawable/side_nav_bar"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
-    >
+>
 
   <RelativeLayout
       android:layout_width="wrap_content"
@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="小鹿妈妈"
-        />
+    />
   </RelativeLayout>
 
 
@@ -51,7 +51,7 @@
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        >
+    >
       <TextView
           android:textStyle="bold"
           android:textSize="15sp"
@@ -60,7 +60,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text="0"
-          />
+      />
 
       <ImageView
           android:layout_below="@id/tvMoney"
@@ -76,6 +76,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_toRightOf="@+id/imgMoney"
+          android:layout_below="@id/tvMoney"
           android:layout_alignBottom="@+id/imgMoney"
           android:gravity="center_vertical"
           android:text="余额(元)"/>
@@ -88,7 +89,7 @@
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        >
+    >
       <TextView
           android:textStyle="bold"
           android:textSize="15sp"
@@ -113,6 +114,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_toRightOf="@+id/imgPoint"
+          android:layout_below="@id/tvScore"
           android:layout_alignBottom="@+id/imgPoint"
           android:gravity="center_vertical"
           android:text="积分"/>
@@ -125,7 +127,7 @@
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        >
+    >
 
       <TextView
           android:textStyle="bold"
@@ -150,6 +152,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_toRightOf="@+id/imgCoupon"
+          android:layout_below="@id/tvDiscount"
           android:layout_alignBottom="@+id/imgCoupon"
           android:gravity="center_vertical"
           android:text="优惠券"/>

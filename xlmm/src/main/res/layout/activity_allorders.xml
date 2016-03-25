@@ -30,11 +30,29 @@
           android:textColor="@android:color/white"
           android:textSize="16sp"
           />
-
     </android.support.v7.widget.Toolbar>
+
+      <android.support.design.widget.TabLayout
+          android:id="@+id/tab_layout"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:background="#FFFFFF"
+          app:tabSelectedTextColor="@color/colorAccent"
+          app:tabTextColor="@color/black_overlay"
+          app:tabIndicatorColor="@color/colorAccent"
+          app:tabMode="scrollable"/>
+
+
   </android.support.design.widget.AppBarLayout>
 
-  <FrameLayout
+  <android.support.v4.view.ViewPager
+      android:id="@+id/view_pager"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      app:layout_behavior="@string/appbar_scrolling_view_behavior"></android.support.v4.view.ViewPager>
+
+
+  <!--FrameLayout
       android:layout_width="fill_parent"
       android:layout_height="fill_parent">
     <ListView
@@ -44,7 +62,7 @@
     </ListView>
 
     <include layout="@layout/orders_emptyinfo"/>
-  </FrameLayout>
+  </FrameLayout-->
 
 
 </LinearLayout>

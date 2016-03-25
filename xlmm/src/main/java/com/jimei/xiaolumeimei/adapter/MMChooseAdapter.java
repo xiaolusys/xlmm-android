@@ -12,8 +12,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.MMChooselistBean;
+import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -72,7 +72,7 @@ public class MMChooseAdapter extends RecyclerView.Adapter<MMChooseAdapter.MMChoo
         "/¥" + (float) (Math.round(mmChooselistBean.getStdSalePrice() * 100)) / 100);
     holder.rebetAmount.setText(
         "¥" + (float) (Math.round(mmChooselistBean.getRebetAmount() * 100)) / 100);
-    holder.lockNum.setText("累积销量 " + mmChooselistBean.getLockNum() + "件");
+    holder.lockNum.setText("累积销量 " + mmChooselistBean.getmSaleNum() + "件");
 
     int inCustomerShop = mmChooselistBean.getInCustomerShop();
     if (0 == inCustomerShop) {
@@ -84,7 +84,7 @@ public class MMChooseAdapter extends RecyclerView.Adapter<MMChooseAdapter.MMChoo
       holder.add.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View v) {
 
-        showIndeterminateProgressDialog(false);
+          showIndeterminateProgressDialog(false);
           MMProductModel.getInstance()
               .add_pro_to_shop(mmChooselistBean.getId() + "")
               .subscribeOn(Schedulers.io())
@@ -125,7 +125,7 @@ public class MMChooseAdapter extends RecyclerView.Adapter<MMChooseAdapter.MMChoo
       holder.remove.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View v) {
 
-      showIndeterminateProgressDialog(false);
+          showIndeterminateProgressDialog(false);
           MMProductModel.getInstance()
               .remove_pro_from_shop(mmChooselistBean.getId() + "")
               .subscribeOn(Schedulers.io())
@@ -164,6 +164,20 @@ public class MMChooseAdapter extends RecyclerView.Adapter<MMChooseAdapter.MMChoo
     return mList == null ? 0 : mList.size();
   }
 
+  public void showIndeterminateProgressDialog(boolean horizontal) {
+    materialDialog = new MaterialDialog.Builder(mContext)
+        //.title(R.string.progress_dialog)
+        .content(R.string.please_wait)
+        .progress(true, 0)
+        .widgetColorRes(R.color.colorAccent)
+        .progressIndeterminateStyle(horizontal)
+        .show();
+  }
+
+  public void hideIndeterminateProgressDialog() {
+    materialDialog.dismiss();
+  }
+
   static class MMChooseVH extends RecyclerView.ViewHolder {
     int id = R.layout.item_chooselist;
     @Bind(R.id.image_chooselist) ImageView imageChooselist;
@@ -179,18 +193,5 @@ public class MMChooseAdapter extends RecyclerView.Adapter<MMChooseAdapter.MMChoo
       super(itemView);
       ButterKnife.bind(this, itemView);
     }
-  }
-
-  public void showIndeterminateProgressDialog(boolean horizontal) {
-    materialDialog = new MaterialDialog.Builder(mContext)
-        //.title(R.string.progress_dialog)
-        .content(R.string.please_wait)
-        .progress(true, 0)
-        .progressIndeterminateStyle(horizontal)
-        .show();
-  }
-
-  public void hideIndeterminateProgressDialog() {
-    materialDialog.dismiss();
   }
 }

@@ -9,7 +9,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
 import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -25,7 +24,8 @@ import rx.schedulers.Schedulers;
  *
  * Copyright 2015年 上海己美. All rights reserved.
  */
-public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity implements View.OnClickListener{
+public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
+    implements View.OnClickListener {
 
   String TAG = "WriteLogisticsInfoActivty";
 
@@ -37,7 +37,6 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity imple
   String company;
   String logistics_number;
   int goods_id;
-  TradeModel model = new TradeModel();
 
   @Override protected void setListener() {
     toolbar.setOnClickListener(this);
@@ -45,12 +44,10 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity imple
   }
 
   @Override protected void initData() {
-    goods_id = getIntent().getExtras().getInt("goods_id");
-    Log.d(TAG, "goods_id " + goods_id);
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
-
+    goods_id = extras.getInt("goods_id");
   }
 
   @Override protected int getContentViewLayoutID() {
@@ -61,14 +58,15 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity imple
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
     finishBack(toolbar);
-    et_logistics_company.setOnTouchListener(new View.OnTouchListener(){
-      public boolean onTouch(View v, MotionEvent event){
+    et_logistics_company.setOnTouchListener(new View.OnTouchListener() {
+      public boolean onTouch(View v, MotionEvent event) {
         //et_refund_reason.setInputType(InputType.TYPE_NULL); //关闭软键盘
-        if(MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
+        if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
           Log.d(TAG, "choose logistics commpay");
-          Intent intent = new Intent(WriteLogisticsInfoActivty.this, ChooseLogisticsCompanyActivity.class);
+          Intent intent = new Intent(WriteLogisticsInfoActivty.this,
+              ChooseLogisticsCompanyActivity.class);
 
-          Log.d(TAG," to ChooseLogisticsCompanyActivity");
+          Log.d(TAG, " to ChooseLogisticsCompanyActivity");
           startActivityForResult(intent, 1);
         }
         return false;
@@ -93,43 +91,44 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity imple
     }
   }
 
-  protected void onActivityResult(int requestCode, int resultCode, Intent data)
-  {
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
     super.onActivityResult(requestCode, resultCode, data);
-    if (requestCode == 1)
-    {
+    if (requestCode == 1) {
 
       // data contains result
       company = data.getExtras().getString("company");
-      Log.d(TAG,"onActivityResult company" + company);
+      Log.d(TAG, "onActivityResult company" + company);
       et_logistics_company.setText(company);
     }
   }
 
-  private  void commit_logistics_info(){
-    Log.i(TAG,"commit_logistics_info goods_id  "+ goods_id + " "+company +" "
-        + ""+et_logistics_number.getText().toString
-        ().trim());
-  Subscription subscription = model.commit_logistics_info(goods_id, company,
-        et_logistics_number.getText().toString().trim())
+  private void commit_logistics_info() {
+    Log.i(TAG, "commit_logistics_info goods_id  "
+        + goods_id
+        + " "
+        + company
+        + " "
+        + ""
+        + et_logistics_number.getText().toString().trim());
+    Subscription subscription = TradeModel.getInstance()
+        .commit_logistics_info(goods_id, company,
+            et_logistics_number.getText().toString().trim())
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ResponseBody>() {
           @Override public void onNext(ResponseBody resp) {
             JUtils.Toast("提交物流信息成功，收货后我们会尽快为您处理退款！");
-            Log.i(TAG,"commit_logistics_info "+ resp.toString());
+            Log.i(TAG, "commit_logistics_info " + resp.toString());
             finish();
           }
 
-          @Override
-          public void onCompleted() {
+          @Override public void onCompleted() {
             super.onCompleted();
           }
 
-          @Override
-          public void onError(Throwable e) {
+          @Override public void onError(Throwable e) {
             e.printStackTrace();
-            Log.e(TAG, " error:commit_logistics_info "   + e.toString());
+            Log.e(TAG, " error:commit_logistics_info " + e.toString());
             JUtils.Toast("网络异常，提交信息失败，请重试！");
             super.onError(e);
           }

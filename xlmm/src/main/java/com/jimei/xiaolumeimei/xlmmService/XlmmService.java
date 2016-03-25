@@ -26,6 +26,7 @@ import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.entities.MMChooselistBean;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.MMStoreBean;
+import com.jimei.xiaolumeimei.entities.MMVisitorsBean;
 import com.jimei.xiaolumeimei.entities.MamaFansBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.MamaLivenessBean;
@@ -37,6 +38,7 @@ import com.jimei.xiaolumeimei.entities.OderCarryBean;
 import com.jimei.xiaolumeimei.entities.OneDayAgentOrdersBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.PointLogBean;
+import com.jimei.xiaolumeimei.entities.PostActivityBean;
 import com.jimei.xiaolumeimei.entities.PostBean;
 import com.jimei.xiaolumeimei.entities.ProductBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
@@ -137,7 +139,8 @@ public interface XlmmService {
 
     //获取所有订单
     @GET(XlmmApi.ALL_ORDERS_URL)
-    Observable<AllOrdersBean> getAllOdersList();
+    Observable<AllOrdersBean> getAllOdersList(
+            @Query("page") String page);
 
 
     //获得商品详情页面数据
@@ -187,8 +190,10 @@ public interface XlmmService {
             @Field("post_fee") String post_fee,
             @Field("discount_fee") String discount_fee,
             @Field("total_fee") String total_fee,
+            @Field("pay_extras")String pay_extras,
             @Field("uuid") String uuid
     );
+
 
     @FormUrlEncoded
     @POST("trades/shoppingcart_create")
@@ -200,6 +205,7 @@ public interface XlmmService {
             @Field("post_fee") String post_fee,
             @Field("discount_fee") String discount_fee,
             @Field("total_fee") String total_fee,
+            @Field("pay_extras")String pay_extras,
             @Field("uuid") String uuid
     );
 
@@ -214,6 +220,7 @@ public interface XlmmService {
             @Field("post_fee") String post_fee,
             @Field("discount_fee") String discount_fee,
             @Field("total_fee") String total_fee,
+            @Field("pay_extras")String pay_extras,
             @Field("uuid") String uuid,
             @Field("coupon_id") String coupon_id
     );
@@ -229,6 +236,7 @@ public interface XlmmService {
             @Field("post_fee") String post_fee,
             @Field("discount_fee") String discount_fee,
             @Field("total_fee") String total_fee,
+            @Field("pay_extras")String pay_extras,
             @Field("uuid") String uuid,
             @Field("coupon_id") String coupon_id
     );
@@ -248,15 +256,18 @@ public interface XlmmService {
 
     //获取所有待支付订单
     @GET(XlmmApi.WAITPAY_URL)
-    Observable<AllOrdersBean> getWaitPayOrdersBean();
+    Observable<AllOrdersBean> getWaitPayOrdersBean(
+            @Query("page")String page);
 
     //获取所有待发货订单
     @GET(XlmmApi.WAITSEND_URL)
-    Observable<AllOrdersBean> getWaitSendOrdersBean();
+    Observable<AllOrdersBean> getWaitSendOrdersBean(
+            @Query("page")String page);
 
     //获取所有退货订单
     @GET(XlmmApi.ALL_REFUNDS_URL)
-    Observable<AllRefundsBean> getAllRedundsList();
+    Observable<AllRefundsBean> getAllRedundsList(
+            @Query("page")String page);
 
 
     //获取注册验证码
@@ -495,8 +506,15 @@ public interface XlmmService {
   @GET("pmt/cashout")
   Observable<WithdrawCashHisBean> getWithdrawCashHis();
 
-  @GET("pmt/xlmm/get_fans_list")
+  //获取粉丝列表
+  @GET(XlmmApi.APP_BASE_URL+ "/rest/v2/mama/fans")
   Observable<MamaFansBean> getMamaFans(
+      @Query("page")String page
+  );
+  //获取访客列表
+  @GET(XlmmApi.APP_BASE_URL+ "/rest/v2/mama/visitor")
+  Observable<MMVisitorsBean> getMamavisitor(
+      @Query("from")String from,
       @Query("page")String page
   );
 
@@ -611,8 +629,8 @@ public interface XlmmService {
   );
 
   //活动内容分享
-  @GET("pmt/free_order/get_share_content")
-  Observable<ActivityBean> get_party_share_content(  );
+  @GET("activitys/{id}/get_share_params")
+  Observable<ActivityBean> get_party_share_content( @Path("id")String id );
 
   //获得one day小鹿妈妈订单记录
   @GET( "pmt/shopping/shops_by_day")
@@ -639,7 +657,9 @@ public interface XlmmService {
   );
 
    @GET("users/get_budget_detail")
-  Observable<BudgetdetailBean> budGetdetailBean();
+  Observable<BudgetdetailBean> budGetdetailBean(
+           @Query("page")String page
+   );
 
   @GET("pmt/ninepic")
   Observable<List<NinePicBean>> getNinepic();
@@ -671,6 +691,12 @@ public interface XlmmService {
   Observable<OderCarryBean> getMamaAllOderCarryLogs(
        @Query("page")String page
   );
+
+  @GET(XlmmApi.APP_BASE_URL+"/rest/v2/mama/ordercarry")
+  Observable<OderCarryBean> getMamaAllOderCarryLogs(
+       @Query("carry_type")String carry_type,
+       @Query("page")String page
+  );
   @GET(XlmmApi.APP_BASE_URL+"/rest/v2/mama/awardcarry")
   Observable<AwardCarryBean> getMamaAllAwardCarryLogs(
        @Query("page")String page
@@ -685,6 +711,16 @@ public interface XlmmService {
   Observable<List<RecentCarryBean>> getRecentCarry(
           @Query("from") String from,
           @Query("days") String day);
+
+  @GET("activitys")
+  Observable<List<PostActivityBean>> getPostActivity(
+  );
+
+  @FormUrlEncoded
+  @POST("usercoupons")
+  Observable<ResponseBody> getUsercoupons(
+      @Field("template_id")String template_id
+  );
 
 
 

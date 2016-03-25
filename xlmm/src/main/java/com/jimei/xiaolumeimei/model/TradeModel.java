@@ -1,12 +1,12 @@
 package com.jimei.xiaolumeimei.model;
 
+import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.entities.BudgetPayBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
-import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 import com.squareup.okhttp.ResponseBody;
 import rx.Observable;
@@ -18,49 +18,61 @@ import rx.Observable;
  */
 public class TradeModel {
 
+  private static TradeModel ourInstance = new TradeModel();
+
+  private TradeModel() {
+  }
+
+  public static TradeModel getInstance() {
+    return ourInstance;
+  }
+
   //得到全部订单数据列表
-  public Observable<AllOrdersBean> getAlloderBean() {
+  public Observable<AllOrdersBean> getAlloderBean(String page) {
     return XlmmRetrofitClient.getService()
-        .getAllOdersList()
+        .getAllOdersList(page)
         .compose(new DefaultTransform<>());
   }
 
   //创建订单
   public Observable<ResponseBody> shoppingcart_create(String cart_ids, String addr_id,
       String channel, String payment, String post_fee, String discount_fee,
-      String total_fee, String uuid) {
+      String total_fee, String pay_extras, String uuid) {
     return XlmmRetrofitClient.getService()
         .shoppingcart_create(cart_ids, addr_id, channel, payment, post_fee, discount_fee,
-            total_fee, uuid)
+            total_fee, pay_extras, uuid)
         .compose(new DefaultTransform<>());
   }
 
   //创建订单
-  public Observable<BudgetPayBean> shoppingcart_createBudget(String cart_ids, String addr_id,
-      String channel, String payment, String post_fee, String discount_fee,
-      String total_fee, String uuid) {
+  public Observable<BudgetPayBean> shoppingcart_createBudget(String cart_ids,
+      String addr_id, String channel, String payment, String post_fee,
+      String discount_fee, String total_fee, String pay_extras, String uuid) {
     return XlmmRetrofitClient.getService()
         .shoppingcart_createBudget(cart_ids, addr_id, channel, payment, post_fee,
-            discount_fee, total_fee, uuid)
+            discount_fee, total_fee, pay_extras, uuid)
         .compose(new DefaultTransform<>());
   }
 
   //创建订单,使用优惠券
   public Observable<ResponseBody> shoppingcart_create_with_coupon(String cart_ids,
       String addr_id, String channel, String payment, String post_fee,
-      String discount_fee, String total_fee, String uuid, String coupon_id) {
+      String discount_fee, String total_fee, String pay_extras, String uuid,
+      String coupon_id) {
     return XlmmRetrofitClient.getService()
         .shoppingcart_create_with_coupon(cart_ids, addr_id, channel, payment, post_fee,
-            discount_fee, total_fee, uuid, coupon_id)
+            discount_fee, total_fee, pay_extras, uuid, coupon_id)
         .compose(new DefaultTransform<>());
   }
+
   //创建订单,使用优惠券
   public Observable<BudgetPayBean> shoppingcart_createBudget_with_coupon(String cart_ids,
       String addr_id, String channel, String payment, String post_fee,
-      String discount_fee, String total_fee, String uuid, String coupon_id) {
+      String discount_fee, String total_fee, String pay_extras, String uuid,
+      String coupon_id) {
     return XlmmRetrofitClient.getService()
         .shoppingcart_createBudget_with_coupon(cart_ids, addr_id, channel, payment,
-            post_fee, discount_fee, total_fee, uuid, coupon_id)
+            post_fee, discount_fee, total_fee, pay_extras, uuid, coupon_id)
         .compose(new DefaultTransform<>());
   }
 
@@ -79,23 +91,23 @@ public class TradeModel {
   }
 
   //得到全部退货单数据列表
-  public Observable<AllRefundsBean> getRefundsBean() {
+  public Observable<AllRefundsBean> getRefundsBean(String page) {
     return XlmmRetrofitClient.getService()
-        .getAllRedundsList()
+        .getAllRedundsList(page)
         .compose(new DefaultTransform<>());
   }
 
   //得到全部待支付订单数据列表
-  public Observable<AllOrdersBean> getWaitPayOrdersBean() {
+  public Observable<AllOrdersBean> getWaitPayOrdersBean(String page) {
     return XlmmRetrofitClient.getService()
-        .getWaitPayOrdersBean()
+        .getWaitPayOrdersBean(page)
         .compose(new DefaultTransform<>());
   }
 
   //得到全部待发货订单数据列表
-  public Observable<AllOrdersBean> getWaitSendOrdersBean() {
+  public Observable<AllOrdersBean> getWaitSendOrdersBean(String page) {
     return XlmmRetrofitClient.getService()
-        .getWaitSendOrdersBean()
+        .getWaitSendOrdersBean(page)
         .compose(new DefaultTransform<>());
   }
 
@@ -116,8 +128,8 @@ public class TradeModel {
   //删除ding单详细数据
   public Observable<ResponseBody> delRefund(int order_id) {
     return XlmmRetrofitClient.getService()
-            .delRefund(order_id)
-            .compose(new DefaultTransform<>());
+        .delRefund(order_id)
+        .compose(new DefaultTransform<>());
   }
 
   //创建退货单数据
@@ -139,15 +151,15 @@ public class TradeModel {
   public Observable<ResponseBody> update_refund_info(int goods_id, int reason, int num,
       double sum_price, String description, String proof_pic) {
     return XlmmRetrofitClient.getService()
-        .update_refund_info(goods_id, 1,reason, num, sum_price, description)
+        .update_refund_info(goods_id, 1, reason, num, sum_price, description)
         .compose(new DefaultTransform<>());
   }
 
   //填写退货物流信息
   public Observable<ResponseBody> commit_logistics_info(int goods_id, String company,
-       String logistics_number) {
+      String logistics_number) {
     return XlmmRetrofitClient.getService()
-        .commit_logistics_info(goods_id,2, company, logistics_number)
+        .commit_logistics_info(goods_id, 2, company, logistics_number)
         .compose(new DefaultTransform<>());
   }
 }

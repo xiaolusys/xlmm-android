@@ -1,290 +1,307 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-  <android.support.design.widget.AppBarLayout
-      android:id="@+id/app_bar_layout"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:theme="@style/AppTheme.AppBarOverlay">
+  <android.support.design.widget.CoordinatorLayout
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="#fdb916"
-        app:popupTheme="@style/AppTheme.PopupOverlay">
-
-      <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_centerInParent="true"
-          android:layout_gravity="center"
-          android:text="确认订单"
-          android:textColor="@android:color/white"
-          android:textSize="16sp"
-          />
-    </android.support.v7.widget.Toolbar>
-
-  </android.support.design.widget.AppBarLayout>
-  <ScrollView
-      app:layout_behavior="@string/appbar_scrolling_view_behavior"
-      android:layout_below="@id/app_bar_layout"
+      android:orientation="vertical"
       android:layout_width="match_parent"
       android:layout_height="match_parent">
-    <LinearLayout
-        android:orientation="vertical"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+      <android.support.v7.widget.Toolbar
+          android:id="@+id/toolbar"
+          android:layout_width="match_parent"
+          android:layout_height="?attr/actionBarSize"
+          android:background="#fdb916"
+          app:popupTheme="@style/AppTheme.PopupOverlay">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:text="确认订单"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+        />
+      </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+    <ScrollView
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_below="@id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-      <RelativeLayout
-          android:clickable="true"
-          android:id="@+id/adress"
-          android:padding="8dp"
+      <LinearLayout
+          android:orientation="vertical"
           android:layout_width="match_parent"
-          android:background="@color/white"
-          android:layout_height="145px">
-        <ImageView android:layout_width="wrap_content"
-            android:layout_centerVertical="true"
-            android:id="@+id/image_location"
-            android:layout_height="wrap_content"
-            android:src="@drawable/location"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/name"
-            android:layout_marginLeft="8dp"
-            android:layout_toRightOf="@id/image_location"
-            android:text=""
-            />
-
-        <TextView android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/phone"
-            android:layout_marginLeft="8dp"
-            android:layout_toRightOf="@id/name"
-            android:text=""
-            />
-        <TextView
-            android:id="@+id/address_details"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_toRightOf="@id/image_location"
-            android:text=""
-            android:layout_alignParentBottom="true"
-            />
-        <TextView
-            android:visibility="invisible"
-            android:id="@+id/choose_address"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_toRightOf="@id/image_location"
-            android:text="填写收货地址"
-            android:layout_alignBottom="@id/image_location"
-            />
-        <ImageView android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:src="@mipmap/common_icon_right_arrow"
-            />
-      </RelativeLayout>
-      <include layout="@layout/common_gap"/>
-      <com.jimei.xiaolumeimei.widget.NestedListView
-          android:id="@+id/payinfo_listview"
-          android:layout_width="match_parent"
-          android:layout_marginTop="16dp"
-          android:layout_marginBottom="16dp"
           android:layout_height="match_parent">
+        <RelativeLayout
+            android:clickable="true"
+            android:id="@+id/adress"
+            android:padding="8dp"
+            android:layout_width="match_parent"
+            android:background="@color/white"
+            android:layout_height="@dimen/y37">
+          <ImageView android:layout_width="wrap_content"
+              android:layout_centerVertical="true"
+              android:id="@+id/image_location"
+              android:layout_height="wrap_content"
+              android:src="@drawable/location"
+          />
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:id="@+id/name"
+              android:layout_marginLeft="@dimen/x7"
+              android:layout_toRightOf="@id/image_location"
+              android:text=""
+          />
 
-      </com.jimei.xiaolumeimei.widget.NestedListView>
-      <include layout="@layout/common_gap"/>
-      <RelativeLayout
-          android:id="@+id/coupon_layout"
-          android:padding="8dp"
-          android:background="@color/white"
-          android:layout_width="match_parent"
-          android:layout_height="88px">
-        <TextView android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="可用优惠券"
-            />
+          <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:id="@+id/phone"
+              android:layout_marginLeft="@dimen/x7"
+              android:layout_toRightOf="@id/name"
+              android:text=""
+          />
+          <TextView
+              android:id="@+id/address_details"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="@dimen/x7"
+              android:layout_toRightOf="@id/image_location"
+              android:text=""
+              android:layout_alignParentBottom="true"
+          />
+          <TextView
+              android:visibility="invisible"
+              android:id="@+id/choose_address"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="@dimen/x7"
+              android:layout_toRightOf="@id/image_location"
+              android:text="填写收货地址"
+              android:layout_alignBottom="@id/image_location"
+          />
+          <ImageView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_centerVertical="true"
+              android:layout_alignParentRight="true"
+              android:src="@mipmap/common_icon_right_arrow"
+          />
+        </RelativeLayout>
+        <include layout="@layout/common_gap"/>
+        <com.jimei.xiaolumeimei.widget.NestedListView
+            android:id="@+id/payinfo_listview"
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/y10"
+            android:layout_marginBottom="@dimen/y10"
+            android:layout_height="match_parent">
+
+        </com.jimei.xiaolumeimei.widget.NestedListView>
+        <include layout="@layout/common_gap"/>
+        <RelativeLayout
+            android:id="@+id/coupon_layout"
+            android:padding="8dp"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/y28">
+          <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="可用优惠券"
+          />
+
+          <TextView
+              android:layout_marginRight="@dimen/x7"
+              android:layout_toLeftOf="@+id/common_icon_right_arrow"
+              android:id="@+id/tv_coupon"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+          />
+
+          <ImageView
+              android:id="@+id/common_icon_right_arrow"
+              android:src="@mipmap/common_icon_right_arrow"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_alignParentRight="true"
+
+          />
+
+        </RelativeLayout>
+        <include layout="@layout/common_gap"/>
+        <RelativeLayout
+            android:padding="8dp"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="@dimen/y28">
+          <TextView
+
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="运费"
+          />
+          <TextView
+              android:id="@+id/post_fee"
+              android:layout_alignParentRight="true"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="0"
+          />
+        </RelativeLayout>
+        <include layout="@layout/common_gap"/>
+        <RelativeLayout
+            android:padding="8dp"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="@dimen/y28">
+          <TextView
+              android:layout_alignParentRight="true"
+              android:id="@+id/pay_extra"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+          />
+        </RelativeLayout>
 
         <TextView
-            android:layout_marginRight="8dp"
-            android:layout_toLeftOf="@+id/common_icon_right_arrow"
-            android:id="@+id/tv_coupon"
+            android:id="@+id/total_price_all"
+            android:layout_marginTop="@dimen/y5"
+            android:layout_marginBottom="@dimen/y5"
+            android:layout_gravity="end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            />
+            android:text=""
+            android:padding="8dp"
+        />
+        <include
+            layout="@layout/common_gap"/>
+        <RelativeLayout
+            android:background="@color/white"
+            android:padding="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/y83">
+          <TextView
+              android:layout_marginTop="@dimen/y4"
+              android:id="@+id/tv_alipay"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="支付宝"
+          />
+          <View
+              android:layout_marginTop="@dimen/y22"
+              android:id="@+id/v1"
+              android:layout_width="match_parent"
+              android:layout_height="1dip"
+              android:background="@color/greytow"/>
+          <TextView
+              android:id="@+id/tv22"
+              android:layout_below="@id/v1"
+              android:layout_marginTop="@dimen/y5"
+              android:layout_centerVertical="true"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="微信"
+          />
+          <View
+              android:layout_marginTop="@dimen/y10"
+              android:layout_below="@+id/tv22"
+              android:id="@+id/v2"
+              android:layout_width="match_parent"
+              android:layout_height="1dip"
+              android:background="@color/greytow"/>
+          <TextView
+              android:layout_below="@id/v2"
+              android:layout_marginTop="@dimen/y10"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="小鹿钱包"
+          />
 
-        <ImageView
-            android:id="@+id/common_icon_right_arrow"
-            android:src="@mipmap/common_icon_right_arrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+          <RadioGroup
+              android:id="@+id/pay_rg"
+              android:layout_width="wrap_content"
+              android:orientation="vertical"
+              android:layout_alignParentRight="true"
+              android:layout_height="wrap_content"
+          >
+            <android.support.v7.widget.AppCompatRadioButton
+                android:id="@+id/alipay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <android.support.v7.widget.AppCompatRadioButton
+                android:id="@+id/wx"
+                android:layout_marginTop="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <android.support.v7.widget.AppCompatRadioButton
+                android:id="@+id/budget"
+                android:layout_marginTop="12dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+          </RadioGroup>
 
-            />
+        </RelativeLayout>
+        <include layout="@layout/common_gap"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/y78"/>
+      </LinearLayout>
+    </ScrollView>
+    <include layout="@layout/include_cartpayinfo_lin"/>
+    <RelativeLayout
+        android:visibility="invisible"
+        android:id="@+id/empty_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#cccccc"
 
-      </RelativeLayout>
-      <include layout="@layout/common_gap"/>
-      <RelativeLayout
-          android:padding="8dp"
-          android:background="@color/white"
-          android:layout_width="match_parent"
-          android:orientation="horizontal"
-          android:layout_height="88px">
-        <TextView
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="运费"
-            />
-        <TextView
-            android:id="@+id/post_fee"
-            android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0"
-            />
-
-      </RelativeLayout>
-
-      <TextView
-          android:id="@+id/total_price_all"
-          android:layout_marginTop="8dp"
-          android:layout_marginBottom="8dp"
-          android:layout_gravity="end"
+    >
+      <ImageView
+          android:layout_marginBottom="24dp"
+          android:layout_above="@+id/tv2"
+          android:layout_centerHorizontal="true"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text=""
-          android:padding="8dp"
-          />
-      <include
-          layout="@layout/common_gap"/>
-      <RelativeLayout
-          android:background="@color/white"
-          android:padding="8dp"
-          android:layout_width="match_parent"
-          android:layout_height="264px">
-        <TextView
-            android:layout_marginTop="12px"
-            android:id="@+id/tv_alipay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="支付宝"
-            />
-        <View
-            android:layout_marginTop="70px"
-            android:id="@+id/v1"
-            android:layout_width="match_parent"
-            android:layout_height="1dip"
-            android:background="@color/greytow"/>
-        <TextView
-            android:id="@+id/tv22"
-            android:layout_below="@id/v1"
-            android:layout_marginTop="8dp"
-            android:layout_centerVertical="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="微信"
-            />
-        <View
-            android:layout_marginTop="30px"
-            android:layout_below="@+id/tv22"
-            android:id="@+id/v2"
-            android:layout_width="match_parent"
-            android:layout_height="1dip"
-            android:background="@color/greytow"/>
-        <TextView
-            android:layout_below="@id/v2"
-            android:layout_marginTop="30px"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="小鹿钱包"
-            />
+          android:src="@drawable/cart"
+      />
 
-        <RadioGroup
-            android:id="@+id/pay_rg"
-            android:layout_width="wrap_content"
-            android:orientation="vertical"
-            android:layout_alignParentRight="true"
-            android:layout_height="wrap_content"
-            >
-          <android.support.v7.widget.AppCompatRadioButton
-              android:id="@+id/alipay"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"/>
-          <android.support.v7.widget.AppCompatRadioButton
-              android:id="@+id/wx"
-              android:layout_marginTop="8dp"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"/>
-          <android.support.v7.widget.AppCompatRadioButton
-              android:id="@+id/budget"
-              android:layout_marginTop="12dp"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"/>
-        </RadioGroup>
+      <TextView
+          android:id="@+id/tv2"
+          android:textColor="@color/black"
+          android:layout_above="@+id/tv1"
+          android:layout_marginBottom="16dp"
+          android:layout_width="wrap_content"
+          android:layout_centerInParent="true"
+          android:layout_height="wrap_content"
+          android:text="您的购物车空空如也~快去装满它吧"/>
 
-      </RelativeLayout>
-      <include layout="@layout/common_gap"/>
-      <LinearLayout
-          android:layout_width="match_parent"
-          android:layout_height="250px"/>
-    </LinearLayout>
-  </ScrollView>
-  <include layout="@layout/include_cartpayinfo_lin"/>
-  <RelativeLayout
-      android:visibility="invisible"
-      android:id="@+id/empty_content"
-      app:layout_behavior="@string/appbar_scrolling_view_behavior"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:background="#cccccc"
-
-      >
-    <ImageView
-        android:layout_marginBottom="24dp"
-        android:layout_above="@+id/tv2"
-        android:layout_centerHorizontal="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/cart"
-        />
-
-    <TextView
-        android:id="@+id/tv2"
-        android:textColor="@color/black"
-        android:layout_above="@+id/tv1"
-        android:layout_marginBottom="16dp"
-        android:layout_width="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_height="wrap_content"
-        android:text="您的购物车空空如也~快去装满它吧"/>
-
-    <TextView
-        android:id="@+id/tv1"
-        android:layout_width="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_height="wrap_content"
-        android:text="快去挑选几件喜欢的宝贝吧~"/>
-    <Button
-        android:id="@+id/go_main"
-        android:layout_marginTop="24dp"
-        android:textColor="@color/white"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/tv1"
-        android:layout_width="650px"
-        android:background="@drawable/shape_common"
-        android:layout_height="wrap_content"
-        android:text="随便逛逛"
-        />
-  </RelativeLayout>
-</android.support.design.widget.CoordinatorLayout>
+      <TextView
+          android:id="@+id/tv1"
+          android:layout_width="wrap_content"
+          android:layout_centerInParent="true"
+          android:layout_height="wrap_content"
+          android:text="快去挑选几件喜欢的宝贝吧~"/>
+      <Button
+          android:id="@+id/go_main"
+          android:layout_marginTop="24dp"
+          android:textColor="@color/white"
+          android:layout_centerHorizontal="true"
+          android:layout_below="@id/tv1"
+          android:layout_width="650px"
+          android:background="@drawable/shape_common"
+          android:layout_height="wrap_content"
+          android:text="随便逛逛"
+      />
+    </RelativeLayout>
+  </android.support.design.widget.CoordinatorLayout>
+</RelativeLayout>

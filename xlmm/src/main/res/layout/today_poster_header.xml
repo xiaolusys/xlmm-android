@@ -14,8 +14,8 @@
         android:id="@+id/slider"
         app:auto_cycle="true"
         android:layout_width="match_parent"
-        android:layout_height="309px"
-        />
+        android:layout_height="310px"
+    />
 
     <com.jimei.xiaolumeimei.widget.banner.Indicators.PagerIndicator
         android:id="@+id/pi_header"
@@ -38,17 +38,22 @@
         app:unselected_padding_left="4dp"
         app:unselected_padding_right="4dp"
         app:unselected_width="6dp"
-        />
+    />
   </FrameLayout>
 
-  <ImageView
-      android:adjustViewBounds="true"
-      android:id="@+id/post_2"
-      android:scaleType="centerCrop"
+  <!--<ImageView-->
+  <!--android:adjustViewBounds="true"-->
+  <!--android:id="@+id/post_2"-->
+  <!--android:scaleType="centerCrop"-->
+  <!--android:layout_width="match_parent"-->
+  <!--android:layout_height="wrap_content"-->
+  <!--android:layout_marginTop="8dp"-->
+  <!--/>-->
+  <LinearLayout
+      android:id="@+id/post_activity"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginTop="8dp"
-      />
+      android:orientation="vertical"/>
 
   <RelativeLayout
       android:layout_width="match_parent"
@@ -86,6 +91,6 @@
         app:suffixHour="时"
         app:suffixMinute="分"
         app:suffixSecond="秒"
-        />
+    />
   </RelativeLayout>
 </LinearLayout>

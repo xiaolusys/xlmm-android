@@ -18,8 +18,10 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.CarryLogAllAdapter;
 import com.jimei.xiaolumeimei.entities.CarryLogListBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
+import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import rx.Subscription;
@@ -65,7 +67,6 @@ public class CarryLogAllFragment extends Fragment {
         .getMamaAllCarryLogs("1")
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<CarryLogListBean>() {
-
           @Override public void onCompleted() {
             super.onCompleted();
             hideIndeterminateProgressDialog();
@@ -80,6 +81,11 @@ public class CarryLogAllFragment extends Fragment {
             if (carryLogListBean != null) {
               list.addAll(carryLogListBean.getResults());
               adapter.update(list);
+
+              if (null == carryLogListBean.getNext()) {
+                xRecyclerView.setLoadingMoreEnabled(false);
+              }
+
               JUtils.Log("carrylog", carryLogListBean.toString());
             }
           }
@@ -93,8 +99,8 @@ public class CarryLogAllFragment extends Fragment {
 
   private void initViews(View view) {
     xRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-    //xRecyclerView.addItemDecoration(
-    //    new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+    xRecyclerView.addItemDecoration(
+        new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
     xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
     xRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
     xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
@@ -165,14 +171,30 @@ public class CarryLogAllFragment extends Fragment {
 
   public void showIndeterminateProgressDialog(boolean horizontal) {
     materialDialog = new MaterialDialog.Builder(getActivity())
+
         //.title(R.string.progress_dialog)
         .content(R.string.please_wait)
         .progress(true, 0)
+        .widgetColorRes(R.color.colorAccent)
         .progressIndeterminateStyle(horizontal)
         .show();
   }
 
   public void hideIndeterminateProgressDialog() {
     materialDialog.dismiss();
+  }
+
+  @Override public void onDetach() {
+    super.onDetach();
+    try {
+      Field childFragmentManager =
+          Fragment.class.getDeclaredField("mChildFragmentManager");
+      childFragmentManager.setAccessible(true);
+      childFragmentManager.set(this, null);
+    } catch (NoSuchFieldException e) {
+      throw new RuntimeException(e);
+    } catch (IllegalAccessException e) {
+      throw new RuntimeException(e);
+    }
   }
 }

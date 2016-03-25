@@ -11,42 +11,38 @@ import java.util.List;
 public class CarryLogListBean {
 
   /**
-   * count : 12
-   * next : http://dev.xiaolumeimei.com/rest/v2/mama/carry?page=2
+   * count : 10108
+   * next : http://api.xiaolumeimei.com/rest/v2/mama/carry?page=2
    * previous : null
-   * results : [{"mama_id":5,"carry_value":36,"carry_type":2,"carry_type_name":"佣金","status":3,"status_display":"取消","today_carry":null,"modified":"2016-03-10T18:39:56","created":"2016-03-10T18:26:19"},{"mama_id":5,"carry_value":31.2,"carry_type":2,"carry_type_name":"佣金","status":3,"status_display":"取消","today_carry":null,"modified":"2016-03-09T18:00:27","created":"2016-03-09T17:28:32"},{"mama_id":5,"carry_value":17.9,"carry_type":1,"carry_type_name":"返现","status":1,"status_display":"待确定","today_carry":null,"modified":"2016-03-08T12:37:53","created":"2016-03-08T12:37:53"},{"mama_id":5,"carry_value":2.19,"carry_type":3,"carry_type_name":"奖金","status":2,"status_display":"已确定","today_carry":null,"modified":"2016-03-08T12:03:32","created":"2016-03-08T12:01:11"},{"mama_id":5,"carry_value":2.39,"carry_type":2,"carry_type_name":"佣金","status":1,"status_display":"待确定","today_carry":null,"modified":"2016-03-08T11:20:33","created":"2016-03-08T11:20:33"},{"mama_id":5,"carry_value":2.19,"carry_type":2,"carry_type_name":"佣金","status":1,"status_display":"待确定","today_carry":null,"modified":"2016-03-08T10:25:21","created":"2016-03-08T10:25:21"},{"mama_id":5,"carry_value":9.19,"carry_type":2,"carry_type_name":"佣金","status":3,"status_display":"取消","today_carry":null,"modified":"2016-03-08T10:48:44","created":"2016-03-08T10:20:05"},{"mama_id":5,"carry_value":6.29,"carry_type":2,"carry_type_name":"佣金","status":1,"status_display":"待确定","today_carry":null,"modified":"2016-03-08T10:07:10","created":"2016-03-08T10:07:10"},{"mama_id":5,"carry_value":5.79,"carry_type":2,"carry_type_name":"佣金","status":1,"status_display":"待确定","today_carry":null,"modified":"2016-03-08T10:06:36","created":"2016-03-08T10:06:36"},{"mama_id":5,"carry_value":1.39,"carry_type":2,"carry_type_name":"佣金","status":1,"status_display":"待确定","today_carry":null,"modified":"2016-03-08T09:57:58","created":"2016-03-08T09:57:58"}]
+   * results : [{"mama_id":44,"carry_value":0.1,"carry_num":0.1,"carry_type":1,"carry_type_name":"返现","carry_description":"","status":1,"status_display":"待确定","today_carry":0.1,"date_field":"2016-03-18","modified":"2016-03-18T00:15:03","created":"2016-03-18T00:15:03"},{"mama_id":44,"carry_value":0.1,"carry_num":0.1,"carry_type":1,"carry_type_name":"返现","carry_description":"","status":1,"status_display":"待确定","today_carry":0.1,"date_field":"2016-03-17","modified":"2016-03-17T00:02:47","created":"2016-03-17T00:02:47"},{"mama_id":44,"carry_value":0.1,"carry_num":0.1,"carry_type":1,"carry_type_name":"返现","carry_description":"","status":1,"status_display":"待确定","today_carry":0.1,"date_field":"2016-03-16","modified":"2016-03-16T00:30:51","created":"2016-03-16T00:30:51"},{"mama_id":44,"carry_value":96,"carry_num":96,"carry_type":2,"carry_type_name":"佣金","carry_description":"升级导入","status":1,"status_display":"待确定","today_carry":1091.49,"date_field":"2016-03-15","modified":"2016-03-17T14:47:33","created":"2016-03-15T23:06:39"},{"mama_id":44,"carry_value":69.9,"carry_num":69.9,"carry_type":2,"carry_type_name":"佣金","carry_description":"升级导入","status":1,"status_display":"待确定","today_carry":1091.49,"date_field":"2016-03-15","modified":"2016-03-17T14:47:33","created":"2016-03-15T22:16:26"},{"mama_id":44,"carry_value":69.9,"carry_num":69.9,"carry_type":2,"carry_type_name":"佣金","carry_description":"升级导入","status":1,"status_display":"待确定","today_carry":1091.49,"date_field":"2016-03-15","modified":"2016-03-17T14:47:33","created":"2016-03-15T21:30:52"},{"mama_id":44,"carry_value":69.9,"carry_num":69.9,"carry_type":2,"carry_type_name":"佣金","carry_description":"升级导入","status":1,"status_display":"待确定","today_carry":1091.49,"date_field":"2016-03-15","modified":"2016-03-17T14:47:33","created":"2016-03-15T20:15:43"},{"mama_id":44,"carry_value":69.9,"carry_num":69.9,"carry_type":2,"carry_type_name":"佣金","carry_description":"升级导入","status":1,"status_display":"待确定","today_carry":1091.49,"date_field":"2016-03-15","modified":"2016-03-17T14:47:33","created":"2016-03-15T20:14:52"},{"mama_id":44,"carry_value":29.9,"carry_num":29.9,"carry_type":2,"carry_type_name":"佣金","carry_description":"升级导入","status":1,"status_display":"待确定","today_carry":1091.49,"date_field":"2016-03-15","modified":"2016-03-17T14:47:33","created":"2016-03-15T20:13:31"},{"mama_id":44,"carry_value":139.8,"carry_num":139.8,"carry_type":2,"carry_type_name":"佣金","carry_description":"升级导入","status":1,"status_display":"待确定","today_carry":1091.49,"date_field":"2016-03-15","modified":"2016-03-17T14:47:33","created":"2016-03-15T20:01:48"}]
    */
 
   @SerializedName("count") private int mCount;
   @SerializedName("next") private String mNext;
+  @SerializedName("previous") private Object mPrevious;
   /**
-   * mama_id : 5
-   * carry_value : 36.0
-   * carry_type : 2
-   * carry_type_name : 佣金
-   * status : 3
-   * status_display : 取消
-   * today_carry : null
-   * modified : 2016-03-10T18:39:56
-   * created : 2016-03-10T18:26:19
+   * mama_id : 44
+   * carry_value : 0.1
+   * carry_num : 0.1
+   * carry_type : 1
+   * carry_type_name : 返现
+   * carry_description :
+   * status : 1
+   * status_display : 待确定
+   * today_carry : 0.1
+   * date_field : 2016-03-18
+   * modified : 2016-03-18T00:15:03
+   * created : 2016-03-18T00:15:03
    */
 
   @SerializedName("results") private List<ResultsEntity> mResults;
-
-  @Override public String toString() {
-    return "CarryLogListBean{" +
-        "mCount=" + mCount +
-        ", mNext='" + mNext + '\'' +
-        ", mResults=" + mResults +
-        '}';
-  }
 
   public int getCount() {
     return mCount;
   }
 
   public void setCount(int count) {
-    this.mCount = count;
+    mCount = count;
   }
 
   public String getNext() {
@@ -54,7 +50,15 @@ public class CarryLogListBean {
   }
 
   public void setNext(String next) {
-    this.mNext = next;
+    mNext = next;
+  }
+
+  public Object getPrevious() {
+    return mPrevious;
+  }
+
+  public void setPrevious(Object previous) {
+    mPrevious = previous;
   }
 
   public List<ResultsEntity> getResults() {
@@ -62,35 +66,29 @@ public class CarryLogListBean {
   }
 
   public void setResults(List<ResultsEntity> results) {
-    this.mResults = results;
+    mResults = results;
   }
 
   public static class ResultsEntity {
     @SerializedName("mama_id") private int mMamaId;
     @SerializedName("carry_value") private double mCarryValue;
+    @SerializedName("carry_num") private double mCarryNum;
     @SerializedName("carry_type") private int mCarryType;
     @SerializedName("carry_type_name") private String mCarryTypeName;
-    @SerializedName("status") private int mStatus;
     @SerializedName("carry_description") private String mCarryDescription;
+    @SerializedName("status") private int mStatus;
     @SerializedName("status_display") private String mStatusDisplay;
     @SerializedName("today_carry") private double mTodayCarry;
+    @SerializedName("date_field") private String mDateField;
     @SerializedName("modified") private String mModified;
     @SerializedName("created") private String mCreated;
-
-    public String getmCarryDescription() {
-      return mCarryDescription;
-    }
-
-    public void setmCarryDescription(String mCarryDescription) {
-      this.mCarryDescription = mCarryDescription;
-    }
 
     public int getMamaId() {
       return mMamaId;
     }
 
     public void setMamaId(int mamaId) {
-      this.mMamaId = mamaId;
+      mMamaId = mamaId;
     }
 
     public double getCarryValue() {
@@ -98,7 +96,15 @@ public class CarryLogListBean {
     }
 
     public void setCarryValue(double carryValue) {
-      this.mCarryValue = carryValue;
+      mCarryValue = carryValue;
+    }
+
+    public double getCarryNum() {
+      return mCarryNum;
+    }
+
+    public void setCarryNum(double carryNum) {
+      mCarryNum = carryNum;
     }
 
     public int getCarryType() {
@@ -106,7 +112,7 @@ public class CarryLogListBean {
     }
 
     public void setCarryType(int carryType) {
-      this.mCarryType = carryType;
+      mCarryType = carryType;
     }
 
     public String getCarryTypeName() {
@@ -114,7 +120,15 @@ public class CarryLogListBean {
     }
 
     public void setCarryTypeName(String carryTypeName) {
-      this.mCarryTypeName = carryTypeName;
+      mCarryTypeName = carryTypeName;
+    }
+
+    public String getCarryDescription() {
+      return mCarryDescription;
+    }
+
+    public void setCarryDescription(String carryDescription) {
+      mCarryDescription = carryDescription;
     }
 
     public int getStatus() {
@@ -122,7 +136,7 @@ public class CarryLogListBean {
     }
 
     public void setStatus(int status) {
-      this.mStatus = status;
+      mStatus = status;
     }
 
     public String getStatusDisplay() {
@@ -130,7 +144,7 @@ public class CarryLogListBean {
     }
 
     public void setStatusDisplay(String statusDisplay) {
-      this.mStatusDisplay = statusDisplay;
+      mStatusDisplay = statusDisplay;
     }
 
     public double getTodayCarry() {
@@ -138,7 +152,15 @@ public class CarryLogListBean {
     }
 
     public void setTodayCarry(double todayCarry) {
-      this.mTodayCarry = todayCarry;
+      mTodayCarry = todayCarry;
+    }
+
+    public String getDateField() {
+      return mDateField;
+    }
+
+    public void setDateField(String dateField) {
+      mDateField = dateField;
     }
 
     public String getModified() {
@@ -146,7 +168,7 @@ public class CarryLogListBean {
     }
 
     public void setModified(String modified) {
-      this.mModified = modified;
+      mModified = modified;
     }
 
     public String getCreated() {
@@ -154,21 +176,7 @@ public class CarryLogListBean {
     }
 
     public void setCreated(String created) {
-      this.mCreated = created;
-    }
-
-    @Override public String toString() {
-      return "ResultsEntity{" +
-          "mMamaId=" + mMamaId +
-          ", mCarryValue=" + mCarryValue +
-          ", mCarryType=" + mCarryType +
-          ", mCarryTypeName='" + mCarryTypeName + '\'' +
-          ", mStatus=" + mStatus +
-          ", mStatusDisplay='" + mStatusDisplay + '\'' +
-          ", mTodayCarry=" + mTodayCarry +
-          ", mModified='" + mModified + '\'' +
-          ", mCreated='" + mCreated + '\'' +
-          '}';
+      mCreated = created;
     }
   }
 }

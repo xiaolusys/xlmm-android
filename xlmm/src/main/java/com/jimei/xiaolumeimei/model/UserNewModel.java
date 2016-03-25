@@ -27,9 +27,9 @@ public class UserNewModel {
   }
 
   //得到用户信息
-  public Observable<BudgetdetailBean> budGetdetailBean() {
+  public Observable<BudgetdetailBean> budGetdetailBean(String page) {
     return XlmmRetrofitClient.getService()
-        .budGetdetailBean()
+        .budGetdetailBean(page)
         .compose(new DefaultTransform<>());
   }
 }

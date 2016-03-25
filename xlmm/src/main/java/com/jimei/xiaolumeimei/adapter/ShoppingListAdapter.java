@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +11,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.entities.ShoppingListBean;
+import com.jimei.xiaolumeimei.entities.OderCarryBean;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +29,7 @@ public class ShoppingListAdapter
 
   private static final String TAG = MMChooseAdapter.class.getSimpleName();
 
-  private List<ShoppingListBean.ResultsEntity> mList;
+  private List<OderCarryBean.ResultsEntity> mList;
   private Context mContext;
 
   public ShoppingListAdapter(Context context) {
@@ -34,13 +37,13 @@ public class ShoppingListAdapter
     mList = new ArrayList<>();
   }
 
-  public void updateWithClear(List<ShoppingListBean.ResultsEntity> list) {
+  public void updateWithClear(List<OderCarryBean.ResultsEntity> list) {
     mList.clear();
     mList.addAll(list);
     notifyDataSetChanged();
   }
 
-  public void update(List<ShoppingListBean.ResultsEntity> list) {
+  public void update(List<OderCarryBean.ResultsEntity> list) {
 
     mList.addAll(list);
     notifyDataSetChanged();
@@ -54,30 +57,47 @@ public class ShoppingListAdapter
 
   @Override public void onBindViewHolder(ShoppingListVH holder, int position) {
 
-    ShoppingListBean.ResultsEntity resultsEntity = mList.get(position);
+    OderCarryBean.ResultsEntity resultsEntity = mList.get(position);
 
-    if (position == 0) {
-      showCategory(holder);
-    } else {
-      boolean theCategoryOfLastEqualsToThis = mList.get(position - 1)
-          .getShoptime()
-          .substring(1, 10)
-          .equals(mList.get(position).getShoptime().substring(1, 10));
-      if (!theCategoryOfLastEqualsToThis) {
+    try {
+      if (position == 0) {
         showCategory(holder);
       } else {
-        hideCategory(holder);
+        boolean theCategoryOfLastEqualsToThis = mList.get(position - 1)
+            .getDateField()
+            .equals(mList.get(position).getDateField());
+        if (!theCategoryOfLastEqualsToThis) {
+          showCategory(holder);
+        } else {
+          hideCategory(holder);
+        }
       }
+    } catch (NullPointerException e) {
+      e.printStackTrace();
     }
 
-    holder.shoptime.setText(resultsEntity.getShoptime().substring(0, 10));
-    ViewUtils.loadImgToImgView(mContext, holder.picPath, resultsEntity.getPicPath());
-    holder.getStatusDisplay.setText(resultsEntity.getGetStatusDisplay());
-    holder.wxordernick.setText(resultsEntity.getWxordernick());
-    holder.timeDisplay.setText(resultsEntity.getTimeDisplay());
-    holder.tichengCash.setText(resultsEntity.getTichengCash() + "");
+    holder.shoptime.setText(resultsEntity.getDateField());
+    if (TextUtils.isEmpty(resultsEntity.getSkuImg())) {
+      Glide.with(mContext)
+          .load(R.mipmap.ic_launcher)
+          .diskCacheStrategy(DiskCacheStrategy.ALL)
+          //.placeholder(R.drawable.parceholder)
+          .centerCrop()
+          .into(holder.picPath);
+    } else {
+      ViewUtils.loadImgToImgView(mContext, holder.picPath, resultsEntity.getSkuImg());
+    }
+
+    holder.getStatusDisplay.setText(resultsEntity.getStatusDisplay());
+    holder.wxordernick.setText(resultsEntity.getContributorNick());
+    holder.timeDisplay.setText(resultsEntity.getCreated().substring(11, 16));
+    holder.tichengCash.setText(
+        "+" + (float) (Math.round(resultsEntity.getCarryNum() * 100)) / 100);
     holder.totalCash.setText(
-        "总收益 " + (float) (Math.round(resultsEntity.getDaylyAmount() * 100)) / 100);
+        "总收益 " + (float) (Math.round(resultsEntity.getTodayCarry() * 100)) / 100);
+    holder.carryTypeName.setText(resultsEntity.getCarryTypeName());
+    holder.shifu.setText(
+        "实付" + (float) (Math.round(resultsEntity.getOrderValue() * 100)) / 100);
   }
 
   private void showCategory(ShoppingListVH holder) {
@@ -107,6 +127,8 @@ public class ShoppingListAdapter
     @Bind(R.id.ticheng_cash) TextView tichengCash;
     @Bind(R.id.category) RelativeLayout category;
     @Bind(R.id.content) RelativeLayout content;
+    @Bind(R.id.carry_type_name) TextView carryTypeName;
+    @Bind(R.id.shifu) TextView shifu;
 
     public ShoppingListVH(View itemView) {
       super(itemView);

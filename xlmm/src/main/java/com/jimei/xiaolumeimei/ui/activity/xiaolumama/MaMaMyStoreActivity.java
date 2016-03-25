@@ -18,7 +18,6 @@ import cn.sharesdk.onekeyshare.OnekeyShare;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.MaMaStoreAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.entities.MMChooselistBean;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.MMStoreBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
@@ -112,6 +111,7 @@ public class MaMaMyStoreActivity extends BaseSwipeBackCompatActivity {
   }
 
   @Override protected void initViews() {
+    ShareSDK.initSDK(this);
     toolbar.setTitle("小鹿妈妈de精选集");
     setSupportActionBar(toolbar);
     finishBack(toolbar);
@@ -135,8 +135,12 @@ public class MaMaMyStoreActivity extends BaseSwipeBackCompatActivity {
                       }
 
                       @Override public void onResponse(Bitmap response) {
-                        if (response != null) {
-                          titleiamge.setImageBitmap(response);
+                        try {
+                          if (null != response) {
+                            titleiamge.setImageBitmap(response);
+                          }
+                        } catch (NullPointerException ex) {
+                          ex.printStackTrace();
                         }
                       }
                     });

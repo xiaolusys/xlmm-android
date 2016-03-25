@@ -95,7 +95,6 @@ public class MainActivity extends BaseActivity
   @Bind(R.id.image_1) ImageView image1;
   @Bind(R.id.image_2) ImageView image2;
   //@Bind(R.id.cv_lefttime) CountdownView cvLefttime;
-  private CartsModel cartsModel = new CartsModel();
   private int num;
   private BadgeView badge;
   private double budgetCash;
@@ -191,71 +190,44 @@ public class MainActivity extends BaseActivity
             }
 
             //获得待支付和待收货数目
-            android.support.design.widget.NavigationView navigationView = (android.support.design.widget.NavigationView)drawer.findViewById(R.id.nav_view);
-            LinearLayout nav_tobepaid = (LinearLayout) navigationView.getMenu().findItem(R.id.nav_tobepaid).getActionView();
-            TextView msg1= (TextView) nav_tobepaid.findViewById(R.id.msg);
-            LinearLayout nav_tobereceived = (LinearLayout) navigationView.getMenu().findItem(R.id.nav_tobereceived).getActionView();
-            TextView msg2= (TextView) nav_tobereceived.findViewById(R.id.msg);
-            TradeModel model = new TradeModel();
-            Subscription subscription= model.getWaitPayOrdersBean()
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(new ServiceResponse<AllOrdersBean>() {
-                      @Override public void onNext(AllOrdersBean allOrdersBean) {
-                        List<AllOrdersBean.ResultsEntity> results = allOrdersBean.getResults();
+            android.support.design.widget.NavigationView navigationView =
+                (android.support.design.widget.NavigationView) drawer.findViewById(
+                    R.id.nav_view);
+            LinearLayout nav_tobepaid = (LinearLayout) navigationView.getMenu()
+                .findItem(R.id.nav_tobepaid)
+                .getActionView();
+            TextView msg1 = (TextView) nav_tobepaid.findViewById(R.id.msg);
+            LinearLayout nav_tobereceived = (LinearLayout) navigationView.getMenu()
+                .findItem(R.id.nav_tobereceived)
+                .getActionView();
+            TextView msg2 = (TextView) nav_tobereceived.findViewById(R.id.msg);
+            LinearLayout nav_refund = (LinearLayout) navigationView.getMenu()
+                    .findItem(R.id.nav_returned)
+                    .getActionView();
+            TextView msg3 = (TextView) nav_refund.findViewById(R.id.msg);
 
-                        if (0 != results.size()) {
-                          msg1.setVisibility(View.VISIBLE);
-                          msg1.setText(Integer.toString(results.size()));
-                        }
-                        else{
-                          msg1.setVisibility(View.INVISIBLE);
-                        }
+            if ((null != userInfoBean) && (userInfoBean.getWaitpayNum() > 0)) {
+              msg1.setVisibility(View.VISIBLE);
+              msg1.setText(Integer.toString(userInfoBean.getWaitpayNum()));
+            } else {
+              msg1.setVisibility(View.INVISIBLE);
+            }
 
-                        Log.i(TAG, ""+results.size());
-                      }
+            Log.i(TAG, "" + userInfoBean.getWaitpayNum());
 
-                      @Override
-                      public void onCompleted() {
-                        super.onCompleted();
-                      }
+            if ((null != userInfoBean) && (userInfoBean.getWaitgoodsNum() > 0)) {
+              msg2.setVisibility(View.VISIBLE);
+              msg2.setText(Integer.toString(userInfoBean.getWaitgoodsNum()));
+            } else {
+              msg2.setVisibility(View.INVISIBLE);
+            }
 
-                      @Override
-                      public void onError(Throwable e) {
-
-                        Log.e(TAG, " error:, "   + e.toString());
-                        super.onError(e);
-                      }
-                    });
-            addSubscription(subscription);
-
-            Subscription subscription1 =  model.getWaitSendOrdersBean()
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(new ServiceResponse<AllOrdersBean>() {
-                      @Override public void onNext(AllOrdersBean allOrdersBean) {
-                        List<AllOrdersBean.ResultsEntity> results = allOrdersBean.getResults();
-                        if (0 != results.size()) {
-                          msg2.setVisibility(View.VISIBLE);
-                          msg2.setText(Integer.toString(results.size()));
-                        }
-                        else{
-                          msg2.setVisibility(View.INVISIBLE);
-                        }
-
-                      }
-
-                      @Override
-                      public void onCompleted() {
-                        super.onCompleted();
-                      }
-
-                      @Override
-                      public void onError(Throwable e) {
-
-                        Log.e(TAG, " error:, "   + e.toString());
-                        super.onError(e);
-                      }
-                    });
-            addSubscription(subscription1);
+            if ((null != userInfoBean) && (userInfoBean.getRefundsNum() > 0)) {
+              msg3.setVisibility(View.VISIBLE);
+              msg3.setText(Integer.toString(userInfoBean.getRefundsNum()));
+            } else {
+              msg3.setVisibility(View.INVISIBLE);
+            }
 
             invalidateOptionsMenu();
           }
@@ -410,27 +382,41 @@ public class MainActivity extends BaseActivity
   }
 
   @Override public boolean onNavigationItemSelected(MenuItem item) {
+    Intent intent;
+    Bundle bundle;
 
     int id = item.getItemId();
 
     if (!LoginUtils.checkLoginState(getApplicationContext())) {
             /*未登录进入登录界面*/
 
-      Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-      Bundle bundle = new Bundle();
+      intent = new Intent(MainActivity.this, LoginActivity.class);
+      bundle = new Bundle();
       bundle.putString("login", "main");
       intent.putExtras(bundle);
       startActivity(intent);
       //startActivity(new Intent(MainActivity.this, LoginActivity.class));
     } else {
       if (id == R.id.nav_tobepaid) {
-        startActivity(new Intent(MainActivity.this, WaitPayOrdersActivity.class));
+        intent = new Intent(MainActivity.this, AllOrdersActivity.class);
+        bundle = new Bundle();
+        bundle.putInt("fragment", 2);
+        intent.putExtras(bundle);
+        startActivity(intent);
       } else if (id == R.id.nav_tobereceived) {
-        startActivity(new Intent(MainActivity.this, WaitSendOrdersActivity.class));
+        intent = new Intent(MainActivity.this, AllOrdersActivity.class);
+        bundle = new Bundle();
+        bundle.putInt("fragment", 3);
+        intent.putExtras(bundle);
+        startActivity(intent);
       } else if (id == R.id.nav_returned) {
         startActivity(new Intent(MainActivity.this, AllRefundsActivity.class));
       } else if (id == R.id.nav_orders) {
-        startActivity(new Intent(MainActivity.this, AllOrdersActivity.class));
+        intent = new Intent(MainActivity.this, AllOrdersActivity.class);
+        bundle = new Bundle();
+        bundle.putInt("fragment", 1);
+        intent.putExtras(bundle);
+        startActivity(intent);
       } else if (id == R.id.nav_setting) {
         startActivity(new Intent(MainActivity.this, SettingActivity.class));
       } else if (id == R.id.nav_complain) {
@@ -535,34 +521,49 @@ public class MainActivity extends BaseActivity
   private void checkMamaInfo() {
     JUtils.Log(TAG, "check mama userinfo");
 
-    UserModel.getInstance()
-        .getUserInfo()
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<UserInfoBean>() {
-          @Override public void onNext(UserInfoBean user) {
-            if ((user.getXiaolumm() != null) && (user.getXiaolumm().getId() != 0)) {
-              JUtils.Log(TAG, "i am xiaolumama, id=" + user.getXiaolumm().getId());
-              Intent intent = new Intent(MainActivity.this, MamaInfoActivity.class);
-              startActivity(intent);
-            } else {
-              JUtils.Toast("您还不是小鹿妈妈，赶紧加入我们吧！");
-            }
-          }
+    if(userInfoBean != null){
+      if ((userInfoBean.getXiaolumm() != null) && (userInfoBean.getXiaolumm().getId() != 0)) {
+        JUtils.Log(TAG, "1 i am xiaolumama, id=" + userInfoBean.getXiaolumm().getId());
+        Intent intent = new Intent(MainActivity.this, MamaInfoActivity.class);
+        startActivity(intent);
+      } else {
+        JUtils.Toast("您还不是小鹿妈妈，赶紧关注小鹿美美公众号了解信息并加入我们吧！");
+      }
+    }
+    else {
+      Subscription subscribe = UserModel.getInstance()
+              .getUserInfo()
+              .subscribeOn(Schedulers.io())
+              .subscribe(new ServiceResponse<UserInfoBean>() {
+                @Override
+                public void onNext(UserInfoBean user) {
+                  if ((user.getXiaolumm() != null) && (user.getXiaolumm().getId() != 0)) {
+                    JUtils.Log(TAG, "2 i am xiaolumama, id=" + user.getXiaolumm().getId());
+                    Intent intent = new Intent(MainActivity.this, MamaInfoActivity.class);
+                    startActivity(intent);
+                  } else {
+                    JUtils.Toast("您还不是小鹿妈妈，赶紧关注小鹿美美公众号了解信息并加入我们吧！");
+                  }
+                }
 
-          @Override public void onCompleted() {
-            super.onCompleted();
-          }
+                @Override
+                public void onCompleted() {
+                  super.onCompleted();
+                }
 
-          @Override public void onError(Throwable e) {
+                @Override
+                public void onError(Throwable e) {
 
-            Log.e(TAG, "getUserInfo error: " + e.getLocalizedMessage());
-            super.onError(e);
-          }
-        });
+                  Log.e(TAG, "getUserInfo error: " + e.getLocalizedMessage());
+                  super.onError(e);
+                }
+              });
+      addSubscription(subscribe);
+    }
   }
 
   private void getUserInfo() {
-    UserModel.getInstance()
+    Subscription subscribe = UserModel.getInstance()
         .getUserInfo()
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<UserInfoBean>() {
@@ -580,6 +581,7 @@ public class MainActivity extends BaseActivity
             super.onError(e);
           }
         });
+    addSubscription(subscribe);
   }
 
   @Override protected void onResume() {
@@ -600,7 +602,8 @@ public class MainActivity extends BaseActivity
     //      }
     //    });
 
-    cartsModel.show_carts_num()
+    Subscription subscribe = CartsModel.getInstance()
+        .show_carts_num()
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<CartsNumResultBean>() {
           @Override public void onNext(CartsNumResultBean cartsNumResultBean) {
@@ -637,11 +640,12 @@ public class MainActivity extends BaseActivity
             }
           }
         });
+    addSubscription(subscribe);
 
     JUtils.Log(TAG, "resume");
     getUserInfo();
 
-    subscribe = UserNewModel.getInstance()
+    this.subscribe = UserNewModel.getInstance()
         .getProfile()
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<UserInfoBean>() {
@@ -665,6 +669,10 @@ public class MainActivity extends BaseActivity
               if (tvMoney != null) {
                 tvMoney.setText((float) (Math.round(budgetCash * 100)) / 100 + "");
               }
+
+              if(tvCoupon != null) {
+                tvCoupon.setText(userNewBean.getCouponNum() + "");
+              }
             }
           }
         });
@@ -679,52 +687,9 @@ public class MainActivity extends BaseActivity
       }
     }
 
-    UserModel.getInstance()
-        .getUnusedCouponBean()
-        .subscribeOn(Schedulers.io())
-        .unsafeSubscribe(new Subscriber<CouponBean>() {
-          @Override public void onCompleted() {
 
-          }
-
-          @Override public void onError(Throwable e) {
-
-          }
-
-          @Override public void onNext(CouponBean couponBean) {
-            if ((couponBean != null) && (tvCoupon != null)) {
-              tvCoupon.setText(couponBean.getCount() + "");
-            } else {
-              JUtils.Log(TAG, "err:" + (tvCoupon == null));
-            }
-          }
-        });
   }
 
-  @Override protected void onDestroy() {
-    JUtils.Log(TAG, "destroy");
-    super.onDestroy();
-  }
-
-  @Override protected void onPause() {
-    JUtils.Log(TAG, "pause");
-    super.onPause();
-  }
-
-  @Override protected void onRestart() {
-    JUtils.Log(TAG, "restart");
-    super.onRestart();
-  }
-
-  @Override protected void onResumeFragments() {
-    JUtils.Log(TAG, "resume fragments");
-    super.onResumeFragments();
-  }
-
-  @Override protected void onStart() {
-    JUtils.Log(TAG, "start");
-    super.onStart();
-  }
 
   @Override protected void onStop() {
     JUtils.Log(TAG, "stop");
@@ -796,4 +761,5 @@ public class MainActivity extends BaseActivity
       return listTitle.get(position);
     }
   }
+
 }

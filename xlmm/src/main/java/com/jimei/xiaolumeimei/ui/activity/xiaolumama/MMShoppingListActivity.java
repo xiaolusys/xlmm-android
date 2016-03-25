@@ -11,8 +11,9 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.ShoppingListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.entities.ShoppingListBean;
+import com.jimei.xiaolumeimei.entities.OderCarryBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
+import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
@@ -28,17 +29,21 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
   @Bind(R.id.shoppinglist_xry) XRecyclerView shoppinglistXry;
   private int page = 2;
   private ShoppingListAdapter adapter;
+  private String order;
 
   @Override protected void setListener() {
 
   }
 
   @Override protected void initData() {
+
+    tvCount.setText(order);
+
     showIndeterminateProgressDialog(false);
     Subscription subscribe = MMProductModel.getInstance()
-        .getShoppingList("1")
+        .getMamaAllOderCarryLogs("direct", "1")
         .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<ShoppingListBean>() {
+        .subscribe(new ServiceResponse<OderCarryBean>() {
 
           @Override public void onCompleted() {
             super.onCompleted();
@@ -50,12 +55,13 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
             e.printStackTrace();
           }
 
-          @Override public void onNext(ShoppingListBean shoppingListBean) {
+          @Override public void onNext(OderCarryBean shoppingListBean) {
             super.onNext(shoppingListBean);
             if (shoppingListBean != null) {
-              int count = shoppingListBean.getCount();
-              tvCount.setText("" + count);
               adapter.update(shoppingListBean.getResults());
+              if (null == shoppingListBean.getNext()) {
+                shoppinglistXry.setLoadingMoreEnabled(false);
+              }
             }
           }
         });
@@ -63,7 +69,7 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
-
+    order = extras.getString("order");
   }
 
   @Override protected int getContentViewLayoutID() {
@@ -80,8 +86,8 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
   private void initRecyclerView() {
 
     shoppinglistXry.setLayoutManager(new LinearLayoutManager(this));
-    //shoppinglistXry.addItemDecoration(
-    //    new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+    shoppinglistXry.addItemDecoration(
+        new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
     shoppinglistXry.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
     shoppinglistXry.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
     shoppinglistXry.setArrowImageView(R.drawable.iconfont_downgrey);
@@ -105,14 +111,13 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
 
   private void loadMoreData(String page) {
     Subscription subscribe = MMProductModel.getInstance()
-        .getShoppingList(page)
+        .getMamaAllOderCarryLogs("direct", page)
         .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<ShoppingListBean>() {
-          @Override public void onNext(ShoppingListBean shoppingListBean) {
-            super.onNext(shoppingListBean);
+        .subscribe(new ServiceResponse<OderCarryBean>() {
+          @Override public void onNext(OderCarryBean shoppingListBean) {
             if (shoppingListBean != null) {
+              adapter.update(shoppingListBean.getResults());
               if (null != shoppingListBean.getNext()) {
-                adapter.update(shoppingListBean.getResults());
               } else {
                 Toast.makeText(MMShoppingListActivity.this, "没有更多了", Toast.LENGTH_SHORT)
                     .show();

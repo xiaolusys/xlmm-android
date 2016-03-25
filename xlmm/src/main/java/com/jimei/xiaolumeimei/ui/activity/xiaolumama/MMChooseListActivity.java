@@ -11,10 +11,12 @@ import android.widget.AdapterView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.MMChooseAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.MMChooselistBean;
+import com.jimei.xiaolumeimei.entities.MMStoreBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -44,8 +46,10 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.tv_sales) TextView tvSales;
   @Bind(R.id.chooselist_xey) RecyclerView chooselistXey;
   @Bind(R.id.loading) RotateLoading loading;
+  //@Bind(R.id.choosenum) TextView choosenum;
   private MMChooseAdapter mmChooseAdapter;
   private boolean isAll, isLady, isChild;
+  private int chooseNum;
 
   @Override protected void setListener() {
     spinnerChoose.setOnItemSelectedListener(this);
@@ -70,6 +74,8 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
     SimpleAdapter adapter = new SimpleAdapter(this, textList, R.layout.item_choosespinner,
         new String[] { "chooselist" }, new int[] { R.id.choose_tv });
     spinnerChoose.setAdapter(adapter);
+
+    chooseNum = getChooseNum();
 
     Subscription subscribe = MMProductModel.getInstance()
         .getMMChooseList()
@@ -108,6 +114,9 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
     finishBack(toolbar);
+
+    //choose_num = (TextView) toolbar.findViewById(R.id.choose_num);
+
     initRecyclerView();
   }
 
@@ -178,7 +187,7 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
           @Override public void onError(Throwable e) {
             super.onError(e);
             e.printStackTrace();
-            hideIndeterminateProgressDialog();
+            //hideIndeterminateProgressDialog();
           }
         });
     addSubscription(subscribe);
@@ -209,7 +218,7 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
           @Override public void onError(Throwable e) {
             super.onError(e);
             e.printStackTrace();
-            hideIndeterminateProgressDialog();
+            //hideIndeterminateProgressDialog();
           }
         });
     addSubscription(subscribe);
@@ -240,7 +249,7 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
           @Override public void onError(Throwable e) {
             super.onError(e);
             e.printStackTrace();
-            hideIndeterminateProgressDialog();
+            //hideIndeterminateProgressDialog();
           }
         });
 
@@ -315,5 +324,36 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void onStop() {
     super.onStop();
+  }
+
+  @Override protected void onResume() {
+    super.onResume();
+    //choosenum.setText(getChooseNum());
+  }
+
+  public int getChooseNum() {
+
+    final int[] num = new int[1];
+
+    MMProductModel.getInstance()
+        .getMMStoreList()
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<List<MMStoreBean>>() {
+          @Override public void onNext(List<MMStoreBean> mmStoreBeen) {
+            if (mmStoreBeen != null) {
+              num[0] = mmStoreBeen.size();
+            } else {
+              num[0] = 0;
+            }
+          }
+        });
+
+    return num[0];
+  }
+
+  @Override protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    // TODO: add setContentView(...) invocation
+    ButterKnife.bind(this);
   }
 }

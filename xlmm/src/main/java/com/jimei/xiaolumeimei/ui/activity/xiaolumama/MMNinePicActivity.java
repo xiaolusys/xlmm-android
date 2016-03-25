@@ -87,7 +87,7 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
 
   private void loadDataRefresh() {
 
-    showIndeterminateProgressDialog(false);
+    //showIndeterminateProgressDialog(false);
     MMProductModel.getInstance()
         .getNinePic()
         .subscribeOn(Schedulers.io())
@@ -95,7 +95,7 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
 
           @Override public void onCompleted() {
             super.onCompleted();
-            hideIndeterminateProgressDialog();
+            //hideIndeterminateProgressDialog();
           }
 
           @Override public void onError(Throwable e) {

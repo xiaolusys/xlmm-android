@@ -9,11 +9,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import butterknife.Bind;
+import com.jimei.library.rx.RxCountDown;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.RegisterBean;
 import com.jimei.xiaolumeimei.model.UserModel;
-import com.jimei.library.rx.RxCountDown;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import rx.Subscriber;
@@ -110,7 +110,7 @@ public class VerifyPhoneActivity extends BaseSwipeBackCompatActivity
               getCheckCode.setClickable(false);
               getCheckCode.setBackgroundColor(Color.parseColor("#f3f3f4"));
 
-               subscribe = UserModel.getInstance()
+              subscribe = UserModel.getInstance()
                   .getChgPasswordCheckCode(mobile)
                   .subscribeOn(Schedulers.io())
                   .subscribe(new ServiceResponse<RegisterBean>() {
@@ -153,7 +153,7 @@ public class VerifyPhoneActivity extends BaseSwipeBackCompatActivity
         invalid_code = editTextInvalid_code.getText().toString().trim();
 
         if (checkInput(mobile, invalid_code)) {
-           subscribe = UserModel.getInstance()
+          subscribe = UserModel.getInstance()
               .check_code_user(mobile, invalid_code)
               .subscribeOn(Schedulers.io())
               .subscribe(new ServiceResponse<RegisterBean>() {

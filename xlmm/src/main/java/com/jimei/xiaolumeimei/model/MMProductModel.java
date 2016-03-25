@@ -135,6 +135,14 @@ public class MMProductModel {
         .compose(new DefaultTransform<>());
   }
 
+  public Observable<OderCarryBean> getMamaAllOderCarryLogs(String carry_type,
+      String page) {
+
+    return XlmmRetrofitClient.getService()
+        .getMamaAllOderCarryLogs(carry_type, page)
+        .compose(new DefaultTransform<>());
+  }
+
   public Observable<AwardCarryBean> getMamaAllAwardCarryLogs(String page) {
 
     return XlmmRetrofitClient.getService()
@@ -152,7 +160,7 @@ public class MMProductModel {
   //MM recent days carry
   public Observable<List<RecentCarryBean>> getRecentCarry(String from, String day) {
     return XlmmRetrofitClient.getService()
-            .getRecentCarry(from,day)
-            .compose(new DefaultTransform<>());
+        .getRecentCarry(from, day)
+        .compose(new DefaultTransform<>());
   }
 }

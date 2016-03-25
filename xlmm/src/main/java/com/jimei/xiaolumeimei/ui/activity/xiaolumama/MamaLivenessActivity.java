@@ -4,8 +4,9 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
-
+import butterknife.Bind;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
@@ -16,31 +17,36 @@ import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
-
 import java.util.List;
-
-import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 /**
  * Created by wulei on 2016/2/4.
  */
-public class MamaLivenessActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener{
+public class MamaLivenessActivity extends BaseSwipeBackCompatActivity
+    implements View.OnClickListener {
   String TAG = "MamaLivenessActivity";
 
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.lv_liveness) XRecyclerView lv_liveness;
+  @Bind(R.id.tv_liveness)  TextView tv_liveness;
 
   private int page = 2;
   private MamaLivenessAdapter mAdapter;
   private Subscription subscribe;
+  int liveness = 0;
 
   @Override protected void setListener() {
     toolbar.setOnClickListener(this);
   }
+
   @Override protected void getBundleExtras(Bundle extras) {
 
+    if(null != extras){
+      liveness = extras.getInt("liveness");
+
+    }
   }
 
   @Override protected int getContentViewLayoutID() {
@@ -52,6 +58,8 @@ public class MamaLivenessActivity extends BaseSwipeBackCompatActivity implements
     setSupportActionBar(toolbar);
     finishBack(toolbar);
     initRecyclerView();
+
+    tv_liveness.setText(liveness + "");
   }
 
   private void initRecyclerView() {
@@ -78,19 +86,20 @@ public class MamaLivenessActivity extends BaseSwipeBackCompatActivity implements
       }
 
       private void loadMoreData(String page) {
-         subscribe = MamaInfoModel.getInstance()
+        subscribe = MamaInfoModel.getInstance()
             .getMamaLiveness(page)
             .subscribeOn(Schedulers.io())
             .subscribe(new ServiceResponse<MamaLivenessBean>() {
               @Override public void onNext(MamaLivenessBean livenessBean) {
                 super.onNext(livenessBean);
                 if (livenessBean != null) {
-                  if (null != livenessBean.getNext()) {
-                    mAdapter.update(livenessBean.getMamaLiveness());
-                  } else {
-                    Toast.makeText(MamaLivenessActivity.this, "没有更多了",
-                        Toast.LENGTH_SHORT).show();
+
+                  mAdapter.update(livenessBean.getResults());
+                  if (null == livenessBean.getNext()) {
+                    Toast.makeText(MamaLivenessActivity.this, "没有更多了", Toast.LENGTH_SHORT)
+                        .show();
                     lv_liveness.post(lv_liveness::loadMoreComplete);
+                    lv_liveness.setLoadingMoreEnabled(false);
                   }
                 }
               }
@@ -100,25 +109,36 @@ public class MamaLivenessActivity extends BaseSwipeBackCompatActivity implements
                 lv_liveness.post(lv_liveness::loadMoreComplete);
               }
             });
-
-
       }
     });
   }
+
   @Override protected void initData() {
-     subscribe = MamaInfoModel.getInstance()
+    showIndeterminateProgressDialog(false);
+    subscribe = MamaInfoModel.getInstance()
         .getMamaLiveness("1")
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<MamaLivenessBean>() {
           @Override public void onNext(MamaLivenessBean pointBean) {
-            JUtils.Log(TAG, "AllowanceBean=" + pointBean.toString());
-            List<MamaLivenessBean.LivenessEntity> results = pointBean.getMamaLiveness();
+            if(pointBean != null) {
+              JUtils.Log(TAG, "MamaLivenessBean=" + pointBean.toString());
+              List<MamaLivenessBean.ResultsEntity> results = pointBean.getResults();
 
-            if (0 == results.size()) {
-              JUtils.Log(TAG, "results.size()=0");
-            } else {
-              mAdapter.update(results);
+              if (0 == results.size()) {
+                JUtils.Log(TAG, "results.size()=0");
+              } else {
+                mAdapter.update(results);
+              }
+
+              if (null == pointBean.getNext()) {
+                lv_liveness.setLoadingMoreEnabled(false);
+              }
             }
+          }
+
+          @Override public void onCompleted() {
+            super.onCompleted();
+            hideIndeterminateProgressDialog();
           }
         });
     addSubscription(subscribe);
@@ -132,16 +152,13 @@ public class MamaLivenessActivity extends BaseSwipeBackCompatActivity implements
     return null;
   }
 
-  @Override
-  public void onClick(View v) {
+  @Override public void onClick(View v) {
     switch (v.getId()) {
-
 
     }
   }
 
   @Override protected void onStop() {
     super.onStop();
-
   }
 }

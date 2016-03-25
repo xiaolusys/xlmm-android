@@ -51,18 +51,17 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
   int goods_id = 0;
   int refund_state = 0;
   AllRefundsBean.ResultsEntity refundDetail;
-  TradeModel model = new TradeModel();
 
   @Override protected void setListener() {
     toolbar.setOnClickListener(this);
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
-
+    goods_id =extras.getInt("goods_id");
   }
 
   @Override protected int getContentViewLayoutID() {
-    if((getIntent() != null) && (getIntent().getExtras() != null)) {
+    if ((getIntent() != null) && (getIntent().getExtras() != null)) {
       refund_state = getIntent().getExtras().getInt("refund_state");
     }
     Log.d(TAG, "refund_state " + refund_state);
@@ -73,7 +72,6 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     } else {
       return R.layout.activity_refund_detail;
     }
-
   }
 
   @Override protected void initViews() {
@@ -81,48 +79,51 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     setSupportActionBar(toolbar);
     finishBack(toolbar);
 
-    goods_id = getIntent().getExtras().getInt("goods_id");
+
     Log.d(TAG, "goods_id " + goods_id);
 
     if (refund_state == XlmmConst.REFUND_STATE_SELLER_AGREED) {
-      et_logistics_info = (EditText)findViewById(R.id.et_logistics_info);
-      et_logistics_info.setOnTouchListener(new View.OnTouchListener(){
-        public boolean onTouch(View v, MotionEvent event){
+      et_logistics_info = (EditText) findViewById(R.id.et_logistics_info);
+      et_logistics_info.setOnTouchListener(new View.OnTouchListener() {
+        public boolean onTouch(View v, MotionEvent event) {
           //et_refund_reason.setInputType(InputType.TYPE_NULL); //关闭软键盘
-          if(MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
+          if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
             Log.d(TAG, "write logistics");
-            Intent intent = new Intent(RefundDetailActivity.this, WriteLogisticsInfoActivty.class);
+            Intent intent =
+                new Intent(RefundDetailActivity.this, WriteLogisticsInfoActivty.class);
             intent.putExtra("goods_id", refundDetail.getOrder_id());
-            Log.d(TAG," to WriteLogisticsInfoActivty");
+            Log.d(TAG, " to WriteLogisticsInfoActivty");
             startActivity(intent);
           }
           return false;
         }
       });
-      btn_return_addr = (Button)findViewById(R.id.btn_return_addr);
+      btn_return_addr = (Button) findViewById(R.id.btn_return_addr);
       btn_return_addr.setOnClickListener(this);
     }
   }
 
   //从server端获得所有订单数据，可能要查询几次
   @Override protected void initData() {
-    JUtils.Log(TAG, "initData goods_id "+ goods_id);
-  Subscription subscription = model.getRefundDetailBean(goods_id)
+    JUtils.Log(TAG, "initData goods_id " + goods_id);
+    Subscription subscription = TradeModel.getInstance()
+        .getRefundDetailBean(goods_id)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<AllRefundsBean.ResultsEntity>() {
           @Override public void onNext(AllRefundsBean.ResultsEntity refundDetailBean) {
-            JUtils.Log(TAG,"getRefundDetailBean success ");
+            JUtils.Log(TAG, "getRefundDetailBean success ");
             refundDetail = refundDetailBean;
             fillDataToView(refundDetailBean);
             Log.i(TAG, refundDetailBean.toString());
-            Log.i(TAG, "status "+refundDetailBean.getStatus());
-            if ((refund_state == XlmmConst.REFUND_STATE_SELLER_AGREED)
-            || (refund_state == XlmmConst.REFUND_STATE_BUYER_APPLY)){
+            Log.i(TAG, "status " + refundDetailBean.getStatus());
+            if ((refund_state == XlmmConst.REFUND_STATE_SELLER_AGREED) || (refund_state
+                == XlmmConst.REFUND_STATE_BUYER_APPLY)) {
               List<String> mDatas = new ArrayList<String>();
               fillPicPath(mDatas, (String) (refundDetailBean.getProof_pic().toString()));
               Log.d(TAG, "proofpic " + refundDetailBean.getProof_pic());
 
-              mHorizontalScrollView = (MyHorizontalScrollView) findViewById(R.id.id_horizontalScrollView);
+              mHorizontalScrollView =
+                  (MyHorizontalScrollView) findViewById(R.id.id_horizontalScrollView);
               HorizontalScrollViewAdapter mAdapter =
                   new HorizontalScrollViewAdapter(RefundDetailActivity.this, mDatas);
               //设置适配器
@@ -130,15 +131,13 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
             }
           }
 
-          @Override
-          public void onCompleted() {
+          @Override public void onCompleted() {
             super.onCompleted();
           }
 
-          @Override
-          public void onError(Throwable e) {
+          @Override public void onError(Throwable e) {
 
-            Log.e(TAG, "getRefundDetailBean error:, "   + e.toString());
+            Log.e(TAG, "getRefundDetailBean error:, " + e.toString());
             super.onError(e);
           }
         });
@@ -154,7 +153,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
   }
 
   private void fillDataToView(AllRefundsBean.ResultsEntity refundDetailBean) {
-    JUtils.Log(TAG,"fillDataToView ");
+    JUtils.Log(TAG, "fillDataToView ");
 
     tx_order_id.setText("订单编号" + refundDetailBean.getRefund_no());
 
@@ -163,19 +162,19 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     ViewUtils.loadImgToImgView(this, img_good, refundDetailBean.getPic_path());
 
     //TextView tx_good_name = (TextView) findViewById(R.id.tx_good_name);
-    if(refundDetailBean.getTitle().length() >= 9) {
+    if (refundDetailBean.getTitle().length() >= 9) {
       tx_good_name.setText(refundDetailBean.getTitle().substring(0, 8) + "...");
-    }
-    else {
+    } else {
       tx_good_name.setText(refundDetailBean.getTitle());
     }
     //TextView tx_good_price = (TextView) findViewById(R.id.tx_good_price);
-    tx_good_price.setText("¥" + refundDetailBean.getTotal_fee());
+    tx_good_price.setText("¥" + refundDetailBean.getPayment());
 
     //TextView tx_good_size = (TextView) findViewById(R.id.tx_good_size);
     tx_good_size.setText("尺码：" + refundDetailBean.getSku_name());
     //TextView tx_good_num = (TextView) findViewById(R.id.tx_good_num);
-    tx_good_num.setText("x" + refundDetailBean.getRefund_num());
+    //tx_good_num.setText("x" + refundDetailBean.getRefund_num());
+    tx_good_num.setText("");
 
     //TextView tx_refund_num = (TextView) findViewById(R.id.tx_refund_num);
     tx_refund_num.setText(Integer.toString(refundDetailBean.getRefund_num()));
@@ -186,29 +185,29 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     //TextView tx_refund_reason = (TextView) findViewById(R.id.tx_refund_reason);
     tx_refund_reason.setText(refundDetailBean.getReason());
 
-    tx_order_crttime.setText(refundDetailBean.getCreated().replace("T"," "));
-    JUtils.Log(TAG,"crt time "+refundDetailBean.getCreated());
-
+    tx_order_crttime.setText(refundDetailBean.getCreated().replace("T", " "));
+    JUtils.Log(TAG, "crt time " + refundDetailBean.getCreated());
   }
 
   @Override public void onClick(View v) {
     switch (v.getId()) {
       case R.id.btn_return_addr:
-        if((refundDetail.getReturn_address() != null)
-            && (! refundDetail.getReturn_address().isEmpty())) {
-          new AlertDialog.Builder(this).setTitle("").setMessage(
-              refundDetail.getReturn_address()+getResources().getString(R.string.return_addr))
+        if ((refundDetail.getReturn_address() != null)
+            && (!refundDetail.getReturn_address().isEmpty())) {
+          new AlertDialog.Builder(this).setTitle("")
+              .setMessage(refundDetail.getReturn_address() + getResources().getString(
+                  R.string.return_addr))
               .show();
         }
         break;
     }
   }
 
-  private void fillPicPath(List<String> mDatas, String pics){
-    if((null == pics) || (pics.equals("")) || (pics.equals("[]"))) return;
+  private void fillPicPath(List<String> mDatas, String pics) {
+    if ((null == pics) || (pics.equals("")) || (pics.equals("[]"))) return;
     String[] strArray = null;
     strArray = pics.split(",");
-    for(int i = 0; i< strArray.length;i++) {
+    for (int i = 0; i < strArray.length; i++) {
       mDatas.add(strArray[i]);
     }
   }

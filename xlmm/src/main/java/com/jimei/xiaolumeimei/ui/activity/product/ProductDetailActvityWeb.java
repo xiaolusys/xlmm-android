@@ -51,7 +51,6 @@ public class ProductDetailActvityWeb extends BaseSwipeBackCompatActivity
   @Bind(R.id.image_2) ImageView imageView2;
   @Bind(R.id.rv_cart) RelativeLayout rvCart;
   @Bind(R.id.shopping_button) Button button_shop;
-  CartsModel cartsModel = new CartsModel();
   int num = 0;
   @Bind(R.id.cv_lefttime) CountdownView cvLefttime;
   private String item_id;
@@ -129,8 +128,8 @@ public class ProductDetailActvityWeb extends BaseSwipeBackCompatActivity
     badge = new BadgeView(this);
     badge.setTargetView(target);
 
-    fragmentDetail = new VerticalFragmentDetail();
-    fragmnetWeb = new VerticalFragmentWeb();
+    fragmentDetail = VerticalFragmentDetail.newInstance("detail");
+    fragmnetWeb = VerticalFragmentWeb.newInstance("webview");
 
     getSupportFragmentManager().beginTransaction()
         .add(R.id.first, fragmentDetail)
@@ -170,7 +169,8 @@ public class ProductDetailActvityWeb extends BaseSwipeBackCompatActivity
           if (isSelectzz) {
             JUtils.Log(sku_id + "这尺寸可以");
 
-            Subscription subscribe = cartsModel.addCarts(item_id, sku_id)
+            Subscription subscribe = CartsModel.getInstance()
+                .addCarts(item_id, sku_id)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<AddCartsBean>() {
 
@@ -237,7 +237,8 @@ public class ProductDetailActvityWeb extends BaseSwipeBackCompatActivity
                       //num++;
                       //badge.setBadgeCount(num);
 
-                      cartsModel.show_carts_num()
+                      Subscription subscribe1 = CartsModel.getInstance()
+                          .show_carts_num()
                           .subscribeOn(Schedulers.io())
                           .subscribe(new ServiceResponse<CartsNumResultBean>() {
                             @Override
@@ -271,6 +272,7 @@ public class ProductDetailActvityWeb extends BaseSwipeBackCompatActivity
                               }
                             }
                           });
+                      addSubscription(subscribe1);
                     }
                   }
                 });
@@ -300,7 +302,8 @@ public class ProductDetailActvityWeb extends BaseSwipeBackCompatActivity
   @Override protected void onResume() {
     super.onResume();
     //显示购物车数量
-    cartsModel.show_carts_num()
+    Subscription subscribe = CartsModel.getInstance()
+        .show_carts_num()
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<CartsNumResultBean>() {
           @Override public void onNext(CartsNumResultBean cartsNumResultBean) {
@@ -337,6 +340,7 @@ public class ProductDetailActvityWeb extends BaseSwipeBackCompatActivity
             }
           }
         });
+    addSubscription(subscribe);
   }
 
   @Override public void setSkuid(String skuid, boolean isSelect) {

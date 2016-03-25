@@ -15,7 +15,6 @@ import com.jimei.xiaolumeimei.entities.AllowanceBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import java.util.List;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
@@ -23,7 +22,8 @@ import rx.schedulers.Schedulers;
 /**
  * Created by wulei on 2016/2/4.
  */
-public class ShareAllowanceActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener{
+public class ShareAllowanceActivity extends BaseSwipeBackCompatActivity
+    implements View.OnClickListener {
   String TAG = "ShareAllowanceActivity";
 
   @Bind(R.id.toolbar) Toolbar toolbar;
@@ -36,6 +36,7 @@ public class ShareAllowanceActivity extends BaseSwipeBackCompatActivity implemen
   @Override protected void setListener() {
     toolbar.setOnClickListener(this);
   }
+
   @Override protected void getBundleExtras(Bundle extras) {
 
   }
@@ -75,15 +76,15 @@ public class ShareAllowanceActivity extends BaseSwipeBackCompatActivity implemen
       }
 
       private void loadMoreData(String page) {
-         subscribe = MamaInfoModel.getInstance()
+        subscribe = MamaInfoModel.getInstance()
             .getAllowance(page)
             .subscribeOn(Schedulers.io())
             .subscribe(new ServiceResponse<AllowanceBean>() {
               @Override public void onNext(AllowanceBean shoppingListBean) {
                 super.onNext(shoppingListBean);
                 if (shoppingListBean != null) {
+                  mAdapter.update(shoppingListBean.getAllowances());
                   if (null != shoppingListBean.getNext()) {
-                    mAdapter.update(shoppingListBean.getAllowances());
                   } else {
                     Toast.makeText(ShareAllowanceActivity.this, "没有更多了",
                         Toast.LENGTH_SHORT).show();
@@ -100,19 +101,20 @@ public class ShareAllowanceActivity extends BaseSwipeBackCompatActivity implemen
       }
     });
   }
+
   @Override protected void initData() {
-     subscribe = MamaInfoModel.getInstance()
+    subscribe = MamaInfoModel.getInstance()
         .getAllowance("1")
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<AllowanceBean>() {
           @Override public void onNext(AllowanceBean pointBean) {
-            JUtils.Log(TAG, "AllowanceBean=" + pointBean.toString());
-            List<AllowanceBean.AllowanceEntity> results = pointBean.getAllowances();
 
-            if (0 == results.size()) {
-              JUtils.Log(TAG, "results.size()=0");
-            } else {
+            if (pointBean != null) {
+              List<AllowanceBean.AllowanceEntity> results = pointBean.getAllowances();
               mAdapter.update(results);
+              if (null == pointBean.getNext()) {
+                lv_allowance.setLoadingMoreEnabled(false);
+              }
             }
           }
         });
@@ -126,10 +128,8 @@ public class ShareAllowanceActivity extends BaseSwipeBackCompatActivity implemen
     return null;
   }
 
-  @Override
-  public void onClick(View v) {
+  @Override public void onClick(View v) {
     switch (v.getId()) {
-
 
     }
   }

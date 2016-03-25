@@ -14,6 +14,16 @@ import rx.Observable;
  */
 public class AddressModel {
 
+
+  private static AddressModel ourInstance = new AddressModel();
+
+  private AddressModel() {
+  }
+
+  public static AddressModel getInstance() {
+    return ourInstance;
+  }
+
   //获取地址列表
   public Observable<List<AddressBean>> getAddressList() {
     return XlmmRetrofitClient.getService()

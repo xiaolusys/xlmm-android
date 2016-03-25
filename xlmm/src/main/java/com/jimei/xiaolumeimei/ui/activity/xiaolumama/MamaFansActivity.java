@@ -20,20 +20,19 @@ import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by wulei on 2016/2/4.
+ * Created by itxuye(www.itxuye.com) on 2016/03/22.
+ *
+ * Copyright 2016年 上海己美. All rights reserved.
  */
-public class MamaFansActivity extends BaseSwipeBackCompatActivity
-    implements View.OnClickListener {
-  String TAG = "MamaFansActivity";
-
+public class MamaFansActivity extends BaseSwipeBackCompatActivity {
+  private static final String TAG = MamaFansActivity.class.getSimpleName();
   @Bind(R.id.toolbar) Toolbar toolbar;
-  @Bind(R.id.xrv_mamafans) XRecyclerView xrv_mamafans;
+  @Bind(R.id.xrv_mmvisitors) XRecyclerView xrvMmvisitors;
   private int page = 2;
   private MamaFansAdapter mAdapter;
   private Subscription subscribe;
 
   @Override protected void setListener() {
-    toolbar.setOnClickListener(this);
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -41,7 +40,7 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected int getContentViewLayoutID() {
-    return R.layout.activity_mamafans;
+    return R.layout.activity_mmvisitor;
   }
 
   @Override protected void initViews() {
@@ -54,6 +53,7 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void initData() {
     showIndeterminateProgressDialog(false);
+    xrvMmvisitors.setVisibility(View.INVISIBLE);
     subscribe = MamaInfoModel.getInstance()
         .getMamaFans("1")
         .subscribeOn(Schedulers.io())
@@ -61,6 +61,7 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity
           @Override public void onCompleted() {
             super.onCompleted();
             hideIndeterminateProgressDialog();
+            xrvMmvisitors.setVisibility(View.VISIBLE);
           }
 
           @Override public void onError(Throwable e) {
@@ -69,31 +70,36 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity
           }
 
           @Override public void onNext(MamaFansBean fansBeen) {
-            JUtils.Log(TAG, "size =" + fansBeen.getCount());
-
-            if (0 == fansBeen.getCount()) {
-              JUtils.Log(TAG, "results.size()=0");
-            } else {
-              mAdapter.update(fansBeen.getFans());
+            if (fansBeen != null) {
+              if (0 == fansBeen.getCount()) {
+                JUtils.Log(TAG, "results.size()=0");
+              } else {
+                mAdapter.update(fansBeen.getResults());
+              }
+              if (null == fansBeen.getNext()) {
+                //Toast.makeText(MamaFansActivity.this, "没有更多了", Toast.LENGTH_SHORT).show();
+                //xrvMmvisitors.post(xrvMmvisitors::loadMoreComplete);
+                xrvMmvisitors.setLoadingMoreEnabled(false);
+              }
             }
           }
         });
   }
 
   private void initRecyclerView() {
-    xrv_mamafans.setLayoutManager(new LinearLayoutManager(this));
-    xrv_mamafans.addItemDecoration(
+    xrvMmvisitors.setLayoutManager(new LinearLayoutManager(this));
+    xrvMmvisitors.addItemDecoration(
         new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
-    xrv_mamafans.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-    xrv_mamafans.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
-    xrv_mamafans.setArrowImageView(R.drawable.iconfont_downgrey);
-    xrv_mamafans.setPullRefreshEnabled(false);
-    xrv_mamafans.setLoadingMoreEnabled(true);
+    xrvMmvisitors.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
+    xrvMmvisitors.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
+    xrvMmvisitors.setArrowImageView(R.drawable.iconfont_downgrey);
+    xrvMmvisitors.setPullRefreshEnabled(false);
+    xrvMmvisitors.setLoadingMoreEnabled(true);
 
     mAdapter = new MamaFansAdapter(this);
-    xrv_mamafans.setAdapter(mAdapter);
+    xrvMmvisitors.setAdapter(mAdapter);
 
-    xrv_mamafans.setLoadingListener(new XRecyclerView.LoadingListener() {
+    xrvMmvisitors.setLoadingListener(new XRecyclerView.LoadingListener() {
       @Override public void onRefresh() {
 
       }
@@ -104,6 +110,7 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity
       }
 
       private void loadMoreData(String page) {
+        JUtils.Log(TAG, "第" + page);
         Subscription subscribe = MamaInfoModel.getInstance()
             .getMamaFans(page)
             .subscribeOn(Schedulers.io())
@@ -111,19 +118,19 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity
               @Override public void onNext(MamaFansBean fansBeen) {
                 super.onNext(fansBeen);
                 if (fansBeen != null) {
+                  mAdapter.update(fansBeen.getResults());
                   if (null != fansBeen.getNext()) {
-                    mAdapter.update(fansBeen.getFans());
                   } else {
                     Toast.makeText(MamaFansActivity.this, "没有更多了", Toast.LENGTH_SHORT)
                         .show();
-                    xrv_mamafans.post(xrv_mamafans::loadMoreComplete);
+                    xrvMmvisitors.post(xrvMmvisitors::loadMoreComplete);
                   }
                 }
               }
 
               @Override public void onCompleted() {
                 super.onCompleted();
-                xrv_mamafans.post(xrv_mamafans::loadMoreComplete);
+                xrvMmvisitors.post(xrvMmvisitors::loadMoreComplete);
               }
             });
         addSubscription(subscribe);
@@ -137,12 +144,6 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity
 
   @Override protected TransitionMode getOverridePendingTransitionMode() {
     return null;
-  }
-
-  @Override public void onClick(View v) {
-    switch (v.getId()) {
-
-    }
   }
 
   @Override protected void onStop() {

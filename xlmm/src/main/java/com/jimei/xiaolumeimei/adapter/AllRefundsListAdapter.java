@@ -137,9 +137,9 @@ public class AllRefundsListAdapter extends BaseAdapter {
       tx_good_name.setText(data.get(position).get("title"));
     }
     tx_good_price.setText("¥" + data.get(position).get("pay_price"));
-    tx_good_size.setText(data.get(position).get("model_id"));
-    tx_good_num.setText("x"+data.get(position).get("num"));
-
+    tx_good_size.setText("尺码:"+data.get(position).get("model_id"));
+    //tx_good_num.setText("x"+data.get(position).get("num"));
+    tx_good_num.setText("");
 
 
     return convertView;

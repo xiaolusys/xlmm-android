@@ -24,6 +24,7 @@ import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.widget.citypicker.CityPicker;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 /**
@@ -36,7 +37,6 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
 
   private static final String TAG = AddAddressActivity.class.getSimpleName();
 
-  AddressModel model = new AddressModel();
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.name) EditText name;
   @Bind(R.id.mobile) EditText mobile;
@@ -132,8 +132,9 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
         clearaddressa = clearAddress.getText().toString().trim();
 
         if (checkInput(receiver_name, receiver_mobile, city_string, clearaddressa)) {
-          model.create_address(receiver_state, receiver_city, receiver_district,
-              clearaddressa, receiver_name, receiver_mobile)
+          Subscription subscribe = AddressModel.getInstance()
+              .create_address(receiver_state, receiver_city, receiver_district,
+                  clearaddressa, receiver_name, receiver_mobile)
               .subscribeOn(Schedulers.io())
               .subscribe(new ServiceResponse<AddressResultBean>() {
                 @Override public void onNext(AddressResultBean addressResultBean) {
@@ -153,6 +154,7 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
                   }
                 }
               });
+          addSubscription(subscribe);
         }
 
         break;

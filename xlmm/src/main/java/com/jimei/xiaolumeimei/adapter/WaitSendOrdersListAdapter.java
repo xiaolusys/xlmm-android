@@ -31,7 +31,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.ui.activity.trade.OrderDetailActivity;
 
 public class WaitSendOrdersListAdapter extends BaseAdapter {
-  private static final String TAG = "WaitRecvOrdersAdapter";
+  private static final String TAG = "WaitSendListAdapter";
   private Activity context;
   List<HashMap<String, String>> data;
   private List<AllOrdersBean.ResultsEntity> mList;
@@ -63,7 +63,6 @@ public class WaitSendOrdersListAdapter extends BaseAdapter {
     int state;
 
     Log.d(TAG, "dataSource.size " + list.size());
-    data.clear();
     for (int i = 0; i < list.size(); i++) {
       HashMap<String, String> map = new HashMap<String, String>();
       payment = (float) list.get(i).getPayment();
@@ -78,7 +77,6 @@ public class WaitSendOrdersListAdapter extends BaseAdapter {
 
       data.add(map);
     }
-    mList.clear();
     mList.addAll(list);
     notifyDataSetChanged();
   }

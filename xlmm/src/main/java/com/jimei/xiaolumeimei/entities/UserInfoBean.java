@@ -9,271 +9,374 @@ import com.google.gson.annotations.SerializedName;
  */
 public class UserInfoBean {
 
+
   /**
-   * id : 29
-   * url : http://dev.xiaolumeimei.com/rest/v1/users/29
-   * user_id : 115
-   * username : chongyang.chen
-   * nick : 笑嘻嘻
-   * mobile : 13816404857
+   * id : 1
+   * url : http://m.xiaolumeimei.com/rest/v1/users/1
+   * user_id : 1
+   * username : xiuqing.mei
+   * nick : 小鹿妈妈
+   * mobile : 18621623915
    * email :
-   * phone : 1
-   * thumbnail :
+   * phone :
+   * thumbnail : http://7xogkj.com2.z0.glb.qiniucdn.com/222-ohmydeer.png
    * status : 1
-   * created : 2015-08-20T15:31:45
-   * modified : 2016-01-31T12:53:06
-   * xiaolumm : {"id":2,"cash":10000,"agencylevel":2,"created":"2015-05-12T17:03:25","status":"effect"}
+   * created : 2015-04-09T11:08:12
+   * modified : 2016-02-22T04:01:42
+   * xiaolumm : {"id":44,"cash":1943361,"agencylevel":2,"created":"2015-04-11T12:20:23","status":"effect"}
    * has_usable_password : true
-   * user_budget : {"budget_cash":10}
-   * "is_attention_public": 1,
-   * score : 150
+   * user_budget : {"budget_cash":5730.75,"is_cash_out":1}
+   * is_attention_public : 1
+   * coupon_num : 2
+   * waitpay_num : 0
+   * waitgoods_num : 16
+   * refunds_num : 21
+   * score : 0
    */
 
-  @SerializedName("id") private int mId;
-  @SerializedName("url") private String mUrl;
-  @SerializedName("user_id") private String mUserId;
-  @SerializedName("username") private String mUsername;
-  @SerializedName("nick") private String mNick;
-  @SerializedName("mobile") private String mMobile;
-  @SerializedName("email") private String mEmail;
-  @SerializedName("phone") private String mPhone;
-  @SerializedName("thumbnail") private String mThumbnail;
-  @SerializedName("status") private int mStatus;
-  @SerializedName("created") private String mCreated;
-  @SerializedName("modified") private String mModified;
+  @SerializedName("id")
+  private int id;
+  @SerializedName("url")
+  private String url;
+  @SerializedName("user_id")
+  private String userId;
+  @SerializedName("username")
+  private String username;
+  @SerializedName("nick")
+  private String nick;
+  @SerializedName("mobile")
+  private String mobile;
+  @SerializedName("email")
+  private String email;
+  @SerializedName("phone")
+  private String phone;
+  @SerializedName("thumbnail")
+  private String thumbnail;
+  @SerializedName("status")
+  private int status;
+  @SerializedName("created")
+  private String created;
+  @SerializedName("modified")
+  private String modified;
   /**
-   * id : 2
-   * cash : 10000
+   * id : 44
+   * cash : 1943361
    * agencylevel : 2
-   * created : 2015-05-12T17:03:25
+   * created : 2015-04-11T12:20:23
    * status : effect
    */
 
-  @SerializedName("xiaolumm") private XiaolummEntity mXiaolumm;
-  @SerializedName("has_usable_password") private boolean mHasUsablePassword;
+  @SerializedName("xiaolumm")
+  private XiaolummEntity xiaolumm;
+  @SerializedName("has_usable_password")
+  private boolean hasUsablePassword;
   /**
-   * budget_cash : 10.0
+   * budget_cash : 5730.75
+   * is_cash_out : 1
    */
 
-  @SerializedName("user_budget") private UserBudgetEntity mUserBudget;
-  @SerializedName("is_attention_public") private int mIsAttentionPublic;
-  @SerializedName("score") private int mScore;
+  @SerializedName("user_budget")
+  private UserBudgetEntity userBudget;
+  @SerializedName("is_attention_public")
+  private int isAttentionPublic;
+  @SerializedName("coupon_num")
+  private int couponNum;
+  @SerializedName("waitpay_num")
+  private int waitpayNum;
+  @SerializedName("waitgoods_num")
+  private int waitgoodsNum;
+  @SerializedName("refunds_num")
+  private int refundsNum;
+  @SerializedName("score")
+  private int score;
 
   public void setId(int id) {
-    this.mId = id;
+    this.id = id;
   }
 
   public void setUrl(String url) {
-    this.mUrl = url;
+    this.url = url;
   }
 
   public void setUserId(String userId) {
-    this.mUserId = userId;
+    this.userId = userId;
   }
 
   public void setUsername(String username) {
-    this.mUsername = username;
+    this.username = username;
   }
 
   public void setNick(String nick) {
-    this.mNick = nick;
+    this.nick = nick;
   }
 
   public void setMobile(String mobile) {
-    this.mMobile = mobile;
+    this.mobile = mobile;
   }
 
   public void setEmail(String email) {
-    this.mEmail = email;
+    this.email = email;
   }
 
   public void setPhone(String phone) {
-    this.mPhone = phone;
+    this.phone = phone;
   }
 
   public void setThumbnail(String thumbnail) {
-    this.mThumbnail = thumbnail;
+    this.thumbnail = thumbnail;
   }
 
   public void setStatus(int status) {
-    this.mStatus = status;
+    this.status = status;
   }
 
   public void setCreated(String created) {
-    this.mCreated = created;
+    this.created = created;
   }
 
   public void setModified(String modified) {
-    this.mModified = modified;
+    this.modified = modified;
   }
 
   public void setXiaolumm(XiaolummEntity xiaolumm) {
-    this.mXiaolumm = xiaolumm;
+    this.xiaolumm = xiaolumm;
   }
 
   public void setHasUsablePassword(boolean hasUsablePassword) {
-    this.mHasUsablePassword = hasUsablePassword;
+    this.hasUsablePassword = hasUsablePassword;
   }
 
   public void setUserBudget(UserBudgetEntity userBudget) {
-    this.mUserBudget = userBudget;
+    this.userBudget = userBudget;
   }
 
-  public void setIsAttentionPublic(int mIsAttentionPublic) {
-    this.mIsAttentionPublic = mIsAttentionPublic;
+  public void setIsAttentionPublic(int isAttentionPublic) {
+    this.isAttentionPublic = isAttentionPublic;
+  }
+
+  public void setCouponNum(int couponNum) {
+    this.couponNum = couponNum;
+  }
+
+  public void setWaitpayNum(int waitpayNum) {
+    this.waitpayNum = waitpayNum;
+  }
+
+  public void setWaitgoodsNum(int waitgoodsNum) {
+    this.waitgoodsNum = waitgoodsNum;
+  }
+
+  public void setRefundsNum(int refundsNum) {
+    this.refundsNum = refundsNum;
   }
 
   public void setScore(int score) {
-    this.mScore = score;
+    this.score = score;
   }
 
   public int getId() {
-    return mId;
+    return id;
   }
 
   public String getUrl() {
-    return mUrl;
+    return url;
   }
 
   public String getUserId() {
-    return mUserId;
+    return userId;
   }
 
   public String getUsername() {
-    return mUsername;
+    return username;
   }
 
   public String getNick() {
-    return mNick;
+    return nick;
   }
 
   public String getMobile() {
-    return mMobile;
+    return mobile;
   }
 
   public String getEmail() {
-    return mEmail;
+    return email;
   }
 
   public String getPhone() {
-    return mPhone;
+    return phone;
   }
 
   public String getThumbnail() {
-    return mThumbnail;
+    return thumbnail;
   }
 
   public int getStatus() {
-    return mStatus;
+    return status;
   }
 
   public String getCreated() {
-    return mCreated;
+    return created;
   }
 
   public String getModified() {
-    return mModified;
+    return modified;
   }
 
   public XiaolummEntity getXiaolumm() {
-    return mXiaolumm;
+    return xiaolumm;
   }
 
   public boolean isHasUsablePassword() {
-    return mHasUsablePassword;
+    return hasUsablePassword;
   }
 
   public UserBudgetEntity getUserBudget() {
-    return mUserBudget;
+    return userBudget;
   }
 
   public int getIsAttentionPublic() {
-    return mIsAttentionPublic;
+    return isAttentionPublic;
+  }
+
+  public int getCouponNum() {
+    return couponNum;
+  }
+
+  public int getWaitpayNum() {
+    return waitpayNum;
+  }
+
+  public int getWaitgoodsNum() {
+    return waitgoodsNum;
+  }
+
+  public int getRefundsNum() {
+    return refundsNum;
   }
 
   public int getScore() {
-    return mScore;
+    return score;
+  }
+
+  @Override
+  public String toString() {
+    return "UserInfoBean{" +
+            "id=" + id +
+            ", url='" + url + '\'' +
+            ", userId='" + userId + '\'' +
+            ", username='" + username + '\'' +
+            ", nick='" + nick + '\'' +
+            ", mobile='" + mobile + '\'' +
+            ", email='" + email + '\'' +
+            ", phone='" + phone + '\'' +
+            ", thumbnail='" + thumbnail + '\'' +
+            ", status=" + status +
+            ", created='" + created + '\'' +
+            ", modified='" + modified + '\'' +
+            ", xiaolumm=" + xiaolumm +
+            ", hasUsablePassword=" + hasUsablePassword +
+            ", userBudget=" + userBudget +
+            ", isAttentionPublic=" + isAttentionPublic +
+            ", couponNum=" + couponNum +
+            ", waitpayNum=" + waitpayNum +
+            ", waitgoodsNum=" + waitgoodsNum +
+            ", refundsNum=" + refundsNum +
+            ", score=" + score +
+            '}';
   }
 
   public static class XiaolummEntity {
-    @SerializedName("id") private int mId;
-    @SerializedName("cash") private int mCash;
-    @SerializedName("agencylevel") private int mAgencylevel;
-    @SerializedName("created") private String mCreated;
-    @SerializedName("status") private String mStatus;
+    @SerializedName("id")
+    private int id;
+    @SerializedName("cash")
+    private int cash;
+    @SerializedName("agencylevel")
+    private int agencylevel;
+    @SerializedName("created")
+    private String created;
+    @SerializedName("status")
+    private String status;
 
     public void setId(int id) {
-      this.mId = id;
+      this.id = id;
     }
 
     public void setCash(int cash) {
-      this.mCash = cash;
+      this.cash = cash;
     }
 
     public void setAgencylevel(int agencylevel) {
-      this.mAgencylevel = agencylevel;
+      this.agencylevel = agencylevel;
     }
 
     public void setCreated(String created) {
-      this.mCreated = created;
+      this.created = created;
     }
 
     public void setStatus(String status) {
-      this.mStatus = status;
+      this.status = status;
     }
 
     public int getId() {
-      return mId;
+      return id;
     }
 
     public int getCash() {
-      return mCash;
+      return cash;
     }
 
     public int getAgencylevel() {
-      return mAgencylevel;
+      return agencylevel;
     }
 
     public String getCreated() {
-      return mCreated;
+      return created;
     }
 
     public String getStatus() {
-      return mStatus;
+      return status;
+    }
+
+    @Override
+    public String toString() {
+      return "XiaolummEntity{" +
+              "id=" + id +
+              ", cash=" + cash +
+              ", agencylevel=" + agencylevel +
+              ", created='" + created + '\'' +
+              ", status='" + status + '\'' +
+              '}';
     }
   }
 
   public static class UserBudgetEntity {
-    @SerializedName("budget_cash") private double mBudgetCash;
+    @SerializedName("budget_cash")
+    private double budgetCash;
+    @SerializedName("is_cash_out")
+    private int isCashOut;
 
     public void setBudgetCash(double budgetCash) {
-      this.mBudgetCash = budgetCash;
+      this.budgetCash = budgetCash;
+    }
+
+    public void setIsCashOut(int isCashOut) {
+      this.isCashOut = isCashOut;
     }
 
     public double getBudgetCash() {
-      return mBudgetCash;
+      return budgetCash;
     }
-  }
 
-  @Override public String toString() {
-    return "UserInfoBean{" +
-        "mId=" + mId +
-        ", mUrl='" + mUrl + '\'' +
-        ", mUserId='" + mUserId + '\'' +
-        ", mUsername='" + mUsername + '\'' +
-        ", mNick='" + mNick + '\'' +
-        ", mMobile='" + mMobile + '\'' +
-        ", mEmail='" + mEmail + '\'' +
-        ", mPhone='" + mPhone + '\'' +
-        ", mThumbnail='" + mThumbnail + '\'' +
-        ", mStatus=" + mStatus +
-        ", mCreated='" + mCreated + '\'' +
-        ", mModified='" + mModified + '\'' +
-        ", mXiaolumm=" + mXiaolumm +
-        ", mHasUsablePassword=" + mHasUsablePassword +
-        ", mUserBudget=" + mUserBudget +
-        ", mIsAttentionPublic=" + mIsAttentionPublic +
-        ", mScore=" + mScore +
-        '}';
+    public int getIsCashOut() {
+      return isCashOut;
+    }
+
+    @Override
+    public String toString() {
+      return "UserBudgetEntity{" +
+              "budgetCash=" + budgetCash +
+              ", isCashOut=" + isCashOut +
+              '}';
+    }
   }
 }

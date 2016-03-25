@@ -136,6 +136,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
+    ShareSDK.initSDK(this);
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
     finishBack(toolbar);

@@ -3,6 +3,7 @@ package com.jimei.xiaolumeimei.ui.fragment.v1;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,20 @@ public class VerticalFragmentWeb extends Fragment {
   private View progressBar;
   private CustWebView webview;
   private boolean hasInited = false;
+
+  public static VerticalFragmentWeb newInstance(String title) {
+    VerticalFragmentWeb todayFragment = new VerticalFragmentWeb();
+    Bundle bundle = new Bundle();
+    bundle.putString("keyword", title);
+    todayFragment.setArguments(bundle);
+    return todayFragment;
+  }
+
+  @Override public void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setRetainInstance(true);
+    JUtils.Log(TAG, "onCreate");
+  }
 
   @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {

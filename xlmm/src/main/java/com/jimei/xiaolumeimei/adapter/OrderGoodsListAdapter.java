@@ -76,7 +76,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
   }
 
   @Override public View getView(int position, View convertView, ViewGroup parent) {
-    Log.d(TAG, "getView "+ position);
+    Log.d(TAG, "getView " + position);
 
     ImageView img_goods = null;
     TextView tx_good_name = null;
@@ -92,8 +92,8 @@ public class OrderGoodsListAdapter extends BaseAdapter {
           == XlmmConst.ORDER_STATE_CONFIRM_RECEIVE)) {
         convertView = LayoutInflater.from(context)
             .inflate(R.layout.item_order_detail_include_proc, null);
-        setBtnInfo(convertView, state, refund_state, Boolean.parseBoolean(data.get
-            (position).get("kill_title")));
+        setBtnInfo(convertView, state, refund_state,
+            Boolean.parseBoolean(data.get(position).get("kill_title")));
         setBtnListener(convertView, state, refund_state,
             Integer.parseInt(data.get(position).get("goods_id")),
             dataSource.get(position));
@@ -108,14 +108,13 @@ public class OrderGoodsListAdapter extends BaseAdapter {
     tx_good_size = (TextView) convertView.findViewById(R.id.tx_good_size);
     tx_good_num = (TextView) convertView.findViewById(R.id.tx_good_num);
 
-    if(data.get(position).get("title").length() >=9) {
+    if (data.get(position).get("title").length() >= 9) {
       tx_good_name.setText(data.get(position).get("title").substring(0, 8) + "...");
-    }
-    else{
+    } else {
       tx_good_name.setText(data.get(position).get("title"));
     }
     tx_good_price.setText("¥" + data.get(position).get("pay_price"));
-    tx_good_size.setText(data.get(position).get("model_id"));
+    tx_good_size.setText("尺码:"+data.get(position).get("model_id"));
     tx_good_num.setText("x" + data.get(position).get("num"));
 
     ViewUtils.loadImgToImgView(context, img_goods, data.get(position).get("img_url"));
@@ -124,7 +123,8 @@ public class OrderGoodsListAdapter extends BaseAdapter {
     return convertView;
   }
 
-  private void setBtnInfo(View convertView, int state, int refund_state, boolean kill_title) {
+  private void setBtnInfo(View convertView, int state, int refund_state,
+      boolean kill_title) {
     Log.d(TAG, " setBtnInfo" + state + " " + refund_state);
 
     Button btn = (Button) convertView.findViewById(R.id.btn_order_proc);
@@ -132,12 +132,10 @@ public class OrderGoodsListAdapter extends BaseAdapter {
       case XlmmConst.ORDER_STATE_PAYED: {
         if (kill_title) {
           btn.setVisibility(View.INVISIBLE);
-        }
-        else {
-          if(refund_state != XlmmConst.REFUND_STATE_NO_REFUND){
+        } else {
+          if (refund_state != XlmmConst.REFUND_STATE_NO_REFUND) {
             btn.setVisibility(View.INVISIBLE);
-          }
-          else {
+          } else {
             btn.setText("申请退款");
           }
         }
@@ -245,8 +243,8 @@ public class OrderGoodsListAdapter extends BaseAdapter {
   }
 
   private void receive_goods(int id) {
-    TradeModel model = new TradeModel();
-    model.receiveGoods(id)
+    TradeModel.getInstance()
+        .receiveGoods(id)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<UserBean>() {
           @Override public void onNext(UserBean userBean) {

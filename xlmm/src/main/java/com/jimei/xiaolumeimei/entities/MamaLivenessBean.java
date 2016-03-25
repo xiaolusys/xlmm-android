@@ -1,7 +1,6 @@
 package com.jimei.xiaolumeimei.entities;
 
 import com.google.gson.annotations.SerializedName;
-
 import java.util.List;
 
 /**
@@ -9,178 +8,183 @@ import java.util.List;
  */
 public class MamaLivenessBean {
 
-    /**
-     * count : 6
-     * next : null
-     * previous : null
-     * results : [{"mama_id":5,"value_num":10,"value_type":2,"value_type_name":"订单","uni_key":"active-5-2-2016-02-23-xo16022356cc287c4767f","date_field":"2016-02-23","status":3,"status_display":"已取消","today_carry":null,"modified":"2016-03-10T18:39:57","created":"2016-03-10T18:31:36"},{"mama_id":5,"value_num":5,"value_type":4,"value_type_name":"粉丝","uni_key":"active-5-4-32","date_field":"2016-03-10","status":3,"status_display":"已取消","today_carry":null,"modified":"2016-03-10T16:57:32","created":"2016-03-10T16:57:32"},{"mama_id":5,"value_num":1,"value_type":1,"value_type_name":"点击","uni_key":"active-5-1-2016-03-09","date_field":"2016-03-09","status":1,"status_display":"待确定","today_carry":null,"modified":"2016-03-09T12:23:22","created":"2016-03-09T12:23:22"},{"mama_id":5,"value_num":50,"value_type":3,"value_type_name":"推荐","uni_key":"active-5-3-55390","date_field":"2016-03-09","status":1,"status_display":"待确定","today_carry":null,"modified":"2016-03-09T10:18:11","created":"2016-03-09T10:18:11"},{"mama_id":5,"value_num":5,"value_type":4,"value_type_name":"粉丝","uni_key":"active-5-4-575510","date_field":"2016-03-09","status":1,"status_display":"待确定","today_carry":null,"modified":"2016-03-09T10:18:10","created":"2016-03-09T10:18:10"},{"mama_id":5,"value_num":5,"value_type":4,"value_type_name":"粉丝","uni_key":"active-5-4-727721","date_field":"2016-03-09","status":1,"status_display":"待确定","today_carry":null,"modified":"2016-03-09T10:17:52","created":"2016-03-09T10:17:52"}]
-     */
+  /**
+   * count : 16
+   * next : http://api.xiaolumeimei.com/rest/v2/mama/activevalue?page=2
+   * previous : null
+   * results : [{"mama_id":44,"value_num":248,"value_type":1,"value_type_name":"点击","uni_key":"active-44-1-2016-03-22","value_description":"点击活跃值
+   * +1","date_field":"2016-03-22","status":1,"status_display":"待确定","today_carry":248,"modified":"2016-03-22T00:00:39","created":"2016-03-22T00:00:39"},{"mama_id":44,"value_num":2050,"value_type":1,"value_type_name":"点击","uni_key":"active-44-1-2016-03-21","value_description":"点击活跃值
+   * +1","date_field":"2016-03-21","status":1,"status_display":"待确定","today_carry":2050,"modified":"2016-03-21T00:07:52","created":"2016-03-21T00:07:52"},{"mama_id":44,"value_num":299,"value_type":1,"value_type_name":"点击","uni_key":"active-44-1-2016-03-20","value_description":"点击活跃值
+   * +1","date_field":"2016-03-20","status":1,"status_display":"待确定","today_carry":299,"modified":"2016-03-22T00:00:39","created":"2016-03-20T00:00:51"},{"mama_id":44,"value_num":279,"value_type":1,"value_type_name":"点击","uni_key":"active-44-1-2016-03-19","value_description":"点击活跃值
+   * +1","date_field":"2016-03-19","status":1,"status_display":"待确定","today_carry":279,"modified":"2016-03-19T00:02:28","created":"2016-03-19T00:02:28"},{"mama_id":44,"value_num":292,"value_type":1,"value_type_name":"点击","uni_key":"active-44-1-2016-03-18","value_description":"点击活跃值
+   * +1","date_field":"2016-03-18","status":1,"status_display":"待确定","today_carry":292,"modified":"2016-03-18T00:15:03","created":"2016-03-18T00:15:03"},{"mama_id":44,"value_num":262,"value_type":1,"value_type_name":"点击","uni_key":"active-44-1-2016-03-17","value_description":"点击活跃值
+   * +1","date_field":"2016-03-17","status":1,"status_display":"待确定","today_carry":262,"modified":"2016-03-17T00:02:47","created":"2016-03-17T00:02:47"},{"mama_id":44,"value_num":264,"value_type":1,"value_type_name":"点击","uni_key":"active-44-1-2016-03-16","value_description":"点击活跃值
+   * +1","date_field":"2016-03-16","status":1,"status_display":"待确定","today_carry":264,"modified":"2016-03-16T00:30:50","created":"2016-03-16T00:30:50"},{"mama_id":44,"value_num":10,"value_type":2,"value_type_name":"订单","uni_key":"active-44-2-2016-02-29-xo16022956d3f6c52bd3a","value_description":"订单活跃值
+   * +10","date_field":"2016-02-29","status":2,"status_display":"已确定","today_carry":90,"modified":"2016-03-17T06:02:43","created":"2016-03-17T06:02:43"},{"mama_id":44,"value_num":10,"value_type":2,"value_type_name":"订单","uni_key":"active-44-2-2016-02-29-xo16022956d3d554322dd","value_description":"订单活跃值
+   * +10","date_field":"2016-02-29","status":2,"status_display":"已确定","today_carry":90,"modified":"2016-03-17T06:02:41","created":"2016-03-17T06:02:41"},{"mama_id":44,"value_num":10,"value_type":2,"value_type_name":"订单","uni_key":"active-44-2-2016-02-29-xo16022956d3c88def131","value_description":"订单活跃值
+   * +10","date_field":"2016-02-29","status":2,"status_display":"已确定","today_carry":90,"modified":"2016-03-17T06:02:39","created":"2016-03-17T06:02:39"}]
+   */
 
-    @SerializedName("count")
-    private int count;
-    @SerializedName("next")
-    private Object next;
-    @SerializedName("previous")
-    private Object previous;
-    /**
-     * mama_id : 5
-     * value_num : 10
-     * value_type : 2
-     * value_type_name : 订单
-     * uni_key : active-5-2-2016-02-23-xo16022356cc287c4767f
-     * date_field : 2016-02-23
-     * status : 3
-     * status_display : 已取消
-     * today_carry : 0.0
-     * modified : 2016-03-10T18:39:57
-     * created : 2016-03-10T18:31:36
-     */
+  @SerializedName("count") private int mCount;
+  @SerializedName("next") private String mNext;
+  @SerializedName("previous") private Object mPrevious;
+  /**
+   * mama_id : 44
+   * value_num : 248
+   * value_type : 1
+   * value_type_name : 点击
+   * uni_key : active-44-1-2016-03-22
+   * value_description : 点击活跃值 +1
+   * date_field : 2016-03-22
+   * status : 1
+   * status_display : 待确定
+   * today_carry : 248
+   * modified : 2016-03-22T00:00:39
+   * created : 2016-03-22T00:00:39
+   */
 
-    @SerializedName("results")
-    private List<LivenessEntity> MamaLiveness;
+  @SerializedName("results") private List<ResultsEntity> mResults;
 
-    public void setCount(int count) {
-        this.count = count;
+  public int getCount() {
+    return mCount;
+  }
+
+  public void setCount(int count) {
+    mCount = count;
+  }
+
+  public String getNext() {
+    return mNext;
+  }
+
+  public void setNext(String next) {
+    mNext = next;
+  }
+
+  public Object getPrevious() {
+    return mPrevious;
+  }
+
+  public void setPrevious(Object previous) {
+    mPrevious = previous;
+  }
+
+  public List<ResultsEntity> getResults() {
+    return mResults;
+  }
+
+  public void setResults(List<ResultsEntity> results) {
+    mResults = results;
+  }
+
+  public static class ResultsEntity {
+    @SerializedName("mama_id") private int mMamaId;
+    @SerializedName("value_num") private int mValueNum;
+    @SerializedName("value_type") private int mValueType;
+    @SerializedName("value_type_name") private String mValueTypeName;
+    @SerializedName("uni_key") private String mUniKey;
+    @SerializedName("value_description") private String mValueDescription;
+    @SerializedName("date_field") private String mDateField;
+    @SerializedName("status") private int mStatus;
+    @SerializedName("status_display") private String mStatusDisplay;
+    @SerializedName("today_carry") private int mTodayCarry;
+    @SerializedName("modified") private String mModified;
+    @SerializedName("created") private String mCreated;
+
+    public int getMamaId() {
+      return mMamaId;
     }
 
-    public void setNext(Object next) {
-        this.next = next;
+    public void setMamaId(int mamaId) {
+      mMamaId = mamaId;
     }
 
-    public void setPrevious(Object previous) {
-        this.previous = previous;
+    public int getValueNum() {
+      return mValueNum;
     }
 
-    public void setMamaLiveness(List<LivenessEntity> MamaLiveness) {
-        this.MamaLiveness = MamaLiveness;
+    public void setValueNum(int valueNum) {
+      mValueNum = valueNum;
     }
 
-    public int getCount() {
-        return count;
+    public int getValueType() {
+      return mValueType;
     }
 
-    public Object getNext() {
-        return next;
+    public void setValueType(int valueType) {
+      mValueType = valueType;
     }
 
-    public Object getPrevious() {
-        return previous;
+    public String getValueTypeName() {
+      return mValueTypeName;
     }
 
-    public List<LivenessEntity> getMamaLiveness() {
-        return MamaLiveness;
+    public void setValueTypeName(String valueTypeName) {
+      mValueTypeName = valueTypeName;
     }
 
-    public static class LivenessEntity {
-        @SerializedName("mama_id")
-        private int mamaId;
-        @SerializedName("value_num")
-        private int valueNum;
-        @SerializedName("value_type")
-        private int valueType;
-        @SerializedName("value_type_name")
-        private String valueTypeName;
-        @SerializedName("uni_key")
-        private String uniKey;
-        @SerializedName("date_field")
-        private String dateField;
-        @SerializedName("status")
-        private int status;
-        @SerializedName("status_display")
-        private String statusDisplay;
-        @SerializedName("today_carry")
-        private double todayCarry;
-        @SerializedName("modified")
-        private String modified;
-        @SerializedName("created")
-        private String created;
-
-        public void setMamaId(int mamaId) {
-            this.mamaId = mamaId;
-        }
-
-        public void setValueNum(int valueNum) {
-            this.valueNum = valueNum;
-        }
-
-        public void setValueType(int valueType) {
-            this.valueType = valueType;
-        }
-
-        public void setValueTypeName(String valueTypeName) {
-            this.valueTypeName = valueTypeName;
-        }
-
-        public void setUniKey(String uniKey) {
-            this.uniKey = uniKey;
-        }
-
-        public void setDateField(String dateField) {
-            this.dateField = dateField;
-        }
-
-        public void setStatus(int status) {
-            this.status = status;
-        }
-
-        public void setStatusDisplay(String statusDisplay) {
-            this.statusDisplay = statusDisplay;
-        }
-
-        public void setTodayCarry(double todayCarry) {
-            this.todayCarry = todayCarry;
-        }
-
-        public void setModified(String modified) {
-            this.modified = modified;
-        }
-
-        public void setCreated(String created) {
-            this.created = created;
-        }
-
-        public int getMamaId() {
-            return mamaId;
-        }
-
-        public int getValueNum() {
-            return valueNum;
-        }
-
-        public int getValueType() {
-            return valueType;
-        }
-
-        public String getValueTypeName() {
-            return valueTypeName;
-        }
-
-        public String getUniKey() {
-            return uniKey;
-        }
-
-        public String getDateField() {
-            return dateField;
-        }
-
-        public int getStatus() {
-            return status;
-        }
-
-        public String getStatusDisplay() {
-            return statusDisplay;
-        }
-
-        public double getTodayCarry() {
-            return todayCarry;
-        }
-
-        public String getModified() {
-            return modified;
-        }
-
-        public String getCreated() {
-            return created;
-        }
+    public String getUniKey() {
+      return mUniKey;
     }
+
+    public void setUniKey(String uniKey) {
+      mUniKey = uniKey;
+    }
+
+    public String getValueDescription() {
+      return mValueDescription;
+    }
+
+    public void setValueDescription(String valueDescription) {
+      mValueDescription = valueDescription;
+    }
+
+    public String getDateField() {
+      return mDateField;
+    }
+
+    public void setDateField(String dateField) {
+      mDateField = dateField;
+    }
+
+    public int getStatus() {
+      return mStatus;
+    }
+
+    public void setStatus(int status) {
+      mStatus = status;
+    }
+
+    public String getStatusDisplay() {
+      return mStatusDisplay;
+    }
+
+    public void setStatusDisplay(String statusDisplay) {
+      mStatusDisplay = statusDisplay;
+    }
+
+    public int getTodayCarry() {
+      return mTodayCarry;
+    }
+
+    public void setTodayCarry(int todayCarry) {
+      mTodayCarry = todayCarry;
+    }
+
+    public String getModified() {
+      return mModified;
+    }
+
+    public void setModified(String modified) {
+      mModified = modified;
+    }
+
+    public String getCreated() {
+      return mCreated;
+    }
+
+    public void setCreated(String created) {
+      mCreated = created;
+    }
+  }
 }

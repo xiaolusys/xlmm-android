@@ -68,19 +68,24 @@ public class CarryLogAllAdapter
 
     CarryLogListBean.ResultsEntity resultsEntity = mList.get(position);
 
-    if (position == 0) {
-      showCategory(holder);
-    } else {
-      boolean theCategoryOfLastEqualsToThis =
-          mList.get(position - 1).getCreated().equals(mList.get(position).getCreated());
-      if (!theCategoryOfLastEqualsToThis) {
+    try {
+      if (position == 0) {
         showCategory(holder);
       } else {
-        hideCategory(holder);
+        boolean theCategoryOfLastEqualsToThis = mList.get(position - 1)
+            .getDateField()
+            .equals(mList.get(position).getDateField());
+        if (!theCategoryOfLastEqualsToThis) {
+          showCategory(holder);
+        } else {
+          hideCategory(holder);
+        }
       }
+    } catch (NullPointerException e) {
+      e.printStackTrace();
     }
 
-    holder.shoptime.setText(resultsEntity.getCreated().substring(0, 10));
+    holder.shoptime.setText(resultsEntity.getDateField());
     //holder.picPath.setImageResource(R.drawable.carrylog_image);
     int carryType = resultsEntity.getCarryType();
     if (carryType == 3) {
@@ -92,12 +97,14 @@ public class CarryLogAllAdapter
     }
 
     holder.totalCash.setText(
-        "总收益 " + (float) (Math.round(resultsEntity.getCarryValue() * 100)) / 100);
+        "总收益 " + (float) (Math.round(resultsEntity.getTodayCarry() * 100)) / 100);
 
-    holder.tichengCash.setText("+" + resultsEntity.getTodayCarry());
+    holder.tichengCash.setText(
+        "+" + (float) (Math.round(resultsEntity.getCarryValue() * 100)) / 100);
 
-    holder.timeDisplay.setText(resultsEntity.getCreated().substring(11, 19));
-    holder.wxordernick.setText(resultsEntity.getmCarryDescription());
+    holder.timeDisplay.setText(resultsEntity.getCreated().substring(11, 16));
+    holder.wxordernick.setText(resultsEntity.getCarryDescription());
+    holder.tvStatus.setText(resultsEntity.getStatusDisplay());
   }
 
   @Override public int getItemCount() {
@@ -114,6 +121,7 @@ public class CarryLogAllAdapter
     @Bind(R.id.wxordernick) TextView wxordernick;
     @Bind(R.id.ticheng_cash) TextView tichengCash;
     @Bind(R.id.content) RelativeLayout content;
+    @Bind(R.id.tv_status) TextView tvStatus;
 
     public CarryLogListVH(View itemView) {
       super(itemView);

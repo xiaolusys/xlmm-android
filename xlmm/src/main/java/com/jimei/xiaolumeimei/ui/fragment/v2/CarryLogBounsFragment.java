@@ -18,8 +18,10 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.AwardCarryLogAdapter;
 import com.jimei.xiaolumeimei.entities.AwardCarryBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
+import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import rx.Subscription;
@@ -45,6 +47,20 @@ public class CarryLogBounsFragment extends Fragment {
     bundle.putString("keyword", title);
     carryLogAllFragment.setArguments(bundle);
     return carryLogAllFragment;
+  }
+
+  @Override public void onDetach() {
+    super.onDetach();
+    try {
+      Field childFragmentManager =
+          Fragment.class.getDeclaredField("mChildFragmentManager");
+      childFragmentManager.setAccessible(true);
+      childFragmentManager.set(this, null);
+    } catch (NoSuchFieldException e) {
+      throw new RuntimeException(e);
+    } catch (IllegalAccessException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   @Override public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,6 +96,9 @@ public class CarryLogBounsFragment extends Fragment {
             if (carryLogListBean != null) {
               list.addAll(carryLogListBean.getResults());
               adapter.update(list);
+              if (null == carryLogListBean.getNext()) {
+                xRecyclerView.setLoadingMoreEnabled(false);
+              }
               JUtils.Log("carrylog", carryLogListBean.toString());
             }
           }
@@ -93,8 +112,8 @@ public class CarryLogBounsFragment extends Fragment {
 
   private void initViews(View view) {
     xRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-    //xRecyclerView.addItemDecoration(
-    //    new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+    xRecyclerView.addItemDecoration(
+        new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
     xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
     xRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
     xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
@@ -137,8 +156,8 @@ public class CarryLogBounsFragment extends Fragment {
         .subscribe(new ServiceResponse<AwardCarryBean>() {
           @Override public void onNext(AwardCarryBean carryLogListBean) {
             if (carryLogListBean != null) {
+              adapter.update(carryLogListBean.getResults());
               if (null != carryLogListBean.getNext()) {
-                adapter.update(carryLogListBean.getResults());
               } else {
                 Toast.makeText(context, "没有更多了", Toast.LENGTH_SHORT).show();
                 xRecyclerView.post(xRecyclerView::loadMoreComplete);
@@ -168,6 +187,7 @@ public class CarryLogBounsFragment extends Fragment {
         //.title(R.string.progress_dialog)
         .content(R.string.please_wait)
         .progress(true, 0)
+        .widgetColorRes(R.color.colorAccent)
         .progressIndeterminateStyle(horizontal)
         .show();
   }

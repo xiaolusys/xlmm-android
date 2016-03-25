@@ -82,6 +82,16 @@ public class AwardCarryBean {
     @SerializedName("status") private int mStatus;
     @SerializedName("carry_description") private String mCarryDescription;
     @SerializedName("status_display") private String mStatusDisplay;
+
+    public String getmDate_field() {
+      return mDate_field;
+    }
+
+    public void setmDate_field(String mDate_field) {
+      this.mDate_field = mDate_field;
+    }
+
+    @SerializedName("date_field") private String mDate_field;
     @SerializedName("today_carry") private double mTodayCarry;
     @SerializedName("modified") private String mModified;
     @SerializedName("created") private String mCreated;
