@@ -112,18 +112,15 @@ public class AllRefundsListAdapter extends BaseAdapter {
 
     TextView tx_refundno = (TextView) convertView.findViewById(R.id.tx_refund_no);
     TextView tx_refund_state = (TextView) convertView.findViewById(R.id.tx_refund_state);
-    TextView tx_refund_num= (TextView) convertView.findViewById(R.id.tx_refund_num);
     TextView tx_refundfee = (TextView) convertView.findViewById(R.id.tx_refundfee);
-    TextView tx_refund_reason = (TextView) convertView.findViewById(R.id.tx_refund_reason);
 
-    tx_refundno.setText("订单编号：" + data.get(position).get("refund_no"));
+
+    tx_refundno.setText("退款编号：" + data.get(position).get("refund_no"));
     tx_refund_state.setText(data.get(position).get("refund_State"));
-    tx_refund_num.setText(data.get(position).get("refund_num"));
     tx_refundfee.setText("¥" + data.get(position).get("refund_fee"));
-    tx_refund_reason.setText(data.get(position).get("refund_reason"));
 
     ImageView img_goods = (ImageView) convertView.findViewById(R.id.img_good);
-    ;
+
     TextView tx_good_name = (TextView) convertView.findViewById(R.id.tx_good_name);
     TextView tx_good_price = (TextView) convertView.findViewById(R.id.tx_good_price);
     TextView tx_good_size = (TextView) convertView.findViewById(R.id.tx_good_size);

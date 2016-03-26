@@ -24,11 +24,11 @@ public class ActivityModel {
   }
 
   //活动内容分享
-  public Observable<ActivityBean> get_share_content(String ufrom) {
+  /*public Observable<ActivityBean> get_share_content(String ufrom) {
     return XlmmRetrofitClient.getService()
         .get_share_content(ufrom)
         .compose(new DefaultTransform<>());
-  }
+  }*/
 
   //活动内容分享
   public Observable<ActivityBean> get_party_share_content(String id) {

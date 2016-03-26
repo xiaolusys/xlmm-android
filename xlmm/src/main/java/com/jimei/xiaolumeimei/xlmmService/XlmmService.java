@@ -707,8 +707,8 @@ public interface XlmmService {
   );
 
   //获得recent days小鹿妈妈订单和收益记录
-  @GET( XlmmApi.APP_BASE_URL+"/rest/v2/mama/order_carry_visitor")
-  Observable<List<RecentCarryBean>> getRecentCarry(
+  @GET( XlmmApi.APP_BASE_URL+"/rest/v2/mama/dailystats")
+  Observable<RecentCarryBean> getRecentCarry(
           @Query("from") String from,
           @Query("days") String day);
 
