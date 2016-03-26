@@ -615,7 +615,9 @@ public class MainActivity extends BaseActivity
 
             userInfoBean = user;
 
+
             if (userInfoBean != null) {
+              JUtils.Log(TAG, "mamaid "+ userInfoBean.getXiaolumm().getId());
               if ((userInfoBean.getXiaolumm() != null) && (userInfoBean.getXiaolumm().getId()
                       != 0)) {
                 img_mmentry.setVisibility(View.VISIBLE);
