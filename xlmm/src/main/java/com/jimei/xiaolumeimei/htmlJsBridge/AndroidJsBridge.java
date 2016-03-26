@@ -1,6 +1,10 @@
 package com.jimei.xiaolumeimei.htmlJsBridge;
 
+import android.content.Context;
+import android.telephony.TelephonyManager;
 import android.webkit.JavascriptInterface;
+
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.ui.activity.main.WebViewActivity;
 import com.jude.utils.JUtils;
 
@@ -35,5 +39,10 @@ public class AndroidJsBridge {
   @JavascriptInterface public void jumpToNativeLocation(String url) {
     JUtils.Log("WebViewActivity", url);
     webViewActivity.jumpToNativeLocation(url);
+  }
+
+  @JavascriptInterface public String getNativeMobileSNCode(){
+    return ((TelephonyManager) XlmmApp.getInstance().getSystemService(
+            Context.TELEPHONY_SERVICE)).getDeviceId();
   }
 }
