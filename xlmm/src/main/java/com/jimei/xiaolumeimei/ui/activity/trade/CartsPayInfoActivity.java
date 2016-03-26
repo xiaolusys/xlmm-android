@@ -14,7 +14,7 @@ import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import butterknife.Bind;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.CartsPayInfoAdapter;
@@ -34,10 +34,13 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.pingplusplus.android.PaymentActivity;
 import com.squareup.okhttp.ResponseBody;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -242,9 +245,12 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
               payWithCoupon("wx");
             } else if (isAlipay) {
               payWithCoupon("alipay");
-            } else if (isBudget) {
-              payWithBudgetCoupon("budget");
-            } else {
+            }
+//            else if (isBudget) {
+//              payWithBudgetCoupon("budget");
+//            }
+
+            else {
               JUtils.Toast("请选择支付方式");
             }
           } else {
@@ -252,9 +258,13 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
               payWithNoCoupon("alipay");
             } else if (isWx) {
               payWithNoCoupon("wx");
-            } else if (isBudget) {
-              payWithBudget("budget");
-            } else {
+            }
+
+//            else if (isBudget) {
+//              payWithBudget("budget");
+//            }
+
+            else {
               JUtils.Toast("请选择支付方式");
             }
           }
@@ -557,16 +567,18 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
       isWx = true;
       isAlipay = false;
       isBudget = false;
-    } else if (checkedId == R.id.budget) {
-      isWx = false;
-      isAlipay = false;
-      if (budget_payable) {
-        isBudget = true;
-      } else {
-        JUtils.Toast("钱包不可用,请选择其他支付方式");
-        isBudget = false;
-      }
     }
+//
+//    else if (checkedId == R.id.budget) {
+//      isWx = false;
+//      isAlipay = false;
+//      if (budget_payable) {
+//        isBudget = true;
+//      } else {
+//        JUtils.Toast("钱包不可用,请选择其他支付方式");
+//        isBudget = false;
+//      }
+//    }
   }
 
   @Override protected void onResume() {
