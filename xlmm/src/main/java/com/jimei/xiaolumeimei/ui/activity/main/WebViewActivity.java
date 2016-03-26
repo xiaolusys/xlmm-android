@@ -79,7 +79,6 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   private ProgressBar mProgressBar;
   private String cookies;
   private String actlink;
-  private ActivityBean shareInfo;
   private ActivityBean partyShareInfo;
   private String domain;
   private String sessionid;
@@ -332,43 +331,44 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     }
   }
 
-  public void getPromotionParams(String uform, String share_link) {
+  public void getPromotionParams(String uform, String activity_id) {
 
     Subscription subscribe = ActivityModel.getInstance()
-        .get_share_content(uform)
+        .get_party_share_content(activity_id)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ActivityBean>() {
           @Override public void onNext(ActivityBean activityBean) {
 
             if (null != activityBean) {
-              shareInfo = activityBean;
-              shareInfo.setQrcodeLink(activityBean.getQrcodeLink());
+              partyShareInfo = activityBean;
+              partyShareInfo.setQrcodeLink(activityBean.getQrcodeLink());
               JUtils.Log(TAG, "getPromotionParams get_share_content: activeDec="
                   +
-                  shareInfo.getActiveDec()
+                      partyShareInfo.getActiveDec()
                   + " linkQrcode="
-                  + shareInfo.getQrcodeLink()
+                  + partyShareInfo.getQrcodeLink()
                   + " "
                   + "title="
-                  + shareInfo.getTitle());
+                  + partyShareInfo.getTitle());
               JUtils.Log(TAG, "getPromotionParams get_share_content: uform="
                   + uform
-                  + " share_link="
-                  + share_link);
+                 );
 
               if (uform.equals("wxapp")) {
-                share_wxapp(share_link, uform);
+                share_wxapp(activity_id);
               } else if (uform.equals("pyq")) {
-                share_pyq(share_link, uform);
+                share_pyq(activity_id);
               } else if (uform.equals("qq")) {
 
-                share_qq(share_link, uform);
+                share_qq(activity_id);
               } else if (uform.equals("qqspa")) {
-                share_qqspa(share_link, uform);
+                share_qqspa(activity_id);
               } else if (uform.equals("sinawb")) {
-                share_sina(share_link, uform);
+                share_sina(activity_id);
               } else if (uform.equals("web")) {
                 saveTwoDimenCode();
+              }else if(uform.equals("")){
+                sharePartyInfo();
               }
             }
           }
@@ -376,20 +376,17 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     addSubscription(subscribe);
   }
 
-  private void share_wxapp(String myurl, String ufrom) {
+  private void share_wxapp(String activity_id) {
+    if (partyShareInfo == null) return;
+
     Platform.ShareParams sp = new Platform.ShareParams();
 
-    sp.setTitle(shareInfo.getTitle());
-    sp.setText(shareInfo.getActiveDec()
-        + " http://m.xiaolumeimei.com/"
-        + myurl
-        + "&ufrom="
-        + ufrom);
+    sp.setTitle(partyShareInfo.getTitle());
+    sp.setText(partyShareInfo.getActiveDec()+partyShareInfo.getShareLink());
 
-    sp.setUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
+    sp.setUrl(partyShareInfo.getShareLink());
     sp.setShareType(Platform.SHARE_WEBPAGE);
-    sp.setImageUrl(shareInfo.getShareIcon());
-    JUtils.Log(TAG, "wxapp: http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
+    sp.setImageUrl(partyShareInfo.getShareIcon());
 
     Platform wx = ShareSDK.getPlatform(WebViewActivity.this, Wechat.NAME);
     wx.setPlatformActionListener(this); // 设置分享事件回调
@@ -397,17 +394,20 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     wx.share(sp);
   }
 
-  private void share_pyq(String myurl, String ufrom) {
+  private void share_pyq(String activity_id) {
+
+    if (partyShareInfo == null) return;
+
+    JUtils.Log(TAG, "title:"+partyShareInfo.getTitle() +" "+partyShareInfo.getShareIcon());
 
     WechatMoments.ShareParams sp = new WechatMoments.ShareParams();
     //sp.setImageUrl(linkQrcode);
-    sp.setTitle(shareInfo.getTitle());
+    sp.setTitle(partyShareInfo.getTitle());
     //sp.setText(shareInfo.getActiveDec() + " http://m.xiaolumeimei.com/" + myurl +
     //    "&ufrom=" + ufrom);
     //sp.setTitleUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
     sp.setShareType(Platform.SHARE_WEBPAGE);
-    sp.setImageUrl(shareInfo.getShareIcon());
-    sp.setUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
+    sp.setImageUrl(partyShareInfo.getShareIcon());
 
     Platform pyq = ShareSDK.getPlatform(WebViewActivity.this, WechatMoments.NAME);
     pyq.setPlatformActionListener(this); // 设置分享事件回调
@@ -415,16 +415,17 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     pyq.share(sp);
   }
 
-  private void share_qq(String myurl, String ufrom) {
+  private void share_qq(String activity_id) {
+    if (partyShareInfo == null) return;
 
-    get_share_content(ufrom);
+    get_party_share_content(activity_id);
     QQ.ShareParams sp = new QQ.ShareParams();
-    sp.setTitle(shareInfo.getTitle());
+    sp.setTitle(partyShareInfo.getTitle());
 
-    sp.setText(shareInfo.getActiveDec());
-    sp.setImageUrl(shareInfo.getShareIcon());
+    sp.setText(partyShareInfo.getActiveDec());
+    sp.setImageUrl(partyShareInfo.getShareIcon());
 
-    sp.setTitleUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
+    sp.setTitleUrl(partyShareInfo.getShareLink());
 
     Platform qq = ShareSDK.getPlatform(WebViewActivity.this, QQ.NAME);
     qq.setPlatformActionListener(this); // 设置分享事件回调
@@ -432,16 +433,18 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     qq.share(sp);
   }
 
-  private void share_qqspa(String myurl, String ufrom) {
-    get_share_content(ufrom);
+  private void share_qqspa(String activity_id) {
+    if (partyShareInfo == null) return;
+
+    get_party_share_content(activity_id);
     QZone.ShareParams sp = new QZone.ShareParams();
-    sp.setTitle(shareInfo.getTitle());
+    sp.setTitle(partyShareInfo.getTitle());
     // 标题的超链接
-    sp.setTitleUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
-    sp.setText(shareInfo.getActiveDec());
-    sp.setImageUrl(shareInfo.getShareIcon());
+    sp.setTitleUrl(partyShareInfo.getShareLink());
+    sp.setText(partyShareInfo.getActiveDec());
+    sp.setImageUrl(partyShareInfo.getShareIcon());
     //sp.setSite("发布分享的网站名称");
-    sp.setSiteUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
+    sp.setSiteUrl(partyShareInfo.getShareLink());
 
     Platform qzone = ShareSDK.getPlatform(WebViewActivity.this, QZone.NAME);
     qzone.setPlatformActionListener(this); // 设置分享事件回调
@@ -449,18 +452,16 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     qzone.share(sp);
   }
 
-  private void share_sina(String myurl, String ufrom) {
-    get_share_content(ufrom);
+  private void share_sina(String activity_id) {
+    if (partyShareInfo == null) return;
+
+    get_party_share_content(activity_id);
     SinaWeibo.ShareParams sp = new SinaWeibo.ShareParams();
     //sp.setTitle(title);
     //sp.setTitleUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
-    sp.setText(shareInfo.getActiveDec()
-        + " http://m.xiaolumeimei.com/"
-        + myurl
-        + "&ufrom="
-        + ufrom);
-    sp.setImageUrl(shareInfo.getShareIcon());
-    sp.setUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
+    sp.setText(partyShareInfo.getActiveDec()
+        + partyShareInfo.getShareLink());
+    sp.setImageUrl(partyShareInfo.getShareIcon());
 
     Platform weibo = ShareSDK.getPlatform(WebViewActivity.this, SinaWeibo.NAME);
     weibo.setPlatformActionListener(this); // 设置分享事件回调
@@ -468,7 +469,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     weibo.share(sp);
   }
 
-  public void get_share_content(String ufrom) {
+  /*public void get_share_content(String ufrom) {
     Subscription subscribe = ActivityModel.getInstance()
         .get_share_content(ufrom)
         .subscribeOn(Schedulers.io())
@@ -490,9 +491,11 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
           }
         });
     addSubscription(subscribe);
-  }
+  }*/
 
   public void get_party_share_content(String id) {
+    JUtils.Log(TAG, "get_party_share_content id "+id);
+
     Subscription subscribe = ActivityModel.getInstance()
         .get_party_share_content(id)
         .subscribeOn(Schedulers.io())
@@ -575,11 +578,11 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
 
   public void saveTwoDimenCode() {
 
-    if ((shareInfo == null)
-        || (shareInfo.getQrcodeLink() == null)
-        || (shareInfo.getQrcodeLink().equals(""))) {
+    if ((partyShareInfo == null)
+        || (partyShareInfo.getQrcodeLink() == null)
+        || (partyShareInfo.getQrcodeLink().equals(""))) {
       Subscription subscribe = ActivityModel.getInstance()
-          .get_share_content("wxapp")
+          .get_party_share_content(id+"")
           .subscribeOn(Schedulers.io())
           .subscribe(new ServiceResponse<ActivityBean>() {
             @Override public void onNext(ActivityBean activityBean) {
@@ -587,7 +590,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
               if (null != activityBean) {
 
                 JUtils.Log(TAG,
-                    "saveTowDimenCode : Qrcodelink=" + shareInfo.getQrcodeLink());
+                    "saveTowDimenCode : Qrcodelink=" + partyShareInfo.getQrcodeLink());
 
                 try {
                   WebView webView = new WebView(WebViewActivity.this);
@@ -618,10 +621,10 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
                       return true;
                     }
                   });
-                  webView.loadUrl(shareInfo.getQrcodeLink());
+                  webView.loadUrl(partyShareInfo.getQrcodeLink());
                   View cv = getWindow().getDecorView();
                   Bitmap bmp = catchWebScreenshot(webView, cv.getWidth(), cv.getHeight(),
-                      shareInfo.getQrcodeLink(), null);
+                          partyShareInfo.getQrcodeLink(), null);
               /*Bitmap bmp= captureWebView(webView);
               String fileName = Environment.getExternalStorageDirectory()
                   + "/"
@@ -637,7 +640,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
           });
       addSubscription(subscribe);
     } else {
-      JUtils.Log(TAG, "saveTowDimenCode : Qrcodelink=" + shareInfo.getQrcodeLink());
+      JUtils.Log(TAG, "saveTowDimenCode : Qrcodelink=" + partyShareInfo.getQrcodeLink());
       try {
         WebView webView = new WebView(WebViewActivity.this);
         webView.setLayoutParams(
@@ -666,11 +669,11 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
           }
         });
 
-        webView.loadUrl(shareInfo.getQrcodeLink());
+        webView.loadUrl(partyShareInfo.getQrcodeLink());
         //Bitmap bmp= captureWebView(webView);
         View cv = getWindow().getDecorView();
         Bitmap bmp = catchWebScreenshot(webView, cv.getWidth(), cv.getHeight(),
-            shareInfo.getQrcodeLink(), null);
+                partyShareInfo.getQrcodeLink(), null);
         /*String fileName = Environment.getExternalStorageDirectory()
             + "/"
             + Environment.DIRECTORY_DCIM
