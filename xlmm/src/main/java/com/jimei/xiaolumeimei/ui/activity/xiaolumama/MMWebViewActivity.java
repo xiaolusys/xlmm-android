@@ -5,7 +5,10 @@ import android.content.Context;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
@@ -17,12 +20,21 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import cn.sharesdk.framework.ShareSDK;
+
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.entities.MMShoppingBean;
+import com.jimei.xiaolumeimei.model.MMProductModel;
+import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+
 import java.util.HashMap;
 import java.util.Map;
+
+import butterknife.Bind;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/03/10.
@@ -44,6 +56,9 @@ public class MMWebViewActivity extends BaseSwipeBackCompatActivity {
   private String actlink;
   private String domain;
   private String sessionid;
+  private String title, sharelink, desc, shareimg;
+  @Bind(R.id.toolbar)
+  Toolbar toolbar;
 
   @Override protected void setListener() {
     //mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -55,6 +70,23 @@ public class MMWebViewActivity extends BaseSwipeBackCompatActivity {
   }
 
   @Override protected void initData() {
+
+    MMProductModel.getInstance()
+            .getShareShopping()
+            .subscribeOn(Schedulers.io())
+            .subscribe(new ServiceResponse<MMShoppingBean>() {
+
+              @Override public void onNext(MMShoppingBean mmShoppingBean) {
+
+                if (null != mmShoppingBean) {
+                  title = (String) mmShoppingBean.getShopInfo().getName();
+                  sharelink = mmShoppingBean.getShopInfo().getShopLink();
+                  shareimg = mmShoppingBean.getShopInfo().getThumbnail();
+                  desc = mmShoppingBean.getShopInfo().getDesc();
+                }
+              }
+            });
+
     JUtils.Log(TAG, "initData");
     runOnUiThread(new Runnable() {
       @Override public void run() {
@@ -95,6 +127,10 @@ public class MMWebViewActivity extends BaseSwipeBackCompatActivity {
 
   @SuppressLint("JavascriptInterface") @Override protected void initViews() {
     JUtils.Log(TAG, "initViews");
+
+    toolbar.setTitle("");
+    setSupportActionBar(toolbar);
+    finishBack(toolbar);
 
     ll_actwebview = (LinearLayout) findViewById(R.id.ll_actwebview);
     mProgressBar = (ProgressBar) findViewById(R.id.pb_view);
@@ -175,6 +211,21 @@ public class MMWebViewActivity extends BaseSwipeBackCompatActivity {
     syncCookie(MMWebViewActivity.this);
   }
 
+  @Override public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.menu_store, menu);
+    return super.onCreateOptionsMenu(menu);
+  }
+
+  @Override public boolean onOptionsItemSelected(MenuItem item) {
+
+
+    if (item.getItemId() == R.id.action_share) {
+      share_shopping(title, sharelink, desc, shareimg);
+    }
+
+    return super.onOptionsItemSelected(item);
+  }
+
   @Override protected boolean toggleOverridePendingTransition() {
     return false;
   }
@@ -243,5 +294,26 @@ public class MMWebViewActivity extends BaseSwipeBackCompatActivity {
       e.printStackTrace();
       JUtils.Log(TAG, "syncCookie err:" + e.toString());
     }
+  }
+
+  private void share_shopping(String title, String sharelink, String desc,
+                              String shareimg) {
+    OnekeyShare oks = new OnekeyShare();
+    //关闭sso授权
+    oks.disableSSOWhenAuthorize();
+
+    oks.setTitle(title);
+    // titleUrl是标题的网络链接，仅在人人网和QQ空间使用
+    oks.setTitleUrl(sharelink);
+    // text是分享文本，所有平台都需要这个字段
+    oks.setText(desc);
+    // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
+    //oks.setImagePath(filePara.getFilePath());//确保SDcard下面存在此张图片
+    //oks.setImageUrl("http://f1.sharesdk.cn/imgs/2014/02/26/owWpLZo_638x960.jpg");
+    oks.setImageUrl(shareimg);
+    oks.setUrl(sharelink);
+
+    // 启动分享GUI
+    oks.show(this);
   }
 }

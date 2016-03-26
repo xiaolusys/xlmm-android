@@ -81,6 +81,7 @@ public class TodayListView extends ViewImpl {
     List<String> appString = new ArrayList<>();
     List<PostBean.WemPostersEntity> wemPosters = new ArrayList<>();
     List<PostBean.WemPostersEntity> wemPostersEntities = new ArrayList<>();
+    Map<String, String> map = new HashMap<>();
     private View head;
     private TodayAdapter mTodayAdapter;
     private ImageView post2;
@@ -117,34 +118,27 @@ public class TodayListView extends ViewImpl {
         head = LayoutInflater.from(context)
                 .inflate(R.layout.today_poster_header,
                         (ViewGroup) mRootView.findViewById(R.id.head_today), false);
-
         xRecyclerView.setLayoutManager(new GridLayoutManager(context, 2));
         xRecyclerView.addItemDecoration(new SpaceItemDecoration(10));
         xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
         xRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
         xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
-
         //post2 = (ImageView) head.findViewById(R.id.post_2);
         post_activity_layout = (LinearLayout) head.findViewById(R.id.post_activity);
         countTime = (CountdownView) head.findViewById(R.id.countTime);
         mSliderLayout = (SliderLayout) head.findViewById(R.id.slider);
         mPagerIndicator = (PagerIndicator) head.findViewById(R.id.pi_header);
-
         xRecyclerView.addHeaderView(head);
-
         mTodayAdapter = new TodayAdapter(fragment, context);
         xRecyclerView.setAdapter(mTodayAdapter);
         head.setVisibility(View.INVISIBLE);
         //loading.start();
         showIndeterminateProgressDialog(false, context);
         initData(context);
-
         xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
-
                 initPost(context);
-
                 subscribe3 = ProductModel.getInstance()
                         .getTodayList(1, page * page_size)
                         .subscribeOn(Schedulers.io())
@@ -180,7 +174,6 @@ public class TodayListView extends ViewImpl {
 
     private void initData(Activity context) {
         initPost(context);
-
         subscription5 = Observable.timer(1, 1, TimeUnit.SECONDS)
                 .onBackpressureDrop()
                 .map(aLong -> calcLeftTime())
@@ -195,7 +188,6 @@ public class TodayListView extends ViewImpl {
                         }
                     }
                 }, Throwable::printStackTrace);
-
         subscribe1 = ProductModel.getInstance()
                 .getTodayList(1, 10)
                 .subscribeOn(Schedulers.io())
@@ -204,7 +196,6 @@ public class TodayListView extends ViewImpl {
                     public void onError(Throwable e) {
                         super.onError(e);
                         e.printStackTrace();
-
                         JUtils.Toast("请检查网络状况,尝试下拉刷新");
                         //loading.stop();
                         hideIndeterminateProgressDialog();
@@ -212,7 +203,6 @@ public class TodayListView extends ViewImpl {
 
                     @Override
                     public void onNext(ProductListBean productListBean) {
-
                         try {
                             if (productListBean != null) {
                                 List<ProductListBean.ResultsEntity> results =
@@ -241,39 +231,34 @@ public class TodayListView extends ViewImpl {
                 .subscribe(new ServiceResponse<PostBean>() {
                     @Override
                     public void onNext(PostBean postBean) {
-                        try {
 
+                        try {
                             wemPosters.clear();
                             wemPostersEntities.clear();
                             postString.clear();
                             appString.clear();
+                            map.clear();
 
                             wemPosters.addAll(postBean.getWemPosters());
                             wemPostersEntities.addAll(postBean.getmChdPosters());
-
                             for (PostBean.WemPostersEntity str : wemPosters) {
                                 postString.add(str.getPicLink() + POST_URL);
                                 appString.add(str.getAppLink());
                             }
-
                             for (PostBean.WemPostersEntity str : wemPostersEntities) {
                                 postString.add(str.getPicLink() + POST_URL);
                                 appString.add(str.getAppLink());
                             }
 
-                            Map<String, String> map = new HashMap<>();
-                            map.clear();
-                            for (int i = 0; i < postString.size(); i++) {
 
+                            for (int i = 0; i < postString.size(); i++) {
                                 map.put(postString.get(i), appString.get(i));
                             }
-
                             for (String name : map.keySet()) {
                                 DefaultSliderView textSliderView = new DefaultSliderView(context);
                                 // initialize a SliderLayout
                                 textSliderView.image(name)
                                         .setScaleType(BaseSliderView.ScaleType.CenterCrop);
-
                                 //add your extra information
                                 textSliderView.bundle(new Bundle());
                                 textSliderView.getBundle().putString("extra", map.get(name));
@@ -284,13 +269,11 @@ public class TodayListView extends ViewImpl {
                                         new BaseSliderView.OnSliderClickListener() {
                                             @Override
                                             public void onSliderClick(BaseSliderView slider) {
-
                                                 Intent intent;
                                                 if (slider.getBundle() != null) {
                                                     String extra = slider.getBundle().getString("extra");
                                                     if (!TextUtils.isEmpty(extra)) {
                                                         JumpUtils.JumpInfo jump_info = JumpUtils.get_jump_info(extra);
-
                                                         if (extra.startsWith("http://")) {
                                                             intent = new Intent(context, WebViewActivity.class);
                                                             //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -340,131 +323,11 @@ public class TodayListView extends ViewImpl {
                                             }
                                         });
                             }
-
-                            //if (null != postBean.getActivity()) {
-                            //
-                            //  post2.setVisibility(View.VISIBLE);
-                            //  post2.setClickable(true);
-                            //  OkHttpUtils.get()
-                            //      .url(postBean.getActivity().getActImg())
-                            //      .build()
-                            //      .execute(new BitmapCallback() {
-                            //        @Override public void onError(Call call, Exception e) {
-                            //
-                            //        }
-                            //
-                            //        @Override public void onResponse(Bitmap response) {
-                            //          int maxHeight = dp2px(context, 300);
-                            //
-                            //          if (response != null) {
-                            //            int height =
-                            //                (int) ((float) mRootView.getWidth() / response.getWidth()
-                            //                    * response.getHeight());
-                            //            if (height > maxHeight) height = maxHeight;
-                            //            LinearLayout.LayoutParams layoutParams =
-                            //                new LinearLayout.LayoutParams(
-                            //                    LinearLayout.LayoutParams.MATCH_PARENT, height);
-                            //            layoutParams.setMargins(0, dp2px(context, 10), 0, 0);
-                            //            post2.setLayoutParams(layoutParams);
-                            //            post2.setImageBitmap(response);
-                            //          }
-                            //        }
-                            //      });
-                            //
-                            //  post2.setOnClickListener(new View.OnClickListener() {
-                            //    @Override public void onClick(View v) {
-                            //
-                            //      //syncCookie(getActivity(), postBean.getActivity().getActLink());
-                            //
-                            //      if (postBean.getActivity().isLoginRequired()) {
-                            //        if (LoginUtils.checkLoginState(context)
-                            //            && (null != context)
-                            //            && (null
-                            //            != ((MainActivity) context).getUserInfoBean())
-                            //            && (null
-                            //            != ((MainActivity) context).getUserInfoBean().getMobile())
-                            //            && !(((MainActivity) context).getUserInfoBean()
-                            //            .getMobile()
-                            //            .isEmpty())) {
-                            //          Intent intent = new Intent(context, WebViewActivity.class);
-                            //          //sharedPreferences =
-                            //          //    getActivity().getSharedPreferences("COOKIESxlmm",
-                            //          //        Context.MODE_PRIVATE);
-                            //          //String cookies = sharedPreferences.getString("Cookies", "");
-                            //          //Bundle bundle = new Bundle();
-                            //          //bundle.putString("cookies", cookies);
-                            //
-                            //          sharedPreferences =
-                            //              context.getSharedPreferences("xlmmCookiesAxiba",
-                            //                  Context.MODE_PRIVATE);
-                            //          cookies = sharedPreferences.getString("cookiesString", "");
-                            //          domain = sharedPreferences.getString("cookiesDomain", "");
-                            //
-                            //          Bundle bundle = new Bundle();
-                            //          bundle.putString("cookies", cookies);
-                            //          bundle.putString("domain", domain);
-                            //          bundle.putString("Cookie",
-                            //              sharedPreferences.getString("Cookie", ""));
-                            //          bundle.putString("actlink", postBean.getActivity().getActLink());
-                            //          intent.putExtras(bundle);
-                            //          context.startActivity(intent);
-                            //        } else {
-                            //
-                            //          if (!LoginUtils.checkLoginState(context)) {
-                            //            JUtils.Toast("登录并绑定手机号后才可参加活动");
-                            //            Intent intent = new Intent(context, LoginActivity.class);
-                            //            Bundle bundle = new Bundle();
-                            //            bundle.putString("login", "main");
-                            //            intent.putExtras(bundle);
-                            //            context.startActivity(intent);
-                            //          } else {
-                            //            JUtils.Toast("登录成功,前往绑定手机号后才可参加活动");
-                            //            Intent intent =
-                            //                new Intent(context, WxLoginBindPhoneActivity.class);
-                            //            if (null != ((MainActivity) context).getUserInfoBean()) {
-                            //              Bundle bundle = new Bundle();
-                            //              bundle.putString("headimgurl",
-                            //                  ((MainActivity) context).getUserInfoBean()
-                            //                      .getThumbnail());
-                            //              bundle.putString("nickname",
-                            //                  ((MainActivity) context).getUserInfoBean().getNick());
-                            //              intent.putExtras(bundle);
-                            //            }
-                            //            context.startActivity(intent);
-                            //          }
-                            //        }
-                            //      } else {
-                            //        Intent intent = new Intent(context, WebViewActivity.class);
-                            //        //sharedPreferences =
-                            //        //    getActivity().getSharedPreferences("COOKIESxlmm",
-                            //        //        Context.MODE_PRIVATE);
-                            //        //cookies = sharedPreferences.getString("Cookies", "");
-                            //
-                            //        sharedPreferences = context.getSharedPreferences("xlmmCookiesAxiba",
-                            //            Context.MODE_PRIVATE);
-                            //        cookies = sharedPreferences.getString("cookiesString", "");
-                            //        domain = sharedPreferences.getString("cookiesDomain", "");
-                            //        Bundle bundle = new Bundle();
-                            //        bundle.putString("cookies", cookies);
-                            //        bundle.putString("domain", domain);
-                            //
-                            //        bundle.putString("actlink", postBean.getActivity().getActLink());
-                            //        intent.putExtras(bundle);
-                            //        context.startActivity(intent);
-                            //      }
-                            //    }
-                            //  });
-                            //} else {
-                            //
-                            //  post2.setVisibility(View.GONE);
-                            //  post2.setClickable(false);
-                            //}
                         } catch (NullPointerException ex) {
                             ex.printStackTrace();
                         }
                     }
                 });
-
         subscribe6 = ActivityModel.getInstance()
                 .getPostActivity()
                 .subscribeOn(Schedulers.io())
@@ -473,7 +336,6 @@ public class TodayListView extends ViewImpl {
                     public void onNext(List<PostActivityBean> postActivityBean) {
                         try {
                             if (null != postActivityBean) {
-
                                 post_activity_layout.setVisibility(View.VISIBLE);
                                 ImageView imageView;
                                 List<ImageView> imageViewList = new ArrayList<>();
@@ -482,7 +344,6 @@ public class TodayListView extends ViewImpl {
                                     imageViewList.add(imageView);
                                     post_activity_layout.addView(imageView);
                                 }
-
                                 for (int i = 0; i < postActivityBean.size(); i++) {
                                     final int finalI = i;
                                     OkHttpUtils.get()
@@ -507,7 +368,6 @@ public class TodayListView extends ViewImpl {
                                                         layoutParams.setMargins(0, dp2px(context, 10), 0, 0);
                                                         imageViewList.get(finalI).setLayoutParams(layoutParams);
                                                         imageViewList.get(finalI).setImageBitmap(response);
-
                                                         if (postActivityBean.get(finalI)
                                                                 .getActType()
                                                                 .equals("webview")) {
@@ -619,7 +479,6 @@ public class TodayListView extends ViewImpl {
                                                                     .setOnClickListener(new View.OnClickListener() {
                                                                         @Override
                                                                         public void onClick(View v) {
-
                                                                             subscribe7 = ActivityModel.getInstance()
                                                                                     .getUsercoupons(postActivityBean.get(finalI)
                                                                                             .getExtras()
@@ -657,7 +516,6 @@ public class TodayListView extends ViewImpl {
     }
 
     private void loadMoreData(int page, int page_size) {
-
         subscribe4 = ProductModel.getInstance()
                 .getTodayList(page, page_size)
                 .subscribeOn(Schedulers.io())
@@ -677,20 +535,16 @@ public class TodayListView extends ViewImpl {
     }
 
     private long calcLeftTime() {
-
         Date now = new Date();
         Date nextDay14PM = new Date();
         Calendar calendar = Calendar.getInstance();
-
         calendar.setTime(nextDay14PM);
         calendar.add(Calendar.DATE, 1);
         calendar.set(Calendar.HOUR_OF_DAY, 14);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
-
         nextDay14PM = calendar.getTime();
-
         long left;
         if (nextDay14PM.getTime() - now.getTime() > 0) {
             left = nextDay14PM.getTime() - now.getTime();
@@ -703,7 +557,6 @@ public class TodayListView extends ViewImpl {
     @Override
     public void destroy() {
         ButterKnife.unbind(this);
-
         if (subscribe1 != null && subscribe1.isUnsubscribed()) {
             subscribe1.unsubscribe();
         }
