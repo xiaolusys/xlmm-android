@@ -1,7 +1,5 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -12,9 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import butterknife.Bind;
-import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.onekeyshare.OnekeyShare;
+
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.MaMaStoreAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -29,7 +25,12 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.victor.loading.rotate.RotateLoading;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
+
 import java.util.List;
+
+import butterknife.Bind;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
 import okhttp3.Call;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
@@ -181,20 +182,20 @@ public class MaMaMyStoreActivity extends BaseSwipeBackCompatActivity {
 
   @Override public boolean onOptionsItemSelected(MenuItem item) {
 
-    if (item.getItemId() == R.id.action_eye) {
-      Intent intent = new Intent(this, MMWebViewActivity.class);
-      sharedPreferences = getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
-      cookies = sharedPreferences.getString("cookiesString", "");
-      domain = sharedPreferences.getString("cookiesDomain", "");
-
-      Bundle bundle = new Bundle();
-      bundle.putString("cookies", cookies);
-      bundle.putString("domain", domain);
-      bundle.putString("Cookie", sharedPreferences.getString("Cookie", ""));
-      bundle.putString("link", sharelink);
-      intent.putExtras(bundle);
-      startActivity(intent);
-    }
+//    if (item.getItemId() == R.id.action_eye) {
+//      Intent intent = new Intent(this, MMWebViewActivity.class);
+//      sharedPreferences = getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+//      cookies = sharedPreferences.getString("cookiesString", "");
+//      domain = sharedPreferences.getString("cookiesDomain", "");
+//
+//      Bundle bundle = new Bundle();
+//      bundle.putString("cookies", cookies);
+//      bundle.putString("domain", domain);
+//      bundle.putString("Cookie", sharedPreferences.getString("Cookie", ""));
+//      bundle.putString("link", sharelink);
+//      intent.putExtras(bundle);
+//      startActivity(intent);
+//    }
 
     if (item.getItemId() == R.id.action_share) {
       share_shopping(title, sharelink, desc, shareimg);

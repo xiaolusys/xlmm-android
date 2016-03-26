@@ -1,6 +1,8 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -12,7 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import butterknife.Bind;
+
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -29,6 +31,7 @@ import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AgentInfoBean;
+import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
@@ -36,10 +39,13 @@ import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.zhy.autolayout.AutoRelativeLayout;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+
+import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -54,6 +60,11 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   List<RecentCarryBean.ResultsEntity> his_refund = new ArrayList<>();
   List<RecentCarryBean.ResultsEntity> show_refund = new ArrayList<>();
   int get_num = 0;
+
+  private String title, sharelink, desc, shareimg;
+  private SharedPreferences sharedPreferences;
+  private String cookies;
+  private String domain;
 
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.imgUser) ImageView imgUser;
@@ -142,6 +153,23 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initData() {
+
+    MMProductModel.getInstance()
+            .getShareShopping()
+            .subscribeOn(Schedulers.io())
+            .subscribe(new ServiceResponse<MMShoppingBean>() {
+
+              @Override public void onNext(MMShoppingBean mmShoppingBean) {
+
+                if (null != mmShoppingBean) {
+                  title = (String) mmShoppingBean.getShopInfo().getName();
+                  sharelink = mmShoppingBean.getShopInfo().getShopLink();
+                  shareimg = mmShoppingBean.getShopInfo().getThumbnail();
+                  desc = mmShoppingBean.getShopInfo().getDesc();
+                }
+              }
+            });
+
     Subscription subscribe3 = MamaInfoModel.getInstance()
         .getMamaFortune()
         .subscribeOn(Schedulers.io())
@@ -278,7 +306,21 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         startActivity(new Intent(MamaInfoActivity.this, MMNinePicActivity.class));
         break;
       case R.id.rl_shop:
-        startActivity(new Intent(MamaInfoActivity.this, MaMaMyStoreActivity.class));
+
+        Intent intentrl_shop = new Intent(this, MMWebViewActivity.class);
+        sharedPreferences = getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+        cookies = sharedPreferences.getString("cookiesString", "");
+        domain = sharedPreferences.getString("cookiesDomain", "");
+
+        Bundle bundlerl_shop = new Bundle();
+        bundlerl_shop.putString("cookies", cookies);
+        bundlerl_shop.putString("domain", domain);
+        bundlerl_shop.putString("Cookie", sharedPreferences.getString("Cookie", ""));
+        bundlerl_shop.putString("link", sharelink);
+        intentrl_shop.putExtras(bundlerl_shop);
+        startActivity(intentrl_shop);
+
+//        startActivity(new Intent(MamaInfoActivity.this, MaMaMyStoreActivity.class));
         break;
       case R.id.rl_two_dimen:
         if (mamaAgentInfo != null) {
