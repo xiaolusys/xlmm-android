@@ -528,6 +528,7 @@ public class TodayListView extends ViewImpl {
                                               sharedPreferences.getString("Cookie", ""));
                                           bundle.putString("actlink",
                                               postActivityBean.get(finalI).getActLink());
+                                          bundle.putInt("id", postActivityBean.get(finalI).getId());
                                           intent.putExtras(bundle);
                                           context.startActivity(intent);
                                         } else {
