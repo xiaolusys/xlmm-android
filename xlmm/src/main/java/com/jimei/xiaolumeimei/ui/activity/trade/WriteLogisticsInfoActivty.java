@@ -94,7 +94,7 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
     super.onActivityResult(requestCode, resultCode, data);
-    if (requestCode == 1) {
+    if ((requestCode == 1) && (data != null)) {
 
       // data contains result
       company = data.getExtras().getString("company");
@@ -109,8 +109,15 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
         + " "
         + company
         + " "
-        + ""
         + et_logistics_number.getText().toString().trim());
+
+    if((company == null) || (company.isEmpty())
+            || (et_logistics_number.getText().toString().trim() == null)
+            || (et_logistics_number.getText().toString().trim().isEmpty())){
+      JUtils.Toast("提交物流信息为空，请重试！");
+      return;
+    }
+
     Subscription subscription = TradeModel.getInstance()
         .commit_logistics_info(goods_id, company,
             et_logistics_number.getText().toString().trim())
