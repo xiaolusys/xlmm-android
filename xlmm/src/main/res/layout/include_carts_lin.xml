@@ -36,7 +36,7 @@
       android:textColor="@color/white"
       android:text="购买"
       android:id="@+id/confirm"
-      android:layout_width="@dimen/x296"
+      android:layout_width="600px"
       android:background="@drawable/shape_common"
       android:layout_height="@dimen/y18"
   />

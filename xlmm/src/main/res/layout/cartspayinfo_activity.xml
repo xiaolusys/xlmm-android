@@ -169,10 +169,33 @@
       <include
           layout="@layout/common_gap"/>
       <RelativeLayout
+          android:padding="8dp"
+          android:background="@color/white"
+          android:layout_width="match_parent"
+          android:orientation="horizontal"
+          android:layout_height="88px">
+        <TextView
+            android:layout_marginTop="12px"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="钱包余额"
+            />
+        <com.jimei.xiaolumeimei.widget.SmoothCheckBox
+            android:id="@+id/scb"
+            android:layout_marginRight="12px"
+            android:layout_width="40px"
+            android:layout_height="40px"
+            android:layout_alignParentRight="true"
+            app:color_checked="@color/colorAccent" />
+
+      </RelativeLayout>
+
+      <include layout="@layout/common_gap" />
+      <RelativeLayout
           android:background="@color/white"
           android:padding="8dp"
           android:layout_width="match_parent"
-          android:layout_height="352px">
+          android:layout_height="176px">
         <TextView
             android:layout_marginTop="12px"
             android:id="@+id/tv_alipay"
@@ -202,13 +225,13 @@
             android:layout_width="match_parent"
             android:layout_height="1dip"
             android:background="@color/greytow"/>
-        <TextView
-            android:layout_below="@id/v2"
-            android:layout_marginTop="30px"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="小鹿钱包"
-        />
+        <!--<TextView-->
+            <!--android:layout_below="@id/v2"-->
+            <!--android:layout_marginTop="30px"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="小鹿钱包"-->
+        <!--/>-->
 
         <RadioGroup
             android:id="@+id/pay_rg"
@@ -226,11 +249,11 @@
               android:layout_marginTop="8dp"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"/>
-          <android.support.v7.widget.AppCompatRadioButton
-              android:id="@+id/budget"
-              android:layout_marginTop="12dp"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"/>
+          <!--<android.support.v7.widget.AppCompatRadioButton-->
+              <!--android:id="@+id/budget"-->
+              <!--android:layout_marginTop="12dp"-->
+              <!--android:layout_width="wrap_content"-->
+              <!--android:layout_height="wrap_content"/>-->
         </RadioGroup>
         <TextView
             android:id="@+id/pay_extra"
