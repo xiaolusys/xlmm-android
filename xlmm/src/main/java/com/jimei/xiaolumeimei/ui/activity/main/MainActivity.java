@@ -533,17 +533,18 @@ public class MainActivity extends BaseActivity
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.mainframe_menu, menu);
-    MenuItem item = menu.findItem(R.id.action_settings);
+    JUtils.Log(TAG,"onCreateOptionsMenu");
+    //getMenuInflater().inflate(R.menu.mainframe_menu, menu);
+    //MenuItem item = menu.findItem(R.id.action_settings);
     if (userInfoBean != null) {
       if ((userInfoBean.getXiaolumm() != null) && (userInfoBean.getXiaolumm().getId()
           != 0)) {
-        item.setVisible(true);
+        //item.setVisible(true);
       } else {
-        item.setVisible(false);
+        //item.setVisible(false);
       }
     }
-    return true;
+    return super.onCreateOptionsMenu(menu);
   }
 
   private void checkMamaInfo() {

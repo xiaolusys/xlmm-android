@@ -25,9 +25,9 @@
           android:layout_height="wrap_content"
           android:id="@+id/img_share"
           android:src="@drawable/ic_share"
-          android:layout_marginLeft="670px"
-          android:layout_marginRight="8px"
-          android:layout_marginTop="45px"
+          android:layout_marginLeft="650px"
+          android:layout_marginRight="10px"
+          android:layout_marginTop="50px"
       />
     </FrameLayout>
     <LinearLayout

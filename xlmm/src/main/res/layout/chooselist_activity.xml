@@ -26,29 +26,28 @@
           android:textSize="16sp"
       />
 
-      <TextView
-          android:id="@+id/choosenum"
-          android:layout_marginRight="8dp"
-          android:background="@drawable/shape_havechoose"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_centerInParent="true"
-          android:layout_gravity="right"
-          android:textColor="@color/colorAccent"
-          android:textSize="16sp"
-      />
+      <!--<TextView-->
+      <!--android:id="@+id/choosenum"-->
+      <!--android:layout_marginRight="8dp"-->
+      <!--android:background="@drawable/shape_havechoose"-->
+      <!--android:layout_width="wrap_content"-->
+      <!--android:layout_height="wrap_content"-->
+      <!--android:layout_centerInParent="true"-->
+      <!--android:layout_gravity="right"-->
+      <!--android:textColor="@color/colorAccent"-->
+      <!--/>-->
 
-      <TextView
-          android:layout_marginRight="8dp"
-          android:padding="4dp"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_centerInParent="true"
-          android:layout_gravity="right"
-          android:text="已选"
-          android:textColor="@android:color/white"
-          android:textSize="16sp"
-      />
+      <!--<TextView-->
+      <!--android:layout_marginRight="8dp"-->
+      <!--android:padding="4dp"-->
+      <!--android:layout_width="wrap_content"-->
+      <!--android:layout_height="wrap_content"-->
+      <!--android:layout_centerInParent="true"-->
+      <!--android:layout_gravity="right"-->
+      <!--android:text="已选"-->
+      <!--android:textColor="@android:color/white"-->
+      <!--android:textSize="16sp"-->
+      <!--/>-->
 
     </android.support.v7.widget.Toolbar>
 
@@ -78,7 +77,7 @@
         android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="销量排序"
+        android:text="售卖排序"
     />
   </RelativeLayout>
   <include layout="@layout/common_gap"/>
