@@ -157,7 +157,7 @@ public class MainActivity extends BaseActivity
   @Override protected void initView() {
     toolbar.setTitle("小鹿美美");
     setSupportActionBar(toolbar);
-    toolbar.setNavigationIcon(R.drawable.ic_deerhead);
+    //toolbar.setNavigationIcon(R.drawable.ic_deerhead);
 
     drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
     ActionBarDrawerToggle toggle =
@@ -231,6 +231,9 @@ public class MainActivity extends BaseActivity
         };
     drawer.setDrawerListener(toggle);
     toggle.syncState();
+    //toggle.setDrawerIndicatorEnabled(false);
+    //toggle.setHomeAsUpIndicator(R.drawable.ic_deerhead);
+    toolbar.setNavigationIcon(R.drawable.ic_deerhead);
 
     NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
     navigationView.setNavigationItemSelectedListener(this);
