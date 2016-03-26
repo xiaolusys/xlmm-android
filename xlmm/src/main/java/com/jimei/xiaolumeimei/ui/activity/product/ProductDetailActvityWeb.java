@@ -68,7 +68,9 @@ public class ProductDetailActvityWeb extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initData() {
-    fragmentDetail.initView(productId);
+    if(fragmentDetail != null) {
+      fragmentDetail.initView(productId);
+    }
 
     Subscription subscribeSubscription = ProductModel.getInstance()
         .getProductDetails(productId)

@@ -160,14 +160,19 @@ public class LadyListAdapter extends RecyclerView.Adapter<LadyListAdapter.LadyLi
       if (name != null) {
         bundle.putString("name", name.split("/")[0]);
       }
-      if (mList.get(position).getProductModel().isIsSingleSpec()) {
-        Intent intent = new Intent(mContext, ProductDetailActvityWeb.class);
-        intent.putExtras(bundle);
-        mContext.startActivity(intent);
-      } else {
-        Intent intent = new Intent(mContext, TongkuanActivity.class);
-        intent.putExtras(bundle);
-        mContext.startActivity(intent);
+
+      try {
+        if (mList.get(position).getProductModel().isIsSingleSpec()) {
+          Intent intent = new Intent(mContext, ProductDetailActvityWeb.class);
+          intent.putExtras(bundle);
+          mContext.startActivity(intent);
+        } else {
+          Intent intent = new Intent(mContext, TongkuanActivity.class);
+          intent.putExtras(bundle);
+          mContext.startActivity(intent);
+        }
+      }catch (NullPointerException e){
+        e.printStackTrace();
       }
     });
   }
