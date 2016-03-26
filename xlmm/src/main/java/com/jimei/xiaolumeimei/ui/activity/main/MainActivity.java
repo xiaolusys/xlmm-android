@@ -67,6 +67,7 @@ public class MainActivity extends BaseActivity
   @Bind(R.id.tool_bar) Toolbar toolbar;
   //@Bind(R.id.fab) FloatingActionButton carts;
   @Bind(R.id.rv_cart) RelativeLayout carts;
+  @Bind(R.id.img_mmentry) ImageView img_mmentry;
 
   DrawerLayout drawer;
   TextView tvNickname;
@@ -103,6 +104,7 @@ public class MainActivity extends BaseActivity
 
   @Override protected void setListener() {
     carts.setOnClickListener(this);
+    img_mmentry.setOnClickListener(this);
   }
 
   @Override protected void initData() {
@@ -155,9 +157,8 @@ public class MainActivity extends BaseActivity
   }
 
   @Override protected void initView() {
-    toolbar.setTitle("小鹿美美");
-    setSupportActionBar(toolbar);
-    //toolbar.setNavigationIcon(R.drawable.ic_deerhead);
+    //toolbar.setTitle("小鹿美美");
+    //setSupportActionBar(toolbar);
 
     drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
     ActionBarDrawerToggle toggle =
@@ -501,14 +502,35 @@ public class MainActivity extends BaseActivity
   }
 
   @Override public void onClick(View v) {
-    if (LoginUtils.checkLoginState(getApplicationContext())) {
-      startActivity(new Intent(MainActivity.this, CartActivity.class));
-    } else {
-      Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-      Bundle bundle = new Bundle();
-      bundle.putString("login", "cart");
-      intent.putExtras(bundle);
-      startActivity(intent);
+
+    Intent intent;
+    switch (v.getId()) {
+      case R.id.rv_cart:
+        if (LoginUtils.checkLoginState(getApplicationContext())) {
+          startActivity(new Intent(MainActivity.this, CartActivity.class));
+        } else {
+          intent = new Intent(MainActivity.this, LoginActivity.class);
+          Bundle bundle = new Bundle();
+          bundle.putString("login", "cart");
+          intent.putExtras(bundle);
+          startActivity(intent);
+        }
+        break;
+      case R.id.img_mmentry:
+        JUtils.Log(TAG, "xiaolu mama entry");
+        if (!LoginUtils.checkLoginState(getApplicationContext())) {
+              /*未登录进入登录界面*/
+          JUtils.Log(TAG, "need login");
+          intent = new Intent(MainActivity.this, LoginActivity.class);
+          Bundle bundle = new Bundle();
+          bundle.putString("login", "main");
+          intent.putExtras(bundle);
+          startActivity(intent);
+          //startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        } else {
+          checkMamaInfo();
+        }
+        break;
     }
   }
 
@@ -539,14 +561,7 @@ public class MainActivity extends BaseActivity
     JUtils.Log(TAG,"onCreateOptionsMenu");
     //getMenuInflater().inflate(R.menu.mainframe_menu, menu);
     //MenuItem item = menu.findItem(R.id.action_settings);
-    if (userInfoBean != null) {
-      if ((userInfoBean.getXiaolumm() != null) && (userInfoBean.getXiaolumm().getId()
-          != 0)) {
-        //item.setVisible(true);
-      } else {
-        //item.setVisible(false);
-      }
-    }
+
     return super.onCreateOptionsMenu(menu);
   }
 
@@ -597,7 +612,17 @@ public class MainActivity extends BaseActivity
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<UserInfoBean>() {
           @Override public void onNext(UserInfoBean user) {
+
             userInfoBean = user;
+
+            if (userInfoBean != null) {
+              if ((userInfoBean.getXiaolumm() != null) && (userInfoBean.getXiaolumm().getId()
+                      != 0)) {
+                img_mmentry.setVisibility(View.VISIBLE);
+              } else {
+                img_mmentry.setVisibility(View.INVISIBLE);
+              }
+            }
           }
 
           @Override public void onCompleted() {
