@@ -243,6 +243,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         }
         break;
       case R.id.img_left:
+        rl_empty_chart.setVisibility(View.INVISIBLE);
         mChart.clear();
         setDataOfPreviousWeek();
         tv_today_visit2.setText(
@@ -253,6 +254,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
             show_refund.get(show_refund.size() - 1).getCarry() * 100)) / 100));
         break;
       case R.id.img_right:
+        rl_empty_chart.setVisibility(View.INVISIBLE);
         mChart.clear();
         setDataOfThisWeek();
         tv_today_visit2.setText(
@@ -342,7 +344,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     // no description text
     mChart.setDescription("");
     mChart.setNoDataText("");
-    mChart.setNoDataTextDescription("您暂无订单收益!");
+    //mChart.setNoDataTextDescription("您暂无订单收益!");
     //mChart.invalidate();
 
     // enable touch gestures
@@ -519,9 +521,9 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     }
 
     // set data
-    if (!isEmptyData(show_refund)) {
+
       setData(xVals, yVals);
-    } else {
+    if (isEmptyData(show_refund)) {
       rl_empty_chart.setVisibility(View.VISIBLE);
     }
   }
@@ -546,8 +548,8 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
       cal.add(Calendar.DAY_OF_YEAR, 1);//日期+1
       xVals.add(
           "" + (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.DAY_OF_MONTH));
-      JUtils.Log(TAG,
-          "DAY: " + (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.DAY_OF_MONTH));
+      //JUtils.Log(TAG,
+      //    "DAY: " + (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.DAY_OF_MONTH));
     }
 
     show_refund.clear();
@@ -562,9 +564,9 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     }
 
     // set data
-    if (!isEmptyData(show_refund)) {
+
       setData(xVals, yVals);
-    } else {
+    if (isEmptyData(show_refund)) {
       rl_empty_chart.setVisibility(View.VISIBLE);
     }
   }
