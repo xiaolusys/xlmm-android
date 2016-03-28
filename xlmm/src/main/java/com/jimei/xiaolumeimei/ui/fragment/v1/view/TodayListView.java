@@ -232,12 +232,12 @@ public class TodayListView extends ViewImpl {
                     @Override
                     public void onNext(PostBean postBean) {
 
+                        wemPosters.clear();
+                        wemPostersEntities.clear();
+                        postString.clear();
+                        appString.clear();
+                        map = new HashMap<>();
                         try {
-                            wemPosters.clear();
-                            wemPostersEntities.clear();
-                            postString.clear();
-                            appString.clear();
-                            map.clear();
 
                             wemPosters.addAll(postBean.getWemPosters());
                             wemPostersEntities.addAll(postBean.getmChdPosters());
@@ -251,9 +251,15 @@ public class TodayListView extends ViewImpl {
                             }
 
 
+                            map.clear();
                             for (int i = 0; i < postString.size(); i++) {
                                 map.put(postString.get(i), appString.get(i));
                             }
+
+                            if (mSliderLayout != null) {
+                                mSliderLayout.removeAllSliders();
+                            }
+
                             for (String name : map.keySet()) {
                                 DefaultSliderView textSliderView = new DefaultSliderView(context);
                                 // initialize a SliderLayout
