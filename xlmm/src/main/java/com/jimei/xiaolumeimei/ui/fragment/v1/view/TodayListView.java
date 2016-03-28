@@ -231,14 +231,12 @@ public class TodayListView extends ViewImpl {
                 .subscribe(new ServiceResponse<PostBean>() {
                     @Override
                     public void onNext(PostBean postBean) {
-
+                        wemPosters.clear();
+                        wemPostersEntities.clear();
+                        postString.clear();
+                        appString.clear();
+                        map.clear();
                         try {
-                            wemPosters.clear();
-                            wemPostersEntities.clear();
-                            postString.clear();
-                            appString.clear();
-                            map.clear();
-
                             wemPosters.addAll(postBean.getWemPosters());
                             wemPostersEntities.addAll(postBean.getmChdPosters());
                             for (PostBean.WemPostersEntity str : wemPosters) {
