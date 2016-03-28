@@ -62,7 +62,7 @@ public class CartsPayinfoBean {
   // * value : 2
   // */
   //
-  @SerializedName("pay_extras") private List<PayExtrasEntity> mPayExtras;
+  @SerializedName("pay_extras") private List<payExtrasEntityApp> mPayExtras;
   @SerializedName("wallet_cash") private float mWalletCash;
   @SerializedName("total_payment") private double mTotalPayment;
   //
@@ -186,11 +186,11 @@ public class CartsPayinfoBean {
   //  mApplePayable = applePayable;
   //}
   //
-  //public List<PayExtrasEntity> getPayExtras() {
+  //public List<payExtrasEntityApp> getPayExtras() {
   //  return mPayExtras;
   //}
   //
-  //public void setPayExtras(List<PayExtrasEntity> payExtras) {
+  //public void setPayExtras(List<payExtrasEntityApp> payExtras) {
   //  mPayExtras = payExtras;
   //}
   //
@@ -728,7 +728,7 @@ public class CartsPayinfoBean {
   //  }
   //}
   //
-  //public static class PayExtrasEntity {
+  //public static class payExtrasEntityApp {
   //  @SerializedName("type") private int mType;
   //  @SerializedName("pid") private int mPid;
   //  @SerializedName("name") private String mName;
@@ -798,11 +798,11 @@ public class CartsPayinfoBean {
 
   @SerializedName("cart_list") private List<CartListEntity> mCartList;
 
-  public List<PayExtrasEntity> getmPayExtras() {
+  public List<payExtrasEntityApp> getmPayExtras() {
     return mPayExtras;
   }
 
-  public void setmPayExtras(List<PayExtrasEntity> mPayExtras) {
+  public void setmPayExtras(List<payExtrasEntityApp> mPayExtras) {
     this.mPayExtras = mPayExtras;
   }
 
@@ -1081,7 +1081,7 @@ public class CartsPayinfoBean {
     }
   }
 
-  public static class PayExtrasEntity {
+  public static class payExtrasEntityApp {
     @SerializedName("type") private int mType;
     @SerializedName("pid") private int mPid;
     @SerializedName("name") private String mName;

@@ -175,13 +175,15 @@
           android:orientation="horizontal"
           android:layout_height="88px">
         <TextView
+            android:id="@+id/extra_budget"
             android:layout_marginTop="12px"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="钱包余额"
+            android:text=""
             />
         <com.jimei.xiaolumeimei.widget.SmoothCheckBox
             android:id="@+id/scb"
+            app:color_unchecked_stroke="@color/colorAccent"
             android:layout_marginRight="12px"
             android:layout_width="40px"
             android:layout_height="40px"
