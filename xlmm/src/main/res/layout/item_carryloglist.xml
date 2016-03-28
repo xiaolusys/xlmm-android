@@ -27,15 +27,18 @@
   <RelativeLayout
       android:background="@color/white"
       android:id="@+id/content"
-      android:padding="4dp"
+      android:paddingLeft="4dp"
+      android:paddingRight="4dp"
+      android:paddingTop="8dp"
+      android:paddingBottom="8dp"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content">
     <ImageView
         android:layout_marginLeft="8dp"
         android:src="@drawable/carrylog_image"
         android:id="@+id/pic_path"
-        android:layout_width="100px"
-        android:layout_height="100px"
+        android:layout_width="90px"
+        android:layout_height="90px"
     />
     <TextView
         android:layout_alignParentTop="true"
