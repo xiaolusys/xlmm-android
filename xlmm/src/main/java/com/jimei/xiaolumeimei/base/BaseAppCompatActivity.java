@@ -29,6 +29,9 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import butterknife.ButterKnife;
+import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.utils.CommonUtils;
@@ -55,6 +58,7 @@ public abstract class BaseAppCompatActivity extends AutoLayoutActivity {
   protected Context mContext = null;
   private SharedPreferences sharedPreferences;
   private MaterialDialog materialDialog;
+  private CompositeSubscription mCompositeSubscription;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     if (toggleOverridePendingTransition()) {
@@ -309,5 +313,28 @@ public abstract class BaseAppCompatActivity extends AutoLayoutActivity {
    */
   public enum TransitionMode {
     LEFT, RIGHT, TOP, BOTTOM, SCALE, FADE
+  }
+
+  public CompositeSubscription getCompositeSubscription() {
+    if (this.mCompositeSubscription == null) {
+      this.mCompositeSubscription = new CompositeSubscription();
+    }
+
+    return this.mCompositeSubscription;
+  }
+
+  public void addSubscription(Subscription s) {
+    if (this.mCompositeSubscription == null) {
+      this.mCompositeSubscription = new CompositeSubscription();
+    }
+
+    this.mCompositeSubscription.add(s);
+  }
+
+  @Override protected void onStop() {
+    super.onStop();
+    if (this.mCompositeSubscription != null) {
+      this.mCompositeSubscription.unsubscribe();
+    }
   }
 }
