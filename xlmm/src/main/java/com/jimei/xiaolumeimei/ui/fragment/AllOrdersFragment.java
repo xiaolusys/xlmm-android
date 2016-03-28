@@ -83,6 +83,7 @@ public class AllOrdersFragment extends Fragment {
                   JUtils.Log(TAG, "results.size()=0");
                   rl_empty.setVisibility(View.VISIBLE);
                 } else {
+                  list.addAll(results);
                   adapter.update(results);
                 }
 

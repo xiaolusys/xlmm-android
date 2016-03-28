@@ -87,6 +87,7 @@ public class WaitSendOrdersFragment extends Fragment {
                   if (0 == results.size()) {
                     rl_empty.setVisibility(View.VISIBLE);
                   } else {
+                    list.addAll(results);
                     adapter.update(results);
                   }
 
