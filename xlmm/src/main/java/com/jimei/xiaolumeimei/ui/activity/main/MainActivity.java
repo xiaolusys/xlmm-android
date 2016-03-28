@@ -185,46 +185,47 @@ public class MainActivity extends BaseActivity
                 ViewUtils.loadImgToImgView(MainActivity.this, imgUser,
                     userInfoBean.getThumbnail());
               }
-            }
 
-            //获得待支付和待收货数目
-            android.support.design.widget.NavigationView navigationView =
-                (android.support.design.widget.NavigationView) drawer.findViewById(
-                    R.id.nav_view);
-            LinearLayout nav_tobepaid = (LinearLayout) navigationView.getMenu()
-                .findItem(R.id.nav_tobepaid)
-                .getActionView();
-            msg1 = (TextView) nav_tobepaid.findViewById(R.id.msg);
-            LinearLayout nav_tobereceived = (LinearLayout) navigationView.getMenu()
-                .findItem(R.id.nav_tobereceived)
-                .getActionView();
-            msg2 = (TextView) nav_tobereceived.findViewById(R.id.msg);
-            LinearLayout nav_refund = (LinearLayout) navigationView.getMenu()
-                .findItem(R.id.nav_returned)
-                .getActionView();
-            msg3 = (TextView) nav_refund.findViewById(R.id.msg);
 
-            if ((null != userInfoBean) && (userInfoBean.getWaitpayNum() > 0)) {
-              msg1.setVisibility(View.VISIBLE);
-              msg1.setText(Integer.toString(userInfoBean.getWaitpayNum()));
-            } else {
-              msg1.setVisibility(View.INVISIBLE);
-            }
+              //获得待支付和待收货数目
+              android.support.design.widget.NavigationView navigationView =
+                  (android.support.design.widget.NavigationView) drawer.findViewById(
+                      R.id.nav_view);
+              LinearLayout nav_tobepaid = (LinearLayout) navigationView.getMenu()
+                  .findItem(R.id.nav_tobepaid)
+                  .getActionView();
+              msg1 = (TextView) nav_tobepaid.findViewById(R.id.msg);
+              LinearLayout nav_tobereceived = (LinearLayout) navigationView.getMenu()
+                  .findItem(R.id.nav_tobereceived)
+                  .getActionView();
+              msg2 = (TextView) nav_tobereceived.findViewById(R.id.msg);
+              LinearLayout nav_refund = (LinearLayout) navigationView.getMenu()
+                  .findItem(R.id.nav_returned)
+                  .getActionView();
+              msg3 = (TextView) nav_refund.findViewById(R.id.msg);
 
-            Log.i(TAG, "" + userInfoBean.getWaitpayNum());
+              if ((null != userInfoBean) && (userInfoBean.getWaitpayNum() > 0)) {
+                msg1.setVisibility(View.VISIBLE);
+                msg1.setText(Integer.toString(userInfoBean.getWaitpayNum()));
+              } else {
+                msg1.setVisibility(View.INVISIBLE);
+              }
 
-            if ((null != userInfoBean) && (userInfoBean.getWaitgoodsNum() > 0)) {
-              msg2.setVisibility(View.VISIBLE);
-              msg2.setText(Integer.toString(userInfoBean.getWaitgoodsNum()));
-            } else {
-              msg2.setVisibility(View.INVISIBLE);
-            }
+              Log.i(TAG, "" + userInfoBean.getWaitpayNum());
 
-            if ((null != userInfoBean) && (userInfoBean.getRefundsNum() > 0)) {
-              msg3.setVisibility(View.VISIBLE);
-              msg3.setText(Integer.toString(userInfoBean.getRefundsNum()));
-            } else {
-              msg3.setVisibility(View.INVISIBLE);
+              if ((null != userInfoBean) && (userInfoBean.getWaitgoodsNum() > 0)) {
+                msg2.setVisibility(View.VISIBLE);
+                msg2.setText(Integer.toString(userInfoBean.getWaitgoodsNum()));
+              } else {
+                msg2.setVisibility(View.INVISIBLE);
+              }
+
+              if ((null != userInfoBean) && (userInfoBean.getRefundsNum() > 0)) {
+                msg3.setVisibility(View.VISIBLE);
+                msg3.setText(Integer.toString(userInfoBean.getRefundsNum()));
+              } else {
+                msg3.setVisibility(View.INVISIBLE);
+              }
             }
 
             invalidateOptionsMenu();
@@ -616,15 +617,7 @@ public class MainActivity extends BaseActivity
             userInfoBean = user;
 
 
-            if (userInfoBean != null) {
-              JUtils.Log(TAG, "mamaid "+ userInfoBean.getXiaolumm().getId());
-              if ((userInfoBean.getXiaolumm() != null) && (userInfoBean.getXiaolumm().getId()
-                      != 0)) {
-                img_mmentry.setVisibility(View.VISIBLE);
-              } else {
-                img_mmentry.setVisibility(View.INVISIBLE);
-              }
-            }
+
           }
 
           @Override public void onCompleted() {
@@ -699,7 +692,7 @@ public class MainActivity extends BaseActivity
     addSubscription(subscribe);
 
     JUtils.Log(TAG, "resume");
-    getUserInfo();
+    //getUserInfo();
 
     this.subscribe = UserNewModel.getInstance()
         .getProfile()
@@ -708,26 +701,66 @@ public class MainActivity extends BaseActivity
           @Override public void onNext(UserInfoBean userNewBean) {
             if (userNewBean != null) {
               userInfoBean = userNewBean;
-              if ((LoginUtils.checkLoginState(getApplicationContext()))
-                  && (userNewBean.getThumbnail() != null)
+              if (LoginUtils.checkLoginState(getApplicationContext())){
+                  if( (userNewBean.getThumbnail() != null)
                   && (!userNewBean.getThumbnail().isEmpty())) {
-                ViewUtils.loadImgToImgView(MainActivity.this, imgUser,
+                    ViewUtils.loadImgToImgView(MainActivity.this, imgUser,
                     userNewBean.getThumbnail());
-              }
+                }
 
-              int score = userNewBean.getScore();
-              if (null != userNewBean.getUserBudget()) {
-                budgetCash = userNewBean.getUserBudget().getBudgetCash();
-              }
-              if (tvPoint != null) {
-                tvPoint.setText(score + "");
-              }
-              if (tvMoney != null) {
-                tvMoney.setText((float) (Math.round(budgetCash * 100)) / 100 + "");
-              }
+                int score = userNewBean.getScore();
+                if (null != userNewBean.getUserBudget()) {
+                  budgetCash = userNewBean.getUserBudget().getBudgetCash();
+                }
+                if (tvPoint != null) {
+                  tvPoint.setText(score + "");
+                }
+                if (tvMoney != null) {
+                  tvMoney.setText((float) (Math.round(budgetCash * 100)) / 100 + "");
+                }
 
-              if (tvCoupon != null) {
-                tvCoupon.setText(userNewBean.getCouponNum() + "");
+                if (tvCoupon != null) {
+                  tvCoupon.setText(userNewBean.getCouponNum() + "");
+                }
+
+                JUtils.Log(TAG, "mamaid "+ userInfoBean.getXiaolumm().getId());
+                if ((userInfoBean.getXiaolumm() != null) && (userInfoBean.getXiaolumm().getId()
+                        != 0)) {
+                  img_mmentry.setVisibility(View.VISIBLE);
+                } else {
+                  img_mmentry.setVisibility(View.INVISIBLE);
+                }
+
+                if( (userInfoBean.getNick() != null)
+                        && (!userInfoBean.getNick().isEmpty())) {
+                  tvNickname.setText(userInfoBean.getNick());
+                } else {
+                  tvNickname.setText("小鹿妈妈");
+                }
+
+                if ((null != userInfoBean) && (userInfoBean.getWaitpayNum() > 0)) {
+                  msg1.setVisibility(View.VISIBLE);
+                  msg1.setText(Integer.toString(userInfoBean.getWaitpayNum()));
+                } else {
+                  msg1.setVisibility(View.INVISIBLE);
+                }
+
+                Log.i(TAG, "" + userInfoBean.getWaitpayNum());
+
+                if ((null != userInfoBean) && (userInfoBean.getWaitgoodsNum() > 0)) {
+                  msg2.setVisibility(View.VISIBLE);
+                  msg2.setText(Integer.toString(userInfoBean.getWaitgoodsNum()));
+                } else {
+                  msg2.setVisibility(View.INVISIBLE);
+                }
+
+                if ((null != userInfoBean) && (userInfoBean.getRefundsNum() > 0)) {
+                  msg3.setVisibility(View.VISIBLE);
+                  msg3.setText(Integer.toString(userInfoBean.getRefundsNum()));
+                } else {
+                  msg3.setVisibility(View.INVISIBLE);
+                }
+
               }
             }
           }
