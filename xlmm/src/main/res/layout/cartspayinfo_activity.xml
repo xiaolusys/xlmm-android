@@ -134,6 +134,21 @@
 
       </RelativeLayout>
       <include layout="@layout/common_gap"/>
+
+      <RelativeLayout
+          android:padding="8dp"
+          android:background="@color/white"
+          android:layout_width="match_parent"
+          android:orientation="horizontal"
+          android:layout_height="88px">
+
+        <TextView
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="App支付立减两元"
+        /></RelativeLayout>
+      <include layout="@layout/common_gap"/>
       <RelativeLayout
           android:padding="8dp"
           android:background="@color/white"

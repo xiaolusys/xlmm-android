@@ -16,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import butterknife.Bind;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.CartsPayInfoAdapter;
@@ -38,10 +38,13 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.pingplusplus.android.PaymentActivity;
 import com.squareup.okhttp.ResponseBody;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -168,7 +171,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
               List<CartsPayinfoBean.payExtrasEntityApp> payExtrasEntities =
                   cartsPayinfoBean.getmPayExtras();
               CartsPayinfoBean.payExtrasEntityApp payExtrasEntityApp = null;
-              CartsPayinfoBean.payExtrasEntityApp payExtrasEntityAppBudget = null;
+//              CartsPayinfoBean.payExtrasEntityApp payExtrasEntityAppBudget = null;
               //if (payExtrasEntities.size() > 1) {
               //  payExtrasEntityAppBudget = payExtrasEntities.get(1);
               //  payExtrasEntityApp = payExtrasEntities.get(0);
@@ -303,13 +306,19 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
               payWithCoupon("wx");
             } else if (isAlipay) {
               payWithCoupon("alipay");
-            } else if (isBudget) {
-              payWithBudgetCoupon("budget");
-            } else if (isBudget && isWx) {
+            }
 
-            } else if (isBudget && isAlipay) {
+//            else if (isBudget) {
+//              payWithBudgetCoupon("budget");
+//            }
 
-            } else {
+//            else if (isBudget && isWx) {
+//
+//            } else if (isBudget && isAlipay) {
+//
+//            }
+
+            else {
               JUtils.Toast("请选择支付方式");
             }
           } else {
@@ -317,13 +326,19 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
               payWithNoCoupon("alipay");
             } else if (isWx) {
               payWithNoCoupon("wx");
-            } else if (isBudget) {
-              payWithBudget("budget");
-            } else if (isBudget && isWx) {
+            }
 
-            } else if (isBudget && isAlipay) {
+//            else if (isBudget) {
+//              payWithBudget("budget");
+//            }
 
-            } else {
+//            else if (isBudget && isWx) {
+//
+//            } else if (isBudget && isAlipay) {
+//
+//            }
+
+            else {
               JUtils.Toast("请选择支付方式");
             }
           }

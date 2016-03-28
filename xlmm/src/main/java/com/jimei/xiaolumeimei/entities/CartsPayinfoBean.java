@@ -1085,7 +1085,7 @@ public class CartsPayinfoBean {
     @SerializedName("type") private int mType;
     @SerializedName("pid") private int mPid;
     @SerializedName("name") private String mName;
-    @SerializedName("value") private int mValue;
+    @SerializedName("value") private double mValue;
 
     public int getType() {
       return mType;
@@ -1111,11 +1111,11 @@ public class CartsPayinfoBean {
       mName = name;
     }
 
-    public int getValue() {
+    public double getValue() {
       return mValue;
     }
 
-    public void setValue(int value) {
+    public void setValue(double value) {
       mValue = value;
     }
   }
