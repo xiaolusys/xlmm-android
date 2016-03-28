@@ -29,6 +29,13 @@ import java.util.TimerTask;
 
 public class SliderLayout extends RelativeLayout {
 
+  public void reMoveAll(){
+    if (mSliderAdapter != null) {
+      mSliderAdapter.removeAllSliders();
+    }
+  }
+
+
   private Context mContext;
   /**
    * InfiniteViewPager is extended from ViewPagerEx. As the name says, it can scroll
