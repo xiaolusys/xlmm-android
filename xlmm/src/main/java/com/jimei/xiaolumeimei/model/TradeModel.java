@@ -5,6 +5,7 @@ import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.entities.BudgetPayBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
+import com.jimei.xiaolumeimei.entities.PayInfoBean;
 import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
@@ -41,6 +42,16 @@ public class TradeModel {
     return XlmmRetrofitClient.getService()
         .shoppingcart_create(cart_ids, addr_id, channel, payment, post_fee, discount_fee,
             total_fee, pay_extras, uuid)
+        .compose(new DefaultTransform<>());
+  }
+
+  //创建订单
+  public Observable<PayInfoBean> shoppingcart_create_v2(String cart_ids, String addr_id,
+      String channel, String payment, String post_fee, String discount_fee,
+      String total_fee, String pay_extras, String uuid) {
+    return XlmmRetrofitClient.getService()
+        .shoppingcart_create_v2(cart_ids, addr_id, channel, payment, post_fee,
+            discount_fee, total_fee, pay_extras, uuid)
         .compose(new DefaultTransform<>());
   }
 
