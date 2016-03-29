@@ -70,8 +70,7 @@ public class MMChooseAdapter extends RecyclerView.Adapter<MMChooseAdapter.MMChoo
         "¥" + (float) (Math.round(mmChooselistBean.getAgentPrice() * 100)) / 100);
     holder.stdSalePrice.setText(
         "/¥" + (float) (Math.round(mmChooselistBean.getStdSalePrice() * 100)) / 100);
-    holder.rebetAmount.setText(
-        "¥" + (float) (Math.round(mmChooselistBean.getRebetAmount() * 100)) / 100);
+    holder.rebetAmount.setText(mmChooselistBean.getRebetAmountDes() );
     holder.lockNum.setText(mmChooselistBean.getSaleNumDes());
 
     int inCustomerShop = mmChooselistBean.getInCustomerShop();

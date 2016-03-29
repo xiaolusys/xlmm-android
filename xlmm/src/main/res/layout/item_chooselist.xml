@@ -39,13 +39,15 @@
       />
 
   <TextView
-      android:layout_marginLeft="14dp"
-      android:layout_below="@id/name"
-      android:layout_marginTop="16dp"
+      android:layout_marginBottom="8dp"
+      android:layout_marginLeft="8dp"
+      android:layout_alignBottom="@id/image_chooselist"
+      android:layout_marginTop="8dp"
       android:id="@+id/rebet_amount"
-      android:layout_toRightOf="@id/std_sale_price"
+      android:layout_toRightOf="@id/image_chooselist"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:textColor="@color/colorAccent"
       />
 
   <TextView
@@ -54,9 +56,10 @@
       android:layout_alignBottom="@id/image_chooselist"
       android:layout_marginTop="8dp"
       android:id="@+id/lock_num"
-      android:layout_toRightOf="@id/image_chooselist"
+      android:layout_toRightOf="@id/rebet_amount"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:textColor="@color/colorAccent"
       />
 
   <Button
