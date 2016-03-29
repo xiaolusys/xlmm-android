@@ -5,6 +5,7 @@
     android:padding="4dp"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:background="@color/white_10"
     android:id="@+id/llayout_order_item">
 
   <RelativeLayout

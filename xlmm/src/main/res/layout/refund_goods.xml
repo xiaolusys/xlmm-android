@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:background="@color/white_10"
     >
 
 
@@ -15,6 +16,7 @@
       android:layout_height="32dp"
       android:padding="4dp"
       android:orientation="horizontal"
+      android:background="@color/white_10"
       >
     <TextView
         android:layout_width="wrap_content"
@@ -47,6 +49,7 @@
       android:layout_height="32dp"
       android:padding="4dp"
       android:orientation="horizontal"
+      android:background="@color/white_10"
       >
     <TextView
         android:layout_width="wrap_content"
@@ -73,11 +76,14 @@
         />
   </RelativeLayout>
 
+  <include layout="@layout/common_gap"/>
+
   <RelativeLayout
       android:layout_width="fill_parent"
       android:layout_height="32dp"
       android:padding="4dp"
       android:orientation="horizontal"
+      android:background="@color/white_10"
       >
     <TextView
         android:layout_width="wrap_content"
@@ -110,6 +116,7 @@
       android:layout_width="fill_parent"
       android:padding="4dp"
       android:layout_height="64dp"
+      android:background="@color/white_10"
       android:orientation="vertical" >
 
     <TextView

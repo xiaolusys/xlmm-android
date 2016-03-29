@@ -334,6 +334,7 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
             try {
               if ((mmChooselistBeans != null) && (mmChooselistBeans.getResults() != null)){
                 mmChooseAdapter.updateWithClear(mmChooselistBeans.getResults());
+                page = 2;
               }
             } catch (NullPointerException ex) {
             }
