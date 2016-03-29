@@ -337,8 +337,12 @@ public abstract class BaseAppCompatActivity extends AutoLayoutActivity {
 
   @Override protected void onStop() {
     super.onStop();
-    if (this.mCompositeSubscription != null) {
-      this.mCompositeSubscription.unsubscribe();
+    try {
+      if (this.mCompositeSubscription != null) {
+        this.mCompositeSubscription.unsubscribe();
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
     }
   }
 }

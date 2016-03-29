@@ -137,11 +137,16 @@ public class XlmmApp extends MultiDexApplication {
 
     httpClient.interceptors().add(new Interceptor() {
       @Override public Response intercept(Chain chain) throws IOException {
-        Request request = chain.request();
-        Response response = chain.proceed(request);
-        int code = response.code();//status code
-        if (403 == code) {
+        Response response = null;
+        try {
+          Request request = chain.request();
+          response = chain.proceed(request);
+          int code = response.code();//status code
+          if (403 == code) {
 
+          }
+        } catch (IOException e) {
+          e.printStackTrace();
         }
         return response;
       }
