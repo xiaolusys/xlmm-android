@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -84,8 +85,15 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
     mapChild.put("chooselist", "童装");
     textList.add(mapChild);
 
-    SimpleAdapter adapter = new SimpleAdapter(this, textList, R.layout.item_choosespinner,
-        new String[] { "chooselist" }, new int[] { R.id.choose_tv });
+    String[] countriesStr =
+            { "全部", "女装", "童装" };
+
+    //SimpleAdapter adapter = new SimpleAdapter(this, textList, R.layout.item_choosespinner,
+     //   new String[] { "chooselist" }, new int[] { R.id.choose_tv });
+    ArrayAdapter adapter = new ArrayAdapter<String>(this,
+            R.layout.item_choosespinner, countriesStr);
+    //设置下拉列表风格
+    adapter.setDropDownViewResource(R.layout.item_choosespinner_dropdown);
     spinnerChoose.setAdapter(adapter);
 
     chooseNum = getChooseNum();
