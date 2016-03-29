@@ -6,6 +6,7 @@
     android:id="@+id/rlayout_order_lefttime"
     android:background="#ffffff"
     android:layout_gravity="bottom"
+    android:layout_alignParentBottom="true"
     android:visibility="invisible"
     android:padding="4dp"
     >
