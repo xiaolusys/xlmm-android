@@ -17,7 +17,7 @@ public class PayInfoBean {
 
   @SerializedName("code") private int mCode;
   @SerializedName("info") private String mInfo;
-  @SerializedName("charge") private String mCharge;
+  @SerializedName("charge") private Object mCharge;
 
   public int getCode() {
     return mCode;
@@ -35,11 +35,11 @@ public class PayInfoBean {
     mInfo = info;
   }
 
-  public String getCharge() {
+  public Object getCharge() {
     return mCharge;
   }
 
-  public void setCharge(String charge) {
+  public void setCharge(Object charge) {
     mCharge = charge;
   }
 
