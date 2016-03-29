@@ -1,5 +1,6 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatSpinner;
@@ -7,9 +8,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
@@ -20,6 +24,7 @@ import com.jimei.xiaolumeimei.entities.MMStoreBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jude.utils.JUtils;
 import com.victor.loading.rotate.RotateLoading;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,6 +41,8 @@ import rx.schedulers.Schedulers;
 public class MMChooseListActivity extends BaseSwipeBackCompatActivity
     implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
+  public  static final String TAG = "MMChooseListActivity";
+
   private static final String COMMISSION = "rebet_amount";//佣金
   private static final String SALES = "sale_num";//销量
   private static final String CHILD = "1";//童装
@@ -50,6 +57,12 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
   private MMChooseAdapter mmChooseAdapter;
   private boolean isAll, isLady, isChild;
   private int chooseNum;
+  private String sortfeild = "";
+  private String category = "";
+  private int page = 2;
+  private int pagesize = 10;
+  boolean isLoading = false;
+  int lastVisibleItemPosition = 0;
 
   @Override protected void setListener() {
     spinnerChoose.setOnItemSelectedListener(this);
@@ -77,15 +90,17 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
 
     chooseNum = getChooseNum();
 
+    sortfeild = "";
+    category = "";
     Subscription subscribe = MMProductModel.getInstance()
-        .getMMChooseList()
+        .getMMChooseLadyOrChildSortListSort(sortfeild, category, "1", ""+pagesize)
         .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<List<MMChooselistBean>>() {
-          @Override public void onNext(List<MMChooselistBean> mmChooselistBeans) {
+        .subscribe(new ServiceResponse<MMChooselistBean>() {
+          @Override public void onNext(MMChooselistBean mmChooselistBeans) {
             super.onNext(mmChooselistBeans);
             try {
-              if (mmChooselistBeans != null) {
-                mmChooseAdapter.update(mmChooselistBeans);
+              if ((mmChooselistBeans != null) && (mmChooselistBeans.getResults() != null)) {
+                mmChooseAdapter.update(mmChooselistBeans.getResults());
               }
             } catch (NullPointerException ex) {
             }
@@ -121,12 +136,42 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
   }
 
   private void initRecyclerView() {
-    chooselistXey.setLayoutManager(new LinearLayoutManager(this));
+    final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+    chooselistXey.setLayoutManager(layoutManager);
     chooselistXey.addItemDecoration(
         new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
 
     mmChooseAdapter = new MMChooseAdapter(this);
     chooselistXey.setAdapter(mmChooseAdapter);
+
+    chooselistXey.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+      @Override
+      public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+        super.onScrollStateChanged(recyclerView, newState);
+        JUtils.Log(TAG,"onScrollStateChanged lastVisibleItemPosition:"+lastVisibleItemPosition +" "+mmChooseAdapter.getItemCount());
+        JUtils.Log(TAG,"newState:"+newState + " isLoading: "+ isLoading);
+        if ((newState == RecyclerView.SCROLL_STATE_IDLE)
+                && (lastVisibleItemPosition + 1 == mmChooseAdapter.getItemCount())) {
+
+          if (!isLoading) {
+            isLoading = true;
+            loadMoreData(page + "", MMChooseListActivity.this);
+            page++;
+          }
+        }
+      }
+
+      @Override
+      public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+        super.onScrolled(recyclerView, dx, dy);
+        JUtils.Log(TAG,"lastVisibleItemPosition:"+lastVisibleItemPosition);
+        lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+
+      }
+
+
+    });
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
@@ -148,21 +193,30 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
       isChild = false;
       isLady = false;
 
-      getchooseList();
+      sortfeild = "";
+      category = "";
+
     } else if (position == 1) {
       isAll = false;
       isChild = false;
       isLady = true;
-      getChooseListLadyorChild(LADY);
+
+      sortfeild = "";
+      category = LADY;
+
     } else if (position == 2) {
       isAll = false;
       isChild = true;
       isLady = false;
-      getChooseListLadyorChild(CHILD);
+
+      sortfeild = "";
+      category = CHILD;
     }
+
+    getChooseListLadyorChildSort(sortfeild, category);
   }
 
-  private void getchooseList() {
+  /*private void getchooseList() {
     showIndeterminateProgressDialog(false);
 
     Subscription subscribe = MMProductModel.getInstance()
@@ -254,20 +308,22 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
         });
 
     addSubscription(subscribe);
-  }
+  }*/
 
   private void getChooseListLadyorChildSort(String sortfeild, String category) {
+    page = 1;
+    isLoading = false;
 
     showIndeterminateProgressDialog(false);
     Subscription subscribe = MMProductModel.getInstance()
-        .getMMChooseLadyOrChildSortListSort(sortfeild, category)
+        .getMMChooseLadyOrChildSortListSort(sortfeild, category,""+page,""+pagesize)
         .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<List<MMChooselistBean>>() {
-          @Override public void onNext(List<MMChooselistBean> mmChooselistBeans) {
+        .subscribe(new ServiceResponse<MMChooselistBean>() {
+          @Override public void onNext(MMChooselistBean mmChooselistBeans) {
             super.onNext(mmChooselistBeans);
             try {
-              if (mmChooselistBeans != null) {
-                mmChooseAdapter.updateWithClear(mmChooselistBeans);
+              if ((mmChooselistBeans != null) && (mmChooselistBeans.getResults() != null)){
+                mmChooseAdapter.updateWithClear(mmChooselistBeans.getResults());
               }
             } catch (NullPointerException ex) {
             }
@@ -286,6 +342,36 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
     addSubscription(subscribe);
   }
 
+  private void loadMoreData(String page, Context context) {
+
+    Subscription subscription2 = MMProductModel.getInstance()
+            .getMMChooseLadyOrChildSortListSort(sortfeild, category,""+page,""+pagesize)
+            .subscribeOn(Schedulers.io())
+            .subscribe(new ServiceResponse<MMChooselistBean>() {
+              @Override public void onNext(MMChooselistBean mmChooselistBeans) {
+                isLoading = false;
+                try {
+                  if ((mmChooselistBeans != null) && (mmChooselistBeans.getResults() != null)){
+                    mmChooseAdapter.update(mmChooselistBeans.getResults());
+                  }
+
+                  if (null == mmChooselistBeans.getNext()) {
+                    Toast.makeText(context, "没有更多了", Toast.LENGTH_SHORT).show();
+
+                  }
+                } catch (NullPointerException ex) {
+                }
+
+              }
+
+
+              @Override public void onCompleted() {
+                super.onCompleted();
+
+              }
+            });
+  }
+
   @Override public void onNothingSelected(AdapterView<?> parent) {
 
   }
@@ -298,25 +384,34 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
         tvSales.setTextColor(Color.parseColor("#4A4A4A"));
 
         if (isLady) {
-          getChooseListLadyorChildSort(COMMISSION, LADY);
+          sortfeild = COMMISSION;
+          category = LADY;
         } else if (isAll) {
-          getchooseSortList(COMMISSION);
+          sortfeild = COMMISSION;
+          category = "";
         } else if (isChild) {
-          getChooseListLadyorChildSort(COMMISSION, CHILD);
+          sortfeild = COMMISSION;
+          category = CHILD;
         }
+
+        getChooseListLadyorChildSort(sortfeild, category);
 
         break;
       case R.id.tv_sales:
         tvCommission.setTextColor(Color.parseColor("#4A4A4A"));
         tvSales.setTextColor(Color.parseColor("#F5B123"));
         if (isLady) {
-          getChooseListLadyorChildSort(SALES, LADY);
+          sortfeild = SALES;
+          category = LADY;
         } else if (isAll) {
-
-          getchooseSortList(SALES);
+          sortfeild = SALES;
+          category = "";
         } else if (isChild) {
-          getChooseListLadyorChildSort(SALES, CHILD);
+          sortfeild = SALES;
+          category = CHILD;
         }
+
+        getChooseListLadyorChildSort(sortfeild, category);
 
         break;
     }

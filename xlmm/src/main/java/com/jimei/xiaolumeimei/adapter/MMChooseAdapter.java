@@ -31,7 +31,7 @@ public class MMChooseAdapter extends RecyclerView.Adapter<MMChooseAdapter.MMChoo
 
   private static final String TAG = MMChooseAdapter.class.getSimpleName();
 
-  private List<MMChooselistBean> mList;
+  private List<MMChooselistBean.ResultsEntity> mList;
   private Context mContext;
   private MaterialDialog materialDialog;
 
@@ -40,13 +40,13 @@ public class MMChooseAdapter extends RecyclerView.Adapter<MMChooseAdapter.MMChoo
     mList = new ArrayList<>();
   }
 
-  public void updateWithClear(List<MMChooselistBean> list) {
+  public void updateWithClear(List<MMChooselistBean.ResultsEntity> list) {
     mList.clear();
     mList.addAll(list);
     notifyDataSetChanged();
   }
 
-  public void update(List<MMChooselistBean> list) {
+  public void update(List<MMChooselistBean.ResultsEntity> list) {
 
     mList.addAll(list);
     notifyDataSetChanged();
@@ -62,7 +62,7 @@ public class MMChooseAdapter extends RecyclerView.Adapter<MMChooseAdapter.MMChoo
   }
 
   @Override public void onBindViewHolder(MMChooseVH holder, int position) {
-    MMChooselistBean mmChooselistBean = mList.get(position);
+    MMChooselistBean.ResultsEntity mmChooselistBean = mList.get(position);
     holder.name.setText(mmChooselistBean.getName());
     ViewUtils.loadImgToImgView(mContext, holder.imageChooselist,
         mmChooselistBean.getPicPath());
@@ -72,7 +72,7 @@ public class MMChooseAdapter extends RecyclerView.Adapter<MMChooseAdapter.MMChoo
         "/¥" + (float) (Math.round(mmChooselistBean.getStdSalePrice() * 100)) / 100);
     holder.rebetAmount.setText(
         "¥" + (float) (Math.round(mmChooselistBean.getRebetAmount() * 100)) / 100);
-    holder.lockNum.setText("累积销量 " + mmChooselistBean.getmSaleNum() + "件");
+    holder.lockNum.setText(mmChooselistBean.getSaleNumDes());
 
     int inCustomerShop = mmChooselistBean.getInCustomerShop();
     if (0 == inCustomerShop) {
