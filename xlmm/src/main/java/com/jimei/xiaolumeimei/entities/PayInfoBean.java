@@ -14,10 +14,27 @@ public class PayInfoBean {
    * info : ok
    * charge : aa
    */
-
+  @SerializedName("channel") private String channel;
   @SerializedName("code") private int mCode;
   @SerializedName("info") private String mInfo;
   @SerializedName("charge") private Object mCharge;
+
+  @Override public String toString() {
+    return "PayInfoBean{" +
+        "channel='" + channel + '\'' +
+        ", mCode=" + mCode +
+        ", mInfo='" + mInfo + '\'' +
+        ", mCharge=" + mCharge +
+        '}';
+  }
+
+  public String getChannel() {
+    return channel;
+  }
+
+  public void setChannel(String channel) {
+    this.channel = channel;
+  }
 
   public int getCode() {
     return mCode;
@@ -41,13 +58,5 @@ public class PayInfoBean {
 
   public void setCharge(Object charge) {
     mCharge = charge;
-  }
-
-  @Override public String toString() {
-    return "PayInfoBean{" +
-        "mCode=" + mCode +
-        ", mInfo='" + mInfo + '\'' +
-        ", mCharge='" + mCharge + '\'' +
-        '}';
   }
 }
