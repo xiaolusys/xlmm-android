@@ -195,6 +195,10 @@ public class CarryLogBounsFragment extends Fragment {
   }
 
   public void hideIndeterminateProgressDialog() {
-    materialDialog.dismiss();
+    try {
+      materialDialog.dismiss();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 }

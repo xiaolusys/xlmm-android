@@ -305,7 +305,11 @@ public abstract class BaseAppCompatActivity extends AutoLayoutActivity {
   }
 
   public void hideIndeterminateProgressDialog() {
-    materialDialog.dismiss();
+    try {
+      materialDialog.dismiss();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   /**

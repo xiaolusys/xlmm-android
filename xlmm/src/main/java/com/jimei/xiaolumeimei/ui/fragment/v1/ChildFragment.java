@@ -34,7 +34,7 @@ import rx.schedulers.Schedulers;
  */
 public class ChildFragment extends Fragment {
 
-  @Bind(R.id.loading) RotateLoading loading;
+  //@Bind(R.id.loading) RotateLoading loading;
   @Bind(R.id.childlist_recyclerView) XRecyclerView xRecyclerView;
 
   int page_size = 10;
@@ -78,7 +78,6 @@ public class ChildFragment extends Fragment {
             super.onError(e);
             e.printStackTrace();
             JUtils.Toast("请检查网络状况,尝试下拉刷新");
-            loading.stop();
           }
 
           @Override public void onNext(ChildListBean childListBean) {
@@ -222,6 +221,10 @@ public class ChildFragment extends Fragment {
   }
 
   public void hideIndeterminateProgressDialog() {
-    materialDialog.dismiss();
+    try {
+      materialDialog.dismiss();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 }

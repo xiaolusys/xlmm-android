@@ -36,7 +36,7 @@ public class LadyFragment extends Fragment {
 
   private static final String TAG = LadyFragment.class.getSimpleName();
 
-  @Bind(R.id.loading) RotateLoading loading;
+  //@Bind(R.id.loading) RotateLoading loading;
   @Bind(R.id.childlist_recyclerView) XRecyclerView xRecyclerView;
 
   int page_size = 10;
@@ -135,7 +135,6 @@ public class LadyFragment extends Fragment {
             super.onError(e);
             e.printStackTrace();
             JUtils.Toast("请检查网络状况,尝试下拉刷新");
-            loading.post(loading::stop);
           }
 
           @Override public void onNext(LadyListBean ladyListBean) {
@@ -231,6 +230,10 @@ public class LadyFragment extends Fragment {
   }
 
   public void hideIndeterminateProgressDialog() {
-    materialDialog.dismiss();
+    try {
+      materialDialog.dismiss();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 }

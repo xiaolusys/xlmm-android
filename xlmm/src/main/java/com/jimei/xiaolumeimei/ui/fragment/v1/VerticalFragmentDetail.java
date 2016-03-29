@@ -366,6 +366,10 @@ public class VerticalFragmentDetail extends Fragment implements View.OnClickList
   }
 
   public void hideIndeterminateProgressDialog() {
-    materialDialog.dismiss();
+    try {
+      materialDialog.dismiss();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 }
