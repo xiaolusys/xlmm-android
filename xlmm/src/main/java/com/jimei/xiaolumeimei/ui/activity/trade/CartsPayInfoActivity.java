@@ -17,7 +17,7 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.Bind;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.CartsPayInfoAdapter;
@@ -38,10 +38,13 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.pingplusplus.android.PaymentActivity;
 import com.squareup.okhttp.ResponseBody;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -135,28 +138,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
     list = new ArrayList<>();
 
-    //Subscription subscribe = UserModel.getInstance()
-    //    .getUserInfo()
-    //    .subscribeOn(Schedulers.io())
-    //    .subscribe(new ServiceResponse<UserInfoBean>() {
-    //      @Override public void onNext(UserInfoBean user) {
-    //        if (null != user) {
-    //          budgetCash = user.getUserBudget().getBudgetCash();
-    //        }
-    //      }
-    //
-    //      @Override public void onCompleted() {
-    //        super.onCompleted();
-    //      }
-    //
-    //      @Override public void onError(Throwable e) {
-    //        e.printStackTrace();
-    //        Log.e(TAG, "getUserInfo error1 ");
-    //        super.onError(e);
-    //      }
-    //    });
-    //addSubscription(subscribe);
-
     downLoadCartsInfo();
   }
 
@@ -170,49 +151,48 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
               JUtils.Log(TAG, cartsPayinfoBean.toString());
               mAdapter.updateWithClear(cartsPayinfoBean.getCartList());
               cart_ids = cartsPayinfoBean.getCartIds();
-              channel = "alipay";
+//              channel = "alipay";
+
               budgetCash = cartsPayinfoBean.getBudget_cash() + "";
               payment = cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
                   - cartsPayinfoBean.getDiscountFee()
                   - payExtrasEntityApp.getValue() + "";
               paymentInfo = cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
                   - cartsPayinfoBean.getDiscountFee()
-                  - payExtrasEntityApp.getValue();
+                  ;
               post_fee = cartsPayinfoBean.getPostFee() + "";
               discount_fee = cartsPayinfoBean.getDiscountFee() + "";
               JUtils.Log(TAG, discount_fee);
               discount_feeInfo = cartsPayinfoBean.getDiscountFee();
               total_fee = cartsPayinfoBean.getTotalFee() + "";
               total_feeInfo =
-                  cartsPayinfoBean.getTotalFee() - payExtrasEntityApp.getValue();
+                  cartsPayinfoBean.getTotalFee();
               uuid = cartsPayinfoBean.getUuid();
 
-              tv_postfee.setText("¥" + post_fee + "元");
-              JUtils.Log(TAG, "post-fee" + post_fee);
-              pay_extra.setText(payExtrasEntityApp.getName());
-              totalPrice.setText("¥" + payment);
-              JUtils.Log(TAG, "payment" + payment);
-              totalPrice_all.setText("合计: ¥" + (cartsPayinfoBean.getTotalFee()
-                  - payExtrasEntityApp.getValue()) +
-                  "");
 
+              JUtils.Log(TAG, "post-fee" + post_fee);
+              JUtils.Log(TAG, "payment" + payment);
               JUtils.Log(TAG, "合计" + (cartsPayinfoBean.getTotalFee()
                   - payExtrasEntityApp.getValue()));
-
-              jieshengjine =
-                  cartsPayinfoBean.getDiscountFee() + payExtrasEntityApp.getValue();
-
-              jiehsneg.setText("已节省"
-                  + (float) (Math.round(
-                  (cartsPayinfoBean.getDiscountFee() + payExtrasEntityApp.getValue())
-                      * 100)) / 100
-                  + "");
-
               JUtils.Log(TAG, "已节省"
                   + (float) (Math.round(
                   (cartsPayinfoBean.getDiscountFee() + payExtrasEntityApp.getValue())
                       * 100)) / 100);
 
+
+              jieshengjine =
+                      cartsPayinfoBean.getDiscountFee() ;
+              pay_extra.setText(payExtrasEntityApp.getName());
+              totalPrice.setText("¥" + payment);
+              tv_postfee.setText("¥" + post_fee + "元");
+              totalPrice_all.setText("合计: ¥" + (cartsPayinfoBean.getTotalFee()
+                      - payExtrasEntityApp.getValue()) +
+                      "");
+              jiehsneg.setText("已节省"
+                      + (float) (Math.round(
+                      (cartsPayinfoBean.getDiscountFee() + payExtrasEntityApp.getValue())
+                              * 100)) / 100
+                      + "");
 
 
               if (null != cartsPayinfoBean.getmPayExtras()) {
