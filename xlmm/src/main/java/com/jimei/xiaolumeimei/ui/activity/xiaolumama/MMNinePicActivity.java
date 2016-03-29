@@ -149,7 +149,11 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
     new Handler().postDelayed(new Runnable() {
       @Override public void run() {
         loadDataRefresh();
-        mRefreshLayout.setRefreshing(false);
+        try {
+          mRefreshLayout.setRefreshing(false);
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
       }
     }, 2000);
   }
