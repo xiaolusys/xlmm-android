@@ -5,46 +5,40 @@ import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
-import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
+import butterknife.Bind;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.gson.Gson;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.CartsPayInfoAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AddressBean;
-import com.jimei.xiaolumeimei.entities.BudgetPayBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
-import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.entities.PayInfoBean;
 import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.TradeModel;
-import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.AddNoAddressActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.AddressSelectActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.CouponSelectActivity;
 import com.jimei.xiaolumeimei.widget.NestedListView;
+import com.jimei.xiaolumeimei.widget.SmoothCheckBox;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.pingplusplus.android.PaymentActivity;
 import com.squareup.okhttp.ResponseBody;
-
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -54,14 +48,19 @@ import rx.schedulers.Schedulers;
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
-    implements View.OnClickListener, RadioGroup.OnCheckedChangeListener{
+    implements View.OnClickListener, RadioGroup.OnCheckedChangeListener,
+    SmoothCheckBox.OnCheckedChangeListener {
   private static final int REQUEST_CODE_PAYMENT = 1;
   private static final int REQUEST_CODE_COUPONT = 2;
   private static final int REQUEST_CODE_ADDRESS = 3;
+  private static final String APP_PAY = "pid:1:value:2.0;";
+  private static final String BUDGET_PAY = "pid:3:budget:";
+  private static final String ALIPAY = "alipay";
+  private static final String WX = "wx";
+  private static final String BUDGET = "budget";
   String TAG = "CartsPayInfoActivity";
   CartsPayInfoAdapter mAdapter;
   @Bind(R.id.toolbar) Toolbar toolbar;
-  @Bind(R.id.app_bar_layout) AppBarLayout appBarLayout;
   @Bind(R.id.name) TextView name;
   @Bind(R.id.phone) TextView phone;
   @Bind(R.id.address_details) TextView addressDetails;
@@ -76,29 +75,19 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.post_fee) TextView tv_postfee;
   @Bind(R.id.coupon_layout) RelativeLayout coupon_layout;
   @Bind(R.id.tv_coupon) TextView tv_coupon;
-  @Bind(R.id.pay_extra) TextView pay_extra;
   List<CartsPayinfoBean.CartListEntity> list;
   @Bind(R.id.go_main) Button goMain;
   @Bind(R.id.empty_content) RelativeLayout emptyContent;
-  @Bind(R.id.image_location) ImageView imageLocation;
-  @Bind(R.id.common_icon_right_arrow) ImageView commonIconRightArrow;
-  //@Bind(R.id.scb) SmoothCheckBox scb;
-  @Bind(R.id.tv_alipay) TextView tvAlipay;
-  @Bind(R.id.v1) View v1;
-  @Bind(R.id.tv22) TextView tv22;
-  @Bind(R.id.v2) View v2;
-  @Bind(R.id.alipay) AppCompatRadioButton alipay;
-  @Bind(R.id.wx) AppCompatRadioButton wx;
-  @Bind(R.id.tv2) TextView tv2;
-  @Bind(R.id.tv1) TextView tv1;
-  //@Bind(R.id.extra_budget) TextView extraBudget;
+  @Bind(R.id.scb) SmoothCheckBox scb;
+
+  @Bind(R.id.extra_budget) TextView extraBudget;
   private boolean isAlipay, isWx, isBudget;
   //@Bind(R.id.payinfo_recyclerview) RecyclerView payinfoRecyclerview;
   private String ids;
   private String cart_ids;
   private String addr_id;
   private String channel;
-  private String payment;
+  private double payment;
   private String post_fee;
   private String discount_fee;
   private String total_fee;
@@ -116,43 +105,24 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   private double discount_feeInfo;
   private double total_feeInfo;
   private boolean budget_payable;
-  private String pay_extras;
+  private String pay_extras, pay_extras_budget;
   private double jieshengjine;
   private boolean isEnough;
-  private double budgetCash;
+  private String budgetCash;
+  private double value;
+  private double yue;
+  private double appcut;
 
   @Override protected void setListener() {
     adress.setOnClickListener(this);
     confirm.setOnClickListener(this);
     rg_pay.setOnCheckedChangeListener(this);
-    //scb.setOnCheckedChangeListener(this);
+    scb.setOnCheckedChangeListener(this);
   }
 
   @Override protected void initData() {
 
     list = new ArrayList<>();
-
-    Subscription subscribe = UserModel.getInstance()
-        .getUserInfo()
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<UserInfoBean>() {
-          @Override public void onNext(UserInfoBean user) {
-            if (null != user) {
-              budgetCash = user.getUserBudget().getBudgetCash();
-            }
-          }
-
-          @Override public void onCompleted() {
-            super.onCompleted();
-          }
-
-          @Override public void onError(Throwable e) {
-            e.printStackTrace();
-            Log.e(TAG, "getUserInfo error1 ");
-            super.onError(e);
-          }
-        });
-    addSubscription(subscribe);
 
     downLoadCartsInfo();
   }
@@ -164,19 +134,179 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         .subscribe(new ServiceResponse<CartsPayinfoBean>() {
           @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
             if (cartsPayinfoBean != null) {
+              JUtils.Log(TAG, cartsPayinfoBean.toString());
               mAdapter.updateWithClear(cartsPayinfoBean.getCartList());
               cart_ids = cartsPayinfoBean.getCartIds();
-              channel = "alipay";
+              //              channel = "alipay";
 
-              List<CartsPayinfoBean.payExtrasEntityApp> payExtrasEntities =
-                  cartsPayinfoBean.getmPayExtras();
-              CartsPayinfoBean.payExtrasEntityApp payExtrasEntityApp = null;
-//              CartsPayinfoBean.payExtrasEntityApp payExtrasEntityAppBudget = null;
-              //if (payExtrasEntities.size() > 1) {
-              //  payExtrasEntityAppBudget = payExtrasEntities.get(1);
-              //  payExtrasEntityApp = payExtrasEntities.get(0);
+              budgetCash = cartsPayinfoBean.getBudget_cash() + "";
+              payment = cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
+                  - cartsPayinfoBean.getDiscountFee();
+              paymentInfo = cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
+                  - cartsPayinfoBean.getDiscountFee();
+              post_fee = cartsPayinfoBean.getPostFee() + "";
+              discount_fee = cartsPayinfoBean.getDiscountFee() + "";
+              JUtils.Log(TAG, "discount_fee" + discount_fee);
+              discount_feeInfo = cartsPayinfoBean.getDiscountFee();
+              total_fee = cartsPayinfoBean.getTotalFee() + "";
+              total_feeInfo = cartsPayinfoBean.getTotalFee();
+              uuid = cartsPayinfoBean.getUuid();
+
+              jieshengjine =
+                  (float) (Math.round((cartsPayinfoBean.getDiscountFee()) * 100)) / 100;
+
+              JUtils.Log(TAG, "post-fee" + post_fee);
+              JUtils.Log(TAG, "payment" + paymentInfo);
+              JUtils.Log(TAG, "合计" + (cartsPayinfoBean.getTotalFee()));
+              JUtils.Log(TAG, "已节省" + jieshengjine);
+
+              jieshengjine = cartsPayinfoBean.getDiscountFee();
+              totalPrice.setText("¥" + paymentInfo);
+              tv_postfee.setText("¥" + post_fee + "元");
+              totalPrice_all.setText("合计: ¥" + (cartsPayinfoBean.getTotalFee()) +
+                  "");
+              jiehsneg.setText("已节省"
+                  + (float) (Math.round((cartsPayinfoBean.getDiscountFee()) * 100)) / 100
+                  + "");
+
+              if (null != cartsPayinfoBean.getmPayExtras()) {
+                List<CartsPayinfoBean.payExtrasEntityApp> payExtrasEntityApps =
+                    cartsPayinfoBean.getmPayExtras();
+
+                for (int i = 0; i < payExtrasEntityApps.size(); i++) {
+                  //优惠券
+                  if (payExtrasEntityApps.get(i).getPid() == 2) {
+                    if (payExtrasEntityApps.get(i).getUseCouponAllowed() == 1) {
+
+                      coupon_layout.setOnClickListener(CartsPayInfoActivity.this);
+
+                      if (isCoupon) {
+                        paymentInfo =
+                            cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
+                                - cartsPayinfoBean.getDiscountFee()
+                                - coupon_price;
+
+                        totalPrice.setText("¥" + paymentInfo);
+                        tv_postfee.setText("¥" + post_fee + "元");
+                        totalPrice_all.setText("合计: ¥" + paymentInfo +
+                            "");
+
+                        jieshengjine = (float) (Math.round(
+                            (cartsPayinfoBean.getDiscountFee()) * 100)) / 100
+                            + coupon_price;
+
+                        jiehsneg.setText("已节省" +
+                            jieshengjine + "");
+
+                        pay_extras = "pid:"
+                            + payExtrasEntityApps.get(i).getValue()
+                            + ":couponid:"
+                            + coupon_id
+                            + ":value:"
+                            + coupon_price
+                            + ";";
+                        if (paymentInfo > 0) {
+                          //payment = paymentInfo + "";
+                          discount_feeInfo =
+                              cartsPayinfoBean.getDiscountFee() + coupon_price;
+                          discount_fee = discount_feeInfo + "";
+                          JUtils.Log(TAG, "discount_fee" + discount_fee);
+                        } else {
+                          //payment = "0";
+                          channel = BUDGET;
+                        }
+                        continue;
+                      }
+                    } else {
+                      tv_coupon.setText("无可用优惠券");
+                      coupon_layout.setOnClickListener(null);
+                    }
+                  }
+
+                  //app支付立减两元
+                  if (payExtrasEntityApps.get(i).getPid() == 1) {
+
+                    appcut = payExtrasEntityApps.get(i).getValue();
+
+                    pay_extras += "pid:"
+                        + payExtrasEntityApps.get(i).getPid()
+                        + ":value:"
+                        + payExtrasEntityApps.get(i).getValue()
+                        + ";";
+
+                    totalPrice.setText(
+                        "¥" + (paymentInfo - payExtrasEntityApps.get(i).getValue()));
+                    tv_postfee.setText("¥" + (post_fee) + "元");
+                    totalPrice_all.setText(
+                        "合计: ¥" + (paymentInfo - payExtrasEntityApps.get(i).getValue()) +
+                            "");
+
+                    jieshengjine =
+                        (float) (Math.round((cartsPayinfoBean.getDiscountFee()) * 100))
+                            / 100 + coupon_price + payExtrasEntityApps.get(i).getValue();
+
+                    jiehsneg.setText("已节省" +
+                        jieshengjine + "");
+
+                    if (paymentInfo > 0) {
+                      paymentInfo = paymentInfo - payExtrasEntityApps.get(i).getValue();
+                      discount_feeInfo =
+                          discount_feeInfo + payExtrasEntityApps.get(i).getValue();
+                      discount_fee = discount_feeInfo + "";
+                      JUtils.Log(TAG, "discount_fee" + discount_fee);
+                      //payment = paymentInfo + "";
+                    } else {
+                      //payment = "0";
+                      channel = BUDGET;
+                    }
+                    continue;
+                  }
+
+                  //使用钱包
+                  if (payExtrasEntityApps.get(i).getPid() == 3) {
+                    try {
+                      yue = payExtrasEntityApps.get(i).getValue();
+                      JUtils.Log(TAG, yue + ":yue");
+                      extraBudget.setText("余额 " + budgetCash + " 本次可用 " + yue);
+                    } catch (NullPointerException e) {
+                      e.printStackTrace();
+                    }
+                    if (paymentInfo > 0) {
+                      yue = payExtrasEntityApps.get(i).getValue();
+                      if (payExtrasEntityApps.get(i).getValue() >= paymentInfo) {
+                        channel = BUDGET;
+                        //payment = paymentInfo + "";
+                      } else {
+                        pay_extras += "pid:" + 3 + ":budget:" + payExtrasEntityApps.get(i)
+                            .getValue() + ";";
+
+                        CartsPayInfoActivity.this.value =
+                            payExtrasEntityApps.get(i).getValue();
+                      }
+                    }
+                  }
+                }
+              }
+
+              JUtils.Log(TAG, "discount_fee" + discount_fee);
+              JUtils.Log(TAG, cart_ids + "    " + addr_id + "    " + "    " +
+                  payment + "    " + post_fee + "    " +
+                  discount_fee + "    " + total_fee + "    " + uuid + "    " +
+                  pay_extras);
+
+              //List<CartsPayinfoBean.payExtrasEntityApp> payExtrasEntities =
+              //    cartsPayinfoBean.getmPayExtras();
               //
-              //  pay_extras = "pid:"
+              ////if (payExtrasEntities.size() > 1) {
+              //payExtrasEntityApp = payExtrasEntities.get(0);
+              //pay_extras = "pid:"
+              //    + payExtrasEntityApp.getPid()
+              //    + ":value:"
+              //    + payExtrasEntityApp.getValue();
+              //
+              //if (payExtrasEntities.size() > 1) {
+              //  payExtrasEntityAppBudget = payExtrasEntities.get(2);
+              //  pay_extras_budget = "pid:"
               //      + payExtrasEntityApp.getPid()
               //      + ":value:"
               //      + payExtrasEntityApp.getValue()
@@ -185,63 +315,60 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
               //      + payExtrasEntityAppBudget.getPid()
               //      + ":budget:"
               //      + payExtrasEntityAppBudget.getValue();
-              //
-              //  extraBudget.setText(
-              //      "余额 " + budgetCash + " 本次可用 " + payExtrasEntityAppBudget.getValue());
-              //} else {
-                payExtrasEntityApp = payExtrasEntities.get(0);
-
-                pay_extras = "pid:"
-                    + payExtrasEntityApp.getPid()
-                    + ":value:"
-                    + payExtrasEntityApp.getValue();
               //}
-
-              payment = cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
-                  - cartsPayinfoBean.getDiscountFee()
-                  - payExtrasEntityApp.getValue() + "";
-
-              paymentInfo = cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
-                  - cartsPayinfoBean.getDiscountFee()
-                  - payExtrasEntityApp.getValue();
-
-              post_fee = cartsPayinfoBean.getPostFee() + "";
-
-              discount_fee = cartsPayinfoBean.getDiscountFee() + "";
-              discount_feeInfo = cartsPayinfoBean.getDiscountFee();
-              total_fee = cartsPayinfoBean.getTotalFee() + "";
-
-              total_feeInfo =
-                  cartsPayinfoBean.getTotalFee() - payExtrasEntityApp.getValue();
-
-              uuid = cartsPayinfoBean.getUuid();
-
-              tv_postfee.setText("¥" + post_fee);
               //
-              //if (isCoupon) {
-              //  totalPrice_all.setText(
-              //      "合计: ¥" + (cartsPayinfoBean.getTotalFee() - coupon_price) + "");
-              //  jiehsneg.setText(
-              //      "已节省" + (cartsPayinfoBean.getDiscountFee() + coupon_price) + "");
-              //} else {
-              pay_extra.setText(payExtrasEntityApp.getName());
-              totalPrice.setText("¥" + payment);
-              totalPrice_all.setText("合计: ¥" + (cartsPayinfoBean.getTotalFee()
-                  - payExtrasEntityApp.getValue()) +
-                  "");
-              jieshengjine =
-                  cartsPayinfoBean.getDiscountFee() + payExtrasEntityApp.getValue();
-              jiehsneg.setText("已节省" + (cartsPayinfoBean.getDiscountFee()
-                  + payExtrasEntityApp.getValue()) + "");
-              //}
 
-              budget_payable = cartsPayinfoBean.isBudget_payable();
-
-              //if (Double.parseDouble(total_fee) < 150) {
-              //  coupon_layout.setOnClickListener(null);
-              //  tv_coupon.setText("无可用优惠券");
-              //} else {
-              coupon_layout.setOnClickListener(CartsPayInfoActivity.this);
+              ////} else {
+              //
+              ////}
+              //
+              //payment = cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
+              //    - cartsPayinfoBean.getDiscountFee()
+              //    - payExtrasEntityApp.getValue() + "";
+              //
+              //paymentInfo = cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
+              //    - cartsPayinfoBean.getDiscountFee()
+              //    - payExtrasEntityApp.getValue();
+              //
+              //post_fee = cartsPayinfoBean.getPostFee() + "";
+              //
+              //discount_fee = cartsPayinfoBean.getDiscountFee() + "";
+              //JUtils.Log(TAG, discount_fee);
+              //discount_feeInfo = cartsPayinfoBean.getDiscountFee();
+              //total_fee = cartsPayinfoBean.getTotalFee() + "";
+              //
+              //total_feeInfo =
+              //    cartsPayinfoBean.getTotalFee() - payExtrasEntityApp.getValue();
+              //
+              //uuid = cartsPayinfoBean.getUuid();
+              //
+              //tv_postfee.setText("¥" + post_fee);
+              //
+              //pay_extra.setText(payExtrasEntityApp.getName());
+              //totalPrice.setText("¥" + payment);
+              //totalPrice_all.setText("合计: ¥" + (cartsPayinfoBean.getTotalFee()
+              //    - payExtrasEntityApp.getValue()) +
+              //    "");
+              //jieshengjine =
+              //    cartsPayinfoBean.getDiscountFee() + payExtrasEntityApp.getValue();
+              //jiehsneg.setText("已节省"
+              //    + (float) (Math.round(
+              //    (cartsPayinfoBean.getDiscountFee() + payExtrasEntityApp.getValue())
+              //        * 100)) / 100
+              //    + "");
+              ////}
+              //
+              //budget_payable = cartsPayinfoBean.isBudget_payable();
+              //
+              ////if (Double.parseDouble(total_fee) < 150) {
+              ////  coupon_layout.setOnClickListener(null);
+              ////  tv_coupon.setText("无可用优惠券");
+              ////} else {
+              //coupon_layout.setOnClickListener(CartsPayInfoActivity.this);
+              //
+              //JUtils.Log(TAG, cart_ids + "    " + addr_id + "    " + "    " +
+              //    payment + "    " + post_fee + "    " +
+              //    discount_fee + "    " + total_fee + "    " + uuid);
               //}
             } else {
               emptyContent.setVisibility(View.VISIBLE);
@@ -301,45 +428,192 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
       case R.id.confirm:
         if (isHaveAddress) {
+
           if (isCoupon) {
-            if (isWx) {
-              payWithCoupon("wx");
-            } else if (isAlipay) {
-              payWithCoupon("alipay");
+            if (!isAlipay && !isWx && !isBudget) {
+              if (coupon_price > payment) {
+                pay_extras = "pid:"
+                    + 2
+                    + ":couponid:"
+                    + coupon_id
+                    + ":value:"
+                    + coupon_price
+                    + ";"
+                    + APP_PAY;
+                payV2(BUDGET, "0", pay_extras, (coupon_price + 2) + "");
+              } else {
+                JUtils.Toast("优惠券金额不足,可以选择其他混合支付");
+              }
+            } else if (isBudget && !isAlipay && !isWx) {
+              if ((coupon_price + yue) > payment) {
+                pay_extras = "pid:"
+                    + 2
+                    + ":couponid:"
+                    + coupon_id
+                    + ":value:"
+                    + coupon_price
+                    + ";"
+                    + APP_PAY
+                    + BUDGET_PAY
+                    + yue
+                    + ";";
+
+                if ((payment - appcut - coupon_price) < yue) {
+                  pay_extras = "pid:"
+                      + 2
+                      + ":couponid:"
+                      + coupon_id
+                      + ":value:"
+                      + coupon_price
+                      + ";"
+                      +
+                      APP_PAY
+                      + BUDGET_PAY
+                      + (payment - appcut - coupon_price)
+                      + ";";
+                }
+                double paymentprice = payment - appcut - coupon_price;
+                JUtils.Log(TAG, pay_extras);
+                payV2(BUDGET, paymentprice + "", pay_extras, (coupon_price + 2) + "");
+              } else {
+                JUtils.Toast("金额不足,可以选择下面一种支付方式混合支付");
+              }
+            } else if (isBudget && isAlipay && !isWx) {
+              pay_extras = "pid:"
+                  + 2
+                  + ":couponid:"
+                  + coupon_id
+                  + ":value:"
+                  + coupon_price
+                  + ";"
+                  + APP_PAY
+                  + BUDGET_PAY
+                  + yue
+                  + ";";
+
+              if ((payment - appcut - coupon_price) < yue) {
+                pay_extras =
+                    APP_PAY + BUDGET_PAY + (payment - appcut - coupon_price) + ";";
+              }
+
+              payV2(ALIPAY, (payment - appcut - coupon_price) + "", pay_extras,
+                  (coupon_price + 2) + "");
+            } else if (isBudget && !isAlipay && isWx) {
+              pay_extras = "pid:"
+                  + 2
+                  + ":couponid:"
+                  + coupon_id
+                  + ":value:"
+                  + coupon_price
+                  + ";"
+                  + APP_PAY
+                  + BUDGET_PAY
+                  + yue
+                  + ";";
+
+              if ((payment - appcut - coupon_price) < yue) {
+                pay_extras = "pid:"
+                    + 2
+                    + ":couponid:"
+                    + coupon_id
+                    + ":value:"
+                    + coupon_price
+                    + ";"
+                    + APP_PAY
+                    + BUDGET_PAY
+                    + (payment - appcut - coupon_price)
+                    + ";";
+              }
+
+              payV2(WX, (payment - appcut - coupon_price) + "", pay_extras,
+                  (coupon_price + 2) + "");
             }
 
-//            else if (isBudget) {
-//              payWithBudgetCoupon("budget");
-//            }
+            if (!isBudget && isAlipay && !isWx) {
+              if (coupon_price > paymentInfo) {
+                pay_extras = "pid:"
+                    + 2
+                    + ":couponid:"
+                    + coupon_id
+                    + ":value:"
+                    + coupon_price
+                    + ";"
+                    + APP_PAY;
+                payV2(BUDGET, "0", pay_extras, (coupon_price + 2) + "");
+              } else {
+                pay_extras = "pid:"
+                    + 2
+                    + ":couponid:"
+                    + coupon_id
+                    + ":value:"
+                    + coupon_price
+                    + ";"
+                    + APP_PAY;
+                payV2(ALIPAY, (payment - appcut - coupon_price) + "", pay_extras,
+                    (coupon_price + 2) + "");
+              }
+            }
 
-//            else if (isBudget && isWx) {
-//
-//            } else if (isBudget && isAlipay) {
-//
-//            }
-
-            else {
-              JUtils.Toast("请选择支付方式");
+            if (!isBudget && !isAlipay && isWx) {
+              if (coupon_price > paymentInfo) {
+                pay_extras = "pid:"
+                    + 2
+                    + ":couponid:"
+                    + coupon_id
+                    + ":value:"
+                    + coupon_price
+                    + ";"
+                    + APP_PAY;
+                payV2(BUDGET, "0", pay_extras, (coupon_price + 2) + "");
+              } else {
+                pay_extras = "pid:"
+                    + 2
+                    + ":couponid:"
+                    + coupon_id
+                    + ":value:"
+                    + coupon_price
+                    + ";"
+                    + APP_PAY;
+                payV2(WX, (payment - appcut - coupon_price) + "", pay_extras,
+                    (coupon_price + 2) + "");
+              }
             }
           } else {
-            if (isAlipay) {
-              payWithNoCoupon("alipay");
-            } else if (isWx) {
-              payWithNoCoupon("wx");
+
+            if (isAlipay && !isBudget && !isWx) {
+              pay_extras = "pid:1:value:2.0";
+              payV2(ALIPAY, (payment - appcut) + "", pay_extras, 2 + "");
+            }
+            if (isWx && !isAlipay && !isBudget) {
+              pay_extras = "pid:1:value:2.0";
+              payV2(WX, (payment - appcut) + "", pay_extras, 2 + "");
             }
 
-//            else if (isBudget) {
-//              payWithBudget("budget");
-//            }
+            if (isBudget) {
+              if (yue > paymentInfo) {
+                if (paymentInfo > 0) {
+                  pay_extras = APP_PAY + BUDGET_PAY + yue + ";";
+                  if ((payment - appcut) < yue) {
+                    pay_extras = APP_PAY + BUDGET_PAY + (payment - appcut) + ";";
+                  }
 
-//            else if (isBudget && isWx) {
-//
-//            } else if (isBudget && isAlipay) {
-//
-//            }
-
-            else {
-              JUtils.Toast("请选择支付方式");
+                  payV2(BUDGET, (payment - appcut) + "", pay_extras, 2 + "");
+                }
+              } else if (!isAlipay && !isWx) {
+                JUtils.Toast("余额不足,请选择下面一种方式一起支付");
+              } else if (isAlipay) {
+                pay_extras = APP_PAY + BUDGET_PAY + yue + ";";
+                if ((payment - appcut) < yue) {
+                  pay_extras = APP_PAY + BUDGET_PAY + (payment - appcut) + ";";
+                }
+                payV2(ALIPAY, (payment - appcut) + "", pay_extras, 2 + "");
+              } else if (isWx) {
+                pay_extras = APP_PAY + BUDGET_PAY + yue + ";";
+                if ((payment - appcut) < yue) {
+                  pay_extras = APP_PAY + BUDGET_PAY + (payment - appcut) + ";";
+                }
+                payV2(WX, (payment - appcut) + "", pay_extras, 2 + "");
+              }
             }
           }
         } else {
@@ -358,17 +632,81 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     }
   }
 
-  private void payWithNoCoupon(String pay_method) {
-    JUtils.Log("CartsPayinfo",
-        cart_ids + "    " + addr_id + "    " + pay_method + "    " +
-            payment + "    " + post_fee + "    " +
-            discount_fee + "    " + total_fee + "    " + uuid);
+  //private void payWithBudget(String pay_method, String pay_extrasaa) {
+  //  JUtils.Log(TAG, cart_ids + "    " + addr_id + "    " + pay_method + "    " +
+  //      payment + "    " + post_fee + "    " +
+  //      discount_fee + "    " + total_fee + "    " + uuid + "  " + pay_extrasaa);
+  //
+  //  showIndeterminateProgressDialog(false);
+  //
+  //  Subscription subscription = TradeModel.getInstance()
+  //      .shoppingcart_create_v2(ids, addr_id, pay_method, payment, post_fee, discount_fee,
+  //          total_fee, uuid, pay_extrasaa)
+  //      .subscribeOn(Schedulers.io())
+  //      .subscribe(new ServiceResponse<PayInfoBean>() {
+  //
+  //        @Override public void onCompleted() {
+  //          super.onCompleted();
+  //          hideIndeterminateProgressDialog();
+  //        }
+  //
+  //        @Override public void onError(Throwable e) {
+  //          super.onError(e);
+  //          e.printStackTrace();
+  //        }
+  //
+  //        @Override public void onNext(PayInfoBean payInfoBean) {
+  //
+  //          if (null != payInfoBean) {
+  //            JUtils.Log(TAG, payInfoBean.toString());
+  //
+  //            if (isBudget
+  //                && TextUtils.isEmpty(payInfoBean.getCharge().toString())
+  //                && payInfoBean.getCode() == 0) {
+  //              JUtils.Toast("支付成功");
+  //            }
+  //
+  //            if (isBudget && !TextUtils.isEmpty(payInfoBean.getCharge().toString())) {
+  //              Intent intent = new Intent();
+  //              String packageName = getPackageName();
+  //              ComponentName componentName = new ComponentName(packageName,
+  //                  packageName + ".wxapi.WXPayEntryActivity");
+  //              intent.setComponent(componentName);
+  //              intent.putExtra(PaymentActivity.EXTRA_CHARGE,
+  //                  payInfoBean.getCharge().toString());
+  //              startActivityForResult(intent, REQUEST_CODE_PAYMENT);
+  //            }
+  //
+  //            if (!isBudget && !TextUtils.isEmpty(payInfoBean.getCharge().toString())) {
+  //              Intent intent = new Intent();
+  //              String packageName = getPackageName();
+  //              ComponentName componentName = new ComponentName(packageName,
+  //                  packageName + ".wxapi.WXPayEntryActivity");
+  //              intent.setComponent(componentName);
+  //              intent.putExtra(PaymentActivity.EXTRA_CHARGE,
+  //                  payInfoBean.getCharge().toString());
+  //              startActivityForResult(intent, REQUEST_CODE_PAYMENT);
+  //            }
+  //          }
+  //        }
+  //      });
+  //
+  //  addSubscription(subscription);
+  //}
+
+  private void payV2(String pay_method, String paymentprice_v2, String pay_extrasaa,
+      String discount_fee_price) {
+    //JUtils.Log("CartsPayinfo",
+    //    cart_ids + "    " + addr_id + "    " + pay_method + "    " +
+    //        payment + "    " + post_fee + "    " +
+    //        discount_fee + "    " + total_fee + "    " + uuid + "  " + pay_extrasaa);
+
     showIndeterminateProgressDialog(false);
     Subscription subscription = TradeModel.getInstance()
-        .shoppingcart_create(cart_ids, addr_id, pay_method, payment, post_fee,
-            discount_fee, total_fee, pay_extras, uuid)
+        .shoppingcart_create_v2(ids, addr_id, pay_method, paymentprice_v2, post_fee,
+            discount_fee_price, total_fee, uuid, pay_extrasaa)
         .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<ResponseBody>() {
+        .subscribe(new ServiceResponse<PayInfoBean>() {
 
           @Override public void onCompleted() {
             super.onCompleted();
@@ -380,95 +718,152 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             e.printStackTrace();
           }
 
-          @Override public void onNext(ResponseBody responseBody) {
-            super.onNext(responseBody);
-            try {
-              String string = responseBody.string();
-              Log.i("charge", string);
-              Intent intent = new Intent();
-              String packageName = getPackageName();
-              ComponentName componentName = new ComponentName(packageName,
-                  packageName + ".wxapi.WXPayEntryActivity");
-              intent.setComponent(componentName);
-              intent.putExtra(PaymentActivity.EXTRA_CHARGE, string);
-              startActivityForResult(intent, REQUEST_CODE_PAYMENT);
-            } catch (IOException e) {
-              e.printStackTrace();
-            }
-          }
-        });
-    addSubscription(subscription);
-  }
+          @Override public void onNext(PayInfoBean payInfoBean) {
 
-  private void payWithBudget(String pay_method) {
-    JUtils.Log("CartsPayinfo",
-        cart_ids + "    " + addr_id + "    " + pay_method + "    " +
-            payment + "    " + post_fee + "    " +
-            discount_fee + "    " + total_fee + "    " + uuid);
-    showIndeterminateProgressDialog(false);
-    Subscription subscription = TradeModel.getInstance()
-        .shoppingcart_createBudget(cart_ids, addr_id, pay_method, payment, post_fee,
-            discount_fee, total_fee, pay_extras, uuid)
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<BudgetPayBean>() {
-          @Override public void onCompleted() {
-            super.onCompleted();
-            hideIndeterminateProgressDialog();
-          }
+            if (null != payInfoBean) {
+              JUtils.Log(TAG, payInfoBean.toString());
+              Gson gson = new Gson();
+              JUtils.Log(TAG, gson.toJson(payInfoBean.getCharge()));
+              if (!payInfoBean.getChannel().equals("budget")) {
 
-          @Override public void onError(Throwable e) {
-            super.onError(e);
-            e.printStackTrace();
-          }
+                if (payInfoBean.getCode() > 0) {
+                  JUtils.Toast(payInfoBean.getInfo());
+                } else {
+                  Intent intent = new Intent();
+                  String packageName = getPackageName();
+                  ComponentName componentName = new ComponentName(packageName,
+                      packageName + ".wxapi.WXPayEntryActivity");
+                  intent.setComponent(componentName);
 
-          @Override public void onNext(BudgetPayBean responseBody) {
-            if (responseBody != null) {
-              boolean success = responseBody.isSuccess();
-              if (success) {
-                JUtils.Toast("支付成功");
+                  intent.putExtra(PaymentActivity.EXTRA_CHARGE,
+                      gson.toJson(payInfoBean.getCharge()));
+                  startActivityForResult(intent, REQUEST_CODE_PAYMENT);
+                }
               } else {
-                JUtils.Toast(responseBody.getInfo());
+                if (payInfoBean.getCode() == 0) {
+                  JUtils.Toast("支付成功");
+                } else {
+                  JUtils.Toast(payInfoBean.getInfo());
+                }
               }
             }
           }
         });
+
     addSubscription(subscription);
   }
 
-  private void payWithBudgetCoupon(String pay_method) {
-    BigDecimal bd = new BigDecimal((paymentInfo - coupon_price));
-    double bigDecimal = bd.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-    showIndeterminateProgressDialog(false);
-    Subscription subscription = TradeModel.getInstance()
-        .shoppingcart_createBudget_with_coupon(cart_ids, addr_id, pay_method,
-            bigDecimal + "", post_fee, discount_fee, total_fee, pay_extras, uuid,
-            coupon_id)
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<BudgetPayBean>() {
+  //private void payWithNoCoupon(String pay_method) {
+  //  JUtils.Log("CartsPayinfo",
+  //      cart_ids + "    " + addr_id + "    " + pay_method + "    " +
+  //          payment + "    " + post_fee + "    " +
+  //          discount_fee + "    " + total_fee + "    " + uuid);
+  //  showIndeterminateProgressDialog(false);
+  //  Subscription subscription = TradeModel.getInstance()
+  //      .shoppingcart_create(cart_ids, addr_id, pay_method, payment, post_fee,
+  //          discount_fee, total_fee, pay_extras, uuid)
+  //      .subscribeOn(Schedulers.io())
+  //      .subscribe(new ServiceResponse<ResponseBody>() {
+  //
+  //        @Override public void onCompleted() {
+  //          super.onCompleted();
+  //          hideIndeterminateProgressDialog();
+  //        }
+  //
+  //        @Override public void onError(Throwable e) {
+  //          super.onError(e);
+  //          e.printStackTrace();
+  //        }
+  //
+  //        @Override public void onNext(ResponseBody responseBody) {
+  //          super.onNext(responseBody);
+  //          try {
+  //            String string = responseBody.string();
+  //            Log.i("charge", string);
+  //            Intent intent = new Intent();
+  //            String packageName = getPackageName();
+  //            ComponentName componentName = new ComponentName(packageName,
+  //                packageName + ".wxapi.WXPayEntryActivity");
+  //            intent.setComponent(componentName);
+  //            intent.putExtra(PaymentActivity.EXTRA_CHARGE, string);
+  //            startActivityForResult(intent, REQUEST_CODE_PAYMENT);
+  //          } catch (IOException e) {
+  //            e.printStackTrace();
+  //          }
+  //        }
+  //      });
+  //  addSubscription(subscription);
+  //}
 
-          @Override public void onNext(BudgetPayBean responseBody) {
-            if (responseBody != null) {
-              boolean success = responseBody.isSuccess();
-              if (success) {
-                JUtils.Toast("支付成功");
-              } else {
-                JUtils.Toast(responseBody.getInfo());
-              }
-            }
-          }
-
-          @Override public void onCompleted() {
-            super.onCompleted();
-            hideIndeterminateProgressDialog();
-          }
-
-          @Override public void onError(Throwable e) {
-            super.onError(e);
-            e.printStackTrace();
-          }
-        });
-    addSubscription(subscription);
-  }
+  //private void payWithBudget(String pay_method) {
+  //  JUtils.Log("CartsPayinfo",
+  //      cart_ids + "    " + addr_id + "    " + pay_method + "    " +
+  //          payment + "    " + post_fee + "    " +
+  //          discount_fee + "    " + total_fee + "    " + uuid);
+  //  showIndeterminateProgressDialog(false);
+  //  Subscription subscription = TradeModel.getInstance()
+  //      .shoppingcart_createBudget(cart_ids, addr_id, pay_method, payment, post_fee,
+  //          discount_fee, total_fee, pay_extras, uuid)
+  //      .subscribeOn(Schedulers.io())
+  //      .subscribe(new ServiceResponse<BudgetPayBean>() {
+  //        @Override public void onCompleted() {
+  //          super.onCompleted();
+  //          hideIndeterminateProgressDialog();
+  //        }
+  //
+  //        @Override public void onError(Throwable e) {
+  //          super.onError(e);
+  //          e.printStackTrace();
+  //        }
+  //
+  //        @Override public void onNext(BudgetPayBean responseBody) {
+  //          if (responseBody != null) {
+  //            boolean success = responseBody.isSuccess();
+  //            if (success) {
+  //              JUtils.Toast("支付成功");
+  //            } else {
+  //              JUtils.Toast(responseBody.getInfo());
+  //            }
+  //          }
+  //        }
+  //      });
+  //  addSubscription(subscription);
+  //}
+  //
+  //private void payWithBudgetCoupon(String pay_method) {
+  //  BigDecimal bd = new BigDecimal((paymentInfo - coupon_price));
+  //  double bigDecimal = bd.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+  //  showIndeterminateProgressDialog(false);
+  //  Subscription subscription = TradeModel.getInstance()
+  //      .shoppingcart_createBudget_with_coupon(cart_ids, addr_id, pay_method,
+  //          bigDecimal + "", post_fee, discount_fee, total_fee, pay_extras, uuid,
+  //          coupon_id)
+  //      .subscribeOn(Schedulers.io())
+  //      .subscribe(new ServiceResponse<BudgetPayBean>() {
+  //
+  //        @Override public void onNext(BudgetPayBean responseBody) {
+  //          if (responseBody != null) {
+  //            boolean success = responseBody.isSuccess();
+  //            if (success) {
+  //              JUtils.Toast("支付成功");
+  //            } else {
+  //              JUtils.Toast(responseBody.getInfo());
+  //            }
+  //          }
+  //        }
+  //
+  //        @Override public void onCompleted() {
+  //          super.onCompleted();
+  //          hideIndeterminateProgressDialog();
+  //        }
+  //
+  //        @Override public void onError(Throwable e) {
+  //          super.onError(e);
+  //          e.printStackTrace();
+  //        }
+  //      });
+  //  addSubscription(subscription);
+  //}
 
   private void payWithCoupon(String pay_method) {
 
@@ -547,13 +942,18 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         BigDecimal bd = new BigDecimal((paymentInfo - coupon_price));
         double bigDecimal = bd.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 
-        BigDecimal bd1 = new BigDecimal((total_feeInfo - coupon_price));
+        BigDecimal bd1 = new BigDecimal((total_feeInfo - coupon_price - 2));
         double bigDecimal1 = bd1.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 
         totalPrice.setText("¥" + bigDecimal);
         totalPrice_all.setText("合计: ¥" + bigDecimal1);
         jiehsneg.setText("已节省" + (coupon_price + jieshengjine));
         tv_coupon.setText(coupon_price + "元优惠券");
+
+        if (coupon_price > paymentInfo) {
+          totalPrice.setText("¥" + 0);
+          totalPrice_all.setText("合计: ¥" + 0);
+        }
 
         JUtils.Log(TAG, "coupon_id:" + coupon_id);
         Subscription subscription =
@@ -686,6 +1086,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 AddressBean addressBean = list.get(0);
 
                 addr_id = addressBean.getId();
+                JUtils.Log(TAG, addr_id + "addr_id");
                 name.setText(addressBean.getReceiverName());
                 phone.setText(addressBean.getReceiverMobile());
 
@@ -720,11 +1121,11 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     }
   }
 
-  //@Override public void onCheckedChanged(SmoothCheckBox checkBox, boolean isChecked) {
-  //  if (isChecked) {
-  //    isBudget = true;
-  //  } else {
-  //    isBudget = false;
-  //  }
-  //}
+  @Override public void onCheckedChanged(SmoothCheckBox checkBox, boolean isChecked) {
+    if (isChecked) {
+      isBudget = true;
+    } else {
+      isBudget = false;
+    }
+  }
 }

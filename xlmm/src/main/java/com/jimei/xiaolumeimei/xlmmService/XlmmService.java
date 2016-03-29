@@ -37,6 +37,7 @@ import com.jimei.xiaolumeimei.entities.NinePicBean;
 import com.jimei.xiaolumeimei.entities.OderCarryBean;
 import com.jimei.xiaolumeimei.entities.OneDayAgentOrdersBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
+import com.jimei.xiaolumeimei.entities.PayInfoBean;
 import com.jimei.xiaolumeimei.entities.PointLogBean;
 import com.jimei.xiaolumeimei.entities.PostActivityBean;
 import com.jimei.xiaolumeimei.entities.PostBean;
@@ -193,6 +194,22 @@ public interface XlmmService {
             @Field("pay_extras")String pay_extras,
             @Field("uuid") String uuid
     );
+
+
+  @FormUrlEncoded
+  @POST(XlmmApi.APP_BASE_URL+"/rest/v2/trades/shoppingcart_create")
+     Observable<PayInfoBean> shoppingcart_create_v2(
+            @Field("cart_ids") String cart_ids,
+            @Field("addr_id") String addr_id,
+            @Field("channel") String channel,
+            @Field("payment") String payment,
+            @Field("post_fee") String post_fee,
+            @Field("discount_fee") String discount_fee,
+            @Field("total_fee") String total_fee,
+            @Field("uuid") String uuid,
+            @Field("pay_extras")String pay_extras
+    );
+
 
 
     @FormUrlEncoded
