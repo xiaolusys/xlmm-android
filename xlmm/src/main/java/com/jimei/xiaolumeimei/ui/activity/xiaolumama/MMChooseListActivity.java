@@ -54,7 +54,7 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.tv_sales) TextView tvSales;
   @Bind(R.id.chooselist_xey) RecyclerView chooselistXey;
   @Bind(R.id.loading) RotateLoading loading;
-  //@Bind(R.id.choosenum) TextView choosenum;
+  @Bind(R.id.choosenum) TextView choosenum;
   private MMChooseAdapter mmChooseAdapter;
   private boolean isAll, isLady, isChild;
   private int chooseNum;
@@ -109,6 +109,8 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
             try {
               if ((mmChooselistBeans != null) && (mmChooselistBeans.getResults() != null)) {
                 mmChooseAdapter.update(mmChooselistBeans.getResults());
+                chooseNum = mmChooselistBeans.getResults().get(0).getShopProductNum();
+                choosenum.setText(""+chooseNum);
               }
             } catch (NullPointerException ex) {
             }
@@ -157,8 +159,8 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
       @Override
       public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
         super.onScrollStateChanged(recyclerView, newState);
-        JUtils.Log(TAG,"onScrollStateChanged lastVisibleItemPosition:"+lastVisibleItemPosition +" "+mmChooseAdapter.getItemCount());
-        JUtils.Log(TAG,"newState:"+newState + " isLoading: "+ isLoading);
+        //JUtils.Log(TAG,"onScrollStateChanged lastVisibleItemPosition:"+lastVisibleItemPosition +" "+mmChooseAdapter.getItemCount());
+        //JUtils.Log(TAG,"newState:"+newState + " isLoading: "+ isLoading);
         if ((newState == RecyclerView.SCROLL_STATE_IDLE)
                 && (lastVisibleItemPosition + 1 == mmChooseAdapter.getItemCount())) {
 
@@ -173,7 +175,7 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
       @Override
       public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
-        JUtils.Log(TAG,"lastVisibleItemPosition:"+lastVisibleItemPosition);
+        //JUtils.Log(TAG,"lastVisibleItemPosition:"+lastVisibleItemPosition);
         lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
 
       }
