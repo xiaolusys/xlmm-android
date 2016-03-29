@@ -152,7 +152,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
       int state = orderDetailBean.getStatus();
       switch (state) {
         case XlmmConst.ORDER_STATE_WAITPAY: {
-          Log.d(TAG, "wait pay lefttime show");
+          Log.i(TAG, "wait pay lefttime show");
 
           rlayout_order_lefttime.setVisibility(View.VISIBLE);
           LinearLayout llayout_order_lefttime =
