@@ -532,7 +532,10 @@ public interface XlmmService {
 
   //选品默认列表
     @GET("products/my_choice_pro")
-    Observable<List<MMChooselistBean>> getMMChooseList();
+    Observable<MMChooselistBean> getMMChooseList(
+            @Query("page")String page,
+            @Query("page_size")String pagesize
+    );
 
   //我的店铺列表
     @GET("pmt/cushoppros")
@@ -540,22 +543,28 @@ public interface XlmmService {
 
   //选品默认列表排序
     @GET("products/my_choice_pro")
-    Observable<List<MMChooselistBean>> getMMChooseSortList(
-          @Query("sort_field")String sort_field
+    Observable<MMChooselistBean> getMMChooseSortList(
+          @Query("sort_field")String sort_field,
+          @Query("page")String page,
+          @Query("page_size")String pagesize
     );
 
   //选品女装或者童装列表
     @GET("products/my_choice_pro")
-    Observable<List<MMChooselistBean>> getMMChooseLadyOrChildList(
+    Observable<MMChooselistBean> getMMChooseLadyOrChildList(
 
-        @Query("category")String category
+        @Query("category")String category,
+        @Query("page")String page,
+        @Query("page_size")String pagesize
     );
 
   //选品排序列表
     @GET("products/my_choice_pro")
-    Observable<List<MMChooselistBean>> getMMChooseLadyOrChildSortListSort(
+    Observable<MMChooselistBean> getMMChooseLadyOrChildSortListSort(
         @Query("sort_field")String sort_field,
-        @Query("category")String category
+        @Query("category")String category,
+        @Query("page")String page,
+        @Query("page_size")String pagesize
     );
 
   //MM上架商品到商铺

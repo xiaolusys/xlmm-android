@@ -32,17 +32,17 @@ public class MMProductModel {
     return ourInstance;
   }
 
-  //得到默认选品列表
-  public Observable<List<MMChooselistBean>> getMMChooseList() {
-    return XlmmRetrofitClient.getService()
-        .getMMChooseList()
-        .compose(new DefaultTransform<>());
-  }
-
   //得到MM店铺列表
   public Observable<List<MMStoreBean>> getMMStoreList() {
     return XlmmRetrofitClient.getService()
-        .getMMStoreList()
+            .getMMStoreList()
+            .compose(new DefaultTransform<>());
+  }
+
+  /*//得到默认选品列表
+  public Observable<List<MMChooselistBean>> getMMChooseList() {
+    return XlmmRetrofitClient.getService()
+        .getMMChooseList()
         .compose(new DefaultTransform<>());
   }
 
@@ -58,14 +58,35 @@ public class MMProductModel {
     return XlmmRetrofitClient.getService()
         .getMMChooseLadyOrChildList(category)
         .compose(new DefaultTransform<>());
-  }
+  }*/
 
   //选品女装或者童装列表排序
-  public Observable<List<MMChooselistBean>> getMMChooseLadyOrChildSortListSort(
-      String sort_field, String category) {
-    return XlmmRetrofitClient.getService()
-        .getMMChooseLadyOrChildSortListSort(sort_field, category)
-        .compose(new DefaultTransform<>());
+  public Observable<MMChooselistBean> getMMChooseLadyOrChildSortListSort(
+      String sort_field, String category, String page, String pagesize) {
+    if((sort_field == null) || (sort_field.isEmpty())){
+      if((category == null) || (category.isEmpty())){
+        return XlmmRetrofitClient.getService()
+                .getMMChooseList(page, pagesize)
+                .compose(new DefaultTransform<>());
+      }
+      else{
+        return XlmmRetrofitClient.getService()
+                .getMMChooseLadyOrChildList(category, page, pagesize)
+                .compose(new DefaultTransform<>());
+      }
+    }
+    else {
+      if((category == null) || (category.isEmpty())){
+        return XlmmRetrofitClient.getService()
+                .getMMChooseSortList(sort_field, page, pagesize)
+                .compose(new DefaultTransform<>());
+      }
+      else {
+        return XlmmRetrofitClient.getService()
+                .getMMChooseLadyOrChildSortListSort(sort_field, category, page, pagesize)
+                .compose(new DefaultTransform<>());
+      }
+    }
   }
 
   //MM上架商品到商铺
