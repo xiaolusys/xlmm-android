@@ -156,7 +156,9 @@ public class CarryLogCashbackFragment extends Fragment {
         .subscribe(new ServiceResponse<ClickcarryBean>() {
           @Override public void onNext(ClickcarryBean carryLogListBean) {
             if (carryLogListBean != null) {
-              adapter.update(carryLogListBean.getResults());
+              if (null != carryLogListBean.getResults()) {
+                adapter.update(carryLogListBean.getResults());
+              }
               if (null != carryLogListBean.getNext()) {
               } else {
                 Toast.makeText(context, "没有更多了", Toast.LENGTH_SHORT).show();

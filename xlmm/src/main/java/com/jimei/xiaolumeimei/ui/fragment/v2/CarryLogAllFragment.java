@@ -144,7 +144,9 @@ public class CarryLogAllFragment extends Fragment {
           @Override public void onNext(CarryLogListBean carryLogListBean) {
             if (carryLogListBean != null) {
               if (null != carryLogListBean.getNext()) {
-                adapter.update(carryLogListBean.getResults());
+                if (null != carryLogListBean.getResults()) {
+                  adapter.update(carryLogListBean.getResults());
+                }
               } else {
                 Toast.makeText(context, "没有更多了", Toast.LENGTH_SHORT).show();
                 xRecyclerView.post(xRecyclerView::loadMoreComplete);

@@ -157,7 +157,9 @@ public class CarryLogCommissionFragment extends Fragment {
         .subscribe(new ServiceResponse<OderCarryBean>() {
           @Override public void onNext(OderCarryBean carryLogListBean) {
             if (carryLogListBean != null) {
-              adapter.update(carryLogListBean.getResults());
+              if (null != carryLogListBean.getResults()) {
+                adapter.update(carryLogListBean.getResults());
+              }
               if (null != carryLogListBean.getNext()) {
               } else {
                 Toast.makeText(context, "没有更多了", Toast.LENGTH_SHORT).show();
