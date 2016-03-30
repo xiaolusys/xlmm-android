@@ -7,13 +7,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import butterknife.Bind;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
 import com.jimei.xiaolumeimei.R;
@@ -34,11 +33,11 @@ import com.jimei.xiaolumeimei.widget.SmoothCheckBox;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.pingplusplus.android.PaymentActivity;
-import com.squareup.okhttp.ResponseBody;
-import java.io.IOException;
-import java.math.BigDecimal;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -409,7 +408,13 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
       case R.id.confirm:
         if (isHaveAddress) {
 
+          if (!isCoupon && !isBudget && !isWx && !isAlipay) {
+            JUtils.Toast("请选择支付方式");
+            return;
+          }
+
           if (isCoupon) {
+
             if (!isAlipay && !isWx && !isBudget) {
               if (paymentInfo == 0) {
                 pay_extras = "pid:"
@@ -444,17 +449,29 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 JUtils.Toast("金额不足,可以选择下面一种支付方式混合支付");
               }
             } else {
+
               pay_extras = "pid:"
-                  + 2
-                  + ":couponid:"
-                  + coupon_id
-                  + ":value:"
-                  + coupon_price
-                  + ";"
-                  + APP_PAY+appcut+";"
-                  + BUDGET_PAY
-                  + yue
-                  + ";";
+                      + 2
+                      + ":couponid:"
+                      + coupon_id
+                      + ":value:"
+                      + coupon_price
+                      + ";"
+                      + APP_PAY+appcut+";"
+                      ;
+              if (isBudget) {
+                pay_extras = "pid:"
+                    + 2
+                    + ":couponid:"
+                    + coupon_id
+                    + ":value:"
+                    + coupon_price
+                    + ";"
+                    + APP_PAY+appcut+";"
+                    + BUDGET_PAY
+                    + yue
+                    + ";";
+              }
               if (paymentInfo == 0) {
                 channel = BUDGET;
               }

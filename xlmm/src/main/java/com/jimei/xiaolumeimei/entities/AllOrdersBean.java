@@ -103,9 +103,9 @@ public class AllOrdersBean {
     @SerializedName("buyer_id") private int mBuyerId;
     @SerializedName("channel") private String mChannel;
     @SerializedName("payment") private double mPayment;
-    @SerializedName("post_fee") private int mPostFee;
+    @SerializedName("post_fee") private double mPostFee;
     @SerializedName("total_fee") private double mTotalFee;
-    @SerializedName("discount_fee") private int mDiscountFee;
+    @SerializedName("discount_fee") private double mDiscountFee;
     @SerializedName("status") private int mStatus;
     @SerializedName("status_display") private String mStatusDisplay;
     @SerializedName("order_pic") private String mOrderPic;
@@ -174,17 +174,12 @@ public class AllOrdersBean {
       this.mPayment = payment;
     }
 
-    public void setPostFee(int postFee) {
-      this.mPostFee = postFee;
-    }
+
 
     public void setTotalFee(double totalFee) {
       this.mTotalFee = totalFee;
     }
 
-    public void setDiscountFee(int discountFee) {
-      this.mDiscountFee = discountFee;
-    }
 
     public void setStatus(int status) {
       this.mStatus = status;
@@ -286,7 +281,7 @@ public class AllOrdersBean {
       return mPayment;
     }
 
-    public int getPostFee() {
+    public double getPostFee() {
       return mPostFee;
     }
 
@@ -294,7 +289,7 @@ public class AllOrdersBean {
       return mTotalFee;
     }
 
-    public int getDiscountFee() {
+    public double getDiscountFee() {
       return mDiscountFee;
     }
 
