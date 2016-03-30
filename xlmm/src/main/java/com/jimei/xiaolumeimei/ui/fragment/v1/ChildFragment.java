@@ -191,7 +191,11 @@ public class ChildFragment extends Fragment {
 
           @Override public void onCompleted() {
             super.onCompleted();
-            xRecyclerView.post(xRecyclerView::loadMoreComplete);
+            try {
+              xRecyclerView.post(xRecyclerView::loadMoreComplete);
+            } catch (Exception e) {
+              e.printStackTrace();
+            }
           }
         });
   }
