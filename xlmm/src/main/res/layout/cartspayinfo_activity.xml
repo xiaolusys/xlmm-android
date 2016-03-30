@@ -142,11 +142,18 @@
           android:orientation="horizontal"
           android:layout_height="88px">
 
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="APP支付优惠"
+            />
+
         <TextView
+            android:id="@+id/tv_app_discount"
             android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="App支付立减两元"
+            android:text="-2元"
+            android:textColor="@color/colorAccent"
         /></RelativeLayout>
       <include layout="@layout/common_gap"/>
       <RelativeLayout
@@ -171,16 +178,6 @@
 
       </RelativeLayout>
 
-      <TextView
-          android:id="@+id/total_price_all"
-          android:layout_marginTop="8dp"
-          android:layout_marginBottom="8dp"
-          android:layout_gravity="end"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text=""
-          android:padding="8dp"
-      />
       <include
           layout="@layout/common_gap"/>
       <RelativeLayout
@@ -202,10 +199,23 @@
             android:layout_marginRight="12px"
             android:layout_width="40px"
             android:layout_height="40px"
+            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             app:color_checked="@color/colorAccent" />
 
       </RelativeLayout>
+
+      <TextView
+          android:id="@+id/total_price_all"
+          android:layout_marginTop="8dp"
+          android:layout_marginBottom="8dp"
+          android:layout_gravity="end"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text=""
+          android:padding="8dp"
+      />
+
 
       <include layout="@layout/common_gap" />
       <RelativeLayout

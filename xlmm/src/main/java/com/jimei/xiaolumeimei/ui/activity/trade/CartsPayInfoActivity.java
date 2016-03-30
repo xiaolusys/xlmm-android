@@ -79,6 +79,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.go_main) Button goMain;
   @Bind(R.id.empty_content) RelativeLayout emptyContent;
   @Bind(R.id.scb) SmoothCheckBox scb;
+  @Bind(R.id.tv_app_discount) TextView tv_app_discount;
 
   @Bind(R.id.extra_budget) TextView extraBudget;
   private boolean isAlipay, isWx, isBudget;
@@ -160,7 +161,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
               JUtils.Log(TAG, "合计" + (cartsPayinfoBean.getTotalFee()));
               JUtils.Log(TAG, "已节省" + jieshengjine);
 
-              jieshengjine = cartsPayinfoBean.getDiscountFee();
+              tv_app_discount.setText("-"+discount_fee+"元");
               totalPrice.setText("¥" + paymentInfo);
               tv_postfee.setText("¥" + post_fee + "元");
               totalPrice_all.setText("合计: ¥" + (cartsPayinfoBean.getTotalFee()) +
@@ -220,6 +221,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     } else {
                       tv_coupon.setText("无可用优惠券");
                       coupon_layout.setOnClickListener(null);
+                      pay_extras = "";
                     }
                   }
 
@@ -253,7 +255,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                       discount_feeInfo =
                           discount_feeInfo + payExtrasEntityApps.get(i).getValue();
                       discount_fee = discount_feeInfo + "";
-                      JUtils.Log(TAG, "discount_fee" + discount_fee);
+                      JUtils.Log(TAG, "discount_fee " + discount_fee);
                       //payment = paymentInfo + "";
                     } else {
                       //payment = "0";
@@ -289,7 +291,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
               }
 
               JUtils.Log(TAG, "discount_fee" + discount_fee);
-              JUtils.Log(TAG, cart_ids + "    " + addr_id + "    " + "    " +
+              JUtils.Log(TAG, "downLoadCartsInfo:"+cart_ids + "    " + addr_id + "    " + "    " +
                   payment + "    " + post_fee + "    " +
                   discount_fee + "    " + total_fee + "    " + uuid + "    " +
                   pay_extras);
@@ -724,7 +726,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
               JUtils.Log(TAG, payInfoBean.toString());
               Gson gson = new Gson();
               JUtils.Log(TAG, gson.toJson(payInfoBean.getCharge()));
-              if (!payInfoBean.getChannel().equals("budget")) {
+              if ((payInfoBean.getChannel() != null) && (!payInfoBean.getChannel().equals("budget"))) {
 
                 if (payInfoBean.getCode() > 0) {
                   JUtils.Toast(payInfoBean.getInfo());
