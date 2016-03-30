@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import butterknife.Bind;
+
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.StartBean;
@@ -18,8 +18,11 @@ import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
+
 import java.util.Timer;
 import java.util.TimerTask;
+
+import butterknife.Bind;
 import okhttp3.Call;
 import rx.schedulers.Schedulers;
 
@@ -133,6 +136,6 @@ public class SplashActivity extends BaseSwipeBackCompatActivity {
   }
 
   @Override protected int getContentViewLayoutID() {
-    return 0;
+    return R.layout.activity_splash;
   }
 }
