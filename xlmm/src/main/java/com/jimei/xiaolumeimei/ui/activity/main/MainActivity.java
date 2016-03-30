@@ -131,16 +131,13 @@ public class MainActivity extends BaseActivity
 
         //UmengUpdateAgent.setUpdateCheckConfig(false);
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(500 * 60);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                UmengUpdateAgent.update(MainActivity.this);
+        new Thread(() -> {
+            try {
+                Thread.sleep(500 * 60);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+            UmengUpdateAgent.update(MainActivity.this);
         }).start();
 
 
