@@ -110,7 +110,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   private double jieshengjine;
   private boolean isEnough;
   private String budgetCash;
-  private double real_use_yue;
+  private double value;
   private double yue;
   private double appcut;
   private boolean useCouponAllowed = false;
@@ -332,7 +332,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     if(Double.compare(coupon_price + appcut - paymentInfo, 0) >= 0 )
     {
       yue = 0;
-      real_use_yue = 0;
       paymentInfo = 0;
     }
     else{
@@ -344,17 +343,16 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         } else {
           paymentInfo = paymentInfo - coupon_price - appcut - yue;
         }
-        real_use_yue = yue;
       }
       else{
         if (Double.compare(yue, paymentInfo - coupon_price - appcut) >= 0) {
           yue = paymentInfo - coupon_price - appcut;
         }
         paymentInfo = paymentInfo - coupon_price - appcut;
-        real_use_yue = 0;
+
       }
     }
-    JUtils.Log(TAG, "real use yue:"+real_use_yue + " paymentInfo:"+paymentInfo);
+    JUtils.Log(TAG, "real use yue:"+yue + " paymentInfo:"+paymentInfo);
 
     tv_app_discount.setText("-"+(double)(Math.round(appcut * 100))/100+"元");
     extraBudget.setText("余额抵扣:   余额剩余" + budgetCash + " 本次可使用 " + yue);
@@ -418,7 +416,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     + coupon_price
                     + ";"
                     + APP_PAY+appcut+";";
-                payV2(BUDGET, paymentInfo+real_use_yue+"", pay_extras, (coupon_price + appcut) + "");
+                payV2(BUDGET, paymentInfo+yue+"", pay_extras, (coupon_price + appcut) + "");
               } else {
                 JUtils.Toast("优惠券金额不足,可以选择其它混合支付");
               }
@@ -437,7 +435,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     + ";";
 
                 JUtils.Log(TAG, pay_extras);
-                payV2(BUDGET, paymentInfo+real_use_yue + "", pay_extras, (coupon_price + appcut) + "");
+                payV2(BUDGET, paymentInfo+yue + "", pay_extras, (coupon_price + appcut) + "");
               } else {
                 JUtils.Toast("金额不足,可以选择下面一种支付方式混合支付");
               }
@@ -464,18 +462,18 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 }
               }
 
-              payV2(channel, (paymentInfo+real_use_yue) + "", pay_extras,
+              payV2(channel, (paymentInfo+yue) + "", pay_extras,
                   (coupon_price + appcut) + "");
             }
           } else {
 
             if (isAlipay && !isBudget && !isWx) {
               pay_extras = APP_PAY + appcut+";";
-              payV2(ALIPAY, (paymentInfo+real_use_yue) + "", pay_extras, appcut + "");
+              payV2(ALIPAY, (paymentInfo+yue) + "", pay_extras, appcut + "");
             }
             if (isWx && !isAlipay && !isBudget) {
               pay_extras = APP_PAY+ appcut+";";
-              payV2(WX, (paymentInfo+real_use_yue) + "", pay_extras, appcut + "");
+              payV2(WX, (paymentInfo+yue) + "", pay_extras, appcut + "");
             }
 
             if (isBudget) {
@@ -495,7 +493,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                   }
                 }
                 pay_extras = APP_PAY+ appcut+";" + BUDGET_PAY + yue + ";";
-                payV2(channel, (paymentInfo+real_use_yue) + "", pay_extras, appcut + "");
+                payV2(channel, (paymentInfo+yue) + "", pay_extras, appcut + "");
               }
 
             }
