@@ -491,8 +491,8 @@ public class TodayListView extends ViewImpl {
 
                 if (!TextUtils.isEmpty(postActivityBean.get(0).getMaskLink())) {
 
-                  MastFragment.newInstance("test");
-
+                  MastFragment test = MastFragment.newInstance("test");
+                  test.show(context.getFragmentManager(),"test");
                 }
               } else {
                 post_activity_layout.setVisibility(View.INVISIBLE);
