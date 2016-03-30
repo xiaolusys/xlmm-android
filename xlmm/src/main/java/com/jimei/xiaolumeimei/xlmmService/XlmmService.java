@@ -52,6 +52,7 @@ import com.jimei.xiaolumeimei.entities.ShareProductBean;
 import com.jimei.xiaolumeimei.entities.ShoppingListBean;
 import com.jimei.xiaolumeimei.entities.SmsLoginBean;
 import com.jimei.xiaolumeimei.entities.SmsLoginUserBean;
+import com.jimei.xiaolumeimei.entities.StartBean;
 import com.jimei.xiaolumeimei.entities.UserAccountBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
@@ -748,6 +749,7 @@ public interface XlmmService {
       @Field("template_id")String template_id
   );
 
-
+  @GET("/rest/v1/activitys/startup_diagrams")
+  Observable<StartBean> getStarsBean();
 
 }
