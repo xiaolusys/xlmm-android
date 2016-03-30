@@ -110,7 +110,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   private double jieshengjine;
   private boolean isEnough;
   private String budgetCash;
-  private double value;
+  private double real_use_yue;
   private double yue;
   private double appcut;
   private boolean useCouponAllowed = false;
@@ -332,6 +332,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     if(Double.compare(coupon_price + appcut - paymentInfo, 0) >= 0 )
     {
       yue = 0;
+      real_use_yue = 0;
       paymentInfo = 0;
     }
     else{
@@ -343,16 +344,18 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         } else {
           paymentInfo = paymentInfo - coupon_price - appcut - yue;
         }
+        real_use_yue = yue;
       }
       else{
         if (Double.compare(yue, paymentInfo - coupon_price - appcut) >= 0) {
           yue = paymentInfo - coupon_price - appcut;
         }
         paymentInfo = paymentInfo - coupon_price - appcut;
-
+        real_use_yue = 0;
       }
     }
-    JUtils.Log(TAG, "real use yue:"+yue + " paymentInfo:"+paymentInfo);
+
+    JUtils.Log(TAG, "yue:"+yue+" real use yue:"+real_use_yue + " paymentInfo:"+paymentInfo);
 
     tv_app_discount.setText("-"+(double)(Math.round(appcut * 100))/100+"元");
     extraBudget.setText("余额抵扣:   余额剩余" + budgetCash + " 本次可使用 " + yue);
