@@ -149,14 +149,22 @@ public class CarryLogAllFragment extends Fragment {
                 }
               } else {
                 Toast.makeText(context, "没有更多了", Toast.LENGTH_SHORT).show();
-                xRecyclerView.post(xRecyclerView::loadMoreComplete);
+                try {
+                  xRecyclerView.post(xRecyclerView::loadMoreComplete);
+                } catch (Exception e) {
+                  e.printStackTrace();
+                }
               }
             }
           }
 
           @Override public void onCompleted() {
             super.onCompleted();
-            xRecyclerView.post(xRecyclerView::loadMoreComplete);
+            try {
+              xRecyclerView.post(xRecyclerView::loadMoreComplete);
+            } catch (Exception e) {
+              e.printStackTrace();
+            }
           }
         });
   }
