@@ -354,7 +354,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         real_use_yue = 0;
       }
     }
-    JUtils.Log(TAG, "real use yue:"+real_use_yue + " paymentInfo:"+paymentInfo);
+    JUtils.Log(TAG, "yue:"+yue+" real use yue:"+real_use_yue + " paymentInfo:"+paymentInfo);
 
     tv_app_discount.setText("-"+(double)(Math.round(appcut * 100))/100+"元");
     extraBudget.setText("余额抵扣:   余额剩余" + budgetCash + " 本次可使用 " + yue);
