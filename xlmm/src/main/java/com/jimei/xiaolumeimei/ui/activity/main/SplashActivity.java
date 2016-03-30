@@ -97,17 +97,19 @@ public class SplashActivity extends BaseSwipeBackCompatActivity {
                       }
 
                       @Override public void onResponse(Bitmap response) {
-                        imageView1.setImageBitmap(response);
+                        if (null != response) {
+                          imageView1.setImageBitmap(response);
 
-                        new Timer().schedule(new TimerTask() {
-                          @Override public void run() {
-                            startActivity(
-                                new Intent(SplashActivity.this, MainActivity.class));
-                            finish();
-                            overridePendingTransition(android.R.anim.fade_in,
-                                android.R.anim.fade_out);
-                          }
-                        }, 2000);
+                          new Timer().schedule(new TimerTask() {
+                            @Override public void run() {
+                              startActivity(
+                                  new Intent(SplashActivity.this, MainActivity.class));
+                              finish();
+                              overridePendingTransition(android.R.anim.fade_in,
+                                  android.R.anim.fade_out);
+                            }
+                          }, 2000);
+                        }
                       }
                     });
               } catch (Exception e) {

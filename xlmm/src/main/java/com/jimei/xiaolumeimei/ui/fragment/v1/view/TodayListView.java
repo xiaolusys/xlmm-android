@@ -323,6 +323,7 @@ public class TodayListView extends ViewImpl {
           @Override public void onNext(List<PostActivityBean> postActivityBean) {
             try {
               if (null != postActivityBean) {
+
                 post_activity_layout.setVisibility(View.VISIBLE);
                 ImageView imageView;
                 List<ImageView> imageViewList = new ArrayList<>();
@@ -486,6 +487,12 @@ public class TodayListView extends ViewImpl {
                           }
                         }
                       });
+                }
+
+                if (!TextUtils.isEmpty(postActivityBean.get(0).getMaskLink())) {
+
+                  MastFragment.newInstance("test");
+
                 }
               } else {
                 post_activity_layout.setVisibility(View.INVISIBLE);
