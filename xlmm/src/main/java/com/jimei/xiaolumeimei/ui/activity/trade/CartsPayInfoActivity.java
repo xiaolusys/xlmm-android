@@ -334,7 +334,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
       yue = 0;
       real_use_yue = 0;
       paymentInfo = 0;
-      jieshengjine = paymentInfo;
+      jieshengjine = payment;
     }
     else{
       //算余额
