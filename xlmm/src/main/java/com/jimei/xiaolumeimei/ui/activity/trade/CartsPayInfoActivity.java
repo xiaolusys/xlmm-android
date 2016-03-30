@@ -327,27 +327,35 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
   private void calcAllPrice() {
     jieshengjine = coupon_price + appcut;
+    paymentInfo = payment;
 
     if(Double.compare(coupon_price + appcut - paymentInfo, 0) >= 0 )
     {
       yue = 0;
       paymentInfo = 0;
-      channel = BUDGET;
     }
     else{
-      if(Double.compare(yue, paymentInfo - coupon_price - appcut) >=0) {
-        yue = paymentInfo - coupon_price - appcut;
-        paymentInfo = 0;
-        channel = BUDGET;
+      //算余额
+      if(isBudget) {
+        if (Double.compare(yue, paymentInfo - coupon_price - appcut) >= 0) {
+          yue = paymentInfo - coupon_price - appcut;
+          paymentInfo = 0;
+        } else {
+          paymentInfo = paymentInfo - coupon_price - appcut - yue;
+        }
       }
-      else {
-        paymentInfo = paymentInfo - yue;
+      else{
+        if (Double.compare(yue, paymentInfo - coupon_price - appcut) >= 0) {
+          yue = paymentInfo - coupon_price - appcut;
+        }
+        paymentInfo = paymentInfo - coupon_price - appcut;
+
       }
     }
     JUtils.Log(TAG, "real use yue:"+yue + " paymentInfo:"+paymentInfo);
 
     tv_app_discount.setText("-"+(double)(Math.round(appcut * 100))/100+"元");
-    extraBudget.setText("余额抵扣:   余额剩余" + budgetCash + " 本次使用 " + yue);
+    extraBudget.setText("余额抵扣:   余额剩余" + budgetCash + " 本次可使用 " + yue);
     totalPrice.setText("¥" + (double)(Math.round(paymentInfo * 100))/100);
     totalPrice_all.setText("合计: ¥" + (double)(Math.round(paymentInfo * 100))/100 + "");
     jiesheng.setText("已节省" + (double)(Math.round(jieshengjine * 100))/100 + "");
@@ -408,7 +416,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     + coupon_price
                     + ";"
                     + APP_PAY+appcut+";";
-                payV2(BUDGET, paymentInfo+"", pay_extras, (coupon_price + appcut) + "");
+                payV2(BUDGET, paymentInfo+yue+"", pay_extras, (coupon_price + appcut) + "");
               } else {
                 JUtils.Toast("优惠券金额不足,可以选择其它混合支付");
               }
@@ -427,7 +435,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     + ";";
 
                 JUtils.Log(TAG, pay_extras);
-                payV2(BUDGET, paymentInfo + "", pay_extras, (coupon_price + appcut) + "");
+                payV2(BUDGET, paymentInfo+yue + "", pay_extras, (coupon_price + appcut) + "");
               } else {
                 JUtils.Toast("金额不足,可以选择下面一种支付方式混合支付");
               }
@@ -454,18 +462,18 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 }
               }
 
-              payV2(channel, (paymentInfo) + "", pay_extras,
+              payV2(channel, (paymentInfo+yue) + "", pay_extras,
                   (coupon_price + appcut) + "");
             }
           } else {
 
             if (isAlipay && !isBudget && !isWx) {
               pay_extras = APP_PAY + appcut+";";
-              payV2(ALIPAY, (paymentInfo) + "", pay_extras, appcut + "");
+              payV2(ALIPAY, (paymentInfo+yue) + "", pay_extras, appcut + "");
             }
             if (isWx && !isAlipay && !isBudget) {
               pay_extras = APP_PAY+ appcut+";";
-              payV2(WX, (paymentInfo) + "", pay_extras, appcut + "");
+              payV2(WX, (paymentInfo+yue) + "", pay_extras, appcut + "");
             }
 
             if (isBudget) {
@@ -473,16 +481,19 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 JUtils.Toast("余额不足,请选择下面一种方式一起支付");
               }
               else{
-                channel = BUDGET;
-
-                if (isAlipay) {
-                  channel = ALIPAY;
+                if (paymentInfo == 0) {
+                  channel = BUDGET;
                 }
-                else if(isWx){
-                  channel = WX;
+                else {
+
+                  if (isAlipay) {
+                    channel = ALIPAY;
+                  } else if (isWx) {
+                    channel = WX;
+                  }
                 }
                 pay_extras = APP_PAY+ appcut+";" + BUDGET_PAY + yue + ";";
-                payV2(channel, (paymentInfo) + "", pay_extras, appcut + "");
+                payV2(channel, (paymentInfo+yue) + "", pay_extras, appcut + "");
               }
 
             }
@@ -567,10 +578,10 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
   private void payV2(String pay_method, String paymentprice_v2, String pay_extrasaa,
       String discount_fee_price) {
-    //JUtils.Log("CartsPayinfo",
-    //    cart_ids + "    " + addr_id + "    " + pay_method + "    " +
-    //        payment + "    " + post_fee + "    " +
-    //        discount_fee + "    " + total_fee + "    " + uuid + "  " + pay_extrasaa);
+    JUtils.Log("CartsPayinfo",
+        cart_ids + "    " + addr_id + "    " + pay_method + "    " +
+                paymentprice_v2 + "    " + post_fee + "    " +
+                discount_fee_price + "    " + total_fee + "    " + uuid + "  " + pay_extrasaa);
 
     showIndeterminateProgressDialog(false);
     Subscription subscription = TradeModel.getInstance()
@@ -822,6 +833,9 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 .subscribe(new ServiceResponse<CartsPayinfoBean>() {
                   @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
                     if (cartsPayinfoBean != null) {
+                      payment = cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
+                              - cartsPayinfoBean.getDiscountFee();
+
                       if (TextUtils.isEmpty(cartsPayinfoBean.getmCoupon_message())) {
                         if ((coupon_id == null) || coupon_id.isEmpty() || (0
                             == Double.compare(coupon_price, 0))) {
@@ -985,5 +999,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     } else {
       isBudget = false;
     }
+    calcAllPrice();
   }
 }
