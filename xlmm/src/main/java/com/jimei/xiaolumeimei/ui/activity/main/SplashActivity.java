@@ -10,9 +10,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import butterknife.Bind;
+
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.StartBean;
@@ -20,23 +18,21 @@ import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
+
 import java.util.Timer;
 import java.util.TimerTask;
+
+import butterknife.Bind;
 import okhttp3.Call;
 import rx.schedulers.Schedulers;
 
 /**
  * Created by 优尼世界 on 15/12/29.
- * <p/>
+ * <p>
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class SplashActivity extends BaseSwipeBackCompatActivity {
-  @Bind(R.id.imageView1) ImageView imageView1;
-  @Bind(R.id.imageView2) ImageView imageView2;
-  @Bind(R.id.textView4) TextView textView4;
-  @Bind(R.id.tv_version) TextView tvVersion;
-  @Bind(R.id.textView3) TextView textView3;
-  @Bind(R.id.rl_splash) RelativeLayout rlSplash;//loading 页面
+  @Bind(R.id.imageView_startup) ImageView imageView_startup;
 
   //@Bind(R.id.rl_splash)  RelativeLayout rl_splash;
 
@@ -66,13 +62,21 @@ public class SplashActivity extends BaseSwipeBackCompatActivity {
       window.setNavigationBarColor(Color.TRANSPARENT);
     }
 
-    new Timer().schedule(new TimerTask() {
-      @Override public void run() {
-        startActivity(new Intent(SplashActivity.this, MainActivity.class));
-        finish();
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-      }
-    }, 2000);
+    //    new Timer().schedule(new TimerTask() {
+    //      @Override public void run() {
+    //        startActivity(new Intent(SplashActivity.this, MainActivity.class));
+    //        finish();
+    //        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    //      }
+    //    }, 2000);
+  }
+
+  @Override protected boolean toggleOverridePendingTransition() {
+    return false;
+  }
+
+  @Override protected TransitionMode getOverridePendingTransitionMode() {
+    return null;
   }
 
   @Override protected void setListener() {
@@ -97,7 +101,7 @@ public class SplashActivity extends BaseSwipeBackCompatActivity {
                       }
 
                       @Override public void onResponse(Bitmap response) {
-                        imageView1.setImageBitmap(response);
+                        imageView_startup.setImageBitmap(response);
 
                         new Timer().schedule(new TimerTask() {
                           @Override public void run() {
@@ -133,13 +137,5 @@ public class SplashActivity extends BaseSwipeBackCompatActivity {
 
   @Override protected int getContentViewLayoutID() {
     return R.layout.activity_splash;
-  }
-
-  @Override protected boolean toggleOverridePendingTransition() {
-    return false;
-  }
-
-  @Override protected TransitionMode getOverridePendingTransitionMode() {
-    return null;
   }
 }
