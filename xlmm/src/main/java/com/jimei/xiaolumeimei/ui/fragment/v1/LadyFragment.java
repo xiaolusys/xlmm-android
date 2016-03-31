@@ -133,7 +133,7 @@ public class LadyFragment extends Fragment {
         .subscribe(new ServiceResponse<LadyListBean>() {
           @Override public void onError(Throwable e) {
             super.onError(e);
-            e.printStackTrace();
+            JUtils.Log(TAG, "load getLadyList onError");
             JUtils.Toast("请检查网络状况,尝试下拉刷新");
           }
 
