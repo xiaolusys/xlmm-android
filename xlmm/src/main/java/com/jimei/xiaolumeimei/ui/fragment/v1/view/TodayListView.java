@@ -15,9 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import cn.iwgang.countdownview.CountdownView;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -47,6 +45,7 @@ import com.squareup.okhttp.ResponseBody;
 import com.victor.loading.rotate.RotateLoading;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -55,6 +54,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import cn.iwgang.countdownview.CountdownView;
 import okhttp3.Call;
 import rx.Observable;
 import rx.Subscription;
@@ -93,6 +96,7 @@ public class TodayListView extends ViewImpl {
   private String cookies;
   private String domain;
   private SharedPreferences sharedPreferencesMask;
+  List<ImageView> imageViewList = new ArrayList<>();
   private Subscription subscribe4;
   private Subscription subscription5;
   private Subscription subscribe6;
@@ -330,7 +334,7 @@ public class TodayListView extends ViewImpl {
               if (null != postActivityBean) {
                 post_activity_layout.setVisibility(View.VISIBLE);
                 ImageView imageView;
-                List<ImageView> imageViewList = new ArrayList<>();
+
                 for (int i = 0; i < postActivityBean.size(); i++) {
                   imageView = new ImageView(context);
                   imageViewList.add(imageView);
@@ -615,6 +619,11 @@ public class TodayListView extends ViewImpl {
             }
           }
         });
+
+    for (int i = 0; i < imageViewList.size(); i++) {
+      imageViewList.get(i).setVisibility(View.GONE);
+    }
+    imageViewList.clear();
     subscribe6 = ActivityModel.getInstance()
         .getPostActivity()
         .subscribeOn(Schedulers.io())
@@ -624,7 +633,6 @@ public class TodayListView extends ViewImpl {
               if (null != postActivityBean) {
                 post_activity_layout.setVisibility(View.VISIBLE);
                 ImageView imageView;
-                List<ImageView> imageViewList = new ArrayList<>();
                 for (int i = 0; i < postActivityBean.size(); i++) {
                   imageView = new ImageView(context);
                   imageViewList.add(imageView);
@@ -709,23 +717,27 @@ public class TodayListView extends ViewImpl {
                                             Bundle bundle = new Bundle();
                                             bundle.putString("login", "main");
                                             intent.putExtras(bundle);
-                                            context.startActivity(intent);
+                                            if (context != null) {
+                                              context.startActivity(intent);
+                                            }
                                           } else {
                                             JUtils.Toast("登录成功,前往绑定手机号后才可参加活动");
                                             Intent intent = new Intent(context,
                                                 WxLoginBindPhoneActivity.class);
-                                            if (null
-                                                != ((MainActivity) context).getUserInfoBean()) {
+                                            if (((MainActivity) context) != null && null
+                                                    != ((MainActivity) context).getUserInfoBean()) {
                                               Bundle bundle = new Bundle();
                                               bundle.putString("headimgurl",
-                                                  ((MainActivity) context).getUserInfoBean()
-                                                      .getThumbnail());
+                                                      ((MainActivity) context).getUserInfoBean()
+                                                              .getThumbnail());
                                               bundle.putString("nickname",
-                                                  ((MainActivity) context).getUserInfoBean()
-                                                      .getNick());
+                                                      ((MainActivity) context).getUserInfoBean()
+                                                              .getNick());
                                               intent.putExtras(bundle);
                                             }
-                                            context.startActivity(intent);
+                                            if (context != null) {
+                                              context.startActivity(intent);
+                                            }
                                           }
                                         }
                                       } else {

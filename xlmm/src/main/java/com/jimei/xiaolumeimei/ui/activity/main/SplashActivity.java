@@ -1,11 +1,9 @@
 package com.jimei.xiaolumeimei.ui.activity.main;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -13,18 +11,11 @@ import android.widget.ImageView;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.entities.StartBean;
-import com.jimei.xiaolumeimei.model.ActivityModel;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.BitmapCallback;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 import butterknife.Bind;
-import okhttp3.Call;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by 优尼世界 on 15/12/29.
@@ -62,13 +53,13 @@ public class SplashActivity extends BaseSwipeBackCompatActivity {
       window.setNavigationBarColor(Color.TRANSPARENT);
     }
 
-    //    new Timer().schedule(new TimerTask() {
-    //      @Override public void run() {
-    //        startActivity(new Intent(SplashActivity.this, MainActivity.class));
-    //        finish();
-    //        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-    //      }
-    //    }, 2000);
+        new Timer().schedule(new TimerTask() {
+          @Override public void run() {
+            startActivity(new Intent(SplashActivity.this, MainActivity.class));
+            finish();
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+          }
+        }, 2000);
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
@@ -85,50 +76,50 @@ public class SplashActivity extends BaseSwipeBackCompatActivity {
 
   @Override protected void initData() {
 
-    ActivityModel.getInstance()
-        .getStarsBean()
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<StartBean>() {
-          @Override public void onNext(StartBean startBean) {
-            if (null != startBean && !TextUtils.isEmpty(startBean.getPicture())) {
-              try {
-                OkHttpUtils.get()
-                    .url(startBean.getPicture())
-                    .build()
-                    .execute(new BitmapCallback() {
-                      @Override public void onError(Call call, Exception e) {
-                        e.printStackTrace();
-                      }
-
-                      @Override public void onResponse(Bitmap response) {
-                        imageView_startup.setImageBitmap(response);
-
-                        new Timer().schedule(new TimerTask() {
-                          @Override public void run() {
-                            startActivity(
-                                new Intent(SplashActivity.this, MainActivity.class));
-                            finish();
-                            overridePendingTransition(android.R.anim.fade_in,
-                                android.R.anim.fade_out);
-                          }
-                        }, 2000);
-                      }
-                    });
-              } catch (Exception e) {
-                e.printStackTrace();
-              }
-            } else {
-              new Timer().schedule(new TimerTask() {
-                @Override public void run() {
-                  startActivity(new Intent(SplashActivity.this, MainActivity.class));
-                  finish();
-                  overridePendingTransition(android.R.anim.fade_in,
-                      android.R.anim.fade_out);
-                }
-              }, 2000);
-            }
-          }
-        });
+//    ActivityModel.getInstance()
+//        .getStarsBean()
+//        .subscribeOn(Schedulers.io())
+//        .subscribe(new ServiceResponse<StartBean>() {
+//          @Override public void onNext(StartBean startBean) {
+//            if (null != startBean && !TextUtils.isEmpty(startBean.getPicture())) {
+//              try {
+//                OkHttpUtils.get()
+//                    .url(startBean.getPicture())
+//                    .build()
+//                    .execute(new BitmapCallback() {
+//                      @Override public void onError(Call call, Exception e) {
+//                        e.printStackTrace();
+//                      }
+//
+//                      @Override public void onResponse(Bitmap response) {
+//                        imageView_startup.setImageBitmap(response);
+//
+//                        new Timer().schedule(new TimerTask() {
+//                          @Override public void run() {
+//                            startActivity(
+//                                new Intent(SplashActivity.this, MainActivity.class));
+//                            finish();
+//                            overridePendingTransition(android.R.anim.fade_in,
+//                                android.R.anim.fade_out);
+//                          }
+//                        }, 2000);
+//                      }
+//                    });
+//              } catch (Exception e) {
+//                e.printStackTrace();
+//              }
+//            } else {
+//              new Timer().schedule(new TimerTask() {
+//                @Override public void run() {
+//                  startActivity(new Intent(SplashActivity.this, MainActivity.class));
+//                  finish();
+//                  overridePendingTransition(android.R.anim.fade_in,
+//                      android.R.anim.fade_out);
+//                }
+//              }, 2000);
+//            }
+//          }
+//        });
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
