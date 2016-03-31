@@ -59,7 +59,15 @@ public class UserWalletAdapter
     BudgetdetailBean.ResultsEntity resultsEntity = mList.get(position);
 
     holder.tvTime.setText(resultsEntity.getBudgetDate());
-    holder.tvPerson.setText(resultsEntity.getDesc());
+    holder.tvDesc.setText(resultsEntity.getDesc());
+
+    if(0 == resultsEntity.getStatus()) {
+      holder.tvStatus.setText("已确定");
+    } else if(1 == resultsEntity.getStatus()) {
+      holder.tvStatus.setText("已取消");
+    }else if(2 == resultsEntity.getStatus()){
+      holder.tvStatus.setText("待确定");
+    }
 
     if (0 == resultsEntity.getBudgetType()) {
 
@@ -78,7 +86,8 @@ public class UserWalletAdapter
 
     int id = R.layout.item_userwallet;
     @Bind(R.id.tv_time) TextView tvTime;
-    @Bind(R.id.tv_person) TextView tvPerson;
+    @Bind(R.id.tv_desc) TextView tvDesc;
+    @Bind(R.id.tv_status) TextView tvStatus;
     @Bind(R.id.tv_moneychange) TextView tvMoneychange;
 
     public UserWalletVH(View itemView) {
