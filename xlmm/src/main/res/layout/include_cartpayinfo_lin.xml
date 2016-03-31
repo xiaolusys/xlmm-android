@@ -1,50 +1,54 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/y55"
+    android:layout_height="175px"
     android:layout_gravity="bottom"
     android:background="#ffffff"
     android:orientation="vertical"
     android:gravity="center"
     app:layout_behavior=".behavior.QuickHideBehavior">
-  <include layout="@layout/common_gap"/>
-  <LinearLayout android:layout_width="match_parent"
+  <LinearLayout
+      android:layout_marginTop="19px"
+      android:layout_width="match_parent"
       android:orientation="horizontal"
       android:gravity="center"
-      android:layout_height="@dimen/y15"
+      android:layout_height="50px"
       >
     <TextView
         android:textColor="#26262e"
         android:layout_width="wrap_content"
         android:text="应付款金额"
-        android:layout_height="wrap_content"
+        android:layout_height="34px"
         />
     <TextView
+        android:layout_marginTop="2px"
         android:id="@+id/total_price"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:textColor="@color/colorPrimary"
         android:layout_width="wrap_content"
         android:text=""
-        android:layout_height="wrap_content"
+        android:layout_height="46px"
         />
 
     <TextView
+        android:layout_marginTop="5px"
         android:layout_marginLeft="8dp"
         android:id="@+id/jiehsneg"
-        android:textSize="15sp"
+        android:textSize="12sp"
         android:layout_width="wrap_content"
         android:text="已节省"
-        android:layout_height="wrap_content"
+        android:layout_height="34px"
         />
   </LinearLayout>
   <Button
-      android:layout_marginBottom="@dimen/y6"
+      android:layout_marginTop="16px"
+      android:layout_marginBottom="8px"
       android:textSize="20sp"
       android:textColor="@color/white"
       android:text="提交订单"
       android:id="@+id/confirm"
       android:layout_width="600px"
       android:background="@drawable/shape_common"
-      android:layout_height="@dimen/y20"
+      android:layout_height="74px"
       />
 </LinearLayout>
