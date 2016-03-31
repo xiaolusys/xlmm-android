@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:gravity="center"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ll"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
-  <ImageView
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-      xmlns:android="http://schemas.android.com/apk/res/android"
-      android:layout_width="wrap_content"
-      android:id="@+id/mask_image"
-      android:layout_height="wrap_content"
-      android:contentDescription="@string/huodong"/>
+    <ImageView
+        android:id="@+id/clear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_clear_white_36dp" />
+
+    <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/mask_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:contentDescription="@string/huodong"
+        android:scaleType="centerCrop" />
 </LinearLayout>

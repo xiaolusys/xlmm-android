@@ -11,15 +11,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.PostActivityBean;
 import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jude.utils.JUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
+
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import okhttp3.Call;
 import rx.schedulers.Schedulers;
 
@@ -32,6 +36,7 @@ public class MastFragment extends DialogFragment {
 
   @Bind(R.id.mask_image) ImageView maskImage;
   @Bind(R.id.ll) LinearLayout ll;
+  @Bind(R.id.clear)ImageView close;
 
   public static MastFragment newInstance(String title) {
     MastFragment todayFragment = new MastFragment();
@@ -76,11 +81,13 @@ public class MastFragment extends DialogFragment {
 
                         @Override public void onResponse(Bitmap response) {
                           if (null != response) {
+                            JUtils.Log("Mask","height:"+response.getHeight()+"  width:"+response.getWidth());
                             LinearLayout.LayoutParams layoutParams =
                                 new LinearLayout.LayoutParams(response.getWidth(),
-                                    response.getHeight());
+                                        response.getHeight());
                             maskImage.setLayoutParams(layoutParams);
                             maskImage.setImageBitmap(response);
+
                           }
                         }
                       });
@@ -91,6 +98,13 @@ public class MastFragment extends DialogFragment {
             }
           }
         });
+
+    close.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+
+      }
+    });
   }
 
   @Override public void onDestroyView() {
