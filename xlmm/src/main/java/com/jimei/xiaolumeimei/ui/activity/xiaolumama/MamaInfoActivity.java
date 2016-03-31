@@ -191,9 +191,6 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
                 (double) (Math.round(fortune.getMama_fortune().getCarry_value() * 100))
                     / 100) + "元");
 
-            tv_today_visit2.setText(
-                Integer.toString(fortune.getMama_fortune().getToday_visitor_num()));
-
             carrylogMoney =
                 ((double) (Math.round(fortune.getMama_fortune().getCarry_value() * 100))
                     / 100);

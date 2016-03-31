@@ -13,12 +13,19 @@
   <TextView
       android:layout_below="@id/tv_time"
       android:layout_width="wrap_content"
-      android:id="@+id/tv_person"
+      android:id="@+id/tv_desc"
+      android:layout_height="wrap_content"/>
+
+  <TextView
+      android:id="@+id/tv_status"
+      android:layout_alignBottom="@+id/tv_time"
+      android:layout_width="wrap_content"
+      android:layout_alignParentRight="true"
       android:layout_height="wrap_content"/>
 
   <TextView
       android:id="@+id/tv_moneychange"
-      android:layout_centerVertical="true"
+      android:layout_alignBottom="@+id/tv_desc"
       android:layout_width="wrap_content"
       android:layout_alignParentRight="true"
       android:layout_height="wrap_content"/>

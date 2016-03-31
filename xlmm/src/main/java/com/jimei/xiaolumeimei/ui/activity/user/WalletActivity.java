@@ -73,6 +73,10 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
               walletRcv.setVisibility(View.VISIBLE);
               ll_wallet_empty.setVisibility(View.INVISIBLE);
               adapter.update(budgetdetailBean.getResults());
+
+              if(budgetdetailBean.getNext() == null){
+                walletRcv.setLoadingMoreEnabled(false);
+              }
             }
             else{
               walletRcv.setVisibility(View.INVISIBLE);
