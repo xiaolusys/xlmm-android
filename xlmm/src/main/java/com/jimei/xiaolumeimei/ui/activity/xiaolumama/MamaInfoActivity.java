@@ -113,6 +113,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   private String from;
   private String actlink;
 
+
   @Override protected void setListener() {
     toolbar.setOnClickListener(this);
     tv_cashinfo.setOnClickListener(this);
@@ -163,7 +164,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
 
                 if (null != mmShoppingBean) {
                   title = (String) mmShoppingBean.getShopInfo().getName();
-                  sharelink = mmShoppingBean.getShopInfo().getShopLink();
+                  sharelink = mmShoppingBean.getShopInfo().getPreview_shop_link();
                   shareimg = mmShoppingBean.getShopInfo().getThumbnail();
                   desc = mmShoppingBean.getShopInfo().getDesc();
                 }

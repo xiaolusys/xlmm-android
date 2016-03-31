@@ -32,6 +32,16 @@ public class MMShoppingBean {
     @SerializedName("customer") private int mCustomer;
     @SerializedName("name") private Object mName;
     @SerializedName("shop_link") private String mShopLink;
+
+    public String getPreview_shop_link() {
+      return preview_shop_link;
+    }
+
+    public void setPreview_shop_link(String preview_shop_link) {
+      this.preview_shop_link = preview_shop_link;
+    }
+
+    @SerializedName("preview_shop_link") private String preview_shop_link;
     @SerializedName("id") private int mId;
     @SerializedName("thumbnail") private String mThumbnail;
     @SerializedName("desc") private String mDesc;
