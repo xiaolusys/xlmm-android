@@ -340,6 +340,7 @@ public abstract class BaseAppCompatActivity extends AutoLayoutActivity {
     try {
       if (this.mCompositeSubscription != null) {
         this.mCompositeSubscription.unsubscribe();
+        this.mCompositeSubscription = null;
       }
     } catch (Exception e) {
       e.printStackTrace();
