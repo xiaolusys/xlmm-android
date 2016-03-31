@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
@@ -30,6 +31,7 @@ import rx.schedulers.Schedulers;
 public class MastFragment extends DialogFragment {
 
   @Bind(R.id.mask_image) ImageView maskImage;
+  @Bind(R.id.ll) LinearLayout ll;
 
   public static MastFragment newInstance(String title) {
     MastFragment todayFragment = new MastFragment();
@@ -74,6 +76,10 @@ public class MastFragment extends DialogFragment {
 
                         @Override public void onResponse(Bitmap response) {
                           if (null != response) {
+                            LinearLayout.LayoutParams layoutParams =
+                                new LinearLayout.LayoutParams(response.getWidth(),
+                                    response.getHeight());
+                            maskImage.setLayoutParams(layoutParams);
                             maskImage.setImageBitmap(response);
                           }
                         }
