@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.ui.activity.main;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -13,14 +14,17 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.HttpAuthHandler;
+import android.webkit.JsResult;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -83,6 +87,8 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   private String domain;
   private String sessionid;
   private int id;
+
+  private JsResult mResult;
 
   @Override protected void setListener() {
     mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -178,6 +184,22 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
             mProgressBar.setVisibility(View.VISIBLE);
           }
         }
+
+        /*@Override
+        public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
+          mResult = result;
+          AlertDialog dialog = new AlertDialog.Builder(WebViewActivity.this)
+                  .setTitle("Custom Dialog")
+                  .setMessage(message)
+                  .setOnCancelListener(new CancelListener())
+                  .setNegativeButton("Cancel", new CancelListener())
+                  .setPositiveButton("Ok", new PositiveListener())
+                  .create();
+          dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+          dialog.show();
+
+          return true;
+        }*/
       });
 
       mWebView.setWebViewClient(new WebViewClient() {
@@ -314,14 +336,14 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
 
       CookieManager cookieManager = CookieManager.getInstance();
 
-      //cookieManager.removeSessionCookie();// 移除
+      cookieManager.removeSessionCookie();// 移除
       cookieManager.removeAllCookie();
 
-      //cookieManager.setAcceptCookie(true);
+      cookieManager.setAcceptCookie(true);
 
       //JUtils.Log(TAG, "acceptCookie:"+cookieManager.acceptCookie());
       //JUtils.Log(TAG, "domain:"+domain + "=====" + cookies);
-      //cookieManager.setCookie(domain, cookies);
+      cookieManager.setCookie(domain, cookies);
 
       CookieSyncManager.getInstance().sync();
       JUtils.Log(TAG, "syncCookie end");
@@ -806,4 +828,26 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     JumpUtils.push_jump_proc(this, url);
     //}
   }
+
+  /*private class CancelListener implements DialogInterface.OnCancelListener,
+          DialogInterface.OnClickListener {
+
+    @Override
+    public void onCancel(DialogInterface dialogInterface) {
+      mResult.cancel();
+    }
+
+    @Override
+    public void onClick(DialogInterface dialogInterface, int i) {
+      mResult.cancel();
+    }
+  }
+
+  private class PositiveListener implements DialogInterface.OnClickListener {
+
+    @Override
+    public void onClick(DialogInterface dialogInterface, int i) {
+      mResult.confirm();
+    }
+  }*/
 }
