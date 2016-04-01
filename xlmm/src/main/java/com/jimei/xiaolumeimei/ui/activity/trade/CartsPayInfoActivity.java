@@ -140,7 +140,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
               cart_ids = cartsPayinfoBean.getCartIds();
               //              channel = "alipay";
 
-              budgetCash = cartsPayinfoBean.getBudget_cash() + "";
+              budgetCash = (double)(Math.round(cartsPayinfoBean.getBudget_cash()*100)) / 100 + "";
               payment = cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
                   - cartsPayinfoBean.getDiscountFee();
               paymentInfo = cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
@@ -358,7 +358,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     JUtils.Log(TAG, "yue:"+yue+" real use yue:"+real_use_yue + " paymentInfo:"+paymentInfo + " jieshengjine:"+jieshengjine);
 
     tv_app_discount.setText("-"+(double)(Math.round(appcut * 100))/100+"元");
-    extraBudget.setText("余额抵扣:   余额剩余" + budgetCash + " 本次可使用 " + yue);
+    extraBudget.setText("余额抵扣:   剩余" + budgetCash + " 本次可使用 " + (double)(Math.round(yue * 100))/100);
     totalPrice.setText("¥" + (double)(Math.round(paymentInfo * 100))/100);
     totalPrice_all.setText("合计: ¥" + (double)(Math.round(paymentInfo * 100))/100 + "");
     jiesheng.setText("已节省" + (double)(Math.round(jieshengjine * 100))/100 + "");
