@@ -17,7 +17,7 @@ public class CartsPayinfoBean {
   @SerializedName("weixin_payable") private boolean mWeixinPayable;
   @SerializedName("coupon_ticket") private Object mCouponTicket;
   @SerializedName("uuid") private String mUuid;
-  @SerializedName("budget_cash") private String budget_cash;
+  @SerializedName("budget_cash") private double budget_cash;
   @SerializedName("budget_payable") private boolean budget_payable;
   @SerializedName("coupon_message") private String mCoupon_message;
   @SerializedName("alipay_payable") private boolean mAlipayPayable;
@@ -64,11 +64,11 @@ public class CartsPayinfoBean {
     this.budget_payable = budget_payable;
   }
 
-  public String getBudget_cash() {
+  public double getBudget_cash() {
     return budget_cash;
   }
 
-  public void setBudget_cash(String budget_cash) {
+  public void setBudget_cash(double budget_cash) {
     this.budget_cash = budget_cash;
   }
 

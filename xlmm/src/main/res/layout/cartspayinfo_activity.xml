@@ -113,6 +113,8 @@
         <TextView android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="可用优惠券"
+            android:textSize="28px"
+            android:layout_centerVertical="true"
         />
 
         <TextView
@@ -121,6 +123,8 @@
             android:id="@+id/tv_coupon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="28px"
+            android:layout_centerVertical="true"
         />
 
         <ImageView
@@ -129,6 +133,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
 
         />
 
@@ -145,6 +150,8 @@
         <TextView android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="APP支付优惠"
+            android:textSize="28px"
+            android:layout_centerVertical="true"
             />
 
         <TextView
@@ -154,6 +161,8 @@
             android:layout_height="wrap_content"
             android:text="-2元"
             android:textColor="@color/colorAccent"
+            android:textSize="28px"
+            android:layout_centerVertical="true"
         /></RelativeLayout>
       <include layout="@layout/common_gap"/>
       <RelativeLayout
@@ -167,6 +176,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="运费"
+            android:textSize="28px"
+            android:layout_centerVertical="true"
         />
         <TextView
             android:id="@+id/post_fee"
@@ -174,6 +185,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0"
+            android:textSize="28px"
+            android:layout_centerVertical="true"
         />
 
       </RelativeLayout>
@@ -188,10 +201,11 @@
           android:layout_height="88px">
         <TextView
             android:id="@+id/extra_budget"
-            android:layout_marginTop="12px"
+            android:layout_centerVertical="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
+            android:textSize="28px"
             />
         <com.jimei.xiaolumeimei.widget.SmoothCheckBox
             android:id="@+id/scb"
@@ -214,6 +228,7 @@
           android:layout_height="wrap_content"
           android:text=""
           android:padding="8dp"
+          android:textSize="28px"
       />
 
 
@@ -229,6 +244,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="支付宝"
+            android:textSize="28px"
         />
         <View
             android:layout_marginTop="70px"
@@ -244,6 +260,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="微信"
+            android:textSize="28px"
         />
         <View
             android:layout_marginTop="30px"
