@@ -5,6 +5,7 @@ import com.jimei.xiaolumeimei.entities.AwardCarryBean;
 import com.jimei.xiaolumeimei.entities.CarryLogListBean;
 import com.jimei.xiaolumeimei.entities.ClickcarryBean;
 import com.jimei.xiaolumeimei.entities.MMChooselistBean;
+import com.jimei.xiaolumeimei.entities.MMHavaChooseResultBean;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.MMStoreBean;
 import com.jimei.xiaolumeimei.entities.NinePicBean;
@@ -192,7 +193,7 @@ public class MMProductModel {
                 .compose(new DefaultTransform<>());
     }
 
-    public Observable<ResponseBody> changeProPosition(String change_id, String target_id) {
+    public Observable<MMHavaChooseResultBean> changeProPosition(String change_id, String target_id) {
         return XlmmRetrofitClient.getService().changeProPosition(change_id, target_id)
                 .compose(new DefaultTransform<>());
     }

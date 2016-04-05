@@ -1,17 +1,18 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.MMHaveChooseAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ShopProductBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
-import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
+import com.jimei.xiaolumeimei.widget.dragrecyclerview.LinearRecyclerView;
 import com.jimei.xiaolumeimei.widget.dragrecyclerview.OnPageListener;
 import com.jimei.xiaolumeimei.widget.dragrecyclerview.SuperRecyclerView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jude.utils.JUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ import rx.schedulers.Schedulers;
 
 
 /**
- * Created by itxuye(http:www.itxuye.com) on 16/4/2.
+ * Created by itxuye(http://www.itxuye.com) on 16/4/2.
  */
 public class HaveChoosedActivity extends BaseSwipeBackCompatActivity implements OnPageListener {
     @Bind(R.id.choose_recyclerview)
@@ -29,6 +30,7 @@ public class HaveChoosedActivity extends BaseSwipeBackCompatActivity implements 
 
     private List<ShopProductBean.ResultsBean> data = new ArrayList<>();
     private MMHaveChooseAdapter adapter;
+    private int page = 2;
 
 
     @Override
@@ -39,6 +41,7 @@ public class HaveChoosedActivity extends BaseSwipeBackCompatActivity implements 
     @Override
     protected void initData() {
 //        showIndeterminateProgressDialog(false);
+        chooseRecyclerview.onLoadStart();
         MMProductModel.getInstance()
                 .getShopProduct("1")
                 .subscribeOn(Schedulers.io())
@@ -47,7 +50,7 @@ public class HaveChoosedActivity extends BaseSwipeBackCompatActivity implements 
                     public void onCompleted() {
                         super.onCompleted();
 //                        hideIndeterminateProgressDialog();
-                        chooseRecyclerview.onLoadStart();
+                        chooseRecyclerview.onLoadFinish();
                     }
 
                     @Override
@@ -56,7 +59,10 @@ public class HaveChoosedActivity extends BaseSwipeBackCompatActivity implements 
                             if (shopProductBean.getResults() != null) {
                                 data.addAll(shopProductBean.getResults());
                                 chooseRecyclerview.notifyDataSetChanged();
-                                chooseRecyclerview.onLoadFinish();
+
+                                if (shopProductBean.getNext() == null) {
+                                    chooseRecyclerview.onLoadFinish();
+                                }
                             }
                         }
                     }
@@ -68,6 +74,17 @@ public class HaveChoosedActivity extends BaseSwipeBackCompatActivity implements 
                     }
                 });
 
+        chooseRecyclerview.setOnScrollListener(new LinearRecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+
+            }
+        });
     }
 
     @Override
@@ -85,7 +102,7 @@ public class HaveChoosedActivity extends BaseSwipeBackCompatActivity implements 
         adapter = new MMHaveChooseAdapter(this, data);
         chooseRecyclerview.setAdapter(adapter);
         chooseRecyclerview.setOnPageListener(this);
-        chooseRecyclerview.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+//        chooseRecyclerview.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
 
     }
 
@@ -101,6 +118,37 @@ public class HaveChoosedActivity extends BaseSwipeBackCompatActivity implements 
 
     @Override
     public void onPage() {
+        chooseRecyclerview.onLoadStart();
+        MMProductModel.getInstance()
+                .getShopProduct(page + "")
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ServiceResponse<ShopProductBean>() {
+                    @Override
+                    public void onCompleted() {
+                        super.onCompleted();
+//                        hideIndeterminateProgressDialog();
+                        chooseRecyclerview.onLoadFinish();
+                    }
 
+                    @Override
+                    public void onNext(ShopProductBean shopProductBean) {
+                        if (shopProductBean != null) {
+                            if (shopProductBean.getResults() != null && shopProductBean.getNext() != null) {
+                                data.addAll(shopProductBean.getResults());
+                                chooseRecyclerview.notifyDataSetChanged();
+
+                            }
+                            if (shopProductBean.getResults() != null && shopProductBean.getNext() == null) {
+                                JUtils.Toast("没有数据了");
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        chooseRecyclerview.onLoadFinish();
+                    }
+                });
     }
 }

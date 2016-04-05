@@ -9,16 +9,15 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.entities.MMHavaChooseResultBean;
 import com.jimei.xiaolumeimei.entities.ShopProductBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.dragrecyclerview.BaseAdapter;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
-import com.squareup.okhttp.ResponseBody;
 import com.zhy.autolayout.utils.AutoUtils;
 
-import java.io.IOException;
 import java.util.List;
 
 import butterknife.Bind;
@@ -30,7 +29,7 @@ import rx.schedulers.Schedulers;
  */
 public class MMHaveChooseAdapter extends BaseAdapter<ShopProductBean.ResultsBean, MMHaveChooseAdapter.MMHaveChooseVH> {
 
-
+    private static final String TAG = MMHaveChooseAdapter.class.getSimpleName();
     private MaterialDialog materialDialog;
 
     public MMHaveChooseAdapter(Context context, List<ShopProductBean.ResultsBean> data) {
@@ -52,21 +51,35 @@ public class MMHaveChooseAdapter extends BaseAdapter<ShopProductBean.ResultsBean
     public void onItemMove(int fromPosition, int targetPosition) {
         super.onItemMove(fromPosition, targetPosition);
 
-        MMProductModel.getInstance().changeProPosition(data.get(fromPosition).getId() + ""
-                , data.get(targetPosition).getId() + "")
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<ResponseBody>(){
-            @Override
-            public void onNext(ResponseBody responseBody) {
-                if (responseBody != null) {
-                    try {
-                        JUtils.Log("MMhavachoose",responseBody.string());
-                    } catch (IOException e) {
-                        e.printStackTrace();
+        JUtils.Log(TAG, fromPosition + "  " + targetPosition);
+        MMProductModel.getInstance()
+                .changeProPosition(
+                        data.get(fromPosition).getId() + ""
+                        , data.get(targetPosition).getId() + "")
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ServiceResponse<MMHavaChooseResultBean>() {
+                    @Override
+                    public void onCompleted() {
+                        super.onCompleted();
+                        JUtils.Log(TAG,"onCompleted()");
                     }
-                }
-            }
-        });
+
+                    @Override
+                    public void onNext(MMHavaChooseResultBean responseBody) {
+                        JUtils.Log(TAG,"next");
+                        if (responseBody != null) {
+                            JUtils.Log(TAG,responseBody.toString());
+                            if (responseBody.getCode() == 0) {
+                                notifyDataSetChanged();
+                                JUtils.Toast("交换成功");
+                            } else {
+                                JUtils.Toast("交换失败");
+                                notifyDataSetChanged();
+
+                            }
+                        }
+                    }
+                });
     }
 
     class MMHaveChooseVH extends RecyclerView.ViewHolder {
