@@ -24,6 +24,7 @@ import com.jimei.xiaolumeimei.entities.IndexBean;
 import com.jimei.xiaolumeimei.entities.LadyListBean;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.entities.MMChooselistBean;
+import com.jimei.xiaolumeimei.entities.MMHavaChooseResultBean;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.MMStoreBean;
 import com.jimei.xiaolumeimei.entities.MMVisitorsBean;
@@ -767,7 +768,7 @@ public interface XlmmService {
     //更换位置
     @FormUrlEncoded
     @POST("pmt/cushoppros/change_pro_position")
-    Observable<ResponseBody> changeProPosition(
+    Observable<MMHavaChooseResultBean> changeProPosition(
             @Field("change_id")String chanege_id,
             @Field("target_id")String target_id
     );
