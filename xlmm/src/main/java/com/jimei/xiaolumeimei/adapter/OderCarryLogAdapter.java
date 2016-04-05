@@ -9,8 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
@@ -18,8 +17,12 @@ import com.jimei.xiaolumeimei.entities.OderCarryBean;
 import com.jimei.xiaolumeimei.glidemoudle.CropCircleTransformation;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.zhy.autolayout.utils.AutoUtils;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/02/18.
@@ -29,7 +32,6 @@ import java.util.List;
 public class OderCarryLogAdapter
     extends RecyclerView.Adapter<OderCarryLogAdapter.CarryLogListVH> {
 
-  private static final String TAG = MMChooseAdapter.class.getSimpleName();
 
   private List<OderCarryBean.ResultsEntity> mList;
   private Context mContext;

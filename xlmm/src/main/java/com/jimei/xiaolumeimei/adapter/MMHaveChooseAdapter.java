@@ -25,15 +25,17 @@ import butterknife.ButterKnife;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by itxuye(http:www.itxuye.com) on 16/4/2.
+ * Created by itxuye(http://www.itxuye.com) on 16/4/2.
  */
 public class MMHaveChooseAdapter extends BaseAdapter<ShopProductBean.ResultsBean, MMHaveChooseAdapter.MMHaveChooseVH> {
 
     private static final String TAG = MMHaveChooseAdapter.class.getSimpleName();
     private MaterialDialog materialDialog;
 
+
     public MMHaveChooseAdapter(Context context, List<ShopProductBean.ResultsBean> data) {
         super(context, data);
+        JUtils.Log(TAG,"  data size  "+ data.size());
     }
 
     @Override
@@ -44,12 +46,37 @@ public class MMHaveChooseAdapter extends BaseAdapter<ShopProductBean.ResultsBean
     @Override
     public void onBindViewHolder(MMHaveChooseVH holder, int position) {
         super.onBindViewHolder(holder, position);
-        holder.bindData(data.get(position));
+        JUtils.Log(TAG,"onbindviewholder  data size "+data.size());
+        ShopProductBean.ResultsBean resultsBean = data.get(position);
+        holder.bindData(resultsBean);
+    }
+
+
+    @Override
+    public void onItemDismiss(int position) {
+
+        MMProductModel.getInstance()
+                .removeProFromShop(data.get(position).getProduct()+"")
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ServiceResponse<MMHavaChooseResultBean>(){
+                    @Override
+                    public void onNext(MMHavaChooseResultBean responseBody) {
+                        if (responseBody != null) {
+                            if (responseBody.getCode() == 0) {
+
+                            } else {
+                                JUtils.Toast("删除失败,请重新尝试");
+                            }
+                        }
+                    }
+
+                });
+        super.onItemDismiss(position);
     }
 
     @Override
     public void onItemMove(int fromPosition, int targetPosition) {
-        super.onItemMove(fromPosition, targetPosition);
+
 
         JUtils.Log(TAG, fromPosition + "  " + targetPosition);
         MMProductModel.getInstance()
@@ -70,16 +97,30 @@ public class MMHaveChooseAdapter extends BaseAdapter<ShopProductBean.ResultsBean
                         if (responseBody != null) {
                             JUtils.Log(TAG,responseBody.toString());
                             if (responseBody.getCode() == 0) {
-                                notifyDataSetChanged();
+//                                notifyDataSetChanged();
+                                MMProductModel.getInstance().getShopProduct("1")
+                                        .subscribeOn(Schedulers.io())
+                                        .subscribe(new ServiceResponse<ShopProductBean>() {
+                                            @Override
+                                            public void onNext(ShopProductBean shopProductBean) {
+                                                if (shopProductBean != null&&shopProductBean.getResults()!=null) {
+                                                    data = shopProductBean.getResults();
+                                                    notifyDataSetChanged();
+
+                                                }
+                                            }
+                                        });
                                 JUtils.Toast("交换成功");
                             } else {
                                 JUtils.Toast("交换失败");
-                                notifyDataSetChanged();
+//                                notifyDataSetChanged();
 
                             }
                         }
                     }
                 });
+
+        super.onItemMove(fromPosition, targetPosition);
     }
 
     class MMHaveChooseVH extends RecyclerView.ViewHolder {

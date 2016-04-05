@@ -555,6 +555,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
       float val = 0;
       if (his_refund.size() > 0) {
         val = (float) his_refund.get(MAX_RECENT_DAYS - days + i).getCarry();
+        JUtils.Log(TAG,"val===="+val);
         show_refund.add(his_refund.get(MAX_RECENT_DAYS - days + i));
       }
       yVals.add(new Entry(val, i));

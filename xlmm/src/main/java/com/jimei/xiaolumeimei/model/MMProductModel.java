@@ -16,7 +16,6 @@ import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.ShopProductBean;
 import com.jimei.xiaolumeimei.entities.ShoppingListBean;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
-import com.squareup.okhttp.ResponseBody;
 
 import java.util.List;
 
@@ -198,7 +197,7 @@ public class MMProductModel {
                 .compose(new DefaultTransform<>());
     }
 
-    public Observable<ResponseBody> removeProFromShop(String id) {
+    public Observable<MMHavaChooseResultBean> removeProFromShop(String id) {
         return XlmmRetrofitClient.getService().removeProFromShop(id)
 
                 .compose(new DefaultTransform<>());

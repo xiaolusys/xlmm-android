@@ -4,6 +4,30 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="#fdb916"
+            app:popupTheme="@style/AppTheme.PopupOverlay" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:text="已选列表"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                />
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
 <com.jimei.xiaolumeimei.widget.dragrecyclerview.SuperRecyclerView
     android:id="@+id/choose_recyclerview"
     android:layout_width="match_parent"
@@ -12,5 +36,6 @@
     app:drag_enabled="true"
     app:selected_color2="@color/colorAccent"
     app:loading_footer="@layout/loadingmore"
+    app:swipe_enabled="true"
     />
 </LinearLayout>
