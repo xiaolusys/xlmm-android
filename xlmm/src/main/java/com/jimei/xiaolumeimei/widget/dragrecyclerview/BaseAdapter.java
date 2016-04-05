@@ -22,9 +22,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.jimei.xiaolumeimei.entities.MMHavaChooseResultBean;
+import com.jimei.xiaolumeimei.model.MMProductModel;
+import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jude.utils.JUtils;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import rx.schedulers.Schedulers;
 
 
 public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> implements ItemTouchHelperAdapter {
@@ -96,14 +103,18 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
 
     @Override
     public void onItemDismiss(int position) {
+
+
         data.remove(position);
         recyclerView.getBookendsAdapter().notifyItemRemoved(position);
+//        notifyItemRangeChanged(position, data.size());
     }
 
     @Override
     public void onItemMove(int fromPosition, int targetPosition) {
         Collections.swap(data, fromPosition, targetPosition);
         recyclerView.getBookendsAdapter().notifyItemMoved(fromPosition, targetPosition);
+//        notifyItemRangeChanged(fromPosition, targetPosition);
     }
 
     public void setRecyclerView(SuperRecyclerView recyclerView) {

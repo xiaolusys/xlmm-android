@@ -7,13 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.BudgetdetailBean;
 import com.zhy.autolayout.utils.AutoUtils;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/02/26.
@@ -23,7 +26,6 @@ import java.util.List;
 public class UserWalletAdapter
     extends RecyclerView.Adapter<UserWalletAdapter.UserWalletVH> {
 
-  private static final String TAG = MMChooseAdapter.class.getSimpleName();
 
   private List<BudgetdetailBean.ResultsEntity> mList;
   private Context mContext;

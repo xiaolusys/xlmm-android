@@ -14,7 +14,7 @@ properties.load(project.rootProject.file('local.properties').newDataInputStream(
 
 android {
   compileSdkVersion 23
-  buildToolsVersion "23.0.2"
+  buildToolsVersion "23.0.3"
 
   defaultConfig {
     applicationId "com.jimei.xiaolumeimei"
@@ -22,8 +22,8 @@ android {
 
     targetSdkVersion 23
 
-    versionCode 20160331
-    versionName "1.0.7"
+    versionCode 20160405
+    versionName "1.0.8"
 
     multiDexEnabled = true
 

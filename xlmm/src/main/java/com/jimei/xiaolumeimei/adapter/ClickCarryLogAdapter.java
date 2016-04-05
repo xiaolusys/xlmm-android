@@ -8,13 +8,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.ClickcarryBean;
 import com.zhy.autolayout.utils.AutoUtils;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/02/18.
@@ -24,7 +27,6 @@ import java.util.List;
 public class ClickCarryLogAdapter
     extends RecyclerView.Adapter<ClickCarryLogAdapter.CarryLogListVH> {
 
-  private static final String TAG = MMChooseAdapter.class.getSimpleName();
 
   private List<ClickcarryBean.ResultsEntity> mList;
   private Context mContext;

@@ -488,7 +488,7 @@ public class MainActivity extends BaseActivity
                                                         msg1.setVisibility(View.INVISIBLE);
                                                         msg2.setVisibility(View.INVISIBLE);
                                                         msg3.setVisibility(View.INVISIBLE);
-
+                                                        img_mmentry.setVisibility(View.INVISIBLE);
                                                         if (tvNickname != null) {
                                                             tvNickname.setText("点击登录");
                                                         }

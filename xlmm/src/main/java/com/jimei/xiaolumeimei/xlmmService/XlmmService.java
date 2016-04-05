@@ -776,7 +776,7 @@ public interface XlmmService {
     //移除一个选品
     @FormUrlEncoded
     @POST("pmt/cushoppros/remove_pro_from_shop")
-    Observable<ResponseBody> removeProFromShop(
+    Observable<MMHavaChooseResultBean> removeProFromShop(
             @Field("product")String id
     );
 }
