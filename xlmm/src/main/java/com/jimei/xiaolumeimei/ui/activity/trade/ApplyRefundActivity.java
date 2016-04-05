@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.ui.activity.trade;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AlertDialog;
@@ -88,7 +89,17 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
     if (null != getIntent() && null != getIntent().getExtras()) {
       goods_info = getIntent().getExtras().getParcelable("goods_info");
     }
-    fillDataToView(goods_info);
+    if(goods_info != null) {
+      fillDataToView(goods_info);
+    }
+    else{
+      JUtils.Log(TAG, "initData, no good info,return");
+      Intent intent = new Intent(ApplyRefundActivity.this, AllOrdersActivity.class);
+      Bundle bundle = new Bundle();
+      bundle.putInt("fragment", 1);
+      intent.putExtras(bundle);
+      startActivity(intent);
+    }
   }
 
   @Override protected boolean toggleOverridePendingTransition() {

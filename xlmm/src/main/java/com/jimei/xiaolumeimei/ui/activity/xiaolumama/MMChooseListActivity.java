@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatSpinner;
@@ -8,15 +9,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.MMChooseAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -25,12 +22,14 @@ import com.jimei.xiaolumeimei.entities.MMStoreBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import com.victor.loading.rotate.RotateLoading;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -69,6 +68,7 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
     spinnerChoose.setOnItemSelectedListener(this);
     tvCommission.setOnClickListener(this);
     tvSales.setOnClickListener(this);
+    choosenum.setOnClickListener(this);
   }
 
   @Override protected void initData() {
@@ -425,6 +425,10 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
         getChooseListLadyorChildSort(sortfeild, category);
 
         break;
+
+      case R.id.choosenum:
+        startActivity(new Intent(this,HaveChoosedActivity.class));
+        break;
     }
   }
 
@@ -457,9 +461,4 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
     return num[0];
   }
 
-  @Override protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    // TODO: add setContentView(...) invocation
-    ButterKnife.bind(this);
-  }
 }
