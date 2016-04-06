@@ -135,8 +135,7 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
     chooselistXey.addItemDecoration(
         new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
 
-    mmChooseAdapter = new MMChooseAdapter(this);
-    chooselistXey.setAdapter(mmChooseAdapter);
+
 
     chooselistXey.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
@@ -423,6 +422,9 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
   @Override protected void onResume() {
     super.onResume();
     //choosenum.setText(getChooseNum());
+    mmChooseAdapter = new MMChooseAdapter(this);
+    chooselistXey.setAdapter(mmChooseAdapter);
+
     Subscription subscribe = MMProductModel.getInstance()
             .getMMChooseLadyOrChildSortListSort(sortfeild, category, "1", ""+pagesize)
             .subscribeOn(Schedulers.io())
