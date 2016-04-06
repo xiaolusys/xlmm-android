@@ -112,6 +112,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   private String s;
   private String from;
   private String actlink;
+  private String shareMmcode;
 
 
   @Override protected void setListener() {
@@ -214,8 +215,11 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<AgentInfoBean>() {
           @Override public void onNext(AgentInfoBean pointBean) {
-            JUtils.Log(TAG, "AgentInfoBean=" + pointBean.toString());
-            mamaAgentInfo = pointBean;
+
+            if (null != pointBean) {
+               shareMmcode = pointBean.getShareMmcode();
+              mamaAgentInfo = pointBean;
+            }
           }
         });
     addSubscription(subscribe);
@@ -321,11 +325,19 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
 //        startActivity(new Intent(MamaInfoActivity.this, MaMaMyStoreActivity.class));
         break;
       case R.id.rl_two_dimen:
-        if (mamaAgentInfo != null) {
-          intent = new Intent(MamaInfoActivity.this, TwoDimenCodeActivity.class);
-          intent.putExtra("myurl", mamaAgentInfo.getShareQrcode());
-          startActivity(intent);
-        }
+
+        Intent intentrl_two_dimen = new Intent(this, MMShareCodeWebViewActivity.class);
+        sharedPreferences = getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+        cookies = sharedPreferences.getString("cookiesString", "");
+        domain = sharedPreferences.getString("cookiesDomain", "");
+
+        Bundle bundlerl_two_dimen = new Bundle();
+        bundlerl_two_dimen.putString("cookies", cookies);
+        bundlerl_two_dimen.putString("domain", domain);
+        bundlerl_two_dimen.putString("Cookie", sharedPreferences.getString("Cookie", ""));
+        bundlerl_two_dimen.putString("link", shareMmcode);
+        intentrl_two_dimen.putExtras(bundlerl_two_dimen);
+        startActivity(intentrl_two_dimen);
         break;
       case R.id.rl_fans:
         startActivity(new Intent(MamaInfoActivity.this, MamaFansActivity.class));

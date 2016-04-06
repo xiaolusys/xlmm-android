@@ -11,11 +11,12 @@ import android.support.v7.widget.Toolbar;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
-import butterknife.Bind;
+
 import com.github.yoojia.zxing.qrcode.Encoder;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -24,6 +25,8 @@ import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.utils.BitmapUtil;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+
+import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -114,8 +117,11 @@ public class WxPubTwoDimenCodeActivity extends BaseSwipeBackCompatActivity imple
 
             save_2dimencode();
 
-        Toast.makeText(WxPubTwoDimenCodeActivity.this, "保存成功，"+wxPubAuthInfo
-          .getAuthMsg(), Toast.LENGTH_SHORT).show();
+        if (null!=wxPubAuthInfo&&!TextUtils.isEmpty(wxPubAuthInfo.getAuthMsg()
+        )) {
+          Toast.makeText(WxPubTwoDimenCodeActivity.this, "保存成功，"+wxPubAuthInfo
+            .getAuthMsg(), Toast.LENGTH_SHORT).show();
+        }
         finish();
         break;
     }
