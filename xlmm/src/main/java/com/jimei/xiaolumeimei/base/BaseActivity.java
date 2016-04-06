@@ -4,10 +4,13 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import butterknife.ButterKnife;
+
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.umeng.analytics.MobclickAgent;
 import com.zhy.autolayout.AutoLayoutActivity;
+
+import butterknife.ButterKnife;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
@@ -42,6 +45,7 @@ public abstract class BaseActivity extends AutoLayoutActivity {
     super.onCreate(savedInstanceState);
 
     setContentView(provideContentViewId());
+    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent),0);
     ButterKnife.bind(this);
 
     initView();

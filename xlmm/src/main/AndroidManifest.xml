@@ -400,6 +400,9 @@
     <activity android:name=".ui.activity.xiaolumama.HaveChoosedActivity"
         android:theme="@style/AppTheme.TransparentActivity"
     />
+    <activity android:name=".ui.activity.xiaolumama.MMShareCodeWebViewActivity"
+        android:theme="@style/AppTheme.TransparentActivity"
+    />
 
     <service
         android:enabled="true"

@@ -186,6 +186,7 @@ public class MainActivity extends BaseActivity
         //setSupportActionBar(toolbar);
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         ActionBarDrawerToggle toggle =
                 new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open,
                         R.string.navigation_drawer_close) {
@@ -415,6 +416,8 @@ public class MainActivity extends BaseActivity
         badge.setPadding(dip2Px(4), dip2Px(1), dip2Px(4), dip2Px(1));
         badge.setTargetView(image2);
         //badge.setBadgeGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
+//        StatusBarUtil.setColorForDrawerLayout(MainActivity.this,drawer, getResources()
+//                .getColor(R.color.colorAccent), 0);
     }
 
     @Override

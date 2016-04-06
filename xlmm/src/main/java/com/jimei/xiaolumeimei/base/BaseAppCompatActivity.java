@@ -28,15 +28,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import butterknife.ButterKnife;
-import rx.Subscription;
-import rx.subscriptions.CompositeSubscription;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.utils.CommonUtils;
-import com.jimei.xiaolumeimei.utils.SmartBarUtils;
 import com.zhy.autolayout.AutoLayoutActivity;
+
+import butterknife.ButterKnife;
+import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
 
 public abstract class BaseAppCompatActivity extends AutoLayoutActivity {
 
@@ -90,8 +90,6 @@ public abstract class BaseAppCompatActivity extends AutoLayoutActivity {
       getBundleExtras(extras);
     }
 
-    SmartBarUtils.hide(getWindow().getDecorView());
-
     mContext = this;
     TAG_LOG = this.getClass().getSimpleName();
     BaseAppManager.getInstance().addActivity(this);
@@ -109,7 +107,7 @@ public abstract class BaseAppCompatActivity extends AutoLayoutActivity {
       throw new IllegalArgumentException(
           "You must return a right contentView layout resource Id");
     }
-
+//    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent),0);
     initViews();
     initData();
     setListener();
