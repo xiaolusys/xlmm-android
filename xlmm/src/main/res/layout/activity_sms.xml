@@ -34,25 +34,24 @@
     <com.jimei.xiaolumeimei.widget.ClearEditText
         android:id="@+id/register_name"
         android:layout_width="match_parent"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
         android:layout_height="110px"
         android:singleLine="true"
-        android:layout_marginTop="2dp"
-        android:paddingLeft="10sp"
-        android:paddingRight="10sp"
+        android:layout_marginTop="1dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:paddingTop="10sp"
         android:paddingBottom="10sp"
         android:background="@drawable/text_frame"
+        android:textSize="16sp"
         android:hint="请输入手机号">
     </com.jimei.xiaolumeimei.widget.ClearEditText>
 
     <LinearLayout
         android:background="@drawable/text_frame"
         android:weightSum="3"
-        android:layout_marginTop="2dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginTop="1dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:orientation="horizontal"
@@ -63,11 +62,10 @@
             android:layout_width="0dp"
             android:layout_height="110px"
             android:singleLine="true"
-            android:paddingLeft="10sp"
-            android:paddingRight="10sp"
             android:paddingTop="10sp"
             android:paddingBottom="10sp"
             android:background="@null"
+            android:textSize="16sp"
             android:hint="请输入短信验证码"/>
         <Button
             android:textColor="@color/colorAccent"

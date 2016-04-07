@@ -151,7 +151,7 @@ public class UserModel {
     }
 
     //微信登录
-    public Observable<WxLogininfoBean> wxapp_login(String noncestr, String timestamp,
+    public Observable<CodeBean> wxapp_login(String noncestr, String timestamp,
                                                    String sign, String headimgurl, String nickname, String openid, String unionid) {
         return XlmmRetrofitClient.getService()
                 .wxapp_login(noncestr, timestamp, sign, headimgurl, nickname, openid, unionid)
