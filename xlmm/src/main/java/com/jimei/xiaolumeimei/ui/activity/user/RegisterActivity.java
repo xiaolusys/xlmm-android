@@ -17,6 +17,9 @@ import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.RegisterBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.library.rx.RxCountDown;
+import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
+import com.jimei.xiaolumeimei.utils.LogUtils;
+import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.widget.ClearEditText;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
@@ -168,18 +171,22 @@ public class RegisterActivity extends BaseSwipeBackCompatActivity
                             .subscribe(new ServiceResponse<CodeBean>() {
                                 @Override
                                 public void onNext(CodeBean codeBean) {
-                                    int result = codeBean.getRcode();
-                                    if (result == 0) {
-                                        Intent intent =
-                                                new Intent(RegisterActivity.this, EditPasswordActivity.class);
-                                        Bundle bundle = new Bundle();
-                                        bundle.putString("username", mobile);
-                                        bundle.putString("valid_code", invalid_code);
-                                        intent.putExtras(bundle);
-                                        startActivity(intent);
-                                        finish();
-                                    }else{
-                                        JUtils.Toast(codeBean.getMsg());
+                                    if (codeBean != null) {
+                                        int result = codeBean.getRcode();
+                                        if (result == 0) {
+//                                            Intent intent =
+//                                                    new Intent(RegisterActivity.this, EditPasswordActivity.class);
+//                                            Bundle bundle = new Bundle();
+//                                            bundle.putString("username", mobile);
+//                                            bundle.putString("valid_code", invalid_code);
+//                                            intent.putExtras(bundle);
+                                            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                                            LoginUtils.saveLoginSuccess(true,getApplicationContext());
+                                            startActivity(intent);
+                                            finish();
+                                        }else{
+                                            JUtils.Toast(codeBean.getMsg());
+                                        }
                                     }
                                 }
                             });

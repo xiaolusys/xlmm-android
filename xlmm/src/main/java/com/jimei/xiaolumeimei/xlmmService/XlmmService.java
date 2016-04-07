@@ -782,6 +782,7 @@ public interface XlmmService {
     );
 
 
+    //发送验证码
     @FormUrlEncoded
     @POST(XlmmApi.APP_BASE_URL + "/rest/v2/send_code")
     Observable<CodeBean> send_code(
@@ -790,6 +791,7 @@ public interface XlmmService {
     );
 
 
+    //验证码验证
     @FormUrlEncoded
     @POST(XlmmApi.APP_BASE_URL + "/rest/v2/verify_code")
     Observable<CodeBean> verify_code(
@@ -798,6 +800,7 @@ public interface XlmmService {
             @Field("verify_code") String code
     );
 
+    //设置账号密码
     @FormUrlEncoded
     @POST(XlmmApi.APP_BASE_URL + "/rest/v2/reset_password")
     Observable<CodeBean> reset_password(
@@ -807,6 +810,7 @@ public interface XlmmService {
             @Field("verify_code") String code
     );
 
+    //用户账号密码
     @FormUrlEncoded
     @POST(XlmmApi.APP_BASE_URL + "/rest/v2/passwordlogin")
     Observable<CodeBean> passwordlogin(
@@ -814,10 +818,13 @@ public interface XlmmService {
             @Field("password") String password,
             @Field("next") String next);
 
+<<<<<<< HEAD
     @GET(XlmmApi.APP_BASE_URL + "/rest/v2/weixinapplogin")
     Observable<CodeBean> wxlogin(@Query("noncestr") String noncestr,
                                  @Query("timestamp") String timestamp,
                                  @Query("sign") String sign);
 
 
+=======
+>>>>>>> upstream/develop
 }

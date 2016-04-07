@@ -32,34 +32,23 @@
 
     <com.jimei.xiaolumeimei.widget.ClearEditText
         android:id="@+id/set_login_name"
-        android:layout_width="match_parent"
-        android:layout_height="110px"
+        style="@style/EditTextStyle"
         android:layout_marginTop="8dp"
+        android:inputType="phone"
+        android:maxLength="11"
+        android:layout_width="match_parent"
         android:background="@drawable/text_frame"
         android:hint="请输入手机号"
-        android:paddingBottom="10sp"
-        android:paddingLeft="10sp"
-        android:paddingRight="10sp"
-        android:paddingTop="10sp"
-        android:singleLine="true"
         app:iconClear="@drawable/clear_text" />
-
-
-    >
 
     <com.jimei.xiaolumeimei.widget.PasswordEditText
         android:id="@+id/set_login_password"
-        android:layout_width="fill_parent"
-        android:layout_height="110px"
-        android:layout_marginTop="1dp"
+        android:layout_width="match_parent"
+        style="@style/EditTextStyle"
         android:background="@drawable/text_frame"
         android:hint="请输入登录密码"
-        android:inputType="textPassword"
-        android:paddingBottom="10sp"
-        android:paddingLeft="10sp"
-        android:paddingRight="10sp"
-        android:paddingTop="10sp"
-        android:singleLine="true" />
+        android:maxLength="18"
+        android:inputType="textPassword"/>
 
     <TextView
         android:id="@+id/forgetTextView"
