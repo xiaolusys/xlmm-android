@@ -201,7 +201,7 @@
         android:theme="@style/AppTheme.TransparentActivity"
     />
 
-    <activity android:name=".ui.activity.main.ComplainActvity"
+    <activity android:name=".ui.activity.main.ComplainActivity"
         android:theme="@style/AppTheme.TransparentActivity"
     />
 

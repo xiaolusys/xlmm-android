@@ -462,7 +462,7 @@ public class MainActivity extends BaseActivity
             } else if (id == R.id.nav_setting) {
                 startActivity(new Intent(MainActivity.this, SettingActivity.class));
             } else if (id == R.id.nav_complain) {
-                startActivity(new Intent(MainActivity.this, ComplainActvity.class));
+                startActivity(new Intent(MainActivity.this, ComplainActivity.class));
                 //Log.d(TAG, "start complain activity ");
             } else if (id == R.id.nav_login) {
                 new MaterialDialog.Builder(MainActivity.this).
@@ -475,7 +475,7 @@ public class MainActivity extends BaseActivity
                             public void onPositive(MaterialDialog dialog) {
                                 final String finalAccount = LoginUtils.getUserAccount(MainActivity.this);
                                 LoginUtils.delLoginInfo(getApplicationContext());
-                                loginFlag.setVisibility(View.VISIBLE);
+                                loginFlag.setVisibility(View.GONE);
                                 UserModel.getInstance()
                                         .customer_logout()
                                         .subscribeOn(Schedulers.io())
@@ -744,23 +744,24 @@ public class MainActivity extends BaseActivity
         addSubscription(subscribe);
 
         JUtils.Log(TAG, "resume");
-        UserModel.getInstance()
+        Subscription subscribe1 = UserModel.getInstance()
                 .getUserInfo()
                 .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<UserInfoBean>(){
+                .subscribe(new ServiceResponse<UserInfoBean>() {
                     @Override
                     public void onNext(UserInfoBean userInfoBean) {
                         if (userInfoBean != null) {
-                            if (userInfoBean.isHasUsablePassword() && userInfoBean.getMobile() != "") {
+                            if (userInfoBean.isHasUsablePassword() && userInfoBean.getMobile() != "" || (!LoginUtils.checkLoginState(getApplicationContext()))) {
                                 loginFlag.setVisibility(View.GONE);
                             } else {
                                 loginFlag.setVisibility(View.VISIBLE);
                             }
-                        }else{
-                            int a=1;
+                        } else {
+                            int a = 1;
                         }
                     }
                 });
+        addSubscription(subscribe1);
 
         this.subscribe = UserNewModel.getInstance()
                 .getProfile()
