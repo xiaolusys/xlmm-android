@@ -16,6 +16,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AgentInfoBean;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
+import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import rx.Subscription;
@@ -59,6 +60,7 @@ public class MamaWithdrawCashActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
+    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent),0);
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
     finishBack(toolbar);

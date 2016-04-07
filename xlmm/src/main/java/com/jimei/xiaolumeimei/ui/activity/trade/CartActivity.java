@@ -20,6 +20,7 @@ import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.CartsinfoBean;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
+import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.widget.ScrollLinearLayoutManager;
@@ -123,6 +124,9 @@ public class CartActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
+
+    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent),0);
+
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
     finishBack(toolbar);

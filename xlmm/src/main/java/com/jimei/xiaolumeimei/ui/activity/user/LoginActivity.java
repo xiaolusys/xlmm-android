@@ -357,7 +357,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                 JUtils.Log(TAG, "------unionid---------" + unionid);
 
                 Subscription subscription = UserModel.getInstance()
-                        .wxapp_login(noncestr,timestamp,sign, headimgurl, nickname,openid,unionid)
+                        .wxapp_login(noncestr, timestamp, sign, headimgurl, nickname, openid, unionid)
                         .subscribeOn(Schedulers.io())
                         .subscribe(new ServiceResponse<CodeBean>() {
 
@@ -378,40 +378,39 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                                         LoginUtils.setPushUserAccount(LoginActivity.this,
                                                                 MiPushClient.getRegId(getApplicationContext()));
 
-                                                        int codeInfo = needSetInfoBean.getCode();
-                                                        if (0 == codeInfo) {
-                                                            hideIndeterminateProgressDialog();
-                                                            LoginUtils.saveLoginSuccess(true, getApplicationContext());
-                                                            JUtils.Toast("登录成功");
-                                                            Intent intent =
-                                                                    new Intent(LoginActivity.this, MainActivity.class);
-                                                            startActivity(intent);
-
-                                                            finish();
-                                                        } else if (1 == codeInfo) {
-                                                            hideIndeterminateProgressDialog();
-                                                            LoginUtils.saveLoginSuccess(true, getApplicationContext());
-                                                            JUtils.Toast("登录成功，已绑定手机号");
-                                                            JUtils.Log(TAG, "code=1,login succ,need reset pwd");
-                                                            Intent intent =
-                                                                    new Intent(LoginActivity.this, MainActivity.class);
-                                                            startActivity(intent);
-
-                                                            finish();
-                                                        } else if (2 == codeInfo) {
-                                                            hideIndeterminateProgressDialog();
-                                                            LoginUtils.saveLoginSuccess(true, getApplicationContext());
-                                                            JUtils.Toast("登录成功,前往绑定手机");
-                                                            Intent intent = new Intent(LoginActivity.this,
-                                                                    WxLoginBindPhoneActivity.class);
-                                                            Bundle bundle = new Bundle();
-                                                            bundle.putString("headimgurl", headimgurl);
-                                                            bundle.putString("nickname", nickname);
-                                                            intent.putExtras(bundle);
-                                                            startActivity(intent);
-
-                                                            finish();
-                                                        }
+//                                                        int codeInfo = needSetInfoBean.getCode();
+//                                                        if (0 == codeInfo) {
+                                                        hideIndeterminateProgressDialog();
+                                                        LoginUtils.saveLoginSuccess(true, getApplicationContext());
+                                                        JUtils.Toast("登录成功");
+                                                        Intent intent =
+                                                                new Intent(LoginActivity.this, MainActivity.class);
+                                                        startActivity(intent);
+                                                        finish();
+//                                                        } else if (1 == codeInfo) {
+//                                                            hideIndeterminateProgressDialog();
+//                                                            LoginUtils.saveLoginSuccess(true, getApplicationContext());
+//                                                            JUtils.Toast("登录成功，已绑定手机号");
+//                                                            JUtils.Log(TAG, "code=1,login succ,need reset pwd");
+//                                                            Intent intent =
+//                                                                    new Intent(LoginActivity.this, MainActivity.class);
+//                                                            startActivity(intent);
+//
+//                                                            finish();
+//                                                        } else if (2 == codeInfo) {
+//                                                            hideIndeterminateProgressDialog();
+//                                                            LoginUtils.saveLoginSuccess(true, getApplicationContext());
+//                                                            JUtils.Toast("登录成功,前往绑定手机");
+//                                                            Intent intent = new Intent(LoginActivity.this,
+//                                                                    WxLoginBindPhoneActivity.class);
+//                                                            Bundle bundle = new Bundle();
+//                                                            bundle.putString("headimgurl", headimgurl);
+//                                                            bundle.putString("nickname", nickname);
+//                                                            intent.putExtras(bundle);
+//                                                            startActivity(intent);
+//
+//                                                            finish();
+//                                                        }
                                                     }
                                                 });
                                         addSubscription(subscribe);

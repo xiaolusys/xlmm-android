@@ -13,6 +13,7 @@ import com.jimei.xiaolumeimei.adapter.AllowanceAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AllowanceBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
+import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import java.util.List;
@@ -46,6 +47,7 @@ public class ShareAllowanceActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
+    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent),0);
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
     finishBack(toolbar);

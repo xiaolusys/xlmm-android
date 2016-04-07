@@ -210,33 +210,32 @@ public class UserModel {
                 .compose(new DefaultTransform<>());
     }
 
+    //发送验证码
     public Observable<CodeBean> getCodeBean(String mobile, String action) {
         return XlmmRetrofitClient.getService()
                 .send_code(mobile, action)
                 .compose(new DefaultTransform<>());
     }
 
+    //验证码验证
     public Observable<CodeBean> verify_code(String mobile, String action, String code) {
         return XlmmRetrofitClient.getService()
                 .verify_code(mobile, action, code)
                 .compose(new DefaultTransform<>());
     }
 
+    //设置账号密码
     public Observable<CodeBean> reset_password(String mobile, String password1, String password2, String code) {
         return XlmmRetrofitClient.getService()
                 .reset_password(mobile, password1, password2, code)
                 .compose(new DefaultTransform<>());
     }
 
+    //用户账号密码登录
     public Observable<CodeBean> passwordlogin(String username, String password, String next) {
         return XlmmRetrofitClient.getService()
                 .passwordlogin(username, password, next)
                 .compose(new DefaultTransform<>());
     }
 
-    public Observable<CodeBean> wxlogin(String noncestr, String timestamp, String sign) {
-        return XlmmRetrofitClient.getService()
-                .wxlogin(noncestr, timestamp, sign)
-                .compose(new DefaultTransform<>());
-    }
 }

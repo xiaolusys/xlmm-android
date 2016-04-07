@@ -25,6 +25,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
+import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 
@@ -127,7 +128,7 @@ public class MMWebViewActivity extends BaseSwipeBackCompatActivity {
 
   @SuppressLint("JavascriptInterface") @Override protected void initViews() {
     JUtils.Log(TAG, "initViews");
-
+    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent),0);
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
     finishBack(toolbar);

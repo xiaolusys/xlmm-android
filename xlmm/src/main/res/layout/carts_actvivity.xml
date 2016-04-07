@@ -43,6 +43,9 @@
         android:layout_height="match_parent">
 
     </android.support.v7.widget.RecyclerView>
+
+
+
     <include layout="@layout/include_carts_lin"/>
     <RelativeLayout
         android:visibility="invisible"

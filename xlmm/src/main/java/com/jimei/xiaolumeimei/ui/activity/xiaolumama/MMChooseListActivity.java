@@ -25,6 +25,7 @@ import com.jimei.xiaolumeimei.entities.MMChooselistBean;
 import com.jimei.xiaolumeimei.entities.MMStoreBean;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
+import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -120,6 +121,7 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
+    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent),0);
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
     finishBack(toolbar);

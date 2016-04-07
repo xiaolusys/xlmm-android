@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
+import butterknife.Bind;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -36,16 +36,14 @@ import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
+import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.zhy.autolayout.AutoRelativeLayout;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
-
-import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -60,43 +58,31 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   List<RecentCarryBean.ResultsEntity> his_refund = new ArrayList<>();
   List<RecentCarryBean.ResultsEntity> show_refund = new ArrayList<>();
   int get_num = 0;
-
-  private String title, sharelink, desc, shareimg;
-  private SharedPreferences sharedPreferences;
-  private String cookies;
-  private String domain;
-
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.imgUser) ImageView imgUser;
   @Bind(R.id.btn_two_dimen) TextView btn_two_dimen;
   @Bind(R.id.tv_cashinfo) TextView tv_cashinfo;
   @Bind(R.id.tv_cash) TextView tv_cash;
   @Bind(R.id.btn_chooselist) TextView btn_chooselist;
-
   @Bind(R.id.tv_liveness) TextView tv_liveness;
   @Bind(R.id.img_liveness) com.jimei.xiaolumeimei.widget.RotateTextView img_liveness;
   @Bind(R.id.pb_hook) ProgressBar mProgressBar;
-
   @Bind(R.id.chart1) LineChart mChart;
   @Bind(R.id.img_left) ImageView img_left;
   @Bind(R.id.img_right) ImageView img_right;
   @Bind(R.id.rl_empty_chart) RelativeLayout rl_empty_chart;
-
   @Bind(R.id.tv_visit2) TextView tv_today_visit2;
   @Bind(R.id.tv_visit1) TextView tv_today_visit1;
   @Bind(R.id.tv_today_order2) TextView tv_today_order2;
   @Bind(R.id.tv_today_order1) TextView tv_today_order1;
   @Bind(R.id.tv_today_fund2) TextView tv_today_fund2;
   @Bind(R.id.tv_today_fund1) TextView tv_today_fund1;
-
   @Bind(R.id.rl_mama_info) RelativeLayout rlMamaInfo;
   @Bind(R.id.rl_order) LinearLayout rlOrder;
-
   @Bind(R.id.rl_chooselist) RelativeLayout rlChooselist;
   @Bind(R.id.rl_party) RelativeLayout rl_party;
   @Bind(R.id.rl_push) RelativeLayout rl_push;
   @Bind(R.id.rl_shop) RelativeLayout rl_shop;
-
   @Bind(R.id.rl_two_dimen) RelativeLayout rlTwoDimen;
   @Bind(R.id.tv_invite_num) TextView tv_invite_num;
   @Bind(R.id.rl_fans) RelativeLayout rl_fans;
@@ -105,15 +91,17 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.tv_order) TextView tv_order;
   @Bind(R.id.rl_income) RelativeLayout rl_income;
   @Bind(R.id.tv_fund) TextView tv_fund;
-
   AgentInfoBean mamaAgentInfo;
   MamaFortune mamaFortune;
+  private String title, sharelink, desc, shareimg;
+  private SharedPreferences sharedPreferences;
+  private String cookies;
+  private String domain;
   private double carrylogMoney;
   private String s;
   private String from;
   private String actlink;
   private String shareMmcode;
-
 
   @Override protected void setListener() {
     toolbar.setOnClickListener(this);
@@ -152,25 +140,26 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
     finishBack(toolbar);
+    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent),0);
   }
 
   @Override protected void initData() {
 
     MMProductModel.getInstance()
-            .getShareShopping()
-            .subscribeOn(Schedulers.io())
-            .subscribe(new ServiceResponse<MMShoppingBean>() {
+        .getShareShopping()
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<MMShoppingBean>() {
 
-              @Override public void onNext(MMShoppingBean mmShoppingBean) {
+          @Override public void onNext(MMShoppingBean mmShoppingBean) {
 
-                if (null != mmShoppingBean) {
-                  title = (String) mmShoppingBean.getShopInfo().getName();
-                  sharelink = mmShoppingBean.getShopInfo().getPreview_shop_link();
-                  shareimg = mmShoppingBean.getShopInfo().getThumbnail();
-                  desc = mmShoppingBean.getShopInfo().getDesc();
-                }
-              }
-            });
+            if (null != mmShoppingBean) {
+              title = (String) mmShoppingBean.getShopInfo().getName();
+              sharelink = mmShoppingBean.getShopInfo().getPreview_shop_link();
+              shareimg = mmShoppingBean.getShopInfo().getThumbnail();
+              desc = mmShoppingBean.getShopInfo().getDesc();
+            }
+          }
+        });
 
     Subscription subscribe3 = MamaInfoModel.getInstance()
         .getMamaFortune()
@@ -217,7 +206,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
           @Override public void onNext(AgentInfoBean pointBean) {
 
             if (null != pointBean) {
-               shareMmcode = pointBean.getShareMmcode();
+              shareMmcode = pointBean.getShareMmcode();
               mamaAgentInfo = pointBean;
             }
           }
@@ -310,7 +299,8 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
       case R.id.rl_shop:
 
         Intent intentrl_shop = new Intent(this, MMWebViewActivity.class);
-        sharedPreferences = getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+        sharedPreferences =
+            getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
         cookies = sharedPreferences.getString("cookiesString", "");
         domain = sharedPreferences.getString("cookiesDomain", "");
 
@@ -322,12 +312,13 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         intentrl_shop.putExtras(bundlerl_shop);
         startActivity(intentrl_shop);
 
-//        startActivity(new Intent(MamaInfoActivity.this, MaMaMyStoreActivity.class));
+        //        startActivity(new Intent(MamaInfoActivity.this, MaMaMyStoreActivity.class));
         break;
       case R.id.rl_two_dimen:
 
         Intent intentrl_two_dimen = new Intent(this, MMShareCodeWebViewActivity.class);
-        sharedPreferences = getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+        sharedPreferences =
+            getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
         cookies = sharedPreferences.getString("cookiesString", "");
         domain = sharedPreferences.getString("cookiesDomain", "");
 
@@ -567,7 +558,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
       float val = 0;
       if (his_refund.size() > 0) {
         val = (float) his_refund.get(MAX_RECENT_DAYS - days + i).getCarry();
-        JUtils.Log(TAG,"val===="+val);
+        JUtils.Log(TAG, "val====" + val);
         show_refund.add(his_refund.get(MAX_RECENT_DAYS - days + i));
       }
       yVals.add(new Entry(val, i));
@@ -575,7 +566,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
 
     // set data
 
-      setData(xVals, yVals);
+    setData(xVals, yVals);
     if (isEmptyData(show_refund)) {
       rl_empty_chart.setVisibility(View.VISIBLE);
     }
@@ -618,7 +609,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
 
     // set data
 
-      setData(xVals, yVals);
+    setData(xVals, yVals);
     if (isEmptyData(show_refund)) {
       rl_empty_chart.setVisibility(View.VISIBLE);
     }

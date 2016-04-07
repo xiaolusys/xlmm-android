@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 
+import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -23,7 +24,7 @@ public class SplashActivity extends BaseSwipeBackCompatActivity {
   //@Bind(R.id.rl_splash)  RelativeLayout rl_splash;
 
   @Override protected void initViews() {
-
+    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent),0);
     /*ImageView view = new ImageView(this);
     view.setBackgroundResource(R.drawable.loading);
     setContentView(view, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
