@@ -11,6 +11,7 @@ import android.widget.TextView;
 import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.RegisterBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.library.rx.RxCountDown;
@@ -110,17 +111,12 @@ public class VerifyPhoneForgetActivity extends BaseSwipeBackCompatActivity
               getCheckCode.setBackgroundColor(Color.parseColor("#f3f3f4"));
 
               subscribe = UserModel.getInstance()
-                  .getChgPasswordCheckCode(mobile)
+                  .getCodeBean(mobile,"find_pwd")
                   .subscribeOn(Schedulers.io())
-                  .subscribe(new ServiceResponse<RegisterBean>() {
-                    @Override public void onNext(RegisterBean registerBean) {
-                      super.onNext(registerBean);
-                      String result = registerBean.getResult();
-                      if (result.equals("0")) {
-                        JUtils.Toast("验证码获取成功");
-                      } else if (result.equals("5")) {
-                        return;
-                      }
+                  .subscribe(new ServiceResponse<CodeBean>(){
+                    @Override
+                    public void onNext(CodeBean codeBean) {
+                      JUtils.Toast(codeBean.getMsg());
                     }
                   });
             }
@@ -148,13 +144,12 @@ public class VerifyPhoneForgetActivity extends BaseSwipeBackCompatActivity
 
         if (checkInput(mobile, invalid_code)) {
           subscribe = UserModel.getInstance()
-              .check_code_user(mobile, invalid_code)
+              .verify_code(mobile, "find_pwd",invalid_code)
               .subscribeOn(Schedulers.io())
-              .subscribe(new ServiceResponse<RegisterBean>() {
-                @Override public void onNext(RegisterBean registerBean) {
-                  super.onNext(registerBean);
-                  String result = registerBean.getResult();
-                  if (result.equals("0")) {
+              .subscribe(new ServiceResponse<CodeBean>() {
+                @Override public void onNext(CodeBean codeBean) {
+                  int result = codeBean.getRcode();
+                  if (result==0) {
                     Intent intent = new Intent(VerifyPhoneForgetActivity.this,
                         EditPasswordForgetActivity.class);
                     Bundle bundle = new Bundle();
@@ -164,6 +159,8 @@ public class VerifyPhoneForgetActivity extends BaseSwipeBackCompatActivity
                     intent.putExtras(bundle);
                     startActivity(intent);
                     finish();
+                  }else {
+                    JUtils.Toast(codeBean.getMsg());
                   }
                 }
               });

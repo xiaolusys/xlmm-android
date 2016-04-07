@@ -35,6 +35,7 @@
       android:id="@+id/register_name"
       android:layout_width="match_parent"
       android:layout_height="110px"
+      android:inputType="phone"
       android:singleLine="true"
       android:paddingLeft="10sp"
       android:paddingRight="10sp"

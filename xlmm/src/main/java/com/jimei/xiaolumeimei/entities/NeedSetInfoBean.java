@@ -17,7 +17,7 @@ public class NeedSetInfoBean {
    */
 
   //@SerializedName("mobile") private String mMobile;
-  //@SerializedName("info") private String mInfo;
+  @SerializedName("info") private String mInfo;
   @SerializedName("code") private int mCode;
   //@SerializedName("result") private String mResult;
 
@@ -25,9 +25,9 @@ public class NeedSetInfoBean {
   //  this.mMobile = mobile;
   //}
   //
-  //public void setInfo(String info) {
-  //  this.mInfo = info;
-  //}
+  public void setInfo(String info) {
+    this.mInfo = info;
+  }
 
   public void setCode(int code) {
     this.mCode = code;
@@ -41,9 +41,9 @@ public class NeedSetInfoBean {
   //  return mMobile;
   //}
   //
-  //public String getInfo() {
-  //  return mInfo;
-  //}
+  public String getInfo() {
+    return mInfo;
+  }
 
   public int getCode() {
     return mCode;

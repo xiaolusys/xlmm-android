@@ -10,10 +10,11 @@ public class XlmmApi {
 //  public static final String APP_BASE_URL = "http://192.168.1.11:9000";
 //  public static final String APP_BASE_URL= "http://dev.xiolumeimei.com";
   //public static final String APP_BASE_URL = "http://192.168.1.13:8000";
+//  public static final String APP_BASE_URL = "http://192.168.1.31:9000";
 
   public static final String URL_BASE = APP_BASE_URL + "/rest/v1/";
   //public static final String URL_BASE = "http://192.168.1.57:8000/rest/v1/";
-  //public static final String URL_BASE = "http://192.168.1.31:9000/rest/v1/";
+//  public static final String URL_BASE = "http://192.168.1.31:9000/rest/v1/";
 
   public static final String TWO_DIMEN_URL_BASE = APP_BASE_URL;
 

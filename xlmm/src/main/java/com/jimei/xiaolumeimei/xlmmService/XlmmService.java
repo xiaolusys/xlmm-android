@@ -19,6 +19,7 @@ import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.CartsinfoBean;
 import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.entities.ClickcarryBean;
+import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.CouponBean;
 import com.jimei.xiaolumeimei.entities.IndexBean;
 import com.jimei.xiaolumeimei.entities.LadyListBean;
@@ -779,4 +780,42 @@ public interface XlmmService {
     Observable<MMHavaChooseResultBean> removeProFromShop(
             @Field("product")String id
     );
+
+
+    @FormUrlEncoded
+    @POST(XlmmApi.APP_BASE_URL + "/rest/v2/send_code")
+    Observable<CodeBean> send_code(
+            @Field("mobile") String mobile,
+            @Field("action") String action
+    );
+
+
+    @FormUrlEncoded
+    @POST(XlmmApi.APP_BASE_URL + "/rest/v2/verify_code")
+    Observable<CodeBean> verify_code(
+            @Field("mobile") String mobile,
+            @Field("action") String action,
+            @Field("verify_code") String code
+    );
+
+    @FormUrlEncoded
+    @POST(XlmmApi.APP_BASE_URL + "/rest/v2/reset_password")
+    Observable<CodeBean> reset_password(
+            @Field("mobile") String mobile,
+            @Field("password1") String password1,
+            @Field("password2") String password2,
+            @Field("verify_code") String code
+    );
+
+    @FormUrlEncoded
+    @POST(XlmmApi.APP_BASE_URL + "/rest/v2/passwordlogin")
+    Observable<CodeBean> passwordlogin(
+            @Field("username") String username,
+            @Field("password") String password,
+            @Field("next") String next);
+
+    @GET(XlmmApi.APP_BASE_URL + "/rest/v2/weixinapplogin")
+    Observable<CodeBean> wxlogin(@Query("noncestr") String noncestr,
+                                 @Query("timestamp") String timestamp,
+                                 @Query("sign") String sign);
 }
