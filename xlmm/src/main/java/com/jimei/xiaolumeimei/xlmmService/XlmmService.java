@@ -510,8 +510,8 @@ public interface XlmmService {
     );
 
     @FormUrlEncoded
-    @POST("register/wxapp_login")
-    Observable<WxLogininfoBean> wxapp_login(
+    @POST(XlmmApi.APP_BASE_URL + "/rest/v2/weixinapplogin")
+    Observable<CodeBean> wxapp_login(
             @Query("noncestr") String noncestr,
             @Query("timestamp") String timestamp,
             @Query("sign") String sign,
