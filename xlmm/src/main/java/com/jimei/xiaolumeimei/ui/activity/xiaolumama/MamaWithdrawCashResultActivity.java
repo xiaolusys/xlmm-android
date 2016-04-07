@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jude.utils.JUtils;
 
 /**
@@ -42,6 +43,7 @@ public class MamaWithdrawCashResultActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
+    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent),0);
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
     finishBack(toolbar);

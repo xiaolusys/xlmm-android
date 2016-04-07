@@ -18,7 +18,8 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorAccent"
-        app:popupTheme="@style/AppTheme.PopupOverlay">
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
       <TextView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
@@ -44,7 +45,7 @@
     >
 
       <RelativeLayout
-          android:background="@color/white"
+          android:background="@color/colorAccent"
           android:id="@+id/rl_mama_info"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -88,11 +89,11 @@
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
             android:text="0"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/white"
             android:textSize="20sp"/>
 
         <TextView
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/black"
             android:id="@+id/tv_liveness"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -124,6 +125,7 @@
             /-->
 
         <com.jimei.xiaolumeimei.widget.RotateTextView
+            android:textColor="@color/white"
             android:id="@+id/img_liveness"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

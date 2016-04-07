@@ -818,4 +818,13 @@ public interface XlmmService {
             @Field("password") String password,
             @Field("next") String next);
 
+<<<<<<< HEAD
+    @GET(XlmmApi.APP_BASE_URL + "/rest/v2/weixinapplogin")
+    Observable<CodeBean> wxlogin(@Query("noncestr") String noncestr,
+                                 @Query("timestamp") String timestamp,
+                                 @Query("sign") String sign);
+
+
+=======
+>>>>>>> upstream/develop
 }

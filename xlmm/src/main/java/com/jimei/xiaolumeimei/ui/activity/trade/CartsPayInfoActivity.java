@@ -28,6 +28,7 @@ import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.AddNoAddressActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.AddressSelectActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.CouponSelectActivity;
+import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.widget.NestedListView;
 import com.jimei.xiaolumeimei.widget.SmoothCheckBox;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -373,6 +374,9 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
+
+    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent),0);
+
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
     finishBack(toolbar);

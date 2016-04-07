@@ -2,7 +2,6 @@ package com.jimei.xiaolumeimei.ui.activity.main;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -14,17 +13,14 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.HttpAuthHandler;
-import android.webkit.JsResult;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -66,18 +62,10 @@ import rx.schedulers.Schedulers;
 public class WebViewActivity extends BaseSwipeBackCompatActivity
     implements PlatformActionListener, Handler.Callback {
 
-  private static final int MSG_TOAST = 1;
   private static final int MSG_ACTION_CCALLBACK = 2;
-  private static final int MSG_CANCEL_NOTIFY = 3;
 
-  //private static final String URL =
-  //    "http://m.xiaolumeimei.com/sale/promotion/xlsampleorder/";
-  private static final String URL = "http://m.xiaolumeimei.com/";
-  //private static final String URL = "http://dev.xiaolumeimei.com";
   private static final String TAG = WebViewActivity.class.getSimpleName();
   LinearLayout ll_actwebview;
-  //private static final String URL =
-  //    "http://192.168.1.31:9000/sale/promotion/xlsampleorder/";
   private Toolbar mToolbar;
   private WebView mWebView;
   private ProgressBar mProgressBar;
@@ -87,8 +75,6 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   private String domain;
   private String sessionid;
   private int id;
-
-  private JsResult mResult;
 
   @Override protected void setListener() {
     mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -315,19 +301,6 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     ShareSDK.stopSDK(this);
   }
 
-  //public void syncCookie(Context context, String url) {
-  //  try {
-  //    CookieSyncManager.createInstance(context);
-  //    CookieManager cookieManager = CookieManager.getInstance();
-  //    cookieManager.setAcceptCookie(true);
-  //    cookieManager.removeSessionCookie();// 移除
-  //    cookieManager.removeAllCookie();
-  //
-  //    cookieManager.setCookie(url, cookies);
-  //    CookieSyncManager.getInstance().sync();
-  //  } catch (Exception e) {
-  //  }
-  //}
   public void syncCookie(Context context) {
 
     try {
@@ -341,8 +314,6 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
 
       cookieManager.setAcceptCookie(true);
 
-      //JUtils.Log(TAG, "acceptCookie:"+cookieManager.acceptCookie());
-      //JUtils.Log(TAG, "domain:"+domain + "=====" + cookies);
       cookieManager.setCookie(domain, cookies);
 
       CookieSyncManager.getInstance().sync();
