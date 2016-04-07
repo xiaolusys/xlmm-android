@@ -13,6 +13,7 @@ import com.jimei.xiaolumeimei.adapter.ShoppingListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.OderCarryBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
+import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import rx.Subscription;
@@ -77,6 +78,7 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
   }
 
   @Override protected void initViews() {
+    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent),0);
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
     finishBack(toolbar);

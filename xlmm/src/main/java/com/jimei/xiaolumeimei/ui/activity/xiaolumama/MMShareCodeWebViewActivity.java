@@ -7,8 +7,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
@@ -20,20 +18,18 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-
+import butterknife.Bind;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
+import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
-
 import java.util.HashMap;
 import java.util.Map;
-
-import butterknife.Bind;
-import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.onekeyshare.OnekeyShare;
 import rx.schedulers.Schedulers;
 
 /**
@@ -47,6 +43,7 @@ public class MMShareCodeWebViewActivity extends BaseSwipeBackCompatActivity {
   private static final String URL = "http://m.xiaolumeimei.com/";
   private static final String TAG = MMShareCodeWebViewActivity.class.getSimpleName();
   LinearLayout ll_actwebview;
+  @Bind(R.id.toolbar) Toolbar toolbar;
   //private static final String URL =
   //    "http://192.168.1.31:9000/sale/promotion/xlsampleorder/";
   //private Toolbar mToolbar;
@@ -57,8 +54,6 @@ public class MMShareCodeWebViewActivity extends BaseSwipeBackCompatActivity {
   private String domain;
   private String sessionid;
   private String title, sharelink, desc, shareimg;
-  @Bind(R.id.toolbar)
-  Toolbar toolbar;
 
   @Override protected void setListener() {
     //mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -72,20 +67,20 @@ public class MMShareCodeWebViewActivity extends BaseSwipeBackCompatActivity {
   @Override protected void initData() {
 
     MMProductModel.getInstance()
-            .getShareShopping()
-            .subscribeOn(Schedulers.io())
-            .subscribe(new ServiceResponse<MMShoppingBean>() {
+        .getShareShopping()
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<MMShoppingBean>() {
 
-              @Override public void onNext(MMShoppingBean mmShoppingBean) {
+          @Override public void onNext(MMShoppingBean mmShoppingBean) {
 
-                if (null != mmShoppingBean) {
-                  title = (String) mmShoppingBean.getShopInfo().getName();
-                  sharelink = mmShoppingBean.getShopInfo().getShopLink();
-                  shareimg = mmShoppingBean.getShopInfo().getThumbnail();
-                  desc = mmShoppingBean.getShopInfo().getDesc();
-                }
-              }
-            });
+            if (null != mmShoppingBean) {
+              title = (String) mmShoppingBean.getShopInfo().getName();
+              sharelink = mmShoppingBean.getShopInfo().getShopLink();
+              shareimg = mmShoppingBean.getShopInfo().getThumbnail();
+              desc = mmShoppingBean.getShopInfo().getDesc();
+            }
+          }
+        });
 
     JUtils.Log(TAG, "initData");
     runOnUiThread(new Runnable() {
@@ -122,12 +117,12 @@ public class MMShareCodeWebViewActivity extends BaseSwipeBackCompatActivity {
   }
 
   @Override protected int getContentViewLayoutID() {
-    return R.layout.activity_mmwebview;
+    return R.layout.activity_mmsharecodewebview;
   }
 
   @SuppressLint("JavascriptInterface") @Override protected void initViews() {
     JUtils.Log(TAG, "initViews");
-
+    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent), 0);
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
     finishBack(toolbar);
@@ -211,21 +206,6 @@ public class MMShareCodeWebViewActivity extends BaseSwipeBackCompatActivity {
     syncCookie(MMShareCodeWebViewActivity.this);
   }
 
-  @Override public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.menu_store, menu);
-    return super.onCreateOptionsMenu(menu);
-  }
-
-  @Override public boolean onOptionsItemSelected(MenuItem item) {
-
-
-    if (item.getItemId() == R.id.action_share) {
-      share_shopping(title, sharelink, desc, shareimg);
-    }
-
-    return super.onOptionsItemSelected(item);
-  }
-
   @Override protected boolean toggleOverridePendingTransition() {
     return false;
   }
@@ -297,7 +277,7 @@ public class MMShareCodeWebViewActivity extends BaseSwipeBackCompatActivity {
   }
 
   private void share_shopping(String title, String sharelink, String desc,
-                              String shareimg) {
+      String shareimg) {
     OnekeyShare oks = new OnekeyShare();
     //关闭sso授权
     oks.disableSSOWhenAuthorize();

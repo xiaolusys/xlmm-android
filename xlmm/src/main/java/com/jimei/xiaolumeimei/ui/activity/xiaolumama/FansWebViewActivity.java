@@ -19,6 +19,7 @@ import cn.sharesdk.framework.ShareSDK;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.ui.activity.main.WebViewActivity;
+import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jude.utils.JUtils;
 
 /**
@@ -57,6 +58,7 @@ public class FansWebViewActivity extends BaseSwipeBackCompatActivity {
   }
 
   @SuppressLint("JavascriptInterface") @Override protected void initViews() {
+    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent),0);
     JUtils.Log(TAG, "initViews");
     ShareSDK.initSDK(this);
 
