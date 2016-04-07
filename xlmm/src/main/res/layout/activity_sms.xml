@@ -34,8 +34,11 @@
     <com.jimei.xiaolumeimei.widget.ClearEditText
         android:id="@+id/register_name"
         android:layout_width="match_parent"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:layout_height="110px"
         android:singleLine="true"
+        android:layout_marginTop="2dp"
         android:paddingLeft="10sp"
         android:paddingRight="10sp"
         android:paddingTop="10sp"
@@ -45,8 +48,12 @@
     </com.jimei.xiaolumeimei.widget.ClearEditText>
 
     <LinearLayout
-        android:background="@color/white"
+        android:background="@drawable/text_frame"
         android:weightSum="3"
+        android:layout_marginTop="2dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:layout_height="wrap_content">
@@ -67,6 +74,7 @@
             android:background="@drawable/shape_getcheckcode"
             android:id="@+id/getCheckCode"
             android:layout_weight="0.5"
+            android:layout_marginRight="5dp"
             android:text="获取验证码"
             android:layout_width="100px"
             android:layout_height="64px"

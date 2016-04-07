@@ -12,6 +12,7 @@ import butterknife.Bind;
 import com.jimei.library.rx.RxCountDown;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.RegisterBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -111,21 +112,12 @@ public class VerifyPhoneActivity extends BaseSwipeBackCompatActivity
               getCheckCode.setBackgroundColor(Color.parseColor("#f3f3f4"));
 
               subscribe = UserModel.getInstance()
-                  .getChgPasswordCheckCode(mobile)
+                  .getCodeBean(mobile,"change_pwd")
                   .subscribeOn(Schedulers.io())
-                  .subscribe(new ServiceResponse<RegisterBean>() {
-                    @Override public void onNext(RegisterBean registerBean) {
-                      if (registerBean != null) {
-                        String result = registerBean.getResult();
-                        if (result.equals("0")) {
-                          JUtils.Toast("验证码获取成功");
-                        } else if (result.equals("1")) {
-                          JUtils.Toast("尚无用户或者手机未绑定");
-                        } else if (result.equals("2")) {
-                          JUtils.Toast("当日验证次数超过上限");
-                        } else if (result.equals("3")) {
-                          JUtils.Toast("验证码过期");
-                        }
+                  .subscribe(new ServiceResponse<CodeBean>() {
+                    @Override public void onNext(CodeBean codeBean) {
+                      if (codeBean != null) {
+                        JUtils.Toast(codeBean.getMsg());
                       }
                     }
                   });
@@ -154,16 +146,15 @@ public class VerifyPhoneActivity extends BaseSwipeBackCompatActivity
 
         if (checkInput(mobile, invalid_code)) {
           subscribe = UserModel.getInstance()
-              .check_code_user(mobile, invalid_code)
+              .verify_code(mobile, "change_pwd",invalid_code)
               .subscribeOn(Schedulers.io())
-              .subscribe(new ServiceResponse<RegisterBean>() {
-                @Override public void onNext(RegisterBean registerBean) {
-                  super.onNext(registerBean);
-                  if (registerBean != null) {
-                    String result = registerBean.getResult();
-                    JUtils.Log("修改密码", result);
+              .subscribe(new ServiceResponse<CodeBean>() {
+                @Override public void onNext(CodeBean codeBean) {
+                  if (codeBean != null) {
+                    int result = codeBean.getRcode();
+                    JUtils.Log("修改密码", result+"");
 
-                    if (result.equals("0")) {
+                    if (result==0) {
                       Intent intent = new Intent(VerifyPhoneActivity.this,
                           SettingPasswordForgetActivity.class);
                       Bundle bundle = new Bundle();
@@ -173,10 +164,8 @@ public class VerifyPhoneActivity extends BaseSwipeBackCompatActivity
                       intent.putExtras(bundle);
                       startActivity(intent);
                       finish();
-                    } else if (result.equals("1")) {
-                      JUtils.Toast("验证码过期或超次，尝试重新获取");
-                    } else if (result.equals("2")) {
-                      JUtils.Toast("手机号码不合法");
+                    } else {
+                      JUtils.Toast(codeBean.getMsg());
                     }
                   }
                 }
