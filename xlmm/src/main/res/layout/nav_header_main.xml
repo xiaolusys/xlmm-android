@@ -23,6 +23,15 @@
         android:layout_alignParentTop="true"
         android:clickable="true"
         android:src="@drawable/img_head"/>
+    <com.jimei.xiaolumeimei.widget.CircleImageView
+        android:id="@+id/login_flag"
+        android:layout_alignTop="@id/imgUser"
+        android:layout_marginTop="5dp"
+        android:layout_alignRight="@id/imgUser"
+        android:layout_marginRight="5dp"
+        android:layout_width="8dp"
+        android:layout_height="8dp"
+        android:src="@color/red"/>
 
     <TextView
         android:layout_centerHorizontal="true"
