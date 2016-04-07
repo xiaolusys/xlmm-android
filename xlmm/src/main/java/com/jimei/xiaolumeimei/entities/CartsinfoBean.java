@@ -40,6 +40,11 @@ public class CartsinfoBean {
   @SerializedName("sku_name") private String mSkuName;
   @SerializedName("id") private String mId;
   @SerializedName("buyer_id") private String mBuyerId;
+  /**
+   * is_sale_out : false
+   */
+
+  @SerializedName("is_sale_out") private boolean mIsSaleOut;
 
   public String getStatus() {
     return mStatus;
@@ -170,5 +175,13 @@ public class CartsinfoBean {
         ", mId='" + mId + '\'' +
         ", mBuyerId='" + mBuyerId + '\'' +
         '}';
+  }
+
+  public boolean isIsSaleOut() {
+    return mIsSaleOut;
+  }
+
+  public void setIsSaleOut(boolean isSaleOut) {
+    mIsSaleOut = isSaleOut;
   }
 }
