@@ -11,6 +11,7 @@ import android.widget.Toast;
 import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
@@ -92,50 +93,38 @@ public class EditPasswordForgetActivity extends BaseSwipeBackCompatActivity
   private void changePassword(String username, String valid_code, String password1,
       String password2) {
     UserModel.getInstance()
-        .changePassword(username, valid_code, password1, password2)
+        .reset_password(username, password1, password2,valid_code )
         .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<UserBean>() {
-          @Override public void onNext(UserBean user) {
+        .subscribe(new ServiceResponse<CodeBean>() {
+          @Override public void onNext(CodeBean codeBean) {
             Log.d(TAG, "user.getCode() "
-                + user.getCode()
+                + codeBean.getRcode()
                 + ", user.getResult() "
-                + user.getResult());
-
-            if (user.getCode() == 0) {
-
+                + codeBean.getMsg());
+            if (codeBean.getRcode() == 0) {
               UserModel.getInstance()
-                  .login(username, password1)
+                  .passwordlogin(username, password1,null)
                   .subscribeOn(Schedulers.io())
-                  .subscribe(new ServiceResponse<UserBean>() {
-                    @Override public void onNext(UserBean user) {
+                  .subscribe(new ServiceResponse<CodeBean>() {
+                    @Override public void onNext(CodeBean codeBean1) {
                       Log.d(TAG, "user.getCode() "
-                          + user.getCode()
+                          + codeBean1.getRcode()
                           + ", user.getResult() "
-                          + user.getResult());
-                      if (user.getCode() == 0 && user.getResult().equals("login")) {
+                          + codeBean1.getMsg());
+                      if (codeBean1.getRcode() == 0) {
                         LoginUtils.saveLoginInfo(true, getApplicationContext(), username,
                             password1);
-                        Toast.makeText(mContext, "密码重置成功,登录成功", Toast.LENGTH_SHORT)
-                            .show();
+                        JUtils.Toast("密码重置成功,登录成功");
                         Intent intent = new Intent(mContext, MainActivity.class);
                         startActivity(intent);
                         finish();
+                      }else{
+                        JUtils.Toast(codeBean1.getMsg());
                       }
                     }
                   });
-
-              //Toast.makeText(mContext, "密码重置成功,登录成功", Toast.LENGTH_SHORT).show();
-              //Intent intent = new Intent(mContext, LoginActivity.class);
-              //
-              //Bundle bundle = new Bundle();
-              //bundle.putString("login", "axiba");
-              //intent.putExtras(bundle);
-              //
-              //startActivity(intent);
-              //finish();
             } else {
-
-              Toast.makeText(mContext, "修改失败", Toast.LENGTH_SHORT).show();
+              JUtils.Toast("修改失败");
             }
           }
 
