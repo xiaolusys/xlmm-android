@@ -34,8 +34,13 @@
       </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
-    <LinearLayout
+    <ScrollView
+        android:background="#f3f3f4"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <LinearLayout
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -47,9 +52,10 @@
           android:layout_width="match_parent"
           android:layout_height="match_parent"/>
       <TextView
+          android:id="@+id/tv_show"
           app:layout_behavior="@string/appbar_scrolling_view_behavior"
           android:layout_width="wrap_content"
-          android:layout_marginTop="8dp"
+          android:layout_marginTop="48dp"
           android:text="可重新购买的商品"
           android:layout_height="wrap_content"
       />
@@ -63,7 +69,7 @@
           android:layout_width="match_parent"
           android:layout_height="match_parent"/>
     </LinearLayout>
-
+    </ScrollView>
 
     <include layout="@layout/include_carts_lin"/>
     <RelativeLayout

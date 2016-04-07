@@ -14,6 +14,7 @@ import com.jimei.xiaolumeimei.entities.BindInfoBean;
 import com.jimei.xiaolumeimei.entities.BudgetPayBean;
 import com.jimei.xiaolumeimei.entities.BudgetdetailBean;
 import com.jimei.xiaolumeimei.entities.CarryLogListBean;
+import com.jimei.xiaolumeimei.entities.CartsHisBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.CartsinfoBean;
@@ -168,6 +169,10 @@ public interface XlmmService {
     @GET("carts")
     Observable<List<CartsinfoBean>> getCartsList();
 
+    //获取历史购物车信息
+    @GET("carts/show_carts_history")
+    Observable<List<CartsinfoBean>> getCartsHisList();
+
     //获取购物信息列表
     @GET("carts/carts_payinfo")
     Observable<CartsPayinfoBean> getCartsPayInfoList(
@@ -180,7 +185,14 @@ public interface XlmmService {
             @Query("cart_ids") String cart_ids,
             @Query("coupon_id") String coupon_id
     );
-
+    //重新购买商品
+    @FormUrlEncoded
+    @POST("carts")
+    Observable<CartsHisBean> rebuy(
+        @Field("item_id") String item_id,
+        @Field("sku_id")  String sku_id,
+        @Field("cart_id") String cart_id
+    );
 
     //创建订单接口
 
