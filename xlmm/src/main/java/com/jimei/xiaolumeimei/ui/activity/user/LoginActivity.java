@@ -357,7 +357,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                 JUtils.Log(TAG, "------unionid---------" + unionid);
 
                 Subscription subscription = UserModel.getInstance()
-                        .wxlogin(noncestr,timestamp,sign)
+                        .wxapp_login(noncestr,timestamp,sign, headimgurl, nickname,openid,unionid)
                         .subscribeOn(Schedulers.io())
                         .subscribe(new ServiceResponse<CodeBean>() {
 
