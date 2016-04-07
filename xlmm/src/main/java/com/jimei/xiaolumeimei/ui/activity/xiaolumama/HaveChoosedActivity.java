@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.MMHaveChooseAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -142,11 +141,5 @@ public class HaveChoosedActivity extends BaseSwipeBackCompatActivity
             chooseRecyclerview.onLoadFinish();
           }
         });
-  }
-
-  @Override protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    // TODO: add setContentView(...) invocation
-    ButterKnife.bind(this);
   }
 }
