@@ -1,7 +1,6 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.jimei.xiaolumeimei.R;
@@ -9,7 +8,7 @@ import com.jimei.xiaolumeimei.adapter.MMHaveChooseAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ShopProductBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
-import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
+import com.jimei.xiaolumeimei.widget.dragrecyclerview.DividerItemDecoration;
 import com.jimei.xiaolumeimei.widget.dragrecyclerview.LinearRecyclerView;
 import com.jimei.xiaolumeimei.widget.dragrecyclerview.OnPageListener;
 import com.jimei.xiaolumeimei.widget.dragrecyclerview.SuperRecyclerView;
@@ -104,7 +103,7 @@ public class HaveChoosedActivity extends BaseSwipeBackCompatActivity implements 
         adapter = new MMHaveChooseAdapter(this, data);
         chooseRecyclerview.setAdapter(adapter);
         chooseRecyclerview.setOnPageListener(this);
-        chooseRecyclerview.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+        chooseRecyclerview.addItemDecoration(new DividerItemDecoration(this));
         //chooseRecyclerview.addItemDecoration(new SpaceItemDecoration(8));
     }
 
