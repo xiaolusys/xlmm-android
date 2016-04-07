@@ -61,12 +61,9 @@ import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.UserWithdrawResult;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
-import com.jimei.xiaolumeimei.entities.WxLogininfoBean;
 import com.jimei.xiaolumeimei.entities.WxPubAuthInfo;
 import com.squareup.okhttp.ResponseBody;
-
 import java.util.List;
-
 import retrofit.http.Body;
 import retrofit.http.DELETE;
 import retrofit.http.Field;
@@ -818,13 +815,11 @@ public interface XlmmService {
             @Field("password") String password,
             @Field("next") String next);
 
-<<<<<<< HEAD
+
     @GET(XlmmApi.APP_BASE_URL + "/rest/v2/weixinapplogin")
     Observable<CodeBean> wxlogin(@Query("noncestr") String noncestr,
                                  @Query("timestamp") String timestamp,
                                  @Query("sign") String sign);
 
 
-=======
->>>>>>> upstream/develop
 }

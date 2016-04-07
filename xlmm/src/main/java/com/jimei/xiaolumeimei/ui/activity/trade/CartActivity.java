@@ -137,7 +137,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
     cartsRecyclerview.addItemDecoration(
         new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
 
-    cartsRecyclerview.setLayoutManager(new LinearLayoutManager(this));
+    cartsRecyclerview.setLayoutManager(new Scroll(this));
 
     mCartsAdapetr = new CartsAdapetr();
 

@@ -34,16 +34,35 @@
       </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
-
-    <android.support.v7.widget.RecyclerView
+    <LinearLayout
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:id="@+id/carts_recyclerview"
-        android:layout_below="@id/app_bar_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </android.support.v7.widget.RecyclerView>
-
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+    >
+      <android.support.v7.widget.RecyclerView
+          app:layout_behavior="@string/appbar_scrolling_view_behavior"
+          android:id="@+id/carts_recyclerview"
+          android:layout_below="@id/app_bar_layout"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"/>
+      <TextView
+          app:layout_behavior="@string/appbar_scrolling_view_behavior"
+          android:layout_width="wrap_content"
+          android:layout_marginTop="8dp"
+          android:text="可重新购买的商品"
+          android:layout_height="wrap_content"
+      />
+      <include
+          layout="@layout/common_gap"/>
+      <android.support.v7.widget.RecyclerView
+          android:layout_marginTop="8dp"
+          app:layout_behavior="@string/appbar_scrolling_view_behavior"
+          android:id="@+id/cartshis_recyclerview"
+          android:layout_below="@id/app_bar_layout"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"/>
+    </LinearLayout>
 
 
     <include layout="@layout/include_carts_lin"/>
