@@ -818,4 +818,6 @@ public interface XlmmService {
     Observable<CodeBean> wxlogin(@Query("noncestr") String noncestr,
                                  @Query("timestamp") String timestamp,
                                  @Query("sign") String sign);
+
+
 }

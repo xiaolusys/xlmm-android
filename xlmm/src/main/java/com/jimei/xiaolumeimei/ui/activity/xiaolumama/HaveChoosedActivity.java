@@ -103,6 +103,7 @@ public class HaveChoosedActivity extends BaseSwipeBackCompatActivity implements 
         adapter = new MMHaveChooseAdapter(this, data);
         chooseRecyclerview.setAdapter(adapter);
         chooseRecyclerview.setOnPageListener(this);
+
         chooseRecyclerview.addItemDecoration(new DividerItemDecoration(this));
         //chooseRecyclerview.addItemDecoration(new SpaceItemDecoration(8));
     }
