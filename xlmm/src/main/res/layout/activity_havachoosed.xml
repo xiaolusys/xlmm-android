@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <android.support.design.widget.AppBarLayout
@@ -28,6 +29,10 @@
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
+    <FrameLayout
+        android:background="#f3f3f4"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 <com.jimei.xiaolumeimei.widget.dragrecyclerview.SuperRecyclerView
     android:id="@+id/choose_recyclerview"
     android:layout_width="match_parent"
@@ -38,4 +43,5 @@
     app:loading_footer="@layout/loadingmore"
     app:swipe_enabled="true"
     />
+    </FrameLayout>
 </LinearLayout>
