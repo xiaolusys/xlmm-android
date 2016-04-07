@@ -237,10 +237,6 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
               JUtils.Toast(codeBean.getMsg());
             }
           }
-
-          @Override public void onCompleted() {
-            super.onCompleted();
-          }
         });
   }
 
