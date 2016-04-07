@@ -134,15 +134,16 @@ public class MMHaveChooseAdapter extends BaseAdapter<ShopProductBean.ResultsBean
         TextView agentPrice;
         @Bind(R.id.std_sale_price)
         TextView stdSalePrice;
-        @Bind(R.id.rebet_amount)
-        TextView rebetAmount;
-        @Bind(R.id.lock_num)
-        TextView lockNum;
+//        @Bind(R.id.rebet_amount)
+//        TextView rebetAmount;
+//        @Bind(R.id.lock_num)
+//        TextView lockNum;
 
         public MMHaveChooseVH(View itemView) {
             super(itemView);
-            AutoUtils.auto(itemView);
+
             ButterKnife.bind(this, itemView);
+            AutoUtils.auto(itemView);
         }
 
         public void bindData(ShopProductBean.ResultsBean data) {

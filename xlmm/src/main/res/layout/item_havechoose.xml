@@ -2,13 +2,15 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:padding="4dp"
+
     android:orientation="vertical"
+
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <ImageView
         android:id="@+id/image_chooselist"
-        android:layout_width="190px"
-        android:layout_height="190px"
+        android:layout_width="150px"
+        android:layout_height="150px"
         />
     <TextView
         android:layout_marginTop="8dp"
@@ -19,8 +21,9 @@
         android:layout_height="wrap_content"
         />
     <TextView
+        android:layout_marginBottom="8dp"
         android:textColor="@color/colorPrimary"
-        android:layout_below="@id/name"
+        android:layout_alignParentBottom="true"
         android:layout_marginTop="16dp"
         android:layout_marginLeft="8dp"
         android:id="@+id/agent_price"
@@ -29,8 +32,9 @@
         android:layout_height="wrap_content"
         />
     <TextView
+        android:layout_marginBottom="8dp"
         android:textSize="10sp"
-        android:layout_below="@id/name"
+        android:layout_alignParentBottom="true"
         android:layout_marginTop="20dp"
         android:id="@+id/std_sale_price"
         android:layout_toRightOf="@id/agent_price"
@@ -38,27 +42,27 @@
         android:layout_height="wrap_content"
         />
 
-    <TextView
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_alignBottom="@id/image_chooselist"
-        android:layout_marginTop="8dp"
-        android:id="@+id/rebet_amount"
-        android:layout_toRightOf="@id/image_chooselist"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/colorAccent"
-        />
+    <!--<TextView-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:layout_marginLeft="8dp"-->
+        <!--android:layout_alignBottom="@id/image_chooselist"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:id="@+id/rebet_amount"-->
+        <!--android:layout_toRightOf="@id/image_chooselist"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:textColor="@color/colorAccent"-->
+        <!--/>-->
 
-    <TextView
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="14dp"
-        android:layout_alignBottom="@id/image_chooselist"
-        android:layout_marginTop="8dp"
-        android:id="@+id/lock_num"
-        android:layout_toRightOf="@id/rebet_amount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/colorAccent"
-        />
+    <!--<TextView-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:layout_marginLeft="14dp"-->
+        <!--android:layout_alignBottom="@id/image_chooselist"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:id="@+id/lock_num"-->
+        <!--android:layout_toRightOf="@id/rebet_amount"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:textColor="@color/colorAccent"-->
+        <!--/>-->
 </RelativeLayout>
