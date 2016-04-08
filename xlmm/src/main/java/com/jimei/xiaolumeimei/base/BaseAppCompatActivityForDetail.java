@@ -1,19 +1,3 @@
-/*
- * Copyright (c) 2015 [1076559197@qq.com | tchen0707@gmail.com]
- *
- * Licensed under the Apache License, Version 2.0 (the "License”);
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.jimei.xiaolumeimei.base;
 
 import android.content.Context;
@@ -32,13 +16,16 @@ import butterknife.ButterKnife;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.utils.CommonUtils;
-import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.zhy.autolayout.AutoLayoutActivity;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
-public abstract class BaseAppCompatActivity extends AutoLayoutActivity {
-
+/**
+ * Created by itxuye(www.itxuye.com) on 2016/04/08.
+ *
+ * Copyright 2016年 上海己美. All rights reserved.
+ */
+public abstract class BaseAppCompatActivityForDetail extends AutoLayoutActivity {
   /**
    * Log tag
    */
@@ -106,7 +93,7 @@ public abstract class BaseAppCompatActivity extends AutoLayoutActivity {
       throw new IllegalArgumentException(
           "You must return a right contentView layout resource Id");
     }
-    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent),0);
+    //StatusBarUtil.setTranslucent(this);
     initViews();
     initData();
     setListener();
@@ -309,13 +296,6 @@ public abstract class BaseAppCompatActivity extends AutoLayoutActivity {
     }
   }
 
-  /**
-   * overridePendingTransition mode
-   */
-  public enum TransitionMode {
-    LEFT, RIGHT, TOP, BOTTOM, SCALE, FADE
-  }
-
   public CompositeSubscription getCompositeSubscription() {
     if (this.mCompositeSubscription == null) {
       this.mCompositeSubscription = new CompositeSubscription();
@@ -342,5 +322,12 @@ public abstract class BaseAppCompatActivity extends AutoLayoutActivity {
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+
+  /**
+   * overridePendingTransition mode
+   */
+  public enum TransitionMode {
+    LEFT, RIGHT, TOP, BOTTOM, SCALE, FADE
   }
 }

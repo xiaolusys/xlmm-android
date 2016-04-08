@@ -24,8 +24,6 @@ import com.jimei.xiaolumeimei.swipeback.SwipeBackActivityHelper;
 import com.jimei.xiaolumeimei.swipeback.SwipeBackLayout;
 import com.jimei.xiaolumeimei.swipeback.Utils;
 import com.umeng.analytics.MobclickAgent;
-import rx.Subscription;
-import rx.subscriptions.CompositeSubscription;
 
 public abstract class BaseSwipeBackCompatActivity extends BaseAppCompatActivity
     implements SwipeBackActivityBase {
@@ -40,6 +38,8 @@ public abstract class BaseSwipeBackCompatActivity extends BaseAppCompatActivity
     mHelper = new SwipeBackActivityHelper(this);
     mHelper.onActivityCreate();
   }
+
+
 
   @Override protected void onPostCreate(Bundle savedInstanceState) {
     super.onPostCreate(savedInstanceState);
