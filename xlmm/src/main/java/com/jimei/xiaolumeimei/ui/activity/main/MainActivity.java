@@ -23,7 +23,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import butterknife.Bind;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseActivity;
@@ -55,9 +55,12 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.update.UmengUpdateAgent;
 import com.xiaomi.mipush.sdk.MiPushClient;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -378,8 +381,10 @@ public class MainActivity extends BaseActivity
           bundle.putString("login", "main");
           intent.putExtras(bundle);
           startActivity(intent);
-          drawer.closeDrawers();
+        }else{
+          startActivity(new Intent(MainActivity.this,SettingActivity.class));
         }
+        drawer.closeDrawers();
       }
     });
     loginFlag = (ImageView) llayout.findViewById(R.id.login_flag);
@@ -436,6 +441,8 @@ public class MainActivity extends BaseActivity
         bundle.putInt("fragment", 1);
         intent.putExtras(bundle);
         startActivity(intent);
+      } else if (id == R.id.nav_problem) {
+        startActivity(new Intent(MainActivity.this, CustomProblemActivity.class));
       } else if (id == R.id.nav_complain) {
         startActivity(new Intent(MainActivity.this, ComplainActivity.class));
         //Log.d(TAG, "start complain activity ");
