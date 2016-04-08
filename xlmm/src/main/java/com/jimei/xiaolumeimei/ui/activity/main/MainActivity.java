@@ -37,6 +37,7 @@ import com.jimei.xiaolumeimei.ui.activity.trade.AllOrdersActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.CouponActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.CustomProblemActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.MembershipPointActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.SettingActivity;
@@ -401,6 +402,8 @@ public class MainActivity extends BaseActivity
                     intent.putExtras(bundle);
                     startActivity(intent);
                     drawer.closeDrawers();
+                }else{
+                    startActivity(new Intent(MainActivity.this, SettingActivity.class));
                 }
             }
         });
@@ -459,77 +462,78 @@ public class MainActivity extends BaseActivity
                 bundle.putInt("fragment", 1);
                 intent.putExtras(bundle);
                 startActivity(intent);
-            } else if (id == R.id.nav_setting) {
-                startActivity(new Intent(MainActivity.this, SettingActivity.class));
+            } else if (id == R.id.nav_problem) {
+                startActivity(new Intent(MainActivity.this, CustomProblemActivity.class));
             } else if (id == R.id.nav_complain) {
                 startActivity(new Intent(MainActivity.this, ComplainActivity.class));
                 //Log.d(TAG, "start complain activity ");
-            } else if (id == R.id.nav_login) {
-                new MaterialDialog.Builder(MainActivity.this).
-                        title("注销登录").
-                        content("您确定要退出登录吗？").
-                        positiveText("注销").
-                        negativeText("取消").
-                        callback(new MaterialDialog.ButtonCallback() {
-                            @Override
-                            public void onPositive(MaterialDialog dialog) {
-                                final String finalAccount = LoginUtils.getUserAccount(MainActivity.this);
-                                LoginUtils.delLoginInfo(getApplicationContext());
-                                loginFlag.setVisibility(View.GONE);
-                                UserModel.getInstance()
-                                        .customer_logout()
-                                        .subscribeOn(Schedulers.io())
-                                        .subscribe(new ServiceResponse<LogOutBean>() {
-                                            @Override
-                                            public void onNext(LogOutBean responseBody) {
-                                                super.onNext(responseBody);
-
-                                                if (responseBody.getCode() == 0) {
-                                                    JUtils.Toast("退出成功");
-
-                                                    try {
-
-                                                        imgUser.setImageResource(R.drawable.img_head);
-
-                                                        msg1.setVisibility(View.INVISIBLE);
-                                                        msg2.setVisibility(View.INVISIBLE);
-                                                        msg3.setVisibility(View.INVISIBLE);
-                                                        img_mmentry.setVisibility(View.INVISIBLE);
-                                                        if (tvNickname != null) {
-                                                            tvNickname.setText("点击登录");
-                                                        }
-                                                        if (tvPoint != null) {
-                                                            tvPoint.setText(0 + "");
-                                                        }
-                                                        if (tvMoney != null) {
-                                                            tvMoney.setText(0 + "");
-                                                        }
-
-                                                        if (tvCoupon != null) {
-                                                            tvCoupon.setText(0 + "");
-                                                        }
-                                                    } catch (NullPointerException e) {
-                                                        e.printStackTrace();
-                                                    }
-
-                                                    if ((finalAccount != null) && ((!finalAccount.isEmpty()))) {
-                                                        MiPushClient.unsetUserAccount(getApplicationContext(),
-                                                                finalAccount, null);
-                                                        JUtils.Log(TAG, "unset useraccount: " + finalAccount);
-                                                    }
-                                                }
-                                            }
-                                        });
-
-                                dialog.dismiss();
-                            }
-
-                            @Override
-                            public void onNegative(MaterialDialog dialog) {
-                                dialog.dismiss();
-                            }
-                        }).show();
             }
+//            else if (id == R.id.nav_login) {
+//                new MaterialDialog.Builder(MainActivity.this).
+//                        title("注销登录").
+//                        content("您确定要退出登录吗？").
+//                        positiveText("注销").
+//                        negativeText("取消").
+//                        callback(new MaterialDialog.ButtonCallback() {
+//                            @Override
+//                            public void onPositive(MaterialDialog dialog) {
+//                                final String finalAccount = LoginUtils.getUserAccount(MainActivity.this);
+//                                LoginUtils.delLoginInfo(getApplicationContext());
+//                                loginFlag.setVisibility(View.GONE);
+//                                UserModel.getInstance()
+//                                        .customer_logout()
+//                                        .subscribeOn(Schedulers.io())
+//                                        .subscribe(new ServiceResponse<LogOutBean>() {
+//                                            @Override
+//                                            public void onNext(LogOutBean responseBody) {
+//                                                super.onNext(responseBody);
+//
+//                                                if (responseBody.getCode() == 0) {
+//                                                    JUtils.Toast("退出成功");
+//
+//                                                    try {
+//
+//                                                        imgUser.setImageResource(R.drawable.img_head);
+//
+//                                                        msg1.setVisibility(View.INVISIBLE);
+//                                                        msg2.setVisibility(View.INVISIBLE);
+//                                                        msg3.setVisibility(View.INVISIBLE);
+//                                                        img_mmentry.setVisibility(View.INVISIBLE);
+//                                                        if (tvNickname != null) {
+//                                                            tvNickname.setText("点击登录");
+//                                                        }
+//                                                        if (tvPoint != null) {
+//                                                            tvPoint.setText(0 + "");
+//                                                        }
+//                                                        if (tvMoney != null) {
+//                                                            tvMoney.setText(0 + "");
+//                                                        }
+//
+//                                                        if (tvCoupon != null) {
+//                                                            tvCoupon.setText(0 + "");
+//                                                        }
+//                                                    } catch (NullPointerException e) {
+//                                                        e.printStackTrace();
+//                                                    }
+//
+//                                                    if ((finalAccount != null) && ((!finalAccount.isEmpty()))) {
+//                                                        MiPushClient.unsetUserAccount(getApplicationContext(),
+//                                                                finalAccount, null);
+//                                                        JUtils.Log(TAG, "unset useraccount: " + finalAccount);
+//                                                    }
+//                                                }
+//                                            }
+//                                        });
+//
+//                                dialog.dismiss();
+//                            }
+//
+//                            @Override
+//                            public void onNegative(MaterialDialog dialog) {
+//                                dialog.dismiss();
+//                            }
+//                        }).show();
+//            }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -744,24 +748,21 @@ public class MainActivity extends BaseActivity
         addSubscription(subscribe);
 
         JUtils.Log(TAG, "resume");
-        Subscription subscribe1 = UserModel.getInstance()
+        UserModel.getInstance()
                 .getUserInfo()
                 .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<UserInfoBean>() {
+                .subscribe(new ServiceResponse<UserInfoBean>(){
                     @Override
                     public void onNext(UserInfoBean userInfoBean) {
                         if (userInfoBean != null) {
-                            if (userInfoBean.isHasUsablePassword() && userInfoBean.getMobile() != "" || (!LoginUtils.checkLoginState(getApplicationContext()))) {
+                            if (userInfoBean.isHasUsablePassword() && userInfoBean.getMobile() != "") {
                                 loginFlag.setVisibility(View.GONE);
                             } else {
                                 loginFlag.setVisibility(View.VISIBLE);
                             }
-                        } else {
-                            int a = 1;
                         }
                     }
                 });
-        addSubscription(subscribe1);
 
         this.subscribe = UserNewModel.getInstance()
                 .getProfile()

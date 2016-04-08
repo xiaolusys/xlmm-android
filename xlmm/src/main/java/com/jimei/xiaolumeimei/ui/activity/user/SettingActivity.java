@@ -11,19 +11,27 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 import butterknife.Bind;
+
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
+import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.model.UserModel;
+import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.utils.AppUtils;
 import com.jimei.xiaolumeimei.utils.DataClearManager;
+import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jude.utils.JUtils;
 import com.umeng.update.UmengUpdateAgent;
 import com.umeng.update.UmengUpdateListener;
 import com.umeng.update.UpdateResponse;
 import com.umeng.update.UpdateStatus;
+import com.xiaomi.mipush.sdk.MiPushClient;
+
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -110,6 +118,7 @@ public class SettingActivity extends BaseSwipeBackCompatActivity {
     private Preference setNickname;
     private Preference bindPhone;
     private Preference about_company;
+    private Preference quit;
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
@@ -118,8 +127,10 @@ public class SettingActivity extends BaseSwipeBackCompatActivity {
 
       clearCache = findPreference(getResources().getString(R.string.clear_cache));
       updateVersion = findPreference(getResources().getString(R.string.update));
+      quit = findPreference("退出账户");
       clearCache.setOnPreferenceClickListener(this);
       updateVersion.setOnPreferenceClickListener(this);
+      quit.setOnPreferenceClickListener(this);
       updateCache();
 
       return view;
@@ -136,6 +147,43 @@ public class SettingActivity extends BaseSwipeBackCompatActivity {
         updateCache();
         AppUtils.showSnackBar(view, R.string.update_cache);
       }
+      if (preference.equals(quit)) {
+        new MaterialDialog.Builder(getActivity()).
+                        title("注销登录").
+                        content("您确定要退出登录吗？").
+                        positiveText("注销").
+                        negativeText("取消").
+                        callback(new MaterialDialog.ButtonCallback() {
+                            @Override
+                            public void onPositive(MaterialDialog dialog) {
+                                final String finalAccount = LoginUtils.getUserAccount(getActivity());
+                                UserModel.getInstance()
+                                        .customer_logout()
+                                        .subscribeOn(Schedulers.io())
+                                        .subscribe(new ServiceResponse<LogOutBean>() {
+                                            @Override
+                                            public void onNext(LogOutBean responseBody) {
+                                                super.onNext(responseBody);
+
+                                                if (responseBody.getCode() == 0) {
+                                                    JUtils.Toast("退出成功");
+                                                    if ((finalAccount != null) && ((!finalAccount.isEmpty()))) {
+                                                        MiPushClient.unsetUserAccount(getActivity().getApplicationContext(),
+                                                                finalAccount, null);
+                                                    }
+                                                }
+                                            }
+                                        });
+
+                                dialog.dismiss();
+                            }
+
+                            @Override
+                            public void onNegative(MaterialDialog dialog) {
+                                dialog.dismiss();
+                            }
+                        }).show();
+            }
 
       if (preference.equals(updateVersion)) {
         UmengUpdateAgent.setUpdateAutoPopup(false);
