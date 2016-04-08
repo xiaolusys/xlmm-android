@@ -7,9 +7,9 @@ package com.jimei.xiaolumeimei.data;
  */
 public class XlmmApi {
   //public static final String APP_BASE_URL = "http://m.xiaolumeimei.com";
-  public static final String APP_BASE_URL = "http://staging.xiaolumeimei.com";
+  //public static final String APP_BASE_URL = "http://staging.xiaolumeimei.com";
 //  public static final String APP_BASE_URL = "http://192.168.1.11:9000";
-//  public static final String APP_BASE_URL= "http//dev.xiolumeimei.com";
+  public static final String APP_BASE_URL= "http//dev.xiolumeimei.com";
   //public static final String APP_BASE_URL = "http://192.168.1.13:8000";
 //  public static final String APP_BASE_URL = "http://192.168.1.31:9000";
 

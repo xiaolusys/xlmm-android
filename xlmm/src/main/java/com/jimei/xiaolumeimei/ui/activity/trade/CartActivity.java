@@ -23,7 +23,6 @@ import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.CartsinfoBean;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
-import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.widget.ScrollLinearLayoutManager;
@@ -81,8 +80,6 @@ public class CartActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
-
-    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent), 0);
 
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
@@ -169,6 +166,15 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                       if (null != cartsinfoBeen) {
                         mCartsHisAdapetr.updateWithClear(cartsinfoBeen);
                       } else {
+
+                          emptyContent.setVisibility(View.VISIBLE);
+                          goMain.setOnClickListener(new View.OnClickListener() {
+                            @Override public void onClick(View v) {
+                              startActivity(new Intent(CartActivity.this, MainActivity.class));
+                              finish();
+                            }
+                          });
+
                         tvShow.setVisibility(View.INVISIBLE);
                         showLine.setVisibility(View.INVISIBLE);
                       }
@@ -203,15 +209,18 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                     }
                   });
               addSubscription(subscription1);
-            } else {
-              emptyContent.setVisibility(View.VISIBLE);
-              goMain.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                  startActivity(new Intent(CartActivity.this, MainActivity.class));
-                  finish();
-                }
-              });
             }
+
+            //else {
+            //  emptyContent.setVisibility(View.VISIBLE);
+            //  goMain.setOnClickListener(new View.OnClickListener() {
+            //    @Override public void onClick(View v) {
+            //      startActivity(new Intent(CartActivity.this, MainActivity.class));
+            //      finish();
+            //    }
+            //  });
+            //}
+
           }
         });
     addSubscription(subscription);
@@ -410,7 +419,22 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                           @Override public void onNext(ResponseBody responseBody) {
                             super.onNext(responseBody);
                             removeAt(position);
-
+                            Subscription subscribe = CartsModel.getInstance()
+                                .getCartsHisList()
+                                .subscribeOn(Schedulers.io())
+                                .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
+                                  @Override public void onNext(
+                                      List<CartsinfoBean> cartsinfoBeen) {
+                                    if (null != cartsinfoBeen) {
+                                      mListhis = cartsinfoBeen;
+                                      mCartsHisAdapetr.notifyDataSetChanged();
+                                    } else {
+                                      tvShow.setVisibility(View.INVISIBLE);
+                                      showLine.setVisibility(View.INVISIBLE);
+                                    }
+                                  }
+                                });
+                            addSubscription(subscribe);
                             getCartsInfo();
                           }
                         });
