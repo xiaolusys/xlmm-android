@@ -65,6 +65,7 @@ import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.entities.WxPubAuthInfo;
 import com.squareup.okhttp.ResponseBody;
 import java.util.List;
+
 import retrofit.http.Body;
 import retrofit.http.DELETE;
 import retrofit.http.Field;
@@ -527,8 +528,8 @@ public interface XlmmService {
             @Field("headimgurl") String headimgurl,
             @Field("nickname") String nickname,
             @Field("openid") String openid,
-            @Field("unionid") String unionid
-    );
+            @Field("unionid") String unionid,
+            @Field("devtype") String devtype);
 
     @GET("pmt/xlmm/agency_info")
     Observable<AgentInfoBean> getAgentInfoBean(
@@ -779,15 +780,15 @@ public interface XlmmService {
     @FormUrlEncoded
     @POST("pmt/cushoppros/change_pro_position")
     Observable<MMHavaChooseResultBean> changeProPosition(
-            @Field("change_id")String chanege_id,
-            @Field("target_id")String target_id
+            @Field("change_id") String chanege_id,
+            @Field("target_id") String target_id
     );
 
     //移除一个选品
     @FormUrlEncoded
     @POST("pmt/cushoppros/remove_pro_from_shop")
     Observable<MMHavaChooseResultBean> removeProFromShop(
-            @Field("product")String id
+            @Field("product") String id
     );
 
 
@@ -806,8 +807,8 @@ public interface XlmmService {
     Observable<CodeBean> verify_code(
             @Field("mobile") String mobile,
             @Field("action") String action,
-            @Field("verify_code") String code
-    );
+            @Field("verify_code") String code,
+            @Field("devtype") String devtype);
 
     //设置账号密码
     @FormUrlEncoded
@@ -825,7 +826,8 @@ public interface XlmmService {
     Observable<CodeBean> passwordlogin(
             @Field("username") String username,
             @Field("password") String password,
-            @Field("next") String next);
+            @Field("next") String next,
+            @Field("devtype")String devtype);
 
 
     @GET(XlmmApi.APP_BASE_URL + "/rest/v2/weixinapplogin")

@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:gravity="center_horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
   <android.support.design.widget.AppBarLayout
@@ -28,20 +29,39 @@
 
   </android.support.design.widget.AppBarLayout>
 
-  <EditText
-      android:id="@+id/complain_text"
+  <RelativeLayout
       android:layout_width="match_parent"
-      android:hint="@string/complaininfo"
-      android:layout_height="wrap_content"
-      android:lines="9"
-      />
+      android:layout_margin="8dp"
+      android:padding="8dp"
+      android:onClick="getSoftInput"
+      android:background="@drawable/complain_bg"
+      android:layout_height="200dp">
+    <EditText
+        android:id="@+id/complain_text"
+        android:textColorHint="#666"
+        android:textSize="16sp"
+        android:background="@null"
+        android:layout_width="match_parent"
+        android:hint="@string/complaininfo"
+        android:layout_height="wrap_content"
+        android:maxLength="200"
+        />
+    <TextView
+        android:id="@+id/count_text"
+        android:text="0/200"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+  </RelativeLayout>
+
 
   <Button
       android:textColor="@color/white"
       android:layout_marginTop="16dp"
-      android:layout_width="match_parent"
       android:text="提交"
-      android:layout_height="wrap_content"
+      android:layout_width="656px"
+      android:layout_height="90px"
       android:id="@+id/tijiao"
       android:background="@drawable/shape_common"
       />
