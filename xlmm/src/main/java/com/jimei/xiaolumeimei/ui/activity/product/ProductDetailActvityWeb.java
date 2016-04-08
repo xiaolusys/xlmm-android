@@ -16,8 +16,7 @@ import android.widget.Toast;
 import butterknife.Bind;
 import cn.iwgang.countdownview.CountdownView;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.base.BaseAppCompatActivity;
-import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.base.BaseAppCompatActivityForDetail;
 import com.jimei.xiaolumeimei.entities.AddCartsBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
@@ -42,7 +41,7 @@ import rx.schedulers.Schedulers;
  *
  * Copyright 2015年 上海己美. All rights reserved.
  */
-public class ProductDetailActvityWeb extends BaseAppCompatActivity
+public class ProductDetailActvityWeb extends BaseAppCompatActivityForDetail
     implements View.OnClickListener, setSkuidListener {
   private static final String TAG = ProductDetailActvityWeb.class.getSimpleName();
   @Bind(R.id.first) FrameLayout first;

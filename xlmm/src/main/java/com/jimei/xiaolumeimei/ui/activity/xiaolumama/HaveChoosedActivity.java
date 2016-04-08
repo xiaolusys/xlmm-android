@@ -89,7 +89,7 @@ public class HaveChoosedActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
-    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent),0);
+
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
     finishBack(toolbar);

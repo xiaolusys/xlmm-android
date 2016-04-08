@@ -303,6 +303,22 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                   .subscribe(new ServiceResponse<ResponseBody>() {
                     @Override public void onNext(ResponseBody responseBody) {
                       super.onNext(responseBody);
+                      Subscription subscribe = CartsModel.getInstance()
+                          .getCartsHisList()
+                          .subscribeOn(Schedulers.io())
+                          .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
+                            @Override public void onNext(
+                                List<CartsinfoBean> cartsinfoBeen) {
+                              if (null != cartsinfoBeen) {
+                                mListhis = cartsinfoBeen;
+                                mCartsHisAdapetr.notifyDataSetChanged();
+                              } else {
+                                tvShow.setVisibility(View.INVISIBLE);
+                                showLine.setVisibility(View.INVISIBLE);
+                              }
+                            }
+                          });
+                      addSubscription(subscribe);
 
                       getCartsInfo(position);
                     }
