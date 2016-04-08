@@ -11,12 +11,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
-/**
- * Created by Jaeger on 16/2/14.
- *
- * Email: chjie.jaeger@gamil.com
- * GitHub: https://github.com/laobie
- */
 public class StatusBarUtil {
 
     public static final int DEFAULT_STATUS_BAR_ALPHA = 112;

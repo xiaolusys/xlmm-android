@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.umeng.analytics.MobclickAgent;
 import com.zhy.autolayout.AutoLayoutActivity;
 import rx.Subscription;
@@ -42,7 +43,7 @@ public abstract class BaseActivity extends AutoLayoutActivity {
     super.onCreate(savedInstanceState);
 
     setContentView(provideContentViewId());
-    //StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent),0);
+    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent),0);
     ButterKnife.bind(this);
 
     initView();
