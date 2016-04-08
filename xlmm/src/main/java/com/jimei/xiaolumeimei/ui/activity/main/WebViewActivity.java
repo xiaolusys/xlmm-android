@@ -192,7 +192,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
 
         @Override public void onPageFinished(WebView view, String url) {
           JUtils.Log(TAG, "onPageFinished:" + url);
-
+          CookieSyncManager.getInstance().sync();
           if (!mWebView.getSettings().getLoadsImagesAutomatically()) {
             mWebView.getSettings().setLoadsImagesAutomatically(true);
           }

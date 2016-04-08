@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
     />
     <TextView
-android:layout_marginTop="2px"
+        android:layout_marginTop="2px"
         android:id="@+id/total_price"
         android:textSize="30px"
         android:textColor="@color/colorPrimary"
