@@ -198,7 +198,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                         hideIndeterminateProgressDialog();
                                         LoginUtils.saveLoginInfo(true, getApplicationContext(),
                                                 login_name_value, login_pass_value);
-                                        JUtils.Toast("登陆成功");
+                                        JUtils.Toast("登录成功!");
                                         //set xiaomi push useraccount
                                         String str = getIntent().getExtras().getString("login");
                                         LoginUtils.setPushUserAccount(LoginActivity.this,
