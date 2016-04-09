@@ -314,9 +314,6 @@
             android:name=".ui.activity.xiaolumama.MMChooseListActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
-            android:name=".ui.activity.xiaolumama.MaMaMyStoreActivity"
-            android:theme="@style/AppTheme.TransparentActivity" />
-        <activity
             android:name=".ui.activity.xiaolumama.ShareAllowanceActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
@@ -344,7 +341,7 @@
             android:name=".ui.activity.user.WxPubTwoDimenCodeActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
-            android:name=".ui.activity.xiaolumama.MMWebViewActivity"
+            android:name=".ui.activity.xiaolumama.MMStoreWebViewActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".ui.activity.xiaolumama.MMcarryLogActivity"

@@ -301,7 +301,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         break;
       case R.id.rl_shop:
 
-        Intent intentrl_shop = new Intent(this, MMWebViewActivity.class);
+        Intent intentrl_shop = new Intent(this, MMStoreWebViewActivity.class);
         sharedPreferences =
             getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
         cookies = sharedPreferences.getString("cookiesString", "");
@@ -310,12 +310,11 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         Bundle bundlerl_shop = new Bundle();
         bundlerl_shop.putString("cookies", cookies);
         bundlerl_shop.putString("domain", domain);
-//        bundlerl_shop.putString("Cookie", sharedPreferences.getString("Cookie", ""));
-        bundlerl_shop.putString("link", sharelink);
+        bundlerl_shop.putString("Cookie", sharedPreferences.getString("Cookie", ""));
+        bundlerl_shop.putString("actlink", sharelink);
         intentrl_shop.putExtras(bundlerl_shop);
         startActivity(intentrl_shop);
 
-        //        startActivity(new Intent(MamaInfoActivity.this, MaMaMyStoreActivity.class));
         break;
       case R.id.rl_two_dimen:
 
@@ -328,7 +327,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         Bundle bundlerl_two_dimen = new Bundle();
         bundlerl_two_dimen.putString("cookies", cookies);
         bundlerl_two_dimen.putString("domain", domain);
-//        bundlerl_two_dimen.putString("cookies", sharedPreferences.getString("Cookie", ""));
+        bundlerl_two_dimen.putString("cookies", sharedPreferences.getString("Cookie", ""));
         bundlerl_two_dimen.putString("actlink", shareMmcode);
         intentrl_two_dimen.putExtras(bundlerl_two_dimen);
         startActivity(intentrl_two_dimen);

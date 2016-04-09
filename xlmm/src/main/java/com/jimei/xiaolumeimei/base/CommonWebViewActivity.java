@@ -574,6 +574,28 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     addSubscription(subscribe);
   }
 
+
+  protected void share_shopping(String title, String sharelink, String desc,
+                              String shareimg) {
+    OnekeyShare oks = new OnekeyShare();
+    //关闭sso授权
+    oks.disableSSOWhenAuthorize();
+
+    oks.setTitle(title);
+    // titleUrl是标题的网络链接，仅在人人网和QQ空间使用
+    oks.setTitleUrl(sharelink);
+    // text是分享文本，所有平台都需要这个字段
+    oks.setText(desc);
+    // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
+    //oks.setImagePath(filePara.getFilePath());//确保SDcard下面存在此张图片
+    //oks.setImageUrl("http://f1.sharesdk.cn/imgs/2014/02/26/owWpLZo_638x960.jpg");
+    oks.setImageUrl(shareimg);
+    oks.setUrl(sharelink);
+
+    // 启动分享GUI
+    oks.show(this);
+  }
+
   private void sharePartyInfo() {
     if (partyShareInfo == null) return;
 

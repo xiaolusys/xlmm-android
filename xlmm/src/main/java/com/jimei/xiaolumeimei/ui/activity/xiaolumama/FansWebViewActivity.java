@@ -11,8 +11,6 @@ import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
  */
 public class FansWebViewActivity extends CommonWebViewActivity {
 
-  private static final String URL = "http://m.xiaolumeimei.com/pages/fans-explain.html";
-
   @Override
   protected void initViews() {
     super.initViews();

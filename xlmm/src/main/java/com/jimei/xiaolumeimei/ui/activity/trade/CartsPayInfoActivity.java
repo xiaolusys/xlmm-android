@@ -850,7 +850,10 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         tv_coupon.setText(coupon_price + "元优惠券");
 
         calcAllPrice();
-
+        if (coupon_price == 0) {
+          isCoupon = false;
+          return;
+        }
         JUtils.Log(TAG, "coupon_id:" + coupon_id);
         Subscription subscription =
             CartsModel.getInstance()
