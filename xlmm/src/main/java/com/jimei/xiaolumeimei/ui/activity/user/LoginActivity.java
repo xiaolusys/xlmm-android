@@ -200,15 +200,15 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                                 login_name_value, login_pass_value);
                                         JUtils.Toast("登陆成功");
                                         //set xiaomi push useraccount
+                                        String str = getIntent().getExtras().getString("login");
                                         LoginUtils.setPushUserAccount(LoginActivity.this,
                                                 MiPushClient.getRegId(getApplicationContext()));
                                         String login;
-                                        if (null != getIntent()) {
+                                        if (null != getIntent()&&getIntent().getExtras()!=null) {
                                             login = getIntent().getExtras().getString("login");
                                         } else {
                                             return;
                                         }
-
                                         assert login != null;
                                         if (login.equals("cart")) {
                                             Intent intent = new Intent(mContext, CartActivity.class);

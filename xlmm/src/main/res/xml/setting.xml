@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <Preference
-        android:key="用户头像"
-        android:layout="@layout/preference_header_img"
-        android:summary=""
-        android:title="用户头像">
-
-    </Preference>
 
     <Preference
         android:key="账户昵称"

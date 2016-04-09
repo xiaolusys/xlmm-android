@@ -12,7 +12,7 @@ public class UserInfoBean {
 
   /**
    * id : 1
-   * url : http://m.xiaolumeimei.com/rest/v1/users/1
+   * url :
    * user_id : 1
    * username : xiuqing.mei
    * nick : 小鹿妈妈

@@ -26,6 +26,8 @@ import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.utils.AppUtils;
 import com.jimei.xiaolumeimei.utils.DataClearManager;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
+import com.jimei.xiaolumeimei.utils.ViewUtils;
+import com.jimei.xiaolumeimei.widget.CircleImageView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.update.UmengUpdateAgent;
@@ -50,6 +52,8 @@ public class SettingActivity extends BaseSwipeBackCompatActivity {
     Toolbar toolbar;
     @Bind(R.id.container_setting)
     FrameLayout containerSetting;
+    @Bind(R.id.user_img)
+    CircleImageView imgUser;
     UserInfoBean userinfo;
     private SettingFragment settingFragment;
 
@@ -80,6 +84,7 @@ public class SettingActivity extends BaseSwipeBackCompatActivity {
                                 + " phone "
                                 + userinfo.getMobile());
                         settingFragment.updatePref();
+                        ViewUtils.loadImgToImgView(getApplicationContext(),imgUser,user.getThumbnail());
                     }
 
                     @Override
@@ -138,7 +143,6 @@ public class SettingActivity extends BaseSwipeBackCompatActivity {
         private Preference bindPhone;
         private Preference about_company;
         private Preference quit;
-        private Preference imgHead;
 
 
         @Override
@@ -241,8 +245,6 @@ public class SettingActivity extends BaseSwipeBackCompatActivity {
 
         public void updatePref() {
             setNickname = findPreference(getResources().getString(R.string.set_nick));
-            imgHead = findPreference("用户头像");
-            imgHead.setIcon(R.mipmap.ic_launcher);
             bindPhone = findPreference(getResources().getString(R.string.bind_phone));
             setNickname.setSummary(nickName);
             bindPhone.setSummary(mobile.substring(0, 3) + "****" + mobile.substring(7));
