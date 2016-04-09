@@ -12,36 +12,8 @@ import rx.schedulers.Schedulers;
  * <p>
  * Copyright 2015年 上海己美. All rights reserved.
  */
+
 public class MMShareCodeWebViewActivity extends CommonWebViewActivity {
-
-    private String actlink;
-    private String domain;
-    private String sessionid;
-    private String title, sharelink, desc, shareimg;
-
-
-    @Override
-    protected void initData() {
-        super.initData();
-
-        MMProductModel.getInstance()
-                .getShareShopping()
-                .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<MMShoppingBean>() {
-
-                    @Override
-                    public void onNext(MMShoppingBean mmShoppingBean) {
-
-                        if (null != mmShoppingBean) {
-                            title = (String) mmShoppingBean.getShopInfo().getName();
-                            sharelink = mmShoppingBean.getShopInfo().getShopLink();
-                            shareimg = mmShoppingBean.getShopInfo().getThumbnail();
-                            desc = mmShoppingBean.getShopInfo().getDesc();
-                        }
-                    }
-                });
-
-    }
 
     @Override
     protected void initViews() {

@@ -211,7 +211,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
       JUtils.Log(TAG, "set webview err");
     }
 
-    syncCookie(CommonWebViewActivity.this);
+    syncCookie(this);
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
