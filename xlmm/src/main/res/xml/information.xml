@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Preference
+        android:key="账户昵称"
+        android:layout="@layout/preference_list_item"
+        android:summary=""
+        android:title="昵称">
+        <intent
+            android:action="android.intent.action.MAIN"
+            android:targetClass="com.jimei.xiaolumeimei.ui.activity.user.SettingNicknameActivity"
+            android:targetPackage="com.jimei.xiaolumeimei" />
+    </Preference>
+    <Preference
+        android:key="绑定手机"
+        android:layout="@layout/preference_list_item"
+        android:summary=""
+        android:title="绑定手机">
+        <intent
+            android:action="android.intent.action.MAIN"
+            android:targetClass="com.jimei.xiaolumeimei.ui.activity.user.WxLoginBindPhoneActivity"
+            android:targetPackage="com.jimei.xiaolumeimei" />
+    </Preference>
+    <Preference
+        android:key="修改密码"
+        android:layout="@layout/preference_list_item"
+        android:summary=""
+        android:title="修改密码">
+        <intent
+            android:action="android.intent.action.MAIN"
+            android:targetClass="com.jimei.xiaolumeimei.ui.activity.user.VerifyPhoneActivity"
+            android:targetPackage="com.jimei.xiaolumeimei" />
+    </Preference>
+    <Preference
+        android:key="地址管理"
+        android:layout="@layout/preference_list_item"
+        android:summary=""
+        android:title="地址管理">
+        <intent
+            android:action="android.intent.action.MAIN"
+            android:targetClass="com.jimei.xiaolumeimei.ui.activity.user.AddressActivity"
+            android:targetPackage="com.jimei.xiaolumeimei" />
+    </Preference>
+
+    <Preference
+        android:key="设置"
+        android:layout="@layout/preference_list_item"
+        android:summary=""
+        android:title="设置">
+        <intent
+            android:action="android.intent.action.MAIN"
+            android:targetClass="com.jimei.xiaolumeimei.ui.activity.user.SettingActivity"
+            android:targetPackage="com.jimei.xiaolumeimei" />
+    </Preference>
+    <Preference
+        android:key="退出账户"
+        android:layout="@layout/preference_list_item"
+        android:summary=""
+        android:title="退出账户"></Preference>
+
+</PreferenceScreen>

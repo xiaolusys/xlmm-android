@@ -38,7 +38,7 @@ import com.jimei.xiaolumeimei.ui.activity.user.CouponActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.CustomProblemActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.MembershipPointActivity;
-import com.jimei.xiaolumeimei.ui.activity.user.SettingActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.InformationActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.WalletActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaInfoActivity;
 import com.jimei.xiaolumeimei.ui.fragment.v1.ChildFragment;
@@ -380,7 +380,7 @@ public class MainActivity extends BaseActivity
                 intent = new Intent(MainActivity.this, CouponActivity.class);
                 break;
             case R.id.imgUser:
-                intent = new Intent(MainActivity.this, SettingActivity.class);
+                intent = new Intent(MainActivity.this, InformationActivity.class);
                 break;
         }
         if(!(LoginUtils.checkLoginState(getApplicationContext()))){
