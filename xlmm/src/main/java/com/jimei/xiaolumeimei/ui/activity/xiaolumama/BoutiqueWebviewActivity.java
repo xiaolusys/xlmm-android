@@ -21,7 +21,7 @@ import android.widget.ProgressBar;
 import cn.sharesdk.framework.ShareSDK;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.ui.activity.main.WebViewActivity;
+import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jude.utils.JUtils;
 
 /**
@@ -31,7 +31,7 @@ import com.jude.utils.JUtils;
  */
 public class BoutiqueWebviewActivity extends BaseSwipeBackCompatActivity {
 
-  private static final String TAG = WebViewActivity.class.getSimpleName();
+  private static final String TAG = CommonWebViewActivity.class.getSimpleName();
   LinearLayout ll_actwebview;
   //private static final String URL =
   //    "http://192.168.1.31:9000/sale/promotion/xlsampleorder/";

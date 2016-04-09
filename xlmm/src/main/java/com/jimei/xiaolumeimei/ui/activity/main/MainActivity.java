@@ -383,11 +383,11 @@ public class MainActivity extends BaseActivity
                 intent = new Intent(MainActivity.this, InformationActivity.class);
                 break;
         }
-        if(!(LoginUtils.checkLoginState(getApplicationContext()))){
+        if (!(LoginUtils.checkLoginState(getApplicationContext()))) {
             login(flag);
-        }else if(xlmmFlag){
+        } else if (xlmmFlag) {
             checkMamaInfo();
-        }else {
+        } else {
             startActivity(intent);
         }
     }
@@ -509,18 +509,19 @@ public class MainActivity extends BaseActivity
 
         swith_fragment();
 
-        //显示购物车数量
-        //cartsModel.show_carts_num()
-        //    .subscribeOn(Schedulers.io())
-        //    .subscribe(new ServiceResponse<CartsNumResultBean>() {
-        //      @Override public void onNext(CartsNumResultBean cartsNumResultBean) {
-        //        super.onNext(cartsNumResultBean);
-        //        if (cartsNumResultBean != null) {
-        //          num = cartsNumResultBean.getResult();
-        //          badge.setBadgeCount(num);
-        //        }
-        //      }
-        //    });
+//        显示购物车数量
+        CartsModel.getInstance().show_carts_num()
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ServiceResponse<CartsNumResultBean>() {
+                    @Override
+                    public void onNext(CartsNumResultBean cartsNumResultBean) {
+                        super.onNext(cartsNumResultBean);
+                        if (cartsNumResultBean != null) {
+                            num = cartsNumResultBean.getResult();
+                            badge.setBadgeCount(num);
+                        }
+                    }
+                });
 
         Subscription subscribe = CartsModel.getInstance()
                 .show_carts_num()

@@ -1,4 +1,4 @@
-package com.jimei.xiaolumeimei.ui.activity.main;
+package com.jimei.xiaolumeimei.base;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -28,18 +28,10 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.PlatformActionListener;
-import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.onekeyshare.OnekeyShare;
-import cn.sharesdk.sina.weibo.SinaWeibo;
-import cn.sharesdk.tencent.qq.QQ;
-import cn.sharesdk.tencent.qzone.QZone;
-import cn.sharesdk.wechat.friends.Wechat;
-import cn.sharesdk.wechat.moments.WechatMoments;
+
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
 import com.jimei.xiaolumeimei.model.ActivityModel;
@@ -48,9 +40,15 @@ import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.mob.tools.utils.UIHandler;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -59,12 +57,12 @@ import rx.schedulers.Schedulers;
  *
  * Copyright 2015年 上海己美. All rights reserved.
  */
-public class WebViewActivity extends BaseSwipeBackCompatActivity
+public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     implements PlatformActionListener, Handler.Callback {
 
   private static final int MSG_ACTION_CCALLBACK = 2;
 
-  private static final String TAG = WebViewActivity.class.getSimpleName();
+  private static final String TAG = CommonWebViewActivity.class.getSimpleName();
   LinearLayout ll_actwebview;
   private Toolbar mToolbar;
   private WebView mWebView;
@@ -75,6 +73,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
   private String domain;
   private String sessionid;
   private int id;
+  protected TextView webviewTitle;
 
   @Override protected void setListener() {
     mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -126,10 +125,12 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     return R.layout.activity_actwebview;
   }
 
+//  @TargetApi(Build.VERSION_CODES.KITKAT)
   @SuppressLint("JavascriptInterface") @Override protected void initViews() {
     JUtils.Log(TAG, "initViews");
     ShareSDK.initSDK(this);
 
+    webviewTitle = (TextView) findViewById(R.id.webview_title);
     ll_actwebview = (LinearLayout) findViewById(R.id.ll_actwebview);
     mProgressBar = (ProgressBar) findViewById(R.id.pb_view);
     mWebView = (WebView) findViewById(R.id.wb_view);
@@ -159,6 +160,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
       mWebView.getSettings().setDatabaseEnabled(true);
       mWebView.getSettings().setLoadWithOverviewMode(true);
       mWebView.getSettings().setUseWideViewPort(true);
+//      mWebView.setWebContentsDebuggingEnabled(true);
 
       mWebView.setWebChromeClient(new WebChromeClient() {
         @Override public void onProgressChanged(WebView view, int newProgress) {
@@ -170,29 +172,13 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
             mProgressBar.setVisibility(View.VISIBLE);
           }
         }
-
-        /*@Override
-        public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
-          mResult = result;
-          AlertDialog dialog = new AlertDialog.Builder(WebViewActivity.this)
-                  .setTitle("Custom Dialog")
-                  .setMessage(message)
-                  .setOnCancelListener(new CancelListener())
-                  .setNegativeButton("Cancel", new CancelListener())
-                  .setPositiveButton("Ok", new PositiveListener())
-                  .create();
-          dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-          dialog.show();
-
-          return true;
-        }*/
       });
 
       mWebView.setWebViewClient(new WebViewClient() {
 
         @Override public void onPageFinished(WebView view, String url) {
           JUtils.Log(TAG, "onPageFinished:" + url);
-
+          CookieSyncManager.getInstance().sync();
           if (!mWebView.getSettings().getLoadsImagesAutomatically()) {
             mWebView.getSettings().setLoadsImagesAutomatically(true);
           }
@@ -225,7 +211,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
       JUtils.Log(TAG, "set webview err");
     }
 
-    syncCookie(WebViewActivity.this);
+    syncCookie(this);
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
@@ -271,14 +257,14 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void onPause() {
     super.onPause();
-    CookieSyncManager.createInstance(WebViewActivity.this);
+    CookieSyncManager.createInstance(CommonWebViewActivity.this);
     CookieSyncManager.getInstance().stopSync();
     mWebView.onPause();
   }
 
   @Override protected void onResume() {
     super.onResume();
-    CookieSyncManager.createInstance(WebViewActivity.this);
+    CookieSyncManager.createInstance(CommonWebViewActivity.this);
     CookieSyncManager.getInstance().startSync();
     mWebView.onResume();
     ShareSDK.initSDK(this);
@@ -364,18 +350,18 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     switch (msg.arg1) {
       case 1: {
         // 成功
-        Toast.makeText(WebViewActivity.this, "分享成功", Toast.LENGTH_SHORT).show();
+        Toast.makeText(CommonWebViewActivity.this, "分享成功", Toast.LENGTH_SHORT).show();
         JUtils.Log(TAG, "分享回调成功------------");
       }
       break;
       case 2: {
         // 失败
-        Toast.makeText(WebViewActivity.this, "分享失败", Toast.LENGTH_SHORT).show();
+        Toast.makeText(CommonWebViewActivity.this, "分享失败", Toast.LENGTH_SHORT).show();
       }
       break;
       case 3: {
         // 取消
-        Toast.makeText(WebViewActivity.this, "分享取消", Toast.LENGTH_SHORT).show();
+        Toast.makeText(CommonWebViewActivity.this, "分享取消", Toast.LENGTH_SHORT).show();
       }
       break;
     }
@@ -400,7 +386,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
                     "saveTowDimenCode : Qrcodelink=" + partyShareInfo.getQrcodeLink());
 
                 try {
-                  WebView webView = new WebView(WebViewActivity.this);
+                  WebView webView = new WebView(CommonWebViewActivity.this);
                   webView.setLayoutParams(
                       new Toolbar.LayoutParams(Toolbar.LayoutParams.MATCH_PARENT,
                           Toolbar.LayoutParams.MATCH_PARENT));
@@ -449,7 +435,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
     } else {
       JUtils.Log(TAG, "saveTowDimenCode : Qrcodelink=" + partyShareInfo.getQrcodeLink());
       try {
-        WebView webView = new WebView(WebViewActivity.this);
+        WebView webView = new WebView(CommonWebViewActivity.this);
         webView.setLayoutParams(
             new Toolbar.LayoutParams(Toolbar.LayoutParams.MATCH_PARENT,
                 Toolbar.LayoutParams.MATCH_PARENT));
@@ -534,7 +520,7 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
                 + getResources().getString(R.string.share_2dimen_pic_name)
                 + ".jpg";
             BitmapUtil.saveBitmap(b, fileName);
-            Toast.makeText(WebViewActivity.this, R.string.share_2dimen_pic_tips,
+            Toast.makeText(CommonWebViewActivity.this, R.string.share_2dimen_pic_tips,
                 Toast.LENGTH_SHORT).show();
 
             File file = new File(fileName);
@@ -586,6 +572,28 @@ public class WebViewActivity extends BaseSwipeBackCompatActivity
               }
             });
     addSubscription(subscribe);
+  }
+
+
+  protected void share_shopping(String title, String sharelink, String desc,
+                              String shareimg) {
+    OnekeyShare oks = new OnekeyShare();
+    //关闭sso授权
+    oks.disableSSOWhenAuthorize();
+
+    oks.setTitle(title);
+    // titleUrl是标题的网络链接，仅在人人网和QQ空间使用
+    oks.setTitleUrl(sharelink);
+    // text是分享文本，所有平台都需要这个字段
+    oks.setText(desc);
+    // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
+    //oks.setImagePath(filePara.getFilePath());//确保SDcard下面存在此张图片
+    //oks.setImageUrl("http://f1.sharesdk.cn/imgs/2014/02/26/owWpLZo_638x960.jpg");
+    oks.setImageUrl(shareimg);
+    oks.setUrl(sharelink);
+
+    // 启动分享GUI
+    oks.show(this);
   }
 
   private void sharePartyInfo() {
