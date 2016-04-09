@@ -126,7 +126,7 @@ public class MMShareCodeWebViewActivity extends BaseSwipeBackCompatActivity {
     return R.layout.activity_mmsharecodewebview;
   }
 
-  //@TargetApi(Build.VERSION_CODES.KITKAT)
+  @TargetApi(Build.VERSION_CODES.KITKAT)
       @SuppressLint("JavascriptInterface") @Override protected void initViews() {
         JUtils.Log(TAG, "initViews");
         StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent), 0);
@@ -163,7 +163,7 @@ public class MMShareCodeWebViewActivity extends BaseSwipeBackCompatActivity {
       mWebView.getSettings().setDatabaseEnabled(true);
       mWebView.getSettings().setLoadWithOverviewMode(true);
       mWebView.getSettings().setUseWideViewPort(true);
-      //mWebView.setWebContentsDebuggingEnabled(true);
+      mWebView.setWebContentsDebuggingEnabled(true);
 
       mWebView.setWebChromeClient(new WebChromeClient() {
         @Override public void onProgressChanged(WebView view, int newProgress) {
