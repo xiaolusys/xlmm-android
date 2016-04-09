@@ -138,6 +138,8 @@ public class SettingActivity extends BaseSwipeBackCompatActivity {
         private Preference bindPhone;
         private Preference about_company;
         private Preference quit;
+        private Preference imgHead;
+
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -239,10 +241,11 @@ public class SettingActivity extends BaseSwipeBackCompatActivity {
 
         public void updatePref() {
             setNickname = findPreference(getResources().getString(R.string.set_nick));
+            imgHead = findPreference("用户头像");
+            imgHead.setIcon(R.mipmap.ic_launcher);
             bindPhone = findPreference(getResources().getString(R.string.bind_phone));
             setNickname.setSummary(nickName);
             bindPhone.setSummary(mobile.substring(0, 3) + "****" + mobile.substring(7));
-
             about_company = findPreference(getResources().getString(R.string.about_company));
             about_company.setSummary(XlmmConst.VERSION);
         }

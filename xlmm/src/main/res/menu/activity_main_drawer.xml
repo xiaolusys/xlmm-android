@@ -6,6 +6,8 @@
 
 
   <group android:checkableBehavior="single" android:id="@+id/group_1">
+    <item android:id="@+id/nav_orders" android:icon="@drawable/ic_menu_order"
+        android:title="我的订单"/>
 
     <item
         app:actionLayout="@layout/nav_badge"
@@ -23,12 +25,11 @@
         android:id="@+id/nav_returned"
         android:icon="@drawable/ic_menu_refund"
         android:title="退换货"/>
-    <item android:id="@+id/nav_orders" android:icon="@drawable/ic_menu_order"
-        android:title="全部订单"/>
+
   </group>
 
-  <item android:id="@+id/nav_complain" android:icon="@drawable/ic_menu_complain"
+  <item android:id="@+id/nav_complain" android:icon="@drawable/ic_menu_complain_3"
       android:title="投诉建议"/>
-  <item android:id="@+id/nav_problem" android:icon="@android:drawable/ic_menu_search"
+  <item android:id="@+id/nav_problem" android:icon="@drawable/ic_menu_problem"
     android:title="常见问题"/>
 </menu>

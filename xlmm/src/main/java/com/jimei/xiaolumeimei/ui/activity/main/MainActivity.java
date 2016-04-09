@@ -24,11 +24,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseActivity;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
-import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.UserModel;
@@ -54,7 +52,6 @@ import com.jimei.xiaolumeimei.widget.badgelib.BadgeView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.update.UmengUpdateAgent;
-import com.xiaomi.mipush.sdk.MiPushClient;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -65,530 +62,446 @@ import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseActivity
-    implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
-  public static String TAG = "MainActivity";
-  @Bind(R.id.tab_layout) TabLayout mTabLayout;
-  @Bind(R.id.view_pager) ViewPager mViewPager;
-  @Bind(R.id.tool_bar) Toolbar toolbar;
-  //@Bind(R.id.fab) FloatingActionButton carts;
-  @Bind(R.id.rv_cart) RelativeLayout carts;
-  @Bind(R.id.img_mmentry) ImageView img_mmentry;
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+    public static String TAG = "MainActivity";
+    @Bind(R.id.tab_layout)
+    TabLayout mTabLayout;
+    @Bind(R.id.view_pager)
+    ViewPager mViewPager;
+    @Bind(R.id.tool_bar)
+    Toolbar toolbar;
+    //@Bind(R.id.fab) FloatingActionButton carts;
+    @Bind(R.id.rv_cart)
+    RelativeLayout carts;
+    @Bind(R.id.img_mmentry)
+    ImageView img_mmentry;
 
-  DrawerLayout drawer;
-  TextView tvNickname;
+    DrawerLayout drawer;
+    TextView tvNickname;
 
-  ImageView imgPoint;
-  ImageView imgCoupon;
-  ImageView imgUser;
-  ImageView imaMoney;
+    ImageView imgUser;
 
-  TextView tvPoint;
-  TextView tvPoint1;
-  TextView tvCoupon;
-  TextView tvCoupon1;
-  TextView tvMoney;
-  TextView tvMoney1;
+    TextView tvPoint;
+    TextView tvCoupon;
+    TextView tvMoney;
 
-  List<Fragment> fragments;
-  List<String> titles;
-  UserInfoBean userInfoBean = new UserInfoBean();
-  @Bind(R.id.image_1) ImageView image1;
-  @Bind(R.id.image_2) ImageView image2;
-  //@Bind(R.id.cv_lefttime) CountdownView cvLefttime;
-  private int num;
-  private BadgeView badge;
-  private double budgetCash;
-  private Subscription subscribe;
-  private TextView msg1;
-  private TextView msg2;
-  private TextView msg3;
-  private ImageView loginFlag;
+    List<Fragment> fragments;
+    List<String> titles;
+    UserInfoBean userInfoBean = new UserInfoBean();
+    @Bind(R.id.image_1)
+    ImageView image1;
+    @Bind(R.id.image_2)
+    ImageView image2;
+    private int num;
+    private BadgeView badge;
+    private double budgetCash;
+    private Subscription subscribe;
+    private TextView msg1;
+    private TextView msg2;
+    private TextView msg3;
+    private ImageView loginFlag;
 
-  @Override protected int provideContentViewId() {
-    return R.layout.activity_main;
-  }
+    @Override
+    protected int provideContentViewId() {
+        return R.layout.activity_main;
+    }
 
-  @Override protected void setListener() {
-    carts.setOnClickListener(this);
-    img_mmentry.setOnClickListener(this);
-  }
+    @Override
+    protected void setListener() {
+        carts.setOnClickListener(this);
+        img_mmentry.setOnClickListener(this);
+    }
 
-  @Override protected void initData() {
-    initFragment();
+    @Override
+    protected void initData() {
+        initFragment();
 
-    initTitles();
+        initTitles();
 
-    initTabLayout();
+        initTabLayout();
 
-    getUserInfo();
+        getUserInfo();
 
-    //UmengUpdateAgent.setUpdateCheckConfig(false);
+        //UmengUpdateAgent.setUpdateCheckConfig(false);
 
-    new Thread(() -> {
-      try {
-        Thread.sleep(500 * 60);
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
-      UmengUpdateAgent.update(MainActivity.this);
-    }).start();
-
-    //Uri uri = Uri.parse("market://details?id=" + getPackageName());
-    //Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-    //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-    //startActivity(intent);
-
-  }
-
-  private void initTabLayout() {
-    mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(0)));
-    mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(1)));
-    mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(2)));
-    mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(3)));
-
-    MainTabAdapter mAdapter =
-        new MainTabAdapter(getSupportFragmentManager(), fragments, titles);
-    mViewPager.setAdapter(mAdapter);
-    mViewPager.setOffscreenPageLimit(3);
-    mTabLayout.setupWithViewPager(mViewPager);
-    //mTabLayout.setTabsFromPagerAdapter(mAdapter);
-    mTabLayout.setTabMode(TabLayout.MODE_FIXED);
-  }
-
-  private void initTitles() {
-    titles = new ArrayList<>();
-    titles.add("今日上新");
-    titles.add("昨日特卖");
-    titles.add("萌娃专区");
-    titles.add("时尚女装");
-  }
-
-  private void initFragment() {
-    fragments = new ArrayList<>();
-    fragments.add(TodayFragment.newInstance("今日上新"));
-    fragments.add(PreviousFragment.newInstance("昨日特卖"));
-    fragments.add(ChildFragment.newInstance("萌娃专区"));
-    fragments.add(LadyFragment.newInstance("时尚女装"));
-  }
-
-  @Override protected void initView() {
-    //toolbar.setTitle("小鹿美美");
-    //setSupportActionBar(toolbar);
-
-    drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-    StatusBarUtil.setColorForDrawerLayout(this, drawer,
-        getResources().getColor(R.color.colorAccent), 0);
-
-    ActionBarDrawerToggle toggle =
-        new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open,
-            R.string.navigation_drawer_close) {
-          @Override public void onDrawerClosed(View drawerView) {
-            //getActionBar().setTitle(mTitle);
-            invalidateOptionsMenu();
-          }
-
-          @Override public void onDrawerOpened(View drawerView) {
-            //getActionBar().setTitle(mDrawerTitle);
-            if (!(LoginUtils.checkLoginState(getApplicationContext()))) {
-              if (tvNickname != null) {
-                tvNickname.setText("点击登录");
-              }
-            } else {
-              if ((tvNickname != null) && (userInfoBean != null)) {
-                tvNickname.setText(userInfoBean.getNick());
-              }
-
-              if ((userInfoBean != null) && (!TextUtils.isEmpty(
-                  userInfoBean.getThumbnail()))) {
-                ViewUtils.loadImgToImgView(MainActivity.this, imgUser,
-                    userInfoBean.getThumbnail());
-              }
-
-              //获得待支付和待收货数目
-              android.support.design.widget.NavigationView navigationView =
-                  (android.support.design.widget.NavigationView) drawer.findViewById(
-                      R.id.nav_view);
-              LinearLayout nav_tobepaid = (LinearLayout) navigationView.getMenu()
-                  .findItem(R.id.nav_tobepaid)
-                  .getActionView();
-              msg1 = (TextView) nav_tobepaid.findViewById(R.id.msg);
-              LinearLayout nav_tobereceived = (LinearLayout) navigationView.getMenu()
-                  .findItem(R.id.nav_tobereceived)
-                  .getActionView();
-              msg2 = (TextView) nav_tobereceived.findViewById(R.id.msg);
-              LinearLayout nav_refund = (LinearLayout) navigationView.getMenu()
-                  .findItem(R.id.nav_returned)
-                  .getActionView();
-              msg3 = (TextView) nav_refund.findViewById(R.id.msg);
-
-              if ((null != userInfoBean) && (userInfoBean.getWaitpayNum() > 0)) {
-                msg1.setVisibility(View.VISIBLE);
-                msg1.setText(Integer.toString(userInfoBean.getWaitpayNum()));
-              } else {
-                msg1.setVisibility(View.INVISIBLE);
-              }
-
-              Log.i(TAG, "" + userInfoBean.getWaitpayNum());
-
-              if ((null != userInfoBean) && (userInfoBean.getWaitgoodsNum() > 0)) {
-                msg2.setVisibility(View.VISIBLE);
-                msg2.setText(Integer.toString(userInfoBean.getWaitgoodsNum()));
-              } else {
-                msg2.setVisibility(View.INVISIBLE);
-              }
-
-              if ((null != userInfoBean) && (userInfoBean.getRefundsNum() > 0)) {
-                msg3.setVisibility(View.VISIBLE);
-                msg3.setText(Integer.toString(userInfoBean.getRefundsNum()));
-              } else {
-                msg3.setVisibility(View.INVISIBLE);
-              }
+        new Thread(() -> {
+            try {
+                Thread.sleep(500 * 60);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+            UmengUpdateAgent.update(MainActivity.this);
+        }).start();
 
-            invalidateOptionsMenu();
-          }
-        };
-    drawer.setDrawerListener(toggle);
-    toggle.syncState();
-    //toggle.setDrawerIndicatorEnabled(false);
-    //toggle.setHomeAsUpIndicator(R.drawable.ic_deerhead);
-    //toolbar.setNavigationIcon(R.drawable.ic_deerhead);
+        //Uri uri = Uri.parse("market://details?id=" + getPackageName());
+        //Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        //startActivity(intent);
 
-    NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-    navigationView.setNavigationItemSelectedListener(this);
+    }
 
-    View llayout = navigationView.getHeaderView(0);
+    private void initTabLayout() {
+        mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(0)));
+        mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(1)));
+        mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(2)));
+        mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(3)));
 
-    tvCoupon = (TextView) llayout.findViewById(R.id.tvDiscount);
-    tvMoney = (TextView) llayout.findViewById(R.id.tvMoney);
-    tvPoint = (TextView) llayout.findViewById(R.id.tvScore);
+        MainTabAdapter mAdapter =
+                new MainTabAdapter(getSupportFragmentManager(), fragments, titles);
+        mViewPager.setAdapter(mAdapter);
+        mViewPager.setOffscreenPageLimit(3);
+        mTabLayout.setupWithViewPager(mViewPager);
+        //mTabLayout.setTabsFromPagerAdapter(mAdapter);
+        mTabLayout.setTabMode(TabLayout.MODE_FIXED);
+    }
 
-    imaMoney = (ImageView) llayout.findViewById(R.id.imgMoney);
-    imaMoney.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        drawer.closeDrawers();
-        if (LoginUtils.checkLoginState(getApplicationContext())) {
-          Intent intent = new Intent(MainActivity.this, WalletActivity.class);
-          Bundle bundle = new Bundle();
-          bundle.putDouble("money", budgetCash);
-          intent.putExtras(bundle);
-          startActivity(intent);
-        } else {
-          Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-          Bundle bundle = new Bundle();
-          bundle.putString("login", "money");
-          intent.putExtras(bundle);
-          startActivity(intent);
-        }
-      }
-    });
+    private void initTitles() {
+        titles = new ArrayList<>();
+        titles.add("今日上新");
+        titles.add("昨日特卖");
+        titles.add("萌娃专区");
+        titles.add("时尚女装");
+    }
 
-    tvMoney1 = (TextView) llayout.findViewById(R.id.tvMoney1);
-    tvMoney1.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        drawer.closeDrawers();
-        if (LoginUtils.checkLoginState(getApplicationContext())) {
-          Intent intent = new Intent(MainActivity.this, WalletActivity.class);
-          Bundle bundle = new Bundle();
-          bundle.putDouble("money", budgetCash);
-          intent.putExtras(bundle);
-          startActivity(intent);
-        } else {
-          Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-          Bundle bundle = new Bundle();
-          bundle.putString("login", "money");
-          intent.putExtras(bundle);
-          startActivity(intent);
-        }
-      }
-    });
+    private void initFragment() {
+        fragments = new ArrayList<>();
+        fragments.add(TodayFragment.newInstance("今日上新"));
+        fragments.add(PreviousFragment.newInstance("昨日特卖"));
+        fragments.add(ChildFragment.newInstance("萌娃专区"));
+        fragments.add(LadyFragment.newInstance("时尚女装"));
+    }
 
-    imgPoint = (ImageView) llayout.findViewById(R.id.imgPoint);
-    imgPoint.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        drawer.closeDrawers();
-        if (LoginUtils.checkLoginState(getApplicationContext())) {
-          Intent intent = new Intent(MainActivity.this, MembershipPointActivity.class);
-          startActivity(intent);
-        } else {
-          Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-          Bundle bundle = new Bundle();
-          bundle.putString("login", "point");
-          intent.putExtras(bundle);
-          startActivity(intent);
-        }
-      }
-    });
+    @Override
+    protected void initView() {
+        //toolbar.setTitle("小鹿美美");
+        //setSupportActionBar(toolbar);
 
-    tvPoint1 = (TextView) llayout.findViewById(R.id.tvPoint1);
-    tvPoint1.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        drawer.closeDrawers();
-        if (LoginUtils.checkLoginState(getApplicationContext())) {
-          Intent intent = new Intent(MainActivity.this, MembershipPointActivity.class);
-          startActivity(intent);
-        } else {
-          Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-          Bundle bundle = new Bundle();
-          bundle.putString("login", "point");
-          intent.putExtras(bundle);
-          startActivity(intent);
-        }
-      }
-    });
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        StatusBarUtil.setColorForDrawerLayout(this, drawer,
+                getResources().getColor(R.color.colorAccent), 0);
 
-    imgCoupon = (ImageView) llayout.findViewById(R.id.imgCoupon);
-    imgCoupon.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        drawer.closeDrawers();
-        if (LoginUtils.checkLoginState(getApplicationContext())) {
-          Intent intent = new Intent(MainActivity.this, CouponActivity.class);
-          startActivity(intent);
-        } else {
-          Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-          Bundle bundle = new Bundle();
-          bundle.putString("login", "coupon");
-          intent.putExtras(bundle);
-          startActivity(intent);
-        }
-      }
-    });
+        ActionBarDrawerToggle toggle =
+                new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open,
+                        R.string.navigation_drawer_close) {
+                    @Override
+                    public void onDrawerClosed(View drawerView) {
+                        //getActionBar().setTitle(mTitle);
+                        invalidateOptionsMenu();
+                    }
 
-    tvCoupon1 = (TextView) llayout.findViewById(R.id.tvCoupon1);
-    tvCoupon1.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        drawer.closeDrawers();
-        if (LoginUtils.checkLoginState(getApplicationContext())) {
-          Intent intent = new Intent(MainActivity.this, CouponActivity.class);
-          startActivity(intent);
-        } else {
-          Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-          Bundle bundle = new Bundle();
-          bundle.putString("login", "coupon");
-          intent.putExtras(bundle);
-          startActivity(intent);
-        }
-      }
-    });
+                    @Override
+                    public void onDrawerOpened(View drawerView) {
+                        //getActionBar().setTitle(mDrawerTitle);
+                        if (!(LoginUtils.checkLoginState(getApplicationContext()))) {
+                            if (tvNickname != null) {
+                                tvNickname.setText("点击登录");
+                            }
+                        } else {
+                            if ((tvNickname != null) && (userInfoBean != null)) {
+                                tvNickname.setText(userInfoBean.getNick());
+                            }
 
-    imgUser = (ImageView) llayout.findViewById(R.id.imgUser);
-    imgUser.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
+                            if ((userInfoBean != null) && (!TextUtils.isEmpty(
+                                    userInfoBean.getThumbnail()))) {
+                                ViewUtils.loadImgToImgView(MainActivity.this, imgUser,
+                                        userInfoBean.getThumbnail());
+                            }
 
+                            //获得待支付和待收货数目
+                            android.support.design.widget.NavigationView navigationView =
+                                    (android.support.design.widget.NavigationView) drawer.findViewById(
+                                            R.id.nav_view);
+                            LinearLayout nav_tobepaid = (LinearLayout) navigationView.getMenu()
+                                    .findItem(R.id.nav_tobepaid)
+                                    .getActionView();
+                            msg1 = (TextView) nav_tobepaid.findViewById(R.id.msg);
+                            LinearLayout nav_tobereceived = (LinearLayout) navigationView.getMenu()
+                                    .findItem(R.id.nav_tobereceived)
+                                    .getActionView();
+                            msg2 = (TextView) nav_tobereceived.findViewById(R.id.msg);
+                            LinearLayout nav_refund = (LinearLayout) navigationView.getMenu()
+                                    .findItem(R.id.nav_returned)
+                                    .getActionView();
+                            msg3 = (TextView) nav_refund.findViewById(R.id.msg);
+
+                            if ((null != userInfoBean) && (userInfoBean.getWaitpayNum() > 0)) {
+                                msg1.setVisibility(View.VISIBLE);
+                                msg1.setText(Integer.toString(userInfoBean.getWaitpayNum()));
+                            } else {
+                                msg1.setVisibility(View.INVISIBLE);
+                            }
+
+                            Log.i(TAG, "" + userInfoBean.getWaitpayNum());
+
+                            if ((null != userInfoBean) && (userInfoBean.getWaitgoodsNum() > 0)) {
+                                msg2.setVisibility(View.VISIBLE);
+                                msg2.setText(Integer.toString(userInfoBean.getWaitgoodsNum()));
+                            } else {
+                                msg2.setVisibility(View.INVISIBLE);
+                            }
+
+                            if ((null != userInfoBean) && (userInfoBean.getRefundsNum() > 0)) {
+                                msg3.setVisibility(View.VISIBLE);
+                                msg3.setText(Integer.toString(userInfoBean.getRefundsNum()));
+                            } else {
+                                msg3.setVisibility(View.INVISIBLE);
+                            }
+                        }
+
+                        invalidateOptionsMenu();
+                    }
+                };
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+        //toggle.setDrawerIndicatorEnabled(false);
+        //toggle.setHomeAsUpIndicator(R.drawable.ic_deerhead);
+        //toolbar.setNavigationIcon(R.drawable.ic_deerhead);
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        View llayout = navigationView.getHeaderView(0);
+
+        tvCoupon = (TextView) llayout.findViewById(R.id.tvDiscount);
+        tvMoney = (TextView) llayout.findViewById(R.id.tvMoney);
+        tvPoint = (TextView) llayout.findViewById(R.id.tvScore);
+        imgUser = (ImageView) llayout.findViewById(R.id.imgUser);
+        llayout.findViewById(R.id.ll_money).setOnClickListener(this);
+        llayout.findViewById(R.id.ll_score).setOnClickListener(this);
+        llayout.findViewById(R.id.ll_discount).setOnClickListener(this);
+        llayout.findViewById(R.id.imgUser).setOnClickListener(this);
+
+        loginFlag = (ImageView) llayout.findViewById(R.id.login_flag);
+
+        tvNickname = (TextView) llayout.findViewById(R.id.tvNickname);
         if (!(LoginUtils.checkLoginState(getApplicationContext()))) {
-          Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-          Bundle bundle = new Bundle();
-          bundle.putString("login", "main");
-          intent.putExtras(bundle);
-          startActivity(intent);
-        }else{
-          startActivity(new Intent(MainActivity.this,SettingActivity.class));
+            tvNickname.setText("点击登录");
         }
+
+        badge = new BadgeView(this);
+        badge.setTextSizeOff(7);
+        badge.setBackground(4, Color.parseColor("#d3321b"));
+        badge.setGravity(Gravity.END | Gravity.TOP);
+        badge.setPadding(dip2Px(4), dip2Px(1), dip2Px(4), dip2Px(1));
+        badge.setTargetView(image2);
+        //badge.setBadgeGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
+        //        StatusBarUtil.setColorForDrawerLayout(MainActivity.this,drawer, getResources()
+        //                .getColor(R.color.colorAccent), 0);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        Intent intent;
+        Bundle bundle;
+
+        int id = item.getItemId();
+
+        if (!LoginUtils.checkLoginState(getApplicationContext())) {
+            /*未登录进入登录界面*/
+
+            intent = new Intent(MainActivity.this, LoginActivity.class);
+            bundle = new Bundle();
+            bundle.putString("login", "main");
+            intent.putExtras(bundle);
+            startActivity(intent);
+            //startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        } else {
+            if (id == R.id.nav_tobepaid) {
+                intent = new Intent(MainActivity.this, AllOrdersActivity.class);
+                bundle = new Bundle();
+                bundle.putInt("fragment", 2);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            } else if (id == R.id.nav_tobereceived) {
+                intent = new Intent(MainActivity.this, AllOrdersActivity.class);
+                bundle = new Bundle();
+                bundle.putInt("fragment", 3);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            } else if (id == R.id.nav_returned) {
+                startActivity(new Intent(MainActivity.this, AllRefundsActivity.class));
+            } else if (id == R.id.nav_orders) {
+                intent = new Intent(MainActivity.this, AllOrdersActivity.class);
+                bundle = new Bundle();
+                bundle.putInt("fragment", 1);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            } else if (id == R.id.nav_problem) {
+                startActivity(new Intent(MainActivity.this, CustomProblemActivity.class));
+            } else if (id == R.id.nav_complain) {
+                startActivity(new Intent(MainActivity.this, ComplainActivity.class));
+                //Log.d(TAG, "start complain activity ");
+            }
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
         drawer.closeDrawers();
-      }
-    });
-    loginFlag = (ImageView) llayout.findViewById(R.id.login_flag);
-
-    tvNickname = (TextView) llayout.findViewById(R.id.tvNickname);
-    if (!(LoginUtils.checkLoginState(getApplicationContext()))) {
-      tvNickname.setText("点击登录");
+        String flag = "main";
+        boolean xlmmFlag = false;
+        Intent intent = new Intent(MainActivity.this, MainActivity.class);
+        switch (v.getId()) {
+            case R.id.rv_cart:
+                intent = new Intent(MainActivity.this, CartActivity.class);
+                flag = "cart";
+                break;
+            case R.id.img_mmentry:
+                JUtils.Log(TAG, "xiaolu mama entry");
+                xlmmFlag = true;
+                break;
+            case R.id.ll_money:
+                intent = new Intent(MainActivity.this, WalletActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putDouble("money", budgetCash);
+                intent.putExtras(bundle);
+                flag = "money";
+                break;
+            case R.id.ll_score:
+                flag = "point";
+                intent = new Intent(MainActivity.this, MembershipPointActivity.class);
+                break;
+            case R.id.ll_discount:
+                flag = "coupon";
+                intent = new Intent(MainActivity.this, CouponActivity.class);
+                break;
+            case R.id.imgUser:
+                intent = new Intent(MainActivity.this, SettingActivity.class);
+                break;
+        }
+        if(!(LoginUtils.checkLoginState(getApplicationContext()))){
+            login(flag);
+        }else if(xlmmFlag){
+            checkMamaInfo();
+        }else {
+            startActivity(intent);
+        }
     }
 
-    badge = new BadgeView(this);
-    badge.setTextSizeOff(7);
-    badge.setBackground(4, Color.parseColor("#d3321b"));
-    badge.setGravity(Gravity.END | Gravity.TOP);
-    badge.setPadding(dip2Px(4), dip2Px(1), dip2Px(4), dip2Px(1));
-    badge.setTargetView(image2);
-    //badge.setBadgeGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
-    //        StatusBarUtil.setColorForDrawerLayout(MainActivity.this,drawer, getResources()
-    //                .getColor(R.color.colorAccent), 0);
-  }
+    private void login(String flag) {
+        JUtils.Log(TAG, "need login");
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("login", flag);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
 
-  @Override public boolean onNavigationItemSelected(MenuItem item) {
-    Intent intent;
-    Bundle bundle;
-
-    int id = item.getItemId();
-
-    if (!LoginUtils.checkLoginState(getApplicationContext())) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                JUtils.Log(TAG, "xiaolu mama entry");
+                if (!LoginUtils.checkLoginState(getApplicationContext())) {
             /*未登录进入登录界面*/
-
-      intent = new Intent(MainActivity.this, LoginActivity.class);
-      bundle = new Bundle();
-      bundle.putString("login", "main");
-      intent.putExtras(bundle);
-      startActivity(intent);
-      //startActivity(new Intent(MainActivity.this, LoginActivity.class));
-    } else {
-      if (id == R.id.nav_tobepaid) {
-        intent = new Intent(MainActivity.this, AllOrdersActivity.class);
-        bundle = new Bundle();
-        bundle.putInt("fragment", 2);
-        intent.putExtras(bundle);
-        startActivity(intent);
-      } else if (id == R.id.nav_tobereceived) {
-        intent = new Intent(MainActivity.this, AllOrdersActivity.class);
-        bundle = new Bundle();
-        bundle.putInt("fragment", 3);
-        intent.putExtras(bundle);
-        startActivity(intent);
-      } else if (id == R.id.nav_returned) {
-        startActivity(new Intent(MainActivity.this, AllRefundsActivity.class));
-      } else if (id == R.id.nav_orders) {
-        intent = new Intent(MainActivity.this, AllOrdersActivity.class);
-        bundle = new Bundle();
-        bundle.putInt("fragment", 1);
-        intent.putExtras(bundle);
-        startActivity(intent);
-      } else if (id == R.id.nav_problem) {
-        startActivity(new Intent(MainActivity.this, CustomProblemActivity.class));
-      } else if (id == R.id.nav_complain) {
-        startActivity(new Intent(MainActivity.this, ComplainActivity.class));
-        //Log.d(TAG, "start complain activity ");
-      }
-    }
-
-    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-    drawer.closeDrawer(GravityCompat.START);
-    return true;
-  }
-
-  @Override public void onBackPressed() {
-    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-    if (drawer.isDrawerOpen(GravityCompat.START)) {
-      drawer.closeDrawer(GravityCompat.START);
-    } else {
-      super.onBackPressed();
-    }
-  }
-
-  @Override public void onClick(View v) {
-
-    Intent intent;
-    switch (v.getId()) {
-      case R.id.rv_cart:
-        if (LoginUtils.checkLoginState(getApplicationContext())) {
-          startActivity(new Intent(MainActivity.this, CartActivity.class));
-        } else {
-          intent = new Intent(MainActivity.this, LoginActivity.class);
-          Bundle bundle = new Bundle();
-          bundle.putString("login", "cart");
-          intent.putExtras(bundle);
-          startActivity(intent);
+                    JUtils.Log(TAG, "need login");
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("login", "main");
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                    //startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                } else {
+                    checkMamaInfo();
+                }
+                break;
+            default:
+                break;
         }
-        break;
-      case R.id.img_mmentry:
-        JUtils.Log(TAG, "xiaolu mama entry");
-        if (!LoginUtils.checkLoginState(getApplicationContext())) {
-              /*未登录进入登录界面*/
-          JUtils.Log(TAG, "need login");
-          intent = new Intent(MainActivity.this, LoginActivity.class);
-          Bundle bundle = new Bundle();
-          bundle.putString("login", "main");
-          intent.putExtras(bundle);
-          startActivity(intent);
-          //startActivity(new Intent(MainActivity.this, LoginActivity.class));
-        } else {
-          checkMamaInfo();
-        }
-        break;
+        return super.onOptionsItemSelected(item);
     }
-  }
 
-  @Override public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-      case R.id.action_settings:
-        JUtils.Log(TAG, "xiaolu mama entry");
-        if (!LoginUtils.checkLoginState(getApplicationContext())) {
-            /*未登录进入登录界面*/
-          JUtils.Log(TAG, "need login");
-          Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-          Bundle bundle = new Bundle();
-          bundle.putString("login", "main");
-          intent.putExtras(bundle);
-          startActivity(intent);
-          //startActivity(new Intent(MainActivity.this, LoginActivity.class));
-        } else {
-          checkMamaInfo();
-        }
-        break;
-      default:
-        break;
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        JUtils.Log(TAG, "onCreateOptionsMenu");
+        //getMenuInflater().inflate(R.menu.mainframe_menu, menu);
+        //MenuItem item = menu.findItem(R.id.action_settings);
+
+        return super.onCreateOptionsMenu(menu);
     }
-    return super.onOptionsItemSelected(item);
-  }
 
-  @Override public boolean onCreateOptionsMenu(Menu menu) {
-    JUtils.Log(TAG, "onCreateOptionsMenu");
-    //getMenuInflater().inflate(R.menu.mainframe_menu, menu);
-    //MenuItem item = menu.findItem(R.id.action_settings);
+    private void checkMamaInfo() {
+        JUtils.Log(TAG, "check mama userinfo");
 
-    return super.onCreateOptionsMenu(menu);
-  }
-
-  private void checkMamaInfo() {
-    JUtils.Log(TAG, "check mama userinfo");
-
-    if (userInfoBean != null) {
-      if ((userInfoBean.getXiaolumm() != null) && (userInfoBean.getXiaolumm().getId()
-          != 0)) {
-        JUtils.Log(TAG, "1 i am xiaolumama, id=" + userInfoBean.getXiaolumm().getId());
-        Intent intent = new Intent(MainActivity.this, MamaInfoActivity.class);
-        startActivity(intent);
-      } else {
-        JUtils.Toast("您还不是小鹿妈妈，赶紧关注小鹿美美公众号了解信息并加入我们吧！");
-      }
-    } else {
-      Subscription subscribe = UserModel.getInstance()
-          .getUserInfo()
-          .subscribeOn(Schedulers.io())
-          .subscribe(new ServiceResponse<UserInfoBean>() {
-            @Override public void onNext(UserInfoBean user) {
-              if ((user.getXiaolumm() != null) && (user.getXiaolumm().getId() != 0)) {
-                JUtils.Log(TAG, "2 i am xiaolumama, id=" + user.getXiaolumm().getId());
+        if (userInfoBean != null) {
+            if ((userInfoBean.getXiaolumm() != null) && (userInfoBean.getXiaolumm().getId()
+                    != 0)) {
+                JUtils.Log(TAG, "1 i am xiaolumama, id=" + userInfoBean.getXiaolumm().getId());
                 Intent intent = new Intent(MainActivity.this, MamaInfoActivity.class);
                 startActivity(intent);
-              } else {
+            } else {
                 JUtils.Toast("您还不是小鹿妈妈，赶紧关注小鹿美美公众号了解信息并加入我们吧！");
-              }
             }
+        } else {
+            Subscription subscribe = UserModel.getInstance()
+                    .getUserInfo()
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(new ServiceResponse<UserInfoBean>() {
+                        @Override
+                        public void onNext(UserInfoBean user) {
+                            if ((user.getXiaolumm() != null) && (user.getXiaolumm().getId() != 0)) {
+                                JUtils.Log(TAG, "2 i am xiaolumama, id=" + user.getXiaolumm().getId());
+                                Intent intent = new Intent(MainActivity.this, MamaInfoActivity.class);
+                                startActivity(intent);
+                            } else {
+                                JUtils.Toast("您还不是小鹿妈妈，赶紧关注小鹿美美公众号了解信息并加入我们吧！");
+                            }
+                        }
 
-            @Override public void onCompleted() {
-              super.onCompleted();
-            }
+                        @Override
+                        public void onCompleted() {
+                            super.onCompleted();
+                        }
 
-            @Override public void onError(Throwable e) {
+                        @Override
+                        public void onError(Throwable e) {
 
-              Log.e(TAG, "getUserInfo error: " + e.getLocalizedMessage());
-              super.onError(e);
-            }
-          });
-      addSubscription(subscribe);
+                            Log.e(TAG, "getUserInfo error: " + e.getLocalizedMessage());
+                            super.onError(e);
+                        }
+                    });
+            addSubscription(subscribe);
+        }
     }
-  }
 
-  private void getUserInfo() {
-    Subscription subscribe = UserModel.getInstance()
-        .getUserInfo()
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<UserInfoBean>() {
-          @Override public void onNext(UserInfoBean user) {
-            userInfoBean = user;
-          }
+    private void getUserInfo() {
+        Subscription subscribe = UserModel.getInstance()
+                .getUserInfo()
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ServiceResponse<UserInfoBean>() {
+                    @Override
+                    public void onNext(UserInfoBean user) {
+                        userInfoBean = user;
+                    }
 
-          @Override public void onCompleted() {
-            super.onCompleted();
-          }
+                    @Override
+                    public void onCompleted() {
+                        super.onCompleted();
+                    }
 
-          @Override public void onError(Throwable e) {
-            e.printStackTrace();
-            Log.e(TAG, "getUserInfo error1 ");
-            super.onError(e);
-          }
-        });
-    addSubscription(subscribe);
-  }
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        Log.e(TAG, "getUserInfo error1 ");
+                        super.onError(e);
+                    }
+                });
+        addSubscription(subscribe);
+    }
 
     @Override
     protected void onResume() {
@@ -654,7 +567,7 @@ public class MainActivity extends BaseActivity
         UserModel.getInstance()
                 .getUserInfo()
                 .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<UserInfoBean>(){
+                .subscribe(new ServiceResponse<UserInfoBean>() {
                     @Override
                     public void onNext(UserInfoBean userInfoBean) {
                         if (userInfoBean != null) {
@@ -741,74 +654,78 @@ public class MainActivity extends BaseActivity
                 });
     }
 
-  @Override protected void onStop() {
-    JUtils.Log(TAG, "stop");
-    super.onStop();
+    @Override
+    protected void onStop() {
+        JUtils.Log(TAG, "stop");
+        super.onStop();
 
-    if (subscribe != null && subscribe.isUnsubscribed()) {
-      subscribe.unsubscribe();
-    }
-  }
-
-  public UserInfoBean getUserInfoBean() {
-    return userInfoBean;
-  }
-
-  //MIpush跳转
-  public void swith_fragment() {
-    int tabid = 0;
-    if (getIntent().getExtras() != null) {
-      tabid = getIntent().getExtras().getInt("fragment");
-      JUtils.Log(TAG, "jump to fragment:" + tabid);
-      if ((tabid >= 1) && (tabid <= 4)) {
-        try {
-          mTabLayout.setScrollPosition(tabid - 1, 0, true);
-          mViewPager.setCurrentItem(tabid - 1);
-        } catch (Exception e) {
-          e.printStackTrace();
+        if (subscribe != null && subscribe.isUnsubscribed()) {
+            subscribe.unsubscribe();
         }
-      }
-    }
-  }
-
-  private long calcLefttowTime(long crtTime) {
-    long left = 0;
-    Date now = new Date();
-    try {
-      if (crtTime * 1000 - now.getTime() > 0) {
-        left = crtTime * 1000 - now.getTime();
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    return left;
-  }
-
-  private int dip2Px(float dip) {
-    return (int) (dip * getResources().getDisplayMetrics().density + 0.5f);
-  }
-
-  class MainTabAdapter extends FragmentPagerAdapter {
-    private List<Fragment> listFragment;
-    private List<String> listTitle;
-
-    public MainTabAdapter(FragmentManager fm, List<Fragment> listFragment,
-        List<String> listTitle) {
-      super(fm);
-      this.listFragment = listFragment;
-      this.listTitle = listTitle;
     }
 
-    @Override public Fragment getItem(int position) {
-      return listFragment.get(position);
+    public UserInfoBean getUserInfoBean() {
+        return userInfoBean;
     }
 
-    @Override public int getCount() {
-      return listFragment.size();
+    //MIpush跳转
+    public void swith_fragment() {
+        int tabid = 0;
+        if (getIntent().getExtras() != null) {
+            tabid = getIntent().getExtras().getInt("fragment");
+            JUtils.Log(TAG, "jump to fragment:" + tabid);
+            if ((tabid >= 1) && (tabid <= 4)) {
+                try {
+                    mTabLayout.setScrollPosition(tabid - 1, 0, true);
+                    mViewPager.setCurrentItem(tabid - 1);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
-    @Override public CharSequence getPageTitle(int position) {
-      return listTitle.get(position);
+    private long calcLefttowTime(long crtTime) {
+        long left = 0;
+        Date now = new Date();
+        try {
+            if (crtTime * 1000 - now.getTime() > 0) {
+                left = crtTime * 1000 - now.getTime();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return left;
     }
-  }
+
+    private int dip2Px(float dip) {
+        return (int) (dip * getResources().getDisplayMetrics().density + 0.5f);
+    }
+
+    class MainTabAdapter extends FragmentPagerAdapter {
+        private List<Fragment> listFragment;
+        private List<String> listTitle;
+
+        public MainTabAdapter(FragmentManager fm, List<Fragment> listFragment,
+                              List<String> listTitle) {
+            super(fm);
+            this.listFragment = listFragment;
+            this.listTitle = listTitle;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return listFragment.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return listFragment.size();
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return listTitle.get(position);
+        }
+    }
 }
