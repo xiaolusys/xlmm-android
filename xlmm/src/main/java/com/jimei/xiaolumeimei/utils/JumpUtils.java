@@ -7,9 +7,10 @@ import android.os.Bundle;
 import android.util.Log;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
-import com.jimei.xiaolumeimei.ui.activity.main.WebViewActivity;
+import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActvityWeb;
 import com.jimei.xiaolumeimei.ui.activity.product.TongkuanActivity;
+import com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.OrderDetailActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.CouponActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMNinePicActivity;
@@ -106,7 +107,7 @@ public class JumpUtils {
         context.startActivity(intent);
         break;
       case XlmmConst.JUMP_WEBVIEW:
-        intent = new Intent(context, WebViewActivity.class);
+        intent = new Intent(context, CommonWebViewActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         SharedPreferences sharedPreferences =
             context.getSharedPreferences("COOKIESxlmm", Context.MODE_PRIVATE);
@@ -124,6 +125,11 @@ public class JumpUtils {
         break;
       case XlmmConst.JUMP_XIAOLUMAMA_DAILYPOST:
         intent = new Intent(context, MMNinePicActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+        break;
+      case XlmmConst.JUMP_REFUNDS:
+        intent = new Intent(context, AllRefundsActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
@@ -177,6 +183,9 @@ public class JumpUtils {
           jumpInfo.setUrl(content[1]);
         } else if (content[1].contains("vip_0day")) {
           jumpInfo.setType(XlmmConst.JUMP_XIAOLUMAMA_DAILYPOST);
+          jumpInfo.setUrl(content[1]);
+        } else if (content[1].contains("refunds")) {
+          jumpInfo.setType(XlmmConst.JUMP_REFUNDS);
           jumpInfo.setUrl(content[1]);
         }
       }

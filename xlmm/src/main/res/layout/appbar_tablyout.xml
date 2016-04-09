@@ -112,8 +112,7 @@
       />
 
       <ImageView
-          android:layout_marginLeft="8dp"
-          android:layout_alignParentLeft="true"
+          android:layout_marginLeft="10dp"
           android:layout_centerVertical="true"
           android:id="@+id/image_2"
           android:src="@drawable/cart2"

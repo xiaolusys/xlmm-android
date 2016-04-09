@@ -23,7 +23,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import butterknife.Bind;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseActivity;
@@ -37,6 +37,7 @@ import com.jimei.xiaolumeimei.ui.activity.trade.AllOrdersActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.CouponActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.CustomProblemActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.MembershipPointActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.SettingActivity;
@@ -54,9 +55,12 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.update.UmengUpdateAgent;
 import com.xiaomi.mipush.sdk.MiPushClient;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -377,8 +381,10 @@ public class MainActivity extends BaseActivity
           bundle.putString("login", "main");
           intent.putExtras(bundle);
           startActivity(intent);
-          drawer.closeDrawers();
+        }else{
+          startActivity(new Intent(MainActivity.this,SettingActivity.class));
         }
+        drawer.closeDrawers();
       }
     });
     loginFlag = (ImageView) llayout.findViewById(R.id.login_flag);
@@ -435,73 +441,11 @@ public class MainActivity extends BaseActivity
         bundle.putInt("fragment", 1);
         intent.putExtras(bundle);
         startActivity(intent);
-      } else if (id == R.id.nav_setting) {
-        startActivity(new Intent(MainActivity.this, SettingActivity.class));
+      } else if (id == R.id.nav_problem) {
+        startActivity(new Intent(MainActivity.this, CustomProblemActivity.class));
       } else if (id == R.id.nav_complain) {
-        startActivity(new Intent(MainActivity.this, ComplainActvity.class));
+        startActivity(new Intent(MainActivity.this, ComplainActivity.class));
         //Log.d(TAG, "start complain activity ");
-      } else if (id == R.id.nav_login) {
-        new MaterialDialog.Builder(MainActivity.this).
-            title("注销登录").
-            content("您确定要退出登录吗？").
-            positiveText("注销").
-            negativeText("取消").
-            callback(new MaterialDialog.ButtonCallback() {
-              @Override public void onPositive(MaterialDialog dialog) {
-                final String finalAccount = LoginUtils.getUserAccount(MainActivity.this);
-                LoginUtils.delLoginInfo(getApplicationContext());
-                loginFlag.setVisibility(View.VISIBLE);
-                UserModel.getInstance()
-                    .customer_logout()
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(new ServiceResponse<LogOutBean>() {
-                      @Override public void onNext(LogOutBean responseBody) {
-                        super.onNext(responseBody);
-
-                        if (responseBody.getCode() == 0) {
-                          JUtils.Toast("退出成功");
-
-                          try {
-
-                            imgUser.setImageResource(R.drawable.img_head);
-
-                            msg1.setVisibility(View.INVISIBLE);
-                            msg2.setVisibility(View.INVISIBLE);
-                            msg3.setVisibility(View.INVISIBLE);
-                            img_mmentry.setVisibility(View.INVISIBLE);
-                            if (tvNickname != null) {
-                              tvNickname.setText("点击登录");
-                            }
-                            if (tvPoint != null) {
-                              tvPoint.setText(0 + "");
-                            }
-                            if (tvMoney != null) {
-                              tvMoney.setText(0 + "");
-                            }
-
-                            if (tvCoupon != null) {
-                              tvCoupon.setText(0 + "");
-                            }
-                          } catch (NullPointerException e) {
-                            e.printStackTrace();
-                          }
-
-                          if ((finalAccount != null) && ((!finalAccount.isEmpty()))) {
-                            MiPushClient.unsetUserAccount(getApplicationContext(),
-                                finalAccount, null);
-                            JUtils.Log(TAG, "unset useraccount: " + finalAccount);
-                          }
-                        }
-                      }
-                    });
-
-                dialog.dismiss();
-              }
-
-              @Override public void onNegative(MaterialDialog dialog) {
-                dialog.dismiss();
-              }
-            }).show();
       }
     }
 
@@ -646,163 +590,156 @@ public class MainActivity extends BaseActivity
     addSubscription(subscribe);
   }
 
-  @Override protected void onResume() {
-    super.onResume();
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-    swith_fragment();
+        swith_fragment();
 
-    //显示购物车数量
-    //cartsModel.show_carts_num()
-    //    .subscribeOn(Schedulers.io())
-    //    .subscribe(new ServiceResponse<CartsNumResultBean>() {
-    //      @Override public void onNext(CartsNumResultBean cartsNumResultBean) {
-    //        super.onNext(cartsNumResultBean);
-    //        if (cartsNumResultBean != null) {
-    //          num = cartsNumResultBean.getResult();
-    //          badge.setBadgeCount(num);
-    //        }
-    //      }
-    //    });
+        //显示购物车数量
+        //cartsModel.show_carts_num()
+        //    .subscribeOn(Schedulers.io())
+        //    .subscribe(new ServiceResponse<CartsNumResultBean>() {
+        //      @Override public void onNext(CartsNumResultBean cartsNumResultBean) {
+        //        super.onNext(cartsNumResultBean);
+        //        if (cartsNumResultBean != null) {
+        //          num = cartsNumResultBean.getResult();
+        //          badge.setBadgeCount(num);
+        //        }
+        //      }
+        //    });
 
-    Subscription subscribe = CartsModel.getInstance()
-        .show_carts_num()
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<CartsNumResultBean>() {
-          @Override public void onNext(CartsNumResultBean cartsNumResultBean) {
-            if (cartsNumResultBean != null && cartsNumResultBean.getResult() != 0) {
-              num = cartsNumResultBean.getResult();
-              badge.setBadgeCount(num);
+        Subscription subscribe = CartsModel.getInstance()
+                .show_carts_num()
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ServiceResponse<CartsNumResultBean>() {
+                    @Override
+                    public void onNext(CartsNumResultBean cartsNumResultBean) {
+                        if (cartsNumResultBean != null && cartsNumResultBean.getResult() != 0) {
+                            num = cartsNumResultBean.getResult();
+                            badge.setBadgeCount(num);
 
-              if (calcLefttowTime(cartsNumResultBean.getLastCreated()) != 0) {
-                image1.setVisibility(View.INVISIBLE);
-                image2.setVisibility(View.VISIBLE);
-                //cvLefttime.setVisibility(View.VISIBLE);
-              } else {
-                image1.setVisibility(View.VISIBLE);
-                image2.setVisibility(View.INVISIBLE);
-                //cvLefttime.setVisibility(View.INVISIBLE);
-                badge.setBadgeCount(0);
-              }
+                            if (calcLefttowTime(cartsNumResultBean.getLastCreated()) != 0) {
+                                image1.setVisibility(View.INVISIBLE);
+                                image2.setVisibility(View.VISIBLE);
+                                //cvLefttime.setVisibility(View.VISIBLE);
+                            } else {
+                                image1.setVisibility(View.VISIBLE);
+                                image2.setVisibility(View.INVISIBLE);
+                                //cvLefttime.setVisibility(View.INVISIBLE);
+                                badge.setBadgeCount(0);
+                            }
 
-              //cvLefttime.start(calcLefttowTime(cartsNumResultBean.getLastCreated()));
+                            //cvLefttime.start(calcLefttowTime(cartsNumResultBean.getLastCreated()));
 
-              //cvLefttime.setOnCountdownEndListener(
-              //    new CountdownView.OnCountdownEndListener() {
-              //      @Override public void onEnd(CountdownView cv) {
-              //        image1.setVisibility(View.VISIBLE);
-              //        image2.setVisibility(View.INVISIBLE);
-              //        cvLefttime.setVisibility(View.INVISIBLE);
-              //        badge.setBadgeCount(0);
-              //      }
-              //    });
-            } else {
-              image1.setVisibility(View.VISIBLE);
-              image2.setVisibility(View.INVISIBLE);
-              //cvLefttime.setVisibility(View.INVISIBLE);
-            }
-          }
-        });
-    addSubscription(subscribe);
+                            //cvLefttime.setOnCountdownEndListener(
+                            //    new CountdownView.OnCountdownEndListener() {
+                            //      @Override public void onEnd(CountdownView cv) {
+                            //        image1.setVisibility(View.VISIBLE);
+                            //        image2.setVisibility(View.INVISIBLE);
+                            //        cvLefttime.setVisibility(View.INVISIBLE);
+                            //        badge.setBadgeCount(0);
+                            //      }
+                            //    });
+                        } else {
+                            image1.setVisibility(View.VISIBLE);
+                            image2.setVisibility(View.INVISIBLE);
+                            //cvLefttime.setVisibility(View.INVISIBLE);
+                        }
+                    }
+                });
+        addSubscription(subscribe);
 
-    JUtils.Log(TAG, "resume");
-    UserModel.getInstance()
-        .getUserInfo()
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<UserInfoBean>() {
-          @Override public void onNext(UserInfoBean userInfoBean) {
-            if (userInfoBean != null) {
-              if (userInfoBean.isHasUsablePassword() && userInfoBean.getMobile() != "") {
-                loginFlag.setVisibility(View.GONE);
-              } else {
-                loginFlag.setVisibility(View.VISIBLE);
-              }
-            } else {
-              int a = 1;
-            }
-          }
-        });
+        JUtils.Log(TAG, "resume");
+        UserModel.getInstance()
+                .getUserInfo()
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ServiceResponse<UserInfoBean>(){
+                    @Override
+                    public void onNext(UserInfoBean userInfoBean) {
+                        if (userInfoBean != null) {
+                            if (userInfoBean.isHasUsablePassword() && userInfoBean.getMobile() != "") {
+                                loginFlag.setVisibility(View.GONE);
+                            } else {
+                                loginFlag.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    }
+                });
 
-    this.subscribe = UserNewModel.getInstance()
-        .getProfile()
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<UserInfoBean>() {
-          @Override public void onNext(UserInfoBean userNewBean) {
-            if (userNewBean != null) {
-              userInfoBean = userNewBean;
-              if (LoginUtils.checkLoginState(getApplicationContext())) {
-                if ((userNewBean.getThumbnail() != null) && (!userNewBean.getThumbnail()
-                    .isEmpty())) {
-                  ViewUtils.loadImgToImgView(MainActivity.this, imgUser,
-                      userNewBean.getThumbnail());
-                }
+        this.subscribe = UserNewModel.getInstance()
+                .getProfile()
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ServiceResponse<UserInfoBean>() {
+                    @Override
+                    public void onNext(UserInfoBean userNewBean) {
+                        if (userNewBean != null) {
+                            userInfoBean = userNewBean;
+                            if (LoginUtils.checkLoginState(getApplicationContext())) {
+                                if ((userNewBean.getThumbnail() != null)
+                                        && (!userNewBean.getThumbnail().isEmpty())) {
+                                    ViewUtils.loadImgToImgView(MainActivity.this, imgUser,
+                                            userNewBean.getThumbnail());
+                                }
 
-                int score = userNewBean.getScore();
-                if (null != userNewBean.getUserBudget()) {
-                  budgetCash = userNewBean.getUserBudget().getBudgetCash();
-                }
-                if (tvPoint != null) {
-                  tvPoint.setText(score + "");
-                }
-                if (tvMoney != null) {
-                  tvMoney.setText((float) (Math.round(budgetCash * 100)) / 100 + "");
-                }
+                                int score = userNewBean.getScore();
+                                if (null != userNewBean.getUserBudget()) {
+                                    budgetCash = userNewBean.getUserBudget().getBudgetCash();
+                                }
+                                if (tvPoint != null) {
+                                    tvPoint.setText(score + "");
+                                }
+                                if (tvMoney != null) {
+                                    tvMoney.setText((float) (Math.round(budgetCash * 100)) / 100 + "");
+                                }
 
-                if (tvCoupon != null) {
-                  tvCoupon.setText(userNewBean.getCouponNum() + "");
-                }
+                                if (tvCoupon != null) {
+                                    tvCoupon.setText(userNewBean.getCouponNum() + "");
+                                }
 
-                JUtils.Log(TAG, "mamaid " + userInfoBean.getXiaolumm().getId());
-                if ((userInfoBean.getXiaolumm() != null) && (userInfoBean.getXiaolumm()
-                    .getId() != 0)) {
-                  img_mmentry.setVisibility(View.VISIBLE);
-                } else {
-                  img_mmentry.setVisibility(View.INVISIBLE);
-                }
+                                JUtils.Log(TAG, "mamaid " + userInfoBean.getXiaolumm().getId());
+                                if ((userInfoBean.getXiaolumm() != null) && (userInfoBean.getXiaolumm().getId()
+                                        != 0)) {
+                                    img_mmentry.setVisibility(View.VISIBLE);
+                                } else {
+                                    img_mmentry.setVisibility(View.INVISIBLE);
+                                }
 
-                if ((userInfoBean.getNick() != null) && (!userInfoBean.getNick()
-                    .isEmpty())) {
-                  tvNickname.setText(userInfoBean.getNick());
-                } else {
-                  tvNickname.setText("小鹿妈妈");
-                }
+                                if ((userInfoBean.getNick() != null)
+                                        && (!userInfoBean.getNick().isEmpty())) {
+                                    tvNickname.setText(userInfoBean.getNick());
+                                } else {
+                                    tvNickname.setText("小鹿妈妈");
+                                }
 
-                if ((null != userInfoBean) && (userInfoBean.getWaitpayNum() > 0)) {
-                  msg1.setVisibility(View.VISIBLE);
-                  msg1.setText(Integer.toString(userInfoBean.getWaitpayNum()));
-                } else {
-                  msg1.setVisibility(View.INVISIBLE);
-                }
+                                if ((null != userInfoBean) && (userInfoBean.getWaitpayNum() > 0)) {
+                                    msg1.setVisibility(View.VISIBLE);
+                                    msg1.setText(Integer.toString(userInfoBean.getWaitpayNum()));
+                                } else {
+                                    msg1.setVisibility(View.INVISIBLE);
+                                }
 
-                Log.i(TAG, "" + userInfoBean.getWaitpayNum());
+                                Log.i(TAG, "" + userInfoBean.getWaitpayNum());
 
-                if ((null != userInfoBean) && (userInfoBean.getWaitgoodsNum() > 0)) {
-                  msg2.setVisibility(View.VISIBLE);
-                  msg2.setText(Integer.toString(userInfoBean.getWaitgoodsNum()));
-                } else {
-                  msg2.setVisibility(View.INVISIBLE);
-                }
+                                if ((null != userInfoBean) && (userInfoBean.getWaitgoodsNum() > 0)) {
+                                    msg2.setVisibility(View.VISIBLE);
+                                    msg2.setText(Integer.toString(userInfoBean.getWaitgoodsNum()));
+                                } else {
+                                    msg2.setVisibility(View.INVISIBLE);
+                                }
 
-                if ((null != userInfoBean) && (userInfoBean.getRefundsNum() > 0)) {
-                  msg3.setVisibility(View.VISIBLE);
-                  msg3.setText(Integer.toString(userInfoBean.getRefundsNum()));
-                } else {
-                  msg3.setVisibility(View.INVISIBLE);
-                }
-              }
-            }
-          }
-        });
+                                if ((null != userInfoBean) && (userInfoBean.getRefundsNum() > 0)) {
+                                    msg3.setVisibility(View.VISIBLE);
+                                    msg3.setText(Integer.toString(userInfoBean.getRefundsNum()));
+                                } else {
+                                    msg3.setVisibility(View.INVISIBLE);
+                                }
 
-    if (LoginUtils.checkLoginState(getApplicationContext()) && (tvNickname != null)) {
-      if ((userInfoBean != null)
-          && (userInfoBean.getNick() != null)
-          && (!userInfoBean.getNick().isEmpty())) {
-        tvNickname.setText(userInfoBean.getNick());
-      } else {
-        tvNickname.setText("小鹿妈妈");
-      }
+                            }
+                        }
+                    }
+                });
     }
-  }
 
   @Override protected void onStop() {
     JUtils.Log(TAG, "stop");

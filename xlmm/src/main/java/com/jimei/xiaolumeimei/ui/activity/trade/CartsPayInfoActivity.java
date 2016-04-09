@@ -326,7 +326,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   }
 
   private void calcAllPrice() {
-    jieshengjine = coupon_price + appcut;
+    jieshengjine =discount_feeInfo+coupon_price + appcut;
     paymentInfo = payment;
 
     if(Double.compare(coupon_price + appcut - paymentInfo, 0) >= 0 )
@@ -527,6 +527,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
           JUtils.Toast("你还未设置地址");
         }
 
+        JUtils.Log(TAG,"pay_extras ======"+pay_extras);
         break;
 
       case R.id.coupon_layout:

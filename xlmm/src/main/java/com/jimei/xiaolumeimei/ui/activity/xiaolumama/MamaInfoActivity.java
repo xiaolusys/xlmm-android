@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import butterknife.Bind;
+
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -40,10 +40,13 @@ import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.zhy.autolayout.AutoRelativeLayout;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+
+import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -307,7 +310,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         Bundle bundlerl_shop = new Bundle();
         bundlerl_shop.putString("cookies", cookies);
         bundlerl_shop.putString("domain", domain);
-        bundlerl_shop.putString("Cookie", sharedPreferences.getString("Cookie", ""));
+//        bundlerl_shop.putString("Cookie", sharedPreferences.getString("Cookie", ""));
         bundlerl_shop.putString("link", sharelink);
         intentrl_shop.putExtras(bundlerl_shop);
         startActivity(intentrl_shop);
@@ -325,8 +328,8 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         Bundle bundlerl_two_dimen = new Bundle();
         bundlerl_two_dimen.putString("cookies", cookies);
         bundlerl_two_dimen.putString("domain", domain);
-        bundlerl_two_dimen.putString("Cookie", sharedPreferences.getString("Cookie", ""));
-        bundlerl_two_dimen.putString("link", shareMmcode);
+//        bundlerl_two_dimen.putString("cookies", sharedPreferences.getString("Cookie", ""));
+        bundlerl_two_dimen.putString("actlink", shareMmcode);
         intentrl_two_dimen.putExtras(bundlerl_two_dimen);
         startActivity(intentrl_two_dimen);
         break;
