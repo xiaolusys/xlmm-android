@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.net.http.SslError;
 import android.os.Build;
@@ -24,6 +25,7 @@ import cn.sharesdk.onekeyshare.OnekeyShare;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
+import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -55,6 +57,7 @@ public class MMShareCodeWebViewActivity extends BaseSwipeBackCompatActivity {
   private String sessionid;
   private String title, sharelink, desc, shareimg;
 
+
   @Override protected void setListener() {
     //mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
     //  @Override public void onClick(View v) {
@@ -65,6 +68,7 @@ public class MMShareCodeWebViewActivity extends BaseSwipeBackCompatActivity {
   }
 
   @Override protected void initData() {
+
 
     MMProductModel.getInstance()
         .getShareShopping()
@@ -101,6 +105,8 @@ public class MMShareCodeWebViewActivity extends BaseSwipeBackCompatActivity {
         JUtils.Log(TAG, "loadUrl--end");
       }
     });
+
+
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -120,31 +126,32 @@ public class MMShareCodeWebViewActivity extends BaseSwipeBackCompatActivity {
     return R.layout.activity_mmsharecodewebview;
   }
 
-  @SuppressLint("JavascriptInterface") @Override protected void initViews() {
-    JUtils.Log(TAG, "initViews");
-    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent), 0);
-    toolbar.setTitle("");
-    setSupportActionBar(toolbar);
-    finishBack(toolbar);
+  //@TargetApi(Build.VERSION_CODES.KITKAT)
+      @SuppressLint("JavascriptInterface") @Override protected void initViews() {
+        JUtils.Log(TAG, "initViews");
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent), 0);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+        finishBack(toolbar);
 
-    ll_actwebview = (LinearLayout) findViewById(R.id.ll_actwebview);
-    mProgressBar = (ProgressBar) findViewById(R.id.pb_view);
-    mWebView = (WebView) findViewById(R.id.wb_view);
-    //mToolbar = (Toolbar) findViewById(R.id.toolbar);
-    //mToolbar.setTitle("");
-    //setSupportActionBar(mToolbar);
-    //mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-    //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ll_actwebview = (LinearLayout) findViewById(R.id.ll_actwebview);
+        mProgressBar = (ProgressBar) findViewById(R.id.pb_view);
+        mWebView = (WebView) findViewById(R.id.wb_view);
+        //mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        //mToolbar.setTitle("");
+        //setSupportActionBar(mToolbar);
+        //mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-    try {
-      if (Build.VERSION.SDK_INT >= 19) {
-        mWebView.getSettings().setLoadsImagesAutomatically(true);
-      } else {
-        mWebView.getSettings().setLoadsImagesAutomatically(false);
-      }
+        try {
+          if (Build.VERSION.SDK_INT >= 19) {
+            mWebView.getSettings().setLoadsImagesAutomatically(true);
+          } else {
+            mWebView.getSettings().setLoadsImagesAutomatically(false);
+          }
 
       mWebView.getSettings().setJavaScriptEnabled(true);
-      //mWebView.addJavascriptInterface(new AndroidJsBridge(this), "AndroidBridge");
+      mWebView.addJavascriptInterface(new AndroidJsBridge(this), "AndroidBridge");
 
       mWebView.getSettings().setAllowFileAccess(true);
       //如果访问的页面中有Javascript，则webview必须设置支持Javascript
@@ -156,6 +163,7 @@ public class MMShareCodeWebViewActivity extends BaseSwipeBackCompatActivity {
       mWebView.getSettings().setDatabaseEnabled(true);
       mWebView.getSettings().setLoadWithOverviewMode(true);
       mWebView.getSettings().setUseWideViewPort(true);
+      //mWebView.setWebContentsDebuggingEnabled(true);
 
       mWebView.setWebChromeClient(new WebChromeClient() {
         @Override public void onProgressChanged(WebView view, int newProgress) {
@@ -173,7 +181,7 @@ public class MMShareCodeWebViewActivity extends BaseSwipeBackCompatActivity {
 
         @Override public void onPageFinished(WebView view, String url) {
           JUtils.Log(TAG, "onPageFinished:" + url);
-
+          CookieSyncManager.getInstance().sync();
           if (!mWebView.getSettings().getLoadsImagesAutomatically()) {
             mWebView.getSettings().setLoadsImagesAutomatically(true);
           }
@@ -267,7 +275,12 @@ public class MMShareCodeWebViewActivity extends BaseSwipeBackCompatActivity {
       JUtils.Log(TAG, "syncCookie bgn");
       CookieSyncManager.createInstance(context);
       CookieManager cookieManager = CookieManager.getInstance();
+      cookieManager.removeSessionCookie();// 移除
       cookieManager.removeAllCookie();
+
+      cookieManager.setAcceptCookie(true);
+
+      cookieManager.setCookie(domain, cookies);
       CookieSyncManager.getInstance().sync();
       JUtils.Log(TAG, "syncCookie end");
     } catch (Exception e) {
