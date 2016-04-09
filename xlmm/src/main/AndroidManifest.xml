@@ -234,7 +234,7 @@
             android:name=".ui.activity.product.LadyListActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
-            android:name=".ui.activity.main.WebViewActivity"
+            android:name=".base.CommonWebViewActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".ui.activity.xiaolumama.BoutiqueWebviewActivity"
@@ -314,9 +314,6 @@
             android:name=".ui.activity.xiaolumama.MMChooseListActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
-            android:name=".ui.activity.xiaolumama.MaMaMyStoreActivity"
-            android:theme="@style/AppTheme.TransparentActivity" />
-        <activity
             android:name=".ui.activity.xiaolumama.ShareAllowanceActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
@@ -344,7 +341,7 @@
             android:name=".ui.activity.user.WxPubTwoDimenCodeActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
-            android:name=".ui.activity.xiaolumama.MMWebViewActivity"
+            android:name=".ui.activity.xiaolumama.MMStoreWebViewActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".ui.activity.xiaolumama.MMcarryLogActivity"
@@ -408,7 +405,12 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".ui.activity.user.CustomProblemActivity"></activity>
+        <activity android:name=".ui.activity.user.CustomProblemActivity"
+            android:theme="@style/AppTheme.TransparentActivity"
+            />
+        <activity android:name=".ui.activity.main.ActivityWebViewActivity"
+            android:theme="@style/AppTheme.TransparentActivity"
+            />
     </application>
 
 </manifest>

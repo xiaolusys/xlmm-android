@@ -12,8 +12,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import butterknife.Bind;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
@@ -34,6 +32,7 @@ import com.umeng.update.UpdateResponse;
 import com.umeng.update.UpdateStatus;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
+import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 

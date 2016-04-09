@@ -27,8 +27,8 @@ import com.jimei.xiaolumeimei.entities.PostBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.model.ProductModel;
+import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
-import com.jimei.xiaolumeimei.ui.activity.main.WebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.WxLoginBindPhoneActivity;
 import com.jimei.xiaolumeimei.ui.fragment.view.ViewImpl;
@@ -272,7 +272,7 @@ public class TodayListView extends ViewImpl {
                           if (!TextUtils.isEmpty(extra)) {
                             JumpUtils.JumpInfo jump_info = JumpUtils.get_jump_info(extra);
                             if (extra.startsWith("http://")) {
-                              intent = new Intent(context, WebViewActivity.class);
+                              intent = new Intent(context, ActivityWebViewActivity.class);
                               //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                               SharedPreferences sharedPreferences =
                                   context.getSharedPreferences("COOKIESxlmm",
@@ -383,7 +383,7 @@ public class TodayListView extends ViewImpl {
                                             .getMobile()
                                             .isEmpty())) {
                                           Intent intent =
-                                              new Intent(context, WebViewActivity.class);
+                                              new Intent(context, ActivityWebViewActivity.class);
                                           //sharedPreferences =
                                           //    getActivity().getSharedPreferences("COOKIESxlmm",
                                           //        Context.MODE_PRIVATE);
@@ -440,7 +440,7 @@ public class TodayListView extends ViewImpl {
                                         }
                                       } else {
                                         Intent intent =
-                                            new Intent(context, WebViewActivity.class);
+                                            new Intent(context, ActivityWebViewActivity.class);
                                         //sharedPreferences =
                                         //    getActivity().getSharedPreferences("COOKIESxlmm",
                                         //        Context.MODE_PRIVATE);
@@ -566,7 +566,7 @@ public class TodayListView extends ViewImpl {
                           if (!TextUtils.isEmpty(extra)) {
                             JumpUtils.JumpInfo jump_info = JumpUtils.get_jump_info(extra);
                             if (extra.startsWith("http://")) {
-                              intent = new Intent(context, WebViewActivity.class);
+                              intent = new Intent(context, ActivityWebViewActivity.class);
                               //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                               SharedPreferences sharedPreferences =
                                   context.getSharedPreferences("COOKIESxlmm",
@@ -681,7 +681,7 @@ public class TodayListView extends ViewImpl {
                                             .getMobile()
                                             .isEmpty())) {
                                           Intent intent =
-                                              new Intent(context, WebViewActivity.class);
+                                              new Intent(context, ActivityWebViewActivity.class);
                                           //sharedPreferences =
                                           //    getActivity().getSharedPreferences("COOKIESxlmm",
                                           //        Context.MODE_PRIVATE);
@@ -742,7 +742,7 @@ public class TodayListView extends ViewImpl {
                                         }
                                       } else {
                                         Intent intent =
-                                            new Intent(context, WebViewActivity.class);
+                                            new Intent(context, ActivityWebViewActivity.class);
                                         //sharedPreferences =
                                         //    getActivity().getSharedPreferences("COOKIESxlmm",
                                         //        Context.MODE_PRIVATE);

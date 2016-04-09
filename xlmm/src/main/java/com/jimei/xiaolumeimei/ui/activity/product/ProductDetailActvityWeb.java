@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -44,8 +43,6 @@ import rx.schedulers.Schedulers;
 public class ProductDetailActvityWeb extends BaseAppCompatActivityForDetail
     implements View.OnClickListener, setSkuidListener {
   private static final String TAG = ProductDetailActvityWeb.class.getSimpleName();
-  @Bind(R.id.first) FrameLayout first;
-  @Bind(R.id.second) FrameLayout second;
   @Bind(R.id.draglayout) DragLayout dragLayout;
   @Bind(R.id.image_1) ImageView imageView1;
   @Bind(R.id.image_2) ImageView imageView2;

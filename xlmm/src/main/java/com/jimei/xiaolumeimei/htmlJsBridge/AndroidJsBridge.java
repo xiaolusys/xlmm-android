@@ -8,7 +8,7 @@ import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.model.ActivityModel;
-import com.jimei.xiaolumeimei.ui.activity.main.WebViewActivity;
+import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 
@@ -33,28 +33,28 @@ public class AndroidJsBridge {
 
   private static final String TAG = "AndroidJsBridge";
 
-  private WebViewActivity webViewActivity;
+  private CommonWebViewActivity commonWebViewActivity;
   private ActivityBean partyShareInfo;
   private Context mContext;
 
   public AndroidJsBridge(Context context) {
-    //this.webViewActivity = webViewActivity;
+    //this.commonWebViewActivity = commonWebViewActivity;
     this.mContext = context;
   }
 
 
   @JavascriptInterface public void callNativeShareFunc(String uform, String activity_id) {
-    JUtils.Log("WebViewActivity", uform + "======activity_id =" + activity_id);
+    JUtils.Log("CommonWebViewActivity", uform + "======activity_id =" + activity_id);
     getPromotionParams(uform, activity_id);
   }
 
   @JavascriptInterface public void saveTwoDimenCode() {
-    JUtils.Log("WebViewActivity", "saveTowDimenCode");
+    JUtils.Log("CommonWebViewActivity", "saveTowDimenCode");
     saveTwoDimenCode();
   }
 
   @JavascriptInterface public void jumpToNativeLocation(String url) {
-    JUtils.Log("WebViewActivity", url);
+    JUtils.Log("CommonWebViewActivity", url);
     jumpToNativeLocation(url);
   }
 

@@ -59,7 +59,10 @@ public class TwoDimenCodeActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initData() {
-    myurl = getIntent().getExtras().getString("myurl");
+
+    if (null != getIntent() && null != getIntent().getExtras()) {
+      myurl = getIntent().getExtras().getString("myurl");
+    }
     if (false == myurl.equals("")) {
       //myurl = XlmmApi.TWO_DIMEN_URL_BASE + myurl;
       ViewUtils.loadImgToImgView(this, img_2dimen, myurl);
@@ -141,8 +144,8 @@ public class TwoDimenCodeActivity extends BaseSwipeBackCompatActivity
       oks.setImagePath(filePara.getFilePath());//确保SDcard下面存在此张图片
       JUtils.Log(TAG, "local pic " + filePara.getFilePath());
     } else {*/
-      JUtils.Log(TAG, "url pic");
-      oks.setImageUrl(myurl);
+    JUtils.Log(TAG, "url pic");
+    oks.setImageUrl(myurl);
     //}
     // url仅在微信（包括好友和朋友圈）中使用
     //oks.setUrl(myurl);
