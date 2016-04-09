@@ -120,7 +120,7 @@ public class SettingPasswordActivity extends BaseSwipeBackCompatActivity
 
             if (user.getCode() == 0) {
               Toast.makeText(mContext, "修改成功", Toast.LENGTH_SHORT).show();
-              Intent intent = new Intent(mContext, SettingActivity.class);
+              Intent intent = new Intent(mContext, InformationActivity.class);
               startActivity(intent);
               finish();
             } else {

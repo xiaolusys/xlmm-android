@@ -32,10 +32,10 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="design_width"
-            android:value="720"></meta-data>
+            android:value="720" />
         <meta-data
             android:name="design_height"
-            android:value="1230"></meta-data>
+            android:value="1230" />
         //友盟统计相关
         <meta-data
             android:name="UMENG_APPKEY"
@@ -52,11 +52,11 @@
 
         <service
             android:name="com.umeng.update.net.DownloadingService"
-            android:process=":DownloadingService"></service>
+            android:process=":DownloadingService" />
 
         <activity
             android:name="com.umeng.update.UpdateDialogActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name=".ui.activity.main.SplashActivity"
             android:theme="@style/AppTheme.TransparentActivity">
@@ -119,38 +119,38 @@
             android:name="com.alipay.sdk.app.H5PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
-            android:screenOrientation="behind"></activity>
+            android:screenOrientation="behind" />
         <activity
             android:name="com.alipay.sdk.auth.AuthActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
-            android:screenOrientation="behind"></activity>
+            android:screenOrientation="behind" />
         <activity
             android:name=".ui.activity.trade.AllOrdersActivity"
             android:label="@string/title_activity_allorders"
-            android:theme="@style/AppTheme.TransparentActivity"></activity>
+            android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".ui.activity.trade.OrderDetailActivity"
             android:label="@string/title_activity_orderdetail"
-            android:theme="@style/AppTheme.TransparentActivity"></activity>
+            android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".ui.activity.trade.AllRefundsActivity"
             android:label="@string/title_activity_refunds"
-            android:theme="@style/AppTheme.TransparentActivity"></activity>
+            android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".ui.activity.trade.RefundDetailActivity"
             android:label="@string/title_activity_refunddetail"
-            android:theme="@style/AppTheme.TransparentActivity"></activity>
+            android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".ui.activity.trade.WaitPayOrdersActivity"
             android:label="@string/title_activity_waitsend"
-            android:theme="@style/AppTheme.TransparentActivity"></activity>
+            android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".ui.activity.trade.WaitSendOrdersActivity"
             android:label="@string/title_activity_waitsend"
-            android:theme="@style/AppTheme.TransparentActivity"></activity>
+            android:theme="@style/AppTheme.TransparentActivity" />
         <activity
-            android:name=".ui.activity.user.SettingActivity"
+            android:name=".ui.activity.user.InformationActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".ui.activity.user.AddressActivity"
@@ -361,6 +361,15 @@
         <activity
             android:name=".ui.activity.xiaolumama.MMShareCodeWebViewActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
+        <activity
+            android:name=".ui.activity.user.CustomProblemActivity"
+            android:theme="@style/AppTheme.TransparentActivity"/>
+        <activity
+            android:name=".ui.activity.user.SettingActivity"
+            android:theme="@style/AppTheme.TransparentActivity"/>
+        <activity
+            android:name=".ui.activity.main.ActivityWebViewActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
 
         <service
             android:name="com.xiaomi.push.service.XMPushService"
@@ -405,12 +414,6 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".ui.activity.user.CustomProblemActivity"
-            android:theme="@style/AppTheme.TransparentActivity"
-            />
-        <activity android:name=".ui.activity.main.ActivityWebViewActivity"
-            android:theme="@style/AppTheme.TransparentActivity"
-            />
     </application>
 
 </manifest>

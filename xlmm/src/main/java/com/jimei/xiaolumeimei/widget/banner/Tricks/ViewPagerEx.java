@@ -460,7 +460,7 @@ public class ViewPagerEx extends ViewGroup {
    * transformations to each page, overriding the default sliding look and feel.
    *
    * <p><em>Note:</em> Prior to Android 3.0 the property animation APIs did not exist.
-   * As a result, setting a PageTransformer prior to Android 3.0 (API 11) will have no
+   * As a result, information a PageTransformer prior to Android 3.0 (API 11) will have no
    * effect.</p>
    *
    * @param reverseDrawingOrder true if the supplied PageTransformer requires page views
@@ -537,13 +537,13 @@ public class ViewPagerEx extends ViewGroup {
    *
    * <p>This is offered as an optimization. If you know in advance the number
    * of pages you will need to support or have lazy-loading mechanisms in place
-   * on your pages, tweaking this setting can have benefits in perceived smoothness
+   * on your pages, tweaking this information can have benefits in perceived smoothness
    * of paging animations and interaction. If you have a small number of pages (3-4)
    * that you can keep active all at once, less time will be spent in layout for
    * newly created view subtrees as the user pages back and forth.</p>
    *
    * <p>You should keep this limit low, especially if your pages have complex layouts.
-   * This setting defaults to 1.</p>
+   * This information defaults to 1.</p>
    *
    * @param limit How many pages will be kept offscreen in an idle state.
    */
@@ -2629,7 +2629,7 @@ public class ViewPagerEx extends ViewGroup {
    * to the page views using animation properties.
    *
    * <p>As property animation is only supported as of Android 3.0 and forward,
-   * setting a PageTransformer on a ViewPager on earlier platform versions will
+   * information a PageTransformer on a ViewPager on earlier platform versions will
    * be ignored.</p>
    */
   public interface PageTransformer {
@@ -2745,7 +2745,7 @@ public class ViewPagerEx extends ViewGroup {
     public boolean isDecor;
 
     /**
-     * Gravity setting for use on decor views only:
+     * Gravity information for use on decor views only:
      * Where to position the view page within the overall ViewPager
      * container; constants are defined in {@link Gravity}.
      */

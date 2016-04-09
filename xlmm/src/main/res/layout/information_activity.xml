@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:text="个人信息"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                />
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="150px"
+        android:background="@color/ECECEC"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:minHeight="?android:listPreferredItemHeight"
+        >
+        <TextView
+            android:id="@android:id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="24dp"
+            android:ellipsize="marquee"
+            android:fadingEdge="horizontal"
+            android:singleLine="true"
+            android:text="头像"
+            android:textColor="@color/primary_text"
+            android:textSize="16sp"/>
+
+        <View
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginRight="16dp"
+            android:layout_alignParentRight="true"
+            android:orientation="horizontal"
+            >
+            <com.jimei.xiaolumeimei.widget.CircleImageView
+                android:id="@+id/user_img"
+                android:layout_width="120px"
+                android:src="@drawable/img_head"
+                android:layout_height="120px"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:src="@mipmap/common_icon_right_arrow"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+    <View android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:background="#CCCCCC" />
+    <FrameLayout
+        android:id="@+id/container_setting"
+        android:background="@color/ECECEC"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</LinearLayout>
