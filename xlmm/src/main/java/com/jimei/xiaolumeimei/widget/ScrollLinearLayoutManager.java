@@ -75,6 +75,7 @@ public class ScrollLinearLayoutManager extends LinearLayoutManager {
                                    int heightSpec, int[] measuredDimension) {
         try {
             View view = recycler.getViewForPosition(position);
+            recycler.bindViewToPosition(view, position);
             if (view.getVisibility() == View.GONE) {
                 measuredDimension[0] = 0;
                 measuredDimension[1] = 0;

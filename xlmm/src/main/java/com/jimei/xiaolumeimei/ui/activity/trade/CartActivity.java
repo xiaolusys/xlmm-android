@@ -646,6 +646,8 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                               if (cartsinfoBeen != null) {
                                 mList = cartsinfoBeen;
                                 mCartsAdapetr.notifyDataSetChanged();
+
+                                getCartsInfo();
                               }
                             }
                           });
@@ -672,6 +674,42 @@ public class CartActivity extends BaseSwipeBackCompatActivity
       mListhis.clear();
       mListhis.addAll(list);
       notifyDataSetChanged();
+    }
+
+    private void getCartsInfo() {
+      Subscription subscription = CartsModel.getInstance()
+          .getCartsList()
+          .subscribeOn(Schedulers.io())
+          .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
+            @Override public void onNext(List<CartsinfoBean> list) {
+              super.onNext(list);
+              mList.clear();
+              mList.addAll(list);
+
+              StringBuilder sb = new StringBuilder();
+              String s = null;
+              if (ids.size() > 0) {
+                s = apendString(sb);
+              }
+
+              CartsModel.getInstance()
+                  .getCartsInfoList(s)
+                  .subscribeOn(Schedulers.io())
+                  .subscribe(new ServiceResponse<CartsPayinfoBean>() {
+                    @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
+                      super.onNext(cartsPayinfoBean);
+                      if (cartsPayinfoBean != null) {
+
+                        total_price = cartsPayinfoBean.getTotalFee();
+
+                        totalPrice.setText("¥" + total_price);
+                        totalPrice_all_1.setText("总金额¥" + total_price);
+                      }
+                    }
+                  });
+            }
+          });
+      addSubscription(subscription);
     }
 
     //删除某一项

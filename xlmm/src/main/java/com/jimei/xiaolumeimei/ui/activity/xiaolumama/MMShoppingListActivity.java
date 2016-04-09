@@ -130,7 +130,11 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
 
           @Override public void onCompleted() {
             super.onCompleted();
-            shoppinglistXry.post(shoppinglistXry::loadMoreComplete);
+            try {
+              shoppinglistXry.post(shoppinglistXry::loadMoreComplete);
+            } catch (Exception e) {
+              e.printStackTrace();
+            }
           }
         });
     addSubscription(subscribe);

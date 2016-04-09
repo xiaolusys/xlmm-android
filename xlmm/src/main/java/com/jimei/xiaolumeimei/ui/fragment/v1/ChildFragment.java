@@ -20,7 +20,6 @@ import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
-import com.victor.loading.rotate.RotateLoading;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -135,7 +134,11 @@ public class ChildFragment extends Fragment {
 
               @Override public void onCompleted() {
                 super.onCompleted();
-                xRecyclerView.post(xRecyclerView::refreshComplete);
+                try {
+                  xRecyclerView.post(xRecyclerView::refreshComplete);
+                } catch (Exception e) {
+                  e.printStackTrace();
+                }
               }
             });
       }
