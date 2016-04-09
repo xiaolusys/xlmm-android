@@ -86,8 +86,8 @@ public class SettingNicknameActivity extends BaseSwipeBackCompatActivity
       return false;
     }
     for (int i = 0; i < name.length(); i++) {
-      if (false == Character.isLetter(name.charAt(i)) && false == Character.isDigit(
-          name.charAt(i)) && '-' != name.charAt(i)) {
+      if (!Character.isLetter(name.charAt(i)) && !Character.isDigit(
+              name.charAt(i)) && '-' != name.charAt(i)) {
         JUtils.Toast("字符不符合规范,只能是字母、数字、-字符.");
         return false;
       }
