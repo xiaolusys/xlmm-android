@@ -2,17 +2,17 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <Preference
         android:key="@string/clear_cache"
-        android:layout="@layout/preference_list_item"
+        android:layout="@layout/preference_setting_item"
         android:summary="0kb"
         android:title="清理缓存"></Preference>
     <Preference
         android:key="@string/update"
-        android:layout="@layout/preference_list_item"
+        android:layout="@layout/preference_setting_item"
         android:summary=""
         android:title="@string/update"></Preference>
     <Preference
         android:key="关于小鹿美美"
-        android:layout="@layout/preference_list_item"
+        android:layout="@layout/preference_setting_item"
         android:summary=""
         android:title="关于小鹿美美">
         <intent
