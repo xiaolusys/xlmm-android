@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +23,7 @@ public class MyPreferenceView extends LinearLayout implements View.OnClickListen
     private TextView summaryText;
     private Context context;
     private Activity activity;
-    private Class clz;
+    private Intent intent;
 
     public MyPreferenceView(Context context) {
         super(context);
@@ -50,11 +51,11 @@ public class MyPreferenceView extends LinearLayout implements View.OnClickListen
         View view = LayoutInflater.from(context).inflate(R.layout.preference_list_item, this, true);
         titleText = ((TextView) view.findViewById(R.id.title));
         summaryText = ((TextView) view.findViewById(R.id.summary));
-       setOnClickListener(this);
+        setOnClickListener(this);
     }
 
 
-    public void setTitleText(String title){
+    public void setTitleText(String title) {
         titleText.setText(title);
     }
 
@@ -62,15 +63,21 @@ public class MyPreferenceView extends LinearLayout implements View.OnClickListen
         summaryText.setText(summary);
     }
 
-    public void bindActivity(Activity activity,Class clz){
+    public void bindActivity(Activity activity, Class clz) {
         this.activity = activity;
-        this.clz = clz;
+        if (clz!=null){
+            intent = new Intent(context, clz);
+        }
     }
 
     @Override
     public void onClick(View v) {
-        if (clz != null) {
-            activity.startActivity(new Intent(context,clz));
+        if (intent != null) {
+            activity.startActivity(intent);
         }
+    }
+
+    public void addBundle(Bundle bundle) {
+        intent.putExtras(bundle);
     }
 }

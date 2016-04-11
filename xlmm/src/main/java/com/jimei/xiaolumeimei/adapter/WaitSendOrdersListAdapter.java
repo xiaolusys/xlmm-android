@@ -219,7 +219,6 @@ public class WaitSendOrdersListAdapter extends BaseAdapter {
     ll_one_order.setOnClickListener(new View.OnClickListener() {
 
       @Override public void onClick(View v) {
-        // TODO Auto-generated method stub
         Log.d(TAG, "onClick ");
         Intent intent = new Intent(context, OrderDetailActivity.class);
         intent.putExtra("orderinfo", order_id);
@@ -289,6 +288,12 @@ public class WaitSendOrdersListAdapter extends BaseAdapter {
     mHorizontalScrollView.initDatas(mAdapter);
 
     return mHorizontalScrollView;
+  }
+
+  public void clearAll(){
+    data.clear();
+    mList.clear();
+    notifyDataSetChanged();
   }
 
   public static class ViewHolder {

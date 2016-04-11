@@ -92,6 +92,10 @@ public class InformationActivity extends BaseSwipeBackCompatActivity implements 
                         nickName = userinfo.getNick();
                         mobile = userinfo.getMobile();
                         nickNameView.setSummary(nickName);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("nickname",nickName);
+                        bundle.putString("headimgurl",user.getThumbnail());
+                        bindPhoneView.addBundle(bundle);
                         bindPhoneView.setSummary(mobile.substring(0, 3) + "****" + mobile.substring(7));
                         ViewUtils.loadImgToImgView(getApplicationContext(), imgUser, user.getThumbnail());
                     }
