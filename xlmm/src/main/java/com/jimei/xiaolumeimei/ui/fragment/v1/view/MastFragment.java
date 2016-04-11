@@ -17,9 +17,9 @@ import android.widget.ImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.PostActivityBean;
 import com.jimei.xiaolumeimei.model.ActivityModel;
+import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.WxLoginBindPhoneActivity;
@@ -143,7 +143,7 @@ public class MastFragment extends DialogFragment {
                                       dismiss();
 
                                       Intent intent = new Intent(context,
-                                          CommonWebViewActivity.class);
+                                          ActivityWebViewActivity.class);
                                       //sharedPreferences =
                                       //    getActivity().getSharedPreferences("COOKIESxlmm",
                                       //        Context.MODE_PRIVATE);
@@ -199,7 +199,7 @@ public class MastFragment extends DialogFragment {
                                     }
                                   } else {
                                     Intent intent =
-                                        new Intent(context, CommonWebViewActivity.class);
+                                        new Intent(context, ActivityWebViewActivity.class);
                                     //sharedPreferences =
                                     //    getActivity().getSharedPreferences("COOKIESxlmm",
                                     //        Context.MODE_PRIVATE);

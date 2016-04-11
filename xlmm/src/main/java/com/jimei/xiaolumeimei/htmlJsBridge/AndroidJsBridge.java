@@ -3,15 +3,6 @@ package com.jimei.xiaolumeimei.htmlJsBridge;
 import android.content.Context;
 import android.telephony.TelephonyManager;
 import android.webkit.JavascriptInterface;
-
-import com.jimei.xiaolumeimei.XlmmApp;
-import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.entities.ActivityBean;
-import com.jimei.xiaolumeimei.model.ActivityModel;
-import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
-
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
@@ -21,6 +12,12 @@ import cn.sharesdk.tencent.qq.QQ;
 import cn.sharesdk.tencent.qzone.QZone;
 import cn.sharesdk.wechat.friends.Wechat;
 import cn.sharesdk.wechat.moments.WechatMoments;
+import com.jimei.xiaolumeimei.XlmmApp;
+import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.entities.ActivityBean;
+import com.jimei.xiaolumeimei.model.ActivityModel;
+import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jude.utils.JUtils;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -33,7 +30,6 @@ public class AndroidJsBridge {
 
   private static final String TAG = "AndroidJsBridge";
 
-  private CommonWebViewActivity commonWebViewActivity;
   private ActivityBean partyShareInfo;
   private Context mContext;
 
