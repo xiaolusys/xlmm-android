@@ -37,10 +37,10 @@ public class CouponSelectActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.sv_frame_coupon) ScrollView sv_frame_coupon;
   int unused_num = 0;
   List<CouponBean.ResultsEntity> list = new ArrayList<>();
+  String selected_couponid;
   private CouponListAdapter mCouponAdapter;
   private CouponListAdapter mPastCouponAdapter;
   private ListView lv_unused_coupon;
-  String selected_couponid;
 
   public static void setListViewHeightBasedOnChildren(ListView listView) {
     ListAdapter listAdapter = listView.getAdapter();
@@ -71,7 +71,6 @@ public class CouponSelectActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void getBundleExtras(Bundle extras) {
     selected_couponid = extras.getString("coupon_id");
-
   }
 
   @Override protected int getContentViewLayoutID() {
@@ -98,7 +97,8 @@ public class CouponSelectActivity extends BaseSwipeBackCompatActivity
 
   //从server端获得所有订单数据，可能要查询几次
   @Override protected void initData() {
-    UserModel.getInstance().getUnusedCouponBean()
+    UserModel.getInstance()
+        .getUnusedCouponBean()
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<CouponBean>() {
           @Override public void onNext(CouponBean couponBean) {
@@ -107,10 +107,11 @@ public class CouponSelectActivity extends BaseSwipeBackCompatActivity
             unused_num = results.size();
             if (0 != results.size()) {
               rl_empty.setVisibility(View.INVISIBLE);
-              mCouponAdapter.update(results, XlmmConst.UNUSED_COUPON,selected_couponid);
+              mCouponAdapter.update(results, XlmmConst.UNUSED_COUPON, selected_couponid);
             }
 
-            UserModel.getInstance().getPastCouponBean()
+            UserModel.getInstance()
+                .getPastCouponBean()
                 .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<CouponBean>() {
                   @Override public void onNext(CouponBean couponBean) {
@@ -122,7 +123,7 @@ public class CouponSelectActivity extends BaseSwipeBackCompatActivity
                       }
                     } else {
                       rl_empty.setVisibility(View.INVISIBLE);
-                      mPastCouponAdapter.update(results, XlmmConst.PAST_COUPON,"");
+                      mPastCouponAdapter.update(results, XlmmConst.PAST_COUPON, "");
                     }
 
                     Log.i(TAG, "过期的" + couponBean.toString());
