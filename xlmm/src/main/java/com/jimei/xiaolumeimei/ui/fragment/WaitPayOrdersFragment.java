@@ -67,46 +67,6 @@ public class WaitPayOrdersFragment extends Fragment {
     setRetainInstance(true);
   }
 
-  @Override public void setUserVisibleHint(boolean isVisibleToUser) {
-    super.setUserVisibleHint(isVisibleToUser);
-    if (isVisibleToUser && list.size() == 0) {
-      load();
-    }
-  }
-
-  private void load() {
-    showIndeterminateProgressDialog(false);
-    subscription1 = TradeModel.getInstance()
-            .getWaitPayOrdersBean("1")
-            .subscribeOn(Schedulers.io())
-            .subscribe(new ServiceResponse<AllOrdersBean>() {
-              @Override public void onNext(AllOrdersBean allOrdersBean) {
-                List<AllOrdersBean.ResultsEntity> results = allOrdersBean.getResults();
-
-                if (0 == results.size()) {
-                  JUtils.Log(TAG, "results.size()=0");
-                  rl_empty.setVisibility(View.VISIBLE);
-                } else {
-                  list.addAll(results);
-                  adapter.update(results);
-                }
-
-                Log.i(TAG, allOrdersBean.toString());
-              }
-
-              @Override public void onCompleted() {
-                super.onCompleted();
-                hideIndeterminateProgressDialog();
-              }
-
-              @Override public void onError(Throwable e) {
-
-                Log.e(TAG, " error:, " + e.toString());
-                super.onError(e);
-              }
-            });;
-  }
-
   @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     initViews(view);
@@ -209,6 +169,42 @@ public class WaitPayOrdersFragment extends Fragment {
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    adapter.clearAll();
+    showIndeterminateProgressDialog(false);
+    subscription1 = TradeModel.getInstance()
+            .getWaitPayOrdersBean("1")
+            .subscribeOn(Schedulers.io())
+            .subscribe(new ServiceResponse<AllOrdersBean>() {
+              @Override public void onNext(AllOrdersBean allOrdersBean) {
+                List<AllOrdersBean.ResultsEntity> results = allOrdersBean.getResults();
+
+                if (0 == results.size()) {
+                  JUtils.Log(TAG, "results.size()=0");
+                  rl_empty.setVisibility(View.VISIBLE);
+                } else {
+                  list.addAll(results);
+                  adapter.update(results);
+                }
+
+                Log.i(TAG, allOrdersBean.toString());
+              }
+
+              @Override public void onCompleted() {
+                super.onCompleted();
+                hideIndeterminateProgressDialog();
+              }
+
+              @Override public void onError(Throwable e) {
+
+                Log.e(TAG, " error:, " + e.toString());
+                super.onError(e);
+              }
+            });
   }
 
   @Override public void onDetach() {
