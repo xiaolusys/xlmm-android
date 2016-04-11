@@ -219,13 +219,13 @@ public class WaitSendOrdersListAdapter extends BaseAdapter {
     ll_one_order.setOnClickListener(new View.OnClickListener() {
 
       @Override public void onClick(View v) {
+        // TODO Auto-generated method stub
         Log.d(TAG, "onClick ");
         Intent intent = new Intent(context, OrderDetailActivity.class);
         intent.putExtra("orderinfo", order_id);
         intent.putExtra("source", "WaitSend");
         Log.d(TAG, "LinearLayout transfer orderid  " + order_id + " to OrderDetailActivity");
         context.startActivity(intent);
-        context.finish();
       }
     });
 
