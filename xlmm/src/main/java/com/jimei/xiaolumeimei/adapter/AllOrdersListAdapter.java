@@ -289,6 +289,12 @@ public class AllOrdersListAdapter extends BaseAdapter {
     return mHorizontalScrollView;
   }
 
+  public void clearAll(){
+    data.clear();
+    mList.clear();
+    notifyDataSetChanged();
+  }
+
   public static class ViewHolder {
     int goods_num;
     int position;

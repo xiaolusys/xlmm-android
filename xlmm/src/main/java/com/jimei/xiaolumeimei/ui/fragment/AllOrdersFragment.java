@@ -62,46 +62,6 @@ public class AllOrdersFragment extends Fragment {
     setRetainInstance(true);
   }
 
-  @Override public void setUserVisibleHint(boolean isVisibleToUser) {
-    super.setUserVisibleHint(isVisibleToUser);
-    if (isVisibleToUser && list.size() == 0) {
-      load();
-    }
-  }
-
-  private void load() {
-    showIndeterminateProgressDialog(false);
-    subscription1 = TradeModel.getInstance()
-        .getAlloderBean("1")
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<AllOrdersBean>() {
-          @Override public void onNext(AllOrdersBean allOrdersBean) {
-
-            if (allOrdersBean != null && allOrdersBean.getResults() != null) {
-              List<AllOrdersBean.ResultsEntity> results = allOrdersBean.getResults();
-
-              list.addAll(results);
-              adapter.update(results);
-            } else {
-              rl_empty.setVisibility(View.VISIBLE);
-            }
-
-            Log.i(TAG, allOrdersBean.toString());
-          }
-
-          @Override public void onCompleted() {
-            super.onCompleted();
-            hideIndeterminateProgressDialog();
-          }
-
-          @Override public void onError(Throwable e) {
-
-            Log.e(TAG, " error:, " + e.toString());
-            super.onError(e);
-          }
-        });
-  }
-
   @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     initViews(view);
@@ -199,6 +159,42 @@ public class AllOrdersFragment extends Fragment {
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    adapter.clearAll();
+    showIndeterminateProgressDialog(false);
+    subscription1 = TradeModel.getInstance()
+            .getAlloderBean("1")
+            .subscribeOn(Schedulers.io())
+            .subscribe(new ServiceResponse<AllOrdersBean>() {
+              @Override public void onNext(AllOrdersBean allOrdersBean) {
+
+                if (allOrdersBean != null && allOrdersBean.getResults() != null) {
+                  List<AllOrdersBean.ResultsEntity> results = allOrdersBean.getResults();
+
+                  list.addAll(results);
+                  adapter.update(results);
+                } else {
+                  rl_empty.setVisibility(View.VISIBLE);
+                }
+
+                Log.i(TAG, allOrdersBean.toString());
+              }
+
+              @Override public void onCompleted() {
+                super.onCompleted();
+                hideIndeterminateProgressDialog();
+              }
+
+              @Override public void onError(Throwable e) {
+
+                Log.e(TAG, " error:, " + e.toString());
+                super.onError(e);
+              }
+            });
   }
 
   @Override public void onDetach() {
