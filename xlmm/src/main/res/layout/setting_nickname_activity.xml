@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center_horizontal"
     android:orientation="vertical">
 
   <android.support.design.widget.AppBarLayout
@@ -61,19 +62,16 @@
   <include layout="@layout/common_gap" />
 
   <Button
+
       android:layout_marginTop="8dp"
-      android:background="@drawable/forget_pass"
+      android:background="@drawable/shape_common"
       android:id="@+id/set_save_button"
-      android:layout_width="260dp"
+      android:layout_width="669px"
       android:layout_height="wrap_content"
-      android:layout_marginRight="8dp"
       android:text="保存"
-      android:textColor="@color/book_loading_book"
+      android:textColor="@color/white"
       android:textSize="16sp"
       android:gravity="center"
       android:layout_gravity="center" />
-
-
-
 
 </LinearLayout>
