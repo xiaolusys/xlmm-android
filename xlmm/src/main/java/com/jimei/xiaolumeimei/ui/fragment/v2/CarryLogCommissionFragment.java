@@ -170,7 +170,11 @@ public class CarryLogCommissionFragment extends Fragment {
 
           @Override public void onCompleted() {
             super.onCompleted();
-            xRecyclerView.post(xRecyclerView::loadMoreComplete);
+            try {
+              xRecyclerView.post(xRecyclerView::loadMoreComplete);
+            } catch (NullPointerException e) {
+              e.printStackTrace();
+            }
           }
         });
   }
