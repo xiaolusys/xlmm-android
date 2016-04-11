@@ -30,7 +30,10 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
@@ -40,15 +43,9 @@ import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.mob.tools.utils.UIHandler;
-
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.PlatformActionListener;
-import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.onekeyshare.OnekeyShare;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -63,6 +60,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
   private static final int MSG_ACTION_CCALLBACK = 2;
 
   private static final String TAG = CommonWebViewActivity.class.getSimpleName();
+  protected TextView webviewTitle;
   LinearLayout ll_actwebview;
   private Toolbar mToolbar;
   private WebView mWebView;
@@ -73,7 +71,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
   private String domain;
   private String sessionid;
   private int id;
-  protected TextView webviewTitle;
 
   @Override protected void setListener() {
     mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -125,7 +122,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     return R.layout.activity_actwebview;
   }
 
-//  @TargetApi(Build.VERSION_CODES.KITKAT)
+  //@TargetApi(Build.VERSION_CODES.KITKAT)
   @SuppressLint("JavascriptInterface") @Override protected void initViews() {
     JUtils.Log(TAG, "initViews");
     ShareSDK.initSDK(this);
@@ -160,7 +157,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
       mWebView.getSettings().setDatabaseEnabled(true);
       mWebView.getSettings().setLoadWithOverviewMode(true);
       mWebView.getSettings().setUseWideViewPort(true);
-//      mWebView.setWebContentsDebuggingEnabled(true);
+      //mWebView.setWebContentsDebuggingEnabled(true);
 
       mWebView.setWebChromeClient(new WebChromeClient() {
         @Override public void onProgressChanged(WebView view, int newProgress) {
@@ -310,8 +307,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     }
   }
 
-
-
   @Override public void onCancel(Platform platform, int action) {
     // 取消
     Message msg = new Message();
@@ -375,7 +370,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
         || (partyShareInfo.getQrcodeLink() == null)
         || (partyShareInfo.getQrcodeLink().equals(""))) {
       Subscription subscribe = ActivityModel.getInstance()
-          .get_party_share_content(id+"")
+          .get_party_share_content(id + "")
           .subscribeOn(Schedulers.io())
           .subscribe(new ServiceResponse<ActivityBean>() {
             @Override public void onNext(ActivityBean activityBean) {
@@ -417,7 +412,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
                   webView.loadUrl(partyShareInfo.getQrcodeLink());
                   View cv = getWindow().getDecorView();
                   Bitmap bmp = catchWebScreenshot(webView, cv.getWidth(), cv.getHeight(),
-                          partyShareInfo.getQrcodeLink(), null);
+                      partyShareInfo.getQrcodeLink(), null);
               /*Bitmap bmp= captureWebView(webView);
               String fileName = Environment.getExternalStorageDirectory()
                   + "/"
@@ -466,7 +461,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
         //Bitmap bmp= captureWebView(webView);
         View cv = getWindow().getDecorView();
         Bitmap bmp = catchWebScreenshot(webView, cv.getWidth(), cv.getHeight(),
-                partyShareInfo.getQrcodeLink(), null);
+            partyShareInfo.getQrcodeLink(), null);
         /*String fileName = Environment.getExternalStorageDirectory()
             + "/"
             + Environment.DIRECTORY_DCIM
@@ -549,34 +544,33 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
   }
 
   public void get_party_share_content(String id) {
-    JUtils.Log(TAG, "get_party_share_content id "+id);
+    JUtils.Log(TAG, "get_party_share_content id " + id);
 
     Subscription subscribe = ActivityModel.getInstance()
-            .get_party_share_content(id)
-            .subscribeOn(Schedulers.io())
-            .subscribe(new ServiceResponse<ActivityBean>() {
-              @Override public void onNext(ActivityBean activityBean) {
+        .get_party_share_content(id)
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<ActivityBean>() {
+          @Override public void onNext(ActivityBean activityBean) {
 
-                if (null != activityBean) {
-                  partyShareInfo = activityBean;
-                  partyShareInfo.setQrcodeLink(activityBean.getQrcodeLink());
+            if (null != activityBean) {
+              partyShareInfo = activityBean;
+              partyShareInfo.setQrcodeLink(activityBean.getQrcodeLink());
 
-                  JUtils.Log(TAG, "partyShareInfo: desc="
-                          + partyShareInfo.getActiveDec()
-                          + " "
-                          + "qrcode="
-                          + partyShareInfo.getQrcodeLink()
-                          + " title="
-                          + partyShareInfo.getTitle());
-                }
-              }
-            });
+              JUtils.Log(TAG, "partyShareInfo: desc="
+                  + partyShareInfo.getActiveDec()
+                  + " "
+                  + "qrcode="
+                  + partyShareInfo.getQrcodeLink()
+                  + " title="
+                  + partyShareInfo.getTitle());
+            }
+          }
+        });
     addSubscription(subscribe);
   }
 
-
   protected void share_shopping(String title, String sharelink, String desc,
-                              String shareimg) {
+      String shareimg) {
     OnekeyShare oks = new OnekeyShare();
     //关闭sso授权
     oks.disableSSOWhenAuthorize();
