@@ -162,7 +162,7 @@ public class CarryLogAllFragment extends Fragment {
             super.onCompleted();
             try {
               xRecyclerView.post(xRecyclerView::loadMoreComplete);
-            } catch (Exception e) {
+            } catch (NullPointerException e) {
               e.printStackTrace();
             }
           }

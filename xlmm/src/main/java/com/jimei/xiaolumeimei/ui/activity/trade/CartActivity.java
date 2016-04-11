@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
@@ -54,7 +53,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.empty_content) RelativeLayout emptyContent;
   @Bind(R.id.empty_content1) RelativeLayout emptyContent1;
-  @Bind(R.id.showline) LinearLayout showLine;
+  @Bind(R.id.showline) View showLine;
   private TextView totalPrice_all_1;
   private CartsAdapetr mCartsAdapetr;
   private CartsHisAdapetr mCartsHisAdapetr;
@@ -173,7 +172,10 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                   .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
                     @Override public void onNext(List<CartsinfoBean> cartsinfoBeen) {
                       if (null != cartsinfoBeen) {
+                        tvShow.setVisibility(View.VISIBLE);
+                        showLine.setVisibility(View.VISIBLE);
                         mCartsHisAdapetr.updateWithClear(cartsinfoBeen);
+
                       } else {
 
                          /* emptyContent.setVisibility(View.VISIBLE);
@@ -234,7 +236,10 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                   .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
                     @Override public void onNext(List<CartsinfoBean> cartsinfoBeen) {
                       if (null != cartsinfoBeen) {
+                        tvShow.setVisibility(View.VISIBLE);
+                        showLine.setVisibility(View.VISIBLE);
                         mCartsHisAdapetr.updateWithClear(cartsinfoBeen);
+
                       } else {
 
                         emptyContent.setVisibility(View.VISIBLE);

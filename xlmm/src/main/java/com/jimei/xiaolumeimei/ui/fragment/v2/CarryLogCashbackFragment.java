@@ -169,7 +169,11 @@ public class CarryLogCashbackFragment extends Fragment {
 
           @Override public void onCompleted() {
             super.onCompleted();
-            xRecyclerView.post(xRecyclerView::loadMoreComplete);
+            try {
+              xRecyclerView.post(xRecyclerView::loadMoreComplete);
+            } catch (NullPointerException e) {
+              e.printStackTrace();
+            }
           }
         });
   }
