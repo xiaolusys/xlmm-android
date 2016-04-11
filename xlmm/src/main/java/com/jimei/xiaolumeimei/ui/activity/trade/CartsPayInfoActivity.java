@@ -234,7 +234,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                       payment + "    " + post_fee + "    " +
                       discount_fee + "    " + total_fee + "    " + uuid + "    " +
                       pay_extras);
-
             } else {
               emptyContent.setVisibility(View.VISIBLE);
               goMain.setOnClickListener(new View.OnClickListener() {
@@ -476,7 +475,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         Intent intent = new Intent(CartsPayInfoActivity.this, CouponSelectActivity.class);
         Bundle bundle = new Bundle();
         if ((coupon_id != null) && (!coupon_id.isEmpty())) {
-          bundle.putString("coupon_id",coupon_id);
+          bundle.putString("coupon_id", coupon_id);
           //intent.putExtra("coupon_id", coupon_id);
           intent.putExtras(bundle);
         }
@@ -583,7 +582,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
              */
         String errorMsg = data.getExtras().getString("error_msg"); // 错误信息
         String extraMsg = data.getExtras().getString("extra_msg"); // 错误信息
-        if (result==null) {
+        if (result == null) {
           return;
         }
 
@@ -613,17 +612,16 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     if (requestCode == REQUEST_CODE_COUPONT) {
       if (resultCode == Activity.RESULT_OK) {
 
-
         coupon_id = data.getStringExtra("coupon_id");
         coupon_price = data.getDoubleExtra("coupon_price", 0);
 
-        JUtils.Log("CartsPayinfo","优惠券返回  "+coupon_price);
+        JUtils.Log("CartsPayinfo", "优惠券返回  " + coupon_price);
         tv_coupon.setText(coupon_price + "元优惠券");
 
         calcAllPrice();
 
         if (coupon_price == 0) {
-          JUtils.Log("CartsPayinfo","优惠券返回 0++++");
+          JUtils.Log("CartsPayinfo", "优惠券返回 0++++");
           downLoadCartsInfo();
           isCoupon = false;
           return;
@@ -799,9 +797,55 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   @Override public void onCheckedChanged(SmoothCheckBox checkBox, boolean isChecked) {
     if (isChecked) {
       isBudget = true;
+      if (isCoupon) {
+        jieshengjine =
+            (double) (Math.round((discount_feeInfo + coupon_price + appcut) * 100)) / 100;
+        paymentInfo = payment;
+
+        if (Double.compare(coupon_price + appcut - paymentInfo, 0) >= 0) {
+          yue = 0;
+          real_use_yue = 0;
+          paymentInfo = 0;
+          jieshengjine = payment;
+        } else {
+          //算余额
+          if (isBudget) {
+            if (Double.compare(yue, paymentInfo - coupon_price - appcut) >= 0) {
+              yue = (double) (Math.round((paymentInfo - appcut) * 100)) / 100;
+
+              paymentInfo = 0;
+            } else {
+              paymentInfo =
+                  (double) (Math.round((paymentInfo - appcut - yue) * 100)) / 100;
+            }
+            real_use_yue = yue;
+          }
+        }
+
+        JUtils.Log("CartsPayinfo", "yue:"
+            + yue
+            + " real use yue:"
+            + real_use_yue
+            + " paymentInfo:"
+            + paymentInfo
+            + " jieshengjine:"
+            + jieshengjine);
+
+        tv_app_discount.setText("-" + (double) (Math.round(appcut * 100)) / 100 + "元");
+        extraBudget.setText("余额抵扣:   剩余"
+            + budgetCash
+            + " 本次可使用 "
+            + (double) (Math.round(yue * 100)) / 100);
+        totalPrice.setText("¥" + (double) (Math.round(paymentInfo * 100)) / 100);
+        totalPrice_all.setText(
+            "合计: ¥" + (double) (Math.round(paymentInfo * 100)) / 100 + "");
+        jiesheng.setText("已节省" + (double) (Math.round(jieshengjine * 100)) / 100 + "");
+      } else {
+        calcAllPrice();
+      }
     } else {
       isBudget = false;
+      calcAllPrice();
     }
-    calcAllPrice();
   }
 }
