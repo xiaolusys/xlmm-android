@@ -22,7 +22,7 @@ android {
 
     targetSdkVersion 23
 
-    versionCode 20160412
+    versionCode 20160413
     versionName "1.0.8"
 
     multiDexEnabled = true
@@ -179,6 +179,11 @@ android {
 
     umeng {
       manifestPlaceholders = [CHANNEL_NAME: "umeng",
+                              UMENG_APPKEY: "569f78a667e58ee15300094b"]
+    }
+
+    oppo {
+      manifestPlaceholders = [CHANNEL_NAME: "oppo",
                               UMENG_APPKEY: "569f78a667e58ee15300094b"]
     }
   }
