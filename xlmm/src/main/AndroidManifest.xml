@@ -138,10 +138,6 @@
             android:label="@string/title_activity_refunds"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
-            android:name=".ui.activity.trade.RefundDetailActivity"
-            android:label="@string/title_activity_refunddetail"
-            android:theme="@style/AppTheme.TransparentActivity" />
-        <activity
             android:name=".ui.activity.trade.WaitPayOrdersActivity"
             android:label="@string/title_activity_waitsend"
             android:theme="@style/AppTheme.TransparentActivity" />
@@ -363,12 +359,18 @@
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".ui.activity.user.CustomProblemActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
+            android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".ui.activity.user.SettingActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
+            android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".ui.activity.main.ActivityWebViewActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
+        <activity
+            android:name=".ui.activity.trade.RefundDetailActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
+        <activity
+            android:name=".ui.activity.trade.LogisticsActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
 
         <service
@@ -413,7 +415,6 @@
                 <action android:name="com.xiaomi.mipush.ERROR" />
             </intent-filter>
         </receiver>
-
     </application>
 
 </manifest>

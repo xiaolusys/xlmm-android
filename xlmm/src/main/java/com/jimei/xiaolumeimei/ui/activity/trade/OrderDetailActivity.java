@@ -21,6 +21,7 @@ import com.jimei.xiaolumeimei.adapter.OrderGoodsListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.PayRightNowInfo;
 import com.jimei.xiaolumeimei.data.XlmmConst;
+import com.jimei.xiaolumeimei.entities.LogisticsBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -30,6 +31,8 @@ import com.squareup.okhttp.ResponseBody;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -41,17 +44,21 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.btn_order_proc) Button btn_proc;
   @Bind(R.id.btn_order_cancel) Button btn_order_cancel;
   @Bind(R.id.rlayout_order_lefttime) RelativeLayout rlayout_order_lefttime;
+  @Bind(R.id.logistics_layout) RelativeLayout logisticsLayout;
 
   int order_id = 0;
   OrderDetailBean orderDetail;
   PayRightNowInfo pay_info = new PayRightNowInfo();
   String source;
   private OrderGoodsListAdapter mGoodsAdapter;
+  String tid;
+  private String time;
 
   @Override protected void setListener() {
     btn_proc.setOnClickListener(this);
     btn_order_cancel.setOnClickListener(this);
     toolbar.setOnClickListener(this);
+    logisticsLayout.setOnClickListener(this);
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -81,8 +88,9 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
           .getOrderDetailBean(order_id)
           .subscribeOn(Schedulers.io())
           .subscribe(new ServiceResponse<OrderDetailBean>() {
-            @Override public void onNext(OrderDetailBean orderDetailBean) {
 
+            @Override public void onNext(OrderDetailBean orderDetailBean) {
+              tid = orderDetailBean.getTid();
               orderDetail = orderDetailBean;
               fillDataToView(orderDetailBean);
               showProcBtn(orderDetailBean);
@@ -113,6 +121,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
   }
 
   private void fillDataToView(OrderDetailBean orderDetailBean) {
+    time = orderDetailBean.getCreated().replace("T", " ");
     TextView tx_order_id = (TextView) findViewById(R.id.tx_order_id);
     tx_order_id.setText("订单编号 " + orderDetailBean.getTid());
 
@@ -126,9 +135,41 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     tx_custom_address.setText("地址：" + orderDetailBean.getReceiver_address());
 
     TextView tx_order_crttime = (TextView) findViewById(R.id.tx_order_crttime);
-    tx_order_crttime.setText("时间：" + orderDetailBean.getCreated().replace("T", " "));
     TextView tx_order_crtstate = (TextView) findViewById(R.id.tx_order_crtstate);
-    tx_order_crtstate.setText("订单创建成功");
+
+    if (tid!="") {
+      Subscription subscribe = TradeModel.getInstance()
+              .get_logistics(tid)
+              .subscribeOn(Schedulers.io())
+              .subscribe(new ServiceResponse<LogisticsBean>() {
+
+                @Override
+                public void onNext(LogisticsBean logisticsBean) {
+                  List<LogisticsBean.Msg> data = logisticsBean.getData();
+                  if (data.size()>=1){
+                    LogisticsBean.Msg msg = data.get(data.size() - 1);
+                    tx_order_crttime.setText(msg.getTime().replace("T", " "));
+                    tx_order_crtstate.setText(msg.getContent());
+                  }else{
+                    tx_order_crttime.setText("时间：" + orderDetailBean.getCreated().replace("T", " "));
+                    tx_order_crtstate.setText("订单创建成功");
+                  }
+                }
+
+                @Override
+                public void onCompleted() {
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                }
+              });
+      addSubscription(subscribe);
+    }else{
+      tx_order_crttime.setText("时间：" + orderDetailBean.getCreated().replace("T", " "));
+      tx_order_crtstate.setText("订单创建成功");
+    }
+
     JUtils.Log(TAG, "crt time " + orderDetailBean.getCreated());
 
     mGoodsAdapter.update(orderDetailBean.getOrders());
@@ -224,6 +265,14 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
       case R.id.btn_order_cancel:
         JUtils.Log(TAG, "onClick cancel");
         cancel_order();
+        break;
+      case R.id.logistics_layout:
+        Intent intent = new Intent(this, LogisticsActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("tid",tid);
+        bundle.putString("time",time);
+        intent.putExtras(bundle);
+        startActivity(intent);
         break;
     }
   }

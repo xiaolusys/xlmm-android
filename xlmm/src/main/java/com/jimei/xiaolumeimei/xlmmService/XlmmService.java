@@ -25,6 +25,7 @@ import com.jimei.xiaolumeimei.entities.CouponBean;
 import com.jimei.xiaolumeimei.entities.IndexBean;
 import com.jimei.xiaolumeimei.entities.LadyListBean;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
+import com.jimei.xiaolumeimei.entities.LogisticsBean;
 import com.jimei.xiaolumeimei.entities.MMChooselistBean;
 import com.jimei.xiaolumeimei.entities.MMHavaChooseResultBean;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
@@ -835,5 +836,8 @@ public interface XlmmService {
                                  @Query("timestamp") String timestamp,
                                  @Query("sign") String sign);
 
+    //获取物流信息
+    @GET("/rest/v1/wuliu/get_wuliu_by_tid")
+    Observable<LogisticsBean> get_logistics(@Query("tid") String tid);
 
 }

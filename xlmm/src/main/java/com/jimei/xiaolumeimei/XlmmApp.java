@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
+
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.mipush.XiaoMiMessageReceiver;
@@ -52,6 +54,7 @@ public class XlmmApp extends MultiDexApplication {
 
   @Override public void onCreate() {
     super.onCreate();
+    Fresco.initialize(this);
 
     //LeakCanary.install(this);
 
