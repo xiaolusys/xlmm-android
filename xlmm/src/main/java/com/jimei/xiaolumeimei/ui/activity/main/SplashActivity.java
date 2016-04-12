@@ -7,24 +7,19 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
 
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-
-import com.jimei.xiaolumeimei.utils.StatusBarUtil;
+import com.jimei.xiaolumeimei.base.BaseAppCompatActivityForDetail;
 
 import java.util.Timer;
 import java.util.TimerTask;
-
-import butterknife.Bind;
 
 /**
  * Created by 优尼世界 on 15/12/29.
  * <p>
  * Copyright 2015年 上海己美. All rights reserved.
  */
-public class SplashActivity extends BaseSwipeBackCompatActivity {
+public class SplashActivity extends BaseAppCompatActivityForDetail {
 
     @Override
     protected void initViews() {
@@ -43,6 +38,7 @@ public class SplashActivity extends BaseSwipeBackCompatActivity {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(Color.TRANSPARENT);
         }
+//        StatusBarUtil.setTranslucent(this,0);
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {

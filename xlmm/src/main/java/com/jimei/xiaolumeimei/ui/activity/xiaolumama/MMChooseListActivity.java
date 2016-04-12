@@ -13,8 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -633,8 +633,8 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
       @Bind(R.id.rebet_amount) TextView rebetAmount;
       @Bind(R.id.lock_num) TextView lockNum;
       @Bind(R.id.add)
-      Button add;
-      @Bind(R.id.remove) Button remove;
+      LinearLayout add;
+      @Bind(R.id.remove) LinearLayout remove;
 
       public MMChooseVH(View itemView) {
         super(itemView);
