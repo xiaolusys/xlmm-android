@@ -1,5 +1,6 @@
 package com.jimei.xiaolumeimei.htmlJsBridge;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -7,6 +8,8 @@ import android.graphics.Canvas;
 import android.graphics.Picture;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
 import android.view.View;
@@ -17,6 +20,19 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
+import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.entities.ActivityBean;
+import com.jimei.xiaolumeimei.model.ActivityModel;
+import com.jimei.xiaolumeimei.utils.BitmapUtil;
+import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jude.utils.JUtils;
+import com.mob.tools.utils.UIHandler;
+
+import java.io.File;
+import java.util.HashMap;
+
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
@@ -26,34 +42,25 @@ import cn.sharesdk.tencent.qq.QQ;
 import cn.sharesdk.tencent.qzone.QZone;
 import cn.sharesdk.wechat.friends.Wechat;
 import cn.sharesdk.wechat.moments.WechatMoments;
-
-import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.XlmmApp;
-import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.entities.ActivityBean;
-import com.jimei.xiaolumeimei.model.ActivityModel;
-import com.jimei.xiaolumeimei.utils.BitmapUtil;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
-
-import java.io.File;
-
 import rx.Subscription;
 import rx.schedulers.Schedulers;
+
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/02/16.
  *
  * Copyright 2016年 上海己美. All rights reserved.
  */
-public class AndroidJsBridge {
+public class AndroidJsBridge implements PlatformActionListener , Handler.Callback {
+
+  private static final int MSG_ACTION_CCALLBACK = 2;
 
   private static final String TAG = "AndroidJsBridge";
 
   private ActivityBean partyShareInfo;
-  private Context mContext;
+  private Activity mContext;
 
-  public AndroidJsBridge(Context context) {
+  public AndroidJsBridge(Activity context) {
     //this.commonWebViewActivity = commonWebViewActivity;
     this.mContext = context;
   }
@@ -122,7 +129,7 @@ public class AndroidJsBridge {
 
   private void share_wxapp(String activity_id) {
     if (partyShareInfo == null) return;
-
+    JUtils.Log(TAG,partyShareInfo.toString());
     Platform.ShareParams sp = new Platform.ShareParams();
 
     sp.setTitle(partyShareInfo.getTitle());
@@ -133,7 +140,7 @@ public class AndroidJsBridge {
     sp.setImageUrl(partyShareInfo.getShareIcon());
 
     Platform wx = ShareSDK.getPlatform(mContext, Wechat.NAME);
-    wx.setPlatformActionListener((PlatformActionListener)mContext); // 设置分享事件回调
+    wx.setPlatformActionListener(this); // 设置分享事件回调
     // 执行图文分享
     wx.share(sp);
   }
@@ -142,19 +149,18 @@ public class AndroidJsBridge {
 
     if (partyShareInfo == null) return;
 
-    JUtils.Log(TAG, "title:"+partyShareInfo.getTitle() +" "+partyShareInfo.getShareIcon());
-
+//    JUtils.Log(TAG, "title:"+partyShareInfo.getTitle() +" "+partyShareInfo.getShareIcon());
+    JUtils.Log(TAG,partyShareInfo.toString());
     WechatMoments.ShareParams sp = new WechatMoments.ShareParams();
     //sp.setImageUrl(linkQrcode);
     sp.setTitle(partyShareInfo.getTitle());
     //sp.setText(shareInfo.getActiveDec() + " http://m.xiaolumeimei.com/" + myurl +
     //    "&ufrom=" + ufrom);
     //sp.setTitleUrl("http://m.xiaolumeimei.com/" + myurl + "&ufrom=" + ufrom);
-    sp.setShareType(Platform.SHARE_WEBPAGE);
     sp.setImageUrl(partyShareInfo.getShareIcon());
-
+    sp.setShareType(Platform.SHARE_WEBPAGE);
     Platform pyq = ShareSDK.getPlatform(mContext, WechatMoments.NAME);
-    pyq.setPlatformActionListener((PlatformActionListener)mContext); // 设置分享事件回调
+    pyq.setPlatformActionListener(this); // 设置分享事件回调
     // 执行图文分享
     pyq.share(sp);
   }
@@ -172,7 +178,7 @@ public class AndroidJsBridge {
     sp.setTitleUrl(partyShareInfo.getShareLink());
 
     Platform qq = ShareSDK.getPlatform(mContext, QQ.NAME);
-    qq.setPlatformActionListener((PlatformActionListener)mContext); // 设置分享事件回调
+    qq.setPlatformActionListener(this); // 设置分享事件回调
     // 执行图文分享
     qq.share(sp);
   }
@@ -191,7 +197,7 @@ public class AndroidJsBridge {
     sp.setSiteUrl(partyShareInfo.getShareLink());
 
     Platform qzone = ShareSDK.getPlatform(mContext, QZone.NAME);
-    qzone.setPlatformActionListener((PlatformActionListener)mContext); // 设置分享事件回调
+    qzone.setPlatformActionListener(this); // 设置分享事件回调
     // 执行图文分享
     qzone.share(sp);
   }
@@ -408,5 +414,62 @@ public class AndroidJsBridge {
     });
 
     return b;
+  }
+
+  @Override public void onCancel(Platform platform, int action) {
+    // 取消
+    Message msg = new Message();
+    msg.what = MSG_ACTION_CCALLBACK;
+    msg.arg1 = 3;
+    msg.arg2 = action;
+    msg.obj = platform;
+    UIHandler.sendMessage(msg, this);
+  }
+
+  @Override
+  public void onComplete(Platform platform, int action, HashMap<String, Object> arg2) {
+    // 成功
+    Message msg = new Message();
+    msg.what = MSG_ACTION_CCALLBACK;
+    msg.arg1 = 1;
+    msg.arg2 = action;
+    msg.obj = platform;
+    UIHandler.sendMessage(msg, this);
+  }
+
+  @Override public void onError(Platform platform, int action, Throwable t) {
+    // 失敗
+    //打印错误信息,print the error msg
+    t.printStackTrace();
+    //错误监听,handle the error msg
+    Message msg = new Message();
+    msg.what = MSG_ACTION_CCALLBACK;
+    msg.arg1 = 2;
+    msg.arg2 = action;
+    msg.obj = t;
+    UIHandler.sendMessage(msg, this);
+  }
+
+  public boolean handleMessage(Message msg) {
+    switch (msg.arg1) {
+      case 1: {
+        // 成功
+        Toast.makeText(mContext, "分享成功", Toast.LENGTH_SHORT).show();
+        JUtils.Log(TAG, "分享回调成功------------");
+      }
+      break;
+      case 2: {
+        // 失败
+        Toast.makeText(mContext, "分享失败", Toast.LENGTH_SHORT).show();
+      }
+      break;
+      case 3: {
+        // 取消
+        Toast.makeText(mContext, "分享取消", Toast.LENGTH_SHORT).show();
+      }
+      break;
+    }
+
+    return false;
   }
 }

@@ -82,4 +82,17 @@ public class ActivityBean {
   public void setShareIcon(String shareIcon) {
     mShareIcon = shareIcon;
   }
+
+  @Override
+  public String toString() {
+    return "ActivityBean{" +
+            "mActiveDec='" + mActiveDec + '\'' +
+            ", mShareType='" + mShareType + '\'' +
+            ", mTitle='" + mTitle + '\'' +
+            ", mQrcodeLink='" + mQrcodeLink + '\'' +
+            ", mId=" + mId +
+            ", mShareLink='" + mShareLink + '\'' +
+            ", mShareIcon='" + mShareIcon + '\'' +
+            '}';
+  }
 }

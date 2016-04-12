@@ -1,87 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:padding="4dp"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-  <ImageView
-      android:id="@+id/image_chooselist"
-      android:layout_width="190px"
-      android:layout_height="190px"
-      />
-  <TextView
-      android:layout_marginTop="8dp"
-      android:layout_marginLeft="8dp"
-      android:id="@+id/name"
-      android:layout_toRightOf="@id/image_chooselist"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      />
-  <TextView
-      android:textColor="@color/colorPrimary"
-      android:layout_below="@id/name"
-      android:layout_marginTop="16dp"
-      android:layout_marginLeft="8dp"
-      android:id="@+id/agent_price"
-      android:layout_toRightOf="@id/image_chooselist"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      />
-  <TextView
-      android:textSize="10sp"
-      android:layout_below="@id/name"
-      android:layout_marginTop="20dp"
-      android:id="@+id/std_sale_price"
-      android:layout_toRightOf="@id/agent_price"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      />
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="4dp">
 
-  <TextView
-      android:layout_marginBottom="8dp"
-      android:layout_marginLeft="8dp"
-      android:layout_alignBottom="@id/image_chooselist"
-      android:layout_marginTop="8dp"
-      android:id="@+id/rebet_amount"
-      android:layout_toRightOf="@id/image_chooselist"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:textColor="@color/colorAccent"
-      />
+    <ImageView
+        android:id="@+id/image_chooselist"
+        android:layout_width="190px"
+        android:layout_height="190px" />
 
-  <TextView
-      android:layout_marginBottom="8dp"
-      android:layout_marginLeft="14dp"
-      android:layout_alignBottom="@id/image_chooselist"
-      android:layout_marginTop="8dp"
-      android:id="@+id/lock_num"
-      android:layout_toRightOf="@id/rebet_amount"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:textColor="@color/colorAccent"
-      />
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@id/image_chooselist" />
 
-  <Button
-      android:id="@+id/add"
-      android:textColor="@color/colorPrimary"
-      android:background="@drawable/shape_chooselist"
-      android:layout_centerVertical="true"
-      android:layout_alignParentRight="true"
-      android:layout_width="136px"
-      android:layout_height="49px"
-      android:text="上架"
-      />
-  <Button
-      android:id="@+id/remove"
-      android:clickable="false"
-      android:visibility="invisible"
-      android:textColor="@color/colorPrimary"
-      android:background="@drawable/shape_chooselist"
-      android:layout_centerVertical="true"
-      android:layout_alignParentRight="true"
-      android:layout_width="136px"
-      android:layout_height="49px"
-      android:text="下架"
-      />
+    <TextView
+        android:id="@+id/agent_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/name"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_toRightOf="@id/image_chooselist"
+        android:textColor="@color/colorPrimary" />
+
+    <TextView
+        android:id="@+id/std_sale_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/name"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@id/agent_price"
+        android:textSize="10sp" />
+
+    <TextView
+        android:id="@+id/rebet_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/image_chooselist"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@id/image_chooselist"
+        android:textColor="@color/colorAccent" />
+
+    <TextView
+        android:id="@+id/lock_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/image_chooselist"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="14dp"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@id/rebet_amount"
+        android:textColor="@color/colorAccent" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:gravity="center"
+        android:id="@+id/add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true">
+
+        <ImageView
+            android:src="@drawable/ic_havechoose"
+            android:id="@+id/add1"
+            android:layout_width="73px"
+            android:layout_height="73px"
+            android:textColor="@color/colorPrimary" />
+
+        <TextView
+            android:layout_marginTop="8dp"
+            android:textSize="19px"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/add1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="加入精选"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:visibility="invisible"
+        android:clickable="false"
+        android:id="@+id/remove"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true">
+
+        <ImageView
+            android:src="@drawable/ic_choosed"
+            android:id="@+id/remove1"
+            android:layout_width="73px"
+            android:layout_height="73px"
+            android:textColor="@color/colorPrimary" />
+
+        <TextView
+            android:layout_marginTop="8dp"
+            android:textSize="19px"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/remove1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="已加入"
+            />
+    </LinearLayout>
+
+    <!--<Button-->
+        <!--android:id="@+id/remove"-->
+        <!--android:layout_width="136px"-->
+        <!--android:layout_height="49px"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:background="@drawable/shape_chooselist"-->
+        <!--android:clickable="false"-->
+        <!--android:text="下架"-->
+        <!--android:textColor="@color/colorPrimary"-->
+        <!--android:visibility="invisible" />-->
 </RelativeLayout>
