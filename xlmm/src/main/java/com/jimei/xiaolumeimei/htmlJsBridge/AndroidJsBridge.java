@@ -1,8 +1,22 @@
 package com.jimei.xiaolumeimei.htmlJsBridge;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Picture;
+import android.net.Uri;
+import android.os.Environment;
+import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
+import android.view.View;
 import android.webkit.JavascriptInterface;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.Toast;
+
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
@@ -12,12 +26,18 @@ import cn.sharesdk.tencent.qq.QQ;
 import cn.sharesdk.tencent.qzone.QZone;
 import cn.sharesdk.wechat.friends.Wechat;
 import cn.sharesdk.wechat.moments.WechatMoments;
+
+import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.model.ActivityModel;
+import com.jimei.xiaolumeimei.utils.BitmapUtil;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+
+import java.io.File;
+
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -44,10 +64,6 @@ public class AndroidJsBridge {
     getPromotionParams(uform, activity_id);
   }
 
-  @JavascriptInterface public void saveTwoDimenCode() {
-    JUtils.Log("CommonWebViewActivity", "saveTowDimenCode");
-    saveTwoDimenCode();
-  }
 
   @JavascriptInterface public void jumpToNativeLocation(String url) {
     JUtils.Log("CommonWebViewActivity", url);
@@ -94,7 +110,7 @@ public class AndroidJsBridge {
                   } else if (uform.equals("sinawb")) {
                     share_sina(activity_id);
                   } else if (uform.equals("web")) {
-                    saveTwoDimenCode();
+                    saveTwoDimenCode(mContext);
                   }else if(uform.equals("")){
                     sharePartyInfo();
                   }
@@ -285,5 +301,112 @@ public class AndroidJsBridge {
 
     // 启动分享GUI
     oks.show(mContext);
+  }
+
+  public void saveTwoDimenCode(Context context) {
+
+    if ((partyShareInfo == null)
+            || (partyShareInfo.getQrcodeLink() == null)
+            || (partyShareInfo.getQrcodeLink().equals(""))) {
+      JUtils.Log(TAG, "saveTowDimenCode : fail,Qrcodelink=null" );
+      return;
+    } else {
+      JUtils.Log(TAG, "saveTowDimenCode : Qrcodelink=" + partyShareInfo.getQrcodeLink());
+      try {
+        WebView webView = new WebView(context);
+        webView.setLayoutParams(
+                new Toolbar.LayoutParams(Toolbar.LayoutParams.MATCH_PARENT,
+                        Toolbar.LayoutParams.MATCH_PARENT));
+        webView.getSettings().setJavaScriptEnabled(true);
+
+        webView.getSettings().setAllowFileAccess(true);
+        //如果访问的页面中有Javascript，则webview必须设置支持Javascript
+        //mWebView.getSettings().setUserAgentString(MyApplication.getUserAgent());
+        webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+        webView.getSettings().setAllowFileAccess(true);
+        webView.getSettings().setAppCacheEnabled(true);
+        webView.getSettings().setDomStorageEnabled(true);
+        webView.getSettings().setDatabaseEnabled(true);
+
+        webView.setWebChromeClient(new WebChromeClient() {
+          @Override public void onProgressChanged(WebView view, int newProgress) {
+
+          }
+        });
+        webView.setWebViewClient(new WebViewClient() {
+          @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            view.loadUrl(url);
+            return true;
+          }
+        });
+
+        webView.loadUrl(partyShareInfo.getQrcodeLink());
+        //Bitmap bmp= captureWebView(webView);
+        View cv = ((BaseSwipeBackCompatActivity)mContext).getWindow().getDecorView();
+        Bitmap bmp = catchWebScreenshot(webView, cv.getWidth(), cv.getHeight(),
+                partyShareInfo.getQrcodeLink(), null);
+        /*String fileName = Environment.getExternalStorageDirectory()
+            + "/"
+            + Environment.DIRECTORY_DCIM
+            + "/Camera/小鹿美美活动二维码.jpg";
+        saveBitmap(bmp, fileName);*/
+
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+  }
+
+  /**
+   * 抓取WEB界面的截屏
+   *
+   * @param containerWidth 截屏宽度，也就放置WebView的宽度
+   * @param containerHeight 截屏高度，也就放置WebView的高度
+   * @param baseUrl Base Url
+   * @param context activity context
+   */
+  public Bitmap catchWebScreenshot(final WebView w, final int containerWidth,
+                                   final int containerHeight, final String baseUrl, final Context context) {
+    final Bitmap b =
+            Bitmap.createBitmap(containerWidth, containerHeight, Bitmap.Config.ARGB_8888);
+    w.post(new Runnable() {
+      public void run() {
+        w.setWebViewClient(new WebViewClient() {
+          @Override public void onPageFinished(WebView view, String url) {
+            JUtils.Log(TAG, "onPageFinished URL=" + url);
+
+            String fileName = Environment.getExternalStorageDirectory()
+                    + "/"
+                    + Environment.DIRECTORY_DCIM
+                    + "/Camera/"
+                    + context.getResources().getString(R.string.share_2dimen_pic_name)
+                    + ".jpg";
+            BitmapUtil.saveBitmap(b, fileName);
+            Toast.makeText(context, R.string.share_2dimen_pic_tips,
+                    Toast.LENGTH_SHORT).show();
+
+            File file = new File(fileName);
+            Uri uri = Uri.fromFile(file);
+            // 通知图库更新
+            Intent scannerIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
+            context.sendBroadcast(scannerIntent);
+          }
+        });
+        w.setPictureListener(new WebView.PictureListener() {
+          public void onNewPicture(WebView view, Picture picture) {
+            JUtils.Log(TAG, "onNewPicture ");
+            final Canvas c = new Canvas(b);
+            view.draw(c);
+            //w.setPictureListener(null);
+
+          }
+        });
+        w.layout(0, 0, containerWidth, containerHeight);
+        w.loadUrl(baseUrl);
+        //              w.loadDataWithBaseURL(baseUrl, content, "text/html", "UTF-8", null);
+      }
+    });
+
+    return b;
   }
 }
