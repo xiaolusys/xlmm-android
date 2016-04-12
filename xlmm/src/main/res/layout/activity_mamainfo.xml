@@ -290,6 +290,11 @@
                         android:textSize="15sp" />
                 </LinearLayout>
             </LinearLayout>
+            <View android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:layout_marginTop="10px"
+                android:layout_below="@+id/rl_order"
+                android:background="@color/greytow" />
 
             <LinearLayout
                 android:id="@+id/ll_shop"
@@ -303,8 +308,7 @@
                     android:id="@+id/rl_chooselist"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/text_frame">
+                    android:layout_weight="1">
 
                     <ImageView
                         android:id="@+id/img_choose"
@@ -331,8 +335,7 @@
                     android:id="@+id/rl_party"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/text_frame">
+                    android:layout_weight="1">
 
                     <ImageView
                         android:id="@+id/img_star"
@@ -359,8 +362,7 @@
                     android:id="@+id/rl_push"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/text_frame">
+                    android:layout_weight="1">
 
                     <ImageView
                         android:id="@+id/img_timer"
@@ -387,8 +389,7 @@
                     android:id="@+id/rl_shop"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/text_frame">
+                    android:layout_weight="1">
 
                     <ImageView
                         android:id="@+id/img_shop"
@@ -413,6 +414,10 @@
 
             </LinearLayout>
 
+            <View android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:layout_below="@+id/ll_shop"
+                android:background="@color/greytow" />
             <RelativeLayout
                 android:id="@+id/rl_btn"
                 android:layout_width="match_parent"
