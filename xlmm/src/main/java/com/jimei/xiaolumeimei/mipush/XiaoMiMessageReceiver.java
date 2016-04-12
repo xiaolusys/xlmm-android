@@ -44,7 +44,7 @@ import java.util.List;
  *
  * @author mayixiang
  */
-public class XiaoMiMessageReceiver extends PushMessageReceiver {
+public class  XiaoMiMessageReceiver extends PushMessageReceiver {
 
   private String mRegId;
   private long mResultCode = -1;
