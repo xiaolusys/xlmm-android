@@ -182,10 +182,6 @@ android {
                               UMENG_APPKEY: "569f78a667e58ee15300094b"]
     }
 
-    oppo {
-      manifestPlaceholders = [CHANNEL_NAME: "oppo",
-                              UMENG_APPKEY: "569f78a667e58ee15300094b"]
-    }
   }
 }
 
