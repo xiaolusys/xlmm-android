@@ -125,14 +125,15 @@
       <include layout="@layout/common_gap"/>
 
       <RelativeLayout
+          android:id="@+id/logistics_layout"
           android:background="@color/white"
-          android:padding="8dp"
           android:layout_width="fill_parent"
           android:layout_height="64dp"
           android:orientation="vertical">
         <ImageView
             android:id="@+id/image_slice"
             android:layout_width="wrap_content"
+            android:layout_marginLeft="8dp"
             android:src="@drawable/slice"
             android:layout_height="wrap_content"
 
@@ -140,6 +141,7 @@
         <TextView
             android:layout_toRightOf="@id/image_slice"
             android:id="@+id/tx_order_crttime"
+            android:padding="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="时间："
@@ -149,6 +151,7 @@
         <TextView
             android:layout_toRightOf="@id/image_slice"
             android:layout_alignParentBottom="true"
+            android:padding="8dp"
             android:id="@+id/tx_order_crtstate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -158,6 +161,7 @@
         <ImageView
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
+            android:layout_margin="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/common_icon_right_arrow"/>

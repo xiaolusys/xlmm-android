@@ -4,6 +4,7 @@ import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.entities.BudgetPayBean;
+import com.jimei.xiaolumeimei.entities.LogisticsBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.PayInfoBean;
 import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
@@ -172,5 +173,12 @@ public class TradeModel {
     return XlmmRetrofitClient.getService()
         .commit_logistics_info(goods_id, 2, company, logistics_number)
         .compose(new DefaultTransform<>());
+  }
+
+  //获取物流信息
+  public Observable<LogisticsBean> get_logistics(String tid) {
+    return XlmmRetrofitClient.getService()
+            .get_logistics(tid)
+            .compose(new DefaultTransform<>());
   }
 }

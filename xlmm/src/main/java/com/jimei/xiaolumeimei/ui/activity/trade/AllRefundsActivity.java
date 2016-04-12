@@ -18,7 +18,6 @@ import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.AllRefundsListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
@@ -64,7 +63,6 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity
 
       @Override
       public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-        // TODO Auto-generated method stub
         Log.d(TAG, "onItemClick " + arg2 + " " + arg3);
         int goods_id = mAllRefundsAdapter.getGoodsId(arg2);
         int refund_state = mAllRefundsAdapter.getRefundStatus(arg2);
