@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import butterknife.Bind;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
 import com.jimei.xiaolumeimei.R;
@@ -34,8 +34,11 @@ import com.jimei.xiaolumeimei.widget.SmoothCheckBox;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.pingplusplus.android.PaymentActivity;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -253,7 +256,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     jieshengjine =
         (double) (Math.round((discount_feeInfo + coupon_price + appcut) * 100)) / 100;
     paymentInfo = payment;
-
+    JUtils.Log("CartsPayinfo","jishengjine ==="+jieshengjine+"   payment=="+payment);
     if (Double.compare(coupon_price + appcut - paymentInfo, 0) >= 0) {
       yue = 0;
       real_use_yue = 0;
@@ -618,11 +621,12 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         JUtils.Log("CartsPayinfo", "优惠券返回  " + coupon_price);
         tv_coupon.setText(coupon_price + "元优惠券");
 
-        calcAllPrice();
+//        calcAllPrice();
 
         if (coupon_price == 0) {
           JUtils.Log("CartsPayinfo", "优惠券返回 0++++");
           downLoadCartsInfo();
+          calcAllPrice();
           isCoupon = false;
           return;
         }
@@ -633,10 +637,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             .subscribe(new ServiceResponse<CartsPayinfoBean>() {
               @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
                 if (cartsPayinfoBean != null) {
-                  payment = (double) (Math.round(
-                      (cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
-                          - cartsPayinfoBean.getDiscountFee()) * 100)) / 100;
-
                   if (TextUtils.isEmpty(cartsPayinfoBean.getmCoupon_message())) {
                     if ((coupon_id == null) || coupon_id.isEmpty() || (0
                         == Double.compare(coupon_price, 0))) {
@@ -644,6 +644,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                       tv_coupon.setText("");
                     } else {
                       isCoupon = true;
+                      calcAllPrice();
                     }
                   } else {
                     isCoupon = false;
@@ -797,55 +798,55 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   @Override public void onCheckedChanged(SmoothCheckBox checkBox, boolean isChecked) {
     if (isChecked) {
       isBudget = true;
-      if (isCoupon) {
-        jieshengjine =
-            (double) (Math.round((discount_feeInfo + coupon_price + appcut) * 100)) / 100;
-        paymentInfo = payment;
-
-        if (Double.compare(coupon_price + appcut - paymentInfo, 0) >= 0) {
-          yue = 0;
-          real_use_yue = 0;
-          paymentInfo = 0;
-          jieshengjine = payment;
-        } else {
-          //算余额
-          if (isBudget) {
-            if (Double.compare(yue, paymentInfo - coupon_price - appcut) >= 0) {
-              yue = (double) (Math.round((paymentInfo - appcut) * 100)) / 100;
-
-              paymentInfo = 0;
-            } else {
-              paymentInfo =
-                  (double) (Math.round((paymentInfo - appcut - yue) * 100)) / 100;
-            }
-            real_use_yue = yue;
-          }
-        }
-
-        JUtils.Log("CartsPayinfo", "yue:"
-            + yue
-            + " real use yue:"
-            + real_use_yue
-            + " paymentInfo:"
-            + paymentInfo
-            + " jieshengjine:"
-            + jieshengjine);
-
-        tv_app_discount.setText("-" + (double) (Math.round(appcut * 100)) / 100 + "元");
-        extraBudget.setText("余额抵扣:   剩余"
-            + budgetCash
-            + " 本次可使用 "
-            + (double) (Math.round(yue * 100)) / 100);
-        totalPrice.setText("¥" + (double) (Math.round(paymentInfo * 100)) / 100);
-        totalPrice_all.setText(
-            "合计: ¥" + (double) (Math.round(paymentInfo * 100)) / 100 + "");
-        jiesheng.setText("已节省" + (double) (Math.round(jieshengjine * 100)) / 100 + "");
-      } else {
-        calcAllPrice();
-      }
+//      if (isCoupon) {
+//        jieshengjine =
+//            (double) (Math.round((discount_feeInfo + coupon_price + appcut) * 100)) / 100;
+//        paymentInfo = payment;
+//
+//        if (Double.compare(coupon_price + appcut - paymentInfo, 0) >= 0) {
+//          yue = 0;
+//          real_use_yue = 0;
+//          paymentInfo = 0;
+//          jieshengjine = payment;
+//        } else {
+//          //算余额
+//          if (isBudget) {
+//            if (Double.compare(yue, paymentInfo - coupon_price - appcut) >= 0) {
+//              yue = (double) (Math.round((paymentInfo - appcut) * 100)) / 100;
+//
+//              paymentInfo = 0;
+//            } else {
+//              paymentInfo =
+//                  (double) (Math.round((paymentInfo - appcut - yue) * 100)) / 100;
+//            }
+//            real_use_yue = yue;
+//          }
+//        }
+//
+//        JUtils.Log("CartsPayinfo", "yue:"
+//            + yue
+//            + " real use yue:"
+//            + real_use_yue
+//            + " paymentInfo:"
+//            + paymentInfo
+//            + " jieshengjine:"
+//            + jieshengjine);
+//
+//        tv_app_discount.setText("-" + (double) (Math.round(appcut * 100)) / 100 + "元");
+//        extraBudget.setText("余额抵扣:   剩余"
+//            + budgetCash
+//            + " 本次可使用 "
+//            + (double) (Math.round(yue * 100)) / 100);
+//        totalPrice.setText("¥" + (double) (Math.round(paymentInfo * 100)) / 100);
+//        totalPrice_all.setText(
+//            "合计: ¥" + (double) (Math.round(paymentInfo * 100)) / 100 + "");
+//        jiesheng.setText("已节省" + (double) (Math.round(jieshengjine * 100)) / 100 + "");
+//      } else {
+//        calcAllPrice();
+//      }
     } else {
       isBudget = false;
-      calcAllPrice();
     }
+    calcAllPrice();
   }
 }
