@@ -254,14 +254,14 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void onPause() {
     super.onPause();
-    CookieSyncManager.createInstance(CommonWebViewActivity.this);
+    CookieSyncManager.createInstance(this);
     CookieSyncManager.getInstance().stopSync();
     mWebView.onPause();
   }
 
   @Override protected void onResume() {
     super.onResume();
-    CookieSyncManager.createInstance(CommonWebViewActivity.this);
+    CookieSyncManager.createInstance(this);
     CookieSyncManager.getInstance().startSync();
     mWebView.onResume();
     ShareSDK.initSDK(this);
@@ -345,18 +345,18 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     switch (msg.arg1) {
       case 1: {
         // 成功
-        Toast.makeText(CommonWebViewActivity.this, "分享成功", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "分享成功", Toast.LENGTH_SHORT).show();
         JUtils.Log(TAG, "分享回调成功------------");
       }
       break;
       case 2: {
         // 失败
-        Toast.makeText(CommonWebViewActivity.this, "分享失败", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "分享失败", Toast.LENGTH_SHORT).show();
       }
       break;
       case 3: {
         // 取消
-        Toast.makeText(CommonWebViewActivity.this, "分享取消", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "分享取消", Toast.LENGTH_SHORT).show();
       }
       break;
     }
@@ -364,7 +364,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     return false;
   }
 
-  public void saveTwoDimenCode() {
+  public void saveTwoDimenCode(Context context) {
 
     if ((partyShareInfo == null)
         || (partyShareInfo.getQrcodeLink() == null)
@@ -381,7 +381,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
                     "saveTowDimenCode : Qrcodelink=" + partyShareInfo.getQrcodeLink());
 
                 try {
-                  WebView webView = new WebView(CommonWebViewActivity.this);
+                  WebView webView = new WebView(context);
                   webView.setLayoutParams(
                       new Toolbar.LayoutParams(Toolbar.LayoutParams.MATCH_PARENT,
                           Toolbar.LayoutParams.MATCH_PARENT));
@@ -430,7 +430,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     } else {
       JUtils.Log(TAG, "saveTowDimenCode : Qrcodelink=" + partyShareInfo.getQrcodeLink());
       try {
-        WebView webView = new WebView(CommonWebViewActivity.this);
+        WebView webView = new WebView(this);
         webView.setLayoutParams(
             new Toolbar.LayoutParams(Toolbar.LayoutParams.MATCH_PARENT,
                 Toolbar.LayoutParams.MATCH_PARENT));
@@ -499,7 +499,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
    * @param content 加载的内容
    */
   public Bitmap catchWebScreenshot(final WebView w, final int containerWidth,
-      final int containerHeight, final String baseUrl, final String content) {
+      final int containerHeight, final String baseUrl, final Context content) {
     final Bitmap b =
         Bitmap.createBitmap(containerWidth, containerHeight, Bitmap.Config.ARGB_8888);
     w.post(new Runnable() {
@@ -515,7 +515,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
                 + getResources().getString(R.string.share_2dimen_pic_name)
                 + ".jpg";
             BitmapUtil.saveBitmap(b, fileName);
-            Toast.makeText(CommonWebViewActivity.this, R.string.share_2dimen_pic_tips,
+            Toast.makeText(content, R.string.share_2dimen_pic_tips,
                 Toast.LENGTH_SHORT).show();
 
             File file = new File(fileName);
