@@ -18,6 +18,7 @@ import com.jimei.xiaolumeimei.data.FilePara;
 import com.jimei.xiaolumeimei.okhttp.callback.FileParaCallback;
 import com.jimei.xiaolumeimei.utils.CameraUtils;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
+import com.jimei.xiaolumeimei.widget.XlmmTitleView;
 import com.jude.utils.JUtils;
 import com.tbruyelle.rxpermissions.RxPermissions;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -31,7 +32,6 @@ public class TwoDimenCodeActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener {
   String TAG = "TwoDimenCodeActivity";
 
-  @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.img_2dimen) ImageView img_2dimen;
   @Bind(R.id.btn_share) Button btn_share;
 
@@ -40,7 +40,6 @@ public class TwoDimenCodeActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void setListener() {
     btn_share.setOnClickListener(this);
-    toolbar.setOnClickListener(this);
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -53,9 +52,6 @@ public class TwoDimenCodeActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void initViews() {
     ShareSDK.initSDK(this);
-    toolbar.setTitle("");
-    setSupportActionBar(toolbar);
-    finishBack(toolbar);
   }
 
   @Override protected void initData() {

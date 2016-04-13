@@ -40,7 +40,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener {
   private static final int REQUEST_CODE_PAYMENT = 1;
   String TAG = "OrderDetailActivity";
-  @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.btn_order_proc) Button btn_proc;
   @Bind(R.id.btn_order_cancel) Button btn_order_cancel;
   @Bind(R.id.rlayout_order_lefttime) RelativeLayout rlayout_order_lefttime;
@@ -57,7 +56,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
   @Override protected void setListener() {
     btn_proc.setOnClickListener(this);
     btn_order_cancel.setOnClickListener(this);
-    toolbar.setOnClickListener(this);
     logisticsLayout.setOnClickListener(this);
   }
 
@@ -70,9 +68,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
-    toolbar.setTitle("");
-    setSupportActionBar(toolbar);
-    finishBack(toolbar);
     ListView lv_goods = (ListView) findViewById(R.id.lv_goods);
     mGoodsAdapter = new OrderGoodsListAdapter(this);
     lv_goods.setAdapter(mGoodsAdapter);
@@ -259,9 +254,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
           JUtils.Log(TAG, "onClick paynow");
           payNow();
         }
-
         break;
-
       case R.id.btn_order_cancel:
         JUtils.Log(TAG, "onClick cancel");
         cancel_order();

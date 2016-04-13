@@ -21,6 +21,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
+import com.jimei.xiaolumeimei.widget.XlmmTitleView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import java.util.List;
 import rx.Subscription;
@@ -31,7 +32,6 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity
   String TAG = "AllRefundsActivity";
 
   @Bind(R.id.btn_jump) Button btn_jump;
-  @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.rlayout_order_empty) RelativeLayout rl_empty;
 
   private AllRefundsListAdapter mAllRefundsAdapter;
@@ -39,7 +39,6 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void setListener() {
     btn_jump.setOnClickListener(this);
-    toolbar.setOnClickListener(this);
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -51,9 +50,6 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
-    toolbar.setTitle("");
-    setSupportActionBar(toolbar);
-    finishBack(toolbar);
     //config allorders list adaptor
     ListView all_refunds_listview = (ListView) findViewById(R.id.all_refunds_listview);
     mAllRefundsAdapter = new AllRefundsListAdapter(this);

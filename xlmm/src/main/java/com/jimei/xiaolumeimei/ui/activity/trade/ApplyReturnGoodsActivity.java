@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -54,7 +53,6 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
       "七天无理由退换货", "发票问题", "与描述不符", "未收到货", "发错货/漏发", "开线/脱色/脱毛/有色差/有虫洞", "错拍", "其他原因"
   };
 
-  @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.img_good) ImageView img_good;
   @Bind(R.id.tx_good_name) TextView tx_good_name;
   @Bind(R.id.tx_good_price) TextView tx_good_price;
@@ -92,7 +90,6 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
   UploadManager uploadManager = new UploadManager();
 
   @Override protected void setListener() {
-    toolbar.setOnClickListener(this);
     btn_commit.setOnClickListener(this);
     imgbtn_camera_pic.setOnClickListener(this);
     add.setOnClickListener(this);
@@ -163,11 +160,6 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
-    //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-    toolbar.setTitle("");
-    setSupportActionBar(toolbar);
-    finishBack(toolbar);
 
     img_proof_pic1 = (ImageView) rl_proof_pic1.findViewById(R.id.img_proof_pic);
     img_proof_pic2 = (ImageView) rl_proof_pic2.findViewById(R.id.img_proof_pic);

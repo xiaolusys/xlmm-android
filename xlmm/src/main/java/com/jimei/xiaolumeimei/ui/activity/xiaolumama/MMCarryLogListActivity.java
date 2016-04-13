@@ -25,7 +25,6 @@ import rx.schedulers.Schedulers;
  */
 public class MMCarryLogListActivity extends BaseSwipeBackCompatActivity {
 
-  @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.tv_count) TextView tvCount;
   @Bind(R.id.carryloglist_xry) XRecyclerView carryloglistXry;
   private CarryLogAllAdapter adapter;
@@ -72,9 +71,6 @@ public class MMCarryLogListActivity extends BaseSwipeBackCompatActivity {
   }
 
   @Override protected void initViews() {
-    toolbar.setTitle("");
-    setSupportActionBar(toolbar);
-    finishBack(toolbar);
     initRecyclerView();
 
     tvCount.setText(carrylogMoney);

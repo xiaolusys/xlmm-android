@@ -95,7 +95,6 @@ public class MamaLivenessActivity extends BaseSwipeBackCompatActivity
               @Override public void onNext(MamaLivenessBean livenessBean) {
                 super.onNext(livenessBean);
                 if (livenessBean != null) {
-
                   mAdapter.update(livenessBean.getResults());
                   if (null == livenessBean.getNext()) {
                     Toast.makeText(MamaLivenessActivity.this, "没有更多了", Toast.LENGTH_SHORT)

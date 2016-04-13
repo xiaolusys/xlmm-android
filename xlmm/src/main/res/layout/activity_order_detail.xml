@@ -8,37 +8,16 @@
     android:orientation="vertical"
     tools:context="com.jimei.xiaolumeimei.ui.activity.trade.OrderDetailActivity">
 
-  <android.support.design.widget.AppBarLayout
+  <com.jimei.xiaolumeimei.widget.XlmmTitleView
+      android:id="@+id/title_view"
+      app:xlmm_title="订单详情"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:id="@+id/app_bar_layout"
-      android:theme="@style/AppTheme.AppBarOverlay">
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="#fdb916"
-        app:popupTheme="@style/AppTheme.PopupOverlay">
-
-      <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_centerInParent="true"
-          android:layout_gravity="center"
-          android:text="订单详情"
-          android:textColor="@android:color/white"
-          android:textSize="16sp"
-      />
-    </android.support.v7.widget.Toolbar>
-
-  </android.support.design.widget.AppBarLayout>
-
+      android:layout_height="wrap_content"/>
   <ScrollView
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       app:layout_behavior="@string/appbar_scrolling_view_behavior"
-      android:layout_below="@id/app_bar_layout">
+      android:layout_below="@id/title_view">
     <LinearLayout
         android:layout_weight="1"
         android:layout_width="match_parent"
@@ -171,10 +150,14 @@
       <com.jimei.xiaolumeimei.widget.NestedListView
           android:id="@+id/lv_goods"
           android:layout_width="fill_parent"
-          android:layout_height="fill_parent">
-      </com.jimei.xiaolumeimei.widget.NestedListView>
+          android:layout_height="fill_parent"/>
 
 
+      <include layout="@layout/common_gap"/>
+      <View
+          android:background="@color/grey100"
+          android:layout_width="match_parent"
+          android:layout_height="10dp"/>
       <include layout="@layout/common_gap"/>
 
       <RelativeLayout
@@ -187,7 +170,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="商品金额："
-            android:textSize="15sp"
+            android:textSize="12sp"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"/>
@@ -198,12 +181,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="￥49"
-            android:textSize="15sp"
+            android:textSize="12sp"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"/>
       </RelativeLayout>
-      <include layout="@layout/common_gap"/>
       <RelativeLayout
           android:background="@color/white"
           android:padding="8dp"
@@ -214,7 +196,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="优惠券："
-            android:textSize="15sp"
+            android:textSize="12sp"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"/>
@@ -225,12 +207,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="￥0"
-            android:textSize="15sp"
+            android:textSize="12sp"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"/>
       </RelativeLayout>
-      <include layout="@layout/common_gap"/>
       <RelativeLayout
           android:background="@color/white"
           android:padding="8dp"
@@ -241,7 +222,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="运费："
-            android:textSize="15sp"
+            android:textSize="12sp"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"/>
@@ -252,7 +233,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="￥5"
-            android:textSize="15sp"
+            android:textSize="12sp"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"/>
@@ -281,7 +262,6 @@
             android:textSize="13sp"
             android:layout_gravity="right"/>
       </RelativeLayout>
-      <include layout="@layout/common_gap"/>
 
       <LinearLayout
           android:layout_width="match_parent"

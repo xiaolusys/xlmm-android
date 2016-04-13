@@ -24,12 +24,11 @@ import java.util.List;
 public class MamaLivenessAdapter
     extends RecyclerView.Adapter<MamaLivenessAdapter.LivenessVH> {
   private static final String TAG = "MamaLivenessAdapter";
-  private List<MamaLivenessBean.ResultsEntity> mList = null;
+  private List<MamaLivenessBean.ResultsEntity> mList = new ArrayList<MamaLivenessBean.ResultsEntity>();
   private Context mContext;
 
   public MamaLivenessAdapter(Context mContext) {
     this.mContext = mContext;
-    mList = new ArrayList<MamaLivenessBean.ResultsEntity>();
   }
 
   public MamaLivenessAdapter(Context mContext,
@@ -45,9 +44,7 @@ public class MamaLivenessAdapter
   }
 
   public void update(List<MamaLivenessBean.ResultsEntity> list) {
-    JUtils.Log(TAG, "dataSource.size " + list.size());
-
-    mList.clear();
+    JUtils.Log(TAG, "dataSource.size " + mList.size());
     mList.addAll(list);
     notifyDataSetChanged();
   }
