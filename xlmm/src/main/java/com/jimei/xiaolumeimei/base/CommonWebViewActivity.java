@@ -1,16 +1,11 @@
 package com.jimei.xiaolumeimei.base;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Picture;
-import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.Toolbar;
@@ -30,22 +25,22 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.PlatformActionListener;
-import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.onekeyshare.OnekeyShare;
+
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
 import com.jimei.xiaolumeimei.model.ActivityModel;
-import com.jimei.xiaolumeimei.utils.BitmapUtil;
-import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.mob.tools.utils.UIHandler;
-import java.io.File;
+
 import java.util.HashMap;
 import java.util.Map;
+
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -122,7 +117,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     return R.layout.activity_actwebview;
   }
 
-  //@TargetApi(Build.VERSION_CODES.KITKAT)
+  @TargetApi(Build.VERSION_CODES.KITKAT)
   @SuppressLint("JavascriptInterface") @Override protected void initViews() {
     JUtils.Log(TAG, "initViews");
     ShareSDK.initSDK(this);
@@ -157,7 +152,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
       mWebView.getSettings().setDatabaseEnabled(true);
       mWebView.getSettings().setLoadWithOverviewMode(true);
       mWebView.getSettings().setUseWideViewPort(true);
-      //mWebView.setWebContentsDebuggingEnabled(true);
+      mWebView.setWebContentsDebuggingEnabled(true);
 
       mWebView.setWebChromeClient(new WebChromeClient() {
         @Override public void onProgressChanged(WebView view, int newProgress) {
@@ -453,18 +448,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
 
     // 启动分享GUI
     oks.show(this);
-  }
-
-  public void jumpToNativeLocation(String url) {
-    //if (!TextUtils.isEmpty(url)) {
-    //Bundle bundle = new Bundle();
-    //bundle.putString("product_id", url);
-    //Intent intent = new Intent(mContext, ProductDetailActvityWeb.class);
-    //intent.putExtras(bundle);
-    //startActivity(intent);
-    //JUtils.Log(TAG, url+"aaaa");
-    JumpUtils.push_jump_proc(this, url);
-    //}
   }
 
   /*private class CancelListener implements DialogInterface.OnCancelListener,
