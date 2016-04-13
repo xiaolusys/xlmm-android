@@ -26,6 +26,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.utils.BitmapUtil;
+import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.mob.tools.utils.UIHandler;
@@ -74,7 +75,7 @@ public class AndroidJsBridge implements PlatformActionListener , Handler.Callbac
 
   @JavascriptInterface public void jumpToNativeLocation(String url) {
     JUtils.Log("CommonWebViewActivity", url);
-    jumpToNativeLocation(url);
+    jump_ToNativeLocation(url);
   }
 
   @JavascriptInterface public String getNativeMobileSNCode(){
@@ -471,5 +472,17 @@ public class AndroidJsBridge implements PlatformActionListener , Handler.Callbac
     }
 
     return false;
+  }
+
+  public void jump_ToNativeLocation(String url) {
+    //if (!TextUtils.isEmpty(url)) {
+    //Bundle bundle = new Bundle();
+    //bundle.putString("product_id", url);
+    //Intent intent = new Intent(mContext, ProductDetailActvityWeb.class);
+    //intent.putExtras(bundle);
+    //startActivity(intent);
+    //JUtils.Log(TAG, url+"aaaa");
+    JumpUtils.push_jump_proc(mContext, url);
+    //}
   }
 }
