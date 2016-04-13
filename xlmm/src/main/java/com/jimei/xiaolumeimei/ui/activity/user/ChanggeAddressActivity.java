@@ -35,7 +35,6 @@ public class ChanggeAddressActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
   private static final String TAG = ChanggeAddressActivity.class.getSimpleName();
-  @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.name) EditText name;
   @Bind(R.id.mobile) EditText mobile;
   @Bind(R.id.address) TextView address;
@@ -93,9 +92,6 @@ public class ChanggeAddressActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
-    toolbar.setTitle("");
-    setSupportActionBar(toolbar);
-    finishBack(toolbar);
     parent = findViewById(R.id.main);
 
     initPopupWindow();
