@@ -9,7 +9,6 @@ import com.jimei.xiaolumeimei.adapter.MMHaveChooseAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ShopProductBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
-import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.widget.dragrecyclerview.DividerItemDecoration;
 import com.jimei.xiaolumeimei.widget.dragrecyclerview.LinearRecyclerView;
 import com.jimei.xiaolumeimei.widget.dragrecyclerview.OnPageListener;
@@ -93,7 +92,7 @@ public class HaveChoosedActivity extends BaseSwipeBackCompatActivity
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
     finishBack(toolbar);
-
+    JUtils.Toast("可以进行手势滑动操作");
     adapter = new MMHaveChooseAdapter(this, data);
     chooseRecyclerview.setAdapter(adapter);
     chooseRecyclerview.setOnPageListener(this);
@@ -132,6 +131,8 @@ public class HaveChoosedActivity extends BaseSwipeBackCompatActivity
               if (shopProductBean.getResults() != null
                   && shopProductBean.getNext() == null) {
                 JUtils.Toast("没有数据了");
+              } else {
+                page++;
               }
             }
           }
