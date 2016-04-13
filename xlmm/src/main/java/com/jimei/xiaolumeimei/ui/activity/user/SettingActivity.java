@@ -15,6 +15,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.utils.AppUtils;
 import com.jimei.xiaolumeimei.utils.DataClearManager;
+import com.jimei.xiaolumeimei.widget.XlmmTitleView;
 import com.umeng.update.UmengUpdateAgent;
 import com.umeng.update.UmengUpdateListener;
 import com.umeng.update.UpdateResponse;
@@ -24,8 +25,6 @@ import butterknife.Bind;
 
 public class SettingActivity extends BaseSwipeBackCompatActivity {
 
-    @Bind(R.id.toolbar)
-    Toolbar toolbar;
     private SettingFragment settingFragment;
 
 
@@ -57,9 +56,6 @@ public class SettingActivity extends BaseSwipeBackCompatActivity {
 
     @Override
     protected void initViews() {
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
-        finishBack(toolbar);
         settingFragment = new SettingFragment();
         getFragmentManager().beginTransaction()
                 .replace(R.id.container_setting, settingFragment)

@@ -9,30 +9,11 @@
     android:id="@+id/llayout_allrefunds"
     tools:context="com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity">
 
-    <android.support.design.widget.AppBarLayout
+
+    <com.jimei.xiaolumeimei.widget.XlmmTitleView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="#fdb916"
-            app:popupTheme="@style/AppTheme.PopupOverlay" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center"
-                android:text="退款退货"
-                android:textColor="@android:color/white"
-                android:textSize="16sp"
-                />
-        </android.support.v7.widget.Toolbar>
-
-    </android.support.design.widget.AppBarLayout>
+        app:xlmm_title="退货退款"/>
 
     <FrameLayout
         android:layout_width="fill_parent"

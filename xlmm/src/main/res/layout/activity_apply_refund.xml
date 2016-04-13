@@ -9,38 +9,17 @@
     style="@style/AppTheme.AppBarOverlay"
     >
 
-  <android.support.design.widget.AppBarLayout
+  <com.jimei.xiaolumeimei.widget.XlmmTitleView
+      android:id="@+id/title_view"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:theme="@style/AppTheme.AppBarOverlay"
-      android:id="@+id/view2"
-      >
+      app:xlmm_title="申请退款"/>
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="#fdb916"
-        app:popupTheme="@style/AppTheme.PopupOverlay"
-        >
-
-      <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_centerInParent="true"
-          android:layout_gravity="center"
-          android:text="申请退款"
-          android:textColor="@android:color/white"
-          android:textSize="16sp"
-          />
-    </android.support.v7.widget.Toolbar>
-
-  </android.support.design.widget.AppBarLayout>
 
   <ScrollView
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_below="@+id/view2"
+      android:layout_below="@id/title_view"
       >
 
     <LinearLayout

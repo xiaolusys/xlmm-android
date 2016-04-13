@@ -14,7 +14,7 @@ public class FansWebViewActivity extends CommonWebViewActivity {
   @Override
   protected void initViews() {
     super.initViews();
-    webviewTitle.setText("我的粉丝");
+    titleView.setName("我的粉丝");
   }
 
   @Override

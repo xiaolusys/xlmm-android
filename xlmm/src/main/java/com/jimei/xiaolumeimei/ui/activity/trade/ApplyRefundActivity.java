@@ -20,6 +20,7 @@ import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
+import com.jimei.xiaolumeimei.widget.XlmmTitleView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.squareup.okhttp.ResponseBody;
@@ -31,7 +32,6 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
   String TAG = "ApplyRefundActivity";
   String slect_reason[] = new String[] { "七天无理由退换", "缺货", "错拍", "没有发货", "与描述不符", "其他" };
 
-  @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.img_good) ImageView img_good;
   @Bind(R.id.tx_good_name) TextView tx_good_name;
   @Bind(R.id.tx_good_price) TextView tx_good_price;
@@ -53,7 +53,6 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
   String proof_pic = "";
 
   @Override protected void setListener() {
-    toolbar.setOnClickListener(this);
     btn_commit.setOnClickListener(this);
     add.setOnClickListener(this);
     delete.setOnClickListener(this);
@@ -80,8 +79,6 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void initViews() {
 
-    toolbar.setTitle("");
-    setSupportActionBar(toolbar);
   }
 
   //从server端获得所有订单数据，可能要查询几次

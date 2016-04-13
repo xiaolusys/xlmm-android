@@ -11,6 +11,6 @@ public class BoutiqueWebviewActivity extends CommonWebViewActivity {
 
   @Override protected void initViews() {
     super.initViews();
-    webviewTitle.setText("精品活动");
+    titleView.setName("精品活动");
   }
 }

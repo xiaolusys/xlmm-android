@@ -7,22 +7,10 @@
     android:orientation="vertical"
     tools:context=".ui.activity.trade.RefundDetailActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <com.jimei.xiaolumeimei.widget.XlmmTitleView
+        app:xlmm_title="退货(款)详情"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="#fdb916">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center"
-            android:text="退款（货）详情"
-            android:textColor="@android:color/white"
-            android:textSize="16sp" />
-    </android.support.v7.widget.Toolbar>
-
+        android:layout_height="wrap_content"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -39,6 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_weight="2.5"
+            android:textSize="12sp"
             android:ellipsize="end" />
 
         <View
@@ -109,9 +98,8 @@
             android:id="@+id/sdv"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:src="@mipmap/ic_launcher"
-            app:placeholderImage="@drawable/logo"
-            app:roundedCornerRadius="5dp" />
+            app:roundedCornerRadius="5dp"
+            app:placeholderImage="@drawable/logo"/>
 
         <LinearLayout
             android:layout_width="fill_parent"

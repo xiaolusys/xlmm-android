@@ -23,6 +23,7 @@ import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.CircleImageView;
 import com.jimei.xiaolumeimei.widget.MyPreferenceView;
+import com.jimei.xiaolumeimei.widget.XlmmTitleView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.xiaomi.mipush.sdk.MiPushClient;
@@ -39,8 +40,6 @@ public class InformationActivity extends BaseSwipeBackCompatActivity implements 
     static String nickName;
     static String mobile;
     String TAG = "InformationActivity";
-    @Bind(R.id.toolbar)
-    Toolbar toolbar;
     @Bind(R.id.user_img)
     CircleImageView imgUser;
     @Bind(R.id.nick_name)
@@ -126,10 +125,6 @@ public class InformationActivity extends BaseSwipeBackCompatActivity implements 
 
     @Override
     protected void initViews() {
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
-        finishBack(toolbar);
-
     }
 
     @Override

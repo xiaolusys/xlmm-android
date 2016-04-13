@@ -14,6 +14,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.ui.fragment.AllOrdersFragment;
 import com.jimei.xiaolumeimei.ui.fragment.WaitPayOrdersFragment;
 import com.jimei.xiaolumeimei.ui.fragment.WaitSendOrdersFragment;
+import com.jimei.xiaolumeimei.widget.XlmmTitleView;
 import com.jude.utils.JUtils;
 
 import java.util.ArrayList;
@@ -24,7 +25,6 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity
   String TAG = "AllOrdersActivity";
   @Bind(R.id.tab_layout)  TabLayout mTabLayout;
   @Bind(R.id.view_pager)  ViewPager mViewPager;
-  @Bind(R.id.toolbar) Toolbar toolbar;
   List<Fragment> fragments;
   List<String> titles;
 
@@ -40,9 +40,7 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
-    toolbar.setTitle("");
-    setSupportActionBar(toolbar);
-    finishBack(toolbar);
+
   }
 
   @Override protected void initData() {
