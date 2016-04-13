@@ -39,7 +39,7 @@ public class MMStoreWebViewActivity extends CommonWebViewActivity {
                         if (null != mmShoppingBean) {
                             try {
                                 title = (String) mmShoppingBean.getShopInfo().getName();
-                                sharelink = mmShoppingBean.getShopInfo().getPreview_shop_link();
+                                sharelink = mmShoppingBean.getShopInfo().getShopLink();
                                 shareimg = mmShoppingBean.getShopInfo().getThumbnail();
                                 desc = mmShoppingBean.getShopInfo().getDesc();
                             } catch (Exception e) {
