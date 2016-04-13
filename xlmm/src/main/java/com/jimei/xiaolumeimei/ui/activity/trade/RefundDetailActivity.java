@@ -1,7 +1,6 @@
 package com.jimei.xiaolumeimei.ui.activity.trade;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -12,20 +11,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.facebook.drawee.drawable.ProgressBarDrawable;
-import com.facebook.drawee.generic.GenericDraweeHierarchy;
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.HorizontalScrollViewAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
-import com.jimei.xiaolumeimei.utils.AppUtils;
-import com.jimei.xiaolumeimei.utils.Utils;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.MyHorizontalScrollView;
-import com.jimei.xiaolumeimei.widget.XlmmTitleView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 
@@ -36,7 +29,7 @@ import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
-public class RefundDetailActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener{
+public class RefundDetailActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener {
     private static final String TAG = RefundDetailActivity.class.getSimpleName();
     @Bind(R.id.tv_order_id)
     TextView orderIdTv;
@@ -49,7 +42,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity implements
     @Bind(R.id.et_logistics_info)
     EditText logInfoEt;
     @Bind(R.id.sdv)
-    SimpleDraweeView goodImageView;
+    ImageView goodImageView;
     @Bind(R.id.tv_good_name)
     TextView goodNameTv;
     @Bind(R.id.tv_good_price)
@@ -166,11 +159,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity implements
         JUtils.Log(TAG, "fillDataToView ");
         orderIdTv.setText(refundDetailBean.getRefund_no());
         statusTv.setText(refundDetailBean.getStatus_display());
-        if (AppUtils.getSDKVersion()<=19) {
-            ViewUtils.loadImgToImgView(getApplicationContext(),goodImageView,refundDetailBean.getPic_path());
-        }else{
-            goodImageView.setImageURI(Uri.parse(refundDetailBean.getPic_path()));
-        }
+        ViewUtils.loadImgToImgView(getApplicationContext(), goodImageView, refundDetailBean.getPic_path());
         if (refundDetailBean.getTitle().length() >= 15) {
             goodNameTv.setText(refundDetailBean.getTitle().substring(0, 8) + "...");
         } else {

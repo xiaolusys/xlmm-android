@@ -86,5 +86,4 @@ dependencies {
   compile 'com.umeng.analytics:analytics:latest.integration'
   compile 'com.android.support:support-v4:23.3.0'
   compile 'com.tbruyelle.rxpermissions:rxpermissions:0.5.2@aar'
-  compile 'com.facebook.fresco:fresco:0.9.0'
 }
