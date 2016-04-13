@@ -17,7 +17,7 @@ public class MMShareCodeWebViewActivity extends CommonWebViewActivity {
     @Override
     protected void initViews() {
         super.initViews();
-       titleView.setName("我的邀请");
+      webviewTitle.setText("我的邀请");
     }
 
     @Override

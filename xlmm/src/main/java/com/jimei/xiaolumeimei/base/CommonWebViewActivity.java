@@ -30,8 +30,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import butterknife.Bind;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
@@ -42,7 +40,6 @@ import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
 import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.utils.BitmapUtil;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
-import com.jimei.xiaolumeimei.widget.XlmmTitleView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.mob.tools.utils.UIHandler;
@@ -63,9 +60,9 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
   private static final int MSG_ACTION_CCALLBACK = 2;
 
   private static final String TAG = CommonWebViewActivity.class.getSimpleName();
-  @Bind(R.id.title_view)
-  public XlmmTitleView titleView;
+  protected TextView webviewTitle;
   LinearLayout ll_actwebview;
+  private Toolbar mToolbar;
   private WebView mWebView;
   private ProgressBar mProgressBar;
   private String cookies;
@@ -76,6 +73,12 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
   private int id;
 
   @Override protected void setListener() {
+    mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        JUtils.Log(TAG, "setNavigationOnClickListener finish");
+        finish();
+      }
+    });
   }
 
   @Override protected void initData() {
@@ -123,9 +126,15 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
   @SuppressLint("JavascriptInterface") @Override protected void initViews() {
     JUtils.Log(TAG, "initViews");
     ShareSDK.initSDK(this);
+
+    webviewTitle = (TextView) findViewById(R.id.webview_title);
     ll_actwebview = (LinearLayout) findViewById(R.id.ll_actwebview);
     mProgressBar = (ProgressBar) findViewById(R.id.pb_view);
     mWebView = (WebView) findViewById(R.id.wb_view);
+    mToolbar = (Toolbar) findViewById(R.id.toolbar);
+    mToolbar.setTitle("");
+    setSupportActionBar(mToolbar);
+    mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     try {

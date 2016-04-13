@@ -22,7 +22,7 @@ public class MMStoreWebViewActivity extends CommonWebViewActivity {
     @Override
     protected void initViews() {
         super.initViews();
-        titleView.setName("我的店铺");
+        webviewTitle.setText("我的店铺");
     }
 
     @Override

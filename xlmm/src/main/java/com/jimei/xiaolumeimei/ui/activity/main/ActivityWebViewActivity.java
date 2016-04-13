@@ -8,6 +8,6 @@ import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 public class ActivityWebViewActivity extends CommonWebViewActivity {
   @Override protected void initViews() {
     super.initViews();
-    titleView.setName("活动");
+    webviewTitle.setText("活动");
   }
 }

@@ -9,7 +9,7 @@ public class CustomProblemActivity extends CommonWebViewActivity {
     @Override
     protected void initViews() {
         super.initViews();
-        titleView.setName("常见问题");
+        webviewTitle.setText("常见问题");
     }
 
     @Override
