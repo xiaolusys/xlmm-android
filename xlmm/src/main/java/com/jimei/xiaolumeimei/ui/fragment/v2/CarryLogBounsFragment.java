@@ -9,8 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -18,12 +17,16 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.AwardCarryLogAdapter;
 import com.jimei.xiaolumeimei.entities.AwardCarryBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
-import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
+import com.jimei.xiaolumeimei.widget.dragrecyclerview.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -113,7 +116,7 @@ public class CarryLogBounsFragment extends Fragment {
   private void initViews(View view) {
     xRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     xRecyclerView.addItemDecoration(
-        new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+        new DividerItemDecoration(getActivity()));
     xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
     xRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
     xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);

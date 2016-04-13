@@ -9,8 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -18,14 +17,19 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.OderCarryLogAdapter;
 import com.jimei.xiaolumeimei.entities.OderCarryBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
-import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
+import com.jimei.xiaolumeimei.widget.dragrecyclerview.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
+
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/03/11.
@@ -113,7 +117,7 @@ public class CarryLogCommissionFragment extends Fragment {
   private void initViews() {
     xRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     xRecyclerView.addItemDecoration(
-        new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+        new DividerItemDecoration(getActivity()));
 
     xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
     xRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);

@@ -77,8 +77,8 @@ public class MMHaveChooseAdapter extends BaseAdapter<ShopProductBean.ResultsBean
     @Override
     public void onItemMove(int fromPosition, int targetPosition) {
 
-
         JUtils.Log(TAG, fromPosition + "  " + targetPosition);
+        super.onItemMove(fromPosition, targetPosition);
         MMProductModel.getInstance()
                 .changeProPosition(
                         data.get(fromPosition).getId() + ""
@@ -110,17 +110,11 @@ public class MMHaveChooseAdapter extends BaseAdapter<ShopProductBean.ResultsBean
                                                 }
                                             }
                                         });
-                                JUtils.Toast("交换成功");
                             } else {
-                                JUtils.Toast("交换失败");
-//                                notifyDataSetChanged();
-
                             }
                         }
                     }
                 });
-
-        super.onItemMove(fromPosition, targetPosition);
     }
 
     class MMHaveChooseVH extends RecyclerView.ViewHolder {
