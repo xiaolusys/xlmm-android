@@ -94,12 +94,11 @@
         android:orientation="horizontal"
         android:padding="8dp">
 
-        <com.facebook.drawee.view.SimpleDraweeView
+        <ImageView
             android:id="@+id/sdv"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            app:roundedCornerRadius="5dp"
-            app:placeholderImage="@drawable/logo"/>
+            android:src="@drawable/logo"/>
 
         <LinearLayout
             android:layout_width="fill_parent"
