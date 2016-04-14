@@ -157,7 +157,6 @@ public class AllOrdersListAdapter extends BaseAdapter {
           holder.mHorizontalScrollView = mHorizontalScrollView;
         }
         holder.position = position;
-
         convertView.setTag(holder);
       }
     }
@@ -167,7 +166,6 @@ public class AllOrdersListAdapter extends BaseAdapter {
     Log.d(TAG, "payment  " + data.get(position).get("payment") + " " + data.get(position)
         .get("orderState"));
     tx_order_sate.setText(data.get(position).get("orderState"));
-
     return convertView;
   }
 

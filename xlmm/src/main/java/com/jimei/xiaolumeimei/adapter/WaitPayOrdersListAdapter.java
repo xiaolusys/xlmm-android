@@ -154,20 +154,12 @@ public class WaitPayOrdersListAdapter extends BaseAdapter {
           holder.mHorizontalScrollView = mHorizontalScrollView;
         }
         holder.position = position;
-
         convertView.setTag(holder);
       }
     }
-
-
-
     tx_order_sate = (TextView) convertView.findViewById(R.id.tx_order_state);
-
     Log.d(TAG, "payment  "+data.get(position).get("payment") + " " + data.get(position).get("orderState"));
     tx_order_sate.setText(data.get(position).get("orderState"));
-
-
-
     return convertView;
   }
 
