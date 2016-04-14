@@ -49,19 +49,23 @@ public class MMHaveChooseAdapter
 
   @Override public void onItemDismiss(int position) {
 
-    MMProductModel.getInstance()
-        .removeProFromShop(data.get(position).getProduct() + "")
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<MMHavaChooseResultBean>() {
-          @Override public void onNext(MMHavaChooseResultBean responseBody) {
-            if (responseBody != null) {
-              if (responseBody.getCode() == 0) {
-              } else {
-                JUtils.Toast("删除失败,请重新尝试");
+    try {
+      MMProductModel.getInstance()
+          .removeProFromShop(data.get(position).getProduct() + "")
+          .subscribeOn(Schedulers.io())
+          .subscribe(new ServiceResponse<MMHavaChooseResultBean>() {
+            @Override public void onNext(MMHavaChooseResultBean responseBody) {
+              if (responseBody != null) {
+                if (responseBody.getCode() == 0) {
+                } else {
+                  JUtils.Toast("删除失败,请重新尝试");
+                }
               }
             }
-          }
-        });
+          });
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     super.onItemDismiss(position);
   }
 
