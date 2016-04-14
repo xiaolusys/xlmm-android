@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:padding="8dp"
+    android:padding="5dp"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
 
-  <ImageView
+  <com.jimei.xiaolumeimei.widget.RoundCornerImageView
       android:id="@+id/img_good"
-      android:layout_width="90dp"
-      android:layout_height="90dp"
+      android:layout_width="134px"
+      android:layout_height="134px"
       android:src="@drawable/logo"
-      android:layout_marginLeft="10px"/>
+      android:layout_marginLeft="5dp"/>
 
 
   <LinearLayout
@@ -57,7 +57,8 @@
           android:layout_width="wrap_content"
           android:layout_height="match_parent"
           android:text="尺码："
-          android:textSize="15sp"
+          android:textSize="12sp"
+          android:textColor="@color/grey"
           android:gravity="bottom"/>
 
       <TextView
@@ -65,8 +66,9 @@
           android:layout_width="wrap_content"
           android:layout_height="match_parent"
           android:text="× 1"
-          android:textSize="15sp"
+          android:textSize="12sp"
           android:gravity="bottom"
+          android:textColor="@color/grey"
           android:layout_alignParentTop="true"
           android:layout_alignParentRight="true"
           android:layout_alignParentEnd="true"

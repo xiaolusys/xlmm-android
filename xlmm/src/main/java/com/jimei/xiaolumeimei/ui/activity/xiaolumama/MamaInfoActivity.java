@@ -69,7 +69,6 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.btn_chooselist) TextView btn_chooselist;
   @Bind(R.id.tv_liveness) TextView tv_liveness;
   @Bind(R.id.img_liveness) com.jimei.xiaolumeimei.widget.RotateTextView img_liveness;
-  @Bind(R.id.pb_hook) ProgressBar mProgressBar;
   @Bind(R.id.chart1) LineChart mChart;
   @Bind(R.id.img_left) ImageView img_left;
   @Bind(R.id.img_right) ImageView img_right;
@@ -842,11 +841,10 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   }
 
   private void show_liveness(int liveness) {
+    liveness = 45;
     JUtils.Log(TAG, "liveness:" + liveness);
     img_liveness.setText(Integer.toString(liveness));
     if (liveness > 100) liveness = 100;
-    mProgressBar.setProgress(liveness);
-    mProgressBar.setVisibility(View.VISIBLE);
 
     /*AutoRelativeLayout.LayoutParams laParams=(AutoRelativeLayout.LayoutParams)img_hook
         .getLayoutParams();

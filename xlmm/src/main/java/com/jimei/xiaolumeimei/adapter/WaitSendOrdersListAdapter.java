@@ -166,9 +166,6 @@ public class WaitSendOrdersListAdapter extends BaseAdapter {
 
     Log.d(TAG, "payment  "+data.get(position).get("payment") + " " + data.get(position).get("orderState"));
     tx_order_sate.setText(data.get(position).get("orderState"));
-
-
-
     return convertView;
   }
 
