@@ -9,8 +9,8 @@
 
   <com.jimei.xiaolumeimei.widget.RoundCornerImageView
       android:id="@+id/img_good"
-      android:layout_width="134px"
-      android:layout_height="134px"
+      android:layout_width="70dp"
+      android:layout_height="70dp"
       android:src="@drawable/logo"
       android:layout_marginLeft="5dp"/>
 

@@ -3,15 +3,15 @@
     android:layout_width="80dp"
     android:layout_height="80dp"
     android:padding="5dp"
+    android:gravity="center"
+    android:layout_marginLeft="5dp"
     android:background="@android:color/white" >
 
     <com.jimei.xiaolumeimei.widget.RoundCornerImageView
         android:id="@+id/id_index_gallery_item_image"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="5dp"
         android:scaleType="centerCrop" />
 
 </RelativeLayout>

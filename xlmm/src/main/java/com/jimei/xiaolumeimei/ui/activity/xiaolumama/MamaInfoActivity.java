@@ -65,6 +65,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.imgUser) ImageView imgUser;
   @Bind(R.id.btn_two_dimen) TextView btn_two_dimen;
   @Bind(R.id.tv_cashinfo) TextView tv_cashinfo;
+  @Bind(R.id.rl_chart) RelativeLayout rl_chart;
   @Bind(R.id.tv_cash) TextView tv_cash;
   @Bind(R.id.btn_chooselist) TextView btn_chooselist;
   @Bind(R.id.tv_liveness) TextView tv_liveness;
@@ -265,6 +266,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         break;
       case R.id.img_left:
         rl_empty_chart.setVisibility(View.INVISIBLE);
+        rl_chart.setVisibility(View.VISIBLE);
         mChart.clear();
         setDataOfPreviousWeek();
         tv_today_visit2.setText(
@@ -276,6 +278,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         break;
       case R.id.img_right:
         rl_empty_chart.setVisibility(View.INVISIBLE);
+        rl_chart.setVisibility(View.VISIBLE);
         mChart.clear();
         setDataOfThisWeek();
         tv_today_visit2.setText(
@@ -570,6 +573,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     setData(xVals, yVals);
     if (isEmptyData(show_refund)) {
       rl_empty_chart.setVisibility(View.VISIBLE);
+      rl_chart.setVisibility(View.INVISIBLE);
     }
   }
 
@@ -613,6 +617,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     setData(xVals, yVals);
     if (isEmptyData(show_refund)) {
       rl_empty_chart.setVisibility(View.VISIBLE);
+      rl_chart.setVisibility(View.INVISIBLE);
     }
   }
 
@@ -841,7 +846,6 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   }
 
   private void show_liveness(int liveness) {
-    liveness = 45;
     JUtils.Log(TAG, "liveness:" + liveness);
     img_liveness.setText(Integer.toString(liveness));
     if (liveness > 100) liveness = 100;

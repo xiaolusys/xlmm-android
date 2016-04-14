@@ -94,7 +94,7 @@
         android:orientation="horizontal"
         android:padding="8dp">
 
-        <ImageView
+        <com.jimei.xiaolumeimei.widget.RoundCornerImageView
             android:id="@+id/sdv"
             android:layout_width="70dp"
             android:layout_height="70dp"
