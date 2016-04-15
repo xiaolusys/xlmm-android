@@ -85,7 +85,6 @@ public class MainActivity extends BaseActivity
   private int num;
   private BadgeView badge;
   private double budgetCash;
-  private Subscription subscribe;
   private TextView msg1;
   private TextView msg2;
   private TextView msg3;
@@ -107,10 +106,6 @@ public class MainActivity extends BaseActivity
 
     initTabLayout();
 
-    getUserInfo();
-
-    //UmengUpdateAgent.setUpdateCheckConfig(false);
-
     new Thread(() -> {
       try {
         Thread.sleep(500 * 60);
@@ -119,11 +114,6 @@ public class MainActivity extends BaseActivity
       }
       UmengUpdateAgent.update(MainActivity.this);
     }).start();
-
-    //Uri uri = Uri.parse("market://details?id=" + getPackageName());
-    //Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-    //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-    //startActivity(intent);
 
   }
 
@@ -338,7 +328,6 @@ public class MainActivity extends BaseActivity
   @Override public void onClick(View v) {
     drawer.closeDrawers();
     String flag = "main";
-    boolean xlmmFlag = false;
     Intent intent = new Intent(MainActivity.this, MainActivity.class);
     switch (v.getId()) {
       case R.id.rv_cart:
@@ -347,7 +336,7 @@ public class MainActivity extends BaseActivity
         break;
       case R.id.img_mmentry:
         JUtils.Log(TAG, "xiaolu mama entry");
-        xlmmFlag = true;
+        intent = new Intent(MainActivity.this, MamaInfoActivity.class);
         break;
       case R.id.ll_money:
         intent = new Intent(MainActivity.this, WalletActivity.class);
@@ -370,8 +359,6 @@ public class MainActivity extends BaseActivity
     }
     if (!(LoginUtils.checkLoginState(getApplicationContext()))) {
       login(flag);
-    } else if (xlmmFlag) {
-      checkMamaInfo();
     } else {
       startActivity(intent);
     }
@@ -386,97 +373,84 @@ public class MainActivity extends BaseActivity
     startActivity(intent);
   }
 
-  @Override public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-      case R.id.action_settings:
-        JUtils.Log(TAG, "xiaolu mama entry");
-        if (!LoginUtils.checkLoginState(getApplicationContext())) {
-            /*未登录进入登录界面*/
-          JUtils.Log(TAG, "need login");
-          Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-          Bundle bundle = new Bundle();
-          bundle.putString("login", "main");
-          intent.putExtras(bundle);
-          startActivity(intent);
-          //startActivity(new Intent(MainActivity.this, LoginActivity.class));
-        } else {
-          checkMamaInfo();
-        }
-        break;
-      default:
-        break;
-    }
-    return super.onOptionsItemSelected(item);
-  }
-
-  @Override public boolean onCreateOptionsMenu(Menu menu) {
-    JUtils.Log(TAG, "onCreateOptionsMenu");
-    //getMenuInflater().inflate(R.menu.mainframe_menu, menu);
-    //MenuItem item = menu.findItem(R.id.action_settings);
-
-    return super.onCreateOptionsMenu(menu);
-  }
-
-  private void checkMamaInfo() {
-    JUtils.Log(TAG, "check mama userinfo");
-
-    if (userInfoBean != null) {
-      if ((userInfoBean.getXiaolumm() != null) && (userInfoBean.getXiaolumm().getId()
-          != 0)) {
-        JUtils.Log(TAG, "1 i am xiaolumama, id=" + userInfoBean.getXiaolumm().getId());
-        Intent intent = new Intent(MainActivity.this, MamaInfoActivity.class);
-        startActivity(intent);
-      } else {
-        JUtils.Toast("您还不是小鹿妈妈，赶紧关注小鹿美美公众号了解信息并加入我们吧！");
-      }
-    } else {
-      Subscription subscribe = UserModel.getInstance()
-          .getUserInfo()
-          .subscribeOn(Schedulers.io())
-          .subscribe(new ServiceResponse<UserInfoBean>() {
-            @Override public void onNext(UserInfoBean user) {
-              if ((user.getXiaolumm() != null) && (user.getXiaolumm().getId() != 0)) {
-                JUtils.Log(TAG, "2 i am xiaolumama, id=" + user.getXiaolumm().getId());
-                Intent intent = new Intent(MainActivity.this, MamaInfoActivity.class);
-                startActivity(intent);
-              } else {
-                JUtils.Toast("您还不是小鹿妈妈，赶紧关注小鹿美美公众号了解信息并加入我们吧！");
-              }
-            }
-
-            @Override public void onCompleted() {
-              super.onCompleted();
-            }
-
-            @Override public void onError(Throwable e) {
-
-              Log.e(TAG, "getUserInfo error: " + e.getLocalizedMessage());
-              super.onError(e);
-            }
-          });
-      addSubscription(subscribe);
-    }
-  }
-
   private void getUserInfo() {
-    Subscription subscribe = UserModel.getInstance()
-        .getUserInfo()
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<UserInfoBean>() {
-          @Override public void onNext(UserInfoBean user) {
-            userInfoBean = user;
-          }
+    Subscription subscribe = UserNewModel.getInstance()
+            .getProfile()
+            .subscribeOn(Schedulers.io())
+            .subscribe(new ServiceResponse<UserInfoBean>() {
+              @Override
+              public void onNext(UserInfoBean userNewBean) {
+                if (userNewBean != null) {
+                  userInfoBean = userNewBean;
+                  if (LoginUtils.checkLoginState(getApplicationContext())) {
+                    if ((userNewBean.getThumbnail() != null) && (!userNewBean.getThumbnail()
+                            .isEmpty())) {
+                      ViewUtils.loadImgToImgView(MainActivity.this, imgUser,
+                              userNewBean.getThumbnail());
+                    }
+                    if (userInfoBean != null) {
+                      if (userInfoBean.isHasUsablePassword() && userInfoBean.getMobile() != "") {
+                        loginFlag.setVisibility(View.GONE);
+                      } else {
+                        loginFlag.setVisibility(View.VISIBLE);
+                      }
+                    }
+                    int score = userNewBean.getScore();
+                    if (null != userNewBean.getUserBudget()) {
+                      budgetCash = userNewBean.getUserBudget().getBudgetCash();
+                    }
+                    if (tvPoint != null) {
+                      tvPoint.setText(score + "");
+                    }
+                    if (tvMoney != null) {
+                      tvMoney.setText((float) (Math.round(budgetCash * 100)) / 100 + "");
+                    }
 
-          @Override public void onCompleted() {
-            super.onCompleted();
-          }
+                    if (tvCoupon != null) {
+                      tvCoupon.setText(userNewBean.getCouponNum() + "");
+                    }
 
-          @Override public void onError(Throwable e) {
-            e.printStackTrace();
-            Log.e(TAG, "getUserInfo error1 ");
-            super.onError(e);
-          }
-        });
+                    JUtils.Log(TAG, "mamaid " + userInfoBean.getXiaolumm().getId());
+                    if ((userInfoBean.getXiaolumm() != null) && (userInfoBean.getXiaolumm()
+                            .getId() != 0)) {
+                      img_mmentry.setVisibility(View.VISIBLE);
+                    } else {
+                      img_mmentry.setVisibility(View.INVISIBLE);
+                    }
+
+                    if ((userInfoBean.getNick() != null) && (!userInfoBean.getNick()
+                            .isEmpty())) {
+                      tvNickname.setText(userInfoBean.getNick());
+                    } else {
+                      tvNickname.setText("小鹿妈妈");
+                    }
+
+                    if ((null != userInfoBean) && (userInfoBean.getWaitpayNum() > 0)) {
+                      msg1.setVisibility(View.VISIBLE);
+                      msg1.setText(Integer.toString(userInfoBean.getWaitpayNum()));
+                    } else {
+                      msg1.setVisibility(View.INVISIBLE);
+                    }
+
+                    Log.i(TAG, "" + userInfoBean.getWaitpayNum());
+
+                    if ((null != userInfoBean) && (userInfoBean.getWaitgoodsNum() > 0)) {
+                      msg2.setVisibility(View.VISIBLE);
+                      msg2.setText(Integer.toString(userInfoBean.getWaitgoodsNum()));
+                    } else {
+                      msg2.setVisibility(View.INVISIBLE);
+                    }
+
+                    if ((null != userInfoBean) && (userInfoBean.getRefundsNum() > 0)) {
+                      msg3.setVisibility(View.VISIBLE);
+                      msg3.setText(Integer.toString(userInfoBean.getRefundsNum()));
+                    } else {
+                      msg3.setVisibility(View.INVISIBLE);
+                    }
+                  }
+                }
+              }
+            });
     addSubscription(subscribe);
   }
 
@@ -484,20 +458,6 @@ public class MainActivity extends BaseActivity
     super.onResume();
 
     swith_fragment();
-
-    //        显示购物车数量
-    CartsModel.getInstance()
-        .show_carts_num()
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<CartsNumResultBean>() {
-          @Override public void onNext(CartsNumResultBean cartsNumResultBean) {
-            super.onNext(cartsNumResultBean);
-            if (cartsNumResultBean != null) {
-              num = cartsNumResultBean.getResult();
-              badge.setBadgeCount(num);
-            }
-          }
-        });
 
     Subscription subscribe = CartsModel.getInstance()
         .show_carts_num()
@@ -511,129 +471,26 @@ public class MainActivity extends BaseActivity
               if (calcLefttowTime(cartsNumResultBean.getLastCreated()) != 0) {
                 image1.setVisibility(View.INVISIBLE);
                 image2.setVisibility(View.VISIBLE);
-                //cvLefttime.setVisibility(View.VISIBLE);
               } else {
                 image1.setVisibility(View.VISIBLE);
                 image2.setVisibility(View.INVISIBLE);
-                //cvLefttime.setVisibility(View.INVISIBLE);
                 badge.setBadgeCount(0);
               }
-
-              //cvLefttime.start(calcLefttowTime(cartsNumResultBean.getLastCreated()));
-
-              //cvLefttime.setOnCountdownEndListener(
-              //    new CountdownView.OnCountdownEndListener() {
-              //      @Override public void onEnd(CountdownView cv) {
-              //        image1.setVisibility(View.VISIBLE);
-              //        image2.setVisibility(View.INVISIBLE);
-              //        cvLefttime.setVisibility(View.INVISIBLE);
-              //        badge.setBadgeCount(0);
-              //      }
-              //    });
             } else {
               image1.setVisibility(View.VISIBLE);
               image2.setVisibility(View.INVISIBLE);
-              //cvLefttime.setVisibility(View.INVISIBLE);
             }
           }
         });
     addSubscription(subscribe);
-
+    getUserInfo();
     JUtils.Log(TAG, "resume");
-    UserModel.getInstance()
-        .getUserInfo()
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<UserInfoBean>() {
-          @Override public void onNext(UserInfoBean userInfoBean) {
-            if (userInfoBean != null) {
-              if (userInfoBean.isHasUsablePassword() && userInfoBean.getMobile() != "") {
-                loginFlag.setVisibility(View.GONE);
-              } else {
-                loginFlag.setVisibility(View.VISIBLE);
-              }
-            }
-          }
-        });
 
-    this.subscribe = UserNewModel.getInstance()
-        .getProfile()
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<UserInfoBean>() {
-          @Override public void onNext(UserInfoBean userNewBean) {
-            if (userNewBean != null) {
-              userInfoBean = userNewBean;
-              if (LoginUtils.checkLoginState(getApplicationContext())) {
-                if ((userNewBean.getThumbnail() != null) && (!userNewBean.getThumbnail()
-                    .isEmpty())) {
-                  ViewUtils.loadImgToImgView(MainActivity.this, imgUser,
-                      userNewBean.getThumbnail());
-                }
-
-                int score = userNewBean.getScore();
-                if (null != userNewBean.getUserBudget()) {
-                  budgetCash = userNewBean.getUserBudget().getBudgetCash();
-                }
-                if (tvPoint != null) {
-                  tvPoint.setText(score + "");
-                }
-                if (tvMoney != null) {
-                  tvMoney.setText((float) (Math.round(budgetCash * 100)) / 100 + "");
-                }
-
-                if (tvCoupon != null) {
-                  tvCoupon.setText(userNewBean.getCouponNum() + "");
-                }
-
-                JUtils.Log(TAG, "mamaid " + userInfoBean.getXiaolumm().getId());
-                if ((userInfoBean.getXiaolumm() != null) && (userInfoBean.getXiaolumm()
-                    .getId() != 0)) {
-                  img_mmentry.setVisibility(View.VISIBLE);
-                } else {
-                  img_mmentry.setVisibility(View.INVISIBLE);
-                }
-
-                if ((userInfoBean.getNick() != null) && (!userInfoBean.getNick()
-                    .isEmpty())) {
-                  tvNickname.setText(userInfoBean.getNick());
-                } else {
-                  tvNickname.setText("小鹿妈妈");
-                }
-
-                if ((null != userInfoBean) && (userInfoBean.getWaitpayNum() > 0)) {
-                  msg1.setVisibility(View.VISIBLE);
-                  msg1.setText(Integer.toString(userInfoBean.getWaitpayNum()));
-                } else {
-                  msg1.setVisibility(View.INVISIBLE);
-                }
-
-                Log.i(TAG, "" + userInfoBean.getWaitpayNum());
-
-                if ((null != userInfoBean) && (userInfoBean.getWaitgoodsNum() > 0)) {
-                  msg2.setVisibility(View.VISIBLE);
-                  msg2.setText(Integer.toString(userInfoBean.getWaitgoodsNum()));
-                } else {
-                  msg2.setVisibility(View.INVISIBLE);
-                }
-
-                if ((null != userInfoBean) && (userInfoBean.getRefundsNum() > 0)) {
-                  msg3.setVisibility(View.VISIBLE);
-                  msg3.setText(Integer.toString(userInfoBean.getRefundsNum()));
-                } else {
-                  msg3.setVisibility(View.INVISIBLE);
-                }
-              }
-            }
-          }
-        });
   }
 
   @Override protected void onStop() {
     JUtils.Log(TAG, "stop");
     super.onStop();
-
-    if (subscribe != null && subscribe.isUnsubscribed()) {
-      subscribe.unsubscribe();
-    }
   }
 
   public UserInfoBean getUserInfoBean() {
