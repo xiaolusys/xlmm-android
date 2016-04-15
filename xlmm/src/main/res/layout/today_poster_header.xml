@@ -40,7 +40,22 @@
         app:unselected_width="3dp"
     />
   </FrameLayout>
+<LinearLayout
 
+  android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+  <ImageView
+      android:layout_gravity="left"
+      android:src="@drawable/ic_companylogo"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content" />
+  <ImageView
+      android:layout_gravity="right"
+      android:src="@drawable/ic_companylogo"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content" />
+</LinearLayout>
   <LinearLayout
       android:id="@+id/post_activity"
       android:layout_width="match_parent"
