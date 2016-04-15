@@ -17,6 +17,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.CarryLogAllAdapter;
 import com.jimei.xiaolumeimei.entities.CarryLogListBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
+import com.jimei.xiaolumeimei.widget.DividerItemDecorationForFooter;
 import com.jimei.xiaolumeimei.widget.dragrecyclerview.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
@@ -32,186 +33,201 @@ import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/03/11.
- *
+ * <p>
  * Copyright 2016年 上海己美. All rights reserved.
  */
 public class CarryLogAllFragment extends Fragment {
-  @Bind(R.id.carrylogall_xry) XRecyclerView xRecyclerView;
-  List<CarryLogListBean.ResultsEntity> list = new ArrayList<>();
-  private CarryLogAllAdapter adapter;
-  private int page = 2;
-  private Subscription subscription1;
-  private Subscription subscription2;
-  private MaterialDialog materialDialog;
+    @Bind(R.id.carrylogall_xry)
+    XRecyclerView xRecyclerView;
+    List<CarryLogListBean.ResultsEntity> list = new ArrayList<>();
+    private CarryLogAllAdapter adapter;
+    private int page = 2;
+    private Subscription subscription1;
+    private Subscription subscription2;
+    private MaterialDialog materialDialog;
 
-  public static CarryLogAllFragment newInstance(String title) {
-    CarryLogAllFragment carryLogAllFragment = new CarryLogAllFragment();
-    Bundle bundle = new Bundle();
-    bundle.putString("keyword", title);
-    carryLogAllFragment.setArguments(bundle);
-    return carryLogAllFragment;
-  }
-
-  @Override public void onCreate(@Nullable Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setRetainInstance(true);
-  }
-
-  @Override public void setUserVisibleHint(boolean isVisibleToUser) {
-    super.setUserVisibleHint(isVisibleToUser);
-    if (isVisibleToUser && list.size() == 0) {
-      load();
+    public static CarryLogAllFragment newInstance(String title) {
+        CarryLogAllFragment carryLogAllFragment = new CarryLogAllFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("keyword", title);
+        carryLogAllFragment.setArguments(bundle);
+        return carryLogAllFragment;
     }
-  }
 
-  private void load() {
-    showIndeterminateProgressDialog(false);
-    subscription1 = MMProductModel.getInstance()
-        .getMamaAllCarryLogs("1")
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<CarryLogListBean>() {
-          @Override public void onCompleted() {
-            super.onCompleted();
-            hideIndeterminateProgressDialog();
-          }
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
 
-          @Override public void onError(Throwable e) {
-            super.onError(e);
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && list.size() == 0) {
+            load();
+        }
+    }
+
+    private void load() {
+        showIndeterminateProgressDialog(false);
+        subscription1 = MMProductModel.getInstance()
+                .getMamaAllCarryLogs("1")
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ServiceResponse<CarryLogListBean>() {
+                    @Override
+                    public void onCompleted() {
+                        super.onCompleted();
+                        hideIndeterminateProgressDialog();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onNext(CarryLogListBean carryLogListBean) {
+                        if (carryLogListBean != null) {
+                            list.addAll(carryLogListBean.getResults());
+                            adapter.update(list);
+
+                            if (null == carryLogListBean.getNext()) {
+                                xRecyclerView.setLoadingMoreEnabled(false);
+                            }
+
+                            JUtils.Log("carrylog", carryLogListBean.toString());
+                        }
+                    }
+                });
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initViews(view);
+    }
+
+    private void initViews(View view) {
+        xRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        xRecyclerView.addItemDecoration(
+                new DividerItemDecorationForFooter(getActivity(), DividerItemDecorationForFooter.VERTICAL_LIST));
+        xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
+        xRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
+        xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
+        xRecyclerView.setPullRefreshEnabled(false);
+        xRecyclerView.setLoadingMoreEnabled(true);
+
+        adapter = new CarryLogAllAdapter(getActivity());
+        xRecyclerView.setAdapter(adapter);
+
+        xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+            @Override
+            public void onRefresh() {
+
+            }
+
+            @Override
+            public void onLoadMore() {
+                loadMoreData(page + "", getActivity());
+                page++;
+            }
+        });
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_carrylogall, container, false);
+        ButterKnife.bind(this, view);
+        return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
+
+    private void loadMoreData(String page, Context context) {
+
+        subscription2 = MMProductModel.getInstance()
+                .getMamaAllCarryLogs(page)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ServiceResponse<CarryLogListBean>() {
+                    @Override
+                    public void onNext(CarryLogListBean carryLogListBean) {
+                        if (carryLogListBean != null) {
+                            if (null != carryLogListBean.getNext()) {
+                                if (null != carryLogListBean.getResults()) {
+                                    adapter.update(carryLogListBean.getResults());
+                                }
+                            } else {
+                                Toast.makeText(context, "没有更多了", Toast.LENGTH_SHORT).show();
+                                try {
+                                    xRecyclerView.post(xRecyclerView::loadMoreComplete);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCompleted() {
+                        super.onCompleted();
+                        try {
+                            xRecyclerView.post(xRecyclerView::loadMoreComplete);
+                        } catch (NullPointerException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (subscription1 != null && subscription1.isUnsubscribed()) {
+            subscription1.unsubscribe();
+        }
+        if (subscription2 != null && subscription2.isUnsubscribed()) {
+            subscription2.unsubscribe();
+        }
+    }
+
+    public void showIndeterminateProgressDialog(boolean horizontal) {
+        materialDialog = new MaterialDialog.Builder(getActivity())
+
+                //.title(R.string.progress_dialog)
+                .content(R.string.please_wait)
+                .progress(true, 0)
+                .widgetColorRes(R.color.colorAccent)
+                .progressIndeterminateStyle(horizontal)
+                .show();
+    }
+
+    public void hideIndeterminateProgressDialog() {
+        try {
+            materialDialog.dismiss();
+        } catch (Exception e) {
             e.printStackTrace();
-          }
-
-          @Override public void onNext(CarryLogListBean carryLogListBean) {
-            if (carryLogListBean != null) {
-              list.addAll(carryLogListBean.getResults());
-              adapter.update(list);
-
-              if (null == carryLogListBean.getNext()) {
-                xRecyclerView.setLoadingMoreEnabled(false);
-              }
-
-              JUtils.Log("carrylog", carryLogListBean.toString());
-            }
-          }
-        });
-  }
-
-  @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-    super.onViewCreated(view, savedInstanceState);
-    initViews(view);
-  }
-
-  private void initViews(View view) {
-    xRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-    xRecyclerView.addItemDecoration(
-        new DividerItemDecoration(getActivity()));
-    xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-    xRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
-    xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
-    xRecyclerView.setPullRefreshEnabled(false);
-    xRecyclerView.setLoadingMoreEnabled(true);
-
-    adapter = new CarryLogAllAdapter(getActivity());
-    xRecyclerView.setAdapter(adapter);
-
-    xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
-      @Override public void onRefresh() {
-
-      }
-
-      @Override public void onLoadMore() {
-        loadMoreData(page + "", getActivity());
-        page++;
-      }
-    });
-  }
-
-  @Nullable @Override
-  public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-      @Nullable Bundle savedInstanceState) {
-    View view = inflater.inflate(R.layout.fragment_carrylogall, container, false);
-    ButterKnife.bind(this, view);
-    return view;
-  }
-
-  @Override public void onDestroyView() {
-    super.onDestroyView();
-    ButterKnife.unbind(this);
-  }
-
-  private void loadMoreData(String page, Context context) {
-
-    subscription2 = MMProductModel.getInstance()
-        .getMamaAllCarryLogs(page)
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<CarryLogListBean>() {
-          @Override public void onNext(CarryLogListBean carryLogListBean) {
-            if (carryLogListBean != null) {
-              if (null != carryLogListBean.getNext()) {
-                if (null != carryLogListBean.getResults()) {
-                  adapter.update(carryLogListBean.getResults());
-                }
-              } else {
-                Toast.makeText(context, "没有更多了", Toast.LENGTH_SHORT).show();
-                try {
-                  xRecyclerView.post(xRecyclerView::loadMoreComplete);
-                } catch (Exception e) {
-                  e.printStackTrace();
-                }
-              }
-            }
-          }
-
-          @Override public void onCompleted() {
-            super.onCompleted();
-            try {
-              xRecyclerView.post(xRecyclerView::loadMoreComplete);
-            } catch (NullPointerException e) {
-              e.printStackTrace();
-            }
-          }
-        });
-  }
-
-  @Override public void onStop() {
-    super.onStop();
-    if (subscription1 != null && subscription1.isUnsubscribed()) {
-      subscription1.unsubscribe();
+        }
     }
-    if (subscription2 != null && subscription2.isUnsubscribed()) {
-      subscription2.unsubscribe();
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        try {
+            Field childFragmentManager =
+                    Fragment.class.getDeclaredField("mChildFragmentManager");
+            childFragmentManager.setAccessible(true);
+            childFragmentManager.set(this, null);
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
-  }
-
-  public void showIndeterminateProgressDialog(boolean horizontal) {
-    materialDialog = new MaterialDialog.Builder(getActivity())
-
-        //.title(R.string.progress_dialog)
-        .content(R.string.please_wait)
-        .progress(true, 0)
-        .widgetColorRes(R.color.colorAccent)
-        .progressIndeterminateStyle(horizontal)
-        .show();
-  }
-
-  public void hideIndeterminateProgressDialog() {
-    try {
-      materialDialog.dismiss();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-  @Override public void onDetach() {
-    super.onDetach();
-    try {
-      Field childFragmentManager =
-          Fragment.class.getDeclaredField("mChildFragmentManager");
-      childFragmentManager.setAccessible(true);
-      childFragmentManager.set(this, null);
-    } catch (NoSuchFieldException e) {
-      throw new RuntimeException(e);
-    } catch (IllegalAccessException e) {
-      throw new RuntimeException(e);
-    }
-  }
 }
