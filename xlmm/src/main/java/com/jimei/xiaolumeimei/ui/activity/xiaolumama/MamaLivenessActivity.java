@@ -16,6 +16,7 @@ import com.jimei.xiaolumeimei.entities.MamaLivenessBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
+import com.jimei.xiaolumeimei.widget.DividerItemDecorationForFooter;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import java.util.List;
@@ -67,7 +68,7 @@ public class MamaLivenessActivity extends BaseSwipeBackCompatActivity
   private void initRecyclerView() {
     lv_liveness.setLayoutManager(new LinearLayoutManager(this));
     lv_liveness.addItemDecoration(
-        new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+        new DividerItemDecorationForFooter(this, DividerItemDecoration.VERTICAL_LIST));
     lv_liveness.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
     lv_liveness.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
     lv_liveness.setArrowImageView(R.drawable.iconfont_downgrey);

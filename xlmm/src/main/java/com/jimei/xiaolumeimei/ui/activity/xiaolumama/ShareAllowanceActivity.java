@@ -15,6 +15,7 @@ import com.jimei.xiaolumeimei.entities.AllowanceBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
+import com.jimei.xiaolumeimei.widget.DividerItemDecorationForFooter;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import java.util.List;
 import rx.Subscription;
@@ -57,7 +58,7 @@ public class ShareAllowanceActivity extends BaseSwipeBackCompatActivity
   private void initRecyclerView() {
     lv_allowance.setLayoutManager(new LinearLayoutManager(this));
     lv_allowance.addItemDecoration(
-        new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+        new DividerItemDecorationForFooter(this, DividerItemDecoration.VERTICAL_LIST));
     lv_allowance.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
     lv_allowance.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
     lv_allowance.setArrowImageView(R.drawable.iconfont_downgrey);
