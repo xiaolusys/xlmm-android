@@ -1,15 +1,21 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.ImageView;
 
 import butterknife.Bind;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.MMHaveChooseAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.ShopProductBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.widget.dragrecyclerview.DividerItemDecoration;
@@ -32,19 +38,51 @@ public class HaveChoosedActivity extends BaseSwipeBackCompatActivity{
     SuperRecyclerView chooseRecyclerview;
     @Bind(R.id.toolbar)
     Toolbar toolbar;
+    @Bind(R.id.home)
+    ImageView homeView;
 
     private List<ShopProductBean.ResultsBean> data = new ArrayList<>();
     private MMHaveChooseAdapter adapter;
     private int page = 2;
+    private String sharelink;
+    private String cookies;
+    private String domain;
 
     @Override
     protected void setListener() {
-
+        homeView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentrl_shop = new Intent(HaveChoosedActivity.this, MMStoreWebViewActivity.class);
+                SharedPreferences sharedPreferences =
+                        getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+                cookies = sharedPreferences.getString("cookiesString", "");
+                domain = sharedPreferences.getString("cookiesDomain", "");
+                Bundle bundlerl_shop = new Bundle();
+                bundlerl_shop.putString("cookies", cookies);
+                bundlerl_shop.putString("domain", domain);
+                bundlerl_shop.putString("Cookie", sharedPreferences.getString("Cookie", ""));
+                bundlerl_shop.putString("actlink", sharelink);
+                intentrl_shop.putExtras(bundlerl_shop);
+                startActivity(intentrl_shop);
+            }
+        });
     }
 
     @Override
     protected void initData() {
-        //        showIndeterminateProgressDialog(false);
+        MMProductModel.getInstance()
+                .getShareShopping()
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ServiceResponse<MMShoppingBean>() {
+
+                    @Override public void onNext(MMShoppingBean mmShoppingBean) {
+
+                        if (null != mmShoppingBean) {
+                            sharelink = mmShoppingBean.getShopInfo().getPreview_shop_link();
+                        }
+                    }
+                });
         chooseRecyclerview.onLoadStart();
         MMProductModel.getInstance()
                 .getShopProduct("200")
