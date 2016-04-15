@@ -9,27 +9,27 @@
     <item
         app:actionLayout="@layout/nav_badge"
         android:id="@+id/nav_tobepaid"
-        android:icon="@drawable/ic_menu_waitpay"
+        android:icon="@drawable/drawer_pay"
         android:title="待支付"
     />
     <item
         app:actionLayout="@layout/nav_badge"
         android:id="@+id/nav_tobereceived"
-        android:icon="@drawable/ic_menu_car"
+        android:icon="@drawable/drawer_car"
         android:title="待收货"/>
     <item
         app:actionLayout="@layout/nav_badge"
         android:id="@+id/nav_returned"
-        android:icon="@drawable/ic_menu_refund"
+        android:icon="@drawable/drawer_refund"
         android:title="退换货"/>
 
-    <item android:id="@+id/nav_orders" android:icon="@drawable/ic_menu_order"
+    <item android:id="@+id/nav_orders" android:icon="@drawable/drawer_order"
         android:title="全部订单"/>
 
   </group>
 
-  <item android:id="@+id/nav_complain" android:icon="@drawable/ic_complain"
+  <item android:id="@+id/nav_complain" android:icon="@drawable/drawer_complain"
       android:title="投诉建议"/>
-  <item android:id="@+id/nav_problem" android:icon="@drawable/ic_problem"
+  <item android:id="@+id/nav_problem" android:icon="@drawable/drawer_problem"
     android:title="常见问题"/>
 </menu>
