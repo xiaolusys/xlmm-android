@@ -17,6 +17,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.OderCarryLogAdapter;
 import com.jimei.xiaolumeimei.entities.OderCarryBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
+import com.jimei.xiaolumeimei.widget.DividerItemDecorationForFooter;
 import com.jimei.xiaolumeimei.widget.dragrecyclerview.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
@@ -117,7 +118,7 @@ public class CarryLogCommissionFragment extends Fragment {
   private void initViews() {
     xRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     xRecyclerView.addItemDecoration(
-        new DividerItemDecoration(getActivity()));
+            new DividerItemDecorationForFooter(getActivity(), DividerItemDecorationForFooter.VERTICAL_LIST));
 
     xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
     xRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
