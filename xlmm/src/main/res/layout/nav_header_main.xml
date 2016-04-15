@@ -2,9 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/llayout_navhead"
     android:layout_width="match_parent"
-    android:layout_height="210dp"
+    android:layout_height="wrap_content"
     android:background="@drawable/side_nav_bar"
-    android:padding="16dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <RelativeLayout
@@ -12,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30px">
+        android:layout_marginTop="133px">
 
         <com.jimei.xiaolumeimei.widget.CircleImageView
             android:id="@+id/imgUser"
@@ -50,7 +49,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/rl_head"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40px"
+        android:paddingBottom="25px"
         android:orientation="horizontal"
         android:weightSum="3">
 
@@ -75,13 +75,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10px"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/imgMoney"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="3px"
                     android:clickable="true"
                     android:src="@drawable/ic_wallet" />
 
@@ -89,7 +89,7 @@
                     android:id="@+id/tvMoney1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:layout_marginLeft="4px"
                     android:text="余额(元)"
                     android:textSize="11sp" />
 
@@ -116,12 +116,12 @@
                 android:layout_marginTop="10px"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
                 <ImageView
                     android:id="@+id/imgPoint"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="3px"
                     android:clickable="true"
                     android:src="@drawable/ic_point" />
 
@@ -129,7 +129,7 @@
                     android:id="@+id/tvPoint1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:layout_marginLeft="4px"
                     android:text="积分"
                     android:textSize="11sp" />
 
@@ -160,12 +160,12 @@
                 android:layout_marginTop="10px"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
                 <ImageView
                     android:id="@+id/imgCoupon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="3px"
                     android:clickable="true"
                     android:src="@drawable/ic_coupon" />
 
@@ -173,7 +173,7 @@
                     android:id="@+id/tvCoupon1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:layout_marginLeft="4px"
                     android:text="优惠券"
                     android:textSize="11sp" />
 

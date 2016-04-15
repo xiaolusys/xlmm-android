@@ -104,8 +104,9 @@
                     android:id="@+id/img_liveness"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignTop="@id/tv_liveness"
                     android:layout_marginLeft="436px"
+                    android:layout_marginTop="0px"
+                    android:layout_below="@id/tv_cash"
                     android:background="@drawable/img_liveness"
                     android:gravity="center"
                     android:text="77%"
@@ -114,7 +115,7 @@
 
                 <ImageView
                     android:id="@+id/progress_img"
-                    android:layout_marginTop="25px"
+                    android:layout_marginTop="29px"
                     android:layout_alignTop="@id/img_liveness"
                     android:layout_alignRight="@id/img_liveness"
                     android:src="@drawable/progress_bg"
@@ -200,6 +201,11 @@
                 </RelativeLayout>
             </FrameLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:layout_below="@+id/fl_chart"
+                android:background="@color/greytow" />
 
             <LinearLayout
                 android:id="@+id/rl_order"
@@ -207,7 +213,7 @@
                 android:layout_height="90px"
                 android:layout_below="@+id/fl_chart"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="1px"
+                android:layout_marginTop="1dip"
                 android:background="@color/white"
                 android:orientation="horizontal">
 
@@ -325,16 +331,16 @@
 
                 <RelativeLayout
                     android:id="@+id/rl_chooselist"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1">
 
                     <ImageView
                         android:id="@+id/img_choose"
-                        android:layout_width="50px"
-                        android:layout_height="50px"
+                        android:layout_width="68px"
+                        android:layout_height="57px"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="25px"
+                        android:layout_marginTop="21.5px"
                         android:src="@drawable/ic_choose" />
 
                     <TextView
@@ -343,7 +349,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/img_choose"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="15px"
+                        android:layout_marginTop="11.5px"
                         android:text="选品上架"
                         android:textColor="@color/gray"
                         android:textSize="12sp" />
@@ -352,16 +358,16 @@
 
                 <RelativeLayout
                     android:id="@+id/rl_party"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1">
 
                     <ImageView
                         android:id="@+id/img_star"
-                        android:layout_width="50px"
-                        android:layout_height="50px"
+                        android:layout_width="60px"
+                        android:layout_height="60px"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="25px"
+                        android:layout_marginTop="20px"
                         android:src="@drawable/ic_choice" />
 
                     <TextView
@@ -370,7 +376,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/img_star"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="15px"
+                        android:layout_marginTop="10px"
                         android:text="精品活动"
                         android:textColor="@color/gray"
                         android:textSize="12sp" />
@@ -379,16 +385,16 @@
 
                 <RelativeLayout
                     android:id="@+id/rl_push"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1">
 
                     <ImageView
                         android:id="@+id/img_timer"
-                        android:layout_width="50px"
-                        android:layout_height="50px"
+                        android:layout_width="48px"
+                        android:layout_height="48px"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="25px"
+                        android:layout_marginTop="26px"
                         android:src="@drawable/img_timer" />
 
                     <TextView
@@ -397,7 +403,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/img_timer"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="15px"
+                        android:layout_marginTop="16px"
                         android:text="每日推送"
                         android:textColor="@color/gray"
                         android:textSize="12sp" />
@@ -406,26 +412,31 @@
 
                 <RelativeLayout
                     android:id="@+id/rl_shop"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:background="@drawable/my_choose_bg"
                     android:layout_weight="1">
 
                     <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="22px"
+                        android:background="@drawable/my_choose_bg"/>
+
+                    <ImageView
                         android:id="@+id/img_shop"
-                        android:layout_width="70px"
-                        android:layout_height="70px"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="15px"
+                        android:layout_width="82px"
+                        android:layout_height="68px"
+                        android:layout_marginLeft="76px"
+                        android:layout_marginTop="16px"
                         android:src="@drawable/ic_shop" />
 
                     <TextView
                         android:id="@+id/btn_mychoose"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="76px"
                         android:layout_below="@id/img_shop"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="5px"
+                        android:layout_marginTop="6px"
                         android:text="我的精选"
                         android:textColor="@color/black"
                         android:textSize="12sp" />
