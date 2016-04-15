@@ -774,7 +774,7 @@ public interface XlmmService {
     //获取已选列表
     @GET("pmt/cushoppros/shop_product")
     Observable<ShopProductBean> getShopProduct(
-            @Query("page") String page
+            @Query("page_size") String page
     );
 
     //更换位置
