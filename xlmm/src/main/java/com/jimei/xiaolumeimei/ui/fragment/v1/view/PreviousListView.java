@@ -25,7 +25,6 @@ import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
-import com.victor.loading.rotate.RotateLoading;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -42,7 +41,6 @@ import rx.schedulers.Schedulers;
  * Copyright 2016年 上海己美. All rights reserved.
  */
 public class PreviousListView extends ViewImpl {
-  @Bind(R.id.loading) RotateLoading loading;
   @Bind(R.id.previous_xrv) XRecyclerView xRecyclerView;
   int page_size = 10;
   private int page = 2;

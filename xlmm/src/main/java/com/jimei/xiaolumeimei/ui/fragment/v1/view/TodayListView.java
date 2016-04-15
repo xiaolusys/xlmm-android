@@ -42,7 +42,6 @@ import com.jimei.xiaolumeimei.widget.banner.SliderTypes.DefaultSliderView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.squareup.okhttp.ResponseBody;
-import com.victor.loading.rotate.RotateLoading;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
 
@@ -74,7 +73,6 @@ public class TodayListView extends ViewImpl {
 
   private static final String POST_URL = "?imageMogr2/format/jpg/quality/80";
   @Bind(R.id.xrecyclerView) XRecyclerView xRecyclerView;
-  @Bind(R.id.loading) RotateLoading loading;
   List<String> postString = new ArrayList<>();
   List<String> appString = new ArrayList<>();
   List<PostBean.WemPostersEntity> wemPosters = new ArrayList<>();
@@ -256,7 +254,7 @@ public class TodayListView extends ViewImpl {
                 DefaultSliderView textSliderView = new DefaultSliderView(context);
                 // initialize a SliderLayout
                 textSliderView.image(name)
-                    .setScaleType(BaseSliderView.ScaleType.CenterCrop);
+                    .setScaleType(BaseSliderView.ScaleType.CenterInside);
                 //add your extra information
                 textSliderView.bundle(new Bundle());
                 textSliderView.getBundle().putString("extra", map.get(name));

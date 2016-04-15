@@ -57,7 +57,6 @@ dependencies {
   compile 'com.squareup.retrofit:converter-gson:2.0.0-beta2'
   compile 'com.squareup.retrofit:adapter-rxjava:2.0.0-beta2'
   compile 'io.reactivex:rxjava:1.1.0'
-  compile 'com.victor:lib:1.0.1'
   //  //debug模式  捕捉异常
 
   //  debugCompile 'me.drakeet.library:crashwoodpecker:0.9.81'

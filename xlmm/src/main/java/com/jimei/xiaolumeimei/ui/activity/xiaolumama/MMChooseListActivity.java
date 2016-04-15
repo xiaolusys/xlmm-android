@@ -29,7 +29,6 @@ import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.victor.loading.rotate.RotateLoading;
 import com.zhy.autolayout.utils.AutoUtils;
 
 import java.util.ArrayList;
@@ -61,7 +60,6 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.tv_commission) TextView tvCommission;
   @Bind(R.id.tv_sales) TextView tvSales;
   @Bind(R.id.chooselist_xey) RecyclerView chooselistXey;
-  @Bind(R.id.loading) RotateLoading loading;
   @Bind(R.id.choosenum) TextView choosenum;
   private MMChooseAdapter mmChooseAdapter;
   private boolean isAll, isLady, isChild;
