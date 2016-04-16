@@ -19,6 +19,7 @@ import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.MyHorizontalScrollView;
+import com.jimei.xiaolumeimei.widget.RoundCornerImageView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 
@@ -65,6 +66,8 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity implements
     TextView lastStateTv;
     @Bind(R.id.ll_last)
     LinearLayout lastLayout;
+    @Bind(R.id.round_image)
+    RoundCornerImageView imageView;
     private int refund_state;
     private int goods_id;
 
@@ -174,6 +177,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity implements
         createTimeTv.setText(refundDetailBean.getCreated().replace("T", " "));
         lastTimeTv.setText(refundDetailBean.getModified().replace("T", " "));
         lastStateTv.setText(refundDetailBean.getStatus_display());
+        ViewUtils.loadImgToImgView(getApplicationContext(),imageView,refundDetailBean.getPic_path());
         JUtils.Log(TAG, "crt time " + refundDetailBean.getCreated());
     }
 

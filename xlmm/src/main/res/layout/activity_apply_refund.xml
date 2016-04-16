@@ -169,6 +169,12 @@
         </LinearLayout>
     </ScrollView>
 
+    <View
+        android:id="@+id/view_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="20px"
+        android:layout_alignParentBottom="true" />
+
     <Button
         android:id="@+id/btn_commit"
         android:layout_width="690px"
@@ -180,11 +186,5 @@
         android:text="提交申请"
         android:textColor="@color/white"
         android:textSize="15sp" />
-
-    <View
-        android:id="@+id/view_bottom"
-        android:layout_width="match_parent"
-        android:layout_height="20px"
-        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>
