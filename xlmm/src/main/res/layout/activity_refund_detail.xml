@@ -62,6 +62,8 @@
             android:background="@drawable/shape_chooselist"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
             android:text="退货地址信息"
             android:textColor="@color/colorAccent"
             android:textSize="15sp" />
@@ -331,5 +333,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/grey100" />
+
 
 </LinearLayout>

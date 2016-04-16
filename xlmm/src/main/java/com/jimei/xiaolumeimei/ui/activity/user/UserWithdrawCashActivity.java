@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
@@ -33,8 +34,8 @@ public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.btn_bindwx) Button btn_bindwx;
   @Bind(R.id.btn_buy) Button btn_buy;
   @Bind(R.id.rl_unbindwx) RelativeLayout rl_unbindwx;
-  @Bind(R.id.rl_has_cash) RelativeLayout rl_has_cash;
-  @Bind(R.id.rl_not_enough_cash) RelativeLayout rl_not_enough_cash;
+  @Bind(R.id.rl_has_cash) LinearLayout rl_has_cash;
+  @Bind(R.id.rl_not_enough_cash) LinearLayout rl_not_enough_cash;
   @Bind(R.id.tv_reminder) TextView tv_reminder;
   @Bind(R.id.btn_withdraw) Button btn_withdraw;
   @Bind(R.id.img_dec) ImageView img_dec;
