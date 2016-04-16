@@ -2,15 +2,12 @@ package com.jimei.xiaolumeimei.ui.activity.user;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsListView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,16 +19,11 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.UserWalletAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.BudgetdetailBean;
-import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
-import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.model.UserNewModel;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
-import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
-
-import java.util.List;
 
 import rx.Subscription;
 import rx.schedulers.Schedulers;
@@ -44,10 +36,12 @@ import rx.schedulers.Schedulers;
 public class WalletActivity extends BaseSwipeBackCompatActivity {
   String TAG = "WalletActivity";
 
-  @Bind(R.id.toolbar) Toolbar toolbar;
+  @Bind(R.id.toolbar)
+  Toolbar toolbar;
   @Bind(R.id.tv_money) TextView tvMoney;
   @Bind(R.id.wallet_rcv)  XRecyclerView walletRcv;
-  @Bind(R.id.ll_wallet_empty) RelativeLayout ll_wallet_empty;
+  @Bind(R.id.ll_wallet_empty)
+  LinearLayout ll_wallet_empty;
   private Double money;
   private UserWalletAdapter adapter;
 
@@ -131,14 +125,10 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
     finishBack(toolbar);
-
-
-
     initRecyclerView();
   }
 
   private void initRecyclerView() {
-
     walletRcv.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
     walletRcv.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
     walletRcv.setArrowImageView(R.drawable.iconfont_downgrey);

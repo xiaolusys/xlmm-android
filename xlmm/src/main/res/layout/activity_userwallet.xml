@@ -1,90 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:background="#f3f3f4"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-  <android.support.design.widget.AppBarLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:theme="@style/AppTheme.AppBarOverlay">
+    android:layout_height="match_parent"
+    android:background="#f3f3f4"
+    android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:popupTheme="@style/AppTheme.PopupOverlay">
-
-      <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_centerInParent="true"
-          android:layout_gravity="center"
-          android:text="钱包"
-          android:textColor="@android:color/white"
-          android:textSize="16sp"
-          />
-
-    </android.support.v7.widget.Toolbar>
-
-  </android.support.design.widget.AppBarLayout>
-
-  <LinearLayout
-      android:orientation="vertical"
-      android:gravity="center_horizontal"
-      android:background="@color/white"
-      android:layout_width="match_parent"
-      android:layout_height="150dp">
-    <TextView android:layout_width="wrap_content"
-        android:textSize="32sp"
-        android:id="@+id/tv_money"
-        android:textColor="@color/colorPrimary"
-        android:layout_marginTop="30dp"
         android:layout_height="wrap_content"
-        android:text=""
-        />
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-    <TextView
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
 
-        android:layout_width="wrap_content"
-        android:textSize="16sp"
-        android:text="我的余额(元)"
-        android:layout_marginTop="10dp"
-        android:layout_height="wrap_content"
-        />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:text="钱包"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
 
-  </LinearLayout>
-  <FrameLayout android:layout_width="match_parent"
-      android:layout_height="match_parent">
-    <RelativeLayout
-        android:id="@+id/ll_wallet_empty"
-        android:visibility="invisible"
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="@color/white"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_money"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text=""
+            android:textColor="@color/colorPrimary"
+            android:textSize="32sp" />
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="我的余额(元)"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-      <ImageView
-          android:id="@+id/img_wallet"
-          android:layout_width="150px"
-          android:layout_height="165px"
-          android:layout_marginLeft="280px"
-          android:layout_marginTop="280px"
-          android:src="@drawable/img_wallet"
-          />
+        <LinearLayout
+            android:id="@+id/ll_wallet_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="visible">
 
-      <TextView
-          android:layout_width="wrap_content"
-          android:text="你的钱包空空如也"
-          android:layout_height="wrap_content"
-          android:layout_below="@+id/img_wallet"
-          android:layout_marginLeft="255px"
-          android:layout_marginTop="10px"/>
-    </RelativeLayout>
-    <com.jcodecraeer.xrecyclerview.XRecyclerView
-        android:id="@+id/wallet_rcv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="invisible"
-        />
-  </FrameLayout>
+            <ImageView
+                android:id="@+id/img_wallet"
+                android:layout_width="150px"
+                android:layout_height="165px"
+                android:src="@drawable/img_wallet" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20px"
+                android:text="你的钱包空空如也" />
+        </LinearLayout>
+
+        <com.jcodecraeer.xrecyclerview.XRecyclerView
+            android:id="@+id/wallet_rcv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible" />
+    </FrameLayout>
 </LinearLayout>

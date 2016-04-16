@@ -6,43 +6,26 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.design.widget.AppBarLayout
+    <com.jimei.xiaolumeimei.widget.XlmmTitleView
         android:id="@+id/app_bar_layout"
+        app:xlmm_title="提现"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_height="wrap_content"/>
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="#fdb916"
-            app:popupTheme="@style/AppTheme.PopupOverlay">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center"
-                android:text="提现"
-                android:textColor="@android:color/white"
-                android:textSize="16sp" />
-        </android.support.v7.widget.Toolbar>
-
-    </android.support.design.widget.AppBarLayout>
-
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/rl_accountinfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:layout_below="@+id/app_bar_layout"
         android:layout_centerHorizontal="true">
+        <include layout="@layout/common_gap"/>
 
         <RelativeLayout
             android:id="@+id/rl_account_remainder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/text_frame">
+            android:background="@color/white">
 
             <TextView
                 android:id="@+id/tv_Point"
@@ -69,12 +52,13 @@
                 android:textSize="15sp" />
         </RelativeLayout>
 
+        <include layout="@layout/common_gap"/>
+
         <RelativeLayout
             android:id="@+id/rl_wxaccount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/rl_account_remainder"
-            android:background="@drawable/text_frame">
+            android:background="@color/white">
 
             <TextView
                 android:id="@+id/tv_wxaccount"
@@ -114,7 +98,10 @@
                 android:textColor="@color/colorAccent"
                 android:textSize="15sp" />
         </RelativeLayout>
-    </RelativeLayout>
+
+        <include layout="@layout/common_gap"/>
+
+    </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"

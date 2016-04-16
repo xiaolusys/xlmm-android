@@ -30,7 +30,6 @@ public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
   String TAG = "UserWithdrawCashActivity";
   static double MAX_WITHDROW_MONEY_EACH_TIME = 8.88;
 
-  @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.btn_bindwx) Button btn_bindwx;
   @Bind(R.id.btn_buy) Button btn_buy;
   @Bind(R.id.rl_unbindwx) RelativeLayout rl_unbindwx;
@@ -72,11 +71,6 @@ public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
-    toolbar.setTitle("");
-    setSupportActionBar(toolbar);
-    finishBack(toolbar);
-
-
   }
 
   @Override protected void initData() {
