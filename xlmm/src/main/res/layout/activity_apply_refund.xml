@@ -2,196 +2,189 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/AppTheme.AppBarOverlay"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context="com.jimei.xiaolumeimei.ui.activity.trade.ApplyRefundActivity"
-    style="@style/AppTheme.AppBarOverlay"
-    >
+    tools:context="com.jimei.xiaolumeimei.ui.activity.trade.ApplyRefundActivity">
 
-  <com.jimei.xiaolumeimei.widget.XlmmTitleView
-      android:id="@+id/title_view"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      app:xlmm_title="申请退款"/>
+    <com.jimei.xiaolumeimei.widget.XlmmTitleView
+        android:id="@+id/title_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:xlmm_title="申请退款" />
 
 
-  <ScrollView
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:layout_below="@id/title_view"
-      >
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="4dp"
-        >
+        android:layout_below="@id/title_view">
 
-      <include layout="@layout/one_order_item"/>
-
-      <include layout="@layout/common_gap"/>
-
-      <RelativeLayout
-          android:layout_width="match_parent"
-          android:layout_height="92px"
-          android:orientation="horizontal"
-          >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:text="申请数量："
-            android:textSize="15sp"
-            android:gravity="center"
-            />
-        <TextView
-            android:id="@+id/delete"
-            android:gravity="center"
-            android:textSize="12sp"
-            android:textColor="@color/colorPrimary"
-            android:background="@drawable/img_dec"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5px"
-            android:layout_marginLeft="543px"
-            android:layout_centerVertical="true"
-            />
-
-        <TextView
-            android:id="@+id/tx_refund_num"
-            android:layout_width="48px"
-            android:layout_height="wrap_content"
-            android:text="1"
-            android:textSize="15sp"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            android:layout_toRightOf="@id/delete"
-            android:layout_alignBottom="@id/delete"
-            android:layout_marginTop="15px"
-            />
-        <TextView
-            android:id="@+id/add"
-            android:gravity="center"
-            android:textSize="12sp"
-            android:textColor="@color/colorPrimary"
-            android:background="@drawable/img_inc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5px"
-            android:layout_toRightOf="@id/tx_refund_num"
-            android:layout_alignBottom="@id/delete"
-            />
-      </RelativeLayout>
-
-      <include layout="@layout/common_gap"/>
-
-      <RelativeLayout
-          android:layout_width="fill_parent"
-          android:layout_height="32dp"
-          android:layout_weight="1"
-          android:orientation="horizontal"
-          >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:text="可退金额："
-            android:textSize="15sp"
-            android:gravity="center"
-            />
-
-        <TextView
-            android:id="@+id/tx_refundfee"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:text="￥120"
-            android:textSize="15sp"
-            android:gravity="center"
-            android:padding="8dp"
-            />
-      </RelativeLayout>
-
-      <include layout="@layout/common_gap"/>
-
-      <RelativeLayout
-          android:layout_width="fill_parent"
-          android:layout_height="352px"
-          android:orientation="vertical"
-          >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="57px"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:text="退款原因"
-            android:textSize="15sp"
-            android:id="@+id/textView"
-            android:gravity="center"
-            />
-
-        <EditText
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="70px"
-            android:text="请选择退款原因"
-            android:textSize="15sp"
-            android:id="@+id/et_refund_reason"
-            android:layout_marginLeft="10px"
-            android:layout_marginRight="10px"
-            android:layout_below="@+id/textView"
-            android:layout_marginTop="10px"
-            android:drawableRight="@drawable/ic_downarrow"
-            android:background="@drawable/text_frame"
-            android:focusable="false"
-            android:cursorVisible="false"
-            android:paddingRight="8dp"
-            android:paddingLeft="8dp"
-            />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <com.jimei.xiaolumeimei.widget.ClearEditText
-            android:id="@+id/et_refund_info"
-            android:layout_width="match_parent"
-            android:layout_height="140px"
-            android:text="请输入退款说明"
-            android:textSize="15sp"
-            android:layout_below="@+id/et_refund_reason"
-            android:layout_marginLeft="10px"
-            android:layout_marginRight="10px"
-            android:layout_marginTop="10px"
-            android:padding="8dp"
-            android:background="@drawable/text_frame"
-            android:focusable="false"
-            android:cursorVisible="false"
-            android:gravity="top"
-            android:maxLength="80"/>
+            <include layout="@layout/one_order_item" />
 
-      </RelativeLayout>
+            <include layout="@layout/common_gap" />
 
-      <include layout="@layout/common_gap"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="92px"
+                android:gravity="center_vertical"
+                android:padding="8dp"
+                android:orientation="horizontal">
 
-    </LinearLayout>
-  </ScrollView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="申请数量："
+                    android:textSize="15sp" />
+                <View
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"/>
 
-  <Button
-      android:layout_width="690px"
-      android:layout_height="80px"
-      android:text="提交申请"
-      android:textColor="@color/white"
-      android:textSize="15sp"
-      android:id="@+id/btn_commit"
-      android:layout_marginBottom="10dp"
-      android:layout_alignParentBottom="true"
-      android:layout_centerHorizontal="true"
-      android:background="@color/colorAccent"
-      />
+                <TextView
+                    android:id="@+id/delete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/img_dec" />
+
+                <TextView
+                    android:id="@+id/tx_refund_num"
+                    android:layout_width="48px"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10px"
+                    android:gravity="center"
+                    android:text="1"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/add"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10px"
+                    android:background="@drawable/img_inc"
+                    android:textColor="@color/colorPrimary" />
+            </LinearLayout>
+
+            <include layout="@layout/common_gap" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="92px"
+                android:padding="8dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:gravity="center"
+                    android:text="可退金额："
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/tx_refundfee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:text="￥120"
+                    android:textSize="15sp" />
+            </RelativeLayout>
+
+            <include layout="@layout/common_gap" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="30px"
+                android:background="@color/grey100" />
+
+            <include layout="@layout/common_gap" />
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="352px"
+                android:padding="8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="57px"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:gravity="center"
+                    android:text="退款原因"
+                    android:textSize="15sp" />
+
+                <EditText
+                    android:id="@+id/et_refund_reason"
+                    android:layout_width="match_parent"
+                    android:layout_height="70px"
+                    android:layout_below="@+id/textView"
+                    android:layout_marginLeft="10px"
+                    android:layout_marginRight="10px"
+                    android:layout_marginTop="10px"
+                    android:background="@drawable/text_frame"
+                    android:cursorVisible="false"
+                    android:drawableRight="@drawable/ic_downarrow"
+                    android:focusable="false"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:text="请选择退款原因"
+                    android:textSize="15sp" />
+
+                <com.jimei.xiaolumeimei.widget.ClearEditText
+                    android:id="@+id/et_refund_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="140px"
+                    android:layout_below="@+id/et_refund_reason"
+                    android:layout_marginLeft="10px"
+                    android:layout_marginRight="10px"
+                    android:layout_marginTop="10px"
+                    android:background="@drawable/text_frame"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:gravity="top"
+                    android:maxLength="80"
+                    android:padding="8dp"
+                    android:text="请输入退款说明"
+                    android:textSize="15sp" />
+
+            </RelativeLayout>
+
+            <include layout="@layout/common_gap" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btn_commit"
+        android:layout_width="690px"
+        android:layout_height="80px"
+        android:layout_alignBottom="@id/view_bottom"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20px"
+        android:background="@color/colorAccent"
+        android:text="提交申请"
+        android:textColor="@color/white"
+        android:textSize="15sp" />
+
+    <View
+        android:id="@+id/view_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="20px"
+        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>

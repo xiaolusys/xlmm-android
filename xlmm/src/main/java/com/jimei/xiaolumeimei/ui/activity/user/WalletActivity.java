@@ -211,7 +211,6 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
         bundle.putDouble("money", money);
         intent.putExtras(bundle);
         startActivity(intent);
-        finish();
         break;
       default:
         break;

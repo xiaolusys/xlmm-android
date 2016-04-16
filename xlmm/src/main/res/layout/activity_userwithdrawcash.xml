@@ -274,7 +274,6 @@
             android:id="@+id/rl_not_enough_cash"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="8px"
             android:background="@drawable/text_frame"
             android:gravity="center_horizontal"
             android:orientation="vertical"
@@ -282,7 +281,6 @@
             android:visibility="invisible">
 
             <ImageView
-                android:id="@+id/img_gray_packet1"
                 android:layout_width="404px"
                 android:layout_height="210px"
                 android:layout_marginTop="240px"
@@ -296,14 +294,12 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/img_dec2"
                     android:layout_width="38px"
                     android:layout_height="38px"
                     android:clickable="true"
                     android:src="@drawable/img_dec" />
 
                 <TextView
-                    android:id="@+id/tx_num2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
@@ -313,7 +309,6 @@
                     android:textSize="25sp" />
 
                 <ImageView
-                    android:id="@+id/img_inc2"
                     android:layout_width="38px"
                     android:layout_height="38px"
                     android:layout_marginLeft="25px"
@@ -324,7 +319,6 @@
 
 
             <TextView
-                android:id="@+id/tv_info2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20px"
@@ -343,7 +337,7 @@
                 android:layout_marginBottom="20px"
                 android:background="@drawable/shape_common"
                 android:padding="10px"
-                android:text="马上提现"
+                android:text="购买宝贝"
                 android:textColor="@color/white"
                 android:textSize="15sp" />
         </LinearLayout>

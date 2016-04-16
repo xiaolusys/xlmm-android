@@ -42,6 +42,7 @@ public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.img_inc) ImageView img_inc;
   @Bind(R.id.tv_wxnickname) TextView tv_wxnickname;
   @Bind(R.id.tx_num) TextView tv_num;
+  @Bind(R.id.btn_jump) Button jumpBtn;
 
   double money;
   double withdraw_cash_fund = 0;
@@ -54,6 +55,7 @@ public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
     btn_withdraw.setOnClickListener(this);
     img_dec.setOnClickListener(this);
     img_inc.setOnClickListener(this);
+    jumpBtn.setOnClickListener(this);
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -93,7 +95,7 @@ public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
 
               if(userNewBean.getIsAttentionPublic() == 1) {
                 btn_bindwx.setVisibility(View.INVISIBLE);
-                tv_wxnickname.setText("已关注");
+                tv_wxnickname.setText(userNewBean.getNick());
                 if (Double.compare(money, MAX_WITHDROW_MONEY_EACH_TIME) >= 0) {
                   rl_unbindwx.setVisibility(View.INVISIBLE);
                   rl_not_enough_cash.setVisibility(View.INVISIBLE);
@@ -142,27 +144,26 @@ public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
         JUtils.Log(TAG, "withdraw now");
         withdraw_cash_fund = withdraw_packet_num * MAX_WITHDROW_MONEY_EACH_TIME;
         withdraw_cash((float)withdraw_cash_fund);
-
         break;
-
       case R.id.img_inc:
         JUtils.Log(TAG, "inc now");
         if(Math.round(money / MAX_WITHDROW_MONEY_EACH_TIME) > withdraw_packet_num) {
           withdraw_packet_num++;
           tv_num.setText(""+withdraw_packet_num);
         }
-
         break;
-
       case R.id.img_dec:
         JUtils.Log(TAG, "dec now");
         if(withdraw_packet_num > 1){
           withdraw_packet_num--;
           tv_num.setText(""+withdraw_packet_num);
         }
-
         break;
-
+      case R.id.btn_jump:
+        JUtils.Log(TAG, "buy now");
+        startActivity(new Intent(UserWithdrawCashActivity.this, MainActivity.class));
+        finish();
+        break;
     }
   }
 
@@ -181,11 +182,7 @@ public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
                   JUtils.Toast(resp.getMessage());
                   finish();
                   break;
-                case 1:
-                case 2:
-                case 3:
-                case 4:
-                case 5:
+                default:
                   JUtils.Log(TAG, "failed:"+resp.getCode());
                   JUtils.Toast(resp.getMessage());
                   break;
