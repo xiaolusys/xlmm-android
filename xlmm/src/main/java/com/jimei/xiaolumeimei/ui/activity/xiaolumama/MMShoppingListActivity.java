@@ -26,7 +26,6 @@ import rx.schedulers.Schedulers;
  * Copyright 2016年 上海己美. All rights reserved.
  */
 public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
-  @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.tv_count) TextView tvCount;
   @Bind(R.id.shoppinglist_xry) XRecyclerView shoppinglistXry;
   private int page = 2;
@@ -80,9 +79,6 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
 
   @Override protected void initViews() {
     StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent),0);
-    toolbar.setTitle("");
-    setSupportActionBar(toolbar);
-    finishBack(toolbar);
     initRecyclerView();
   }
 

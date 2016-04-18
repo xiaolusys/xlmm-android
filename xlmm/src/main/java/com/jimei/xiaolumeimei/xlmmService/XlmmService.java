@@ -224,7 +224,8 @@ public interface XlmmService {
             @Field("discount_fee") String discount_fee,
             @Field("total_fee") String total_fee,
             @Field("uuid") String uuid,
-            @Field("pay_extras") String pay_extras
+            @Field("pay_extras") String pay_extras,
+            @Field("buyer_message") String buyer_message
     );
 
 

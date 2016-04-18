@@ -357,7 +357,6 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         bundlerl_income.putString("carrylogMoney", carrylogMoney + "");
         intent1.putExtras(bundlerl_income);
         startActivity(intent1);
-        //startActivity(new Intent(MamaInfoActivity.this, MMCarryLogListActivity.class));
         break;
       case R.id.tv_today_fund1:
         Intent intent4 = new Intent(MamaInfoActivity.this, MMcarryLogActivity.class);
@@ -365,12 +364,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         bundle4.putString("carrylogMoney", carrylogMoney + "");
         intent4.putExtras(bundle4);
         startActivity(intent4);
-        //startActivity(new Intent(MamaInfoActivity.this, MMCarryLogListActivity.class));
         break;
-      //case R.id.rl_share:
-      //  startActivity(new Intent(MamaInfoActivity.this, ShareAllowanceActivity.class));
-      //  break;
-
       case R.id.tv_visit1:
         Intent intent5 =
             new Intent(new Intent(MamaInfoActivity.this, MamaVisitorActivity.class));
@@ -527,18 +521,6 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
 
     mChart.animateX(2500, Easing.EasingOption.EaseInOutQuart);
     mChart.setVisibleXRangeMaximum(6);
-
-    /*if (show_his_refund.size() > 7) {
-      mChart.moveViewToX(MAX_RECENT_DAYS - 6);
-    }
-    Calendar cal= Calendar.getInstance();
-    JUtils.Log(TAG, "DAY_OF_WEEK:"+ cal.get(Calendar.DAY_OF_WEEK));
-    if(cal.get(Calendar.DAY_OF_WEEK) == 1) {
-      mChart.moveViewToX(MAX_RECENT_DAYS - 6);
-    }
-    else{
-      mChart.moveViewToX(MAX_RECENT_DAYS - 6 + 8 - cal.get(Calendar.DAY_OF_WEEK));
-    }*/
   }
 
   private void setDataOfThisWeek() {
