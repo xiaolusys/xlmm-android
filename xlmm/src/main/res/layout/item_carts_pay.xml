@@ -5,10 +5,10 @@
     android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-  <ImageView
-      android:layout_width="100dp"
+  <com.jimei.xiaolumeimei.widget.RoundCornerImageView
+      android:layout_width="120px"
       android:id="@+id/cart_image"
-      android:layout_height="100dp"
+      android:layout_height="120px"
       />
   <LinearLayout
       android:layout_width="fill_parent"

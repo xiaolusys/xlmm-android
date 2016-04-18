@@ -20,7 +20,7 @@
 	<TextView		
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="亲，您暂时还没有待支付订单哦~快去看看吧！"
+		android:text="亲，您暂时还没有订单哦~快去看看吧！"
 		android:textSize="12sp"
         android:layout_gravity="center"
         android:gravity="center"
@@ -51,7 +51,7 @@
         android:layout_marginTop="15px"
         android:layout_below="@+id/tx2"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/forget_pass"
+        android:background="@drawable/shape_res"
         android:textColor="@color/colorAccent"
         android:id="@+id/btn_jump"/>
 
