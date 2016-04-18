@@ -40,22 +40,22 @@
         app:unselected_width="3dp"
     />
   </FrameLayout>
-<LinearLayout
+  <LinearLayout
 
-  android:orientation="horizontal"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-  <ImageView
-      android:layout_gravity="left"
-      android:src="@drawable/ic_companylogo"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content" />
-  <ImageView
-      android:layout_gravity="right"
-      android:src="@drawable/ic_companylogo"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content" />
-</LinearLayout>
+      android:orientation="horizontal"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+    <ImageView
+        android:layout_gravity="left"
+        android:src="@drawable/ic_companylogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <ImageView
+        android:layout_gravity="right"
+        android:src="@drawable/ic_companylogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+  </LinearLayout>
   <LinearLayout
       android:id="@+id/post_activity"
       android:layout_width="match_parent"
@@ -100,4 +100,28 @@
         app:suffixSecond="秒"
     />
   </RelativeLayout>
+  <FrameLayout android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+    <RadioGroup android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+    >
+      <RadioButton
+          android:id="@+id/yesterday"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"/>
+      <RadioButton
+          android:id="@+id/today"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"/>
+      <RadioButton
+          android:id="@+id/tomorrow"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"/>
+    </RadioGroup>
+  </FrameLayout>
+  <android.support.v4.view.ViewPager
+      android:id="@+id/tomorrow_vp"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"/>
 </LinearLayout>

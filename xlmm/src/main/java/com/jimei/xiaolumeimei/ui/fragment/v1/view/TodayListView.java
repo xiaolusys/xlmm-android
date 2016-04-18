@@ -7,24 +7,18 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
-
+import butterknife.ButterKnife;
+import cn.iwgang.countdownview.CountdownView;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.jcodecraeer.xrecyclerview.ProgressStyle;
-import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.TodayAdapter;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.PostActivityBean;
 import com.jimei.xiaolumeimei.entities.PostBean;
-import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
@@ -34,7 +28,6 @@ import com.jimei.xiaolumeimei.ui.activity.user.WxLoginBindPhoneActivity;
 import com.jimei.xiaolumeimei.ui.fragment.view.ViewImpl;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
-import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.widget.banner.Indicators.PagerIndicator;
 import com.jimei.xiaolumeimei.widget.banner.SliderLayout;
 import com.jimei.xiaolumeimei.widget.banner.SliderTypes.BaseSliderView;
@@ -44,7 +37,6 @@ import com.jude.utils.JUtils;
 import com.squareup.okhttp.ResponseBody;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -53,10 +45,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import cn.iwgang.countdownview.CountdownView;
 import okhttp3.Call;
 import rx.Observable;
 import rx.Subscription;
@@ -72,13 +60,13 @@ import rx.schedulers.Schedulers;
 public class TodayListView extends ViewImpl {
 
   private static final String POST_URL = "?imageMogr2/format/jpg/quality/80";
-  @Bind(R.id.xrecyclerView) XRecyclerView xRecyclerView;
+  //@Bind(R.id.xrecyclerView) XRecyclerView xRecyclerView;
   List<String> postString = new ArrayList<>();
   List<String> appString = new ArrayList<>();
   List<PostBean.WemPostersEntity> wemPosters = new ArrayList<>();
   List<PostBean.WemPostersEntity> wemPostersEntities = new ArrayList<>();
   Map<String, String> map = new HashMap<>();
-  private View head;
+  //private View head;
   private TodayAdapter mTodayAdapter;
   private ImageView post2;
   private LinearLayout post_activity_layout;
@@ -115,57 +103,57 @@ public class TodayListView extends ViewImpl {
   public void initViews(Fragment fragment, Activity context) {
     sharedPreferencesMask = context.getSharedPreferences("maskActivity", 0);
     mask = sharedPreferencesMask.getInt("mask", 0);
-    head = LayoutInflater.from(context)
-        .inflate(R.layout.today_poster_header,
-            (ViewGroup) mRootView.findViewById(R.id.head_today), false);
-    xRecyclerView.setLayoutManager(new GridLayoutManager(context, 2));
-    xRecyclerView.addItemDecoration(new SpaceItemDecoration(10));
-    xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-    xRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
-    xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
+    //head = LayoutInflater.from(context)
+    //    .inflate(R.layout.today_poster_header,
+    //        (ViewGroup) mRootView.findViewById(R.id.head_today), false);
+    //xRecyclerView.setLayoutManager(new GridLayoutManager(context, 2));
+    //xRecyclerView.addItemDecoration(new SpaceItemDecoration(10));
+    //xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
+    //xRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
+    //xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
     //post2 = (ImageView) head.findViewById(R.id.post_2);
-    post_activity_layout = (LinearLayout) head.findViewById(R.id.post_activity);
-    countTime = (CountdownView) head.findViewById(R.id.countTime);
-    mSliderLayout = (SliderLayout) head.findViewById(R.id.slider);
-    mPagerIndicator = (PagerIndicator) head.findViewById(R.id.pi_header);
-    xRecyclerView.addHeaderView(head);
-    mTodayAdapter = new TodayAdapter(fragment, context);
-    xRecyclerView.setAdapter(mTodayAdapter);
-    head.setVisibility(View.INVISIBLE);
+    post_activity_layout = (LinearLayout)mRootView.findViewById(R.id.post_activity);
+    countTime = (CountdownView) mRootView.findViewById(R.id.countTime);
+    mSliderLayout = (SliderLayout) mRootView.findViewById(R.id.slider);
+    mPagerIndicator = (PagerIndicator) mRootView.findViewById(R.id.pi_header);
+    //xRecyclerView.addHeaderView(head);
+    //mTodayAdapter = new TodayAdapter(fragment, context);
+    //xRecyclerView.setAdapter(mTodayAdapter);
+    //head.setVisibility(View.INVISIBLE);
     //loading.start();
     showIndeterminateProgressDialog(false, context);
     initData(context);
-    xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
-      @Override public void onRefresh() {
-        initPostRefresh(context);
-        subscribe3 = ProductModel.getInstance()
-            .getTodayList(1, page * page_size)
-            .subscribeOn(Schedulers.io())
-            .subscribe(new ServiceResponse<ProductListBean>() {
-              @Override public void onNext(ProductListBean productListBean) {
-                List<ProductListBean.ResultsEntity> results =
-                    productListBean.getResults();
-                mTodayAdapter.updateWithClear(results);
-              }
-
-              @Override public void onCompleted() {
-                super.onCompleted();
-                head.setVisibility(View.VISIBLE);
-                xRecyclerView.post(xRecyclerView::refreshComplete);
-              }
-            });
-      }
-
-      @Override public void onLoadMore() {
-        if (page <= totalPages) {
-          loadMoreData(page, 10);
-          page++;
-        } else {
-          Toast.makeText(context, "没有更多了拉,去购物吧", Toast.LENGTH_SHORT).show();
-          xRecyclerView.post(xRecyclerView::loadMoreComplete);
-        }
-      }
-    });
+    //xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+    //  @Override public void onRefresh() {
+    //    initPostRefresh(context);
+    //    subscribe3 = ProductModel.getInstance()
+    //        .getTodayList(1, page * page_size)
+    //        .subscribeOn(Schedulers.io())
+    //        .subscribe(new ServiceResponse<ProductListBean>() {
+    //          @Override public void onNext(ProductListBean productListBean) {
+    //            List<ProductListBean.ResultsEntity> results =
+    //                productListBean.getResults();
+    //            mTodayAdapter.updateWithClear(results);
+    //          }
+    //
+    //          @Override public void onCompleted() {
+    //            super.onCompleted();
+    //            head.setVisibility(View.VISIBLE);
+    //            xRecyclerView.post(xRecyclerView::refreshComplete);
+    //          }
+    //        });
+    //  }
+    //
+    //  @Override public void onLoadMore() {
+    //    if (page <= totalPages) {
+    //      loadMoreData(page, 10);
+    //      page++;
+    //    } else {
+    //      Toast.makeText(context, "没有更多了拉,去购物吧", Toast.LENGTH_SHORT).show();
+    //      xRecyclerView.post(xRecyclerView::loadMoreComplete);
+    //    }
+    //  }
+    //});
   }
 
   private void initData(Activity context) {
@@ -184,37 +172,37 @@ public class TodayListView extends ViewImpl {
             }
           }
         }, Throwable::printStackTrace);
-    subscribe1 = ProductModel.getInstance()
-        .getTodayList(1, 10)
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<ProductListBean>() {
-          @Override public void onError(Throwable e) {
-            super.onError(e);
-            e.printStackTrace();
-            JUtils.Toast("请检查网络状况,尝试下拉刷新");
-            //loading.stop();
-            hideIndeterminateProgressDialog();
-          }
-
-          @Override public void onNext(ProductListBean productListBean) {
-            try {
-              if (productListBean != null) {
-                List<ProductListBean.ResultsEntity> results =
-                    productListBean.getResults();
-                totalPages = productListBean.getCount() / page_size;
-                mTodayAdapter.update(results);
-              }
-            } catch (NullPointerException ex) {
-            }
-          }
-
-          @Override public void onCompleted() {
-            super.onCompleted();
-            //loading.post(loading::stop);
-            hideIndeterminateProgressDialog();
-            head.setVisibility(View.VISIBLE);
-          }
-        });
+    //subscribe1 = ProductModel.getInstance()
+    //    .getTodayList(1, 10)
+    //    .subscribeOn(Schedulers.io())
+    //    .subscribe(new ServiceResponse<ProductListBean>() {
+    //      @Override public void onError(Throwable e) {
+    //        super.onError(e);
+    //        e.printStackTrace();
+    //        JUtils.Toast("请检查网络状况,尝试下拉刷新");
+    //        //loading.stop();
+    //        hideIndeterminateProgressDialog();
+    //      }
+    //
+    //      @Override public void onNext(ProductListBean productListBean) {
+    //        try {
+    //          if (productListBean != null) {
+    //            List<ProductListBean.ResultsEntity> results =
+    //                productListBean.getResults();
+    //            totalPages = productListBean.getCount() / page_size;
+    //            mTodayAdapter.update(results);
+    //          }
+    //        } catch (NullPointerException ex) {
+    //        }
+    //      }
+    //
+    //      @Override public void onCompleted() {
+    //        super.onCompleted();
+    //        //loading.post(loading::stop);
+    //        hideIndeterminateProgressDialog();
+    //        //head.setVisibility(View.VISIBLE);
+    //      }
+    //    });
   }
 
   private void initPost(Activity context) {
@@ -806,22 +794,22 @@ public class TodayListView extends ViewImpl {
         });
   }
 
-  private void loadMoreData(int page, int page_size) {
-    subscribe4 = ProductModel.getInstance()
-        .getTodayList(page, page_size)
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<ProductListBean>() {
-          @Override public void onNext(ProductListBean productListBean) {
-            List<ProductListBean.ResultsEntity> results = productListBean.getResults();
-            mTodayAdapter.update(results);
-          }
-
-          @Override public void onCompleted() {
-            super.onCompleted();
-            xRecyclerView.post(xRecyclerView::loadMoreComplete);
-          }
-        });
-  }
+  //private void loadMoreData(int page, int page_size) {
+  //  subscribe4 = ProductModel.getInstance()
+  //      .getTodayList(page, page_size)
+  //      .subscribeOn(Schedulers.io())
+  //      .subscribe(new ServiceResponse<ProductListBean>() {
+  //        @Override public void onNext(ProductListBean productListBean) {
+  //          List<ProductListBean.ResultsEntity> results = productListBean.getResults();
+  //          mTodayAdapter.update(results);
+  //        }
+  //
+  //        @Override public void onCompleted() {
+  //          super.onCompleted();
+  //          xRecyclerView.post(xRecyclerView::loadMoreComplete);
+  //        }
+  //      });
+  //}
 
   private long calcLeftTime() {
     Date now = new Date();
