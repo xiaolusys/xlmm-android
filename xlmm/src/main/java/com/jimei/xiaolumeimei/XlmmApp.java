@@ -2,16 +2,17 @@ package com.jimei.xiaolumeimei;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
-
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.mipush.XiaoMiMessageReceiver;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.okhttp.PersistentCookieStore;
+import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.utils.NetWorkUtil;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -55,7 +56,7 @@ public class XlmmApp extends MultiDexApplication {
     super.onCreate();
 
     //LeakCanary.install(this);
-
+    //Thread.setDefaultUncaughtExceptionHandler(new MyUnCaughtExceptionHandler());
     mContext = getApplicationContext();
     cookiePrefs = getSharedPreferences("COOKIESxlmm", 0);
     client = initOkHttpClient();
@@ -174,5 +175,17 @@ public class XlmmApp extends MultiDexApplication {
       }
     }
     return false;
+  }
+
+  //异常退出的时候,自动重启
+  class MyUnCaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
+    @Override public void uncaughtException(Thread thread, Throwable ex) {
+      ex.printStackTrace();
+      Intent intent = new Intent(XlmmApp.this, MainActivity.class);
+      intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      XlmmApp.this.startActivity(intent);
+      android.os.Process.killProcess(android.os.Process.myPid());
+      System.exit(1);
+    }
   }
 }

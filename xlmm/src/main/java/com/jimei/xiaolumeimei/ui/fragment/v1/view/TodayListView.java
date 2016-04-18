@@ -7,15 +7,22 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTabHost;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TabHost;
+import android.widget.TabWidget;
 import butterknife.ButterKnife;
 import cn.iwgang.countdownview.CountdownView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.TodayAdapter;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.PostActivityBean;
 import com.jimei.xiaolumeimei.entities.PostBean;
@@ -25,6 +32,9 @@ import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.WxLoginBindPhoneActivity;
+import com.jimei.xiaolumeimei.ui.fragment.v2.TodayV2Fragment;
+import com.jimei.xiaolumeimei.ui.fragment.v2.TomorrowV2Fragment;
+import com.jimei.xiaolumeimei.ui.fragment.v2.YesterdayV2Fragment;
 import com.jimei.xiaolumeimei.ui.fragment.view.ViewImpl;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
@@ -57,7 +67,8 @@ import rx.schedulers.Schedulers;
  * <p>
  * Copyright 2016年 上海己美. All rights reserved.
  */
-public class TodayListView extends ViewImpl {
+public class TodayListView extends ViewImpl implements ViewPager.OnPageChangeListener,
+    TabHost.OnTabChangeListener {
 
   private static final String POST_URL = "?imageMogr2/format/jpg/quality/80";
   //@Bind(R.id.xrecyclerView) XRecyclerView xRecyclerView;
@@ -66,13 +77,10 @@ public class TodayListView extends ViewImpl {
   List<PostBean.WemPostersEntity> wemPosters = new ArrayList<>();
   List<PostBean.WemPostersEntity> wemPostersEntities = new ArrayList<>();
   Map<String, String> map = new HashMap<>();
+  List<ImageView> imageViewList = new ArrayList<>();
   //private View head;
-  private TodayAdapter mTodayAdapter;
   private ImageView post2;
   private LinearLayout post_activity_layout;
-  private int page = 2;
-  private int page_size = 10;
-  private int totalPages;//总的分页数0
   private CountdownView countTime;
   private SliderLayout mSliderLayout;
   private PagerIndicator mPagerIndicator;
@@ -82,7 +90,6 @@ public class TodayListView extends ViewImpl {
   private String cookies;
   private String domain;
   private SharedPreferences sharedPreferencesMask;
-  List<ImageView> imageViewList = new ArrayList<>();
   private Subscription subscribe4;
   private Subscription subscription5;
   private Subscription subscribe6;
@@ -90,6 +97,16 @@ public class TodayListView extends ViewImpl {
   private MaterialDialog materialDialog;
   private SharedPreferences sharedPreferences;
   private int mask;
+  private FragmentTabHost mTabHost;
+  private LayoutInflater layoutInflater;
+  private Class fragmentArr[] = {
+      YesterdayV2Fragment.class, TodayV2Fragment.class, TomorrowV2Fragment.class
+  };
+  private List<Fragment> list = new ArrayList<Fragment>();
+  private ViewPager vp;
+  private int imageViewArray[] = {
+      R.drawable.yesterday, R.drawable.today, R.drawable.tomorror
+  };
 
   public static int dp2px(Context context, int dp) {
     float scale = context.getResources().getDisplayMetrics().density;
@@ -103,57 +120,41 @@ public class TodayListView extends ViewImpl {
   public void initViews(Fragment fragment, Activity context) {
     sharedPreferencesMask = context.getSharedPreferences("maskActivity", 0);
     mask = sharedPreferencesMask.getInt("mask", 0);
-    //head = LayoutInflater.from(context)
-    //    .inflate(R.layout.today_poster_header,
-    //        (ViewGroup) mRootView.findViewById(R.id.head_today), false);
-    //xRecyclerView.setLayoutManager(new GridLayoutManager(context, 2));
-    //xRecyclerView.addItemDecoration(new SpaceItemDecoration(10));
-    //xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-    //xRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
-    //xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
-    //post2 = (ImageView) head.findViewById(R.id.post_2);
-    post_activity_layout = (LinearLayout)mRootView.findViewById(R.id.post_activity);
+    vp = (ViewPager) mRootView.findViewById(R.id.pager);
+    vp.setOnPageChangeListener(this);
+
+    layoutInflater = LayoutInflater.from(context);
+    mTabHost = (FragmentTabHost) mRootView.findViewById(android.R.id.tabhost);
+    mTabHost.setup(context, fragment.getChildFragmentManager(), R.id.pager);
+    mTabHost.setOnTabChangedListener(this);
+
+    int count = imageViewArray.length;
+
+    for (int i = 0; i < count; i++) {
+      TabHost.TabSpec tabSpec = mTabHost.newTabSpec("").setIndicator(getTabItemView(i));
+      mTabHost.addTab(tabSpec, fragmentArr[i], null);
+      mTabHost.setTag(i);
+    }
+
+    list.add(YesterdayV2Fragment.newInstance("昨天"));
+    list.add(TodayV2Fragment.newInstance("今天"));
+    list.add(TomorrowV2Fragment.newInstance("明天"));
+    vp.setAdapter(new MyFragmentAdapter(fragment.getChildFragmentManager(), list));
+    post_activity_layout = (LinearLayout) mRootView.findViewById(R.id.post_activity);
     countTime = (CountdownView) mRootView.findViewById(R.id.countTime);
     mSliderLayout = (SliderLayout) mRootView.findViewById(R.id.slider);
     mPagerIndicator = (PagerIndicator) mRootView.findViewById(R.id.pi_header);
-    //xRecyclerView.addHeaderView(head);
-    //mTodayAdapter = new TodayAdapter(fragment, context);
-    //xRecyclerView.setAdapter(mTodayAdapter);
-    //head.setVisibility(View.INVISIBLE);
-    //loading.start();
-    showIndeterminateProgressDialog(false, context);
+
     initData(context);
-    //xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
-    //  @Override public void onRefresh() {
-    //    initPostRefresh(context);
-    //    subscribe3 = ProductModel.getInstance()
-    //        .getTodayList(1, page * page_size)
-    //        .subscribeOn(Schedulers.io())
-    //        .subscribe(new ServiceResponse<ProductListBean>() {
-    //          @Override public void onNext(ProductListBean productListBean) {
-    //            List<ProductListBean.ResultsEntity> results =
-    //                productListBean.getResults();
-    //            mTodayAdapter.updateWithClear(results);
-    //          }
-    //
-    //          @Override public void onCompleted() {
-    //            super.onCompleted();
-    //            head.setVisibility(View.VISIBLE);
-    //            xRecyclerView.post(xRecyclerView::refreshComplete);
-    //          }
-    //        });
-    //  }
-    //
-    //  @Override public void onLoadMore() {
-    //    if (page <= totalPages) {
-    //      loadMoreData(page, 10);
-    //      page++;
-    //    } else {
-    //      Toast.makeText(context, "没有更多了拉,去购物吧", Toast.LENGTH_SHORT).show();
-    //      xRecyclerView.post(xRecyclerView::loadMoreComplete);
-    //    }
-    //  }
-    //});
+
+  }
+
+  private View getTabItemView(int i) {
+    View view = layoutInflater.inflate(R.layout.tab_content, null);
+    ImageView mImageView = (ImageView) view.findViewById(R.id.tab_imageview);
+    mImageView.setBackgroundResource(imageViewArray[i]);
+    //mTextView.setText(textViewArray[i]);
+    return view;
   }
 
   private void initData(Activity context) {
@@ -368,8 +369,8 @@ public class TodayListView extends ViewImpl {
                                             && !(((MainActivity) context).getUserInfoBean()
                                             .getMobile()
                                             .isEmpty())) {
-                                          Intent intent =
-                                              new Intent(context, ActivityWebViewActivity.class);
+                                          Intent intent = new Intent(context,
+                                              ActivityWebViewActivity.class);
                                           //sharedPreferences =
                                           //    getActivity().getSharedPreferences("COOKIESxlmm",
                                           //        Context.MODE_PRIVATE);
@@ -425,8 +426,8 @@ public class TodayListView extends ViewImpl {
                                           }
                                         }
                                       } else {
-                                        Intent intent =
-                                            new Intent(context, ActivityWebViewActivity.class);
+                                        Intent intent = new Intent(context,
+                                            ActivityWebViewActivity.class);
                                         //sharedPreferences =
                                         //    getActivity().getSharedPreferences("COOKIESxlmm",
                                         //        Context.MODE_PRIVATE);
@@ -666,8 +667,8 @@ public class TodayListView extends ViewImpl {
                                             && !(((MainActivity) context).getUserInfoBean()
                                             .getMobile()
                                             .isEmpty())) {
-                                          Intent intent =
-                                              new Intent(context, ActivityWebViewActivity.class);
+                                          Intent intent = new Intent(context,
+                                              ActivityWebViewActivity.class);
                                           //sharedPreferences =
                                           //    getActivity().getSharedPreferences("COOKIESxlmm",
                                           //        Context.MODE_PRIVATE);
@@ -710,15 +711,16 @@ public class TodayListView extends ViewImpl {
                                             JUtils.Toast("登录成功,前往绑定手机号后才可参加活动");
                                             Intent intent = new Intent(context,
                                                 WxLoginBindPhoneActivity.class);
-                                            if (((MainActivity) context) != null && null
-                                                    != ((MainActivity) context).getUserInfoBean()) {
+                                            if (((MainActivity) context) != null
+                                                && null
+                                                != ((MainActivity) context).getUserInfoBean()) {
                                               Bundle bundle = new Bundle();
                                               bundle.putString("headimgurl",
-                                                      ((MainActivity) context).getUserInfoBean()
-                                                              .getThumbnail());
+                                                  ((MainActivity) context).getUserInfoBean()
+                                                      .getThumbnail());
                                               bundle.putString("nickname",
-                                                      ((MainActivity) context).getUserInfoBean()
-                                                              .getNick());
+                                                  ((MainActivity) context).getUserInfoBean()
+                                                      .getNick());
                                               intent.putExtras(bundle);
                                             }
                                             if (context != null) {
@@ -727,8 +729,8 @@ public class TodayListView extends ViewImpl {
                                           }
                                         }
                                       } else {
-                                        Intent intent =
-                                            new Intent(context, ActivityWebViewActivity.class);
+                                        Intent intent = new Intent(context,
+                                            ActivityWebViewActivity.class);
                                         //sharedPreferences =
                                         //    getActivity().getSharedPreferences("COOKIESxlmm",
                                         //        Context.MODE_PRIVATE);
@@ -871,6 +873,52 @@ public class TodayListView extends ViewImpl {
       materialDialog.dismiss();
     } catch (Exception e) {
       e.printStackTrace();
+    }
+  }
+
+  @Override public void onPageScrolled(int position, float positionOffset,
+      int positionOffsetPixels) {
+
+  }
+
+  @Override public void onPageSelected(int position) {
+    TabWidget widget = mTabHost.getTabWidget();
+    int oldFocusability = widget.getDescendantFocusability();
+    widget.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
+    mTabHost.setCurrentTab(position);
+    widget.setDescendantFocusability(oldFocusability);
+    //mTabHost.getTabWidget().getChildAt(position)
+    //    .setBackgroundResource(R.drawable.selector_tab_background);
+  }
+
+  @Override public void onPageScrollStateChanged(int state) {
+
+  }
+
+  @Override public void onTabChanged(String tabId) {
+    int position = mTabHost.getCurrentTab();
+    vp.setCurrentItem(position);
+  }
+
+  private class MyFragmentAdapter extends FragmentPagerAdapter {
+
+    List<Fragment> list;
+
+    public MyFragmentAdapter(FragmentManager fm) {
+      super(fm);
+    }
+
+    public MyFragmentAdapter(FragmentManager fm, List<Fragment> list) {
+      super(fm);
+      this.list = list;
+    }
+
+    @Override public Fragment getItem(int arg0) {
+      return list.get(arg0);
+    }
+
+    @Override public int getCount() {
+      return list.size();
     }
   }
 }
