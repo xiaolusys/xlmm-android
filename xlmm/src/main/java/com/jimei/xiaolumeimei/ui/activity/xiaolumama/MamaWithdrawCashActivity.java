@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
@@ -33,7 +34,7 @@ public class MamaWithdrawCashActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.btn_jump) Button btn_jump;
   @Bind(R.id.btn_withdraw) Button btn_withdraw;
   @Bind(R.id.rl_has_cash) RelativeLayout rl_has_cash;
-  @Bind(R.id.rl_has_no_cash) RelativeLayout rl_has_no_cash;
+  @Bind(R.id.rl_has_no_cash) LinearLayout rl_has_no_cash;
   @Bind(R.id.img_red_packet1) ImageView img_red_packet1;
   @Bind(R.id.img_red_packet2) ImageView img_red_packet2;
   @Bind(R.id.tv_reminder) TextView tv_reminder;
@@ -98,7 +99,6 @@ public class MamaWithdrawCashActivity extends BaseSwipeBackCompatActivity
     switch (v.getId()) {
       case R.id.btn_jump:
         JUtils.Log(TAG, "withdraw cash now");
-        //startActivity(new Intent(MamaWithdrawCashActivity.this, MainActivity.class));
         finish();
         break;
       case R.id.btn_withdraw:
@@ -178,24 +178,10 @@ public class MamaWithdrawCashActivity extends BaseSwipeBackCompatActivity
           .subscribe(new ServiceResponse<ResponseResultBean>() {
             @Override public void onNext(ResponseResultBean resp) {
               JUtils.Log(TAG, "ResponseBody11=" + resp.getCode());
-              switch (resp.getCode()) {
-                case 0:
-                  JUtils.Toast("提现成功，待审核通过");
-                  break;
-                case 1:
-                  JUtils.Toast("参数错误");
-                  break;
-                case 2:
-                  JUtils.Toast("不足提现金额");
-                  break;
-                case 3:
-                  JUtils.Toast("有待审核记录不予再次提现 ");
-                  break;
-              }
-
               Intent intent = new Intent(MamaWithdrawCashActivity.this,
                   MamaWithdrawCashResultActivity.class);
               intent.putExtra("cash", fund);
+              intent.putExtra("code",resp.getCode());
               startActivity(intent);
             }
           });

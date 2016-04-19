@@ -114,8 +114,8 @@ public class OderCarryLogAdapter
     holder.tichengCash.setText(
         "+" + (float) (Math.round(resultsEntity.getCarryNum() * 100)) / 100);
 
-    holder.timeDisplay.setText(resultsEntity.getContributorNick());
-    holder.wxordernick.setText(resultsEntity.getCarryTypeName());
+    holder.timeDisplay.setText(resultsEntity.getModified().substring(11, 16));
+    holder.wxordernick.setText(resultsEntity.getContributorNick());
     holder.tvStatus.setText(resultsEntity.getStatusDisplay());
   }
 

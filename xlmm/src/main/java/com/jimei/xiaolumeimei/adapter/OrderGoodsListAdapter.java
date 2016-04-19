@@ -78,11 +78,11 @@ public class OrderGoodsListAdapter extends BaseAdapter {
   @Override public View getView(int position, View convertView, ViewGroup parent) {
     Log.d(TAG, "getView " + position);
 
-    ImageView img_goods = null;
-    TextView tx_good_name = null;
-    TextView tx_good_price = null;
-    TextView tx_good_size = null;
-    TextView tx_good_num = null;
+    ImageView img_goods;
+    TextView tx_good_name;
+    TextView tx_good_price;
+    TextView tx_good_size;
+    TextView tx_good_num;
     int state = Integer.parseInt(data.get(position).get("state"));
     int refund_state = Integer.parseInt(data.get(position).get("refund_state"));
 
@@ -139,7 +139,6 @@ public class OrderGoodsListAdapter extends BaseAdapter {
             btn.setVisibility(View.INVISIBLE);
             tv_order_state.setVisibility(View.VISIBLE);
             switch (refund_state) {
-
               case XlmmConst.REFUND_STATE_BUYER_APPLY: {
                 tv_order_state.setText("已经申请退款");
                 break;

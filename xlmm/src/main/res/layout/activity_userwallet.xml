@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:background="#f3f3f4"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#f3f3f4"
+    android:orientation="vertical">
+
   <android.support.design.widget.AppBarLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -24,68 +25,67 @@
           android:layout_gravity="center"
           android:text="钱包"
           android:textColor="@android:color/white"
-          android:textSize="16sp"
-          />
+          android:textSize="16sp"/>
 
     </android.support.v7.widget.Toolbar>
 
   </android.support.design.widget.AppBarLayout>
 
   <LinearLayout
-      android:orientation="vertical"
-      android:gravity="center_horizontal"
-      android:background="@color/white"
       android:layout_width="match_parent"
-      android:layout_height="150dp">
-    <TextView android:layout_width="wrap_content"
-        android:textSize="32sp"
+      android:layout_height="150dp"
+      android:background="@color/white"
+      android:gravity="center_horizontal"
+      android:orientation="vertical">
+
+    <TextView
         android:id="@+id/tv_money"
-        android:textColor="@color/colorPrimary"
-        android:layout_marginTop="30dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:text=""
-        />
+        android:textColor="@color/colorPrimary"
+        android:textSize="32sp"/>
 
     <TextView
 
         android:layout_width="wrap_content"
-        android:textSize="16sp"
-        android:text="我的余额(元)"
-        android:layout_marginTop="10dp"
         android:layout_height="wrap_content"
-        />
+        android:layout_marginTop="10dp"
+        android:text="我的余额(元)"
+        android:textSize="16sp"/>
 
   </LinearLayout>
-  <FrameLayout android:layout_width="match_parent"
+
+  <FrameLayout
+      android:layout_width="match_parent"
       android:layout_height="match_parent">
-    <RelativeLayout
+
+    <LinearLayout
         android:id="@+id/ll_wallet_empty"
-        android:visibility="invisible"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="visible">
 
       <ImageView
           android:id="@+id/img_wallet"
           android:layout_width="150px"
           android:layout_height="165px"
-          android:layout_marginLeft="280px"
-          android:layout_marginTop="280px"
-          android:src="@drawable/img_wallet"
-          />
+          android:src="@drawable/img_wallet"/>
 
       <TextView
           android:layout_width="wrap_content"
-          android:text="你的钱包空空如也"
           android:layout_height="wrap_content"
-          android:layout_below="@+id/img_wallet"
-          android:layout_marginLeft="255px"
-          android:layout_marginTop="10px"/>
-    </RelativeLayout>
+          android:layout_marginTop="20px"
+          android:text="你的钱包空空如也"/>
+    </LinearLayout>
+
     <com.jcodecraeer.xrecyclerview.XRecyclerView
         android:id="@+id/wallet_rcv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="invisible"
-        />
+        android:visibility="invisible"/>
   </FrameLayout>
 </LinearLayout>
