@@ -15,13 +15,13 @@ import android.widget.BaseAdapter;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
-public class MyAdapter extends BaseAdapter implements SectionIndexer{
+public class CompanyAdapter extends BaseAdapter implements SectionIndexer{
 
   private List<LogisticsCompanyInfo> list = null;
   private Context mContext;
   private SectionIndexer mIndexer;
 
-  public MyAdapter(Context mContext, List<LogisticsCompanyInfo> list) {
+  public CompanyAdapter(Context mContext, List<LogisticsCompanyInfo> list) {
     this.mContext = mContext;
     this.list = list;
 

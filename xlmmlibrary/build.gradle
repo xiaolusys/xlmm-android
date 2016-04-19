@@ -86,4 +86,5 @@ dependencies {
   compile 'com.umeng.analytics:analytics:latest.integration'
   compile 'com.android.support:support-v4:23.3.0'
   compile 'com.tbruyelle.rxpermissions:rxpermissions:0.5.2@aar'
+  compile 'com.github.cpoopc:scrollablelayoutlib:1.0.0'
 }

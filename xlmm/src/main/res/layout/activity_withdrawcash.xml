@@ -28,7 +28,6 @@
                 android:textColor="@android:color/white"
                 android:textSize="16sp" />
         </android.support.v7.widget.Toolbar>
-        >
 
     </android.support.design.widget.AppBarLayout>
 
@@ -90,19 +89,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="50px"
-                android:textSize="26px"
                 android:gravity="center_horizontal"
-                android:text="亲爱的小鹿妈妈们，" />
+                android:text="亲爱的小鹿妈妈们，"
+                android:textSize="26px" />
 
             <TextView
                 android:id="@+id/tv_order2"
-                android:layout_below="@id/tv_order1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/tv_order1"
                 android:layout_marginTop="18px"
-                android:textSize="26px"
                 android:gravity="center_horizontal"
-                android:text="系统升级中暂时只能用微信红包提现哦~" />
+                android:text="系统升级中暂时只能用微信红包提现哦~"
+                android:textSize="26px" />
 
             <ImageView
                 android:id="@+id/img_red_packet1"
@@ -124,34 +123,65 @@
                 android:src="@drawable/img_redpacket200_1"
                 android:textSize="15sp" />
 
-            <Button
-                android:id="@+id/btn_withdraw"
-                android:layout_width="660px"
-                android:layout_height="76px"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/view_1"
-                android:layout_centerHorizontal="true"
                 android:layout_marginBottom="20px"
-                android:background="@drawable/shape_common"
-                android:text="马上提现"
-                android:textColor="@color/white"
-                android:textSize="15sp" />
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="76px"
+                    android:layout_weight="1" />
+
+
+                <Button
+                    android:id="@+id/btn_to_wallet"
+                    android:layout_width="240px"
+                    android:layout_height="76px"
+                    android:background="@drawable/shape_common"
+                    android:text="转到钱包"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="76px"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/btn_withdraw"
+                    android:layout_width="240px"
+                    android:layout_height="76px"
+                    android:background="@drawable/shape_common"
+                    android:text="马上提现"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="76px"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
 
             <View
                 android:id="@+id/view_1"
-                android:layout_alignParentBottom="true"
                 android:layout_width="match_parent"
-                android:layout_height="20px"/>
+                android:layout_height="20px"
+                android:layout_alignParentBottom="true" />
         </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/rl_has_no_cash"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:background="@drawable/text_frame"
             android:gravity="center_horizontal"
-            android:visibility="gone"
-            android:padding="4dp">
+            android:orientation="vertical"
+            android:padding="4dp"
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/img_gray_packet1"
