@@ -3,9 +3,13 @@ package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.Bind;
+
+import com.cpoopc.scrollablelayoutlib.ScrollableHelper;
+import com.cpoopc.scrollablelayoutlib.ScrollableLayout;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
@@ -25,9 +29,10 @@ import rx.schedulers.Schedulers;
  *
  * Copyright 2016年 上海己美. All rights reserved.
  */
-public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
+public class MMShoppingListActivity extends BaseSwipeBackCompatActivity implements ScrollableHelper.ScrollableContainer{
   @Bind(R.id.tv_count) TextView tvCount;
   @Bind(R.id.shoppinglist_xry) XRecyclerView shoppinglistXry;
+  @Bind(R.id.scrollable_layout) ScrollableLayout scrollableLayout;
   private int page = 2;
   private ShoppingListAdapter adapter;
   private String order;
@@ -106,6 +111,7 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
         page++;
       }
     });
+    scrollableLayout.getHelper().setCurrentScrollableContainer(this);
   }
 
   private void loadMoreData(String page) {
@@ -147,5 +153,10 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity {
 
   @Override protected void onStop() {
     super.onStop();
+  }
+
+  @Override
+  public View getScrollableView() {
+    return shoppinglistXry;
   }
 }

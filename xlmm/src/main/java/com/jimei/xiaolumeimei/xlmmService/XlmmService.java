@@ -65,6 +65,7 @@ import com.jimei.xiaolumeimei.entities.UserWithdrawResult;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.entities.WxPubAuthInfo;
 import com.squareup.okhttp.ResponseBody;
+
 import java.util.List;
 
 import retrofit.http.Body;
@@ -187,13 +188,14 @@ public interface XlmmService {
             @Query("cart_ids") String cart_ids,
             @Query("coupon_id") String coupon_id
     );
+
     //重新购买商品
     @FormUrlEncoded
     @POST("carts")
     Observable<CartsHisBean> rebuy(
-        @Field("item_id") String item_id,
-        @Field("sku_id")  String sku_id,
-        @Field("cart_id") String cart_id
+            @Field("item_id") String item_id,
+            @Field("sku_id") String sku_id,
+            @Field("cart_id") String cart_id
     );
 
     //创建订单接口
@@ -559,6 +561,11 @@ public interface XlmmService {
     Observable<ResponseResultBean> withdraw_cash(
             @Field("choice") String fund_type);
 
+    //妈妈钱包转账到小鹿钱包
+    @GET(XlmmApi.APP_BASE_URL + "/rest/v1/pmt/cashout/cashout_to_budget")
+    Observable<ResponseResultBean> toWallet(
+            @Query("choice") String fund_type);
+
     //cancel提款单信息
     @FormUrlEncoded
     @POST("pmt/cashout")
@@ -829,7 +836,7 @@ public interface XlmmService {
             @Field("username") String username,
             @Field("password") String password,
             @Field("next") String next,
-            @Field("devtype")String devtype);
+            @Field("devtype") String devtype);
 
 
     @GET(XlmmApi.APP_BASE_URL + "/rest/v2/weixinapplogin")

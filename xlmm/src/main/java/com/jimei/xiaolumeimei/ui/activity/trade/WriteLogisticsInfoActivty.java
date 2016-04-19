@@ -29,17 +29,14 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
 
   String TAG = "WriteLogisticsInfoActivty";
 
-  @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.et_logistics_company) EditText et_logistics_company;
   @Bind(R.id.et_logistics_number) EditText et_logistics_number;
   @Bind(R.id.btn_commit) Button btn_commit;
 
   String company;
-  String logistics_number;
   int goods_id;
 
   @Override protected void setListener() {
-    toolbar.setOnClickListener(this);
     btn_commit.setOnClickListener(this);
   }
 
@@ -55,9 +52,6 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
-    toolbar.setTitle("");
-    setSupportActionBar(toolbar);
-    finishBack(toolbar);
     et_logistics_company.setOnTouchListener(new View.OnTouchListener() {
       public boolean onTouch(View v, MotionEvent event) {
         //et_refund_reason.setInputType(InputType.TYPE_NULL); //关闭软键盘

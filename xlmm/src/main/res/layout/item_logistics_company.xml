@@ -1,28 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_coupon_item"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-		android:padding="8dp"
-	android:id="@+id/ll_coupon_item">
+    android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/tv_catalog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:gravity="bottom"
+        android:text="A"
+        android:background="@color/ECECEC"
+        android:textSize="18sp" />
 
+    <include layout="@layout/common_gap"/>
 
-		<TextView
-			android:id="@+id/tv_catalog"
-			android:layout_width="wrap_content"
-			android:layout_height="48px"
-			android:text="A"
-			android:textSize="15sp"
-			android:gravity="bottom" />
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:gravity="bottom"
+        android:text="快递"
+        android:textSize="20sp" />
 
-		<TextView
-			android:id="@+id/tv_title"
-			android:layout_width="wrap_content"
-			android:layout_height="65px"
-			android:text="快递"
-			android:textSize="15sp"
-			android:gravity="bottom" />
-
+    <include layout="@layout/common_gap"/>
 
 </LinearLayout>

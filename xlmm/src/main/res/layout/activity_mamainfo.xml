@@ -67,23 +67,21 @@
 
                 <TextView
                     android:id="@+id/tv_cashinfo"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/imgCircleStar"
-                    android:layout_centerHorizontal="true"
                     android:layout_marginTop="10px"
                     android:gravity="center"
-                    android:text="账户余额（元）"
+                    android:text="账户余额(元)"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/tv_cash"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_cashinfo"
-                    android:layout_centerHorizontal="true"
-                    android:layout_gravity="center"
+                    android:gravity="center"
                     android:text="0"
                     android:textColor="@color/white"
                     android:textSize="25sp" />
@@ -112,6 +110,12 @@
                     android:text="77%"
                     android:textColor="@color/white"
                     android:textSize="8sp" />
+
+                <View
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/white"
+                    android:layout_width="match_parent"
+                    android:layout_height="2px"/>
 
                 <ImageView
                     android:id="@+id/progress_img"
