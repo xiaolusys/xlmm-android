@@ -13,7 +13,6 @@ import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.victor.loading.rotate.RotateLoading;
 import java.util.List;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
@@ -30,14 +29,12 @@ public class ChildListActivity extends BaseSwipeBackCompatActivity {
   private int totalPages;//总的分页数
   private XRecyclerView xRecyclerView;
   private ChildListActivityAdapter mChildListAdapter;
-  private RotateLoading loading;
 
   @Override protected void setListener() {
 
   }
 
   @Override protected void initData() {
-    loading.start();
    Subscription subscribe = ProductModel.getInstance()
         .getChildList(1, 10)
         .subscribeOn(Schedulers.io())
@@ -57,7 +54,6 @@ public class ChildListActivity extends BaseSwipeBackCompatActivity {
 
           @Override public void onCompleted() {
             super.onCompleted();
-            loading.post(loading::stop);
           }
         });
     addSubscription(subscribe);
@@ -76,7 +72,6 @@ public class ChildListActivity extends BaseSwipeBackCompatActivity {
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
     finishBack(toolbar);
-    loading = (RotateLoading) findViewById(R.id.loading);
     initRecyclerView();
   }
 

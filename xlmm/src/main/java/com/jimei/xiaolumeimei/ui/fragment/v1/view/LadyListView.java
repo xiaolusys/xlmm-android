@@ -16,7 +16,6 @@ import com.jimei.xiaolumeimei.ui.fragment.view.ViewImpl;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
-import com.victor.loading.rotate.RotateLoading;
 import java.util.List;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
@@ -28,7 +27,6 @@ import rx.schedulers.Schedulers;
  */
 public class LadyListView extends ViewImpl {
 
-  @Bind(R.id.loading) RotateLoading loading;
   @Bind(R.id.childlist_recyclerView) XRecyclerView xRecyclerView;
 
   int page_size = 10;
@@ -70,7 +68,6 @@ public class LadyListView extends ViewImpl {
     mLadyListAdapter = new LadyListAdapter(context, fragment);
     xRecyclerView.setAdapter(mLadyListAdapter);
 
-    loading.start();
 
     subscribe1 = ProductModel.getInstance()
         .getLadyList(1, 10)
@@ -80,7 +77,6 @@ public class LadyListView extends ViewImpl {
             super.onError(e);
             e.printStackTrace();
             JUtils.Toast("请检查网络状况,尝试下拉刷新");
-            loading.stop();
           }
 
           @Override public void onNext(LadyListBean ladyListBean) {
@@ -97,7 +93,6 @@ public class LadyListView extends ViewImpl {
 
           @Override public void onCompleted() {
             super.onCompleted();
-            loading.post(loading::stop);
           }
         });
 

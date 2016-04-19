@@ -13,7 +13,6 @@ import com.jimei.xiaolumeimei.entities.ProductBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.victor.loading.rotate.RotateLoading;
 import java.util.List;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
@@ -28,7 +27,6 @@ public class TongkuanActivity extends BaseSwipeBackCompatActivity {
   String TAG = "tongkuanActivity";
   @Bind(R.id.tool_bar) Toolbar toolbar;
   @Bind(R.id.tongkuan_recyclerview) RecyclerView recyclerView;
-  @Bind(R.id.loading) RotateLoading loading;
   private TongkuanAdapter mTongkuanAdapter;
   private int model_id;
   private String name = null;

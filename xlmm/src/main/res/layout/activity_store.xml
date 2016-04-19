@@ -47,7 +47,8 @@
           android:id="@+id/toolbar"
           android:layout_width="match_parent"
           android:layout_height="?attr/actionBarSize"
-          app:popupTheme="@style/AppTheme.PopupOverlay">
+          app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+          app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
       </android.support.v7.widget.Toolbar>
     </android.support.design.widget.CollapsingToolbarLayout>
@@ -64,6 +65,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <include layout="@layout/common_loading"/>
   </FrameLayout>
 </android.support.design.widget.CoordinatorLayout>

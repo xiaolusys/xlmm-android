@@ -35,7 +35,6 @@ public class LadyFragment extends Fragment {
 
   private static final String TAG = LadyFragment.class.getSimpleName();
 
-  //@Bind(R.id.loading) RotateLoading loading;
   @Bind(R.id.childlist_recyclerView) XRecyclerView xRecyclerView;
 
   int page_size = 10;

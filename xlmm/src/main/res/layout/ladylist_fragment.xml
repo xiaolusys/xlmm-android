@@ -4,7 +4,6 @@
     android:background="#f3f3f4"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-  <include layout="@layout/common_loading"/>
   <com.jcodecraeer.xrecyclerview.XRecyclerView
       android:id="@+id/childlist_recyclerView"
       android:layout_width="match_parent"

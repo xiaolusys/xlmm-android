@@ -16,7 +16,6 @@ import com.jimei.xiaolumeimei.ui.fragment.view.ViewImpl;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
-import com.victor.loading.rotate.RotateLoading;
 import java.util.List;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
@@ -27,7 +26,6 @@ import rx.schedulers.Schedulers;
  * Copyright 2016年 上海己美. All rights reserved.
  */
 public class ChildListView extends ViewImpl {
-  @Bind(R.id.loading) RotateLoading loading;
   @Bind(R.id.childlist_recyclerView) XRecyclerView xRecyclerView;
 
   int page_size = 10;
@@ -68,7 +66,6 @@ public class ChildListView extends ViewImpl {
     mChildListAdapter = new ChildListAdapter(fragment, context);
     xRecyclerView.setAdapter(mChildListAdapter);
 
-    loading.start();
     subscribe1 = ProductModel.getInstance()
         .getChildList(1, 10)
         .subscribeOn(Schedulers.io())
@@ -77,7 +74,6 @@ public class ChildListView extends ViewImpl {
             super.onError(e);
             e.printStackTrace();
             JUtils.Toast("请检查网络状况,尝试下拉刷新");
-            loading.stop();
           }
 
           @Override public void onNext(ChildListBean childListBean) {
@@ -95,7 +91,6 @@ public class ChildListView extends ViewImpl {
 
           @Override public void onCompleted() {
             super.onCompleted();
-            loading.post(loading::stop);
           }
         });
 

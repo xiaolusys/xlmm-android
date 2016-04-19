@@ -95,15 +95,7 @@
             android:layout_height="wrap_content"
             android:padding="20dp">
         </com.jimei.xiaolumeimei.widget.TagFlowLayout>
-        <TextView
-            android:layout_marginBottom="8dp"
-            android:id="@+id/look_size"
-            android:layout_width="wrap_content"
-            android:layout_gravity="center"
-            android:textColor="@color/book_loading_book"
-            android:layout_height="wrap_content"
-            android:text="查看尺码表"
-            />
+
 
         <View android:layout_width="match_parent"
             android:layout_height="1dip"
@@ -188,15 +180,7 @@
             android:src="@drawable/sku"
             android:layout_width="548px"
             android:layout_height="122px"/>
-        <TextView
-            android:layout_marginBottom="8dp"
-            android:id="@+id/look_xidi"
-            android:layout_width="wrap_content"
-            android:layout_gravity="center"
-            android:textColor="@color/book_loading_book"
-            android:layout_height="wrap_content"
-            android:text="查看洗涤说明"
-            />
+
         <include layout="@layout/common_gap"/>
 
 
