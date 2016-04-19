@@ -102,10 +102,10 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     SmoothCheckBox scb;
     @Bind(R.id.tv_app_discount)
     TextView tv_app_discount;
-    @Bind(R.id.edit_query)
-    EditText editText;
     @Bind(R.id.extra_budget)
     TextView extraBudget;
+    @Bind(R.id.edit_query)
+    EditText editText;
     private boolean isAlipay, isWx, isBudget;
     private String ids;
     private String cart_ids;
@@ -540,7 +540,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         String buyer_message = editText.getText() + "";
         Subscription subscription = TradeModel.getInstance()
                 .shoppingcart_create_v2(ids, addr_id, pay_method, paymentprice_v2, post_fee,
-                        discount_fee_price, total_fee, uuid, pay_extrasaa, buyer_message)
+                        discount_fee_price, total_fee, uuid, pay_extrasaa, "")
                 .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<PayInfoBean>() {
 

@@ -70,6 +70,13 @@ public class MamaInfoModel {
         .compose(new DefaultTransform<>());
   }
 
+  //转账到小鹿钱包
+  public Observable<ResponseResultBean> toWallet(String fund_type) {
+    return XlmmRetrofitClient.getService()
+            .toWallet(fund_type)
+            .compose(new DefaultTransform<>());
+  }
+
   //cancel提款单信息
   public Observable<ResponseResultBean> cancel_withdraw_cash(String id) {
     return XlmmRetrofitClient.getService()

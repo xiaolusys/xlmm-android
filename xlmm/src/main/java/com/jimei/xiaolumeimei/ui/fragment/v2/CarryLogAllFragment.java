@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.cpoopc.scrollablelayoutlib.ScrollableHelper;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
@@ -36,7 +37,7 @@ import rx.schedulers.Schedulers;
  * <p>
  * Copyright 2016年 上海己美. All rights reserved.
  */
-public class CarryLogAllFragment extends Fragment {
+public class CarryLogAllFragment extends Fragment implements ScrollableHelper.ScrollableContainer{
     @Bind(R.id.carrylogall_xry)
     XRecyclerView xRecyclerView;
     List<CarryLogListBean.ResultsEntity> list = new ArrayList<>();
@@ -229,5 +230,10 @@ public class CarryLogAllFragment extends Fragment {
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public View getScrollableView() {
+        return xRecyclerView;
     }
 }

@@ -4,32 +4,17 @@ package com.jimei.xiaolumeimei.widget;
  * Created by wulei on 2016/1/24.
  */
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Paint.Style;
 import android.graphics.drawable.ColorDrawable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.HeaderViewListAdapter;
-import android.widget.ListView;
-import android.widget.SectionIndexer;
 import android.widget.TextView;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.MyAdapter;
 
-import android.content.Context;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
-import android.util.AttributeSet;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.TextView;
 
 public class SideBar extends View {
   // 触摸事件

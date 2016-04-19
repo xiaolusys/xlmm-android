@@ -10,7 +10,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.MyAdapter;
+import com.jimei.xiaolumeimei.adapter.CompanyAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.LogisticsCompanyInfo;
 import com.jimei.xiaolumeimei.widget.SideBar;
@@ -28,7 +28,7 @@ public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
    * 显示字母的TextView
    */
   @Bind(R.id.dialog) TextView dialog;
-  private MyAdapter mCompanyAdapter;
+  private CompanyAdapter mCompanyAdapter;
 
   @Override protected void setListener() {
 
@@ -50,7 +50,7 @@ public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
     //ListView all_orders_listview = (ListView) findViewById(R.id.all_orders_listview);
 
     fillCompanyInfo();
-    mCompanyAdapter = new MyAdapter(this, company_list);
+    mCompanyAdapter = new CompanyAdapter(this, company_list);
     lv_logistics_company.setAdapter(mCompanyAdapter);
     lv_logistics_company.setOnItemClickListener(new AdapterView.OnItemClickListener() {
       @Override
