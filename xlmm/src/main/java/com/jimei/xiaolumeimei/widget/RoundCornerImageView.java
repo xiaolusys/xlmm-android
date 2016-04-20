@@ -28,7 +28,7 @@ public class RoundCornerImageView extends ImageView {
         Path clipPath = new Path();
         int w = this.getWidth();
         int h = this.getHeight();
-        clipPath.addRoundRect(new RectF(0, 0, w, h), 25.0f, 25.0f, Path.Direction.CW);
+        clipPath.addRoundRect(new RectF(0, 0, w, h), 16.0f, 16.0f, Path.Direction.CW);
         canvas.clipPath(clipPath);
         canvas.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG));
         super.onDraw(canvas);

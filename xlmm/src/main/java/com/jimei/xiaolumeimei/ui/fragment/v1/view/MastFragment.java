@@ -86,7 +86,9 @@ public class MastFragment extends DialogFragment {
 
   @Override public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-    close.setVisibility(View.INVISIBLE);
+      if (close != null) {
+          close.setVisibility(View.INVISIBLE);
+      }
     subscribe = ActivityModel.getInstance()
         .getPostActivity()
         .subscribeOn(Schedulers.io())
@@ -110,7 +112,9 @@ public class MastFragment extends DialogFragment {
                                 + response.getHeight()
                                 + "  width:"
                                 + response.getWidth());
-                            close.setVisibility(View.VISIBLE);
+                              if (close != null) {
+                                  close.setVisibility(View.VISIBLE);
+                              }
                             FrameLayout.LayoutParams layoutParams =
                                 new FrameLayout.LayoutParams(
                                     DisplayUtil.dip2px(getActivity(),
@@ -267,7 +271,7 @@ public class MastFragment extends DialogFragment {
 
     //maskImage.setOnClickListener(new View.OnClickListener() {
     //  @Override public void onClick(View v) {
-    //    
+    //
     //  }
     //});
   }
