@@ -100,8 +100,6 @@ public class OderCarryLogAdapter
           .load(R.mipmap.ic_launcher)
           .diskCacheStrategy(DiskCacheStrategy.ALL)
           .bitmapTransform(new CropCircleTransformation(mContext))
-          //.placeholder(R.drawable.parceholder)
-          //.centerCrop()
           .into(holder.picPath);
     } else {
       ViewUtils.loadImgToImgViewWithTransformCircle(mContext, holder.picPath,
@@ -124,7 +122,6 @@ public class OderCarryLogAdapter
   }
 
   static class CarryLogListVH extends RecyclerView.ViewHolder {
-    int id = R.layout.item_carryloglist;
     @Bind(R.id.shoptime) TextView shoptime;
     @Bind(R.id.total_cash) TextView totalCash;
     @Bind(R.id.category) RelativeLayout category;

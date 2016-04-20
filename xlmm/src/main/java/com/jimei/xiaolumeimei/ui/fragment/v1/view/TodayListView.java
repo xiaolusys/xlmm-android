@@ -329,7 +329,7 @@ public class TodayListView extends ViewImpl {
         .subscribe(new ServiceResponse<List<PostActivityBean>>() {
           @Override public void onNext(List<PostActivityBean> postActivityBean) {
             try {
-              if (null != postActivityBean) {
+              if (null != postActivityBean&&postActivityBean.size()!=0) {
                 post_activity_layout.setVisibility(View.VISIBLE);
                 ImageView imageView;
 

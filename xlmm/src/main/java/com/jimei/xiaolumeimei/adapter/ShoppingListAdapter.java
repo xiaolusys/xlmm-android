@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -146,7 +147,7 @@ public class ShoppingListAdapter
         @Bind(R.id.ticheng_cash)
         TextView tichengCash;
         @Bind(R.id.category)
-        RelativeLayout category;
+        LinearLayout category;
         @Bind(R.id.content)
         RelativeLayout content;
 

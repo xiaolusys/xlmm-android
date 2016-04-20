@@ -4,33 +4,38 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#F3F3F4">
+        android:background="#F3F3F4"
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/shoptime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="20px"
-            android:textSize="16sp"
-            android:textColor="@color/black" />
-
-        <TextView
-            android:id="@+id/total_cash"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="20px"
-            android:textSize="16sp"
-            android:layout_alignParentRight="true" />
-        <View
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#DADADA"
-            android:layout_below="@id/shoptime"/>
-    </RelativeLayout>
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/shoptime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="20px"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/total_cash"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:padding="20px"
+                android:textSize="16sp" />
+
+        </RelativeLayout>
+
+        <include layout="@layout/common_gap" />
+
+    </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/content"
@@ -38,58 +43,67 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:padding="20px">
-
-        <com.jimei.xiaolumeimei.widget.RoundCornerImageView
-            android:id="@+id/pic_path"
+        <RelativeLayout
+            android:id="@+id/img_layout"
             android:layout_width="130px"
-            android:layout_height="130px"/>
+            android:layout_height="130px"
+            android:background="@drawable/choose_img_bg"
+            android:gravity="center">
+
+            <com.jimei.xiaolumeimei.widget.RoundCornerImageView
+                android:id="@+id/pic_path"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY" />
+
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/wxordernick"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
-            android:layout_toRightOf="@id/pic_path"
-            android:padding="6px"
-            android:layout_marginLeft="6dp"
             android:layout_alignParentBottom="true"
+            android:layout_marginLeft="6dp"
+            android:layout_toRightOf="@id/img_layout"
             android:gravity="center"
-            android:textSize="16sp"
-            android:textColor="@color/black" />
+            android:padding="6px"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="16sp" />
 
 
         <TextView
             android:id="@+id/time_display"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/pic_path"
+            android:layout_marginLeft="6dp"
+            android:layout_toRightOf="@id/img_layout"
             android:padding="6px"
             android:text=""
-            android:layout_marginLeft="6dp"
-            android:textSize="15sp"
-            android:textColor="@color/c8c8c8" />
+            android:textColor="@color/c8c8c8"
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/get_status_display"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
             android:layout_toRightOf="@id/time_display"
             android:padding="6px"
             android:text=""
-            android:textSize="15sp"
-            android:layout_marginLeft="6dp"
-            android:textColor="@color/colorPrimary" />
+            android:textColor="@color/colorPrimary"
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/ticheng_cash"
-            android:text=""
-            android:textSize="20sp"
-            android:gravity="center"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black" />
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="20sp" />
 
     </RelativeLayout>
 </LinearLayout>

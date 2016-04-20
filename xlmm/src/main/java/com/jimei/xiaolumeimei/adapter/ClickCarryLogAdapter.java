@@ -104,7 +104,6 @@ public class ClickCarryLogAdapter
   }
 
   static class CarryLogListVH extends RecyclerView.ViewHolder {
-    int id = R.layout.item_carryloglist;
     @Bind(R.id.shoptime) TextView shoptime;
     @Bind(R.id.total_cash) TextView totalCash;
     @Bind(R.id.category) RelativeLayout category;
