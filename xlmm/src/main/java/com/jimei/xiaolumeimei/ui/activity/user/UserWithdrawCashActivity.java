@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
@@ -29,18 +30,18 @@ public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
   String TAG = "UserWithdrawCashActivity";
   static double MAX_WITHDROW_MONEY_EACH_TIME = 8.88;
 
-  @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.btn_bindwx) Button btn_bindwx;
   @Bind(R.id.btn_buy) Button btn_buy;
   @Bind(R.id.rl_unbindwx) RelativeLayout rl_unbindwx;
-  @Bind(R.id.rl_has_cash) RelativeLayout rl_has_cash;
-  @Bind(R.id.rl_not_enough_cash) RelativeLayout rl_not_enough_cash;
+  @Bind(R.id.rl_has_cash) LinearLayout rl_has_cash;
+  @Bind(R.id.rl_not_enough_cash) LinearLayout rl_not_enough_cash;
   @Bind(R.id.tv_reminder) TextView tv_reminder;
   @Bind(R.id.btn_withdraw) Button btn_withdraw;
   @Bind(R.id.img_dec) ImageView img_dec;
   @Bind(R.id.img_inc) ImageView img_inc;
   @Bind(R.id.tv_wxnickname) TextView tv_wxnickname;
   @Bind(R.id.tx_num) TextView tv_num;
+  @Bind(R.id.btn_jump) Button jumpBtn;
 
   double money;
   double withdraw_cash_fund = 0;
@@ -53,6 +54,7 @@ public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
     btn_withdraw.setOnClickListener(this);
     img_dec.setOnClickListener(this);
     img_inc.setOnClickListener(this);
+    jumpBtn.setOnClickListener(this);
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -69,11 +71,6 @@ public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
-    toolbar.setTitle("");
-    setSupportActionBar(toolbar);
-    finishBack(toolbar);
-
-
   }
 
   @Override protected void initData() {
@@ -92,7 +89,7 @@ public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
 
               if(userNewBean.getIsAttentionPublic() == 1) {
                 btn_bindwx.setVisibility(View.INVISIBLE);
-                tv_wxnickname.setText("已关注");
+                tv_wxnickname.setText(userNewBean.getNick());
                 if (Double.compare(money, MAX_WITHDROW_MONEY_EACH_TIME) >= 0) {
                   rl_unbindwx.setVisibility(View.INVISIBLE);
                   rl_not_enough_cash.setVisibility(View.INVISIBLE);
@@ -141,27 +138,26 @@ public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
         JUtils.Log(TAG, "withdraw now");
         withdraw_cash_fund = withdraw_packet_num * MAX_WITHDROW_MONEY_EACH_TIME;
         withdraw_cash((float)withdraw_cash_fund);
-
         break;
-
       case R.id.img_inc:
         JUtils.Log(TAG, "inc now");
         if(Math.round(money / MAX_WITHDROW_MONEY_EACH_TIME) > withdraw_packet_num) {
           withdraw_packet_num++;
           tv_num.setText(""+withdraw_packet_num);
         }
-
         break;
-
       case R.id.img_dec:
         JUtils.Log(TAG, "dec now");
         if(withdraw_packet_num > 1){
           withdraw_packet_num--;
           tv_num.setText(""+withdraw_packet_num);
         }
-
         break;
-
+      case R.id.btn_jump:
+        JUtils.Log(TAG, "buy now");
+        startActivity(new Intent(UserWithdrawCashActivity.this, MainActivity.class));
+        finish();
+        break;
     }
   }
 
@@ -180,11 +176,7 @@ public class UserWithdrawCashActivity extends BaseSwipeBackCompatActivity
                   JUtils.Toast(resp.getMessage());
                   finish();
                   break;
-                case 1:
-                case 2:
-                case 3:
-                case 4:
-                case 5:
+                default:
                   JUtils.Log(TAG, "failed:"+resp.getCode());
                   JUtils.Toast(resp.getMessage());
                   break;

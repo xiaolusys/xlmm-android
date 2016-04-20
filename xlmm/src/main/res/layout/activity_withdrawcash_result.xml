@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -16,8 +17,8 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#fdb916"
-            app:popupTheme="@style/AppTheme.PopupOverlay" >
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" >
 
             <TextView
                 android:layout_width="wrap_content"
@@ -28,72 +29,67 @@
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
                 />
-        </android.support.v7.widget.Toolbar>>
+        </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="600px"
-        android:layout_below="@+id/app_bar_layout"
+        android:layout_height="500px"
         android:id="@+id/rl_result"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
         android:background="@drawable/text_frame">
 
         <ImageView
             android:id="@+id/img_red_packet1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="200px"
             android:layout_marginTop="90px"
             android:clickable="true"
-            android:src="@drawable/img_redpacket100_1"
+            android:src="@drawable/img_redpacket100_2"
             />
-
-        <TextView android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="提现申请已提交"
-            android:id="@+id/tv_Point"
-            android:gravity="center"
-            android:layout_centerHorizontal="true"
-            android:textSize="15sp"
-            android:layout_marginTop="40px"
-            android:layout_below="@id/img_red_packet1"
-            />
-
-        <TextView android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:id="@+id/tv_reminder"
-            android:text="小鹿美美公众号将会在24小时内将红包发到"
-            android:textSize="15sp"
-            android:layout_gravity="center"
-            android:textColor="@color/colorAccent"
-            android:layout_below="@id/tv_Point"/>
 
         <TextView
-            android:layout_centerHorizontal="true"
+            android:id="@+id/tv_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="提现申请已提交"
+            android:gravity="center"
+            android:textSize="26px"
+            android:layout_marginTop="15px"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30px"
+            android:text="小鹿美美公众号将会在24小时内将红包发到"
+            android:textSize="22px"
+            android:layout_gravity="center"
+            android:textColor="@color/colorAccent"/>
+
+        <TextView
             android:id="@+id/tv_nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:textSize="26px"
             android:layout_marginTop="10px"
-            android:text="微信账号："
-            android:layout_below="@id/tv_reminder"/>
-    </RelativeLayout>
+            android:text="微信账号："/>
+    </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/rl_publish"
-        android:layout_below="@id/rl_result"
-
-        >
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:id="@+id/rl_publish">
 
         <ImageView
             android:id="@+id/img_gray_packet1"
             android:layout_width="120px"
             android:layout_height="120px"
-            android:layout_marginLeft="300px"
             android:layout_marginTop="40px"
             android:src="@drawable/img_return"
             />
@@ -103,28 +99,22 @@
             android:id="@+id/tv_info2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:layout_marginLeft="150px"
-            android:layout_marginTop="20px"
-            android:text="@string/publish_info"
-            android:layout_below="@+id/img_gray_packet1"
-            />
+            android:gravity="center"
+            android:layout_marginTop="46px"
+            android:text="@string/publish_info" />
 
         <Button
             android:id="@+id/btn_jump"
             android:layout_width="190px"
             android:layout_height="80px"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20px"
+            android:layout_marginTop="50px"
             android:padding="10px"
             android:text="发布产品"
             android:textColor="@color/white"
             android:textSize="15sp"
-            android:background="@drawable/shape_common"
-            android:layout_below="@+id/tv_info2"
-            />
-    </RelativeLayout>
+            android:background="@drawable/shape_common" />
+    </LinearLayout>
 
 
 
-</RelativeLayout>
+</LinearLayout>

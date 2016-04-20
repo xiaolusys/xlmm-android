@@ -1,90 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-  <RelativeLayout
-      android:background="#F3F3F4"
-      android:id="@+id/category"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content">
-    <TextView
-        android:textColor="@color/black"
-        android:id="@+id/shoptime"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F3F3F4">
+
+        <TextView
+            android:id="@+id/shoptime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="20px"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/total_cash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:padding="20px" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/greytow" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-    />
-    <TextView
-        android:layout_alignParentRight="true"
-        android:id="@+id/total_cash"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="8dp"
-    />
-  </RelativeLayout>
-  <RelativeLayout
-      android:background="@color/white"
-      android:id="@+id/content"
-      android:paddingLeft="4dp"
-      android:paddingRight="4dp"
-      android:paddingTop="8dp"
-      android:paddingBottom="8dp"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content">
-    <ImageView
-        android:layout_marginLeft="8dp"
-        android:src="@drawable/carrylog_image"
-        android:id="@+id/pic_path"
-        android:layout_width="90px"
-        android:layout_height="90px"
-    />
-    <TextView
-        android:layout_alignParentTop="true"
-        android:id="@+id/tv_status"
-        android:textColor="@color/colorAccent"
-        android:layout_marginLeft="16dp"
-        android:layout_toRightOf="@id/pic_path"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:background="@color/white"
+        android:paddingBottom="38px"
+        android:paddingLeft="20px"
+        android:paddingRight="20px"
+        android:paddingTop="38px">
 
-    <TextView
-        android:layout_alignParentTop="true"
-        android:id="@+id/time_display"
-        android:textColor="@color/c8c8c8"
-        android:layout_marginLeft="16dp"
-        android:layout_toRightOf="@id/tv_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    <!--<TextView-->
-    <!--android:id="@+id/get_status_display"-->
-    <!--android:layout_marginTop="16dp"-->
-    <!--android:textColor="@color/colorPrimary"-->
-    <!--android:layout_marginLeft="20dp"-->
-    <!--android:layout_toRightOf="@id/time_display"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"/>-->
+        <ImageView
+            android:id="@+id/pic_path"
+            android:layout_width="90px"
+            android:layout_height="90px"
+            android:layout_marginLeft="8dp"
+            android:src="@drawable/carrylog_image" />
 
-    <TextView
-        android:layout_alignParentBottom="true"
-        android:id="@+id/wxordernick"
-        android:layout_marginTop="16dp"
+        <TextView
+            android:id="@+id/tv_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="16dp"
+            android:layout_toRightOf="@id/pic_path"
+            android:textColor="@color/colorAccent"
+            android:textSize="13sp" />
 
-        android:layout_marginLeft="16dp"
-        android:layout_toRightOf="@id/pic_path"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/time_display"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="16dp"
+            android:layout_toRightOf="@id/tv_status"
+            android:textColor="@color/c8c8c8"
+            android:textSize="13sp" />
 
-    <TextView
-        android:layout_marginRight="12dp"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:id="@+id/ticheng_cash"
-        android:layout_marginTop="16dp"
-        android:textColor="@color/black"
-        android:layout_marginLeft="8dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-  </RelativeLayout>
+        <TextView
+            android:id="@+id/wxordernick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_toRightOf="@id/pic_path" />
+
+        <TextView
+            android:id="@+id/ticheng_cash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="16dp"
+            android:textColor="@color/black" />
+    </RelativeLayout>
 </LinearLayout>

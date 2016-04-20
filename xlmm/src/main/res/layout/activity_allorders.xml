@@ -37,17 +37,4 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 
-    <!--FrameLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-      <ListView
-          android:id="@+id/all_orders_listview"
-          android:layout_width="fill_parent"
-          android:layout_height="fill_parent">
-      </ListView>
-
-      <include layout="@layout/orders_emptyinfo"/>
-    </FrameLayout-->
-
-
 </LinearLayout>

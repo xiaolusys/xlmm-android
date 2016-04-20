@@ -8,9 +8,10 @@
     tools:context=".ui.activity.trade.RefundDetailActivity">
 
     <com.jimei.xiaolumeimei.widget.XlmmTitleView
-        app:xlmm_title="退货(款)详情"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        app:xlmm_title="退货(款)详情" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -27,8 +28,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_weight="2.5"
-            android:textSize="12sp"
-            android:ellipsize="end" />
+            android:ellipsize="end"
+            android:textSize="12sp" />
 
         <View
             android:layout_width="0dp"
@@ -60,8 +61,10 @@
             android:layout_gravity="right"
             android:layout_margin="8dp"
             android:background="@drawable/shape_chooselist"
+            android:paddingBottom="3dp"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
+            android:paddingTop="3dp"
             android:text="退货地址信息"
             android:textColor="@color/colorAccent"
             android:textSize="15sp" />
@@ -98,7 +101,7 @@
             android:id="@+id/sdv"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:src="@drawable/logo"/>
+            android:src="@drawable/logo" />
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -208,6 +211,14 @@
 
     <include layout="@layout/common_gap" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@color/grey100" />
+
+    <include layout="@layout/common_gap" />
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -226,6 +237,17 @@
             android:gravity="end"
             android:text="" />
     </LinearLayout>
+
+    <include layout="@layout/common_gap" />
+
+    <com.jimei.xiaolumeimei.widget.RoundCornerImageView
+        android:id="@+id/round_image"
+        android:layout_width="115px"
+        android:layout_height="115px"
+        android:layout_margin="8dp"
+        android:layout_gravity="right|end" />
+
+    <include layout="@layout/common_gap" />
 
     <include layout="@layout/common_gap" />
 
@@ -331,5 +353,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/grey100" />
+
 
 </LinearLayout>

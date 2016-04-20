@@ -1,11 +1,16 @@
 package com.jimei.xiaolumeimei.base;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.Toolbar;
@@ -25,22 +30,21 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.entities.ActivityBean;
-import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
-import com.jimei.xiaolumeimei.model.ActivityModel;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
-import com.mob.tools.utils.UIHandler;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
+import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.entities.ActivityBean;
+import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
+import com.jimei.xiaolumeimei.model.ActivityModel;
+import com.jimei.xiaolumeimei.utils.BitmapUtil;
+import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jude.utils.JUtils;
+import com.mob.tools.utils.UIHandler;
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -117,7 +121,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     return R.layout.activity_actwebview;
   }
 
-  @TargetApi(Build.VERSION_CODES.KITKAT)
+  //  @TargetApi(Build.VERSION_CODES.KITKAT)
   @SuppressLint("JavascriptInterface") @Override protected void initViews() {
     JUtils.Log(TAG, "initViews");
     ShareSDK.initSDK(this);
@@ -152,7 +156,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
       mWebView.getSettings().setDatabaseEnabled(true);
       mWebView.getSettings().setLoadWithOverviewMode(true);
       mWebView.getSettings().setUseWideViewPort(true);
-      mWebView.setWebContentsDebuggingEnabled(true);
+      //      mWebView.setWebContentsDebuggingEnabled(true);
 
       mWebView.setWebChromeClient(new WebChromeClient() {
         @Override public void onProgressChanged(WebView view, int newProgress) {
@@ -359,10 +363,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     return false;
   }
 
-
-
-
-
   public void get_party_share_content(String id) {
     JUtils.Log(TAG, "get_party_share_content id " + id);
 
@@ -445,9 +445,131 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     //oks.setSite(getString(R.string.app_name));
     // siteUrl是分享此内容的网站地址，仅在QQ空间使用
     //oks.setSiteUrl("http://sharesdk.cn");
-
+    Bitmap enableLogo = BitmapFactory.decodeResource(mContext.getResources(),
+        R.drawable.ssdk_oks_logo_copy);
+    String label = "快照链接";
+    Bitmap enableLogo2 = BitmapFactory.decodeResource(mContext.getResources(),
+        R.drawable.ssdk_oks_logo_copy);
+    View.OnClickListener listener = new View.OnClickListener() {
+      public void onClick(View v) {
+        //if (shareProductBean.getShareLink()) {
+        //}
+        saveTwoDimenCode(mContext);
+      }
+    };
+    oks.setCustomerLogo(enableLogo, enableLogo2, label, listener);
     // 启动分享GUI
     oks.show(this);
+  }
+
+  public void saveTwoDimenCode(Context context) {
+
+    if ((partyShareInfo == null)
+        || (partyShareInfo.getQrcodeLink() == null)
+        || (partyShareInfo.getQrcodeLink().equals(""))) {
+      JUtils.Log(TAG, "saveTowDimenCode : fail,Qrcodelink=null");
+      return;
+    } else {
+      JUtils.Log(TAG, "saveTowDimenCode : Qrcodelink=" + partyShareInfo.getQrcodeLink());
+      try {
+        WebView webView = new WebView(context);
+        webView.setLayoutParams(
+            new Toolbar.LayoutParams(Toolbar.LayoutParams.MATCH_PARENT,
+                Toolbar.LayoutParams.MATCH_PARENT));
+        webView.getSettings().setJavaScriptEnabled(true);
+
+        webView.getSettings().setAllowFileAccess(true);
+        //如果访问的页面中有Javascript，则webview必须设置支持Javascript
+        //mWebView.getSettings().setUserAgentString(MyApplication.getUserAgent());
+        webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+        webView.getSettings().setAllowFileAccess(true);
+        webView.getSettings().setAppCacheEnabled(true);
+        webView.getSettings().setDomStorageEnabled(true);
+        webView.getSettings().setDatabaseEnabled(true);
+
+        webView.setWebChromeClient(new WebChromeClient() {
+          @Override public void onProgressChanged(WebView view, int newProgress) {
+
+          }
+        });
+        webView.setWebViewClient(new WebViewClient() {
+          @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            view.loadUrl(url);
+            return true;
+          }
+        });
+
+        webView.loadUrl(partyShareInfo.getQrcodeLink());
+        //Bitmap bmp= captureWebView(webView);
+        View cv = getWindow().getDecorView();
+        Bitmap bmp = catchWebScreenshot(webView, cv.getWidth(), cv.getHeight(),
+            partyShareInfo.getQrcodeLink(), this);
+        String fileName = Environment.getExternalStorageDirectory()
+            + "/"
+            + Environment.DIRECTORY_DCIM
+            + "/Camera/小鹿美美活动二维码.jpg";
+        //saveBitmap(bmp, fileName);
+
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+  }
+
+  /**
+   * 抓取WEB界面的截屏
+   *
+   * @param containerWidth 截屏宽度，也就放置WebView的宽度
+   * @param containerHeight 截屏高度，也就放置WebView的高度
+   * @param baseUrl Base Url
+   * @param context activity context
+   */
+  public Bitmap catchWebScreenshot(final WebView w, final int containerWidth,
+      final int containerHeight, final String baseUrl, final Context context) {
+    final Bitmap b =
+        Bitmap.createBitmap(containerWidth, containerHeight, Bitmap.Config.ARGB_8888);
+
+    w.post(new Runnable() {
+      public void run() {
+        w.setWebViewClient(new WebViewClient() {
+          @Override public void onPageFinished(WebView view, String url) {
+            JUtils.Log(TAG, "onPageFinished URL=" + url);
+            Canvas canvas = new Canvas(b);
+            view.draw(canvas);
+
+            String fileName = Environment.getExternalStorageDirectory()
+                + "/"
+                + Environment.DIRECTORY_DCIM
+                + "/Camera/"
+                + context.getResources().getString(R.string.share_2dimen_pic_name)
+                + ".jpg";
+            BitmapUtil.saveBitmap(b, fileName);
+            Toast.makeText(context, R.string.share_2dimen_pic_tips, Toast.LENGTH_SHORT)
+                .show();
+
+            File file = new File(fileName);
+            Uri uri = Uri.fromFile(file);
+            // 通知图库更新
+            Intent scannerIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
+            context.sendBroadcast(scannerIntent);
+          }
+        });
+        //w.setPictureListener(new WebView.PictureListener() {
+        //  public void onNewPicture(WebView view, Picture picture) {
+        //    JUtils.Log(TAG, "onNewPicture ");
+        //    final Canvas c = new Canvas(b);
+        //    view.draw(c);
+        //    //w.setPictureListener(null);
+        //
+        //  }
+        //});
+        //w.layout(0, 0, containerWidth, containerHeight);
+        //w.loadUrl(baseUrl);
+        //              w.loadDataWithBaseURL(baseUrl, content, "text/html", "UTF-8", null);
+      }
+    });
+
+    return b;
   }
 
   /*private class CancelListener implements DialogInterface.OnCancelListener,

@@ -8,9 +8,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import butterknife.Bind;
+
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AgentInfoBean;
@@ -19,6 +22,7 @@ import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -26,186 +30,240 @@ import rx.schedulers.Schedulers;
  * Created by wulei on 2016/2/4.
  */
 public class MamaWithdrawCashActivity extends BaseSwipeBackCompatActivity
-    implements View.OnClickListener {
-  String TAG = "MamaWithdrawCashActivity";
+        implements View.OnClickListener {
+    String TAG = "MamaWithdrawCashActivity";
 
-  @Bind(R.id.toolbar) Toolbar toolbar;
-  @Bind(R.id.btn_jump) Button btn_jump;
-  @Bind(R.id.btn_withdraw) Button btn_withdraw;
-  @Bind(R.id.rl_has_cash) RelativeLayout rl_has_cash;
-  @Bind(R.id.rl_has_no_cash) RelativeLayout rl_has_no_cash;
-  @Bind(R.id.img_red_packet1) ImageView img_red_packet1;
-  @Bind(R.id.img_red_packet2) ImageView img_red_packet2;
-  @Bind(R.id.tv_reminder) TextView tv_reminder;
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
+    @Bind(R.id.btn_jump)
+    Button btn_jump;
+    @Bind(R.id.btn_withdraw)
+    Button btn_withdraw;
+    @Bind(R.id.btn_to_wallet)
+    Button btnWallet;
+    @Bind(R.id.rl_has_cash)
+    RelativeLayout rl_has_cash;
+    @Bind(R.id.rl_has_no_cash)
+    LinearLayout rl_has_no_cash;
+    @Bind(R.id.img_red_packet1)
+    ImageView img_red_packet1;
+    @Bind(R.id.img_red_packet2)
+    ImageView img_red_packet2;
+    @Bind(R.id.tv_reminder)
+    TextView tv_reminder;
 
-  double cash;
-  float withdraw_cash_fund = 0;
-  boolean click_cash100 = false;
-  boolean click_cash200 = false;
-  private Subscription subscribe;
+    double cash;
+    float withdraw_cash_fund = 0;
+    boolean click_cash100 = false;
+    boolean click_cash200 = false;
+    private Subscription subscribe;
 
-  @Override protected void setListener() {
-    btn_jump.setOnClickListener(this);
-    btn_withdraw.setOnClickListener(this);
-    img_red_packet1.setOnClickListener(this);
-    img_red_packet2.setOnClickListener(this);
-  }
-
-  @Override protected void getBundleExtras(Bundle extras) {
-
-  }
-
-  @Override protected int getContentViewLayoutID() {
-    return R.layout.activity_withdrawcash;
-  }
-
-  @Override protected void initViews() {
-    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent),0);
-    toolbar.setTitle("");
-    setSupportActionBar(toolbar);
-    finishBack(toolbar);
-    if (null != getIntent() && null != getIntent().getExtras()) {
-      cash = getIntent().getExtras().getDouble("cash");
+    @Override
+    protected void setListener() {
+        btn_jump.setOnClickListener(this);
+        btn_withdraw.setOnClickListener(this);
+        btnWallet.setOnClickListener(this);
+        img_red_packet1.setOnClickListener(this);
+        img_red_packet2.setOnClickListener(this);
     }
-    tv_reminder.setText(Double.toString((double) (Math.round(cash * 100)) / 100));
-    if (Double.compare(cash, 0) > 0) {
-      rl_has_no_cash.setVisibility(View.INVISIBLE);
-    } else {
-      rl_has_cash.setVisibility(View.INVISIBLE);
+
+    @Override
+    protected void getBundleExtras(Bundle extras) {
+
     }
-  }
 
-  @Override protected void initData() {
-    subscribe = MamaInfoModel.getInstance()
-        .getAgentInfoBean()
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<AgentInfoBean>() {
-          @Override public void onNext(AgentInfoBean pointBean) {
-            JUtils.Log(TAG, "AgentInfoBean=" + pointBean.toString());
-          }
-        });
-  }
+    @Override
+    protected int getContentViewLayoutID() {
+        return R.layout.activity_withdrawcash;
+    }
 
-  @Override protected boolean toggleOverridePendingTransition() {
-    return false;
-  }
-
-  @Override protected TransitionMode getOverridePendingTransitionMode() {
-    return null;
-  }
-
-  @Override public void onClick(View v) {
-    switch (v.getId()) {
-      case R.id.btn_jump:
-        JUtils.Log(TAG, "withdraw cash now");
-        //startActivity(new Intent(MamaWithdrawCashActivity.this, MainActivity.class));
-        finish();
-        break;
-      case R.id.btn_withdraw:
-        JUtils.Log(TAG, "withdraw cash now");
-        withdraw_cash(withdraw_cash_fund);
-        break;
-      case R.id.img_red_packet1:
-        if (click_cash100) {
-          click_cash100 = false;
-          withdraw_cash_fund = 0;
-          img_red_packet1.setImageResource(R.drawable.img_redpacket100_1);
+    @Override
+    protected void initViews() {
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent), 0);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+        finishBack(toolbar);
+        if (null != getIntent() && null != getIntent().getExtras()) {
+            cash = getIntent().getExtras().getDouble("cash");
+        }
+        tv_reminder.setText(Double.toString((double) (Math.round(cash * 100)) / 100));
+        if (Double.compare(cash, 0) > 0) {
+            rl_has_no_cash.setVisibility(View.INVISIBLE);
         } else {
-          if (Double.compare(cash, 100) > 0) {
-            click_cash100 = true;
-            withdraw_cash_fund = 100;
-            img_red_packet1.setImageResource(R.drawable.img_redpacket100_2);
-          }
+            rl_has_cash.setVisibility(View.INVISIBLE);
         }
-        if (click_cash200) {
-          img_red_packet2.setImageResource(R.drawable.img_redpacket200_1);
-        }
+    }
 
-        break;
-      case R.id.img_red_packet2:
-        if (click_cash200) {
-          click_cash200 = false;
-          withdraw_cash_fund = 0;
-          img_red_packet2.setImageResource(R.drawable.img_redpacket200_1);
+    @Override
+    protected void initData() {
+        subscribe = MamaInfoModel.getInstance()
+                .getAgentInfoBean()
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ServiceResponse<AgentInfoBean>() {
+                    @Override
+                    public void onNext(AgentInfoBean pointBean) {
+                        JUtils.Log(TAG, "AgentInfoBean=" + pointBean.toString());
+                    }
+                });
+    }
+
+    @Override
+    protected boolean toggleOverridePendingTransition() {
+        return false;
+    }
+
+    @Override
+    protected TransitionMode getOverridePendingTransitionMode() {
+        return null;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_jump:
+                finish();
+                break;
+            case R.id.btn_withdraw:
+                JUtils.Log(TAG, "withdraw cash now");
+                withdraw_cash(withdraw_cash_fund);
+                break;
+            case R.id.btn_to_wallet:
+                toWallet(withdraw_cash_fund);
+                break;
+            case R.id.img_red_packet1:
+                if (click_cash100) {
+                    click_cash100 = false;
+                    withdraw_cash_fund = 0;
+                    img_red_packet1.setImageResource(R.drawable.img_redpacket100_1);
+                } else {
+                    if (Double.compare(cash, 100) > 0) {
+                        click_cash100 = true;
+                        withdraw_cash_fund = 100;
+                        img_red_packet1.setImageResource(R.drawable.img_redpacket100_2);
+                    }
+                }
+                if (click_cash200) {
+                    img_red_packet2.setImageResource(R.drawable.img_redpacket200_1);
+                }
+                break;
+            case R.id.img_red_packet2:
+                if (click_cash200) {
+                    click_cash200 = false;
+                    withdraw_cash_fund = 0;
+                    img_red_packet2.setImageResource(R.drawable.img_redpacket200_1);
+                } else {
+                    if (Double.compare(cash, 200) > 0) {
+                        click_cash200 = true;
+                        withdraw_cash_fund = 200;
+                        img_red_packet2.setImageResource(R.drawable.img_redpacket200_2);
+                    }
+                }
+                if (click_cash100) {
+                    img_red_packet1.setImageResource(R.drawable.img_redpacket100_1);
+                }
+                break;
+        }
+    }
+
+    private void toWallet(float fund) {
+        String fund_type = "";
+        JUtils.Log(TAG, "withdraw cash =" + fund);
+        if ((Float.compare(fund, 100) != 0) && (Float.compare(fund, 200) != 0)) {
+            JUtils.Toast("提现金额不够。");
         } else {
-          if (Double.compare(cash, 200) > 0) {
-            click_cash200 = true;
-            withdraw_cash_fund = 200;
-            img_red_packet2.setImageResource(R.drawable.img_redpacket200_2);
-          }
-        }
-        if (click_cash100) {
-          img_red_packet1.setImageResource(R.drawable.img_redpacket100_1);
-        }
-
-        break;
-    }
-  }
-
-  @Override public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-      case R.id.action_history:
-        JUtils.Log(TAG, "withdraw cash history entry");
-        startActivity(new Intent(this, MamaWithdrawCashHistoryActivity.class));
-        break;
-      default:
-        break;
-    }
-    return super.onOptionsItemSelected(item);
-  }
-
-  @Override public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.menu_withdrawcash, menu);
-    return super.onCreateOptionsMenu(menu);
-  }
-
-  private void withdraw_cash(float fund) {
-    String fund_type = "";
-
-    JUtils.Log(TAG, "withdraw cash =" + fund);
-    if ((Float.compare(fund, 100) != 0) && (Float.compare(fund, 200) != 0)) {
-      JUtils.Toast("提现金额不够。");
-    } else {
-      if (Float.compare(fund, 100) == 0) {
-        fund_type = "c1";
-      } else if (Float.compare(fund, 200) == 0) {
-        fund_type = "c2";
-      }
-
-      subscribe = MamaInfoModel.getInstance()
-          .withdraw_cash(fund_type)
-          .subscribeOn(Schedulers.io())
-          .subscribe(new ServiceResponse<ResponseResultBean>() {
-            @Override public void onNext(ResponseResultBean resp) {
-              JUtils.Log(TAG, "ResponseBody11=" + resp.getCode());
-              switch (resp.getCode()) {
-                case 0:
-                  JUtils.Toast("提现成功，待审核通过");
-                  break;
-                case 1:
-                  JUtils.Toast("参数错误");
-                  break;
-                case 2:
-                  JUtils.Toast("不足提现金额");
-                  break;
-                case 3:
-                  JUtils.Toast("有待审核记录不予再次提现 ");
-                  break;
-              }
-
-              Intent intent = new Intent(MamaWithdrawCashActivity.this,
-                  MamaWithdrawCashResultActivity.class);
-              intent.putExtra("cash", fund);
-              startActivity(intent);
+            if (Float.compare(fund, 100) == 0) {
+                fund_type = "c1";
+            } else if (Float.compare(fund, 200) == 0) {
+                fund_type = "c2";
             }
-          });
-    }
-  }
+            subscribe = MamaInfoModel.getInstance()
+                    .toWallet(fund_type)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(new ServiceResponse<ResponseResultBean>() {
+                        String msg = "";
+                        @Override
+                        public void onNext(ResponseResultBean resp) {
+                            switch (resp.getCode()) {
+                                case 0:
+                                    msg = "转账已提交,待审核中";
+                                    break;
+                                case 1:
+                                    msg = "参数错误";
+                                    break;
+                                case 2:
+                                    msg = "不足转账金额";
+                                    break;
+                                case 3:
+                                    msg = "有待审核记录不予操作";
+                                    break;
+                                default:
+                                    msg = "系统状态异常";
+                                    break;
+                            }
+                        }
 
-  @Override protected void onStop() {
-    super.onStop();
-    if (subscribe != null && subscribe.isUnsubscribed()) {
-      subscribe.unsubscribe();
+                        @Override
+                        public void onCompleted() {
+                            JUtils.ToastLong(msg);
+                        }
+                    });
+        }
     }
-  }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_history:
+                JUtils.Log(TAG, "withdraw cash history entry");
+                startActivity(new Intent(this, MamaWithdrawCashHistoryActivity.class));
+                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_withdrawcash, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private void withdraw_cash(float fund) {
+        String fund_type = "";
+
+        JUtils.Log(TAG, "withdraw cash =" + fund);
+        if ((Float.compare(fund, 100) != 0) && (Float.compare(fund, 200) != 0)) {
+            JUtils.Toast("提现金额不够。");
+        } else {
+            if (Float.compare(fund, 100) == 0) {
+                fund_type = "c1";
+            } else if (Float.compare(fund, 200) == 0) {
+                fund_type = "c2";
+            }
+
+            subscribe = MamaInfoModel.getInstance()
+                    .withdraw_cash(fund_type)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(new ServiceResponse<ResponseResultBean>() {
+                        @Override
+                        public void onNext(ResponseResultBean resp) {
+                            JUtils.Log(TAG, "ResponseBody11=" + resp.getCode());
+                            Intent intent = new Intent(MamaWithdrawCashActivity.this,
+                                    MamaWithdrawCashResultActivity.class);
+                            intent.putExtra("cash", fund);
+                            intent.putExtra("code", resp.getCode());
+                            startActivity(intent);
+                        }
+                    });
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (subscribe != null && subscribe.isUnsubscribed()) {
+            subscribe.unsubscribe();
+        }
+    }
 }

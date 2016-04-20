@@ -23,6 +23,7 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.zhy.autolayout.config.AutoLayoutConifg;
+import com.zhy.http.okhttp.OkHttpUtils;
 import java.io.IOException;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
@@ -56,7 +57,10 @@ public class XlmmApp extends MultiDexApplication {
     super.onCreate();
 
     //LeakCanary.install(this);
-    //Thread.setDefaultUncaughtExceptionHandler(new MyUnCaughtExceptionHandler());
+    Thread.setDefaultUncaughtExceptionHandler(new MyUnCaughtExceptionHandler());
+
+    OkHttpUtils.getInstance().setConnectTimeout(10 * 1000, TimeUnit.MILLISECONDS);
+
     mContext = getApplicationContext();
     cookiePrefs = getSharedPreferences("COOKIESxlmm", 0);
     client = initOkHttpClient();
