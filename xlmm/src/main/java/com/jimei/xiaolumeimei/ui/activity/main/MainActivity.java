@@ -376,7 +376,6 @@ public class MainActivity extends BaseActivity
   }
 
   private void initDataForTab() {
-
     initPost();
     subscription5 = Observable.timer(1, 1, TimeUnit.SECONDS)
         .onBackpressureDrop()
