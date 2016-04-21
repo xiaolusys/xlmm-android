@@ -68,6 +68,8 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity implements
     LinearLayout lastLayout;
     @Bind(R.id.round_image)
     RoundCornerImageView imageView;
+    @Bind(R.id.refund_type)
+    TextView refundTypeTv;
     private int refund_state;
     private int goods_id;
 
@@ -179,6 +181,10 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity implements
         lastStateTv.setText(refundDetailBean.getStatus_display());
         ViewUtils.loadImgToImgView(getApplicationContext(),imageView,refundDetailBean.getPic_path());
         JUtils.Log(TAG, "crt time " + refundDetailBean.getCreated());
+        if (refundDetailBean.getStatus_display().equals("退款成功")) {
+            // TODO: 16/4/21
+            refundTypeTv.setText("获取失败");
+        }
     }
 
     private void fillPicPath(List<String> mDatas, String pics) {

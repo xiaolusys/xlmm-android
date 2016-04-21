@@ -109,7 +109,9 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
     protected void getBundleExtras(Bundle extras) {
         tid = extras.getString("tid");
         time = extras.getString("time");
-        Log.d(TAG, tid);
+        if (tid!=null) {
+            JUtils.Log(TAG, tid);
+        }
     }
 
     @Override

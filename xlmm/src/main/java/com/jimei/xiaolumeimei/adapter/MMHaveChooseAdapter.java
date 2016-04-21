@@ -22,7 +22,7 @@ import java.util.List;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by itxuye(http://www.itxuye.com) on 16/4/2.
+ * Created by itxuye(http://www.itxuye.com) on 16 /4/2.
  */
 public class MMHaveChooseAdapter
     extends BaseAdapter<ShopProductBean.ResultsBean, MMHaveChooseAdapter.MMHaveChooseVH> {
