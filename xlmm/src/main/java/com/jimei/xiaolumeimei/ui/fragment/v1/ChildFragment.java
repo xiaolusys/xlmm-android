@@ -11,12 +11,14 @@ import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.cpoopc.scrollablelayoutlib.ScrollableHelper;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.ChildListAdapter;
 import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
+import com.jimei.xiaolumeimei.widget.ExStaggeredGridLayoutManager;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
@@ -31,11 +33,11 @@ import rx.schedulers.Schedulers;
  *
  * Copyright 2016年 上海己美. All rights reserved.
  */
-public class ChildFragment extends Fragment {
-
-  @Bind(R.id.childlist_recyclerView) XRecyclerView xRecyclerView;
+public class ChildFragment extends Fragment
+    implements ScrollableHelper.ScrollableContainer {
 
   int page_size = 10;
+  @Bind(R.id.childlist_recyclerView) XRecyclerView xRecyclerView;
   List<ChildListBean.ResultsEntity> list = new ArrayList<>();
   private int page = 2;
   private int totalPages;//总的分页数
@@ -106,8 +108,11 @@ public class ChildFragment extends Fragment {
   }
 
   private void initViews(View view) {
-
-    xRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+    ExStaggeredGridLayoutManager manager =
+        new ExStaggeredGridLayoutManager(getActivity(), 2);
+    manager.setOrientation(GridLayoutManager.VERTICAL);
+    manager.setSmoothScrollbarEnabled(true);
+    xRecyclerView.setLayoutManager(manager);
 
     xRecyclerView.addItemDecoration(new SpaceItemDecoration(10));
 
@@ -232,5 +237,9 @@ public class ChildFragment extends Fragment {
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+
+  @Override public View getScrollableView() {
+    return xRecyclerView;
   }
 }

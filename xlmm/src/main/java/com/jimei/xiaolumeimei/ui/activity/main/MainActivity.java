@@ -32,6 +32,8 @@ import android.widget.TextView;
 import butterknife.Bind;
 import cn.iwgang.countdownview.CountdownView;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.cpoopc.scrollablelayoutlib.ScrollableHelper;
+import com.cpoopc.scrollablelayoutlib.ScrollableLayout;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
@@ -121,6 +123,7 @@ public class MainActivity extends BaseActivity
   UserInfoBean userInfoBean = new UserInfoBean();
   @Bind(R.id.image_1) ImageView image1;
   @Bind(R.id.image_2) ImageView image2;
+  @Bind(R.id.scrollableLayout) ScrollableLayout scrollableLayout;
   private View view;
   //private View head;
   private ImageView post2;
@@ -357,7 +360,7 @@ public class MainActivity extends BaseActivity
       mTabHost.setTag(i);
     }
 
-    list.add(YesterdayV2Fragment.newInstance("昨天"));
+    list.add(ChildFragment.newInstance("昨天"));
     list.add(TodayV2Fragment.newInstance("今天"));
     list.add(TomorrowV2Fragment.newInstance("明天"));
     vp.setAdapter(new MyFragmentAdapter(getSupportFragmentManager(), list));
@@ -366,6 +369,9 @@ public class MainActivity extends BaseActivity
     mSliderLayout = (SliderLayout) findViewById(R.id.slider);
     mPagerIndicator = (PagerIndicator) findViewById(R.id.pi_header);
 
+    scrollableLayout.getHelper()
+        .setCurrentScrollableContainer(
+            (ScrollableHelper.ScrollableContainer) list.get(0));
     initDataForTab();
   }
 
