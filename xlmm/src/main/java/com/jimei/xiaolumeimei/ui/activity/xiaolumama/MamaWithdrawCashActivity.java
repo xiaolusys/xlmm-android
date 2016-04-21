@@ -169,7 +169,7 @@ public class MamaWithdrawCashActivity extends BaseSwipeBackCompatActivity
         String fund_type = "";
         JUtils.Log(TAG, "withdraw cash =" + fund);
         if ((Float.compare(fund, 100) != 0) && (Float.compare(fund, 200) != 0)) {
-            JUtils.Toast("提现金额不够。");
+            JUtils.Toast("请选择转账金额。");
         } else {
             if (Float.compare(fund, 100) == 0) {
                 fund_type = "c1";
@@ -234,7 +234,7 @@ public class MamaWithdrawCashActivity extends BaseSwipeBackCompatActivity
 
         JUtils.Log(TAG, "withdraw cash =" + fund);
         if ((Float.compare(fund, 100) != 0) && (Float.compare(fund, 200) != 0)) {
-            JUtils.Toast("提现金额不够。");
+            JUtils.Toast("请选择提现金额。");
         } else {
             if (Float.compare(fund, 100) == 0) {
                 fund_type = "c1";
