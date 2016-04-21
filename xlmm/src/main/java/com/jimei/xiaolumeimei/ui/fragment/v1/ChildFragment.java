@@ -33,8 +33,7 @@ import rx.schedulers.Schedulers;
  *
  * Copyright 2016年 上海己美. All rights reserved.
  */
-public class ChildFragment extends Fragment
-    implements ScrollableHelper.ScrollableContainer {
+public class ChildFragment extends Fragment implements ScrollableHelper.ScrollableContainer{
 
   int page_size = 10;
   @Bind(R.id.childlist_recyclerView) XRecyclerView xRecyclerView;

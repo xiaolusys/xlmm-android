@@ -22,12 +22,11 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
-import android.widget.TabHost;
-import android.widget.TabWidget;
 import android.widget.TextView;
 import butterknife.Bind;
 import cn.iwgang.countdownview.CountdownView;
@@ -96,16 +95,12 @@ import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseActivity
     implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener,
-    ViewPager.OnPageChangeListener, TabHost.OnTabChangeListener {
+    ViewPager.OnPageChangeListener {
   private static final String POST_URL = "?imageMogr2/format/jpg/quality/80";
   public static String TAG = "MainActivity";
-  //@Bind(R.id.tab_layout) TabLayout mTabLayout;
-  //@Bind(R.id.view_pager) ViewPager mViewPager;
   @Bind(R.id.tool_bar) Toolbar toolbar;
-  //@Bind(R.id.fab) FloatingActionButton carts;
   @Bind(R.id.rv_cart) RelativeLayout carts;
   @Bind(R.id.img_mmentry) ImageView img_mmentry;
-  //@Bind(R.id.xrecyclerView) XRecyclerView xRecyclerView;
   List<String> postString = new ArrayList<>();
   List<String> appString = new ArrayList<>();
   List<PostBean.WemPostersEntity> wemPosters = new ArrayList<>();
@@ -124,6 +119,10 @@ public class MainActivity extends BaseActivity
   @Bind(R.id.image_1) ImageView image1;
   @Bind(R.id.image_2) ImageView image2;
   @Bind(R.id.scrollableLayout) ScrollableLayout scrollableLayout;
+  @Bind(R.id.rb_yesterday) RadioButton rbYesterday;
+  @Bind(R.id.rb_today) RadioButton rbToday;
+  @Bind(R.id.rb_tomorror) RadioButton rbTomorror;
+  @Bind(R.id.radioGroup) RadioGroup radioGroup;
   private View view;
   //private View head;
   private ImageView post2;
@@ -258,9 +257,8 @@ public class MainActivity extends BaseActivity
               }
 
               //获得待支付和待收货数目
-              android.support.design.widget.NavigationView navigationView =
-                  (android.support.design.widget.NavigationView) drawer.findViewById(
-                      R.id.nav_view);
+              NavigationView navigationView =
+                  (NavigationView) drawer.findViewById(R.id.nav_view);
               LinearLayout nav_tobepaid = (LinearLayout) navigationView.getMenu()
                   .findItem(R.id.nav_tobepaid)
                   .getActionView();
@@ -344,34 +342,42 @@ public class MainActivity extends BaseActivity
     view = LayoutInflater.from(this).inflate(R.layout.activity_main, null);
     sharedPreferencesMask = getSharedPreferences("maskActivity", 0);
     mask = sharedPreferencesMask.getInt("mask", 0);
-    vp = (ViewPager) findViewById(R.id.pager);
+    vp = (ViewPager) findViewById(R.id.viewPager);
     vp.setOnPageChangeListener(this);
 
-    layoutInflater = LayoutInflater.from(this);
-    mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
-    mTabHost.setup(this, getSupportFragmentManager(), R.id.pager);
-    mTabHost.setOnTabChangedListener(this);
-
-    int count = imageViewArray.length;
-
-    for (int i = 0; i < count; i++) {
-      TabHost.TabSpec tabSpec = mTabHost.newTabSpec("").setIndicator(getTabItemView(i));
-      mTabHost.addTab(tabSpec, fragmentArr[i], null);
-      mTabHost.setTag(i);
-    }
+    radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+      @Override public void onCheckedChanged(RadioGroup group, int checkedId) {
+        switch (checkedId) {
+          case R.id.rb_yesterday:
+            /**
+             * setCurrentItem第二个参数控制页面切换动画
+             * true:打开/false:关闭
+             */
+            vp.setCurrentItem(0, false);
+            break;
+          case R.id.rb_today:
+            vp.setCurrentItem(1, false);
+            break;
+          case R.id.rb_tomorror:
+            vp.setCurrentItem(2, false);
+            break;
+        }
+      }
+    });
 
     list.add(ChildFragment.newInstance("昨天"));
     list.add(TodayV2Fragment.newInstance("今天"));
     list.add(TomorrowV2Fragment.newInstance("明天"));
     vp.setAdapter(new MyFragmentAdapter(getSupportFragmentManager(), list));
+    vp.setCurrentItem(0);
+
     post_activity_layout = (LinearLayout) findViewById(R.id.post_activity);
     countTime = (CountdownView) findViewById(R.id.countTime);
     mSliderLayout = (SliderLayout) findViewById(R.id.slider);
     mPagerIndicator = (PagerIndicator) findViewById(R.id.pi_header);
 
     scrollableLayout.getHelper()
-        .setCurrentScrollableContainer(
-            (ScrollableHelper.ScrollableContainer) list.get(0));
+        .setCurrentScrollableContainer((ScrollableHelper.ScrollableContainer) list.get(0));
     initDataForTab();
   }
 
@@ -1013,26 +1019,35 @@ public class MainActivity extends BaseActivity
 
   @Override public void onPageScrolled(int position, float positionOffset,
       int positionOffsetPixels) {
-
+    switch (position) {
+      case 0:
+        radioGroup.check(R.id.rb_yesterday);
+        break;
+      case 1:
+        radioGroup.check(R.id.rb_today);
+        break;
+      case 2:
+        radioGroup.check(R.id.rb_tomorror);
+        break;
+    }
   }
 
   @Override public void onPageSelected(int position) {
-    TabWidget widget = mTabHost.getTabWidget();
-    int oldFocusability = widget.getDescendantFocusability();
-    widget.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
-    mTabHost.setCurrentTab(position);
-    widget.setDescendantFocusability(oldFocusability);
-    //mTabHost.getTabWidget().getChildAt(position)
-    //    .setBackgroundResource(R.drawable.selector_tab_background);
+    switch (position) {
+      case 0:
+        radioGroup.check(R.id.rb_yesterday);
+        break;
+      case 1:
+        radioGroup.check(R.id.rb_today);
+        break;
+      case 2:
+        radioGroup.check(R.id.rb_tomorror);
+        break;
+    }
   }
 
   @Override public void onPageScrollStateChanged(int state) {
 
-  }
-
-  @Override public void onTabChanged(String tabId) {
-    int position = mTabHost.getCurrentTab();
-    vp.setCurrentItem(position);
   }
 
   private class MyFragmentAdapter extends FragmentPagerAdapter {
