@@ -115,7 +115,7 @@
       SortId="6"
       AppId="wx25fcb32689872499"
       AppSecret="3c7b4e3eb5ae4cfb132b2ac060a872ee"
-      Enable="true"/>
+      Enable="false"/>
 
   <!-- ShareByAppClient标识是否使用微博客户端分享，默认是false -->
   <QQ

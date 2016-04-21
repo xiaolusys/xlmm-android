@@ -11,10 +11,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
+import butterknife.Bind;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -40,13 +39,10 @@ import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.zhy.autolayout.AutoRelativeLayout;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
-
-import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -143,7 +139,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
     finishBack(toolbar);
-    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent),0);
+    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent), 0);
   }
 
   @Override protected void initData() {
@@ -277,9 +273,17 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         break;
       case R.id.rl_party:
         intent = new Intent(this, BoutiqueWebviewActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("actlink", actlink);
-        intent.putExtras(bundle);
+        sharedPreferences =
+            getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+        cookies = sharedPreferences.getString("cookiesString", "");
+        domain = sharedPreferences.getString("cookiesDomain", "");
+
+        Bundle bundlerl_party = new Bundle();
+        bundlerl_party.putString("cookies", cookies);
+        bundlerl_party.putString("domain", domain);
+        bundlerl_party.putString("Cookie", sharedPreferences.getString("Cookie", ""));
+        bundlerl_party.putString("actlink", actlink);
+        intent.putExtras(bundlerl_party);
         startActivity(intent);
         break;
       case R.id.rl_push:
@@ -313,7 +317,8 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         Bundle bundlerl_two_dimen = new Bundle();
         bundlerl_two_dimen.putString("cookies", cookies);
         bundlerl_two_dimen.putString("domain", domain);
-        bundlerl_two_dimen.putString("cookies", sharedPreferences.getString("Cookie", ""));
+        bundlerl_two_dimen.putString("cookies",
+            sharedPreferences.getString("Cookie", ""));
         bundlerl_two_dimen.putString("actlink", shareMmcode);
         intentrl_two_dimen.putExtras(bundlerl_two_dimen);
         startActivity(intentrl_two_dimen);

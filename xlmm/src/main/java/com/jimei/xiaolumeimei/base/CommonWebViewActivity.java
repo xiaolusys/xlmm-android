@@ -1,14 +1,25 @@
 package com.jimei.xiaolumeimei.base;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
+import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,22 +36,25 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.entities.ActivityBean;
-import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
-import com.jimei.xiaolumeimei.model.ActivityModel;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
-import com.mob.tools.utils.UIHandler;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
+import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.entities.ActivityBean;
+import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
+import com.jimei.xiaolumeimei.model.ActivityModel;
+import com.jimei.xiaolumeimei.utils.CameraUtils;
+import com.jimei.xiaolumeimei.utils.FileUtils;
+import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jude.utils.JUtils;
+import com.mob.tools.utils.UIHandler;
+import com.tbruyelle.rxpermissions.RxPermissions;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -53,12 +67,13 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     implements PlatformActionListener, Handler.Callback {
 
   private static final int MSG_ACTION_CCALLBACK = 2;
-
+  private static final int WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 200;
   private static final String TAG = CommonWebViewActivity.class.getSimpleName();
   protected TextView webviewTitle;
   LinearLayout ll_actwebview;
+  private Bitmap bitmap;
   private Toolbar mToolbar;
-  private WebView mWebView;
+  public WebView mWebView;
   private ProgressBar mProgressBar;
   private String cookies;
   private String actlink;
@@ -117,8 +132,9 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     return R.layout.activity_actwebview;
   }
 
-//  @TargetApi(Build.VERSION_CODES.KITKAT)
+  //  @TargetApi(Build.VERSION_CODES.KITKAT)
   @SuppressLint("JavascriptInterface") @Override protected void initViews() {
+    //requestPermission();
     JUtils.Log(TAG, "initViews");
     ShareSDK.initSDK(this);
 
@@ -152,7 +168,8 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
       mWebView.getSettings().setDatabaseEnabled(true);
       mWebView.getSettings().setLoadWithOverviewMode(true);
       mWebView.getSettings().setUseWideViewPort(true);
-//      mWebView.setWebContentsDebuggingEnabled(true);
+      mWebView.setDrawingCacheEnabled(true);
+      //      mWebView.setWebContentsDebuggingEnabled(true);
 
       mWebView.setWebChromeClient(new WebChromeClient() {
         @Override public void onProgressChanged(WebView view, int newProgress) {
@@ -272,6 +289,10 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
       mWebView.removeAllViews();
       mWebView.destroy();
     }
+
+    if (bitmap != null) {
+      bitmap.recycle();
+    }
   }
 
   @Override protected void onStop() {
@@ -359,10 +380,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     return false;
   }
 
-
-
-
-
   public void get_party_share_content(String id) {
     JUtils.Log(TAG, "get_party_share_content id " + id);
 
@@ -445,30 +462,147 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     //oks.setSite(getString(R.string.app_name));
     // siteUrl是分享此内容的网站地址，仅在QQ空间使用
     //oks.setSiteUrl("http://sharesdk.cn");
-
+    Bitmap enableLogo = BitmapFactory.decodeResource(mContext.getResources(),
+        R.drawable.ssdk_oks_logo_copy);
+    String label = "二维码";
+    Bitmap enableLogo2 = BitmapFactory.decodeResource(mContext.getResources(),
+        R.drawable.ssdk_oks_logo_copy);
+    View.OnClickListener listener = new View.OnClickListener() {
+      public void onClick(View v) {
+        //if (shareProductBean.getShareLink()) {
+        //}
+        saveTwoDimenCode(mContext);
+      }
+    };
+    oks.setCustomerLogo(enableLogo, enableLogo2, label, listener);
     // 启动分享GUI
     oks.show(this);
   }
 
-  /*private class CancelListener implements DialogInterface.OnCancelListener,
-          DialogInterface.OnClickListener {
+  public void saveTwoDimenCode(Context context) {
 
-    @Override
-    public void onCancel(DialogInterface dialogInterface) {
-      mResult.cancel();
+    if (partyShareInfo == null || TextUtils.isEmpty(partyShareInfo.getShareLink())) {
+
+      JUtils.Log(TAG, "saveTowDimenCode : fail,Qrcodelink=null");
+      return;
     }
 
-    @Override
-    public void onClick(DialogInterface dialogInterface, int i) {
-      mResult.cancel();
+    JUtils.Log(TAG, "saveTowDimenCode : Qrcodelink=" + partyShareInfo.getShareLink());
+    try {
+      //WebView webView = new WebView(this);
+      //webView.setLayoutParams(new Toolbar.LayoutParams(Toolbar.LayoutParams.MATCH_PARENT,
+      //    Toolbar.LayoutParams.MATCH_PARENT));
+      //webView.getSettings().setJavaScriptEnabled(true);
+      //
+      //webView.getSettings().setAllowFileAccess(true);
+      ////如果访问的页面中有Javascript，则webview必须设置支持Javascript
+      ////mWebView.getSettings().setUserAgentString(MyApplication.getUserAgent());
+      //webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+      //webView.getSettings().setAllowFileAccess(true);
+      //webView.getSettings().setAppCacheEnabled(true);
+      //webView.getSettings().setDomStorageEnabled(true);
+      //webView.getSettings().setDatabaseEnabled(true);
+      //webView.setDrawingCacheEnabled(true);
+      //
+      //webView.setWebChromeClient(new WebChromeClient() {
+      //  @Override public void onProgressChanged(WebView view, int newProgress) {
+      //
+      //  }
+      //});
+      //webView.setWebViewClient(new WebViewClient() {
+      //  @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
+      //    view.loadUrl(url);
+      //    return true;
+      //  }
+      //});
+      //
+      //webView.loadUrl(partyShareInfo.getQrcodeLink());
+      bitmap = mWebView.getDrawingCache();
+      JUtils.Log(TAG, "bitmap====" + bitmap.getByteCount());
+      RxPermissions.getInstance(this)
+          .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+          .subscribe(granted -> {
+            if (granted) {
+              String fileName = Environment.getExternalStorageDirectory() +
+                  CameraUtils.XLMM_IMG_PATH + "/webview_capture" + ".jpg";
+
+              if (FileUtils.isFileExist(fileName)) {
+                FileUtils.deleteFile(fileName);
+              }
+
+              try {
+                FileOutputStream fos = new FileOutputStream(fileName);
+                //压缩bitmap到输出流中
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                fos.flush();
+                fos.close();
+              } catch (IOException e) {
+                e.printStackTrace();
+              }
+
+              Uri uri = Uri.fromFile(new File(fileName));
+              // 通知图库更新
+              Intent scannerIntent =
+                  new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
+              scannerIntent.setData(uri);
+
+              sendBroadcast(scannerIntent);
+              JUtils.Log(TAG, "filename===" + FileUtils.isFileExist(fileName));
+              Toast.makeText(this, "截取快照成功至/xlmm/xiaolumeimei", Toast.LENGTH_LONG).show();
+            } else {
+              // Oups permission denied
+              JUtils.Toast("小鹿美美需要存储权限存储图片,请再次点击保存并打开权限许可.");
+            }
+          });
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      //if (null!=bitmap) {
+      //  bitmap.recycle();
+      //}
     }
   }
 
-  private class PositiveListener implements DialogInterface.OnClickListener {
-
-    @Override
-    public void onClick(DialogInterface dialogInterface, int i) {
-      mResult.confirm();
+  /**
+   * 当系统版本大于5.0时 开启enableSlowWholeDocumentDraw 获取整个html文档内容
+   */
+  private void checkSdkVersion() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      WebView.enableSlowWholeDocumentDraw();
     }
-  }*/
+  }
+
+  /**
+   * 当build target为23时，需要动态申请权限
+   */
+  private void requestPermission() {
+    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+
+      if (ContextCompat.checkSelfPermission(this,
+          Manifest.permission.WRITE_EXTERNAL_STORAGE)
+          != PackageManager.PERMISSION_GRANTED) {
+        //申请WRITE_EXTERNAL_STORAGE权限
+        ActivityCompat.requestPermissions(this,
+            new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+            WRITE_EXTERNAL_STORAGE_REQUEST_CODE);
+      }
+    }
+  }
+
+  @Override public void onRequestPermissionsResult(int requestCode, String[] permissions,
+      int[] grantResults) {
+    switch (requestCode) {
+      case 200:
+        boolean writeAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+        Log.d(TAG, "writeAcceped--" + writeAccepted);
+        break;
+    }
+  }
+
+  public void copy(String content, Context context) {
+    // 得到剪贴板管理器
+    ClipboardManager cmb =
+        (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+    cmb.setText(content.trim());
+  }
 }
