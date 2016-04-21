@@ -1,11 +1,14 @@
 package com.jimei.xiaolumeimei.htmlJsBridge;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Picture;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
@@ -33,12 +36,16 @@ import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.model.ActivityModel;
-import com.jimei.xiaolumeimei.utils.BitmapUtil;
+import com.jimei.xiaolumeimei.utils.CameraUtils;
+import com.jimei.xiaolumeimei.utils.FileUtils;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.mob.tools.utils.UIHandler;
+import com.tbruyelle.rxpermissions.RxPermissions;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
@@ -56,6 +63,7 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
 
   private ActivityBean partyShareInfo;
   private Activity mContext;
+  private Bitmap bitmap;
 
   public AndroidJsBridge(Activity context) {
     //this.commonWebViewActivity = commonWebViewActivity;
@@ -282,14 +290,17 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
 
     Bitmap enableLogo = BitmapFactory.decodeResource(mContext.getResources(),
         R.drawable.ssdk_oks_logo_copy);
-    String label = "快照链接";
+    String label = "复制链接";
     Bitmap enableLogo2 = BitmapFactory.decodeResource(mContext.getResources(),
         R.drawable.ssdk_oks_logo_copy);
     View.OnClickListener listener = new View.OnClickListener() {
       public void onClick(View v) {
         //if (shareProductBean.getShareLink()) {
         //}
-        saveTwoDimenCode(mContext);
+        //saveTwoDimenCode(mContext);
+
+        copy(partyShareInfo.getShareLink(), mContext);
+        JUtils.Toast("文字已经复制");
       }
     };
     oks.setCustomerLogo(enableLogo, enableLogo2, label, listener);
@@ -300,12 +311,12 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
   public void saveTwoDimenCode(Context context) {
 
     if ((partyShareInfo == null)
-        || (partyShareInfo.getShareLink() == null)
-        || (partyShareInfo.getShareLink().equals(""))) {
-      JUtils.Log(TAG, "saveTowDimenCode : fail,Qrcodelink=null");
+        || (partyShareInfo.getQrcodeLink() == null)
+        || (partyShareInfo.getQrcodeLink().equals(""))) {
+      JUtils.Log(TAG, "saveTowDimenCode : fail,Qrcodelink=null" );
       return;
     } else {
-      JUtils.Log(TAG, "saveTowDimenCode : Qrcodelink=" + partyShareInfo.getShareLink());
+      JUtils.Log(TAG, "saveTowDimenCode : Qrcodelink=" + partyShareInfo.getQrcodeLink());
       try {
         WebView webView = new WebView(context);
         webView.setLayoutParams(
@@ -321,6 +332,7 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
         webView.getSettings().setAppCacheEnabled(true);
         webView.getSettings().setDomStorageEnabled(true);
         webView.getSettings().setDatabaseEnabled(true);
+        //webView.setDrawingCacheEnabled(true);
 
         webView.setWebChromeClient(new WebChromeClient() {
           @Override public void onProgressChanged(WebView view, int newProgress) {
@@ -336,14 +348,52 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
 
         webView.loadUrl(partyShareInfo.getQrcodeLink());
         //Bitmap bmp= captureWebView(webView);
-        View cv = mContext.getWindow().getDecorView();
+        View cv = ((BaseSwipeBackCompatActivity)mContext).getWindow().getDecorView();
         Bitmap bmp = catchWebScreenshot(webView, cv.getWidth(), cv.getHeight(),
             partyShareInfo.getShareLink(), mContext);
-        String fileName = Environment.getExternalStorageDirectory()
+        /*String fileName = Environment.getExternalStorageDirectory()
             + "/"
             + Environment.DIRECTORY_DCIM
             + "/Camera/小鹿美美活动二维码.jpg";
-        //saveBitmap(bmp, fileName);
+        saveBitmap(bmp, fileName);*/
+
+        RxPermissions.getInstance(context)
+            .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            .subscribe(granted -> {
+              if (granted) {
+                String fileName = Environment.getExternalStorageDirectory() +
+                    CameraUtils.XLMM_IMG_PATH + "/webview_capture1" + ".jpg";
+
+                if (FileUtils.isFileExist(fileName)) {
+                  FileUtils.deleteFile(fileName);
+                }
+
+                try {
+                  FileOutputStream fos = new FileOutputStream(fileName);
+                  //压缩bitmap到输出流中
+                  bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                  fos.flush();
+                  fos.close();
+                } catch (IOException e) {
+                  e.printStackTrace();
+                }
+
+                Uri uri = Uri.fromFile(new File(fileName));
+                // 通知图库更新
+                Intent scannerIntent =
+                    new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
+                scannerIntent.setData(uri);
+
+                context.sendBroadcast(scannerIntent);
+                JUtils.Log(TAG, "filename===" + FileUtils.isFileExist(fileName));
+                Toast.makeText(context, "截取快照成功至/xlmm/xiaolumeimei", Toast.LENGTH_LONG)
+                    .show();
+              } else {
+                // Oups permission denied
+                JUtils.Toast("小鹿美美需要存储权限存储图片,请再次点击保存并打开权限许可.");
+              }
+            });
+
 
       } catch (Exception e) {
         e.printStackTrace();
@@ -363,43 +413,34 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
       final int containerHeight, final String baseUrl, final Context context) {
     final Bitmap b =
         Bitmap.createBitmap(containerWidth, containerHeight, Bitmap.Config.ARGB_8888);
-
     w.post(new Runnable() {
       public void run() {
         w.setWebViewClient(new WebViewClient() {
           @Override public void onPageFinished(WebView view, String url) {
             JUtils.Log(TAG, "onPageFinished URL=" + url);
-            Canvas canvas = new Canvas(b);
-            view.draw(canvas);
 
-            String fileName = Environment.getExternalStorageDirectory()
-                + "/"
-                + Environment.DIRECTORY_DCIM
-                + "/Camera/"
-                + context.getResources().getString(R.string.share_2dimen_pic_name)
-                + ".jpg";
-            BitmapUtil.saveBitmap(b, fileName);
-            Toast.makeText(context, R.string.share_2dimen_pic_tips, Toast.LENGTH_SHORT)
-                .show();
+            //String fileName = Environment.getExternalStorageDirectory()
+            //    + "/"
+            //    + Environment.DIRECTORY_DCIM
+            //    + "/Camera/"
+            //    + context.getResources().getString(R.string.share_2dimen_pic_name)
+            //    + ".jpg";
+            //BitmapUtil.saveBitmap(b, fileName);
 
-            File file = new File(fileName);
-            Uri uri = Uri.fromFile(file);
-            // 通知图库更新
-            Intent scannerIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
-            context.sendBroadcast(scannerIntent);
+
           }
         });
-        //w.setPictureListener(new WebView.PictureListener() {
-        //  public void onNewPicture(WebView view, Picture picture) {
-        //    JUtils.Log(TAG, "onNewPicture ");
-        //    final Canvas c = new Canvas(b);
-        //    view.draw(c);
-        //    //w.setPictureListener(null);
-        //
-        //  }
-        //});
-        //w.layout(0, 0, containerWidth, containerHeight);
-        //w.loadUrl(baseUrl);
+        w.setPictureListener(new WebView.PictureListener() {
+          public void onNewPicture(WebView view, Picture picture) {
+            JUtils.Log(TAG, "onNewPicture ");
+            final Canvas c = new Canvas(b);
+            view.draw(c);
+            //w.setPictureListener(null);
+
+          }
+        });
+        w.layout(0, 0, containerWidth, containerHeight);
+        w.loadUrl(baseUrl);
         //              w.loadDataWithBaseURL(baseUrl, content, "text/html", "UTF-8", null);
       }
     });
@@ -474,5 +515,12 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     //JUtils.Log(TAG, url+"aaaa");
     JumpUtils.push_jump_proc(mContext, url);
     //}
+  }
+
+  public void copy(String content, Context context) {
+    // 得到剪贴板管理器
+    ClipboardManager cmb =
+        (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+    cmb.setText(content.trim());
   }
 }
