@@ -1,68 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:padding="4dp"
-
-    android:orientation="vertical"
-
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <ImageView
-        android:id="@+id/image_chooselist"
-        android:layout_width="150px"
-        android:layout_height="150px"
-        />
+    android:layout_height="wrap_content"
+    android:padding="20px">
+
+    <RelativeLayout
+        android:id="@+id/img_layout"
+        android:layout_width="130px"
+        android:layout_height="130px"
+        android:background="@drawable/choose_img_bg"
+        android:gravity="center">
+
+        <com.jimei.xiaolumeimei.widget.RoundCornerImageView
+            android:id="@+id/image_chooselist"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY" />
+
+    </RelativeLayout>
+
     <TextView
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="8dp"
         android:id="@+id/name"
-        android:layout_toRightOf="@id/image_chooselist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        />
+        android:layout_marginLeft="20px"
+        android:layout_marginTop="10px"
+        android:layout_toRightOf="@id/img_layout"
+        android:text="韩版大摆加厚卫衣"
+        android:textColor="@color/c26262E"
+        android:textSize="15sp" />
+
     <TextView
-        android:layout_marginBottom="8dp"
-        android:textColor="@color/colorPrimary"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="8dp"
         android:id="@+id/agent_price"
-        android:layout_toRightOf="@id/image_chooselist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        />
-    <TextView
-        android:layout_marginBottom="8dp"
-        android:textSize="10sp"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10px"
+        android:layout_marginLeft="20px"
+        android:layout_toRightOf="@id/img_layout"
+        android:text="¥49"
+        android:textColor="@color/c26262E"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
         android:id="@+id/std_sale_price"
-        android:layout_toRightOf="@id/agent_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        />
-
-    <!--<TextView-->
-        <!--android:layout_marginBottom="8dp"-->
-        <!--android:layout_marginLeft="8dp"-->
-        <!--android:layout_alignBottom="@id/image_chooselist"-->
-        <!--android:layout_marginTop="8dp"-->
-        <!--android:id="@+id/rebet_amount"-->
-        <!--android:layout_toRightOf="@id/image_chooselist"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:textColor="@color/colorAccent"-->
-        <!--/>-->
-
-    <!--<TextView-->
-        <!--android:layout_marginBottom="8dp"-->
-        <!--android:layout_marginLeft="14dp"-->
-        <!--android:layout_alignBottom="@id/image_chooselist"-->
-        <!--android:layout_marginTop="8dp"-->
-        <!--android:id="@+id/lock_num"-->
-        <!--android:layout_toRightOf="@id/rebet_amount"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:textColor="@color/colorAccent"-->
-        <!--/>-->
+        android:layout_alignBaseline="@id/agent_price"
+        android:layout_toRightOf="@id/agent_price"
+        android:layout_alignParentBottom="true"
+        android:text="/¥249"
+        android:textSize="13sp" />
 </RelativeLayout>

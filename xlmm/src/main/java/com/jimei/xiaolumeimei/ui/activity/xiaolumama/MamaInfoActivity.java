@@ -71,11 +71,8 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.img_right) ImageView img_right;
   @Bind(R.id.rl_empty_chart) RelativeLayout rl_empty_chart;
   @Bind(R.id.tv_visit2) TextView tv_today_visit2;
-  @Bind(R.id.tv_visit1) TextView tv_today_visit1;
   @Bind(R.id.tv_today_order2) TextView tv_today_order2;
-  @Bind(R.id.tv_today_order1) TextView tv_today_order1;
   @Bind(R.id.tv_today_fund2) TextView tv_today_fund2;
-  @Bind(R.id.tv_today_fund1) TextView tv_today_fund1;
   @Bind(R.id.rl_mama_info) RelativeLayout rlMamaInfo;
   @Bind(R.id.rl_order) LinearLayout rlOrder;
   @Bind(R.id.rl_chooselist) RelativeLayout rlChooselist;
@@ -90,6 +87,9 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.tv_order) TextView tv_order;
   @Bind(R.id.rl_income) RelativeLayout rl_income;
   @Bind(R.id.tv_fund) TextView tv_fund;
+  @Bind(R.id.visit_layout)LinearLayout visitLayout;
+  @Bind(R.id.order_layout)LinearLayout orderLayout;
+  @Bind(R.id.fund_layout)LinearLayout fundLayout;
   AgentInfoBean mamaAgentInfo;
   MamaFortune mamaFortune;
   private String title, sharelink, desc, shareimg;
@@ -122,9 +122,9 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     rl_party.setOnClickListener(this);
     rl_push.setOnClickListener(this);
     rl_shop.setOnClickListener(this);
-    tv_today_order1.setOnClickListener(this);
-    tv_today_fund1.setOnClickListener(this);
-    tv_today_visit1.setOnClickListener(this);
+    visitLayout.setOnClickListener(this);
+    orderLayout.setOnClickListener(this);
+    fundLayout.setOnClickListener(this);
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -211,22 +211,6 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
           }
         });
     addSubscription(subscribe);
-
-
-    /*Subscription subscribe1 = MMProductModel.getInstance()
-        .getShoppingList("1")
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<ShoppingListBean>() {
-          @Override public void onNext(ShoppingListBean shoppingListBean) {
-            super.onNext(shoppingListBean);
-            if (shoppingListBean != null) {
-              JUtils.Log(TAG, "all orders num =" + shoppingListBean.getCount());
-              tv_order.setText(Integer.toString(shoppingListBean.getCount()) + "个订单");
-            }
-          }
-        });
-
-    addSubscription(subscribe1);*/
     get_his_refund();
   }
 
@@ -349,7 +333,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         intent2.putExtras(bundle1);
         startActivity(intent2);
         break;
-      case R.id.tv_today_order1:
+      case R.id.order_layout:
         Intent intent3 = new Intent(MamaInfoActivity.this, MMShoppingListActivity.class);
         Bundle bundle3 = new Bundle();
         bundle3.putString("order", s);
@@ -363,14 +347,14 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         intent1.putExtras(bundlerl_income);
         startActivity(intent1);
         break;
-      case R.id.tv_today_fund1:
+      case R.id.fund_layout:
         Intent intent4 = new Intent(MamaInfoActivity.this, MMcarryLogActivity.class);
         Bundle bundle4 = new Bundle();
         bundle4.putString("carrylogMoney", carrylogMoney + "");
         intent4.putExtras(bundle4);
         startActivity(intent4);
         break;
-      case R.id.tv_visit1:
+      case R.id.visit_layout:
         Intent intent5 =
             new Intent(new Intent(MamaInfoActivity.this, MamaVisitorActivity.class));
         Bundle bundle2 = new Bundle();

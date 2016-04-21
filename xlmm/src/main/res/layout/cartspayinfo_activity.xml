@@ -103,9 +103,9 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="16dp"
-                android:background="#DADADA" />
+                android:layout_height="16dp" />
+
+            <include layout="@layout/common_gap" />
 
             <com.jimei.xiaolumeimei.widget.NestedListView
                 android:id="@+id/payinfo_listview"
@@ -116,9 +116,9 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="16dp"
-                android:background="#DADADA" />
+                android:layout_height="16dp" />
+
+            <include layout="@layout/common_gap" />
 
             <RelativeLayout
                 android:id="@+id/coupon_layout"
@@ -149,9 +149,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:src="@mipmap/common_icon_right_arrow"
-
-                    />
+                    android:src="@mipmap/common_icon_right_arrow" />
 
             </RelativeLayout>
 
@@ -320,7 +318,7 @@
                     </LinearLayout>
 
 
-                    <include layout="@layout/common_gap"/>
+                    <include layout="@layout/common_gap" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -360,8 +358,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:shadowColor="@color/colorPrimary"
-                        android:gravity="center" />
+                        android:gravity="center"
+                        android:shadowColor="@color/colorPrimary" />
 
                     <android.support.v7.widget.AppCompatRadioButton
                         android:id="@+id/wx"
@@ -389,9 +387,7 @@
         android:layout_height="match_parent"
         android:background="#cccccc"
         android:visibility="invisible"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-
-        >
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <ImageView
             android:layout_width="wrap_content"

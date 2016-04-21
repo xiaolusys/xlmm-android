@@ -23,10 +23,12 @@ import com.jimei.xiaolumeimei.adapter.CartsPayInfoAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AddressBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
+import com.jimei.xiaolumeimei.entities.CouponBean;
 import com.jimei.xiaolumeimei.entities.PayInfoBean;
 import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.TradeModel;
+import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.AddNoAddressActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.AddressSelectActivity;
@@ -133,6 +135,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     private double real_use_yue;
     private double yue;
     private double appcut;
+    private List<CouponBean.ResultsEntity> results;
 
     @Override
     protected void setListener() {
@@ -148,6 +151,30 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         list = new ArrayList<>();
 
         downLoadCartsInfo();
+
+        Subscription subscribe = UserModel.getInstance()
+                .getUnusedCouponBean()
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ServiceResponse<CouponBean>() {
+                    @Override
+                    public void onNext(CouponBean couponBean) {
+                        results = couponBean.getResults();
+                        for (int i = 0; i < results.size(); i++) {
+                            CouponBean.ResultsEntity entity = results.get(i);
+                            JUtils.Log(TAG,entity.getTitle()+"-->"+entity.getUse_fee());
+                            if (entity.getPoll_status() == 1 && entity.getStatus() == 0 && entity.getUse_fee() <= (paymentInfo + jieshengjine) && entity.isValid()) {
+                                if (entity.getCoupon_value() >= coupon_price) {
+                                    coupon_price = entity.getCoupon_value();
+                                    coupon_id = entity.getId() + "";
+                                    tv_coupon.setText(coupon_price + "元优惠券");
+                                    isCoupon = true;
+                                }
+                            }
+                        }
+                    }
+                });
+        addSubscription(subscribe);
+
     }
 
     private void downLoadCartsInfo() {
@@ -270,6 +297,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     }
                 });
         addSubscription(subscription);
+
     }
 
     private void calcAllPrice() {
@@ -644,13 +672,10 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         }
         if (requestCode == REQUEST_CODE_COUPONT) {
             if (resultCode == Activity.RESULT_OK) {
-
                 coupon_id = data.getStringExtra("coupon_id");
                 coupon_price = data.getDoubleExtra("coupon_price", 0);
-
                 JUtils.Log("CartsPayinfo", "优惠券返回  " + coupon_price);
                 tv_coupon.setText(coupon_price + "元优惠券");
-
                 if (coupon_price == 0) {
                     JUtils.Log("CartsPayinfo", "优惠券返回 0++++");
                     downLoadCartsInfo();
