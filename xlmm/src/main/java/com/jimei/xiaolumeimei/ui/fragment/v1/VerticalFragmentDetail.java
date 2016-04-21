@@ -325,6 +325,34 @@ public class VerticalFragmentDetail extends Fragment implements View.OnClickList
     oks.setUrl(shareProductBean.getShareLink());
 
     // 启动分享GUI
+
+    //Bitmap enableLogo = BitmapFactory.decodeResource(getResources(),
+    //    R.drawable
+    //    .search_button);
+    //String label = "快照链接";
+    //Bitmap enableLogo2 = BitmapFactory.decodeResource(getResources(),
+    //    R.drawable.search_button);
+    //View.OnClickListener listener = new View.OnClickListener() {
+    //  public void onClick(View v) {
+    //    //if (shareProductBean.getShareLink()) {
+    //    //}
+    //  }
+    //};
+    //oks.setCustomerLogo(enableLogo, enableLogo2,label, listener);
+    //
+    //Bitmap enableLogo3 = BitmapFactory.decodeResource(getResources(),
+    //    R.drawable
+    //    .search_button);
+    //String label1 = "测试";
+    //Bitmap enableLogo4 = BitmapFactory.decodeResource(getResources(),
+    //    R.drawable.search_button);
+    //View.OnClickListener listener1 = new View.OnClickListener() {
+    //  public void onClick(View v) {
+    //    //if (shareProductBean.getShareLink()) {
+    //    //}
+    //  }
+    //};
+    //oks.setCustomerLogo(enableLogo3, enableLogo4,label1, listener);
     oks.show(getActivity());
   }
 
