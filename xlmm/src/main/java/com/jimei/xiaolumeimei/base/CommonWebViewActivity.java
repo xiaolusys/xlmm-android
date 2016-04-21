@@ -1,11 +1,13 @@
 package com.jimei.xiaolumeimei.base;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
@@ -13,7 +15,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,11 +44,15 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
 import com.jimei.xiaolumeimei.model.ActivityModel;
-import com.jimei.xiaolumeimei.utils.BitmapUtil;
+import com.jimei.xiaolumeimei.utils.CameraUtils;
+import com.jimei.xiaolumeimei.utils.FileUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.mob.tools.utils.UIHandler;
+import com.tbruyelle.rxpermissions.RxPermissions;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import rx.Subscription;
@@ -57,12 +67,13 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     implements PlatformActionListener, Handler.Callback {
 
   private static final int MSG_ACTION_CCALLBACK = 2;
-
+  private static final int WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 200;
   private static final String TAG = CommonWebViewActivity.class.getSimpleName();
   protected TextView webviewTitle;
   LinearLayout ll_actwebview;
+  private Bitmap bitmap;
   private Toolbar mToolbar;
-  private WebView mWebView;
+  public WebView mWebView;
   private ProgressBar mProgressBar;
   private String cookies;
   private String actlink;
@@ -123,6 +134,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
 
   //  @TargetApi(Build.VERSION_CODES.KITKAT)
   @SuppressLint("JavascriptInterface") @Override protected void initViews() {
+    //requestPermission();
     JUtils.Log(TAG, "initViews");
     ShareSDK.initSDK(this);
 
@@ -156,6 +168,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
       mWebView.getSettings().setDatabaseEnabled(true);
       mWebView.getSettings().setLoadWithOverviewMode(true);
       mWebView.getSettings().setUseWideViewPort(true);
+      mWebView.setDrawingCacheEnabled(true);
       //      mWebView.setWebContentsDebuggingEnabled(true);
 
       mWebView.setWebChromeClient(new WebChromeClient() {
@@ -275,6 +288,10 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     if (mWebView != null) {
       mWebView.removeAllViews();
       mWebView.destroy();
+    }
+
+    if (bitmap != null) {
+      bitmap.recycle();
     }
   }
 
@@ -447,7 +464,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     //oks.setSiteUrl("http://sharesdk.cn");
     Bitmap enableLogo = BitmapFactory.decodeResource(mContext.getResources(),
         R.drawable.ssdk_oks_logo_copy);
-    String label = "快照链接";
+    String label = "二维码";
     Bitmap enableLogo2 = BitmapFactory.decodeResource(mContext.getResources(),
         R.drawable.ssdk_oks_logo_copy);
     View.OnClickListener listener = new View.OnClickListener() {
@@ -464,133 +481,128 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
 
   public void saveTwoDimenCode(Context context) {
 
-    if ((partyShareInfo == null)
-        || (partyShareInfo.getQrcodeLink() == null)
-        || (partyShareInfo.getQrcodeLink().equals(""))) {
+    if (partyShareInfo == null || TextUtils.isEmpty(partyShareInfo.getShareLink())) {
+
       JUtils.Log(TAG, "saveTowDimenCode : fail,Qrcodelink=null");
       return;
-    } else {
-      JUtils.Log(TAG, "saveTowDimenCode : Qrcodelink=" + partyShareInfo.getQrcodeLink());
-      try {
-        WebView webView = new WebView(context);
-        webView.setLayoutParams(
-            new Toolbar.LayoutParams(Toolbar.LayoutParams.MATCH_PARENT,
-                Toolbar.LayoutParams.MATCH_PARENT));
-        webView.getSettings().setJavaScriptEnabled(true);
+    }
 
-        webView.getSettings().setAllowFileAccess(true);
-        //如果访问的页面中有Javascript，则webview必须设置支持Javascript
-        //mWebView.getSettings().setUserAgentString(MyApplication.getUserAgent());
-        webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-        webView.getSettings().setAllowFileAccess(true);
-        webView.getSettings().setAppCacheEnabled(true);
-        webView.getSettings().setDomStorageEnabled(true);
-        webView.getSettings().setDatabaseEnabled(true);
+    JUtils.Log(TAG, "saveTowDimenCode : Qrcodelink=" + partyShareInfo.getShareLink());
+    try {
+      //WebView webView = new WebView(this);
+      //webView.setLayoutParams(new Toolbar.LayoutParams(Toolbar.LayoutParams.MATCH_PARENT,
+      //    Toolbar.LayoutParams.MATCH_PARENT));
+      //webView.getSettings().setJavaScriptEnabled(true);
+      //
+      //webView.getSettings().setAllowFileAccess(true);
+      ////如果访问的页面中有Javascript，则webview必须设置支持Javascript
+      ////mWebView.getSettings().setUserAgentString(MyApplication.getUserAgent());
+      //webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+      //webView.getSettings().setAllowFileAccess(true);
+      //webView.getSettings().setAppCacheEnabled(true);
+      //webView.getSettings().setDomStorageEnabled(true);
+      //webView.getSettings().setDatabaseEnabled(true);
+      //webView.setDrawingCacheEnabled(true);
+      //
+      //webView.setWebChromeClient(new WebChromeClient() {
+      //  @Override public void onProgressChanged(WebView view, int newProgress) {
+      //
+      //  }
+      //});
+      //webView.setWebViewClient(new WebViewClient() {
+      //  @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
+      //    view.loadUrl(url);
+      //    return true;
+      //  }
+      //});
+      //
+      //webView.loadUrl(partyShareInfo.getQrcodeLink());
+      bitmap = mWebView.getDrawingCache();
+      JUtils.Log(TAG, "bitmap====" + bitmap.getByteCount());
+      RxPermissions.getInstance(this)
+          .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+          .subscribe(granted -> {
+            if (granted) {
+              String fileName = Environment.getExternalStorageDirectory() +
+                  CameraUtils.XLMM_IMG_PATH + "/webview_capture" + ".jpg";
 
-        webView.setWebChromeClient(new WebChromeClient() {
-          @Override public void onProgressChanged(WebView view, int newProgress) {
+              if (FileUtils.isFileExist(fileName)) {
+                FileUtils.deleteFile(fileName);
+              }
 
-          }
-        });
-        webView.setWebViewClient(new WebViewClient() {
-          @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            view.loadUrl(url);
-            return true;
-          }
-        });
+              try {
+                FileOutputStream fos = new FileOutputStream(fileName);
+                //压缩bitmap到输出流中
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                fos.flush();
+                fos.close();
+              } catch (IOException e) {
+                e.printStackTrace();
+              }
 
-        webView.loadUrl(partyShareInfo.getQrcodeLink());
-        //Bitmap bmp= captureWebView(webView);
-        View cv = getWindow().getDecorView();
-        Bitmap bmp = catchWebScreenshot(webView, cv.getWidth(), cv.getHeight(),
-            partyShareInfo.getQrcodeLink(), this);
-        String fileName = Environment.getExternalStorageDirectory()
-            + "/"
-            + Environment.DIRECTORY_DCIM
-            + "/Camera/小鹿美美活动二维码.jpg";
-        //saveBitmap(bmp, fileName);
+              Uri uri = Uri.fromFile(new File(fileName));
+              // 通知图库更新
+              Intent scannerIntent =
+                  new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
+              scannerIntent.setData(uri);
 
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
+              sendBroadcast(scannerIntent);
+              JUtils.Log(TAG, "filename===" + FileUtils.isFileExist(fileName));
+              Toast.makeText(this, "截取快照成功至/xlmm/xiaolumeimei", Toast.LENGTH_LONG).show();
+            } else {
+              // Oups permission denied
+              JUtils.Toast("小鹿美美需要存储权限存储图片,请再次点击保存并打开权限许可.");
+            }
+          });
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      //if (null!=bitmap) {
+      //  bitmap.recycle();
+      //}
     }
   }
 
   /**
-   * 抓取WEB界面的截屏
-   *
-   * @param containerWidth 截屏宽度，也就放置WebView的宽度
-   * @param containerHeight 截屏高度，也就放置WebView的高度
-   * @param baseUrl Base Url
-   * @param context activity context
+   * 当系统版本大于5.0时 开启enableSlowWholeDocumentDraw 获取整个html文档内容
    */
-  public Bitmap catchWebScreenshot(final WebView w, final int containerWidth,
-      final int containerHeight, final String baseUrl, final Context context) {
-    final Bitmap b =
-        Bitmap.createBitmap(containerWidth, containerHeight, Bitmap.Config.ARGB_8888);
+  private void checkSdkVersion() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      WebView.enableSlowWholeDocumentDraw();
+    }
+  }
 
-    w.post(new Runnable() {
-      public void run() {
-        w.setWebViewClient(new WebViewClient() {
-          @Override public void onPageFinished(WebView view, String url) {
-            JUtils.Log(TAG, "onPageFinished URL=" + url);
-            Canvas canvas = new Canvas(b);
-            view.draw(canvas);
+  /**
+   * 当build target为23时，需要动态申请权限
+   */
+  private void requestPermission() {
+    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
 
-            String fileName = Environment.getExternalStorageDirectory()
-                + "/"
-                + Environment.DIRECTORY_DCIM
-                + "/Camera/"
-                + context.getResources().getString(R.string.share_2dimen_pic_name)
-                + ".jpg";
-            BitmapUtil.saveBitmap(b, fileName);
-            Toast.makeText(context, R.string.share_2dimen_pic_tips, Toast.LENGTH_SHORT)
-                .show();
-
-            File file = new File(fileName);
-            Uri uri = Uri.fromFile(file);
-            // 通知图库更新
-            Intent scannerIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
-            context.sendBroadcast(scannerIntent);
-          }
-        });
-        //w.setPictureListener(new WebView.PictureListener() {
-        //  public void onNewPicture(WebView view, Picture picture) {
-        //    JUtils.Log(TAG, "onNewPicture ");
-        //    final Canvas c = new Canvas(b);
-        //    view.draw(c);
-        //    //w.setPictureListener(null);
-        //
-        //  }
-        //});
-        //w.layout(0, 0, containerWidth, containerHeight);
-        //w.loadUrl(baseUrl);
-        //              w.loadDataWithBaseURL(baseUrl, content, "text/html", "UTF-8", null);
+      if (ContextCompat.checkSelfPermission(this,
+          Manifest.permission.WRITE_EXTERNAL_STORAGE)
+          != PackageManager.PERMISSION_GRANTED) {
+        //申请WRITE_EXTERNAL_STORAGE权限
+        ActivityCompat.requestPermissions(this,
+            new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+            WRITE_EXTERNAL_STORAGE_REQUEST_CODE);
       }
-    });
-
-    return b;
-  }
-
-  /*private class CancelListener implements DialogInterface.OnCancelListener,
-          DialogInterface.OnClickListener {
-
-    @Override
-    public void onCancel(DialogInterface dialogInterface) {
-      mResult.cancel();
-    }
-
-    @Override
-    public void onClick(DialogInterface dialogInterface, int i) {
-      mResult.cancel();
     }
   }
 
-  private class PositiveListener implements DialogInterface.OnClickListener {
-
-    @Override
-    public void onClick(DialogInterface dialogInterface, int i) {
-      mResult.confirm();
+  @Override public void onRequestPermissionsResult(int requestCode, String[] permissions,
+      int[] grantResults) {
+    switch (requestCode) {
+      case 200:
+        boolean writeAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+        Log.d(TAG, "writeAcceped--" + writeAccepted);
+        break;
     }
-  }*/
+  }
+
+  public void copy(String content, Context context) {
+    // 得到剪贴板管理器
+    ClipboardManager cmb =
+        (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+    cmb.setText(content.trim());
+  }
 }

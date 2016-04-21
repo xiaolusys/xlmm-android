@@ -947,10 +947,9 @@ public class MainActivity extends BaseActivity
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<CartsNumResultBean>() {
           @Override public void onNext(CartsNumResultBean cartsNumResultBean) {
-            if (cartsNumResultBean != null && cartsNumResultBean.getResult() != 0) {
+            if (cartsNumResultBean != null) {
               num = cartsNumResultBean.getResult();
               badge.setBadgeCount(num);
-
               if (calcLefttowTime(cartsNumResultBean.getLastCreated()) != 0) {
                 image1.setVisibility(View.INVISIBLE);
                 image2.setVisibility(View.VISIBLE);

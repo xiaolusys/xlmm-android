@@ -31,10 +31,8 @@ import rx.schedulers.Schedulers;
 public class MMNinePicActivity extends BaseSwipeBackCompatActivity
     implements SwipeRefreshLayout.OnRefreshListener {
 
-  @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.circleLv) ListView circleLv;
   @Bind(R.id.mRefreshLayout) SwipeRefreshLayout mRefreshLayout;
-  @Bind(R.id.app_bar_layout) AppBarLayout appBarLayout;
   @Bind(R.id.cv_lefttime) CountdownView cvLefttime;
   @Bind(R.id.left) TextView left;
   @Bind(R.id.count_left) FrameLayout countLeft;
@@ -126,9 +124,6 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void initViews() {
     StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent),0);
-    toolbar.setTitle("");
-    setSupportActionBar(toolbar);
-    finishBack(toolbar);
 
     mRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
         android.R.color.holo_green_light, android.R.color.holo_orange_light,

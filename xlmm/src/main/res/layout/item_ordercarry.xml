@@ -37,10 +37,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:paddingBottom="38px"
+        android:paddingBottom="32px"
         android:paddingLeft="20px"
         android:paddingRight="20px"
-        android:paddingTop="38px">
+        android:paddingTop="32px">
 
         <ImageView
             android:id="@+id/pic_path"
@@ -89,7 +89,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:text="提现"
-            android:textSize="20sp"
+            android:textSize="22sp"
             android:textColor="@color/black" />
     </RelativeLayout>
 </LinearLayout>
