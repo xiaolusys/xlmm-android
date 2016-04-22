@@ -56,9 +56,6 @@ import com.jimei.xiaolumeimei.ui.activity.user.WalletActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.WxLoginBindPhoneActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaInfoActivity;
 import com.jimei.xiaolumeimei.ui.fragment.v1.ChildFragment;
-import com.jimei.xiaolumeimei.ui.fragment.v1.LadyFragment;
-import com.jimei.xiaolumeimei.ui.fragment.v1.PreviousFragment;
-import com.jimei.xiaolumeimei.ui.fragment.v1.TodayFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v1.view.MastFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.TodayV2Fragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.TomorrowV2Fragment;
@@ -95,7 +92,7 @@ import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseActivity
     implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener,
-    ViewPager.OnPageChangeListener {
+    ViewPager.OnPageChangeListener, RadioGroup.OnCheckedChangeListener {
   private static final String POST_URL = "?imageMogr2/format/jpg/quality/80";
   public static String TAG = "MainActivity";
   @Bind(R.id.tool_bar) Toolbar toolbar;
@@ -173,15 +170,11 @@ public class MainActivity extends BaseActivity
   @Override protected void setListener() {
     carts.setOnClickListener(this);
     img_mmentry.setOnClickListener(this);
+    vp.setOnPageChangeListener(this);
+    radioGroup.setOnCheckedChangeListener(this);
   }
 
   @Override protected void initData() {
-    //initFragment();
-    //
-    //initTitles();
-
-    //initTabLayout();
-
     new Thread(() -> {
       try {
         Thread.sleep(500 * 60);
@@ -190,37 +183,6 @@ public class MainActivity extends BaseActivity
       }
       UmengUpdateAgent.update(MainActivity.this);
     }).start();
-  }
-
-  //private void initTabLayout() {
-  //  mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(0)));
-  //  mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(1)));
-  //  mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(2)));
-  //  mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(3)));
-  //
-  //  MainTabAdapter mAdapter =
-  //      new MainTabAdapter(getSupportFragmentManager(), fragments, titles);
-  //  mViewPager.setAdapter(mAdapter);
-  //  mViewPager.setOffscreenPageLimit(3);
-  //  mTabLayout.setupWithViewPager(mViewPager);
-  //  //mTabLayout.setTabsFromPagerAdapter(mAdapter);
-  //  mTabLayout.setTabMode(TabLayout.MODE_FIXED);
-  ////}
-
-  private void initTitles() {
-    titles = new ArrayList<>();
-    titles.add("今日上新");
-    titles.add("昨日特卖");
-    titles.add("萌娃专区");
-    titles.add("时尚女装");
-  }
-
-  private void initFragment() {
-    fragments = new ArrayList<>();
-    fragments.add(TodayFragment.newInstance("今日上新"));
-    fragments.add(PreviousFragment.newInstance("昨日特卖"));
-    fragments.add(ChildFragment.newInstance("萌娃专区"));
-    fragments.add(LadyFragment.newInstance("时尚女装"));
   }
 
   @Override protected void initView() {
@@ -335,49 +297,29 @@ public class MainActivity extends BaseActivity
     //badge.setBadgeGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
     //        StatusBarUtil.setColorForDrawerLayout(MainActivity.this,drawer, getResources()
     //                .getColor(R.color.colorAccent), 0);
-    initViews();
+    initViewsForTab();
   }
 
-  public void initViews() {
+  public void initViewsForTab() {
     view = LayoutInflater.from(this).inflate(R.layout.activity_main, null);
-    sharedPreferencesMask = getSharedPreferences("maskActivity", 0);
-    mask = sharedPreferencesMask.getInt("mask", 0);
-    vp = (ViewPager) findViewById(R.id.viewPager);
-    vp.setOnPageChangeListener(this);
-
-    radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-      @Override public void onCheckedChanged(RadioGroup group, int checkedId) {
-        switch (checkedId) {
-          case R.id.rb_yesterday:
-            /**
-             * setCurrentItem第二个参数控制页面切换动画
-             * true:打开/false:关闭
-             */
-            vp.setCurrentItem(0, false);
-            break;
-          case R.id.rb_today:
-            vp.setCurrentItem(1, false);
-            break;
-          case R.id.rb_tomorror:
-            vp.setCurrentItem(2, false);
-            break;
-        }
-      }
-    });
-
-    list.add(ChildFragment.newInstance("昨天"));
-    list.add(TodayV2Fragment.newInstance("今天"));
-    list.add(TomorrowV2Fragment.newInstance("明天"));
-    vp.setAdapter(new MyFragmentAdapter(getSupportFragmentManager(), list));
-    vp.setCurrentItem(0);
-
     post_activity_layout = (LinearLayout) findViewById(R.id.post_activity);
     countTime = (CountdownView) findViewById(R.id.countTime);
     mSliderLayout = (SliderLayout) findViewById(R.id.slider);
     mPagerIndicator = (PagerIndicator) findViewById(R.id.pi_header);
+    vp = (ViewPager) findViewById(R.id.viewPager);
+    sharedPreferencesMask = getSharedPreferences("maskActivity", 0);
+    mask = sharedPreferencesMask.getInt("mask", 0);
 
+    list.add(ChildFragment.newInstance("昨天"));
+    list.add(ChildFragment.newInstance("今天"));
+    list.add(ChildFragment.newInstance("明天"));
+    vp.setAdapter(new MyFragmentAdapter(getSupportFragmentManager(), list));
     scrollableLayout.getHelper()
-        .setCurrentScrollableContainer((ScrollableHelper.ScrollableContainer) list.get(0));
+        .setCurrentScrollableContainer(
+            (ScrollableHelper.ScrollableContainer) list.get(0));
+
+    vp.setCurrentItem(0);
+
     initDataForTab();
   }
 
@@ -396,37 +338,6 @@ public class MainActivity extends BaseActivity
             }
           }
         }, Throwable::printStackTrace);
-    //subscribe1 = ProductModel.getInstance()
-    //    .getTodayList(1, 10)
-    //    .subscribeOn(Schedulers.io())
-    //    .subscribe(new ServiceResponse<ProductListBean>() {
-    //      @Override public void onError(Throwable e) {
-    //        super.onError(e);
-    //        e.printStackTrace();
-    //        JUtils.Toast("请检查网络状况,尝试下拉刷新");
-    //        //loading.stop();
-    //        hideIndeterminateProgressDialog();
-    //      }
-    //
-    //      @Override public void onNext(ProductListBean productListBean) {
-    //        try {
-    //          if (productListBean != null) {
-    //            List<ProductListBean.ResultsEntity> results =
-    //                productListBean.getResults();
-    //            totalPages = productListBean.getCount() / page_size;
-    //            mTodayAdapter.update(results);
-    //          }
-    //        } catch (NullPointerException ex) {
-    //        }
-    //      }
-    //
-    //      @Override public void onCompleted() {
-    //        super.onCompleted();
-    //        //loading.post(loading::stop);
-    //        hideIndeterminateProgressDialog();
-    //        //head.setVisibility(View.VISIBLE);
-    //      }
-    //    });
   }
 
   private void initPost() {
@@ -1044,10 +955,32 @@ public class MainActivity extends BaseActivity
         radioGroup.check(R.id.rb_tomorror);
         break;
     }
+    scrollableLayout.getHelper().setCurrentScrollableContainer(
+        (ScrollableHelper.ScrollableContainer) list.get(position));
   }
 
   @Override public void onPageScrollStateChanged(int state) {
 
+  }
+
+  @Override public void onCheckedChanged(RadioGroup group, int checkedId) {
+    int position = 0;
+    switch (checkedId) {
+      case R.id.rb_yesterday:
+        vp.setCurrentItem(0, false);
+        position = 0;
+        break;
+      case R.id.rb_today:
+        vp.setCurrentItem(1, false);
+        position = 1;
+        break;
+      case R.id.rb_tomorror:
+        vp.setCurrentItem(2, false);
+        position =2;
+        break;
+    }
+    scrollableLayout.getHelper().setCurrentScrollableContainer(
+        (ScrollableHelper.ScrollableContainer) list.get(position));
   }
 
   private class MyFragmentAdapter extends FragmentPagerAdapter {

@@ -18,7 +18,6 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.ChildListAdapter;
 import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
-import com.jimei.xiaolumeimei.widget.ExStaggeredGridLayoutManager;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
@@ -33,7 +32,8 @@ import rx.schedulers.Schedulers;
  *
  * Copyright 2016年 上海己美. All rights reserved.
  */
-public class ChildFragment extends Fragment implements ScrollableHelper.ScrollableContainer{
+public class ChildFragment extends Fragment
+    implements ScrollableHelper.ScrollableContainer {
 
   int page_size = 10;
   @Bind(R.id.childlist_recyclerView) XRecyclerView xRecyclerView;
@@ -107,10 +107,9 @@ public class ChildFragment extends Fragment implements ScrollableHelper.Scrollab
   }
 
   private void initViews(View view) {
-    ExStaggeredGridLayoutManager manager =
-        new ExStaggeredGridLayoutManager(getActivity(), 2);
-    manager.setOrientation(GridLayoutManager.VERTICAL);
-    manager.setSmoothScrollbarEnabled(true);
+    GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
+    //manager.setOrientation(GridLayoutManager.VERTICAL);
+    //manager.setSmoothScrollbarEnabled(true);
     xRecyclerView.setLayoutManager(manager);
 
     xRecyclerView.addItemDecoration(new SpaceItemDecoration(10));
@@ -118,32 +117,30 @@ public class ChildFragment extends Fragment implements ScrollableHelper.Scrollab
     xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
     xRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
     xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
-
+    xRecyclerView.setPullRefreshEnabled(false);
     mChildListAdapter = new ChildListAdapter(ChildFragment.this, getActivity());
     xRecyclerView.setAdapter(mChildListAdapter);
 
-    //loading.start();
-
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
       @Override public void onRefresh() {
-        subscribe2 = ProductModel.getInstance()
-            .getChildList(1, page * page_size)
-            .subscribeOn(Schedulers.io())
-            .subscribe(new ServiceResponse<ChildListBean>() {
-              @Override public void onNext(ChildListBean childListBean) {
-                List<ChildListBean.ResultsEntity> results = childListBean.getResults();
-                mChildListAdapter.updateWithClear(results);
-              }
-
-              @Override public void onCompleted() {
-                super.onCompleted();
-                try {
-                  xRecyclerView.post(xRecyclerView::refreshComplete);
-                } catch (Exception e) {
-                  e.printStackTrace();
-                }
-              }
-            });
+        //subscribe2 = ProductModel.getInstance()
+        //    .getChildList(1, page * page_size)
+        //    .subscribeOn(Schedulers.io())
+        //    .subscribe(new ServiceResponse<ChildListBean>() {
+        //      @Override public void onNext(ChildListBean childListBean) {
+        //        List<ChildListBean.ResultsEntity> results = childListBean.getResults();
+        //        mChildListAdapter.updateWithClear(results);
+        //      }
+        //
+        //      @Override public void onCompleted() {
+        //        super.onCompleted();
+        //        try {
+        //          xRecyclerView.post(xRecyclerView::refreshComplete);
+        //        } catch (Exception e) {
+        //          e.printStackTrace();
+        //        }
+        //      }
+        //    });
       }
 
       @Override public void onLoadMore() {
