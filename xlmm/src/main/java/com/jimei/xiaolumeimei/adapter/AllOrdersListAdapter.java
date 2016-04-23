@@ -24,18 +24,15 @@ import com.jimei.xiaolumeimei.widget.MyHorizontalScrollView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 public class AllOrdersListAdapter extends BaseAdapter {
   private static final String TAG = "AllOrdersListAdapter";
-  List<HashMap<String, String>> data;
   private Activity context;
   private List<AllOrdersBean.ResultsEntity> mList;
 
   public AllOrdersListAdapter(Activity context) {
-    mList = new ArrayList<AllOrdersBean.ResultsEntity>();
-    this.data = new ArrayList<HashMap<String, String>>();
+    mList = new ArrayList<>();
     this.context = context;
   }
 
@@ -53,41 +50,17 @@ public class AllOrdersListAdapter extends BaseAdapter {
   }
 
   public void update(List<AllOrdersBean.ResultsEntity> list) {
-    float payment = 0;
-    int state = 0;
-    String orderState = "";
-    String crtTime = "";
-
-    String picpath;
-
     Log.d(TAG, "dataSource.size " + list.size());
-
-    for (int i = 0; i < list.size(); i++) {
-      HashMap<String, String> map = new HashMap<String, String>();
-      payment = (float) list.get(i).getPayment();
-      orderState = list.get(i).getStatusDisplay();
-      state = list.get(i).getStatus();
-      crtTime = list.get(i).getCreated();
-
-      picpath = list.get(i).getOrderPic();
-      map.put("payment", Float.toString(payment));
-      map.put("orderState", orderState);
-      map.put("state", Integer.toString(state));
-      map.put("crtTime", crtTime);
-      map.put("img_url", picpath);
-
-      data.add(map);
-    }
     mList.addAll(list);
     notifyDataSetChanged();
   }
 
   @Override public int getCount() {
-    return data.size();
+    return mList.size();
   }
 
   @Override public Object getItem(int position) {
-    return data.get(position);
+    return mList.get(position);
   }
 
   @Override public long getItemId(int position) {
@@ -96,10 +69,8 @@ public class AllOrdersListAdapter extends BaseAdapter {
 
   @Override public View getView(int position, View convertView, ViewGroup parent) {
     Log.d(TAG, "getView " + position + " " + mList.get(position).getOrders().size());
-
-    TextView tx_payment = null;
-    TextView tx_order_sate = null;
-    ViewHolder holder = null;
+    TextView tx_order_sate;
+    ViewHolder holder;
     LinearLayout llayout;
     final int order_id = mList.get(position).getId();
     Log.d(TAG, "order_id " + order_id);
@@ -163,9 +134,8 @@ public class AllOrdersListAdapter extends BaseAdapter {
 
     tx_order_sate = (TextView) convertView.findViewById(R.id.tx_order_state);
 
-    Log.d(TAG, "payment  " + data.get(position).get("payment") + " " + data.get(position)
-        .get("orderState"));
-    tx_order_sate.setText(data.get(position).get("orderState"));
+    Log.d(TAG, "payment  " + mList.get(position).getPayment() + " " + mList.get(position).getStatusDisplay());
+    tx_order_sate.setText(mList.get(position).getStatusDisplay());
     return convertView;
   }
 
@@ -242,7 +212,7 @@ public class AllOrdersListAdapter extends BaseAdapter {
     tx_good_num.setText(
         "x" + Integer.toString(mList.get(position).getOrders().get(0).getNum()));
 
-    ViewUtils.loadImgToImgView(context, img_goods, data.get(position).get("img_url"));
+    ViewUtils.loadImgToImgView(context, img_goods, mList.get(position).getOrderPic());
 
     return ll_one_order;
   }
@@ -288,7 +258,6 @@ public class AllOrdersListAdapter extends BaseAdapter {
   }
 
   public void clearAll(){
-    data.clear();
     mList.clear();
     notifyDataSetChanged();
   }

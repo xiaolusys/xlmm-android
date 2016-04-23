@@ -44,6 +44,7 @@ public class VerticalFragmentDetail extends Fragment implements View.OnClickList
 
   @Bind(R.id.iv_zoom) ImageView ivZoom;
   @Bind(R.id.img_share) ImageView img_share;
+  @Bind(R.id.img_back) ImageView backImg;
 
   List<ProductDetailBean.NormalSkusEntity> normalSkus = new ArrayList<>();
   ShareProductBean shareProductBean = new ShareProductBean();
@@ -59,7 +60,6 @@ public class VerticalFragmentDetail extends Fragment implements View.OnClickList
     super.onCreate(savedInstanceState);
     ShareSDK.initSDK(getActivity());
     setRetainInstance(true);
-
   }
 
   public static VerticalFragmentDetail newInstance(String title) {
@@ -103,6 +103,7 @@ public class VerticalFragmentDetail extends Fragment implements View.OnClickList
     //xidi.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
 
     img_share.setOnClickListener(this);
+    backImg.setOnClickListener(this);
   }
 
   @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -368,6 +369,9 @@ public class VerticalFragmentDetail extends Fragment implements View.OnClickList
           intent.putExtras(bundle);
           startActivity(intent);
         }
+        break;
+      case R.id.img_back:
+        getActivity().finish();
         break;
     }
   }

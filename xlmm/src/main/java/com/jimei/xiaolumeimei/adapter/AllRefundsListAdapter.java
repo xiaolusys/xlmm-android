@@ -17,137 +17,95 @@ import android.widget.TextView;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 
 public class AllRefundsListAdapter extends BaseAdapter {
-  private static final String TAG = "AllRefundsListAdapter";
-  private Activity context;
-  List<HashMap<String, String>> data;
+    private static final String TAG = "AllRefundsListAdapter";
+    private Activity context;
+    private List<AllRefundsBean.ResultsEntity> datas;
 
-  private List<AllRefundsBean.ResultsEntity> data_refund_list;
-
-  public AllRefundsListAdapter(Activity context) {
-    data_refund_list = new ArrayList<AllRefundsBean.ResultsEntity>();
-    this.data = new ArrayList<HashMap<String, String>>();
-    this.context = context;
-  }
-
-  public void updateWithClear(List<AllRefundsBean.ResultsEntity> list) {
-    data_refund_list.clear();
-    data_refund_list.addAll(list);
-    notifyDataSetChanged();
-  }
-
-  public void update(List<AllRefundsBean.ResultsEntity> list) {
-
-    float refund_fee = 0;
-    String refund_State = "";
-    String refund_no = "";
-    String img_url = "";
-    String title = "";
-    float std_sale_price = 0;
-    float pay_price = 0;
-    String model_id = "";
-    int num = 0;
-    int apply_num = 0;
-    String apply_reason = "";
-
-    Log.d(TAG, "update size " + list.size());
-    for (int i = 0; i < list.size(); i++) {
-      HashMap<String, String> map = new HashMap<String, String>();
-      refund_no = list.get(i).getRefund_no();
-      refund_State = list.get(i).getStatus_display();
-      refund_fee = (float) list.get(i).getRefund_fee();
-      img_url = list.get(i).getPic_path();
-      title = list.get(i).getTitle();
-      std_sale_price = (float) list.get(i).getTotal_fee();
-      pay_price = (float) list.get(i).getPayment();
-      model_id = list.get(i).getSku_name();
-      num = list.get(i).getRefund_num();
-      apply_num = list.get(i).getRefund_num();
-      apply_reason = list.get(i).getReason();
-      Log.d(TAG, "state " + list.get(i).getStatus()+" "+ list.get(i).getStatus_display());
-
-      map.put("img_url", img_url);
-      map.put("title", title);
-      map.put("std_sale_price", Float.toString(std_sale_price));
-      map.put("pay_price", Float.toString(pay_price));
-      map.put("model_id", model_id);
-      map.put("num", Integer.toString(num));
-
-      map.put("refund_no", (refund_no));
-      map.put("refund_State", refund_State);
-      map.put("refund_num", Integer.toString(apply_num));
-      map.put("refund_fee", Float.toString(refund_fee));
-      map.put("refund_reason", (apply_reason));
-      data.add(map);
-    }
-    data_refund_list.addAll(list);
-    notifyDataSetChanged();
-  }
-
-  @Override public int getCount() {
-    return data.size();
-  }
-
-  @Override public Object getItem(int position) {
-    return data.get(position);
-  }
-
-  @Override public long getItemId(int position) {
-    return position;
-  }
-
-  @Override public View getView(int position, View convertView, ViewGroup parent) {
-    Log.d(TAG, "getView ");
-
-    if (convertView == null) {
-      convertView =
-          LayoutInflater.from(context).inflate(R.layout.refunds_list_item, null);
+    public AllRefundsListAdapter(Activity context) {
+        datas = new ArrayList<>();
+        this.context = context;
     }
 
-    TextView tx_refundno = (TextView) convertView.findViewById(R.id.tx_refund_no);
-    TextView tx_refund_state = (TextView) convertView.findViewById(R.id.tx_refund_state);
-    TextView tx_refundfee = (TextView) convertView.findViewById(R.id.tx_refundfee);
-
-
-    tx_refundno.setText("退款编号：" + data.get(position).get("refund_no"));
-    tx_refund_state.setText(data.get(position).get("refund_State"));
-    tx_refundfee.setText("¥" + data.get(position).get("refund_fee"));
-
-    ImageView img_goods = (ImageView) convertView.findViewById(R.id.img_good);
-
-    TextView tx_good_name = (TextView) convertView.findViewById(R.id.tx_good_name);
-    TextView tx_good_price = (TextView) convertView.findViewById(R.id.tx_good_price);
-    TextView tx_good_size = (TextView) convertView.findViewById(R.id.tx_good_size);
-    TextView tx_good_num = (TextView) convertView.findViewById(R.id.tx_good_num);
-
-    ViewUtils.loadImgToImgView(context, img_goods, data.get(position).get("img_url"));
-    if(data.get(position).get("title").length() >= 9) {
-      tx_good_name.setText(data.get(position).get("title").substring(0, 8) + "...");
+    public void update(List<AllRefundsBean.ResultsEntity> list) {
+        Log.d(TAG, "update size " + list.size());
+        datas.addAll(list);
+        notifyDataSetChanged();
     }
-    else{
-      tx_good_name.setText(data.get(position).get("title"));
+
+    @Override
+    public int getCount() {
+        return datas.size();
     }
-    tx_good_price.setText("¥" + data.get(position).get("pay_price"));
-    tx_good_size.setText("尺码:"+data.get(position).get("model_id"));
-    //tx_good_num.setText("x"+data.get(position).get("num"));
-    tx_good_num.setText("");
+
+    @Override
+    public Object getItem(int position) {
+        return datas.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        Log.d(TAG, "getView ");
+        ViewHolder holder;
+        if (convertView == null) {
+            convertView =
+                    LayoutInflater.from(context).inflate(R.layout.refunds_list_item, null);
+            holder = new ViewHolder(convertView);
+            convertView.setTag(holder);
+
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
+        holder.no.setText("退款编号：" + datas.get(position).getRefund_no());
+        holder.state.setText(datas.get(position).getStatus_display());
+        holder.refundfee.setText("¥" + datas.get(position).getRefund_fee());
+
+        ViewUtils.loadImgToImgView(context, holder.img_goods, datas.get(position).getPic_path());
+        if (datas.get(position).getTitle().length() >= 9) {
+            holder.name.setText(datas.get(position).getTitle().substring(0, 8) + "...");
+        } else {
+            holder.name.setText(datas.get(position).getTitle());
+        }
+        holder.price.setText("¥" + datas.get(position).getPayment());
+        holder.size.setText("尺码:" + datas.get(position).getSku_name());
+        holder.num.setText("");
 
 
-    return convertView;
-  }
+        return convertView;
+    }
 
-  public int getGoodsId(int position) {
-    return data_refund_list.get(position).getId();
-  }
+    public int getGoodsId(int position) {
+        return datas.get(position).getId();
+    }
 
-  public int getRefundStatus(int position) {
-    return data_refund_list.get(position).getStatus();
-  }
+    public int getRefundStatus(int position) {
+        return datas.get(position).getStatus();
+    }
+
+    private class ViewHolder {
+        ImageView img_goods;
+        TextView no, state, refundfee, name, price, size, num;
+
+        public ViewHolder(View itemView) {
+            no = (TextView) itemView.findViewById(R.id.tx_refund_no);
+            state = (TextView) itemView.findViewById(R.id.tx_refund_state);
+            refundfee = (TextView) itemView.findViewById(R.id.tx_refundfee);
+            name = (TextView) itemView.findViewById(R.id.tx_good_name);
+            price = (TextView) itemView.findViewById(R.id.tx_good_price);
+            size = (TextView) itemView.findViewById(R.id.tx_good_size);
+            num = (TextView) itemView.findViewById(R.id.tx_good_num);
+            img_goods = ((ImageView) itemView.findViewById(R.id.img_good));
+        }
+    }
 }
 

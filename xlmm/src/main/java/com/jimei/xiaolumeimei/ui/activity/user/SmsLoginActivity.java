@@ -35,8 +35,6 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener {
   private static final String TAG = SmsLoginActivity.class.getSimpleName();
 
-  @Bind(R.id.tx_title) TextView txTitle;
-  @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.register_name) ClearEditText registerName;
   @Bind(R.id.checkcode) EditText checkcode;
   @Bind(R.id.getCheckCode) Button getCheckCode;
@@ -48,7 +46,6 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
   @Override protected void setListener() {
     getCheckCode.setOnClickListener(this);
     confirm.setOnClickListener(this);
-    toolbar.setOnClickListener(this);
   }
 
   @Override protected void initData() {
@@ -64,9 +61,6 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
-    toolbar.setTitle("");
-    setSupportActionBar(toolbar);
-    finishBack(toolbar);
   }
 
   @Override protected boolean toggleOverridePendingTransition() {

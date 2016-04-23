@@ -185,7 +185,7 @@ public class MamaWithdrawCashActivity extends BaseSwipeBackCompatActivity
                         public void onNext(ResponseResultBean resp) {
                             switch (resp.getCode()) {
                                 case 0:
-                                    msg = "转账已提交,待审核中";
+                                    msg = "转账成功,请查询~~";
                                     break;
                                 case 1:
                                     msg = "参数错误";

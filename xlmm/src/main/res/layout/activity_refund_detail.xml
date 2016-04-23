@@ -97,11 +97,19 @@
         android:orientation="horizontal"
         android:padding="8dp">
 
-        <com.jimei.xiaolumeimei.widget.RoundCornerImageView
-            android:id="@+id/sdv"
+        <RelativeLayout
+            android:id="@+id/img_layout"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:src="@drawable/logo" />
+            android:background="@drawable/choose_img_bg"
+            android:gravity="center">
+
+            <com.jimei.xiaolumeimei.widget.RoundCornerImageView
+                android:id="@+id/sdv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/logo" />
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -262,12 +270,22 @@
 
     <include layout="@layout/common_gap" />
 
-    <com.jimei.xiaolumeimei.widget.RoundCornerImageView
-        android:id="@+id/round_image"
-        android:layout_width="115px"
-        android:layout_height="115px"
+    <RelativeLayout
+        android:layout_width="110px"
+        android:layout_height="110px"
+        android:layout_gravity="right|end"
         android:layout_margin="8dp"
-        android:layout_gravity="right|end" />
+        android:background="@drawable/choose_img_bg"
+        android:gravity="center">
+
+        <com.jimei.xiaolumeimei.widget.RoundCornerImageView
+            android:id="@+id/round_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@drawable/logo" />
+
+    </RelativeLayout>
 
     <include layout="@layout/common_gap" />
 

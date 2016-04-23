@@ -40,12 +40,10 @@ import com.jimei.xiaolumeimei.ui.activity.trade.OrderDetailActivity;
 public class MembershipPointListAdapter extends BaseAdapter {
     private static final String TAG = "PointListAdapter";
     private Context context;
-    List<HashMap<String, String>> data;
     private List<PointLogBean.ResultsEntity> mList;
 
     public MembershipPointListAdapter(Context context) {
-        mList = new ArrayList<PointLogBean.ResultsEntity>();
-        this.data = new ArrayList<HashMap<String, String>>();
+        mList = new ArrayList<>();
         this.context = context;
     }
 
@@ -56,35 +54,19 @@ public class MembershipPointListAdapter extends BaseAdapter {
     }
 
     public void update(List<PointLogBean.ResultsEntity> list) {
-        String time = "";
-        String info = "";
-        int pointvalue = 0;
-
-        Log.d(TAG,"dataSource.size "+ list.size());
-        for (int i = 0; i < list.size(); i++) {
-            HashMap<String, String> map = new HashMap<String, String>();
-            //payment = (float)list.get(i).getPayment();
-            pointvalue = list.get(i).getLog_value();
-
-
-            map.put("logtime", (time) );
-            map.put("info", (info) );
-            map.put("pointvalue", Integer.toString(pointvalue) );
-
-            data.add(map);
-        }
+        Log.d(TAG, "dataSource.size " + list.size());
         mList.addAll(list);
         notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        return data.size();
+        return mList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return data.get(position);
+        return mList.get(position);
     }
 
     @Override
@@ -94,28 +76,31 @@ public class MembershipPointListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Log.d(TAG,"getView ");
-
-        TextView tx_time = null;
-        TextView tx_pointinfo= null;
-        TextView tx_pointvalue= null;
-
+        Log.d(TAG, "getView ");
+        ViewHolder holder;
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.item_membership_point, null);
+            holder = new ViewHolder(convertView);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
         }
 
-        tx_time = (TextView) convertView.findViewById(R.id.tx_point_logtime);
-        tx_pointinfo = (TextView) convertView.findViewById(R.id.tx_point_info);
-        tx_pointvalue = (TextView) convertView.findViewById(R.id.tx_point_value);
-
-        tx_time.setText(data.get(position).get("logtime"));
-        tx_pointinfo.setText(data.get(position).get("info"));
-        tx_pointvalue.setText("+"+data.get(position).get("pointvalue")+"分");
-
-
+        holder.logTime.setText("");
+        holder.info.setText("");
+        holder.value.setText("+" + mList.get(position).getLog_value() + "分");
         return convertView;
     }
 
+
+    private class ViewHolder {
+        TextView logTime, info, value;
+        public ViewHolder(View itemView) {
+            logTime = (TextView) itemView.findViewById(R.id.tx_point_logtime);
+            info = (TextView) itemView.findViewById(R.id.tx_point_info);
+            value = (TextView) itemView.findViewById(R.id.tx_point_value);
+        }
+    }
 
 }
 
