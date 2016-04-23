@@ -2,8 +2,8 @@ package com.jimei.xiaolumeimei.ui.fragment.v2;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.View;
-import com.jimei.xiaolumeimei.base.BaseFragment;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
  *
  * Copyright 2016年 上海己美. All rights reserved.
  */
-public class TomorrowV2Fragment extends BaseFragment {
+public class TomorrowV2Fragment extends Fragment {
 
   private List<String> list = new ArrayList<>();
 
@@ -47,9 +47,5 @@ public class TomorrowV2Fragment extends BaseFragment {
 
   private void initViews(View view) {
 
-  }
-
-  @Override public View getScrollableView() {
-    return null;
   }
 }

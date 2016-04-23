@@ -58,19 +58,22 @@ public class YesterdayV2Fragment extends BaseFragment {
     setRetainInstance(true);
   }
 
-  @Nullable @Override
-  public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-      @Nullable Bundle savedInstanceState) {
+
+
+  @Override protected View initViews(LayoutInflater inflater, ViewGroup container,
+      Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_yesterdayv2, container, false);
     ButterKnife.bind(this, view);
+    initViews();
     return view;
   }
 
-  @Override public void setUserVisibleHint(boolean isVisibleToUser) {
-    super.setUserVisibleHint(isVisibleToUser);
-    if (isVisibleToUser && list.size() == 0) {
-      load();
-    }
+  @Override protected void initData() {
+    load();
+  }
+
+  @Override protected void setDefaultFragmentTitle(String title) {
+
   }
 
   private void load() {
@@ -107,12 +110,12 @@ public class YesterdayV2Fragment extends BaseFragment {
         });
   }
 
-  @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-    super.onViewCreated(view, savedInstanceState);
-    initViews(view);
-  }
+  //@Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+  //  super.onViewCreated(view, savedInstanceState);
+  //
+  //}
 
-  private void initViews(View view) {
+  private void initViews() {
 
     GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
     //manager.setOrientation(GridLayoutManager.VERTICAL);

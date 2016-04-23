@@ -44,7 +44,6 @@ public class TodayV2Fragment extends BaseFragment {
   private Subscription subscribe2;
   private Subscription subscribe3;
 
-
   public static TodayV2Fragment newInstance(String title) {
     TodayV2Fragment todayV2Fragment = new TodayV2Fragment();
     Bundle bundle = new Bundle();
@@ -58,11 +57,22 @@ public class TodayV2Fragment extends BaseFragment {
     setRetainInstance(true);
   }
 
-  @Override public void setUserVisibleHint(boolean isVisibleToUser) {
-    super.setUserVisibleHint(isVisibleToUser);
-    if (isVisibleToUser && list.size() == 0) {
-      load();
-    }
+
+  @Override protected View initViews(LayoutInflater inflater, ViewGroup container,
+      Bundle savedInstanceState) {
+    View view = inflater.inflate(R.layout.fragment_todayv2, container, false);
+    ButterKnife.bind(this, view);
+    initViews();
+
+    return view;
+  }
+
+  @Override protected void initData() {
+    load();
+  }
+
+  @Override protected void setDefaultFragmentTitle(String title) {
+
   }
 
   private void load() {
@@ -99,20 +109,7 @@ public class TodayV2Fragment extends BaseFragment {
         });
   }
 
-  @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-    super.onViewCreated(view, savedInstanceState);
-    initViews(view);
-  }
-
-  @Nullable @Override
-  public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-      @Nullable Bundle savedInstanceState) {
-    View view = inflater.inflate(R.layout.fragment_todayv2, container, false);
-    ButterKnife.bind(this, view);
-    return view;
-  }
-
-  private void initViews(View view) {
+  private void initViews() {
     GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
     //manager.setOrientation(GridLayoutManager.VERTICAL);
     //manager.setSmoothScrollbarEnabled(true);
@@ -203,7 +200,6 @@ public class TodayV2Fragment extends BaseFragment {
     }
   }
 
-
   public void showIndeterminateProgressDialog(boolean horizontal) {
     materialDialog = new MaterialDialog.Builder(getActivity())
         //.title(R.string.progress_dialog)
@@ -238,5 +234,4 @@ public class TodayV2Fragment extends BaseFragment {
       subscribe3.unsubscribe();
     }
   }
-
 }

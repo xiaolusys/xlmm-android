@@ -23,6 +23,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
@@ -87,7 +89,7 @@ import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseActivity
     implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener,
-    ViewPager.OnPageChangeListener {
+    ViewPager.OnPageChangeListener, RadioGroup.OnCheckedChangeListener {
   private static final String POST_URL = "?imageMogr2/format/jpg/quality/80";
   public static String TAG = "MainActivity";
   @Bind(R.id.tool_bar) Toolbar toolbar;
@@ -109,9 +111,13 @@ public class MainActivity extends BaseActivity
   @Bind(R.id.image_1) ImageView image1;
   @Bind(R.id.image_2) ImageView image2;
   @Bind(R.id.scrollableLayout) ScrollableLayout scrollableLayout;
-  @Bind(R.id.imag_yesterday) ImageView imagYesterday;
-  @Bind(R.id.imag_today) ImageView imagToday;
-  @Bind(R.id.imag_tomorror) ImageView imagTomorror;
+  @Bind(R.id.rb_yesterday) RadioButton rbYesterday;
+  @Bind(R.id.rb_today) RadioButton rbToday;
+  @Bind(R.id.rb_tomorror) RadioButton rbTomorror;
+  @Bind(R.id.radioGroup) RadioGroup radioGroup;
+  //@Bind(R.id.imag_yesterday) ImageView imagYesterday;
+  //@Bind(R.id.imag_today) ImageView imagToday;
+  //@Bind(R.id.imag_tomorror) ImageView imagTomorror;
   private View view;
   //private View head;
   private LinearLayout post_activity_layout;
@@ -145,9 +151,10 @@ public class MainActivity extends BaseActivity
   @Override protected void setListener() {
     carts.setOnClickListener(this);
     img_mmentry.setOnClickListener(this);
-    imagYesterday.setOnClickListener(this);
-    imagTomorror.setOnClickListener(this);
-    imagToday.setOnClickListener(this);
+    //imagYesterday.setOnClickListener(this);
+    //imagTomorror.setOnClickListener(this);
+    //imagToday.setOnClickListener(this);
+    radioGroup.setOnCheckedChangeListener(this);
   }
 
   @Override protected void initData() {
@@ -290,6 +297,8 @@ public class MainActivity extends BaseActivity
     list.add(TodayV2Fragment.newInstance("今天"));
     list.add(ChildFragment.newInstance("明天"));
     vp.setAdapter(adapter);
+    vp.setOffscreenPageLimit(2);
+
     vp.addOnPageChangeListener(this);
     scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(0));
 
@@ -925,19 +934,38 @@ public class MainActivity extends BaseActivity
     scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(position));
     switch (position) {
       case 0:
-        //radioGroup.check(R.id.rb_yesterday);
+        radioGroup.check(R.id.rb_yesterday);
         break;
       case 1:
-        //radioGroup.check(R.id.rb_today);
+        radioGroup.check(R.id.rb_today);
         break;
       case 2:
-        //radioGroup.check(R.id.rb_tomorror);
+        radioGroup.check(R.id.rb_tomorror);
         break;
     }
   }
 
   @Override public void onPageScrollStateChanged(int state) {
 
+  }
+
+  @Override public void onCheckedChanged(RadioGroup group, int checkedId) {
+    int position = 0;
+    switch (checkedId) {
+      case R.id.rb_yesterday:
+        position = 0;
+        vp.setCurrentItem(0, false);
+        break;
+      case R.id.rb_today:
+        position = 1;
+        vp.setCurrentItem(1, false);
+        break;
+      case R.id.rb_tomorror:
+        position = 2;
+        vp.setCurrentItem(2, false);
+        break;
+    }
+    scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(position));
   }
 
   private class MyFragmentAdapter extends FragmentPagerAdapter {

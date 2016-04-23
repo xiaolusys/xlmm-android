@@ -60,11 +60,21 @@ public class ChildFragment extends BaseFragment {
     setRetainInstance(true);
   }
 
-  @Override public void setUserVisibleHint(boolean isVisibleToUser) {
-    super.setUserVisibleHint(isVisibleToUser);
-    if (isVisibleToUser && list.size() == 0) {
-      load();
-    }
+
+  @Override protected View initViews(LayoutInflater inflater, ViewGroup container,
+      Bundle savedInstanceState) {
+    View view = inflater.inflate(R.layout.childlist_fragment, container, false);
+    ButterKnife.bind(this, view);
+    initViews();
+    return view;
+  }
+
+  @Override protected void initData() {
+    load();
+  }
+
+  @Override protected void setDefaultFragmentTitle(String title) {
+
   }
 
   private void load() {
@@ -101,12 +111,8 @@ public class ChildFragment extends BaseFragment {
         });
   }
 
-  @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-    super.onViewCreated(view, savedInstanceState);
-    initViews(view);
-  }
 
-  private void initViews(View view) {
+  private void initViews() {
     GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
     //manager.setOrientation(GridLayoutManager.VERTICAL);
     //manager.setSmoothScrollbarEnabled(true);
@@ -169,13 +175,6 @@ public class ChildFragment extends BaseFragment {
     }
   }
 
-  @Nullable @Override
-  public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-      @Nullable Bundle savedInstanceState) {
-    View view = inflater.inflate(R.layout.childlist_fragment, container, false);
-    ButterKnife.bind(this, view);
-    return view;
-  }
 
   @Override public void onDestroyView() {
     super.onDestroyView();
