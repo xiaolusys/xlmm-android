@@ -5,50 +5,35 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.design.widget.AppBarLayout
+    <com.jimei.xiaolumeimei.widget.XlmmTitleView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        app:xlmm_title="登录" />
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/AppTheme.PopupOverlay">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center"
-                android:text="@string/login"
-                android:textColor="@android:color/white"
-                android:textSize="16sp" />
-
-        </android.support.v7.widget.Toolbar>
-
-    </android.support.design.widget.AppBarLayout>
-
+    <include layout="@layout/common_gap" />
 
     <com.jimei.xiaolumeimei.widget.ClearEditText
         android:id="@+id/set_login_name"
         style="@style/EditTextStyle"
-        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:background="@null"
+        android:hint="请输入手机号"
         android:inputType="phone"
         android:maxLength="11"
-        android:layout_width="match_parent"
-        android:background="@drawable/text_frame"
-        android:hint="请输入手机号"
         app:iconClear="@drawable/clear_text" />
+
+    <include layout="@layout/common_gap" />
 
     <com.jimei.xiaolumeimei.widget.PasswordEditText
         android:id="@+id/set_login_password"
-        android:layout_width="match_parent"
         style="@style/EditTextStyle"
-        android:background="@drawable/text_frame"
+        android:layout_width="match_parent"
+        android:background="@null"
         android:hint="请输入登录密码"
-        android:maxLength="18"
-        android:inputType="textPassword"/>
+        android:inputType="textPassword"
+        android:maxLength="18" />
+
+    <include layout="@layout/common_gap" />
 
     <TextView
         android:id="@+id/forgetTextView"
