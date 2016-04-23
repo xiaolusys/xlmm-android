@@ -10,7 +10,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTabHost;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -24,17 +23,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
 import cn.iwgang.countdownview.CountdownView;
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.cpoopc.scrollablelayoutlib.ScrollableHelper;
-import com.cpoopc.scrollablelayoutlib.ScrollableLayout;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseActivity;
+import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.PostActivityBean;
@@ -58,7 +53,6 @@ import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaInfoActivity;
 import com.jimei.xiaolumeimei.ui.fragment.v1.ChildFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v1.view.MastFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.TodayV2Fragment;
-import com.jimei.xiaolumeimei.ui.fragment.v2.TomorrowV2Fragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.YesterdayV2Fragment;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
@@ -69,6 +63,7 @@ import com.jimei.xiaolumeimei.widget.banner.Indicators.PagerIndicator;
 import com.jimei.xiaolumeimei.widget.banner.SliderLayout;
 import com.jimei.xiaolumeimei.widget.banner.SliderTypes.BaseSliderView;
 import com.jimei.xiaolumeimei.widget.banner.SliderTypes.DefaultSliderView;
+import com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableLayout;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.squareup.okhttp.ResponseBody;
@@ -92,7 +87,7 @@ import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseActivity
     implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener,
-    ViewPager.OnPageChangeListener, RadioGroup.OnCheckedChangeListener {
+    ViewPager.OnPageChangeListener {
   private static final String POST_URL = "?imageMogr2/format/jpg/quality/80";
   public static String TAG = "MainActivity";
   @Bind(R.id.tool_bar) Toolbar toolbar;
@@ -110,46 +105,26 @@ public class MainActivity extends BaseActivity
   TextView tvPoint;
   TextView tvCoupon;
   TextView tvMoney;
-  List<Fragment> fragments;
-  List<String> titles;
   UserInfoBean userInfoBean = new UserInfoBean();
   @Bind(R.id.image_1) ImageView image1;
   @Bind(R.id.image_2) ImageView image2;
   @Bind(R.id.scrollableLayout) ScrollableLayout scrollableLayout;
-  @Bind(R.id.rb_yesterday) RadioButton rbYesterday;
-  @Bind(R.id.rb_today) RadioButton rbToday;
-  @Bind(R.id.rb_tomorror) RadioButton rbTomorror;
-  @Bind(R.id.radioGroup) RadioGroup radioGroup;
+  @Bind(R.id.imag_yesterday) ImageView imagYesterday;
+  @Bind(R.id.imag_today) ImageView imagToday;
+  @Bind(R.id.imag_tomorror) ImageView imagTomorror;
   private View view;
   //private View head;
-  private ImageView post2;
   private LinearLayout post_activity_layout;
   private CountdownView countTime;
   private SliderLayout mSliderLayout;
   private PagerIndicator mPagerIndicator;
-  private Subscription subscribe1;
-  private Subscription subscribe3;
-  private Subscription subscribe2;
   private String cookies;
   private String domain;
   private SharedPreferences sharedPreferencesMask;
-  private Subscription subscribe4;
-  private Subscription subscription5;
-  private Subscription subscribe6;
-  private Subscription subscribe7;
-  private MaterialDialog materialDialog;
   private SharedPreferences sharedPreferences;
   private int mask;
-  private FragmentTabHost mTabHost;
-  private LayoutInflater layoutInflater;
-  private Class fragmentArr[] = {
-      YesterdayV2Fragment.class, TodayV2Fragment.class, TomorrowV2Fragment.class
-  };
-  private List<Fragment> list = new ArrayList<Fragment>();
+  private List<BaseFragment> list = new ArrayList<>();
   private ViewPager vp;
-  private int imageViewArray[] = {
-      R.drawable.yesterday, R.drawable.today, R.drawable.tomorror
-  };
   private int num;
   private BadgeView badge;
   private double budgetCash;
@@ -170,8 +145,9 @@ public class MainActivity extends BaseActivity
   @Override protected void setListener() {
     carts.setOnClickListener(this);
     img_mmentry.setOnClickListener(this);
-    vp.setOnPageChangeListener(this);
-    radioGroup.setOnCheckedChangeListener(this);
+    imagYesterday.setOnClickListener(this);
+    imagTomorror.setOnClickListener(this);
+    imagToday.setOnClickListener(this);
   }
 
   @Override protected void initData() {
@@ -309,23 +285,22 @@ public class MainActivity extends BaseActivity
     vp = (ViewPager) findViewById(R.id.viewPager);
     sharedPreferencesMask = getSharedPreferences("maskActivity", 0);
     mask = sharedPreferencesMask.getInt("mask", 0);
-
-    list.add(ChildFragment.newInstance("昨天"));
-    list.add(ChildFragment.newInstance("今天"));
+    MyFragmentAdapter adapter = new MyFragmentAdapter(getSupportFragmentManager());
+    list.add(YesterdayV2Fragment.newInstance("昨天"));
+    list.add(TodayV2Fragment.newInstance("今天"));
     list.add(ChildFragment.newInstance("明天"));
-    vp.setAdapter(new MyFragmentAdapter(getSupportFragmentManager(), list));
-    scrollableLayout.getHelper()
-        .setCurrentScrollableContainer(
-            (ScrollableHelper.ScrollableContainer) list.get(0));
+    vp.setAdapter(adapter);
+    vp.addOnPageChangeListener(this);
+    scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(0));
 
-    vp.setCurrentItem(0);
+    //vp.setCurrentItem(0);
 
     initDataForTab();
   }
 
   private void initDataForTab() {
     initPost();
-    subscription5 = Observable.timer(1, 1, TimeUnit.SECONDS)
+    Subscription subscription5 = Observable.timer(1, 1, TimeUnit.SECONDS)
         .onBackpressureDrop()
         .map(aLong -> calcLeftTime())
         .observeOn(AndroidSchedulers.mainThread())
@@ -338,10 +313,11 @@ public class MainActivity extends BaseActivity
             }
           }
         }, Throwable::printStackTrace);
+    addSubscription(subscription5);
   }
 
   private void initPost() {
-    subscribe2 = ProductModel.getInstance()
+    Subscription subscribe2 = ProductModel.getInstance()
         .getTodayPost()
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<PostBean>() {
@@ -452,7 +428,8 @@ public class MainActivity extends BaseActivity
             }
           }
         });
-    subscribe6 = ActivityModel.getInstance()
+    addSubscription(subscribe2);
+    Subscription subscribe6 = ActivityModel.getInstance()
         .getPostActivity()
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<List<PostActivityBean>>() {
@@ -592,24 +569,27 @@ public class MainActivity extends BaseActivity
                               imageViewList.get(finalI)
                                   .setOnClickListener(new View.OnClickListener() {
                                     @Override public void onClick(View v) {
-                                      subscribe7 = ActivityModel.getInstance()
-                                          .getUsercoupons(postActivityBean.get(finalI)
-                                              .getExtras()
-                                              .getTemplateId())
-                                          .subscribeOn(Schedulers.io())
-                                          .subscribe(new ServiceResponse<ResponseBody>() {
-                                            @Override public void onNext(
-                                                ResponseBody responseBody) {
-                                              if (null != responseBody) {
-                                                try {
-                                                  JUtils.Log("TodayListView",
-                                                      responseBody.string());
-                                                } catch (IOException e) {
-                                                  e.printStackTrace();
-                                                }
-                                              }
-                                            }
-                                          });
+                                      Subscription subscribe7 =
+                                          ActivityModel.getInstance()
+                                              .getUsercoupons(postActivityBean.get(finalI)
+                                                  .getExtras()
+                                                  .getTemplateId())
+                                              .subscribeOn(Schedulers.io())
+                                              .subscribe(
+                                                  new ServiceResponse<ResponseBody>() {
+                                                    @Override public void onNext(
+                                                        ResponseBody responseBody) {
+                                                      if (null != responseBody) {
+                                                        try {
+                                                          JUtils.Log("TodayListView",
+                                                              responseBody.string());
+                                                        } catch (IOException e) {
+                                                          e.printStackTrace();
+                                                        }
+                                                      }
+                                                    }
+                                                  });
+                                      addSubscription(subscribe7);
                                     }
                                   });
                             }
@@ -632,6 +612,7 @@ public class MainActivity extends BaseActivity
             }
           }
         });
+    addSubscription(subscribe6);
   }
 
   private long calcLeftTime() {
@@ -652,14 +633,6 @@ public class MainActivity extends BaseActivity
     } else {
       return 0;
     }
-  }
-
-  private View getTabItemView(int i) {
-    View view = layoutInflater.inflate(R.layout.tab_content, null);
-    ImageView mImageView = (ImageView) view.findViewById(R.id.tab_imageview);
-    mImageView.setBackgroundResource(imageViewArray[i]);
-    //mTextView.setText(textViewArray[i]);
-    return view;
   }
 
   @Override public boolean onNavigationItemSelected(MenuItem item) {
@@ -755,11 +728,26 @@ public class MainActivity extends BaseActivity
       case R.id.imgUser:
         intent = new Intent(MainActivity.this, InformationActivity.class);
         break;
+
+      case R.id.imag_yesterday:
+        vp.setCurrentItem(0);
+        break;
+      case R.id.imag_today:
+        vp.setCurrentItem(1);
+        break;
+      case R.id.imag_tomorror:
+        vp.setCurrentItem(2);
+        break;
     }
-    if (!(LoginUtils.checkLoginState(getApplicationContext()))) {
-      login(flag);
-    } else {
-      startActivity(intent);
+
+    if (v.getId() != R.id.imag_today
+        && v.getId() != R.id.imag_tomorror
+        && v.getId() != R.id.imag_yesterday) {
+      if (!(LoginUtils.checkLoginState(getApplicationContext()))) {
+        login(flag);
+      } else {
+        startActivity(intent);
+      }
     }
   }
 
@@ -930,78 +918,40 @@ public class MainActivity extends BaseActivity
 
   @Override public void onPageScrolled(int position, float positionOffset,
       int positionOffsetPixels) {
-    switch (position) {
-      case 0:
-        radioGroup.check(R.id.rb_yesterday);
-        break;
-      case 1:
-        radioGroup.check(R.id.rb_today);
-        break;
-      case 2:
-        radioGroup.check(R.id.rb_tomorror);
-        break;
-    }
+
   }
 
   @Override public void onPageSelected(int position) {
+    scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(position));
     switch (position) {
       case 0:
-        radioGroup.check(R.id.rb_yesterday);
+        //radioGroup.check(R.id.rb_yesterday);
         break;
       case 1:
-        radioGroup.check(R.id.rb_today);
+        //radioGroup.check(R.id.rb_today);
         break;
       case 2:
-        radioGroup.check(R.id.rb_tomorror);
+        //radioGroup.check(R.id.rb_tomorror);
         break;
     }
-    scrollableLayout.getHelper().setCurrentScrollableContainer(
-        (ScrollableHelper.ScrollableContainer) list.get(position));
   }
 
   @Override public void onPageScrollStateChanged(int state) {
 
   }
 
-  @Override public void onCheckedChanged(RadioGroup group, int checkedId) {
-    int position = 0;
-    switch (checkedId) {
-      case R.id.rb_yesterday:
-        vp.setCurrentItem(0, false);
-        position = 0;
-        break;
-      case R.id.rb_today:
-        vp.setCurrentItem(1, false);
-        position = 1;
-        break;
-      case R.id.rb_tomorror:
-        vp.setCurrentItem(2, false);
-        position =2;
-        break;
-    }
-    scrollableLayout.getHelper().setCurrentScrollableContainer(
-        (ScrollableHelper.ScrollableContainer) list.get(position));
-  }
-
   private class MyFragmentAdapter extends FragmentPagerAdapter {
-
-    List<Fragment> list;
 
     public MyFragmentAdapter(FragmentManager fm) {
       super(fm);
     }
 
-    public MyFragmentAdapter(FragmentManager fm, List<Fragment> list) {
-      super(fm);
-      this.list = list;
-    }
-
-    @Override public Fragment getItem(int arg0) {
-      return list.get(arg0);
+    @Override public Fragment getItem(int position) {
+      return getCount() > position ? list.get(position) : null;
     }
 
     @Override public int getCount() {
-      return list.size();
+      return list == null ? 0 : list.size();
     }
   }
 }

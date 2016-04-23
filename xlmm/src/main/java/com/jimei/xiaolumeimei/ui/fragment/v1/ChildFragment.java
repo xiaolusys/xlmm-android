@@ -11,11 +11,11 @@ import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.cpoopc.scrollablelayoutlib.ScrollableHelper;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.ChildListAdapter;
+import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
@@ -32,13 +32,13 @@ import rx.schedulers.Schedulers;
  *
  * Copyright 2016年 上海己美. All rights reserved.
  */
-public class ChildFragment extends Fragment
-    implements ScrollableHelper.ScrollableContainer {
+public class ChildFragment extends BaseFragment {
 
-  int page_size = 10;
+
   @Bind(R.id.childlist_recyclerView) XRecyclerView xRecyclerView;
   List<ChildListBean.ResultsEntity> list = new ArrayList<>();
   private int page = 2;
+  int page_size = 10;
   private int totalPages;//总的分页数
   private ChildListAdapter mChildListAdapter;
   //private TextView mNormal, mOrder;
@@ -111,6 +111,7 @@ public class ChildFragment extends Fragment
     //manager.setOrientation(GridLayoutManager.VERTICAL);
     //manager.setSmoothScrollbarEnabled(true);
     xRecyclerView.setLayoutManager(manager);
+    xRecyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
 
     xRecyclerView.addItemDecoration(new SpaceItemDecoration(10));
 
