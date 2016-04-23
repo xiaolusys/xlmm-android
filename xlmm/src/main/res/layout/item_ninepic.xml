@@ -15,7 +15,7 @@
             android:layout_width="81px"
             android:layout_height="81px"
             android:layout_marginLeft="10px"
-            android:layout_marginRight="12px"
+            android:layout_marginRight="20px"
             android:background="@color/colorPrimary"/>
 
 
