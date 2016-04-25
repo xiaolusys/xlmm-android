@@ -27,6 +27,7 @@
         android:layout_marginTop="10px"
         android:layout_toRightOf="@id/img_layout"
         android:text="韩版大摆加厚卫衣"
+        android:singleLine="true"
         android:textColor="@color/c26262E"
         android:textSize="15sp" />
 

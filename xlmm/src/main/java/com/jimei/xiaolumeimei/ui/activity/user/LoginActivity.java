@@ -65,8 +65,6 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
     Button login_button;
     @Bind(R.id.set_register_button)
     Button set_register;
-    @Bind(R.id.toolbar)
-    Toolbar toolbar;
     @Bind(R.id.forgetTextView)
     TextView forGetTextView;
     @Bind(R.id.wx_login)
@@ -102,8 +100,6 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
 
         set_register.setOnClickListener(this);
 
-        toolbar.setOnClickListener(this);
-
         wx.setOnClickListener(this);
         sms.setOnClickListener(this);
 
@@ -121,9 +117,6 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
         if (!LoginUtils.checkLoginState(getApplicationContext())) {
             removeWX(new Wechat(this));
         }
-        //UMWXHandler wxHandler =
-        //    new UMWXHandler(this, "wx25fcb32689872499", "3c7b4e3eb5ae4cfb132b2ac060a872ee");
-        //wxHandler.;
         sharedPreferences =
                 getApplicationContext().getSharedPreferences("login_info", Context.MODE_PRIVATE);
         String[] loginInfo = LoginUtils.getLoginInfo(getApplicationContext());
@@ -154,10 +147,6 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void initViews() {
         ShareSDK.initSDK(this);
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
-        finishBack(toolbar);
-
         forGetTextView.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
     }
 
@@ -466,61 +455,6 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
         return false;
     }
 
-    /*
-    @Override
-    public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
-      if (i == Platform.ACTION_USER_INFOR) {
-        UIHandler.sendEmptyMessage(MSG_AUTH_COMPLETE, this);
-        login(platform.getName(), platform.getDb().getUserId(), hashMap);
-      }
-      for (Map.Entry<String, Object> entry : hashMap.entrySet()) {
-        String key = entry.getKey();
-        Object value = entry.getValue();
-        JUtils.Log(TAG, key + "=====" + value);
-      }
-      JUtils.Log(TAG, "------User Name ---------" + platform.getDb().getUserName());
-      JUtils.Log(TAG, "------User ID ---------" + platform.getDb().getUserId());
-      headimgurl = (String) hashMap.get("headimgurl");
-      nickname = (String) hashMap.get("nickname");
-      openid = (String) hashMap.get("openid");
-      unionid = (String) hashMap.get("unionid");
-
-      model.wxapp_login(noncestr, timestamp, sign, headimgurl, nickname, openid, unionid)
-          .subscribeOn(Schedulers.io())
-          .subscribe(new ServiceResponse<WxLogininfoBean>() {
-            @Override public void onNext(WxLogininfoBean wxLogininfoBean) {
-              super.onNext(wxLogininfoBean);
-              if (wxLogininfoBean != null) {
-                int code = wxLogininfoBean.getCode();
-                if (0 == code) {
-
-                  LoginUtils.saveLoginSuccess(true, getApplicationContext());
-                  JUtils.Toast("登录成功,前往绑定手机");
-                  Intent intent =
-                      new Intent(LoginActivity.this, WxLoginBindPhoneActivity.class);
-                  Bundle bundle = new Bundle();
-                  bundle.putString("headimgurl", headimgurl);
-                  bundle.putString("nickname", nickname);
-                  intent.putExtras(bundle);
-                  startActivity(intent);
-
-                  finish();
-                } else {
-                  JUtils.Toast("登陆有误,请检查你的微信版本");
-                }
-              }
-            }
-          });
-    }
-
-    @Override public void onError(Platform platform, int i, Throwable throwable) {
-
-    }
-
-    @Override public void onCancel(Platform platform, int i) {
-
-    }
-  */
     public void removeWX(Platform platform) {
         if (platform != null) {
             platform.removeAccount(true);
