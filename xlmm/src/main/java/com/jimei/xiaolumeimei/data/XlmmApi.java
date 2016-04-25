@@ -12,6 +12,7 @@ public class XlmmApi {
 
 //  public static final String APP_BASE_URL = "http://m.xiaolumeimei.com";
 
+    //public static final String APP_BASE_URL = "http://192.168.1.50:8000";
 //    public static final String APP_BASE_URL = "http://192.168.1.11:9000";
 //    public static final String APP_BASE_URL = "http://192.168.1.56:8000";
 //  public static final String APP_BASE_URL= "http//dev.xiaolumeimei.com";

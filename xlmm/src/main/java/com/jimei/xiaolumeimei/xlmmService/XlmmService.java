@@ -11,6 +11,7 @@ import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.entities.AllowanceBean;
 import com.jimei.xiaolumeimei.entities.AwardCarryBean;
 import com.jimei.xiaolumeimei.entities.BindInfoBean;
+import com.jimei.xiaolumeimei.entities.BrandpromotionBean;
 import com.jimei.xiaolumeimei.entities.BudgetPayBean;
 import com.jimei.xiaolumeimei.entities.BudgetdetailBean;
 import com.jimei.xiaolumeimei.entities.CarryLogListBean;
@@ -848,4 +849,12 @@ public interface XlmmService {
     @GET("/rest/v1/wuliu/get_wuliu_by_tid")
     Observable<LogisticsBean> get_logistics(@Query("tid") String tid);
 
+      //品牌列表
+    @GET("products/brandlist")
+    Observable<BrandpromotionBean> getBrandlist(
+            @Query("page")      int page,
+            @Query("page_size") int page_size,
+            @Query("brand")     int brand
+
+    );
 }

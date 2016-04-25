@@ -19,32 +19,33 @@
 
 
     <RadioGroup
-          android:id="@+id/radioGroup"
-          android:layout_width="match_parent"
-          android:layout_height="55dp"
-          android:background="@color/white"
-          android:orientation="horizontal">
-        <RadioButton
-            android:id="@+id/rb_yesterday"
-            android:checked="true"
-            android:drawableTop="@drawable/yesterday"
-            style="@style/main_radio"/>
+        android:layout_marginTop="8dp"
+        android:id="@+id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/white"
+        android:orientation="horizontal">
+      <RadioButton
+          android:id="@+id/rb_yesterday"
+          android:checked="true"
+          android:drawableTop="@drawable/yesterday"
+          style="@style/main_radio"/>
 
-        <RadioButton
-            android:id="@+id/rb_today"
-            android:drawableTop="@drawable/today"
-            style="@style/main_radio"/>
+      <RadioButton
+          android:id="@+id/rb_today"
+          android:drawableTop="@drawable/today"
+          style="@style/main_radio"/>
 
-        <RadioButton
-            android:id="@+id/rb_tomorror"
-            android:drawableTop="@drawable/tomorror"
-            style="@style/main_radio"/>
+      <RadioButton
+          android:id="@+id/rb_tomorror"
+          android:drawableTop="@drawable/tomorror"
+          style="@style/main_radio"/>
 
-      </RadioGroup>
+    </RadioGroup>
     <!--<include-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--layout="@layout/include_nav"/>-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--layout="@layout/include_nav"/>-->
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPager"

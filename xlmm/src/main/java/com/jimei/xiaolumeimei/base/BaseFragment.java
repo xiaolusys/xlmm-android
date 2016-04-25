@@ -9,10 +9,12 @@ import android.view.ViewGroup;
 import com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableHelper;
 
 /**
- * Created by 优尼世界 on 15/12/29.
+ * Created by itxuye on 16/04/23
  * <p/>
- * Copyright 2015年 上海己美. All rights reserved.
+ * Copyright 2016年 上海己美. All rights reserved.
  */
+
+//fragment的懒加载方式
 public abstract class BaseFragment extends Fragment
     implements ScrollableHelper.ScrollableContainer {
   /**

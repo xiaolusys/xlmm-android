@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<RelativeLayout
+<LinearLayout
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:background="#f3f3f4"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="wrap_content" tools:showIn="@layout/include_mainscrollcontent">
   <FrameLayout
-      android:id="@+id/ff"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="vertical">
@@ -42,33 +41,41 @@
         app:unselected_width="3dp"
     />
   </FrameLayout>
+
+  <!--<LinearLayout-->
+  <!--android:id="@+id/ll"-->
+  <!--android:orientation="horizontal"-->
+  <!--android:layout_width="match_parent"-->
+  <!--android:layout_height="wrap_content">-->
+  <!--<ImageView-->
+  <!--android:layout_gravity="left"-->
+  <!--android:src="@drawable/ic_companylogo"-->
+  <!--android:layout_width="wrap_content"-->
+  <!--android:layout_height="wrap_content"/>-->
+  <!--<ImageView-->
+  <!--android:layout_gravity="right"-->
+  <!--android:src="@drawable/ic_companylogo"-->
+  <!--android:layout_width="wrap_content"-->
+  <!--android:layout_height="wrap_content"/>-->
+  <!--</LinearLayout>-->
+
   <LinearLayout
-      android:id="@+id/ll"
-      android:layout_below="@id/ff"
-      android:orientation="horizontal"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content">
-    <ImageView
-        android:layout_gravity="left"
-        android:src="@drawable/ic_companylogo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    <ImageView
-        android:layout_gravity="right"
-        android:src="@drawable/ic_companylogo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-  </LinearLayout>
-  <LinearLayout
-      android:layout_below="@id/ll"
-      android:id="@+id/post_activity"
+      android:id="@+id/brand"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:orientation="vertical"/>
+      android:orientation="vertical">
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/brand_xrey"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+  </LinearLayout>
+  <include
+      android:id="@+id/post_ll"
+      layout="@layout/post_layout"/>
 
   <RelativeLayout
       android:id="@+id/rr"
-      android:layout_below="@id/post_activity"
       android:layout_width="match_parent"
       android:layout_height="50dp"
       android:layout_marginTop="10dp"
@@ -105,6 +112,7 @@
         app:suffixMinute="分"
         app:suffixSecond="秒"
     />
+
   </RelativeLayout>
 
-</RelativeLayout>
+</LinearLayout>

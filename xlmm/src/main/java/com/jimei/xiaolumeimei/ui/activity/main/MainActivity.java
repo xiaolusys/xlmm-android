@@ -14,6 +14,8 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -30,9 +32,11 @@ import android.widget.TextView;
 import butterknife.Bind;
 import cn.iwgang.countdownview.CountdownView;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.adapter.BrandlistAdapter;
 import com.jimei.xiaolumeimei.base.BaseActivity;
 import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.data.XlmmConst;
+import com.jimei.xiaolumeimei.entities.BrandpromotionBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.PostActivityBean;
 import com.jimei.xiaolumeimei.entities.PostBean;
@@ -60,6 +64,7 @@ import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
+import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.widget.badgelib.BadgeView;
 import com.jimei.xiaolumeimei.widget.banner.Indicators.PagerIndicator;
 import com.jimei.xiaolumeimei.widget.banner.SliderLayout;
@@ -95,6 +100,7 @@ public class MainActivity extends BaseActivity
   @Bind(R.id.tool_bar) Toolbar toolbar;
   @Bind(R.id.rv_cart) RelativeLayout carts;
   @Bind(R.id.img_mmentry) ImageView img_mmentry;
+  @Bind(R.id.brand_xrey) RecyclerView recyclerView;
   List<String> postString = new ArrayList<>();
   List<String> appString = new ArrayList<>();
   List<PostBean.WemPostersEntity> wemPosters = new ArrayList<>();
@@ -138,6 +144,7 @@ public class MainActivity extends BaseActivity
   private TextView msg2;
   private TextView msg3;
   private ImageView loginFlag;
+  private BrandlistAdapter brandlistAdapter;
 
   public static int dp2px(Context context, int dp) {
     float scale = context.getResources().getDisplayMetrics().density;
@@ -277,14 +284,21 @@ public class MainActivity extends BaseActivity
     badge.setGravity(Gravity.END | Gravity.TOP);
     badge.setPadding(dip2Px(4), dip2Px(1), dip2Px(4), dip2Px(1));
     badge.setTargetView(image2);
-    //badge.setBadgeGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
-    //        StatusBarUtil.setColorForDrawerLayout(MainActivity.this,drawer, getResources()
-    //                .getColor(R.color.colorAccent), 0);
+
     initViewsForTab();
   }
 
   public void initViewsForTab() {
-    view = LayoutInflater.from(this).inflate(R.layout.activity_main, null);
+    brandlistAdapter = new BrandlistAdapter(this);
+    LinearLayoutManager manager = new LinearLayoutManager(this);
+    manager.setOrientation(LinearLayoutManager.HORIZONTAL);
+    recyclerView.setLayoutManager(manager);
+    //recyclerView.setHasFixedSize(true);
+
+    recyclerView.addItemDecoration(new SpaceItemDecoration(5));
+    recyclerView.setAdapter(brandlistAdapter);
+
+    view = LayoutInflater.from(this).inflate(R.layout.post_layout, null);
     post_activity_layout = (LinearLayout) findViewById(R.id.post_activity);
     countTime = (CountdownView) findViewById(R.id.countTime);
     mSliderLayout = (SliderLayout) findViewById(R.id.slider);
@@ -301,8 +315,6 @@ public class MainActivity extends BaseActivity
 
     vp.addOnPageChangeListener(this);
     scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(0));
-
-    //vp.setCurrentItem(0);
 
     initDataForTab();
   }
@@ -438,6 +450,17 @@ public class MainActivity extends BaseActivity
           }
         });
     addSubscription(subscribe2);
+
+    ProductModel.getInstance()
+        .getBrandlist(1, 10, 1)
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<BrandpromotionBean>() {
+          @Override public void onNext(BrandpromotionBean brandpromotionBean) {
+            super.onNext(brandpromotionBean);
+            brandlistAdapter.update(brandpromotionBean.getResults());
+          }
+        });
+
     Subscription subscribe6 = ActivityModel.getInstance()
         .getPostActivity()
         .subscribeOn(Schedulers.io())

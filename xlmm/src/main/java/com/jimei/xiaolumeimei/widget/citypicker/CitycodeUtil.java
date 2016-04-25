@@ -2,8 +2,8 @@ package com.jimei.xiaolumeimei.widget.citypicker;
 
 import android.content.Context;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 城市代码
@@ -74,8 +74,7 @@ public class CitycodeUtil {
     return province_list;
   }
 
-  public ArrayList<String> getCity(ConcurrentHashMap<String, List<Cityinfo>>
-      cityHashMap,
+  public ArrayList<String> getCity(HashMap<String, List<Cityinfo>> cityHashMap,
       String provicecode) {
     if (city_list_code.size() > 0) {
       city_list_code.clear();
@@ -85,7 +84,6 @@ public class CitycodeUtil {
     }
     List<Cityinfo> city = new ArrayList<Cityinfo>();
     city = cityHashMap.get(provicecode);
-    System.out.println("city--->" + city.toString());
     for (int i = 0; i < city.size(); i++) {
       city_list.add(city.get(i).getCity_name());
       city_list_code.add(city.get(i).getId());
@@ -93,9 +91,8 @@ public class CitycodeUtil {
     return city_list;
   }
 
-  public ArrayList<String> getCouny(ConcurrentHashMap<String, List<Cityinfo>> cityHashMap,
+  public ArrayList<String> getCouny(HashMap<String, List<Cityinfo>> cityHashMap,
       String citycode) {
-    System.out.println("citycode" + citycode);
     List<Cityinfo> couny = null;
     if (couny_list_code.size() > 0) {
       couny_list_code.clear();
@@ -110,7 +107,6 @@ public class CitycodeUtil {
     }
 
     couny = cityHashMap.get(citycode);
-    System.out.println("couny--->" + couny.toString());
     for (int i = 0; i < couny.size(); i++) {
       couny_list.add(couny.get(i).getCity_name());
       couny_list_code.add(couny.get(i).getId());

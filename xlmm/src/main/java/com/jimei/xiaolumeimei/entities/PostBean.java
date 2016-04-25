@@ -46,6 +46,18 @@ public class PostBean {
    */
 
   @SerializedName("wem_posters") private List<WemPostersEntity> mWemPosters;
+  @SerializedName("chd_posters") private List<WemPostersEntity> mChdPosters;
+  @SerializedName("brand_promotion") private List<BrandpromotionEntity>
+      mBrandpromotionEntities;
+
+  public List<BrandpromotionEntity> getmBrandpromotionEntities() {
+    return mBrandpromotionEntities;
+  }
+
+  public void setmBrandpromotionEntities(
+      List<BrandpromotionEntity> mBrandpromotionEntities) {
+    this.mBrandpromotionEntities = mBrandpromotionEntities;
+  }
 
   public List<WemPostersEntity> getmChdPosters() {
     return mChdPosters;
@@ -54,8 +66,6 @@ public class PostBean {
   public void setmChdPosters(List<WemPostersEntity> mChdPosters) {
     this.mChdPosters = mChdPosters;
   }
-
-  @SerializedName("chd_posters") private List<WemPostersEntity> mChdPosters;
 
   public int getId() {
     return mId;
@@ -96,8 +106,6 @@ public class PostBean {
   public void setWemPosters(List<WemPostersEntity> wemPosters) {
     this.mWemPosters = wemPosters;
   }
-
-
 
   public static class ActivityEntity {
     @SerializedName("id") private int mId;
@@ -228,6 +236,103 @@ public class PostBean {
 
     public void setSubject(List<String> subject) {
       this.mSubject = subject;
+    }
+  }
+
+  private static class BrandpromotionEntity {
+
+    /**
+     * id : 1
+     * brand_name : top10
+     * brand_desc : test
+     * brand_pic :
+     * brand_post :
+     * brand_applink :
+     * start_time : 2016-04-18T18:56:20
+     * end_time : 2016-04-18T18:56:23
+     * is_active : true
+     */
+
+    @SerializedName("id") private int mId;
+    @SerializedName("brand_name") private String mBrandName;
+    @SerializedName("brand_desc") private String mBrandDesc;
+    @SerializedName("brand_pic") private String mBrandPic;
+    @SerializedName("brand_post") private String mBrandPost;
+    @SerializedName("brand_applink") private String mBrandApplink;
+    @SerializedName("start_time") private String mStartTime;
+    @SerializedName("end_time") private String mEndTime;
+    @SerializedName("is_active") private boolean mIsActive;
+
+    public int getId() {
+      return mId;
+    }
+
+    public void setId(int id) {
+      mId = id;
+    }
+
+    public String getBrandName() {
+      return mBrandName;
+    }
+
+    public void setBrandName(String brandName) {
+      mBrandName = brandName;
+    }
+
+    public String getBrandDesc() {
+      return mBrandDesc;
+    }
+
+    public void setBrandDesc(String brandDesc) {
+      mBrandDesc = brandDesc;
+    }
+
+    public String getBrandPic() {
+      return mBrandPic;
+    }
+
+    public void setBrandPic(String brandPic) {
+      mBrandPic = brandPic;
+    }
+
+    public String getBrandPost() {
+      return mBrandPost;
+    }
+
+    public void setBrandPost(String brandPost) {
+      mBrandPost = brandPost;
+    }
+
+    public String getBrandApplink() {
+      return mBrandApplink;
+    }
+
+    public void setBrandApplink(String brandApplink) {
+      mBrandApplink = brandApplink;
+    }
+
+    public String getStartTime() {
+      return mStartTime;
+    }
+
+    public void setStartTime(String startTime) {
+      mStartTime = startTime;
+    }
+
+    public String getEndTime() {
+      return mEndTime;
+    }
+
+    public void setEndTime(String endTime) {
+      mEndTime = endTime;
+    }
+
+    public boolean isIsActive() {
+      return mIsActive;
+    }
+
+    public void setIsActive(boolean isActive) {
+      mIsActive = isActive;
     }
   }
 
