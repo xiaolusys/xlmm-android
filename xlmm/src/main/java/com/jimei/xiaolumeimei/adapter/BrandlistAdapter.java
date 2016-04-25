@@ -8,9 +8,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.BrandpromotionBean;
-import com.jimei.xiaolumeimei.utils.ViewUtils;
+import com.jude.utils.JUtils;
+import com.zhy.autolayout.utils.AutoUtils;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +29,7 @@ public class BrandlistAdapter extends RecyclerView.Adapter<BrandlistAdapter.Bran
   private Context mContext;
 
   public BrandlistAdapter(Context mContext) {
+    JUtils.Log("MainActivity", "-----------BrandlistAdapter");
     this.mContext = mContext;
     mList = new ArrayList<>();
   }
@@ -52,11 +56,15 @@ public class BrandlistAdapter extends RecyclerView.Adapter<BrandlistAdapter.Bran
 
     BrandpromotionBean.ResultsEntity resultsEntity = mList.get(position);
     String picPath = resultsEntity.getPicPath();
-    ViewUtils.loadImgToImgViewWithPlaceholder(mContext, holder.brandImag, picPath);
+    //ViewUtils.loadImgToImgViewWithPlaceholder(mContext, holder.brandImag, picPath);
+    Glide.with(mContext).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
+        //.placeholder(R.drawable.parceholder)
+        .centerCrop().into(holder.brandImag);
   }
 
+
   @Override public int getItemCount() {
-    return 0;
+    return mList.size();
   }
 
   static class BrandlistVH extends RecyclerView.ViewHolder {
@@ -66,6 +74,7 @@ public class BrandlistAdapter extends RecyclerView.Adapter<BrandlistAdapter.Bran
 
     public BrandlistVH(View itemView) {
       super(itemView);
+      AutoUtils.autoSize(itemView);
       ButterKnife.bind(this, itemView);
     }
   }

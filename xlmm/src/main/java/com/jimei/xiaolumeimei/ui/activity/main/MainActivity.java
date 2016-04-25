@@ -100,7 +100,6 @@ public class MainActivity extends BaseActivity
   @Bind(R.id.tool_bar) Toolbar toolbar;
   @Bind(R.id.rv_cart) RelativeLayout carts;
   @Bind(R.id.img_mmentry) ImageView img_mmentry;
-  @Bind(R.id.brand_xrey) RecyclerView recyclerView;
   List<String> postString = new ArrayList<>();
   List<String> appString = new ArrayList<>();
   List<PostBean.WemPostersEntity> wemPosters = new ArrayList<>();
@@ -121,6 +120,7 @@ public class MainActivity extends BaseActivity
   @Bind(R.id.rb_today) RadioButton rbToday;
   @Bind(R.id.rb_tomorror) RadioButton rbTomorror;
   @Bind(R.id.radioGroup) RadioGroup radioGroup;
+  @Bind(R.id.brand) LinearLayout brand;
   //@Bind(R.id.imag_yesterday) ImageView imagYesterday;
   //@Bind(R.id.imag_today) ImageView imagToday;
   //@Bind(R.id.imag_tomorror) ImageView imagTomorror;
@@ -144,7 +144,6 @@ public class MainActivity extends BaseActivity
   private TextView msg2;
   private TextView msg3;
   private ImageView loginFlag;
-  private BrandlistAdapter brandlistAdapter;
 
   public static int dp2px(Context context, int dp) {
     float scale = context.getResources().getDisplayMetrics().density;
@@ -289,14 +288,14 @@ public class MainActivity extends BaseActivity
   }
 
   public void initViewsForTab() {
-    brandlistAdapter = new BrandlistAdapter(this);
-    LinearLayoutManager manager = new LinearLayoutManager(this);
-    manager.setOrientation(LinearLayoutManager.HORIZONTAL);
-    recyclerView.setLayoutManager(manager);
-    //recyclerView.setHasFixedSize(true);
 
-    recyclerView.addItemDecoration(new SpaceItemDecoration(5));
-    recyclerView.setAdapter(brandlistAdapter);
+    //LinearLayoutManager manager = new LinearLayoutManager(this);
+    //manager.setOrientation(LinearLayoutManager.HORIZONTAL);
+    //recyclerView.setLayoutManager(manager);
+    //recyclerView.addItemDecoration(new SpaceItemDecoration(5));
+    //
+    //brandlistAdapter = new BrandlistAdapter(this);
+    //recyclerView.setAdapter(brandlistAdapter);
 
     view = LayoutInflater.from(this).inflate(R.layout.post_layout, null);
     post_activity_layout = (LinearLayout) findViewById(R.id.post_activity);
@@ -444,6 +443,65 @@ public class MainActivity extends BaseActivity
                       }
                     });
               }
+
+              List<BrandlistAdapter> brandlistAdapters = new ArrayList<>();
+              List<RecyclerView> recyclerViews = new ArrayList<>();
+
+              if (postBean.getmBrandpromotionEntities() != null) {
+                brand.setVisibility(View.VISIBLE);
+
+                List<PostBean.BrandpromotionEntity> brandpromotionEntities =
+                    postBean.getmBrandpromotionEntities();
+                if (brandpromotionEntities.size() != 0) {
+                  LinearLayoutManager manager = new LinearLayoutManager(MainActivity
+                      .this);
+                  manager.setOrientation(LinearLayoutManager.HORIZONTAL);
+
+                  for (int i = 0; i < brandpromotionEntities.size(); i++) {
+                    BrandlistAdapter brandlistAdapter =
+                        new BrandlistAdapter(MainActivity.this);
+                    brandlistAdapters.add(brandlistAdapter);
+                    RecyclerView recyclerView = new RecyclerView(MainActivity.this);
+                    recyclerView.setLayoutManager(manager);
+                    recyclerView.addItemDecoration(new SpaceItemDecoration(5));
+                    recyclerViews.add(recyclerView);
+                    brand.addView(recyclerView);
+                  }
+
+                  for (int i = 0; i < brandlistAdapters.size(); i++) {
+                    recyclerViews.get(i).setAdapter(brandlistAdapters.get(i));
+                    final int finalI = i;
+                    ProductModel.getInstance()
+                        .getBrandlist(1, 10, brandpromotionEntities.get(i).getId())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(new ServiceResponse<BrandpromotionBean>() {
+
+                          @Override public void onError(Throwable e) {
+                            super.onError(e);
+                            JUtils.Log(TAG, "-------onError");
+                          }
+
+                          @Override public void onCompleted() {
+                            super.onCompleted();
+                            JUtils.Log(TAG, "-------onCompleted");
+                          }
+
+                          @Override
+                          public void onNext(BrandpromotionBean brandpromotionBean) {
+                            if (null != brandpromotionBean) {
+                              if (null != brandpromotionBean.getResults()) {
+                                JUtils.Log(TAG, brandpromotionBean.toString());
+                                brandlistAdapters.get(finalI)
+                                    .update(brandpromotionBean.getResults());
+                              }
+                            }
+                          }
+                        });
+                  }
+                }
+              } else {
+                brand.setVisibility(View.GONE);
+              }
             } catch (NullPointerException ex) {
               ex.printStackTrace();
             }
@@ -451,15 +509,19 @@ public class MainActivity extends BaseActivity
         });
     addSubscription(subscribe2);
 
-    ProductModel.getInstance()
-        .getBrandlist(1, 10, 1)
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<BrandpromotionBean>() {
-          @Override public void onNext(BrandpromotionBean brandpromotionBean) {
-            super.onNext(brandpromotionBean);
-            brandlistAdapter.update(brandpromotionBean.getResults());
-          }
-        });
+    //ProductModel.getInstance()
+    //    .getBrandlist(1, 10, 1)
+    //    .subscribeOn(Schedulers.io())
+    //    .subscribe(new ServiceResponse<BrandpromotionBean>() {
+    //      @Override public void onNext(BrandpromotionBean brandpromotionBean) {
+    //        if (null != brandpromotionBean) {
+    //          if (null != brandpromotionBean.getResults()) {
+    //            JUtils.Log(TAG, brandpromotionBean.toString());
+    //            brandlistAdapter.update(brandpromotionBean.getResults());
+    //          }
+    //        }
+    //      }
+    //    });
 
     Subscription subscribe6 = ActivityModel.getInstance()
         .getPostActivity()
@@ -637,7 +699,7 @@ public class MainActivity extends BaseActivity
                   test.show(getFragmentManager(), "mask");
                 }
               } else {
-                post_activity_layout.setVisibility(View.INVISIBLE);
+                post_activity_layout.setVisibility(View.GONE);
               }
             } catch (NullPointerException e) {
               e.printStackTrace();

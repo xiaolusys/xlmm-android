@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools" android:background="#f3f3f4"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    android:layout_height="wrap_content" tools:showIn="@layout/include_mainscrollcontent">
+    android:layout_height="wrap_content"
+    tools:showIn="@layout/include_mainscrollcontent">
   <FrameLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -64,10 +65,10 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="vertical">
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/brand_xrey"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+    <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:id="@+id/brand_xrey"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"/>-->
 
   </LinearLayout>
   <include

@@ -239,7 +239,7 @@ public class PostBean {
     }
   }
 
-  private static class BrandpromotionEntity {
+  public static class BrandpromotionEntity {
 
     /**
      * id : 1
