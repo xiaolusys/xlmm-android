@@ -2,7 +2,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
-    android:background="@drawable/tag_bg"
+    android:background="@drawable/tag_bg_issalout"
     android:text=""
-    android:textColor="@drawable/text_color"
-    />
+    android:clickable="false"
+    android:textColor="@drawable/text_color_salout"
+/>
