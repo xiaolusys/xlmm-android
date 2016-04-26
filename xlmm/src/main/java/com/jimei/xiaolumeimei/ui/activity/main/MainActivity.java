@@ -456,12 +456,13 @@ public class MainActivity extends BaseActivity
                   LinearLayoutManager manager = new LinearLayoutManager(MainActivity
                       .this);
                   manager.setOrientation(LinearLayoutManager.HORIZONTAL);
-
+                  BrandlistAdapter brandlistAdapter;
+                  RecyclerView recyclerView;
                   for (int i = 0; i < brandpromotionEntities.size(); i++) {
-                    BrandlistAdapter brandlistAdapter =
+                     brandlistAdapter =
                         new BrandlistAdapter(MainActivity.this);
                     brandlistAdapters.add(brandlistAdapter);
-                    RecyclerView recyclerView = new RecyclerView(MainActivity.this);
+                     recyclerView = new RecyclerView(MainActivity.this);
                     recyclerView.setLayoutManager(manager);
                     recyclerView.addItemDecoration(new SpaceItemDecoration(5));
                     recyclerViews.add(recyclerView);
