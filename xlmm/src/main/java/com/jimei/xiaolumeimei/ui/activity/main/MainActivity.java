@@ -447,28 +447,38 @@ public class MainActivity extends BaseActivity
               List<BrandlistAdapter> brandlistAdapters = new ArrayList<>();
               List<RecyclerView> recyclerViews = new ArrayList<>();
 
+              //LinearLayoutManager manager = new LinearLayoutManager(this);
+              //manager.setOrientation(LinearLayoutManager.HORIZONTAL);
+              //recyclerView.setLayoutManager(manager);
+              //recyclerView.addItemDecoration(new SpaceItemDecoration(5));
+              //
+              //brandlistAdapter = new BrandlistAdapter(this);
+              //recyclerView.setAdapter(brandlistAdapter);
+
               if (postBean.getmBrandpromotionEntities() != null) {
                 brand.setVisibility(View.VISIBLE);
 
                 List<PostBean.BrandpromotionEntity> brandpromotionEntities =
                     postBean.getmBrandpromotionEntities();
                 if (brandpromotionEntities.size() != 0) {
-                  LinearLayoutManager manager = new LinearLayoutManager(MainActivity
-                      .this);
-                  manager.setOrientation(LinearLayoutManager.HORIZONTAL);
+
                   BrandlistAdapter brandlistAdapter;
                   RecyclerView recyclerView;
                   for (int i = 0; i < brandpromotionEntities.size(); i++) {
-                     brandlistAdapter =
-                        new BrandlistAdapter(MainActivity.this);
+                    LinearLayoutManager manager = new LinearLayoutManager(MainActivity
+                        .this);
+                    manager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                    brandlistAdapter = new BrandlistAdapter(MainActivity.this);
                     brandlistAdapters.add(brandlistAdapter);
-                     recyclerView = new RecyclerView(MainActivity.this);
+                    recyclerView = new RecyclerView(MainActivity.this);
                     recyclerView.setLayoutManager(manager);
                     recyclerView.addItemDecoration(new SpaceItemDecoration(5));
                     recyclerViews.add(recyclerView);
                     brand.addView(recyclerView);
                   }
 
+                  JUtils.Log(TAG,
+                      "brandlistAdapters.size()====" + brandlistAdapters.size());
                   for (int i = 0; i < brandlistAdapters.size(); i++) {
                     recyclerViews.get(i).setAdapter(brandlistAdapters.get(i));
                     final int finalI = i;
