@@ -56,18 +56,18 @@ public class VerticalFragmentDetail extends Fragment implements View.OnClickList
   private Subscription Subscription, subscription2;
   private MaterialDialog materialDialog;
 
-  @Override public void onCreate(@Nullable Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    ShareSDK.initSDK(getActivity());
-    setRetainInstance(true);
-  }
-
   public static VerticalFragmentDetail newInstance(String title) {
     VerticalFragmentDetail todayFragment = new VerticalFragmentDetail();
     Bundle bundle = new Bundle();
     bundle.putString("keyword", title);
     todayFragment.setArguments(bundle);
     return todayFragment;
+  }
+
+  @Override public void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    ShareSDK.initSDK(getActivity());
+    setRetainInstance(true);
   }
 
   public void setListener(setSkuidListener listener) {
@@ -214,10 +214,17 @@ public class VerticalFragmentDetail extends Fragment implements View.OnClickList
 
                   @Override public View getView(FlowLayout parent, int position,
                       ProductDetailBean.NormalSkusEntity normalSkusEntity) {
-                    TextView tv =
-                        (TextView) mInflater.inflate(R.layout.tv, tagFlowLayout, false);
+                    TextView tv;
+                    if (!normalSkus.get(position).isIsSaleout()) {
+                      tv =
+                          (TextView) mInflater.inflate(R.layout.tv, tagFlowLayout, false);
+                    } else {
+                      tv = (TextView) mInflater.inflate(R.layout.tv_issalout,
+                          tagFlowLayout, false);
+                    }
 
                     tv.setText(normalSkus.get(position).getName());
+
                     return tv;
                   }
                 };
