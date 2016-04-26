@@ -19,7 +19,6 @@ import rx.schedulers.Schedulers;
 public class BindSettingPasswordActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener {
   String TAG = "SettingPasswordActivity";
-  @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.set_password) EditText etPassword;
   @Bind(R.id.set_password2) EditText etPassword2;
   @Bind(R.id.set_commit_button) Button commit_button;
@@ -28,7 +27,6 @@ public class BindSettingPasswordActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void setListener() {
     commit_button.setOnClickListener(this);
-    toolbar.setOnClickListener(this);
   }
 
   @Override protected void initData() {
@@ -44,10 +42,6 @@ public class BindSettingPasswordActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
-
-    toolbar.setTitle("");
-    setSupportActionBar(toolbar);
-    finishBack(toolbar);
   }
 
   @Override protected boolean toggleOverridePendingTransition() {

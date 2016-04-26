@@ -38,8 +38,6 @@ public class RegisterActivity extends BaseSwipeBackCompatActivity
     EditText editTextInvalid_code;
     @Bind(R.id.register_button)
     Button register_button;
-    @Bind(R.id.toolbar)
-    Toolbar toolbar;
     @Bind(R.id.getCheckCode)
     Button getCheckCode;
     private String mobile, invalid_code;
@@ -68,9 +66,6 @@ public class RegisterActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void initViews() {
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
-        finishBack(toolbar);
     }
 
     @Override

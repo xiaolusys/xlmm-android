@@ -77,6 +77,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
+                    android:singleLine="true"
                     android:layout_marginLeft="8dp"
                     android:layout_toRightOf="@id/image_location"
                     android:text="" />
@@ -375,11 +376,62 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="250px" />
+                android:layout_height="56px" />
+
+            <include layout="@layout/common_gap" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ffffff"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50px"
+                    android:layout_marginTop="19px"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="应付款金额"
+                        android:textColor="#26262e"
+                        android:textSize="30px" />
+
+                    <TextView
+                        android:id="@+id/total_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2px"
+                        android:text=""
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="30px" />
+
+                    <TextView
+                        android:id="@+id/jiehsneg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:text="已节省"
+                        android:textSize="30px" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/confirm"
+                    android:layout_width="600px"
+                    android:layout_height="74px"
+                    android:layout_marginBottom="20px"
+                    android:layout_marginTop="16px"
+                    android:background="@drawable/shape_common"
+                    android:text="提交订单"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
-
-    <include layout="@layout/include_cartpayinfo_lin" />
 
     <RelativeLayout
         android:id="@+id/empty_content"

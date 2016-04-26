@@ -95,7 +95,8 @@
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".ui.activity.trade.CartsPayInfoActivity"
-            android:theme="@style/AppTheme.TransparentActivity" />
+            android:theme="@style/AppTheme.TransparentActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.activity.user.ChanggeAddressActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
