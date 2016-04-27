@@ -310,8 +310,12 @@ public class MainActivity extends BaseActivity
     vp.setAdapter(adapter);
     vp.setOffscreenPageLimit(2);
 
+    vp.setCurrentItem(1);
+    imagYesterday.setImageDrawable(getResources().getDrawable(R.drawable.yesterday_nochoose));
+    imagToday.setImageDrawable(getResources().getDrawable(R.drawable.today_choose));
+    imagTomorror.setImageDrawable(getResources().getDrawable(R.drawable.tomorror_nochoose));
     vp.addOnPageChangeListener(this);
-    scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(0));
+    scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(1));
 
     initDataForTab();
   }
@@ -834,12 +838,21 @@ public class MainActivity extends BaseActivity
 
       case R.id.imag_yesterday:
         vp.setCurrentItem(0);
+        imagYesterday.setImageDrawable(getResources().getDrawable(R.drawable.yesterday_choose));
+        imagToday.setImageDrawable(getResources().getDrawable(R.drawable.today_nochoose));
+        imagTomorror.setImageDrawable(getResources().getDrawable(R.drawable.tomorror_nochoose));
         break;
       case R.id.imag_today:
         vp.setCurrentItem(1);
+        imagYesterday.setImageDrawable(getResources().getDrawable(R.drawable.yesterday_nochoose));
+        imagToday.setImageDrawable(getResources().getDrawable(R.drawable.today_choose));
+        imagTomorror.setImageDrawable(getResources().getDrawable(R.drawable.tomorror_nochoose));
         break;
       case R.id.imag_tomorror:
         vp.setCurrentItem(2);
+        imagYesterday.setImageDrawable(getResources().getDrawable(R.drawable.yesterday_nochoose));
+        imagToday.setImageDrawable(getResources().getDrawable(R.drawable.today_nochoose));
+        imagTomorror.setImageDrawable(getResources().getDrawable(R.drawable.tomorror_choose));
         break;
     }
 
@@ -1029,12 +1042,21 @@ public class MainActivity extends BaseActivity
     switch (position) {
       case 0:
         //radioGroup.check(R.id.rb_yesterday);
+        imagYesterday.setImageDrawable(getResources().getDrawable(R.drawable.yesterday_choose));
+        imagToday.setImageDrawable(getResources().getDrawable(R.drawable.today_nochoose));
+        imagTomorror.setImageDrawable(getResources().getDrawable(R.drawable.tomorror_nochoose));
         break;
       case 1:
         //radioGroup.check(R.id.rb_today);
+        imagYesterday.setImageDrawable(getResources().getDrawable(R.drawable.yesterday_nochoose));
+        imagToday.setImageDrawable(getResources().getDrawable(R.drawable.today_choose));
+        imagTomorror.setImageDrawable(getResources().getDrawable(R.drawable.tomorror_nochoose));
         break;
       case 2:
         //radioGroup.check(R.id.rb_tomorror);
+        imagYesterday.setImageDrawable(getResources().getDrawable(R.drawable.yesterday_nochoose));
+        imagToday.setImageDrawable(getResources().getDrawable(R.drawable.today_nochoose));
+        imagTomorror.setImageDrawable(getResources().getDrawable(R.drawable.tomorror_choose));
         break;
     }
   }

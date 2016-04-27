@@ -6,25 +6,24 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:layout_marginTop="8dp"
+    android:background="@color/white"
     tools:showIn="@layout/include_mainscrollcontent">
   <ImageView
       android:id="@+id/imag_yesterday"
       android:layout_weight="1"
-      android:src="@drawable/yesterday"
       android:layout_width="0dp"
       android:layout_height="wrap_content"/>
 
   <ImageView
       android:id="@+id/imag_today"
       android:layout_weight="1"
-      android:src="@drawable/today"
       android:layout_width="0dp"
       android:layout_height="wrap_content"/>
 
   <ImageView
       android:id="@+id/imag_tomorror"
       android:layout_weight="1"
-      android:src="@drawable/tomorror"
       android:layout_width="0dp"
       android:layout_height="wrap_content"/>
 
