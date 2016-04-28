@@ -125,7 +125,7 @@ public class MainActivity extends BaseActivity
   private View view;
   //private View head;
   private LinearLayout post_activity_layout;
-  private CountdownView countTime;
+//  private CountdownView countTime;
   private SliderLayout mSliderLayout;
   private PagerIndicator mPagerIndicator;
   private String cookies;
@@ -297,7 +297,7 @@ public class MainActivity extends BaseActivity
 
     view = LayoutInflater.from(this).inflate(R.layout.post_layout, null);
     post_activity_layout = (LinearLayout) findViewById(R.id.post_activity);
-    countTime = (CountdownView) findViewById(R.id.countTime);
+//    countTime = (CountdownView) findViewById(R.id.countTime);
     mSliderLayout = (SliderLayout) findViewById(R.id.slider);
     mPagerIndicator = (PagerIndicator) findViewById(R.id.pi_header);
     vp = (ViewPager) findViewById(R.id.viewPager);
@@ -322,20 +322,20 @@ public class MainActivity extends BaseActivity
 
   private void initDataForTab() {
     initPost();
-    Subscription subscription5 = Observable.timer(1, 1, TimeUnit.SECONDS)
-        .onBackpressureDrop()
-        .map(aLong -> calcLeftTime())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new Action1<Long>() {
-          @Override public void call(Long aLong) {
-            if (aLong > 0) {
-              countTime.updateShow(aLong);
-            } else {
-              countTime.setVisibility(View.INVISIBLE);
-            }
-          }
-        }, Throwable::printStackTrace);
-    addSubscription(subscription5);
+//    Subscription subscription5 = Observable.timer(1, 1, TimeUnit.SECONDS)
+//        .onBackpressureDrop()
+//        .map(aLong -> calcLeftTime())
+//        .observeOn(AndroidSchedulers.mainThread())
+//        .subscribe(new Action1<Long>() {
+//          @Override public void call(Long aLong) {
+//            if (aLong > 0) {
+//              countTime.updateShow(aLong);
+//            } else {
+//              countTime.setVisibility(View.INVISIBLE);
+//            }
+//          }
+//        }, Throwable::printStackTrace);
+//    addSubscription(subscription5);
   }
 
   private void initPost() {

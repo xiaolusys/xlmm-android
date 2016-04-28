@@ -56,7 +56,7 @@ public class XlmmApp extends MultiDexApplication {
     super.onCreate();
 
     //LeakCanary.install(this);
-    //Thread.setDefaultUncaughtExceptionHandler(new MyUnCaughtExceptionHandler());
+//    Thread.setDefaultUncaughtExceptionHandler(new MyUnCaughtExceptionHandler());
 
     //OkHttpUtils.getInstance().setConnectTimeout(10 * 1000, TimeUnit.MILLISECONDS);
 
