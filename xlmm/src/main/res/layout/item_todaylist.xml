@@ -1,3 +1,5 @@
+
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="582px"
@@ -6,56 +8,56 @@
     android:foreground="?attr/selectableItemBackground"
     android:orientation="vertical">
 
-    <RelativeLayout
+  <RelativeLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/childlist_image"
+        android:layout_width="match_parent"
+        android:layout_height="465px"
+        android:scaleType="centerCrop"/>
+
+    <include layout="@layout/item_saleout"/>
+  </RelativeLayout>
+
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="37px"
+      android:layout_marginTop="26px"
+      android:gravity="center">
+
+    <TextView
+        android:id="@+id/childlist_name"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="36px"
+        android:text="可爱印花连帽羽绒服"
+        android:textColor="#4a4a4a"
+        android:textSize="12sp"/>
+  </LinearLayout>
 
-        <ImageView
-            android:id="@+id/childlist_image"
-            android:layout_width="match_parent"
-            android:layout_height="465px"
-            android:scaleType="centerCrop" />
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="46px"
+      android:layout_marginBottom="14px"
+      android:gravity="center"
+      android:orientation="horizontal">
 
-        <include layout="@layout/item_saleout" />
-    </RelativeLayout>
+    <TextView
+        android:id="@+id/childlist_agent_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="79.9/"
+        android:textColor="#f5b123"/>
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="37px"
-        android:layout_marginTop="26px"
-        android:gravity="center">
-
-        <TextView
-            android:id="@+id/childlist_name"
-            android:layout_width="wrap_content"
-            android:layout_height="36px"
-            android:text="可爱印花连帽羽绒服"
-            android:textColor="#4a4a4a"
-            android:textSize="12sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="46px"
-        android:layout_marginBottom="14px"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/childlist_agent_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="79.9/"
-            android:textColor="#f5b123" />
-
-        <TextView
-            android:id="@+id/childlist_stdsale_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="79.9"
-            android:textColor="@color/C646464"
-            android:textSize="12sp" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/childlist_stdsale_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="79.9"
+        android:textColor="@color/C646464"
+        android:textSize="12sp"/>
+  </LinearLayout>
 
 </LinearLayout>

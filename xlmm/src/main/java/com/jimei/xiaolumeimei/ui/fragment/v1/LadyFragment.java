@@ -45,7 +45,6 @@ public class LadyFragment extends Fragment {
   private Subscription subscribe1;
   private Subscription subscribe2;
   private Subscription subscribe3;
-  private boolean isSuccessful;
   private MaterialDialog materialDialog;
 
   public static LadyFragment newInstance(String title) {

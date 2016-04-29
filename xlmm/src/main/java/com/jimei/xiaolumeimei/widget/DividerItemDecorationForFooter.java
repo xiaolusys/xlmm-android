@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-
 import com.jimei.xiaolumeimei.R;
 
 /**
@@ -51,7 +50,7 @@ public class DividerItemDecorationForFooter extends RecyclerView.ItemDecoration 
     final int right = parent.getWidth() - parent.getPaddingRight();
 
     final int childCount = parent.getChildCount();
-    for (int i = 0; i < childCount-1; i++) {
+    for (int i = 0; i < childCount - 1; i++) {
       final View child = parent.getChildAt(i);
       final RecyclerView.LayoutParams params =
           (RecyclerView.LayoutParams) child.getLayoutParams();

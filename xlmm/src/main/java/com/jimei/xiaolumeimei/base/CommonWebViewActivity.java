@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.base;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
@@ -69,11 +70,11 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
   private static final int MSG_ACTION_CCALLBACK = 2;
   private static final int WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 200;
   private static final String TAG = CommonWebViewActivity.class.getSimpleName();
+  public WebView mWebView;
   protected TextView webviewTitle;
   LinearLayout ll_actwebview;
   private Bitmap bitmap;
   private Toolbar mToolbar;
-  public WebView mWebView;
   private ProgressBar mProgressBar;
   private String cookies;
   private String actlink;
@@ -132,8 +133,8 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     return R.layout.activity_actwebview;
   }
 
-  //  @TargetApi(Build.VERSION_CODES.KITKAT)
-  @SuppressLint("JavascriptInterface") @Override protected void initViews() {
+  @TargetApi(Build.VERSION_CODES.KITKAT) @SuppressLint("JavascriptInterface") @Override
+  protected void initViews() {
     //requestPermission();
     JUtils.Log(TAG, "initViews");
     ShareSDK.initSDK(this);
@@ -155,6 +156,8 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
         mWebView.getSettings().setLoadsImagesAutomatically(false);
       }
 
+      String userAgentString = mWebView.getSettings().getUserAgentString();
+      mWebView.getSettings().setUserAgentString(userAgentString + "; xlmm;");
       mWebView.getSettings().setJavaScriptEnabled(true);
       mWebView.addJavascriptInterface(new AndroidJsBridge(this), "AndroidBridge");
 
@@ -169,7 +172,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
       mWebView.getSettings().setLoadWithOverviewMode(true);
       mWebView.getSettings().setUseWideViewPort(true);
       mWebView.setDrawingCacheEnabled(true);
-      //      mWebView.setWebContentsDebuggingEnabled(true);
+      mWebView.setWebContentsDebuggingEnabled(true);
 
       mWebView.setWebChromeClient(new WebChromeClient() {
         @Override public void onProgressChanged(WebView view, int newProgress) {

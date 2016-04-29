@@ -15,6 +15,7 @@ import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.ChildListAdapter;
+import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
@@ -31,13 +32,13 @@ import rx.schedulers.Schedulers;
  *
  * Copyright 2016年 上海己美. All rights reserved.
  */
-public class ChildFragment extends Fragment {
+public class ChildFragment extends BaseFragment {
+
 
   @Bind(R.id.childlist_recyclerView) XRecyclerView xRecyclerView;
-
-  int page_size = 10;
   List<ChildListBean.ResultsEntity> list = new ArrayList<>();
   private int page = 2;
+  int page_size = 10;
   private int totalPages;//总的分页数
   private ChildListAdapter mChildListAdapter;
   //private TextView mNormal, mOrder;
@@ -59,11 +60,21 @@ public class ChildFragment extends Fragment {
     setRetainInstance(true);
   }
 
-  @Override public void setUserVisibleHint(boolean isVisibleToUser) {
-    super.setUserVisibleHint(isVisibleToUser);
-    if (isVisibleToUser && list.size() == 0) {
-      load();
-    }
+
+  @Override protected View initViews(LayoutInflater inflater, ViewGroup container,
+      Bundle savedInstanceState) {
+    View view = inflater.inflate(R.layout.childlist_fragment, container, false);
+    ButterKnife.bind(this, view);
+    initViews();
+    return view;
+  }
+
+  @Override protected void initData() {
+    load();
+  }
+
+  @Override protected void setDefaultFragmentTitle(String title) {
+
   }
 
   private void load() {
@@ -100,46 +111,43 @@ public class ChildFragment extends Fragment {
         });
   }
 
-  @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-    super.onViewCreated(view, savedInstanceState);
-    initViews(view);
-  }
 
-  private void initViews(View view) {
-
-    xRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+  private void initViews() {
+    GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
+    //manager.setOrientation(GridLayoutManager.VERTICAL);
+    //manager.setSmoothScrollbarEnabled(true);
+    xRecyclerView.setLayoutManager(manager);
+    xRecyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
 
     xRecyclerView.addItemDecoration(new SpaceItemDecoration(10));
 
     xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
     xRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
     xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
-
+    xRecyclerView.setPullRefreshEnabled(false);
     mChildListAdapter = new ChildListAdapter(ChildFragment.this, getActivity());
     xRecyclerView.setAdapter(mChildListAdapter);
 
-    //loading.start();
-
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
       @Override public void onRefresh() {
-        subscribe2 = ProductModel.getInstance()
-            .getChildList(1, page * page_size)
-            .subscribeOn(Schedulers.io())
-            .subscribe(new ServiceResponse<ChildListBean>() {
-              @Override public void onNext(ChildListBean childListBean) {
-                List<ChildListBean.ResultsEntity> results = childListBean.getResults();
-                mChildListAdapter.updateWithClear(results);
-              }
-
-              @Override public void onCompleted() {
-                super.onCompleted();
-                try {
-                  xRecyclerView.post(xRecyclerView::refreshComplete);
-                } catch (Exception e) {
-                  e.printStackTrace();
-                }
-              }
-            });
+        //subscribe2 = ProductModel.getInstance()
+        //    .getChildList(1, page * page_size)
+        //    .subscribeOn(Schedulers.io())
+        //    .subscribe(new ServiceResponse<ChildListBean>() {
+        //      @Override public void onNext(ChildListBean childListBean) {
+        //        List<ChildListBean.ResultsEntity> results = childListBean.getResults();
+        //        mChildListAdapter.updateWithClear(results);
+        //      }
+        //
+        //      @Override public void onCompleted() {
+        //        super.onCompleted();
+        //        try {
+        //          xRecyclerView.post(xRecyclerView::refreshComplete);
+        //        } catch (Exception e) {
+        //          e.printStackTrace();
+        //        }
+        //      }
+        //    });
       }
 
       @Override public void onLoadMore() {
@@ -167,13 +175,6 @@ public class ChildFragment extends Fragment {
     }
   }
 
-  @Nullable @Override
-  public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-      @Nullable Bundle savedInstanceState) {
-    View view = inflater.inflate(R.layout.childlist_fragment, container, false);
-    ButterKnife.bind(this, view);
-    return view;
-  }
 
   @Override public void onDestroyView() {
     super.onDestroyView();
@@ -232,5 +233,9 @@ public class ChildFragment extends Fragment {
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+
+  @Override public View getScrollableView() {
+    return xRecyclerView;
   }
 }

@@ -37,6 +37,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.glidemoudle.CropCircleTransformation;
 import com.jimei.xiaolumeimei.glidemoudle.GlideRoundTransform;
+import com.jude.utils.JUtils;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.net.URLEncoder;
@@ -252,7 +253,9 @@ public final class ViewUtils {
           .centerCrop().into(img);
     }
   }
-  public static void loadImgToImgView(Context context, ImageView img, String picPath,int radius) {
+
+  public static void loadImgToImgView(Context context, ImageView img, String picPath,
+      int radius) {
     if (null == picPath) return;
 
     if (picPath.startsWith("http://image.xiaolu.so")) {
@@ -261,20 +264,20 @@ public final class ViewUtils {
       if (temp.length > 1) {
         try {
           head_img = "http://image.xiaolu.so/"
-                  + URLEncoder.encode(temp[1], "utf-8")
-                  + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
+              + URLEncoder.encode(temp[1], "utf-8")
+              + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
         } catch (UnsupportedEncodingException e) {
           e.printStackTrace();
         }
       }
 
       Glide.with(context).load(head_img).diskCacheStrategy(DiskCacheStrategy.ALL)
-              //.placeholder(R.drawable.parceholder)
-              .centerCrop().transform(new GlideRoundTransform(context, radius)).into(img);
+          //.placeholder(R.drawable.parceholder)
+          .centerCrop().transform(new GlideRoundTransform(context, radius)).into(img);
     } else {
       Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
-              //.placeholder(R.drawable.parceholder)
-              .centerCrop().transform(new GlideRoundTransform(context, radius)).into(img);
+          //.placeholder(R.drawable.parceholder)
+          .centerCrop().transform(new GlideRoundTransform(context, radius)).into(img);
     }
   }
 
@@ -338,10 +341,12 @@ public final class ViewUtils {
           .centerCrop()
           .into(img);
     } else {
+      JUtils.Log("MainActivity", "picPath1===" + picPath);
       //if (picPath.startsWith("https://mmbiz.qlogo.cn")) {
       Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
           //.placeholder(R.drawable.parceholder)
           .centerCrop().into(img);
+      JUtils.Log("MainActivity", "picPath2===" + picPath);
     }
   }
 
