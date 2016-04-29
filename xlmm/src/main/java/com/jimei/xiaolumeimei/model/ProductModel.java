@@ -5,6 +5,7 @@ import com.jimei.xiaolumeimei.entities.BrandpromotionBean;
 import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.entities.IndexBean;
 import com.jimei.xiaolumeimei.entities.LadyListBean;
+import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.PostBean;
 import com.jimei.xiaolumeimei.entities.ProductBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
@@ -110,11 +111,19 @@ public class ProductModel {
         .compose(new DefaultTransform<>());
   }
 
+//  //品牌数据列表
+//  public Observable<BrandpromotionBean> getBrandlist(int page, int page_size, int brand) {
+//
+//    return XlmmRetrofitClient.getService()
+//        .getBrandlist(page, page_size, brand)
+//        .compose(new DefaultTransform<>());
+//  }
+
   //品牌数据列表
-  public Observable<BrandpromotionBean> getBrandlist(int page, int page_size, int brand) {
+  public Observable<BrandpromotionBean> getBrandlist(int id, int page, int page_size) {
 
     return XlmmRetrofitClient.getService()
-        .getBrandlist(page, page_size, brand)
+        .getBrandList(id, page, page_size)
         .compose(new DefaultTransform<>());
   }
 
@@ -133,4 +142,13 @@ public class ProductModel {
         .getProductShareInfo(product_id)
         .compose(new DefaultTransform<>());
   }
+
+  //得到主页Portal数据
+  public Observable<PortalBean> getPortalBean(){
+
+    return XlmmRetrofitClient.getService()
+            .getPortalBean()
+            .compose(new DefaultTransform<>());
+  }
+
 }

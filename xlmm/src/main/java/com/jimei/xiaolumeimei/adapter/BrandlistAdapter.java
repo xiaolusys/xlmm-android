@@ -24,7 +24,7 @@ import java.util.List;
  */
 public class BrandlistAdapter extends RecyclerView.Adapter<BrandlistAdapter.BrandlistVH> {
 
-  private List<BrandpromotionBean.ResultsEntity> mList;
+  private List<BrandpromotionBean.ResultsBean> mList;
 
   private Context mContext;
 
@@ -34,13 +34,13 @@ public class BrandlistAdapter extends RecyclerView.Adapter<BrandlistAdapter.Bran
     mList = new ArrayList<>();
   }
 
-  public void updateWithClear(List<BrandpromotionBean.ResultsEntity> list) {
+  public void updateWithClear(List<BrandpromotionBean.ResultsBean> list) {
     mList.clear();
     mList.addAll(list);
     notifyDataSetChanged();
   }
 
-  public void update(List<BrandpromotionBean.ResultsEntity> list) {
+  public void update(List<BrandpromotionBean.ResultsBean> list) {
 
     mList.addAll(list);
     notifyDataSetChanged();
@@ -54,8 +54,8 @@ public class BrandlistAdapter extends RecyclerView.Adapter<BrandlistAdapter.Bran
 
   @Override public void onBindViewHolder(BrandlistVH holder, int position) {
 
-    BrandpromotionBean.ResultsEntity resultsEntity = mList.get(position);
-    String picPath = resultsEntity.getPicPath();
+    BrandpromotionBean.ResultsBean resultsEntity = mList.get(position);
+    String picPath = resultsEntity.getProduct_img();
     //ViewUtils.loadImgToImgViewWithPlaceholder(mContext, holder.brandImag, picPath);
     Glide.with(mContext).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
         //.placeholder(R.drawable.parceholder)
