@@ -32,9 +32,9 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:ellipsize="end"
-            android:singleLine="true"
             android:gravity="center_vertical"
-            android:text="韩版大摆加厚卫衣"
+            android:singleLine="true"
+            android:text=""
             android:textColor="@color/c26262E"
             android:textSize="15sp" />
 
@@ -47,20 +47,19 @@
                 android:id="@+id/agent_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="¥49"
                 android:layout_centerVertical="true"
+                android:text=""
                 android:textColor="@color/c26262E"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/std_sale_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/agent_price"
                 android:layout_alignBaseline="@id/agent_price"
+                android:layout_toRightOf="@id/agent_price"
                 android:gravity="bottom"
-                android:text="/¥249"
+                android:text=""
                 android:textSize="13sp" />
 
         </RelativeLayout>
@@ -77,7 +76,7 @@
                 android:id="@+id/rebet_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="返佣"
+                android:text=""
                 android:textColor="@color/colorAccent"
                 android:textSize="12sp" />
 
@@ -86,9 +85,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="18px"
-                android:text="销量"
-                android:singleLine="true"
                 android:ellipsize="end"
+                android:singleLine="true"
+                android:text=""
                 android:textColor="@color/colorAccent"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -120,6 +119,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="11px"
             android:text="加入精选"
+            android:textColor="@color/c26262E"
             android:textSize="19px" />
     </LinearLayout>
 
@@ -149,6 +149,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="8dp"
             android:text="已加入"
+            android:textColor="@color/c26262E"
             android:textSize="19px" />
     </LinearLayout>
 

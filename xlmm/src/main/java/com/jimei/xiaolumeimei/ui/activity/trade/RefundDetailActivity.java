@@ -70,6 +70,8 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity implements
     RoundCornerImageView imageView;
     @Bind(R.id.refund_type)
     TextView refundTypeTv;
+    @Bind(R.id.refund_layout)
+    LinearLayout refundLayout;
     private int refund_state;
     private int goods_id;
 
@@ -179,11 +181,14 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity implements
         createTimeTv.setText(refundDetailBean.getCreated().replace("T", " "));
         lastTimeTv.setText(refundDetailBean.getModified().replace("T", " "));
         lastStateTv.setText(refundDetailBean.getStatus_display());
-        ViewUtils.loadImgToImgView(getApplicationContext(),imageView,refundDetailBean.getPic_path());
+        ViewUtils.loadImgToImgView(getApplicationContext(), imageView, refundDetailBean.getPic_path());
         JUtils.Log(TAG, "crt time " + refundDetailBean.getCreated());
-        if (refundDetailBean.getStatus_display().equals("退款成功")) {
-            // TODO: 16/4/21
-            refundTypeTv.setText("获取失败");
+        String desc = refundDetailBean.getAmount_flow().getDesc();
+        refundTypeTv.setText(desc);
+        if (refundDetailBean.getStatus_display().equals("退款成功")){
+            refundLayout.setVisibility(View.VISIBLE);
+        }else {
+            refundLayout.setVisibility(View.GONE);
         }
     }
 

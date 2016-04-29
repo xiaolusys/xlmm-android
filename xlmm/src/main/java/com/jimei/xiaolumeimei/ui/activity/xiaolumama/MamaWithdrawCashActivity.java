@@ -188,7 +188,7 @@ public class MamaWithdrawCashActivity extends BaseSwipeBackCompatActivity
                                     msg = "转账成功,请查询~~";
                                     break;
                                 case 1:
-                                    msg = "参数错误";
+                                    msg = "暂未开放!";
                                     break;
                                 case 2:
                                     msg = "不足转账金额";

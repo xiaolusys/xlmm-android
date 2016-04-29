@@ -220,6 +220,7 @@
     <include layout="@layout/common_gap" />
 
     <LinearLayout
+        android:id="@+id/refund_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"

@@ -1,58 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.design.widget.AppBarLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+        <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="wrap_content"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center"
-                android:text="已选列表"
-                android:textColor="@android:color/white"
-                android:textSize="16sp" />
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-            <ImageView
-                android:id="@+id/home"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="18dp"
-                android:layout_gravity="right|center_vertical"
-                android:src="@drawable/my_home"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:text="已选列表"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp" />
 
-        </android.support.v7.widget.Toolbar>
+                <ImageView
+                    android:id="@+id/home"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="18dp"
+                    android:src="@drawable/my_home" />
 
-    </android.support.design.widget.AppBarLayout>
+            </android.support.v7.widget.Toolbar>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#f3f3f4">
+        </android.support.design.widget.AppBarLayout>
 
-        <com.jimei.xiaolumeimei.widget.dragrecyclerview.SuperRecyclerView
-            android:id="@+id/choose_recyclerview"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical"
-            app:drag_enabled="true"
-            app:loading_footer="@layout/loadingmore"
-            app:selected_color2="@color/colorAccent"
-            app:swipe_enabled="true" />
-    </FrameLayout>
-</LinearLayout>
+            android:background="#f3f3f4">
+
+            <com.jimei.xiaolumeimei.widget.dragrecyclerview.SuperRecyclerView
+                android:id="@+id/choose_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"
+                app:drag_enabled="true"
+                app:loading_footer="@layout/loadingmore"
+                app:selected_color2="@color/colorAccent"
+                app:swipe_enabled="true" />
+        </FrameLayout>
+    </LinearLayout>
+</FrameLayout>

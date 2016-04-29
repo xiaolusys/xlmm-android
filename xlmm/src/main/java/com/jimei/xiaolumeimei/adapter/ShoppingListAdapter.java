@@ -96,6 +96,8 @@ public class ShoppingListAdapter
         holder.getStatusDisplay.setText(resultsEntity.getStatusDisplay());
         holder.wxordernick.setText(resultsEntity.getContributorNick());
         holder.timeDisplay.setText(resultsEntity.getCreated().substring(11, 16));
+        holder.totalMoneyTv.setText("实付"+resultsEntity.getOrderValue());
+        holder.flagTv.setText(resultsEntity.getCarryTypeName());
         double carryNum = resultsEntity.getCarryNum();
         if (carryNum >= 0) {
             holder.tichengCash.setText("+" + carryNum);
@@ -150,6 +152,10 @@ public class ShoppingListAdapter
         LinearLayout category;
         @Bind(R.id.content)
         RelativeLayout content;
+        @Bind(R.id.total_money)
+        TextView totalMoneyTv;
+        @Bind(R.id.flag)
+        TextView flagTv;
 
         public ShoppingListVH(View itemView) {
             super(itemView);
