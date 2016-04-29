@@ -87,7 +87,7 @@ public class MamaLivenessAdapter
 
     holder.tvDay.setText(resultsEntity.getDateField());
     //holder.tv_time.setText(resultsEntity.getCreated().replace("T"," "));
-    holder.todayActive.setText("日活跃" + resultsEntity.getTodayCarry());
+    holder.todayActive.setText("日活跃 " + resultsEntity.getTodayCarry());
     holder.tvTime.setText(resultsEntity.getCreated().substring(11, 16));
     holder.tvStatusInfo.setText(resultsEntity.getStatusDisplay());
     holder.tvInfo.setText(resultsEntity.getValueDescription());

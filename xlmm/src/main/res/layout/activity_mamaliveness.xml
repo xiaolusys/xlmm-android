@@ -1,91 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/llayout_liveness"
+    style="@style/AppTheme.AppBarOverlay"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    style="@style/AppTheme.AppBarOverlay"
-    >
+    android:orientation="vertical">
 
-  <android.support.design.widget.AppBarLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-      app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-      >
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <com.jimei.xiaolumeimei.widget.XlmmTitleView
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        >
-
-      <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_centerInParent="true"
-          android:layout_gravity="center"
-          android:text="活跃值"
-          android:textColor="@android:color/white"
-          android:textSize="16sp"
-          />
-
-    </android.support.v7.widget.Toolbar>
-    >
-
-  </android.support.design.widget.AppBarLayout>
-
-  <RelativeLayout
-      android:id="@+id/rl_allowance"
-      android:layout_width="match_parent"
-      android:layout_height="250px"
-      android:layout_below="@id/app_bar_layout"
-      android:layout_centerHorizontal="true"
-      >
-
-    <TextView
-        android:id="@+id/tv_today_title"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="48px"
-        android:gravity="center"
-        android:text="活跃值"
-        />
+        app:xlmm_title="活跃值" />
 
-    <TextView
-        android:id="@+id/tv_liveness"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tv_today_title"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"
-        android:text="0.00"
-        android:textColor="@color/colorAccent"
-        android:textSize="30sp"
-        />
+    <com.cpoopc.scrollablelayoutlib.ScrollableLayout
+        android:id="@+id/scrollable_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="130dp"
+            android:gravity="center"
+            android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/tv_today_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="近30天活跃值"
+                android:textSize="13sp" />
 
-  </RelativeLayout>
+            <TextView
+                android:id="@+id/tv_liveness"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16px"
+                android:text="0.00"
+                android:textColor="@color/colorAccent"
+                android:textSize="28sp" />
+        </LinearLayout>
 
-  <FrameLayout
-      android:layout_width="fill_parent"
-      android:layout_height="fill_parent"
-      android:layout_below="@id/rl_allowance"
-      >
-    <com.jcodecraeer.xrecyclerview.XRecyclerView
-        android:id="@+id/lv_liveness"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:padding="4dp"
-        >
-    </com.jcodecraeer.xrecyclerview.XRecyclerView>
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
 
-  </FrameLayout>
+            <com.jimei.xiaolumeimei.widget.MyXRecyclerView
+                android:id="@+id/lv_liveness"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" />
+
+        </FrameLayout>
+
+    </com.cpoopc.scrollablelayoutlib.ScrollableLayout>
 
 </LinearLayout>

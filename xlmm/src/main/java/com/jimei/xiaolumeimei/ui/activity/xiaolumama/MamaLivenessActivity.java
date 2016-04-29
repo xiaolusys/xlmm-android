@@ -7,6 +7,9 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.Bind;
+
+import com.cpoopc.scrollablelayoutlib.ScrollableHelper;
+import com.cpoopc.scrollablelayoutlib.ScrollableLayout;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
@@ -17,6 +20,7 @@ import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.widget.DividerItemDecorationForFooter;
+import com.jimei.xiaolumeimei.widget.MyXRecyclerView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import java.util.List;
@@ -30,9 +34,11 @@ public class MamaLivenessActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener {
   String TAG = "MamaLivenessActivity";
 
-  @Bind(R.id.toolbar) Toolbar toolbar;
-  @Bind(R.id.lv_liveness) XRecyclerView lv_liveness;
+  @Bind(R.id.lv_liveness)
+  MyXRecyclerView lv_liveness;
   @Bind(R.id.tv_liveness)  TextView tv_liveness;
+  @Bind(R.id.scrollable_layout)
+  ScrollableLayout scrollableLayout;
 
   private int page = 2;
   private MamaLivenessAdapter mAdapter;
@@ -40,7 +46,6 @@ public class MamaLivenessActivity extends BaseSwipeBackCompatActivity
   int liveness = 0;
 
   @Override protected void setListener() {
-    toolbar.setOnClickListener(this);
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -57,9 +62,7 @@ public class MamaLivenessActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void initViews() {
     StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent),0);
-    toolbar.setTitle("");
-    setSupportActionBar(toolbar);
-    finishBack(toolbar);
+    scrollableLayout.getHelper().setCurrentScrollableContainer((ScrollableHelper.ScrollableContainer) lv_liveness);
     initRecyclerView();
 
     tv_liveness.setText(liveness + "");
