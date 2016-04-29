@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.bumptech.glide.Glide;
@@ -60,8 +61,10 @@ public class BrandlistAdapter extends RecyclerView.Adapter<BrandlistAdapter.Bran
     Glide.with(mContext).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
         //.placeholder(R.drawable.parceholder)
         .centerCrop().into(holder.brandImag);
-  }
 
+    holder.productLowestPrice.setText("¥" + resultsEntity.getProduct_lowest_price());
+    holder.productStdSalePrice.setText("/¥" + resultsEntity.getProduct_std_sale_price());
+  }
 
   @Override public int getItemCount() {
     return mList.size();
@@ -71,6 +74,8 @@ public class BrandlistAdapter extends RecyclerView.Adapter<BrandlistAdapter.Bran
 
     int id = R.layout.item_brand;
     @Bind(R.id.brand_imag) ImageView brandImag;
+    @Bind(R.id.product_lowest_price) TextView productLowestPrice;
+    @Bind(R.id.product_std_sale_price) TextView productStdSalePrice;
 
     public BrandlistVH(View itemView) {
       super(itemView);

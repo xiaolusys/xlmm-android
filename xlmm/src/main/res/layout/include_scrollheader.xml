@@ -2,12 +2,14 @@
 <LinearLayout
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:background="#f3f3f4"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="wrap_content"
     tools:showIn="@layout/include_mainscrollcontent">
   <FrameLayout
+      android:background="@color/white"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="vertical">
@@ -44,21 +46,24 @@
   </FrameLayout>
 
   <LinearLayout
-  android:id="@+id/ll"
-  android:orientation="horizontal"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content">
-  <ImageView
-      android:id="@+id/lady_img"
- android:layout_gravity="center"
-  android:layout_width="wrap_content"
-  android:layout_height="wrap_content"/>
-  <ImageView
-  android:layout_gravity="center"
-      android:id="@+id/child_img"
-  android:layout_width="wrap_content"
-  android:layout_height="wrap_content"/>
+      android:id="@+id/ll"
+      android:orientation="horizontal"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/lady_img"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <ImageView
+        android:layout_gravity="center"
+        android:id="@+id/child_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
   </LinearLayout>
+  <include
+      android:id="@+id/post_ll"
+      layout="@layout/post_layout"/>
 
   <LinearLayout
       android:id="@+id/brand"
@@ -66,53 +71,51 @@
       android:layout_height="wrap_content"
       android:orientation="vertical">
     <!--<android.support.v7.widget.RecyclerView-->
-        <!--android:id="@+id/brand_xrey"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"/>-->
+    <!--android:id="@+id/brand_xrey"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"/>-->
 
   </LinearLayout>
-  <include
-      android:id="@+id/post_ll"
-      layout="@layout/post_layout"/>
+  <include layout="@layout/common_gap"/>
 
   <!--<RelativeLayout-->
-      <!--android:id="@+id/rr"-->
-      <!--android:layout_width="match_parent"-->
-      <!--android:layout_height="50dp"-->
-      <!--android:layout_marginTop="10dp"-->
-      <!--android:background="@color/white">-->
+  <!--android:id="@+id/rr"-->
+  <!--android:layout_width="match_parent"-->
+  <!--android:layout_height="50dp"-->
+  <!--android:layout_marginTop="10dp"-->
+  <!--android:background="@color/white">-->
 
-    <!--<TextView-->
-        <!--android:id="@+id/nvzhuangText"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginLeft="14dp"-->
-        <!--android:layout_marginTop="12dp"-->
-        <!--android:text="@string/today_new"-->
-        <!--android:textColor="#615f5f"-->
-        <!--android:textSize="18dp"/>-->
+  <!--<TextView-->
+  <!--android:id="@+id/nvzhuangText"-->
+  <!--android:layout_width="wrap_content"-->
+  <!--android:layout_height="wrap_content"-->
+  <!--android:layout_marginLeft="14dp"-->
+  <!--android:layout_marginTop="12dp"-->
+  <!--android:text="@string/today_new"-->
+  <!--android:textColor="#615f5f"-->
+  <!--android:textSize="18dp"/>-->
 
-    <!--<cn.iwgang.countdownview.CountdownView-->
-        <!--android:layout_marginTop="6dp"-->
-        <!--android:id="@+id/countTime"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_alignTop="@+id/nvzhuangText"-->
-        <!--app:isShowDay="true"-->
-        <!--app:isShowHour="true"-->
-        <!--app:isShowMinute="true"-->
-        <!--app:isShowSecond="true"-->
-        <!--app:timeTextColor="@color/colorAccent"-->
-        <!--app:timeTextSize="22sp"-->
-        <!--app:suffixGravity="bottom"-->
-        <!--app:suffixTextColor="@color/colorAccent"-->
-        <!--app:suffixTextSize="12sp"-->
-        <!--app:suffixDay="天"-->
-        <!--app:suffixHour="时"-->
-        <!--app:suffixMinute="分"-->
-        <!--app:suffixSecond="秒"-->
-    <!--/>-->
+  <!--<cn.iwgang.countdownview.CountdownView-->
+  <!--android:layout_marginTop="6dp"-->
+  <!--android:id="@+id/countTime"-->
+  <!--android:layout_width="wrap_content"-->
+  <!--android:layout_height="wrap_content"-->
+  <!--android:layout_alignParentRight="true"-->
+  <!--android:layout_alignTop="@+id/nvzhuangText"-->
+  <!--app:isShowDay="true"-->
+  <!--app:isShowHour="true"-->
+  <!--app:isShowMinute="true"-->
+  <!--app:isShowSecond="true"-->
+  <!--app:timeTextColor="@color/colorAccent"-->
+  <!--app:timeTextSize="22sp"-->
+  <!--app:suffixGravity="bottom"-->
+  <!--app:suffixTextColor="@color/colorAccent"-->
+  <!--app:suffixTextSize="12sp"-->
+  <!--app:suffixDay="天"-->
+  <!--app:suffixHour="时"-->
+  <!--app:suffixMinute="分"-->
+  <!--app:suffixSecond="秒"-->
+  <!--/>-->
 
   <!--</RelativeLayout>-->
 
