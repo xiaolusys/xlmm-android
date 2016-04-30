@@ -103,7 +103,7 @@ public class WaitPayOrdersListAdapter extends BaseAdapter {
                 holder.mHorizontalScrollView = mHorizontalScrollView;
             }
             holder.position = position;
-
+            llayout.addView(LayoutInflater.from(context).inflate(R.layout.common_gap, null));
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -132,6 +132,7 @@ public class WaitPayOrdersListAdapter extends BaseAdapter {
                     holder.goods_num = mList.get(position).getOrders().size();
                     holder.mHorizontalScrollView = mHorizontalScrollView;
                 }
+                llayout.addView(LayoutInflater.from(context).inflate(R.layout.common_gap, null));
                 holder.position = position;
                 convertView.setTag(holder);
             }
