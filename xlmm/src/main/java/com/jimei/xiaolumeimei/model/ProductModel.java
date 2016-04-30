@@ -55,6 +55,15 @@ public class ProductModel {
         .compose(new DefaultTransform<>());
   }
 
+
+  //得到明日分页数据
+  public Observable<ProductListBean> getAdvanceList(int page, int page_size) {
+
+    return XlmmRetrofitClient.getService()
+        .getAdvanceList(page, page_size)
+        .compose(new DefaultTransform<>());
+  }
+
   //得到儿童分页数据
   public Observable<ChildListBean> getChildList(int page, int page_size) {
 
