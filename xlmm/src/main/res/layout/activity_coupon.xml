@@ -1,47 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/AppTheme.AppBarOverlay"
-    android:id="@+id/llayout_coupon"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.jimei.xiaolumeimei.ui.activity.user.CouponActivity">
 
-    <android.support.design.widget.AppBarLayout
+    <com.jimei.xiaolumeimei.widget.XlmmTitleView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorAccent"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center"
-                android:text="优惠券"
-                android:textColor="@android:color/white"
-                android:textSize="16sp"
-                />
-        </android.support.v7.widget.Toolbar>
-
-    </android.support.design.widget.AppBarLayout>
+        app:xlmm_title="优惠券" />
 
     <FrameLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <include layout="@layout/frame_coupon" />
 
-        <include layout="@layout/orders_emptyinfo" />
+        <include layout="@layout/empty_coupon" />
+
     </FrameLayout>
 
 </LinearLayout>

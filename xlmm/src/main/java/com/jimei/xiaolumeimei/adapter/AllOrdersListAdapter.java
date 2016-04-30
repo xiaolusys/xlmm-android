@@ -102,7 +102,6 @@ public class AllOrdersListAdapter extends BaseAdapter {
                 holder.goods_num = mList.get(position).getOrders().size();
                 holder.mHorizontalScrollView = mHorizontalScrollView;
             }
-            llayout.addView(LayoutInflater.from(context).inflate(R.layout.common_gap, null));
             holder.position = position;
 
             convertView.setTag(holder);
@@ -134,7 +133,6 @@ public class AllOrdersListAdapter extends BaseAdapter {
                     holder.goods_num = mList.get(position).getOrders().size();
                     holder.mHorizontalScrollView = mHorizontalScrollView;
                 }
-                llayout.addView(LayoutInflater.from(context).inflate(R.layout.common_gap, null));
                 holder.position = position;
                 convertView.setTag(holder);
             }

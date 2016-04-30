@@ -36,8 +36,6 @@ import rx.schedulers.Schedulers;
 public class WalletActivity extends BaseSwipeBackCompatActivity {
   String TAG = "WalletActivity";
 
-  @Bind(R.id.toolbar)
-  Toolbar toolbar;
   @Bind(R.id.tv_money) TextView tvMoney;
   @Bind(R.id.wallet_rcv)  XRecyclerView walletRcv;
   @Bind(R.id.ll_wallet_empty)
@@ -122,9 +120,6 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
   }
 
   @Override protected void initViews() {
-    toolbar.setTitle("");
-    setSupportActionBar(toolbar);
-    finishBack(toolbar);
     initRecyclerView();
   }
 
