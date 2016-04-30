@@ -1,5 +1,7 @@
 package com.jimei.xiaolumeimei.entities;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 /**
@@ -13,43 +15,55 @@ public class AllRefundsBean {
      * results : [{"id":8514,"url":"http://m.xiaolumeimei.com/rest/v1/refunds/8514","refund_no":"RF15091555f7943868910","trade_id":108531,"order_id":104427,"buyer_id":15977,"item_id":17682,"title":"可爱卡通印花哈衣/红色草莓","sku_id":68991,"sku_name":"6M/66","refund_num":1,"buyer_nick":"小鹿美美","mobile":"13816404857","phone":"","proof_pic":null,"total_fee":29,"payment":29,"created":"2015-09-15T11:44:56","modified":"2015-09-17T12:12:04","company_name":"","sid":"","reason":"错拍","pic_path":"https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLvlAphyfwwyVle7KJbyNjk97CTC2baR370KldvKvMxokGRtyVibcBTN9oQCd3XGrzmaj9ibVFicnpFuA/0?wx_fmt=png","desc":"123","feedback":"","has_good_return":false,"has_good_change":false,"good_status":0,"status":3,"refund_fee":12,"status_display":"买家已经申请退款"},{"id":8507,"url":"http://m.xiaolumeimei.com/rest/v1/refunds/8507","refund_no":"RF15091555f791d28ff88","trade_id":108499,"order_id":104393,"buyer_id":15977,"item_id":17682,"title":"可爱卡通印花哈衣/红色草莓","sku_id":68993,"sku_name":"12M/80","refund_num":1,"buyer_nick":"小鹿美美","mobile":"13816404857","phone":"","proof_pic":null,"total_fee":29,"payment":29,"created":"2015-09-15T11:34:42","modified":"2015-09-15T11:34:42","company_name":"","sid":"","reason":"其他","pic_path":"https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLvlAphyfwwyVle7KJbyNjk97CTC2baR370KldvKvMxokGRtyVibcBTN9oQCd3XGrzmaj9ibVFicnpFuA/0?wx_fmt=png","desc":"121212","feedback":"","has_good_return":false,"has_good_change":false,"good_status":0,"status":3,"refund_fee":12,"status_display":"买家已经申请退款"},{"id":8488,"url":"http://m.xiaolumeimei.com/rest/v1/refunds/8488","refund_no":"RF15091555f78855084f5","trade_id":108354,"order_id":104225,"buyer_id":15977,"item_id":17671,"title":"秋款休闲宝宝套装/粉色","sku_id":68945,"sku_name":"100","refund_num":2,"buyer_nick":"","mobile":"13816404857","phone":"","proof_pic":null,"total_fee":69,"payment":138,"created":"2015-09-15T10:54:13","modified":"2015-09-15T11:14:37","company_name":"shunfeng","sid":"123456","reason":"没有发货","pic_path":"http://image.xiaolu.so/MG-1449729609122-0.png","desc":"123","feedback":"","has_good_return":false,"has_good_change":false,"good_status":2,"status":1,"refund_fee":138,"status_display":"退款关闭"},{"id":8487,"url":"http://m.xiaolumeimei.com/rest/v1/refunds/8487","refund_no":"RF15091555f7882ed874d","trade_id":108354,"order_id":104224,"buyer_id":15977,"item_id":17671,"title":"秋款休闲宝宝套装/粉色","sku_id":68946,"sku_name":"110","refund_num":2,"buyer_nick":"小鹿美美","mobile":"13816404857","phone":"","proof_pic":null,"total_fee":69,"payment":138,"created":"2015-09-15T10:53:34","modified":"2015-09-15T11:16:29","company_name":"","sid":"","reason":"没有发货","pic_path":"http://image.xiaolu.so/MG-1449729609122-0.png","desc":"123","feedback":"","has_good_return":false,"has_good_change":false,"good_status":0,"status":1,"refund_fee":12,"status_display":"退款关闭"},{"id":7468,"url":"http://m.xiaolumeimei.com/rest/v1/refunds/7468","refund_no":"RF15091255f3cb8074795","trade_id":87670,"order_id":82078,"buyer_id":15977,"item_id":16422,"title":"名媛蕾丝背心公主裙/红色","sku_id":64064,"sku_name":"9/110","refund_num":1,"buyer_nick":"","mobile":"13816404857","phone":"","proof_pic":null,"total_fee":49,"payment":49,"created":"2015-09-12T14:51:44","modified":"2015-09-14T15:24:50","company_name":"","sid":"","reason":"没有发货","pic_path":"https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLvt4h9EbG1yDs4ueZDgNbwYFHSRqZ3HeEULjic8JWMHLm0ekg4iaEibSAA0hwDyjJQzVzr24LKMG7twA/0?wx_fmt=png","desc":"让人","feedback":"","has_good_return":false,"has_good_change":false,"good_status":0,"status":2,"refund_fee":22,"status_display":"卖家拒绝退款"},{"id":7466,"url":"http://m.xiaolumeimei.com/rest/v1/refunds/7466","refund_no":"RF15091255f3cb5d3260f","trade_id":87170,"order_id":81573,"buyer_id":15977,"item_id":16228,"title":"不规则假两件裤裙/黑色","sku_id":63264,"sku_name":"均码","refund_num":1,"buyer_nick":"","mobile":"13816404857","phone":"","proof_pic":null,"total_fee":49,"payment":49,"created":"2015-09-12T14:51:09","modified":"2015-09-13T15:20:44","company_name":"","sid":"","reason":"未收到货","pic_path":"http://image.xiaolu.so/MG-1450756977876-不规则假两件裤裙03.png","desc":"ss","feedback":"","has_good_return":false,"has_good_change":false,"good_status":0,"status":3,"refund_fee":12,"status_display":"买家已经申请退款"},{"id":4084,"url":"http://m.xiaolumeimei.com/rest/v1/refunds/4084","refund_no":"RF15090155e50badd2437","trade_id":68268,"order_id":63024,"buyer_id":15977,"item_id":15474,"title":"韩版格子长袖连衣裙/藏蓝色","sku_id":60203,"sku_name":"L","refund_num":1,"buyer_nick":"","mobile":"13816404857","phone":"","proof_pic":null,"total_fee":59,"payment":59,"created":"2015-09-01T10:21:33","modified":"2015-09-01T12:05:18","company_name":"","sid":"","reason":"其他","pic_path":"https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLs5dk1nGDdeaUKQFGTtRsPH4JGickBT5FpPMFufH3sRwBSBmpkGVBfQfghkLDssMyLFHTrp3Hw2LCw/0?wx_fmt=png","desc":"","feedback":"内部测试购买成功，商品很好，我要退。","has_good_return":false,"has_good_change":false,"good_status":0,"status":7,"refund_fee":59,"status_display":"退款成功"}]
      */
 
+    @SerializedName("count")
     private int count;
+    @SerializedName("next")
     private Object next;
+    @SerializedName("previous")
     private Object previous;
+
+
     /**
-     * id : 8514
-     * url : http://m.xiaolumeimei.com/rest/v1/refunds/8514
-     * refund_no : RF15091555f7943868910
-     * trade_id : 108531
-     * order_id : 104427
-     * buyer_id : 15977
-     * item_id : 17682
-     * title : 可爱卡通印花哈衣/红色草莓
-     * sku_id : 68991
-     * sku_name : 6M/66
-     * refund_num : 1
-     * buyer_nick : 小鹿美美
-     * mobile : 13816404857
-     * phone :
-     * proof_pic : null
-     * total_fee : 29.0
-     * payment : 29.0
-     * created : 2015-09-15T11:44:56
-     * modified : 2015-09-17T12:12:04
-     * company_name :
-     * sid :
-     * reason : 错拍
-     * pic_path : https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLvlAphyfwwyVle7KJbyNjk97CTC2baR370KldvKvMxokGRtyVibcBTN9oQCd3XGrzmaj9ibVFicnpFuA/0?wx_fmt=png
-     * desc : 123
-     * feedback :
-     * has_good_return : false
-     * has_good_change : false
-     * good_status : 0
-     * status : 3
-     * refund_fee : 12.0
-     * status_display : 买家已经申请退款
+     "id": 41979,
+     "url": "http://m.xiaolumeimei.com/rest/v1/refunds/41979",
+     "refund_no": "RF1604165711b21b15c04",
+     "trade_id": 326789,
+     "order_id": 362204,
+     "buyer_id": 1,
+     "item_id": 39285,
+     "title": "帅气卡通印花T恤/美国队长",
+     "sku_id": 157679,
+     "sku_name": "130",
+     "refund_num": 1,
+     "buyer_nick": "meron@小鹿美美",
+     "mobile": "18565565655",
+     "phone": "",
+     "proof_pic": [],
+     "total_fee": 39.9,
+     "payment": 37.9,
+     "created": "2016-04-16T11:31:39",
+     "modified": "2016-04-21T15:25:45",
+     "company_name": "",
+     "sid": "",
+     "reason": "其他",
+     "pic_path": "http://image.xiaolu.so/MG_14604489807443.jpg",
+     "desc": "请输入退款说明",
+     "feedback": "",
+     "has_good_return": false,
+     "has_good_change": false,
+     "good_status": 0,
+     "status": 1,
+     "refund_fee": 37.9,
+     "return_address": "退货状态未确定",
+     "status_display": "退款关闭",
+     "amount_flow": {
+     "desc": ""
+     }
      */
 
+
+
+    @SerializedName("results")
     private List<ResultsEntity> results;
 
     public void setCount(int count) {
@@ -94,38 +108,80 @@ public class AllRefundsBean {
     }
 
     public static class ResultsEntity {
+        @SerializedName("id")
         private int id;
+        @SerializedName("url")
         private String url;
+        @SerializedName("refund_no")
         private String refund_no;
+        @SerializedName("trade_id")
         private int trade_id;
+        @SerializedName("order_id")
         private int order_id;
+        @SerializedName("buyer_id")
         private int buyer_id;
+        @SerializedName("item_id")
         private int item_id;
+        @SerializedName("title")
         private String title;
+        @SerializedName("sku_id")
         private int sku_id;
+        @SerializedName("sku_name")
         private String sku_name;
+        @SerializedName("refund_num")
         private int refund_num;
+        @SerializedName("buyer_nick")
         private String buyer_nick;
+        @SerializedName("mobile")
         private String mobile;
+        @SerializedName("phone")
         private String phone;
+        @SerializedName("proof_pic")
         private Object proof_pic;
+        @SerializedName("total_fee")
         private double total_fee;
+        @SerializedName("payment")
         private double payment;
+        @SerializedName("created")
         private String created;
+        @SerializedName("modified")
         private String modified;
+        @SerializedName("company_name")
         private String company_name;
+        @SerializedName("sid")
         private String sid;
+        @SerializedName("reason")
         private String reason;
+        @SerializedName("pic_path")
         private String pic_path;
+        @SerializedName("desc")
         private String desc;
+        @SerializedName("feedback")
         private String feedback;
+        @SerializedName("has_good_return")
         private boolean has_good_return;
+        @SerializedName("has_good_change")
         private boolean has_good_change;
+        @SerializedName("good_status")
         private int good_status;
+        @SerializedName("status")
         private int status;
+        @SerializedName("refund_fee")
         private double refund_fee;
+        @SerializedName("status_display")
         private String status_display;
+        @SerializedName("return_address")
         private String return_address;
+        @SerializedName("amount_flow")
+        private Amount_flowEntity amount_flow;
+
+        public Amount_flowEntity getAmount_flow() {
+            return amount_flow;
+        }
+
+        public void setAmount_flow(Amount_flowEntity amount_flow) {
+            this.amount_flow = amount_flow;
+        }
 
         public void setId(int id) {
             this.id = id;

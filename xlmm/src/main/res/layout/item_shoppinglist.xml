@@ -19,17 +19,22 @@
                 android:id="@+id/shoptime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="20px"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:paddingBottom="12px"
+                android:paddingLeft="20px"
+                android:paddingTop="12px"
+                android:textColor="#626262"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/total_cash"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:padding="20px"
-                android:textSize="16sp" />
+                android:paddingBottom="12px"
+                android:paddingRight="20px"
+                android:paddingTop="12px"
+                android:textColor="#626262"
+                android:textSize="14sp" />
 
         </RelativeLayout>
 
@@ -43,10 +48,11 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:padding="20px">
+
         <RelativeLayout
             android:id="@+id/img_layout"
-            android:layout_width="130px"
-            android:layout_height="130px"
+            android:layout_width="116px"
+            android:layout_height="116px"
             android:background="@drawable/choose_img_bg"
             android:gravity="center">
 
@@ -66,10 +72,13 @@
             android:layout_marginLeft="6dp"
             android:layout_toRightOf="@id/img_layout"
             android:gravity="center"
-            android:padding="6px"
+            android:padding="8px"
+            android:maxLength="16"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:text=""
-            android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:textColor="#626262"
+            android:textSize="13sp" />
 
 
         <TextView
@@ -78,10 +87,10 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="6dp"
             android:layout_toRightOf="@id/img_layout"
-            android:padding="6px"
+            android:padding="8px"
             android:text=""
             android:textColor="@color/c8c8c8"
-            android:textSize="15sp" />
+            android:textSize="13sp" />
 
         <TextView
             android:id="@+id/get_status_display"
@@ -89,21 +98,44 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="6dp"
             android:layout_toRightOf="@id/time_display"
-            android:padding="6px"
+            android:padding="8px"
             android:text=""
             android:textColor="@color/colorPrimary"
-            android:textSize="15sp" />
+            android:textSize="13sp" />
 
         <TextView
             android:id="@+id/ticheng_cash"
-            android:layout_width="wrap_content"
+            android:layout_width="130px"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:gravity="center"
-            android:text=""
-            android:textColor="@color/black"
-            android:textSize="20sp" />
+            android:gravity="right|center_vertical"
+            android:text="+100.00"
+            android:textColor="#626262"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/flag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="130px"
+            android:paddingTop="8px"
+            android:textColor="@color/gray"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/total_money"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="130px"
+            android:paddingBottom="8px"
+            android:textColor="@color/gray"
+            android:textSize="13sp" />
 
     </RelativeLayout>
 </LinearLayout>

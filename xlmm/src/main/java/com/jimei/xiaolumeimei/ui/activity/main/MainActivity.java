@@ -14,8 +14,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -28,8 +26,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
-import cn.iwgang.countdownview.CountdownView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
@@ -40,14 +36,14 @@ import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.BrandpromotionBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.PortalBean;
-import com.jimei.xiaolumeimei.entities.PostActivityBean;
 import com.jimei.xiaolumeimei.entities.PostBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
-import com.jimei.xiaolumeimei.glidemoudle.GlideRoundTransform;
 import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.model.UserNewModel;
+import com.jimei.xiaolumeimei.ui.activity.product.ChildListActivity;
+import com.jimei.xiaolumeimei.ui.activity.product.LadyListActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllOrdersActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
@@ -68,7 +64,7 @@ import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
-import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
+import com.jimei.xiaolumeimei.widget.BrandView;
 import com.jimei.xiaolumeimei.widget.badgelib.BadgeView;
 import com.jimei.xiaolumeimei.widget.banner.Indicators.PagerIndicator;
 import com.jimei.xiaolumeimei.widget.banner.SliderLayout;
@@ -88,12 +84,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import okhttp3.Call;
-import rx.Observable;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseActivity
@@ -130,7 +122,7 @@ public class MainActivity extends BaseActivity
   private View view;
   //private View head;
   private LinearLayout post_activity_layout;
-//  private CountdownView countTime;
+  //  private CountdownView countTime;
   private SliderLayout mSliderLayout;
   private PagerIndicator mPagerIndicator;
   private String cookies;
@@ -163,6 +155,8 @@ public class MainActivity extends BaseActivity
     imagYesterday.setOnClickListener(this);
     imagTomorror.setOnClickListener(this);
     imagToday.setOnClickListener(this);
+    childImage.setOnClickListener(this);
+    ladyImage.setOnClickListener(this);
     //radioGroup.setOnCheckedChangeListener(this);
   }
 
@@ -293,7 +287,7 @@ public class MainActivity extends BaseActivity
   public void initViewsForTab() {
     view = LayoutInflater.from(this).inflate(R.layout.post_layout, null);
     post_activity_layout = (LinearLayout) findViewById(R.id.post_activity);
-//    countTime = (CountdownView) findViewById(R.id.countTime);
+    //    countTime = (CountdownView) findViewById(R.id.countTime);
     mSliderLayout = (SliderLayout) findViewById(R.id.slider);
     mPagerIndicator = (PagerIndicator) findViewById(R.id.pi_header);
     vp = (ViewPager) findViewById(R.id.viewPager);
@@ -307,9 +301,11 @@ public class MainActivity extends BaseActivity
     vp.setOffscreenPageLimit(2);
 
     vp.setCurrentItem(1);
-    imagYesterday.setImageDrawable(getResources().getDrawable(R.drawable.yesterday_nochoose));
+    imagYesterday.setImageDrawable(
+        getResources().getDrawable(R.drawable.yesterday_nochoose));
     imagToday.setImageDrawable(getResources().getDrawable(R.drawable.today_choose));
-    imagTomorror.setImageDrawable(getResources().getDrawable(R.drawable.tomorror_nochoose));
+    imagTomorror.setImageDrawable(
+        getResources().getDrawable(R.drawable.tomorror_nochoose));
     vp.addOnPageChangeListener(this);
     scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(1));
 
@@ -318,20 +314,20 @@ public class MainActivity extends BaseActivity
 
   private void initDataForTab() {
     initPost();
-//    Subscription subscription5 = Observable.timer(1, 1, TimeUnit.SECONDS)
-//        .onBackpressureDrop()
-//        .map(aLong -> calcLeftTime())
-//        .observeOn(AndroidSchedulers.mainThread())
-//        .subscribe(new Action1<Long>() {
-//          @Override public void call(Long aLong) {
-//            if (aLong > 0) {
-//              countTime.updateShow(aLong);
-//            } else {
-//              countTime.setVisibility(View.INVISIBLE);
-//            }
-//          }
-//        }, Throwable::printStackTrace);
-//    addSubscription(subscription5);
+    //    Subscription subscription5 = Observable.timer(1, 1, TimeUnit.SECONDS)
+    //        .onBackpressureDrop()
+    //        .map(aLong -> calcLeftTime())
+    //        .observeOn(AndroidSchedulers.mainThread())
+    //        .subscribe(new Action1<Long>() {
+    //          @Override public void call(Long aLong) {
+    //            if (aLong > 0) {
+    //              countTime.updateShow(aLong);
+    //            } else {
+    //              countTime.setVisibility(View.INVISIBLE);
+    //            }
+    //          }
+    //        }, Throwable::printStackTrace);
+    //    addSubscription(subscription5);
   }
 
   private void initPost() {
@@ -433,21 +429,28 @@ public class MainActivity extends BaseActivity
                     });
               }
 
-
               if (postBean.getCategorys() != null) {
                 List<PortalBean.CategorysBean> categorys = postBean.getCategorys();
-                Glide.with(MainActivity.this).load(categorys.get(0).getCat_img()).diskCacheStrategy(DiskCacheStrategy.ALL)
-                        //.placeholder(R.drawable.parceholder)
-                        .centerCrop().override(DisplayUtils.getScreenW(MainActivity.this)/2,300).into(childImage);
+                Glide.with(MainActivity.this)
+                    .load(categorys.get(0).getCat_img())
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    //.placeholder(R.drawable.parceholder)
+                    .centerCrop()
+                    .override(DisplayUtils.getScreenW(MainActivity.this) / 2, 330)
+                    .into(childImage);
 
-                Glide.with(MainActivity.this).load(categorys.get(1).getCat_img()).diskCacheStrategy(DiskCacheStrategy.ALL)
-                        //.placeholder(R.drawable.parceholder)
-                        .centerCrop().override(DisplayUtils.getScreenW(MainActivity.this)/2,300).into(ladyImage);
+                Glide.with(MainActivity.this)
+                    .load(categorys.get(1).getCat_img())
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    //.placeholder(R.drawable.parceholder)
+                    .centerCrop()
+                    .override(DisplayUtils.getScreenW(MainActivity.this) / 2, 330)
+                    .into(ladyImage);
               }
 
               List<BrandlistAdapter> brandlistAdapters = new ArrayList<>();
-              List<RecyclerView> recyclerViews = new ArrayList<>();
-
+              //List<RecyclerView> recyclerViews = new ArrayList<>();
+              List<BrandView> brandViews = new ArrayList<>();
               //LinearLayoutManager manager = new LinearLayoutManager(this);
               //manager.setOrientation(LinearLayoutManager.HORIZONTAL);
               //recyclerView.setLayoutManager(manager);
@@ -464,27 +467,33 @@ public class MainActivity extends BaseActivity
                 if (brandpromotionEntities.size() != 0) {
 
                   BrandlistAdapter brandlistAdapter;
-                  RecyclerView recyclerView;
+                  //RecyclerView recyclerView;
+                  BrandView brandView;
                   for (int i = 0; i < brandpromotionEntities.size(); i++) {
-                    LinearLayoutManager manager = new LinearLayoutManager(MainActivity
-                        .this);
-                    manager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                    //LinearLayoutManager manager = new LinearLayoutManager(MainActivity
+                    //    .this);
+                    //manager.setOrientation(LinearLayoutManager.HORIZONTAL);
                     brandlistAdapter = new BrandlistAdapter(MainActivity.this);
                     brandlistAdapters.add(brandlistAdapter);
-                    recyclerView = new RecyclerView(MainActivity.this);
-                    recyclerView.setLayoutManager(manager);
-                    recyclerView.addItemDecoration(new SpaceItemDecoration(5));
-                    recyclerViews.add(recyclerView);
-                    brand.addView(recyclerView);
+                    //recyclerView = new RecyclerView(MainActivity.this);
+                    brandView = new BrandView(MainActivity.this);
+                    //recyclerView.setLayoutManager(manager);
+                    brandView.addItemDecoration(20);
+
+                    brandViews.add(brandView);
+                    //recyclerViews.add(recyclerView);
+                    brand.addView(brandView);
                   }
 
                   JUtils.Log(TAG,
                       "brandlistAdapters.size()====" + brandlistAdapters.size());
                   for (int i = 0; i < brandlistAdapters.size(); i++) {
-                    recyclerViews.get(i).setAdapter(brandlistAdapters.get(i));
+                    brandViews.get(i)
+                        .setBrandtitleImage(brandpromotionEntities.get(i).getBrand_pic());
+                    brandViews.get(i).setAdapter(brandlistAdapters.get(i));
                     final int finalI = i;
                     ProductModel.getInstance()
-                        .getBrandlist(brandpromotionEntities.get(i).getId(),1, 10)
+                        .getBrandlist(brandpromotionEntities.get(i).getId(), 1, 10)
                         .subscribeOn(Schedulers.io())
                         .subscribe(new ServiceResponse<BrandpromotionBean>() {
 
@@ -527,159 +536,159 @@ public class MainActivity extends BaseActivity
                 for (int i = 0; i < postActivityBean.size(); i++) {
                   final int finalI = i;
                   OkHttpUtils.get()
-                          .url(postActivityBean.get(i).getAct_img())
-                          .build()
-                          .execute(new BitmapCallback() {
-                            @Override public void onError(Call call, Exception e) {
-                            }
+                      .url(postActivityBean.get(i).getAct_img())
+                      .build()
+                      .execute(new BitmapCallback() {
+                        @Override public void onError(Call call, Exception e) {
+                        }
 
-                            @Override public void onResponse(Bitmap response) {
-                              int maxHeight = dp2px(MainActivity.this, 300);
-                              if (response != null) {
-//                                int height =
-//                                        (int) ((float) view.getWidth() / response.getWidth()
-//                                                * response.getHeight());
-//                                if (height > maxHeight) height = maxHeight;
-//                                LinearLayout.LayoutParams layoutParams =
-//                                        new LinearLayout.LayoutParams(
-//                                                LinearLayout.LayoutParams.MATCH_PARENT, height);
-//                                layoutParams.setMargins(0, dp2px(MainActivity.this, 10), 0,
-//                                        0);
-//                                imageViewList.get(finalI).setLayoutParams(layoutParams);
-                                imageViewList.get(finalI).setImageBitmap(response);
-                                if (postActivityBean.get(finalI)
-                                        .getAct_type()
-                                        .equals("webview")) {
-                                  imageViewList.get(finalI)
-                                          .setOnClickListener(new View.OnClickListener() {
-                                            @Override public void onClick(View v) {
-                                              //syncCookie(getActivity(), postBean.getActivity().getActLink());
-                                              if (postActivityBean.get(finalI)
-                                                      .isLogin_required()) {
-                                                if (LoginUtils.checkLoginState(MainActivity.this)
-                                                        && (null != getUserInfoBean()
-                                                        && (null
-                                                        != getUserInfoBean().getMobile())
-                                                        && !getUserInfoBean().getMobile()
-                                                        .isEmpty())) {
-                                                  Intent intent = new Intent(MainActivity.this,
-                                                          ActivityWebViewActivity.class);
-                                                  //sharedPreferences =
-                                                  //    getActivity().getSharedPreferences("COOKIESxlmm",
-                                                  //        Context.MODE_PRIVATE);
-                                                  //String cookies = sharedPreferences.getString("Cookies", "");
-                                                  //Bundle bundle = new Bundle();
-                                                  //bundle.putString("cookies", cookies);
-                                                  sharedPreferences =
-                                                          getSharedPreferences("xlmmCookiesAxiba",
-                                                                  Context.MODE_PRIVATE);
-                                                  cookies =
-                                                          sharedPreferences.getString("cookiesString",
-                                                                  "");
-                                                  domain =
-                                                          sharedPreferences.getString("cookiesDomain",
-                                                                  "");
-                                                  Bundle bundle = new Bundle();
-                                                  bundle.putString("cookies", cookies);
-                                                  bundle.putString("domain", domain);
-                                                  bundle.putString("Cookie",
-                                                          sharedPreferences.getString("Cookie", ""));
-                                                  bundle.putString("actlink",
-                                                          postActivityBean.get(finalI).getAct_link());
-                                                  bundle.putInt("id",
-                                                          postActivityBean.get(finalI).getId());
-                                                  intent.putExtras(bundle);
-                                                  startActivity(intent);
-                                                } else {
-                                                  if (!LoginUtils.checkLoginState(
-                                                          MainActivity.this)) {
-                                                    JUtils.Toast("登录并绑定手机号后才可参加活动");
-                                                    Intent intent = new Intent(MainActivity.this,
-                                                            LoginActivity.class);
-                                                    Bundle bundle = new Bundle();
-                                                    bundle.putString("login", "main");
-                                                    intent.putExtras(bundle);
-                                                    startActivity(intent);
-                                                  } else {
-                                                    JUtils.Toast("登录成功,前往绑定手机号后才可参加活动");
-                                                    Intent intent = new Intent(MainActivity.this,
-                                                            WxLoginBindPhoneActivity.class);
-                                                    if (null != getUserInfoBean()) {
-                                                      Bundle bundle = new Bundle();
-                                                      bundle.putString("headimgurl",
-                                                              getUserInfoBean().getThumbnail());
-                                                      bundle.putString("nickname",
-                                                              getUserInfoBean().getNick());
-                                                      intent.putExtras(bundle);
+                        @Override public void onResponse(Bitmap response) {
+                          int maxHeight = dp2px(MainActivity.this, 300);
+                          if (response != null) {
+                            //                                int height =
+                            //                                        (int) ((float) view.getWidth() / response.getWidth()
+                            //                                                * response.getHeight());
+                            //                                if (height > maxHeight) height = maxHeight;
+                            //                                LinearLayout.LayoutParams layoutParams =
+                            //                                        new LinearLayout.LayoutParams(
+                            //                                                LinearLayout.LayoutParams.MATCH_PARENT, height);
+                            //                                layoutParams.setMargins(0, dp2px(MainActivity.this, 10), 0,
+                            //                                        0);
+                            //                                imageViewList.get(finalI).setLayoutParams(layoutParams);
+                            imageViewList.get(finalI).setImageBitmap(response);
+                            if (postActivityBean.get(finalI)
+                                .getAct_type()
+                                .equals("webview")) {
+                              imageViewList.get(finalI)
+                                  .setOnClickListener(new View.OnClickListener() {
+                                    @Override public void onClick(View v) {
+                                      //syncCookie(getActivity(), postBean.getActivity().getActLink());
+                                      if (postActivityBean.get(finalI)
+                                          .isLogin_required()) {
+                                        if (LoginUtils.checkLoginState(MainActivity.this)
+                                            && (null != getUserInfoBean()
+                                            && (null
+                                            != getUserInfoBean().getMobile())
+                                            && !getUserInfoBean().getMobile()
+                                            .isEmpty())) {
+                                          Intent intent = new Intent(MainActivity.this,
+                                              ActivityWebViewActivity.class);
+                                          //sharedPreferences =
+                                          //    getActivity().getSharedPreferences("COOKIESxlmm",
+                                          //        Context.MODE_PRIVATE);
+                                          //String cookies = sharedPreferences.getString("Cookies", "");
+                                          //Bundle bundle = new Bundle();
+                                          //bundle.putString("cookies", cookies);
+                                          sharedPreferences =
+                                              getSharedPreferences("xlmmCookiesAxiba",
+                                                  Context.MODE_PRIVATE);
+                                          cookies =
+                                              sharedPreferences.getString("cookiesString",
+                                                  "");
+                                          domain =
+                                              sharedPreferences.getString("cookiesDomain",
+                                                  "");
+                                          Bundle bundle = new Bundle();
+                                          bundle.putString("cookies", cookies);
+                                          bundle.putString("domain", domain);
+                                          bundle.putString("Cookie",
+                                              sharedPreferences.getString("Cookie", ""));
+                                          bundle.putString("actlink",
+                                              postActivityBean.get(finalI).getAct_link());
+                                          bundle.putInt("id",
+                                              postActivityBean.get(finalI).getId());
+                                          intent.putExtras(bundle);
+                                          startActivity(intent);
+                                        } else {
+                                          if (!LoginUtils.checkLoginState(
+                                              MainActivity.this)) {
+                                            JUtils.Toast("登录并绑定手机号后才可参加活动");
+                                            Intent intent = new Intent(MainActivity.this,
+                                                LoginActivity.class);
+                                            Bundle bundle = new Bundle();
+                                            bundle.putString("login", "main");
+                                            intent.putExtras(bundle);
+                                            startActivity(intent);
+                                          } else {
+                                            JUtils.Toast("登录成功,前往绑定手机号后才可参加活动");
+                                            Intent intent = new Intent(MainActivity.this,
+                                                WxLoginBindPhoneActivity.class);
+                                            if (null != getUserInfoBean()) {
+                                              Bundle bundle = new Bundle();
+                                              bundle.putString("headimgurl",
+                                                  getUserInfoBean().getThumbnail());
+                                              bundle.putString("nickname",
+                                                  getUserInfoBean().getNick());
+                                              intent.putExtras(bundle);
+                                            }
+                                            startActivity(intent);
+                                          }
+                                        }
+                                      } else {
+                                        Intent intent = new Intent(MainActivity.this,
+                                            ActivityWebViewActivity.class);
+                                        //sharedPreferences =
+                                        //    getActivity().getSharedPreferences("COOKIESxlmm",
+                                        //        Context.MODE_PRIVATE);
+                                        //cookies = sharedPreferences.getString("Cookies", "");
+                                        sharedPreferences =
+                                            getSharedPreferences("xlmmCookiesAxiba",
+                                                Context.MODE_PRIVATE);
+                                        cookies =
+                                            sharedPreferences.getString("cookiesString",
+                                                "");
+                                        domain =
+                                            sharedPreferences.getString("cookiesDomain",
+                                                "");
+                                        Bundle bundle = new Bundle();
+                                        bundle.putInt("id",
+                                            postActivityBean.get(finalI).getId());
+                                        bundle.putString("cookies", cookies);
+                                        bundle.putString("domain", domain);
+                                        bundle.putString("actlink",
+                                            postActivityBean.get(finalI).getAct_link());
+                                        intent.putExtras(bundle);
+                                        startActivity(intent);
+                                      }
+                                    }
+                                  });
+                            } else if (postActivityBean.get(finalI)
+                                .getAct_type()
+                                .equals("coupon")) {
+                              imageViewList.get(finalI)
+                                  .setOnClickListener(new View.OnClickListener() {
+                                    @Override public void onClick(View v) {
+                                      Subscription subscribe7 =
+                                          ActivityModel.getInstance()
+                                              .getUsercoupons(postActivityBean.get(finalI)
+                                                  .getExtras()
+                                                  .getTemplateId())
+                                              .subscribeOn(Schedulers.io())
+                                              .subscribe(
+                                                  new ServiceResponse<ResponseBody>() {
+                                                    @Override public void onNext(
+                                                        ResponseBody responseBody) {
+                                                      if (null != responseBody) {
+                                                        try {
+                                                          JUtils.Log("TodayListView",
+                                                              responseBody.string());
+                                                        } catch (IOException e) {
+                                                          e.printStackTrace();
+                                                        }
+                                                      }
                                                     }
-                                                    startActivity(intent);
-                                                  }
-                                                }
-                                              } else {
-                                                Intent intent = new Intent(MainActivity.this,
-                                                        ActivityWebViewActivity.class);
-                                                //sharedPreferences =
-                                                //    getActivity().getSharedPreferences("COOKIESxlmm",
-                                                //        Context.MODE_PRIVATE);
-                                                //cookies = sharedPreferences.getString("Cookies", "");
-                                                sharedPreferences =
-                                                        getSharedPreferences("xlmmCookiesAxiba",
-                                                                Context.MODE_PRIVATE);
-                                                cookies =
-                                                        sharedPreferences.getString("cookiesString",
-                                                                "");
-                                                domain =
-                                                        sharedPreferences.getString("cookiesDomain",
-                                                                "");
-                                                Bundle bundle = new Bundle();
-                                                bundle.putInt("id",
-                                                        postActivityBean.get(finalI).getId());
-                                                bundle.putString("cookies", cookies);
-                                                bundle.putString("domain", domain);
-                                                bundle.putString("actlink",
-                                                        postActivityBean.get(finalI).getAct_link());
-                                                intent.putExtras(bundle);
-                                                startActivity(intent);
-                                              }
-                                            }
-                                          });
-                                } else if (postActivityBean.get(finalI)
-                                        .getAct_type()
-                                        .equals("coupon")) {
-                                  imageViewList.get(finalI)
-                                          .setOnClickListener(new View.OnClickListener() {
-                                            @Override public void onClick(View v) {
-                                              Subscription subscribe7 =
-                                                      ActivityModel.getInstance()
-                                                              .getUsercoupons(postActivityBean.get(finalI)
-                                                                      .getExtras()
-                                                                      .getTemplateId())
-                                                              .subscribeOn(Schedulers.io())
-                                                              .subscribe(
-                                                                      new ServiceResponse<ResponseBody>() {
-                                                                        @Override public void onNext(
-                                                                                ResponseBody responseBody) {
-                                                                          if (null != responseBody) {
-                                                                            try {
-                                                                              JUtils.Log("TodayListView",
-                                                                                      responseBody.string());
-                                                                            } catch (IOException e) {
-                                                                              e.printStackTrace();
-                                                                            }
-                                                                          }
-                                                                        }
-                                                                      });
-                                              addSubscription(subscribe7);
-                                            }
-                                          });
-                                }
-                              }
+                                                  });
+                                      addSubscription(subscribe7);
+                                    }
+                                  });
                             }
-                          });
+                          }
+                        }
+                      });
                 }
 
                 if (mask != postActivityBean.get(0).getId() && !TextUtils.isEmpty(
-                        postActivityBean.get(0).getMask_link())) {
+                    postActivityBean.get(0).getMask_link())) {
 
                   MastFragment test = MastFragment.newInstance("mask");
                   test.show(getFragmentManager(), "mask");
@@ -687,9 +696,6 @@ public class MainActivity extends BaseActivity
               } else {
                 post_activity_layout.setVisibility(View.GONE);
               }
-
-
-
             } catch (NullPointerException ex) {
               ex.printStackTrace();
             }
@@ -811,30 +817,46 @@ public class MainActivity extends BaseActivity
       case R.id.imgUser:
         intent = new Intent(MainActivity.this, InformationActivity.class);
         break;
+      case R.id.child_img:
+        intent = new Intent(MainActivity.this, ChildListActivity.class);
+        startActivity(intent);
+        break;
+      case R.id.lady_img:
+        intent = new Intent(MainActivity.this, LadyListActivity.class);
+        startActivity(intent);
+        break;
 
       case R.id.imag_yesterday:
         vp.setCurrentItem(0);
-        imagYesterday.setImageDrawable(getResources().getDrawable(R.drawable.yesterday_choose));
+        imagYesterday.setImageDrawable(
+            getResources().getDrawable(R.drawable.yesterday_choose));
         imagToday.setImageDrawable(getResources().getDrawable(R.drawable.today_nochoose));
-        imagTomorror.setImageDrawable(getResources().getDrawable(R.drawable.tomorror_nochoose));
+        imagTomorror.setImageDrawable(
+            getResources().getDrawable(R.drawable.tomorror_nochoose));
         break;
       case R.id.imag_today:
         vp.setCurrentItem(1);
-        imagYesterday.setImageDrawable(getResources().getDrawable(R.drawable.yesterday_nochoose));
+        imagYesterday.setImageDrawable(
+            getResources().getDrawable(R.drawable.yesterday_nochoose));
         imagToday.setImageDrawable(getResources().getDrawable(R.drawable.today_choose));
-        imagTomorror.setImageDrawable(getResources().getDrawable(R.drawable.tomorror_nochoose));
+        imagTomorror.setImageDrawable(
+            getResources().getDrawable(R.drawable.tomorror_nochoose));
         break;
       case R.id.imag_tomorror:
         vp.setCurrentItem(2);
-        imagYesterday.setImageDrawable(getResources().getDrawable(R.drawable.yesterday_nochoose));
+        imagYesterday.setImageDrawable(
+            getResources().getDrawable(R.drawable.yesterday_nochoose));
         imagToday.setImageDrawable(getResources().getDrawable(R.drawable.today_nochoose));
-        imagTomorror.setImageDrawable(getResources().getDrawable(R.drawable.tomorror_choose));
+        imagTomorror.setImageDrawable(
+            getResources().getDrawable(R.drawable.tomorror_choose));
         break;
     }
 
     if (v.getId() != R.id.imag_today
         && v.getId() != R.id.imag_tomorror
-        && v.getId() != R.id.imag_yesterday) {
+        && v.getId() != R.id.imag_yesterday
+        && v.getId() != R.id.lady_img
+        && v.getId() != R.id.child_img) {
       if (!(LoginUtils.checkLoginState(getApplicationContext()))) {
         login(flag);
       } else {
@@ -1018,21 +1040,27 @@ public class MainActivity extends BaseActivity
     switch (position) {
       case 0:
         //radioGroup.check(R.id.rb_yesterday);
-        imagYesterday.setImageDrawable(getResources().getDrawable(R.drawable.yesterday_choose));
+        imagYesterday.setImageDrawable(
+            getResources().getDrawable(R.drawable.yesterday_choose));
         imagToday.setImageDrawable(getResources().getDrawable(R.drawable.today_nochoose));
-        imagTomorror.setImageDrawable(getResources().getDrawable(R.drawable.tomorror_nochoose));
+        imagTomorror.setImageDrawable(
+            getResources().getDrawable(R.drawable.tomorror_nochoose));
         break;
       case 1:
         //radioGroup.check(R.id.rb_today);
-        imagYesterday.setImageDrawable(getResources().getDrawable(R.drawable.yesterday_nochoose));
+        imagYesterday.setImageDrawable(
+            getResources().getDrawable(R.drawable.yesterday_nochoose));
         imagToday.setImageDrawable(getResources().getDrawable(R.drawable.today_choose));
-        imagTomorror.setImageDrawable(getResources().getDrawable(R.drawable.tomorror_nochoose));
+        imagTomorror.setImageDrawable(
+            getResources().getDrawable(R.drawable.tomorror_nochoose));
         break;
       case 2:
         //radioGroup.check(R.id.rb_tomorror);
-        imagYesterday.setImageDrawable(getResources().getDrawable(R.drawable.yesterday_nochoose));
+        imagYesterday.setImageDrawable(
+            getResources().getDrawable(R.drawable.yesterday_nochoose));
         imagToday.setImageDrawable(getResources().getDrawable(R.drawable.today_nochoose));
-        imagTomorror.setImageDrawable(getResources().getDrawable(R.drawable.tomorror_choose));
+        imagTomorror.setImageDrawable(
+            getResources().getDrawable(R.drawable.tomorror_choose));
         break;
     }
   }
