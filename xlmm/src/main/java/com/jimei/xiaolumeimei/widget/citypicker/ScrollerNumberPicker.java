@@ -17,13 +17,7 @@ import com.jimei.xiaolumeimei.R;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
-/**
- * 
- * 滑动选择
- * 
- * @author zihao
- * 
- */
+
 public class ScrollerNumberPicker extends View {
 	/** 控件宽度 */
 	private float controlWidth;
@@ -32,7 +26,7 @@ public class ScrollerNumberPicker extends View {
 	/** 是否滑动中 */
 	private boolean isScrolling = false;
 	/** 选择的内容 */
-	private ArrayList<ItemObject> itemList = new ArrayList<ItemObject>();
+	private ArrayList<ItemObject> itemList = new ArrayList<ScrollerNumberPicker.ItemObject>();
 	/** 设置数据 */
 	private ArrayList<String> dataList = new ArrayList<String>();
 	/** 按下的坐标 */
@@ -71,7 +65,7 @@ public class ScrollerNumberPicker extends View {
 	private static final int MOVE_NUMBER = 5;
 	/** 是否允许选空 */
 	private boolean noEmpty = false;
-	
+
 	/** 正在修改数据，避免ConcurrentModificationException异常 */
 	private boolean isClearing = false;
 
@@ -104,32 +98,32 @@ public class ScrollerNumberPicker extends View {
 			return true;
 		int y = (int) event.getY();
 		switch (event.getAction()) {
-		case MotionEvent.ACTION_DOWN:
-			isScrolling = true;
-			downY = (int) event.getY();
-			downTime = System.currentTimeMillis();
-			break;
-		case MotionEvent.ACTION_MOVE:
-			actionMove(y - downY);
-			onSelectListener();
-			break;
-		case MotionEvent.ACTION_UP:
+			case MotionEvent.ACTION_DOWN:
+				isScrolling = true;
+				downY = (int) event.getY();
+				downTime = System.currentTimeMillis();
+				break;
+			case MotionEvent.ACTION_MOVE:
+				actionMove(y - downY);
+				onSelectListener();
+				break;
+			case MotionEvent.ACTION_UP:
 
-			// 移动距离的绝对值
-			int move = (y - downY);
-			move = move > 0 ? move : move * (-1);
-			// 判断段时间移动的距离
-			if (System.currentTimeMillis() - downTime < goonTime
-					&& move > goonDistence) {
-				goonMove(y - downY);
-			} else {
-				actionUp(y - downY);
-			}
-			noEmpty();
-			isScrolling = false;
-			break;
-		default:
-			break;
+				// 移动距离的绝对值
+				int move = (y - downY);
+				move = move > 0 ? move : move * (-1);
+				// 判断段时间移动的距离
+				if (System.currentTimeMillis() - downTime < goonTime
+						&& move > goonDistence) {
+					goonMove(y - downY);
+				} else {
+					actionUp(y - downY);
+				}
+				noEmpty();
+				isScrolling = false;
+				break;
+			default:
+				break;
 		}
 		return true;
 	}
@@ -249,7 +243,7 @@ public class ScrollerNumberPicker extends View {
 
 	/**
 	 * 移动的时候
-	 * 
+	 *
 	 * @param move
 	 */
 	private void actionMove(int move) {
@@ -261,26 +255,21 @@ public class ScrollerNumberPicker extends View {
 
 	/**
 	 * 移动，线程中调用
-	 * 
+	 *
 	 * @param move
 	 */
 	private void actionThreadMove(int move) {
-		try {
-			for (ItemObject item : itemList) {
-				item.move(move);
-			}
-			Message rMessage = new Message();
-			rMessage.what = REFRESH_VIEW;
-			handler.sendMessage(rMessage);
-		} catch (ConcurrentModificationException e) {
-			e.printStackTrace();
-
+		for (ItemObject item : itemList) {
+			item.move(move);
 		}
+		Message rMessage = new Message();
+		rMessage.what = REFRESH_VIEW;
+		handler.sendMessage(rMessage);
 	}
 
 	/**
 	 * 松开的时候
-	 * 
+	 *
 	 * @param move
 	 */
 	private void actionUp(int move) {
@@ -318,7 +307,7 @@ public class ScrollerNumberPicker extends View {
 
 	/**
 	 * 缓慢移动
-	 * 
+	 *
 	 * @param move
 	 */
 	private synchronized void slowMove(final int move) {
@@ -376,7 +365,7 @@ public class ScrollerNumberPicker extends View {
 
 	/**
 	 * 移动到默认位置
-	 * 
+	 *
 	 * @param move
 	 */
 	private void defaultMove(int move) {
@@ -403,7 +392,7 @@ public class ScrollerNumberPicker extends View {
 
 	/**
 	 * 绘制线条
-	 * 
+	 *
 	 * @param canvas
 	 */
 	private void drawLine(Canvas canvas) {
@@ -423,7 +412,7 @@ public class ScrollerNumberPicker extends View {
 
 	/**
 	 * 绘制遮盖板
-	 * 
+	 *
 	 * @param canvas
 	 */
 	private void drawMask(Canvas canvas) {
@@ -444,7 +433,7 @@ public class ScrollerNumberPicker extends View {
 
 	/**
 	 * 初始化，获取设置的属性
-	 * 
+	 *
 	 * @param context
 	 * @param attrs
 	 */
@@ -478,7 +467,7 @@ public class ScrollerNumberPicker extends View {
 
 	/**
 	 * 设置数据
-	 * 
+	 *
 	 * @param data
 	 */
 	public void setData(ArrayList<String> data) {
@@ -488,7 +477,7 @@ public class ScrollerNumberPicker extends View {
 
 	/**
 	 * 获取返回项
-	 * 
+	 *
 	 * @return
 	 */
 	public int getSelected() {
@@ -501,7 +490,7 @@ public class ScrollerNumberPicker extends View {
 
 	/**
 	 * 获取返回的内容
-	 * 
+	 *
 	 * @return
 	 */
 	public String getSelectedText() {
@@ -514,7 +503,7 @@ public class ScrollerNumberPicker extends View {
 
 	/**
 	 * 是否正在滑动
-	 * 
+	 *
 	 * @return
 	 */
 	public boolean isScrolling() {
@@ -523,7 +512,7 @@ public class ScrollerNumberPicker extends View {
 
 	/**
 	 * 是否可用
-	 * 
+	 *
 	 * @return
 	 */
 	public boolean isEnable() {
@@ -532,7 +521,7 @@ public class ScrollerNumberPicker extends View {
 
 	/**
 	 * 设置是否可用
-	 * 
+	 *
 	 * @param isEnable
 	 */
 	public void setEnable(boolean isEnable) {
@@ -541,7 +530,7 @@ public class ScrollerNumberPicker extends View {
 
 	/**
 	 * 设置默认选项
-	 * 
+	 *
 	 * @param index
 	 */
 	public void setDefault(int index) {
@@ -551,7 +540,7 @@ public class ScrollerNumberPicker extends View {
 
 	/**
 	 * 获取列表大小
-	 * 
+	 *
 	 * @return
 	 */
 	public int getListSize() {
@@ -562,7 +551,7 @@ public class ScrollerNumberPicker extends View {
 
 	/**
 	 * 获取某项的内容
-	 * 
+	 *
 	 * @param index
 	 * @return
 	 */
@@ -574,7 +563,7 @@ public class ScrollerNumberPicker extends View {
 
 	/**
 	 * 监听
-	 * 
+	 *
 	 * @param onSelectListener
 	 */
 	public void setOnSelectListener(OnSelectListener onSelectListener) {
@@ -589,11 +578,11 @@ public class ScrollerNumberPicker extends View {
 			// TODO Auto-generated method stub
 			super.handleMessage(msg);
 			switch (msg.what) {
-			case REFRESH_VIEW:
-				invalidate();
-				break;
-			default:
-				break;
+				case REFRESH_VIEW:
+					invalidate();
+					break;
+				default:
+					break;
 			}
 		}
 
@@ -601,7 +590,7 @@ public class ScrollerNumberPicker extends View {
 
 	/**
 	 * 单条内容
-	 * 
+	 *
 	 * @author zoudong
 	 */
 	private class ItemObject {
@@ -626,7 +615,7 @@ public class ScrollerNumberPicker extends View {
 
 		/**
 		 * 绘制自身
-		 * 
+		 *
 		 * @param canvas
 		 */
 		public void drawSelf(Canvas canvas) {
@@ -649,7 +638,7 @@ public class ScrollerNumberPicker extends View {
 				// 计算当前字体大小
 				float textSize = (float) normalFont
 						+ ((float) (selectedFont - normalFont) * (1.0f - (float) moveToSelect
-								/ (float) unitHeight));
+						/ (float) unitHeight));
 				textPaint.setTextSize(textSize);
 			} else {
 				textPaint.setColor(normalColor);
@@ -664,12 +653,17 @@ public class ScrollerNumberPicker extends View {
 
 			// 绘制内容
 			canvas.drawText(itemText, x + controlWidth / 2 - textRect.width()
-					/ 2, y + move + unitHeight / 2 + textRect.height() / 2,
+							/ 2, y + move + unitHeight / 2 + textRect.height() / 2,
 					textPaint);
 
 		}
 
-
+		/**
+		 * 是否在可视界面内
+		 *
+		 * @param rect
+		 * @return
+		 */
 		public boolean isInView() {
 			if (y + move > controlHeight
 					|| (y + move + unitHeight / 2 + textRect.height() / 2) < 0)
@@ -679,14 +673,18 @@ public class ScrollerNumberPicker extends View {
 
 		/**
 		 * 移动距离
-		 * 
+		 *
 		 * @param _move
 		 */
 		public void move(int _move) {
 			this.move = _move;
 		}
 
-
+		/**
+		 * 设置新的坐标
+		 *
+		 * @param move
+		 */
 		public void newY(int _move) {
 			this.move = 0;
 			this.y = y + _move;
@@ -694,7 +692,7 @@ public class ScrollerNumberPicker extends View {
 
 		/**
 		 * 判断是否在选择区域内
-		 * 
+		 *
 		 * @return
 		 */
 		public boolean isSelected() {
@@ -704,11 +702,11 @@ public class ScrollerNumberPicker extends View {
 			if ((y + move + unitHeight) >= controlHeight / 2 - unitHeight / 2
 					+ 2
 					&& (y + move + unitHeight) <= controlHeight / 2
-							+ unitHeight / 2 - 2)
+					+ unitHeight / 2 - 2)
 				return true;
 			if ((y + move) <= controlHeight / 2 - unitHeight / 2 + 2
 					&& (y + move + unitHeight) >= controlHeight / 2
-							+ unitHeight / 2 - 2)
+					+ unitHeight / 2 - 2)
 				return true;
 			return false;
 		}
@@ -723,15 +721,15 @@ public class ScrollerNumberPicker extends View {
 
 	/**
 	 * 选择监听监听
-	 * 
+	 *
 	 * @author zoudong
-	 * 
+	 *
 	 */
 	public interface OnSelectListener {
 
 		/**
 		 * 结束选择
-		 * 
+		 *
 		 * @param id
 		 * @param text
 		 */
@@ -739,7 +737,7 @@ public class ScrollerNumberPicker extends View {
 
 		/**
 		 * 选中的内容
-		 * 
+		 *
 		 * @param id
 		 * @param text
 		 */

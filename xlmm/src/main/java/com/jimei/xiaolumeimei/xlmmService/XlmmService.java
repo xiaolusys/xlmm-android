@@ -11,6 +11,7 @@ import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.entities.AllowanceBean;
 import com.jimei.xiaolumeimei.entities.AwardCarryBean;
 import com.jimei.xiaolumeimei.entities.BindInfoBean;
+import com.jimei.xiaolumeimei.entities.BrandpromotionBean;
 import com.jimei.xiaolumeimei.entities.BudgetPayBean;
 import com.jimei.xiaolumeimei.entities.BudgetdetailBean;
 import com.jimei.xiaolumeimei.entities.CarryLogListBean;
@@ -43,6 +44,7 @@ import com.jimei.xiaolumeimei.entities.OneDayAgentOrdersBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.PayInfoBean;
 import com.jimei.xiaolumeimei.entities.PointLogBean;
+import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.PostActivityBean;
 import com.jimei.xiaolumeimei.entities.PostBean;
 import com.jimei.xiaolumeimei.entities.ProductBean;
@@ -848,4 +850,25 @@ public interface XlmmService {
     @GET("/rest/v1/wuliu/get_wuliu_by_tid")
     Observable<LogisticsBean> get_logistics(@Query("tid") String tid);
 
+//      //品牌列表
+//    @GET("products/brandlist")
+//    Observable<BrandpromotionBean> getBrandlist(
+//            @Query("page")      int page,
+//            @Query("page_size") int page_size,
+//            @Query("brand")     int brand
+//
+//    );
+
+
+    @GET("portal")
+    Observable<PortalBean> getPortalBean(
+
+    );
+
+    @GET("brands/{id}/products")
+    Observable<BrandpromotionBean> getBrandList(
+            @Path("id")int id,
+            @Query("page")int page,
+            @Query("page_size")int page_size
+    );
 }

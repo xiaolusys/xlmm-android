@@ -5,6 +5,4 @@
     android:background="@drawable/tag_bg"
     android:text=""
     android:textColor="@drawable/text_color"
-    >
-
-</TextView>
+    />
