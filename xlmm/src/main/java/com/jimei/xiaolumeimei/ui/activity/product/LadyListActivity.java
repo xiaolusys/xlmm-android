@@ -35,6 +35,7 @@ public class LadyListActivity extends BaseSwipeBackCompatActivity {
   }
 
   @Override protected void initData() {
+    showIndeterminateProgressDialog(false);
     Subscription subscribe = ProductModel.getInstance()
         .getLadyList(1, 10)
         .subscribeOn(Schedulers.io())
@@ -53,6 +54,7 @@ public class LadyListActivity extends BaseSwipeBackCompatActivity {
 
           @Override public void onCompleted() {
             super.onCompleted();
+            hideIndeterminateProgressDialog();
           }
         });
     addSubscription(subscribe);

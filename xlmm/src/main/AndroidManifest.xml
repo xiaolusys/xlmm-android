@@ -373,6 +373,9 @@
         <activity
             android:name=".ui.activity.trade.LogisticsActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
+        <activity
+            android:name=".ui.activity.product.BrandListActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
 
         <service
             android:name="com.xiaomi.push.service.XMPushService"

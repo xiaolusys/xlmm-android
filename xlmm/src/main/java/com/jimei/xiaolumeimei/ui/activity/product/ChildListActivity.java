@@ -35,6 +35,8 @@ public class ChildListActivity extends BaseSwipeBackCompatActivity {
   }
 
   @Override protected void initData() {
+
+      showIndeterminateProgressDialog(false);
    Subscription subscribe = ProductModel.getInstance()
         .getChildList(1, 10)
         .subscribeOn(Schedulers.io())
@@ -54,6 +56,7 @@ public class ChildListActivity extends BaseSwipeBackCompatActivity {
 
           @Override public void onCompleted() {
             super.onCompleted();
+              hideIndeterminateProgressDialog();
           }
         });
     addSubscription(subscribe);
