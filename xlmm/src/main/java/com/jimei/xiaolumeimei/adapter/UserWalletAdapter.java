@@ -18,13 +18,14 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+
 /**
  * Created by itxuye(www.itxuye.com) on 2016/02/26.
  *
  * Copyright 2016年 上海己美. All rights reserved.
  */
-public class UserWalletAdapter
-    extends RecyclerView.Adapter<UserWalletAdapter.UserWalletVH> {
+public abstract class UserWalletAdapter
+    extends RecyclerView.Adapter<UserWalletAdapter.UserWalletVH> implements View.OnClickListener {
 
 
   private List<BudgetdetailBean.ResultsEntity> mList;
@@ -78,11 +79,15 @@ public class UserWalletAdapter
     } else if (1 == resultsEntity.getBudgetType()) {
       holder.tvMoneychange.setText("- " + resultsEntity.getBudegetDetailCash() + "元  ");
     }
+    holder.tvMoneychange.setOnClickListener(this);
   }
 
   @Override public int getItemCount() {
     return mList == null ? 0 : mList.size();
   }
+
+  @Override
+  public abstract void onClick(View v);
 
   static class UserWalletVH extends RecyclerView.ViewHolder {
 

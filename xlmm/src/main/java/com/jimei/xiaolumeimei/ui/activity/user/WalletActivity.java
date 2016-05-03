@@ -132,7 +132,12 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
             new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
     walletRcv.setPullRefreshEnabled(false);
 
-    adapter = new UserWalletAdapter(this);
+    adapter = new UserWalletAdapter(this) {
+      @Override
+      public void onClick(View v) {
+
+      }
+    };
     walletRcv.setAdapter(adapter);
 
     walletRcv.setLoadingListener(new XRecyclerView.LoadingListener() {
