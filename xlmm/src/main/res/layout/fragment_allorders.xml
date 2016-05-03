@@ -5,13 +5,15 @@
     android:layout_height="match_parent">
   <FrameLayout
     android:layout_width="fill_parent"
+      android:background="#F3F3F4"
     android:layout_height="fill_parent">
 
     <ListView
         android:id="@+id/all_orders_listview"
         android:layout_width="fill_parent"
         android:dividerHeight="30px"
-        android:divider="@color/greytow"
+        android:divider="#F3F3F4"
+        android:background="#F3F3F4"
         android:layout_height="fill_parent">
     </ListView>
 

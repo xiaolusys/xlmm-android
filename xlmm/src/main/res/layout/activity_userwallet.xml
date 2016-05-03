@@ -6,30 +6,10 @@
     android:background="#f3f3f4"
     android:orientation="vertical">
 
-  <android.support.design.widget.AppBarLayout
+  <com.jimei.xiaolumeimei.widget.XlmmTitleView
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:theme="@style/AppTheme.AppBarOverlay">
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-      <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_centerInParent="true"
-          android:layout_gravity="center"
-          android:text="钱包"
-          android:textColor="@android:color/white"
-          android:textSize="16sp"/>
-
-    </android.support.v7.widget.Toolbar>
-
-  </android.support.design.widget.AppBarLayout>
+      app:xlmm_title="钱包"/>
 
   <LinearLayout
       android:layout_width="match_parent"

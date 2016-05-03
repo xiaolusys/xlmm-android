@@ -332,9 +332,6 @@
             android:name=".ui.activity.xiaolumama.ImagePagerActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
-            android:name=".ui.activity.user.UserWithdrawCashActivity"
-            android:theme="@style/AppTheme.TransparentActivity" />
-        <activity
             android:name=".ui.activity.user.WxPubTwoDimenCodeActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
@@ -372,6 +369,12 @@
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".ui.activity.trade.LogisticsActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
+        <activity
+            android:name=".ui.activity.user.WalletDetailActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
+        <activity
+            android:name=".ui.activity.user.UserDrawCashActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
 
         <service
@@ -416,6 +419,8 @@
                 <action android:name="com.xiaomi.mipush.ERROR" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".ui.activity.user.DrawCashCompleteActivity"></activity>
     </application>
 
 </manifest>

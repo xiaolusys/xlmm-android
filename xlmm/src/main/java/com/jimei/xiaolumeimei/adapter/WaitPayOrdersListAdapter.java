@@ -103,7 +103,6 @@ public class WaitPayOrdersListAdapter extends BaseAdapter {
                 holder.mHorizontalScrollView = mHorizontalScrollView;
             }
             holder.position = position;
-
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();

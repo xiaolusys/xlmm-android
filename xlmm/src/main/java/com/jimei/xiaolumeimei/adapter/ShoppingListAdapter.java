@@ -101,7 +101,6 @@ public class ShoppingListAdapter
         double carryNum = resultsEntity.getCarryNum();
         if (carryNum >= 0) {
             holder.tichengCash.setText("+" + carryNum);
-            holder.tichengCash.setTextColor(mContext.getResources().getColor(R.color.b9));
         } else {
             holder.tichengCash.setText(carryNum + "");
             holder.tichengCash.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.jimei.xiaolumeimei.ui.activity.user.UserDrawCashActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_grey"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <com.jimei.xiaolumeimei.widget.XlmmTitleView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:xlmm_title="提现" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="我的余额:  "
+                android:textColor="@color/text_color_62"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_money"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="0元"
+                android:textColor="@color/text_color_62"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="全部提现"
+                android:textColor="@color/text_color_62"
+                android:textSize="14sp" />
+
+            <com.jimei.xiaolumeimei.widget.SmoothCheckBox
+                android:id="@+id/scb"
+                android:layout_width="40px"
+                android:layout_height="40px"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="12px"
+                app:color_checked="@color/colorAccent"
+                app:color_unchecked_stroke="@color/colorAccent" />
+
+        </LinearLayout>
+
+        <include layout="@layout/common_gap" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="金额(元):  "
+                android:textColor="@color/text_color_62"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/et_money"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:hint="请输入提现金额"
+                android:textCursorDrawable="@drawable/color_cursor"
+                android:inputType="numberDecimal"
+                android:shadowColor="@color/colorAccent"
+                android:textColor="@color/text_color_26"
+                android:textColorHint="#BBBBBB"
+                android:textSize="14sp" />
+
+
+        </LinearLayout>
+
+        <include layout="@layout/common_gap" />
+
+        <TextView
+            android:id="@+id/tv_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32px"
+            android:textColor="#FF3840"
+            android:textSize="13sp" />
+
+        <Button
+            android:id="@+id/btn_draw_cash"
+            android:layout_width="660px"
+            android:layout_height="80px"
+            android:layout_marginTop="34px"
+            android:background="@drawable/shape_common"
+            android:text="确认提现"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="34px"
+            android:text="提现金额将以微信红包形式，24小时内发至你绑定的微信账户"
+            android:textColor="#BBBBBB"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/btn_bind"
+            android:layout_width="660px"
+            android:layout_height="80px"
+            android:layout_marginTop="34px"
+            android:background="@drawable/shape_common"
+            android:text="绑定微信"
+            android:visibility="invisible"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+    </LinearLayout>
+</LinearLayout>

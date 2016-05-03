@@ -11,32 +11,70 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/ll_unused"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:padding="8dp"
-            android:paddingTop="@dimen/nav_header_vertical_spacing"
-            android:text="可用优惠券" />
+            android:orientation="vertical"
+            android:visibility="gone">
 
-        <com.jimei.xiaolumeimei.widget.NestedListView
-            android:id="@+id/lv_unused_coupon"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:padding="8dp"
+                android:paddingTop="@dimen/nav_header_vertical_spacing"
+                android:text="可使用优惠券" />
 
-        <TextView
-            android:layout_width="wrap_content"
+            <com.jimei.xiaolumeimei.widget.NestedListView
+                android:id="@+id/lv_unused_coupon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_used"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
 
-            android:layout_gravity="left"
-            android:padding="8dp"
-            android:text="已过期优惠券" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:padding="8dp"
+                android:paddingTop="@dimen/nav_header_vertical_spacing"
+                android:text="不可用优惠券" />
 
-        <com.jimei.xiaolumeimei.widget.NestedListView
-            android:id="@+id/lv_timeout_coupon"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"/>
+            <com.jimei.xiaolumeimei.widget.NestedListView
+                android:id="@+id/lv_used_coupon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_past"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:padding="8dp"
+                android:paddingTop="@dimen/nav_header_vertical_spacing"
+                android:text="已过期优惠券" />
+
+            <com.jimei.xiaolumeimei.widget.NestedListView
+                android:id="@+id/lv_timeout_coupon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
 
     </LinearLayout>
 </ScrollView>

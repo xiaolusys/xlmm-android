@@ -7,6 +7,7 @@ package com.jimei.xiaolumeimei.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -58,10 +59,9 @@ public class CouponListAdapter extends BaseAdapter {
 
     public void update(List<CouponBean.ResultsEntity> list, int coupon_type, String selected_couponid) {
 
-        Log.d(TAG,"dataSource.size "+ list.size());
+        Log.d(TAG, "dataSource.size " + list.size());
         mCouponTyp = coupon_type;
         mSelecteCouponid = selected_couponid;
-
         mList.addAll(list);
         notifyDataSetChanged();
     }
@@ -83,49 +83,46 @@ public class CouponListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Log.d(TAG,"getView ");
-
+        Log.d(TAG, "getView ");
         ViewHolder holder;
-
         if (convertView == null) {
-            holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.item_coupon, null);
-            if(mCouponTyp == XlmmConst.UNUSED_COUPON) {
-                convertView.setBackgroundResource(R.drawable.bg_img_coupon);
-            }
-            else if(mCouponTyp == XlmmConst.PAST_COUPON){
-                convertView.setBackgroundResource(R.drawable.bg_img_pastcoupon);
-            }
-
-            holder.tv_coupon_value = (TextView) convertView.findViewById(R.id.tv_coupon_value);
-            holder.tv_coupon_info = (TextView) convertView.findViewById(R.id.tv_coupon_info);
-            holder.tv_coupon_crttime = (TextView) convertView.findViewById(R.id.tv_coupon_crttime);
-            holder.tv_coupon_deadline = (TextView) convertView.findViewById(R.id.tv_coupon_deadline);
-            holder.tv_coupon_type = (TextView) convertView.findViewById(R.id.tv_coupon_type);
-            holder.tv_coupon_no = (TextView) convertView.findViewById(R.id.tv_coupon_no);
-            holder.img_selected= (ImageView) convertView.findViewById(R.id.img_selected);
-
+            holder = new ViewHolder(convertView);
             convertView.setTag(holder);
-        }
-        else{
+        } else {
             holder = (ViewHolder) convertView.getTag();
         }
-
-        holder.tv_coupon_value.setText("￥"+ Math.round(mList.get(position).getCoupon_value()*100)/100);
-        holder.tv_coupon_info.setText(mList.get(position).getTitle());
-        holder.tv_coupon_crttime.setText("使用期限"+mList.get(position).getCreated().replace("T"," "));
-        holder.tv_coupon_deadline.setText("至"+mList.get(position).getDeadline().replace("T"," "));
-        holder.tv_coupon_type.setText("使用范围"+mList.get(position).getCoupon_type_display());
-        holder.tv_coupon_no.setText("优惠编码"+mList.get(position).getCoupon_no());
-        JUtils.Log(TAG, "couponno= "+ mList.get(position).getId() + " selected couponno="+mSelecteCouponid);
-        if((mSelecteCouponid != null) && (! mSelecteCouponid.isEmpty())
-                && mSelecteCouponid.equals(Integer.toString(mList.get(position).getId()))){
-            holder.img_selected.setVisibility(View.VISIBLE);
+        if (mCouponTyp == XlmmConst.UNUSED_COUPON) {
+            holder.tv_coupon_value.setTextColor(Color.parseColor("#F05050"));
+            convertView.setBackgroundResource(R.drawable.bg_img_coupon);
+        } else if (mCouponTyp == XlmmConst.PAST_COUPON) {
+            holder.tv_coupon_value.setTextColor(Color.parseColor("#D8D8D8"));
+            holder.tv_coupon_info.setTextColor(Color.parseColor("#D8D8D8"));
+            holder.tv_coupon_crttime.setTextColor(Color.parseColor("#D8D8D8"));
+            holder.use_fee.setTextColor(Color.parseColor("#D8D8D8"));
+            convertView.setBackgroundResource(R.drawable.bg_img_pastcoupon);
+        } else if (mCouponTyp == XlmmConst.USED_COUPON) {
+            holder.tv_coupon_value.setTextColor(Color.parseColor("#4A4A4A"));
+            convertView.setBackgroundResource(R.drawable.bg_img_usedcoupon);
+        } else if (mCouponTyp == 3) {
+            holder.tv_coupon_value.setTextColor(Color.parseColor("#4A4A4A"));
+            convertView.setBackgroundResource(R.drawable.bg_img_dcoupon);
         }
-        else{
+        holder.tv_coupon_value.setText("￥" + Math.round(mList.get(position).getCoupon_value() * 100) / 100);
+        holder.tv_coupon_info.setText(mList.get(position).getCoupon_type_display());
+        holder.tv_coupon_crttime.setText("期限   " + mList.get(position).getCreated().replace("T", " ") + "   至   " + mList.get(position).getDeadline().replace("T", " "));
+        JUtils.Log(TAG, "couponno= " + mList.get(position).getId() + " selected couponno=" + mSelecteCouponid);
+        double fee = mList.get(position).getUse_fee();
+        if (fee > 0) {
+            String str = "满" + ((int) fee) + "元使用";
+            holder.use_fee.setText(str);
+        }
+        if ((mSelecteCouponid != null) && (!mSelecteCouponid.isEmpty())
+                && mSelecteCouponid.equals(Integer.toString(mList.get(position).getId()))) {
+            holder.img_selected.setVisibility(View.VISIBLE);
+        } else {
             holder.img_selected.setVisibility(View.INVISIBLE);
         }
-
         return convertView;
     }
 
@@ -133,10 +130,16 @@ public class CouponListAdapter extends BaseAdapter {
         TextView tv_coupon_value;
         TextView tv_coupon_info;
         TextView tv_coupon_crttime;
-        TextView tv_coupon_deadline;
-        TextView tv_coupon_type;
-        TextView tv_coupon_no;
         ImageView img_selected;
+        TextView use_fee;
+
+        public ViewHolder(View itemView) {
+            tv_coupon_value = (TextView) itemView.findViewById(R.id.tv_coupon_value);
+            tv_coupon_info = (TextView) itemView.findViewById(R.id.tv_coupon_info);
+            tv_coupon_crttime = (TextView) itemView.findViewById(R.id.tv_coupon_crttime);
+            img_selected = (ImageView) itemView.findViewById(R.id.img_selected);
+            use_fee = (TextView) itemView.findViewById(R.id.use_fee);
+        }
     }
 
 
