@@ -455,7 +455,9 @@ public class MainActivity extends BaseActivity
                             }
 
                             if (postBean.getCategorys() != null) {
+
                                 List<PortalBean.CategorysBean> categorys = postBean.getCategorys();
+
                                 Glide.with(MainActivity.this)
                                         .load(categorys.get(0).getCat_img())
                                         .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -463,6 +465,9 @@ public class MainActivity extends BaseActivity
                                         .centerCrop()
                                         .override(DisplayUtils.getScreenW(MainActivity.this) / 2, 330)
                                         .into(childImage);
+
+//                                ViewUtils.loadImageWithOkhttp(categorys.get(0).getCat_img(), DisplayUtils.getScreenW(MainActivity.this) / 2, childImage);
+//                                ViewUtils.loadImageWithOkhttp(categorys.get(1).getCat_img(), DisplayUtils.getScreenW(MainActivity.this) / 2, ladyImage);
 
                                 Glide.with(MainActivity.this)
                                         .load(categorys.get(1).getCat_img())
@@ -1132,7 +1137,7 @@ public class MainActivity extends BaseActivity
         }
     }
 
-    public static LinearLayout.LayoutParams getLayoutParams(Bitmap bitmap,int screenWidth){
+    public static LinearLayout.LayoutParams getLayoutParams(Bitmap bitmap, int screenWidth) {
 
         float rawWidth = bitmap.getWidth();
         float rawHeight = bitmap.getHeight();
@@ -1140,15 +1145,15 @@ public class MainActivity extends BaseActivity
         float width = 0;
         float height = 0;
 
-        if(rawWidth > screenWidth){
-            height = (rawHeight/rawWidth)*screenWidth;
+        if (rawWidth > screenWidth) {
+            height = (rawHeight / rawWidth) * screenWidth;
             width = screenWidth;
-        }else{
+        } else {
             width = rawWidth;
             height = rawHeight;
         }
 
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams((int)width, (int)height);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams((int) width, (int) height);
 
         return layoutParams;
     }

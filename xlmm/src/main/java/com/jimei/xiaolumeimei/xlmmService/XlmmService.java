@@ -149,7 +149,7 @@ public interface XlmmService {
             @Query("page_size") int page_size);
 
     //同款列表
-    @GET("/rest/v1products/modellist/{model_id}")
+    @GET("/rest/v1/products/modellist/{model_id}")
     Observable<List<ProductBean>> getTongKuanList(
             @Path("model_id") int model_id);
 
