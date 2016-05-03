@@ -28,10 +28,11 @@
             android:textSize="14sp" />
 
         <TextView
+            android:id="@+id/tv_money"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10px"
-            android:text="0"
+            android:text=""
             android:textColor="#F5A623"
             android:textSize="32sp" />
 
@@ -103,10 +104,11 @@
                     android:textSize="13sp" />
 
                 <TextView
+                    android:id="@+id/date_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8px"
-                    android:text="2016-04-05"
+                    android:text=""
                     android:textColor="#9b9b9b"
                     android:textSize="13sp" />
             </LinearLayout>
@@ -127,10 +129,11 @@
                     android:textSize="13sp" />
 
                 <TextView
+                    android:id="@+id/date_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8px"
-                    android:text="2016-04-05"
+                    android:text=""
                     android:textColor="#9b9b9b"
                     android:textSize="13sp" />
             </LinearLayout>
@@ -151,10 +154,11 @@
                     android:textSize="13sp" />
 
                 <TextView
+                    android:id="@+id/date_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8px"
-                    android:text="2016-04-05"
+                    android:text=""
                     android:textColor="#9b9b9b"
                     android:textSize="13sp" />
             </LinearLayout>
@@ -180,74 +184,83 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="账单类型:   "
                 android:textColor="#626262"
-                android:textSize="14sp"
-                android:text="账单类型:   "/>
-            
+                android:textSize="14sp" />
+
             <TextView
+                android:id="@+id/tv_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="#9B9B9B"/>
+                android:textColor="#9B9B9B"
+                android:textSize="14sp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="35px"
+            android:layout_marginTop="50px"
             android:orientation="horizontal">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="创建时间:   "
                 android:textColor="#626262"
-                android:textSize="14sp"
-                android:text="创建时间:   "/>
+                android:textSize="14sp" />
 
             <TextView
+                android:id="@+id/tv_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="#9B9B9B"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="35px"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#626262"
-                android:textSize="14sp"
-                android:text="交易单号:   "/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="#9B9B9B"/>
+                android:textColor="#9B9B9B"
+                android:textSize="14sp" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="35px"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#626262"
-                android:textSize="14sp"
-                android:text="转入账户:   "/>
+            android:layout_marginTop="50px"
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="#9B9B9B"/>
+                android:text="交易单号:   "
+                android:textColor="#626262"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#9B9B9B"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50px"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="转入账户:   "
+                android:textColor="#626262"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_account"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#9B9B9B"
+                android:textSize="14sp" />
 
         </LinearLayout>
 
