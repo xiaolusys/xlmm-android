@@ -40,6 +40,11 @@ import rx.schedulers.Schedulers;
 public class XlmmApp extends MultiDexApplication {
 
   public static OkHttpClient client;
+
+  public static Context getmContext() {
+    return mContext;
+  }
+
   private static Context mContext;
   private static XiaoMiMessageReceiver.XiaoMiPushHandler handler = null;
   private SharedPreferences cookiePrefs;

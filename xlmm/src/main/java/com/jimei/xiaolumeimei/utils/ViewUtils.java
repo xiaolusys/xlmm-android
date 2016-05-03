@@ -17,6 +17,7 @@ package com.jimei.xiaolumeimei.utils;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.Paint.FontMetrics;
 import android.support.v4.app.Fragment;
@@ -38,11 +39,16 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.glidemoudle.CropCircleTransformation;
 import com.jimei.xiaolumeimei.glidemoudle.GlideRoundTransform;
 import com.jude.utils.JUtils;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.BitmapCallback;
+
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
 
 /**
  * ViewUtils
@@ -458,4 +464,46 @@ public final class ViewUtils {
           .centerCrop().into(img);
     }
   }
+
+  public static void loadImageWithOkhttp(String picpath,int width,ImageView imageView){
+    OkHttpUtils.get().url(picpath).build()
+            .execute(new BitmapCallback() {
+              @Override
+              public void onError(Call call, Exception e) {
+                e.printStackTrace();
+              }
+
+              @Override
+              public void onResponse(Bitmap response) {
+                if (null != response) {
+                  LinearLayout.LayoutParams layoutParams = getLayoutParams(response, width);
+                  imageView.setLayoutParams(layoutParams);
+                  imageView.setImageBitmap(response);
+                }
+              }
+            });
+  }
+
+
+  public static LinearLayout.LayoutParams getLayoutParams(Bitmap bitmap,int screenWidth){
+
+    float rawWidth = bitmap.getWidth();
+    float rawHeight = bitmap.getHeight();
+
+    float width = 0;
+    float height = 0;
+
+    if(rawWidth > screenWidth){
+      height = (rawHeight/rawWidth)*screenWidth;
+      width = screenWidth;
+    }else{
+      width = rawWidth;
+      height = rawHeight;
+    }
+
+    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams((int)width, (int)height);
+
+    return layoutParams;
+  }
+
 }

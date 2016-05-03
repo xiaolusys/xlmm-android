@@ -2,7 +2,8 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
   <com.jimei.xiaolumeimei.widget.banner.Tricks.InfiniteViewPager
       android:id="@+id/daimajia_slider_viewpager"
