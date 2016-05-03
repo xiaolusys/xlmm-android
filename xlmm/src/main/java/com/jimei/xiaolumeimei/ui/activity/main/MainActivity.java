@@ -28,8 +28,6 @@ import android.widget.TextView;
 
 import butterknife.Bind;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.BrandlistAdapter;
 import com.jimei.xiaolumeimei.base.BaseActivity;
@@ -44,6 +42,7 @@ import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.model.UserNewModel;
+import com.jimei.xiaolumeimei.ui.activity.product.BrandListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ChildListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.LadyListActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllOrdersActivity;
@@ -382,14 +381,15 @@ public class MainActivity extends BaseActivity
                                 DefaultSliderView textSliderView = new DefaultSliderView(MainActivity
                                         .this);
                                 // initialize a SliderLayout
-                                textSliderView.image(name)
+                                textSliderView.image(name + POST_URL)
                                         .setScaleType(BaseSliderView.ScaleType.CenterInside);
                                 //add your extra information
                                 textSliderView.bundle(new Bundle());
                                 textSliderView.getBundle().putString("extra", map.get(name));
                                 mSliderLayout.addSlider(textSliderView);
                                 mSliderLayout.setDuration(3000);
-                                mSliderLayout.setCustomIndicator(mPagerIndicator);
+//                                mSliderLayout.setCustomIndicator(mPagerIndicator);
+                                mSliderLayout.setPresetIndicator(SliderLayout.PresetIndicators.Left_Bottom);
                                 textSliderView.setOnSliderClickListener(
                                         new BaseSliderView.OnSliderClickListener() {
                                             @Override
@@ -458,24 +458,24 @@ public class MainActivity extends BaseActivity
 
                                 List<PortalBean.CategorysBean> categorys = postBean.getCategorys();
 
-                                Glide.with(MainActivity.this)
-                                        .load(categorys.get(0).getCat_img())
-                                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                        //.placeholder(R.drawable.parceholder)
-                                        .centerCrop()
-                                        .override(DisplayUtils.getScreenW(MainActivity.this) / 2, 330)
-                                        .into(childImage);
+//                                Glide.with(MainActivity.this)
+//                                        .load(categorys.get(0).getCat_img())
+//                                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                                        //.placeholder(R.drawable.parceholder)
+//                                        .centerCrop()
+//                                        .override(DisplayUtils.getScreenW(MainActivity.this) / 2, 330)
+//                                        .into(childImage);
 
-//                                ViewUtils.loadImageWithOkhttp(categorys.get(0).getCat_img(), DisplayUtils.getScreenW(MainActivity.this) / 2, childImage);
-//                                ViewUtils.loadImageWithOkhttp(categorys.get(1).getCat_img(), DisplayUtils.getScreenW(MainActivity.this) / 2, ladyImage);
+                                ViewUtils.loadImageWithOkhttp(categorys.get(1).getCat_img(), MainActivity.this, ladyImage);
+                                ViewUtils.loadImageWithOkhttp(categorys.get(0).getCat_img(), MainActivity.this, childImage);
 
-                                Glide.with(MainActivity.this)
-                                        .load(categorys.get(1).getCat_img())
-                                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                        //.placeholder(R.drawable.parceholder)
-                                        .centerCrop()
-                                        .override(DisplayUtils.getScreenW(MainActivity.this) / 2, 330)
-                                        .into(ladyImage);
+//                                Glide.with(MainActivity.this)
+//                                        .load(categorys.get(1).getCat_img())
+//                                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                                        //.placeholder(R.drawable.parceholder)
+//                                        .centerCrop()
+//                                        .override(DisplayUtils.getScreenW(MainActivity.this) / 2, 330)
+//                                        .into(ladyImage);
                             }
 
                             List<BrandlistAdapter> brandlistAdapters = new ArrayList<>();
@@ -550,6 +550,29 @@ public class MainActivity extends BaseActivity
                                                         }
                                                     }
                                                 });
+
+                                        final int finalI1 = i;
+                                        brandViews.get(i).setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                Intent intent = new Intent(MainActivity.this, BrandListActivity.class);
+                                                Bundle bundle = new Bundle();
+                                                bundle.putInt("id", brandpromotionEntities.get(finalI1).getId());
+                                                intent.putExtras(bundle);
+                                                startActivity(intent);
+                                            }
+                                        });
+
+                                        brandlistAdapters.get(i).setListener(new BrandlistAdapter.itemOnclickListener() {
+                                            @Override
+                                            public void itemClick() {
+                                                Intent intent = new Intent(MainActivity.this, BrandListActivity.class);
+                                                Bundle bundle = new Bundle();
+                                                bundle.putInt("id", brandpromotionEntities.get(finalI1).getId());
+                                                intent.putExtras(bundle);
+                                                startActivity(intent);
+                                            }
+                                        });
                                     }
                                 }
                             } else {
@@ -581,18 +604,29 @@ public class MainActivity extends BaseActivity
                                                 public void onResponse(Bitmap response) {
                                                     int maxHeight = dp2px(MainActivity.this, 300);
                                                     if (response != null) {
-                                                        int height =
-                                                                (int) ((float) ((response.getWidth() + 10) * postActivityBean.size()) / response.getWidth()
-                                                                        * response.getHeight());
-                                                        if (height > maxHeight) height = maxHeight;
-                                                        LinearLayout.LayoutParams layoutParams =
-                                                                new LinearLayout.LayoutParams(
-                                                                        LinearLayout.LayoutParams.MATCH_PARENT, height);
-                                                        layoutParams.setMargins(0, dp2px(MainActivity.this, 10), 0,
-                                                                0);
+//                                                        int height =
+//                                                                (int) ((float) ((response.getWidth() + 10) * postActivityBean.size()) / response.getWidth()
+//                                                                        * response.getHeight());
+//                                                        if (height > maxHeight) height = maxHeight;
+//                                                        LinearLayout.LayoutParams layoutParams =
+//                                                                new LinearLayout.LayoutParams(
+//                                                                        LinearLayout.LayoutParams.MATCH_PARENT, height);
+//                                                        layoutParams.setMargins(0, dp2px(MainActivity.this, 10), 0,
+//                                                                0);
 
 //                                                        LinearLayout.LayoutParams layoutParams = getLayoutParams(response, DisplayUtils.getScreenW(MainActivity.this));
-                                                        imageViewList.get(finalI).setLayoutParams(layoutParams);
+                                                        imageViewList.get(finalI).setAdjustViewBounds(true);
+
+                                                        int screenWidth = DisplayUtils.getScreenW(MainActivity.this);
+                                                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(screenWidth, LinearLayout.LayoutParams.WRAP_CONTENT);
+//                                                        lp.width = screenWidth;
+//                                                        lp.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+                                                        imageViewList.get(finalI).setLayoutParams(lp);
+
+                                                        imageViewList.get(finalI).setMaxWidth(screenWidth);
+                                                        imageViewList.get(finalI).setMaxHeight(screenWidth * 5);
+
+//                                                        imageViewList.get(finalI).setLayoutParams(layoutParams);
                                                         imageViewList.get(finalI).setImageBitmap(response);
                                                         if (postActivityBean.get(finalI)
                                                                 .getAct_type()

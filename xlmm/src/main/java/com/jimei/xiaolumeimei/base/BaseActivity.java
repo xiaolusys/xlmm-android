@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.base;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import butterknife.ButterKnife;
@@ -17,7 +18,7 @@ import rx.subscriptions.CompositeSubscription;
  * <p/>
  * Copyright 2015年 上海己美. All rights reserved.
  */
-public abstract class BaseActivity extends AutoLayoutActivity {
+public abstract class BaseActivity extends AutoLayoutActivity{
 
   private CompositeSubscription mCompositeSubscription;
 
@@ -43,7 +44,7 @@ public abstract class BaseActivity extends AutoLayoutActivity {
     super.onCreate(savedInstanceState);
 
     setContentView(provideContentViewId());
-    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent),0);
+//    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent),0);
     ButterKnife.bind(this);
 
     initView();
