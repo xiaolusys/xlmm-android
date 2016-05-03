@@ -1,82 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/llayout_order_item"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:background="@color/white_10"
-    android:id="@+id/llayout_order_item">
+    android:orientation="vertical">
 
-  <RelativeLayout
-      android:layout_width="match_parent"
-      android:layout_height="65px"
-      android:gravity="center_vertical">
+    <include layout="@layout/common_gap" />
 
-    <TextView
-        android:id="@+id/tx1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="订单状态"
-        android:textSize="13sp"
-        android:gravity="center_vertical"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="false"
-        android:padding="5dp"
-        android:layout_marginLeft="5dp"
-        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="65px"
+        android:gravity="center_vertical">
 
-    <TextView
-        android:id="@+id/tx_order_state"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:textSize="13sp"
-        android:textColor="@color/colorAccent"
-        android:gravity="center_vertical"
-        android:layout_alignParentRight="true"
-        android:padding="5dp"
-        android:layout_marginRight="5dp"
-        />
+        <TextView
+            android:id="@+id/tx1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="false"
+            android:layout_marginLeft="5dp"
+            android:gravity="center_vertical"
+            android:padding="5dp"
+            android:text="订单状态"
+            android:textSize="13sp" />
 
-    <TextView
-        android:id="@+id/tx_order_left_paytime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="剩余时间"
-        android:textSize="13sp"
-        android:textColor="@color/colorAccent"
-        android:gravity="center_vertical"
-        android:padding="4dp"
-        android:layout_marginLeft="275px"
-        android:layout_alignParentTop="false"
-        android:layout_toRightOf="@+id/tx_order_state"
-        android:visibility="invisible"
-        />
+        <TextView
+            android:id="@+id/tx_order_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:gravity="center_vertical"
+            android:padding="5dp"
+            android:text=""
+            android:textColor="@color/colorAccent"
+            android:textSize="13sp" />
 
-    <cn.iwgang.countdownview.CountdownView
-        android:id="@+id/cv_lefttime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center_vertical"
-        app:isShowMinute="true"
-        app:isShowSecond="true"
-        app:isShowMillisecond="false"
-        app:suffixGravity="center"
-        app:suffixTextColor="#000000"
-        app:suffixTextSize="12sp"
-        app:timeTextColor="@color/colorAccent"
-        app:timeTextSize="12sp"
-        app:isShowTimeBgDivisionLine="false"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:layout_toRightOf="@+id/tx_order_left_paytime"
-        android:visibility="invisible"
-        />
+        <TextView
+            android:id="@+id/tx_order_left_paytime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="false"
+            android:layout_marginLeft="275px"
+            android:layout_toRightOf="@+id/tx_order_state"
+            android:gravity="center_vertical"
+            android:padding="4dp"
+            android:text="剩余时间"
+            android:textColor="@color/colorAccent"
+            android:textSize="13sp"
+            android:visibility="invisible" />
+
+        <cn.iwgang.countdownview.CountdownView
+            android:id="@+id/cv_lefttime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_toRightOf="@+id/tx_order_left_paytime"
+            android:gravity="center_vertical"
+            android:visibility="invisible"
+            app:isShowMillisecond="false"
+            app:isShowMinute="true"
+            app:isShowSecond="true"
+            app:isShowTimeBgDivisionLine="false"
+            app:suffixGravity="center"
+            app:suffixTextColor="#000000"
+            app:suffixTextSize="12sp"
+            app:timeTextColor="@color/colorAccent"
+            app:timeTextSize="12sp" />
 
 
+    </RelativeLayout>
 
-  </RelativeLayout>
-  <include layout="@layout/common_gap"/>
+    <include layout="@layout/common_gap" />
 
 </LinearLayout>

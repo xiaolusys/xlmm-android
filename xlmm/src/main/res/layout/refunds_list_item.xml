@@ -59,7 +59,7 @@
                 android:layout_marginLeft="20px"
                 android:gravity="center"
                 android:text="可退金额："
-                android:textSize="15sp" />
+                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/tx_refundfee"
@@ -71,7 +71,7 @@
                 android:layout_marginRight="20px"
                 android:gravity="center"
                 android:text="￥0"
-                android:textSize="15sp" />
+                android:textSize="13sp" />
         </RelativeLayout>
 
         <include layout="@layout/common_gap" />

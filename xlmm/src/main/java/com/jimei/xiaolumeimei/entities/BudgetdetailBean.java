@@ -1,6 +1,8 @@
 package com.jimei.xiaolumeimei.entities;
 
 import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -63,7 +65,7 @@ public class BudgetdetailBean {
     return mResults;
   }
 
-  public static class ResultsEntity {
+  public static class ResultsEntity  implements Serializable{
     @SerializedName("desc") private String mDesc;
     @SerializedName("budget_type") private int mBudgetType;
     @SerializedName("budget_log_type") private String mBudgetLogType;
