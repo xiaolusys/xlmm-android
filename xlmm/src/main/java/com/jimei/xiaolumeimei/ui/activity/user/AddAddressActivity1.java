@@ -15,8 +15,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
@@ -24,6 +23,9 @@ import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.widget.citypicker.CityPicker;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -57,6 +59,7 @@ public class AddAddressActivity1 extends BaseSwipeBackCompatActivity
   private boolean isDefault;
   private String city_string;
   private String clearaddressa;
+  private String defaulta;
 
   @Override protected void setListener() {
     save.setOnClickListener(this);
@@ -134,22 +137,17 @@ public class AddAddressActivity1 extends BaseSwipeBackCompatActivity
         if (checkInput(receiver_name, receiver_mobile, city_string, clearaddressa)) {
           Subscription subscribe = AddressModel.getInstance()
               .create_address(receiver_state, receiver_city, receiver_district,
-                  clearaddressa, receiver_name, receiver_mobile)
+                  clearaddressa, receiver_name, receiver_mobile,defaulta)
               .subscribeOn(Schedulers.io())
               .subscribe(new ServiceResponse<AddressResultBean>() {
                 @Override public void onNext(AddressResultBean addressResultBean) {
                   if (addressResultBean != null) {
-                    if (addressResultBean.isRet()) {
+                    if (addressResultBean.getCode()==0) {
 
-                      if (isDefault) {
                         startActivity(
                             new Intent(AddAddressActivity1.this, AddressActivity.class));
                         AddAddressActivity1.this.finish();
-                      } else {
-                        startActivity(
-                            new Intent(AddAddressActivity1.this, AddressActivity.class));
-                        AddAddressActivity1.this.finish();
-                      }
+
                     }
                   }
                 }
@@ -202,8 +200,9 @@ public class AddAddressActivity1 extends BaseSwipeBackCompatActivity
       case R.id.switch_button:
         if (isChecked) {
           isDefault = true;
+          defaulta = "true";
         } else {
-          isDefault = false;
+          defaulta = "false";
         }
 
         break;

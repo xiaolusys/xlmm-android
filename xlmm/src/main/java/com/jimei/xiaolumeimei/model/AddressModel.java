@@ -55,22 +55,22 @@ public class AddressModel {
   //创建新的地址
   public Observable<AddressResultBean> create_address(String receiver_state,
       String receiver_city, String receiver_district, String receiver_address,
-      String receiver_name, String receiver_mobile) {
+      String receiver_name, String receiver_mobile,String defaulta) {
 
     return XlmmRetrofitClient.getService()
         .create_address(receiver_state, receiver_city, receiver_district,
-            receiver_address, receiver_name, receiver_mobile)
+            receiver_address, receiver_name, receiver_mobile,defaulta)
         .compose(new DefaultTransform<>());
   }
 
   //更新地址
   public Observable<AddressResultBean> update_address(String id,String receiver_state,
       String receiver_city, String receiver_district, String receiver_address,
-      String receiver_name, String receiver_mobile) {
+      String receiver_name, String receiver_mobile,String defalut) {
 
     return XlmmRetrofitClient.getService()
         .update_address(id, receiver_state, receiver_city, receiver_district,
-            receiver_address, receiver_name, receiver_mobile)
+            receiver_address, receiver_name, receiver_mobile,defalut)
         .compose(new DefaultTransform<>());
   }
 }

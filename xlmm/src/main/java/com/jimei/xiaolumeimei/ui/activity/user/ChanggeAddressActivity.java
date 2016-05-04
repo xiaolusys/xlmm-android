@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.SwitchCompat;
-import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import butterknife.Bind;
+
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
@@ -23,6 +22,8 @@ import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.widget.citypicker.CityPicker;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+
+import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -44,7 +45,6 @@ public class ChanggeAddressActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.delete) Button delete;
   @Bind(R.id.main) LinearLayout main;
   private String id;
-  private boolean isDefault;
   private PopupWindow popupWindow;
   private View view;
   private CityPicker cityPicker;
@@ -58,6 +58,7 @@ public class ChanggeAddressActivity extends BaseSwipeBackCompatActivity
   private String receiver_address;
   private String receiver_name;
   private String receiver_mobile;
+  private String defalut;
 
   @Override protected void setListener() {
     save.setOnClickListener(this);
@@ -145,33 +146,36 @@ public class ChanggeAddressActivity extends BaseSwipeBackCompatActivity
         if (checkInput(receiver_name, receiver_mobile, city_string, clearaddressa)) {
           Subscription subscribe = AddressModel.getInstance()
               .update_address(id, receiver_state, receiver_city, receiver_district,
-                  clearaddressa, receiver_name, receiver_mobile)
+                  clearaddressa, receiver_name, receiver_mobile,defalut)
               .subscribeOn(Schedulers.io())
               .subscribe(new ServiceResponse<AddressResultBean>() {
                 @Override public void onNext(AddressResultBean addressResultBean) {
                   if (addressResultBean != null) {
-                    if (addressResultBean.isRet()) {
-                      if (isDefault) {
-                        Subscription subscribe1 = AddressModel.getInstance()
-                            .change_default(id)
-                            .subscribeOn(Schedulers.io())
-                            .subscribe(new ServiceResponse<AddressResultBean>() {
-                              @Override
-                              public void onNext(AddressResultBean addressResultBean1) {
-                                if (addressResultBean1 != null
-                                    && addressResultBean1.isRet()) {
-                                  //startActivity(new Intent(ChanggeAddressActivity.this,
-                                  //    AddressActivity.class));
-                                  finish();
-                                }
-                              }
-                            });
-                        addSubscription(subscribe1);
-                      } else {
-                        //startActivity(new Intent(ChanggeAddressActivity.this,
-                        //    AddressActivity.class));
-                        finish();
-                      }
+                    if (addressResultBean.getCode()==0) {
+
+                      JUtils.Toast("修改成功");
+                      finish();
+//                      if (isDefault) {
+//                        Subscription subscribe1 = AddressModel.getInstance()
+//                            .change_default(id)
+//                            .subscribeOn(Schedulers.io())
+//                            .subscribe(new ServiceResponse<AddressResultBean>() {
+//                              @Override
+//                              public void onNext(AddressResultBean addressResultBean1) {
+//                                if (addressResultBean1 != null
+//                                    && addressResultBean1.isRet()) {
+//                                  //startActivity(new Intent(ChanggeAddressActivity.this,
+//                                  //    AddressActivity.class));
+//                                  finish();
+//                                }
+//                              }
+//                            });
+//                        addSubscription(subscribe1);
+//                      } else {
+//                        //startActivity(new Intent(ChanggeAddressActivity.this,
+//                        //    AddressActivity.class));
+//                        finish();
+//                      }
                     }
                   }
                 }
@@ -239,9 +243,9 @@ public class ChanggeAddressActivity extends BaseSwipeBackCompatActivity
     switch (buttonView.getId()) {
       case R.id.switch_button:
         if (isChecked) {
-          isDefault = true;
+          defalut = "true";
         } else {
-          isDefault = false;
+          defalut = "false";
         }
 
         break;
