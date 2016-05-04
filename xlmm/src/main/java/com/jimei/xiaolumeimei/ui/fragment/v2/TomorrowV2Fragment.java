@@ -21,19 +21,15 @@ import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.iwgang.countdownview.CountdownView;
-import rx.Observable;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -58,6 +54,7 @@ public class TomorrowV2Fragment extends BaseFragment {
     private View view;
     private Subscription subscribe2;
     private CountdownView countTime;
+    private String left;
 
     public static TomorrowV2Fragment newInstance(String title) {
         TomorrowV2Fragment tomorrowV2Fragment = new TomorrowV2Fragment();
@@ -75,54 +72,43 @@ public class TomorrowV2Fragment extends BaseFragment {
 
 
     @Override
-    protected View initViews(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    protected View initViews(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_tomorrorv2, container, false);
         ButterKnife.bind(this, view);
         initViews();
 
         return view;
     }
-    private long calcLeftTime() {
-        Date now = new Date();
-        Date nextDay14PM = new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(nextDay14PM);
-        calendar.add(Calendar.DATE, 1);
-        calendar.set(Calendar.HOUR_OF_DAY, 14);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        nextDay14PM = calendar.getTime();
-        long left;
-        if (nextDay14PM.getTime() - now.getTime() > 0) {
-            left = nextDay14PM.getTime() - now.getTime();
-            return left;
-        } else {
-            return 0;
-        }
-    }
+
     @Override
     protected void initData() {
         load();
-        subscribe2 = Observable.timer(1, 1, TimeUnit.SECONDS)
-                .onBackpressureDrop()
-                .map(aLong -> calcLeftTime())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Long>() {
-                    @Override public void call(Long aLong) {
-                        if (aLong > 0) {
-                            countTime.updateShow(aLong);
-                        } else {
-                            countTime.setVisibility(View.INVISIBLE);
-                        }
-                    }
-                }, Throwable::printStackTrace);
+
     }
 
     @Override
     protected void setDefaultFragmentTitle(String title) {
 
     }
+
+    private long calcLeftTime(String crtTime) {
+        long left = 0;
+        Date now = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            crtTime = crtTime.replace("T", " ");
+            Date crtdate = format.parse(crtTime);
+            if (crtdate.getTime() - now.getTime() > 0) {
+                left = crtdate.getTime() - now.getTime();
+            }
+        } catch (Exception e) {
+
+        }
+
+        return left;
+    }
+
 
     private void load() {
         showIndeterminateProgressDialog(false);
@@ -138,13 +124,16 @@ public class TomorrowV2Fragment extends BaseFragment {
 
                     @Override
                     public void onNext(ProductListBean productListBean) {
+
                         try {
+
                             if (productListBean != null) {
                                 List<ProductListBean.ResultsEntity> results =
                                         productListBean.getResults();
                                 totalPages = productListBean.getCount() / page_size;
                                 list.addAll(results);
                                 mTodayAdapter.update(list);
+                                countTime.updateShow(calcLeftTime(productListBean.getDownshelfDeadline()));
                             }
                         } catch (Exception ex) {
                         }
@@ -153,22 +142,32 @@ public class TomorrowV2Fragment extends BaseFragment {
                     @Override
                     public void onCompleted() {
                         super.onCompleted();
+                        //loading.post(loading::stop);
                         hideIndeterminateProgressDialog();
                     }
                 });
-    }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        initViews();
+//        subscribe2 = Observable.timer(1, 1, TimeUnit.SECONDS)
+//                .onBackpressureDrop()
+//                .map(aLong -> calcLeftTime(left))
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Action1<Long>() {
+//                    @Override
+//                    public void call(Long aLong) {
+//                        if (aLong > 0) {
+//                            countTime.updateShow(aLong);
+//                        } else {
+//                            countTime.setVisibility(View.INVISIBLE);
+//                        }
+//                    }
+//                }, Throwable::printStackTrace);
     }
 
     private void initViews() {
-        head = LayoutInflater.from(getActivity())
-                .inflate(R.layout.today_poster_header,
-                        (ViewGroup) view.findViewById(R.id.head_today), false);
 
+        head = LayoutInflater.from(getActivity())
+                .inflate(R.layout.tomorrow_poster_header,
+                        (ViewGroup) view.findViewById(R.id.head_today), false);
         countTime = (CountdownView) head.findViewById(R.id.countTime);
         GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
         //manager.setOrientation(GridLayoutManager.VERTICAL);
@@ -184,7 +183,6 @@ public class TomorrowV2Fragment extends BaseFragment {
         xRecyclerView.setPullRefreshEnabled(false);
         mTodayAdapter = new TodayAdapter(this, getActivity());
         xRecyclerView.addHeaderView(head);
-
         xRecyclerView.setAdapter(mTodayAdapter);
 
         xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
@@ -247,7 +245,6 @@ public class TomorrowV2Fragment extends BaseFragment {
                 });
     }
 
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -305,6 +302,4 @@ public class TomorrowV2Fragment extends BaseFragment {
             subscribe3.unsubscribe();
         }
     }
-
-
 }

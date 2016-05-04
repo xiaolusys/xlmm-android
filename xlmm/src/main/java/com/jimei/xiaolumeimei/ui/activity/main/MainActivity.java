@@ -411,37 +411,39 @@ public class MainActivity extends BaseActivity
                                                             intent.putExtras(bundle);
                                                             startActivity(intent);
                                                         } else {
-                                                            if (jump_info.getType() == XlmmConst.JUMP_PROMOTE_TODAY) {
-                                                                intent =
-                                                                        new Intent(MainActivity.this, MainActivity.class);
-                                                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                                intent.putExtra("fragment", 1);
-                                                                startActivity(intent);
-                                                                finish();
-                                                            } else if (jump_info.getType()
-                                                                    == XlmmConst.JUMP_PROMOTE_PREVIOUS) {
-                                                                intent =
-                                                                        new Intent(MainActivity.this, MainActivity.class);
-                                                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                                intent.putExtra("fragment", 2);
-                                                                startActivity(intent);
-                                                                finish();
-                                                            } else if (jump_info.getType()
+//                                                            if (jump_info.getType() == XlmmConst.JUMP_PROMOTE_TODAY) {
+//                                                                intent =
+//                                                                        new Intent(MainActivity.this, MainActivity.class);
+//                                                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                                                                intent.putExtra("fragment", 1);
+//                                                                startActivity(intent);
+//                                                                finish();
+//                                                            } else if (jump_info.getType()
+//                                                                    == XlmmConst.JUMP_PROMOTE_PREVIOUS) {
+//                                                                intent =
+//                                                                        new Intent(MainActivity.this, MainActivity.class);
+//                                                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                                                                intent.putExtra("fragment", 2);
+//                                                                startActivity(intent);
+//                                                                finish();
+//                                                            } else
+
+                                                            if (jump_info.getType()
                                                                     == XlmmConst.JUMP_PRODUCT_CHILDLIST) {
                                                                 intent =
-                                                                        new Intent(MainActivity.this, MainActivity.class);
-                                                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                                intent.putExtra("fragment", 3);
+                                                                        new Intent(MainActivity.this, ChildListActivity.class);
+//                                                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                                                                intent.putExtra("fragment", 3);
                                                                 startActivity(intent);
-                                                                finish();
+//                                                                finish();
                                                             } else if (jump_info.getType()
                                                                     == XlmmConst.JUMP_PRODUCT_LADYLIST) {
                                                                 intent =
-                                                                        new Intent(MainActivity.this, MainActivity.class);
-                                                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                                intent.putExtra("fragment", 4);
+                                                                        new Intent(MainActivity.this, LadyListActivity.class);
+//                                                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                                                                intent.putExtra("fragment", 4);
                                                                 startActivity(intent);
-                                                                finish();
+//                                                                finish();
                                                             } else {
                                                                 JumpUtils.push_jump_proc(MainActivity.this, extra);
                                                             }
