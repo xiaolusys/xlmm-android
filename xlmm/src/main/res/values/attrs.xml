@@ -272,4 +272,14 @@
     <attr name="xlmm_title" format="string"/>
   </declare-styleable>
 
+  <declare-styleable name="BrandView">
+    <attr name="brand_des" format="string"/>
+  </declare-styleable>
+
+
+  //适配tablayout高度问题初步
+  <declare-styleable name="AutoTabLayout">
+    <attr name="auto_textSize_base_width" format="boolean"></attr>
+  </declare-styleable>
+
 </resources>

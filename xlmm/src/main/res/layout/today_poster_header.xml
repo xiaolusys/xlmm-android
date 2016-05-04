@@ -4,27 +4,59 @@
     android:id="@+id/head_today"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    >
+    android:gravity="center">
+
+    <TextView
+        android:textStyle="bold"
+        android:textColor="#A0A0A0"
+        android:textSize="30px"
+        android:id="@+id/tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:text="距本场结束" />
+
+    <!--<cn.iwgang.countdownview.CountdownView-->
+        <!--android:layout_toRightOf="@id/tv"-->
+        <!--android:id="@+id/countTime"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignTop="@+id/nvzhuangText"-->
+        <!--android:layout_marginTop="6dp"-->
+        <!--app:isShowDay="true"-->
+        <!--app:isShowHour="true"-->
+        <!--app:isShowMinute="true"-->
+        <!--app:isShowSecond="true"-->
+        <!--app:suffixDay="天"-->
+        <!--app:suffixGravity="bottom"-->
+        <!--app:suffixHour="时"-->
+        <!--app:suffixMinute="分"-->
+        <!--app:suffixSecond="秒"-->
+        <!--app:suffixTextColor="@color/colorAccent"-->
+        <!--app:suffixTextSize="12sp"-->
+        <!--app:timeTextColor="@color/colorAccent"-->
+        <!--app:timeTextSize="22sp" />-->
 
     <cn.iwgang.countdownview.CountdownView
-        android:layout_centerHorizontal="true"
+        android:layout_toRightOf="@id/tv"
         android:id="@+id/countTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/nvzhuangText"
-        android:layout_marginTop="6dp"
-        app:isShowDay="true"
+        android:layout_gravity="center_horizontal"
         app:isShowHour="true"
         app:isShowMinute="true"
         app:isShowSecond="true"
-        app:suffixDay="天"
-        app:suffixGravity="bottom"
-        app:suffixHour="时"
-        app:suffixMinute="分"
-        app:suffixSecond="秒"
-        app:suffixTextColor="@color/colorAccent"
+        app:isSuffixTextBold="true"
+        app:isShowMillisecond="false"
+        app:suffixGravity="center"
+        app:suffixTextColor="@color/black"
         app:suffixTextSize="12sp"
-        app:timeTextColor="@color/colorAccent"
-        app:timeTextSize="22sp" />
+        app:timeTextColor="@color/black"
+        app:timeTextSize="18sp"
+        app:isTimeTextBold="true"
+        app:isHideTimeBackground="false"
+        app:timeBgColor="@color/white"
+        app:isShowTimeBgDivisionLine="false"
+        />
 
 </RelativeLayout>
