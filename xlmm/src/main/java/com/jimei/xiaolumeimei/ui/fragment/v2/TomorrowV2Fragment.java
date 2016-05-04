@@ -153,7 +153,6 @@ public class TomorrowV2Fragment extends BaseFragment {
                     @Override
                     public void onCompleted() {
                         super.onCompleted();
-                        //loading.post(loading::stop);
                         hideIndeterminateProgressDialog();
                     }
                 });
@@ -169,6 +168,7 @@ public class TomorrowV2Fragment extends BaseFragment {
         head = LayoutInflater.from(getActivity())
                 .inflate(R.layout.today_poster_header,
                         (ViewGroup) view.findViewById(R.id.head_today), false);
+
         countTime = (CountdownView) head.findViewById(R.id.countTime);
         GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
         //manager.setOrientation(GridLayoutManager.VERTICAL);
@@ -182,8 +182,8 @@ public class TomorrowV2Fragment extends BaseFragment {
         xRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
         xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
         xRecyclerView.setPullRefreshEnabled(false);
-        xRecyclerView.addHeaderView(head);
         mTodayAdapter = new TodayAdapter(this, getActivity());
+        xRecyclerView.addHeaderView(head);
 
         xRecyclerView.setAdapter(mTodayAdapter);
 

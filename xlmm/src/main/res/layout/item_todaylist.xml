@@ -2,7 +2,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="582px"
+    android:layout_height="wrap_content"
     android:background="@drawable/shot_item_background"
     android:clickable="true"
     android:foreground="?attr/selectableItemBackground"
@@ -13,18 +13,20 @@
       android:layout_height="wrap_content">
 
     <ImageView
+        android:adjustViewBounds="true"
         android:id="@+id/childlist_image"
         android:layout_width="match_parent"
-        android:layout_height="465px"
+        android:layout_height="450px"
         android:scaleType="centerCrop"/>
 
     <include layout="@layout/item_saleout"/>
+    <include layout="@layout/item_salenotopen"/>
   </RelativeLayout>
 
 
   <LinearLayout
       android:layout_width="match_parent"
-      android:layout_height="37px"
+      android:layout_height="43px"
       android:layout_marginTop="26px"
       android:gravity="center">
 
@@ -32,32 +34,36 @@
         android:id="@+id/childlist_name"
         android:layout_width="wrap_content"
         android:layout_height="36px"
-        android:text="可爱印花连帽羽绒服"
+        android:text=""
         android:textColor="#4a4a4a"
-        android:textSize="12sp"/>
+        android:textSize="28px"/>
   </LinearLayout>
 
-  <LinearLayout
+  <RelativeLayout
       android:layout_width="match_parent"
       android:layout_height="46px"
-      android:layout_marginBottom="14px"
+      android:layout_marginBottom="12px"
       android:gravity="center"
       android:orientation="horizontal">
 
     <TextView
+        android:gravity="center|bottom"
+        android:textSize="36px"
         android:id="@+id/childlist_agent_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="79.9/"
-        android:textColor="#f5b123"/>
+        android:text=""
+        android:textColor="#3C3C3C"/>
 
     <TextView
+        android:layout_alignBaseline="@id/childlist_agent_price"
+        android:layout_toRightOf="@id/childlist_agent_price"
         android:id="@+id/childlist_stdsale_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="79.9"
-        android:textColor="@color/C646464"
-        android:textSize="12sp"/>
-  </LinearLayout>
+        android:text=""
+        android:textColor="#A0A0A0"
+        android:textSize="24px"/>
+  </RelativeLayout>
 
 </LinearLayout>

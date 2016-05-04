@@ -26,8 +26,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import butterknife.Bind;
-
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.BrandlistAdapter;
 import com.jimei.xiaolumeimei.base.BaseActivity;
@@ -56,9 +54,9 @@ import com.jimei.xiaolumeimei.ui.activity.user.MembershipPointActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.WalletActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.WxLoginBindPhoneActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaInfoActivity;
-import com.jimei.xiaolumeimei.ui.fragment.v1.ChildFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v1.view.MastFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.TodayV2Fragment;
+import com.jimei.xiaolumeimei.ui.fragment.v2.TomorrowV2Fragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.YesterdayV2Fragment;
 import com.jimei.xiaolumeimei.utils.DisplayUtils;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
@@ -81,12 +79,12 @@ import com.zhy.http.okhttp.callback.BitmapCallback;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.Bind;
 import okhttp3.Call;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
@@ -318,7 +316,7 @@ public class MainActivity extends BaseActivity
         MyFragmentAdapter adapter = new MyFragmentAdapter(getSupportFragmentManager());
         list.add(YesterdayV2Fragment.newInstance("昨天"));
         list.add(TodayV2Fragment.newInstance("今天"));
-        list.add(ChildFragment.newInstance("明天"));
+        list.add(TomorrowV2Fragment.newInstance("明天"));
         vp.setAdapter(adapter);
         vp.setOffscreenPageLimit(2);
 
@@ -520,6 +518,7 @@ public class MainActivity extends BaseActivity
                                     for (int i = 0; i < brandlistAdapters.size(); i++) {
                                         brandViews.get(i)
                                                 .setBrandtitleImage(brandpromotionEntities.get(i).getBrand_pic());
+                                        brandViews.get(i).setBrandDesText(brandpromotionEntities.get(i).getBrand_desc());
                                         brandViews.get(i).setAdapter(brandlistAdapters.get(i));
                                         final int finalI = i;
                                         ProductModel.getInstance()
@@ -779,25 +778,6 @@ public class MainActivity extends BaseActivity
         addSubscription(subscribe2);
     }
 
-    private long calcLeftTime() {
-        Date now = new Date();
-        Date nextDay14PM = new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(nextDay14PM);
-        calendar.add(Calendar.DATE, 1);
-        calendar.set(Calendar.HOUR_OF_DAY, 14);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        nextDay14PM = calendar.getTime();
-        long left;
-        if (nextDay14PM.getTime() - now.getTime() > 0) {
-            left = nextDay14PM.getTime() - now.getTime();
-            return left;
-        } else {
-            return 0;
-        }
-    }
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {

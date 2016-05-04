@@ -1,6 +1,5 @@
 package com.jimei.xiaolumeimei.xlmmService;
 
-import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.entities.AddCartsBean;
 import com.jimei.xiaolumeimei.entities.AddressBean;
@@ -309,7 +308,7 @@ public interface XlmmService {
             @Query("page") String page);
 
     //获取所有退货订单
-    @GET("/rest/v1/trades/refunds")
+    @GET("/rest/v1/refunds")
     Observable<AllRefundsBean> getAllRedundsList(
             @Query("page") String page);
 
