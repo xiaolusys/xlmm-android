@@ -11,13 +11,12 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
         android:orientation="vertical">
 
         <com.jimei.xiaolumeimei.widget.banner.SliderLayout
             android:id="@+id/slider"
             android:layout_width="match_parent"
-            android:layout_height="310px"
+            android:layout_height="280px"
             app:auto_cycle="true" />
 
         <com.jimei.xiaolumeimei.widget.banner.Indicators.PagerIndicator
@@ -51,26 +50,22 @@
 
         <ImageView
             android:id="@+id/lady_img"
-            android:scaleType="centerInside"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center" />
+            android:adjustViewBounds="true"
+            android:scaleType="center" />
 
         <ImageView
             android:id="@+id/child_img"
-            android:scaleType="centerInside"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center" />
+            android:adjustViewBounds="true"
+            android:scaleType="center" />
+
     </LinearLayout>
 
-    <!--<LinearLayout-->
-    <!--android:id="@+id/post_mainactivity"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:orientation="vertical"-->
-    <!--/>-->
     <include layout="@layout/common_gap" />
+
     <include layout="@layout/post_layout" />
 
     <LinearLayout
@@ -78,11 +73,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <!--<android.support.v7.widget.RecyclerView-->
-        <!--android:id="@+id/brand_xrey"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"/>-->
-
     </LinearLayout>
 
     <include layout="@layout/common_gap" />

@@ -29,6 +29,13 @@ public class BrandlistAdapter extends RecyclerView.Adapter<BrandlistAdapter.Bran
 
   private Context mContext;
 
+  public void setListener(itemOnclickListener listener) {
+    this.listener = listener;
+  }
+
+  private itemOnclickListener listener;
+
+
   public BrandlistAdapter(Context mContext) {
     JUtils.Log("MainActivity", "-----------BrandlistAdapter");
     this.mContext = mContext;
@@ -64,6 +71,15 @@ public class BrandlistAdapter extends RecyclerView.Adapter<BrandlistAdapter.Bran
 
     holder.productLowestPrice.setText("¥" + resultsEntity.getProduct_lowest_price());
     holder.productStdSalePrice.setText("/¥" + resultsEntity.getProduct_std_sale_price());
+
+    if (listener != null) {
+      holder.cardview.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          listener.itemClick();
+        }
+      });
+    }
   }
 
   @Override public int getItemCount() {
@@ -72,6 +88,7 @@ public class BrandlistAdapter extends RecyclerView.Adapter<BrandlistAdapter.Bran
 
   static class BrandlistVH extends RecyclerView.ViewHolder {
 
+    private final View cardview;
     int id = R.layout.item_brand;
     @Bind(R.id.brand_imag) ImageView brandImag;
     @Bind(R.id.product_lowest_price) TextView productLowestPrice;
@@ -79,8 +96,13 @@ public class BrandlistAdapter extends RecyclerView.Adapter<BrandlistAdapter.Bran
 
     public BrandlistVH(View itemView) {
       super(itemView);
+      cardview = itemView;
       AutoUtils.autoSize(itemView);
       ButterKnife.bind(this, itemView);
     }
+  }
+
+ public interface itemOnclickListener{
+    void itemClick();
   }
 }

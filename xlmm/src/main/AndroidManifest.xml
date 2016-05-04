@@ -368,7 +368,7 @@
             android:name=".ui.activity.trade.LogisticsActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
-            android:name=".ui.activity.user.WalletDetailActivity"
+            android:name=".ui.activity.product.BrandListActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".ui.activity.user.UserDrawCashActivity"
@@ -378,6 +378,9 @@
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".ui.activity.xiaolumama.MamaDrawCashActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
+        <activity
+            android:name=".ui.activity.user.WalletDetailActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
 
         <service

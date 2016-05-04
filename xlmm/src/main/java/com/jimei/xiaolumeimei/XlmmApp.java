@@ -145,22 +145,22 @@ public class XlmmApp extends MultiDexApplication {
 
     //httpClient.networkInterceptors().add(new StethoInterceptor());
 
-    httpClient.interceptors().add(new Interceptor() {
-      @Override public Response intercept(Chain chain) throws IOException {
-        Response response = null;
-        try {
-          Request request = chain.request();
-          response = chain.proceed(request);
-          int code = response.code();//status code
-          if (403 == code) {
-
-          }
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
-        return response;
-      }
-    });
+//    httpClient.interceptors().add(new Interceptor() {
+//      @Override public Response intercept(Chain chain) throws IOException {
+//        Response response = null;
+//        try {
+//          Request request = chain.request();
+//          response = chain.proceed(request);
+//          int code = response.code();//status code
+//          if (403 == code) {
+//
+//          }
+//        } catch (IOException e) {
+//          e.printStackTrace();
+//        }
+//        return response;
+//      }
+//    });
 
     httpClient.setCookieHandler(cookieManager);
     return httpClient;

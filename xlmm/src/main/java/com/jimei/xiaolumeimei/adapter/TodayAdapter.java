@@ -11,16 +11,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActvityWeb;
 import com.jimei.xiaolumeimei.ui.activity.product.TongkuanActivity;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.zhy.autolayout.utils.AutoUtils;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by 优尼世界 on 15/12/29.
@@ -75,11 +78,14 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.TodayVH> {
 
         if (isSaleOut && isSingleSpec) {
           holder.saleout.setVisibility(View.VISIBLE);
+          holder.salenotopen.setVisibility(View.INVISIBLE);
         } else {
           holder.saleout.setVisibility(View.INVISIBLE);
+          holder.salenotopen.setVisibility(View.INVISIBLE);
         }
       } else {
-        holder.saleout.setVisibility(View.VISIBLE);
+        holder.salenotopen.setVisibility(View.VISIBLE);
+        holder.saleout.setVisibility(View.INVISIBLE);
       }
 
       if (productModel.getName().length() <= 9) {
@@ -174,6 +180,7 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.TodayVH> {
     @Bind(R.id.childlist_agent_price) TextView childlistAgentPrice;
     @Bind(R.id.childlist_stdsale_price) TextView childlistStdsalePrice;
     @Bind(R.id.saleout) TextView saleout;
+    @Bind(R.id.salenotopen) TextView salenotopen;
 
     public TodayVH(View itemView) {
       super(itemView);

@@ -28,7 +28,7 @@
           android:layout_marginRight="8dp"
           android:id="@+id/brand_text"
           android:layout_toLeftOf="@+id/right_arrow"
-          android:text="三折起"
+          android:text=""
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"/>
       <ImageView

@@ -9,9 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -25,9 +22,18 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import cn.iwgang.countdownview.CountdownView;
+import rx.Observable;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -46,8 +52,12 @@ public class TodayV2Fragment extends BaseFragment {
     private int totalPages;//总的分页数
     private TodayAdapter mTodayAdapter;
     private Subscription subscribe1;
-    private Subscription subscribe2;
+
     private Subscription subscribe3;
+    private View head;
+    private View view;
+    private Subscription subscribe2;
+    private CountdownView countTime;
 
     public static TodayV2Fragment newInstance(String title) {
         TodayV2Fragment todayV2Fragment = new TodayV2Fragment();
@@ -67,7 +77,7 @@ public class TodayV2Fragment extends BaseFragment {
     @Override
     protected View initViews(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_todayv2, container, false);
+         view = inflater.inflate(R.layout.fragment_todayv2, container, false);
         ButterKnife.bind(this, view);
         initViews();
 
@@ -77,12 +87,46 @@ public class TodayV2Fragment extends BaseFragment {
     @Override
     protected void initData() {
         load();
+        subscribe2 = Observable.timer(1, 1, TimeUnit.SECONDS)
+                .onBackpressureDrop()
+                .map(aLong -> calcLeftTime())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Long>() {
+                    @Override public void call(Long aLong) {
+                        if (aLong > 0) {
+                            countTime.updateShow(aLong);
+                        } else {
+                            countTime.setVisibility(View.INVISIBLE);
+                        }
+                    }
+                }, Throwable::printStackTrace);
     }
 
     @Override
     protected void setDefaultFragmentTitle(String title) {
 
     }
+
+    private long calcLeftTime() {
+        Date now = new Date();
+        Date nextDay14PM = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(nextDay14PM);
+        calendar.add(Calendar.DATE, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 14);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        nextDay14PM = calendar.getTime();
+        long left;
+        if (nextDay14PM.getTime() - now.getTime() > 0) {
+            left = nextDay14PM.getTime() - now.getTime();
+            return left;
+        } else {
+            return 0;
+        }
+    }
+
 
     private void load() {
         showIndeterminateProgressDialog(false);
@@ -122,6 +166,11 @@ public class TodayV2Fragment extends BaseFragment {
     }
 
     private void initViews() {
+
+        head = LayoutInflater.from(getActivity())
+                .inflate(R.layout.today_poster_header,
+                        (ViewGroup) view.findViewById(R.id.head_today), false);
+        countTime = (CountdownView) head.findViewById(R.id.countTime);
         GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
         //manager.setOrientation(GridLayoutManager.VERTICAL);
         //manager.setSmoothScrollbarEnabled(true);
@@ -135,6 +184,7 @@ public class TodayV2Fragment extends BaseFragment {
         xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
         xRecyclerView.setPullRefreshEnabled(false);
         mTodayAdapter = new TodayAdapter(this, getActivity());
+        xRecyclerView.addHeaderView(head);
         xRecyclerView.setAdapter(mTodayAdapter);
 
         xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
