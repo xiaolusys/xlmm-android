@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.jimei.xiaolumeimei.ui.activity.user.UserDrawCashActivity">
+    tools:context="com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaDrawCashActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -92,11 +92,11 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:hint="请输入提现金额"
-                android:textCursorDrawable="@drawable/color_cursor"
                 android:inputType="numberDecimal"
                 android:shadowColor="@color/colorAccent"
                 android:textColor="@color/text_color_26"
                 android:textColorHint="#BBBBBB"
+                android:textCursorDrawable="@drawable/color_cursor"
                 android:textSize="14sp" />
 
 
@@ -108,9 +108,84 @@
             android:id="@+id/tv_msg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32px"
+            android:padding="12px"
             android:textColor="#FF3840"
             android:textSize="13sp" />
+
+        <include layout="@layout/common_gap" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="116px"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="21px"
+                android:src="@drawable/wallet_icon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="18px"
+                android:text="提现至小鹿钱包"
+                android:textColor="@color/text_color_62"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <RadioButton
+                android:id="@+id/rb_xl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="33px"
+                android:checked="true" />
+
+        </LinearLayout>
+
+        <include layout="@layout/common_gap" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="116px"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="21px"
+                android:src="@drawable/wx_wallet_icon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="18px"
+                android:text="提现至微信钱包"
+                android:textColor="@color/text_color_62"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <RadioButton
+                android:id="@+id/rb_wx"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="33px" />
+
+        </LinearLayout>
+
+        <include layout="@layout/common_gap" />
 
         <Button
             android:id="@+id/btn_draw_cash"
@@ -130,16 +205,6 @@
             android:textColor="#BBBBBB"
             android:textSize="12sp" />
 
-        <Button
-            android:id="@+id/btn_bind"
-            android:layout_width="660px"
-            android:layout_height="80px"
-            android:layout_marginTop="34px"
-            android:background="@drawable/shape_common"
-            android:text="绑定微信"
-            android:visibility="invisible"
-            android:textColor="@color/white"
-            android:textSize="15sp" />
-
     </LinearLayout>
+
 </FrameLayout>

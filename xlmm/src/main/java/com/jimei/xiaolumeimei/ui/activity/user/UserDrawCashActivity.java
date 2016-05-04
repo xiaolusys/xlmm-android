@@ -140,7 +140,11 @@ public class UserDrawCashActivity extends BaseSwipeBackCompatActivity implements
             drawCashBtn.setClickable(false);
             drawCashBtn.setBackgroundResource(R.drawable.shape_common_unclickable);
         } else {
-            if (drawMoney > 200) {
+            if (drawMoney < 8.88) {
+                msgTv.setText("提现最低金额需要8.88元哦");
+                drawCashBtn.setClickable(false);
+                drawCashBtn.setBackgroundResource(R.drawable.shape_common_unclickable);
+            } else if (drawMoney > 200) {
                 msgTv.setText("提现金额超过微信红包限额");
                 drawCashBtn.setClickable(false);
                 drawCashBtn.setBackgroundResource(R.drawable.shape_common_unclickable);

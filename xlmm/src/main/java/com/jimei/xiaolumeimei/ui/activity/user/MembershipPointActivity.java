@@ -70,7 +70,7 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity impleme
                     List<MembershipPointBean.ResultsEntity> results =
                         pointBean.getResults();
                     if (0 != results.size()) {
-                        tx_point.setText(results.get(0).getIntegral_value());
+                        tx_point.setText(results.get(0).getIntegral_value()+"");
                         Log.d(TAG, "point " + results.get(0).getIntegral_value());
                     } else {
                         Log.d(TAG, "point record not exist. ");

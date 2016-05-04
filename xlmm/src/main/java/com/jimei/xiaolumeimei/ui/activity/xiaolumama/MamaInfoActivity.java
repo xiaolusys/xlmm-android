@@ -276,9 +276,8 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
             case R.id.tv_cash:
             case R.id.tv_cashinfo:
                 if (mamaFortune != null) {
-                    intent = new Intent(MamaInfoActivity.this, MamaWithdrawCashActivity.class);
+                    intent = new Intent(MamaInfoActivity.this, MamaDrawCashActivity.class);
                     intent.putExtra("cash", mamaFortune.getMama_fortune().getCash_value());
-
                     startActivity(intent);
                 }
                 break;

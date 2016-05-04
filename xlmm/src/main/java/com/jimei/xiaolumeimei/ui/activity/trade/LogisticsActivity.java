@@ -1,8 +1,6 @@
 package com.jimei.xiaolumeimei.ui.activity.trade;
 
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -23,8 +21,6 @@ import rx.schedulers.Schedulers;
 
 public class LogisticsActivity extends BaseSwipeBackCompatActivity {
     private static final java.lang.String TAG = LogisticsActivity.class.getSimpleName();
-    @Bind(R.id.toolbar)
-    Toolbar toolbar;
     private String tid;
     @Bind(R.id.tv_company)
     TextView companyTv;
@@ -121,9 +117,6 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
 
     @Override
     protected void initViews() {
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
-        finishBack(toolbar);
     }
 
     @Override
