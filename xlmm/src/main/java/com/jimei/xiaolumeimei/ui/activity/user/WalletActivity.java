@@ -80,7 +80,7 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
                                 money = userNewBean.getUserBudget().getBudgetCash();
                             }
                             tvMoney.setText((float) (Math.round(money * 100)) / 100 + "");
-                            if(money>0){
+                            if (money > 0) {
                                 ll_wallet_empty.setVisibility(View.INVISIBLE);
                             }
                         }

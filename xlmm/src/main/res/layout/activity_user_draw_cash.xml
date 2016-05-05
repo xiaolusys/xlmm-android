@@ -53,7 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="全部提现"
+                android:text="最大提现"
                 android:textColor="@color/text_color_62"
                 android:textSize="14sp" />
 
