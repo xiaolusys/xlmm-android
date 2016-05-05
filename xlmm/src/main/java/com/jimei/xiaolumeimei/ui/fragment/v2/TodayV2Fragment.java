@@ -19,6 +19,7 @@ import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jude.utils.JUtils;
 
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
@@ -39,6 +40,8 @@ import rx.schedulers.Schedulers;
  */
 public class TodayV2Fragment extends BaseFragment {
 
+    private static final java.lang.String TAG = TodayV2Fragment.class.getSimpleName();
+
     @Bind(R.id.xrcy_todayv2)
     XRecyclerView xRecyclerView;
     int page_size = 10;
@@ -54,7 +57,7 @@ public class TodayV2Fragment extends BaseFragment {
     private View view;
     private Subscription subscribe2;
     private CountdownView countTime;
-    private String left;
+    private long left;
 
     public static TodayV2Fragment newInstance(String title) {
         TodayV2Fragment todayV2Fragment = new TodayV2Fragment();
@@ -99,7 +102,9 @@ public class TodayV2Fragment extends BaseFragment {
         try {
             crtTime = crtTime.replace("T", " ");
             Date crtdate = format.parse(crtTime);
+            JUtils.Log(TAG, "crtdate.getTime() ==" + crtdate.getTime() + "     now.getTime()====" + now.getTime());
             if (crtdate.getTime() - now.getTime() > 0) {
+                JUtils.Log(TAG, "crtdate.getTime() ==" + crtdate.getTime() + "     now.getTime()====" + now.getTime());
                 left = crtdate.getTime() - now.getTime();
             }
         } catch (Exception e) {
@@ -128,12 +133,16 @@ public class TodayV2Fragment extends BaseFragment {
                         try {
 
                             if (productListBean != null) {
+                                left = calcLeftTime(productListBean.getDownshelfDeadline());
+                                JUtils.Log(TAG,"getDownshelfDeadline===="+productListBean.getDownshelfDeadline()+ "      left=====" + left);
+                                countTime.updateShow(left);
+
                                 List<ProductListBean.ResultsEntity> results =
                                         productListBean.getResults();
                                 totalPages = productListBean.getCount() / page_size;
                                 list.addAll(results);
                                 mTodayAdapter.update(list);
-                                countTime.updateShow(calcLeftTime(productListBean.getDownshelfDeadline()));
+
                             }
                         } catch (Exception ex) {
                         }
