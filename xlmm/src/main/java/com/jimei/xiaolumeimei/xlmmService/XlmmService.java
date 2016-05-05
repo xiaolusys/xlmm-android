@@ -118,7 +118,7 @@ public interface XlmmService {
 
 
     //今日列表
-    @GET("/rest/v1/products/promote_today_paging")
+    @GET("/rest/v2/products")
     Observable<ProductListBean> getTodayList(
             @Query("page") int page,
             @Query("page_size") int page_size);
@@ -136,13 +136,13 @@ public interface XlmmService {
     Observable<IndexBean> getYestDayList();
 
     //昨日分页列表
-    @GET("/rest/v1/products/promote_previous_paging")
+    @GET("/rest/v2/products/yesterday")
     Observable<ProductListBean> getPreviousList(
             @Query("page") int page,
             @Query("page_size") int page_size);
 
     //明日分页列表
-    @GET("/rest/v1/products/advance")
+    @GET("/rest/v2/products/tomorrow")
     Observable<ProductListBean> getAdvanceList(
             @Query("page") int page,
             @Query("page_size") int page_size);
@@ -338,7 +338,8 @@ public interface XlmmService {
             @Field("receiver_district") String receiver_district,
             @Field("receiver_address") String receiver_address,
             @Field("receiver_name") String receiver_name,
-            @Field("receiver_mobile") String receiver_mobile
+            @Field("receiver_mobile") String receiver_mobile,
+            @Field("default")String defaulta
     );
 
     //修改地址
@@ -351,7 +352,8 @@ public interface XlmmService {
             @Field("receiver_district") String receiver_district,
             @Field("receiver_address") String receiver_address,
             @Field("receiver_name") String receiver_name,
-            @Field("receiver_mobile") String receiver_mobile
+            @Field("receiver_mobile") String receiver_mobile,
+            @Field("default")String defaulta
     );
 
 

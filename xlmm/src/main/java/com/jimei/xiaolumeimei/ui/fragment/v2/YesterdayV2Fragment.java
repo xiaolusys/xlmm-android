@@ -21,19 +21,15 @@ import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.iwgang.countdownview.CountdownView;
-import rx.Observable;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -58,6 +54,7 @@ public class YesterdayV2Fragment extends BaseFragment {
   private View view;
   private Subscription subscribe2;
   private CountdownView countTime;
+  private String left;
 
   public static YesterdayV2Fragment newInstance(String title) {
     YesterdayV2Fragment yesterdayV2Fragment = new YesterdayV2Fragment();
@@ -84,43 +81,29 @@ public class YesterdayV2Fragment extends BaseFragment {
 
   @Override protected void initData() {
     load();
-    subscribe2 = Observable.timer(1, 1, TimeUnit.SECONDS)
-            .onBackpressureDrop()
-            .map(aLong -> calcLeftTime())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Action1<Long>() {
-              @Override public void call(Long aLong) {
-                if (aLong > 0) {
-                  countTime.updateShow(aLong);
-                } else {
-                  countTime.setVisibility(View.INVISIBLE);
-                }
-              }
-            }, Throwable::printStackTrace);
+
   }
 
   @Override protected void setDefaultFragmentTitle(String title) {
 
   }
-  private long calcLeftTime() {
+  private long calcLeftTime(String crtTime) {
+    long left = 0;
     Date now = new Date();
-    Date nextDay14PM = new Date();
-    Calendar calendar = Calendar.getInstance();
-    calendar.setTime(nextDay14PM);
-    calendar.add(Calendar.DATE, 1);
-    calendar.set(Calendar.HOUR_OF_DAY, 14);
-    calendar.set(Calendar.MINUTE, 0);
-    calendar.set(Calendar.SECOND, 0);
-    calendar.set(Calendar.MILLISECOND, 0);
-    nextDay14PM = calendar.getTime();
-    long left;
-    if (nextDay14PM.getTime() - now.getTime() > 0) {
-      left = nextDay14PM.getTime() - now.getTime();
-      return left;
-    } else {
-      return 0;
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    try {
+      crtTime = crtTime.replace("T", " ");
+      Date crtdate = format.parse(crtTime);
+      if (crtdate.getTime() - now.getTime() > 0) {
+        left = crtdate.getTime() - now.getTime();
+      }
+    } catch (Exception e) {
+
     }
+
+    return left;
   }
+
   private void load() {
     showIndeterminateProgressDialog(false);
     subscribe1 = ProductModel.getInstance()
@@ -142,6 +125,8 @@ public class YesterdayV2Fragment extends BaseFragment {
                 totalPages = productListBean.getCount() / page_size;
                 list.addAll(results);
                 mPreviousAdapter.update(list);
+                left = productListBean.getDownshelfDeadline();
+                countTime.updateShow(calcLeftTime(left));
               }
             } catch (Exception ex) {
             }
@@ -153,12 +138,10 @@ public class YesterdayV2Fragment extends BaseFragment {
             hideIndeterminateProgressDialog();
           }
         });
+
+
   }
 
-  //@Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-  //  super.onViewCreated(view, savedInstanceState);
-  //
-  //}
 
   private void initViews() {
     head = LayoutInflater.from(getActivity())
