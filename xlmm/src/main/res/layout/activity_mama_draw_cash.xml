@@ -55,7 +55,8 @@
                 android:padding="8dp"
                 android:text="全部提现"
                 android:textColor="@color/text_color_62"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:visibility="gone" />
 
             <com.jimei.xiaolumeimei.widget.SmoothCheckBox
                 android:id="@+id/scb"
@@ -64,6 +65,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="12px"
+                android:visibility="gone"
                 app:color_checked="@color/colorAccent"
                 app:color_unchecked_stroke="@color/colorAccent" />
 
@@ -84,7 +86,8 @@
                 android:padding="16dp"
                 android:text="金额(元):  "
                 android:textColor="@color/text_color_62"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:visibility="gone" />
 
             <EditText
                 android:id="@+id/et_money"
@@ -97,7 +100,56 @@
                 android:textColor="@color/text_color_26"
                 android:textColorHint="#BBBBBB"
                 android:textCursorDrawable="@drawable/color_cursor"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:visibility="gone" />
+
+            <RadioGroup
+                android:id="@+id/rg_money"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <RadioButton
+                    android:id="@+id/rb_100"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:gravity="center"
+                    android:checked="true"
+                    android:paddingBottom="16dp"
+                    android:paddingTop="16dp"
+                    android:text="100元"
+                    android:textColor="@color/text_color_62"
+                    android:textSize="14sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <RadioButton
+                    android:id="@+id/rb_200"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:gravity="center"
+                    android:paddingBottom="16dp"
+                    android:paddingTop="16dp"
+                    android:text="200元"
+                    android:textColor="@color/text_color_62"
+                    android:textSize="14sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+            </RadioGroup>
 
 
         </LinearLayout>

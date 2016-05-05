@@ -5,29 +5,35 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableLayout
-        android:id="@+id/scrollableLayout"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <include
-            layout="@layout/include_scrollheader"
+
+        <com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableLayout
+            android:id="@+id/scrollableLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <include
-            layout="@layout/include_nav"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <include
+                layout="@layout/include_scrollheader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                layout="@layout/include_nav"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
 
-        <include layout="@layout/common_gap" />
+            <include layout="@layout/common_gap" />
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/viewPager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableLayout>
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewPager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </RelativeLayout>

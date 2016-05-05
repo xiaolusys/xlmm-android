@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,6 +14,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -31,6 +33,7 @@ import com.jimei.xiaolumeimei.adapter.BrandlistAdapter;
 import com.jimei.xiaolumeimei.base.BaseActivity;
 import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.data.XlmmConst;
+import com.jimei.xiaolumeimei.entities.BrandListBean;
 import com.jimei.xiaolumeimei.entities.BrandpromotionBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.PortalBean;
@@ -91,7 +94,7 @@ import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener,
-        ViewPager.OnPageChangeListener/*, RadioGroup.OnCheckedChangeListener*/ {
+        ViewPager.OnPageChangeListener, ScrollableLayout.OnScrollListener/*, RadioGroup.OnCheckedChangeListener*/ {
     private static final String POST_URL = "?imageMogr2/format/jpg/quality/80";
     public static String TAG = "MainActivity";
     @Bind(R.id.tool_bar)
@@ -119,6 +122,8 @@ public class MainActivity extends BaseActivity
     ImageView image2;
     @Bind(R.id.scrollableLayout)
     ScrollableLayout scrollableLayout;
+    @Bind(R.id.swipe_layout)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Bind(R.id.brand)
     LinearLayout brand;
@@ -174,6 +179,7 @@ public class MainActivity extends BaseActivity
         childImage.setOnClickListener(this);
         ladyImage.setOnClickListener(this);
         //radioGroup.setOnCheckedChangeListener(this);
+        scrollableLayout.setOnScrollListener(this);
     }
 
     @Override
@@ -302,6 +308,20 @@ public class MainActivity extends BaseActivity
         badge.setTargetView(image2);
 
         initViewsForTab();
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                initDataForTab();
+                new Handler().postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                }, 2000);
+            }
+        });
     }
 
     public void initViewsForTab() {
@@ -481,6 +501,7 @@ public class MainActivity extends BaseActivity
                             List<BrandlistAdapter> brandlistAdapters = new ArrayList<>();
                             //List<RecyclerView> recyclerViews = new ArrayList<>();
                             List<BrandView> brandViews = new ArrayList<>();
+                            brand.removeAllViews();
                             //LinearLayoutManager manager = new LinearLayoutManager(this);
                             //manager.setOrientation(LinearLayoutManager.HORIZONTAL);
                             //recyclerView.setLayoutManager(manager);
@@ -524,9 +545,9 @@ public class MainActivity extends BaseActivity
                                         brandViews.get(i).setAdapter(brandlistAdapters.get(i));
                                         final int finalI = i;
                                         ProductModel.getInstance()
-                                                .getBrandlist(brandpromotionEntities.get(i).getId(), 1, 10)
+                                                .getBrandlistProducts(brandpromotionEntities.get(i).getId(), 1, 10)
                                                 .subscribeOn(Schedulers.io())
-                                                .subscribe(new ServiceResponse<BrandpromotionBean>() {
+                                                .subscribe(new ServiceResponse<BrandListBean>() {
 
                                                     @Override
                                                     public void onError(Throwable e) {
@@ -541,7 +562,7 @@ public class MainActivity extends BaseActivity
                                                     }
 
                                                     @Override
-                                                    public void onNext(BrandpromotionBean brandpromotionBean) {
+                                                    public void onNext(BrandListBean brandpromotionBean) {
                                                         if (null != brandpromotionBean) {
                                                             if (null != brandpromotionBean.getResults()) {
                                                                 JUtils.Log(TAG, brandpromotionBean.toString());
@@ -1134,6 +1155,15 @@ public class MainActivity extends BaseActivity
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    @Override
+    public void onScroll(int currentY, int maxY) {
+        if (currentY > 1) {
+            swipeRefreshLayout.setEnabled(false);
+        } else {
+            swipeRefreshLayout.setEnabled(true);
+        }
     }
 
     private class MyFragmentAdapter extends FragmentPagerAdapter {

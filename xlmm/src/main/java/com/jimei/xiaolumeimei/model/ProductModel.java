@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.model;
 
 import com.jimei.library.rx.DefaultTransform;
+import com.jimei.xiaolumeimei.entities.BrandListBean;
 import com.jimei.xiaolumeimei.entities.BrandpromotionBean;
 import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.entities.IndexBean;
@@ -129,7 +130,7 @@ public class ProductModel {
 //  }
 
   //品牌数据列表
-  public Observable<BrandpromotionBean> getBrandlist(int id, int page, int page_size) {
+  public Observable<BrandpromotionBean> getBrandList(int id, int page, int page_size) {
 
     return XlmmRetrofitClient.getService()
         .getBrandList(id, page, page_size)
@@ -137,7 +138,7 @@ public class ProductModel {
   }
 
   //品牌数据列表
-  public Observable<ChildListBean> getBrandlistProducts(int id, int page, int page_size) {
+  public Observable<BrandListBean> getBrandlistProducts(int id, int page, int page_size) {
 
     return XlmmRetrofitClient.getService()
         .getBrandListProducts(id, page, page_size)

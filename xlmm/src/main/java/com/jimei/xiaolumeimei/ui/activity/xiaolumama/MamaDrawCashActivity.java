@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.jimei.xiaolumeimei.R;
@@ -24,7 +25,7 @@ import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
-public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements SmoothCheckBox.OnCheckedChangeListener, TextWatcher, View.OnClickListener {
+public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements SmoothCheckBox.OnCheckedChangeListener, TextWatcher, View.OnClickListener, RadioGroup.OnCheckedChangeListener {
     @Bind(R.id.tv_money)
     TextView moneyTv;
     @Bind(R.id.scb)
@@ -39,9 +40,11 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
     RadioButton xlRbtn;
     @Bind(R.id.btn_draw_cash)
     Button drawCashBtn;
+    @Bind(R.id.rg_money)
+    RadioGroup moneyRg;
     private double cash;
     private double drawMoney = 0;
-    private Subscription subscribe;
+    Subscription subscribe;
 
     @Override
     protected void setListener() {
@@ -50,11 +53,13 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
         drawCashBtn.setOnClickListener(this);
         wxRbtn.setOnClickListener(this);
         xlRbtn.setOnClickListener(this);
+        moneyRg.setOnCheckedChangeListener(this);
     }
 
     @Override
     protected void initData() {
-
+        moneyEt.setText("100");
+        drawMoney = 100;
     }
 
     @Override
@@ -97,6 +102,7 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
                     .subscribeOn(Schedulers.io())
                     .subscribe(new ServiceResponse<ResponseResultBean>() {
                         String msg = "";
+
                         @Override
                         public void onNext(ResponseResultBean resp) {
                             switch (resp.getCode()) {
@@ -270,5 +276,19 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_withdrawcash, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+        switch (checkedId) {
+            case R.id.rb_100:
+                drawMoney = 100;
+                moneyEt.setText("100");
+                break;
+            case R.id.rb_200:
+                drawMoney = 200;
+                moneyEt.setText("200");
+                break;
+        }
     }
 }
