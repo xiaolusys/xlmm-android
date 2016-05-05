@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/llayout_point"
     style="@style/AppTheme.AppBarOverlay"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,35 +13,53 @@
         android:layout_height="wrap_content"
         app:xlmm_title="我的积分" />
 
-    <TextView
-        android:id="@+id/tv_Point"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="0"
-        android:textColor="@color/colorAccent"
-        android:textSize="30dp" />
+    <com.cpoopc.scrollablelayoutlib.ScrollableLayout
+        android:id="@+id/scrollable_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="我的积分" />
 
-    <include layout="@layout/common_gap" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:background="@color/white"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
-    <FrameLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+            <TextView
+                android:id="@+id/tv_Point"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="0"
+                android:textColor="@color/colorAccent"
+                android:textSize="32sp" />
 
-        <ListView
-            android:id="@+id/all_points_listview"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="我的积分"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+
+        <include layout="@layout/common_gap" />
+
+        <FrameLayout
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"/>
+            android:layout_height="fill_parent"
+            android:background="@color/bg_grey">
 
-        <include layout="@layout/orders_emptyinfo" />
-    </FrameLayout>
+            <ListView
+                android:id="@+id/all_points_listview"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" />
+
+            <include layout="@layout/orders_emptyinfo" />
+        </FrameLayout>
+    </com.cpoopc.scrollablelayoutlib.ScrollableLayout>
 
 </LinearLayout>

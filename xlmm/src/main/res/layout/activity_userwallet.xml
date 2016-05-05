@@ -3,69 +3,79 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f3f3f4"
     android:orientation="vertical">
 
-  <com.jimei.xiaolumeimei.widget.XlmmTitleView
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      app:xlmm_title="钱包"/>
-
-  <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="150dp"
-      android:background="@color/white"
-      android:gravity="center_horizontal"
-      android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/tv_money"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text=""
-        android:textColor="@color/colorPrimary"
-        android:textSize="32sp"/>
-
-    <TextView
-
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="我的余额(元)"
-        android:textSize="16sp"/>
-
-  </LinearLayout>
-
-  <FrameLayout
-      android:layout_width="match_parent"
-      android:layout_height="match_parent">
-
-    <LinearLayout
-        android:id="@+id/ll_wallet_empty"
+    <com.jimei.xiaolumeimei.widget.XlmmTitleView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="visible">
+        android:layout_height="wrap_content"
+        app:xlmm_title="钱包" />
 
-      <ImageView
-          android:id="@+id/img_wallet"
-          android:layout_width="150px"
-          android:layout_height="165px"
-          android:src="@drawable/img_wallet"/>
-
-      <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="20px"
-          android:text="你的钱包空空如也"/>
-    </LinearLayout>
-
-    <com.jcodecraeer.xrecyclerview.XRecyclerView
-        android:id="@+id/wallet_rcv"
+    <com.cpoopc.scrollablelayoutlib.ScrollableLayout
+        android:id="@+id/scrollable_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="invisible"/>
-  </FrameLayout>
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:background="@color/white"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_money"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text=""
+                android:textColor="@color/colorPrimary"
+                android:textSize="32sp" />
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="我的余额(元)"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#f3f3f4">
+
+            <LinearLayout
+                android:id="@+id/ll_wallet_empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/img_wallet"
+                    android:layout_width="150px"
+                    android:layout_height="165px"
+                    android:layout_marginTop="-100dp"
+                    android:src="@drawable/img_wallet" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20px"
+                    android:text="你的钱包空空如也" />
+            </LinearLayout>
+
+            <com.jimei.xiaolumeimei.widget.MyXRecyclerView
+                android:id="@+id/wallet_rcv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="invisible" />
+        </FrameLayout>
+
+    </com.cpoopc.scrollablelayoutlib.ScrollableLayout>
 </LinearLayout>

@@ -173,7 +173,28 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
+        if (s.toString().contains(".")) {
+            if (s.length() - 1 - s.toString().indexOf(".") > 2) {
+                s = s.toString().subSequence(0,
+                        s.toString().indexOf(".") + 3);
+                moneyEt.setText(s);
+                moneyEt.setSelection(s.length());
+            }
+        }
+        if (s.toString().trim().substring(0).equals(".")) {
+            s = "0" + s;
+            moneyEt.setText(s);
+            moneyEt.setSelection(2);
+        }
 
+        if (s.toString().startsWith("0")
+                && s.toString().trim().length() > 1) {
+            if (!s.toString().substring(1, 2).equals(".")) {
+                moneyEt.setText(s.subSequence(0, 1));
+                moneyEt.setSelection(1);
+                return;
+            }
+        }
     }
 
     @Override
