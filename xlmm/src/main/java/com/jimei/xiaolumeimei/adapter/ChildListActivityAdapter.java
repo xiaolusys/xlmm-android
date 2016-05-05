@@ -9,16 +9,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActvityWeb;
 import com.jimei.xiaolumeimei.ui.activity.product.TongkuanActivity;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.zhy.autolayout.utils.AutoUtils;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by 优尼世界 on 15/12/29.
@@ -69,7 +72,7 @@ public class ChildListActivityAdapter
   @Override public ChildListVH onCreateViewHolder(ViewGroup parent, int viewType) {
 
     View view = LayoutInflater.from(parent.getContext())
-        .inflate(R.layout.item_childlist, parent, false);
+        .inflate(R.layout.item_todaylist, parent, false);
     return new ChildListVH(view);
   }
 
