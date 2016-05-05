@@ -120,6 +120,28 @@ public class UserDrawCashActivity extends BaseSwipeBackCompatActivity implements
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
+        if (s.toString().contains(".")) {
+            if (s.length() - 1 - s.toString().indexOf(".") > 2) {
+                s = s.toString().subSequence(0,
+                        s.toString().indexOf(".") + 3);
+                moneyEt.setText(s);
+                moneyEt.setSelection(s.length());
+            }
+        }
+        if (s.toString().equals(".")) {
+            s = "0" + s;
+            moneyEt.setText(s);
+            moneyEt.setSelection(2);
+        }
+
+        if (s.toString().startsWith("0")
+                && s.toString().length() > 1) {
+            if (!s.toString().substring(1, 2).equals(".")) {
+                moneyEt.setText(s.subSequence(0, 1));
+                moneyEt.setSelection(1);
+                return;
+            }
+        }
 
     }
 
@@ -129,7 +151,9 @@ public class UserDrawCashActivity extends BaseSwipeBackCompatActivity implements
             moneyEt.setTextSize(14);
         } else {
             moneyEt.setTextSize(32);
-            drawMoney = Double.parseDouble(s.toString());
+            if (!s.toString().startsWith(".")) {
+                drawMoney = Double.parseDouble(s.toString());
+            }
         }
         if (!bindFlag) {
             msgTv.setText("请先绑定微信后提现哦~~");
@@ -140,7 +164,11 @@ public class UserDrawCashActivity extends BaseSwipeBackCompatActivity implements
             drawCashBtn.setClickable(false);
             drawCashBtn.setBackgroundResource(R.drawable.shape_common_unclickable);
         } else {
-            if (drawMoney > 200) {
+            if (drawMoney < 8.88) {
+                msgTv.setText("提现最低金额需要8.88元哦");
+                drawCashBtn.setClickable(false);
+                drawCashBtn.setBackgroundResource(R.drawable.shape_common_unclickable);
+            } else if (drawMoney > 200) {
                 msgTv.setText("提现金额超过微信红包限额");
                 drawCashBtn.setClickable(false);
                 drawCashBtn.setBackgroundResource(R.drawable.shape_common_unclickable);

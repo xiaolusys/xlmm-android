@@ -40,7 +40,7 @@ public class MamaWithdrawCashResultActivity extends BaseSwipeBackCompatActivity
     @Bind(R.id.tv_nickname)
     TextView nickNameTv;
 
-    float cash;
+    double cash;
     private int code;
     String msg;
     String nickName;
@@ -53,7 +53,7 @@ public class MamaWithdrawCashResultActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void getBundleExtras(Bundle extras) {
         if (null != getIntent() && null != getIntent().getExtras()) {
-            cash = getIntent().getExtras().getFloat("cash");
+            cash = getIntent().getExtras().getDouble("cash");
             code = getIntent().getExtras().getInt("code");
         }
     }
@@ -73,13 +73,13 @@ public class MamaWithdrawCashResultActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void initData() {
-        if (Float.compare(cash, 100) == 0 && code == 0) {
+        if (Double.compare(cash, 100) == 0 && code == 0) {
             img_red_packet1.setImageResource(R.drawable.img_redpacket100_2);
-        } else if (Float.compare(cash, 200) == 0 & code == 0) {
+        } else if (Double.compare(cash, 200) == 0 & code == 0) {
             img_red_packet1.setImageResource(R.drawable.img_redpacket200_2);
-        } else if (Float.compare(cash, 100) == 0) {
+        } else if (Double.compare(cash, 100) == 0) {
             img_red_packet1.setImageResource(R.drawable.img_graypacket100);
-        } else if (Float.compare(cash, 200) == 0) {
+        } else if (Double.compare(cash, 200) == 0) {
             img_red_packet1.setImageResource(R.drawable.img_graypacket200);
         }
         switch (code) {

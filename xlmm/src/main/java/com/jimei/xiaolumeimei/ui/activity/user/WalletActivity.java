@@ -3,7 +3,6 @@ package com.jimei.xiaolumeimei.ui.activity.user;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,6 +12,7 @@ import android.widget.Toast;
 
 import butterknife.Bind;
 
+import com.cpoopc.scrollablelayoutlib.ScrollableLayout;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
@@ -22,6 +22,7 @@ import com.jimei.xiaolumeimei.entities.BudgetdetailBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.model.UserNewModel;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
+import com.jimei.xiaolumeimei.widget.MyXRecyclerView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 
@@ -39,9 +40,11 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
     @Bind(R.id.tv_money)
     TextView tvMoney;
     @Bind(R.id.wallet_rcv)
-    XRecyclerView walletRcv;
+    MyXRecyclerView walletRcv;
     @Bind(R.id.ll_wallet_empty)
     LinearLayout ll_wallet_empty;
+    @Bind(R.id.scrollable_layout)
+    ScrollableLayout scrollableLayout;
     private Double money;
     private UserWalletAdapter adapter;
 
@@ -80,6 +83,9 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
                                 money = userNewBean.getUserBudget().getBudgetCash();
                             }
                             tvMoney.setText((float) (Math.round(money * 100)) / 100 + "");
+                            if (money > 0) {
+                                ll_wallet_empty.setVisibility(View.INVISIBLE);
+                            }
                         }
                     }
                 });
@@ -123,6 +129,7 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
     @Override
     protected void initViews() {
         initRecyclerView();
+        scrollableLayout.getHelper().setCurrentScrollableContainer(walletRcv);
     }
 
     private void initRecyclerView() {

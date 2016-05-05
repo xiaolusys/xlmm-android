@@ -293,9 +293,6 @@
             android:name=".ui.activity.xiaolumama.MamaInfoActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
-            android:name=".ui.activity.xiaolumama.MamaWithdrawCashActivity"
-            android:theme="@style/AppTheme.TransparentActivity" />
-        <activity
             android:name=".ui.activity.xiaolumama.MamaWithdrawCashHistoryActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
@@ -377,6 +374,12 @@
             android:name=".ui.activity.user.UserDrawCashActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
+            android:name=".ui.activity.user.DrawCashCompleteActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
+        <activity
+            android:name=".ui.activity.xiaolumama.MamaDrawCashActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
+        <activity
             android:name=".ui.activity.user.WalletDetailActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
 
@@ -423,7 +426,6 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".ui.activity.user.DrawCashCompleteActivity"></activity>
     </application>
 
 </manifest>

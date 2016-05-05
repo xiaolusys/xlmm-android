@@ -10,6 +10,7 @@ import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.entities.AllowanceBean;
 import com.jimei.xiaolumeimei.entities.AwardCarryBean;
 import com.jimei.xiaolumeimei.entities.BindInfoBean;
+import com.jimei.xiaolumeimei.entities.BrandListBean;
 import com.jimei.xiaolumeimei.entities.BrandpromotionBean;
 import com.jimei.xiaolumeimei.entities.BudgetPayBean;
 import com.jimei.xiaolumeimei.entities.BudgetdetailBean;
@@ -571,9 +572,10 @@ public interface XlmmService {
             @Field("choice") String fund_type);
 
     //妈妈钱包转账到小鹿钱包
-    @GET("/rest/v1/pmt/cashout/cashout_to_budget")
+    @FormUrlEncoded
+    @POST("/rest/v1/pmt/cashout/cashout_to_budget")
     Observable<ResponseResultBean> toWallet(
-            @Query("choice") String fund_type);
+            @Field("choice") String fund_type);
 
     //cancel提款单信息
     @FormUrlEncoded
@@ -870,7 +872,7 @@ public interface XlmmService {
     );
 
     @GET("/rest/v1/brands/{id}/products")
-    Observable<ChildListBean> getBrandListProducts(
+    Observable<BrandListBean> getBrandListProducts(
             @Path("id") int id,
             @Query("page") int page,
             @Query("page_size") int page_size

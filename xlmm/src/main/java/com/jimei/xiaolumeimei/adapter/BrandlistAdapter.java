@@ -12,6 +12,7 @@ import butterknife.ButterKnife;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.entities.BrandListBean;
 import com.jimei.xiaolumeimei.entities.BrandpromotionBean;
 import com.jude.utils.JUtils;
 import com.zhy.autolayout.utils.AutoUtils;
@@ -25,7 +26,7 @@ import java.util.List;
  */
 public class BrandlistAdapter extends RecyclerView.Adapter<BrandlistAdapter.BrandlistVH> {
 
-  private List<BrandpromotionBean.ResultsBean> mList;
+  private List<BrandListBean.ResultsBean> mList;
 
   private Context mContext;
 
@@ -42,13 +43,13 @@ public class BrandlistAdapter extends RecyclerView.Adapter<BrandlistAdapter.Bran
     mList = new ArrayList<>();
   }
 
-  public void updateWithClear(List<BrandpromotionBean.ResultsBean> list) {
+  public void updateWithClear(List<BrandListBean.ResultsBean> list) {
     mList.clear();
     mList.addAll(list);
     notifyDataSetChanged();
   }
 
-  public void update(List<BrandpromotionBean.ResultsBean> list) {
+  public void update(List<BrandListBean.ResultsBean> list) {
 
     mList.addAll(list);
     notifyDataSetChanged();
@@ -62,7 +63,7 @@ public class BrandlistAdapter extends RecyclerView.Adapter<BrandlistAdapter.Bran
 
   @Override public void onBindViewHolder(BrandlistVH holder, int position) {
 
-    BrandpromotionBean.ResultsBean resultsEntity = mList.get(position);
+      BrandListBean.ResultsBean resultsEntity = mList.get(position);
     String picPath = resultsEntity.getProduct_img();
     //ViewUtils.loadImgToImgViewWithPlaceholder(mContext, holder.brandImag, picPath);
     Glide.with(mContext).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)

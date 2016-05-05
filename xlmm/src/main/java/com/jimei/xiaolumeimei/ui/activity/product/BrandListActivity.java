@@ -9,8 +9,11 @@ import android.widget.Toast;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.adapter.BrandActivityAdapter;
+import com.jimei.xiaolumeimei.adapter.BrandlistAdapter;
 import com.jimei.xiaolumeimei.adapter.ChildListActivityAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.entities.BrandListBean;
 import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
@@ -32,7 +35,7 @@ public class BrandListActivity extends BaseSwipeBackCompatActivity {
     private int page = 2;
     private int totalPages;//总的分页数
     private XRecyclerView xRecyclerView;
-    private ChildListActivityAdapter mTodayAdapter;
+    private BrandActivityAdapter mBrandActivityAdapter;
     private int id;
 
     @Override
@@ -46,16 +49,16 @@ public class BrandListActivity extends BaseSwipeBackCompatActivity {
         Subscription subscribe = ProductModel.getInstance()
                 .getBrandlistProducts(id, 1, 10)
                 .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<ChildListBean>() {
+                .subscribe(new ServiceResponse<BrandListBean>() {
                     @Override
-                    public void onNext(ChildListBean productListBean) {
+                    public void onNext(BrandListBean productListBean) {
 
                         try {
 
                             if (productListBean != null) {
-                                List<ChildListBean.ResultsEntity> results = productListBean.getResults();
+                                List<BrandListBean.ResultsBean> results = productListBean.getResults();
                                 totalPages = productListBean.getCount() / page_size;
-                                mTodayAdapter.update(results);
+                                mBrandActivityAdapter.update(results);
                             }
                         } catch (Exception ex) {
                         }
@@ -111,8 +114,8 @@ public class BrandListActivity extends BaseSwipeBackCompatActivity {
         xRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
         xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
 
-        mTodayAdapter = new ChildListActivityAdapter(this);
-        xRecyclerView.setAdapter(mTodayAdapter);
+        mBrandActivityAdapter = new BrandActivityAdapter(this);
+        xRecyclerView.setAdapter(mBrandActivityAdapter);
 
         xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
@@ -120,11 +123,11 @@ public class BrandListActivity extends BaseSwipeBackCompatActivity {
                 Subscription subscribe = ProductModel.getInstance()
                         .getBrandlistProducts(id, 1, page * page_size)
                         .subscribeOn(Schedulers.io())
-                        .subscribe(new ServiceResponse<ChildListBean>() {
+                        .subscribe(new ServiceResponse<BrandListBean>() {
                             @Override
-                            public void onNext(ChildListBean childListBean) {
-                                List<ChildListBean.ResultsEntity> results = childListBean.getResults();
-                                mTodayAdapter.updateWithClear(results);
+                            public void onNext(BrandListBean childListBean) {
+                                List<BrandListBean.ResultsBean> results = childListBean.getResults();
+                                mBrandActivityAdapter.updateWithClear(results);
                             }
 
                             @Override
@@ -155,11 +158,11 @@ public class BrandListActivity extends BaseSwipeBackCompatActivity {
         Subscription subscribe = ProductModel.getInstance()
                 .getBrandlistProducts(id, page, page_size)
                 .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<ChildListBean>() {
+                .subscribe(new ServiceResponse<BrandListBean>() {
                     @Override
-                    public void onNext(ChildListBean productListBean) {
-                        List<ChildListBean.ResultsEntity> results = productListBean.getResults();
-                        mTodayAdapter.update(results);
+                    public void onNext(BrandListBean productListBean) {
+                        List<BrandListBean.ResultsBean> results = productListBean.getResults();
+                        mBrandActivityAdapter.update(results);
                     }
 
                     @Override
