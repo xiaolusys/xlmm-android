@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -1124,6 +1125,7 @@ public class MainActivity extends BaseActivity
     @Override
     public void onPageSelected(int position) {
         scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(position));
+        swipeRefreshLayout.setEnabled(true);
         switch (position) {
             case 0:
                 //radioGroup.check(R.id.rb_yesterday);
@@ -1154,17 +1156,18 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onPageScrollStateChanged(int state) {
-
+        swipeRefreshLayout.setEnabled(false);
     }
 
     @Override
     public void onScroll(int currentY, int maxY) {
-        if (currentY > 1) {
+        if (currentY > 0) {
             swipeRefreshLayout.setEnabled(false);
         } else {
             swipeRefreshLayout.setEnabled(true);
         }
     }
+
 
     private class MyFragmentAdapter extends FragmentPagerAdapter {
 
