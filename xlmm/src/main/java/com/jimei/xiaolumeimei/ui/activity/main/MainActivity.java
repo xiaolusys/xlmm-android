@@ -1119,13 +1119,12 @@ public class MainActivity extends BaseActivity
     @Override
     public void onPageScrolled(int position, float positionOffset,
                                int positionOffsetPixels) {
-
+        swipeRefreshLayout.setEnabled(false);
     }
 
     @Override
     public void onPageSelected(int position) {
         scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(position));
-        swipeRefreshLayout.setEnabled(true);
         switch (position) {
             case 0:
                 //radioGroup.check(R.id.rb_yesterday);
@@ -1156,7 +1155,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onPageScrollStateChanged(int state) {
-        swipeRefreshLayout.setEnabled(false);
+        swipeRefreshLayout.setEnabled(true);
     }
 
     @Override
