@@ -868,4 +868,11 @@ public interface XlmmService {
             @Query("page") int page,
             @Query("page_size") int page_size
     );
+
+    @GET("/rest/v1/brands/{id}/products")
+    Observable<ChildListBean> getBrandListProducts(
+            @Path("id") int id,
+            @Query("page") int page,
+            @Query("page_size") int page_size
+    );
 }

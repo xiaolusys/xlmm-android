@@ -136,6 +136,14 @@ public class ProductModel {
         .compose(new DefaultTransform<>());
   }
 
+  //品牌数据列表
+  public Observable<ChildListBean> getBrandlistProducts(int id, int page, int page_size) {
+
+    return XlmmRetrofitClient.getService()
+        .getBrandListProducts(id, page, page_size)
+        .compose(new DefaultTransform<>());
+  }
+
   //得到商品详情
   public Observable<ProductDetailBean> getProductDetails(String id) {
 
