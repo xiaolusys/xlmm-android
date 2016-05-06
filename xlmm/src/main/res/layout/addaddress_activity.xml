@@ -6,48 +6,30 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
+    <com.jimei.xiaolumeimei.widget.XlmmTitleView
+        android:layout_width="@dimen/md_button_min_width"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        app:xlmm_title="新增收货地址" />
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center"
-                android:text="新增收货地址"
-                android:textColor="@android:color/white"
-                android:textSize="16sp" />
-
-        </android.support.v7.widget.Toolbar>
-
-    </android.support.design.widget.AppBarLayout>
-
-    <View android:layout_width="match_parent"
+    <View
+        android:layout_width="match_parent"
         android:layout_height="1dip"
-        android:background="@color/greytow"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="16dp"
+        android:background="@color/greytow" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="90px"
+        android:layout_gravity="center_vertical"
         android:background="@color/white"
-        android:orientation="horizontal"
-        android:layout_gravity="center_vertical">
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxLength="12"
             android:padding="8dp"
             android:text="收货人"
-            android:maxLength="12"
             android:textSize="14sp" />
 
         <EditText
@@ -55,10 +37,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp"
-            android:padding="8dp"
             android:background="@null"
-            android:maxLength="20"
             android:hint="请输入收货人姓名"
+            android:maxLength="20"
+            android:padding="8dp"
             android:textSize="14sp" />
 
     </LinearLayout>
@@ -83,27 +65,29 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp"
-            android:padding="8dp"
             android:background="@null"
+            android:hint="请输入收货人手机号"
             android:inputType="phone"
             android:maxLength="11"
-            android:hint="请输入收货人手机号"
+            android:padding="8dp"
             android:textSize="14sp" />
 
     </LinearLayout>
 
     <include layout="@layout/common_gap" />
-    <View android:layout_width="match_parent"
+
+    <View
+        android:layout_width="match_parent"
         android:layout_height="1dip"
-        android:background="@color/greytow"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="16dp"
+        android:background="@color/greytow" />
 
     <LinearLayout
-        android:minHeight="90px"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
         android:background="@color/white"
+        android:gravity="center_vertical"
+        android:minHeight="90px"
         android:orientation="horizontal">
 
         <TextView
@@ -162,9 +146,8 @@
         android:layout_width="match_parent"
         android:layout_height="90px"
         android:layout_marginTop="16dp"
-        android:minHeight="90px"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:minHeight="90px">
 
         <TextView
             android:layout_width="wrap_content"
@@ -178,9 +161,10 @@
             android:id="@+id/switch_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
             android:layout_margin="4dp"
             android:padding="8dp"
-            android:layout_alignParentRight="true" />
+            android:shadowColor="@color/colorAccent" />
 
     </RelativeLayout>
 
@@ -197,7 +181,7 @@
             android:background="@drawable/shape_common"
             android:text="保存"
             android:textColor="@color/white" />
-        >
+
     </RelativeLayout>
 
 

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.SwitchCompat;
-import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +38,6 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
 
   private static final String TAG = AddAddressActivity.class.getSimpleName();
 
-  @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.name) EditText name;
   @Bind(R.id.mobile) EditText mobile;
   @Bind(R.id.clear_address) EditText clearAddress;
@@ -80,9 +78,6 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
-    toolbar.setTitle("");
-    setSupportActionBar(toolbar);
-    finishBack(toolbar);
     parent = findViewById(R.id.main);
 
     initPopupWindow();

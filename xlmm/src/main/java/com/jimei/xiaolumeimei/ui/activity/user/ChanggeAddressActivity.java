@@ -1,13 +1,15 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
-import android.content.Context;
+
+import android.annotation.TargetApi;
+import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.SwitchCompat;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -69,6 +71,7 @@ public class ChanggeAddressActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void initData() {
     name.setText(receiver_name);
+    name.setSelection(receiver_name.length());
     mobile.setText(receiver_mobile);
     address.setText(city_string);
     clearAddress.setText(clearaddressa);
@@ -84,7 +87,6 @@ public class ChanggeAddressActivity extends BaseSwipeBackCompatActivity
     receiver_city = extras.getString("receiver_city");
     receiver_district = extras.getString("receiver_district");
     id = extras.getString("id");
-
     JUtils.Log(TAG, receiver_name + receiver_mobile + clearaddressa + receiver_state);
   }
 
@@ -109,11 +111,6 @@ public class ChanggeAddressActivity extends BaseSwipeBackCompatActivity
   @Override public void onClick(View v) {
     switch (v.getId()) {
       case R.id.address:
-
-        InputMethodManager imm =
-            (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(mobile.getWindowToken(), 0);
-
         //为popWindow添加动画效果
         popupWindow.setAnimationStyle(R.style.popWindow_animation);
         // 点击弹出泡泡窗口

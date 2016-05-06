@@ -508,11 +508,10 @@ public class MainActivity extends BaseActivity
                             //
                             //brandlistAdapter = new BrandlistAdapter(this);
                             //recyclerView.setAdapter(brandlistAdapter);
-
+                            brand.removeAllViews();
+                            brandViews.clear();
                             if (postBean.getPromotion_brands() != null) {
                                 brand.setVisibility(View.VISIBLE);
-                                brand.removeAllViews();
-                                brandViews.clear();
 
                                 List<PortalBean.PromotionBrandsBean> brandpromotionEntities =
                                         postBean.getPromotion_brands();
@@ -602,10 +601,11 @@ public class MainActivity extends BaseActivity
                                 brand.setVisibility(View.GONE);
                             }
 
+                            post_activity_layout.removeAllViews();
+                            imageViewList.clear();
                             if (null != postBean.getActivitys() && postBean.getActivitys().size() > 0) {
                                 post_activity_layout.setVisibility(View.VISIBLE);
-                                post_activity_layout.removeAllViews();
-                                imageViewList.clear();
+
                                 ImageView imageView;
 
                                 List<PortalBean.ActivitysBean> postActivityBean = postBean.getActivitys();

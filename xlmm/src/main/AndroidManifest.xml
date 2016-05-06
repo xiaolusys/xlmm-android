@@ -151,8 +151,7 @@
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".ui.activity.user.AddressActivity"
-            android:theme="@style/AppTheme.TransparentActivity"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
+            android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".ui.activity.user.AddAddressActivity"
             android:theme="@style/AppTheme.TransparentActivity" />

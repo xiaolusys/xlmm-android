@@ -73,10 +73,6 @@ public class LadyListActivity extends BaseSwipeBackCompatActivity {
   }
 
   private void initRecyclerView() {
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-    toolbar.setTitle("");
-    setSupportActionBar(toolbar);
-    finishBack(toolbar);
     xRecyclerView = (XRecyclerView) findViewById(R.id.childlist_recyclerView);
     GridLayoutManager layoutManager = new GridLayoutManager(LadyListActivity.this, 2);
 

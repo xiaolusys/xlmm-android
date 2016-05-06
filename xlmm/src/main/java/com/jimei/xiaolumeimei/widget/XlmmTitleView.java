@@ -1,6 +1,5 @@
 package com.jimei.xiaolumeimei.widget;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.design.widget.AppBarLayout;

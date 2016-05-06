@@ -71,10 +71,6 @@ public class ChildListActivity extends BaseSwipeBackCompatActivity {
   }
 
   @Override protected void initViews() {
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-    toolbar.setTitle("");
-    setSupportActionBar(toolbar);
-    finishBack(toolbar);
     initRecyclerView();
   }
 

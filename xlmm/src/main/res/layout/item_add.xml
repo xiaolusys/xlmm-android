@@ -30,7 +30,7 @@
       android:layout_marginTop="14dp"
       android:layout_below="@id/ll"
       android:id="@+id/receiver_address"
-      android:layout_width="wrap_content"
+      android:layout_width="600px"
       android:layout_height="wrap_content"/>
     <ImageView
         android:layout_centerVertical="true"
