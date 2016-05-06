@@ -1,8 +1,10 @@
 package com.jimei.xiaolumeimei.ui.fragment.v2;
 
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,13 +51,14 @@ public class YesterdayV2Fragment extends BaseFragment {
     private PreviousAdapter mPreviousAdapter;
     //private TextView mNormal, mOrder;
     private Subscription subscribe1;
+    private Subscription subscribe2;
     private Subscription subscribe3;
 
     private View head;
     private View view;
-    private Subscription subscribe2;
     private CountdownView countTime;
-    private String left;
+    private long left;
+    private Thread thread;
 
     public static YesterdayV2Fragment newInstance(String title) {
         YesterdayV2Fragment yesterdayV2Fragment = new YesterdayV2Fragment();
@@ -83,7 +86,7 @@ public class YesterdayV2Fragment extends BaseFragment {
 
     @Override
     protected void initData() {
-        load();
+        load(null);
     }
 
     @Override
@@ -98,9 +101,7 @@ public class YesterdayV2Fragment extends BaseFragment {
         try {
             crtTime = crtTime.replace("T", " ");
             Date crtdate = format.parse(crtTime);
-            if (crtdate.getTime() - now.getTime() > 0) {
-                left = crtdate.getTime() - now.getTime();
-            }
+            left = crtdate.getTime() - now.getTime();
         } catch (Exception e) {
 
         }
@@ -108,8 +109,12 @@ public class YesterdayV2Fragment extends BaseFragment {
         return left;
     }
 
-    private void load() {
-        showIndeterminateProgressDialog(false);
+    public void load(SwipeRefreshLayout swipeRefreshLayout) {
+        list.clear();
+        mPreviousAdapter.updateWithClear(list);
+        if (swipeRefreshLayout == null) {
+            showIndeterminateProgressDialog(false);
+        }
         subscribe1 = ProductModel.getInstance()
                 .getPreviousList(1, 10)
                 .subscribeOn(Schedulers.io())
@@ -129,10 +134,28 @@ public class YesterdayV2Fragment extends BaseFragment {
                                 List<ProductListBean.ResultsEntity> results =
                                         productListBean.getResults();
                                 totalPages = productListBean.getCount() / page_size;
+                                list.clear();
                                 list.addAll(results);
-                                mPreviousAdapter.update(list);
-                                left = productListBean.getDownshelfDeadline();
-                                countTime.updateShow(calcLeftTime(left));
+                                mPreviousAdapter.updateWithClear(list);
+                                left = calcLeftTime(productListBean.getDownshelfDeadline());
+                                if (thread == null) {
+                                    thread = new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            while (true) {
+                                                left--;
+                                                SystemClock.sleep(1);
+                                                getActivity().runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        countTime.updateShow(left);
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    });
+                                }
+                                thread.start();
                             }
                         } catch (Exception ex) {
                         }
@@ -142,7 +165,11 @@ public class YesterdayV2Fragment extends BaseFragment {
                     public void onCompleted() {
                         super.onCompleted();
                         //loading.post(loading::stop);
-                        hideIndeterminateProgressDialog();
+                        if (swipeRefreshLayout != null) {
+                            swipeRefreshLayout.setRefreshing(false);
+                        } else {
+                            hideIndeterminateProgressDialog();
+                        }
                     }
                 });
 

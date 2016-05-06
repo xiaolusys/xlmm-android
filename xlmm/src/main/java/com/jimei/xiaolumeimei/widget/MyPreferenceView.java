@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -21,6 +22,7 @@ public class MyPreferenceView extends LinearLayout implements View.OnClickListen
 
     private TextView titleText;
     private TextView summaryText;
+    private ImageView imageView;
     private Context context;
     private Activity activity;
     private Intent intent;
@@ -51,9 +53,13 @@ public class MyPreferenceView extends LinearLayout implements View.OnClickListen
         View view = LayoutInflater.from(context).inflate(R.layout.preference_list_item, this, true);
         titleText = ((TextView) view.findViewById(R.id.title));
         summaryText = ((TextView) view.findViewById(R.id.summary));
+        imageView = (ImageView)view.findViewById(R.id.img);
         setOnClickListener(this);
     }
 
+    public void hideImg(){
+        imageView.setVisibility(GONE);
+    }
 
     public void setTitleText(String title) {
         titleText.setText(title);

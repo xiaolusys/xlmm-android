@@ -37,7 +37,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:src="@mipmap/common_icon_right_arrow"
-
             />
     </LinearLayout>
 

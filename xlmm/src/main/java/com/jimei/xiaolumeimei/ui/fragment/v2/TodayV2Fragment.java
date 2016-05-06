@@ -1,8 +1,10 @@
 package com.jimei.xiaolumeimei.ui.fragment.v2;
 
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,6 +60,7 @@ public class TodayV2Fragment extends BaseFragment {
     private Subscription subscribe2;
     private CountdownView countTime;
     private long left;
+    Thread thread;
 
     public static TodayV2Fragment newInstance(String title) {
         TodayV2Fragment todayV2Fragment = new TodayV2Fragment();
@@ -86,7 +89,7 @@ public class TodayV2Fragment extends BaseFragment {
 
     @Override
     protected void initData() {
-        load();
+        load(null);
 
     }
 
@@ -115,8 +118,12 @@ public class TodayV2Fragment extends BaseFragment {
     }
 
 
-    private void load() {
-        showIndeterminateProgressDialog(false);
+    public void load(SwipeRefreshLayout swipeRefreshLayout) {
+        list.clear();
+        mTodayAdapter.updateWithClear(list);
+        if (swipeRefreshLayout==null) {
+            showIndeterminateProgressDialog(false);
+        }
         subscribe1 = ProductModel.getInstance()
                 .getTodayList(1, 10)
                 .subscribeOn(Schedulers.io())
@@ -135,14 +142,30 @@ public class TodayV2Fragment extends BaseFragment {
                             if (productListBean != null) {
                                 left = calcLeftTime(productListBean.getDownshelfDeadline());
                                 JUtils.Log(TAG,"getDownshelfDeadline===="+productListBean.getDownshelfDeadline()+ "      left=====" + left);
-                                countTime.updateShow(left);
-
                                 List<ProductListBean.ResultsEntity> results =
                                         productListBean.getResults();
                                 totalPages = productListBean.getCount() / page_size;
+                                list.clear();
                                 list.addAll(results);
-                                mTodayAdapter.update(list);
-
+                                mTodayAdapter.updateWithClear(list);
+                                if (thread == null) {
+                                    thread = new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            while (true) {
+                                                left--;
+                                                SystemClock.sleep(1);
+                                                getActivity().runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        countTime.updateShow(left);
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    });
+                                }
+                                thread.start();
                             }
                         } catch (Exception ex) {
                         }
@@ -152,7 +175,11 @@ public class TodayV2Fragment extends BaseFragment {
                     public void onCompleted() {
                         super.onCompleted();
                         //loading.post(loading::stop);
-                        hideIndeterminateProgressDialog();
+                        if (swipeRefreshLayout != null) {
+                            swipeRefreshLayout.setRefreshing(false);
+                        }else {
+                            hideIndeterminateProgressDialog();
+                        }
                     }
                 });
 

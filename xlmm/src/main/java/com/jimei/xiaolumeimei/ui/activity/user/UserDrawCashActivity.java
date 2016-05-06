@@ -105,6 +105,7 @@ public class UserDrawCashActivity extends BaseSwipeBackCompatActivity implements
         if (isChecked) {
             if (money >= 200) {
                 moneyEt.setText("200");
+                moneyEt.setSelection(3);
             } else {
                 moneyEt.setText(money + "");
             }
@@ -168,12 +169,12 @@ public class UserDrawCashActivity extends BaseSwipeBackCompatActivity implements
                 msgTv.setText("提现最低金额需要8.88元哦");
                 drawCashBtn.setClickable(false);
                 drawCashBtn.setBackgroundResource(R.drawable.shape_common_unclickable);
-            } else if (drawMoney > 200) {
-                msgTv.setText("提现金额超过微信红包限额");
+            }  else if (drawMoney > money) {
+                msgTv.setText("提现金额超过账户可提额度");
                 drawCashBtn.setClickable(false);
                 drawCashBtn.setBackgroundResource(R.drawable.shape_common_unclickable);
-            } else if (drawMoney > money) {
-                msgTv.setText("提现金额超过账户可提额度");
+            }else if (drawMoney > 200) {
+                msgTv.setText("提现金额超过微信红包限额");
                 drawCashBtn.setClickable(false);
                 drawCashBtn.setBackgroundResource(R.drawable.shape_common_unclickable);
             } else {

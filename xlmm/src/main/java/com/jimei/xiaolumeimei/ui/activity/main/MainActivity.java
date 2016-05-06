@@ -22,7 +22,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -35,7 +34,6 @@ import com.jimei.xiaolumeimei.base.BaseActivity;
 import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.BrandListBean;
-import com.jimei.xiaolumeimei.entities.BrandpromotionBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.PostBean;
@@ -181,6 +179,16 @@ public class MainActivity extends BaseActivity
         ladyImage.setOnClickListener(this);
         //radioGroup.setOnCheckedChangeListener(this);
         scrollableLayout.setOnScrollListener(this);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                initPost(swipeRefreshLayout);
+                vp.setCurrentItem(1);
+                ((YesterdayV2Fragment) list.get(0)).load(swipeRefreshLayout);
+                ((TodayV2Fragment) list.get(1)).load(swipeRefreshLayout);
+                ((TomorrowV2Fragment) list.get(2)).load(swipeRefreshLayout);
+            }
+        });
     }
 
     @Override
@@ -307,22 +315,10 @@ public class MainActivity extends BaseActivity
         badge.setGravity(Gravity.END | Gravity.TOP);
         badge.setPadding(dip2Px(4), dip2Px(1), dip2Px(4), dip2Px(1));
         badge.setTargetView(image2);
-
-        initViewsForTab();
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                initDataForTab();
-                new Handler().postDelayed(new Runnable() {
+        initViewsForTab();
 
-                    @Override
-                    public void run() {
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                }, 2000);
-            }
-        });
+
     }
 
     public void initViewsForTab() {
@@ -354,7 +350,7 @@ public class MainActivity extends BaseActivity
     }
 
     private void initDataForTab() {
-        initPost();
+        initPost(null);
         //    Subscription subscription5 = Observable.timer(1, 1, TimeUnit.SECONDS)
         //        .onBackpressureDrop()
         //        .map(aLong -> calcLeftTime())
@@ -371,7 +367,7 @@ public class MainActivity extends BaseActivity
         //    addSubscription(subscription5);
     }
 
-    private void initPost() {
+    private void initPost(SwipeRefreshLayout swipeRefreshLayout) {
         Subscription subscribe2 = ProductModel.getInstance()
                 .getPortalBean()
                 .subscribeOn(Schedulers.io())
@@ -798,10 +794,16 @@ public class MainActivity extends BaseActivity
                             ex.printStackTrace();
                         }
                     }
+
+                    @Override
+                    public void onCompleted() {
+                        if (swipeRefreshLayout != null) {
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
+                    }
                 });
         addSubscription(subscribe2);
     }
-
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {

@@ -76,6 +76,7 @@ public class InformationActivity extends BaseSwipeBackCompatActivity implements 
         editAddressView.bindActivity(this,AddressActivity.class);
         settingView.bindActivity(this,SettingActivity.class);
         login_out.bindActivity(this,null);
+        login_out.hideImg();
     }
 
     @Override

@@ -80,12 +80,12 @@ public class UserWalletAdapter extends RecyclerView.Adapter<UserWalletAdapter.Us
         } else if (1 == resultsEntity.getBudgetType()) {
             holder.tvMoneychange.setText("- " + resultsEntity.getBudegetDetailCash() + "元  ");
         }
-        bindOnClickListener(holder.tvMoneychange, position);
+        bindOnClickListener(holder.itemView, position);
     }
 
-    private void bindOnClickListener(TextView tvMoneychange, int position) {
+    private void bindOnClickListener(View itemView, int position) {
         BudgetdetailBean.ResultsEntity entity = mList.get(position);
-        tvMoneychange.setOnClickListener(new View.OnClickListener() {
+        itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, WalletDetailActivity.class);
@@ -106,6 +106,7 @@ public class UserWalletAdapter extends RecyclerView.Adapter<UserWalletAdapter.Us
     static class UserWalletVH extends RecyclerView.ViewHolder {
 
         int id = R.layout.item_userwallet;
+        View itemView;
         @Bind(R.id.tv_time)
         TextView tvTime;
         @Bind(R.id.tv_desc)
@@ -117,6 +118,7 @@ public class UserWalletAdapter extends RecyclerView.Adapter<UserWalletAdapter.Us
 
         public UserWalletVH(View itemView) {
             super(itemView);
+            this.itemView = itemView;
             ButterKnife.bind(this, itemView);
         }
     }
