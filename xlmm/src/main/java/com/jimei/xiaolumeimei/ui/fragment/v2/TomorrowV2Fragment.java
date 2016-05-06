@@ -1,8 +1,10 @@
 package com.jimei.xiaolumeimei.ui.fragment.v2;
 
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,7 +56,8 @@ public class TomorrowV2Fragment extends BaseFragment {
     private View view;
     private Subscription subscribe2;
     private CountdownView countTime;
-    private String left;
+    private long left;
+    private Thread thread;
 
     public static TomorrowV2Fragment newInstance(String title) {
         TomorrowV2Fragment tomorrowV2Fragment = new TomorrowV2Fragment();
@@ -83,7 +86,7 @@ public class TomorrowV2Fragment extends BaseFragment {
 
     @Override
     protected void initData() {
-        load();
+        load(null);
 
     }
 
@@ -93,25 +96,28 @@ public class TomorrowV2Fragment extends BaseFragment {
     }
 
     private long calcLeftTime(String crtTime) {
-        long left = 0;
+        long time = 0;
         Date now = new Date();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
             crtTime = crtTime.replace("T", " ");
             Date crtdate = format.parse(crtTime);
             if (crtdate.getTime() - now.getTime() > 0) {
-                left = crtdate.getTime() - now.getTime();
+                time = crtdate.getTime() - now.getTime();
             }
         } catch (Exception e) {
 
         }
-
-        return left;
+        return time;
     }
 
 
-    private void load() {
-        showIndeterminateProgressDialog(false);
+    public void load(SwipeRefreshLayout swipeRefreshLayout) {
+        list.clear();
+        mTodayAdapter.updateWithClear(list);
+        if (swipeRefreshLayout == null) {
+            showIndeterminateProgressDialog(false);
+        }
         subscribe1 = ProductModel.getInstance()
                 .getAdvanceList(1, 10)
                 .subscribeOn(Schedulers.io())
@@ -131,9 +137,28 @@ public class TomorrowV2Fragment extends BaseFragment {
                                 List<ProductListBean.ResultsEntity> results =
                                         productListBean.getResults();
                                 totalPages = productListBean.getCount() / page_size;
+                                list.clear();
                                 list.addAll(results);
-                                mTodayAdapter.update(list);
-                                countTime.updateShow(calcLeftTime(productListBean.getDownshelfDeadline()));
+                                mTodayAdapter.updateWithClear(list);
+                                left = calcLeftTime(productListBean.getDownshelfDeadline());
+                                if (thread == null) {
+                                    thread = new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            while (left>0) {
+                                                left--;
+                                                SystemClock.sleep(1);
+                                                getActivity().runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        countTime.updateShow(left);
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    });
+                                }
+                                thread.start();
                             }
                         } catch (Exception ex) {
                         }
@@ -143,7 +168,11 @@ public class TomorrowV2Fragment extends BaseFragment {
                     public void onCompleted() {
                         super.onCompleted();
                         //loading.post(loading::stop);
-                        hideIndeterminateProgressDialog();
+                        if (swipeRefreshLayout != null) {
+                            swipeRefreshLayout.setRefreshing(false);
+                        } else {
+                            hideIndeterminateProgressDialog();
+                        }
                     }
                 });
 
