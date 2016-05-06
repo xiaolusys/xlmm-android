@@ -142,7 +142,7 @@ public class YesterdayV2Fragment extends BaseFragment {
                                     thread = new Thread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            while (true) {
+                                            while (left > 0) {
                                                 left--;
                                                 SystemClock.sleep(1);
                                                 getActivity().runOnUiThread(new Runnable() {
