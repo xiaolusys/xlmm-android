@@ -611,7 +611,7 @@ public class MainActivity extends BaseActivity
                                 List<PortalBean.ActivitysBean> postActivityBean = postBean.getActivitys();
                                 for (int i = 0; i < postActivityBean.size(); i++) {
                                     imageView = new ImageView(MainActivity.this);
-                                    imageView.setScaleType(ImageView.ScaleType.CENTER);
+ com                                   imageView.setScaleType(ImageView.ScaleType.CENTER);
                                     imageViewList.add(imageView);
                                     post_activity_layout.addView(imageView);
                                 }
