@@ -472,6 +472,8 @@ public class MainActivity extends BaseActivity
                             }
 
                             if (postBean.getCategorys() != null) {
+                                ladyImage.setImageResource(0);
+                                childImage.setImageResource(0);
 
                                 List<PortalBean.CategorysBean> categorys = postBean.getCategorys();
 
@@ -509,6 +511,8 @@ public class MainActivity extends BaseActivity
 
                             if (postBean.getPromotion_brands() != null) {
                                 brand.setVisibility(View.VISIBLE);
+                                brand.removeAllViews();
+                                brandViews.clear();
 
                                 List<PortalBean.PromotionBrandsBean> brandpromotionEntities =
                                         postBean.getPromotion_brands();
@@ -600,6 +604,8 @@ public class MainActivity extends BaseActivity
 
                             if (null != postBean.getActivitys() && postBean.getActivitys().size() > 0) {
                                 post_activity_layout.setVisibility(View.VISIBLE);
+                                post_activity_layout.removeAllViews();
+                                imageViewList.clear();
                                 ImageView imageView;
 
                                 List<PortalBean.ActivitysBean> postActivityBean = postBean.getActivitys();
