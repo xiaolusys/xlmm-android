@@ -11,6 +11,39 @@
         android:layout_height="wrap_content"
         app:xlmm_title="萌娃专区" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="4dp">
+
+        <TextView
+            android:id="@+id/text_1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="4dp"
+            android:gravity="center"
+            android:text="推荐排序"
+            android:textColor="@color/colorAccent" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/text_color_9B" />
+
+        <TextView
+            android:id="@+id/text_2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="4dp"
+            android:gravity="center"
+            android:text="价格排序"
+            android:textColor="@color/text_color_9B" />
+
+    </LinearLayout>
+
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -18,6 +51,11 @@
 
         <com.jcodecraeer.xrecyclerview.XRecyclerView
             android:id="@+id/childlist_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <com.jcodecraeer.xrecyclerview.XRecyclerView
+            android:id="@+id/xrv_by"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </FrameLayout>

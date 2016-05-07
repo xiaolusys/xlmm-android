@@ -105,6 +105,12 @@ public interface XlmmService {
     Observable<ChildListBean> getChildList(
             @Query("page") int page,
             @Query("page_size") int page_size);
+    //童装分页列表
+    @GET("/rest/v1/products/childlist")
+    Observable<ChildListBean> getChildList(
+            @Query("page") int page,
+            @Query("page_size") int page_size,
+            @Query("order_by")String order_by);
 
 
     //女装列表
@@ -117,6 +123,12 @@ public interface XlmmService {
             @Query("page") int page,
             @Query("page_size") int page_size);
 
+    //女装分页列表,升价排序
+    @GET("/rest/v1/products/ladylist")
+    Observable<LadyListBean> getLadyList(
+            @Query("page") int page,
+            @Query("page_size") int page_size,
+            @Query("order_by") String order_by);
 
     //今日列表
     @GET("/rest/v2/products")
@@ -340,7 +352,7 @@ public interface XlmmService {
             @Field("receiver_address") String receiver_address,
             @Field("receiver_name") String receiver_name,
             @Field("receiver_mobile") String receiver_mobile,
-            @Field("default")String defaulta
+            @Field("default") String defaulta
     );
 
     //修改地址
@@ -354,7 +366,7 @@ public interface XlmmService {
             @Field("receiver_address") String receiver_address,
             @Field("receiver_name") String receiver_name,
             @Field("receiver_mobile") String receiver_mobile,
-            @Field("default")String defaulta
+            @Field("default") String defaulta
     );
 
 

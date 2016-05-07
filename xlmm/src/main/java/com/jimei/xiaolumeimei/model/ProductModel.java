@@ -32,13 +32,6 @@ public class ProductModel {
     return ourInstance;
   }
 
-  //得到儿童数据列表
-  public Observable<ChildListBean> getChildList() {
-
-    return XlmmRetrofitClient.getService()
-        .getChildList()
-        .compose(new DefaultTransform<>());
-  }
 
   //得到今日数据
   public Observable<ProductListBean> getTodayList(int page, int page_size) {
@@ -72,6 +65,13 @@ public class ProductModel {
         .getChildList(page, page_size)
         .compose(new DefaultTransform<>());
   }
+  //得到儿童分页数据
+  public Observable<ChildListBean> getChildList(int page, int page_size,String orderBy) {
+
+    return XlmmRetrofitClient.getService()
+        .getChildList(page, page_size,orderBy)
+        .compose(new DefaultTransform<>());
+  }
 
   //得到女装分页数据
   public Observable<LadyListBean> getLadyList(int page, int page_size) {
@@ -79,6 +79,13 @@ public class ProductModel {
     return XlmmRetrofitClient.getService()
         .getLadyList(page, page_size)
         .compose(new DefaultTransform<>());
+  }
+
+  //得到女装分页数据,升价排序
+  public Observable<LadyListBean> getLadyList(int page, int page_size,String order_by) {
+    return XlmmRetrofitClient.getService()
+            .getLadyList(page, page_size,order_by)
+            .compose(new DefaultTransform<>());
   }
 
   //得到昨日数据
