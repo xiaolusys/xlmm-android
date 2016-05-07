@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
@@ -121,7 +122,7 @@ public class TodayV2Fragment extends BaseFragment {
     public void load(SwipeRefreshLayout swipeRefreshLayout) {
         list.clear();
         mTodayAdapter.updateWithClear(list);
-        if (swipeRefreshLayout==null) {
+        if (swipeRefreshLayout == null) {
             showIndeterminateProgressDialog(false);
         }
         subscribe1 = ProductModel.getInstance()
@@ -141,7 +142,7 @@ public class TodayV2Fragment extends BaseFragment {
 
                             if (productListBean != null) {
                                 left = calcLeftTime(productListBean.getDownshelfDeadline());
-                                JUtils.Log(TAG,"getDownshelfDeadline===="+productListBean.getDownshelfDeadline()+ "      left=====" + left);
+                                JUtils.Log(TAG, "getDownshelfDeadline====" + productListBean.getDownshelfDeadline() + "      left=====" + left);
                                 List<ProductListBean.ResultsEntity> results =
                                         productListBean.getResults();
                                 totalPages = productListBean.getCount() / page_size;
@@ -152,15 +153,18 @@ public class TodayV2Fragment extends BaseFragment {
                                     thread = new Thread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            while (left>0) {
+                                            while (left > 0) {
                                                 left--;
                                                 SystemClock.sleep(1);
-                                                getActivity().runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        countTime.updateShow(left);
-                                                    }
-                                                });
+                                                FragmentActivity activity = getActivity();
+                                                if (activity != null) {
+                                                    activity.runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            countTime.updateShow(left);
+                                                        }
+                                                    });
+                                                }
                                             }
                                         }
                                     });
@@ -177,7 +181,7 @@ public class TodayV2Fragment extends BaseFragment {
                         //loading.post(loading::stop);
                         if (swipeRefreshLayout != null) {
                             swipeRefreshLayout.setRefreshing(false);
-                        }else {
+                        } else {
                             hideIndeterminateProgressDialog();
                         }
                     }

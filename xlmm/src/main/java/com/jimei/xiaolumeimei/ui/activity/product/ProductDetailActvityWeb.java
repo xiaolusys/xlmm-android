@@ -247,8 +247,10 @@ public class ProductDetailActvityWeb extends BaseAppCompatActivityForDetail
                         addSubscription(subscribe);
                     } else {
                         Toast.makeText(mContext, "请选择尺码", Toast.LENGTH_SHORT).show();
-                        CustScrollView custScrollView = (CustScrollView) fragmentDetail.getView().findViewById(R.id.custScrollView);
-                        custScrollView.setScrollY(400);
+                        if (fragmentDetail.getView() != null) {
+                            CustScrollView custScrollView = (CustScrollView) fragmentDetail.getView().findViewById(R.id.custScrollView);
+                            custScrollView.setScrollY(400);
+                        }
                     }
                 }
 

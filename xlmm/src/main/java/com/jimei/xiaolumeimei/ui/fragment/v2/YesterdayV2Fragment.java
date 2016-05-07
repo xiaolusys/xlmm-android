@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
@@ -145,12 +146,15 @@ public class YesterdayV2Fragment extends BaseFragment {
                                             while (left > 0) {
                                                 left--;
                                                 SystemClock.sleep(1);
-                                                getActivity().runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        countTime.updateShow(left);
-                                                    }
-                                                });
+                                                FragmentActivity activity = getActivity();
+                                                if (activity != null) {
+                                                    activity.runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            countTime.updateShow(left);
+                                                        }
+                                                    });
+                                                }
                                             }
                                         }
                                     });

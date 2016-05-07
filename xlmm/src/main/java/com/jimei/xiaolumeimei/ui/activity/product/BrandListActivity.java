@@ -30,8 +30,6 @@ import rx.schedulers.Schedulers;
  */
 public class BrandListActivity extends BaseSwipeBackCompatActivity {
     int page_size = 10;
-    @Bind(R.id.tool_bartitle)
-    TextView toolBartitle;
     private int page = 2;
     private int totalPages;//总的分页数
     private XRecyclerView xRecyclerView;
@@ -85,11 +83,6 @@ public class BrandListActivity extends BaseSwipeBackCompatActivity {
 
     @Override
     protected void initViews() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("");
-        toolBartitle.setText("品牌推广");
-        setSupportActionBar(toolbar);
-        finishBack(toolbar);
         initRecyclerView();
     }
 

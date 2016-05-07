@@ -185,9 +185,9 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity implements
         JUtils.Log(TAG, "crt time " + refundDetailBean.getCreated());
         String desc = refundDetailBean.getAmount_flow().getDesc();
         refundTypeTv.setText(desc);
-        if (refundDetailBean.getStatus_display().equals("退款成功")){
+        if (refundDetailBean.getStatus_display().equals("退款成功")) {
             refundLayout.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             refundLayout.setVisibility(View.GONE);
         }
     }
@@ -211,11 +211,13 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_return_addr:
-                if ((refundDetail.getReturn_address() != null) && (!refundDetail.getReturn_address().isEmpty())) {
-                    new AlertDialog.Builder(this).setTitle("")
-                            .setMessage(refundDetail.getReturn_address() + getResources().getString(
-                                    R.string.return_addr))
-                            .show();
+                if (refundDetail != null) {
+                    if ((refundDetail.getReturn_address() != null) && (!refundDetail.getReturn_address().isEmpty())) {
+                        new AlertDialog.Builder(this).setTitle("")
+                                .setMessage(refundDetail.getReturn_address() + getResources().getString(
+                                        R.string.return_addr))
+                                .show();
+                    }
                 }
                 break;
             case R.id.et_logistics_info:

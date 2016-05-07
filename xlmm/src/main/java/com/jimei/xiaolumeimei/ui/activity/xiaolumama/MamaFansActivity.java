@@ -69,7 +69,9 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity {
           @Override public void onCompleted() {
             super.onCompleted();
             hideIndeterminateProgressDialog();
-            xrvMmvisitors.setVisibility(View.VISIBLE);
+            if (xrvMmvisitors != null) {
+              xrvMmvisitors.setVisibility(View.VISIBLE);
+            }
           }
 
           @Override public void onError(Throwable e) {
