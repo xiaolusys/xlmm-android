@@ -364,7 +364,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
                 Bundle bundlerl_two_dimen = new Bundle();
                 bundlerl_two_dimen.putString("cookies", cookies);
                 bundlerl_two_dimen.putString("domain", domain);
-                bundlerl_two_dimen.putString("cookies",
+                bundlerl_two_dimen.putString("Cookie",
                         sharedPreferences.getString("Cookie", ""));
                 bundlerl_two_dimen.putString("actlink", shareMmcode);
                 intentrl_two_dimen.putExtras(bundlerl_two_dimen);

@@ -61,6 +61,11 @@ public class LadyListActivityAdapter
     notifyDataSetChanged();
   }
 
+  public void clear(){
+    mList.clear();
+    notifyDataSetChanged();
+  }
+
   public void updateStart(List<LadyListBean.ResultsEntity> list) {
 
     mList.addAll(0, list);
