@@ -2,15 +2,9 @@ package com.jimei.xiaolumeimei.ui.activity.user;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-
-import butterknife.Bind;
+import android.widget.LinearLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
@@ -18,16 +12,17 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.model.UserModel;
+import com.jimei.xiaolumeimei.ui.activity.main.DebugActivity;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.CircleImageView;
 import com.jimei.xiaolumeimei.widget.MyPreferenceView;
-import com.jimei.xiaolumeimei.widget.XlmmTitleView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
+import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -56,10 +51,14 @@ public class InformationActivity extends BaseSwipeBackCompatActivity implements 
     MyPreferenceView login_out;
 
     UserInfoBean userinfo;
+    @Bind(R.id.debug)
+    LinearLayout debug;
+    private int num;
 
     @Override
     protected void setListener() {
         login_out.setOnClickListener(this);
+        debug.setOnClickListener(this);
     }
 
     @Override
@@ -70,12 +69,12 @@ public class InformationActivity extends BaseSwipeBackCompatActivity implements 
         editAddressView.setTitleText("地址管理");
         settingView.setTitleText("设置");
         login_out.setTitleText("退出账户");
-        nickNameView.bindActivity(this,SettingNicknameActivity.class);
-        bindPhoneView.bindActivity(this,WxLoginBindPhoneActivity.class);
-        editPwdView.bindActivity(this,VerifyPhoneActivity.class);
-        editAddressView.bindActivity(this,AddressActivity.class);
-        settingView.bindActivity(this,SettingActivity.class);
-        login_out.bindActivity(this,null);
+        nickNameView.bindActivity(this, SettingNicknameActivity.class);
+        bindPhoneView.bindActivity(this, WxLoginBindPhoneActivity.class);
+        editPwdView.bindActivity(this, VerifyPhoneActivity.class);
+        editAddressView.bindActivity(this, AddressActivity.class);
+        settingView.bindActivity(this, SettingActivity.class);
+        login_out.bindActivity(this, null);
         login_out.hideImg();
     }
 
@@ -93,8 +92,8 @@ public class InformationActivity extends BaseSwipeBackCompatActivity implements 
                         mobile = userinfo.getMobile();
                         nickNameView.setSummary(nickName);
                         Bundle bundle = new Bundle();
-                        bundle.putString("nickname",nickName);
-                        bundle.putString("headimgurl",user.getThumbnail());
+                        bundle.putString("nickname", nickName);
+                        bundle.putString("headimgurl", user.getThumbnail());
                         bindPhoneView.addBundle(bundle);
                         bindPhoneView.setSummary(mobile.substring(0, 3) + "****" + mobile.substring(7));
                         ViewUtils.loadImgToImgView(getApplicationContext(), imgUser, user.getThumbnail());
@@ -181,7 +180,42 @@ public class InformationActivity extends BaseSwipeBackCompatActivity implements 
                             }
                         }).show();
                 break;
+
+            case R.id.debug:
+                num++;
+                JUtils.Log(TAG, "num====" + num);
+                if (num == 8) {
+
+
+                    final String finalAccount = LoginUtils.getUserAccount(getApplicationContext());
+                    UserModel.getInstance()
+                            .customer_logout()
+                            .subscribeOn(Schedulers.io())
+                            .subscribe(new ServiceResponse<LogOutBean>() {
+                                @Override
+                                public void onNext(LogOutBean responseBody) {
+                                    super.onNext(responseBody);
+                                    if (responseBody.getCode() == 0) {
+                                        JUtils.Toast("成功进入debug模式");
+                                        if ((finalAccount != null) && ((!finalAccount.isEmpty()))) {
+                                            MiPushClient.unsetUserAccount(getApplicationContext(),
+                                                    finalAccount, null);
+                                        }
+                                        Intent intent = new Intent(InformationActivity.this, DebugActivity.class);
+
+                                        LoginUtils.delLoginInfo(getApplicationContext());
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                }
+                            });
+
+                } else if (num == 9) {
+                    num = 0;
+                }
+                break;
         }
 
     }
+
 }
