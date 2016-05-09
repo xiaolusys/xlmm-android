@@ -236,6 +236,9 @@
             android:name=".ui.activity.xiaolumama.BoutiqueWebviewActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
+            android:name=".ui.activity.main.ComplainWebActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
+        <activity
             android:name="com.mob.tools.MobUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
@@ -381,10 +384,11 @@
         <activity
             android:name=".ui.activity.user.WalletDetailActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
+        <activity android:name=".ui.activity.xiaolumama.DrawCashResultActivity"
+            android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
             android:name=".ui.activity.main.DebugActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
-
         <service
             android:name="com.xiaomi.push.service.XMPushService"
             android:enabled="true"
@@ -427,6 +431,7 @@
                 <action android:name="com.xiaomi.mipush.ERROR" />
             </intent-filter>
         </receiver>
+
 
     </application>
 

@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -52,7 +54,7 @@ import rx.schedulers.Schedulers;
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
-        implements View.OnClickListener, RadioGroup.OnCheckedChangeListener,
+        implements View.OnClickListener,
         SmoothCheckBox.OnCheckedChangeListener {
     private static final int REQUEST_CODE_PAYMENT = 1;
     private static final int REQUEST_CODE_COUPONT = 2;
@@ -86,8 +88,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     TextView jiesheng;
     @Bind(R.id.confirm)
     Button confirm;
-    @Bind(R.id.pay_rg)
-    RadioGroup rg_pay;
     @Bind(R.id.post_fee)
     TextView tv_postfee;
     @Bind(R.id.coupon_layout)
@@ -107,6 +107,14 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     TextView extraBudget;
     @Bind(R.id.edit_query)
     EditText editText;
+    @Bind(R.id.iv_wx)
+    ImageView wxImg;
+    @Bind(R.id.iv_alipay)
+    ImageView alipayImg;
+    @Bind(R.id.wx_layout)
+    LinearLayout wxLayout;
+    @Bind(R.id.alipay_layout)
+    LinearLayout alipayLayout;
     private boolean isAlipay, isWx, isBudget;
     private String ids;
     private String cart_ids;
@@ -134,18 +142,19 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     private double real_use_yue;
     private double yue;
     private double appcut;
-    private List<CouponBean.ResultsEntity> results;
 
     @Override
     protected void setListener() {
         adress.setOnClickListener(this);
         confirm.setOnClickListener(this);
-        rg_pay.setOnCheckedChangeListener(this);
+        wxLayout.setOnClickListener(this);
+        alipayLayout.setOnClickListener(this);
         scb.setOnCheckedChangeListener(this);
     }
 
     @Override
     protected void initData() {
+        isAlipay = true;
 
         list = new ArrayList<>();
 
@@ -383,12 +392,9 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
     @Override
     public void onClick(View v) {
-
         switch (v.getId()) {
             case R.id.adress:
-
                 if (isHaveAddress) {
-
                     Intent intent =
                             new Intent(CartsPayInfoActivity.this, AddressSelectActivity.class);
                     startActivityForResult(intent, REQUEST_CODE_ADDRESS);
@@ -396,19 +402,14 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     startActivity(
                             new Intent(CartsPayInfoActivity.this, AddNoAddressActivity.class));
                 }
-
                 break;
-
             case R.id.confirm:
                 if (isHaveAddress) {
-
                     if (!isCoupon && !isBudget && !isWx && !isAlipay) {
                         JUtils.Toast("请选择支付方式");
                         return;
                     }
-
                     if (isCoupon) {
-
                         if (!isAlipay && !isWx && !isBudget) {
                             if (paymentInfo == 0) {
                                 pay_extras = "pid:"
@@ -536,6 +537,18 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     intent.putExtras(bundle);
                 }
                 startActivityForResult(intent, REQUEST_CODE_COUPONT);
+                break;
+            case R.id.wx_layout:
+                isWx = true;
+                isAlipay = false;
+                wxImg.setImageResource(R.drawable.radio_bg_checked);
+                alipayImg.setImageResource(R.drawable.radio_bg);
+                break;
+            case R.id.alipay_layout:
+                isAlipay = true;
+                isWx = false;
+                alipayImg.setImageResource(R.drawable.radio_bg_checked);
+                wxImg.setImageResource(R.drawable.radio_bg);
                 break;
         }
     }
@@ -759,17 +772,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         builder.setTitle("提示");
         builder.setPositiveButton("OK", null);
         builder.create().show();
-    }
-
-    @Override
-    public void onCheckedChanged(RadioGroup group, int checkedId) {
-        if (checkedId == R.id.alipay) {
-            isAlipay = true;
-            isWx = false;
-        } else if (checkedId == R.id.wx) {
-            isWx = true;
-            isAlipay = false;
-        }
     }
 
     @Override

@@ -35,8 +35,6 @@ public class ComplainActivity extends BaseSwipeBackCompatActivity
         implements View.OnClickListener, TextWatcher {
     @Bind(R.id.tijiao)
     Button confirm;
-    @Bind(R.id.toolbar)
-    Toolbar toolbar;
     @Bind(R.id.complain_text)
     EditText complainText;
     @Bind(R.id.count_text)
@@ -65,9 +63,6 @@ public class ComplainActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void initViews() {
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
-        finishBack(toolbar);
     }
 
     @Override

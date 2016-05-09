@@ -6,58 +6,43 @@ package com.jimei.xiaolumeimei.adapter;
  */
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jimei.xiaolumeimei.data.XlmmConst;
-import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.CouponBean;
-import com.jimei.xiaolumeimei.widget.MyHorizontalScrollView;
-import com.jimei.xiaolumeimei.widget.NestedListView;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.ui.activity.trade.OrderDetailActivity;
 import com.jude.utils.JUtils;
 
 public class CouponListAdapter extends BaseAdapter {
     private static final String TAG = "CouponListAdapter";
     private Context context;
-    private List<CouponBean.ResultsEntity> mList;
+    private List<CouponBean.ResultsBean> mList;
     private int mCouponTyp;
     private String mSelecteCouponid;
 
     public CouponListAdapter(Context context) {
-        mList = new ArrayList<CouponBean.ResultsEntity>();
+        mList = new ArrayList<>();
         this.context = context;
     }
 
-    public void updateWithClear(List<CouponBean.ResultsEntity> list) {
+    public void updateWithClear(List<CouponBean.ResultsBean> list) {
         mList.clear();
         mList.addAll(list);
         notifyDataSetChanged();
     }
 
-    public void update(List<CouponBean.ResultsEntity> list, int coupon_type, String selected_couponid) {
+    public void update(List<CouponBean.ResultsBean> list, int coupon_type, String selected_couponid) {
 
         Log.d(TAG, "dataSource.size " + list.size());
         mCouponTyp = coupon_type;
@@ -109,14 +94,16 @@ public class CouponListAdapter extends BaseAdapter {
             convertView.setBackgroundResource(R.drawable.bg_img_dcoupon);
         }
         holder.tv_coupon_value.setText("￥" + Math.round(mList.get(position).getCoupon_value() * 100) / 100);
-        holder.tv_coupon_info.setText(mList.get(position).getCoupon_type_display());
-        holder.tv_coupon_crttime.setText("期限   " + mList.get(position).getCreated().replace("T", " ") + "   至   " + mList.get(position).getDeadline().replace("T", " "));
-        JUtils.Log(TAG, "couponno= " + mList.get(position).getId() + " selected couponno=" + mSelecteCouponid);
-        double fee = mList.get(position).getUse_fee();
-        if (fee > 0) {
-            String str = "满" + ((int) fee) + "元使用";
-            holder.use_fee.setText(str);
+        holder.tv_coupon_info.setText(mList.get(position).getPros_desc());
+        String start_time = mList.get(position).getStart_time();
+        if (start_time != null) {
+            holder.tv_coupon_crttime.setText("期限   " + start_time + "   至   " + mList.get(position).getDeadline());
+        } else {
+            holder.tv_coupon_crttime.setText("期限   " + mList.get(position).getCreated().replace("T", " ") + "   至   " + mList.get(position).getDeadline());
         }
+        JUtils.Log(TAG, "couponno= " + mList.get(position).getId() + " selected couponno=" + mSelecteCouponid);
+        holder.use_fee.setText(mList.get(position).getUse_fee_des());
+
         if ((mSelecteCouponid != null) && (!mSelecteCouponid.isEmpty())
                 && mSelecteCouponid.equals(Integer.toString(mList.get(position).getId()))) {
             holder.img_selected.setVisibility(View.VISIBLE);

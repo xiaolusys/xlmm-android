@@ -141,7 +141,7 @@ public class TomorrowV2Fragment extends BaseFragment {
                                 list.clear();
                                 list.addAll(results);
                                 mTodayAdapter.updateWithClear(list);
-                                left = calcLeftTime(productListBean.getDownshelfDeadline()) - 4 * 3600 * 1000;
+                                left = calcLeftTime(productListBean.getDownshelfDeadline()) - 28 * 3600 * 1000;
                                 if (thread == null) {
                                     thread = new Thread(new Runnable() {
                                         @Override
