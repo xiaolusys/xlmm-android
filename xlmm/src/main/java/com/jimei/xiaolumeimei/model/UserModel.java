@@ -1,5 +1,6 @@
 package com.jimei.xiaolumeimei.model;
 
+import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.entities.BindInfoBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
@@ -16,9 +17,7 @@ import com.jimei.xiaolumeimei.entities.UserAccountBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.UserWithdrawResult;
-import com.jimei.xiaolumeimei.entities.WxLogininfoBean;
 import com.jimei.xiaolumeimei.entities.WxPubAuthInfo;
-import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 
 import rx.Observable;
@@ -238,4 +237,9 @@ public class UserModel {
                 .compose(new DefaultTransform<>());
     }
 
+    public Observable<CodeBean> openDebug(String debug_secret){
+
+        return XlmmRetrofitClient.getService().openDebug(debug_secret)
+                .compose(new DefaultTransform<>());
+    }
 }
