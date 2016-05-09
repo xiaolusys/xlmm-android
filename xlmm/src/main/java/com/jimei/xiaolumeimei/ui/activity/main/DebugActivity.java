@@ -3,6 +3,7 @@ package com.jimei.xiaolumeimei.ui.activity.main;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Process;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -10,10 +11,14 @@ import android.widget.EditText;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.entities.CodeBean;
+import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
+import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 
 import butterknife.Bind;
+import rx.schedulers.Schedulers;
 
 
 /**
@@ -27,8 +32,11 @@ public class DebugActivity extends BaseSwipeBackCompatActivity implements View.O
     @Bind(R.id.bt_debug)
     Button btDebug;
 
-    SharedPreferences sharedPreferences ;
+    SharedPreferences sharedPreferences;
     String textDebug;
+    String textPass;
+    @Bind(R.id.edit_pass)
+    EditText editPass;
 
     @Override
     protected void setListener() {
@@ -76,18 +84,42 @@ public class DebugActivity extends BaseSwipeBackCompatActivity implements View.O
                 JUtils.Toast("请输入API地址");
                 return;
             }
-            textDebug = editDebug.getText().toString().trim();
-           SharedPreferences.Editor editor =  sharedPreferences.edit();
-            editor.putString("BASE_URL",textDebug);
-           boolean isPut =  editor.commit();
-            if (isPut) {
-                Intent intent = new Intent(this, LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                android.os.Process.killProcess(android.os.Process.myPid());
-                System.exit(1);
+
+            if (TextUtils.isEmpty(editPass.getText())) {
+                JUtils.Toast("请输入密码");
+                return;
             }
+
+            textDebug = editDebug.getText().toString().trim();
+            textPass = editPass.getText().toString().trim();
+
+            UserModel.getInstance()
+                    .openDebug(textPass)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(new ServiceResponse<CodeBean>() {
+                        @Override
+                        public void onNext(CodeBean codeBean) {
+                            if (null != codeBean) {
+                                if (codeBean.getRcode() == 0) {
+                                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                                    editor.putString("BASE_URL", textDebug);
+                                    boolean isPut = editor.commit();
+                                    if (isPut) {
+                                        Intent intent = new Intent(DebugActivity.this, LoginActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        startActivity(intent);
+                                        Process.killProcess(Process.myPid());
+                                        System.exit(1);
+                                    }
+                                }
+
+                                JUtils.Toast(codeBean.getMsg());
+                            }
+                        }
+                    });
+
 
         }
     }
+
 }
