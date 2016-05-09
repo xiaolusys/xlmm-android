@@ -36,7 +36,7 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.SimpleCallback {
 
     public ItemTouchHelperCallback(ItemTouchHelperAdapter adapter) {
         super(ItemTouchHelper.UP | ItemTouchHelper.DOWN,
-                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
+                ItemTouchHelper.LEFT );
         this.adapter = adapter;
     }
 
