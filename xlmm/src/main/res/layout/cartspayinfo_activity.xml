@@ -77,9 +77,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:singleLine="true"
                     android:layout_marginLeft="8dp"
                     android:layout_toRightOf="@id/image_location"
+                    android:singleLine="true"
                     android:text="" />
 
                 <TextView
@@ -297,6 +297,7 @@
 
 
                     <LinearLayout
+                        android:id="@+id/alipay_layout"
                         android:layout_width="match_parent"
                         android:layout_height="88px"
                         android:gravity="center_vertical"
@@ -316,12 +317,25 @@
                             android:layout_marginLeft="12dp"
                             android:text="支付宝"
                             android:textSize="28px" />
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:layout_weight="1" />
+
+                        <ImageView
+                            android:id="@+id/iv_alipay"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="15dp"
+                            android:src="@drawable/radio_bg_checked" />
                     </LinearLayout>
 
 
                     <include layout="@layout/common_gap" />
 
                     <LinearLayout
+                        android:id="@+id/wx_layout"
                         android:layout_width="match_parent"
                         android:layout_height="88px"
                         android:gravity="center_vertical"
@@ -342,33 +356,21 @@
                             android:text="微信"
                             android:textSize="28px" />
 
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:layout_weight="1" />
+
+                        <ImageView
+                            android:id="@+id/iv_wx"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="15dp"
+                            android:src="@drawable/radio_bg" />
+
                     </LinearLayout>
 
                 </LinearLayout>
-
-                <RadioGroup
-                    android:id="@+id/pay_rg"
-                    android:layout_width="wrap_content"
-                    android:layout_height="177px"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="12dp"
-                    android:orientation="vertical">
-
-                    <android.support.v7.widget.AppCompatRadioButton
-                        android:id="@+id/alipay"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:shadowColor="@color/colorPrimary" />
-
-                    <android.support.v7.widget.AppCompatRadioButton
-                        android:id="@+id/wx"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:gravity="center" />
-                </RadioGroup>
 
             </RelativeLayout>
 

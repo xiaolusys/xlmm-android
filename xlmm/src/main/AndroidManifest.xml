@@ -236,6 +236,9 @@
             android:name=".ui.activity.xiaolumama.BoutiqueWebviewActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
+            android:name=".ui.activity.main.ComplainWebActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
+        <activity
             android:name="com.mob.tools.MobUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
@@ -425,6 +428,7 @@
             </intent-filter>
         </receiver>
 
+        <activity android:name=".ui.activity.xiaolumama.DrawCashResultActivity"></activity>
     </application>
 
 </manifest>

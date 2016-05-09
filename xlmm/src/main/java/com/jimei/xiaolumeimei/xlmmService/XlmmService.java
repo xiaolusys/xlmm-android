@@ -587,7 +587,7 @@ public interface XlmmService {
     @FormUrlEncoded
     @POST("/rest/v1/pmt/cashout/cashout_to_budget")
     Observable<ResponseResultBean> toWallet(
-            @Field("choice") String fund_type);
+            @Field("cashout_amount") String cashout_amount);
 
     //cancel提款单信息
     @FormUrlEncoded

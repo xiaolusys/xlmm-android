@@ -2,8 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ll_coupon_item"
     android:layout_width="fill_parent"
-    android:background="@drawable/bg_img_coupon"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_img_coupon">
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -20,24 +20,22 @@
             android:textSize="50sp" />
 
         <TextView
-            android:id="@+id/tv_coupon_info"
+            android:id="@+id/use_fee"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30px"
             android:layout_marginTop="30px"
             android:layout_toRightOf="@+id/tv_coupon_value"
-            android:text="普通"
             android:textColor="#4A4A4A"
             android:textSize="13sp" />
 
         <TextView
-            android:id="@+id/use_fee"
+            android:id="@+id/tv_coupon_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@id/tv_coupon_value"
             android:layout_marginLeft="30px"
             android:layout_toRightOf="@+id/tv_coupon_value"
-            android:text="全场通用"
             android:textColor="#4A4A4A"
             android:textSize="13sp" />
     </RelativeLayout>

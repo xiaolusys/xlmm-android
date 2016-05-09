@@ -20,7 +20,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="115px"
             android:background="@color/white"
             android:gravity="center_vertical"
             android:orientation="horizontal"
@@ -43,130 +43,19 @@
                 android:textColor="@color/text_color_62"
                 android:textSize="14sp" />
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="1" />
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="全部提现"
-                android:textColor="@color/text_color_62"
-                android:textSize="14sp"
-                android:visibility="gone" />
-
-            <com.jimei.xiaolumeimei.widget.SmoothCheckBox
-                android:id="@+id/scb"
-                android:layout_width="40px"
-                android:layout_height="40px"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="12px"
-                android:visibility="gone"
-                app:color_checked="@color/colorAccent"
-                app:color_unchecked_stroke="@color/colorAccent" />
-
         </LinearLayout>
 
         <include layout="@layout/common_gap" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:text="金额(元):  "
-                android:textColor="@color/text_color_62"
-                android:textSize="14sp"
-                android:visibility="gone" />
-
-            <EditText
-                android:id="@+id/et_money"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:hint="请输入提现金额"
-                android:inputType="numberDecimal"
-                android:shadowColor="@color/colorAccent"
-                android:textColor="@color/text_color_26"
-                android:textColorHint="#BBBBBB"
-                android:textCursorDrawable="@drawable/color_cursor"
-                android:textSize="14sp"
-                android:visibility="gone" />
-
-            <RadioGroup
-                android:id="@+id/rg_money"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1" />
-
-                <RadioButton
-                    android:id="@+id/rb_100"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:gravity="center"
-                    android:checked="true"
-                    android:paddingBottom="16dp"
-                    android:paddingTop="16dp"
-                    android:text="100元"
-                    android:textColor="@color/text_color_62"
-                    android:textSize="14sp" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1" />
-
-                <RadioButton
-                    android:id="@+id/rb_200"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:gravity="center"
-                    android:paddingBottom="16dp"
-                    android:paddingTop="16dp"
-                    android:text="200元"
-                    android:textColor="@color/text_color_62"
-                    android:textSize="14sp" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1" />
-
-            </RadioGroup>
-
-
-        </LinearLayout>
-
-        <include layout="@layout/common_gap" />
-
-        <TextView
+        <View
             android:id="@+id/tv_msg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="12px"
-            android:textColor="#FF3840"
-            android:textSize="13sp" />
+            android:layout_width="match_parent"
+            android:layout_height="58px" />
 
         <include layout="@layout/common_gap" />
 
         <LinearLayout
+            android:id="@+id/xl_layout"
             android:layout_width="match_parent"
             android:layout_height="116px"
             android:background="@color/white"
@@ -192,18 +81,19 @@
                 android:layout_height="1dp"
                 android:layout_weight="1" />
 
-            <RadioButton
-                android:id="@+id/rb_xl"
+            <ImageView
+                android:id="@+id/iv_xl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="33px"
-                android:checked="true" />
+                android:src="@drawable/radio_bg_checked"/>
 
         </LinearLayout>
 
         <include layout="@layout/common_gap" />
 
         <LinearLayout
+            android:id="@+id/wx_layout"
             android:layout_width="match_parent"
             android:layout_height="116px"
             android:background="@color/white"
@@ -229,14 +119,85 @@
                 android:layout_height="1dp"
                 android:layout_weight="1" />
 
-            <RadioButton
-                android:id="@+id/rb_wx"
+            <ImageView
+                android:id="@+id/iv_wx"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="33px" />
+                android:layout_marginRight="33px"
+                android:src="@drawable/radio_bg"/>
 
         </LinearLayout>
 
+        <include layout="@layout/common_gap" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="提现金额:"
+            android:textSize="14sp"
+            android:paddingTop="20px"
+            android:paddingLeft="24px"
+            android:background="@color/white"
+            android:textColor="@color/text_color_62"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="115px"
+            android:background="@color/white"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:id="@+id/iv_100"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/radio_bg_checked"/>
+
+            <TextView
+                android:id="@+id/tv_100"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="100.0元"
+                android:padding="8dp"
+                android:layout_margin="8dp"
+                android:textColor="@color/colorAccent"
+                android:background="@drawable/text_checked_bg"
+                android:textSize="18sp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:id="@+id/iv_200"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/radio_bg"/>
+
+            <TextView
+                android:id="@+id/tv_200"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="200.0元"
+                android:padding="8dp"
+                android:layout_margin="8dp"
+                android:textColor="#c0c0c0"
+                android:background="@drawable/text_unchecked_bg"
+                android:textSize="18sp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+        </LinearLayout>
         <include layout="@layout/common_gap" />
 
         <Button

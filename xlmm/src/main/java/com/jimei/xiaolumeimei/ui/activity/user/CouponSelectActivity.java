@@ -50,7 +50,7 @@ public class CouponSelectActivity extends BaseSwipeBackCompatActivity
     @Bind(R.id.lv_used_coupon)
     ListView lv_used_coupon;
     int unused_num = 0;
-    List<CouponBean.ResultsEntity> list = new ArrayList<>();
+    List<CouponBean.ResultsBean> list = new ArrayList<>();
     String selected_couponid;
     private CouponListAdapter mCouponAdapter;
     private CouponListAdapter mUsedCouponAdapter;
@@ -118,14 +118,14 @@ public class CouponSelectActivity extends BaseSwipeBackCompatActivity
                 .subscribe(new ServiceResponse<CouponBean>() {
                     @Override
                     public void onNext(CouponBean couponBean) {
-                        List<CouponBean.ResultsEntity> results = couponBean.getResults();
+                        List<CouponBean.ResultsBean> results = couponBean.getResults();
                         list.addAll(results);
                         unused_num = results.size();
                         if (0 != results.size()) {
                             rl_empty.setVisibility(View.INVISIBLE);
-                            List<CouponBean.ResultsEntity> unusedList = new ArrayList<>();
-                            List<CouponBean.ResultsEntity> usedList = new ArrayList<>();
-                            for (CouponBean.ResultsEntity result : results) {
+                            List<CouponBean.ResultsBean> unusedList = new ArrayList<>();
+                            List<CouponBean.ResultsBean> usedList = new ArrayList<>();
+                            for (CouponBean.ResultsBean result : results) {
                                 if (result.getStatus() == 2) {
                                     usedList.add(result);
                                 } else if (result.getStatus() == 0) {
@@ -177,7 +177,7 @@ public class CouponSelectActivity extends BaseSwipeBackCompatActivity
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        CouponBean.ResultsEntity resultsEntity = list.get(position);
+        CouponBean.ResultsBean resultsEntity = list.get(position);
         String coupon_id = resultsEntity.getId() + "";
         double coupon_value = resultsEntity.getCoupon_value();
         Intent intent = new Intent();

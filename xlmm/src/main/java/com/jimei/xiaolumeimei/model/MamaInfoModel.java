@@ -71,9 +71,9 @@ public class MamaInfoModel {
   }
 
   //转账到小鹿钱包
-  public Observable<ResponseResultBean> toWallet(String fund_type) {
+  public Observable<ResponseResultBean> toWallet(String cashout_amount) {
     return XlmmRetrofitClient.getService()
-            .toWallet(fund_type)
+            .toWallet(cashout_amount)
             .compose(new DefaultTransform<>());
   }
 

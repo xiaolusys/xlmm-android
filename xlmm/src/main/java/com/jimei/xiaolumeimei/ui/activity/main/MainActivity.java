@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -55,6 +56,7 @@ import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.MembershipPointActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.WalletActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.WxLoginBindPhoneActivity;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.BoutiqueWebviewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaInfoActivity;
 import com.jimei.xiaolumeimei.ui.fragment.v1.view.MastFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.TodayV2Fragment;
@@ -183,10 +185,34 @@ public class MainActivity extends BaseActivity
             @Override
             public void onRefresh() {
                 initPost(swipeRefreshLayout);
-                vp.setCurrentItem(1);
-                ((YesterdayV2Fragment) list.get(0)).load(swipeRefreshLayout);
-                ((TodayV2Fragment) list.get(1)).load(swipeRefreshLayout);
-                ((TomorrowV2Fragment) list.get(2)).load(swipeRefreshLayout);
+                switch (vp.getCurrentItem()) {
+                    case 0:
+                        ((YesterdayV2Fragment) list.get(0)).load(swipeRefreshLayout);
+                        break;
+                    case 1:
+                        ((TodayV2Fragment) list.get(1)).load(swipeRefreshLayout);
+                        break;
+                    case 2:
+                        ((TomorrowV2Fragment) list.get(2)).load(swipeRefreshLayout);
+                        break;
+                }
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        SystemClock.sleep(10000);
+                        if (swipeRefreshLayout != null) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (swipeRefreshLayout.isRefreshing()) {
+                                        JUtils.Toast("网络状态异常,请重新加载~~ ");
+                                    }
+                                    swipeRefreshLayout.setRefreshing(false);
+                                }
+                            });
+                        }
+                    }
+                }).start();
             }
         });
     }
@@ -807,6 +833,14 @@ public class MainActivity extends BaseActivity
                             swipeRefreshLayout.setRefreshing(false);
                         }
                     }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if (swipeRefreshLayout != null) {
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
+                        JUtils.Toast("数据加载失败!");
+                    }
                 });
         addSubscription(subscribe2);
     }
@@ -857,6 +891,19 @@ public class MainActivity extends BaseActivity
             } else if (id == R.id.nav_complain) {
                 startActivity(new Intent(MainActivity.this, ComplainActivity.class));
                 //Log.d(TAG, "start complain activity ");
+//                Intent intent1 = new Intent(this, ComplainWebActivity.class);
+//                sharedPreferences =
+//                        getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+//                cookies = sharedPreferences.getString("cookiesString", "");
+//                domain = sharedPreferences.getString("cookiesDomain", "");
+//
+//                Bundle bundle1 = new Bundle();
+//                bundle1.putString("cookies", cookies);
+//                bundle1.putString("domain", domain);
+//                bundle1.putString("Cookie", sharedPreferences.getString("Cookie", ""));
+//                bundle1.putString("actlink", "http://m.xiaolumeimei.com/pages/tousu.html");
+//                intent1.putExtras(bundle1);
+//                startActivity(intent1);
             }
         }
 
