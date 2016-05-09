@@ -384,7 +384,8 @@
         <activity
             android:name=".ui.activity.user.WalletDetailActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
-
+        <activity android:name=".ui.activity.xiaolumama.DrawCashResultActivity"
+            android:theme="@style/AppTheme.TransparentActivity"/>
         <service
             android:name="com.xiaomi.push.service.XMPushService"
             android:enabled="true"
@@ -428,7 +429,7 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".ui.activity.xiaolumama.DrawCashResultActivity"></activity>
+
     </application>
 
 </manifest>
