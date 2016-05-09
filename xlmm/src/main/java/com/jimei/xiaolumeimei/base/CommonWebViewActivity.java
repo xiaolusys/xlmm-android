@@ -133,7 +133,9 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     return R.layout.activity_actwebview;
   }
 
-  @TargetApi(Build.VERSION_CODES.KITKAT) @SuppressLint("JavascriptInterface") @Override
+//  @TargetApi(Build.VERSION_CODES.KITKAT)
+  @SuppressLint("JavascriptInterface")
+  @Override
   protected void initViews() {
     //requestPermission();
     JUtils.Log(TAG, "initViews");
@@ -172,7 +174,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
       mWebView.getSettings().setLoadWithOverviewMode(true);
       mWebView.getSettings().setUseWideViewPort(true);
       mWebView.setDrawingCacheEnabled(true);
-      mWebView.setWebContentsDebuggingEnabled(true);
+//      mWebView.setWebContentsDebuggingEnabled(true);
 
       mWebView.setWebChromeClient(new WebChromeClient() {
         @Override public void onProgressChanged(WebView view, int newProgress) {
