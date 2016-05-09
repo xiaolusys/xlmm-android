@@ -889,4 +889,10 @@ public interface XlmmService {
             @Query("page") int page,
             @Query("page_size") int page_size
     );
+
+    @FormUrlEncoded
+    @POST("/rest/v1/users/open_debug_for_app")
+    Observable<CodeBean> openDebug(
+            @Field("debug_secret")String debug_secret
+    );
 }

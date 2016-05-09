@@ -386,6 +386,9 @@
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity android:name=".ui.activity.xiaolumama.DrawCashResultActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
+        <activity
+            android:name=".ui.activity.main.DebugActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
         <service
             android:name="com.xiaomi.push.service.XMPushService"
             android:enabled="true"

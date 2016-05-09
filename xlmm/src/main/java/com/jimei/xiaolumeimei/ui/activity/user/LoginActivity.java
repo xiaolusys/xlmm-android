@@ -7,7 +7,6 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
@@ -16,14 +15,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import butterknife.Bind;
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.PlatformActionListener;
-import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.wechat.friends.Wechat;
-
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
 import com.jimei.xiaolumeimei.model.UserModel;
@@ -42,6 +36,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import butterknife.Bind;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.wechat.friends.Wechat;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -81,6 +80,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
     private String nickname;
     private String openid;
     private String unionid;
+    private String actlink;
 
     public static String getRandomString(int length) {
         //length表示生成字符串的长度
@@ -195,6 +195,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                         String login;
                                         if (null != getIntent()&&getIntent().getExtras()!=null) {
                                             login = getIntent().getExtras().getString("login");
+                                            actlink = getIntent().getExtras().getString("actlink");
                                         } else {
                                             return;
                                         }
@@ -224,6 +225,21 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                             startActivity(intent);
                                             finish();
                                         } else if (login.equals("productdetail")) {
+                                            finish();
+                                        } else if (login.equals("h5")) {
+                                          Intent  intent = new Intent(mContext,
+                                                    CommonWebViewActivity.class);
+                                            //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            SharedPreferences sharedPreferences =
+                                                    getSharedPreferences("COOKIESxlmm",
+                                                            Context.MODE_PRIVATE);
+                                            String cookies = sharedPreferences.getString("Cookies", "");
+                                            Bundle bundle = new Bundle();
+                                            bundle.putString("cookies", cookies);
+                                            bundle.putString("actlink", actlink);
+                                            intent.putExtras(bundle);
+                                            startActivity(intent);
+
                                             finish();
                                         }
                                     } else {

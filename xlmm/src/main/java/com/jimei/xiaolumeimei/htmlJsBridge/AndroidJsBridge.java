@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Picture;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
@@ -22,6 +23,26 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
+
+import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
+import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.entities.ActivityBean;
+import com.jimei.xiaolumeimei.model.ActivityModel;
+import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
+import com.jimei.xiaolumeimei.utils.CameraUtils;
+import com.jimei.xiaolumeimei.utils.FileUtils;
+import com.jimei.xiaolumeimei.utils.JumpUtils;
+import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jude.utils.JUtils;
+import com.mob.tools.utils.UIHandler;
+import com.tbruyelle.rxpermissions.RxPermissions;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.HashMap;
+
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
@@ -31,22 +52,6 @@ import cn.sharesdk.tencent.qq.QQ;
 import cn.sharesdk.tencent.qzone.QZone;
 import cn.sharesdk.wechat.friends.Wechat;
 import cn.sharesdk.wechat.moments.WechatMoments;
-import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.XlmmApp;
-import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.entities.ActivityBean;
-import com.jimei.xiaolumeimei.model.ActivityModel;
-import com.jimei.xiaolumeimei.utils.CameraUtils;
-import com.jimei.xiaolumeimei.utils.FileUtils;
-import com.jimei.xiaolumeimei.utils.JumpUtils;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
-import com.mob.tools.utils.UIHandler;
-import com.tbruyelle.rxpermissions.RxPermissions;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.HashMap;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -522,5 +527,15 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     ClipboardManager cmb =
         (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
     cmb.setText(content.trim());
+  }
+
+  public void callNativeLoginActivity(String pageUrl) {
+    Intent intent = new Intent(mContext, LoginActivity.class);
+    Bundle bundle = new Bundle();
+    bundle.putString("login", "h5");
+    bundle.putString("actlink", pageUrl);
+    intent.putExtras(bundle);
+    mContext.startActivity(intent);
+    mContext.finish();
   }
 }
