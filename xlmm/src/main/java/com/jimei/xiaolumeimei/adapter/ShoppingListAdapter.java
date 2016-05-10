@@ -97,7 +97,14 @@ public class ShoppingListAdapter
         holder.wxordernick.setText(resultsEntity.getContributorNick());
         holder.timeDisplay.setText(resultsEntity.getCreated().substring(11, 16));
         holder.totalMoneyTv.setText("实付"+resultsEntity.getOrderValue());
-        holder.flagTv.setText(resultsEntity.getCarryTypeName());
+        String carryTypeName = resultsEntity.getCarryTypeName();
+        if (carryTypeName.contains("订单")) {
+            String str = carryTypeName.split("订单")[0]+"订单";
+            holder.flagTv.setText(str);
+        }else {
+            holder.flagTv.setText(carryTypeName);
+        }
+
         double carryNum = resultsEntity.getCarryNum();
         if (carryNum >= 0) {
             holder.tichengCash.setText("+" + carryNum);

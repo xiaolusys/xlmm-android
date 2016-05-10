@@ -29,8 +29,6 @@ public class MamaWithdrawCashResultActivity extends BaseSwipeBackCompatActivity
         implements View.OnClickListener {
     String TAG = "MamaWithdrawCashResultActivity";
 
-    @Bind(R.id.toolbar)
-    Toolbar toolbar;
     @Bind(R.id.btn_jump)
     Button btn_jump;
     @Bind(R.id.img_red_packet1)
@@ -42,7 +40,7 @@ public class MamaWithdrawCashResultActivity extends BaseSwipeBackCompatActivity
 
     double cash;
     private int code;
-    String msg;
+    String msg = "";
     String nickName;
 
     @Override
@@ -52,9 +50,10 @@ public class MamaWithdrawCashResultActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-        if (null != getIntent() && null != getIntent().getExtras()) {
-            cash = getIntent().getExtras().getDouble("cash");
-            code = getIntent().getExtras().getInt("code");
+        if (extras != null) {
+            cash = extras.getDouble("cash");
+            code = extras.getInt("code");
+            msg = extras.getString("msg");
         }
     }
 
@@ -66,9 +65,6 @@ public class MamaWithdrawCashResultActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void initViews() {
         StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent), 0);
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
-        finishBack(toolbar);
     }
 
     @Override
@@ -81,23 +77,6 @@ public class MamaWithdrawCashResultActivity extends BaseSwipeBackCompatActivity
             img_red_packet1.setImageResource(R.drawable.img_graypacket100);
         } else if (Double.compare(cash, 200) == 0) {
             img_red_packet1.setImageResource(R.drawable.img_graypacket200);
-        }
-        switch (code) {
-            case 0:
-                msg = "提现成功，待审核通过";
-                break;
-            case 1:
-                msg = "参数错误";
-                break;
-            case 2:
-                msg = "不足提现金额";
-                break;
-            case 3:
-                msg = "有待审核记录不予再次提现";
-                break;
-            default:
-                msg = "系统状态异常";
-                break;
         }
         JUtils.Toast(msg);
         msgTv.setText(msg);

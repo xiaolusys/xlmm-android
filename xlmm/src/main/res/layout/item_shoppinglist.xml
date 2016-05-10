@@ -76,9 +76,8 @@
             android:maxLength="16"
             android:ellipsize="end"
             android:singleLine="true"
-            android:text=""
             android:textColor="#626262"
-            android:textSize="13sp" />
+            android:textSize="12sp" />
 
 
         <TextView
@@ -88,9 +87,8 @@
             android:layout_marginLeft="6dp"
             android:layout_toRightOf="@id/img_layout"
             android:padding="8px"
-            android:text=""
             android:textColor="@color/c8c8c8"
-            android:textSize="13sp" />
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/get_status_display"
@@ -98,20 +96,21 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="6dp"
             android:layout_toRightOf="@id/time_display"
-            android:padding="8px"
-            android:text=""
+            android:paddingTop="8px"
+            android:paddingRight="8px"
             android:textColor="@color/colorPrimary"
-            android:textSize="13sp" />
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/ticheng_cash"
-            android:layout_width="130px"
+            android:layout_width="120px"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:gravity="right|center_vertical"
             android:textColor="#626262"
-            android:textSize="17sp" />
+            android:singleLine="true"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/flag"
@@ -119,10 +118,12 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="130px"
+            android:layout_marginRight="120px"
+            android:singleLine="true"
+            android:maxLength="7"
             android:paddingTop="8px"
             android:textColor="#626262"
-            android:textSize="13sp" />
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/total_money"
@@ -131,10 +132,11 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="130px"
+            android:layout_marginRight="120px"
+            android:singleLine="true"
             android:paddingBottom="8px"
             android:textColor="#626262"
-            android:textSize="13sp" />
+            android:textSize="12sp" />
 
     </RelativeLayout>
 </LinearLayout>

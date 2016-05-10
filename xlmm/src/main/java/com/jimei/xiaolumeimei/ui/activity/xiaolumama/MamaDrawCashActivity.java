@@ -88,17 +88,11 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
     }
 
     private void toWallet(double fund) {
-        String cashout_amount = "";
-        if ((Double.compare(fund, 100) != 0) && (Double.compare(fund, 200) != 0)) {
+        if (fund == 0) {
             JUtils.Toast("请选择转账金额。");
         } else {
-            if (Double.compare(fund, 100) == 0) {
-                cashout_amount = "100.0";
-            } else if (Double.compare(fund, 200) == 0) {
-                cashout_amount = "200.0";
-            }
             subscribe = MamaInfoModel.getInstance()
-                    .toWallet(cashout_amount)
+                    .toWallet(fund + ".0")
                     .subscribeOn(Schedulers.io())
                     .subscribe(new ServiceResponse<ResponseResultBean>() {
                         String msg = "";
@@ -109,11 +103,14 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
                             msg = resp.getMsg();
                             code = resp.getCode();
                         }
-
                         @Override
                         public void onCompleted() {
                             if (code == 0) {
                                 Intent intent = new Intent(MamaDrawCashActivity.this, DrawCashResultActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("msg",msg);
+                                bundle.putInt("code",code);
+                                intent.putExtras(bundle);
                                 startActivity(intent);
                             } else {
                                 JUtils.ToastLong(msg);
@@ -144,6 +141,7 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
                                     MamaWithdrawCashResultActivity.class);
                             intent.putExtra("cash", fund);
                             intent.putExtra("code", resp.getCode());
+                            intent.putExtra("msg", resp.getMsg());
                             startActivity(intent);
                             MamaDrawCashActivity.this.finish();
                         }
