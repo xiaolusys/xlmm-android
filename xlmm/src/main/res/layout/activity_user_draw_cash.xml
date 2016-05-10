@@ -126,6 +126,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="34px"
+            android:gravity="center"
             android:text="提现金额将以微信红包形式，24小时内发至你绑定的微信账户"
             android:textColor="#BBBBBB"
             android:textSize="12sp" />
