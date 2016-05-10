@@ -15,6 +15,7 @@
 
         <com.jimei.xiaolumeimei.widget.RoundCornerImageView
             android:id="@+id/cart_image"
+            android:scaleType="fitXY"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </RelativeLayout>

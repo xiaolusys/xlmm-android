@@ -119,7 +119,9 @@ public class TodayV2Fragment extends BaseFragment {
 
     public void load(SwipeRefreshLayout swipeRefreshLayout) {
         list.clear();
-        mTodayAdapter.updateWithClear(list);
+        if (mTodayAdapter != null) {
+            mTodayAdapter.updateWithClear(list);
+        }
         if (swipeRefreshLayout == null) {
             showIndeterminateProgressDialog(false);
         }
