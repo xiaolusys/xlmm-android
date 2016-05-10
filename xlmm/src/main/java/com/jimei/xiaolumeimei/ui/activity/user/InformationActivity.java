@@ -186,29 +186,11 @@ public class InformationActivity extends BaseSwipeBackCompatActivity implements 
                 JUtils.Log(TAG, "num====" + num);
                 if (num == 8) {
 
+                    Intent intent = new Intent(InformationActivity.this, DebugActivity.class);
 
-                    final String finalAccount = LoginUtils.getUserAccount(getApplicationContext());
-                    UserModel.getInstance()
-                            .customer_logout()
-                            .subscribeOn(Schedulers.io())
-                            .subscribe(new ServiceResponse<LogOutBean>() {
-                                @Override
-                                public void onNext(LogOutBean responseBody) {
-                                    super.onNext(responseBody);
-                                    if (responseBody.getCode() == 0) {
-                                        JUtils.Toast("成功进入debug模式");
-                                        if ((finalAccount != null) && ((!finalAccount.isEmpty()))) {
-                                            MiPushClient.unsetUserAccount(getApplicationContext(),
-                                                    finalAccount, null);
-                                        }
-                                        Intent intent = new Intent(InformationActivity.this, DebugActivity.class);
+                    startActivity(intent);
+                    finish();
 
-                                        LoginUtils.delLoginInfo(getApplicationContext());
-                                        startActivity(intent);
-                                        finish();
-                                    }
-                                }
-                            });
 
                 } else if (num == 9) {
                     num = 0;

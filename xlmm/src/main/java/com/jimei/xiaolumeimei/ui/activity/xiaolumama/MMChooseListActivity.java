@@ -453,7 +453,7 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
                     @Override
                     public void onClick(View v) {
 
-                        showIndeterminateProgressDialog(false);
+//                        showIndeterminateProgressDialog(false);
                         Subscription subscribe = MMProductModel.getInstance()
                                 .add_pro_to_shop(mmChooselistBean.getId() + "")
                                 .subscribeOn(Schedulers.io())
@@ -478,14 +478,14 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
                                     @Override
                                     public void onCompleted() {
                                         super.onCompleted();
-                                        hideIndeterminateProgressDialog();
+//                                        hideIndeterminateProgressDialog();
                                     }
 
                                     @Override
                                     public void onError(Throwable e) {
                                         super.onError(e);
                                         e.printStackTrace();
-                                        hideIndeterminateProgressDialog();
+//                                        hideIndeterminateProgressDialog();
                                     }
                                 });
                         addSubscription(subscribe);
@@ -501,7 +501,7 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
                     @Override
                     public void onClick(View v) {
 
-                        showIndeterminateProgressDialog(false);
+//                        showIndeterminateProgressDialog(false);
                         Subscription subscribe = MMProductModel.getInstance()
                                 .remove_pro_from_shop(mmChooselistBean.getId() + "")
                                 .subscribeOn(Schedulers.io())
@@ -527,14 +527,14 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
                                     @Override
                                     public void onCompleted() {
                                         super.onCompleted();
-                                        hideIndeterminateProgressDialog();
+//                                        hideIndeterminateProgressDialog();
                                     }
 
                                     @Override
                                     public void onError(Throwable e) {
                                         super.onError(e);
                                         e.printStackTrace();
-                                        hideIndeterminateProgressDialog();
+//                                        hideIndeterminateProgressDialog();
                                     }
                                 });
                         addSubscription(subscribe);
