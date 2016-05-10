@@ -9,7 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.cpoopc.scrollablelayoutlib.ScrollableHelper;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
@@ -19,16 +20,11 @@ import com.jimei.xiaolumeimei.adapter.OderCarryLogAdapter;
 import com.jimei.xiaolumeimei.entities.OderCarryBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.widget.DividerItemDecorationForFooter;
-import com.jimei.xiaolumeimei.widget.dragrecyclerview.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -46,6 +42,7 @@ public class CarryLogCommissionFragment extends Fragment implements ScrollableHe
   private Subscription subscription1;
   private Subscription subscription2;
   private MaterialDialog materialDialog;
+
 
   public static CarryLogCommissionFragment newInstance(String title) {
     CarryLogCommissionFragment carryLogAllFragment = new CarryLogCommissionFragment();
@@ -122,7 +119,7 @@ public class CarryLogCommissionFragment extends Fragment implements ScrollableHe
             new DividerItemDecorationForFooter(getActivity(), DividerItemDecorationForFooter.VERTICAL_LIST));
 
     xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-    xRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
+    xRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
     xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
     xRecyclerView.setPullRefreshEnabled(false);
     xRecyclerView.setLoadingMoreEnabled(true);

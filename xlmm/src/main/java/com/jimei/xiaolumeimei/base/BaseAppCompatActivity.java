@@ -59,6 +59,7 @@ public abstract class BaseAppCompatActivity extends AutoLayoutActivity {
   private MaterialDialog materialDialog;
   private CompositeSubscription mCompositeSubscription;
 
+
   @Override protected void onCreate(Bundle savedInstanceState) {
     if (toggleOverridePendingTransition()) {
       switch (getOverridePendingTransitionMode()) {
@@ -158,7 +159,6 @@ public abstract class BaseAppCompatActivity extends AutoLayoutActivity {
 
   @Override protected void onDestroy() {
     super.onDestroy();
-    ButterKnife.unbind(this);
   }
 
   /**

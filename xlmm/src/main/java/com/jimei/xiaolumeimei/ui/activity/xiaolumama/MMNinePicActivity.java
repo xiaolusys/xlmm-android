@@ -2,9 +2,7 @@ package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.AppBarLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ListView;

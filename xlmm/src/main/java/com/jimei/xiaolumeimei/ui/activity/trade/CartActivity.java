@@ -175,7 +175,6 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                         tvShow.setVisibility(View.VISIBLE);
                         showLine.setVisibility(View.VISIBLE);
                         mCartsHisAdapetr.updateWithClear(cartsinfoBeen);
-
                       } else {
 
                          /* emptyContent.setVisibility(View.VISIBLE);
@@ -239,7 +238,6 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                         tvShow.setVisibility(View.VISIBLE);
                         showLine.setVisibility(View.VISIBLE);
                         mCartsHisAdapetr.updateWithClear(cartsinfoBeen);
-
                       } else {
 
                         emptyContent.setVisibility(View.VISIBLE);

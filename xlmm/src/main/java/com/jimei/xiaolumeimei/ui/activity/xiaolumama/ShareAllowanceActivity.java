@@ -60,7 +60,7 @@ public class ShareAllowanceActivity extends BaseSwipeBackCompatActivity
     lv_allowance.addItemDecoration(
         new DividerItemDecorationForFooter(this, DividerItemDecoration.VERTICAL_LIST));
     lv_allowance.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-    lv_allowance.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
+    lv_allowance.setLoadingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
     lv_allowance.setArrowImageView(R.drawable.iconfont_downgrey);
     lv_allowance.setPullRefreshEnabled(false);
     lv_allowance.setLoadingMoreEnabled(true);
