@@ -9,7 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.cpoopc.scrollablelayoutlib.ScrollableHelper;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
@@ -19,16 +20,11 @@ import com.jimei.xiaolumeimei.adapter.ClickCarryLogAdapter;
 import com.jimei.xiaolumeimei.entities.ClickcarryBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.widget.DividerItemDecorationForFooter;
-import com.jimei.xiaolumeimei.widget.dragrecyclerview.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -45,6 +41,7 @@ public class CarryLogCashbackFragment extends Fragment implements ScrollableHelp
   private Subscription subscription1;
   private Subscription subscription2;
   private MaterialDialog materialDialog;
+
 
   public static CarryLogCashbackFragment newInstance(String title) {
     CarryLogCashbackFragment carryLogAllFragment = new CarryLogCashbackFragment();
@@ -120,7 +117,7 @@ public class CarryLogCashbackFragment extends Fragment implements ScrollableHelp
     xRecyclerView.addItemDecoration(
             new DividerItemDecorationForFooter(getActivity(), DividerItemDecorationForFooter.VERTICAL_LIST));
     xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-    xRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
+    xRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
     xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
     xRecyclerView.setPullRefreshEnabled(false);
     xRecyclerView.setLoadingMoreEnabled(true);
@@ -150,7 +147,7 @@ public class CarryLogCashbackFragment extends Fragment implements ScrollableHelp
 
   @Override public void onDestroyView() {
     super.onDestroyView();
-    ButterKnife.unbind(this);
+   ButterKnife.unbind(this);
   }
 
   private void loadMoreData(String page, Context context) {

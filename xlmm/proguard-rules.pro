@@ -24,201 +24,117 @@
 # removes such information by default, so configure it to keep all of it.
 
 ##--- For:android默认 ---
--optimizationpasses 5  # 指定代码的压缩级别
--allowaccessmodification #优化时允许访问并修改有修饰符的类和类的成员
--dontusemixedcaseclassnames  # 是否使用大小写混合
--dontskipnonpubliclibraryclasses  # 是否混淆第三方jar
--dontpreverify  # 混淆时是否做预校验
--verbose    # 混淆时是否记录日志
--ignorewarnings  # 忽略警告，避免打包时某些警告出现
--optimizations !code/simplification/arithmetic,!code/simplification/cast,!field/*,!class/merging/*  # 混淆时所采用的算法
--keep public class com.google.vending.licensing.ILicensingService
--keep public class com.android.vending.licensing.ILicensingService
 
+#---------------------------------1---------------------------------
+
+-keep class com.jimei.xiaolumeimei.entities.** { *; }
+
+#-------------------------------------------------------------------------
+
+#---------------------------------2-------------------------------
+# support design
+-dontwarn android.support.**
+-dontwarn android.support.design.**
+-keep class android.support.design.** { *; }
+-keep interface android.support.design.** { *; }
+-keep public class android.support.design.R$* { *; }
+
+
+
+
+#-------------------------------------------------------------------------
+
+#---------------------------------3------------------------
+
+
+
+#-------------------------------------------------------------------------
+
+#---------------------------------4-----------------------
+
+
+
+#----------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
+
+#-------------------------------------------基本不用动区域--------------------------------------------
+#---------------------------------基本指令区----------------------------------
+-optimizationpasses 5
+-dontusemixedcaseclassnames
+-dontskipnonpubliclibraryclasses
+-dontskipnonpubliclibraryclassmembers
+-dontpreverify
+-verbose
+-printmapping proguardMapping.txt
+-optimizations !code/simplification/cast,!field/*,!class/merging/*
+-keepattributes *Annotation*,InnerClasses
+-keepattributes Signature
+-keepattributes SourceFile,LineNumberTable
+#----------------------------------------------------------------------------
+
+#---------------------------------默认保留区---------------------------------
 -keep public class * extends android.app.Activity
--keep public class * extends android.app.Fragment# 保持哪些类不被混淆
--keep public class * extends android.app.Application   # 保持哪些类不被混淆
--keep public class * extends android.app.Service       # 保持哪些类不被混淆
--keep public class * extends android.content.BroadcastReceiver  # 保持哪些类不被混淆
--keep public class * extends android.content.ContentProvider    # 保持哪些类不被混淆
--keep public class * extends android.app.backup.BackupAgentHelper # 保持哪些类不被混淆
--keep public class * extends android.preference.Preference        # 保持哪些类不被混淆
--keep public class com.android.vending.licensing.ILicensingService    # 保持哪些类不被混淆
+-keep public class * extends android.app.Application
+-keep public class * extends android.app.Service
+-keep public class * extends android.content.BroadcastReceiver
+-keep public class * extends android.content.ContentProvider
+-keep public class * extends android.app.backup.BackupAgentHelper
+-keep public class * extends android.preference.Preference
+-keep public class * extends android.view.View
+-keep public class com.android.vending.licensing.ILicensingService
+-keep class android.support.** {*;}
 
--keepclasseswithmembernames class * {  # 保持 native 方法不被混淆
+-keepclasseswithmembernames class * {
     native <methods>;
 }
-
--keepclassmembers public class * extends android.view.View {
-   void set*(***);
-   *** get*();
-}
-
--keepclasseswithmembers class * {   # 保持自定义控件类不被混淆
-    public <init>(android.content.Context, android.util.AttributeSet);
-}
--keepclasseswithmembers class * {# 保持自定义控件类不被混淆
-    public <init>(android.content.Context, android.util.AttributeSet, int);
-}
--keepclassmembers class * extends android.app.Activity { # 保持自定义控件类不被混淆
+-keepclassmembers class * extends android.app.Activity{
     public void *(android.view.View);
 }
--keepclassmembers enum * {     # 保持枚举 enum 类不被混淆
-    public static **[] values();
-    public static ** valueOf(java.lang.String);
-}
--keep class * implements android.os.Parcelable { # 保持 Parcelable 不被混淆
-    public static final android.os.Parcelable$Creator *;
-}
-
--keepattributes Signature
-
-
-# Gson specific classes
--keep class sun.misc.Unsafe { *; }
-#
--keep class com.idea.fifaalarmclock.entity.***
--keep class com.google.gson.stream.** { *; }
-
-
-# Application classes that will be serialized/deserialized over Gson
--keep class com.google.gson.examples.android.model.** { *; }
-
-
-##---------------End: proguard configuration for Gson  ----------
-
-##-------------------------ping ++
--dontwarn com.alipay.**
--keep class com.alipay.** {*;}
-
--dontwarn  com.ta.utdid2.**
--keep class com.ta.utdid2.** {*;}
-
--dontwarn  com.ut.device.**
--keep class com.ut.device.** {*;}
-
--dontwarn  com.tencent.**
--keep class com.tencent.** {*;}
-
--dontwarn  com.unionpay.**
--keep class com.unionpay.** {*;}
-
--dontwarn com.pingplusplus.**
--keep class com.pingplusplus.** {*;}
-
--dontwarn com.baidu.**
--keep class com.baidu.**{*;}
-
--keepclassmembers class * {
-    @android.webkit.JavascriptInterface <methods>;
-}
-
-##--------------------------end
-
-##umeng---------------
--keepclassmembers class **.R$* { #不混淆R文件
-    public static <fields>;
-}
-
--dontwarn android.support.**
-#如果引用了v4或者v7包
-# Keep the support library
--keep class android.support.v4.** { *; }
--keep interface android.support.v4.** { *; }
-# Keep the support library
--keep class android.support.v7.** { *; }
--keep interface android.support.v7.** { *; }
-##--- End android默认 ---
-
 -keepclassmembers enum * {
     public static **[] values();
     public static ** valueOf(java.lang.String);
-}##-----------------end
-
-
-# Support library
--keep class android.support.** { *; }
--keep interface android.support.** { *; }
-
-# Retrofit
--dontwarn retrofit.**
--keep class retrofit.** { *; }
--keepattributes Signature
--keepattributes Exceptions
-
-# OkHttp
--dontwarn okio.**
--dontwarn com.squareup.okhttp.**
-
-# RxJava
-# RxAndroid will soon ship with rules so this may not be needed in the future
-# https://github.com/ReactiveX/RxAndroid/issues/219
--dontwarn sun.misc.Unsafe
--keep class rx.internal.util.unsafe.** { *; }
-
-# Gson
--keep class com.google.gson.** { *; }
--keep class sun.misc.Unsafe { *; }
--keep class com.google.gson.stream.** { *; }
--keepattributes *Annotation*
-
-# JSONObject
--keepclassmembers class * {
-   public <init>(org.json.JSONObject);
 }
-
-# Serializable Parcelable
--keepnames class * implements java.io.Serializable
--keep public class * implements android.os.Parcelable {*;}
+-keep public class * extends android.view.View{
+    *** get*();
+    void set*(***);
+    public <init>(android.content.Context);
+    public <init>(android.content.Context, android.util.AttributeSet);
+    public <init>(android.content.Context, android.util.AttributeSet, int);
+}
+-keepclasseswithmembers class * {
+    public <init>(android.content.Context, android.util.AttributeSet);
+    public <init>(android.content.Context, android.util.AttributeSet, int);
+}
 -keep class * implements android.os.Parcelable {
   public static final android.os.Parcelable$Creator *;
 }
 -keepclassmembers class * implements java.io.Serializable {
     static final long serialVersionUID;
     private static final java.io.ObjectStreamField[] serialPersistentFields;
-    !static !transient <fields>;
     private void writeObject(java.io.ObjectOutputStream);
     private void readObject(java.io.ObjectInputStream);
     java.lang.Object writeReplace();
     java.lang.Object readResolve();
 }
-
-# Glide
--keep class com.github.bumptech.glide.** {*;}
--keep public class * implements com.bumptech.glide.module.GlideModule
--keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
-    **[] $VALUES;
-    public *;
+-keep class **.R$* {
+ *;
 }
-
-
-# butterknife
--keep class butterknife.** { *; }
--dontwarn butterknife.internal.**
--keep class **$$ViewBinder { *; }
-
--keepclasseswithmembernames class * {
-    @butterknife.* <fields>;
+-keepclassmembers class * {
+    void *(**On*Event);
 }
+#----------------------------------------------------------------------------
 
--keepclasseswithmembernames class * {
-    @butterknife.* <methods>;
+#---------------------------------webview------------------------------------
+-keepclassmembers class fqcn.of.javascript.interface.for.webview {
+   public *;
 }
-
-##--- For:android-support-v4 ---
--dontwarn android.support.v4.**
--keep class android.support.v4.** { *; }
--keep interface android.support.v4.app.** { *; }
--keep class * extends android.support.v4.** { *; }
--keep public class * extends android.support.v4.**
--keep public class * extends android.support.v4.widget
--keep class * extends android.support.v4.app.** {*;}
--keep class * extends android.support.v4.view.** {*;}
-
-
-##--- For:attributes(未启用) ---
-#
--keepattributes SourceFile,LineNumberTable # 保持反编译工具能看到代码的行数，以及release包安装后出现异常信息可以知道在哪行代码出现异常，建议不启用
--keepattributes *Annotation* #使用注解
--keepattributes Signature #过滤泛型  出现类型转换错误时，启用这个
+-keepclassmembers class * extends android.webkit.webViewClient {
+    public void *(android.webkit.WebView, java.lang.String, android.graphics.Bitmap);
+    public boolean *(android.webkit.WebView, java.lang.String);
+}
+-keepclassmembers class * extends android.webkit.webViewClient {
+    public void *(android.webkit.webView, jav.lang.String);
+}
+#----------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 

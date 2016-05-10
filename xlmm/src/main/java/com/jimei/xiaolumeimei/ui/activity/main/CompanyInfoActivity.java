@@ -7,7 +7,6 @@ import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
-import com.jude.utils.JUtils;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/01/19.
@@ -20,7 +19,7 @@ public class CompanyInfoActivity extends BaseSwipeBackCompatActivity {
   @Bind(R.id.tv_version) TextView tv_version;
 
   @Override protected void setListener() {
-    
+
   }
 
   @Override protected void initData() {
@@ -53,9 +52,5 @@ public class CompanyInfoActivity extends BaseSwipeBackCompatActivity {
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-   
   }
-
-  
-  
 }

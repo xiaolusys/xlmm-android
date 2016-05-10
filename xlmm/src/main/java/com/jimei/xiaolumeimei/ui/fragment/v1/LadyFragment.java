@@ -75,7 +75,7 @@ public class LadyFragment extends Fragment {
     xRecyclerView.addItemDecoration(new SpaceItemDecoration(10));
 
     xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-    xRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
+    xRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
     xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
 
     mLadyListAdapter = new LadyListAdapter(getActivity(), LadyFragment.this);
@@ -176,13 +176,13 @@ public class LadyFragment extends Fragment {
       @Nullable Bundle savedInstanceState) {
     JUtils.Log(TAG, "onCreateView");
     View view = inflater.inflate(R.layout.ladylist_fragment, container, false);
-    ButterKnife.bind(this, view);
+     ButterKnife.bind(this, view);
     return view;
   }
 
   @Override public void onDestroyView() {
     super.onDestroyView();
-    ButterKnife.unbind(this);
+   ButterKnife.unbind(this);
   }
 
   private void loadMoreData(int page, int page_size) {

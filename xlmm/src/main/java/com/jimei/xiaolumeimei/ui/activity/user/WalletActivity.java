@@ -134,7 +134,7 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
 
     private void initRecyclerView() {
         walletRcv.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-        walletRcv.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
+        walletRcv.setLoadingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
         walletRcv.setArrowImageView(R.drawable.iconfont_downgrey);
         walletRcv.setLayoutManager(new LinearLayoutManager(this));
         walletRcv.addItemDecoration(

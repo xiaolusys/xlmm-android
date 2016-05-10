@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
@@ -14,9 +13,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.ui.fragment.AllOrdersFragment;
 import com.jimei.xiaolumeimei.ui.fragment.WaitPayOrdersFragment;
 import com.jimei.xiaolumeimei.ui.fragment.WaitSendOrdersFragment;
-import com.jimei.xiaolumeimei.widget.XlmmTitleView;
 import com.jude.utils.JUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 

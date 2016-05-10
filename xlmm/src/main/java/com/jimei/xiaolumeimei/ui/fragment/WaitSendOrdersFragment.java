@@ -107,7 +107,7 @@ public class WaitSendOrdersFragment extends Fragment {
   public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                            @Nullable Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_allorders, container, false);
-    ButterKnife.bind(this, view);
+     ButterKnife.bind(this, view);
     return view;
   }
 

@@ -26,6 +26,7 @@ public class VerticalFragmentWeb extends Fragment {
   private CustWebView webview;
   private boolean hasInited = false;
 
+
   public static VerticalFragmentWeb newInstance(String title) {
     VerticalFragmentWeb todayFragment = new VerticalFragmentWeb();
     Bundle bundle = new Bundle();

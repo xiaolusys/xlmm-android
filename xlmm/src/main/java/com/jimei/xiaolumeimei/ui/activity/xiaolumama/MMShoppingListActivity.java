@@ -2,12 +2,10 @@ package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.Bind;
-
 import com.cpoopc.scrollablelayoutlib.ScrollableHelper;
 import com.cpoopc.scrollablelayoutlib.ScrollableLayout;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
@@ -93,7 +91,7 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity implemen
     shoppinglistXry.addItemDecoration(
         new DividerItemDecorationForFooter(this, DividerItemDecoration.VERTICAL_LIST));
     shoppinglistXry.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-    shoppinglistXry.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
+    shoppinglistXry.setLoadingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
     shoppinglistXry.setArrowImageView(R.drawable.iconfont_downgrey);
     shoppinglistXry.setPullRefreshEnabled(false);
     shoppinglistXry.setLoadingMoreEnabled(true);

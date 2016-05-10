@@ -94,7 +94,7 @@ public class MamaVisitorActivity extends BaseSwipeBackCompatActivity
     xrv_mamafans.addItemDecoration(
         new DividerItemDecorationForFooter(this, DividerItemDecoration.VERTICAL_LIST));
     xrv_mamafans.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-    xrv_mamafans.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
+    xrv_mamafans.setLoadingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
     xrv_mamafans.setArrowImageView(R.drawable.iconfont_downgrey);
     xrv_mamafans.setPullRefreshEnabled(false);
     xrv_mamafans.setLoadingMoreEnabled(true);
