@@ -53,6 +53,7 @@ public class MastFragment extends DialogFragment {
   private Subscription subscribe2;
   private Subscription subscribe;
 
+
   public static MastFragment newInstance(String title) {
     MastFragment todayFragment = new MastFragment();
     Bundle bundle = new Bundle();
@@ -278,7 +279,7 @@ public class MastFragment extends DialogFragment {
 
   @Override public void onDestroyView() {
     super.onDestroyView();
-    ButterKnife.unbind(this);
+   ButterKnife.unbind(this);
   }
 
   @Override public void onStop() {

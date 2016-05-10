@@ -11,7 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import cn.iwgang.countdownview.CountdownView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -23,16 +25,11 @@ import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
-
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import cn.iwgang.countdownview.CountdownView;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -58,10 +55,11 @@ public class TodayV2Fragment extends BaseFragment {
     private Subscription subscribe3;
     private View head;
     private View view;
-    private Subscription subscribe2;
+
     private CountdownView countTime;
     private long left;
     Thread thread;
+
 
     public static TodayV2Fragment newInstance(String title) {
         TodayV2Fragment todayV2Fragment = new TodayV2Fragment();
@@ -218,7 +216,7 @@ public class TodayV2Fragment extends BaseFragment {
         xRecyclerView.addItemDecoration(new SpaceItemDecoration(10));
 
         xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-        xRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
+        xRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
         xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
         xRecyclerView.setPullRefreshEnabled(false);
         mTodayAdapter = new TodayAdapter(this, getActivity());
@@ -335,9 +333,7 @@ public class TodayV2Fragment extends BaseFragment {
         if (subscribe1 != null && subscribe1.isUnsubscribed()) {
             subscribe1.unsubscribe();
         }
-        if (subscribe2 != null && subscribe2.isUnsubscribed()) {
-            subscribe2.unsubscribe();
-        }
+
         if (subscribe3 != null && subscribe3.isUnsubscribed()) {
             subscribe3.unsubscribe();
         }

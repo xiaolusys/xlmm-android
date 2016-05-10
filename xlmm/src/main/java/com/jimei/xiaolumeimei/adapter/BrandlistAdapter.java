@@ -13,7 +13,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.BrandListBean;
-import com.jimei.xiaolumeimei.entities.BrandpromotionBean;
 import com.jude.utils.JUtils;
 import com.zhy.autolayout.utils.AutoUtils;
 import java.util.ArrayList;

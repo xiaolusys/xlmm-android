@@ -145,7 +145,7 @@ public abstract class BaseAppCompatActivityForDetail extends AutoLayoutActivity 
 
   @Override protected void onDestroy() {
     super.onDestroy();
-    ButterKnife.unbind(this);
+   ButterKnife.unbind(this);
   }
 
   /**

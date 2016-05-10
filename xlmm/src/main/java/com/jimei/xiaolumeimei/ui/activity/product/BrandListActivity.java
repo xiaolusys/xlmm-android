@@ -2,26 +2,17 @@ package com.jimei.xiaolumeimei.ui.activity.product;
 
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.Toolbar;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.BrandActivityAdapter;
-import com.jimei.xiaolumeimei.adapter.BrandlistAdapter;
-import com.jimei.xiaolumeimei.adapter.ChildListActivityAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.BrandListBean;
-import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-
 import java.util.List;
-
-import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -104,7 +95,7 @@ public class BrandListActivity extends BaseSwipeBackCompatActivity {
         xRecyclerView.addItemDecoration(new SpaceItemDecoration(10));
 
         xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-        xRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
+        xRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
         xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
 
         mBrandActivityAdapter = new BrandActivityAdapter(this);

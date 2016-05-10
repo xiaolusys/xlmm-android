@@ -2,7 +2,6 @@ package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.Bind;
@@ -82,7 +81,7 @@ public class MMCarryLogListActivity extends BaseSwipeBackCompatActivity {
     carryloglistXry.addItemDecoration(
         new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
     carryloglistXry.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-    carryloglistXry.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
+    carryloglistXry.setLoadingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
     carryloglistXry.setArrowImageView(R.drawable.iconfont_downgrey);
     carryloglistXry.setPullRefreshEnabled(false);
     carryloglistXry.setLoadingMoreEnabled(true);

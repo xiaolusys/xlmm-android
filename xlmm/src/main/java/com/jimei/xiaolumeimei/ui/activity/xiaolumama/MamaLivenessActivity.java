@@ -2,12 +2,10 @@ package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.Bind;
-
 import com.cpoopc.scrollablelayoutlib.ScrollableHelper;
 import com.cpoopc.scrollablelayoutlib.ScrollableLayout;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
@@ -73,7 +71,7 @@ public class MamaLivenessActivity extends BaseSwipeBackCompatActivity
     lv_liveness.addItemDecoration(
         new DividerItemDecorationForFooter(this, DividerItemDecoration.VERTICAL_LIST));
     lv_liveness.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-    lv_liveness.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
+    lv_liveness.setLoadingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
     lv_liveness.setArrowImageView(R.drawable.iconfont_downgrey);
     lv_liveness.setPullRefreshEnabled(false);
     lv_liveness.setLoadingMoreEnabled(true);

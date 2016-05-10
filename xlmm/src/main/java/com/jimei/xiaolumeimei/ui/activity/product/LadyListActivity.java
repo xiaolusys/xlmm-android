@@ -2,11 +2,10 @@ package com.jimei.xiaolumeimei.ui.activity.product;
 
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import butterknife.Bind;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
@@ -16,10 +15,7 @@ import com.jimei.xiaolumeimei.entities.LadyListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-
 import java.util.List;
-
-import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -122,7 +118,7 @@ public class LadyListActivity extends BaseSwipeBackCompatActivity implements Vie
         xRecyclerView.addItemDecoration(new SpaceItemDecoration(10));
 
         xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-        xRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
+        xRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
         xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
 
 
@@ -131,7 +127,7 @@ public class LadyListActivity extends BaseSwipeBackCompatActivity implements Vie
         byXRecyclerView.addItemDecoration(new SpaceItemDecoration(10));
 
         byXRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-        byXRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
+        byXRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
         byXRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
 
         mLadyListAdapter = new LadyListActivityAdapter(LadyListActivity.this);

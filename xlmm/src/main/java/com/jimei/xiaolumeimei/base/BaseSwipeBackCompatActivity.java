@@ -34,10 +34,6 @@ public abstract class BaseSwipeBackCompatActivity extends BaseAppCompatActivity
     implements SwipeBackActivityBase {
   private SwipeBackActivityHelper mHelper;
 
-
-
-
-
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     mHelper = new SwipeBackActivityHelper(this);

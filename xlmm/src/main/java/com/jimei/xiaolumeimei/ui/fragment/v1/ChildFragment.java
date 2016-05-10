@@ -47,6 +47,7 @@ public class ChildFragment extends BaseFragment {
   private Subscription subscribe3;
   private MaterialDialog materialDialog;
 
+
   public static ChildFragment newInstance(String title) {
     ChildFragment todayFragment = new ChildFragment();
     Bundle bundle = new Bundle();
@@ -122,7 +123,7 @@ public class ChildFragment extends BaseFragment {
     xRecyclerView.addItemDecoration(new SpaceItemDecoration(10));
 
     xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-    xRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
+    xRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
     xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
     xRecyclerView.setPullRefreshEnabled(false);
     mChildListAdapter = new ChildListAdapter(ChildFragment.this, getActivity());
@@ -178,7 +179,7 @@ public class ChildFragment extends BaseFragment {
 
   @Override public void onDestroyView() {
     super.onDestroyView();
-    ButterKnife.unbind(this);
+
   }
 
   private void loadMoreData(int page, int page_size) {

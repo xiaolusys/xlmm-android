@@ -2,12 +2,10 @@ package com.jimei.xiaolumeimei.base;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.umeng.analytics.MobclickAgent;
 import com.zhy.autolayout.AutoLayoutActivity;
 import rx.Subscription;
@@ -61,7 +59,6 @@ public abstract class BaseActivity extends AutoLayoutActivity{
 
   @Override protected void onDestroy() {
     super.onDestroy();
-    ButterKnife.unbind(this);
   }
 
   @Override protected void onResume() {
