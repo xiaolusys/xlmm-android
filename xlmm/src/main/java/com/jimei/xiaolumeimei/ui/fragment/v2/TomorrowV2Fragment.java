@@ -153,7 +153,7 @@ public class TomorrowV2Fragment extends BaseFragment {
                                             while (left > 0) {
                                                 left--;
                                                 SystemClock.sleep(1);
-                                                FragmentActivity activity = getActivity();
+                                                FragmentActivity activity = TomorrowV2Fragment.this.getActivity();
                                                 if (activity != null) {
                                                     activity.runOnUiThread(new Runnable() {
                                                         @Override

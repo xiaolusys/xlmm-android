@@ -3,6 +3,8 @@ package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -92,7 +94,7 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
             JUtils.Toast("请选择转账金额。");
         } else {
             subscribe = MamaInfoModel.getInstance()
-                    .toWallet(fund + ".0")
+                    .toWallet(fund+"")
                     .subscribeOn(Schedulers.io())
                     .subscribe(new ServiceResponse<ResponseResultBean>() {
                         String msg = "";
@@ -192,19 +194,19 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
         }
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.action_history:
-//                startActivity(new Intent(this, MamaWithdrawCashHistoryActivity.class));
-//                break;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
-//
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu_withdrawcash, menu);
-//        return super.onCreateOptionsMenu(menu);
-//    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_history:
+                startActivity(new Intent(this, MamaWithdrawCashHistoryActivity.class));
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_withdrawcash, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 }
