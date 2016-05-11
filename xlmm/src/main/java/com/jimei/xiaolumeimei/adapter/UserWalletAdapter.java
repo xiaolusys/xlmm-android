@@ -9,22 +9,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.BudgetdetailBean;
 import com.jimei.xiaolumeimei.ui.activity.user.WalletDetailActivity;
 import com.zhy.autolayout.utils.AutoUtils;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/02/26.
  * <p>
  * Copyright 2016年 上海己美. All rights reserved.
  */
-public class UserWalletAdapter
-    extends RecyclerView.Adapter<UserWalletAdapter.UserWalletVH> {
+public class UserWalletAdapter extends RecyclerView.Adapter<UserWalletAdapter.UserWalletVH> {
 
   private List<BudgetdetailBean.ResultsEntity> mList;
   private Context mContext;
@@ -45,15 +48,17 @@ public class UserWalletAdapter
     notifyDataSetChanged();
   }
 
-  @Override public UserWalletVH onCreateViewHolder(ViewGroup parent, int viewType) {
+  @Override
+  public UserWalletVH onCreateViewHolder(ViewGroup parent, int viewType) {
     View view;
     view = LayoutInflater.from(parent.getContext())
-        .inflate(R.layout.item_userwallet, parent, false);
+            .inflate(R.layout.item_userwallet, parent, false);
     AutoUtils.autoSize(view);
     return new UserWalletVH(view);
   }
 
-  @Override public void onBindViewHolder(UserWalletVH holder, int position) {
+  @Override
+  public void onBindViewHolder(UserWalletVH holder, int position) {
 
     BudgetdetailBean.ResultsEntity resultsEntity = mList.get(position);
 
@@ -71,7 +76,7 @@ public class UserWalletAdapter
     if (0 == resultsEntity.getBudgetType()) {
 
       holder.tvMoneychange.setText("+ " + resultsEntity.getBudegetDetailCash() + "元  ");
-      holder.tvMoneychange.setTextColor(Color.parseColor("#F5B123"));
+//            holder.tvMoneychange.setTextColor(Color.parseColor("#F5B123"));
     } else if (1 == resultsEntity.getBudgetType()) {
       holder.tvMoneychange.setText("- " + resultsEntity.getBudegetDetailCash() + "元  ");
     }
@@ -81,28 +86,35 @@ public class UserWalletAdapter
   private void bindOnClickListener(View itemView, int position) {
     BudgetdetailBean.ResultsEntity entity = mList.get(position);
     itemView.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
+      @Override
+      public void onClick(View v) {
         Intent intent = new Intent(mContext, WalletDetailActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("entity", entity);
+        bundle.putSerializable("entity",entity);
         intent.putExtras(bundle);
         mContext.startActivity(intent);
       }
     });
   }
 
-  @Override public int getItemCount() {
+  @Override
+  public int getItemCount() {
     return mList == null ? 0 : mList.size();
   }
+
 
   static class UserWalletVH extends RecyclerView.ViewHolder {
 
     int id = R.layout.item_userwallet;
     View itemView;
-    @Bind(R.id.tv_time) TextView tvTime;
-    @Bind(R.id.tv_desc) TextView tvDesc;
-    @Bind(R.id.tv_status) TextView tvStatus;
-    @Bind(R.id.tv_moneychange) TextView tvMoneychange;
+    @Bind(R.id.tv_time)
+    TextView tvTime;
+    @Bind(R.id.tv_desc)
+    TextView tvDesc;
+    @Bind(R.id.tv_status)
+    TextView tvStatus;
+    @Bind(R.id.tv_moneychange)
+    TextView tvMoneychange;
 
     public UserWalletVH(View itemView) {
       super(itemView);

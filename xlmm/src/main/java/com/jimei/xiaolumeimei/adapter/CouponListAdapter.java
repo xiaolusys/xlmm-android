@@ -97,9 +97,9 @@ public class CouponListAdapter extends BaseAdapter {
         holder.tv_coupon_info.setText(mList.get(position).getPros_desc());
         String start_time = mList.get(position).getStart_time();
         if (start_time != null) {
-            holder.tv_coupon_crttime.setText("期限   " + start_time + "   至   " + mList.get(position).getDeadline());
+            holder.tv_coupon_crttime.setText("期限   " + start_time.replace("T", " ") + "   至   " + mList.get(position).getDeadline().replace("T", " "));
         } else {
-            holder.tv_coupon_crttime.setText("期限   " + mList.get(position).getCreated().replace("T", " ") + "   至   " + mList.get(position).getDeadline());
+            holder.tv_coupon_crttime.setText("期限   " + mList.get(position).getCreated().replace("T", " ") + "   至   " + mList.get(position).getDeadline().replace("T", " "));
         }
         JUtils.Log(TAG, "couponno= " + mList.get(position).getId() + " selected couponno=" + mSelecteCouponid);
         holder.use_fee.setText(mList.get(position).getUse_fee_des());

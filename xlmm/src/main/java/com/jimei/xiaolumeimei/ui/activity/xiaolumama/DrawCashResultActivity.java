@@ -1,6 +1,9 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -54,5 +57,22 @@ public class DrawCashResultActivity extends BaseSwipeBackCompatActivity implemen
                 finish();
                 break;
         }
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_detail:
+                startActivity(new Intent(this, MamaDrawCashDetailActivity.class));
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_draw_cash_detail, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 }
