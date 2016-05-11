@@ -1,6 +1,8 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -12,8 +14,10 @@ import android.widget.Toast;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.adapter.MamaFansAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.entities.MamaFansBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.utils.StatusBarUtil;
@@ -38,6 +42,7 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity {
   private int page = 2;
   private MamaFansAdapter mAdapter;
   private Subscription subscribe;
+  static SharedPreferences sharedPreferences;
 
   @Override protected void setListener() {
   }
@@ -172,9 +177,15 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity {
     switch (item.getItemId()) {
 
       case R.id.action_fans:
+        sharedPreferences = XlmmApp.getmContext().getSharedPreferences("APICLIENT", Context.MODE_PRIVATE);
+        String baseUrl = "http://" + sharedPreferences.getString("BASE_URL", "");
+        if(baseUrl.equals("http://")){
+          baseUrl = XlmmApi.APP_BASE_URL;
+        }
+
         Intent intent = new Intent(this, FansWebViewActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putString("actlink","http://m.xiaolumeimei.com/pages/fans-explain.html");
+        bundle.putString("actlink", baseUrl + "/pages/fans-explain.html");
         intent.putExtras(bundle);
         startActivity(intent);
 
