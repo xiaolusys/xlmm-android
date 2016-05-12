@@ -29,7 +29,7 @@ import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.model.ActivityModel;
-import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.PhoneLoginActivity;
 import com.jimei.xiaolumeimei.utils.CameraUtils;
 import com.jimei.xiaolumeimei.utils.FileUtils;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
@@ -529,8 +529,8 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     cmb.setText(content.trim());
   }
 
-  public void callNativeLoginActivity(String pageUrl) {
-    Intent intent = new Intent(mContext, LoginActivity.class);
+  @JavascriptInterface public void callNativeLoginActivity(String pageUrl) {
+    Intent intent = new Intent(mContext, PhoneLoginActivity.class);
     Bundle bundle = new Bundle();
     bundle.putString("login", "h5");
     bundle.putString("actlink", pageUrl);
