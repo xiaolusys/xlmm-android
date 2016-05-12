@@ -316,8 +316,8 @@ public class MainActivity extends BaseActivity
     drawer.setDrawerListener(toggle);
     toggle.syncState();
     //toggle.setDrawerIndicatorEnabled(false);
-    //toggle.setHomeAsUpIndicator(R.drawable.ic_deerhead);
-    //toolbar.setNavigationIcon(R.drawable.ic_deerhead);
+    toggle.setHomeAsUpIndicator(R.drawable.icon_nav);
+    toolbar.setNavigationIcon(R.drawable.icon_nav);
 
     NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
     navigationView.setNavigationItemSelectedListener(this);
