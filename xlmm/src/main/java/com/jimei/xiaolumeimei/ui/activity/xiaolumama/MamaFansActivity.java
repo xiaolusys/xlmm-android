@@ -10,7 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-
+import butterknife.Bind;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
@@ -25,8 +25,7 @@ import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.widget.DividerItemDecorationForFooter;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
-
-import butterknife.Bind;
+import retrofit.http.HEAD;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -56,7 +55,7 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity {
   }
 
   @Override protected void initViews() {
-    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent),0);
+    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent), 0);
     toolbar.setTitle("");
     setSupportActionBar(toolbar);
     finishBack(toolbar);
@@ -175,7 +174,6 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity {
 
   @Override public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
-
       case R.id.action_fans:
         sharedPreferences = XlmmApp.getmContext().getSharedPreferences("APICLIENT", Context.MODE_PRIVATE);
         String baseUrl = "http://" + sharedPreferences.getString("BASE_URL", "");
@@ -186,12 +184,11 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity {
         Intent intent = new Intent(this, FansWebViewActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString("actlink", baseUrl + "/pages/fans-explain.html");
+
         intent.putExtras(bundle);
         startActivity(intent);
-
         break;
     }
-
     return super.onOptionsItemSelected(item);
   }
 }
