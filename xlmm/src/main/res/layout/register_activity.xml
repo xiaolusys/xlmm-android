@@ -25,6 +25,7 @@
         <com.jimei.xiaolumeimei.widget.ClearEditText
             android:id="@+id/register_name"
             style="@style/EditTextStyle"
+            android:textCursorDrawable="@drawable/color_cursor"
             android:layout_width="match_parent"
             android:hint="请输入手机号"
             android:inputType="phone"
@@ -48,6 +49,7 @@
         <EditText
             android:id="@+id/register_password"
             style="@style/EditTextStyle"
+            android:textCursorDrawable="@drawable/color_cursor"
             android:layout_width="0dp"
             android:layout_weight="2.5"
             android:hint="请输入验证码"

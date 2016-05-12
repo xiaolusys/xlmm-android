@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <com.jimei.xiaolumeimei.widget.XlmmTitleView
-        android:layout_width="@dimen/md_button_min_width"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:xlmm_title="新增收货地址" />
 
@@ -36,6 +36,7 @@
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:textCursorDrawable="@drawable/color_cursor"
             android:layout_marginLeft="20dp"
             android:background="@null"
             android:hint="请输入收货人姓名"
@@ -64,6 +65,7 @@
             android:id="@+id/mobile"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:textCursorDrawable="@drawable/color_cursor"
             android:layout_marginLeft="20dp"
             android:background="@null"
             android:hint="请输入收货人手机号"
@@ -131,6 +133,7 @@
             android:id="@+id/clear_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textCursorDrawable="@drawable/color_cursor"
             android:layout_marginLeft="13dp"
             android:background="@null"
             android:hint="请输入详细地址"
@@ -162,6 +165,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:buttonTint="@color/colorAccent"
             android:layout_margin="4dp"
             android:padding="8dp"
             android:shadowColor="@color/colorAccent" />
