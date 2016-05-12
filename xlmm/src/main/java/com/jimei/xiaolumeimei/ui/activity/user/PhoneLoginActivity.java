@@ -136,52 +136,53 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity implements V
                                         JUtils.Toast("登录成功!");
                                         LoginUtils.setPushUserAccount(PhoneLoginActivity.this,
                                                 MiPushClient.getRegId(getApplicationContext()));
-                                        String login;
+                                        String login = null;
                                         if (null != getIntent() && getIntent().getExtras() != null) {
                                             login = getIntent().getExtras().getString("login");
                                             actlink = getIntent().getExtras().getString("actlink");
-                                        } else {
-                                            return;
                                         }
-                                        assert login != null;
-                                        if (login.equals("cart")) {
-                                            Intent intent = new Intent(mContext, CartActivity.class);
-                                            startActivity(intent);
-                                            finish();
-                                        } else if (login.equals("product")) {
-                                            finish();
-                                        } else if (login.equals("main")) {
-                                            finish();
-                                        } else if (login.equals("point")) {
-                                            Intent intent = new Intent(mContext, MembershipPointActivity.class);
-                                            startActivity(intent);
-                                            finish();
-                                        } else if (login.equals("money")) {
-                                            Intent intent = new Intent(mContext, WalletActivity.class);
-                                            startActivity(intent);
-                                            finish();
-                                        } else if (login.equals("axiba")) {
-                                            Intent intent = new Intent(mContext, MainActivity.class);
-                                            startActivity(intent);
-                                            finish();
-                                        } else if (login.equals("coupon")) {
-                                            Intent intent = new Intent(mContext, CouponActivity.class);
-                                            startActivity(intent);
-                                            finish();
-                                        } else if (login.equals("productdetail")) {
-                                            finish();
-                                        } else if (login.equals("h5")) {
-                                            Intent intent = new Intent(mContext, CommonWebViewActivity.class);
-                                            //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                            SharedPreferences sharedPreferences =
-                                                    getSharedPreferences("COOKIESxlmm", Context.MODE_PRIVATE);
-                                            String cookies = sharedPreferences.getString("Cookies", "");
-                                            Bundle bundle = new Bundle();
-                                            bundle.putString("cookies", cookies);
-                                            bundle.putString("actlink", actlink);
-                                            intent.putExtras(bundle);
-                                             startActivity(intent);
-                                            finish();
+
+
+                                        if (null != login) {
+                                            if (login.equals("cart")) {
+                                                Intent intent = new Intent(mContext, CartActivity.class);
+                                                startActivity(intent);
+                                                finish();
+                                            } else if (login.equals("product")) {
+                                                finish();
+                                            } else if (login.equals("main")) {
+                                                finish();
+                                            } else if (login.equals("point")) {
+                                                Intent intent = new Intent(mContext, MembershipPointActivity.class);
+                                                startActivity(intent);
+                                                finish();
+                                            } else if (login.equals("money")) {
+                                                Intent intent = new Intent(mContext, WalletActivity.class);
+                                                startActivity(intent);
+                                                finish();
+                                            } else if (login.equals("axiba")) {
+                                                Intent intent = new Intent(mContext, MainActivity.class);
+                                                startActivity(intent);
+                                                finish();
+                                            } else if (login.equals("coupon")) {
+                                                Intent intent = new Intent(mContext, CouponActivity.class);
+                                                startActivity(intent);
+                                                finish();
+                                            } else if (login.equals("productdetail")) {
+                                                finish();
+                                            } else if (login.equals("h5")) {
+                                                Intent intent = new Intent(mContext, CommonWebViewActivity.class);
+                                                //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                SharedPreferences sharedPreferences =
+                                                        getSharedPreferences("COOKIESxlmm", Context.MODE_PRIVATE);
+                                                String cookies = sharedPreferences.getString("Cookies", "");
+                                                Bundle bundle = new Bundle();
+                                                bundle.putString("cookies", cookies);
+                                                bundle.putString("actlink", actlink);
+                                                intent.putExtras(bundle);
+                                                startActivity(intent);
+                                                finish();
+                                            }
                                         }
                                     } else {
                                         hideIndeterminateProgressDialog();
