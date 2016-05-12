@@ -119,7 +119,9 @@ public class TodayV2Fragment extends BaseFragment {
 
     public void load(SwipeRefreshLayout swipeRefreshLayout) {
         list.clear();
-        mTodayAdapter.updateWithClear(list);
+        if (mTodayAdapter != null) {
+            mTodayAdapter.updateWithClear(list);
+        }
         if (swipeRefreshLayout == null) {
             showIndeterminateProgressDialog(false);
         }
@@ -154,7 +156,7 @@ public class TodayV2Fragment extends BaseFragment {
                                             while (left > 0) {
                                                 left--;
                                                 SystemClock.sleep(1);
-                                                FragmentActivity activity = getActivity();
+                                                FragmentActivity activity = TodayV2Fragment.this.getActivity();
                                                 if (activity != null) {
                                                     activity.runOnUiThread(new Runnable() {
                                                         @Override

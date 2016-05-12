@@ -1,27 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:background="@color/ECECEC"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/ECECEC"
+    android:orientation="vertical">
+
     <com.jimei.xiaolumeimei.widget.XlmmTitleView
-        app:xlmm_title="个人信息"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        app:xlmm_title="个人信息" />
+
     <LinearLayout
         android:id="@+id/ll_head"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
         <LinearLayout
             android:id="@+id/debug"
             android:layout_width="fill_parent"
             android:layout_height="150px"
-            android:orientation="horizontal"
             android:gravity="center_vertical"
             android:minHeight="?android:listPreferredItemHeight"
-            >
+            android:orientation="horizontal">
+
             <TextView
                 android:id="@android:id/title"
                 android:layout_width="wrap_content"
@@ -32,61 +35,69 @@
                 android:singleLine="true"
                 android:text="头像"
                 android:textColor="@color/primary_text"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
 
             <View
-                android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                />
+                android:layout_weight="1" />
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:layout_marginRight="16dp"
                 android:layout_alignParentRight="true"
-                android:orientation="horizontal"
-                >
+                android:layout_marginRight="16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
                 <com.jimei.xiaolumeimei.widget.CircleImageView
                     android:id="@+id/user_img"
                     android:layout_width="120px"
-                    android:src="@drawable/img_head"
-                    android:layout_height="120px"/>
+                    android:layout_height="120px"
+                    android:src="@drawable/img_head" />
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:src="@mipmap/common_icon_right_arrow"
-                    />
+                    android:src="@mipmap/common_icon_right_arrow" />
             </LinearLayout>
 
         </LinearLayout>
-        <View android:layout_width="match_parent"
+
+        <View
+            android:layout_width="match_parent"
             android:layout_height="1dip"
             android:background="#CCCCCC" />
     </LinearLayout>
+
     <com.jimei.xiaolumeimei.widget.MyPreferenceView
         android:id="@+id/nick_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
+
     <com.jimei.xiaolumeimei.widget.MyPreferenceView
         android:id="@+id/bind_phone"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
+
     <com.jimei.xiaolumeimei.widget.MyPreferenceView
         android:id="@+id/edit_pwd"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
+
     <com.jimei.xiaolumeimei.widget.MyPreferenceView
         android:id="@+id/edit_address"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
+
     <com.jimei.xiaolumeimei.widget.MyPreferenceView
         android:id="@+id/setting"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
+
     <com.jimei.xiaolumeimei.widget.MyPreferenceView
         android:id="@+id/login_out"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 </LinearLayout>

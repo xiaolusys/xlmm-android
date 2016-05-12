@@ -3,6 +3,8 @@ package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -88,17 +90,11 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
     }
 
     private void toWallet(double fund) {
-        String cashout_amount = "";
-        if ((Double.compare(fund, 100) != 0) && (Double.compare(fund, 200) != 0)) {
+        if (fund == 0) {
             JUtils.Toast("请选择转账金额。");
         } else {
-            if (Double.compare(fund, 100) == 0) {
-                cashout_amount = "100.0";
-            } else if (Double.compare(fund, 200) == 0) {
-                cashout_amount = "200.0";
-            }
             subscribe = MamaInfoModel.getInstance()
-                    .toWallet(cashout_amount)
+                    .toWallet(fund+"")
                     .subscribeOn(Schedulers.io())
                     .subscribe(new ServiceResponse<ResponseResultBean>() {
                         String msg = "";
@@ -109,11 +105,14 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
                             msg = resp.getMsg();
                             code = resp.getCode();
                         }
-
                         @Override
                         public void onCompleted() {
                             if (code == 0) {
                                 Intent intent = new Intent(MamaDrawCashActivity.this, DrawCashResultActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("msg",msg);
+                                bundle.putInt("code",code);
+                                intent.putExtras(bundle);
                                 startActivity(intent);
                             } else {
                                 JUtils.ToastLong(msg);
@@ -144,6 +143,7 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
                                     MamaWithdrawCashResultActivity.class);
                             intent.putExtra("cash", fund);
                             intent.putExtra("code", resp.getCode());
+                            intent.putExtra("msg", resp.getMsg());
                             startActivity(intent);
                             MamaDrawCashActivity.this.finish();
                         }
@@ -194,19 +194,19 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
         }
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.action_history:
-//                startActivity(new Intent(this, MamaWithdrawCashHistoryActivity.class));
-//                break;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
-//
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu_withdrawcash, menu);
-//        return super.onCreateOptionsMenu(menu);
-//    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_history:
+                startActivity(new Intent(this, MamaWithdrawCashHistoryActivity.class));
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_withdrawcash, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 }
