@@ -449,7 +449,7 @@
             android:layout_above="@+id/tv2"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="24dp"
-            android:src="@drawable/cart" />
+            android:src="@drawable/ic_carts" />
 
         <TextView
             android:id="@+id/tv2"
