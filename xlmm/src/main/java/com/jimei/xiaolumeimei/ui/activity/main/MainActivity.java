@@ -960,18 +960,21 @@ public class MainActivity extends BaseActivity
 
       case R.id.text_yesterday:
         vp.setCurrentItem(0);
+        scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(0));
         textYesterday.setTextColor(Color.parseColor("#FAAA14"));
         textToday.setTextColor(Color.parseColor("#3C3C3C"));
         textTomorror.setTextColor(Color.parseColor("#3C3C3C"));
         break;
       case R.id.text_today:
         vp.setCurrentItem(1);
+        scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(1));
         textYesterday.setTextColor(Color.parseColor("#3C3C3C"));
         textToday.setTextColor(Color.parseColor("#FAAA14"));
         textTomorror.setTextColor(Color.parseColor("#3C3C3C"));
         break;
       case R.id.text_tomorror:
         vp.setCurrentItem(2);
+        scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(2));
         textYesterday.setTextColor(Color.parseColor("#3C3C3C"));
         textToday.setTextColor(Color.parseColor("#3C3C3C"));
         textTomorror.setTextColor(Color.parseColor("#FAAA14"));
