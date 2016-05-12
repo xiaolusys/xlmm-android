@@ -14,8 +14,10 @@ import android.widget.Toast;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.adapter.MamaFansAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.entities.MamaFansBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.utils.StatusBarUtil;
@@ -180,10 +182,14 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity {
         bundle.putString("cookies", sharedPreferences.getString("cookiesString", ""));
         bundle.putString("domain", sharedPreferences.getString("cookiesDomain", ""));
         bundle.putString("Cookie", sharedPreferences.getString("Cookie", ""));
-        bundle.putString("actlink","http://m.xiaolumeimei.com/pages/fans-explain.html");
+        SharedPreferences sharedPreferences2 = XlmmApp.getmContext().getSharedPreferences("APICLIENT", Context.MODE_PRIVATE);
+        String baseUrl = "http://" + sharedPreferences2.getString("BASE_URL", "");
+        if(baseUrl.equals("http://")){
+          baseUrl = XlmmApi.APP_BASE_URL;
+        }
+        bundle.putString("actlink", baseUrl + "/pages/fans-explain.html");
         intent.putExtras(bundle);
         startActivity(intent);
-
         break;
     }
 
