@@ -50,6 +50,7 @@
         android:id="@+id/register_name"
         style="@style/EditTextStyle"
         android:layout_width="match_parent"
+        android:textCursorDrawable="@drawable/color_cursor"
         android:singleLine="true"
         android:inputType="phone"
         android:maxLength="11"
@@ -67,6 +68,7 @@
             android:id="@+id/checkcode"
             style="@style/EditTextStyle"
             android:layout_width="0dp"
+            android:textCursorDrawable="@drawable/color_cursor"
             android:background="@null"
             android:hint="请输入短信验证码"/>
         <Button

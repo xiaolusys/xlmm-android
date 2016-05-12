@@ -137,7 +137,9 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
         switch (v.getId()) {
             case R.id.login_button:
                 Intent intent1 = new Intent(mContext, PhoneLoginActivity.class);
-                intent1.putExtras(extras);
+                if (extras != null) {
+                    intent1.putExtras(extras);
+                }
                 startActivity(intent1);
                 finish();
                 break;

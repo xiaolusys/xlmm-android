@@ -1,6 +1,8 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -172,8 +174,12 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity {
     switch (item.getItemId()) {
 
       case R.id.action_fans:
+        SharedPreferences sharedPreferences = getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
         Intent intent = new Intent(this, FansWebViewActivity.class);
         Bundle bundle = new Bundle();
+        bundle.putString("cookies", sharedPreferences.getString("cookiesString", ""));
+        bundle.putString("domain", sharedPreferences.getString("cookiesDomain", ""));
+        bundle.putString("Cookie", sharedPreferences.getString("Cookie", ""));
         bundle.putString("actlink","http://m.xiaolumeimei.com/pages/fans-explain.html");
         intent.putExtras(bundle);
         startActivity(intent);

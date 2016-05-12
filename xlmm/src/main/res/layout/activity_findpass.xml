@@ -55,6 +55,7 @@
             android:layout_weight="2.5"
             android:id="@+id/register_password"
             android:layout_width="0dp"
+            android:textCursorDrawable="@drawable/color_cursor"
             android:layout_height="110px"
             android:inputType="textPassword"
             android:singleLine="true"
