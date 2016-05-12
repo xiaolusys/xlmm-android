@@ -61,7 +61,7 @@
         android:layout_weight="1"
         android:padding="4dp"
         android:gravity="center"
-        android:text="明日新品"
+        android:text="即将上新"
         android:textColor="#3C3C3C"/>
 
   </LinearLayout>
