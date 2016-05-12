@@ -53,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@drawable/cart2"
+            android:src="@drawable/ic_carts"
             android:visibility="invisible" />
 
         <ImageView
@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:src="@drawable/cart2" />
+            android:src="@drawable/ic_carts" />
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>
