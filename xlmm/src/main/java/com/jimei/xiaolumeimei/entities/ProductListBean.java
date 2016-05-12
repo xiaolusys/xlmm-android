@@ -12,39 +12,41 @@ public class ProductListBean {
 
   @SerializedName("count") private int mCount;
   @SerializedName("next") private Object mNext;
+  @SerializedName("downshelf_deadline") private String mDownshelfDeadline;
+
+  public String getUpshelfStarttime() {
+    return mUpshelfStarttime;
+  }
+
+  @SerializedName("upshelf_starttime") private String mUpshelfStarttime;
+  @SerializedName("results") private List<ResultsEntity> mResults;
 
   public String getDownshelfDeadline() {
     return mDownshelfDeadline;
-  }
-
-  @SerializedName("downshelf_deadline") private String mDownshelfDeadline;
-
-  @SerializedName("results") private List<ResultsEntity> mResults;
-
-  public void setCount(int count) {
-    this.mCount = count;
-  }
-
-  public void setNext(Object next) {
-    this.mNext = next;
-  }
-
-
-  public void setResults(List<ResultsEntity> results) {
-    this.mResults = results;
   }
 
   public int getCount() {
     return mCount;
   }
 
+  public void setCount(int count) {
+    this.mCount = count;
+  }
+
   public Object getNext() {
     return mNext;
   }
 
+  public void setNext(Object next) {
+    this.mNext = next;
+  }
 
   public List<ResultsEntity> getResults() {
     return mResults;
+  }
+
+  public void setResults(List<ResultsEntity> results) {
+    this.mResults = results;
   }
 
   public static class ResultsEntity {
@@ -90,180 +92,180 @@ public class ProductListBean {
     @SerializedName("is_verify") private boolean mIsVerify;
     @SerializedName("model_id") private int mModelId;
 
-    public void setId(String id) {
-      this.mId = id;
-    }
-
-    public void setUrl(String url) {
-      this.mUrl = url;
-    }
-
-    public void setName(String name) {
-      this.mName = name;
-    }
-
-    public void setOuterId(String outerId) {
-      this.mOuterId = outerId;
-    }
-
-    public void setCategory(CategoryEntity category) {
-      this.mCategory = category;
-    }
-
-    public void setPicPath(String picPath) {
-      this.mPicPath = picPath;
-    }
-
-    public void setRemainNum(int remainNum) {
-      this.mRemainNum = remainNum;
-    }
-
-    public void setIsSaleout(boolean isSaleout) {
-      this.mIsSaleout = isSaleout;
-    }
-
-    public void setHeadImg(String headImg) {
-      this.mHeadImg = headImg;
-    }
-
-    public void setIsSaleopen(boolean isSaleopen) {
-      this.mIsSaleopen = isSaleopen;
-    }
-
-    public void setIsNewgood(boolean isNewgood) {
-      this.mIsNewgood = isNewgood;
-    }
-
-    public void setStdSalePrice(int stdSalePrice) {
-      this.mStdSalePrice = stdSalePrice;
-    }
-
-    public void setAgentPrice(double agentPrice) {
-      this.mAgentPrice = agentPrice;
-    }
-
-    public void setSaleTime(String saleTime) {
-      this.mSaleTime = saleTime;
-    }
-
-    public void setOffshelfTime(Object offshelfTime) {
-      this.mOffshelfTime = offshelfTime;
-    }
-
-    public void setMemo(String memo) {
-      this.mMemo = memo;
-    }
-
-    public void setLowestPrice(double lowestPrice) {
-      this.mLowestPrice = lowestPrice;
-    }
-
-    public void setProductLowestPrice(double productLowestPrice) {
-      this.mProductLowestPrice = productLowestPrice;
-    }
-
-    public void setProductModel(ProductModelEntity productModel) {
-      this.mProductModel = productModel;
-    }
-
-    public void setWareBy(int wareBy) {
-      this.mWareBy = wareBy;
-    }
-
-    public void setIsVerify(boolean isVerify) {
-      this.mIsVerify = isVerify;
-    }
-
-    public void setModelId(int modelId) {
-      this.mModelId = modelId;
-    }
-
     public String getId() {
       return mId;
+    }
+
+    public void setId(String id) {
+      this.mId = id;
     }
 
     public String getUrl() {
       return mUrl;
     }
 
+    public void setUrl(String url) {
+      this.mUrl = url;
+    }
+
     public String getName() {
       return mName;
+    }
+
+    public void setName(String name) {
+      this.mName = name;
     }
 
     public String getOuterId() {
       return mOuterId;
     }
 
+    public void setOuterId(String outerId) {
+      this.mOuterId = outerId;
+    }
+
     public CategoryEntity getCategory() {
       return mCategory;
+    }
+
+    public void setCategory(CategoryEntity category) {
+      this.mCategory = category;
     }
 
     public String getPicPath() {
       return mPicPath;
     }
 
+    public void setPicPath(String picPath) {
+      this.mPicPath = picPath;
+    }
+
     public int getRemainNum() {
       return mRemainNum;
+    }
+
+    public void setRemainNum(int remainNum) {
+      this.mRemainNum = remainNum;
     }
 
     public boolean isIsSaleout() {
       return mIsSaleout;
     }
 
+    public void setIsSaleout(boolean isSaleout) {
+      this.mIsSaleout = isSaleout;
+    }
+
     public String getHeadImg() {
       return mHeadImg;
+    }
+
+    public void setHeadImg(String headImg) {
+      this.mHeadImg = headImg;
     }
 
     public boolean isIsSaleopen() {
       return mIsSaleopen;
     }
 
+    public void setIsSaleopen(boolean isSaleopen) {
+      this.mIsSaleopen = isSaleopen;
+    }
+
     public boolean isIsNewgood() {
       return mIsNewgood;
+    }
+
+    public void setIsNewgood(boolean isNewgood) {
+      this.mIsNewgood = isNewgood;
     }
 
     public double getStdSalePrice() {
       return mStdSalePrice;
     }
 
+    public void setStdSalePrice(int stdSalePrice) {
+      this.mStdSalePrice = stdSalePrice;
+    }
+
     public double getAgentPrice() {
       return mAgentPrice;
+    }
+
+    public void setAgentPrice(double agentPrice) {
+      this.mAgentPrice = agentPrice;
     }
 
     public String getSaleTime() {
       return mSaleTime;
     }
 
+    public void setSaleTime(String saleTime) {
+      this.mSaleTime = saleTime;
+    }
+
     public Object getOffshelfTime() {
       return mOffshelfTime;
+    }
+
+    public void setOffshelfTime(Object offshelfTime) {
+      this.mOffshelfTime = offshelfTime;
     }
 
     public String getMemo() {
       return mMemo;
     }
 
+    public void setMemo(String memo) {
+      this.mMemo = memo;
+    }
+
     public double getLowestPrice() {
       return mLowestPrice;
+    }
+
+    public void setLowestPrice(double lowestPrice) {
+      this.mLowestPrice = lowestPrice;
     }
 
     public double getProductLowestPrice() {
       return mProductLowestPrice;
     }
 
+    public void setProductLowestPrice(double productLowestPrice) {
+      this.mProductLowestPrice = productLowestPrice;
+    }
+
     public ProductModelEntity getProductModel() {
       return mProductModel;
+    }
+
+    public void setProductModel(ProductModelEntity productModel) {
+      this.mProductModel = productModel;
     }
 
     public int getWareBy() {
       return mWareBy;
     }
 
+    public void setWareBy(int wareBy) {
+      this.mWareBy = wareBy;
+    }
+
     public boolean isIsVerify() {
       return mIsVerify;
     }
 
+    public void setIsVerify(boolean isVerify) {
+      this.mIsVerify = isVerify;
+    }
+
     public int getModelId() {
       return mModelId;
+    }
+
+    public void setModelId(int modelId) {
+      this.mModelId = modelId;
     }
 
     public static class CategoryEntity {
@@ -273,44 +275,44 @@ public class ProductListBean {
       @SerializedName("status") private String mStatus;
       @SerializedName("sort_order") private int mSortOrder;
 
-      public void setCid(int cid) {
-        this.mCid = cid;
-      }
-
-      public void setParentCid(int parentCid) {
-        this.mParentCid = parentCid;
-      }
-
-      public void setName(String name) {
-        this.mName = name;
-      }
-
-      public void setStatus(String status) {
-        this.mStatus = status;
-      }
-
-      public void setSortOrder(int sortOrder) {
-        this.mSortOrder = sortOrder;
-      }
-
       public int getCid() {
         return mCid;
+      }
+
+      public void setCid(int cid) {
+        this.mCid = cid;
       }
 
       public int getParentCid() {
         return mParentCid;
       }
 
+      public void setParentCid(int parentCid) {
+        this.mParentCid = parentCid;
+      }
+
       public String getName() {
         return mName;
+      }
+
+      public void setName(String name) {
+        this.mName = name;
       }
 
       public String getStatus() {
         return mStatus;
       }
 
+      public void setStatus(String status) {
+        this.mStatus = status;
+      }
+
       public int getSortOrder() {
         return mSortOrder;
+      }
+
+      public void setSortOrder(int sortOrder) {
+        this.mSortOrder = sortOrder;
       }
     }
 
@@ -324,68 +326,68 @@ public class ProductListBean {
       @SerializedName("head_imgs") private List<String> mHeadImgs;
       @SerializedName("content_imgs") private List<String> mContentImgs;
 
-      public void setId(String id) {
-        this.mId = id;
-      }
-
-      public void setName(String name) {
-        this.mName = name;
-      }
-
-      public void setIsSingleSpec(boolean isSingleSpec) {
-        this.mIsSingleSpec = isSingleSpec;
-      }
-
-      public void setIsSaleOut(boolean isSaleOut) {
-        this.mIsSaleOut = isSaleOut;
-      }
-
-      public void setBuyLimit(boolean buyLimit) {
-        this.mBuyLimit = buyLimit;
-      }
-
-      public void setPerLimit(int perLimit) {
-        this.mPerLimit = perLimit;
-      }
-
-      public void setHeadImgs(List<String> headImgs) {
-        this.mHeadImgs = headImgs;
-      }
-
-      public void setContentImgs(List<String> contentImgs) {
-        this.mContentImgs = contentImgs;
-      }
-
       public String getId() {
         return mId;
+      }
+
+      public void setId(String id) {
+        this.mId = id;
       }
 
       public String getName() {
         return mName;
       }
 
+      public void setName(String name) {
+        this.mName = name;
+      }
+
       public boolean isIsSingleSpec() {
         return mIsSingleSpec;
+      }
+
+      public void setIsSingleSpec(boolean isSingleSpec) {
+        this.mIsSingleSpec = isSingleSpec;
       }
 
       public boolean isIsSaleOut() {
         return mIsSaleOut;
       }
 
+      public void setIsSaleOut(boolean isSaleOut) {
+        this.mIsSaleOut = isSaleOut;
+      }
+
       public boolean isBuyLimit() {
         return mBuyLimit;
+      }
+
+      public void setBuyLimit(boolean buyLimit) {
+        this.mBuyLimit = buyLimit;
       }
 
       public int getPerLimit() {
         return mPerLimit;
       }
 
+      public void setPerLimit(int perLimit) {
+        this.mPerLimit = perLimit;
+      }
+
       public List<String> getHeadImgs() {
         return mHeadImgs;
       }
 
+      public void setHeadImgs(List<String> headImgs) {
+        this.mHeadImgs = headImgs;
+      }
+
       public List<String> getContentImgs() {
         return mContentImgs;
+      }
+
+      public void setContentImgs(List<String> contentImgs) {
+        this.mContentImgs = contentImgs;
       }
     }
   }
