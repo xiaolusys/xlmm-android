@@ -180,7 +180,7 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity implements V
                                             bundle.putString("cookies", cookies);
                                             bundle.putString("actlink", actlink);
                                             intent.putExtras(bundle);
-                                            startActivity(intent);
+                                             startActivity(intent);
                                             finish();
                                         }
                                     } else {

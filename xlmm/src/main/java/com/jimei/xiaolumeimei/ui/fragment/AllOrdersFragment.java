@@ -172,10 +172,8 @@ public class AllOrdersFragment extends Fragment {
             .subscribeOn(Schedulers.io())
             .subscribe(new ServiceResponse<AllOrdersBean>() {
               @Override public void onNext(AllOrdersBean allOrdersBean) {
-
-                if (allOrdersBean != null && allOrdersBean.getResults() != null) {
-                  List<AllOrdersBean.ResultsEntity> results = allOrdersBean.getResults();
-
+                List<AllOrdersBean.ResultsEntity> results = allOrdersBean.getResults();
+                if (results.size() != 0) {
                   list.addAll(results);
                   adapter.update(results);
                 } else {

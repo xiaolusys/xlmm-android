@@ -25,6 +25,9 @@ import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.utils.BitmapUtil;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+
+import org.apache.commons.lang3.StringUtils;
+
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -71,24 +74,21 @@ public class WxPubTwoDimenCodeActivity extends BaseSwipeBackCompatActivity
         .setOutputBitmapPadding(0) // 设置为没有白边
         .build();
     mDecodeTask = new WxPubTwoDimenCodeActivity.DecodeTask();
-
     Subscription subscribe1 = UserModel.getInstance()
         .getWxPubAuthInfo()
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<WxPubAuthInfo>() {
           @Override public void onNext(WxPubAuthInfo wxpub) {
-
-            if (wxpub != null && TextUtils.isEmpty(wxPubAuthInfo.getAuthMsg())) {
+            if (wxpub != null) {
               JUtils.Log(TAG, "wxPubAuthInfo:" + wxpub.toString());
               wxPubAuthInfo = wxpub;
-
-              JUtils.Log(TAG, "execute decode task");
-              //mDecodeTask.execute(wxPubAuthInfo.getAuthLink());
-              bitmap = mEncoder.encode(wxPubAuthInfo.getAuthLink());
-              bitmap = getNewBitMap(bitmap, wxPubAuthInfo.getAuthMsg());
+              bitmap = mEncoder.encode(wxpub.getAuthLink());
+              bitmap = getNewBitMap(bitmap, wxpub.getAuthMsg());
               img_2dimen.setImageBitmap(bitmap);
             }
           }
+
+
         });
     addSubscription(subscribe1);
   }
