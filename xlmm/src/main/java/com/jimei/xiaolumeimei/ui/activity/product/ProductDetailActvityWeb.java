@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -11,10 +12,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-
 import butterknife.Bind;
 import cn.iwgang.countdownview.CountdownView;
-
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseAppCompatActivityForDetail;
 import com.jimei.xiaolumeimei.entities.AddCartsBean;
@@ -30,12 +29,10 @@ import com.jimei.xiaolumeimei.ui.fragment.v1.setSkuidListener;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.widget.badgelib.BadgeView;
 import com.jimei.xiaolumeimei.widget.doubleview.CustScrollView;
-import com.jimei.xiaolumeimei.widget.doubleview.DragLayout;
+import com.jimei.xiaolumeimei.widget.dragviewfortest.DragLayout;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
-
 import java.util.Date;
-
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -45,295 +42,308 @@ import rx.schedulers.Schedulers;
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class ProductDetailActvityWeb extends BaseAppCompatActivityForDetail
-        implements View.OnClickListener, setSkuidListener {
-    private static final String TAG = ProductDetailActvityWeb.class.getSimpleName();
-    @Bind(R.id.draglayout)
-    DragLayout dragLayout;
-    @Bind(R.id.image_1)
-    ImageView imageView1;
-    @Bind(R.id.image_2)
-    ImageView imageView2;
-    @Bind(R.id.rv_cart)
-    RelativeLayout rvCart;
-    @Bind(R.id.shopping_button)
-    Button button_shop;
-    int num = 0;
-    @Bind(R.id.cv_lefttime)
-    CountdownView cvLefttime;
-    private String item_id;
-    private String sku_id;
-    private BadgeView badge;
-    private String productId;
-    private VerticalFragmentDetail fragmentDetail;
-    private VerticalFragmentWeb fragmnetWeb;
-    private boolean isSelectzz;
-    private DragLayout.ShowNextPageNotifier nextIntf;
+    implements View.OnClickListener, setSkuidListener {
+  private static final String TAG = ProductDetailActvityWeb.class.getSimpleName();
+  @Bind(R.id.draglayout) DragLayout dragLayout;
+  @Bind(R.id.image_1) ImageView imageView1;
+  @Bind(R.id.image_2) ImageView imageView2;
+  @Bind(R.id.rv_cart) RelativeLayout rvCart;
+  @Bind(R.id.shopping_button) Button button_shop;
+  int num = 0;
+  @Bind(R.id.cv_lefttime) CountdownView cvLefttime;
+  private String item_id;
+  private String sku_id;
+  private BadgeView badge;
+  private String productId;
+  private VerticalFragmentDetail fragmentDetail;
+  private VerticalFragmentWeb fragmnetWeb;
+  private boolean isSelectzz;
+  //private DragLayout.ShowNextPageNotifier nextIntf;
 
-    @Override
-    protected void setListener() {
-        button_shop.setOnClickListener(this);
-        rvCart.setOnClickListener(this);
+  @Override protected void setListener() {
+    button_shop.setOnClickListener(this);
+    rvCart.setOnClickListener(this);
+  }
+
+  @Override protected void initData() {
+    if (fragmentDetail != null) {
+      fragmentDetail.initView(productId);
     }
 
-    @Override
-    protected void initData() {
-        if (fragmentDetail != null) {
-            fragmentDetail.initView(productId);
-        }
+    Subscription subscribeSubscription = ProductModel.getInstance()
+        .getProductDetails(productId)
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<ProductDetailBean>() {
+          @Override public void onNext(ProductDetailBean productDetailBean) {
+            if (productDetailBean != null) {
+              boolean isSaleopen = productDetailBean.isIsSaleopen();
+              boolean isSaleout = productDetailBean.isIsSaleout();
+              if (isSaleopen) {
+                if (isSaleout) {
+                  button_shop.setClickable(false);
+                  button_shop.setBackgroundColor(Color.parseColor("#f3f3f4"));
+                } else {
+                  button_shop.setClickable(true);
+                }
+              } else {
+                button_shop.setClickable(false);
+                button_shop.setBackgroundColor(Color.parseColor("#f3f3f4"));
+              }
 
-        Subscription subscribeSubscription = ProductModel.getInstance()
-                .getProductDetails(productId)
-                .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<ProductDetailBean>() {
-                    @Override
-                    public void onNext(ProductDetailBean productDetailBean) {
-                        if (productDetailBean != null) {
-                            boolean isSaleopen = productDetailBean.isIsSaleopen();
-                            boolean isSaleout = productDetailBean.isIsSaleout();
-                            if (isSaleopen) {
-                                if (isSaleout) {
-                                    button_shop.setClickable(false);
-                                    button_shop.setBackgroundColor(Color.parseColor("#f3f3f4"));
-                                } else {
-                                    button_shop.setClickable(true);
-                                }
-                            } else {
-                                button_shop.setClickable(false);
-                                button_shop.setBackgroundColor(Color.parseColor("#f3f3f4"));
-                            }
-
-                            item_id = productDetailBean.getId();
-                        }
-                    }
-                });
-        addSubscription(subscribeSubscription);
-    }
-
-    @Override
-    protected void getBundleExtras(Bundle extras) {
-        productId = extras.getString("product_id");
-    }
-
-    @Override
-    protected int getContentViewLayoutID() {
-        return R.layout.activity_productdetail_web;
-    }
-
-    @Override
-    protected void initViews() {
-
-        Window window = getWindow();
-        //4.4版本及以上
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        }
-        //5.0版本及以上
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.getDecorView()
-                    .setSystemUiVisibility(
-                            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.TRANSPARENT);
-        }
-
-        View target = findViewById(R.id.rv_cart);
-        badge = new BadgeView(this);
-        badge.setTargetView(target);
-
-        fragmentDetail = VerticalFragmentDetail.newInstance("detail");
-        fragmnetWeb = VerticalFragmentWeb.newInstance("webview");
-
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.first, fragmentDetail)
-                .add(R.id.second, fragmnetWeb)
-                .commit();
-
-        nextIntf = new DragLayout.ShowNextPageNotifier() {
-            @Override
-            public void onDragNext() {
-                fragmnetWeb.initView(productId);
+              item_id = productDetailBean.getId();
             }
-        };
-        dragLayout.setNextPageListener(nextIntf);
+          }
+        });
+    addSubscription(subscribeSubscription);
+  }
+
+  @Override protected void getBundleExtras(Bundle extras) {
+    productId = extras.getString("product_id");
+  }
+
+  @Override protected int getContentViewLayoutID() {
+    return R.layout.activity_productdetail_web;
+  }
+
+  @Override protected void initViews() {
+
+    Window window = getWindow();
+    //4.4版本及以上
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+      window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+          WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+    }
+    //5.0版本及以上
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+      window.getDecorView()
+          .setSystemUiVisibility(
+              View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+      window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+      window.setStatusBarColor(Color.TRANSPARENT);
     }
 
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
+    View target = findViewById(R.id.rv_cart);
+    badge = new BadgeView(this);
+    badge.setTargetView(target);
 
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
-    }
+    fragmentDetail = VerticalFragmentDetail.newInstance("detail");
+    fragmnetWeb = VerticalFragmentWeb.newInstance("webview");
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.shopping_button:
-                if (!LoginUtils.checkLoginState(getApplicationContext())) {
+    Intent intent = getIntent();
+    String top = intent.getStringExtra("top");
+    String bottom = intent.getStringExtra("bottom");
+    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
-                    Intent intent = new Intent(ProductDetailActvityWeb.this, LoginActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("login", "product");
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                } else {
+    //switch (top) {
+    //  case "ScrollView":
+    //    transaction.replace(R.id.first, fragmentDetail);
+    //    break;
+    //}
+    //switch (bottom) {
+    //
+    //  case "WebView":
+    //    transaction.replace(R.id.second, fragmnetWeb);
+    //    dragLayout.setOnShowNextPageListener(new DragLayout.OnShowNextPageListener() {
+    //      @Override public void onShowNextPage() {
+    //        fragmnetWeb.initView(productId);
+    //      }
+    //    });
+    //    break;
+    //}
+    //transaction.commit();
 
-                    if (isSelectzz) {
-                        JUtils.Log(sku_id + "这尺寸可以");
+    //getSupportFragmentManager().beginTransaction()
+    //    .add(R.id.first, fragmentDetail)
+    //    .add(R.id.second, fragmnetWeb)
+    //    .commit();
 
-                        Subscription subscribe = CartsModel.getInstance()
-                                .addCarts(item_id, sku_id)
-                                .subscribeOn(Schedulers.io())
-                                .subscribe(new ServiceResponse<AddCartsBean>() {
+    getSupportFragmentManager().beginTransaction()
+        .add(R.id.first, fragmentDetail)
+        .add(R.id.second, fragmnetWeb)
+        .commit();
 
-                                    @Override
-                                    public void onError(Throwable e) {
-                                        super.onError(e);
-                                        JUtils.Toast("商品库存不足,选择其它看看吧");
-                                    }
+    dragLayout.setOnShowNextPageListener(new DragLayout.OnShowNextPageListener() {
+      @Override public void onShowNextPage() {
+        fragmnetWeb.initView(productId);
+      }
+    });
 
-                                    @Override
-                                    public void onNext(AddCartsBean addCartsBean) {
 
-                                        if (addCartsBean != null) {
-                                            //num++;
-                                            //badge.setBadgeCount(num);
+    //nextIntf = new DragLayout.ShowNextPageNotifier() {
+    //  @Override public void onDragNext() {
+    //    fragmnetWeb.initView(productId);
+    //  }
+    //};
+    //dragLayout.setNextPageListener(nextIntf);
+  }
 
-                                            Subscription subscribe1 = CartsModel.getInstance()
-                                                    .show_carts_num()
-                                                    .subscribeOn(Schedulers.io())
-                                                    .subscribe(new ServiceResponse<CartsNumResultBean>() {
-                                                        @Override
-                                                        public void onNext(CartsNumResultBean cartsNumResultBean) {
-                                                            if (cartsNumResultBean != null
-                                                                    && cartsNumResultBean.getResult() != 0) {
-                                                                num = cartsNumResultBean.getResult();
-                                                                badge.setBadgeCount(num);
-                                                                imageView1.setVisibility(View.INVISIBLE);
-                                                                imageView2.setVisibility(View.VISIBLE);
-                                                                cvLefttime.setVisibility(View.VISIBLE);
+  @Override protected boolean toggleOverridePendingTransition() {
+    return false;
+  }
 
-                                                                JUtils.Log(TAG,
-                                                                        calcLefttowTime(cartsNumResultBean.getLastCreated())
-                                                                                + "");
-                                                                cvLefttime.start(
-                                                                        calcLefttowTime(cartsNumResultBean.getLastCreated()));
-                                                                cvLefttime.setOnCountdownEndListener(
-                                                                        new CountdownView.OnCountdownEndListener() {
-                                                                            @Override
-                                                                            public void onEnd(CountdownView cv) {
-                                                                                imageView1.setVisibility(View.VISIBLE);
-                                                                                imageView2.setVisibility(View.INVISIBLE);
-                                                                                cvLefttime.setVisibility(View.INVISIBLE);
-                                                                                badge.setBadgeCount(0);
-                                                                            }
-                                                                        });
-                                                            } else {
-                                                                imageView1.setVisibility(View.VISIBLE);
-                                                                imageView2.setVisibility(View.INVISIBLE);
-                                                                cvLefttime.setVisibility(View.INVISIBLE);
-                                                            }
-                                                        }
-                                                    });
-                                            addSubscription(subscribe1);
-                                        }
-                                    }
-                                });
+  @Override protected TransitionMode getOverridePendingTransitionMode() {
+    return null;
+  }
 
-                        addSubscription(subscribe);
-                    } else {
-                        Toast.makeText(mContext, "请选择尺码", Toast.LENGTH_SHORT).show();
-                        if (fragmentDetail.getView() != null) {
-                            CustScrollView custScrollView = (CustScrollView) fragmentDetail.getView().findViewById(R.id.custScrollView);
-                            custScrollView.setScrollY(400);
-                        }
-                    }
-                }
+  @Override public void onClick(View v) {
+    switch (v.getId()) {
+      case R.id.shopping_button:
+        if (!LoginUtils.checkLoginState(getApplicationContext())) {
 
-                break;
+          Intent intent = new Intent(ProductDetailActvityWeb.this, LoginActivity.class);
+          Bundle bundle = new Bundle();
+          bundle.putString("login", "product");
+          intent.putExtras(bundle);
+          startActivity(intent);
+        } else {
 
-            case R.id.rv_cart:
-                if (LoginUtils.checkLoginState(getApplicationContext())) {
-                    startActivity(new Intent(ProductDetailActvityWeb.this, CartActivity.class));
-                } else {
-                    Intent intent = new Intent(ProductDetailActvityWeb.this, LoginActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("login", "cart");
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                }
-                break;
-        }
-    }
+          if (isSelectzz) {
+            JUtils.Log(sku_id + "这尺寸可以");
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //显示购物车数量
-        Subscription subscribe = CartsModel.getInstance()
-                .show_carts_num()
+            Subscription subscribe = CartsModel.getInstance()
+                .addCarts(item_id, sku_id)
                 .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<CartsNumResultBean>() {
-                    @Override
-                    public void onNext(CartsNumResultBean cartsNumResultBean) {
-                        if (cartsNumResultBean != null && cartsNumResultBean.getResult() != 0) {
-                            num = cartsNumResultBean.getResult();
-                            badge.setBadgeCount(num);
+                .subscribe(new ServiceResponse<AddCartsBean>() {
 
-                            if (calcLefttowTime(cartsNumResultBean.getLastCreated()) != 0) {
+                  @Override public void onError(Throwable e) {
+                    super.onError(e);
+                    JUtils.Toast("商品库存不足,选择其它看看吧");
+                  }
+
+                  @Override public void onNext(AddCartsBean addCartsBean) {
+
+                    if (addCartsBean != null) {
+                      //num++;
+                      //badge.setBadgeCount(num);
+
+                      Subscription subscribe1 = CartsModel.getInstance()
+                          .show_carts_num()
+                          .subscribeOn(Schedulers.io())
+                          .subscribe(new ServiceResponse<CartsNumResultBean>() {
+                            @Override
+                            public void onNext(CartsNumResultBean cartsNumResultBean) {
+                              if (cartsNumResultBean != null
+                                  && cartsNumResultBean.getResult() != 0) {
+                                num = cartsNumResultBean.getResult();
+                                badge.setBadgeCount(num);
                                 imageView1.setVisibility(View.INVISIBLE);
                                 imageView2.setVisibility(View.VISIBLE);
                                 cvLefttime.setVisibility(View.VISIBLE);
-                            } else {
+
+                                JUtils.Log(TAG,
+                                    calcLefttowTime(cartsNumResultBean.getLastCreated())
+                                        + "");
+                                cvLefttime.start(
+                                    calcLefttowTime(cartsNumResultBean.getLastCreated()));
+                                cvLefttime.setOnCountdownEndListener(
+                                    new CountdownView.OnCountdownEndListener() {
+                                      @Override public void onEnd(CountdownView cv) {
+                                        imageView1.setVisibility(View.VISIBLE);
+                                        imageView2.setVisibility(View.INVISIBLE);
+                                        cvLefttime.setVisibility(View.INVISIBLE);
+                                        badge.setBadgeCount(0);
+                                      }
+                                    });
+                              } else {
                                 imageView1.setVisibility(View.VISIBLE);
                                 imageView2.setVisibility(View.INVISIBLE);
                                 cvLefttime.setVisibility(View.INVISIBLE);
-                                badge.setBadgeCount(0);
+                              }
                             }
-
-                            cvLefttime.start(calcLefttowTime(cartsNumResultBean.getLastCreated()));
-
-                            cvLefttime.setOnCountdownEndListener(
-                                    new CountdownView.OnCountdownEndListener() {
-                                        @Override
-                                        public void onEnd(CountdownView cv) {
-                                            imageView1.setVisibility(View.VISIBLE);
-                                            imageView2.setVisibility(View.INVISIBLE);
-                                            cvLefttime.setVisibility(View.INVISIBLE);
-                                            badge.setBadgeCount(0);
-                                        }
-                                    });
-                        } else {
-                            imageView1.setVisibility(View.VISIBLE);
-                            imageView2.setVisibility(View.INVISIBLE);
-                            cvLefttime.setVisibility(View.INVISIBLE);
-                        }
+                          });
+                      addSubscription(subscribe1);
                     }
+                  }
                 });
-        addSubscription(subscribe);
-    }
 
-    @Override
-    public void setSkuid(String skuid, boolean isSelect) {
-        sku_id = skuid;
-        isSelectzz = isSelect;
-    }
-
-    private long calcLefttowTime(long crtTime) {
-        long left = 0;
-        Date now = new Date();
-        try {
-            if (crtTime * 1000 - now.getTime() > 0) {
-                left = crtTime * 1000 - now.getTime();
+            addSubscription(subscribe);
+          } else {
+            Toast.makeText(mContext, "请选择尺码", Toast.LENGTH_SHORT).show();
+            if (fragmentDetail.getView() != null) {
+              CustScrollView custScrollView = (CustScrollView) fragmentDetail.getView()
+                  .findViewById(R.id.custScrollView);
+              custScrollView.setScrollY(400);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+          }
         }
-        return left;
+
+        break;
+
+      case R.id.rv_cart:
+        if (LoginUtils.checkLoginState(getApplicationContext())) {
+          startActivity(new Intent(ProductDetailActvityWeb.this, CartActivity.class));
+        } else {
+          Intent intent = new Intent(ProductDetailActvityWeb.this, LoginActivity.class);
+          Bundle bundle = new Bundle();
+          bundle.putString("login", "cart");
+          intent.putExtras(bundle);
+          startActivity(intent);
+        }
+        break;
     }
+  }
+
+  @Override protected void onResume() {
+    super.onResume();
+    //显示购物车数量
+    Subscription subscribe = CartsModel.getInstance()
+        .show_carts_num()
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<CartsNumResultBean>() {
+          @Override public void onNext(CartsNumResultBean cartsNumResultBean) {
+            if (cartsNumResultBean != null && cartsNumResultBean.getResult() != 0) {
+              num = cartsNumResultBean.getResult();
+              badge.setBadgeCount(num);
+
+              if (calcLefttowTime(cartsNumResultBean.getLastCreated()) != 0) {
+                imageView1.setVisibility(View.INVISIBLE);
+                imageView2.setVisibility(View.VISIBLE);
+                cvLefttime.setVisibility(View.VISIBLE);
+              } else {
+                imageView1.setVisibility(View.VISIBLE);
+                imageView2.setVisibility(View.INVISIBLE);
+                cvLefttime.setVisibility(View.INVISIBLE);
+                badge.setBadgeCount(0);
+              }
+
+              cvLefttime.start(calcLefttowTime(cartsNumResultBean.getLastCreated()));
+
+              cvLefttime.setOnCountdownEndListener(
+                  new CountdownView.OnCountdownEndListener() {
+                    @Override public void onEnd(CountdownView cv) {
+                      imageView1.setVisibility(View.VISIBLE);
+                      imageView2.setVisibility(View.INVISIBLE);
+                      cvLefttime.setVisibility(View.INVISIBLE);
+                      badge.setBadgeCount(0);
+                    }
+                  });
+            } else {
+              imageView1.setVisibility(View.VISIBLE);
+              imageView2.setVisibility(View.INVISIBLE);
+              cvLefttime.setVisibility(View.INVISIBLE);
+            }
+          }
+        });
+    addSubscription(subscribe);
+  }
+
+  @Override public void setSkuid(String skuid, boolean isSelect) {
+    sku_id = skuid;
+    isSelectzz = isSelect;
+  }
+
+  private long calcLefttowTime(long crtTime) {
+    long left = 0;
+    Date now = new Date();
+    try {
+      if (crtTime * 1000 - now.getTime() > 0) {
+        left = crtTime * 1000 - now.getTime();
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return left;
+  }
 }
 
