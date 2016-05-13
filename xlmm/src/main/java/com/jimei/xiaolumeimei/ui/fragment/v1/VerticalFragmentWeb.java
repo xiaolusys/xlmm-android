@@ -16,7 +16,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.widget.doubleview.CustWebView;
+import com.jimei.xiaolumeimei.widget.dragviewfortest.CustWebView;
 import com.jude.utils.JUtils;
 
 public class VerticalFragmentWeb extends Fragment {
