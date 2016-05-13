@@ -26,13 +26,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import butterknife.Bind;
 
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.BrandlistAdapter;
 import com.jimei.xiaolumeimei.base.BaseActivity;
