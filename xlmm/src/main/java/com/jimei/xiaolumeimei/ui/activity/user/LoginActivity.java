@@ -97,6 +97,9 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void initData() {
+        if (!LoginUtils.checkLoginState(getApplicationContext())) {
+            removeWX(new Wechat(this));
+        }
     }
 
     @Override
