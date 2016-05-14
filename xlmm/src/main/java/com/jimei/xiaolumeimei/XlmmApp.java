@@ -111,7 +111,7 @@ public class XlmmApp extends MultiDexApplication {
         .connectTimeout(10000, TimeUnit.MILLISECONDS)
         .writeTimeout(1000, TimeUnit.MILLISECONDS)
         .cookieJar(new PersistentCookieJar(new SetCookieCache(),
-            new SharedPrefsCookiePersistor(mContext), mContext))
+            new SharedPrefsCookiePersistor(mContext)))
         .build();
   }
 
