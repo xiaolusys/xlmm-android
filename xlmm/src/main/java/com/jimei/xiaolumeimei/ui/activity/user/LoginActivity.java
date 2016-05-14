@@ -376,7 +376,16 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void onStop() {
         super.onStop();
+        removeWX(new Wechat(this));
         ShareSDK.stopSDK(this);
     }
+
+    public void removeWX(Platform platform) {
+        if (platform != null) {
+            platform.removeAccount(true);
+            platform.removeAccount();
+        }
+    }
+
 }
 
