@@ -92,14 +92,57 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:hint="请输入提现金额"
-                android:textCursorDrawable="@drawable/color_cursor"
                 android:inputType="numberDecimal"
                 android:shadowColor="@color/colorAccent"
                 android:textColor="@color/text_color_26"
                 android:textColorHint="#BBBBBB"
+                android:textCursorDrawable="@drawable/color_cursor"
                 android:textSize="14sp" />
 
 
+        </LinearLayout>
+
+        <include layout="@layout/common_gap" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="56px" />
+
+        <include layout="@layout/common_gap" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:src="@drawable/wx_wallet_icon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="提现至微信账户"
+                android:textColor="@color/text_color_62"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/nick_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="12px"
+                android:textColor="@color/text_color_9B"
+                android:textSize="14sp" />
         </LinearLayout>
 
         <include layout="@layout/common_gap" />
@@ -109,8 +152,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32px"
-            android:textColor="#FF3840"
-            android:textSize="13sp" />
+            android:gravity="center"
+            android:text="提现金额将以微信红包形式，24小时内发至你绑定的微信账户"
+            android:textColor="#BBBBBB"
+            android:textSize="12sp" />
 
         <Button
             android:id="@+id/btn_draw_cash"
@@ -122,15 +167,6 @@
             android:textColor="@color/white"
             android:textSize="15sp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="34px"
-            android:gravity="center"
-            android:text="提现金额将以微信红包形式，24小时内发至你绑定的微信账户"
-            android:textColor="#BBBBBB"
-            android:textSize="12sp" />
-
         <Button
             android:id="@+id/btn_bind"
             android:layout_width="660px"
@@ -138,9 +174,9 @@
             android:layout_marginTop="34px"
             android:background="@drawable/shape_common"
             android:text="绑定微信"
-            android:visibility="invisible"
             android:textColor="@color/white"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:visibility="invisible" />
 
     </LinearLayout>
 </FrameLayout>

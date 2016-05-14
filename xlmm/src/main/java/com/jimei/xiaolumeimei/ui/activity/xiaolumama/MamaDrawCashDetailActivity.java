@@ -1,6 +1,8 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jimei.xiaolumeimei.R;
@@ -30,6 +32,11 @@ public class MamaDrawCashDetailActivity extends BaseSwipeBackCompatActivity {
     TextView moneyTv;
     @Bind(R.id.tv_activity)
     TextView activityTv;
+    @Bind(R.id.account_tv)
+    TextView accountTv;
+    @Bind(R.id.ll_account)
+    LinearLayout accountLayout;
+    private String account;
 
 
     @Override
@@ -78,7 +85,9 @@ public class MamaDrawCashDetailActivity extends BaseSwipeBackCompatActivity {
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-
+        if (extras != null) {
+            account = extras.getString("account");
+        }
     }
 
     @Override
@@ -88,7 +97,11 @@ public class MamaDrawCashDetailActivity extends BaseSwipeBackCompatActivity {
 
     @Override
     protected void initViews() {
-
+        if (!"".equals(account)) {
+            accountTv.setText(account);
+        } else {
+            accountLayout.setVisibility(View.GONE);
+        }
     }
 
     @Override

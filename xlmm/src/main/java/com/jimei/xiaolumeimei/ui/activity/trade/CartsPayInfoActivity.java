@@ -607,7 +607,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         String buyer_message = editText.getText() + "";
         Subscription subscription = TradeModel.getInstance()
                 .shoppingcart_create_v2(ids, addr_id, pay_method, paymentprice_v2, post_fee,
-                        discount_fee_price, total_fee, uuid, pay_extrasaa, "")
+                        discount_fee_price, total_fee, uuid, pay_extrasaa, buyer_message)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<PayInfoBean>() {
 

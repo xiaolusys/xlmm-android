@@ -15,6 +15,8 @@ import butterknife.Bind;
 public class DrawCashResultActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener {
     @Bind(R.id.finish_btn)
     Button finishBtn;
+    private Bundle extras;
+
     @Override
     protected void setListener() {
         finishBtn.setOnClickListener(this);
@@ -27,7 +29,9 @@ public class DrawCashResultActivity extends BaseSwipeBackCompatActivity implemen
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-
+        if (extras!=null) {
+            this.extras = extras;
+        }
     }
 
     @Override
@@ -64,7 +68,9 @@ public class DrawCashResultActivity extends BaseSwipeBackCompatActivity implemen
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_detail:
-                startActivity(new Intent(this, MamaDrawCashDetailActivity.class));
+                Intent intent = new Intent(this, MamaDrawCashDetailActivity.class);
+                intent.putExtras(extras);
+                startActivity(intent);
                 break;
         }
         return super.onOptionsItemSelected(item);
