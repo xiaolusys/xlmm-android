@@ -7,26 +7,23 @@ import android.content.SharedPreferences;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
-
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.mipush.XiaoMiMessageReceiver;
 import com.jimei.xiaolumeimei.model.UserModel;
-import com.jimei.xiaolumeimei.okhttp.PersistentCookieStore;
+import com.jimei.xiaolumeimei.okhttp3.PersistentCookieJar;
+import com.jimei.xiaolumeimei.okhttp3.cache.SetCookieCache;
+import com.jimei.xiaolumeimei.okhttp3.persistence.SharedPrefsCookiePersistor;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.utils.NetWorkUtil;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
-import com.squareup.okhttp.OkHttpClient;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.zhy.autolayout.config.AutoLayoutConifg;
-
-import java.net.CookieManager;
-import java.net.CookiePolicy;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
+import okhttp3.OkHttpClient;
 import rx.schedulers.Schedulers;
 
 //import com.squareup.leakcanary.LeakCanary;
@@ -39,14 +36,13 @@ import rx.schedulers.Schedulers;
 public class XlmmApp extends MultiDexApplication {
 
   public static OkHttpClient client;
+  private static Context mContext;
+  private static XiaoMiMessageReceiver.XiaoMiPushHandler handler = null;
+  private SharedPreferences cookiePrefs;
 
   public static Context getmContext() {
     return mContext;
   }
-
-  private static Context mContext;
-  private static XiaoMiMessageReceiver.XiaoMiPushHandler handler = null;
-  private SharedPreferences cookiePrefs;
 
   public static Context getInstance() {
     return mContext;
@@ -60,7 +56,7 @@ public class XlmmApp extends MultiDexApplication {
     super.onCreate();
 
     //LeakCanary.install(this);
-//    Thread.setDefaultUncaughtExceptionHandler(new MyUnCaughtExceptionHandler());
+    //    Thread.setDefaultUncaughtExceptionHandler(new MyUnCaughtExceptionHandler());
 
     //OkHttpUtils.getInstance().setConnectTimeout(10 * 1000, TimeUnit.MILLISECONDS);
 
@@ -111,58 +107,12 @@ public class XlmmApp extends MultiDexApplication {
   //初始化OkHttpClient
   private OkHttpClient initOkHttpClient() {
 
-    CookieManager cookieManager =
-        new CookieManager(new PersistentCookieStore(getApplicationContext()),
-            CookiePolicy.ACCEPT_ALL);
-    OkHttpClient httpClient = new OkHttpClient(); //create OKHTTPClient
-    //create a cookieManager so your client can be cookie persistant
-    httpClient.setConnectTimeout(10 * 1000, TimeUnit.MILLISECONDS);
-    httpClient.setWriteTimeout(30 * 1000, TimeUnit.MILLISECONDS);
-    httpClient.setWriteTimeout(30 * 1000, TimeUnit.MILLISECONDS);
-    //httpClient.interceptors().add(new Interceptor() {
-    //  @Override public Response intercept(Chain chain) throws IOException {
-    //    Request request = chain.request()
-    //        .newBuilder()
-    //        .addHeader("Content-Type", "application/json;charset=utf-8")
-    //        .build();
-    //
-    //    Response originalResponse = chain.proceed(request);
-    //
-    //    List<String> cookieList = originalResponse.headers("Set-Cookie");
-    //    if (cookieList != null) {
-    //      //JUtils.Log("XLMMAPP", cookieList.get(0));
-    //      for (String s : cookieList) {//Cookie的格式为:cookieName=cookieValue;path=xxx
-    //        //保存你需要的cookie数据
-    //        JUtils.Log("XLMMAPP", cookieList.get(0));
-    //        editor.putString("Cookies", s);
-    //        editor.apply();
-    //      }
-    //    }
-    //    return originalResponse;
-    //  }
-    //});
-
-    //httpClient.networkInterceptors().add(new StethoInterceptor());
-
-//    httpClient.interceptors().add(new Interceptor() {
-//      @Override public Response intercept(Chain chain) throws IOException {
-//        Response response = null;
-//        try {
-//          Request request = chain.request();
-//          response = chain.proceed(request);
-//          int code = response.code();//status code
-//          if (403 == code) {
-//
-//          }
-//        } catch (IOException e) {
-//          e.printStackTrace();
-//        }
-//        return response;
-//      }
-//    });
-
-    httpClient.setCookieHandler(cookieManager);
-    return httpClient;
+    return new OkHttpClient.Builder().readTimeout(10000, TimeUnit.MILLISECONDS)
+        .connectTimeout(10000, TimeUnit.MILLISECONDS)
+        .writeTimeout(1000, TimeUnit.MILLISECONDS)
+        .cookieJar(new PersistentCookieJar(new SetCookieCache(),
+            new SharedPrefsCookiePersistor(mContext), mContext))
+        .build();
   }
 
   @Override protected void attachBaseContext(Context base) {
