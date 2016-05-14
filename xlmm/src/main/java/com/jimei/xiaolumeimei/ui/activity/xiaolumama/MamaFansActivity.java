@@ -25,7 +25,6 @@ import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.widget.DividerItemDecorationForFooter;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
-import retrofit.http.HEAD;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 

@@ -27,11 +27,11 @@ import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.widget.ScrollLinearLayoutManager;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
-import com.squareup.okhttp.ResponseBody;
 import com.zhy.autolayout.utils.AutoUtils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import okhttp3.ResponseBody;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
