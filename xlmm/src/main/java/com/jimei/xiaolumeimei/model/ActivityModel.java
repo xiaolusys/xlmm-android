@@ -5,8 +5,8 @@ import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.entities.PostActivityBean;
 import com.jimei.xiaolumeimei.entities.StartBean;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
-import com.squareup.okhttp.ResponseBody;
 import java.util.List;
+import okhttp3.ResponseBody;
 import rx.Observable;
 
 /**

@@ -14,7 +14,9 @@ import android.widget.TextView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
+import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
+import com.jimei.xiaolumeimei.model.UserNewModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 
@@ -43,6 +45,8 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
     ImageView iv100;
     @Bind(R.id.iv_200)
     ImageView iv200;
+    @Bind(R.id.nick_name)
+    TextView nickNameTv;
     private double cash;
     private double drawMoney = 0;
     Subscription subscribe;
@@ -62,6 +66,18 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
     @Override
     protected void initData() {
         drawMoney = 100;
+        Subscription subscribe = UserNewModel.getInstance()
+                .getProfile()
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ServiceResponse<UserInfoBean>() {
+                    @Override
+                    public void onNext(UserInfoBean userNewBean) {
+                        if (userNewBean != null) {
+                            nickNameTv.setText(userNewBean.getNick());
+                        }
+                    }
+                });
+        addSubscription(subscribe);
     }
 
     @Override
@@ -94,7 +110,7 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
             JUtils.Toast("请选择转账金额。");
         } else {
             subscribe = MamaInfoModel.getInstance()
-                    .toWallet(fund+"")
+                    .toWallet(fund + "")
                     .subscribeOn(Schedulers.io())
                     .subscribe(new ServiceResponse<ResponseResultBean>() {
                         String msg = "";
@@ -105,13 +121,13 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
                             msg = resp.getMsg();
                             code = resp.getCode();
                         }
+
                         @Override
                         public void onCompleted() {
                             if (code == 0) {
                                 Intent intent = new Intent(MamaDrawCashActivity.this, DrawCashResultActivity.class);
                                 Bundle bundle = new Bundle();
-                                bundle.putString("msg",msg);
-                                bundle.putInt("code",code);
+                                bundle.putString("account", "小鹿钱包");
                                 intent.putExtras(bundle);
                                 startActivity(intent);
                             } else {

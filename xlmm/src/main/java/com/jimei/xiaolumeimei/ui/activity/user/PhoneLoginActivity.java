@@ -136,15 +136,14 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity implements V
                                         JUtils.Toast("登录成功!");
                                         LoginUtils.setPushUserAccount(PhoneLoginActivity.this,
                                                 MiPushClient.getRegId(getApplicationContext()));
-                                        String login =null;
+                                        String login = null;
                                         if (null != getIntent() && getIntent().getExtras() != null) {
                                             login = getIntent().getExtras().getString("login");
                                             actlink = getIntent().getExtras().getString("actlink");
-                                        } else {
-                                            return;
                                         }
 
-                                        if (null!=login) {
+
+                                        if (null != login) {
                                             if (login.equals("cart")) {
                                                 Intent intent = new Intent(mContext, CartActivity.class);
                                                 startActivity(intent);

@@ -37,6 +37,7 @@
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:textCursorDrawable="@drawable/color_cursor"
             android:layout_marginLeft="20dp"
             android:background="@null"
             android:hint="请输入收货人姓名"
@@ -65,6 +66,7 @@
             android:id="@+id/mobile"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:textCursorDrawable="@drawable/color_cursor"
             android:layout_marginLeft="20dp"
             android:background="@null"
             android:hint="请输入收货人手机号"
@@ -133,6 +135,7 @@
             android:id="@+id/clear_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textCursorDrawable="@drawable/color_cursor"
             android:layout_marginLeft="13dp"
             android:background="@null"
             android:hint="请输入详细地址"
@@ -154,7 +157,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
             android:padding="8dp"
             android:text="是否设为常用地址"
             android:textSize="14sp" />
@@ -164,7 +166,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_margin="4dp"
+            android:buttonTint="@color/colorAccent"
             android:padding="8dp"
             android:shadowColor="@color/colorAccent" />
 

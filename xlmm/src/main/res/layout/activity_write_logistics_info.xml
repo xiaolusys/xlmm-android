@@ -5,51 +5,30 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
-    <android.support.design.widget.AppBarLayout
+    <com.jimei.xiaolumeimei.widget.XlmmTitleView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-            <TextView
-                android:id="@+id/tx_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center"
-                android:text="填写物流信息"
-                android:textColor="@android:color/white"
-                android:textSize="16sp"/>
-        </android.support.v7.widget.Toolbar>
-
-    </android.support.design.widget.AppBarLayout>
+        app:xlmm_title="填写物流信息"/>
 
     <EditText
         android:id="@+id/et_logistics_company"
         android:layout_width="match_parent"
         android:layout_height="110px"
+        android:textCursorDrawable="@drawable/color_cursor"
         android:singleLine="true"
         android:paddingLeft="10sp"
         android:paddingRight="10sp"
         android:paddingTop="10sp"
         android:paddingBottom="10sp"
         android:background="@drawable/text_frame"
-        android:hint="请输入物流公司">
-    </EditText>
+        android:hint="请输入物流公司"/>
 
 
     <EditText
-
         android:id="@+id/et_logistics_number"
         android:layout_width="match_parent"
         android:layout_height="110px"
+        android:textCursorDrawable="@drawable/color_cursor"
         android:singleLine="true"
         android:paddingLeft="10sp"
         android:paddingRight="10sp"

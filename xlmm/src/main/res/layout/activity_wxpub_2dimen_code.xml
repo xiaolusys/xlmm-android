@@ -1,67 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="@style/AppTheme.AppBarOverlay">
+    android:orientation="vertical">
 
-  <android.support.design.widget.AppBarLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:id="@+id/app_bar_layout"
-      android:theme="@style/AppTheme.AppBarOverlay">
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <com.jimei.xiaolumeimei.widget.XlmmTitleView
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" >
-
-      <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_centerInParent="true"
-          android:layout_gravity="center"
-          android:text="微信公众号二维码"
-          android:textColor="@android:color/white"
-          android:textSize="16sp"
-          />
-    </android.support.v7.widget.Toolbar>
-
-  </android.support.design.widget.AppBarLayout>
-
-  <RelativeLayout
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:layout_below="@+id/app_bar_layout"
-      android:layout_centerHorizontal="true"
-      android:id="@+id/rl_mamainfo">
-
-    <ImageView
-        android:id="@+id/img_2dimen"
-        android:layout_width="500px"
-        android:layout_height="500px"
-        android:layout_marginLeft="100px"
-        android:layout_marginTop="40px"
-        android:src="@drawable/img_emptypic"
-        />
-
-    <Button
-        android:id="@+id/btn_save"
-        android:layout_width="660px"
         android:layout_height="wrap_content"
-        android:text="保存"
-        android:textColor="@color/white"
-        android:textSize="15sp"
-        android:background="@drawable/shape_common"
-        android:layout_below="@id/img_2dimen"
-        android:layout_gravity="center"
-        android:layout_marginTop="20px"
-        android:layout_marginLeft="30px"
-        />
-  </RelativeLayout>
+        app:xlmm_title="微信公众号二维码" />
+
+    <LinearLayout
+        android:id="@+id/ll_mamainfo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_grey"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4" />
+
+        <LinearLayout
+            android:layout_width="540px"
+            android:layout_height="620px"
+            android:background="@color/white"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="微信提现授权码"
+                android:textColor="@color/colorAccent"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:id="@+id/img_2dimen"
+                android:layout_width="420px"
+                android:layout_height="420px"
+                android:layout_marginBottom="60px"
+                android:src="@drawable/img_emptypic" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="打开微信扫描二维码授权即可"
+            android:textColor="@color/text_color_62"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20px"
+            android:text="系统升级中暂时只能用微信红包提现喔"
+            android:textColor="@color/text_color_9B"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3" />
+
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="660px"
+            android:layout_height="76px"
+            android:layout_marginBottom="60px"
+            android:background="@drawable/shape_common"
+            android:gravity="center"
+            android:text="保存二维码"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+    </LinearLayout>
 
 
-</RelativeLayout>
+</LinearLayout>

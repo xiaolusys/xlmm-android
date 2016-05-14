@@ -25,7 +25,6 @@ import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.widget.DividerItemDecorationForFooter;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
-import retrofit.http.HEAD;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -41,7 +40,6 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity {
   private int page = 2;
   private MamaFansAdapter mAdapter;
   private Subscription subscribe;
-  static SharedPreferences sharedPreferences;
 
   @Override protected void setListener() {
   }
@@ -175,14 +173,17 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity {
   @Override public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
       case R.id.action_fans:
-        sharedPreferences = XlmmApp.getmContext().getSharedPreferences("APICLIENT", Context.MODE_PRIVATE);
-        String baseUrl = "http://" + sharedPreferences.getString("BASE_URL", "");
+        SharedPreferences sharedPreferences = getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+        Intent intent = new Intent(this, FansWebViewActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("cookies", sharedPreferences.getString("cookiesString", ""));
+        bundle.putString("domain", sharedPreferences.getString("cookiesDomain", ""));
+        bundle.putString("Cookie", sharedPreferences.getString("Cookie", ""));
+        SharedPreferences sharedPreferences2 = XlmmApp.getmContext().getSharedPreferences("APICLIENT", Context.MODE_PRIVATE);
+        String baseUrl = "http://" + sharedPreferences2.getString("BASE_URL", "");
         if(baseUrl.equals("http://")){
           baseUrl = XlmmApi.APP_BASE_URL;
         }
-
-        Intent intent = new Intent(this, FansWebViewActivity.class);
-        Bundle bundle = new Bundle();
         bundle.putString("actlink", baseUrl + "/pages/fans-explain.html");
 
         intent.putExtras(bundle);
