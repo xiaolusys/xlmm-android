@@ -16,8 +16,6 @@
 
 package com.jimei.xiaolumeimei.okhttp3;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import com.jimei.xiaolumeimei.okhttp3.cache.CookieCache;
 import com.jimei.xiaolumeimei.okhttp3.persistence.CookiePersistor;
 import java.util.ArrayList;
@@ -28,13 +26,12 @@ import okhttp3.HttpUrl;
 
 public class PersistentCookieJar implements ClearableCookieJar {
 
-  private final SharedPreferences cookiePrefs1;
+
   private CookieCache cache;
   private CookiePersistor persistor;
 
-  public PersistentCookieJar(CookieCache cache, CookiePersistor persistor,
-      Context context) {
-    cookiePrefs1 = context.getSharedPreferences("xlmmCookiesAxiba", 0);
+  public PersistentCookieJar(CookieCache cache, CookiePersistor persistor) {
+
     this.cache = cache;
     this.persistor = persistor;
     this.cache.addAll(persistor.loadAll());
@@ -61,18 +58,6 @@ public class PersistentCookieJar implements ClearableCookieJar {
         it.remove();
       } else if (currentCookie.matches(url)) {
         validCookies.add(currentCookie);
-
-        SharedPreferences.Editor editor = cookiePrefs1.edit();
-        editor.putString("cookiesString", currentCookie.name()
-            + "="
-            + currentCookie.value()
-            + "; domain="
-            + currentCookie.domain()
-            + "; path="
-            + currentCookie.path());
-        editor.putString("cookiesDomain", currentCookie.domain());
-        editor.putString("Cookie", currentCookie.name() + "=" + currentCookie.value());
-        editor.apply();
       }
     }
 
