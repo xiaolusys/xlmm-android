@@ -27,12 +27,12 @@ import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.widget.timecircleview.utils.DisplayUtil;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
-import com.squareup.okhttp.ResponseBody;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
 import java.io.IOException;
 import java.util.List;
 import okhttp3.Call;
+import okhttp3.ResponseBody;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 

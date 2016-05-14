@@ -3,14 +3,12 @@ package com.jimei.xiaolumeimei.xlmmService;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
-
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jude.utils.JUtils;
-
-import retrofit.GsonConverterFactory;
-import retrofit.Retrofit;
-import retrofit.RxJavaCallAdapterFactory;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by itxuye(www.itxuye.com) on 15/12/29.

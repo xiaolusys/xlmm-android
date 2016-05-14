@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="colorPrimary">#F5B123</color>
-  <color name="colorPrimaryDark">#F5B123</color>
-  <color name="colorAccent">#F5B123</color>
+  <color name="colorPrimary">#FAAA14</color>
+  <color name="colorPrimaryDark">#FAAA14</color>
+  <color name="colorAccent">#FAAA14</color>
+
 
 
   <color name="primary_text">#212121</color>

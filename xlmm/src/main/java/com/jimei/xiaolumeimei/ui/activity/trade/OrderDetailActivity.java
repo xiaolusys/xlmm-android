@@ -26,11 +26,11 @@ import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.pingplusplus.android.PaymentActivity;
-import com.squareup.okhttp.ResponseBody;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import okhttp3.ResponseBody;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
