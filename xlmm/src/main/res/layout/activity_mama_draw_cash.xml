@@ -86,7 +86,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="33px"
-                android:src="@drawable/radio_bg_checked"/>
+                android:src="@drawable/radio_bg_checked" />
 
         </LinearLayout>
 
@@ -119,12 +119,20 @@
                 android:layout_height="1dp"
                 android:layout_weight="1" />
 
+            <TextView
+                android:id="@+id/nick_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="12px"
+                android:textColor="@color/text_color_9B"
+                android:textSize="14sp" />
+
             <ImageView
                 android:id="@+id/iv_wx"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="33px"
-                android:src="@drawable/radio_bg"/>
+                android:src="@drawable/radio_bg" />
 
         </LinearLayout>
 
@@ -133,12 +141,12 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="提现金额:"
-            android:textSize="14sp"
-            android:paddingTop="20px"
-            android:paddingLeft="24px"
             android:background="@color/white"
-            android:textColor="@color/text_color_62"/>
+            android:paddingLeft="24px"
+            android:paddingTop="20px"
+            android:text="提现金额:"
+            android:textColor="@color/text_color_62"
+            android:textSize="14sp" />
 
 
         <LinearLayout
@@ -157,17 +165,17 @@
                 android:id="@+id/iv_100"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/radio_bg_checked"/>
+                android:src="@drawable/radio_bg_checked" />
 
             <TextView
                 android:id="@+id/tv_100"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="100.0元"
-                android:padding="8dp"
                 android:layout_margin="8dp"
-                android:textColor="@color/colorAccent"
                 android:background="@drawable/text_checked_bg"
+                android:padding="8dp"
+                android:text="100.0元"
+                android:textColor="@color/colorAccent"
                 android:textSize="18sp" />
 
             <View
@@ -179,17 +187,17 @@
                 android:id="@+id/iv_200"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/radio_bg"/>
+                android:src="@drawable/radio_bg" />
 
             <TextView
                 android:id="@+id/tv_200"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="200.0元"
-                android:padding="8dp"
                 android:layout_margin="8dp"
-                android:textColor="#c0c0c0"
                 android:background="@drawable/text_unchecked_bg"
+                android:padding="8dp"
+                android:text="200.0元"
+                android:textColor="#c0c0c0"
                 android:textSize="18sp" />
 
             <View
@@ -198,6 +206,7 @@
                 android:layout_weight="1" />
 
         </LinearLayout>
+
         <include layout="@layout/common_gap" />
 
         <Button
