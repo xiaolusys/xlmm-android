@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -28,8 +27,8 @@ import com.jimei.xiaolumeimei.ui.fragment.v1.VerticalFragmentWeb;
 import com.jimei.xiaolumeimei.ui.fragment.v1.setSkuidListener;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.widget.badgelib.BadgeView;
-import com.jimei.xiaolumeimei.widget.dragviewfortest.CustScrollView;
-import com.jimei.xiaolumeimei.widget.dragviewfortest.DragLayout;
+import com.jimei.xiaolumeimei.widget.doubleview.CustScrollView;
+import com.jimei.xiaolumeimei.widget.doubleview.DragLayout;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import java.util.Date;
@@ -58,7 +57,7 @@ public class ProductDetailActvityWeb extends BaseAppCompatActivityForDetail
   private VerticalFragmentDetail fragmentDetail;
   private VerticalFragmentWeb fragmnetWeb;
   private boolean isSelectzz;
-  //private DragLayout.ShowNextPageNotifier nextIntf;
+  private DragLayout.ShowNextPageNotifier nextIntf;
 
   @Override protected void setListener() {
     button_shop.setOnClickListener(this);
@@ -129,12 +128,11 @@ public class ProductDetailActvityWeb extends BaseAppCompatActivityForDetail
 
     fragmentDetail = VerticalFragmentDetail.newInstance("detail");
     fragmnetWeb = VerticalFragmentWeb.newInstance("webview");
-
-    Intent intent = getIntent();
-    String top = intent.getStringExtra("top");
-    String bottom = intent.getStringExtra("bottom");
-    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-
+    //dragLayout.setOnShowNextPageListener(new DragLayout.OnShowNextPageListener() {
+    //  @Override public void onShowNextPage() {
+    //    fragmnetWeb.initView(productId);
+    //  }
+    //});
     //switch (top) {
     //  case "ScrollView":
     //    transaction.replace(R.id.first, fragmentDetail);
@@ -153,29 +151,27 @@ public class ProductDetailActvityWeb extends BaseAppCompatActivityForDetail
     //}
     //transaction.commit();
 
-    //getSupportFragmentManager().beginTransaction()
-    //    .add(R.id.first, fragmentDetail)
-    //    .add(R.id.second, fragmnetWeb)
-    //    .commit();
-
     getSupportFragmentManager().beginTransaction()
         .add(R.id.first, fragmentDetail)
         .add(R.id.second, fragmnetWeb)
         .commit();
 
-    dragLayout.setOnShowNextPageListener(new DragLayout.OnShowNextPageListener() {
-      @Override public void onShowNextPage() {
+    //FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+    //
+    //transaction.replace(R.id.first, fragmentDetail);
+    //transaction.replace(R.id.second, fragmnetWeb);
+
+    //.add(R.id.first, fragmentDetail)
+    //.add(R.id.second, fragmnetWeb)
+    //.commit();
+
+
+    nextIntf = new DragLayout.ShowNextPageNotifier() {
+      @Override public void onDragNext() {
         fragmnetWeb.initView(productId);
       }
-    });
-
-
-    //nextIntf = new DragLayout.ShowNextPageNotifier() {
-    //  @Override public void onDragNext() {
-    //    fragmnetWeb.initView(productId);
-    //  }
-    //};
-    //dragLayout.setNextPageListener(nextIntf);
+    };
+    dragLayout.setNextPageListener(nextIntf);
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
