@@ -6,54 +6,36 @@ package com.jimei.xiaolumeimei.adapter;
  */
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Paint;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.jimei.xiaolumeimei.entities.AllOrdersBean;
-import com.jimei.xiaolumeimei.entities.MembershipPointBean;
-import com.jimei.xiaolumeimei.entities.PointLogBean;
-import com.jimei.xiaolumeimei.widget.MyHorizontalScrollView;
-import com.jimei.xiaolumeimei.widget.NestedListView;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.ui.activity.trade.OrderDetailActivity;
+import com.jimei.xiaolumeimei.entities.PointLogBean;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MembershipPointListAdapter extends BaseAdapter {
     private static final String TAG = "PointListAdapter";
     private Context context;
-    private List<PointLogBean.ResultsEntity> mList;
+    private List<PointLogBean.ResultsBean> mList;
 
     public MembershipPointListAdapter(Context context) {
         mList = new ArrayList<>();
         this.context = context;
     }
 
-    public void updateWithClear(List<PointLogBean.ResultsEntity> list) {
+    public void updateWithClear(List<PointLogBean.ResultsBean> list) {
         mList.clear();
         mList.addAll(list);
         notifyDataSetChanged();
     }
 
-    public void update(List<PointLogBean.ResultsEntity> list) {
+    public void update(List<PointLogBean.ResultsBean> list) {
         Log.d(TAG, "dataSource.size " + list.size());
         mList.addAll(list);
         notifyDataSetChanged();
@@ -86,8 +68,8 @@ public class MembershipPointListAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.logTime.setText("");
-        holder.info.setText("");
+        holder.logTime.setText("" + mList.get(position).getCreated().replace("T", " "));
+        holder.info.setText("购物订单完成奖励积分");
         holder.value.setText("+" + mList.get(position).getLog_value() + "分");
         return convertView;
     }
@@ -95,6 +77,7 @@ public class MembershipPointListAdapter extends BaseAdapter {
 
     private class ViewHolder {
         TextView logTime, info, value;
+
         public ViewHolder(View itemView) {
             logTime = (TextView) itemView.findViewById(R.id.tx_point_logtime);
             info = (TextView) itemView.findViewById(R.id.tx_point_info);
