@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.jimei.xiaolumeimei.widget.dragviewfortest.CustScrollView
+<com.jimei.xiaolumeimei.widget.doubleview.CustScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/custScrollView"
@@ -119,7 +119,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:padding="20dp"
-        app:max_select="1"></com.jimei.xiaolumeimei.widget.TagFlowLayout>
+        app:max_select="1"/>
     <!--<TextView-->
     <!--android:layout_marginBottom="8dp"-->
     <!--android:id="@+id/look_size"-->
@@ -279,4 +279,4 @@
 
   </LinearLayout>
 
-</com.jimei.xiaolumeimei.widget.dragviewfortest.CustScrollView>
+</com.jimei.xiaolumeimei.widget.doubleview.CustScrollView>

@@ -151,6 +151,8 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity implements V
                                             } else if (login.equals("product")) {
                                                 finish();
                                             } else if (login.equals("main")) {
+                                                Intent intent = new Intent(mContext, MainActivity.class);
+                                                startActivity(intent);
                                                 finish();
                                             } else if (login.equals("point")) {
                                                 Intent intent = new Intent(mContext, MembershipPointActivity.class);
