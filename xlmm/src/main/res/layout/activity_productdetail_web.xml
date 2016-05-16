@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-  <com.jimei.xiaolumeimei.widget.dragviewfortest.DragLayout
+  <com.jimei.xiaolumeimei.widget.doubleview.DragLayout
       android:id="@+id/draglayout"
       android:layout_width="match_parent"
       android:layout_height="0dp"
@@ -21,7 +21,7 @@
         android:id="@+id/second"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"/>
-  </com.jimei.xiaolumeimei.widget.dragviewfortest.DragLayout>
+  </com.jimei.xiaolumeimei.widget.doubleview.DragLayout>
 
   <RelativeLayout
       android:padding="4dp"
