@@ -237,6 +237,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                 if (codeBean != null) {
                                     int code = codeBean.getRcode();
                                     if (0 == code) {
+                                        JUtils.Toast("登录成功");
                                         Subscription subscribe = UserModel.getInstance()
                                                 .need_set_info()
                                                 .subscribeOn(Schedulers.io())

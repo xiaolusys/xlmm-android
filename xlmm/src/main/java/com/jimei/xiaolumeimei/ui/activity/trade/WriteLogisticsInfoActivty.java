@@ -16,12 +16,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
-<<<<<<< HEAD
-import com.squareup.okhttp.ResponseBody;
-
-=======
 import okhttp3.ResponseBody;
->>>>>>> upstream/develop
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 

@@ -28,7 +28,7 @@ import com.jimei.xiaolumeimei.ui.fragment.v1.VerticalFragmentWeb;
 import com.jimei.xiaolumeimei.ui.fragment.v1.setSkuidListener;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.widget.badgelib.BadgeView;
-import com.jimei.xiaolumeimei.widget.doubleview.CustScrollView;
+import com.jimei.xiaolumeimei.widget.dragviewfortest.CustScrollView;
 import com.jimei.xiaolumeimei.widget.dragviewfortest.DragLayout;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
