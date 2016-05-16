@@ -138,6 +138,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
           JUtils.Log("CartActivity", s);
 
           startActivity(intent);
+          finish();
         }
 
         break;
