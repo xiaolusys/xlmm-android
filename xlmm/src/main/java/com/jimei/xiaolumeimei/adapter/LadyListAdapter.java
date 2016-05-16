@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.LadyListBean;
+import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActvityWeb;
 import com.jimei.xiaolumeimei.ui.activity.product.TongkuanActivity;
 import com.zhy.autolayout.utils.AutoUtils;
 import java.io.UnsupportedEncodingException;

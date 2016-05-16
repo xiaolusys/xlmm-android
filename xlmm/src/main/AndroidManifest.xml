@@ -87,6 +87,9 @@
             android:name=".ui.activity.product.TongkuanActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
+            android:name=".ui.activity.product.ProductDetailActvityWeb"
+            android:theme="@style/AppTheme.TransparentActivity" />
+        <activity
             android:name=".ui.activity.trade.CartActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
