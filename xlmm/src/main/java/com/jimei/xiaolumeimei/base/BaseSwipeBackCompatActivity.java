@@ -16,19 +16,15 @@
 
 package com.jimei.xiaolumeimei.base;
 
-import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 
-import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.swipeback.SwipeBackActivityBase;
 import com.jimei.xiaolumeimei.swipeback.SwipeBackActivityHelper;
 import com.jimei.xiaolumeimei.swipeback.SwipeBackLayout;
 import com.jimei.xiaolumeimei.swipeback.Utils;
 import com.umeng.analytics.MobclickAgent;
-import com.umeng.update.UmengUpdateAgent;
-import com.umeng.update.UpdateResponse;
 
 public abstract class BaseSwipeBackCompatActivity extends BaseAppCompatActivity
     implements SwipeBackActivityBase {

@@ -2,7 +2,6 @@ package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
 import butterknife.Bind;
@@ -13,7 +12,6 @@ import com.jimei.xiaolumeimei.adapter.MMVisitorsAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.MMVisitorsBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
-import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.widget.DividerItemDecorationForFooter;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -26,7 +24,6 @@ import rx.schedulers.Schedulers;
 public class MamaVisitorActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener {
 
-  @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.xrv_mamafans) XRecyclerView xrv_mamafans;
   private int page = 2;
   private MMVisitorsAdapter mAdapter;
@@ -34,7 +31,6 @@ public class MamaVisitorActivity extends BaseSwipeBackCompatActivity
   private String from;
 
   @Override protected void setListener() {
-    toolbar.setOnClickListener(this);
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -46,11 +42,6 @@ public class MamaVisitorActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
-    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent),0);
-    toolbar.setTitle("");
-    setSupportActionBar(toolbar);
-    finishBack(toolbar);
-
     initRecyclerView();
   }
 
@@ -148,9 +139,6 @@ public class MamaVisitorActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override public void onClick(View v) {
-    switch (v.getId()) {
-
-    }
   }
 
   @Override protected void onStop() {
