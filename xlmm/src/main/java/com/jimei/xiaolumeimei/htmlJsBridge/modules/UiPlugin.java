@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.htmlJsBridge.modules;
 
-import android.app.Activity;
+import android.content.Context;
+import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/05/17.
@@ -10,13 +11,13 @@ import android.app.Activity;
 public class UiPlugin {
   private static final String TAG = UiPlugin.class.getCanonicalName();
 
-  private Activity mContext;
+  private Context mContext;
 
-  public UiPlugin(Activity context) {
+  public UiPlugin(Context context) {
     mContext = context;
   }
 
-  private void showSkuPopup(String json) {
-    (()mContext)
+  public void showSkuPopup(String json) {
+    ((ProductPopDetailActvityWeb) mContext).showPop(json);
   }
 }

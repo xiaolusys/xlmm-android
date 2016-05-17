@@ -1,15 +1,10 @@
-package com.jimei.xiaolumeimei.okhttp.callback;
+package com.jimei.xiaolumeimei.okhttp3;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Environment;
-
 import com.jimei.xiaolumeimei.data.FilePara;
 import com.jimei.xiaolumeimei.utils.CameraUtils;
 import com.jude.utils.JUtils;
 import com.zhy.http.okhttp.callback.Callback;
-import com.zhy.http.okhttp.utils.Exceptions;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
