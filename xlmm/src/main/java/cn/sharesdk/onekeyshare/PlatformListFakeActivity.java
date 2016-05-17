@@ -152,6 +152,10 @@ public class PlatformListFakeActivity extends FakeActivity {
 
 			// EditPage不支持微信平台、Google+、QQ分享、Pinterest、信息和邮件，总是执行直接分享
 			if(silent || ShareCore.isDirectShare(plat)) {
+				if ("WechatMoments".equals(name)){
+					shareParamsMap.remove("title");
+					shareParamsMap.put("title",shareParamsMap.get("text"));
+				}
 				shareParam = new HashMap<String, Object>(shareParamsMap);
 				shareParam.put("platform", name);
 				silentShareData.put(plat, shareParam);

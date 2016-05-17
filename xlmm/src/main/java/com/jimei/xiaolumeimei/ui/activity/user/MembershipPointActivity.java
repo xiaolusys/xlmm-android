@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import butterknife.Bind;
+
 import com.cpoopc.scrollablelayoutlib.ScrollableHelper;
 import com.cpoopc.scrollablelayoutlib.ScrollableLayout;
 import com.jimei.xiaolumeimei.R;
@@ -20,7 +20,10 @@ import com.jimei.xiaolumeimei.entities.PointLogBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+
 import java.util.List;
+
+import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -85,7 +88,7 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<PointLogBean>() {
           @Override public void onNext(PointLogBean pointLogBean) {
-            List<PointLogBean.ResultsEntity> results = pointLogBean.getResults();
+            List<PointLogBean.ResultsBean> results = pointLogBean.getResults();
             if (0 == results.size()) {
               Log.d(TAG, "pointlog 0 ");
               rlayout_order_empty.setVisibility(View.VISIBLE);

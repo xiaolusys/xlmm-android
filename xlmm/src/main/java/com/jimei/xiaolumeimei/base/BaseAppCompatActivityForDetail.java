@@ -25,7 +25,7 @@ import rx.subscriptions.CompositeSubscription;
  *
  * Copyright 2016年 上海己美. All rights reserved.
  */
-public abstract class BaseAppCompatActivityForDetail extends AutoLayoutActivity {
+public abstract class   BaseAppCompatActivityForDetail extends AutoLayoutActivity {
   /**
    * Log tag
    */

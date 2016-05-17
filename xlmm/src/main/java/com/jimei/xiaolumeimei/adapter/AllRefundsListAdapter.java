@@ -38,6 +38,11 @@ public class AllRefundsListAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public void clear(){
+        datas.clear();
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
         return datas.size();

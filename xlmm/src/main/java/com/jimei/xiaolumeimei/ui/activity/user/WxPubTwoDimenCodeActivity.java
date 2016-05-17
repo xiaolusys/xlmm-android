@@ -88,7 +88,7 @@ public class WxPubTwoDimenCodeActivity extends BaseSwipeBackCompatActivity
                             JUtils.Log(TAG, "wxPubAuthInfo:" + wxpub.toString());
                             wxPubAuthInfo = wxpub;
                             bitmap = mEncoder.encode(wxpub.getAuthLink());
-//                            bitmap = getNewBitMap(bitmap, wxpub.getAuthMsg());
+                            bitmap = getNewBitMap(bitmap, wxpub.getAuthMsg());
                             if (!"".equals(wxpub.getAuthMsg())) {
                                 JUtils.Toast(wxpub.getAuthMsg());
                             }

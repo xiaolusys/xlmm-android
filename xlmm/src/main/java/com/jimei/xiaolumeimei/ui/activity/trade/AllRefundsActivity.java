@@ -124,6 +124,40 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity
     addSubscription(subscription);
   }
 
+  @Override
+  protected void onResume() {
+    super.onResume();
+    Subscription subscription = TradeModel.getInstance()
+            .getRefundsBean("1")
+            .subscribeOn(Schedulers.io())
+            .subscribe(new ServiceResponse<AllRefundsBean>() {
+              @Override public void onNext(AllRefundsBean allRefundsBean) {
+                List<AllRefundsBean.ResultsEntity> results = allRefundsBean.getResults();
+                if (0 == results.size()) {
+                  Log.d(TAG, " NO redunds data");
+                  rl_empty.setVisibility(View.VISIBLE);
+                } else {
+                  Log.d(TAG, " redunds data num " + results.size());
+                  mAllRefundsAdapter.clear();
+                  mAllRefundsAdapter.update(results);
+                }
+
+                Log.i(TAG, allRefundsBean.toString());
+              }
+
+              @Override public void onCompleted() {
+                super.onCompleted();
+              }
+
+              @Override public void onError(Throwable e) {
+
+                Log.e(TAG, " error:, " + e.toString());
+                super.onError(e);
+              }
+            });
+    addSubscription(subscription);
+  }
+
   @Override protected boolean toggleOverridePendingTransition() {
     return false;
   }
