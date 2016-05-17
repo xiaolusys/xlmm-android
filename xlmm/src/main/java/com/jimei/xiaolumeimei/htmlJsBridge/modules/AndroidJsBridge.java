@@ -1,4 +1,4 @@
-package com.jimei.xiaolumeimei.htmlJsBridge;
+package com.jimei.xiaolumeimei.htmlJsBridge.modules;
 
 import android.Manifest;
 import android.app.Activity;
