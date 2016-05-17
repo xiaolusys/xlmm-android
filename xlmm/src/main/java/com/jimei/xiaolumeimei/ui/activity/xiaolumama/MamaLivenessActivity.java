@@ -15,7 +15,6 @@ import com.jimei.xiaolumeimei.adapter.MamaLivenessAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.MamaLivenessBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
-import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.widget.DividerItemDecorationForFooter;
 import com.jimei.xiaolumeimei.widget.MyXRecyclerView;
@@ -59,7 +58,6 @@ public class MamaLivenessActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
-    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent),0);
     scrollableLayout.getHelper().setCurrentScrollableContainer((ScrollableHelper.ScrollableContainer) lv_liveness);
     initRecyclerView();
 

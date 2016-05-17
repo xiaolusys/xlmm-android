@@ -1,64 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llayout_order_item"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-	android:id="@+id/llayout_order_item">
+    android:padding="4dp"
+    android:orientation="vertical">
 
-	<RelativeLayout
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:orientation="horizontal"
-		android:padding="4dp">
-		<TextView
-			android:id="@+id/tx_withdraw_fund"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="0"
-			android:textSize="15sp" />
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="4dp">
 
-		<TextView
-			android:id="@+id/tx_withdraw_state"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text=""
-			android:textSize="15sp"
-			android:layout_alignParentTop="true"
-			android:layout_alignParentRight="true"
-			android:layout_alignParentEnd="true"
-			android:padding="4dp"
-				/>
-	</RelativeLayout>
+        <TextView
+            android:id="@+id/tx_withdraw_fund"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:text="特效1"
+            android:textSize="15sp" />
 
-	<RelativeLayout
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:orientation="horizontal"
-			android:padding="4dp">
-	<TextView
-			android:id="@+id/tx_time"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:padding="4dp"
-			android:text="11"
-			android:textSize="15sp"
-			android:layout_alignParentLeft="true"
- />
+        <TextView
+            android:id="@+id/tx_withdraw_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:padding="4dp"
+            android:text="特效2"
+            android:textSize="15sp" />
+    </RelativeLayout>
 
-	<Button
-			android:id="@+id/btn_cancel"
-			android:layout_width="80dp"
-			android:layout_height="40dp"
-			android:text="取消"
-			android:textColor="@color/colorAccent"
-			android:textSize="15sp"
-			android:background="@drawable/shape_chooselist"
-			android:layout_alignParentTop="true"
-			android:layout_alignParentRight="true"
-			android:layout_alignParentEnd="true"
-			android:padding="4dp"
-			android:visibility="invisible"
-			/>
-	</RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="4dp">
+
+        <TextView
+            android:id="@+id/tx_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:padding="4dp"
+            android:text="特效3"
+            android:textSize="15sp" />
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="4dp"
+            android:background="@drawable/shape_chooselist"
+            android:text="取消"
+            android:textColor="@color/colorAccent"
+            android:textSize="15sp"
+            android:visibility="visible" />
+    </RelativeLayout>
 
 </LinearLayout>

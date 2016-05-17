@@ -560,7 +560,9 @@ public interface XlmmService {
     );
 
     @GET("/rest/v1/pmt/cashout")
-    Observable<WithdrawCashHisBean> getWithdrawCashHis();
+    Observable<WithdrawCashHisBean> getWithdrawCashHis(
+            @Query("page") String page
+    );
 
     //获取粉丝列表
     @GET("/rest/v2/mama/fans")
@@ -589,7 +591,7 @@ public interface XlmmService {
 
     //cancel提款单信息
     @FormUrlEncoded
-    @POST("/rest/v1/pmt/cashout")
+    @POST("/rest/v1/pmt/cashout/cancal_cashout")
     Observable<ResponseResultBean> cancel_withdraw_cash(
             @Field("id") String id);
 
