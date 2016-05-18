@@ -29,6 +29,7 @@ import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.model.ActivityModel;
+import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
 import com.jimei.xiaolumeimei.ui.activity.user.PhoneLoginActivity;
 import com.jimei.xiaolumeimei.utils.CameraUtils;
 import com.jimei.xiaolumeimei.utils.FileUtils;
@@ -537,5 +538,10 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     intent.putExtras(bundle);
     mContext.startActivity(intent);
     mContext.finish();
+  }
+
+
+  @JavascriptInterface public void showSkuPopup(String json) {
+    ((ProductPopDetailActvityWeb) mContext).showPop(json);
   }
 }

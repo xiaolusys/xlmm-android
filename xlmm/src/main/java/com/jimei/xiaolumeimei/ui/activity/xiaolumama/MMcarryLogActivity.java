@@ -16,7 +16,6 @@ import com.jimei.xiaolumeimei.ui.fragment.v2.CarryLogAllFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.CarryLogBounsFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.CarryLogCashbackFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.CarryLogCommissionFragment;
-import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,7 +58,6 @@ public class MMcarryLogActivity extends BaseSwipeBackCompatActivity {
   }
 
   @Override protected void initViews() {
-    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent), 0);
 
     tvLeiji.setText("累计收益");
     tvNum.setText(carrylogMoney);

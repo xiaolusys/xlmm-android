@@ -22,10 +22,10 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import cn.sharesdk.framework.ShareSDK;
+
 import com.google.gson.Gson;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseAppCompatActivityForDetail;
@@ -36,9 +36,12 @@ import com.jimei.xiaolumeimei.widget.FlowLayout;
 import com.jimei.xiaolumeimei.widget.TagAdapter;
 import com.jimei.xiaolumeimei.widget.TagFlowLayout;
 import com.jude.utils.JUtils;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import cn.sharesdk.framework.ShareSDK;
 
 /**
  * Created by 优尼世界 on 15/12/29.
@@ -52,7 +55,7 @@ public class ProductPopDetailActvityWeb extends BaseAppCompatActivityForDetail {
       "com.jimei.xiaolumeimei.htmlJsBridge.modules";
   public WebView mWebView;
   protected TextView webviewTitle;
-  LinearLayout ll_actwebview;
+  FrameLayout ll_actwebview;
   //private Bitmap bitmap;
   private Toolbar mToolbar;
   private ProgressBar mProgressBar;
@@ -66,12 +69,12 @@ public class ProductPopDetailActvityWeb extends BaseAppCompatActivityForDetail {
   private Ponto mPonto;
 
   @Override protected void setListener() {
-    mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        JUtils.Log(TAG, "setNavigationOnClickListener finish");
-        finish();
-      }
-    });
+//    mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+//      @Override public void onClick(View v) {
+//        JUtils.Log(TAG, "setNavigationOnClickListener finish");
+//        finish();
+//      }
+//    });
   }
 
   @Override protected void initData() {
@@ -117,15 +120,32 @@ public class ProductPopDetailActvityWeb extends BaseAppCompatActivityForDetail {
     JUtils.Log(TAG, "initViews");
     ShareSDK.initSDK(this);
 
+
+//    Window window = getWindow();
+//    //4.4版本及以上
+//    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//      window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+//              WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//    }
+//    //5.0版本及以上
+//    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//      window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//      window.getDecorView()
+//              .setSystemUiVisibility(
+//                      View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+//      window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//      window.setStatusBarColor(Color.TRANSPARENT);
+//    }
+
     webviewTitle = (TextView) findViewById(R.id.webview_title);
-    ll_actwebview = (LinearLayout) findViewById(R.id.ll_actwebview);
+    ll_actwebview = (FrameLayout) findViewById(R.id.ll_actwebview);
     //mProgressBar = (ProgressBar) findViewById(R.id.pb_view);
     mWebView = (WebView) findViewById(R.id.wb_view);
-    mToolbar = (Toolbar) findViewById(R.id.toolbar);
-    mToolbar.setTitle("");
-    setSupportActionBar(mToolbar);
-    mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//    mToolbar = (Toolbar) findViewById(R.id.toolbar);
+//    mToolbar.setTitle("");
+//    setSupportActionBar(mToolbar);
+//    mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+//    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     try {
       if (Build.VERSION.SDK_INT >= 19) {
@@ -138,7 +158,7 @@ public class ProductPopDetailActvityWeb extends BaseAppCompatActivityForDetail {
       mWebView.getSettings().setUserAgentString(userAgentString + "; xlmm;");
       mWebView.getSettings().setJavaScriptEnabled(true);
       mWebView.addJavascriptInterface(new AndroidJsBridge(this), "AndroidBridge");
-      mPonto = new Ponto(mWebView, PONTO_MODULES_PACKAGE);
+//      mPonto = new Ponto(mWebView, PONTO_MODULES_PACKAGE);
       mWebView.getSettings().setAllowFileAccess(true);
       //如果访问的页面中有Javascript，则webview必须设置支持Javascript
       //mWebView.getSettings().setUserAgentString(MyApplication.getUserAgent());

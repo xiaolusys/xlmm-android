@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
@@ -10,16 +11,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
-import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActvityWeb;
-import com.jimei.xiaolumeimei.ui.activity.product.TongkuanActivity;
+import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.zhy.autolayout.utils.AutoUtils;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by 优尼世界 on 15/12/31.
@@ -121,34 +124,58 @@ public class PreviousAdapter extends RecyclerView.Adapter<PreviousAdapter.Previo
 
     holder.card.setOnClickListener(v -> {
 
-      String product_id = null;
-      int model_id = 0;
-      String name = null;
-      Bundle bundle;
+//      String product_id = null;
+//      int model_id = 0;
+//      String name = null;
+//      Bundle bundle;
+//
+//      try {
+//        product_id = mList.get(position).getId();
+//        model_id = mList.get(position).getModelId();
+//        name = mList.get(position).getName();
+//      } catch (Exception e) {
+//        e.printStackTrace();
+//      }
+//
+//      bundle = new Bundle();
+//      bundle.putString("product_id", product_id);
+//      bundle.putInt("model_id", model_id);
+//      if (name != null) {
+//        bundle.putString("name", name.split("/")[0]);
+//      }
+//      if (productModel.isIsSingleSpec()) {
+//        Intent intent = new Intent(mContext, ProductDetailActvityWeb.class);
+//        intent.putExtras(bundle);
+//        mContext.startActivity(intent);
+//      } else {
+//        Intent intent = new Intent(mContext, TongkuanActivity.class);
+//        intent.putExtras(bundle);
+//        mContext.startActivity(intent);
+//      }
 
-      try {
-        product_id = mList.get(position).getId();
-        model_id = mList.get(position).getModelId();
-        name = mList.get(position).getName();
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
+      int modelId = mList.get(position).getModelId();
+      Intent intent = new Intent(mContext, ProductPopDetailActvityWeb.class);
 
-      bundle = new Bundle();
-      bundle.putString("product_id", product_id);
-      bundle.putInt("model_id", model_id);
-      if (name != null) {
-        bundle.putString("name", name.split("/")[0]);
-      }
-      if (productModel.isIsSingleSpec()) {
-        Intent intent = new Intent(mContext, ProductDetailActvityWeb.class);
-        intent.putExtras(bundle);
-        mContext.startActivity(intent);
-      } else {
-        Intent intent = new Intent(mContext, TongkuanActivity.class);
-        intent.putExtras(bundle);
-        mContext.startActivity(intent);
-      }
+      SharedPreferences sharedPreferences =
+              mContext.getSharedPreferences("xlmmCookiesAxiba",
+                      Context.MODE_PRIVATE);
+      String cookies =
+              sharedPreferences.getString("cookiesString",
+                      "");
+      String domain =
+              sharedPreferences.getString("cookiesDomain",
+                      "");
+      Bundle bundle = new Bundle();
+      bundle.putString("cookies", cookies);
+      bundle.putString("domain", domain);
+      bundle.putString("Cookie",
+              sharedPreferences.getString("Cookie", ""));
+      bundle.putString("actlink",
+              "http://staging.xiaolumeimei.com/mall/#/product/details/"+modelId);
+      bundle.putInt("id",
+              modelId);
+      intent.putExtras(bundle);
+      mContext.startActivity(intent);
     });
   }
 

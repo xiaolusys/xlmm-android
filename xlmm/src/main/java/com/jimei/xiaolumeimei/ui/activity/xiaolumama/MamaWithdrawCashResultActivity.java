@@ -2,7 +2,6 @@ package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,7 +17,6 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.model.UserNewModel;
-import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 
@@ -64,7 +62,6 @@ public class MamaWithdrawCashResultActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void initViews() {
-        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent), 0);
     }
 
     @Override
