@@ -330,6 +330,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                                 });
                                         addSubscription(subscribe);
                                     } else {
+                                        removeWX(new Wechat(LoginActivity.this));
                                         hideIndeterminateProgressDialog();
                                         JUtils.Toast(codeBean.getMsg());
                                     }
@@ -342,10 +343,12 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
 
             @Override
             public void onError(Platform platform, int i, Throwable throwable) {
+                removeWX(new Wechat(LoginActivity.this));
             }
 
             @Override
             public void onCancel(Platform platform, int i) {
+                removeWX(new Wechat(LoginActivity.this));
                 hideIndeterminateProgressDialog();
             }
         });
