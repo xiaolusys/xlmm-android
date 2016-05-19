@@ -276,8 +276,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     protected void initView() {
-        presenter = new MainPresenter(this);
         findById();
+        presenter = new MainPresenter(this);
+        presenter.getView();
         StatusBarUtil.setColorForDrawerLayout(this, drawer,
                 getResources().getColor(R.color.colorAccent), 0);
         ActionBarDrawerToggle toggle =
