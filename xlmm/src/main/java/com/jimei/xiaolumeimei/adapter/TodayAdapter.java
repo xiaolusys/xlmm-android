@@ -1,6 +1,9 @@
 package com.jimei.xiaolumeimei.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,14 +11,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
+import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActvityWeb;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.zhy.autolayout.utils.AutoUtils;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by 优尼世界 on 15/12/29.
@@ -160,6 +167,28 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.TodayVH> {
       //}
 
       int modelId = mList.get(position).getModelId();
+        Intent intent = new Intent(mContext, ProductDetailActvityWeb.class);
+
+     SharedPreferences sharedPreferences =
+              mContext.getSharedPreferences("xlmmCookiesAxiba",
+                      Context.MODE_PRIVATE);
+     String cookies =
+              sharedPreferences.getString("cookiesString",
+                      "");
+     String domain =
+              sharedPreferences.getString("cookiesDomain",
+                      "");
+      Bundle bundle = new Bundle();
+      bundle.putString("cookies", cookies);
+      bundle.putString("domain", domain);
+      bundle.putString("Cookie",
+              sharedPreferences.getString("Cookie", ""));
+      bundle.putString("actlink",
+              "http://staging.xiaolumeimei.com/mall/#/product/details/"+modelId);
+      bundle.putInt("id",
+              modelId);
+      intent.putExtras(bundle);
+      mContext.startActivity(intent);
 
     });
   }
