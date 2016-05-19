@@ -27,7 +27,6 @@ import rx.schedulers.Schedulers;
 public class AddressSelectActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener {
 
-  @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.address_recyclerView) RecyclerView addressRecyclerView;
   @Bind(R.id.addAdress) Button addAdress;
   private AddressSelectAdapter adapter;
@@ -37,17 +36,6 @@ public class AddressSelectActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initData() {
-    //model.getAddressList()
-    //    .subscribeOn(Schedulers.io())
-    //    .subscribe(new ServiceResponse<List<AddressBean>>() {
-    //      @Override public void onNext(List<AddressBean> list) {
-    //        super.onNext(list);
-    //        if (list != null) {
-    //          adapter.update(list);
-    //        }
-    //
-    //      }
-    //    });
   }
 
   @Override protected void onResume() {
@@ -75,9 +63,6 @@ public class AddressSelectActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
-    toolbar.setTitle("");
-    setSupportActionBar(toolbar);
-    finishBack(toolbar);
     addressRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     addressRecyclerView.addItemDecoration(
         new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));

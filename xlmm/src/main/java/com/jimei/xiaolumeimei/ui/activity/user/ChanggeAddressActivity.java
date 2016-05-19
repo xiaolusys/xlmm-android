@@ -65,8 +65,10 @@ public class ChanggeAddressActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initData() {
-    name.setText(receiver_name);
-    name.setSelection(receiver_name.length());
+    if (receiver_name!=null) {
+      name.setText(receiver_name);
+      name.setSelection(receiver_name.length());
+    }
     mobile.setText(receiver_mobile);
     address.setText(city_string);
     clearAddress.setText(clearaddressa);

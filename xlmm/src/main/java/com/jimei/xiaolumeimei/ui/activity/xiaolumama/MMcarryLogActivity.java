@@ -8,14 +8,16 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.widget.TextView;
 import butterknife.Bind;
-import com.cpoopc.scrollablelayoutlib.ScrollableHelper;
-import com.cpoopc.scrollablelayoutlib.ScrollableLayout;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.ui.fragment.v2.CarryLogAllFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.CarryLogBounsFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.CarryLogCashbackFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.CarryLogCommissionFragment;
+import com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableHelper;
+import com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableLayout;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,13 +26,14 @@ import java.util.List;
  * <p>
  * Copyright 2016年 上海己美. All rights reserved.
  */
-public class MMcarryLogActivity extends BaseSwipeBackCompatActivity {
+public class MMcarryLogActivity extends BaseSwipeBackCompatActivity implements ViewPager.OnPageChangeListener {
   @Bind(R.id.tab_layout) TabLayout tabLayout;
   @Bind(R.id.view_pager) ViewPager viewPager;
   @Bind(R.id.tv_leiji) TextView tvLeiji;
   @Bind(R.id.tv_num) TextView tvNum;
-  @Bind(R.id.scrollable_layout) ScrollableLayout scrollableLayout;
-  List<Fragment> fragments = new ArrayList<>();
+  @Bind(R.id.scrollable_layout)
+  ScrollableLayout scrollableLayout;
+  List<BaseFragment> fragments = new ArrayList<>();
   private String carrylogMoney;
   private TabLayout.Tab[] tabs;
 
@@ -38,7 +41,7 @@ public class MMcarryLogActivity extends BaseSwipeBackCompatActivity {
   }
 
   @Override protected void initData() {
-
+    viewPager.setOnPageChangeListener(this);
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -100,6 +103,19 @@ public class MMcarryLogActivity extends BaseSwipeBackCompatActivity {
 
   @Override protected TransitionMode getOverridePendingTransitionMode() {
     return null;
+  }
+
+  @Override
+  public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+  }
+
+  @Override
+  public void onPageSelected(int position) {
+    scrollableLayout.getHelper().setCurrentScrollableContainer(fragments.get(position));
+  }
+
+  @Override
+  public void onPageScrollStateChanged(int state) {
   }
 
   class MainTabAdapter extends FragmentPagerAdapter {

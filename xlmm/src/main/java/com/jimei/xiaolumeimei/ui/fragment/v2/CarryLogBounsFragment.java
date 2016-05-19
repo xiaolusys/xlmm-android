@@ -12,11 +12,11 @@ import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.cpoopc.scrollablelayoutlib.ScrollableHelper;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.AwardCarryLogAdapter;
+import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.entities.AwardCarryBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.widget.DividerItemDecorationForFooter;
@@ -33,7 +33,7 @@ import rx.schedulers.Schedulers;
  *
  * Copyright 2016年 上海己美. All rights reserved.
  */
-public class CarryLogBounsFragment extends Fragment implements ScrollableHelper.ScrollableContainer{
+public class CarryLogBounsFragment extends BaseFragment {
   List<AwardCarryBean.ResultsEntity> list = new ArrayList<>();
   @Bind(R.id.carrylogall_xry) XRecyclerView xRecyclerView;
   private AwardCarryLogAdapter adapter;
@@ -75,6 +75,21 @@ public class CarryLogBounsFragment extends Fragment implements ScrollableHelper.
     if (isVisibleToUser && list.size() == 0) {
       load();
     }
+  }
+
+  @Override
+  protected View initViews(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    return null;
+  }
+
+  @Override
+  protected void initData() {
+
+  }
+
+  @Override
+  protected void setDefaultFragmentTitle(String title) {
+
   }
 
   private void load() {

@@ -31,10 +31,10 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:orientation="horizontal"
-                android:paddingRight="24px"
+                android:paddingBottom="14px"
                 android:paddingLeft="24px"
-                android:paddingTop="14px"
-                android:paddingBottom="14px">
+                android:paddingRight="24px"
+                android:paddingTop="14px">
 
                 <TextView
                     android:id="@+id/tx_order_id"
@@ -62,15 +62,15 @@
             <include layout="@layout/common_gap" />
 
             <RelativeLayout
-                android:id="@+id/adress"
+                android:id="@+id/address"
                 android:layout_width="match_parent"
                 android:layout_height="145px"
                 android:background="@color/white"
                 android:clickable="true"
-                android:paddingRight="24px"
+                android:paddingBottom="10px"
                 android:paddingLeft="24px"
-                android:paddingTop="10px"
-                android:paddingBottom="10px">
+                android:paddingRight="24px"
+                android:paddingTop="10px">
 
                 <ImageView
                     android:id="@+id/image_location"
@@ -84,9 +84,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:textSize="14sp"
                     android:layout_toRightOf="@id/image_location"
-                    android:text="" />
+                    android:text=""
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/tx_custom_address"
@@ -94,10 +94,10 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_marginLeft="8dp"
-                    android:textSize="13sp"
-                    android:textColor="#9B9B9B"
                     android:layout_toRightOf="@id/image_location"
-                    android:text="" />
+                    android:text=""
+                    android:textColor="#9B9B9B"
+                    android:textSize="13sp" />
 
                 <TextView
                     android:id="@+id/choose_address"
@@ -114,56 +114,11 @@
 
             <include layout="@layout/common_gap" />
 
-            <RelativeLayout
-                android:id="@+id/logistics_layout"
-                android:layout_width="fill_parent"
-                android:layout_height="64dp"
-                android:background="#F3F3F4"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/image_slice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:src="@drawable/slice" />
-
-                <TextView
-                    android:id="@+id/tx_order_crttime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/image_slice"
-                    android:padding="8dp"
-                    android:text="时间："
-                    android:textColor="#9B9B9B"
-                    android:textSize="13sp" />
-
-                <TextView
-                    android:id="@+id/tx_order_crtstate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_toRightOf="@id/image_slice"
-                    android:padding="8dp"
-                    android:text="订单创建成功"
-                    android:textSize="14sp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_margin="8dp"
-                    android:src="@mipmap/common_icon_right_arrow" />
-            </RelativeLayout>
-
-            <include layout="@layout/common_gap" />
-
             <com.jimei.xiaolumeimei.widget.NestedListView
                 android:id="@+id/lv_goods"
-                android:background="@color/white"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent" />
+                android:layout_height="fill_parent"
+                android:background="@color/white" />
 
 
             <include layout="@layout/common_gap" />
@@ -280,8 +235,8 @@
                     android:id="@+id/tx_order_payment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
                     android:layout_alignBaseline="@id/tv_money"
+                    android:layout_alignParentRight="true"
                     android:layout_gravity="right"
                     android:text="￥"
                     android:textColor="@color/colorPrimary"
