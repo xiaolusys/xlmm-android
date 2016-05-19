@@ -43,9 +43,9 @@ public class MamaInfoModel {
   }
 
   //得到提现历史
-  public Observable<WithdrawCashHisBean> getWithdrawCashHis() {
+  public Observable<WithdrawCashHisBean> getWithdrawCashHis(String page) {
     return XlmmRetrofitClient.getService()
-        .getWithdrawCashHis()
+        .getWithdrawCashHis(page)
         .compose(new DefaultTransform<>());
   }
 

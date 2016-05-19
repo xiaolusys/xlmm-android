@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -37,7 +36,6 @@ import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
-import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.zhy.autolayout.AutoRelativeLayout;
@@ -61,8 +59,6 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     List<RecentCarryBean.ResultsEntity> his_refund = new ArrayList<>();
     List<RecentCarryBean.ResultsEntity> show_refund = new ArrayList<>();
     int get_num = 0;
-    @Bind(R.id.toolbar)
-    Toolbar toolbar;
     @Bind(R.id.imgUser)
     ImageView imgUser;
     @Bind(R.id.btn_two_dimen)
@@ -141,7 +137,6 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void setListener() {
-        toolbar.setOnClickListener(this);
         tv_cashinfo.setOnClickListener(this);
         tv_cash.setOnClickListener(this);
 
@@ -177,10 +172,6 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void initViews() {
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
-        finishBack(toolbar);
-        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent), 0);
     }
 
     @Override
@@ -615,8 +606,6 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
             cal.add(Calendar.DAY_OF_YEAR, 1);//日期+1
             xVals.add(
                     "" + (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.DAY_OF_MONTH));
-            //JUtils.Log(TAG,
-            //    "DAY: " + (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.DAY_OF_MONTH));
         }
 
         show_refund.clear();
@@ -703,40 +692,6 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
                 Integer.toString((int) (show_refund.get(e.getXIndex()).getOrderNum())));
         tv_today_fund2.setText(Double.toString(
                 (double) (Math.round(show_refund.get(e.getXIndex()).getCarry() * 100)) / 100));
-
-    /*if (Double.compare(show_his_refund.get(e.getXIndex()).getRefund(), 0) == 0) {
-      tv_today_fund2.setText(Float.toString(
-          (float) (Math.round(show_his_refund.get(e.getXIndex()).getRefund() * 100))
-              / 100));
-
-      Subscription subscribe = MMProductModel.getInstance()
-          .getOneDayAgentOrders(MAX_RECENT_DAYS - 1 - e.getXIndex())
-          .subscribeOn(Schedulers.io())
-          .subscribe(new ServiceResponse<OneDayAgentOrdersBean>() {
-            @Override public void onNext(OneDayAgentOrdersBean oneDayBean) {
-              super.onNext(oneDayBean);
-              if (oneDayBean != null) {
-                show_his_refund.get(e.getXIndex())
-                    .setRefund(oneDayBean.getShops().get(0).getDayly_amount());
-
-                JUtils.Log(TAG, "incom= " + oneDayBean.getShops()
-                    .get(e.getXIndex())
-                    .getDayly_amount());
-                if ((show_his_refund.get(e.getXIndex()) != null)) {
-                  tv_today_order2.setText(
-                      Float.toString(show_his_refund.get(e.getXIndex()).getOrder_num()));
-                  tv_today_fund2.setText(Float.toString((float) (Math.round(
-                      show_his_refund.get(e.getXIndex()).getRefund() * 100)) / 100));
-                }
-              }
-            }
-          });
-      addSubscription(subscribe);
-    } else {
-      tv_today_fund2.setText(Float.toString(
-          (float) (Math.round(show_his_refund.get(e.getXIndex()).getRefund() * 100))
-              / 100));
-    }*/
     }
 
     @Override
@@ -783,92 +738,7 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
                     }
                 });
         addSubscription(subscribe);
-    /*for (int i = 0; i < MAX_RECENT_DAYS; i++) {
-      HisRefund hisRefund = new HisRefund();
-      hisRefund.setOrder_num(0);
-      hisRefund.setRefund(0);
-      show_his_refund.add(i, hisRefund);
     }
-
-    Subscription subscribe = MMProductModel.getInstance()
-        .getLatestAgentOrders(MAX_RECENT_DAYS)
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<List<Integer>>() {
-          @Override public void onNext(List<Integer> oneDayBean) {
-            super.onNext(oneDayBean);
-            if (oneDayBean != null) {
-              for (int i = 0; i < MAX_RECENT_DAYS; i++) {
-                show_his_refund.get(MAX_RECENT_DAYS - 1 - i)
-                    .setOrder_num(oneDayBean.get(i));
-              }
-
-              JUtils.Log(TAG,
-                  "get_num =" + get_num + " " + "size= " + show_his_refund.size());
-              if ((show_his_refund.size() > 0)) {
-                init_chart();
-                setData(MAX_RECENT_DAYS);
-                mChart.setVisibility(View.VISIBLE);
-
-                mChart.animateX(2500, Easing.EasingOption.EaseInOutQuart);
-                mChart.setVisibleXRangeMaximum(6);
-
-                if (show_his_refund.size() > 7) {
-                  mChart.moveViewToX(MAX_RECENT_DAYS - 6);
-                }
-                if (show_his_refund.get(0) != null) {
-                  tv_today_order2.setText(
-                      Integer.toString(show_his_refund.get(0).getOrder_num()));
-                  tv_today_fund2.setText(Float.toString(
-                      (float) (Math.round(show_his_refund.get(0).getRefund() * 100))
-                          / 100));
-                }
-              }
-            }
-          }
-        });
-    addSubscription(subscribe);
-
-    for (int i = 0; i < MAX_RECENT_DAYS; i++) {
-      JUtils.Log(TAG, " day  =" + (MAX_RECENT_DAYS - 1 - i));
-      get_his_one_day_refund(i);
-    }*/
-    }
-
-  /*void get_his_one_day_refund(int day) {
-    final int finalI = day;
-    Subscription subscribe = MMProductModel.getInstance()
-        .getOneDayAgentOrders(MAX_RECENT_DAYS - 1 - day)
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<OneDayAgentOrdersBean>() {
-          @Override public void onNext(OneDayAgentOrdersBean oneDayBean) {
-            super.onNext(oneDayBean);
-            if (oneDayBean != null) {
-              synchronized (this) {
-                show_his_refund.get(finalI)
-                    .setRefund(oneDayBean.getShops().get(0).getDayly_amount());
-              }
-              JUtils.Log(TAG, "incom= " + oneDayBean.getShops().get(0).getDayly_amount());
-              if ((show_his_refund.get(0) != null) && (finalI == 0)) {
-                tv_today_order2.setText(
-                    Integer.toString(show_his_refund.get(0).getOrder_num()));
-                tv_today_fund2.setText(Float.toString(
-                    (float) (Math.round(show_his_refund.get(0).getRefund() * 100))
-                        / 100));
-              }
-            }
-          }
-        });
-    addSubscription(subscribe);
-  }
-
-  float calc_refund(List<OneDayAgentOrdersBean.ShopsEntity> list) {
-    float sum = 0;
-    if (list == null) return 0;
-    for (int i = 0; i < list.size(); i++) {
-      sum += list.get(i).getTicheng_cash();
-    }
-    return sum;
-  }*/
 
     @Override
     protected void onStop() {
@@ -879,15 +749,6 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
         JUtils.Log(TAG, "liveness:" + liveness);
         img_liveness.setText(Integer.toString(liveness));
         if (liveness > 100) liveness = 100;
-
-    /*AutoRelativeLayout.LayoutParams laParams=(AutoRelativeLayout.LayoutParams)img_hook
-        .getLayoutParams();
-    laParams.width= getWindowManager().getDefaultDisplay().getWidth() *
-    liveness/ 100;
-    img_hook.setLayoutParams(laParams);*/
-
-        //AutoRelativeLayout.LayoutParams laParams1=(AutoRelativeLayout.LayoutParams)
-        //    img_liveness.getLayoutParams();
         AutoRelativeLayout.LayoutParams laParams1 =
                 new AutoRelativeLayout.LayoutParams(AutoRelativeLayout.LayoutParams.WRAP_CONTENT,
                         AutoRelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -896,8 +757,6 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
                 + getWindowManager().getDefaultDisplay().getWidth() * liveness / 100
                 + "width:"
                 + img_liveness.getWidth());
-        //laParams1.leftMargin = getWindowManager().getDefaultDisplay().getWidth() *
-        //    liveness/ 100 - laParams1.width;
 
         laParams1.setMargins(
                 getWindowManager().getDefaultDisplay().getWidth() * liveness / 100
