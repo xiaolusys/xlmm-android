@@ -20,148 +20,130 @@ import rx.schedulers.Schedulers;
  * Created by itxuye on 16/5/3.
  */
 public class BrandListActivity extends BaseSwipeBackCompatActivity {
-    int page_size = 10;
-    private int page = 2;
-    private int totalPages;//总的分页数
-    private XRecyclerView xRecyclerView;
-    private BrandActivityAdapter mBrandActivityAdapter;
-    private int id;
+  int page_size = 10;
+  private int page = 2;
+  private int totalPages;//总的分页数
+  private XRecyclerView xRecyclerView;
+  private BrandActivityAdapter mBrandActivityAdapter;
+  private int id;
 
-    @Override
-    protected void setListener() {
+  @Override protected void setListener() {
 
-    }
+  }
 
-    @Override
-    protected void initData() {
-        showIndeterminateProgressDialog(false);
-        Subscription subscribe = ProductModel.getInstance()
-                .getBrandlistProducts(id, 1, 10)
-                .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<BrandListBean>() {
-                    @Override
-                    public void onNext(BrandListBean productListBean) {
+  @Override protected void initData() {
+    showIndeterminateProgressDialog(false);
+    Subscription subscribe = ProductModel.getInstance()
+        .getBrandlistProducts(id, 1, 10)
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<BrandListBean>() {
+          @Override public void onNext(BrandListBean productListBean) {
 
-                        try {
+            try {
 
-                            if (productListBean != null) {
-                                List<BrandListBean.ResultsBean> results = productListBean.getResults();
-                                totalPages = productListBean.getCount() / page_size;
-                                mBrandActivityAdapter.update(results);
-                            }
-                        } catch (Exception ex) {
-                        }
-                    }
-
-                    @Override
-                    public void onCompleted() {
-                        super.onCompleted();
-                        hideIndeterminateProgressDialog();
-                    }
-                });
-        addSubscription(subscribe);
-    }
-
-    @Override
-    protected void getBundleExtras(Bundle extras) {
-        id = extras.getInt("id");
-    }
-
-    @Override
-    protected int getContentViewLayoutID() {
-        return R.layout.activty_childlist;
-    }
-
-    @Override
-    protected void initViews() {
-        initRecyclerView();
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
-    }
-
-    private void initRecyclerView() {
-
-        xRecyclerView = (XRecyclerView) findViewById(R.id.childlist_recyclerView);
-        xRecyclerView.setLayoutManager(new GridLayoutManager(BrandListActivity.this, 2));
-
-        xRecyclerView.addItemDecoration(new SpaceItemDecoration(10));
-
-        xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-        xRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
-        xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
-
-        mBrandActivityAdapter = new BrandActivityAdapter(this);
-        xRecyclerView.setAdapter(mBrandActivityAdapter);
-
-        xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
-            @Override
-            public void onRefresh() {
-                Subscription subscribe = ProductModel.getInstance()
-                        .getBrandlistProducts(id, 1, page * page_size)
-                        .subscribeOn(Schedulers.io())
-                        .subscribe(new ServiceResponse<BrandListBean>() {
-                            @Override
-                            public void onNext(BrandListBean childListBean) {
-                                List<BrandListBean.ResultsBean> results = childListBean.getResults();
-                                mBrandActivityAdapter.updateWithClear(results);
-                            }
-
-                            @Override
-                            public void onCompleted() {
-                                super.onCompleted();
-                                xRecyclerView.post(xRecyclerView::refreshComplete);
-                            }
-                        });
-                addSubscription(subscribe);
+              if (productListBean != null) {
+                List<BrandListBean.ResultsBean> results = productListBean.getResults();
+                totalPages = productListBean.getCount() / page_size;
+                mBrandActivityAdapter.update(results);
+              }
+            } catch (Exception ex) {
             }
+          }
 
-            @Override
-            public void onLoadMore() {
-                if (page <= totalPages) {
-                    loadMoreData(page, 10);
-                    page++;
-                } else {
-                    Toast.makeText(BrandListActivity.this, "没有更多了拉,去购物吧", Toast.LENGTH_SHORT)
-                            .show();
-                    xRecyclerView.post(xRecyclerView::loadMoreComplete);
-                }
-            }
+          @Override public void onCompleted() {
+            super.onCompleted();
+            hideIndeterminateProgressDialog();
+          }
         });
-    }
+    addSubscription(subscribe);
+  }
 
-    private void loadMoreData(int page, int page_size) {
+  @Override protected void getBundleExtras(Bundle extras) {
+    id = extras.getInt("id");
+  }
 
+  @Override protected int getContentViewLayoutID() {
+    return R.layout.activty_childlist;
+  }
+
+  @Override protected void initViews() {
+    initRecyclerView();
+  }
+
+  @Override protected boolean toggleOverridePendingTransition() {
+    return false;
+  }
+
+  @Override protected TransitionMode getOverridePendingTransitionMode() {
+    return null;
+  }
+
+  private void initRecyclerView() {
+
+    xRecyclerView = (XRecyclerView) findViewById(R.id.childlist_recyclerView);
+    xRecyclerView.setLayoutManager(new GridLayoutManager(BrandListActivity.this, 2));
+
+    xRecyclerView.addItemDecoration(new SpaceItemDecoration(10));
+
+    xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
+    xRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
+    xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
+
+    mBrandActivityAdapter = new BrandActivityAdapter(this);
+    xRecyclerView.setAdapter(mBrandActivityAdapter);
+
+    xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+      @Override public void onRefresh() {
         Subscription subscribe = ProductModel.getInstance()
-                .getBrandlistProducts(id, page, page_size)
-                .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<BrandListBean>() {
-                    @Override
-                    public void onNext(BrandListBean productListBean) {
-                        List<BrandListBean.ResultsBean> results = productListBean.getResults();
-                        mBrandActivityAdapter.update(results);
-                    }
+            .getBrandlistProducts(id, 1, page * page_size)
+            .subscribeOn(Schedulers.io())
+            .subscribe(new ServiceResponse<BrandListBean>() {
+              @Override public void onNext(BrandListBean childListBean) {
+                List<BrandListBean.ResultsBean> results = childListBean.getResults();
+                mBrandActivityAdapter.updateWithClear(results);
+              }
 
-                    @Override
-                    public void onCompleted() {
-                        super.onCompleted();
-                        xRecyclerView.post(xRecyclerView::loadMoreComplete);
-                    }
-                });
+              @Override public void onCompleted() {
+                super.onCompleted();
+                xRecyclerView.post(xRecyclerView::refreshComplete);
+              }
+            });
         addSubscription(subscribe);
-    }
+      }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
+      @Override public void onLoadMore() {
+        if (page <= totalPages) {
+          loadMoreData(page, 10);
+          page++;
+        } else {
+          Toast.makeText(BrandListActivity.this, "没有更多了拉,去购物吧", Toast.LENGTH_SHORT)
+              .show();
+          xRecyclerView.post(xRecyclerView::loadMoreComplete);
+        }
+      }
+    });
+  }
 
-    }
+  private void loadMoreData(int page, int page_size) {
 
+    Subscription subscribe = ProductModel.getInstance()
+        .getBrandlistProducts(id, page, page_size)
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<BrandListBean>() {
+          @Override public void onNext(BrandListBean productListBean) {
+            List<BrandListBean.ResultsBean> results = productListBean.getResults();
+            mBrandActivityAdapter.update(results);
+          }
+
+          @Override public void onCompleted() {
+            super.onCompleted();
+            xRecyclerView.post(xRecyclerView::loadMoreComplete);
+          }
+        });
+    addSubscription(subscribe);
+  }
+
+  @Override protected void onStop() {
+    super.onStop();
+  }
 }

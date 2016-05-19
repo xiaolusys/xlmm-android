@@ -13,13 +13,12 @@ public class ProductListBean {
   @SerializedName("count") private int mCount;
   @SerializedName("next") private Object mNext;
   @SerializedName("downshelf_deadline") private String mDownshelfDeadline;
+  @SerializedName("upshelf_starttime") private String mUpshelfStarttime;
+  @SerializedName("results") private List<ResultsEntity> mResults;
 
   public String getUpshelfStarttime() {
     return mUpshelfStarttime;
   }
-
-  @SerializedName("upshelf_starttime") private String mUpshelfStarttime;
-  @SerializedName("results") private List<ResultsEntity> mResults;
 
   public String getDownshelfDeadline() {
     return mDownshelfDeadline;
@@ -91,6 +90,11 @@ public class ProductListBean {
     @SerializedName("ware_by") private int mWareBy;
     @SerializedName("is_verify") private boolean mIsVerify;
     @SerializedName("model_id") private int mModelId;
+    @SerializedName("web_url") private String mWebUrl;
+
+    public String getWebUrl() {
+      return mWebUrl;
+    }
 
     public String getId() {
       return mId;
