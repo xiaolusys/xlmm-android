@@ -15,6 +15,8 @@ public class PackageBean {
      * process_time : 2016-05-18 13:10:27
      * package_group_key : 2-2-3101031503285
      */
+    
+
 
     private String title;
     private String pic_path;

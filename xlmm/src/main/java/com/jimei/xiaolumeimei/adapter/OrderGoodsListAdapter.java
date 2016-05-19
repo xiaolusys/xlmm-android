@@ -46,6 +46,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
     private String packetid;
     private String tid;
 
+
     public void setTid(String tid) {
         this.tid = tid;
     }

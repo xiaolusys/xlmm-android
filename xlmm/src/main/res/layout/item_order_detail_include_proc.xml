@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <LinearLayout
@@ -9,22 +10,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone" >
+        android:visibility="gone">
 
         <View
             android:layout_width="match_parent"
             android:layout_height="10dp"
-            android:background="#F3F3F4"/>
+            android:background="@color/bg_grey" />
 
         <include layout="@layout/common_gap" />
+
     </LinearLayout>
 
 
     <RelativeLayout
         android:id="@+id/logistics_layout"
         android:layout_width="fill_parent"
-        android:layout_height="64dp"
-        android:background="#F3F3F4"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
         android:orientation="vertical"
         android:visibility="gone">
 
@@ -50,18 +52,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:layout_below="@id/tx_order_crttime"
+            android:layout_toLeftOf="@id/right"
             android:layout_toRightOf="@id/image_slice"
+            android:ellipsize="end"
             android:padding="8dp"
+            android:singleLine="true"
             android:text="订单成功创建"
             android:textSize="14sp" />
 
         <ImageView
+            android:id="@+id/right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_margin="8dp"
             android:src="@mipmap/common_icon_right_arrow" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:background="#33DADADA" />
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -72,7 +86,7 @@
 
         <LinearLayout
             android:id="@+id/ll_good"
-            android:layout_width="300dp"
+            android:layout_width="600px"
             android:layout_height="90dp"
             android:orientation="horizontal">
 

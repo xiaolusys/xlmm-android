@@ -8,6 +8,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -31,6 +33,7 @@ import com.pingplusplus.android.PaymentActivity;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -93,9 +96,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void initViews() {
-        ListView lv_goods = (ListView) findViewById(R.id.lv_goods);
-        mGoodsAdapter = new OrderGoodsListAdapter(this);
-        lv_goods.setAdapter(mGoodsAdapter);
+
     }
 
     //从server端获得所有订单数据，可能要查询几次
@@ -115,25 +116,9 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                             tid = orderDetailBean.getTid();
                             orderDetail = orderDetailBean;
                             showProcBtn(orderDetailBean);
+                            fillDataToView(orderDetailBean);
 
                             Log.i(TAG, "order_id " + order_id + " " + orderDetailBean.toString());
-
-                            Subscription subscribe1 = TradeModel.getInstance()
-                                    .getPackageList(tid)
-                                    .subscribeOn(Schedulers.io())
-                                    .subscribe(new ServiceResponse<List<PackageBean>>() {
-                                        @Override
-                                        public void onNext(List<PackageBean> packageBeen) {
-                                            packageBeanList = packageBeen;
-                                            fillDataToView(orderDetailBean);
-                                        }
-                                    });
-                            addSubscription(subscribe1);
-                        }
-
-                        @Override
-                        public void onCompleted() {
-                            super.onCompleted();
                         }
 
                         @Override
@@ -169,11 +154,28 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         tx_order_payment.setText("¥" + orderDetailBean.getPayment());
 
         JUtils.Log(TAG, "crt time " + orderDetailBean.getCreated());
+        ListView lv_goods = (ListView) findViewById(R.id.lv_goods);
+        mGoodsAdapter = new OrderGoodsListAdapter(this);
 
-        mGoodsAdapter.update(orderDetailBean.getOrders());
-        mGoodsAdapter.setPackageBeanList(packageBeanList);
-        mGoodsAdapter.setTimeStr(time);
-        mGoodsAdapter.setTid(orderDetailBean.getTid());
+        packageBeanList = new ArrayList<>();
+        Subscription subscribe = TradeModel.getInstance()
+                .getPackageList(tid)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ServiceResponse<List<PackageBean>>() {
+                    @Override
+                    public void onNext(List<PackageBean> packageBeen) {
+                        packageBeanList.addAll(packageBeen);
+                        mGoodsAdapter.setPackageBeanList(packageBeanList);
+                        mGoodsAdapter.update(orderDetailBean.getOrders());
+
+                        mGoodsAdapter.setTimeStr(time);
+                        mGoodsAdapter.setTid(orderDetailBean.getTid());
+                        lv_goods.setAdapter(mGoodsAdapter);
+                    }
+                });
+        addSubscription(subscribe);
+
+
     }
 
     private void showProcBtn(OrderDetailBean orderDetailBean) {

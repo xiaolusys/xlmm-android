@@ -69,6 +69,9 @@ import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.UserWithdrawResult;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.entities.WxPubAuthInfo;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 import okhttp3.ResponseBody;
 import retrofit2.http.Body;
@@ -313,7 +316,7 @@ public interface XlmmService {
 
     //根据订单号获取包裹信息
     @GET("/rest/packageskuitem")
-    Observable<List<PackageBean>> getPackageList(
+    Observable<ArrayList<PackageBean>> getPackageList(
         @Query("sale_trade_id") String sale_trade_id
     );
 
