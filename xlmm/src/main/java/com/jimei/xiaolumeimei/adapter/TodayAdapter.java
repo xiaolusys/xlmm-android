@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -136,7 +135,6 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.TodayVH> {
 
       try {
         product_id = mList.get(position).getId();
-        Log.i("dawang jiaowo lai xunshan", product_id);
         model_id = mList.get(position).getModelId();
         name = mList.get(position).getProductModel().getName();
       } catch (Exception e) {
