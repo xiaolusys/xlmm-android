@@ -147,20 +147,19 @@ public class TomorrowV2Fragment extends BaseFragment {
           }
         });
 
-    //        subscribe2 = Observable.timer(1, 1, TimeUnit.SECONDS)
-    //                .onBackpressureDrop()
-    //                .map(aLong -> calcLeftTime(left))
-    //                .observeOn(AndroidSchedulers.mainThread())
-    //                .subscribe(new Action1<Long>() {
-    //                    @Override
-    //                    public void call(Long aLong) {
-    //                        if (aLong > 0) {
-    //                            countTime.updateShow(aLong);
-    //                        } else {
-    //                            countTime.setVisibility(View.INVISIBLE);
-    //                        }
-    //                    }
-    //                }, Throwable::printStackTrace);
+    //Subscription subscribe = Observable.timer(1, 1, TimeUnit.SECONDS)
+    //    .onBackpressureDrop()
+    //    .map(aLong -> calcLeftTime(left))
+    //    .observeOn(AndroidSchedulers.mainThread())
+    //    .subscribe(new Action1<Long>() {
+    //      @Override public void call(Long aLong) {
+    //        if (aLong > 0) {
+    //          countTime.updateShow(aLong);
+    //        } else {
+    //          countTime.setVisibility(View.INVISIBLE);
+    //        }
+    //      }
+    //    }, Throwable::printStackTrace);
   }
 
   private void initLeftTime() {

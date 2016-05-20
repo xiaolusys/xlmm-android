@@ -11,87 +11,97 @@ public class MMShoppingBean {
 
   /**
    * customer : 1
-   * name : null
-   * shop_link : http://192.168.1.31/static/wap/mmshop.html?mm_linkid=44&ufrom=web
+   * name : meron@小鹿美美の外贸店
+   * shop_link : http://m.xiaolumeimei.com/m/44?next=/pages/mmshop.html%3Fmm_linkid%3D44
+   * preview_shop_link : http://m.xiaolumeimei.com/pages/preview-mmshop.html?mm_linkid=44
    * id : 3
-   * thumbnail : http://7xogkj.com2.z0.glb.qiniucdn.com/222-ohmydeer.png
-   * desc : 外贸原单，天天精选，买买买！
+   * first_pro_pic : http://image.xiaolu.so/MG_14636352750782.jpg
+   * thumbnail : http://image.xiaolu.so/MG_14636352750782.jpg
+   * desc : meron@小鹿美美の外贸店今天又上新啦！
    */
 
   @SerializedName("shop_info") private ShopInfoEntity mShopInfo;
-
-  public void setShopInfo(ShopInfoEntity shopInfo) {
-    this.mShopInfo = shopInfo;
-  }
 
   public ShopInfoEntity getShopInfo() {
     return mShopInfo;
   }
 
+  public void setShopInfo(ShopInfoEntity shopInfo) {
+    mShopInfo = shopInfo;
+  }
+
   public static class ShopInfoEntity {
     @SerializedName("customer") private int mCustomer;
-    @SerializedName("name") private Object mName;
+    @SerializedName("name") private String mName;
     @SerializedName("shop_link") private String mShopLink;
-
-    public String getPreview_shop_link() {
-      return preview_shop_link;
-    }
-
-    public void setPreview_shop_link(String preview_shop_link) {
-      this.preview_shop_link = preview_shop_link;
-    }
-
-    @SerializedName("preview_shop_link") private String preview_shop_link;
+    @SerializedName("preview_shop_link") private String mPreviewShopLink;
     @SerializedName("id") private int mId;
+    @SerializedName("first_pro_pic") private String mFirstProPic;
     @SerializedName("thumbnail") private String mThumbnail;
     @SerializedName("desc") private String mDesc;
-
-    public void setCustomer(int customer) {
-      this.mCustomer = customer;
-    }
-
-    public void setName(Object name) {
-      this.mName = name;
-    }
-
-    public void setShopLink(String shopLink) {
-      this.mShopLink = shopLink;
-    }
-
-    public void setId(int id) {
-      this.mId = id;
-    }
-
-    public void setThumbnail(String thumbnail) {
-      this.mThumbnail = thumbnail;
-    }
-
-    public void setDesc(String desc) {
-      this.mDesc = desc;
-    }
 
     public int getCustomer() {
       return mCustomer;
     }
 
-    public Object getName() {
+    public void setCustomer(int customer) {
+      mCustomer = customer;
+    }
+
+    public String getName() {
       return mName;
+    }
+
+    public void setName(String name) {
+      mName = name;
     }
 
     public String getShopLink() {
       return mShopLink;
     }
 
+    public void setShopLink(String shopLink) {
+      mShopLink = shopLink;
+    }
+
+    public String getPreviewShopLink() {
+      return mPreviewShopLink;
+    }
+
+    public void setPreviewShopLink(String previewShopLink) {
+      mPreviewShopLink = previewShopLink;
+    }
+
     public int getId() {
       return mId;
+    }
+
+    public void setId(int id) {
+      mId = id;
+    }
+
+    public String getFirstProPic() {
+      return mFirstProPic;
+    }
+
+    public void setFirstProPic(String firstProPic) {
+      mFirstProPic = firstProPic;
     }
 
     public String getThumbnail() {
       return mThumbnail;
     }
 
+    public void setThumbnail(String thumbnail) {
+      mThumbnail = thumbnail;
+    }
+
     public String getDesc() {
       return mDesc;
+    }
+
+    public void setDesc(String desc) {
+      mDesc = desc;
     }
   }
 }
