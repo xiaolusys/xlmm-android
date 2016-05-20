@@ -73,8 +73,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     int order_id = 0;
     OrderDetailBean orderDetail;
     String source;
-
-
     String tid;
     private OrderGoodsListAdapter mGoodsAdapter;
     private String time;
