@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,8 +16,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.LadyListBean;
-import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActvityWeb;
-import com.jimei.xiaolumeimei.ui.activity.product.TongkuanActivity;
+import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
 import com.zhy.autolayout.utils.AutoUtils;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -58,7 +58,7 @@ public class LadyListActivityAdapter
     notifyDataSetChanged();
   }
 
-  public void clear(){
+  public void clear() {
     mList.clear();
     notifyDataSetChanged();
   }
@@ -144,34 +144,50 @@ public class LadyListActivityAdapter
 
     holder.card.setOnClickListener(v -> {
 
-      String product_id = null;
-      int model_id = 0;
-      String name = null;
-      Bundle bundle;
+      //String product_id = null;
+      //int model_id = 0;
+      //String name = null;
+      //Bundle bundle;
+      //
+      //try {
+      //  product_id = mList.get(position).getId();
+      //  model_id = mList.get(position).getModelId();
+      //  name = mList.get(position).getProductModel().getName();
+      //} catch (Exception e) {
+      //  e.printStackTrace();
+      //}
+      //
+      //bundle = new Bundle();
+      //bundle.putString("product_id", product_id);
+      //bundle.putInt("model_id", model_id);
+      //if (name != null) {
+      //  bundle.putString("name", name.split("/")[0]);
+      //}
+      //if (mList.get(position).getProductModel().isIsSingleSpec()) {
+      //  Intent intent = new Intent(mContext, ProductDetailActvityWeb.class);
+      //  intent.putExtras(bundle);
+      //  mContext.startActivity(intent);
+      //} else {
+      //  Intent intent = new Intent(mContext, TongkuanActivity.class);
+      //  intent.putExtras(bundle);
+      //  mContext.startActivity(intent);
+      //}
 
-      try {
-        product_id = mList.get(position).getId();
-        model_id = mList.get(position).getModelId();
-        name = mList.get(position).getProductModel().getName();
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
+      int modelId = mList.get(position).getModelId();
+      Intent intent = new Intent(mContext, ProductPopDetailActvityWeb.class);
 
-      bundle = new Bundle();
-      bundle.putString("product_id", product_id);
-      bundle.putInt("model_id", model_id);
-      if (name != null) {
-        bundle.putString("name", name.split("/")[0]);
-      }
-      if (mList.get(position).getProductModel().isIsSingleSpec()) {
-        Intent intent = new Intent(mContext, ProductDetailActvityWeb.class);
-        intent.putExtras(bundle);
-        mContext.startActivity(intent);
-      } else {
-        Intent intent = new Intent(mContext, TongkuanActivity.class);
-        intent.putExtras(bundle);
-        mContext.startActivity(intent);
-      }
+      SharedPreferences sharedPreferences =
+          mContext.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+      String cookies = sharedPreferences.getString("cookiesString", "");
+      String domain = sharedPreferences.getString("cookiesDomain", "");
+      Bundle bundle = new Bundle();
+      bundle.putString("cookies", cookies);
+      bundle.putString("domain", domain);
+      bundle.putString("Cookie", sharedPreferences.getString("Cookie", ""));
+      bundle.putString("actlink", mList.get(position).getWebUrl());
+      bundle.putInt("id", modelId);
+      intent.putExtras(bundle);
+      mContext.startActivity(intent);
     });
   }
 
