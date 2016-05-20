@@ -1,41 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent"
-	android:layout_height="90dp"
-	android:orientation="horizontal"
-	android:id="@+id/rlayout_order_lefttime"
-	>
-	<LinearLayout
-		android:layout_width="300dp"
-		android:layout_height="90dp"
-		android:orientation="horizontal"
-		android:id="@+id/ll_good"
-		>
-		<include layout = "@layout/one_order_item" />
-	</LinearLayout>>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
 
-	<Button
-		android:id="@+id/btn_order_proc"
-		android:layout_width="48dp"
-		android:layout_height="24dp"
-		android:text="申请退款"
-		android:textColor="@color/colorAccent"
-		android:background="@drawable/text_frame"
-		android:textSize="10sp"
-        android:gravity="center"
-		android:layout_centerInParent="true"
-		android:layout_toRightOf="@id/ll_good"/>
+    <LinearLayout
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
 
-	<TextView
-		android:id="@+id/tv_order_state"
-		android:layout_width="48dp"
-		android:layout_height="wrap_content"
-		android:text="申请退款"
-		android:textSize="13sp"
-		android:gravity="center"
-		android:layout_centerInParent="true"
-		android:layout_toRightOf="@id/ll_good"
-		android:visibility="invisible"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@color/bg_grey" />
+
+        <include layout="@layout/common_gap" />
+
+    </LinearLayout>
 
 
-</RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/logistics_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/image_slice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:src="@drawable/slice" />
+
+        <TextView
+            android:id="@+id/tx_order_crttime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/image_slice"
+            android:padding="8dp"
+            android:text="时间："
+            android:textColor="#9B9B9B"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/tx_order_crtstate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@id/tx_order_crttime"
+            android:layout_toLeftOf="@id/right"
+            android:layout_toRightOf="@id/image_slice"
+            android:ellipsize="end"
+            android:padding="8dp"
+            android:singleLine="true"
+            android:text="订单成功创建"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="8dp"
+            android:src="@mipmap/common_icon_right_arrow" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:background="#33DADADA" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlayout_order_lefttime"
+        android:layout_width="fill_parent"
+        android:layout_height="90dp">
+
+
+        <LinearLayout
+            android:id="@+id/ll_good"
+            android:layout_width="600px"
+            android:layout_height="90dp"
+            android:orientation="horizontal">
+
+            <include layout="@layout/one_order_item" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_order_proc"
+            android:layout_width="48dp"
+            android:layout_height="24dp"
+            android:layout_centerInParent="true"
+            android:layout_toRightOf="@id/ll_good"
+            android:background="@drawable/text_frame"
+            android:gravity="center"
+            android:text="申请退款"
+            android:textColor="@color/colorAccent"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/tv_order_state"
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_toRightOf="@id/ll_good"
+            android:gravity="center"
+            android:text="申请退款"
+            android:textSize="13sp"
+            android:visibility="invisible" />
+
+
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,5 +1,7 @@
 package com.jimei.xiaolumeimei.xlmmService;
 
+import android.widget.ListView;
+
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.entities.AddCartsBean;
 import com.jimei.xiaolumeimei.entities.AddressBean;
@@ -42,6 +44,7 @@ import com.jimei.xiaolumeimei.entities.NinePicBean;
 import com.jimei.xiaolumeimei.entities.OderCarryBean;
 import com.jimei.xiaolumeimei.entities.OneDayAgentOrdersBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
+import com.jimei.xiaolumeimei.entities.PackageBean;
 import com.jimei.xiaolumeimei.entities.PayInfoBean;
 import com.jimei.xiaolumeimei.entities.PointLogBean;
 import com.jimei.xiaolumeimei.entities.PortalBean;
@@ -66,6 +69,9 @@ import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.UserWithdrawResult;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.entities.WxPubAuthInfo;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 import okhttp3.ResponseBody;
 import retrofit2.http.Body;
@@ -307,6 +313,12 @@ public interface XlmmService {
     @GET("/rest/v1/trades/{pk}/details")
     Observable<OrderDetailBean> getOrderDetail(
             @Path("pk") int order_id);
+
+    //根据订单号获取包裹信息
+    @GET("/rest/packageskuitem")
+    Observable<ArrayList<PackageBean>> getPackageList(
+        @Query("sale_trade_id") String sale_trade_id
+    );
 
     //获取所有待支付订单
     @GET("/rest/v1/trades/waitpay")
@@ -870,6 +882,13 @@ public interface XlmmService {
     //获取物流信息
     @GET("/rest/v1/wuliu/get_wuliu_by_tid")
     Observable<LogisticsBean> get_logistics(@Query("tid") String tid);
+
+    //获取物流信息
+    @GET("/rest/v1/wuliu/get_wuliu_by_packetid")
+    Observable<LogisticsBean> get_logistics_by_packagetid(
+            @Query("packetid") String packetid
+    );
+
 
     @GET("/rest/v1/portal")
     Observable<PortalBean> getPortalBean(

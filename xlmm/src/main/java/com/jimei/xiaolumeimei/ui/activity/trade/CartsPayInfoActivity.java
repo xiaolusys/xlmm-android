@@ -3,18 +3,16 @@ package com.jimei.xiaolumeimei.ui.activity.trade;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.AppCompatSpinner;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -66,8 +64,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     private static final String BUDGET = "budget";
     String TAG = "CartsPayInfoActivity";
     CartsPayInfoAdapter mAdapter;
-    @Bind(R.id.toolbar)
-    Toolbar toolbar;
     @Bind(R.id.name)
     TextView name;
     @Bind(R.id.phone)
@@ -105,8 +101,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     TextView tv_app_discount;
     @Bind(R.id.extra_budget)
     TextView extraBudget;
-    @Bind(R.id.edit_query)
-    EditText editText;
     @Bind(R.id.iv_wx)
     ImageView wxImg;
     @Bind(R.id.iv_alipay)
@@ -119,6 +113,8 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     CheckBox ruleCb;
     @Bind(R.id.tv_rule)
     TextView ruleTv;
+    @Bind(R.id.spinner)
+    AppCompatSpinner spinner;
     private boolean isAlipay, isWx, isBudget;
     private String ids;
     private String cart_ids;
@@ -147,17 +143,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     private double yue;
     private double appcut;
     private AlertDialog dialog;
-
-    public static void closeInputMethod(Activity context) {
-        try {
-            InputMethodManager inputMethodManager =
-                    (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(
-                    context.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-        } catch (Exception e) {
-            JUtils.Log(TAG_LOG, "输入法关闭异常");
-        }
-    }
+    private String[] countriesStr;
 
     @Override
     protected void setListener() {
@@ -173,34 +159,13 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void initData() {
         isAlipay = true;
-
+        countriesStr = new String[]{"  韵达  ", "  申通  ", "  邮政  "};
+        ArrayAdapter adapter =
+                new ArrayAdapter<>(this, R.layout.item_choosespinner, countriesStr);
+        adapter.setDropDownViewResource(R.layout.item_choosespinner_dropdown);
+        spinner.setAdapter(adapter);
         list = new ArrayList<>();
-
         downLoadCartsInfo();
-
-        //        Subscription subscribe = UserModel.getInstance()
-        //                .getUnusedCouponBean()
-        //                .subscribeOn(Schedulers.io())
-        //                .subscribe(new ServiceResponse<CouponBean>() {
-        //                    @Override
-        //                    public void onNext(CouponBean couponBean) {
-        //                        results = couponBean.getResults();
-        //                        for (int i = 0; i < results.size(); i++) {
-        //                            CouponBean.ResultsEntity entity = results.get(i);
-        //                            JUtils.Log(TAG,entity.getTitle()+"-->"+entity.getUse_fee());
-        //                            if (entity.getPoll_status() == 1 && entity.getStatus() == 0 && entity.getUse_fee() <= (paymentInfo + jieshengjine) && entity.isValid()) {
-        //                                if (entity.getCoupon_value() >= coupon_price) {
-        //                                    coupon_price = entity.getCoupon_value();
-        //                                    coupon_id = entity.getId() + "";
-        //                                    tv_coupon.setText(coupon_price + "元优惠券");
-        //                                    isCoupon = true;
-        //                                }
-        //                            }
-        //                        }
-        //                    }
-        //                });
-        //        addSubscription(subscribe);
-
     }
 
     private void downLoadCartsInfo() {
@@ -388,11 +353,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void initViews() {
-
-
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
-        finishBack(toolbar);
         mAdapter = new CartsPayInfoAdapter(this, list);
         payinfoListview.setAdapter(mAdapter);
         View view = getLayoutInflater().inflate(R.layout.dialog_rule, null);
@@ -602,10 +562,11 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                         + pay_extrasaa);
 
         showIndeterminateProgressDialog(false);
-        String buyer_message = editText.getText() + "";
+        int position = spinner.getSelectedItemPosition();
+        String message = countriesStr[position];
         Subscription subscription = TradeModel.getInstance()
                 .shoppingcart_create_v2(ids, addr_id, pay_method, paymentprice_v2, post_fee,
-                        discount_fee_price, total_fee, uuid, pay_extrasaa, buyer_message)
+                        discount_fee_price, total_fee, uuid, pay_extrasaa, message)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<PayInfoBean>() {
 
@@ -868,7 +829,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     });
             addSubscription(subscription);
         }
-        closeInputMethod(this);
     }
 
     @Override
