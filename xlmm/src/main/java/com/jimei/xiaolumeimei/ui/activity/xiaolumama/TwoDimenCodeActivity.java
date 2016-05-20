@@ -14,7 +14,7 @@ import cn.sharesdk.onekeyshare.OnekeyShare;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.FilePara;
-import com.jimei.xiaolumeimei.okhttp.callback.FileParaCallback;
+import com.jimei.xiaolumeimei.okhttp3.FileParaCallback;
 import com.jimei.xiaolumeimei.utils.CameraUtils;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jude.utils.JUtils;

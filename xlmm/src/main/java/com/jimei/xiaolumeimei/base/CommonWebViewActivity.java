@@ -2,7 +2,6 @@ package com.jimei.xiaolumeimei.base;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
@@ -43,7 +42,7 @@ import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
-import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
+import com.jimei.xiaolumeimei.htmlJsBridge.modules.AndroidJsBridge;
 import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.utils.CameraUtils;
 import com.jimei.xiaolumeimei.utils.FileUtils;
