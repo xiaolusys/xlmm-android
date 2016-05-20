@@ -56,7 +56,7 @@ public class ChildListActivity extends BaseSwipeBackCompatActivity
 
               if (childListBean != null) {
                 List<ChildListBean.ResultsEntity> results = childListBean.getResults();
-                totalPages = childListBean.getCount() / page_size;
+                totalPages = childListBean.getCount() / page_size + 1;
                 mChildListAdapter.update(results);
               }
             } catch (Exception ex) {
@@ -78,7 +78,7 @@ public class ChildListActivity extends BaseSwipeBackCompatActivity
 
               if (childListBean != null) {
                 List<ChildListBean.ResultsEntity> results = childListBean.getResults();
-                totalPages2 = childListBean.getCount() / page_size;
+                totalPages2 = childListBean.getCount() / page_size + 1;
                 mChildListAdapter2.update(results);
               }
             } catch (Exception ex) {

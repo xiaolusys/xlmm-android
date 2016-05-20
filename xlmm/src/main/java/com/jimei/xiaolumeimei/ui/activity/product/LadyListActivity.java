@@ -76,7 +76,7 @@ public class LadyListActivity extends BaseSwipeBackCompatActivity
             try {
               if (ladyListBean != null) {
                 List<LadyListBean.ResultsEntity> results = ladyListBean.getResults();
-                totalPages = ladyListBean.getCount() / page_size;
+                totalPages = ladyListBean.getCount() / page_size + 1;
                 mLadyListAdapter2.update(results);
               }
             } catch (Exception ex) {
