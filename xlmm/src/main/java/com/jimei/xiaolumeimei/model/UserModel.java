@@ -19,7 +19,6 @@ import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.UserWithdrawResult;
 import com.jimei.xiaolumeimei.entities.WxPubAuthInfo;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
-
 import rx.Observable;
 
 /**
@@ -30,6 +29,7 @@ import rx.Observable;
 public class UserModel {
 
     private static UserModel ourInstance = new UserModel();
+
 
     private UserModel() {
     }
