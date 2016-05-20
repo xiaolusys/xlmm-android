@@ -54,7 +54,7 @@ public class LadyListActivity extends BaseSwipeBackCompatActivity
             try {
               if (ladyListBean != null) {
                 List<LadyListBean.ResultsEntity> results = ladyListBean.getResults();
-                totalPages = ladyListBean.getCount() / page_size;
+                totalPages = ladyListBean.getCount() / page_size + 1;
                 mLadyListAdapter.update(results);
               }
             } catch (Exception ex) {
@@ -126,18 +126,30 @@ public class LadyListActivity extends BaseSwipeBackCompatActivity
     byXRecyclerView.setAdapter(mLadyListAdapter2);
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
       @Override public void onRefresh() {
+        page1 = 2;
         Subscription subscribe = ProductModel.getInstance()
-            .getLadyList(1, page1 * page_size)
+            .getLadyList(1, 10)
             .subscribeOn(Schedulers.io())
             .subscribe(new ServiceResponse<LadyListBean>() {
               @Override public void onNext(LadyListBean ladyListBean) {
-                List<LadyListBean.ResultsEntity> results = ladyListBean.getResults();
-                mLadyListAdapter.updateWithClear(results);
+
+                try {
+                  if (ladyListBean != null) {
+                    List<LadyListBean.ResultsEntity> results = ladyListBean.getResults();
+                    totalPages = ladyListBean.getCount() / page_size + 1;
+                    mLadyListAdapter.update(results);
+                  }
+                } catch (Exception ex) {
+                }
               }
 
               @Override public void onCompleted() {
                 super.onCompleted();
-                xRecyclerView.post(xRecyclerView::refreshComplete);
+                try {
+                  xRecyclerView.post(xRecyclerView::refreshComplete);
+                } catch (Exception e) {
+                  e.printStackTrace();
+                }
               }
             });
         addSubscription(subscribe);
@@ -155,18 +167,30 @@ public class LadyListActivity extends BaseSwipeBackCompatActivity
     });
     byXRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
       @Override public void onRefresh() {
+        page2 = 2;
         Subscription subscribe = ProductModel.getInstance()
-            .getLadyList(1, page2 * page_size, "price")
+            .getLadyList(1, 10, "price")
             .subscribeOn(Schedulers.io())
             .subscribe(new ServiceResponse<LadyListBean>() {
               @Override public void onNext(LadyListBean ladyListBean) {
-                List<LadyListBean.ResultsEntity> results = ladyListBean.getResults();
-                mLadyListAdapter2.updateWithClear(results);
+
+                try {
+                  if (ladyListBean != null) {
+                    List<LadyListBean.ResultsEntity> results = ladyListBean.getResults();
+                    totalPages = ladyListBean.getCount() / page_size + 1;
+                    mLadyListAdapter2.update(results);
+                  }
+                } catch (Exception ex) {
+                }
               }
 
               @Override public void onCompleted() {
                 super.onCompleted();
-                byXRecyclerView.post(byXRecyclerView::refreshComplete);
+                try {
+                  byXRecyclerView.post(xRecyclerView::refreshComplete);
+                } catch (Exception e) {
+                  e.printStackTrace();
+                }
               }
             });
         addSubscription(subscribe);

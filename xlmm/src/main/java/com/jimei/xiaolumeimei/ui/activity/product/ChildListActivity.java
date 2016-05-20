@@ -84,6 +84,11 @@ public class ChildListActivity extends BaseSwipeBackCompatActivity
             } catch (Exception ex) {
             }
           }
+
+          @Override public void onCompleted() {
+            super.onCompleted();
+            byXRecyclerView.post(xRecyclerView::loadMoreComplete);
+          }
         });
     addSubscription(subscribe);
     addSubscription(subscribe2);
@@ -135,13 +140,23 @@ public class ChildListActivity extends BaseSwipeBackCompatActivity
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
       @Override public void onRefresh() {
+        page1 = 2;
         Subscription subscribe = ProductModel.getInstance()
-            .getChildList(1, page1 * page_size)
+            .getChildList(1, 10)
             .subscribeOn(Schedulers.io())
             .subscribe(new ServiceResponse<ChildListBean>() {
               @Override public void onNext(ChildListBean childListBean) {
-                List<ChildListBean.ResultsEntity> results = childListBean.getResults();
-                mChildListAdapter.updateWithClear(results);
+
+                try {
+
+                  if (childListBean != null) {
+                    List<ChildListBean.ResultsEntity> results =
+                        childListBean.getResults();
+                    totalPages = childListBean.getCount() / page_size + 1;
+                    mChildListAdapter.update(results);
+                  }
+                } catch (Exception ex) {
+                }
               }
 
               @Override public void onCompleted() {
@@ -165,21 +180,30 @@ public class ChildListActivity extends BaseSwipeBackCompatActivity
     });
     byXRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
       @Override public void onRefresh() {
-        Subscription subscribe = ProductModel.getInstance()
-            .getChildList(1, page2 * page_size, "price")
+        page2 = 2;
+        Subscription subscribe2 = ProductModel.getInstance()
+            .getChildList(1, 10, "price")
             .subscribeOn(Schedulers.io())
             .subscribe(new ServiceResponse<ChildListBean>() {
               @Override public void onNext(ChildListBean childListBean) {
-                List<ChildListBean.ResultsEntity> results = childListBean.getResults();
-                mChildListAdapter2.updateWithClear(results);
-              }
 
+                try {
+
+                  if (childListBean != null) {
+                    List<ChildListBean.ResultsEntity> results =
+                        childListBean.getResults();
+                    totalPages2 = childListBean.getCount() / page_size + 1;
+                    mChildListAdapter2.update(results);
+                  }
+                } catch (Exception ex) {
+                }
+              }
               @Override public void onCompleted() {
                 super.onCompleted();
-                byXRecyclerView.post(byXRecyclerView::refreshComplete);
+                xRecyclerView.post(xRecyclerView::loadMoreComplete);
               }
             });
-        addSubscription(subscribe);
+        addSubscription(subscribe2);
       }
 
       @Override public void onLoadMore() {
