@@ -9,10 +9,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -75,7 +74,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     String source;
     String tid;
     private OrderGoodsListAdapter mGoodsAdapter;
-    private String time;
 
     @Override
     protected void setListener() {
@@ -143,11 +141,10 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     }
 
     private void fillDataToView(OrderDetailBean orderDetailBean) {
-        time = orderDetailBean.getCreated().replace("T", " ");
         tx_order_id.setText("订单编号: " + orderDetailBean.getTid());
         tx_order_state.setText(orderDetailBean.getStatus_display());
         tx_custom_name.setText("姓名：" + orderDetailBean.getReceiver_name());
-        tx_custom_address.setText("地址：" + orderDetailBean.getReceiver_address());
+        tx_custom_address.setText("地址：" + orderDetailBean.getReceiver_state() + orderDetailBean.getReceiver_city() + orderDetailBean.getReceiver_address());
         tx_order_totalfee.setText("¥" + orderDetailBean.getTotal_fee());
         tx_order_discountfee.setText("¥" + orderDetailBean.getDiscount_fee());
         tx_order_postfee.setText("¥" + orderDetailBean.getPost_fee());
@@ -166,11 +163,9 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                     public void onNext(List<PackageBean> packageBeen) {
                         packageBeanList.addAll(packageBeen);
                         mGoodsAdapter.setPackageBeanList(packageBeanList);
-                        mGoodsAdapter.update(orderDetailBean.getOrders());
-
-                        mGoodsAdapter.setTimeStr(time);
-                        mGoodsAdapter.setTid(orderDetailBean.getTid());
+                        mGoodsAdapter.setData(orderDetailBean);
                         lv_goods.setAdapter(mGoodsAdapter);
+                        setListViewHeightBasedOnChildren(lv_goods);
                     }
                 });
         addSubscription(subscribe);
@@ -374,5 +369,24 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         builder.setTitle("提示");
         builder.setPositiveButton("OK", null);
         builder.create().show();
+    }
+
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null) {
+            return;
+        }
+
+        int totalHeight = 0;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            View listItem = listAdapter.getView(i, null, listView);
+            listItem.measure(0, 0);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight
+                + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
     }
 }

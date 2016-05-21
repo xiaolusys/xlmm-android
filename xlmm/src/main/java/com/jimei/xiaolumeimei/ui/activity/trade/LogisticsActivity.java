@@ -35,6 +35,7 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
     @Bind(R.id.tv_order_last_state)
     TextView lastStateTv;
     private String packetid = "";
+    private String company_code = "";
     private String time = "";
     private String tid = "";
 
@@ -45,9 +46,9 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
 
     @Override
     protected void initData() {
-        if (!"".equals(packetid)) {
+        if (!"".equals(packetid)&&!"".equals(company_code)) {
             Subscription subscribe = TradeModel.getInstance()
-                    .get_logistics_by_packagetid(packetid)
+                    .get_logistics_by_packagetid(packetid,company_code)
                     .subscribeOn(Schedulers.io())
                     .subscribe(new ServiceResponse<LogisticsBean>() {
 
@@ -126,11 +127,9 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
     @Override
     protected void getBundleExtras(Bundle extras) {
         packetid = extras.getString("packetid");
+        company_code = extras.getString("company_code");
         tid = extras.getString("tid");
         time = extras.getString("time");
-        if (packetid != null) {
-            JUtils.Log(TAG, packetid);
-        }
     }
 
     @Override

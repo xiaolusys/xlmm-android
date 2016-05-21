@@ -10,7 +10,7 @@
         android:id="@+id/tx_point_logtime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="aaa"
+        android:text=""
         android:textSize="15sp" />
 
     <TextView
@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:text="aaa"
+        android:text=""
         android:layout_marginRight="8dp"
         android:textColor="@color/colorAccent"
         android:textSize="15sp" />
