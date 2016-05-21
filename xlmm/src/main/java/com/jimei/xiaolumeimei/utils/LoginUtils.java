@@ -22,7 +22,9 @@ import rx.schedulers.Schedulers;
 public class LoginUtils {
   static String TAG = "LoginUtils";
   static SharedPreferences sharedPreferences;
+  static SharedPreferences sharedPreferences1;
   static SharedPreferences.Editor editor;
+  static SharedPreferences.Editor editor1;
   static UserInfoBean userinfo;
 
   public static void saveLoginInfo(boolean isSuccess, Context context, String username,
@@ -46,9 +48,14 @@ public class LoginUtils {
 
   public static void delLoginInfo(Context context) {
     sharedPreferences = context.getSharedPreferences("login_info", Context.MODE_PRIVATE);
+    sharedPreferences1 = context.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
     editor = sharedPreferences.edit();
     editor.clear();
     editor.apply();
+
+    editor1 = sharedPreferences1.edit();
+    editor1.clear();
+    editor1.apply();
       Log.d(TAG, "clear logininfo "  );
 
   }
