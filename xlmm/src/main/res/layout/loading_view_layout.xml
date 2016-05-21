@@ -19,13 +19,6 @@
       android:paddingTop="18dp"
       >
 
-    <com.jimei.xiaolumeimei.widget.ProgressBarCircularIndeterminateIndeterminate
-        android:id="@+id/progress_view"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="?attr/colorPrimary"
-        />
-
 
     <TextView
         android:id="@+id/tvLoading"

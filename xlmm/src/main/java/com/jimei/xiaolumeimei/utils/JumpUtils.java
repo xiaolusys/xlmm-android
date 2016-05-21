@@ -6,9 +6,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
-import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ChildListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.LadyListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActvityWeb;
@@ -17,6 +17,7 @@ import com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.OrderDetailActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.CouponActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMNinePicActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaInfoActivity;
 import com.jude.utils.JUtils;
@@ -43,25 +44,25 @@ public class JumpUtils {
       case XlmmConst.JUMP_PROMOTE_TODAY:
         intent = new Intent(context, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        intent.putExtra("fragment", 1);
+        //        intent.putExtra("fragment", 1);
         context.startActivity(intent);
         break;
       case XlmmConst.JUMP_PROMOTE_PREVIOUS:
         intent = new Intent(context, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        intent.putExtra("fragment", 2);
+        //        intent.putExtra("fragment", 2);
         context.startActivity(intent);
         break;
       case XlmmConst.JUMP_PRODUCT_CHILDLIST:
         intent = new Intent(context, ChildListActivity.class);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        intent.putExtra("fragment", 3);
+        //        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        //        intent.putExtra("fragment", 3);
         context.startActivity(intent);
         break;
       case XlmmConst.JUMP_PRODUCT_LADYLIST:
         intent = new Intent(context, LadyListActivity.class);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        intent.putExtra("fragment", 4);
+        //        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        //        intent.putExtra("fragment", 4);
         context.startActivity(intent);
         break;
       case XlmmConst.JUMP_PRODUCT_MODELLIST:
@@ -137,9 +138,18 @@ public class JumpUtils {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
       case XlmmConst.JUMP_CARTS:
-        intent = new Intent(context, CartActivity.class);
-        context.startActivity(intent);
-        ((Activity)context).finish();
+        if (LoginUtils.checkLoginState(context)) {
+          intent = new Intent(context, CartActivity.class);
+          context.startActivity(intent);
+          ((Activity) context).finish();
+        } else {
+          intent = new Intent(context, LoginActivity.class);
+          bundle = new Bundle();
+          bundle.putString("login", "cart");
+          intent.putExtras(bundle);
+          context.startActivity(intent);
+          ((Activity) context).finish();
+        }
     }
   }
 
@@ -195,7 +205,7 @@ public class JumpUtils {
         } else if (content[1].contains("refunds")) {
           jumpInfo.setType(XlmmConst.JUMP_REFUNDS);
           jumpInfo.setUrl(content[1]);
-        }else if (content[1].contains("shopping_cart")) {
+        } else if (content[1].contains("shopping_cart")) {
           jumpInfo.setType(XlmmConst.JUMP_CARTS);
           jumpInfo.setUrl(content[1]);
         }

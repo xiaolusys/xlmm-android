@@ -27,7 +27,6 @@ import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import butterknife.Bind;
 import cn.sharesdk.framework.ShareSDK;
 import com.google.gson.Gson;
 import com.jimei.xiaolumeimei.R;
@@ -37,7 +36,6 @@ import com.jimei.xiaolumeimei.htmlJsBridge.modules.AndroidJsBridge;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.widget.FlowLayout;
-import com.jimei.xiaolumeimei.widget.ProgressBarCircularIndeterminate;
 import com.jimei.xiaolumeimei.widget.TagAdapter;
 import com.jimei.xiaolumeimei.widget.TagFlowLayout;
 import com.jude.utils.JUtils;
@@ -68,7 +66,6 @@ public class ProductPopDetailActvityWeb extends BaseAppCompatActivityForDetail {
   private String sessionid;
   private int id;
   private List<ProductSkuDetailsBean.SkuInfoEntity> skuInfo;
-  @Bind(R.id.progress_view)ProgressBarCircularIndeterminate progressBar;
 
   @Override protected void setListener() {
   }
