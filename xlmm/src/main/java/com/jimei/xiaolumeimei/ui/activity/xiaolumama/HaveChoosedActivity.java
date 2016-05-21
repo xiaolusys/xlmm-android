@@ -8,7 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
-import butterknife.Bind;
+
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.MMHaveChooseAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -20,8 +20,11 @@ import com.jimei.xiaolumeimei.widget.dragrecyclerview.LinearRecyclerView;
 import com.jimei.xiaolumeimei.widget.dragrecyclerview.SuperRecyclerView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
 import rx.schedulers.Schedulers;
 
 /**
@@ -68,7 +71,7 @@ public class HaveChoosedActivity extends BaseSwipeBackCompatActivity {
           @Override public void onNext(MMShoppingBean mmShoppingBean) {
 
             if (null != mmShoppingBean) {
-              sharelink = mmShoppingBean.getShopInfo().getPreview_shop_link();
+              sharelink = mmShoppingBean.getShopInfo().getPreviewShopLink();
             }
           }
         });

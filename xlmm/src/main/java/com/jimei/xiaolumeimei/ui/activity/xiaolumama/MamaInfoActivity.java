@@ -13,8 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import butterknife.Bind;
-
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -45,6 +43,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
+import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -186,8 +185,8 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
                     public void onNext(MMShoppingBean mmShoppingBean) {
 
                         if (null != mmShoppingBean) {
-                            title = (String) mmShoppingBean.getShopInfo().getName();
-                            sharelink = mmShoppingBean.getShopInfo().getPreview_shop_link();
+                            title = mmShoppingBean.getShopInfo().getName();
+                            sharelink = mmShoppingBean.getShopInfo().getPreviewShopLink();
                             shareimg = mmShoppingBean.getShopInfo().getThumbnail();
                             desc = mmShoppingBean.getShopInfo().getDesc();
                         }
