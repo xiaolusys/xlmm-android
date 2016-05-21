@@ -116,9 +116,12 @@ public class JumpUtils {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         SharedPreferences sharedPreferences =
             context.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
-        String cookies = sharedPreferences.getString("Cookie", "");
+
+        String cookies = sharedPreferences.getString("cookiesString", "");
+        String domain = sharedPreferences.getString("cookiesDomain", "");
         Bundle bundle = new Bundle();
         bundle.putString("cookies", cookies);
+        bundle.putString("domain", domain);
         bundle.putString("actlink", jumpInfo.getUrl());
         intent.putExtras(bundle);
         context.startActivity(intent);
@@ -253,5 +256,23 @@ public class JumpUtils {
           ", url='" + url + '\'' +
           '}';
     }
+  }
+
+  public static void jumpToWebViewWithCookies(Context context,String actlink,int id,
+      Class<?>
+      classname){
+    Intent intent = new Intent(context, classname);
+    SharedPreferences sharedPreferences =
+        context.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+    String cookies = sharedPreferences.getString("cookiesString", "");
+    String domain = sharedPreferences.getString("cookiesDomain", "");
+    Bundle bundle = new Bundle();
+    bundle.putString("cookies", cookies);
+    bundle.putString("domain", domain);
+    bundle.putString("Cookie", sharedPreferences.getString("Cookie", ""));
+    bundle.putString("actlink", actlink);
+    bundle.putInt("id", id);
+    intent.putExtras(bundle);
+    context.startActivity(intent);
   }
 }

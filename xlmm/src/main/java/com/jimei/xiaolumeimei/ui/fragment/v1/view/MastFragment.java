@@ -163,7 +163,7 @@ public class MastFragment extends DialogFragment {
                                       //bundle.putString("cookies", cookies);
                                       sharedPreferences =
                                           mActivity.getSharedPreferences("xlmmCookiesAxiba",
-                                              mActivity.MODE_PRIVATE);
+                                              Context.MODE_PRIVATE);
                                       cookies =
                                           sharedPreferences.getString("cookiesString",
                                               "");
@@ -217,7 +217,7 @@ public class MastFragment extends DialogFragment {
                                     //cookies = sharedPreferences.getString("Cookies", "");
                                     sharedPreferences =
                                         mActivity.getSharedPreferences("xlmmCookiesAxiba",
-                                            mActivity.MODE_PRIVATE);
+                                            Context.MODE_PRIVATE);
                                     cookies =
                                         sharedPreferences.getString("cookiesString", "");
                                     domain =

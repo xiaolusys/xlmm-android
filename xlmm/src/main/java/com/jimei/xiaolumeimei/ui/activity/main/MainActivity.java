@@ -56,6 +56,7 @@ import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.MembershipPointActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.WalletActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.WxLoginBindPhoneActivity;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMStoreWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaInfoActivity;
 import com.jimei.xiaolumeimei.ui.fragment.v1.view.MastFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.TodayV2Fragment;
@@ -708,17 +709,22 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                                 if (!TextUtils.isEmpty(extra)) {
                                     JumpUtils.JumpInfo jump_info = JumpUtils.get_jump_info(extra);
                                     if (extra.startsWith("http://")) {
-                                        intent = new Intent(MainActivity.this,
-                                                ActivityWebViewActivity.class);
-                                        SharedPreferences sharedPreferences =
-                                                getSharedPreferences("xlmmCookiesAxiba",
-                                                        Context.MODE_PRIVATE);
-                                        String cookies = sharedPreferences.getString("Cookie", "");
-                                        Bundle bundle = new Bundle();
-                                        bundle.putString("cookies", cookies);
-                                        bundle.putString("actlink", extra);
-                                        intent.putExtras(bundle);
-                                        startActivity(intent);
+                                        //intent = new Intent(MainActivity.this,
+                                        //        ActivityWebViewActivity.class);
+                                        //SharedPreferences sharedPreferences =
+                                        //        getSharedPreferences("xlmmCookiesAxiba",
+                                        //                Context.MODE_PRIVATE);
+                                        //String cookies = sharedPreferences.getString("Cookie", "");
+                                        //Bundle bundle = new Bundle();
+                                        //bundle.putString("cookies", cookies);
+                                        //bundle.putString("actlink", extra);
+                                        //intent.putExtras(bundle);
+                                        //startActivity(intent);
+
+                                        JumpUtils.jumpToWebViewWithCookies(MainActivity
+                                            .this,extra,
+                                            -1,  ActivityWebViewActivity.class);
+
                                     } else {
                                         if (jump_info.getType() == XlmmConst.JUMP_PRODUCT_CHILDLIST) {
                                             intent = new Intent(MainActivity.this, ChildListActivity.class);
