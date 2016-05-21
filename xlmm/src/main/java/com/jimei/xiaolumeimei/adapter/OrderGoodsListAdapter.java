@@ -15,12 +15,14 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
+import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.PackageBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
@@ -43,17 +45,8 @@ public class OrderGoodsListAdapter extends BaseAdapter {
     private List<AllOrdersBean.ResultsEntity.OrdersEntity> dataSource;
     private List<PackageBean> packageBeanList;
     private String timeStr;
-    private String packetid;
     private String tid;
-
-
-    public void setTid(String tid) {
-        this.tid = tid;
-    }
-
-    public void setTimeStr(String timeStr) {
-        this.timeStr = timeStr;
-    }
+    private String stateStr;
 
     public void setPackageBeanList(List<PackageBean> packageBeanList) {
         this.packageBeanList = packageBeanList;
@@ -74,8 +67,16 @@ public class OrderGoodsListAdapter extends BaseAdapter {
 
     public void update(List<AllOrdersBean.ResultsEntity.OrdersEntity> list) {
         saveData(list);
-
         dataSource.addAll(list);
+        notifyDataSetChanged();
+    }
+
+    public void setData(OrderDetailBean orderDetailBean) {
+        stateStr = orderDetailBean.getStatus_display();
+        timeStr = orderDetailBean.getCreated().replace("T", " ");
+        tid = orderDetailBean.getTid();
+        saveData(orderDetailBean.getOrders());
+        dataSource.addAll(orderDetailBean.getOrders());
         notifyDataSetChanged();
     }
 
@@ -107,20 +108,24 @@ public class OrderGoodsListAdapter extends BaseAdapter {
         int refund_state = Integer.parseInt(data.get(position).get("refund_state"));
 
         if (convertView == null) {
+            convertView = LayoutInflater.from(context)
+                    .inflate(R.layout.item_order_detail_include_proc, null);
             if ((state == XlmmConst.ORDER_STATE_PAYED) || (state
                     == XlmmConst.ORDER_STATE_SENDED) || (state
                     == XlmmConst.ORDER_STATE_CONFIRM_RECEIVE)) {
-                convertView = LayoutInflater.from(context)
-                        .inflate(R.layout.item_order_detail_include_proc, null);
                 setBtnInfo(convertView, state, refund_state,
                         Boolean.parseBoolean(data.get(position).get("kill_title")));
                 setBtnListener(convertView, state, refund_state,
                         Integer.parseInt(data.get(position).get("goods_id")),
                         dataSource.get(position));
-                RelativeLayout layout = (RelativeLayout) convertView.findViewById(R.id.logistics_layout);
-                View view = convertView.findViewById(R.id.divider);
+            } else {
+                convertView.findViewById(R.id.rl_info).setVisibility(View.GONE);
+            }
+            LinearLayout layout = (LinearLayout) convertView.findViewById(R.id.logistics_layout);
+            View view = convertView.findViewById(R.id.divider);
+            if (packageBeanList.size() > position) {
                 if (position == 0) {
-                    view.setVisibility(View.GONE);
+                    view.setVisibility(View.VISIBLE);
                     layout.setVisibility(View.VISIBLE);
                 } else if (packageBeanList.get(position).getPackage_group_key().equals(packageBeanList.get(position - 1).getPackage_group_key())) {
                     view.setVisibility(View.GONE);
@@ -129,45 +134,43 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                     view.setVisibility(View.VISIBLE);
                     layout.setVisibility(View.VISIBLE);
                 }
-
-                if (packageBeanList.size() > position) {
-                    if (!"".equals(packageBeanList.get(position).getProcess_time())) {
-                        ((TextView) convertView.findViewById(R.id.tx_order_crttime)).setText("时间: " + packageBeanList.get(position).getProcess_time().replace("T", " "));
-                    } else {
-                        ((TextView) convertView.findViewById(R.id.tx_order_crttime)).setText("时间: " + timeStr);
-                    }
-                    ((TextView) convertView.findViewById(R.id.tx_order_crtstate)).setText(packageBeanList.get(position).getAssign_status_display());
-                    packetid = packageBeanList.get(position).getOut_sid();
-                    layout.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(context, LogisticsActivity.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putString("packetid", packetid);
-                            bundle.putString("tid", tid);
-                            bundle.putString("time", timeStr);
-                            intent.putExtras(bundle);
-                            context.startActivity(intent);
-                        }
-                    });
+                if (!"".equals(packageBeanList.get(position).getProcess_time()) && packageBeanList.get(position).getProcess_time() != null) {
+                    ((TextView) convertView.findViewById(R.id.tx_order_crttime)).setText("时间: " + packageBeanList.get(position).getProcess_time().replace("T", " "));
                 } else {
-                    layout.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(context, LogisticsActivity.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putString("packetid", "");
-                            bundle.putString("tid", tid);
-                            bundle.putString("time", timeStr);
-                            intent.putExtras(bundle);
-                            context.startActivity(intent);
-                        }
-                    });
                     ((TextView) convertView.findViewById(R.id.tx_order_crttime)).setText("时间: " + timeStr);
                 }
+                ((TextView) convertView.findViewById(R.id.name)).setText(packageBeanList.get(position).getLogistics_company_name());
+                ((TextView) convertView.findViewById(R.id.code)).setText(packageBeanList.get(position).getOut_sid());
+                ((TextView) convertView.findViewById(R.id.tx_order_crtstate)).setText(packageBeanList.get(position).getAssign_status_display());
+                String packetid = packageBeanList.get(position).getOut_sid();
+                String company_code = packageBeanList.get(position).getLogistics_company_code();
+                layout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(context, LogisticsActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("packetid", packetid);
+                        bundle.putString("tid", tid);
+                        bundle.putString("time", timeStr);
+                        bundle.putString("company_code", company_code);
+                        intent.putExtras(bundle);
+                        context.startActivity(intent);
+                    }
+                });
             } else {
-                convertView = LayoutInflater.from(context).inflate(R.layout.one_order_item, null);
+                if (position == 0) {
+                    view.setVisibility(View.VISIBLE);
+                    layout.setVisibility(View.VISIBLE);
+                } else {
+                    view.setVisibility(View.GONE);
+                    layout.setVisibility(View.GONE);
+                }
+                ((TextView) convertView.findViewById(R.id.tx_order_crttime)).setText("时间: " + timeStr);
+                ((TextView) convertView.findViewById(R.id.tx_order_crtstate)).setText(stateStr);
             }
+//            } else {
+//                convertView = LayoutInflater.from(context).inflate(R.layout.one_order_item, null);
+//            }
         }
 
         img_goods = (ImageView) convertView.findViewById(R.id.img_good);

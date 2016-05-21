@@ -43,7 +43,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
-                    android:text="待付款"
+                    android:text=""
                     android:textColor="@color/colorPrimary"
                     android:textColorHighlight="@color/colorAccent"
                     android:textSize="14sp" />
@@ -115,7 +115,7 @@
 
             <include layout="@layout/common_gap" />
 
-            <com.jimei.xiaolumeimei.widget.NestedListView
+            <ListView
                 android:id="@+id/lv_goods"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

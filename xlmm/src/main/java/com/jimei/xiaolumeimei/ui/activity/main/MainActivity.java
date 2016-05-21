@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -44,8 +43,6 @@ import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.model.UserNewModel;
-import com.jimei.xiaolumeimei.presenter.main.IMainPresenter;
-import com.jimei.xiaolumeimei.presenter.main.MainPresenter;
 import com.jimei.xiaolumeimei.ui.activity.product.BrandListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ChildListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.LadyListActivity;
@@ -69,7 +66,6 @@ import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
-import com.jimei.xiaolumeimei.view.main.IMainView;
 import com.jimei.xiaolumeimei.widget.BrandView;
 import com.jimei.xiaolumeimei.widget.badgelib.BadgeView;
 import com.jimei.xiaolumeimei.widget.banner.SliderLayout;
@@ -95,50 +91,22 @@ import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener,
-        View.OnClickListener, ViewPager.OnPageChangeListener, ScrollableLayout.OnScrollListener, SwipeRefreshLayout.OnRefreshListener, IMainView {
+        View.OnClickListener, ViewPager.OnPageChangeListener, ScrollableLayout.OnScrollListener, SwipeRefreshLayout.OnRefreshListener {
     private static final String POST_URL = "?imageMogr2/format/jpg/quality/80";
     public static String TAG = "MainActivity";
     Map<String, String> map = new HashMap<>();
     List<ImageView> imageViewList = new ArrayList<>();
-
-    public TextView getTvNickname() {
-        return tvNickname;
-    }
-
     TextView tvNickname;
-
-    public ImageView getImgUser() {
-        return imgUser;
-    }
-
     ImageView imgUser;
     TextView tvPoint;
-
-    public TextView getTvPoint() {
-        return tvPoint;
-    }
-
-    public TextView getTvCoupon() {
-        return tvCoupon;
-    }
-
-    public TextView getTvMoney() {
-        return tvMoney;
-    }
-
     TextView tvCoupon;
     TextView tvMoney;
     UserInfoBean userInfoBean = new UserInfoBean();
-    IMainPresenter presenter;
 
     @Bind(R.id.tool_bar)
     Toolbar toolbar;
     @Bind(R.id.rv_cart)
     RelativeLayout carts;
-
-    public ImageView getImg_mmentry() {
-        return img_mmentry;
-    }
 
     @Bind(R.id.img_mmentry)
     ImageView img_mmentry;
@@ -192,22 +160,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private int num;
     private BadgeView badge;
     private double budgetCash;
-
-    public TextView getMsg1() {
-        return msg1;
-    }
-
-    public TextView getMsg2() {
-        return msg2;
-    }
-
-    public TextView getMsg3() {
-        return msg3;
-    }
-
-    public ImageView getLoginFlag() {
-        return loginFlag;
-    }
 
     private TextView msg1;
     private TextView msg2;
@@ -277,8 +229,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     protected void initView() {
         findById();
-        presenter = new MainPresenter(this);
-        presenter.getView();
         StatusBarUtil.setColorForDrawerLayout(this, drawer,
                 getResources().getColor(R.color.colorAccent), 0);
         ActionBarDrawerToggle toggle =
@@ -291,7 +241,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
                     @Override
                     public void onDrawerOpened(View drawerView) {
-                        presenter.initDrawer();
+                        initDrawer();
                         invalidateOptionsMenu();
                     }
                 };
@@ -309,7 +259,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
 
     //购物车数量
-    @Override
     public void showBadge() {
         badge = new BadgeView(this);
         badge.setTextSizeOff(7);
@@ -319,53 +268,53 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         badge.setTargetView(image2);
     }
 
-//    //侧滑栏初始化
-//    public void initDrawer() {
-//        JUtils.Log(TAG, "侧滑栏初始化");
-//        if (!(LoginUtils.checkLoginState(getApplicationContext()))) {
-//            if (tvNickname != null) {
-//                tvNickname.setText("点击登录");
-//            }
-//        } else {
-//            if ((tvNickname != null) && (userInfoBean != null)) {
-//                tvNickname.setText(userInfoBean.getNick());
-//            }
-//            if ((userInfoBean != null) && (!TextUtils.isEmpty(
-//                    userInfoBean.getThumbnail()))) {
-//                ViewUtils.loadImgToImgView(MainActivity.this, imgUser,
-//                        userInfoBean.getThumbnail());
-//            }
-//            if ((null != userInfoBean) && (userInfoBean.getWaitpayNum() > 0)) {
-//                msg1.setVisibility(View.VISIBLE);
-//                msg1.setText(Integer.toString(userInfoBean.getWaitpayNum()));
-//            } else {
-//                msg1.setVisibility(View.INVISIBLE);
-//            }
-//            Log.i(TAG, "" + userInfoBean.getWaitpayNum());
-//
-//            if ((null != userInfoBean) && (userInfoBean.getWaitgoodsNum() > 0)) {
-//                msg2.setVisibility(View.VISIBLE);
-//                msg2.setText(Integer.toString(userInfoBean.getWaitgoodsNum()));
-//            } else {
-//                msg2.setVisibility(View.INVISIBLE);
-//            }
-//
-//            if ((null != userInfoBean) && (userInfoBean.getRefundsNum() > 0)) {
-//                msg3.setVisibility(View.VISIBLE);
-//                msg3.setText(Integer.toString(userInfoBean.getRefundsNum()));
-//            } else {
-//                msg3.setVisibility(View.INVISIBLE);
-//            }
-//            String pointStr = userInfoBean.getScore() + "";
-//            tvPoint.setText(pointStr);
-//            if (userInfoBean.getUserBudget() != null) {
-//                String moneyStr = (float) (Math.round(userInfoBean.getUserBudget().getBudgetCash() * 100)) / 100 + "";
-//                tvMoney.setText(moneyStr);
-//            }
-//            String couponStr = userInfoBean.getCouponNum() + "";
-//            tvCoupon.setText(couponStr);
-//        }
-//    }
+    //侧滑栏初始化
+    public void initDrawer() {
+        JUtils.Log(TAG, "侧滑栏初始化");
+        if (!(LoginUtils.checkLoginState(getApplicationContext()))) {
+            if (tvNickname != null) {
+                tvNickname.setText("点击登录");
+            }
+        } else {
+            if ((tvNickname != null) && (userInfoBean != null)) {
+                tvNickname.setText(userInfoBean.getNick());
+            }
+            if ((userInfoBean != null) && (!TextUtils.isEmpty(
+                    userInfoBean.getThumbnail()))) {
+                ViewUtils.loadImgToImgView(MainActivity.this, imgUser,
+                        userInfoBean.getThumbnail());
+            }
+            if ((null != userInfoBean) && (userInfoBean.getWaitpayNum() > 0)) {
+                msg1.setVisibility(View.VISIBLE);
+                msg1.setText(Integer.toString(userInfoBean.getWaitpayNum()));
+            } else {
+                msg1.setVisibility(View.INVISIBLE);
+            }
+            Log.i(TAG, "" + userInfoBean.getWaitpayNum());
+
+            if ((null != userInfoBean) && (userInfoBean.getWaitgoodsNum() > 0)) {
+                msg2.setVisibility(View.VISIBLE);
+                msg2.setText(Integer.toString(userInfoBean.getWaitgoodsNum()));
+            } else {
+                msg2.setVisibility(View.INVISIBLE);
+            }
+
+            if ((null != userInfoBean) && (userInfoBean.getRefundsNum() > 0)) {
+                msg3.setVisibility(View.VISIBLE);
+                msg3.setText(Integer.toString(userInfoBean.getRefundsNum()));
+            } else {
+                msg3.setVisibility(View.INVISIBLE);
+            }
+            String pointStr = userInfoBean.getScore() + "";
+            tvPoint.setText(pointStr);
+            if (userInfoBean.getUserBudget() != null) {
+                String moneyStr = (float) (Math.round(userInfoBean.getUserBudget().getBudgetCash() * 100)) / 100 + "";
+                tvMoney.setText(moneyStr);
+            }
+            String couponStr = userInfoBean.getCouponNum() + "";
+            tvCoupon.setText(couponStr);
+        }
+    }
 
     public void findById() {
         llayout = navigationView.getHeaderView(0);
@@ -940,45 +889,45 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         startActivity(intent);
     }
 
-//    public void getUserInfo() {
-//        Subscription subscribe = UserNewModel.getInstance()
-//                .getProfile()
-//                .subscribeOn(Schedulers.io())
-//                .subscribe(new ServiceResponse<UserInfoBean>() {
-//                    @Override
-//                    public void onNext(UserInfoBean userNewBean) {
-//                        if (userNewBean != null) {
-//                            userInfoBean = userNewBean;
-//                            if (LoginUtils.checkLoginState(getApplicationContext())) {
-//                                if ((userNewBean.getThumbnail() != null) && (!userNewBean.getThumbnail()
-//                                        .isEmpty())) {
-//                                    ViewUtils.loadImgToImgView(MainActivity.this, imgUser,
-//                                            userNewBean.getThumbnail());
-//                                }
-//                                if (userInfoBean != null) {
-//                                    if (userInfoBean.isHasUsablePassword()
-//                                            && userInfoBean.getMobile() != "") {
-//                                        loginFlag.setVisibility(View.GONE);
-//                                    } else {
-//                                        loginFlag.setVisibility(View.VISIBLE);
-//                                    }
-//                                }
-//                                if (null != userNewBean.getUserBudget()) {
-//                                    budgetCash = userNewBean.getUserBudget().getBudgetCash();
-//                                }
-//                                JUtils.Log(TAG, "mamaid " + userInfoBean.getXiaolumm().getId());
-//                                if ((userInfoBean.getXiaolumm() != null) && (userInfoBean.getXiaolumm()
-//                                        .getId() != 0)) {
-//                                    img_mmentry.setVisibility(View.VISIBLE);
-//                                } else {
-//                                    img_mmentry.setVisibility(View.INVISIBLE);
-//                                }
-//                            }
-//                        }
-//                    }
-//                });
-//        addSubscription(subscribe);
-//    }
+    public void getUserInfo() {
+        Subscription subscribe = UserNewModel.getInstance()
+                .getProfile()
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ServiceResponse<UserInfoBean>() {
+                    @Override
+                    public void onNext(UserInfoBean userNewBean) {
+                        if (userNewBean != null) {
+                            userInfoBean = userNewBean;
+                            if (LoginUtils.checkLoginState(getApplicationContext())) {
+                                if ((userNewBean.getThumbnail() != null) && (!userNewBean.getThumbnail()
+                                        .isEmpty())) {
+                                    ViewUtils.loadImgToImgView(MainActivity.this, imgUser,
+                                            userNewBean.getThumbnail());
+                                }
+                                if (userInfoBean != null) {
+                                    if (userInfoBean.isHasUsablePassword()
+                                            && userInfoBean.getMobile() != "") {
+                                        loginFlag.setVisibility(View.GONE);
+                                    } else {
+                                        loginFlag.setVisibility(View.VISIBLE);
+                                    }
+                                }
+                                if (null != userNewBean.getUserBudget()) {
+                                    budgetCash = userNewBean.getUserBudget().getBudgetCash();
+                                }
+                                JUtils.Log(TAG, "mamaid " + userInfoBean.getXiaolumm().getId());
+                                if ((userInfoBean.getXiaolumm() != null) && (userInfoBean.getXiaolumm()
+                                        .getId() != 0)) {
+                                    img_mmentry.setVisibility(View.VISIBLE);
+                                } else {
+                                    img_mmentry.setVisibility(View.INVISIBLE);
+                                }
+                            }
+                        }
+                    }
+                });
+        addSubscription(subscribe);
+    }
 
     @Override
     protected void onResume() {
@@ -1007,7 +956,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     }
                 });
         addSubscription(subscribe);
-        presenter.getUserInfo();
+        getUserInfo();
         JUtils.Log(TAG, "resume");
     }
 
@@ -1097,23 +1046,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 ((TomorrowV2Fragment) list.get(2)).load(swipeRefreshLayout);
                 break;
         }
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                SystemClock.sleep(15000);
-                if (swipeRefreshLayout != null) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (swipeRefreshLayout.isRefreshing()) {
-                                JUtils.Toast("刷新状态异常,请稍等片刻刷新~~ ");
-                            }
-                            swipeRefreshLayout.setRefreshing(false);
-                        }
-                    });
-                }
-            }
-        }).start();
     }
 
     private class MyFragmentAdapter extends FragmentPagerAdapter {
