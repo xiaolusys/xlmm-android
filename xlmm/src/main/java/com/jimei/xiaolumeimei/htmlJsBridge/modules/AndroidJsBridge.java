@@ -538,11 +538,11 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     ((ProductPopDetailActvityWeb) mContext).showPop(json);
   }
 
-  @JavascriptInterface public void jumToNativeLogin() {
+  @JavascriptInterface public void jumpToNativeLogin() {
     ((ProductPopDetailActvityWeb) mContext).jumToNativeLogin();
   }
 
-  @JavascriptInterface public void jumToNatvieCarts() {
+  @JavascriptInterface public void jumpToNatvieCarts() {
     ((ProductPopDetailActvityWeb) mContext).jumToNatvieCarts();
   }
 }
