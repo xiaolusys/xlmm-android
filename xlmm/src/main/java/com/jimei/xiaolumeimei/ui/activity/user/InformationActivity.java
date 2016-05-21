@@ -6,15 +6,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import butterknife.Bind;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.model.UserModel;
-import com.jimei.xiaolumeimei.ui.activity.main.DebugActivity;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
@@ -24,6 +21,7 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
+import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -189,19 +187,6 @@ public class InformationActivity extends BaseSwipeBackCompatActivity
                         }).show();
                 break;
 
-            case R.id.debug:
-                num++;
-                JUtils.Log(TAG, "num====" + num);
-                if (num == 8) {
-
-                    Intent intent = new Intent(InformationActivity.this, DebugActivity.class);
-
-                    startActivity(intent);
-                    finish();
-                } else if (num == 9) {
-                    num = 0;
-                }
-                break;
         }
     }
 }

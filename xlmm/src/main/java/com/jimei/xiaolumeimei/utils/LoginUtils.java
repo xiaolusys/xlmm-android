@@ -22,7 +22,9 @@ import rx.schedulers.Schedulers;
 public class LoginUtils {
   static String TAG = "LoginUtils";
   static SharedPreferences sharedPreferences;
+  static SharedPreferences sharedPreferences1;
   static SharedPreferences.Editor editor;
+  static SharedPreferences.Editor editor1;
   static UserInfoBean userinfo;
 
   public static void saveLoginInfo(boolean isSuccess, Context context, String username,
@@ -33,7 +35,7 @@ public class LoginUtils {
     editor.putString("password", password);
     editor.putBoolean("success", isSuccess);
     editor.apply();
-      Log.d(TAG, "save logininfo "  );
+    Log.d(TAG, "save logininfo ");
   }
 
   public static void saveLoginSuccess(boolean isSuccess, Context context) {
@@ -41,16 +43,21 @@ public class LoginUtils {
     editor = sharedPreferences.edit();
     editor.putBoolean("success", isSuccess);
     editor.apply();
-      Log.d(TAG, "save logininfo success"  );
+    Log.d(TAG, "save logininfo success");
   }
 
   public static void delLoginInfo(Context context) {
     sharedPreferences = context.getSharedPreferences("login_info", Context.MODE_PRIVATE);
+    sharedPreferences1 =
+        context.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
     editor = sharedPreferences.edit();
     editor.clear();
     editor.apply();
-      Log.d(TAG, "clear logininfo "  );
 
+    editor1 = sharedPreferences1.edit();
+    editor1.clear();
+    editor1.apply();
+    Log.d(TAG, "clear logininfo ");
   }
 
   //登录
@@ -99,35 +106,37 @@ public class LoginUtils {
 
   //获取用户登录状态
   public static void login(Context context) {
-    if(checkLoginState(context)){
+    if (checkLoginState(context)) {
       return;
-    }
-    else{
+    } else {
       //需要跳转到登录界面
       Intent intent = new Intent(context, LoginActivity.class);
-      Log.d(TAG, "have not logined, "   + "jump to LoginActivity");
+      Log.d(TAG, "have not logined, " + "jump to LoginActivity");
       context.startActivity(intent);
     }
   }
 
-  public static void setPushUserAccount(Context context, String mRegId){
+  public static void setPushUserAccount(Context context, String mRegId) {
     //register xiaomi push
-    JUtils.Log(TAG, "regid: " + mRegId
-        + " devid:"+((TelephonyManager) context.getSystemService( Context.TELEPHONY_SERVICE ))
-        .getDeviceId());
-    UserModel.getInstance().getUserAccount("android", mRegId,
-        ((TelephonyManager) context.getSystemService(
+    JUtils.Log(TAG,
+        "regid: " + mRegId + " devid:" + ((TelephonyManager) context.getSystemService(
+            Context.TELEPHONY_SERVICE)).getDeviceId());
+    UserModel.getInstance()
+        .getUserAccount("android", mRegId, ((TelephonyManager) context.getSystemService(
             Context.TELEPHONY_SERVICE)).getDeviceId())
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<UserAccountBean>() {
           @Override public void onNext(UserAccountBean user) {
             JUtils.Log(TAG, "UserAccountBean:, " + user.toString());
-            if((getUserAccount(context) != null) && ((!getUserAccount(context).isEmpty()))
-                && (!getUserAccount(context).equals(user.getUserAccount()))) {
-              MiPushClient.unsetUserAccount(context.getApplicationContext(), getUserAccount(context), null);
+            if ((getUserAccount(context) != null) && ((!getUserAccount(
+                context).isEmpty())) && (!getUserAccount(context).equals(
+                user.getUserAccount()))) {
+              MiPushClient.unsetUserAccount(context.getApplicationContext(),
+                  getUserAccount(context), null);
               JUtils.Log(TAG, "unset useraccount: " + getUserAccount(context));
             }
-            MiPushClient.setUserAccount(context.getApplicationContext(), user.getUserAccount(), null);
+            MiPushClient.setUserAccount(context.getApplicationContext(),
+                user.getUserAccount(), null);
           }
 
           @Override public void onCompleted() {
@@ -147,7 +156,7 @@ public class LoginUtils {
     editor = sharedPreferences.edit();
     editor.putString("userAccount", userAccount);
     editor.apply();
-    Log.d(TAG, "save saveUserAccount "  );
+    Log.d(TAG, "save saveUserAccount ");
   }
 
   public static void delUserAccount(Context context, String userAccount) {
@@ -155,7 +164,7 @@ public class LoginUtils {
     editor = sharedPreferences.edit();
     editor.putString("userAccount", "");
     editor.apply();
-    Log.d(TAG, "delUserAccount "  );
+    Log.d(TAG, "delUserAccount ");
   }
 
   public static String getUserAccount(Context context) {
@@ -166,5 +175,4 @@ public class LoginUtils {
 
     return account;
   }
-
 }

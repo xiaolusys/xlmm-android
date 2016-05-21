@@ -121,34 +121,34 @@ public class PreviousAdapter extends RecyclerView.Adapter<PreviousAdapter.Previo
 
     holder.card.setOnClickListener(v -> {
 
-      //      String product_id = null;
-      //      int model_id = 0;
-      //      String name = null;
-      //      Bundle bundle;
+      //String product_id = null;
+      //int model_id = 0;
+      //String name = null;
+      //Bundle bundle;
       //
-      //      try {
-      //        product_id = mList.get(position).getId();
-      //        model_id = mList.get(position).getModelId();
-      //        name = mList.get(position).getName();
-      //      } catch (Exception e) {
-      //        e.printStackTrace();
-      //      }
+      //try {
+      //  product_id = mList.get(position).getId();
+      //  model_id = mList.get(position).getModelId();
+      //  name = mList.get(position).getName();
+      //} catch (Exception e) {
+      //  e.printStackTrace();
+      //}
       //
-      //      bundle = new Bundle();
-      //      bundle.putString("product_id", product_id);
-      //      bundle.putInt("model_id", model_id);
-      //      if (name != null) {
-      //        bundle.putString("name", name.split("/")[0]);
-      //      }
-      //      if (productModel.isIsSingleSpec()) {
-      //        Intent intent = new Intent(mContext, ProductDetailActvityWeb.class);
-      //        intent.putExtras(bundle);
-      //        mContext.startActivity(intent);
-      //      } else {
-      //        Intent intent = new Intent(mContext, TongkuanActivity.class);
-      //        intent.putExtras(bundle);
-      //        mContext.startActivity(intent);
-      //      }
+      //bundle = new Bundle();
+      //bundle.putString("product_id", product_id);
+      //bundle.putInt("model_id", model_id);
+      //if (name != null) {
+      //  bundle.putString("name", name.split("/")[0]);
+      //}
+      //if (productModel.isIsSingleSpec()) {
+      //  Intent intent = new Intent(mContext, ProductDetailActvityWeb.class);
+      //  intent.putExtras(bundle);
+      //  mContext.startActivity(intent);
+      //} else {
+      //  Intent intent = new Intent(mContext, TongkuanActivity.class);
+      //  intent.putExtras(bundle);
+      //  mContext.startActivity(intent);
+      //}
 
       int modelId = mList.get(position).getModelId();
       Intent intent = new Intent(mContext, ProductPopDetailActvityWeb.class);

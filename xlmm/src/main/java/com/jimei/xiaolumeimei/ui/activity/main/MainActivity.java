@@ -711,9 +711,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                                         intent = new Intent(MainActivity.this,
                                                 ActivityWebViewActivity.class);
                                         SharedPreferences sharedPreferences =
-                                                getSharedPreferences("COOKIESxlmm",
+                                                getSharedPreferences("xlmmCookiesAxiba",
                                                         Context.MODE_PRIVATE);
-                                        String cookies = sharedPreferences.getString("Cookies", "");
+                                        String cookies = sharedPreferences.getString("Cookie", "");
                                         Bundle bundle = new Bundle();
                                         bundle.putString("cookies", cookies);
                                         bundle.putString("actlink", extra);

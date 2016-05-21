@@ -17,6 +17,7 @@ import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
+import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.widget.ClearEditText;
@@ -180,8 +181,20 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                                   Intent intent = new Intent(mContext, CommonWebViewActivity.class);
                                   //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                   SharedPreferences sharedPreferences =
-                                          getSharedPreferences("COOKIESxlmm", Context.MODE_PRIVATE);
-                                  String cookies = sharedPreferences.getString("Cookies", "");
+                                          getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+                                  String cookies = sharedPreferences.getString("Cookie", "");
+                                  Bundle bundle = new Bundle();
+                                  bundle.putString("cookies", cookies);
+                                  bundle.putString("actlink", actlink);
+                                  intent.putExtras(bundle);
+                                  startActivity(intent);
+                                  finish();
+                                }else if (login.equals("prodcutweb")) {
+                                  Intent intent = new Intent(mContext, ProductPopDetailActvityWeb.class);
+                                  //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                  SharedPreferences sharedPreferences =
+                                      getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+                                  String cookies = sharedPreferences.getString("Cookie", "");
                                   Bundle bundle = new Bundle();
                                   bundle.putString("cookies", cookies);
                                   bundle.putString("actlink", actlink);

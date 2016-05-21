@@ -30,7 +30,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
-import com.jimei.xiaolumeimei.ui.activity.user.PhoneLoginActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.utils.CameraUtils;
 import com.jimei.xiaolumeimei.utils.FileUtils;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
@@ -319,7 +319,7 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     if ((partyShareInfo == null)
         || (partyShareInfo.getQrcodeLink() == null)
         || (partyShareInfo.getQrcodeLink().equals(""))) {
-      JUtils.Log(TAG, "saveTowDimenCode : fail,Qrcodelink=null" );
+      JUtils.Log(TAG, "saveTowDimenCode : fail,Qrcodelink=null");
       return;
     } else {
       JUtils.Log(TAG, "saveTowDimenCode : Qrcodelink=" + partyShareInfo.getQrcodeLink());
@@ -354,7 +354,7 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
 
         webView.loadUrl(partyShareInfo.getQrcodeLink());
         //Bitmap bmp= captureWebView(webView);
-        View cv = ((BaseSwipeBackCompatActivity)mContext).getWindow().getDecorView();
+        View cv = ((BaseSwipeBackCompatActivity) mContext).getWindow().getDecorView();
         Bitmap bmp = catchWebScreenshot(webView, cv.getWidth(), cv.getHeight(),
             partyShareInfo.getShareLink(), mContext);
         /*String fileName = Environment.getExternalStorageDirectory()
@@ -399,8 +399,6 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
                 JUtils.Toast("小鹿美美需要存储权限存储图片,请再次点击保存并打开权限许可.");
               }
             });
-
-
       } catch (Exception e) {
         e.printStackTrace();
       }
@@ -432,7 +430,6 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
             //    + context.getResources().getString(R.string.share_2dimen_pic_name)
             //    + ".jpg";
             //BitmapUtil.saveBitmap(b, fileName);
-
 
           }
         });
@@ -531,7 +528,7 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
   }
 
   @JavascriptInterface public void callNativeLoginActivity(String pageUrl) {
-    Intent intent = new Intent(mContext, PhoneLoginActivity.class);
+    Intent intent = new Intent(mContext, LoginActivity.class);
     Bundle bundle = new Bundle();
     bundle.putString("login", "h5");
     bundle.putString("actlink", pageUrl);
@@ -540,8 +537,15 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     mContext.finish();
   }
 
-
   @JavascriptInterface public void showSkuPopup(String json) {
     ((ProductPopDetailActvityWeb) mContext).showPop(json);
+  }
+
+  @JavascriptInterface public void jumpToNativeLogin() {
+    ((ProductPopDetailActvityWeb) mContext).jumToNativeLogin();
+  }
+
+  @JavascriptInterface public void callNativeBack() {
+    mContext.finish();
   }
 }

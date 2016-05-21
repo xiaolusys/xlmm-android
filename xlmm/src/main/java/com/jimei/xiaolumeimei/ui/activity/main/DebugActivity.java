@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import butterknife.Bind;
+
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
@@ -21,6 +21,8 @@ import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.xiaomi.mipush.sdk.MiPushClient;
+
+import butterknife.Bind;
 import rx.schedulers.Schedulers;
 
 /**
@@ -43,6 +45,7 @@ public class DebugActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.lin) RadioButton lin;
   @Bind(R.id.lei) RadioButton lei;
   @Bind(R.id.enjun) RadioButton enjun;
+  @Bind(R.id.shawn) RadioButton shawn;
   @Bind(R.id.rg) RadioGroup rg;
 
   @Override protected void setListener() {
@@ -167,6 +170,9 @@ public class DebugActivity extends BaseSwipeBackCompatActivity
 
       case R.id.enjun:
         editDebug.setText(enjun.getText().toString().trim());
+        break;
+      case R.id.shawn:
+        editDebug.setText(shawn.getText().toString().trim());
         break;
     }
   }
