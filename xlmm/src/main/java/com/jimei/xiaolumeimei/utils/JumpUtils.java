@@ -1,5 +1,6 @@
 package com.jimei.xiaolumeimei.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,6 +14,7 @@ import com.jimei.xiaolumeimei.ui.activity.product.LadyListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActvityWeb;
 import com.jimei.xiaolumeimei.ui.activity.product.TongkuanActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity;
+import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.OrderDetailActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.CouponActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMNinePicActivity;
@@ -134,6 +136,10 @@ public class JumpUtils {
         intent = new Intent(context, AllRefundsActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
+      case XlmmConst.JUMP_CARTS:
+        intent = new Intent(context, CartActivity.class);
+        context.startActivity(intent);
+        ((Activity)context).finish();
     }
   }
 
@@ -188,6 +194,9 @@ public class JumpUtils {
           jumpInfo.setUrl(content[1]);
         } else if (content[1].contains("refunds")) {
           jumpInfo.setType(XlmmConst.JUMP_REFUNDS);
+          jumpInfo.setUrl(content[1]);
+        }else if (content[1].contains("shopping_cart")) {
+          jumpInfo.setType(XlmmConst.JUMP_CARTS);
           jumpInfo.setUrl(content[1]);
         }
       }

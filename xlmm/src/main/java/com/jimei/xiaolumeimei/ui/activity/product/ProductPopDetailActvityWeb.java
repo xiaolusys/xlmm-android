@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.ui.activity.product;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -26,7 +27,7 @@ import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import cn.sharesdk.framework.ShareSDK;
+
 import com.google.gson.Gson;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseAppCompatActivityForDetail;
@@ -39,9 +40,12 @@ import com.jimei.xiaolumeimei.widget.FlowLayout;
 import com.jimei.xiaolumeimei.widget.TagAdapter;
 import com.jimei.xiaolumeimei.widget.TagFlowLayout;
 import com.jude.utils.JUtils;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import cn.sharesdk.framework.ShareSDK;
 
 /**
  * Created by 优尼世界 on 15/12/29.
@@ -116,6 +120,7 @@ public class ProductPopDetailActvityWeb extends BaseAppCompatActivityForDetail {
     return R.layout.activity_popdetail;
   }
 
+  @TargetApi(Build.VERSION_CODES.KITKAT)
   @SuppressLint("JavascriptInterface") @Override protected void initViews() {
     JUtils.Log(TAG, "initViews");
     ShareSDK.initSDK(this);
@@ -169,7 +174,7 @@ public class ProductPopDetailActvityWeb extends BaseAppCompatActivityForDetail {
       mWebView.getSettings().setLoadWithOverviewMode(true);
       mWebView.getSettings().setUseWideViewPort(true);
       mWebView.setDrawingCacheEnabled(true);
-      //      mWebView.setWebContentsDebuggingEnabled(true);
+            mWebView.setWebContentsDebuggingEnabled(true);
 
       mWebView.setWebChromeClient(new WebChromeClient() {
         @Override public void onProgressChanged(WebView view, int newProgress) {

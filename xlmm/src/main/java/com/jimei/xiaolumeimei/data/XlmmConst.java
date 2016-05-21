@@ -41,6 +41,7 @@ public class XlmmConst {
     public static  final int JUMP_XIAOLUMAMA = 10;
     public static  final int JUMP_XIAOLUMAMA_DAILYPOST = 11;
     public static  final int JUMP_REFUNDS =12;
+    public static  final int JUMP_CARTS =13;
 
     public static  final String JUMP_PREFIX = "com.jimei.xlmm://app/v1/";
 
