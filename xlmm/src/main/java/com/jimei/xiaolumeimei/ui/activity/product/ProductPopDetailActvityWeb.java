@@ -27,25 +27,23 @@ import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
+import butterknife.Bind;
+import cn.sharesdk.framework.ShareSDK;
 import com.google.gson.Gson;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseAppCompatActivityForDetail;
 import com.jimei.xiaolumeimei.entities.ProductSkuDetailsBean;
-import com.jimei.xiaolumeimei.htmlJsBridge.Ponto;
 import com.jimei.xiaolumeimei.htmlJsBridge.modules.AndroidJsBridge;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.widget.FlowLayout;
+import com.jimei.xiaolumeimei.widget.ProgressBarCircularIndeterminate;
 import com.jimei.xiaolumeimei.widget.TagAdapter;
 import com.jimei.xiaolumeimei.widget.TagFlowLayout;
 import com.jude.utils.JUtils;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import cn.sharesdk.framework.ShareSDK;
 
 /**
  * Created by 优尼世界 on 15/12/29.
@@ -70,15 +68,9 @@ public class ProductPopDetailActvityWeb extends BaseAppCompatActivityForDetail {
   private String sessionid;
   private int id;
   private List<ProductSkuDetailsBean.SkuInfoEntity> skuInfo;
-  private Ponto mPonto;
+  @Bind(R.id.progress_view)ProgressBarCircularIndeterminate progressBar;
 
   @Override protected void setListener() {
-    //    mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-    //      @Override public void onClick(View v) {
-    //        JUtils.Log(TAG, "setNavigationOnClickListener finish");
-    //        finish();
-    //      }
-    //    });
   }
 
   @Override protected void initData() {
