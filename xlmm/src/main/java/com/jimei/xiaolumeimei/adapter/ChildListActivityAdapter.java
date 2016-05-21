@@ -1,9 +1,6 @@
 package com.jimei.xiaolumeimei.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +12,7 @@ import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
+import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.zhy.autolayout.utils.AutoUtils;
 import java.util.ArrayList;
@@ -177,20 +175,10 @@ public class ChildListActivityAdapter
       //}
 
       int modelId = mList.get(position).getModelId();
-      Intent intent = new Intent(mContext, ProductPopDetailActvityWeb.class);
 
-      SharedPreferences sharedPreferences =
-          mContext.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
-      String cookies = sharedPreferences.getString("cookiesString", "");
-      String domain = sharedPreferences.getString("cookiesDomain", "");
-      Bundle bundle = new Bundle();
-      bundle.putString("cookies", cookies);
-      bundle.putString("domain", domain);
-      bundle.putString("Cookie", sharedPreferences.getString("Cookie", ""));
-      bundle.putString("actlink", mList.get(position).getWebUrl());
-      bundle.putInt("id", modelId);
-      intent.putExtras(bundle);
-      mContext.startActivity(intent);
+      JumpUtils.jumpToWebViewWithCookies(mContext,mList.get(position).getWebUrl(),
+          modelId, ProductPopDetailActvityWeb.class);
+
     });
   }
 
