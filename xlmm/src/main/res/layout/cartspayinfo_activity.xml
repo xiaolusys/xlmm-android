@@ -5,30 +5,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar_layout"
+    <com.jimei.xiaolumeimei.widget.XlmmTitleView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center"
-                android:text="确认订单"
-                android:textColor="@android:color/white"
-                android:textSize="16sp" />
-        </android.support.v7.widget.Toolbar>
-
-    </android.support.design.widget.AppBarLayout>
+        app:xlmm_title="确认订单" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -215,6 +195,7 @@
                 android:background="@color/white"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
+                android:visibility="gone"
                 android:orientation="horizontal">
 
                 <TextView
@@ -222,22 +203,15 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:padding="8dp"
-                    android:text="留言:"
+                    android:text="物流"
                     android:textSize="28px" />
 
-                <EditText
-                    android:id="@+id/edit_query"
+                <android.support.v7.widget.AppCompatSpinner
+                    android:id="@+id/spinner"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginRight="8dp"
-                    android:background="@null"
-                    android:gravity="center_vertical"
-                    android:hint="选填:快递发韵达,邮政都包邮哦"
-                    android:maxLength="30"
-                    android:singleLine="true"
-                    android:textColorHint="@color/b9"
-                    android:textCursorDrawable="@drawable/color_cursor"
-                    android:textSize="15sp" />
+                    android:gravity="center" />
 
             </LinearLayout>
 
@@ -380,29 +354,29 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:padding="5dp">
 
                 <CheckBox
                     android:id="@+id/cb_rule"
-                    android:checked="true"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:checked="true" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="8dp"
-                    android:textSize="14sp"
-                    android:text="我已阅读并同意" />
+                    android:text="我已阅读并同意"
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/tv_rule"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="小鹿美美购买条款"
                     android:textColor="@color/book_loading_book"
-                    android:textSize="14sp"
-                    android:text="小鹿美美购买条款" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
 

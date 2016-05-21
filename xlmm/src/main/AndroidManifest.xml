@@ -138,14 +138,6 @@
             android:label="@string/title_activity_refunds"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
-            android:name=".ui.activity.trade.WaitPayOrdersActivity"
-            android:label="@string/title_activity_waitsend"
-            android:theme="@style/AppTheme.TransparentActivity" />
-        <activity
-            android:name=".ui.activity.trade.WaitSendOrdersActivity"
-            android:label="@string/title_activity_waitsend"
-            android:theme="@style/AppTheme.TransparentActivity" />
-        <activity
             android:name=".ui.activity.user.InformationActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity

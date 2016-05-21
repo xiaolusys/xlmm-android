@@ -11,9 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.iwgang.countdownview.CountdownView;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -25,11 +27,13 @@ import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -146,20 +150,39 @@ public class TodayV2Fragment extends BaseFragment {
                 initLeftTime();
               }
             } catch (Exception ex) {
-            }
-          }
 
-          @Override public void onCompleted() {
-            super.onCompleted();
-            //loading.post(loading::stop);
-            if (swipeRefreshLayout != null) {
-              swipeRefreshLayout.setRefreshing(false);
-            } else {
-              hideIndeterminateProgressDialog();
-            }
-          }
-        });
-  }
+                        }
+                    }
+
+                    @Override
+                    public void onCompleted() {
+                        super.onCompleted();
+                        //loading.post(loading::stop);
+                        if (swipeRefreshLayout != null) {
+                            swipeRefreshLayout.setRefreshing(false);
+                        } else {
+                            hideIndeterminateProgressDialog();
+                        }
+                    }
+                });
+
+//        subscribe2 = Observable.timer(1, 1, TimeUnit.SECONDS)
+//                .onBackpressureDrop()
+//                .map(aLong -> calcLeftTime(left))
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Action1<Long>() {
+//                    @Override
+//                    public void call(Long aLong) {
+//                        if (aLong > 0) {
+//                            countTime.updateShow(aLong);
+//                        } else {
+//                            countTime.setVisibility(View.INVISIBLE);
+//                        }
+//                    }
+//                }, Throwable::printStackTrace);
+    }
+
+
 
   private void initLeftTime() {
     if (thread == null) {
@@ -168,7 +191,7 @@ public class TodayV2Fragment extends BaseFragment {
           while (left > 0) {
             left--;
             SystemClock.sleep(1);
-            FragmentActivity activity = TodayV2Fragment.this.getActivity();
+            FragmentActivity activity = getActivity();
             if (activity != null) {
               activity.runOnUiThread(new Runnable() {
                 @Override public void run() {

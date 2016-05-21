@@ -208,7 +208,7 @@ public class CityPicker extends LinearLayout {
             return;
           counyPicker.setData(citycodeUtil.getCouny(couny_map,
               citycodeUtil.getCity_list_code().get(id)));
-          counyPicker.setDefault(1);
+          counyPicker.setDefault(0);
           int lastDay = Integer.valueOf(cityPicker.getListSize());
           if (id > lastDay) {
             cityPicker.setDefault(lastDay - 1);

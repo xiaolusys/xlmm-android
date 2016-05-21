@@ -1,5 +1,7 @@
 package com.jimei.xiaolumeimei.xlmmService;
 
+import android.widget.ListView;
+
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.entities.AddCartsBean;
 import com.jimei.xiaolumeimei.entities.AddressBean;
@@ -42,6 +44,7 @@ import com.jimei.xiaolumeimei.entities.NinePicBean;
 import com.jimei.xiaolumeimei.entities.OderCarryBean;
 import com.jimei.xiaolumeimei.entities.OneDayAgentOrdersBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
+import com.jimei.xiaolumeimei.entities.PackageBean;
 import com.jimei.xiaolumeimei.entities.PayInfoBean;
 import com.jimei.xiaolumeimei.entities.PointLogBean;
 import com.jimei.xiaolumeimei.entities.PortalBean;
@@ -66,7 +69,11 @@ import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.UserWithdrawResult;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.entities.WxPubAuthInfo;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
+
 import okhttp3.ResponseBody;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -103,12 +110,13 @@ public interface XlmmService {
     Observable<ChildListBean> getChildList(
             @Query("page") int page,
             @Query("page_size") int page_size);
+
     //童装分页列表
     @GET("/rest/v1/products/childlist")
     Observable<ChildListBean> getChildList(
             @Query("page") int page,
             @Query("page_size") int page_size,
-            @Query("order_by")String order_by);
+            @Query("order_by") String order_by);
 
 
     //女装列表
@@ -244,8 +252,7 @@ public interface XlmmService {
             @Field("discount_fee") String discount_fee,
             @Field("total_fee") String total_fee,
             @Field("uuid") String uuid,
-            @Field("pay_extras") String pay_extras,
-            @Field("buyer_message") String buyer_message
+            @Field("pay_extras") String pay_extras
     );
 
 
@@ -307,6 +314,12 @@ public interface XlmmService {
     @GET("/rest/v1/trades/{pk}/details")
     Observable<OrderDetailBean> getOrderDetail(
             @Path("pk") int order_id);
+
+    //根据订单号获取包裹信息
+    @GET("/rest/packageskuitem")
+    Observable<ArrayList<PackageBean>> getPackageList(
+            @Query("sale_trade_id") String sale_trade_id
+    );
 
     //获取所有待支付订单
     @GET("/rest/v1/trades/waitpay")
@@ -438,7 +451,9 @@ public interface XlmmService {
 
     //获取用户积分记录信息
     @GET("/rest/v1/integrallog")
-    Observable<PointLogBean> getPointLogBean();
+    Observable<PointLogBean> getPointLogBean(
+            @Query("page")String page
+    );
 
     //获取用户未使用优惠券信息
     @GET("/rest/v1/usercoupons")
@@ -871,6 +886,14 @@ public interface XlmmService {
     @GET("/rest/v1/wuliu/get_wuliu_by_tid")
     Observable<LogisticsBean> get_logistics(@Query("tid") String tid);
 
+    //获取物流信息
+    @GET("/rest/v1/wuliu/get_wuliu_by_packetid")
+    Observable<LogisticsBean> get_logistics_by_packagetid(
+            @Query("packetid") String packetid,
+            @Query("company_code") String company_code
+    );
+
+
     @GET("/rest/v1/portal")
     Observable<PortalBean> getPortalBean(
 
@@ -893,6 +916,6 @@ public interface XlmmService {
     @FormUrlEncoded
     @POST("/rest/v1/users/open_debug_for_app")
     Observable<CodeBean> openDebug(
-            @Field("debug_secret")String debug_secret
+            @Field("debug_secret") String debug_secret
     );
 }
