@@ -163,8 +163,8 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                         Intent intent = new Intent(mContext, CommonWebViewActivity.class);
                         //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         SharedPreferences sharedPreferences =
-                            getSharedPreferences("COOKIESxlmm", Context.MODE_PRIVATE);
-                        String cookies = sharedPreferences.getString("Cookies", "");
+                            getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+                        String cookies = sharedPreferences.getString("Cookie", "");
                         Bundle bundle = new Bundle();
                         bundle.putString("cookies", cookies);
                         bundle.putString("actlink", actlink);
@@ -175,8 +175,8 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                         Intent intent = new Intent(mContext, ProductPopDetailActvityWeb.class);
                         //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         SharedPreferences sharedPreferences =
-                            getSharedPreferences("COOKIESxlmm", Context.MODE_PRIVATE);
-                        String cookies = sharedPreferences.getString("Cookies", "");
+                            getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+                        String cookies = sharedPreferences.getString("Cookie", "");
                         Bundle bundle = new Bundle();
                         bundle.putString("cookies", cookies);
                         bundle.putString("actlink", actlink);

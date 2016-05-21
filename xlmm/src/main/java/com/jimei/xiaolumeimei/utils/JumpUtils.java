@@ -115,8 +115,8 @@ public class JumpUtils {
         intent = new Intent(context, CommonWebViewActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         SharedPreferences sharedPreferences =
-            context.getSharedPreferences("COOKIESxlmm", Context.MODE_PRIVATE);
-        String cookies = sharedPreferences.getString("Cookies", "");
+            context.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+        String cookies = sharedPreferences.getString("Cookie", "");
         Bundle bundle = new Bundle();
         bundle.putString("cookies", cookies);
         bundle.putString("actlink", jumpInfo.getUrl());
