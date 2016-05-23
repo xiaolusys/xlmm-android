@@ -28,8 +28,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import butterknife.Bind;
-
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.BrandlistAdapter;
 import com.jimei.xiaolumeimei.base.BaseActivity;
@@ -56,7 +54,6 @@ import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.MembershipPointActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.WalletActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.WxLoginBindPhoneActivity;
-import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMStoreWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaInfoActivity;
 import com.jimei.xiaolumeimei.ui.fragment.v1.view.MastFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.TodayV2Fragment;
@@ -86,6 +83,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.Bind;
 import okhttp3.Call;
 import okhttp3.ResponseBody;
 import rx.Subscription;
@@ -673,15 +671,19 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     MainActivity.this, childImage);
         }
     }
-
+    List<PortalBean.PostersBean> posters = new ArrayList<>();
     public void initSliderLayout(PortalBean postBean) throws NullPointerException {
         JUtils.Log(TAG, "refreshSliderLayout");
-        List<PortalBean.PostersBean> posters = postBean.getPosters();
+
+
+        posters.clear();
+        map.clear();
+
+        posters.addAll(postBean.getPosters());
 
         for (int i = 0; i < posters.size(); i++) {
             map.put(posters.get(i).getPic_link(), posters.get(i).getApp_link());
         }
-
         if (mSliderLayout != null) {
             mSliderLayout.removeAllSliders();
         }
