@@ -1,7 +1,6 @@
 package com.jimei.xiaolumeimei.ui.activity.product;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -109,7 +108,7 @@ public class ProductPopDetailActvityWeb extends BaseAppCompatActivityForDetail {
     return R.layout.activity_popdetail;
   }
 
-  @TargetApi(Build.VERSION_CODES.KITKAT)
+  //@TargetApi(Build.VERSION_CODES.KITKAT)
   @SuppressLint("JavascriptInterface") @Override protected void initViews() {
     JUtils.Log(TAG, "initViews");
     ShareSDK.initSDK(this);
@@ -163,7 +162,7 @@ public class ProductPopDetailActvityWeb extends BaseAppCompatActivityForDetail {
       mWebView.getSettings().setLoadWithOverviewMode(true);
       mWebView.getSettings().setUseWideViewPort(true);
       mWebView.setDrawingCacheEnabled(true);
-            mWebView.setWebContentsDebuggingEnabled(true);
+            //mWebView.setWebContentsDebuggingEnabled(true);
 
       mWebView.setWebChromeClient(new WebChromeClient() {
         @Override public void onProgressChanged(WebView view, int newProgress) {
