@@ -111,6 +111,14 @@
                     android:textSize="14sp"
                     android:visibility="invisible" />
 
+                <ImageView
+                    android:id="@+id/right_flag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:src="@mipmap/common_icon_right_arrow" />
+
             </RelativeLayout>
 
             <include layout="@layout/common_gap" />
