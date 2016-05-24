@@ -195,7 +195,6 @@
                 android:background="@color/white"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:visibility="gone"
                 android:orientation="horizontal">
 
                 <TextView
@@ -203,7 +202,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:padding="8dp"
-                    android:text="物流"
+                    android:text="快递"
                     android:textSize="28px" />
 
                 <android.support.v7.widget.AppCompatSpinner

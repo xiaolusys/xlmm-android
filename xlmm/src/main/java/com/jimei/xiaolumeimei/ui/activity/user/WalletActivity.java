@@ -45,7 +45,7 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
     LinearLayout ll_wallet_empty;
     @Bind(R.id.scrollable_layout)
     ScrollableLayout scrollableLayout;
-    private Double money;
+    private Double money = 0d;
     private UserWalletAdapter adapter;
 
     private int page = 2;

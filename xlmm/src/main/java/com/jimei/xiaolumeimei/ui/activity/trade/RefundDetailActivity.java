@@ -97,6 +97,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
             lastLayout.setVisibility(View.VISIBLE);
         }
         JUtils.Log(TAG, "initData goods_id " + goods_id);
+        showIndeterminateProgressDialog(false);
         Subscription subscription = TradeModel.getInstance()
                 .getRefundDetailBean(goods_id)
                 .subscribeOn(Schedulers.io())
@@ -111,7 +112,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
                         if ((refund_state == XlmmConst.REFUND_STATE_SELLER_AGREED) || (refund_state
                                 == XlmmConst.REFUND_STATE_BUYER_APPLY)) {
                             List<String> mDatas = new ArrayList<String>();
-                            fillPicPath(mDatas, (String) (refundDetailBean.getProof_pic().toString()));
+                            fillPicPath(mDatas, refundDetailBean.getProof_pic().toString());
                             Log.d(TAG, "proofpic " + refundDetailBean.getProof_pic());
 
                             mHorizontalScrollView =
@@ -124,6 +125,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
 
                     @Override
                     public void onCompleted() {
+                        hideIndeterminateProgressDialog();
                         super.onCompleted();
                     }
 

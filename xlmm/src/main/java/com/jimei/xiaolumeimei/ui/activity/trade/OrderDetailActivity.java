@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -26,6 +27,7 @@ import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.PackageBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
+import com.jimei.xiaolumeimei.ui.activity.user.WaitSendAddressActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.pingplusplus.android.PaymentActivity;
@@ -68,6 +70,8 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     TextView tx_order_payment;
     @Bind(R.id.address)
     RelativeLayout addressLayout;
+    @Bind(R.id.right_flag)
+    ImageView rightImage;
     private List<PackageBean> packageBeanList;
     int order_id = 0;
     OrderDetailBean orderDetail;
@@ -79,7 +83,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     protected void setListener() {
         btn_proc.setOnClickListener(this);
         btn_order_cancel.setOnClickListener(this);
-        addressLayout.setOnClickListener(this);
     }
 
     @Override
@@ -115,7 +118,11 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                             orderDetail = orderDetailBean;
                             showProcBtn(orderDetailBean);
                             fillDataToView(orderDetailBean);
-
+                            if ("待付款".equals(orderDetailBean.getStatus_display()) || "已付款".equals(orderDetailBean.getStatus_display())) {
+                                addressLayout.setOnClickListener(OrderDetailActivity.this);
+                            } else {
+                                rightImage.setVisibility(View.GONE);
+                            }
                             Log.i(TAG, "order_id " + order_id + " " + orderDetailBean.toString());
                         }
 
@@ -253,9 +260,27 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                 cancel_order();
                 break;
             case R.id.address:
-
+                Intent intent = new Intent(this, WaitSendAddressActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("receiver_name", orderDetail.getReceiver_name());
+                bundle.putString("mobile", orderDetail.getReceiver_mobile());
+                bundle.putString("address1", orderDetail.getReceiver_state() + orderDetail.getReceiver_city() + orderDetail.getReceiver_district());
+                bundle.putString("address2", orderDetail.getReceiver_address());
+                bundle.putString("receiver_state", orderDetail.getReceiver_state());
+                bundle.putString("receiver_city", orderDetail.getReceiver_city());
+                bundle.putString("receiver_district", orderDetail.getReceiver_district());
+                bundle.putString("address_id", "");
+                bundle.putString("referal_trade_id",orderDetail.getId()+"");
+                intent.putExtras(bundle);
+                startActivity(intent);
                 break;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
     }
 
     private void payNow() {

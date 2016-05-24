@@ -155,7 +155,7 @@ public class YesterdayV2Fragment extends BaseFragment {
           while (left > 0) {
             left--;
             SystemClock.sleep(1);
-            FragmentActivity activity = YesterdayV2Fragment.this.getActivity();
+            FragmentActivity activity = getActivity();
             if (activity != null) {
               activity.runOnUiThread(new Runnable() {
                 @Override public void run() {
