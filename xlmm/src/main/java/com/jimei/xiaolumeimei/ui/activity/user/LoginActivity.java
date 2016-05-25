@@ -11,11 +11,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+
 import butterknife.Bind;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.wechat.friends.Wechat;
+
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
@@ -32,9 +34,11 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.mob.tools.utils.UIHandler;
 import com.xiaomi.mipush.sdk.MiPushClient;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -161,7 +165,11 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                 authorize(new Wechat(this));
                 break;
             case R.id.sms_login:
-                startActivity(new Intent(LoginActivity.this, SmsLoginActivity.class));
+                Intent intent = new Intent(LoginActivity.this, SmsLoginActivity.class);
+                if (extras != null) {
+                    intent.putExtras(extras);
+                }
+                startActivity(intent);
                 finish();
                 break;
             case R.id.iv_close:
@@ -258,7 +266,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                                             actlink = getIntent().getExtras().getString("actlink");
                                                         }
 
-                                                        if (null!=login) {
+                                                        if (null != login) {
                                                             if (login.equals("cart")) {
                                                                 Intent intent = new Intent(mContext, CartActivity.class);
                                                                 startActivity(intent);
@@ -301,7 +309,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                                                 intent.putExtras(bundle);
                                                                 startActivity(intent);
                                                                 finish();
-                                                            }else if (login.equals("prodcutweb")) {
+                                                            } else if (login.equals("prodcutweb")) {
                                                                 //Intent intent = new Intent(mContext, ProductPopDetailActvityWeb.class);
                                                                 ////intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                                                 //SharedPreferences sharedPreferences =
@@ -313,9 +321,9 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                                                 //intent.putExtras(bundle);
                                                                 //startActivity(intent);
                                                                 JumpUtils
-                                                                    .jumpToWebViewWithCookies(mContext,actlink,
-                                                                    -1,  ProductPopDetailActvityWeb
-                                                                        .class);
+                                                                        .jumpToWebViewWithCookies(mContext, actlink,
+                                                                                -1, ProductPopDetailActvityWeb
+                                                                                        .class);
                                                                 finish();
                                                             }
                                                         }

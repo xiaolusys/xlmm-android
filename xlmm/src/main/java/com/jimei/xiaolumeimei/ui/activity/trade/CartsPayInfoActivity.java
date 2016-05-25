@@ -113,8 +113,8 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     CheckBox ruleCb;
     @Bind(R.id.tv_rule)
     TextView ruleTv;
-//    @Bind(R.id.spinner)
-//    AppCompatSpinner spinner;
+    @Bind(R.id.spinner)
+    AppCompatSpinner spinner;
     private boolean isAlipay, isWx, isBudget;
     private String ids;
     private String cart_ids;
@@ -143,7 +143,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     private double yue;
     private double appcut;
     private AlertDialog dialog;
-//    private String[] countriesStr;
+    private String[] countriesStr;
 
     @Override
     protected void setListener() {
@@ -159,11 +159,11 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void initData() {
         isAlipay = true;
-//        countriesStr = new String[]{"  韵达  ", "  申通  ", "  邮政  "};
-//        ArrayAdapter adapter =
-//                new ArrayAdapter<>(this, R.layout.item_choosespinner, countriesStr);
-//        adapter.setDropDownViewResource(R.layout.item_choosespinner_dropdown);
-//        spinner.setAdapter(adapter);
+        countriesStr = new String[]{"  韵达  ", "  申通  ", "  邮政  "};
+        ArrayAdapter adapter =
+                new ArrayAdapter<>(this, R.layout.item_choosespinner, countriesStr);
+        adapter.setDropDownViewResource(R.layout.item_choosespinner_dropdown);
+        spinner.setAdapter(adapter);
         list = new ArrayList<>();
         downLoadCartsInfo();
     }
@@ -515,7 +515,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 Bundle bundle = new Bundle();
                 if ((coupon_id != null) && (!coupon_id.isEmpty())) {
                     bundle.putString("coupon_id", coupon_id);
-                    //intent.putExtra("coupon_id", coupon_id);
                     intent.putExtras(bundle);
                 }
                 startActivityForResult(intent, REQUEST_CODE_COUPONT);
@@ -562,11 +561,12 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                         + pay_extrasaa);
 
         showIndeterminateProgressDialog(false);
-//        int position = spinner.getSelectedItemPosition();
-//        String message = countriesStr[position];
+        int position = spinner.getSelectedItemPosition();
+        String message = countriesStr[position];
+        // TODO: 16/5/24 支付接口传入物流公司信息
         Subscription subscription = TradeModel.getInstance()
                 .shoppingcart_create_v2(ids, addr_id, pay_method, paymentprice_v2, post_fee,
-                        discount_fee_price, total_fee, uuid, pay_extrasaa)
+                        discount_fee_price, total_fee, uuid, pay_extrasaa,"")
                 .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<PayInfoBean>() {
 

@@ -1,22 +1,17 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
-import android.content.Context;
+
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.support.v7.widget.SwitchCompat;
-import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -26,72 +21,85 @@ import com.jimei.xiaolumeimei.widget.citypicker.CityPicker;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 
+import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
-/**
- * Created by itxuye(www.itxuye.com) on 2016/01/19.
- * <p>
- * Copyright 2015年 上海己美. All rights reserved.
- */
-public class AddNoAddressActivity extends BaseSwipeBackCompatActivity
-        implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener {
 
-    private static final String TAG = AddNoAddressActivity.class.getSimpleName();
-
+    private static final String TAG = WaitSendAddressActivity.class.getSimpleName();
     @Bind(R.id.name)
     EditText name;
     @Bind(R.id.mobile)
     EditText mobile;
-    @Bind(R.id.clear_address)
-    EditText clearAddress;
-    @Bind(R.id.switch_button)
-    SwitchCompat switchButton;
-    @Bind(R.id.save)
-    Button save;
     @Bind(R.id.address)
     TextView address;
+    @Bind(R.id.clear_address)
+    EditText clearAddress;
+    @Bind(R.id.save)
+    Button save;
+    @Bind(R.id.delete)
+    Button delete;
+    @Bind(R.id.main)
+    LinearLayout main;
+    @Bind(R.id.rl_default)
+    RelativeLayout relativeLayout;
+    private String id;
     private PopupWindow popupWindow;
     private View view;
     private CityPicker cityPicker;
     private View parent;
+
+    private String city_string;
+    private String clearaddressa;
     private String receiver_state;
     private String receiver_city;
     private String receiver_district;
-    private String receiver_address;
     private String receiver_name;
     private String receiver_mobile;
-    private boolean isDefault;
-    private String city_string;
-    private String clearaddressa;
-    private String defaulta;
+    private String referal_trade_id;
 
     @Override
     protected void setListener() {
         save.setOnClickListener(this);
         address.setOnClickListener(this);
-        switchButton.setOnCheckedChangeListener(this);
     }
 
     @Override
     protected void initData() {
-
+        if (receiver_name != null) {
+            name.setText(receiver_name);
+            name.setSelection(receiver_name.length());
+        }
+        mobile.setText(receiver_mobile);
+        address.setText(city_string);
+        clearAddress.setText(clearaddressa);
     }
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-
+        receiver_name = extras.getString("receiver_name");
+        receiver_mobile = extras.getString("mobile");
+        city_string = extras.getString("address1");
+        clearaddressa = extras.getString("address2");
+        receiver_state = extras.getString("receiver_state");
+        receiver_city = extras.getString("receiver_city");
+        receiver_district = extras.getString("receiver_district");
+        id = extras.getString("address_id");
+        referal_trade_id = extras.getString("referal_trade_id");
+        JUtils.Log(TAG, receiver_name + receiver_mobile + clearaddressa + receiver_state);
     }
 
     @Override
     protected int getContentViewLayoutID() {
-        return R.layout.addaddress_activity;
+        return R.layout.activity_changgeaddress;
     }
 
     @Override
     protected void initViews() {
         parent = findViewById(R.id.main);
-
+        delete.setVisibility(View.GONE);
+        relativeLayout.setVisibility(View.GONE);
         initPopupWindow();
     }
 
@@ -106,20 +114,9 @@ public class AddNoAddressActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ButterKnife.bind(this);
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.address:
-
-                InputMethodManager imm =
-                        (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(mobile.getWindowToken(), 0);
-
                 //为popWindow添加动画效果
                 popupWindow.setAnimationStyle(R.style.popWindow_animation);
                 // 点击弹出泡泡窗口
@@ -140,24 +137,26 @@ public class AddNoAddressActivity extends BaseSwipeBackCompatActivity
                 });
                 break;
             case R.id.save:
-
                 receiver_name = name.getText().toString().trim();
-                receiver_address = address.getText().toString().trim();
                 receiver_mobile = mobile.getText().toString().trim();
                 clearaddressa = clearAddress.getText().toString().trim();
 
+                JUtils.Log(TAG,
+                        receiver_mobile + "====" + receiver_state + "====" + receiver_city + "====" +
+                                receiver_district + "====" +
+                                clearaddressa + "====" + receiver_name);
                 if (checkInput(receiver_name, receiver_mobile, city_string, clearaddressa)) {
                     Subscription subscribe = AddressModel.getInstance()
-                            .create_address(receiver_state, receiver_city, receiver_district,
-                                    clearaddressa, receiver_name, receiver_mobile, defaulta)
+                            .update_address(id, receiver_state, receiver_city, receiver_district,
+                                    clearaddressa, receiver_name, receiver_mobile, "true")
                             .subscribeOn(Schedulers.io())
                             .subscribe(new ServiceResponse<AddressResultBean>() {
                                 @Override
                                 public void onNext(AddressResultBean addressResultBean) {
                                     if (addressResultBean != null) {
-                                        if (addressResultBean.isRet()) {
-
-                                            AddNoAddressActivity.this.finish();
+                                        if (addressResultBean.getCode() == 0) {
+                                            JUtils.Toast("修改成功");
+                                            finish();
                                         }
                                     }
                                 }
@@ -203,19 +202,5 @@ public class AddNoAddressActivity extends BaseSwipeBackCompatActivity
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
         popupWindow.setOutsideTouchable(true);
         cityPicker = (CityPicker) view.findViewById(R.id.city_picker);
-    }
-
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        switch (buttonView.getId()) {
-            case R.id.switch_button:
-                if (isChecked) {
-                    defaulta = "true";
-                } else {
-                    defaulta = "false";
-                }
-
-                break;
-        }
     }
 }
