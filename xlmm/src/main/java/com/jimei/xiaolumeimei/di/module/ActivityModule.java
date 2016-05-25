@@ -1,13 +1,10 @@
 package com.jimei.xiaolumeimei.di.module;
 
 import android.app.Activity;
-import com.gzsll.hupu.injector.PerActivity;
+import com.jimei.xiaolumeimei.di.scope.PerActivity;
 import dagger.Module;
 import dagger.Provides;
 
-/**
- * Created by sll on 2016/1/6.
- */
 @Module public class ActivityModule {
 
   private final Activity mActivity;
