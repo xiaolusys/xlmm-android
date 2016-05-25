@@ -75,7 +75,6 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     @Bind(R.id.refund_layout)
     LinearLayout refundLayout;
     AllRefundsBean.ResultsEntity refundDetail;
-    MyHorizontalScrollView mHorizontalScrollView;
     private int refund_state;
     private int goods_id;
 
@@ -114,12 +113,6 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
                             List<String> mDatas = new ArrayList<String>();
                             fillPicPath(mDatas, refundDetailBean.getProof_pic().toString());
                             Log.d(TAG, "proofpic " + refundDetailBean.getProof_pic());
-
-                            mHorizontalScrollView =
-                                    (MyHorizontalScrollView) findViewById(R.id.id_horizontalScrollView);
-                            HorizontalScrollViewAdapter mAdapter =
-                                    new HorizontalScrollViewAdapter(RefundDetailActivity.this, mDatas);
-                            mHorizontalScrollView.initDatas(mAdapter);
                         }
                     }
 

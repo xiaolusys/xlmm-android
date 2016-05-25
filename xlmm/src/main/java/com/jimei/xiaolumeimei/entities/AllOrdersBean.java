@@ -474,6 +474,15 @@ public class AllOrdersBean {
       @SerializedName("refund_status_display") private String mRefundStatusDisplay;
       @SerializedName("refund_id") private Object mRefundId;
       @SerializedName("kill_title") private boolean mKillTitle;
+      @SerializedName("is_seckill") private boolean is_seckill;
+
+      public boolean is_seckill() {
+        return is_seckill;
+      }
+
+      public void setIs_seckill(boolean is_seckill) {
+        this.is_seckill = is_seckill;
+      }
 
       public void setId(int id) {
         this.mId = id;

@@ -167,6 +167,7 @@ public class AllOrdersFragment extends Fragment {
     super.onResume();
     adapter.clearAll();
     showIndeterminateProgressDialog(false);
+    page = 2;
     subscription1 = TradeModel.getInstance()
             .getAlloderBean("1")
             .subscribeOn(Schedulers.io())

@@ -150,8 +150,8 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     private void fillDataToView(OrderDetailBean orderDetailBean) {
         tx_order_id.setText("订单编号: " + orderDetailBean.getTid());
         tx_order_state.setText(orderDetailBean.getStatus_display());
-        tx_custom_name.setText("姓名：" + orderDetailBean.getReceiver_name());
-        tx_custom_address.setText("地址：" + orderDetailBean.getReceiver_state() + orderDetailBean.getReceiver_city() + orderDetailBean.getReceiver_address());
+        tx_custom_name.setText("姓名：" + orderDetailBean.getUser_adress().getReceiver_name());
+        tx_custom_address.setText("地址：" + orderDetailBean.getUser_adress().getReceiver_state() + orderDetailBean.getUser_adress().getReceiver_city() + orderDetailBean.getUser_adress().getReceiver_address());
         tx_order_totalfee.setText("¥" + orderDetailBean.getTotal_fee());
         tx_order_discountfee.setText("¥" + orderDetailBean.getDiscount_fee());
         tx_order_postfee.setText("¥" + orderDetailBean.getPost_fee());
@@ -262,15 +262,15 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
             case R.id.address:
                 Intent intent = new Intent(this, WaitSendAddressActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString("receiver_name", orderDetail.getReceiver_name());
-                bundle.putString("mobile", orderDetail.getReceiver_mobile());
-                bundle.putString("address1", orderDetail.getReceiver_state() + orderDetail.getReceiver_city() + orderDetail.getReceiver_district());
-                bundle.putString("address2", orderDetail.getReceiver_address());
-                bundle.putString("receiver_state", orderDetail.getReceiver_state());
-                bundle.putString("receiver_city", orderDetail.getReceiver_city());
-                bundle.putString("receiver_district", orderDetail.getReceiver_district());
-                bundle.putString("address_id", "");
-                bundle.putString("referal_trade_id",orderDetail.getId()+"");
+                bundle.putString("receiver_name", orderDetail.getUser_adress().getReceiver_name());
+                bundle.putString("mobile", orderDetail.getUser_adress().getReceiver_mobile());
+                bundle.putString("address1", orderDetail.getUser_adress().getReceiver_state() + orderDetail.getUser_adress().getReceiver_city() + orderDetail.getUser_adress().getReceiver_district());
+                bundle.putString("address2", orderDetail.getUser_adress().getReceiver_address());
+                bundle.putString("receiver_state", orderDetail.getUser_adress().getReceiver_state());
+                bundle.putString("receiver_city", orderDetail.getUser_adress().getReceiver_city());
+                bundle.putString("receiver_district", orderDetail.getUser_adress().getReceiver_district());
+                bundle.putString("address_id", orderDetail.getUser_adress().getId() + "");
+                bundle.putString("referal_trade_id", orderDetail.getId() + "");
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;
@@ -280,7 +280,18 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-
+        Subscription subscription = TradeModel.getInstance()
+                .getOrderDetailBean(order_id)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ServiceResponse<OrderDetailBean>() {
+                    @Override
+                    public void onNext(OrderDetailBean orderDetailBean) {
+                        orderDetail = orderDetailBean;
+                        tx_custom_name.setText("姓名：" + orderDetailBean.getUser_adress().getReceiver_name());
+                        tx_custom_address.setText("地址：" + orderDetailBean.getUser_adress().getReceiver_state() + orderDetailBean.getUser_adress().getReceiver_city() + orderDetailBean.getUser_adress().getReceiver_address());
+                    }
+                });
+        addSubscription(subscription);
     }
 
     private void payNow() {

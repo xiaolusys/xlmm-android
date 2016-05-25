@@ -172,6 +172,7 @@ public class WaitPayOrdersFragment extends Fragment {
   public void onResume() {
     super.onResume();
     adapter.clearAll();
+    page = 2;
     showIndeterminateProgressDialog(false);
     subscription1 = TradeModel.getInstance()
             .getWaitPayOrdersBean("1")
