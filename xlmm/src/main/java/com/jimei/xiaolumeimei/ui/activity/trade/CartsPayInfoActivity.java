@@ -9,6 +9,7 @@ import android.support.v7.widget.AppCompatSpinner;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -27,7 +28,9 @@ import com.jimei.xiaolumeimei.adapter.CartsPayInfoAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AddressBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
+import com.jimei.xiaolumeimei.entities.LogisticCompany;
 import com.jimei.xiaolumeimei.entities.PayInfoBean;
+import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.TradeModel;
@@ -143,7 +146,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     private double yue;
     private double appcut;
     private AlertDialog dialog;
-    private String[] countriesStr;
+    private List<LogisticCompany> logisticCompanyList;
 
     @Override
     protected void setListener() {
@@ -159,11 +162,21 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void initData() {
         isAlipay = true;
-        countriesStr = new String[]{"  韵达  ", "  申通  ", "  邮政  "};
-        ArrayAdapter adapter =
-                new ArrayAdapter<>(this, R.layout.item_choosespinner, countriesStr);
-        adapter.setDropDownViewResource(R.layout.item_choosespinner_dropdown);
-        spinner.setAdapter(adapter);
+        Subscription subscribe = ActivityModel.getInstance()
+                .getLogisticCompany()
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ServiceResponse<List<LogisticCompany>>() {
+                    @Override
+                    public void onNext(List<LogisticCompany> logisticCompanies) {
+                        logisticCompanyList = logisticCompanies;
+                        ArrayAdapter<LogisticCompany> adapter =
+                                new ArrayAdapter<>(getApplicationContext(), R.layout.item_choosespinner, logisticCompanyList);
+                        adapter.setDropDownViewResource(R.layout.item_choosespinner_dropdown);
+                        spinner.setAdapter(adapter);
+                    }
+                });
+        addSubscription(subscribe);
+
         list = new ArrayList<>();
         downLoadCartsInfo();
     }
@@ -562,11 +575,11 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
         showIndeterminateProgressDialog(false);
         int position = spinner.getSelectedItemPosition();
-        String message = countriesStr[position];
-        // TODO: 16/5/24 支付接口传入物流公司信息
+        String code = logisticCompanyList.get(position).getCode();
+        // TODO: 16/5/25 支付时是否传入物流参数待定
         Subscription subscription = TradeModel.getInstance()
                 .shoppingcart_create_v2(ids, addr_id, pay_method, paymentprice_v2, post_fee,
-                        discount_fee_price, total_fee, uuid, pay_extrasaa,"")
+                        discount_fee_price, total_fee, uuid, pay_extrasaa)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<PayInfoBean>() {
 
@@ -851,4 +864,5 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             confirm.setEnabled(false);
         }
     }
+
 }

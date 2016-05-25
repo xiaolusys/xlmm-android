@@ -73,4 +73,15 @@ public class AddressModel {
             receiver_address, receiver_name, receiver_mobile,defalut)
         .compose(new DefaultTransform<>());
   }
+
+  //更新地址
+  public Observable<AddressResultBean> update_address(String id,String receiver_state,
+      String receiver_city, String receiver_district, String receiver_address,
+      String receiver_name, String receiver_mobile,String logistic_company_code, String referal_trade_id) {
+
+    return XlmmRetrofitClient.getService()
+        .update_address(id, receiver_state, receiver_city, receiver_district,
+            receiver_address, receiver_name, receiver_mobile,logistic_company_code,referal_trade_id)
+        .compose(new DefaultTransform<>());
+  }
 }

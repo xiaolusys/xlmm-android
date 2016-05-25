@@ -148,7 +148,7 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
                 if (checkInput(receiver_name, receiver_mobile, city_string, clearaddressa)) {
                     Subscription subscribe = AddressModel.getInstance()
                             .update_address(id, receiver_state, receiver_city, receiver_district,
-                                    clearaddressa, receiver_name, receiver_mobile, "true")
+                                    clearaddressa, receiver_name, receiver_mobile, null, referal_trade_id)
                             .subscribeOn(Schedulers.io())
                             .subscribe(new ServiceResponse<AddressResultBean>() {
                                 @Override

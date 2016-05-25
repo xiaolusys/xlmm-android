@@ -53,10 +53,10 @@ public class TradeModel {
   //创建订单
   public Observable<PayInfoBean> shoppingcart_create_v2(String cart_ids, String addr_id,
       String channel, String payment, String post_fee, String discount_fee,
-      String total_fee, String uuid, String pay_extras,String logistics_company_id) {
+      String total_fee, String uuid, String pay_extras) {
     return XlmmRetrofitClient.getService()
         .shoppingcart_create_v2(cart_ids, addr_id, channel, payment, post_fee,
-            discount_fee, total_fee, uuid, pay_extras,logistics_company_id)
+            discount_fee, total_fee, uuid, pay_extras)
         .compose(new DefaultTransform<>());
   }
 

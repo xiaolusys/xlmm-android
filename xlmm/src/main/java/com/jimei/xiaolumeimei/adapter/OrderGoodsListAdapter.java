@@ -16,7 +16,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jimei.xiaolumeimei.R;
@@ -45,8 +44,8 @@ public class OrderGoodsListAdapter extends BaseAdapter {
     private List<AllOrdersBean.ResultsEntity.OrdersEntity> dataSource;
     private List<PackageBean> packageBeanList;
     private String timeStr;
-    private String tid;
     private String stateStr;
+    private String tid;
 
     public void setPackageBeanList(List<PackageBean> packageBeanList) {
         this.packageBeanList = packageBeanList;
@@ -79,6 +78,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
         dataSource.addAll(orderDetailBean.getOrders());
         notifyDataSetChanged();
     }
+
 
     @Override
     public int getCount() {
@@ -144,19 +144,21 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                 ((TextView) convertView.findViewById(R.id.tx_order_crtstate)).setText(packageBeanList.get(position).getAssign_status_display());
                 String packetid = packageBeanList.get(position).getOut_sid();
                 String company_code = packageBeanList.get(position).getLogistics_company_code();
-                layout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(context, LogisticsActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("packetid", packetid);
-                        bundle.putString("tid", tid);
-                        bundle.putString("time", timeStr);
-                        bundle.putString("company_code", company_code);
-                        intent.putExtras(bundle);
-                        context.startActivity(intent);
-                    }
-                });
+                if (!"".equals(packetid) || !"".equals(company_code)) {
+                    layout.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(context, LogisticsActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("packetid", packetid);
+                            bundle.putString("time", timeStr);
+                            bundle.putString("tid", tid);
+                            bundle.putString("company_code", company_code);
+                            intent.putExtras(bundle);
+                            context.startActivity(intent);
+                        }
+                    });
+                }
             } else {
                 if (position == 0) {
                     view.setVisibility(View.VISIBLE);
@@ -168,9 +170,6 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                 ((TextView) convertView.findViewById(R.id.tx_order_crttime)).setText("时间: " + timeStr);
                 ((TextView) convertView.findViewById(R.id.tx_order_crtstate)).setText(stateStr);
             }
-//            } else {
-//                convertView = LayoutInflater.from(context).inflate(R.layout.one_order_item, null);
-//            }
         }
 
         img_goods = (ImageView) convertView.findViewById(R.id.img_good);
