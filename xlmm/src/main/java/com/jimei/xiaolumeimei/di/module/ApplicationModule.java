@@ -1,20 +1,26 @@
 package com.jimei.xiaolumeimei.di.module;
 
-import android.app.Application;
+import android.content.Context;
+
 import com.jimei.xiaolumeimei.XlmmApp;
-import dagger.Module;
-import dagger.Provides;
+
 import javax.inject.Singleton;
 
-@Module public class ApplicationModule {
+import dagger.Module;
+import dagger.Provides;
 
-  private final XlmmApp context;
+@Module
+public class ApplicationModule {
 
-  public ApplicationModule(XlmmApp context) {
-    this.context = context;
-  }
+    private final XlmmApp context;
 
-  @Provides @Singleton public Application provideApplicationContext() {
-    return context;
-  }
+    public ApplicationModule(XlmmApp context) {
+        this.context = context;
+    }
+
+    @Provides
+    @Singleton
+    public Context provideApplicationContext() {
+        return context.getApplicationContext();
+    }
 }
