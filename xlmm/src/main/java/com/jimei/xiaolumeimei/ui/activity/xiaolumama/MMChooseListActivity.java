@@ -77,23 +77,8 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initData() {
-    List<Map<String, String>> textList = new ArrayList<>();
-    HashMap<String, String> mapAll = new HashMap<>();
-    mapAll.put("chooselist", "全部");
-    textList.add(mapAll);
-
-    HashMap<String, String> mapLady = new HashMap<>();
-    mapLady.put("chooselist", "女装");
-    textList.add(mapLady);
-
-    HashMap<String, String> mapChild = new HashMap<>();
-    mapChild.put("chooselist", "童装");
-    textList.add(mapChild);
 
     String[] countriesStr = { "  全部  ", "  女装  ", "  童装  " };
-
-    //SimpleAdapter adapter = new SimpleAdapter(this, textList, R.layout.item_choosespinner,
-    //   new String[] { "chooselist" }, new int[] { R.id.choose_tv });
     ArrayAdapter adapter =
         new ArrayAdapter<String>(this, R.layout.item_choosespinner, countriesStr);
     //设置下拉列表风格

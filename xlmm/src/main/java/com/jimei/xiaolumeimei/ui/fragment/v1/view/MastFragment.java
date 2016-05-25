@@ -1,5 +1,6 @@
 package com.jimei.xiaolumeimei.ui.fragment.v1.view;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
@@ -52,7 +53,7 @@ public class MastFragment extends DialogFragment {
   private String domain;
   private Subscription subscribe2;
   private Subscription subscribe;
-
+  private Activity mActivity;
 
   public static MastFragment newInstance(String title) {
     MastFragment todayFragment = new MastFragment();
@@ -62,9 +63,14 @@ public class MastFragment extends DialogFragment {
     return todayFragment;
   }
 
+  @Override public void onAttach(Activity activity) {
+    super.onAttach(activity);
+    mActivity = activity;
+
+  }
+
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    context = getActivity();
     sharedPreferences = getActivity().getSharedPreferences(SHARE_MASK, 0);
 
     sharedPreferences.getInt("mask", 0);
@@ -118,9 +124,9 @@ public class MastFragment extends DialogFragment {
                               }
                             FrameLayout.LayoutParams layoutParams =
                                 new FrameLayout.LayoutParams(
-                                    DisplayUtil.dip2px(getActivity(),
+                                    DisplayUtil.dip2px(mActivity,
                                         response.getWidth()),
-                                    DisplayUtil.dip2px(getActivity(),
+                                    DisplayUtil.dip2px(mActivity,
                                         response.getHeight()));
                             maskImage.setLayoutParams(layoutParams);
                             maskImage.setImageBitmap(response);
@@ -134,20 +140,20 @@ public class MastFragment extends DialogFragment {
                                 @Override public void onClick(View v) {
                                   //syncCookie(getActivity(), postBean.getActivity().getActLink());
                                   if (postActivityBean.get(0).isLoginRequired()) {
-                                    if (LoginUtils.checkLoginState(context)
+                                    if (LoginUtils.checkLoginState(mActivity)
                                         && (null
-                                        != context)
+                                        != mActivity)
                                         && (null
-                                        != ((MainActivity) context).getUserInfoBean())
+                                        != ((MainActivity) mActivity).getUserInfoBean())
                                         && (null
-                                        != ((MainActivity) context).getUserInfoBean()
+                                        != ((MainActivity) mActivity).getUserInfoBean()
                                         .getMobile())
-                                        && !(((MainActivity) context).getUserInfoBean()
+                                        && !(((MainActivity) mActivity).getUserInfoBean()
                                         .getMobile()
                                         .isEmpty())) {
                                       dismiss();
 
-                                      Intent intent = new Intent(context,
+                                      Intent intent = new Intent(mActivity,
                                           ActivityWebViewActivity.class);
                                       //sharedPreferences =
                                       //    getActivity().getSharedPreferences("COOKIESxlmm",
@@ -156,7 +162,7 @@ public class MastFragment extends DialogFragment {
                                       //Bundle bundle = new Bundle();
                                       //bundle.putString("cookies", cookies);
                                       sharedPreferences =
-                                          context.getSharedPreferences("xlmmCookiesAxiba",
+                                          mActivity.getSharedPreferences("xlmmCookiesAxiba",
                                               Context.MODE_PRIVATE);
                                       cookies =
                                           sharedPreferences.getString("cookiesString",
@@ -174,43 +180,43 @@ public class MastFragment extends DialogFragment {
                                       bundle.putInt("id",
                                           postActivityBean.get(0).getId());
                                       intent.putExtras(bundle);
-                                      context.startActivity(intent);
+                                      mActivity.startActivity(intent);
                                     } else {
-                                      if (!LoginUtils.checkLoginState(context)) {
+                                      if (!LoginUtils.checkLoginState(mActivity)) {
                                         JUtils.Toast("登录并绑定手机号后才可参加活动");
                                         Intent intent =
-                                            new Intent(context, LoginActivity.class);
+                                            new Intent(mActivity, LoginActivity.class);
                                         Bundle bundle = new Bundle();
                                         bundle.putString("login", "main");
                                         intent.putExtras(bundle);
-                                        context.startActivity(intent);
+                                        mActivity.startActivity(intent);
                                       } else {
                                         JUtils.Toast("登录成功,前往绑定手机号后才可参加活动");
-                                        Intent intent = new Intent(context,
+                                        Intent intent = new Intent(mActivity,
                                             WxLoginBindPhoneActivity.class);
                                         if (null
-                                            != ((MainActivity) context).getUserInfoBean()) {
+                                            != ((MainActivity) mActivity).getUserInfoBean()) {
                                           Bundle bundle = new Bundle();
                                           bundle.putString("headimgurl",
-                                              ((MainActivity) context).getUserInfoBean()
+                                              ((MainActivity) mActivity).getUserInfoBean()
                                                   .getThumbnail());
                                           bundle.putString("nickname",
-                                              ((MainActivity) context).getUserInfoBean()
+                                              ((MainActivity) mActivity).getUserInfoBean()
                                                   .getNick());
                                           intent.putExtras(bundle);
                                         }
-                                        context.startActivity(intent);
+                                        mActivity.startActivity(intent);
                                       }
                                     }
                                   } else {
                                     Intent intent =
-                                        new Intent(context, ActivityWebViewActivity.class);
+                                        new Intent(mActivity, ActivityWebViewActivity.class);
                                     //sharedPreferences =
                                     //    getActivity().getSharedPreferences("COOKIESxlmm",
                                     //        Context.MODE_PRIVATE);
                                     //cookies = sharedPreferences.getString("Cookies", "");
                                     sharedPreferences =
-                                        context.getSharedPreferences("xlmmCookiesAxiba",
+                                        mActivity.getSharedPreferences("xlmmCookiesAxiba",
                                             Context.MODE_PRIVATE);
                                     cookies =
                                         sharedPreferences.getString("cookiesString", "");
@@ -223,7 +229,7 @@ public class MastFragment extends DialogFragment {
                                     bundle.putString("actlink",
                                         postActivityBean.get(0).getActLink());
                                     intent.putExtras(bundle);
-                                    context.startActivity(intent);
+                                    mActivity.startActivity(intent);
                                   }
                                 }
                               });

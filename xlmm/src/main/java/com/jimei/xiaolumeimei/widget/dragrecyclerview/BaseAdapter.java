@@ -103,10 +103,10 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
 
     @Override
     public void onItemDismiss(int position) {
-
-
-        data.remove(position);
-        recyclerView.getBookendsAdapter().notifyItemRemoved(position);
+        if (position < data.size()) {
+            data.remove(position);
+            recyclerView.getBookendsAdapter().notifyItemRemoved(position);
+        }
 //        notifyItemRangeChanged(position, data.size());
     }
 

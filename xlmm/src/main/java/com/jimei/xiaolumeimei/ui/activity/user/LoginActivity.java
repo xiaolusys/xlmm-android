@@ -12,6 +12,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import butterknife.Bind;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.wechat.friends.Wechat;
+
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
@@ -19,7 +25,9 @@ import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
+import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
+import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.utils.SHA1Utils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -31,11 +39,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import butterknife.Bind;
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.PlatformActionListener;
-import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.wechat.friends.Wechat;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -162,7 +165,11 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                 authorize(new Wechat(this));
                 break;
             case R.id.sms_login:
-                startActivity(new Intent(LoginActivity.this, SmsLoginActivity.class));
+                Intent intent = new Intent(LoginActivity.this, SmsLoginActivity.class);
+                if (extras != null) {
+                    intent.putExtras(extras);
+                }
+                startActivity(intent);
                 finish();
                 break;
             case R.id.iv_close:
@@ -259,7 +266,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                                             actlink = getIntent().getExtras().getString("actlink");
                                                         }
 
-                                                        if (null!=login) {
+                                                        if (null != login) {
                                                             if (login.equals("cart")) {
                                                                 Intent intent = new Intent(mContext, CartActivity.class);
                                                                 startActivity(intent);
@@ -292,13 +299,31 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                                                 Intent intent = new Intent(mContext, CommonWebViewActivity.class);
                                                                 //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                                                 SharedPreferences sharedPreferences =
-                                                                        getSharedPreferences("COOKIESxlmm", Context.MODE_PRIVATE);
-                                                                String cookies = sharedPreferences.getString("Cookies", "");
+                                                                        getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+                                                                String cookies = sharedPreferences.getString("cookiesString", "");
+                                                                String domain = sharedPreferences.getString("cookiesDomain", "");
                                                                 Bundle bundle = new Bundle();
                                                                 bundle.putString("cookies", cookies);
+                                                                bundle.putString("domain", domain);
                                                                 bundle.putString("actlink", actlink);
                                                                 intent.putExtras(bundle);
                                                                 startActivity(intent);
+                                                                finish();
+                                                            } else if (login.equals("prodcutweb")) {
+                                                                //Intent intent = new Intent(mContext, ProductPopDetailActvityWeb.class);
+                                                                ////intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                                //SharedPreferences sharedPreferences =
+                                                                //    getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+                                                                //String cookies = sharedPreferences.getString("Cookie", "");
+                                                                //Bundle bundle = new Bundle();
+                                                                //bundle.putString("cookies", cookies);
+                                                                //bundle.putString("actlink", actlink);
+                                                                //intent.putExtras(bundle);
+                                                                //startActivity(intent);
+                                                                JumpUtils
+                                                                        .jumpToWebViewWithCookies(mContext, actlink,
+                                                                                -1, ProductPopDetailActvityWeb
+                                                                                        .class);
                                                                 finish();
                                                             }
                                                         }

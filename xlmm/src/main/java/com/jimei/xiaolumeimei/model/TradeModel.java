@@ -6,10 +6,14 @@ import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.entities.BudgetPayBean;
 import com.jimei.xiaolumeimei.entities.LogisticsBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
+import com.jimei.xiaolumeimei.entities.PackageBean;
 import com.jimei.xiaolumeimei.entities.PayInfoBean;
 import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
+
+import java.util.List;
+
 import okhttp3.ResponseBody;
 import rx.Observable;
 
@@ -49,10 +53,10 @@ public class TradeModel {
   //创建订单
   public Observable<PayInfoBean> shoppingcart_create_v2(String cart_ids, String addr_id,
       String channel, String payment, String post_fee, String discount_fee,
-      String total_fee, String uuid, String pay_extras,String buyer_message) {
+      String total_fee, String uuid, String pay_extras,String logistics_company_id) {
     return XlmmRetrofitClient.getService()
         .shoppingcart_create_v2(cart_ids, addr_id, channel, payment, post_fee,
-            discount_fee, total_fee, uuid, pay_extras,buyer_message)
+            discount_fee, total_fee, uuid, pay_extras,logistics_company_id)
         .compose(new DefaultTransform<>());
   }
 
@@ -179,6 +183,20 @@ public class TradeModel {
   public Observable<LogisticsBean> get_logistics(String tid) {
     return XlmmRetrofitClient.getService()
             .get_logistics(tid)
+            .compose(new DefaultTransform<>());
+  }
+
+  public Observable<List<PackageBean>> getPackageList(String tid) {
+    return XlmmRetrofitClient.getService()
+            .getPackageList(tid)
+            .compose(new DefaultTransform<>());
+  }
+
+
+  //获取物流信息
+  public Observable<LogisticsBean> get_logistics_by_packagetid(String packetid,String company_code) {
+    return XlmmRetrofitClient.getService()
+            .get_logistics_by_packagetid(packetid,company_code)
             .compose(new DefaultTransform<>());
   }
 }

@@ -1,20 +1,24 @@
 package com.jimei.xiaolumeimei.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
-import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ChildListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.LadyListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActvityWeb;
 import com.jimei.xiaolumeimei.ui.activity.product.TongkuanActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity;
+import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.OrderDetailActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.CouponActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMNinePicActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaInfoActivity;
 import com.jude.utils.JUtils;
@@ -30,36 +34,37 @@ public class JumpUtils {
   public static void push_jump_proc(Context context, String recvContent) {
     JUtils.Log(TAG, "push_jump_proc:" + recvContent);
 
-    if ((recvContent == null) || (recvContent.isEmpty())) return;
-
-    JUtils.Log(TAG,
-        "push_jump_proc:" + (recvContent == null) + " " + (recvContent.isEmpty()));
+    if (TextUtils.isEmpty(recvContent)) return;
 
     JumpInfo jumpInfo = get_jump_info(recvContent);
+    jumToProc(context, jumpInfo);
+  }
+
+  public static void jumToProc(Context context, JumpInfo jumpInfo) {
     Intent intent;
     switch (jumpInfo.getType()) {
       case XlmmConst.JUMP_PROMOTE_TODAY:
         intent = new Intent(context, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        intent.putExtra("fragment", 1);
+        //        intent.putExtra("fragment", 1);
         context.startActivity(intent);
         break;
       case XlmmConst.JUMP_PROMOTE_PREVIOUS:
         intent = new Intent(context, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        intent.putExtra("fragment", 2);
+        //        intent.putExtra("fragment", 2);
         context.startActivity(intent);
         break;
       case XlmmConst.JUMP_PRODUCT_CHILDLIST:
         intent = new Intent(context, ChildListActivity.class);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        intent.putExtra("fragment", 3);
+        //        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        //        intent.putExtra("fragment", 3);
         context.startActivity(intent);
         break;
       case XlmmConst.JUMP_PRODUCT_LADYLIST:
         intent = new Intent(context, LadyListActivity.class);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        intent.putExtra("fragment", 4);
+        //        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        //        intent.putExtra("fragment", 4);
         context.startActivity(intent);
         break;
       case XlmmConst.JUMP_PRODUCT_MODELLIST:
@@ -112,10 +117,13 @@ public class JumpUtils {
         intent = new Intent(context, CommonWebViewActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         SharedPreferences sharedPreferences =
-            context.getSharedPreferences("COOKIESxlmm", Context.MODE_PRIVATE);
-        String cookies = sharedPreferences.getString("Cookies", "");
+            context.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+
+        String cookies = sharedPreferences.getString("cookiesString", "");
+        String domain = sharedPreferences.getString("cookiesDomain", "");
         Bundle bundle = new Bundle();
         bundle.putString("cookies", cookies);
+        bundle.putString("domain", domain);
         bundle.putString("actlink", jumpInfo.getUrl());
         intent.putExtras(bundle);
         context.startActivity(intent);
@@ -134,6 +142,19 @@ public class JumpUtils {
         intent = new Intent(context, AllRefundsActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
+      case XlmmConst.JUMP_CARTS:
+        if (LoginUtils.checkLoginState(context)) {
+          intent = new Intent(context, CartActivity.class);
+          context.startActivity(intent);
+          ((Activity) context).finish();
+        } else {
+          intent = new Intent(context, LoginActivity.class);
+          bundle = new Bundle();
+          bundle.putString("login", "cart");
+          intent.putExtras(bundle);
+          context.startActivity(intent);
+          ((Activity) context).finish();
+        }
     }
   }
 
@@ -189,6 +210,9 @@ public class JumpUtils {
         } else if (content[1].contains("refunds")) {
           jumpInfo.setType(XlmmConst.JUMP_REFUNDS);
           jumpInfo.setUrl(content[1]);
+        } else if (content[1].contains("shopping_cart")) {
+          jumpInfo.setType(XlmmConst.JUMP_CARTS);
+          jumpInfo.setUrl(content[1]);
         }
       }
     } catch (ArrayIndexOutOfBoundsException e) {
@@ -234,5 +258,23 @@ public class JumpUtils {
           ", url='" + url + '\'' +
           '}';
     }
+  }
+
+  public static void jumpToWebViewWithCookies(Context context,String actlink,int id,
+      Class<?>
+      classname){
+    Intent intent = new Intent(context, classname);
+    SharedPreferences sharedPreferences =
+        context.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+    String cookies = sharedPreferences.getString("cookiesString", "");
+    String domain = sharedPreferences.getString("cookiesDomain", "");
+    Bundle bundle = new Bundle();
+    bundle.putString("cookies", cookies);
+    bundle.putString("domain", domain);
+    bundle.putString("Cookie", sharedPreferences.getString("Cookie", ""));
+    bundle.putString("actlink", actlink);
+    bundle.putInt("id", id);
+    intent.putExtras(bundle);
+    context.startActivity(intent);
   }
 }

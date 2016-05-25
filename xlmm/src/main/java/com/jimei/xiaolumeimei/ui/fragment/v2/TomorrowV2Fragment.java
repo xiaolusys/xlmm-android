@@ -104,6 +104,7 @@ public class TomorrowV2Fragment extends BaseFragment {
 
   public void load(SwipeRefreshLayout swipeRefreshLayout) {
     list.clear();
+    page = 2;
     mTodayAdapter.updateWithClear(list);
     if (swipeRefreshLayout == null) {
       showIndeterminateProgressDialog(false);
@@ -129,25 +130,7 @@ public class TomorrowV2Fragment extends BaseFragment {
                 list.addAll(results);
                 mTodayAdapter.updateWithClear(list);
                 left = calcLeftTime(productListBean.getUpshelfStarttime());
-                if (thread == null) {
-                  thread = new Thread(new Runnable() {
-                    @Override public void run() {
-                      while (left > 0) {
-                        left--;
-                        SystemClock.sleep(1);
-                        FragmentActivity activity = getActivity();
-                        if (activity != null) {
-                          activity.runOnUiThread(new Runnable() {
-                            @Override public void run() {
-                              countTime.updateShow(left);
-                            }
-                          });
-                        }
-                      }
-                    }
-                  });
-                }
-                thread.start();
+                initLeftTime();
               }
             } catch (Exception ex) {
             }
@@ -164,20 +147,41 @@ public class TomorrowV2Fragment extends BaseFragment {
           }
         });
 
-    //        subscribe2 = Observable.timer(1, 1, TimeUnit.SECONDS)
-    //                .onBackpressureDrop()
-    //                .map(aLong -> calcLeftTime(left))
-    //                .observeOn(AndroidSchedulers.mainThread())
-    //                .subscribe(new Action1<Long>() {
-    //                    @Override
-    //                    public void call(Long aLong) {
-    //                        if (aLong > 0) {
-    //                            countTime.updateShow(aLong);
-    //                        } else {
-    //                            countTime.setVisibility(View.INVISIBLE);
-    //                        }
-    //                    }
-    //                }, Throwable::printStackTrace);
+    //Subscription subscribe = Observable.timer(1, 1, TimeUnit.SECONDS)
+    //    .onBackpressureDrop()
+    //    .map(aLong -> calcLeftTime(left))
+    //    .observeOn(AndroidSchedulers.mainThread())
+    //    .subscribe(new Action1<Long>() {
+    //      @Override public void call(Long aLong) {
+    //        if (aLong > 0) {
+    //          countTime.updateShow(aLong);
+    //        } else {
+    //          countTime.setVisibility(View.INVISIBLE);
+    //        }
+    //      }
+    //    }, Throwable::printStackTrace);
+  }
+
+  private void initLeftTime() {
+    if (thread == null) {
+      thread = new Thread(new Runnable() {
+        @Override public void run() {
+          while (left > 0) {
+            left--;
+            SystemClock.sleep(1);
+            FragmentActivity activity = getActivity();
+            if (activity != null) {
+              activity.runOnUiThread(new Runnable() {
+                @Override public void run() {
+                  countTime.updateShow(left);
+                }
+              });
+            }
+          }
+        }
+      });
+    }
+    thread.start();
   }
 
   private void initViews() {

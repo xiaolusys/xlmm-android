@@ -96,27 +96,15 @@ public class ShoppingListAdapter
         holder.getStatusDisplay.setText(resultsEntity.getStatusDisplay());
         holder.wxordernick.setText(resultsEntity.getContributorNick());
         holder.timeDisplay.setText(resultsEntity.getCreated().substring(11, 16));
-        holder.totalMoneyTv.setText("实付"+resultsEntity.getOrderValue());
+        holder.totalMoneyTv.setText("实付" + resultsEntity.getOrderValue());
         String carryTypeName = resultsEntity.getCarryTypeName();
         if (carryTypeName.contains("订单")) {
-            String str = carryTypeName.split("订单")[0]+"订单";
-            holder.flagTv.setText(str);
-        }else {
-            holder.flagTv.setText(carryTypeName);
-        }
-
-        double carryNum = resultsEntity.getCarryNum();
-        if (carryNum >= 0) {
-            holder.tichengCash.setText("+" + carryNum);
+            holder.flagRl.setVisibility(View.VISIBLE);
         } else {
-            holder.tichengCash.setText(carryNum + "");
-            holder.tichengCash.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));
-        }
-        if (resultsEntity.getStatusDisplay().equals("已确定")){
-            holder.tichengCash.setTextColor(Color.BLACK);
+            holder.flagRl.setVisibility(View.GONE);
         }
         holder.tichengCash.setText(
-                "+" + (float) (Math.round(resultsEntity.getCarryNum() * 100)) / 100);
+                "收益" + (float) (Math.round(resultsEntity.getCarryNum() * 100)) / 100);
         holder.totalCash.setText(
                 "总收益 " + (float) (Math.round(resultsEntity.getTodayCarry() * 100)) / 100);
     }
@@ -161,7 +149,7 @@ public class ShoppingListAdapter
         @Bind(R.id.total_money)
         TextView totalMoneyTv;
         @Bind(R.id.flag)
-        TextView flagTv;
+        RelativeLayout flagRl;
 
         public ShoppingListVH(View itemView) {
             super(itemView);

@@ -1,8 +1,5 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -15,6 +12,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.ShopProductBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
+import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.widget.dragrecyclerview.DividerItemDecoration;
 import com.jimei.xiaolumeimei.widget.dragrecyclerview.LinearRecyclerView;
 import com.jimei.xiaolumeimei.widget.dragrecyclerview.SuperRecyclerView;
@@ -42,19 +40,22 @@ public class HaveChoosedActivity extends BaseSwipeBackCompatActivity {
   @Override protected void setListener() {
     homeView.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
-        Intent intentrl_shop =
-            new Intent(HaveChoosedActivity.this, MMStoreWebViewActivity.class);
-        SharedPreferences sharedPreferences =
-            getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
-        cookies = sharedPreferences.getString("cookiesString", "");
-        domain = sharedPreferences.getString("cookiesDomain", "");
-        Bundle bundlerl_shop = new Bundle();
-        bundlerl_shop.putString("cookies", cookies);
-        bundlerl_shop.putString("domain", domain);
-        bundlerl_shop.putString("Cookie", sharedPreferences.getString("Cookie", ""));
-        bundlerl_shop.putString("actlink", sharelink);
-        intentrl_shop.putExtras(bundlerl_shop);
-        startActivity(intentrl_shop);
+        //Intent intentrl_shop =
+        //    new Intent(HaveChoosedActivity.this, MMStoreWebViewActivity.class);
+        //SharedPreferences sharedPreferences =
+        //    getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+        //cookies = sharedPreferences.getString("cookiesString", "");
+        //domain = sharedPreferences.getString("cookiesDomain", "");
+        //Bundle bundlerl_shop = new Bundle();
+        //bundlerl_shop.putString("cookies", cookies);
+        //bundlerl_shop.putString("domain", domain);
+        //bundlerl_shop.putString("Cookie", sharedPreferences.getString("Cookie", ""));
+        //bundlerl_shop.putString("actlink", sharelink);
+        //intentrl_shop.putExtras(bundlerl_shop);
+        //startActivity(intentrl_shop);
+
+        JumpUtils.jumpToWebViewWithCookies(mContext,sharelink,
+            -1,  MMStoreWebViewActivity.class);
       }
     });
   }
@@ -68,7 +69,7 @@ public class HaveChoosedActivity extends BaseSwipeBackCompatActivity {
           @Override public void onNext(MMShoppingBean mmShoppingBean) {
 
             if (null != mmShoppingBean) {
-              sharelink = mmShoppingBean.getShopInfo().getPreview_shop_link();
+              sharelink = mmShoppingBean.getShopInfo().getPreviewShopLink();
             }
           }
         });

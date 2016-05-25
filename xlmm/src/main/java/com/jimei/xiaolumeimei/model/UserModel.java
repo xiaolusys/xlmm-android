@@ -115,9 +115,9 @@ public class UserModel {
     }
 
     //得到用户积分记录信息
-    public Observable<PointLogBean> getPointLogBean() {
+    public Observable<PointLogBean> getPointLogBean(String page) {
         return XlmmRetrofitClient.getService()
-                .getPointLogBean()
+                .getPointLogBean(page)
                 .compose(new DefaultTransform<>());
     }
 

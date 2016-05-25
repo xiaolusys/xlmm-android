@@ -138,14 +138,6 @@
             android:label="@string/title_activity_refunds"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
-            android:name=".ui.activity.trade.WaitPayOrdersActivity"
-            android:label="@string/title_activity_waitsend"
-            android:theme="@style/AppTheme.TransparentActivity" />
-        <activity
-            android:name=".ui.activity.trade.WaitSendOrdersActivity"
-            android:label="@string/title_activity_waitsend"
-            android:theme="@style/AppTheme.TransparentActivity" />
-        <activity
             android:name=".ui.activity.user.InformationActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
@@ -395,6 +387,8 @@
         <activity android:name=".ui.activity.xiaolumama.MamaDrawCashDetailActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity android:name=".ui.activity.product.ProductPopDetailActvityWeb"
+            android:theme="@style/AppTheme.TransparentActivity"/>
+        <activity android:name=".ui.activity.user.WaitSendAddressActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <service
             android:name="com.xiaomi.push.service.XMPushService"

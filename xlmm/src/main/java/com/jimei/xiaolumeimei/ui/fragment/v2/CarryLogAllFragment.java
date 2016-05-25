@@ -12,11 +12,11 @@ import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.cpoopc.scrollablelayoutlib.ScrollableHelper;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.CarryLogAllAdapter;
+import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.entities.CarryLogListBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.widget.DividerItemDecorationForFooter;
@@ -33,7 +33,7 @@ import rx.schedulers.Schedulers;
  * <p>
  * Copyright 2016年 上海己美. All rights reserved.
  */
-public class CarryLogAllFragment extends Fragment implements ScrollableHelper.ScrollableContainer{
+public class CarryLogAllFragment extends BaseFragment {
     @Bind(R.id.carrylogall_xry)
     XRecyclerView xRecyclerView;
     List<CarryLogListBean.ResultsEntity> list = new ArrayList<>();
@@ -64,6 +64,21 @@ public class CarryLogAllFragment extends Fragment implements ScrollableHelper.Sc
         if (isVisibleToUser && list.size() == 0) {
             load();
         }
+    }
+
+    @Override
+    protected View initViews(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return null;
+    }
+
+    @Override
+    protected void initData() {
+
+    }
+
+    @Override
+    protected void setDefaultFragmentTitle(String title) {
+
     }
 
     private void load() {
@@ -228,7 +243,6 @@ public class CarryLogAllFragment extends Fragment implements ScrollableHelper.Sc
             throw new RuntimeException(e);
         }
     }
-
     @Override
     public View getScrollableView() {
         return xRecyclerView;

@@ -1,8 +1,6 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -17,7 +15,9 @@ import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
+import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
+import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.widget.ClearEditText;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -157,6 +157,8 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                                 } else if (login.equals("product")) {
                                   finish();
                                 } else if (login.equals("main")) {
+                                  Intent intent = new Intent(mContext,MainActivity.class);
+                                  startActivity(intent);
                                   finish();
                                 } else if (login.equals("point")) {
                                   Intent intent = new Intent(mContext, MembershipPointActivity.class);
@@ -177,16 +179,32 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                                 } else if (login.equals("productdetail")) {
                                   finish();
                                 } else if (login.equals("h5")) {
-                                  Intent intent = new Intent(mContext, CommonWebViewActivity.class);
-                                  //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                  SharedPreferences sharedPreferences =
-                                          getSharedPreferences("COOKIESxlmm", Context.MODE_PRIVATE);
-                                  String cookies = sharedPreferences.getString("Cookies", "");
-                                  Bundle bundle = new Bundle();
-                                  bundle.putString("cookies", cookies);
-                                  bundle.putString("actlink", actlink);
-                                  intent.putExtras(bundle);
-                                  startActivity(intent);
+                                  //Intent intent = new Intent(mContext, CommonWebViewActivity.class);
+                                  ////intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                  //SharedPreferences sharedPreferences =
+                                  //        getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+                                  //String cookies = sharedPreferences.getString("Cookie", "");
+                                  //Bundle bundle = new Bundle();
+                                  //bundle.putString("cookies", cookies);
+                                  //bundle.putString("actlink", actlink);
+                                  //intent.putExtras(bundle);
+                                  //startActivity(intent);
+                                  JumpUtils.jumpToWebViewWithCookies(mContext,actlink,
+                                      -1,  CommonWebViewActivity.class);
+                                  finish();
+                                }else if (login.equals("prodcutweb")) {
+                                  //Intent intent = new Intent(mContext, ProductPopDetailActvityWeb.class);
+                                  ////intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                  //SharedPreferences sharedPreferences =
+                                  //    getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+                                  //String cookies = sharedPreferences.getString("Cookie", "");
+                                  //Bundle bundle = new Bundle();
+                                  //bundle.putString("cookies", cookies);
+                                  //bundle.putString("actlink", actlink);
+                                  //intent.putExtras(bundle);
+                                  //startActivity(intent);
+                                  JumpUtils.jumpToWebViewWithCookies(mContext,actlink,
+                                      -1,  ProductPopDetailActvityWeb.class);
                                   finish();
                                 }
                               }

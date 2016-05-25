@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -28,8 +27,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import butterknife.Bind;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.BrandlistAdapter;
@@ -86,6 +83,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.Bind;
 import okhttp3.Call;
 import okhttp3.ResponseBody;
 import rx.Subscription;
@@ -108,6 +106,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     Toolbar toolbar;
     @Bind(R.id.rv_cart)
     RelativeLayout carts;
+
     @Bind(R.id.img_mmentry)
     ImageView img_mmentry;
     @Nullable
@@ -160,6 +159,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private int num;
     private BadgeView badge;
     private double budgetCash;
+
     private TextView msg1;
     private TextView msg2;
     private TextView msg3;
@@ -258,7 +258,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
 
     //购物车数量
-    private void showBadge() {
+    public void showBadge() {
         badge = new BadgeView(this);
         badge.setTextSizeOff(7);
         badge.setBackground(4, Color.parseColor("#d3321b"));
@@ -268,7 +268,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     //侧滑栏初始化
-    private void initDrawer() {
+    public void initDrawer() {
         JUtils.Log(TAG, "侧滑栏初始化");
         if (!(LoginUtils.checkLoginState(getApplicationContext()))) {
             if (tvNickname != null) {
@@ -315,7 +315,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
     }
 
-    private void findById() {
+    public void findById() {
         llayout = navigationView.getHeaderView(0);
         tvCoupon = (TextView) llayout.findViewById(R.id.tvDiscount);
         tvMoney = (TextView) llayout.findViewById(R.id.tvMoney);
@@ -353,7 +353,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(1));
     }
 
-    private void init(SwipeRefreshLayout swipeRefreshLayout) {
+    public void init(SwipeRefreshLayout swipeRefreshLayout) {
         Subscription subscribe2 = ProductModel.getInstance()
                 .getPortalBean()
                 .subscribeOn(Schedulers.io())
@@ -391,7 +391,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         addSubscription(subscribe2);
     }
 
-    private void initPost(PortalBean postBean) throws NullPointerException {
+    public void initPost(PortalBean postBean) throws NullPointerException {
         JUtils.Log(TAG, "refreshPost");
         post_activity_layout.removeAllViews();
         imageViewList.clear();
@@ -564,7 +564,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
     }
 
-    private void initBrand(PortalBean postBean) throws NullPointerException {
+    public void initBrand(PortalBean postBean) throws NullPointerException {
         JUtils.Log(TAG, "refreshBrand");
         List<BrandlistAdapter> brandListAdapters = new ArrayList<>();
         List<BrandView> brandViews = new ArrayList<>();
@@ -659,7 +659,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
     }
 
-    private void initCategory(PortalBean postBean) throws NullPointerException {
+    public void initCategory(PortalBean postBean) throws NullPointerException {
         JUtils.Log(TAG, "refreshCategory");
         if (postBean.getCategorys() != null) {
             ladyImage.setImageResource(0);
@@ -671,15 +671,19 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     MainActivity.this, childImage);
         }
     }
-
-    private void initSliderLayout(PortalBean postBean) throws NullPointerException {
+    List<PortalBean.PostersBean> posters = new ArrayList<>();
+    public void initSliderLayout(PortalBean postBean) throws NullPointerException {
         JUtils.Log(TAG, "refreshSliderLayout");
-        List<PortalBean.PostersBean> posters = postBean.getPosters();
+
+
+        posters.clear();
+        map.clear();
+
+        posters.addAll(postBean.getPosters());
 
         for (int i = 0; i < posters.size(); i++) {
             map.put(posters.get(i).getPic_link(), posters.get(i).getApp_link());
         }
-
         if (mSliderLayout != null) {
             mSliderLayout.removeAllSliders();
         }
@@ -707,17 +711,22 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                                 if (!TextUtils.isEmpty(extra)) {
                                     JumpUtils.JumpInfo jump_info = JumpUtils.get_jump_info(extra);
                                     if (extra.startsWith("http://")) {
-                                        intent = new Intent(MainActivity.this,
-                                                ActivityWebViewActivity.class);
-                                        SharedPreferences sharedPreferences =
-                                                getSharedPreferences("COOKIESxlmm",
-                                                        Context.MODE_PRIVATE);
-                                        String cookies = sharedPreferences.getString("Cookies", "");
-                                        Bundle bundle = new Bundle();
-                                        bundle.putString("cookies", cookies);
-                                        bundle.putString("actlink", extra);
-                                        intent.putExtras(bundle);
-                                        startActivity(intent);
+                                        //intent = new Intent(MainActivity.this,
+                                        //        ActivityWebViewActivity.class);
+                                        //SharedPreferences sharedPreferences =
+                                        //        getSharedPreferences("xlmmCookiesAxiba",
+                                        //                Context.MODE_PRIVATE);
+                                        //String cookies = sharedPreferences.getString("Cookie", "");
+                                        //Bundle bundle = new Bundle();
+                                        //bundle.putString("cookies", cookies);
+                                        //bundle.putString("actlink", extra);
+                                        //intent.putExtras(bundle);
+                                        //startActivity(intent);
+
+                                        JumpUtils.jumpToWebViewWithCookies(MainActivity
+                                            .this,extra,
+                                            -1,  ActivityWebViewActivity.class);
+
                                     } else {
                                         if (jump_info.getType() == XlmmConst.JUMP_PRODUCT_CHILDLIST) {
                                             intent = new Intent(MainActivity.this, ChildListActivity.class);
@@ -879,7 +888,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
     }
 
-    private void login(String flag) {
+    public void login(String flag) {
         JUtils.Log(TAG, "need login");
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         Bundle bundle = new Bundle();
@@ -888,7 +897,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         startActivity(intent);
     }
 
-    private void getUserInfo() {
+    public void getUserInfo() {
         Subscription subscribe = UserNewModel.getInstance()
                 .getProfile()
                 .subscribeOn(Schedulers.io())
@@ -897,7 +906,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     public void onNext(UserInfoBean userNewBean) {
                         if (userNewBean != null) {
                             userInfoBean = userNewBean;
-                            initDrawer();
                             if (LoginUtils.checkLoginState(getApplicationContext())) {
                                 if ((userNewBean.getThumbnail() != null) && (!userNewBean.getThumbnail()
                                         .isEmpty())) {
@@ -970,7 +978,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         return userInfoBean;
     }
 
-    private long calcLefttowTime(long crtTime) {
+    public long calcLefttowTime(long crtTime) {
         long left = 0;
         Date now = new Date();
         try {
@@ -983,7 +991,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         return left;
     }
 
-    private int dip2Px(float dip) {
+    public int dip2Px(float dip) {
         return (int) (dip * getResources().getDisplayMetrics().density + 0.5f);
     }
 
@@ -1046,23 +1054,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 ((TomorrowV2Fragment) list.get(2)).load(swipeRefreshLayout);
                 break;
         }
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                SystemClock.sleep(15000);
-                if (swipeRefreshLayout != null) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (swipeRefreshLayout.isRefreshing()) {
-                                JUtils.Toast("刷新状态异常,请稍等片刻刷新~~ ");
-                            }
-                            swipeRefreshLayout.setRefreshing(false);
-                        }
-                    });
-                }
-            }
-        }).start();
     }
 
     private class MyFragmentAdapter extends FragmentPagerAdapter {

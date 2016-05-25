@@ -93,7 +93,13 @@ public class CouponListAdapter extends BaseAdapter {
             holder.tv_coupon_value.setTextColor(Color.parseColor("#4A4A4A"));
             convertView.setBackgroundResource(R.drawable.bg_img_dcoupon);
         }
-        holder.tv_coupon_value.setText("￥" + Math.round(mList.get(position).getCoupon_value() * 100) / 100);
+        double coupon_value = mList.get(position).getCoupon_value();
+        if (Math.round(coupon_value * 100) % 100 == 0) {
+            holder.tv_coupon_value.setText("￥" + Math.round(coupon_value * 100) / 100);
+        } else {
+            holder.tv_coupon_value.setText("￥" + coupon_value);
+        }
+
         holder.tv_coupon_info.setText(mList.get(position).getPros_desc());
         String start_time = mList.get(position).getStart_time();
         if (start_time != null) {

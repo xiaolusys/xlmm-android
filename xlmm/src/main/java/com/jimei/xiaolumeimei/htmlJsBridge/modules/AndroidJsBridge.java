@@ -16,6 +16,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
@@ -23,27 +24,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
-
-import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.XlmmApp;
-import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.entities.ActivityBean;
-import com.jimei.xiaolumeimei.model.ActivityModel;
-import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
-import com.jimei.xiaolumeimei.ui.activity.user.PhoneLoginActivity;
-import com.jimei.xiaolumeimei.utils.CameraUtils;
-import com.jimei.xiaolumeimei.utils.FileUtils;
-import com.jimei.xiaolumeimei.utils.JumpUtils;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
-import com.mob.tools.utils.UIHandler;
-import com.tbruyelle.rxpermissions.RxPermissions;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.HashMap;
-
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
@@ -53,12 +33,32 @@ import cn.sharesdk.tencent.qq.QQ;
 import cn.sharesdk.tencent.qzone.QZone;
 import cn.sharesdk.wechat.friends.Wechat;
 import cn.sharesdk.wechat.moments.WechatMoments;
+import com.google.gson.Gson;
+import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
+import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.entities.ActivityBean;
+import com.jimei.xiaolumeimei.entities.CallNativeFuncBean;
+import com.jimei.xiaolumeimei.model.ActivityModel;
+import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
+import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
+import com.jimei.xiaolumeimei.utils.CameraUtils;
+import com.jimei.xiaolumeimei.utils.FileUtils;
+import com.jimei.xiaolumeimei.utils.JumpUtils;
+import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jude.utils.JUtils;
+import com.mob.tools.utils.UIHandler;
+import com.tbruyelle.rxpermissions.RxPermissions;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.HashMap;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/02/16.
- *
+ * <p>
  * Copyright 2016年 上海己美. All rights reserved.
  */
 public class AndroidJsBridge implements PlatformActionListener, Handler.Callback {
@@ -319,7 +319,7 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     if ((partyShareInfo == null)
         || (partyShareInfo.getQrcodeLink() == null)
         || (partyShareInfo.getQrcodeLink().equals(""))) {
-      JUtils.Log(TAG, "saveTowDimenCode : fail,Qrcodelink=null" );
+      JUtils.Log(TAG, "saveTowDimenCode : fail,Qrcodelink=null");
       return;
     } else {
       JUtils.Log(TAG, "saveTowDimenCode : Qrcodelink=" + partyShareInfo.getQrcodeLink());
@@ -354,7 +354,7 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
 
         webView.loadUrl(partyShareInfo.getQrcodeLink());
         //Bitmap bmp= captureWebView(webView);
-        View cv = ((BaseSwipeBackCompatActivity)mContext).getWindow().getDecorView();
+        View cv = ((BaseSwipeBackCompatActivity) mContext).getWindow().getDecorView();
         Bitmap bmp = catchWebScreenshot(webView, cv.getWidth(), cv.getHeight(),
             partyShareInfo.getShareLink(), mContext);
         /*String fileName = Environment.getExternalStorageDirectory()
@@ -399,8 +399,6 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
                 JUtils.Toast("小鹿美美需要存储权限存储图片,请再次点击保存并打开权限许可.");
               }
             });
-
-
       } catch (Exception e) {
         e.printStackTrace();
       }
@@ -432,7 +430,6 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
             //    + context.getResources().getString(R.string.share_2dimen_pic_name)
             //    + ".jpg";
             //BitmapUtil.saveBitmap(b, fileName);
-
 
           }
         });
@@ -518,8 +515,10 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     //Intent intent = new Intent(mContext, ProductDetailActvityWeb.class);
     //intent.putExtras(bundle);
     //startActivity(intent);
-    //JUtils.Log(TAG, url+"aaaa");
-    JumpUtils.push_jump_proc(mContext, url);
+    JUtils.Log(TAG, "jump_ToNativeLocation=====" + url);
+    if (!TextUtils.isEmpty(url)) {
+      JumpUtils.jumToProc(mContext, JumpUtils.get_jump_info(url));
+    }
     //}
   }
 
@@ -531,7 +530,7 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
   }
 
   @JavascriptInterface public void callNativeLoginActivity(String pageUrl) {
-    Intent intent = new Intent(mContext, PhoneLoginActivity.class);
+    Intent intent = new Intent(mContext, LoginActivity.class);
     Bundle bundle = new Bundle();
     bundle.putString("login", "h5");
     bundle.putString("actlink", pageUrl);
@@ -540,8 +539,59 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     mContext.finish();
   }
 
-
   @JavascriptInterface public void showSkuPopup(String json) {
     ((ProductPopDetailActvityWeb) mContext).showPop(json);
+  }
+
+  @JavascriptInterface public void jumpToNativeLogin() {
+    ((ProductPopDetailActvityWeb) mContext).jumToNativeLogin();
+  }
+
+  @JavascriptInterface public void callNativeBack() {
+    mContext.finish();
+  }
+
+  @JavascriptInterface public void callNativeUniShareFunc(String json) {
+    JUtils.Log(TAG, "callNativeUniShareFunc====" + json);
+    if (!TextUtils.isEmpty(json)) {
+      Gson gson = new Gson();
+      CallNativeFuncBean callNativeFuncBean =
+          gson.fromJson(json, CallNativeFuncBean.class);
+
+
+    }
+  }
+
+  protected void share(String title, String sharelink, String desc, String shareimg) {
+    OnekeyShare oks = new OnekeyShare();
+    //关闭sso授权
+    oks.disableSSOWhenAuthorize();
+
+    oks.setTitle(title);
+    // titleUrl是标题的网络链接，仅在人人网和QQ空间使用
+    oks.setTitleUrl(sharelink);
+    // text是分享文本，所有平台都需要这个字段
+    oks.setText(desc);
+    // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
+    //oks.setImagePath(filePara.getFilePath());//确保SDcard下面存在此张图片
+    //oks.setImageUrl("http://f1.sharesdk.cn/imgs/2014/02/26/owWpLZo_638x960.jpg");
+    oks.setImageUrl(shareimg);
+    oks.setUrl(sharelink);
+
+    Bitmap enableLogo = BitmapFactory.decodeResource(mContext.getResources(),
+        R.drawable.ssdk_oks_logo_copy);
+    String label = "二维码";
+    Bitmap enableLogo2 = BitmapFactory.decodeResource(mContext.getResources(),
+        R.drawable.ssdk_oks_logo_copy);
+    View.OnClickListener listener = new View.OnClickListener() {
+      public void onClick(View v) {
+        //if (shareProductBean.getShareLink()) {
+        //}
+        saveTwoDimenCode(mContext);
+      }
+    };
+    oks.setCustomerLogo(enableLogo, enableLogo2, label, listener);
+    // 启动分享GUI
+    oks.show(mContext);
   }
 }

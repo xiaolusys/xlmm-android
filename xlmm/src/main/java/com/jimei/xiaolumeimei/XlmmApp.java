@@ -61,7 +61,7 @@ public class XlmmApp extends MultiDexApplication {
     //OkHttpUtils.getInstance().setConnectTimeout(10 * 1000, TimeUnit.MILLISECONDS);
 
     mContext = getApplicationContext();
-    cookiePrefs = getSharedPreferences("COOKIESxlmm", 0);
+    cookiePrefs = getSharedPreferences("xlmmCookiesAxiba", 0);
     client = initOkHttpClient();
     JUtils.initialize(this);
     JUtils.setDebug(true, "xlmm");
