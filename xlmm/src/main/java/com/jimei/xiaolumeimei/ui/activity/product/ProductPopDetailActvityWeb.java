@@ -41,6 +41,7 @@ import com.jude.utils.JUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import retrofit2.http.HEAD;
 
 /**
  * Created by 优尼世界 on 15/12/29.
@@ -162,9 +163,11 @@ public class ProductPopDetailActvityWeb extends BaseSwipeBackCompatActivity {
       mWebView.getSettings().setLoadWithOverviewMode(true);
       mWebView.getSettings().setUseWideViewPort(true);
       mWebView.setDrawingCacheEnabled(true);
+
       //mWebView.setWebContentsDebuggingEnabled(true);
 
       showIndeterminateProgressDialog(false);
+
 
       mWebView.setWebChromeClient(new WebChromeClient() {
         @Override public void onProgressChanged(WebView view, int newProgress) {
