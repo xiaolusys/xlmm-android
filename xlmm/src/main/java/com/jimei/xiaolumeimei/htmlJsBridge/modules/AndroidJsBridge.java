@@ -16,6 +16,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
@@ -23,11 +24,21 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
-
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
+import cn.sharesdk.sina.weibo.SinaWeibo;
+import cn.sharesdk.tencent.qq.QQ;
+import cn.sharesdk.tencent.qzone.QZone;
+import cn.sharesdk.wechat.friends.Wechat;
+import cn.sharesdk.wechat.moments.WechatMoments;
+import com.google.gson.Gson;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
+import com.jimei.xiaolumeimei.entities.CallNativeFuncBean;
 import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
@@ -38,27 +49,16 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.mob.tools.utils.UIHandler;
 import com.tbruyelle.rxpermissions.RxPermissions;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
-
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.PlatformActionListener;
-import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.onekeyshare.OnekeyShare;
-import cn.sharesdk.sina.weibo.SinaWeibo;
-import cn.sharesdk.tencent.qq.QQ;
-import cn.sharesdk.tencent.qzone.QZone;
-import cn.sharesdk.wechat.friends.Wechat;
-import cn.sharesdk.wechat.moments.WechatMoments;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/02/16.
- *
+ * <p>
  * Copyright 2016年 上海己美. All rights reserved.
  */
 public class AndroidJsBridge implements PlatformActionListener, Handler.Callback {
@@ -515,8 +515,10 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     //Intent intent = new Intent(mContext, ProductDetailActvityWeb.class);
     //intent.putExtras(bundle);
     //startActivity(intent);
-    //JUtils.Log(TAG, url+"aaaa");
-    JumpUtils.push_jump_proc(mContext, url);
+    JUtils.Log(TAG, "jump_ToNativeLocation=====" + url);
+    if (!TextUtils.isEmpty(url)) {
+      JumpUtils.jumToProc(mContext, JumpUtils.get_jump_info(url));
+    }
     //}
   }
 
@@ -547,5 +549,142 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
 
   @JavascriptInterface public void callNativeBack() {
     mContext.finish();
+  }
+
+  @JavascriptInterface public void callNativeUniShareFunc(String json) {
+    JUtils.Log(TAG, "callNativeUniShareFunc====" + json);
+    if (!TextUtils.isEmpty(json)) {
+      Gson gson = new Gson();
+      CallNativeFuncBean callNativeFuncBean =
+          gson.fromJson(json, CallNativeFuncBean.class);
+      if (null != callNativeFuncBean) {
+        if (!TextUtils.isEmpty(callNativeFuncBean.getShareTo())
+            && callNativeFuncBean.getShareTo().equals("wxapp")) {
+          shareToWx(callNativeFuncBean);
+        } else if (!TextUtils.isEmpty(callNativeFuncBean.getShareTo())
+            && callNativeFuncBean.getShareTo().equals("pyq")) {
+          shareToPyq(callNativeFuncBean);
+        } else if (!TextUtils.isEmpty(callNativeFuncBean.getShareTo())
+            && callNativeFuncBean.getShareTo().equals("qq")) {
+          shareToQq(callNativeFuncBean);
+        } else if (!TextUtils.isEmpty(callNativeFuncBean.getShareTo())
+            && callNativeFuncBean.getShareTo().equals("qqspa")) {
+          shareToQQspa(callNativeFuncBean);
+        } else if (!TextUtils.isEmpty(callNativeFuncBean.getShareTo())
+            && callNativeFuncBean.getShareTo().equals("sinawb")) {
+          shareToSina(callNativeFuncBean);
+        } else if (!TextUtils.isEmpty(callNativeFuncBean.getShareTo())
+            && callNativeFuncBean.getShareTo().equals("web")) {
+          saveTwoDimenCode(mContext);
+        } else if (TextUtils.isEmpty(callNativeFuncBean.getShareTo())) {
+          share(callNativeFuncBean.getShareTitle(), callNativeFuncBean.getLink(),
+              callNativeFuncBean.getShareDesc(), callNativeFuncBean.getShareIcon());
+        }
+      }
+    }
+  }
+
+  private void shareToSina(CallNativeFuncBean callNativeFuncBean) {
+    SinaWeibo.ShareParams sp = new SinaWeibo.ShareParams();
+
+    sp.setText(callNativeFuncBean.getShareDesc());
+    sp.setImageUrl(callNativeFuncBean.getShareIcon());
+
+    Platform weibo = ShareSDK.getPlatform(mContext, SinaWeibo.NAME);
+    weibo.setPlatformActionListener((PlatformActionListener) mContext); // 设置分享事件回调
+    // 执行图文分享
+    weibo.share(sp);
+  }
+
+  private void shareToQQspa(CallNativeFuncBean callNativeFuncBean) {
+    QZone.ShareParams sp = new QZone.ShareParams();
+    sp.setTitle(callNativeFuncBean.getShareTitle());
+    // 标题的超链接
+    sp.setTitleUrl(callNativeFuncBean.getLink());
+    sp.setText(callNativeFuncBean.getShareDesc());
+    sp.setImageUrl(callNativeFuncBean.getShareIcon());
+    //sp.setSite("发布分享的网站名称");
+    sp.setSiteUrl(callNativeFuncBean.getLink());
+
+    Platform qzone = ShareSDK.getPlatform(mContext, QZone.NAME);
+    qzone.setPlatformActionListener(this); // 设置分享事件回调
+    // 执行图文分享
+    qzone.share(sp);
+  }
+
+  private void shareToQq(CallNativeFuncBean callNativeFuncBean) {
+    QQ.ShareParams sp = new QQ.ShareParams();
+    sp.setTitle(callNativeFuncBean.getShareTitle());
+
+    sp.setText(callNativeFuncBean.getShareDesc());
+    sp.setImageUrl(callNativeFuncBean.getShareIcon());
+
+    sp.setTitleUrl(callNativeFuncBean.getLink());
+
+    Platform qq = ShareSDK.getPlatform(mContext, QQ.NAME);
+    qq.setPlatformActionListener(this); // 设置分享事件回调
+    // 执行图文分享
+    qq.share(sp);
+  }
+
+  private void shareToPyq(CallNativeFuncBean callNativeFuncBean) {
+    WechatMoments.ShareParams sp = new WechatMoments.ShareParams();
+    //sp.setImageUrl(linkQrcode);
+    sp.setTitle(callNativeFuncBean.getShareTitle());
+    sp.setImageUrl(callNativeFuncBean.getShareIcon());
+    sp.setShareType(Platform.SHARE_WEBPAGE);
+    Platform pyq = ShareSDK.getPlatform(mContext, WechatMoments.NAME);
+    pyq.setPlatformActionListener(this); // 设置分享事件回调
+    // 执行图文分享
+    pyq.share(sp);
+  }
+
+  private void shareToWx(CallNativeFuncBean callNativeFuncBean) {
+    Platform.ShareParams sp = new Platform.ShareParams();
+
+    sp.setTitle(callNativeFuncBean.getShareTitle());
+    sp.setText(callNativeFuncBean.getShareDesc());
+
+    sp.setUrl(callNativeFuncBean.getLink());
+    sp.setShareType(Platform.SHARE_WEBPAGE);
+    sp.setImageUrl(callNativeFuncBean.getShareIcon());
+
+    Platform wx = ShareSDK.getPlatform(mContext, Wechat.NAME);
+    wx.setPlatformActionListener(this); // 设置分享事件回调
+    // 执行图文分享
+    wx.share(sp);
+  }
+
+  protected void share(String title, String sharelink, String desc, String shareimg) {
+    OnekeyShare oks = new OnekeyShare();
+    //关闭sso授权
+    oks.disableSSOWhenAuthorize();
+
+    oks.setTitle(title);
+    // titleUrl是标题的网络链接，仅在人人网和QQ空间使用
+    oks.setTitleUrl(sharelink);
+    // text是分享文本，所有平台都需要这个字段
+    oks.setText(desc);
+    // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
+    //oks.setImagePath(filePara.getFilePath());//确保SDcard下面存在此张图片
+    //oks.setImageUrl("http://f1.sharesdk.cn/imgs/2014/02/26/owWpLZo_638x960.jpg");
+    oks.setImageUrl(shareimg);
+    oks.setUrl(sharelink);
+
+    Bitmap enableLogo = BitmapFactory.decodeResource(mContext.getResources(),
+        R.drawable.ssdk_oks_logo_copy);
+    String label = "二维码";
+    Bitmap enableLogo2 = BitmapFactory.decodeResource(mContext.getResources(),
+        R.drawable.ssdk_oks_logo_copy);
+    View.OnClickListener listener = new View.OnClickListener() {
+      public void onClick(View v) {
+        //if (shareProductBean.getShareLink()) {
+        //}
+        saveTwoDimenCode(mContext);
+      }
+    };
+    oks.setCustomerLogo(enableLogo, enableLogo2, label, listener);
+    // 启动分享GUI
+    oks.show(mContext);
   }
 }

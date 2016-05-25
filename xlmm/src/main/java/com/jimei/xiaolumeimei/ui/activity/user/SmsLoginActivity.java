@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import butterknife.Bind;
+
 import com.jimei.library.rx.RxCountDown;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -23,6 +23,8 @@ import com.jimei.xiaolumeimei.widget.ClearEditText;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.xiaomi.mipush.sdk.MiPushClient;
+
+import butterknife.Bind;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.functions.Action0;
@@ -155,6 +157,8 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                                 } else if (login.equals("product")) {
                                   finish();
                                 } else if (login.equals("main")) {
+                                  Intent intent = new Intent(mContext,MainActivity.class);
+                                  startActivity(intent);
                                   finish();
                                 } else if (login.equals("point")) {
                                   Intent intent = new Intent(mContext, MembershipPointActivity.class);

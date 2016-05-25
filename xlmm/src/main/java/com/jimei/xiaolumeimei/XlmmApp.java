@@ -8,6 +8,9 @@ import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 import com.jimei.xiaolumeimei.data.XlmmConst;
+import com.jimei.xiaolumeimei.di.component.ApplicationComponent;
+import com.jimei.xiaolumeimei.di.component.DaggerApplicationComponent;
+import com.jimei.xiaolumeimei.di.module.ApplicationModule;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.mipush.XiaoMiMessageReceiver;
 import com.jimei.xiaolumeimei.model.UserModel;
@@ -39,6 +42,7 @@ public class XlmmApp extends MultiDexApplication {
   private static Context mContext;
   private static XiaoMiMessageReceiver.XiaoMiPushHandler handler = null;
   private SharedPreferences cookiePrefs;
+  private ApplicationComponent mApplicationComponent;
 
   public static Context getmContext() {
     return mContext;
@@ -57,9 +61,7 @@ public class XlmmApp extends MultiDexApplication {
 
     //LeakCanary.install(this);
     //    Thread.setDefaultUncaughtExceptionHandler(new MyUnCaughtExceptionHandler());
-
-    //OkHttpUtils.getInstance().setConnectTimeout(10 * 1000, TimeUnit.MILLISECONDS);
-
+    initComponent();
     mContext = getApplicationContext();
     cookiePrefs = getSharedPreferences("xlmmCookiesAxiba", 0);
     client = initOkHttpClient();
@@ -132,6 +134,17 @@ public class XlmmApp extends MultiDexApplication {
       }
     }
     return false;
+  }
+
+  private void initComponent() {
+    mApplicationComponent = DaggerApplicationComponent.builder()
+        .applicationModule(new ApplicationModule(this))
+        .build();
+    mApplicationComponent.inject(this);
+  }
+
+  public ApplicationComponent getApplicationComponent() {
+    return mApplicationComponent;
   }
 
   //异常退出的时候,自动重启
