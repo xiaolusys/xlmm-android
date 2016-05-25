@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
@@ -33,12 +34,13 @@ public class JumpUtils {
   public static void push_jump_proc(Context context, String recvContent) {
     JUtils.Log(TAG, "push_jump_proc:" + recvContent);
 
-    if ((recvContent == null) || (recvContent.isEmpty())) return;
-
-    JUtils.Log(TAG,
-        "push_jump_proc:" + (recvContent == null) + " " + (recvContent.isEmpty()));
+    if (TextUtils.isEmpty(recvContent)) return;
 
     JumpInfo jumpInfo = get_jump_info(recvContent);
+    jumToProc(context, jumpInfo);
+  }
+
+  public static void jumToProc(Context context, JumpInfo jumpInfo) {
     Intent intent;
     switch (jumpInfo.getType()) {
       case XlmmConst.JUMP_PROMOTE_TODAY:

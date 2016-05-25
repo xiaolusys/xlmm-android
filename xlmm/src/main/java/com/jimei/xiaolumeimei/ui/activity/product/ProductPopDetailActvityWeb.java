@@ -1,7 +1,6 @@
 package com.jimei.xiaolumeimei.ui.activity.product;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -30,7 +29,7 @@ import android.widget.TextView;
 import cn.sharesdk.framework.ShareSDK;
 import com.google.gson.Gson;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.base.BaseAppCompatActivityForDetail;
+import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ProductSkuDetailsBean;
 import com.jimei.xiaolumeimei.htmlJsBridge.modules.AndroidJsBridge;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
@@ -42,13 +41,14 @@ import com.jude.utils.JUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import retrofit2.http.HEAD;
 
 /**
  * Created by 优尼世界 on 15/12/29.
  * <p>
  * Copyright 2015年 上海己美. All rights reserved.
  */
-public class ProductPopDetailActvityWeb extends BaseAppCompatActivityForDetail {
+public class ProductPopDetailActvityWeb extends BaseSwipeBackCompatActivity {
 
   private static final String TAG = ProductPopDetailActvityWeb.class.getSimpleName();
   private static final String PONTO_MODULES_PACKAGE =
@@ -109,7 +109,7 @@ public class ProductPopDetailActvityWeb extends BaseAppCompatActivityForDetail {
     return R.layout.activity_popdetail;
   }
 
-  @TargetApi(Build.VERSION_CODES.KITKAT)
+  //@TargetApi(Build.VERSION_CODES.KITKAT)
   @SuppressLint("JavascriptInterface") @Override protected void initViews() {
     JUtils.Log(TAG, "initViews");
     ShareSDK.initSDK(this);
@@ -163,16 +163,18 @@ public class ProductPopDetailActvityWeb extends BaseAppCompatActivityForDetail {
       mWebView.getSettings().setLoadWithOverviewMode(true);
       mWebView.getSettings().setUseWideViewPort(true);
       mWebView.setDrawingCacheEnabled(true);
-            mWebView.setWebContentsDebuggingEnabled(true);
+
+      //mWebView.setWebContentsDebuggingEnabled(true);
+
+      showIndeterminateProgressDialog(false);
+
 
       mWebView.setWebChromeClient(new WebChromeClient() {
         @Override public void onProgressChanged(WebView view, int newProgress) {
 
-          //if (newProgress == 100) {
-          //  mProgressBar.setVisibility(View.GONE);
-          //} else {
-          //  mProgressBar.setVisibility(View.VISIBLE);
-          //}
+          if (newProgress == 100) {
+            hideIndeterminateProgressDialog();
+          }
         }
       });
 
@@ -258,6 +260,7 @@ public class ProductPopDetailActvityWeb extends BaseAppCompatActivityForDetail {
   @Override protected void onDestroy() {
     JUtils.Log(TAG, "onDestroy");
     super.onDestroy();
+    ShareSDK.stopSDK(this);
     if (ll_actwebview != null) {
       ll_actwebview.removeView(mWebView);
     }
@@ -269,7 +272,6 @@ public class ProductPopDetailActvityWeb extends BaseAppCompatActivityForDetail {
 
   @Override protected void onStop() {
     super.onStop();
-    ShareSDK.stopSDK(this);
   }
 
   public void syncCookie(Context context) {
