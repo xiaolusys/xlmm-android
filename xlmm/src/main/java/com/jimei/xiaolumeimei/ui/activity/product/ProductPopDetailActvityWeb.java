@@ -29,7 +29,7 @@ import android.widget.TextView;
 import cn.sharesdk.framework.ShareSDK;
 import com.google.gson.Gson;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.base.BaseAppCompatActivityForDetail;
+import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ProductSkuDetailsBean;
 import com.jimei.xiaolumeimei.htmlJsBridge.modules.AndroidJsBridge;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
@@ -47,7 +47,7 @@ import java.util.Map;
  * <p>
  * Copyright 2015年 上海己美. All rights reserved.
  */
-public class ProductPopDetailActvityWeb extends BaseAppCompatActivityForDetail {
+public class ProductPopDetailActvityWeb extends BaseSwipeBackCompatActivity {
 
   private static final String TAG = ProductPopDetailActvityWeb.class.getSimpleName();
   private static final String PONTO_MODULES_PACKAGE =
@@ -109,8 +109,7 @@ public class ProductPopDetailActvityWeb extends BaseAppCompatActivityForDetail {
   }
 
   //@TargetApi(Build.VERSION_CODES.KITKAT)
-  @SuppressLint("JavascriptInterface") @Override
-  protected void initViews() {
+  @SuppressLint("JavascriptInterface") @Override protected void initViews() {
     JUtils.Log(TAG, "initViews");
     ShareSDK.initSDK(this);
 

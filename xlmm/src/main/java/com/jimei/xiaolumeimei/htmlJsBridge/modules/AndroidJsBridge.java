@@ -557,9 +557,102 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
       Gson gson = new Gson();
       CallNativeFuncBean callNativeFuncBean =
           gson.fromJson(json, CallNativeFuncBean.class);
-
-
+      if (null != callNativeFuncBean) {
+        if (!TextUtils.isEmpty(callNativeFuncBean.getShareTo())
+            && callNativeFuncBean.getShareTo().equals("wxapp")) {
+          shareToWx(callNativeFuncBean);
+        } else if (!TextUtils.isEmpty(callNativeFuncBean.getShareTo())
+            && callNativeFuncBean.getShareTo().equals("pyq")) {
+          shareToPyq(callNativeFuncBean);
+        } else if (!TextUtils.isEmpty(callNativeFuncBean.getShareTo())
+            && callNativeFuncBean.getShareTo().equals("qq")) {
+          shareToQq(callNativeFuncBean);
+        } else if (!TextUtils.isEmpty(callNativeFuncBean.getShareTo())
+            && callNativeFuncBean.getShareTo().equals("qqspa")) {
+          shareToQQspa(callNativeFuncBean);
+        } else if (!TextUtils.isEmpty(callNativeFuncBean.getShareTo())
+            && callNativeFuncBean.getShareTo().equals("sinawb")) {
+          shareToSina(callNativeFuncBean);
+        } else if (!TextUtils.isEmpty(callNativeFuncBean.getShareTo())
+            && callNativeFuncBean.getShareTo().equals("web")) {
+          saveTwoDimenCode(mContext);
+        } else if (TextUtils.isEmpty(callNativeFuncBean.getShareTo())) {
+          share(callNativeFuncBean.getShareTitle(), callNativeFuncBean.getLink(),
+              callNativeFuncBean.getShareDesc(), callNativeFuncBean.getShareIcon());
+        }
+      }
     }
+  }
+
+  private void shareToSina(CallNativeFuncBean callNativeFuncBean) {
+    SinaWeibo.ShareParams sp = new SinaWeibo.ShareParams();
+
+    sp.setText(callNativeFuncBean.getShareDesc());
+    sp.setImageUrl(callNativeFuncBean.getShareIcon());
+
+    Platform weibo = ShareSDK.getPlatform(mContext, SinaWeibo.NAME);
+    weibo.setPlatformActionListener((PlatformActionListener) mContext); // 设置分享事件回调
+    // 执行图文分享
+    weibo.share(sp);
+  }
+
+  private void shareToQQspa(CallNativeFuncBean callNativeFuncBean) {
+    QZone.ShareParams sp = new QZone.ShareParams();
+    sp.setTitle(callNativeFuncBean.getShareTitle());
+    // 标题的超链接
+    sp.setTitleUrl(callNativeFuncBean.getLink());
+    sp.setText(callNativeFuncBean.getShareDesc());
+    sp.setImageUrl(callNativeFuncBean.getShareIcon());
+    //sp.setSite("发布分享的网站名称");
+    sp.setSiteUrl(callNativeFuncBean.getLink());
+
+    Platform qzone = ShareSDK.getPlatform(mContext, QZone.NAME);
+    qzone.setPlatformActionListener(this); // 设置分享事件回调
+    // 执行图文分享
+    qzone.share(sp);
+  }
+
+  private void shareToQq(CallNativeFuncBean callNativeFuncBean) {
+    QQ.ShareParams sp = new QQ.ShareParams();
+    sp.setTitle(callNativeFuncBean.getShareTitle());
+
+    sp.setText(callNativeFuncBean.getShareDesc());
+    sp.setImageUrl(callNativeFuncBean.getShareIcon());
+
+    sp.setTitleUrl(callNativeFuncBean.getLink());
+
+    Platform qq = ShareSDK.getPlatform(mContext, QQ.NAME);
+    qq.setPlatformActionListener(this); // 设置分享事件回调
+    // 执行图文分享
+    qq.share(sp);
+  }
+
+  private void shareToPyq(CallNativeFuncBean callNativeFuncBean) {
+    WechatMoments.ShareParams sp = new WechatMoments.ShareParams();
+    //sp.setImageUrl(linkQrcode);
+    sp.setTitle(callNativeFuncBean.getShareTitle());
+    sp.setImageUrl(callNativeFuncBean.getShareIcon());
+    sp.setShareType(Platform.SHARE_WEBPAGE);
+    Platform pyq = ShareSDK.getPlatform(mContext, WechatMoments.NAME);
+    pyq.setPlatformActionListener(this); // 设置分享事件回调
+    // 执行图文分享
+    pyq.share(sp);
+  }
+
+  private void shareToWx(CallNativeFuncBean callNativeFuncBean) {
+    Platform.ShareParams sp = new Platform.ShareParams();
+
+    sp.setTitle(callNativeFuncBean.getShareTitle());
+    sp.setText(callNativeFuncBean.getShareDesc());
+
+    sp.setUrl(callNativeFuncBean.getLink());
+    sp.setShareType(Platform.SHARE_WEBPAGE);
+    sp.setImageUrl(callNativeFuncBean.getShareIcon());
+
+    Platform wx = ShareSDK.getPlatform(mContext, Wechat.NAME);
+    wx.setPlatformActionListener(this); // 设置分享事件回调
+    // 执行图文分享
+    wx.share(sp);
   }
 
   protected void share(String title, String sharelink, String desc, String shareimg) {
