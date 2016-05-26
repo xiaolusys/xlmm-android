@@ -99,13 +99,12 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     }
 
     @JavascriptInterface
-    public void showLoading(){
-        mContext.showIndeterminateProgressDialog(false);
-    }
-
-    @JavascriptInterface
-    public void hideLoading(){
-        mContext.hideIndeterminateProgressDialog();
+    public void showLoading(String isShow) {
+        if (isShow.contains("true")) {
+            mContext.showIndeterminateProgressDialog(false);
+        } else if (isShow.contains("false")) {
+            mContext.hideIndeterminateProgressDialog();
+        }
     }
 
     public void getPromotionParams(String uform, String activity_id) {
