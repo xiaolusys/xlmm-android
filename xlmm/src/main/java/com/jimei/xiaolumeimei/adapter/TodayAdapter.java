@@ -70,9 +70,8 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.TodayVH> {
       if (isSaleopen) {
 
         boolean isSaleOut = productModel.isIsSaleOut();
-        boolean isSingleSpec = productModel.isIsSingleSpec();
 
-        if (isSaleOut && isSingleSpec) {
+        if (isSaleOut) {
           holder.saleout.setVisibility(View.VISIBLE);
           holder.salenotopen.setVisibility(View.INVISIBLE);
         } else {

@@ -89,9 +89,8 @@ public class ChildListActivityAdapter
       if (isSaleopen) {
 
         boolean isSaleOut = productModel.isIsSaleOut();
-        boolean isSingleSpec = productModel.isIsSingleSpec();
 
-        if (isSaleOut && isSingleSpec) {
+        if (isSaleOut) {
           holder.saleout.setVisibility(View.VISIBLE);
         } else {
           holder.saleout.setVisibility(View.INVISIBLE);

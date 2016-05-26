@@ -31,6 +31,9 @@ import android.view.WindowManager;
 import butterknife.ButterKnife;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
+import com.jimei.xiaolumeimei.di.component.ApplicationComponent;
+import com.jimei.xiaolumeimei.di.module.ActivityModule;
 import com.jimei.xiaolumeimei.utils.CommonUtils;
 import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.zhy.autolayout.AutoLayoutActivity;
@@ -59,7 +62,6 @@ public abstract class BaseAppCompatActivity extends AutoLayoutActivity {
   private MaterialDialog materialDialog;
   private CompositeSubscription mCompositeSubscription;
 
-
   @Override protected void onCreate(Bundle savedInstanceState) {
     if (toggleOverridePendingTransition()) {
       switch (getOverridePendingTransitionMode()) {
@@ -83,6 +85,9 @@ public abstract class BaseAppCompatActivity extends AutoLayoutActivity {
           break;
       }
     }
+
+    getApplicationComponent().inject(this);
+
     super.onCreate(savedInstanceState);
     // base setup
     Bundle extras = getIntent().getExtras();
@@ -107,10 +112,18 @@ public abstract class BaseAppCompatActivity extends AutoLayoutActivity {
       throw new IllegalArgumentException(
           "You must return a right contentView layout resource Id");
     }
-    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent),0);
+    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent), 0);
     initViews();
     initData();
     setListener();
+  }
+
+  protected ApplicationComponent getApplicationComponent() {
+    return ((XlmmApp) getApplication()).getApplicationComponent();
+  }
+
+  protected ActivityModule getActivityModule() {
+    return new ActivityModule(this);
   }
 
   protected abstract void setListener();
@@ -309,13 +322,6 @@ public abstract class BaseAppCompatActivity extends AutoLayoutActivity {
     }
   }
 
-  /**
-   * overridePendingTransition mode
-   */
-  public enum TransitionMode {
-    LEFT, RIGHT, TOP, BOTTOM, SCALE, FADE
-  }
-
   public CompositeSubscription getCompositeSubscription() {
     if (this.mCompositeSubscription == null) {
       this.mCompositeSubscription = new CompositeSubscription();
@@ -342,5 +348,12 @@ public abstract class BaseAppCompatActivity extends AutoLayoutActivity {
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+
+  /**
+   * overridePendingTransition mode
+   */
+  public enum TransitionMode {
+    LEFT, RIGHT, TOP, BOTTOM, SCALE, FADE
   }
 }
