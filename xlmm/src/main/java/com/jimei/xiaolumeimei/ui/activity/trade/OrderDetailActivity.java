@@ -118,7 +118,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                             orderDetail = orderDetailBean;
                             showProcBtn(orderDetailBean);
                             fillDataToView(orderDetailBean);
-                            if ("待付款".equals(orderDetailBean.getStatus_display()) || "已付款".equals(orderDetailBean.getStatus_display())) {
+                            if ("已付款".equals(orderDetailBean.getStatus_display())) {
                                 addressLayout.setOnClickListener(OrderDetailActivity.this);
                             } else {
                                 rightImage.setVisibility(View.GONE);
