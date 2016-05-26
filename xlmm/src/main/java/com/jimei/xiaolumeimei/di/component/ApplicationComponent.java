@@ -1,20 +1,19 @@
 package com.jimei.xiaolumeimei.di.component;
 
 import android.content.Context;
-
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseActivity;
 import com.jimei.xiaolumeimei.base.BaseAppCompatActivity;
 import com.jimei.xiaolumeimei.base.BaseAppCompatActivityForDetail;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.di.module.ApplicationModule;
-
-import javax.inject.Singleton;
-
+import com.jimei.xiaolumeimei.di.scope.ContextLife;
 import dagger.Component;
+import javax.inject.Singleton;
 
 @Singleton @Component(modules = { ApplicationModule.class })
 public interface ApplicationComponent {
+  @ContextLife("Application")
   Context context();
 
   void inject(XlmmApp mApplication);
