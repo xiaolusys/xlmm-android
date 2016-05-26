@@ -89,7 +89,7 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
                     });
             addSubscription(subscribe);
         } else {
-            JUtils.Toast("获取物流信息失败!");
+            JUtils.Toast("获取物流信息失败,请通过物流单号网上查询!");
         }
     }
 

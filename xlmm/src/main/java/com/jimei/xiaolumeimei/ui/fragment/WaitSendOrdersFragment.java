@@ -172,6 +172,7 @@ public class WaitSendOrdersFragment extends Fragment {
   public void onResume() {
     super.onResume();
     adapter.clearAll();
+    page = 2;
     showIndeterminateProgressDialog(false);
     subscription1 = TradeModel.getInstance()
             .getWaitSendOrdersBean("1")

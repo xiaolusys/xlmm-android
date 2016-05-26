@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.xlmmService;
 
 import android.widget.ListView;
 
+import com.jimei.xiaolumeimei.data.LogisticsCompanyInfo;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.entities.AddCartsBean;
 import com.jimei.xiaolumeimei.entities.AddressBean;
@@ -28,6 +29,7 @@ import com.jimei.xiaolumeimei.entities.CouponBean;
 import com.jimei.xiaolumeimei.entities.IndexBean;
 import com.jimei.xiaolumeimei.entities.LadyListBean;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
+import com.jimei.xiaolumeimei.entities.LogisticCompany;
 import com.jimei.xiaolumeimei.entities.LogisticsBean;
 import com.jimei.xiaolumeimei.entities.MMChooselistBean;
 import com.jimei.xiaolumeimei.entities.MMHavaChooseResultBean;
@@ -252,8 +254,7 @@ public interface XlmmService {
             @Field("discount_fee") String discount_fee,
             @Field("total_fee") String total_fee,
             @Field("uuid") String uuid,
-            @Field("pay_extras") String pay_extras,
-            @Field("logistics_company_id") String logistics_company_id
+            @Field("pay_extras") String pay_extras
     );
 
 
@@ -312,7 +313,7 @@ public interface XlmmService {
     );
 
     //获得订单数据
-    @GET("/rest/v1/trades/{pk}/details")
+    @GET("/rest/v2/trades/{pk}")
     Observable<OrderDetailBean> getOrderDetail(
             @Path("pk") int order_id);
 
@@ -379,6 +380,21 @@ public interface XlmmService {
             @Field("receiver_name") String receiver_name,
             @Field("receiver_mobile") String receiver_mobile,
             @Field("default") String defaulta
+    );
+
+    //修改地址
+    @FormUrlEncoded
+    @POST("/rest/v1/address/{id}/update")
+    Observable<AddressResultBean> update_address(
+            @Path("id") String id,
+            @Field("receiver_state") String receiver_state,
+            @Field("receiver_city") String receiver_city,
+            @Field("receiver_district") String receiver_district,
+            @Field("receiver_address") String receiver_address,
+            @Field("receiver_name") String receiver_name,
+            @Field("receiver_mobile") String receiver_mobile,
+            @Field("logistic_company_code") String logistic_company_code,
+            @Field("referal_trade_id") String referal_trade_id
     );
 
 
@@ -453,7 +469,7 @@ public interface XlmmService {
     //获取用户积分记录信息
     @GET("/rest/v1/integrallog")
     Observable<PointLogBean> getPointLogBean(
-            @Query("page")String page
+            @Query("page") String page
     );
 
     //获取用户未使用优惠券信息
@@ -807,6 +823,10 @@ public interface XlmmService {
 
     @GET("/rest/v1/activitys")
     Observable<List<PostActivityBean>> getPostActivity(
+    );
+
+    @GET("/rest/v1/address/get_logistic_companys")
+    Observable<List<LogisticCompany>> getLogisticCompany(
     );
 
     @FormUrlEncoded

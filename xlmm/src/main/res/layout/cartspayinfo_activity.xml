@@ -194,6 +194,7 @@
                 android:layout_height="88px"
                 android:background="@color/white"
                 android:focusable="true"
+                android:visibility="gone"
                 android:focusableInTouchMode="true"
                 android:orientation="horizontal">
 
@@ -210,7 +211,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginRight="8dp"
-                    android:gravity="center" />
+                    android:gravity="center"
+                    android:spinnerMode="dropdown" />
 
             </LinearLayout>
 
