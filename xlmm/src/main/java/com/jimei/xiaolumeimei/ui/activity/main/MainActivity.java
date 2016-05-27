@@ -425,7 +425,7 @@ public class MainActivity extends BaseActivity
                                   Intent intent =
                                       new Intent(MainActivity.this, LoginActivity.class);
                                   Bundle bundle = new Bundle();
-                                  bundle.putString("login", "goactivty");
+                                  bundle.putString("login", "goactivity");
                                   bundle.putString("actlink",
                                       postActivityBean.get(finalI).getAct_link());
                                   bundle.putInt("id", postActivityBean.get(finalI).getId());

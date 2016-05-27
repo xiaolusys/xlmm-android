@@ -183,7 +183,7 @@ public class MastFragment extends DialogFragment {
                                         Intent intent =
                                             new Intent(mActivity, LoginActivity.class);
                                         Bundle bundle = new Bundle();
-                                        bundle.putString("login", "goactivty");
+                                        bundle.putString("login", "goactivity");
                                         bundle.putString("actlink",
                                             postActivityBean.get(0).getActLink());
                                         bundle.putInt("id",

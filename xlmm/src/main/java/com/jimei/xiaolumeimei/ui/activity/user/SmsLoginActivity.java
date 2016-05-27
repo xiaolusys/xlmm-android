@@ -14,6 +14,7 @@ import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
 import com.jimei.xiaolumeimei.model.UserModel;
+import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
@@ -203,7 +204,7 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                                   finish();
                                 } else if (login.equals("goactivity")) {
                                   JumpUtils.jumpToWebViewWithCookies(mContext, actlink,
-                                      id, ProductPopDetailActvityWeb.class);
+                                      id, ActivityWebViewActivity.class);
                                 }
                               }
                             } else {

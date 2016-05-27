@@ -21,6 +21,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.model.UserModel;
+import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
@@ -190,7 +191,7 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                         finish();
                       } else if (login.equals("goactivity")) {
                         JumpUtils.jumpToWebViewWithCookies(mContext, actlink, id,
-                            ProductPopDetailActvityWeb.class);
+                            ActivityWebViewActivity.class);
                       }
                     }
                   } else {
@@ -234,8 +235,11 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void onStop() {
     super.onStop();
-    removeWX(new Wechat(this));
-    ShareSDK.stopSDK(this);
+
+  }
+
+  @Override protected void onDestroy() {
+    super.onDestroy();
   }
 
   @Override
