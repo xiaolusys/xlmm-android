@@ -66,7 +66,6 @@ public class MastFragment extends DialogFragment {
   @Override public void onAttach(Activity activity) {
     super.onAttach(activity);
     mActivity = activity;
-
   }
 
   @Override public void onCreate(Bundle savedInstanceState) {
@@ -93,9 +92,9 @@ public class MastFragment extends DialogFragment {
 
   @Override public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-      if (close != null) {
-          close.setVisibility(View.INVISIBLE);
-      }
+    if (close != null) {
+      close.setVisibility(View.INVISIBLE);
+    }
     subscribe = ActivityModel.getInstance()
         .getPostActivity()
         .subscribeOn(Schedulers.io())
@@ -119,15 +118,13 @@ public class MastFragment extends DialogFragment {
                                 + response.getHeight()
                                 + "  width:"
                                 + response.getWidth());
-                              if (close != null) {
-                                  close.setVisibility(View.VISIBLE);
-                              }
+                            if (close != null) {
+                              close.setVisibility(View.VISIBLE);
+                            }
                             FrameLayout.LayoutParams layoutParams =
                                 new FrameLayout.LayoutParams(
-                                    DisplayUtil.dip2px(mActivity,
-                                        response.getWidth()),
-                                    DisplayUtil.dip2px(mActivity,
-                                        response.getHeight()));
+                                    DisplayUtil.dip2px(mActivity, response.getWidth()),
+                                    DisplayUtil.dip2px(mActivity, response.getHeight()));
                             maskImage.setLayoutParams(layoutParams);
                             maskImage.setImageBitmap(response);
 
@@ -161,9 +158,8 @@ public class MastFragment extends DialogFragment {
                                       //String cookies = sharedPreferences.getString("Cookies", "");
                                       //Bundle bundle = new Bundle();
                                       //bundle.putString("cookies", cookies);
-                                      sharedPreferences =
-                                          mActivity.getSharedPreferences("xlmmCookiesAxiba",
-                                              Context.MODE_PRIVATE);
+                                      sharedPreferences = mActivity.getSharedPreferences(
+                                          "xlmmCookiesAxiba", Context.MODE_PRIVATE);
                                       cookies =
                                           sharedPreferences.getString("cookiesString",
                                               "");
@@ -187,7 +183,13 @@ public class MastFragment extends DialogFragment {
                                         Intent intent =
                                             new Intent(mActivity, LoginActivity.class);
                                         Bundle bundle = new Bundle();
-                                        bundle.putString("login", "main");
+                                        bundle.putString("login", "goactivity");
+                                        bundle.putString("actlink",
+                                            postActivityBean.get(0).getActLink());
+                                        bundle.putInt("id",
+                                            postActivityBean.get(0).getId());
+                                        intent.putExtras(bundle);
+                                        intent.putExtras(bundle);
                                         intent.putExtras(bundle);
                                         mActivity.startActivity(intent);
                                       } else {
@@ -209,8 +211,8 @@ public class MastFragment extends DialogFragment {
                                       }
                                     }
                                   } else {
-                                    Intent intent =
-                                        new Intent(mActivity, ActivityWebViewActivity.class);
+                                    Intent intent = new Intent(mActivity,
+                                        ActivityWebViewActivity.class);
                                     //sharedPreferences =
                                     //    getActivity().getSharedPreferences("COOKIESxlmm",
                                     //        Context.MODE_PRIVATE);
@@ -285,7 +287,7 @@ public class MastFragment extends DialogFragment {
 
   @Override public void onDestroyView() {
     super.onDestroyView();
-   ButterKnife.unbind(this);
+    ButterKnife.unbind(this);
   }
 
   @Override public void onStop() {

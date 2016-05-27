@@ -21,6 +21,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.model.UserModel;
+import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
@@ -46,6 +47,7 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
   String login_name_value;//登录名
   String login_pass_value;//登录密码
   private String actlink;
+  private int id;
 
   @Override protected void setListener() {
     login_button.setOnClickListener(this);
@@ -126,6 +128,7 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                     if (getIntent() !=null && getIntent().getExtras() != null) {
                       login = getIntent().getExtras().getString("login");
                       actlink = getIntent().getExtras().getString("actlink");
+                      id = getIntent().getExtras().getInt("id");
                     }
 
                     if (login!=null) {
@@ -169,10 +172,10 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                         //bundle.putString("actlink", actlink);
                         //intent.putExtras(bundle);
                         //startActivity(intent);
-                        JumpUtils.jumpToWebViewWithCookies(mContext,actlink,
-                            -1,  CommonWebViewActivity.class);
+                        JumpUtils.jumpToWebViewWithCookies(mContext, actlink, -1,
+                            CommonWebViewActivity.class);
                         finish();
-                      }else if (login.equals("prodcutweb")) {
+                      } else if (login.equals("prodcutweb")) {
                         //Intent intent = new Intent(mContext, ProductPopDetailActvityWeb.class);
                         ////intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         //SharedPreferences sharedPreferences =
@@ -183,8 +186,12 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                         //bundle.putString("actlink", actlink);
                         //intent.putExtras(bundle);
                         //startActivity(intent);
-                        JumpUtils.jumpToWebViewWithCookies(mContext,actlink,
-                            -1,  ProductPopDetailActvityWeb.class);
+                        JumpUtils.jumpToWebViewWithCookies(mContext, actlink, -1,
+                            ProductPopDetailActvityWeb.class);
+                        finish();
+                      } else if (login.equals("goactivity")) {
+                        JumpUtils.jumpToWebViewWithCookies(mContext, actlink, id,
+                            ActivityWebViewActivity.class);
                         finish();
                       }
                     }
@@ -229,8 +236,11 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void onStop() {
     super.onStop();
-    removeWX(new Wechat(this));
-    ShareSDK.stopSDK(this);
+
+  }
+
+  @Override protected void onDestroy() {
+    super.onDestroy();
   }
 
   @Override
