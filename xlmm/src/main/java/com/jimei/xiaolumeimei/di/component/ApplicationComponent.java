@@ -13,8 +13,7 @@ import javax.inject.Singleton;
 
 @Singleton @Component(modules = { ApplicationModule.class })
 public interface ApplicationComponent {
-  @ContextLife("Application")
-  Context context();
+  @ContextLife("Application") Context context();
 
   void inject(XlmmApp mApplication);
 
