@@ -146,7 +146,6 @@ public class JumpUtils {
         if (LoginUtils.checkLoginState(context)) {
           intent = new Intent(context, CartActivity.class);
           context.startActivity(intent);
-          ((Activity) context).finish();
         } else {
           intent = new Intent(context, LoginActivity.class);
           bundle = new Bundle();

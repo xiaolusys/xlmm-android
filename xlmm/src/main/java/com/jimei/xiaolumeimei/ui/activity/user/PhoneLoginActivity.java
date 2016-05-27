@@ -122,15 +122,13 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                     LoginUtils.saveLoginInfo(true, getApplicationContext(),
                         login_name_value, login_pass_value);
                     JUtils.Toast("登录成功!");
-                    LoginUtils.setPushUserAccount(PhoneLoginActivity.this,
-                        MiPushClient.getRegId(getApplicationContext()));
                     String login = null;
-                    if (null != getIntent() && getIntent().getExtras() != null) {
+                    if (getIntent() !=null && getIntent().getExtras() != null) {
                       login = getIntent().getExtras().getString("login");
                       actlink = getIntent().getExtras().getString("actlink");
                     }
 
-                    if (null != login) {
+                    if (login!=null) {
                       if (login.equals("cart")) {
                         Intent intent = new Intent(mContext, CartActivity.class);
                         startActivity(intent);
@@ -195,10 +193,12 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                     LoginUtils.saveLoginInfo(false, getApplicationContext(), "", "");
                     JUtils.Toast(codeBean.getMsg());
                   }
+                  LoginUtils.setPushUserAccount(PhoneLoginActivity.this,
+                          MiPushClient.getRegId(getApplicationContext()));
                 }
 
                 @Override public void onCompleted() {
-                  super.onCompleted();
+
                 }
               });
 
