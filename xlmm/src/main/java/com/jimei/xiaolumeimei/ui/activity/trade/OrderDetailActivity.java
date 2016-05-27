@@ -118,11 +118,12 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                             orderDetail = orderDetailBean;
                             showProcBtn(orderDetailBean);
                             fillDataToView(orderDetailBean);
-                            if ("已付款".equals(orderDetailBean.getStatus_display())) {
-                                addressLayout.setOnClickListener(OrderDetailActivity.this);
-                            } else {
-                                rightImage.setVisibility(View.GONE);
-                            }
+                            // TODO: 16/5/27 后台修改地址功能暂时未完成,先屏蔽修改地址功能
+//                            if ("已付款".equals(orderDetailBean.getStatus_display())) {
+//                                addressLayout.setOnClickListener(OrderDetailActivity.this);
+//                            } else {
+                            rightImage.setVisibility(View.GONE);
+//                            }
                             Log.i(TAG, "order_id " + order_id + " " + orderDetailBean.toString());
                         }
 
