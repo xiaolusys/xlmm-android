@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
+import butterknife.Bind;
 import com.jimei.library.rx.RxCountDown;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -23,8 +23,6 @@ import com.jimei.xiaolumeimei.widget.ClearEditText;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.xiaomi.mipush.sdk.MiPushClient;
-
-import butterknife.Bind;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.functions.Action0;
@@ -47,6 +45,7 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
   private String mobile, invalid_code;
   private Subscription subscribe;
   private String actlink;
+  private int id;
 
   @Override protected void setListener() {
     getCheckCode.setOnClickListener(this);
@@ -88,11 +87,10 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
               getCheckCode.setBackgroundColor(Color.parseColor("#f3f3f4"));
 
               subscribe = UserModel.getInstance()
-                  .getCodeBean(mobile,"sms_login")
+                  .getCodeBean(mobile, "sms_login")
                   .subscribeOn(Schedulers.io())
-                  .subscribe(new ServiceResponse<CodeBean>(){
-                    @Override
-                    public void onNext(CodeBean codeBean) {
+                  .subscribe(new ServiceResponse<CodeBean>() {
+                    @Override public void onNext(CodeBean codeBean) {
                       JUtils.Toast(codeBean.getMsg());
                     }
                   });
@@ -120,12 +118,11 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
         invalid_code = checkcode.getText().toString().trim();
         if (checkInput(mobile, invalid_code)) {
           subscribe = UserModel.getInstance()
-              .verify_code(mobile, "sms_login",invalid_code)
+              .verify_code(mobile, "sms_login", invalid_code)
               .subscribeOn(Schedulers.io())
               .subscribe(new ServiceResponse<CodeBean>() {
                 @Override public void onNext(CodeBean codeBean) {
                   int code = codeBean.getRcode();
-
 
                   if (code == 0) {
 
@@ -143,37 +140,44 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                               LoginUtils.setPushUserAccount(SmsLoginActivity.this,
                                   MiPushClient.getRegId(getApplicationContext()));
                               String login = null;
-                              if (null != getIntent() && getIntent().getExtras() != null) {
+                              if (null != getIntent()
+                                  && getIntent().getExtras() != null) {
                                 login = getIntent().getExtras().getString("login");
                                 actlink = getIntent().getExtras().getString("actlink");
+                                id = getIntent().getExtras().getInt("id");
                               }
 
-
-                              if (null!=login) {
+                              if (null != login) {
                                 if (login.equals("cart")) {
-                                  Intent intent = new Intent(mContext, CartActivity.class);
+                                  Intent intent =
+                                      new Intent(mContext, CartActivity.class);
                                   startActivity(intent);
                                   finish();
                                 } else if (login.equals("product")) {
                                   finish();
                                 } else if (login.equals("main")) {
-                                  Intent intent = new Intent(mContext,MainActivity.class);
+                                  Intent intent =
+                                      new Intent(mContext, MainActivity.class);
                                   startActivity(intent);
                                   finish();
                                 } else if (login.equals("point")) {
-                                  Intent intent = new Intent(mContext, MembershipPointActivity.class);
+                                  Intent intent =
+                                      new Intent(mContext, MembershipPointActivity.class);
                                   startActivity(intent);
                                   finish();
                                 } else if (login.equals("money")) {
-                                  Intent intent = new Intent(mContext, WalletActivity.class);
+                                  Intent intent =
+                                      new Intent(mContext, WalletActivity.class);
                                   startActivity(intent);
                                   finish();
                                 } else if (login.equals("axiba")) {
-                                  Intent intent = new Intent(mContext, MainActivity.class);
+                                  Intent intent =
+                                      new Intent(mContext, MainActivity.class);
                                   startActivity(intent);
                                   finish();
                                 } else if (login.equals("coupon")) {
-                                  Intent intent = new Intent(mContext, CouponActivity.class);
+                                  Intent intent =
+                                      new Intent(mContext, CouponActivity.class);
                                   startActivity(intent);
                                   finish();
                                 } else if (login.equals("productdetail")) {
@@ -189,23 +193,17 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                                   //bundle.putString("actlink", actlink);
                                   //intent.putExtras(bundle);
                                   //startActivity(intent);
-                                  JumpUtils.jumpToWebViewWithCookies(mContext,actlink,
-                                      -1,  CommonWebViewActivity.class);
+                                  JumpUtils.jumpToWebViewWithCookies(mContext, actlink,
+                                      -1, CommonWebViewActivity.class);
                                   finish();
-                                }else if (login.equals("prodcutweb")) {
-                                  //Intent intent = new Intent(mContext, ProductPopDetailActvityWeb.class);
-                                  ////intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                  //SharedPreferences sharedPreferences =
-                                  //    getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
-                                  //String cookies = sharedPreferences.getString("Cookie", "");
-                                  //Bundle bundle = new Bundle();
-                                  //bundle.putString("cookies", cookies);
-                                  //bundle.putString("actlink", actlink);
-                                  //intent.putExtras(bundle);
-                                  //startActivity(intent);
-                                  JumpUtils.jumpToWebViewWithCookies(mContext,actlink,
-                                      -1,  ProductPopDetailActvityWeb.class);
+                                } else if (login.equals("prodcutweb")) {
+
+                                  JumpUtils.jumpToWebViewWithCookies(mContext, actlink,
+                                      -1, ProductPopDetailActvityWeb.class);
                                   finish();
+                                } else if (login.equals("goactivity")) {
+                                  JumpUtils.jumpToWebViewWithCookies(mContext, actlink,
+                                      id, ProductPopDetailActvityWeb.class);
                                 }
                               }
                             } else {
@@ -213,7 +211,7 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                             }
                           }
                         });
-                  } else{
+                  } else {
                     JUtils.Toast(codeBean.getMsg());
                   }
                 }
