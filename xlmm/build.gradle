@@ -108,7 +108,7 @@ android {
                     def outputFile = output.outputFile
                     if (outputFile != null && outputFile.name.endsWith('.apk')) {
                         // Xlmm_版本_yyyy-MM-dd_渠道.apk
-                        def fileName = "Xlmm_v${defaultConfig.versionName}_${releaseTime()}_${variant.productFlavors[0].name}.apk"
+                        def fileName = "Xlmm_v${defaultConfig.versionName.replace(".","")}_${releaseTime()}_${variant.productFlavors[0].name}.apk"
                         println("====== buildTypes.output ======")
                         println("AppName: " + fileName)
                         output.outputFile = new File(outputFile.parent, fileName)
