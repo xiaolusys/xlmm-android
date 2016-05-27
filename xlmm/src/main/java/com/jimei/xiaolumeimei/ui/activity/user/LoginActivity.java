@@ -316,6 +316,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                               } else if (login.equals("goactivity")) {
                                 JumpUtils.jumpToWebViewWithCookies(mContext, actlink, id,
                                     ActivityWebViewActivity.class);
+                                finish();
                               }
                             }
                             //                                                        } else if (1 == codeInfo) {
