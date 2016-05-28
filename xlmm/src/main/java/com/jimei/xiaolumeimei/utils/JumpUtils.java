@@ -86,12 +86,15 @@ public class JumpUtils {
       case XlmmConst.JUMP_PRODUCT_DETAIL:
         String product_id = get_jump_arg("product_id", jumpInfo.getUrl());
         if (null != product_id) {
-          intent = new Intent(context, ProductPopDetailActvityWeb.class);
-          intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-          Bundle bundle = new Bundle();
-          bundle.putString("actlink", product_id);
-          intent.putExtras(bundle);
-          context.startActivity(intent);
+          //intent = new Intent(context, ProductPopDetailActvityWeb.class);
+          //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+          //Bundle bundle = new Bundle();
+          //bundle.putString("actlink", product_id);
+          //intent.putExtras(bundle);
+          //context.startActivity(intent);
+
+          jumpToWebViewWithCookies(context, product_id.replace("\"}", ""), -1,
+              ProductPopDetailActvityWeb.class);
         }
         break;
       case XlmmConst.JUMP_TRADE_DETAIL:
