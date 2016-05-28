@@ -88,7 +88,9 @@ public class JumpUtils {
         if (null != product_id) {
           intent = new Intent(context, ProductPopDetailActvityWeb.class);
           intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-          intent.putExtra("actlink", product_id);
+          Bundle bundle = new Bundle();
+          bundle.putString("actlink", product_id);
+          intent.putExtras(bundle);
           context.startActivity(intent);
         }
         break;
@@ -231,6 +233,23 @@ public class JumpUtils {
     }
   }
 
+  public static void jumpToWebViewWithCookies(Context context, String actlink, int id,
+      Class<?> classname) {
+    Intent intent = new Intent(context, classname);
+    SharedPreferences sharedPreferences =
+        context.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+    String cookies = sharedPreferences.getString("cookiesString", "");
+    String domain = sharedPreferences.getString("cookiesDomain", "");
+    Bundle bundle = new Bundle();
+    bundle.putString("cookies", cookies);
+    bundle.putString("domain", domain);
+    bundle.putString("Cookie", sharedPreferences.getString("Cookie", ""));
+    bundle.putString("actlink", actlink);
+    bundle.putInt("id", id);
+    intent.putExtras(bundle);
+    context.startActivity(intent);
+  }
+
   public static class JumpInfo {
     int type;
     String url;
@@ -257,23 +276,5 @@ public class JumpUtils {
           ", url='" + url + '\'' +
           '}';
     }
-  }
-
-  public static void jumpToWebViewWithCookies(Context context,String actlink,int id,
-      Class<?>
-      classname){
-    Intent intent = new Intent(context, classname);
-    SharedPreferences sharedPreferences =
-        context.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
-    String cookies = sharedPreferences.getString("cookiesString", "");
-    String domain = sharedPreferences.getString("cookiesDomain", "");
-    Bundle bundle = new Bundle();
-    bundle.putString("cookies", cookies);
-    bundle.putString("domain", domain);
-    bundle.putString("Cookie", sharedPreferences.getString("Cookie", ""));
-    bundle.putString("actlink", actlink);
-    bundle.putInt("id", id);
-    intent.putExtras(bundle);
-    context.startActivity(intent);
   }
 }
