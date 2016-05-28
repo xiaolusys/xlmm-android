@@ -61,6 +61,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
   private List<CartsinfoBean> mList;
   private List<CartsinfoBean> mListhis;
   private View view;
+  private static final String TAG ="CartActivity";
 
   @Override protected void setListener() {
     confirmTrade.setOnClickListener(this);
@@ -332,7 +333,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                   super.onNext(responseBody);
                   try {
                     String s = responseBody.string();
-                    JUtils.Log("CartsAdapter", s);
+                    JUtils.Log(TAG,"add" +s);
                     getCartsInfo(holder.getAdapterPosition());
                   } catch (IOException e) {
                     e.printStackTrace();
@@ -359,6 +360,11 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                   .subscribe(new ServiceResponse<ResponseBody>() {
                     @Override public void onNext(ResponseBody responseBody) {
                       super.onNext(responseBody);
+                      try {
+                        JUtils.Log(TAG,"minus"+responseBody.string());
+                      } catch (IOException e) {
+                        e.printStackTrace();
+                      }
                       Subscription subscribe = CartsModel.getInstance()
                           .getCartsHisList()
                           .subscribeOn(Schedulers.io())
@@ -394,6 +400,11 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                           .subscribe(new ServiceResponse<ResponseBody>() {
                             @Override public void onNext(ResponseBody responseBody) {
                               super.onNext(responseBody);
+                              try {
+                                JUtils.Log(TAG,"delete"+responseBody.string());
+                              } catch (IOException e) {
+                                e.printStackTrace();
+                              }
                               removeAt(holder.getAdapterPosition());
 
                               Subscription subscribe = CartsModel.getInstance()
@@ -465,6 +476,11 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                         .subscribe(new ServiceResponse<ResponseBody>() {
                           @Override public void onNext(ResponseBody responseBody) {
                             super.onNext(responseBody);
+                            try {
+                              JUtils.Log(TAG,"delete"+responseBody.string());
+                            } catch (IOException e) {
+                              e.printStackTrace();
+                            }
                             removeAt(holder.getAdapterPosition());
                             Subscription subscribe = CartsModel.getInstance()
                                 .getCartsHisList()

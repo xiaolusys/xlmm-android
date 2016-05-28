@@ -40,7 +40,8 @@ import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
-
+import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
+import cn.sharesdk.wechat.moments.WechatMoments;
 import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
@@ -172,7 +173,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
       mWebView.getSettings().setLoadWithOverviewMode(true);
       mWebView.getSettings().setUseWideViewPort(true);
       mWebView.setDrawingCacheEnabled(true);
-      if(Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT){
+      if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
         mWebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG);
       }
 
@@ -427,7 +428,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     //oks.setImageUrl("http://f1.sharesdk.cn/imgs/2014/02/26/owWpLZo_638x960.jpg");
     oks.setImageUrl(shareimg);
     oks.setUrl(sharelink);
-
+    oks.setShareContentCustomizeCallback(new ShareContentCustom(desc));
     // 启动分享GUI
     oks.show(this);
   }
@@ -470,8 +471,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     Bitmap enableLogo = BitmapFactory.decodeResource(mContext.getResources(),
         R.drawable.ssdk_oks_logo_copy);
     String label = "二维码";
-    Bitmap enableLogo2 = BitmapFactory.decodeResource(mContext.getResources(),
-        R.drawable.ssdk_oks_logo_copy);
+
     View.OnClickListener listener = new View.OnClickListener() {
       public void onClick(View v) {
         //if (shareProductBean.getShareLink()) {
@@ -479,8 +479,10 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
         saveTwoDimenCode(mContext);
       }
     };
-    oks.setCustomerLogo(enableLogo, enableLogo2, label, listener);
+    oks.setCustomerLogo(enableLogo, label, listener);
     // 启动分享GUI
+    oks.setShareContentCustomizeCallback(new ShareContentCustom(
+        partyShareInfo.getActiveDec() + partyShareInfo.getShareLink()));
     oks.show(this);
   }
 
@@ -609,5 +611,20 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     ClipboardManager cmb =
         (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
     cmb.setText(content.trim());
+  }
+
+  class ShareContentCustom implements ShareContentCustomizeCallback {
+
+    private String text;
+
+    public ShareContentCustom(String text) {
+      this.text = text;
+    }
+
+    @Override public void onShare(Platform platform, Platform.ShareParams paramsToShare) {
+      if (WechatMoments.NAME.equals(platform.getName())) {
+        paramsToShare.setTitle(text);
+      }
+    }
   }
 }
