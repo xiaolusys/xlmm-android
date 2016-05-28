@@ -1,8 +1,5 @@
 package com.jimei.xiaolumeimei.xlmmService;
 
-import android.widget.ListView;
-
-import com.jimei.xiaolumeimei.data.LogisticsCompanyInfo;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.entities.AddCartsBean;
 import com.jimei.xiaolumeimei.entities.AddressBean;
@@ -71,11 +68,8 @@ import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.UserWithdrawResult;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.entities.WxPubAuthInfo;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
-
 import okhttp3.ResponseBody;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -498,19 +492,19 @@ public interface XlmmService {
 
 
     //购物车增加一件
-    @POST("/rest/v1/carts/{id}/plus_product_carts")
+    @POST("/rest/v2/carts/{id}/plus_product_carts")
     Observable<ResponseBody> plus_product_carts(
             @Path("id") String id
     );
 
     //购物车删除一件
-    @POST("/rest/v1/carts/{id}/minus_product_carts")
+    @POST("/rest/v2/carts/{id}/minus_product_carts")
     Observable<ResponseBody> minus_product_carts(
             @Path("id") String id
     );
 
     //删除一列
-    @POST("/rest/v1/carts/{id}/delete_carts")
+    @POST("/rest/v2/carts/{id}/delete_carts")
     Observable<ResponseBody> delete_carts(
             @Path("id") String id
     );
