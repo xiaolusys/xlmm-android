@@ -34,6 +34,7 @@ import cn.sharesdk.tencent.qzone.QZone;
 import cn.sharesdk.wechat.friends.Wechat;
 import cn.sharesdk.wechat.moments.WechatMoments;
 import com.google.gson.Gson;
+import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -693,6 +694,10 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     // 启动分享GUI
     oks.setShareContentCustomizeCallback(new ShareContentCustom(desc));
     oks.show(mContext);
+  }
+
+  @JavascriptInterface public String appVersion() {
+    return String.valueOf(BuildConfig.VERSION_CODE);
   }
 
   class ShareContentCustom implements ShareContentCustomizeCallback {
