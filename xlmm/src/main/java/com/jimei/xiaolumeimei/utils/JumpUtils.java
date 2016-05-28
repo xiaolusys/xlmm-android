@@ -12,7 +12,7 @@ import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ChildListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.LadyListActivity;
-import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActvityWeb;
+import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
 import com.jimei.xiaolumeimei.ui.activity.product.TongkuanActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
@@ -86,9 +86,9 @@ public class JumpUtils {
       case XlmmConst.JUMP_PRODUCT_DETAIL:
         String product_id = get_jump_arg("product_id", jumpInfo.getUrl());
         if (null != product_id) {
-          intent = new Intent(context, ProductDetailActvityWeb.class);
+          intent = new Intent(context, ProductPopDetailActvityWeb.class);
           intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-          intent.putExtra("product_id", product_id);
+          intent.putExtra("actlink", product_id);
           context.startActivity(intent);
         }
         break;
