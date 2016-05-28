@@ -2,19 +2,23 @@ package com.jimei.xiaolumeimei.ui.activity.trade;
 
 import android.os.Bundle;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import butterknife.Bind;
 
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.adapter.GoodsListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.LogisticsBean;
+import com.jimei.xiaolumeimei.entities.PackageBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.widget.LogImageView;
 import com.jimei.xiaolumeimei.widget.LogMsgView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import rx.Subscription;
@@ -34,6 +38,9 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
     TextView lastTimeTv;
     @Bind(R.id.tv_order_last_state)
     TextView lastStateTv;
+    @Bind(R.id.lv)
+    ListView mListView;
+    private ArrayList<PackageBean> packageBeanList;
     private String packetid = "";
     private String company_code = "";
     private String time = "";
@@ -46,9 +53,9 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
 
     @Override
     protected void initData() {
-        if (!"".equals(packetid)&&!"".equals(company_code)) {
+        if (!"".equals(packetid) && !"".equals(company_code)) {
             Subscription subscribe = TradeModel.getInstance()
-                    .get_logistics_by_packagetid(packetid,company_code)
+                    .get_logistics_by_packagetid(packetid, company_code)
                     .subscribeOn(Schedulers.io())
                     .subscribe(new ServiceResponse<LogisticsBean>() {
 
@@ -91,6 +98,7 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
         } else {
             JUtils.Toast("获取物流信息失败,请通过物流单号网上查询!");
         }
+
     }
 
     private void fillDataToView(LogisticsBean logisticsBean) {
@@ -101,6 +109,13 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
         }
         if (logisticsBean.getOrder() != "" && logisticsBean.getOrder() != null) {
             orderTv.setText(logisticsBean.getOrder());
+            List<PackageBean> data = new ArrayList<>();
+            for (PackageBean packageBean : packageBeanList) {
+                if (packageBean.getOut_sid().equals(logisticsBean.getOrder())) {
+                    data.add(packageBean);
+                }
+            }
+            mListView.setAdapter(new GoodsListAdapter(data, this));
         } else {
             orderTv.setText("暂无物流信息");
         }
@@ -122,6 +137,8 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
             lastStateTv.setText("订单已成功创建!");
             lastTimeTv.setText(time);
         }
+
+
     }
 
     @Override
@@ -130,6 +147,7 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
         company_code = extras.getString("company_code");
         tid = extras.getString("tid");
         time = extras.getString("time");
+        packageBeanList = (ArrayList<PackageBean>) extras.getSerializable("list");
     }
 
     @Override

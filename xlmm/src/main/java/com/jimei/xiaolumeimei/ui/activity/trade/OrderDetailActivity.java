@@ -72,7 +72,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     RelativeLayout addressLayout;
     @Bind(R.id.right_flag)
     ImageView rightImage;
-    private List<PackageBean> packageBeanList;
+    private ArrayList<PackageBean> packageBeanList;
     int order_id = 0;
     OrderDetailBean orderDetail;
     String source;
@@ -166,9 +166,9 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         Subscription subscribe = TradeModel.getInstance()
                 .getPackageList(tid)
                 .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<List<PackageBean>>() {
+                .subscribe(new ServiceResponse<ArrayList<PackageBean>>() {
                     @Override
-                    public void onNext(List<PackageBean> packageBeen) {
+                    public void onNext(ArrayList<PackageBean> packageBeen) {
                         packageBeanList.addAll(packageBeen);
                         mGoodsAdapter.setPackageBeanList(packageBeanList);
                         mGoodsAdapter.setData(orderDetailBean);
