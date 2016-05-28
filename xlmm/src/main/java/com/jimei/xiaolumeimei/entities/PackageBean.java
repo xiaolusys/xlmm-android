@@ -1,9 +1,13 @@
 package com.jimei.xiaolumeimei.entities;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+
 /**
  * Created by wisdom on 16/5/18.
  */
-public class PackageBean {
+public class PackageBean implements Serializable {
 
     /**
      * title : 蝙蝠袖蕾丝拼接衬衣/乳白色

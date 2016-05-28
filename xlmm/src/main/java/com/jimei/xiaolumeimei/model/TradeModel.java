@@ -12,6 +12,7 @@ import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -186,7 +187,7 @@ public class TradeModel {
             .compose(new DefaultTransform<>());
   }
 
-  public Observable<List<PackageBean>> getPackageList(String tid) {
+  public Observable<ArrayList<PackageBean>> getPackageList(String tid) {
     return XlmmRetrofitClient.getService()
             .getPackageList(tid)
             .compose(new DefaultTransform<>());

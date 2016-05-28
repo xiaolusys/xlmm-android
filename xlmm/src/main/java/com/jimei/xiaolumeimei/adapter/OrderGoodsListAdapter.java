@@ -42,12 +42,12 @@ public class OrderGoodsListAdapter extends BaseAdapter {
     List<HashMap<String, String>> data;
     private Activity context;
     private List<AllOrdersBean.ResultsEntity.OrdersEntity> dataSource;
-    private List<PackageBean> packageBeanList;
+    private ArrayList<PackageBean> packageBeanList;
     private String timeStr;
     private String stateStr;
     private String tid;
 
-    public void setPackageBeanList(List<PackageBean> packageBeanList) {
+    public void setPackageBeanList(ArrayList<PackageBean> packageBeanList) {
         this.packageBeanList = packageBeanList;
     }
 
@@ -154,6 +154,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                             bundle.putString("time", timeStr);
                             bundle.putString("tid", tid);
                             bundle.putString("company_code", company_code);
+                            bundle.putSerializable("list",packageBeanList);
                             intent.putExtras(bundle);
                             context.startActivity(intent);
                         }
