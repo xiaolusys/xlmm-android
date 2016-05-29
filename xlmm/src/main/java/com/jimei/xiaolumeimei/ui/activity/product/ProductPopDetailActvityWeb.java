@@ -1,7 +1,6 @@
 package com.jimei.xiaolumeimei.ui.activity.product;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -21,15 +20,12 @@ import android.webkit.CookieSyncManager;
 import android.webkit.HttpAuthHandler;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import cn.sharesdk.framework.ShareSDK;
-
 import com.google.gson.Gson;
 import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.R;
@@ -38,17 +34,13 @@ import com.jimei.xiaolumeimei.entities.ProductSkuDetailsBean;
 import com.jimei.xiaolumeimei.htmlJsBridge.modules.AndroidJsBridge;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
-import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.widget.FlowLayout;
 import com.jimei.xiaolumeimei.widget.TagAdapter;
 import com.jimei.xiaolumeimei.widget.TagFlowLayout;
 import com.jude.utils.JUtils;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import retrofit2.http.HEAD;
 
 /**
  * Created by 优尼世界 on 15/12/29.
@@ -176,12 +168,11 @@ public class ProductPopDetailActvityWeb extends BaseSwipeBackCompatActivity {
             mWebView.getSettings().setAllowFileAccess(true);
             //如果访问的页面中有Javascript，则webview必须设置支持Javascript
             //mWebView.getSettings().setUserAgentString(MyApplication.getUserAgent());
-            mWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+            //mWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
             mWebView.getSettings().setAllowFileAccess(true);
             mWebView.getSettings().setAppCacheEnabled(true);
             mWebView.getSettings().setDomStorageEnabled(true);
             mWebView.getSettings().setDatabaseEnabled(true);
-            mWebView.getSettings().setLoadWithOverviewMode(true);
             mWebView.getSettings().setUseWideViewPort(true);
             mWebView.setDrawingCacheEnabled(true);
 
@@ -299,7 +290,9 @@ public class ProductPopDetailActvityWeb extends BaseSwipeBackCompatActivity {
         if (mWebView != null) {
             mWebView.removeAllViews();
             mWebView.destroy();
+            mWebView = null;
         }
+
     }
 
     @Override
