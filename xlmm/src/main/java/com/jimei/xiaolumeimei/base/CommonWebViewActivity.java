@@ -29,7 +29,6 @@ import android.webkit.CookieSyncManager;
 import android.webkit.HttpAuthHandler;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
@@ -165,12 +164,11 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
       mWebView.getSettings().setAllowFileAccess(true);
       //如果访问的页面中有Javascript，则webview必须设置支持Javascript
       //mWebView.getSettings().setUserAgentString(MyApplication.getUserAgent());
-      mWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+      //mWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
       mWebView.getSettings().setAllowFileAccess(true);
       mWebView.getSettings().setAppCacheEnabled(true);
       mWebView.getSettings().setDomStorageEnabled(true);
       mWebView.getSettings().setDatabaseEnabled(true);
-      mWebView.getSettings().setLoadWithOverviewMode(true);
       mWebView.getSettings().setUseWideViewPort(true);
       mWebView.setDrawingCacheEnabled(true);
       if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
@@ -295,6 +293,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     if (mWebView != null) {
       mWebView.removeAllViews();
       mWebView.destroy();
+      mWebView = null;
     }
 
     if (bitmap != null) {
