@@ -428,7 +428,8 @@ public class MainActivity extends BaseActivity
                                   bundle.putString("login", "goactivity");
                                   bundle.putString("actlink",
                                       postActivityBean.get(finalI).getAct_link());
-                                  bundle.putInt("id", postActivityBean.get(finalI).getId());
+                                  bundle.putInt("id",
+                                      postActivityBean.get(finalI).getId());
                                   intent.putExtras(bundle);
                                   intent.putExtras(bundle);
                                   startActivity(intent);
@@ -971,6 +972,8 @@ public class MainActivity extends BaseActivity
         ((TomorrowV2Fragment) list.get(2)).load(swipeRefreshLayout);
         break;
     }
+    scrollableLayout.getHelper()
+        .setCurrentScrollableContainer(list.get(vp.getCurrentItem()));
   }
 
   private class MyFragmentAdapter extends FragmentPagerAdapter {

@@ -11,6 +11,8 @@ import java.util.List;
 public class CartsPayinfoBean {
 
   @SerializedName("pay_extras") private List<payExtrasEntityApp> mPayExtras;
+  @SerializedName("logistics_companys") private List<LogisticsCompanys>
+      mLogisticsCompanyses;
   @SerializedName("wallet_cash") private float mWalletCash;
   @SerializedName("total_payment") private double mTotalPayment;
   @SerializedName("wallet_payable") private boolean mWalletPayable;
@@ -26,6 +28,10 @@ public class CartsPayinfoBean {
   @SerializedName("total_fee") private double mTotalFee;
   @SerializedName("post_fee") private double mPostFee;
   @SerializedName("cart_list") private List<CartListEntity> mCartList;
+
+  public List<LogisticsCompanys> getLogisticsCompanyses() {
+    return mLogisticsCompanyses;
+  }
 
   @Override public String toString() {
     return "CartsPayinfoBean{" +
@@ -451,6 +457,53 @@ public class CartsPayinfoBean {
 
     public void setStatus(int status) {
       this.mStatus = status;
+    }
+  }
+
+  public static class LogisticsCompanys {
+
+    /**
+     * is_priority : true
+     * code :
+     * id :
+     * name : 自动分配
+     */
+
+    @SerializedName("is_priority") private boolean mIsPriority;
+    @SerializedName("code") private String mCode;
+    @SerializedName("id") private String mId;
+    @SerializedName("name") private String mName;
+
+    public boolean isIsPriority() {
+      return mIsPriority;
+    }
+
+    public void setIsPriority(boolean isPriority) {
+      mIsPriority = isPriority;
+    }
+
+    public String getCode() {
+      return mCode;
+    }
+
+    public void setCode(String code) {
+      mCode = code;
+    }
+
+    public String getId() {
+      return mId;
+    }
+
+    public void setId(String id) {
+      mId = id;
+    }
+
+    public String getName() {
+      return mName;
+    }
+
+    public void setName(String name) {
+      mName = name;
     }
   }
 

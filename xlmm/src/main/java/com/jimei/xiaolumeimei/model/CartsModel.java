@@ -6,9 +6,10 @@ import com.jimei.xiaolumeimei.entities.CartsHisBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.CartsinfoBean;
+import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 import java.util.List;
-import okhttp3.ResponseBody;
+import retrofit2.Response;
 import rx.Observable;
 
 /**
@@ -57,6 +58,14 @@ public class CartsModel {
   }
 
   //获取购物车列表信息
+  public Observable<CartsPayinfoBean> getCartsPayInfoListV2(String cart_ids,
+      String device) {
+    return XlmmRetrofitClient.getService()
+        .getCartsPayInfoListV2(cart_ids, device)
+        .compose(new DefaultTransform<>());
+  }
+
+  //获取购物车列表信息
   public Observable<CartsPayinfoBean> getCartsInfoList(String cart_ids,
       String coupon_id) {
     return XlmmRetrofitClient.getService()
@@ -65,21 +74,21 @@ public class CartsModel {
   }
 
   //增加一件
-  public Observable<ResponseBody> plus_product_carts(String id) {
+  public Observable<Response<CodeBean>> plus_product_carts(String id) {
     return XlmmRetrofitClient.getService()
         .plus_product_carts(id)
         .compose(new DefaultTransform<>());
   }
 
   //删除一件
-  public Observable<ResponseBody> minus_product_carts(String id) {
+  public Observable<Response<CodeBean>> minus_product_carts(String id) {
     return XlmmRetrofitClient.getService()
         .minus_product_carts(id)
         .compose(new DefaultTransform<>());
   }
 
   //删除一列
-  public Observable<ResponseBody> delete_carts(String id) {
+  public Observable<Response<CodeBean>> delete_carts(String id) {
     return XlmmRetrofitClient.getService()
         .delete_carts(id)
         .compose(new DefaultTransform<>());
