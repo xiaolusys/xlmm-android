@@ -36,7 +36,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import okhttp3.ResponseBody;
 import rx.Subscription;
@@ -72,6 +71,8 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     RelativeLayout addressLayout;
     @Bind(R.id.right_flag)
     ImageView rightImage;
+    @Bind(R.id.time)
+    TextView timeText;
     private ArrayList<PackageBean> packageBeanList;
     int order_id = 0;
     OrderDetailBean orderDetail;
@@ -118,12 +119,11 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                             orderDetail = orderDetailBean;
                             showProcBtn(orderDetailBean);
                             fillDataToView(orderDetailBean);
-                            // TODO: 16/5/27 后台修改地址功能暂时未完成,先屏蔽修改地址功能
-//                            if ("已付款".equals(orderDetailBean.getStatus_display())) {
-//                                addressLayout.setOnClickListener(OrderDetailActivity.this);
-//                            } else {
-                            rightImage.setVisibility(View.GONE);
-//                            }
+                            if ("已付款".equals(orderDetailBean.getStatus_display())) {
+                                addressLayout.setOnClickListener(OrderDetailActivity.this);
+                            } else {
+                                rightImage.setVisibility(View.GONE);
+                            }
                             Log.i(TAG, "order_id " + order_id + " " + orderDetailBean.toString());
                         }
 
@@ -157,6 +157,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         tx_order_discountfee.setText("¥" + orderDetailBean.getDiscount_fee());
         tx_order_postfee.setText("¥" + orderDetailBean.getPost_fee());
         tx_order_payment.setText("¥" + orderDetailBean.getPayment());
+        timeText.setText("下单时间:" + orderDetailBean.getCreated().replace("T", "-"));
 
         JUtils.Log(TAG, "crt time " + orderDetailBean.getCreated());
         ListView lv_goods = (ListView) findViewById(R.id.lv_goods);

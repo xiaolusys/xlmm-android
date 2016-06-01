@@ -117,7 +117,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     get_party_share_content(id + "");
   }
 
-  @Override protected void getBundleExtras(Bundle extras) {
+  @Override public void getBundleExtras(Bundle extras) {
     if (extras != null) {
       cookies = extras.getString("cookies");
       domain = extras.getString("domain");

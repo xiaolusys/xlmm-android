@@ -16,6 +16,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+
 import okhttp3.ResponseBody;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
@@ -37,6 +38,7 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
     @Bind(R.id.btn_commit)
     Button btn_commit;
 
+    private String address;
     String company;
     int goods_id;
 
@@ -52,6 +54,7 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
     @Override
     protected void getBundleExtras(Bundle extras) {
         goods_id = extras.getInt("goods_id");
+        address = extras.getString("address");
     }
 
     @Override

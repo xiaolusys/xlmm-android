@@ -347,7 +347,7 @@ public class MainActivity extends BaseActivity
             if (swipeRefreshLayout != null) {
               swipeRefreshLayout.setRefreshing(false);
             }
-            JUtils.Toast("数据加载失败!");
+            JUtils.ToastLong("数据加载失败,请确认网络是否正常!");
           }
         });
     addSubscription(subscribe2);
@@ -416,6 +416,7 @@ public class MainActivity extends BaseActivity
                                     sharedPreferences.getString("Cookie", ""));
                                 bundle.putString("actlink",
                                     postActivityBean.get(finalI).getAct_link());
+                                bundle.putString("title",postActivityBean.get(finalI).getTitle());
                                 bundle.putInt("id", postActivityBean.get(finalI).getId());
                                 intent.putExtras(bundle);
                                 startActivity(intent);
@@ -429,7 +430,7 @@ public class MainActivity extends BaseActivity
                                   bundle.putString("actlink",
                                       postActivityBean.get(finalI).getAct_link());
                                   bundle.putInt("id", postActivityBean.get(finalI).getId());
-                                  intent.putExtras(bundle);
+                                  bundle.putString("title",postActivityBean.get(finalI).getTitle());
                                   intent.putExtras(bundle);
                                   startActivity(intent);
                                 } else {
@@ -460,6 +461,7 @@ public class MainActivity extends BaseActivity
                               bundle.putString("domain", domain);
                               bundle.putString("actlink",
                                   postActivityBean.get(finalI).getAct_link());
+                              bundle.putString("title",postActivityBean.get(finalI).getTitle());
                               intent.putExtras(bundle);
                               startActivity(intent);
                             }

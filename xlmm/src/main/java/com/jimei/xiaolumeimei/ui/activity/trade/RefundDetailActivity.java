@@ -40,10 +40,6 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     TextView statusTv;
     @Bind(R.id.ll_return)
     LinearLayout returnLayout;
-    @Bind(R.id.btn_return_addr)
-    Button returnAddrBtn;
-    @Bind(R.id.et_logistics_info)
-    EditText logInfoEt;
     @Bind(R.id.sdv)
     ImageView goodImageView;
     @Bind(R.id.tv_good_name)
@@ -74,14 +70,23 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     TextView refundTypeTv;
     @Bind(R.id.refund_layout)
     LinearLayout refundLayout;
+    @Bind(R.id.time)
+    TextView timeTv;
+    @Bind(R.id.name)
+    TextView nameTv;
+    @Bind(R.id.phone)
+    TextView phoneTv;
+    @Bind(R.id.address)
+    TextView addressTv;
+    @Bind(R.id.btn_write)
+    Button writeBtn;
     AllRefundsBean.ResultsEntity refundDetail;
     private int refund_state;
     private int goods_id;
 
     @Override
     protected void setListener() {
-        logInfoEt.setOnClickListener(this);
-        returnAddrBtn.setOnClickListener(this);
+        writeBtn.setOnClickListener(this);
     }
 
     @Override
@@ -161,6 +166,17 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
         JUtils.Log(TAG, "fillDataToView ");
         orderIdTv.setText(refundDetailBean.getRefund_no());
         statusTv.setText(refundDetailBean.getStatus_display());
+        String address = refundDetailBean.getReturn_address();
+        String[] split = address.split("，");
+        for (String s : split) {
+            if (s.contains("市")) {
+                addressTv.setText(s);
+            } else if (s.contains("小鹿")) {
+                nameTv.setText("小鹿售后");
+            } else {
+                phoneTv.setText(s);
+            }
+        }
         ViewUtils.loadImgToImgView(getApplicationContext(), goodImageView,
                 refundDetailBean.getPic_path());
         if (refundDetailBean.getTitle().length() >= 15) {
@@ -171,12 +187,14 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
         goodPriceTv.setText("¥" + refundDetailBean.getPayment());
         goodSizeTv.setText("尺码：" + refundDetailBean.getSku_name());
         goodNumTv.setText("");
+        timeTv.setText("下单时间:" + refundDetailBean.getCreated().replace("T", " "));
         numTv.setText(Integer.toString(refundDetailBean.getRefund_num()));
         priceTv.setText("¥" + refundDetailBean.getRefund_fee());
         reasonTv.setText(refundDetailBean.getReason());
         createTimeTv.setText(refundDetailBean.getCreated().replace("T", " "));
         lastTimeTv.setText(refundDetailBean.getModified().replace("T", " "));
         lastStateTv.setText(refundDetailBean.getStatus_display());
+        // TODO: 16/5/31
         ViewUtils.loadImgToImgView(getApplicationContext(), imageView,
                 refundDetailBean.getPic_path());
         JUtils.Log(TAG, "crt time " + refundDetailBean.getCreated());
@@ -201,30 +219,23 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        logInfoEt.setClickable(true);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_return_addr:
-                if (refundDetail != null) {
-                    if ((refundDetail.getReturn_address() != null)
-                            && (!refundDetail.getReturn_address().isEmpty())) {
-                        new AlertDialog.Builder(this).setTitle("")
-                                .setMessage(refundDetail.getReturn_address() + getResources().getString(
-                                        R.string.return_addr))
-                                .show();
-                    }
-                }
-                break;
-            case R.id.et_logistics_info:
+            case R.id.btn_write:
                 Log.d(TAG, "write logistics");
                 Intent intent = new Intent(this, WriteLogisticsInfoActivty.class);
                 intent.putExtra("goods_id", refundDetail.getOrder_id());
+                if (refundDetail != null) {
+                    if ((refundDetail.getReturn_address() != null)
+                            && (!refundDetail.getReturn_address().isEmpty())) {
+                        intent.putExtra("address", refundDetail.getReturn_address());
+                    }
+                }
                 Log.d(TAG, " to WriteLogisticsInfoActivty");
                 startActivityForResult(intent, 0);
-                logInfoEt.setClickable(false);
                 break;
         }
     }
