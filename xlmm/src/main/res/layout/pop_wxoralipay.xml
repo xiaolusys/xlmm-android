@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-
     android:layout_width="match_parent"
+    android:background="@color/white"
     android:layout_height="wrap_content">
-
   <RelativeLayout
 
       android:layout_width="wrap_content"
@@ -21,7 +20,7 @@
     <LinearLayout
         android:id="@+id/alipay_layout"
         android:layout_width="match_parent"
-        android:layout_height="88px"
+        android:layout_height="100px"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -33,6 +32,7 @@
           android:src="@drawable/alipay"/>
 
       <TextView
+          android:textColor="@color/black"
           android:id="@+id/tv_alipay"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
@@ -46,11 +46,11 @@
           android:layout_weight="1"/>
 
       <!--<ImageView-->
-          <!--android:id="@+id/iv_alipay"-->
-          <!--android:layout_width="wrap_content"-->
-          <!--android:layout_height="wrap_content"-->
-          <!--android:layout_marginRight="15dp"-->
-          <!--android:src="@drawable/radio_bg_checked"/>-->
+      <!--android:id="@+id/iv_alipay"-->
+      <!--android:layout_width="wrap_content"-->
+      <!--android:layout_height="wrap_content"-->
+      <!--android:layout_marginRight="15dp"-->
+      <!--android:src="@drawable/radio_bg_checked"/>-->
     </LinearLayout>
 
 
@@ -59,7 +59,7 @@
     <LinearLayout
         android:id="@+id/wx_layout"
         android:layout_width="match_parent"
-        android:layout_height="88px"
+        android:layout_height="100px"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -71,6 +71,7 @@
           android:src="@drawable/wx_icon"/>
 
       <TextView
+          android:textColor="@color/black"
           android:id="@+id/tv22"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
@@ -84,11 +85,11 @@
           android:layout_weight="1"/>
 
       <!--<ImageView-->
-          <!--android:id="@+id/iv_wx"-->
-          <!--android:layout_width="wrap_content"-->
-          <!--android:layout_height="wrap_content"-->
-          <!--android:layout_marginRight="15dp"-->
-          <!--android:src="@drawable/radio_bg"/>-->
+      <!--android:id="@+id/iv_wx"-->
+      <!--android:layout_width="wrap_content"-->
+      <!--android:layout_height="wrap_content"-->
+      <!--android:layout_marginRight="15dp"-->
+      <!--android:src="@drawable/radio_bg"/>-->
 
     </LinearLayout>
 
