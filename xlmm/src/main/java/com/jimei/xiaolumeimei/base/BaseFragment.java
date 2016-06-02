@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableHelper;
+import com.jude.utils.JUtils;
 
 /**
  * Created by itxuye on 16/04/23
@@ -40,6 +41,7 @@ public abstract class BaseFragment extends Fragment
     // 销毁的Fragment onCreateView 每次都会执行(但实体类没有从内存销毁)
     // 导致initData反复执行,所以这里注释掉
     // isFirstLoad = true;
+    JUtils.Log("Today", "onCreateView");
     View view = initViews(inflater, container, savedInstanceState);
     isPrepared = true;
     lazyLoad();
@@ -53,6 +55,7 @@ public abstract class BaseFragment extends Fragment
    */
   @Override public void setUserVisibleHint(boolean isVisibleToUser) {
     super.setUserVisibleHint(isVisibleToUser);
+    JUtils.Log("Today", "setUserVisibleHint");
     if (getUserVisibleHint()) {
       isVisible = true;
       onVisible();
@@ -67,6 +70,7 @@ public abstract class BaseFragment extends Fragment
    * 若是初始就show的Fragment 为了触发该事件 需要先hide再show
    */
   @Override public void onHiddenChanged(boolean hidden) {
+    JUtils.Log("Today", "onHiddenChanged");
     super.onHiddenChanged(hidden);
     if (!hidden) {
       isVisible = true;
@@ -78,10 +82,12 @@ public abstract class BaseFragment extends Fragment
   }
 
   protected void onVisible() {
+    JUtils.Log("Today", "onVisible");
     lazyLoad();
   }
 
   protected void onInvisible() {
+    JUtils.Log("Today", "onInvisible");
   }
 
   /**
@@ -89,6 +95,7 @@ public abstract class BaseFragment extends Fragment
    * isPrepared = true;
    */
   protected void lazyLoad() {
+    JUtils.Log("Today", "lazyLoad");
     if (!isPrepared || !isVisible || !isFirstLoad) {
       return;
     }
