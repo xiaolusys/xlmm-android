@@ -53,7 +53,7 @@
                     android:layout_below="@id/imgCircleStar"
                     android:layout_marginTop="10px"
                     android:gravity="center"
-                    android:text="账户余额(元)"
+                    android:text="小鹿妈妈账户余额(元)"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
 
@@ -135,6 +135,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="17px"
                         android:src="@drawable/img_left" />
+
                     <ImageView
                         android:id="@+id/img_right"
                         android:layout_width="22px"

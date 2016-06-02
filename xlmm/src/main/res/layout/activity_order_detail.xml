@@ -31,10 +31,10 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:orientation="horizontal"
-                android:paddingBottom="14px"
+                android:paddingBottom="20px"
                 android:paddingLeft="24px"
                 android:paddingRight="24px"
-                android:paddingTop="14px">
+                android:paddingTop="20px">
 
                 <TextView
                     android:id="@+id/tx_order_state"
@@ -58,6 +58,26 @@
                     android:layout_toLeftOf="@id/tx_order_state"
                     android:text="订单编号："
                     android:textSize="14sp" />
+            </RelativeLayout>
+
+            <include layout="@layout/common_gap" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/bg_grey">
+
+                <TextView
+                    android:id="@+id/time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:paddingRight="18px"
+                    android:layout_margin="6px"
+                    android:text="下单时间:"
+                    android:layout_alignParentRight="true"
+                    android:textColor="@color/text_color_9B"
+                    android:textSize="13sp" />
             </RelativeLayout>
 
             <include layout="@layout/common_gap" />
@@ -97,7 +117,7 @@
                     android:layout_marginLeft="8dp"
                     android:layout_toRightOf="@id/image_location"
                     android:text=""
-                    android:textColor="#9B9B9B"
+                    android:textColor="@color/text_color_9B"
                     android:textSize="13sp" />
 
                 <TextView
@@ -115,8 +135,8 @@
                     android:id="@+id/right_flag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
                     android:src="@mipmap/common_icon_right_arrow" />
 
             </RelativeLayout>
@@ -135,7 +155,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
-                android:background="#F3F3F4" />
+                android:background="@color/bg_grey" />
 
             <include layout="@layout/common_gap" />
 

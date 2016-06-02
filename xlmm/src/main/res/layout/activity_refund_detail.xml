@@ -1,404 +1,448 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ui.activity.trade.RefundDetailActivity">
 
-    <LinearLayout
+    <com.jimei.xiaolumeimei.widget.XlmmTitleView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        app:xlmm_title="退货(款)详情" />
 
-        <com.jimei.xiaolumeimei.widget.XlmmTitleView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:xlmm_title="退货(款)详情" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp">
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="订单编号" />
-
-            <TextView
-                android:id="@+id/tv_order_id"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_weight="2.5"
-                android:ellipsize="end"
-                android:textSize="12sp" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="1" />
-
-            <TextView
-                android:id="@+id/tv_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textColor="@color/colorPrimary" />
-        </LinearLayout>
-
-        <include layout="@layout/common_gap" />
-
-        <LinearLayout
-            android:id="@+id/ll_return"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-
-            <Button
-                android:id="@+id/btn_return_addr"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_margin="8dp"
-                android:background="@drawable/shape_chooselist"
-                android:paddingBottom="3dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingTop="3dp"
-                android:text="退货地址信息"
-                android:textColor="@color/colorAccent"
-                android:textSize="15sp" />
-
-            <include layout="@layout/common_gap" />
-
-            <EditText
-                android:id="@+id/et_logistics_info"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textCursorDrawable="@drawable/color_cursor"
-                android:layout_below="@+id/textView"
-                android:layout_marginLeft="20px"
-                android:layout_marginRight="10px"
-                android:layout_marginTop="10px"
-                android:background="@drawable/text_frame"
-                android:cursorVisible="false"
-                android:drawableRight="@drawable/ic_downarrow"
-                android:focusable="false"
-                android:padding="4dp"
-                android:text="请选择物流信息"
-                android:textSize="15sp" />
+                android:paddingBottom="20px"
+                android:paddingLeft="24px"
+                android:paddingRight="24px"
+                android:paddingTop="20px">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="订单编号" />
+
+                <TextView
+                    android:id="@+id/tv_order_id"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_weight="2.5"
+                    android:ellipsize="end"
+                    android:textSize="12sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/tv_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="@color/colorPrimary" />
+            </LinearLayout>
 
             <include layout="@layout/common_gap" />
 
-        </LinearLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/bg_grey">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp">
+                <TextView
+                    android:id="@+id/time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="6px"
+                    android:gravity="center_vertical"
+                    android:paddingRight="18px"
+                    android:text="下单时间:"
+                    android:textColor="@color/text_color_9B"
+                    android:textSize="13sp" />
+            </RelativeLayout>
+
+            <include layout="@layout/common_gap" />
+
+            <LinearLayout
+                android:id="@+id/ll_return"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="24px">
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/text_color_62"
+                            android:textSize="13sp" />
+
+                        <TextView
+                            android:id="@+id/phone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20px"
+                            android:layout_toRightOf="@id/name"
+                            android:textColor="@color/text_color_62"
+                            android:textSize="13sp" />
+
+                        <TextView
+                            android:id="@+id/address"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/name"
+                            android:layout_marginTop="6dp"
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:textColor="@color/text_color_9B"
+                            android:textSize="12sp" />
+
+                    </RelativeLayout>
+
+                    <Button
+                        android:id="@+id/btn_write"
+                        android:layout_width="wrap_content"
+                        android:layout_height="60px"
+                        android:background="@drawable/shape_chooselist"
+                        android:text="填写快递单" />
+
+                </LinearLayout>
+
+                <include layout="@layout/common_gap" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:background="@color/grey100" />
+
+            </LinearLayout>
+
+
+            <include layout="@layout/common_gap" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <RelativeLayout
+                    android:id="@+id/img_layout"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:background="@drawable/choose_img_bg"
+                    android:gravity="center">
+
+                    <com.jimei.xiaolumeimei.widget.RoundCornerImageView
+                        android:id="@+id/sdv"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/logo" />
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="bottom"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_good_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="8dp"
+                            android:text=""
+                            android:textSize="13sp" />
+
+                        <TextView
+                            android:id="@+id/tv_good_price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="10px"
+                            android:text=""
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="13sp" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_good_size"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="8dp"
+                            android:gravity="bottom"
+                            android:text="尺码："
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/tv_good_num"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginRight="10px"
+                            android:gravity="bottom"
+                            android:text=""
+                            android:textSize="15sp" />
+                    </RelativeLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <include layout="@layout/common_gap" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="申请数量:" />
+
+                <TextView
+                    android:id="@+id/num"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:text="" />
+            </LinearLayout>
+
+            <include layout="@layout/common_gap" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="可退金额:" />
+
+                <TextView
+                    android:id="@+id/price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:text=""
+                    android:textColor="@color/colorPrimary" />
+            </LinearLayout>
+
+            <include layout="@layout/common_gap" />
+
+            <LinearLayout
+                android:id="@+id/refund_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="退回账户:" />
+
+                <TextView
+                    android:id="@+id/refund_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:text="暂无退款" />
+            </LinearLayout>
+
+            <include layout="@layout/common_gap" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:background="@color/grey100" />
+
+            <include layout="@layout/common_gap" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="退款原因:" />
+
+
+            <include layout="@layout/common_gap" />
+
+            <TextView
+                android:id="@+id/reason"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text=""
+                android:textSize="14sp" />
 
             <RelativeLayout
-                android:id="@+id/img_layout"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:layout_width="110px"
+                android:layout_height="110px"
+                android:layout_margin="8dp"
                 android:background="@drawable/choose_img_bg"
                 android:gravity="center">
 
                 <com.jimei.xiaolumeimei.widget.RoundCornerImageView
-                    android:id="@+id/sdv"
+                    android:id="@+id/round_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:scaleType="fitXY"
                     android:src="@drawable/logo" />
+
             </RelativeLayout>
 
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <RelativeLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="bottom"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tv_good_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="8dp"
-                        android:text=""
-                        android:textSize="13sp" />
-
-                    <TextView
-                        android:id="@+id/tv_good_price"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="10px"
-                        android:text=""
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="13sp" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tv_good_size"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="8dp"
-                        android:gravity="bottom"
-                        android:text="尺码："
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:id="@+id/tv_good_num"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginRight="10px"
-                        android:gravity="bottom"
-                        android:text=""
-                        android:textSize="15sp" />
-                </RelativeLayout>
-            </LinearLayout>
-        </LinearLayout>
-
-        <include layout="@layout/common_gap" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="申请数量:" />
-
-            <TextView
-                android:id="@+id/num"
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="end"
-                android:text="" />
-        </LinearLayout>
+                android:layout_height="20dp"
+                android:background="@color/grey100" />
 
-        <include layout="@layout/common_gap" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="可退金额:" />
-
-            <TextView
-                android:id="@+id/price"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="end"
-                android:text=""
-                android:textColor="@color/colorPrimary" />
-        </LinearLayout>
-
-        <include layout="@layout/common_gap" />
-
-        <LinearLayout
-            android:id="@+id/refund_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="退回账户:" />
-
-            <TextView
-                android:id="@+id/refund_type"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="end"
-                android:text="暂无退款" />
-        </LinearLayout>
-
-        <include layout="@layout/common_gap" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:background="@color/grey100" />
-
-        <include layout="@layout/common_gap" />
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="退款原因:" />
-
-            <TextView
-                android:id="@+id/reason"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="end"
-                android:text="" />
-        </LinearLayout>
-
-        <include layout="@layout/common_gap" />
-
-        <RelativeLayout
-            android:layout_width="110px"
-            android:layout_height="110px"
-            android:layout_gravity="right|end"
-            android:layout_margin="8dp"
-            android:background="@drawable/choose_img_bg"
-            android:gravity="center">
-
-            <com.jimei.xiaolumeimei.widget.RoundCornerImageView
-                android:id="@+id/round_image"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="fitXY"
-                android:src="@drawable/logo" />
-
-        </RelativeLayout>
-
-        <include layout="@layout/common_gap" />
-
-        <include layout="@layout/common_gap" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:background="@color/grey100" />
-
-        <include layout="@layout/common_gap" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="128dp"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/state_last" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/state_path" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/state_oval" />
-
-            </LinearLayout>
-
+            <include layout="@layout/common_gap" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="128dp"
+                android:orientation="horizontal">
 
                 <LinearLayout
-                    android:id="@+id/ll_last"
-                    android:layout_width="fill_parent"
-                    android:layout_height="64dp"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical"
-                    android:padding="8dp">
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/tv_order_last_time"
+                    <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="16px"
-                        android:text=""
-                        android:textSize="12sp" />
+                        android:src="@drawable/state_last" />
 
-                    <TextView
-                        android:id="@+id/tv_order_last_state"
+                    <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="16px"
-                        android:layout_marginTop="4dp"
-                        android:text=""/>
+                        android:src="@drawable/state_path" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/state_oval" />
 
                 </LinearLayout>
 
+
                 <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="64dp"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical"
-                    android:padding="8dp">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/tv_order_create_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="16px"
-                        android:text=""
-                        android:textSize="12sp" />
+                    <LinearLayout
+                        android:id="@+id/ll_last"
+                        android:layout_width="fill_parent"
+                        android:layout_height="64dp"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:padding="8dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="16px"
-                        android:layout_marginTop="4dp"
-                        android:text="申请退款" />
+                        <TextView
+                            android:id="@+id/tv_order_last_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="16px"
+                            android:text=""
+                            android:textSize="12sp" />
 
+                        <TextView
+                            android:id="@+id/tv_order_last_state"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="16px"
+                            android:layout_marginTop="4dp"
+                            android:text="" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="64dp"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:padding="8dp">
+
+                        <TextView
+                            android:id="@+id/tv_order_create_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="16px"
+                            android:text=""
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="16px"
+                            android:layout_marginTop="4dp"
+                            android:text="申请退款" />
+
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
+
+            <include layout="@layout/common_gap" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/grey100" />
+
+
         </LinearLayout>
-
-        <include layout="@layout/common_gap" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/grey100" />
-
-
-    </LinearLayout>
-</FrameLayout>
+    </ScrollView>
+</LinearLayout>

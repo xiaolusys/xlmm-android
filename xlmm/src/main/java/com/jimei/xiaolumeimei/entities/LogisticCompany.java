@@ -1,9 +1,11 @@
 package com.jimei.xiaolumeimei.entities;
 
+import java.io.Serializable;
+
 /**
  * Created by wisdom on 16/5/24.
  */
-public class LogisticCompany {
+public class LogisticCompany implements Serializable{
     /**
      * code : POSTB
      * id : 200734

@@ -4,6 +4,7 @@ import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.entities.LogisticCompany;
 import com.jimei.xiaolumeimei.entities.PostActivityBean;
+import com.jimei.xiaolumeimei.entities.ResultBean;
 import com.jimei.xiaolumeimei.entities.StartBean;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 
@@ -52,6 +53,20 @@ public class ActivityModel {
     public Observable<List<LogisticCompany>> getLogisticCompany() {
         return XlmmRetrofitClient.getService()
                 .getLogisticCompany()
+                .compose(new DefaultTransform<>());
+    }
+
+    //物流列表
+    public Observable<List<LogisticCompany>> getLogisticCompany(String referal_trade_id) {
+        return XlmmRetrofitClient.getService()
+                .getLogisticCompany(referal_trade_id)
+                .compose(new DefaultTransform<>());
+    }
+
+    //修改物流
+    public Observable<ResultBean> changeLogisticCompany(String referal_trade_id, String logistic_company_code) {
+        return XlmmRetrofitClient.getService()
+                .changeLogisticCompany(referal_trade_id, logistic_company_code)
                 .compose(new DefaultTransform<>());
     }
 

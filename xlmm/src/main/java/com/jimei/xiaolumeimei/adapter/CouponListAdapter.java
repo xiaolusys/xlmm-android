@@ -99,7 +99,7 @@ public class CouponListAdapter extends BaseAdapter {
         } else {
             holder.tv_coupon_value.setText("￥" + coupon_value);
         }
-
+        holder.titleTv.setText(mList.get(position).getTitle());
         holder.tv_coupon_info.setText(mList.get(position).getPros_desc());
         String start_time = mList.get(position).getStart_time();
         if (start_time != null) {
@@ -125,6 +125,7 @@ public class CouponListAdapter extends BaseAdapter {
         TextView tv_coupon_crttime;
         ImageView img_selected;
         TextView use_fee;
+        TextView titleTv;
 
         public ViewHolder(View itemView) {
             tv_coupon_value = (TextView) itemView.findViewById(R.id.tv_coupon_value);
@@ -132,6 +133,7 @@ public class CouponListAdapter extends BaseAdapter {
             tv_coupon_crttime = (TextView) itemView.findViewById(R.id.tv_coupon_crttime);
             img_selected = (ImageView) itemView.findViewById(R.id.img_selected);
             use_fee = (TextView) itemView.findViewById(R.id.use_fee);
+            titleTv = (TextView) itemView.findViewById(R.id.title);
         }
     }
 
