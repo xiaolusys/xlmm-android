@@ -57,16 +57,16 @@ public class ActivityModel {
     }
 
     //物流列表
-    public Observable<List<LogisticCompany>> getLogisticCompany(String referal_trade_id) {
+    public Observable<List<LogisticCompany>> getLogisticCompany( int referal_trade_id) {
         return XlmmRetrofitClient.getService()
                 .getLogisticCompany(referal_trade_id)
                 .compose(new DefaultTransform<>());
     }
 
     //修改物流
-    public Observable<ResultBean> changeLogisticCompany(String referal_trade_id, String logistic_company_code) {
+    public Observable<ResultBean> changeLogisticCompany(int address_id, String referal_trade_id, String logistic_company_code) {
         return XlmmRetrofitClient.getService()
-                .changeLogisticCompany(referal_trade_id, logistic_company_code)
+                .changeLogisticCompany(address_id, referal_trade_id, logistic_company_code)
                 .compose(new DefaultTransform<>());
     }
 

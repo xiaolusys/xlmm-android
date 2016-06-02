@@ -13,6 +13,7 @@ public class ResultBean {
 
     private String message;
     private int code;
+    private String info;
 
     public String getMessage() {
         return message;
@@ -28,6 +29,14 @@ public class ResultBean {
 
     public void setCode(int code) {
         this.code = code;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
     }
 
     @Override

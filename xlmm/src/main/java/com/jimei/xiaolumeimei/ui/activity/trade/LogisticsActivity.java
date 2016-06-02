@@ -1,20 +1,19 @@
 package com.jimei.xiaolumeimei.ui.activity.trade;
 
+import android.app.Dialog;
 import android.content.Context;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import butterknife.Bind;
@@ -64,7 +63,6 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity implements Vi
     @Bind(R.id.ll_container)
     LinearLayout containerLayout;
 
-    PopupWindow pop;
     private ArrayList<PackageBean> packageBeanList;
     private String packetid = "";
     private String company_code = "";
@@ -72,7 +70,10 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity implements Vi
     private String tid = "";
     private String stateStr = "";
     private String key = "";
-    private int id;
+    private int referal_trade_id;
+    private int address_id;
+    private Dialog dialog;
+    private String logisticsCompanyName;
 
     @Override
     protected void setListener() {
@@ -120,6 +121,7 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity implements Vi
 
                         @Override
                         public void onError(Throwable e) {
+                            JUtils.Toast(e.getMessage());
                         }
                     });
             addSubscription(subscribe);
@@ -134,7 +136,7 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity implements Vi
             companyTv.setText(logisticsBean.getName());
             companyTv.setTextColor(getResources().getColor(R.color.colorAccent));
         } else {
-            companyTv.setText("小鹿推荐快递");
+            companyTv.setText(logisticsCompanyName);
         }
 
         if ("已付款".equals(stateStr)) {
@@ -162,13 +164,14 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity implements Vi
             OrderDetailActivity.setListViewHeightBasedOnChildren(mListView);
         } else {
             Subscription subscription = TradeModel.getInstance()
-                    .getOrderDetailBean(id)
+                    .getOrderDetailBean(referal_trade_id)
                     .subscribeOn(Schedulers.io())
                     .subscribe(new ServiceResponse<OrderDetailBean>() {
                         @Override
                         public void onNext(OrderDetailBean orderDetailBean) {
                             ArrayList<AllOrdersBean.ResultsEntity.OrdersEntity> orders = orderDetailBean.getOrders();
                             mListView.setAdapter(new GoodsListAdapter2(orders, getApplicationContext()));
+                            OrderDetailActivity.setListViewHeightBasedOnChildren(mListView);
                         }
                     });
             addSubscription(subscription);
@@ -202,8 +205,10 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity implements Vi
         time = extras.getString("time");
         stateStr = extras.getString("state");
         packageBeanList = (ArrayList<PackageBean>) extras.getSerializable("list");
-        id = extras.getInt("id");
+        referal_trade_id = extras.getInt("id");
         key = extras.getString("key");
+        address_id = extras.getInt("address_id");
+        logisticsCompanyName = extras.getString("logisticsCompanyName");
     }
 
     @Override
@@ -214,18 +219,20 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity implements Vi
     @Override
     protected void initViews() {
         View view = getLayoutInflater().inflate(R.layout.pop_layout, null);
-        pop = new PopupWindow(view, LayoutParams.MATCH_PARENT,
-                LayoutParams.WRAP_CONTENT, true);
-        pop.setBackgroundDrawable(new BitmapDrawable());
-        pop.setOutsideTouchable(false);
-        pop.setFocusable(true);
-        pop.setTouchable(true);
+        dialog = new Dialog(this, R.style.dialog_style);
+        dialog.setContentView(view);
+        Window window = dialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        wlp.gravity = Gravity.BOTTOM;
+        wlp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        window.setAttributes(wlp);
+        window.setWindowAnimations(R.style.dialog_anim);
         View closeIv = view.findViewById(R.id.close_iv);
         ListView listView = (ListView) view.findViewById(R.id.lv_logistics_company);
 
         closeIv.setOnClickListener(this);
         Subscription subscribe = ActivityModel.getInstance()
-                .getLogisticCompany(id + "")
+                .getLogisticCompany(referal_trade_id)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<List<LogisticCompany>>() {
                     @Override
@@ -237,18 +244,24 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity implements Vi
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                 String code = logisticCompanies.get(position).getCode();
                                 ActivityModel.getInstance()
-                                        .changeLogisticCompany(id + "", code)
+                                        .changeLogisticCompany(address_id, referal_trade_id + "", code)
                                         .subscribeOn(Schedulers.io())
                                         .subscribe(new ServiceResponse<ResultBean>() {
                                             @Override
                                             public void onNext(ResultBean resultBean) {
-                                                JUtils.Toast(resultBean.getMessage());
-                                                changePopupWindowState();
+                                                switch (resultBean.getCode()) {
+                                                    case 0:
+                                                        companyTv.setText(logisticCompanies.get(position).getName());
+                                                        break;
+                                                }
+                                                JUtils.Toast(resultBean.getInfo());
+                                                changeDialogWindowState();
                                             }
 
                                             @Override
                                             public void onError(Throwable e) {
-                                                JUtils.Toast("修改异常");
+                                                JUtils.Toast(e.getMessage());
+                                                changeDialogWindowState();
                                             }
                                         });
                             }
@@ -272,19 +285,19 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity implements Vi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.company_layout:
-                changePopupWindowState();
+                changeDialogWindowState();
                 break;
             case R.id.close_iv:
-                changePopupWindowState();
+                changeDialogWindowState();
                 break;
         }
     }
 
-    private void changePopupWindowState() {
-        if (pop.isShowing()) {
-            pop.dismiss();
+    private void changeDialogWindowState() {
+        if (dialog.isShowing()) {
+            dialog.dismiss();
         } else {
-            pop.showAtLocation(containerLayout, Gravity.BOTTOM, 0, 0);
+            dialog.show();
         }
     }
 
