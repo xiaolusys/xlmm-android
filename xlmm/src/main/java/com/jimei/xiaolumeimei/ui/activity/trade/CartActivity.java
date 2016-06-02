@@ -186,8 +186,8 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                             }
                           });*/
 
-                        tvShow.setVisibility(View.INVISIBLE);
-                        showLine.setVisibility(View.INVISIBLE);
+                        tvShow.setVisibility(View.GONE);
+                        showLine.setVisibility(View.GONE);
                       }
                     }
                   });
@@ -250,8 +250,8 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                           }
                         });
 
-                        tvShow.setVisibility(View.INVISIBLE);
-                        showLine.setVisibility(View.INVISIBLE);
+                        tvShow.setVisibility(View.GONE);
+                        showLine.setVisibility(View.GONE);
                       }
                     }
                   });

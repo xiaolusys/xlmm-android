@@ -1,5 +1,6 @@
 package com.jimei.xiaolumeimei.ui.fragment.v2;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
@@ -44,6 +45,7 @@ import rx.schedulers.Schedulers;
  */
 public class TodayV2Fragment extends BaseFragment {
 
+  SharedPreferences sharedPreferences;
   private static final java.lang.String TAG = TodayV2Fragment.class.getSimpleName();
 
   @Bind(R.id.xrcy_todayv2) XRecyclerView xRecyclerView;
@@ -91,6 +93,11 @@ public class TodayV2Fragment extends BaseFragment {
 
   }
 
+  @Override public void onResume() {
+    super.onResume();
+    JUtils.Log(TAG,"onResume");
+  }
+
   private long calcLeftTime(String crtTime) {
     long left = 0;
     Date now = new Date();
@@ -117,6 +124,7 @@ public class TodayV2Fragment extends BaseFragment {
   }
 
   public void load(SwipeRefreshLayout swipeRefreshLayout) {
+    JUtils.Log(TAG,"load");
     list.clear();
     page = 2;
     if (mTodayAdapter != null) {
