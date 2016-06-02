@@ -1,12 +1,14 @@
 package com.jimei.xiaolumeimei.entities;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by wisdom on 16-5-25.
  */
 
-public class OrderDetailBean {
+public class OrderDetailBean implements Serializable {
 
     /**
      * id : 348481
@@ -87,7 +89,7 @@ public class OrderDetailBean {
      * is_seckill : false
      */
 
-    private List<AllOrdersBean.ResultsEntity.OrdersEntity> orders;
+    private ArrayList<AllOrdersBean.ResultsEntity.OrdersEntity> orders;
     /**
      * code : YUNDA_QR
      * name : 韵达热敏
@@ -248,11 +250,11 @@ public class OrderDetailBean {
         this.user_adress = user_adress;
     }
 
-    public List<AllOrdersBean.ResultsEntity.OrdersEntity> getOrders() {
+    public ArrayList<AllOrdersBean.ResultsEntity.OrdersEntity> getOrders() {
         return orders;
     }
 
-    public void setOrders(List<AllOrdersBean.ResultsEntity.OrdersEntity> orders) {
+    public void setOrders(ArrayList<AllOrdersBean.ResultsEntity.OrdersEntity> orders) {
         this.orders = orders;
     }
 
@@ -280,7 +282,7 @@ public class OrderDetailBean {
         this.logistics_company = logistics_company;
     }
 
-    public static class UserAdressBean {
+    public static class UserAdressBean implements Serializable{
         private String receiver_address;
         private String receiver_district;
         private String receiver_city;

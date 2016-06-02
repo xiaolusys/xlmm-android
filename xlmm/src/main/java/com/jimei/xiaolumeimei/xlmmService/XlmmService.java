@@ -56,6 +56,7 @@ import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
 import com.jimei.xiaolumeimei.entities.RegisterBean;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
+import com.jimei.xiaolumeimei.entities.ResultBean;
 import com.jimei.xiaolumeimei.entities.ShareProductBean;
 import com.jimei.xiaolumeimei.entities.ShopProductBean;
 import com.jimei.xiaolumeimei.entities.ShoppingListBean;
@@ -68,8 +69,10 @@ import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.UserWithdrawResult;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.entities.WxPubAuthInfo;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import retrofit2.http.Body;
@@ -830,6 +833,18 @@ public interface XlmmService {
 
     @GET("/rest/v1/address/get_logistic_companys")
     Observable<List<LogisticCompany>> getLogisticCompany(
+    );
+
+    @GET("/rest/v1/address/get_logistic_companys")
+    Observable<List<LogisticCompany>> getLogisticCompany(
+            @Query("referal_trade_id") String referal_trade_id
+    );
+
+    @FormUrlEncoded
+    @POST("/rest/v1/address/change_company_code")
+    Observable<ResultBean> changeLogisticCompany(
+            @Field("referal_trade_id") String referal_trade_id,
+            @Field("logistic_company_code") String logistic_company_code
     );
 
     @FormUrlEncoded

@@ -38,6 +38,7 @@ import java.util.List;
 import rx.schedulers.Schedulers;
 
 public class OrderGoodsListAdapter extends BaseAdapter {
+    private final String[] NUM = {"一", "二", "三", "四", "五", "六", "七", "八", "九", "十"};
     private static final String TAG = "OrderGoodsListAdapter";
     List<HashMap<String, String>> data;
     private Activity context;
@@ -46,11 +47,15 @@ public class OrderGoodsListAdapter extends BaseAdapter {
     private String timeStr;
     private String stateStr;
     private String tid;
+    private OrderDetailBean orderDetailEntity;
+    private int count = 0;
+    String packetid = "";
+    String company_code = "";
+
 
     public void setPackageBeanList(ArrayList<PackageBean> packageBeanList) {
         this.packageBeanList = packageBeanList;
     }
-
 
     public OrderGoodsListAdapter(Activity context) {
         dataSource = new ArrayList<>();
@@ -71,6 +76,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
     }
 
     public void setData(OrderDetailBean orderDetailBean) {
+        orderDetailEntity = orderDetailBean;
         stateStr = orderDetailBean.getStatus_display();
         timeStr = orderDetailBean.getCreated().replace("T", " ");
         tid = orderDetailBean.getTid();
@@ -123,43 +129,32 @@ public class OrderGoodsListAdapter extends BaseAdapter {
             }
             LinearLayout layout = (LinearLayout) convertView.findViewById(R.id.logistics_layout);
             View view = convertView.findViewById(R.id.divider);
+            String key = "";
             if (packageBeanList.size() > position) {
+                key = packageBeanList.get(position).getPackage_group_key();
                 if (position == 0) {
                     view.setVisibility(View.VISIBLE);
                     layout.setVisibility(View.VISIBLE);
+                    count = 0;
                 } else if (packageBeanList.get(position).getPackage_group_key().equals(packageBeanList.get(position - 1).getPackage_group_key())) {
                     view.setVisibility(View.GONE);
                     layout.setVisibility(View.GONE);
                 } else {
                     view.setVisibility(View.VISIBLE);
                     layout.setVisibility(View.VISIBLE);
+                    count++;
                 }
-                if (!"".equals(packageBeanList.get(position).getProcess_time()) && packageBeanList.get(position).getProcess_time() != null) {
-                    ((TextView) convertView.findViewById(R.id.tx_order_crttime)).setText("时间: " + packageBeanList.get(position).getProcess_time().replace("T", " "));
+                ((TextView) convertView.findViewById(R.id.tv_order_package)).setText("包裹" + NUM[count]);
+                String name = packageBeanList.get(position).getLogistics_company_name();
+                if ("".equals(name.trim())) {
+                    ((TextView) convertView.findViewById(R.id.tx_order_name)).setText("小鹿推荐快递");
                 } else {
-                    ((TextView) convertView.findViewById(R.id.tx_order_crttime)).setText("时间: " + timeStr);
+                    ((TextView) convertView.findViewById(R.id.tx_order_name)).setText(name);
                 }
-                ((TextView) convertView.findViewById(R.id.name)).setText(packageBeanList.get(position).getLogistics_company_name());
-                ((TextView) convertView.findViewById(R.id.code)).setText(packageBeanList.get(position).getOut_sid());
+
                 ((TextView) convertView.findViewById(R.id.tx_order_crtstate)).setText(packageBeanList.get(position).getAssign_status_display());
-                String packetid = packageBeanList.get(position).getOut_sid();
-                String company_code = packageBeanList.get(position).getLogistics_company_code();
-                if (!"".equals(packetid) || !"".equals(company_code)) {
-                    layout.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(context, LogisticsActivity.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putString("packetid", packetid);
-                            bundle.putString("time", timeStr);
-                            bundle.putString("tid", tid);
-                            bundle.putString("company_code", company_code);
-                            bundle.putSerializable("list",packageBeanList);
-                            intent.putExtras(bundle);
-                            context.startActivity(intent);
-                        }
-                    });
-                }
+                packetid = packageBeanList.get(position).getOut_sid();
+                company_code = packageBeanList.get(position).getLogistics_company_code();
             } else {
                 if (position == 0) {
                     view.setVisibility(View.VISIBLE);
@@ -168,9 +163,28 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                     view.setVisibility(View.GONE);
                     layout.setVisibility(View.GONE);
                 }
-                ((TextView) convertView.findViewById(R.id.tx_order_crttime)).setText("时间: " + timeStr);
                 ((TextView) convertView.findViewById(R.id.tx_order_crtstate)).setText(stateStr);
+                ((TextView) convertView.findViewById(R.id.tv_order_package)).setText("包裹一");
+                ((TextView) convertView.findViewById(R.id.tx_order_name)).setText("小鹿推荐快递");
             }
+            final String finalKey = key;
+            layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, LogisticsActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("packetid", packetid);
+                    bundle.putString("time", timeStr);
+                    bundle.putString("tid", tid);
+                    bundle.putString("state", stateStr);
+                    bundle.putString("key", finalKey);
+                    bundle.putString("company_code", company_code);
+                    bundle.putSerializable("list", packageBeanList);
+                    bundle.putInt("id", orderDetailEntity.getId());
+                    intent.putExtras(bundle);
+                    context.startActivity(intent);
+                }
+            });
         }
 
         img_goods = (ImageView) convertView.findViewById(R.id.img_good);

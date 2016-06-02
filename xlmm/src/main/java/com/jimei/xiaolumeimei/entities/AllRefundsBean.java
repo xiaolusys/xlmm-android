@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.entities;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,43 +25,42 @@ public class AllRefundsBean {
 
 
     /**
-     "id": 41979,
-     "url": "http://m.xiaolumeimei.com/rest/v1/refunds/41979",
-     "refund_no": "RF1604165711b21b15c04",
-     "trade_id": 326789,
-     "order_id": 362204,
-     "buyer_id": 1,
-     "item_id": 39285,
-     "title": "帅气卡通印花T恤/美国队长",
-     "sku_id": 157679,
-     "sku_name": "130",
-     "refund_num": 1,
-     "buyer_nick": "meron@小鹿美美",
-     "mobile": "18565565655",
-     "phone": "",
-     "proof_pic": [],
-     "total_fee": 39.9,
-     "payment": 37.9,
-     "created": "2016-04-16T11:31:39",
-     "modified": "2016-04-21T15:25:45",
-     "company_name": "",
-     "sid": "",
-     "reason": "其他",
-     "pic_path": "http://image.xiaolu.so/MG_14604489807443.jpg",
-     "desc": "请输入退款说明",
-     "feedback": "",
-     "has_good_return": false,
-     "has_good_change": false,
-     "good_status": 0,
-     "status": 1,
-     "refund_fee": 37.9,
-     "return_address": "退货状态未确定",
-     "status_display": "退款关闭",
-     "amount_flow": {
-     "desc": ""
-     }
+     * "id": 41979,
+     * "url": "http://m.xiaolumeimei.com/rest/v1/refunds/41979",
+     * "refund_no": "RF1604165711b21b15c04",
+     * "trade_id": 326789,
+     * "order_id": 362204,
+     * "buyer_id": 1,
+     * "item_id": 39285,
+     * "title": "帅气卡通印花T恤/美国队长",
+     * "sku_id": 157679,
+     * "sku_name": "130",
+     * "refund_num": 1,
+     * "buyer_nick": "meron@小鹿美美",
+     * "mobile": "18565565655",
+     * "phone": "",
+     * "proof_pic": [],
+     * "total_fee": 39.9,
+     * "payment": 37.9,
+     * "created": "2016-04-16T11:31:39",
+     * "modified": "2016-04-21T15:25:45",
+     * "company_name": "",
+     * "sid": "",
+     * "reason": "其他",
+     * "pic_path": "http://image.xiaolu.so/MG_14604489807443.jpg",
+     * "desc": "请输入退款说明",
+     * "feedback": "",
+     * "has_good_return": false,
+     * "has_good_change": false,
+     * "good_status": 0,
+     * "status": 1,
+     * "refund_fee": 37.9,
+     * "return_address": "退货状态未确定",
+     * "status_display": "退款关闭",
+     * "amount_flow": {
+     * "desc": ""
+     * }
      */
-
 
 
     @SerializedName("results")
@@ -98,13 +98,14 @@ public class AllRefundsBean {
         return results;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return "AllRefundsBean{" +
-            "count=" + count +
-            ", next=" + next +
-            ", previous=" + previous +
-            ", results=" + results +
-            '}';
+                "count=" + count +
+                ", next=" + next +
+                ", previous=" + previous +
+                ", results=" + results +
+                '}';
     }
 
     public static class ResultsEntity {
@@ -137,7 +138,7 @@ public class AllRefundsBean {
         @SerializedName("phone")
         private String phone;
         @SerializedName("proof_pic")
-        private Object proof_pic;
+        private ArrayList<String> proof_pic;
         @SerializedName("total_fee")
         private double total_fee;
         @SerializedName("payment")
@@ -239,7 +240,7 @@ public class AllRefundsBean {
             this.phone = phone;
         }
 
-        public void setProof_pic(Object proof_pic) {
+        public void setProof_pic(ArrayList<String> proof_pic) {
             this.proof_pic = proof_pic;
         }
 
@@ -367,7 +368,7 @@ public class AllRefundsBean {
             return phone;
         }
 
-        public Object getProof_pic() {
+        public ArrayList<String> getProof_pic() {
             return proof_pic;
         }
 
@@ -439,40 +440,41 @@ public class AllRefundsBean {
             return return_address;
         }
 
-        @Override public String toString() {
+        @Override
+        public String toString() {
             return "ResultsEntity{" +
-                "id=" + id +
-                ", url='" + url + '\'' +
-                ", refund_no='" + refund_no + '\'' +
-                ", trade_id=" + trade_id +
-                ", order_id=" + order_id +
-                ", buyer_id=" + buyer_id +
-                ", item_id=" + item_id +
-                ", title='" + title + '\'' +
-                ", sku_id=" + sku_id +
-                ", sku_name='" + sku_name + '\'' +
-                ", refund_num=" + refund_num +
-                ", buyer_nick='" + buyer_nick + '\'' +
-                ", mobile='" + mobile + '\'' +
-                ", phone='" + phone + '\'' +
-                ", proof_pic=" + proof_pic +
-                ", total_fee=" + total_fee +
-                ", payment=" + payment +
-                ", created='" + created + '\'' +
-                ", modified='" + modified + '\'' +
-                ", company_name='" + company_name + '\'' +
-                ", sid='" + sid + '\'' +
-                ", reason='" + reason + '\'' +
-                ", pic_path='" + pic_path + '\'' +
-                ", desc='" + desc + '\'' +
-                ", feedback='" + feedback + '\'' +
-                ", has_good_return=" + has_good_return +
-                ", has_good_change=" + has_good_change +
-                ", good_status=" + good_status +
-                ", status=" + status +
-                ", refund_fee=" + refund_fee +
-                ", status_display='" + status_display + '\'' +
-                '}';
+                    "id=" + id +
+                    ", url='" + url + '\'' +
+                    ", refund_no='" + refund_no + '\'' +
+                    ", trade_id=" + trade_id +
+                    ", order_id=" + order_id +
+                    ", buyer_id=" + buyer_id +
+                    ", item_id=" + item_id +
+                    ", title='" + title + '\'' +
+                    ", sku_id=" + sku_id +
+                    ", sku_name='" + sku_name + '\'' +
+                    ", refund_num=" + refund_num +
+                    ", buyer_nick='" + buyer_nick + '\'' +
+                    ", mobile='" + mobile + '\'' +
+                    ", phone='" + phone + '\'' +
+                    ", proof_pic=" + proof_pic +
+                    ", total_fee=" + total_fee +
+                    ", payment=" + payment +
+                    ", created='" + created + '\'' +
+                    ", modified='" + modified + '\'' +
+                    ", company_name='" + company_name + '\'' +
+                    ", sid='" + sid + '\'' +
+                    ", reason='" + reason + '\'' +
+                    ", pic_path='" + pic_path + '\'' +
+                    ", desc='" + desc + '\'' +
+                    ", feedback='" + feedback + '\'' +
+                    ", has_good_return=" + has_good_return +
+                    ", has_good_change=" + has_good_change +
+                    ", good_status=" + good_status +
+                    ", status=" + status +
+                    ", refund_fee=" + refund_fee +
+                    ", status_display='" + status_display + '\'' +
+                    '}';
         }
     }
 /*

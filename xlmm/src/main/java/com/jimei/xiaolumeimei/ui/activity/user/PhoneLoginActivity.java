@@ -47,6 +47,7 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
   String login_name_value;//登录名
   String login_pass_value;//登录密码
   private String actlink;
+  private String title;
   private int id;
 
   @Override protected void setListener() {
@@ -128,6 +129,7 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                     if (getIntent() !=null && getIntent().getExtras() != null) {
                       login = getIntent().getExtras().getString("login");
                       actlink = getIntent().getExtras().getString("actlink");
+                      title = getIntent().getExtras().getString("title");
                       id = getIntent().getExtras().getInt("id");
                     }
 
@@ -191,7 +193,7 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                         finish();
                       } else if (login.equals("goactivity")) {
                         JumpUtils.jumpToWebViewWithCookies(mContext, actlink, id,
-                            ActivityWebViewActivity.class);
+                            ActivityWebViewActivity.class,title);
                         finish();
                       }
                     }
