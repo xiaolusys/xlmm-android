@@ -28,6 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
+import com.jimei.library.event.TimeEvent;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.BrandlistAdapter;
 import com.jimei.xiaolumeimei.base.BaseActivity;
@@ -36,6 +37,7 @@ import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.BrandListBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.PortalBean;
+import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.model.CartsModel;
@@ -83,6 +85,8 @@ import java.util.List;
 import java.util.Map;
 import okhttp3.Call;
 import okhttp3.ResponseBody;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -121,6 +125,7 @@ public class MainActivity extends BaseActivity
   @Bind(R.id.slider) SliderLayout mSliderLayout;
   @Bind(R.id.viewPager) ViewPager vp;
   List<PortalBean.PostersBean> posters = new ArrayList<>();
+  SharedPreferences sharedPreferencesTime;
   private String cookies;
   private String domain;
   private SharedPreferences sharedPreferencesMask;
@@ -135,6 +140,7 @@ public class MainActivity extends BaseActivity
   private TextView msg3;
   private ImageView loginFlag;
   private View llayout;
+  private String newTime;
 
   public static int dp2px(Context context, int dp) {
     float scale = context.getResources().getDisplayMetrics().density;
@@ -182,7 +188,9 @@ public class MainActivity extends BaseActivity
   }
 
   @Override protected void initData() {
+
     init(null);
+
     new Thread(() -> {
       try {
         Thread.sleep(500 * 60);
@@ -194,6 +202,7 @@ public class MainActivity extends BaseActivity
   }
 
   @Override protected void initView() {
+    EventBus.getDefault().register(this);
     findById();
     StatusBarUtil.setColorForDrawerLayout(this, drawer,
         getResources().getColor(R.color.colorAccent), 0);
@@ -304,6 +313,7 @@ public class MainActivity extends BaseActivity
 
   public void initViewsForTab() {
     sharedPreferencesMask = getSharedPreferences("maskActivity", 0);
+    sharedPreferencesTime = getSharedPreferences("resumeTime", 0);
     mask = sharedPreferencesMask.getInt("mask", 0);
     MyFragmentAdapter adapter = new MyFragmentAdapter(getSupportFragmentManager());
     list.add(YesterdayV2Fragment.newInstance("昨天"));
@@ -319,12 +329,14 @@ public class MainActivity extends BaseActivity
   }
 
   public void init(SwipeRefreshLayout swipeRefreshLayout) {
+
     Subscription subscribe2 = ProductModel.getInstance()
         .getPortalBean()
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<PortalBean>() {
           @Override public void onNext(PortalBean postBean) {
             try {
+
               initSliderLayout(postBean);
 
               initCategory(postBean);
@@ -332,6 +344,20 @@ public class MainActivity extends BaseActivity
               initBrand(postBean);
 
               initPost(postBean);
+
+              ProductModel.getInstance()
+                  .getTodayList(1, 1)
+                  .subscribeOn(Schedulers.io())
+                  .subscribe(new ServiceResponse<ProductListBean>() {
+                    @Override public void onNext(ProductListBean productListBean) {
+                      if (null != productListBean) {
+                        String upshelfStarttime = productListBean.getUpshelfStarttime();
+                        SharedPreferences.Editor edit = sharedPreferencesTime.edit();
+                        edit.putString("resumetime", upshelfStarttime);
+                        edit.apply();
+                      }
+                    }
+                  });
             } catch (NullPointerException ex) {
               ex.printStackTrace();
             }
@@ -351,6 +377,11 @@ public class MainActivity extends BaseActivity
           }
         });
     addSubscription(subscribe2);
+  }
+
+  @Subscribe private void onTimeEvent(TimeEvent event) {
+
+    newTime = event.time;
   }
 
   public void initPost(PortalBean postBean) throws NullPointerException {
@@ -416,7 +447,8 @@ public class MainActivity extends BaseActivity
                                     sharedPreferences.getString("Cookie", ""));
                                 bundle.putString("actlink",
                                     postActivityBean.get(finalI).getAct_link());
-                                bundle.putString("title",postActivityBean.get(finalI).getTitle());
+                                bundle.putString("title",
+                                    postActivityBean.get(finalI).getTitle());
                                 bundle.putInt("id", postActivityBean.get(finalI).getId());
                                 intent.putExtras(bundle);
                                 startActivity(intent);
@@ -430,8 +462,10 @@ public class MainActivity extends BaseActivity
                                   bundle.putString("actlink",
                                       postActivityBean.get(finalI).getAct_link());
 
-                                  bundle.putInt("id", postActivityBean.get(finalI).getId());
-                                  bundle.putString("title",postActivityBean.get(finalI).getTitle());
+                                  bundle.putInt("id",
+                                      postActivityBean.get(finalI).getId());
+                                  bundle.putString("title",
+                                      postActivityBean.get(finalI).getTitle());
 
                                   intent.putExtras(bundle);
                                   startActivity(intent);
@@ -463,7 +497,8 @@ public class MainActivity extends BaseActivity
                               bundle.putString("domain", domain);
                               bundle.putString("actlink",
                                   postActivityBean.get(finalI).getAct_link());
-                              bundle.putString("title",postActivityBean.get(finalI).getTitle());
+                              bundle.putString("title",
+                                  postActivityBean.get(finalI).getTitle());
                               intent.putExtras(bundle);
                               startActivity(intent);
                             }
@@ -868,6 +903,9 @@ public class MainActivity extends BaseActivity
 
   @Override protected void onResume() {
     super.onResume();
+
+    resumeData();
+
     Subscription subscribe = CartsModel.getInstance()
         .show_carts_num()
         .subscribeOn(Schedulers.io())
@@ -893,6 +931,63 @@ public class MainActivity extends BaseActivity
     addSubscription(subscribe);
     getUserInfo();
     JUtils.Log(TAG, "resume");
+  }
+
+  private void resumeData() {
+    String resumetime = sharedPreferencesTime.getString("resumetime", "");
+    if (!resumetime.equals(newTime)) {
+      Subscription subscribe2 = ProductModel.getInstance()
+          .getPortalBean()
+          .subscribeOn(Schedulers.io())
+          .subscribe(new ServiceResponse<PortalBean>() {
+            @Override public void onNext(PortalBean postBean) {
+              try {
+
+                initSliderLayout(postBean);
+
+                initCategory(postBean);
+
+                initBrand(postBean);
+
+                initPost(postBean);
+              } catch (NullPointerException ex) {
+                ex.printStackTrace();
+              }
+            }
+
+            @Override public void onCompleted() {
+              if (swipeRefreshLayout != null) {
+                swipeRefreshLayout.setRefreshing(false);
+              }
+            }
+
+            @Override public void onError(Throwable e) {
+              if (swipeRefreshLayout != null) {
+                swipeRefreshLayout.setRefreshing(false);
+              }
+              JUtils.ToastLong("数据加载失败,请确认网络是否正常!");
+            }
+          });
+      addSubscription(subscribe2);
+
+      switch (vp.getCurrentItem()) {
+        case 0:
+          ((YesterdayV2Fragment) list.get(0)).load(swipeRefreshLayout);
+          break;
+        case 1:
+          ((TodayV2Fragment) list.get(1)).load(swipeRefreshLayout);
+          break;
+        case 2:
+          ((TomorrowV2Fragment) list.get(2)).load(swipeRefreshLayout);
+          break;
+      }
+      scrollableLayout.getHelper()
+          .setCurrentScrollableContainer(list.get(vp.getCurrentItem()));
+
+      SharedPreferences.Editor edit = sharedPreferencesTime.edit();
+      edit.putString("resumetime", newTime);
+      edit.apply();
+    }
   }
 
   @Override protected void onStop() {

@@ -17,6 +17,7 @@ import cn.iwgang.countdownview.CountdownView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.jimei.library.event.TimeEvent;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.TodayAdapter;
 import com.jimei.xiaolumeimei.base.BaseFragment;
@@ -29,6 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import org.greenrobot.eventbus.EventBus;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -240,6 +242,26 @@ public class TomorrowV2Fragment extends BaseFragment {
     });
   }
 
+  @Override public void onResume() {
+    super.onResume();
+    ProductModel.getInstance()
+        .getTodayList(1, 1)
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<ProductListBean>() {
+          @Override public void onNext(ProductListBean productListBean) {
+            if (null != productListBean) {
+              String upshelfStarttime = productListBean.getUpshelfStarttime();
+              EventBus.getDefault().post(new TimeEvent(upshelfStarttime));
+            }
+          }
+        });
+  }
+
+  @Override public void onStart() {
+    super.onStart();
+    EventBus.getDefault().register(this);
+  }
+
   private void loadMoreData(int page, int page_size) {
 
     subscribe3 = ProductModel.getInstance()
@@ -312,5 +334,7 @@ public class TomorrowV2Fragment extends BaseFragment {
     if (subscribe3 != null && subscribe3.isUnsubscribed()) {
       subscribe3.unsubscribe();
     }
+
+    EventBus.getDefault().unregister(this);
   }
 }

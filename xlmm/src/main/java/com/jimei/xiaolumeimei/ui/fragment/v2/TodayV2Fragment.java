@@ -12,14 +12,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.iwgang.countdownview.CountdownView;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.jimei.library.event.TimeEvent;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.TodayAdapter;
 import com.jimei.xiaolumeimei.base.BaseFragment;
@@ -28,13 +27,12 @@ import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
-
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
+import org.greenrobot.eventbus.EventBus;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -45,9 +43,8 @@ import rx.schedulers.Schedulers;
  */
 public class TodayV2Fragment extends BaseFragment {
 
-  SharedPreferences sharedPreferences;
   private static final java.lang.String TAG = TodayV2Fragment.class.getSimpleName();
-
+  SharedPreferences sharedPreferences;
   @Bind(R.id.xrcy_todayv2) XRecyclerView xRecyclerView;
   int page_size = 10;
   Thread thread;
@@ -76,6 +73,10 @@ public class TodayV2Fragment extends BaseFragment {
     setRetainInstance(true);
   }
 
+  @Override public void onStart() {
+    super.onStart();
+    EventBus.getDefault().register(this);
+  }
   @Override protected View initViews(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     view = inflater.inflate(R.layout.fragment_todayv2, container, false);
@@ -95,7 +96,20 @@ public class TodayV2Fragment extends BaseFragment {
 
   @Override public void onResume() {
     super.onResume();
-    JUtils.Log(TAG,"onResume");
+    JUtils.Log(TAG, "onResume");
+
+    ProductModel.getInstance()
+        .getTodayList(1, 1)
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<ProductListBean>() {
+          @Override public void onNext(ProductListBean productListBean) {
+            if (null != productListBean) {
+              String upshelfStarttime = productListBean.getUpshelfStarttime();
+              EventBus.getDefault().post(new TimeEvent(upshelfStarttime));
+            }
+          }
+        });
+
   }
 
   private long calcLeftTime(String crtTime) {
@@ -124,7 +138,7 @@ public class TodayV2Fragment extends BaseFragment {
   }
 
   public void load(SwipeRefreshLayout swipeRefreshLayout) {
-    JUtils.Log(TAG,"load");
+    JUtils.Log(TAG, "load");
     list.clear();
     page = 2;
     if (mTodayAdapter != null) {
@@ -159,38 +173,35 @@ public class TodayV2Fragment extends BaseFragment {
               }
             } catch (Exception ex) {
 
-                        }
-                    }
+            }
+          }
 
-                    @Override
-                    public void onCompleted() {
-                        super.onCompleted();
-                        //loading.post(loading::stop);
-                        if (swipeRefreshLayout != null) {
-                            swipeRefreshLayout.setRefreshing(false);
-                        } else {
-                            hideIndeterminateProgressDialog();
-                        }
-                    }
-                });
+          @Override public void onCompleted() {
+            super.onCompleted();
+            //loading.post(loading::stop);
+            if (swipeRefreshLayout != null) {
+              swipeRefreshLayout.setRefreshing(false);
+            } else {
+              hideIndeterminateProgressDialog();
+            }
+          }
+        });
 
-//        subscribe2 = Observable.timer(1, 1, TimeUnit.SECONDS)
-//                .onBackpressureDrop()
-//                .map(aLong -> calcLeftTime(left))
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Action1<Long>() {
-//                    @Override
-//                    public void call(Long aLong) {
-//                        if (aLong > 0) {
-//                            countTime.updateShow(aLong);
-//                        } else {
-//                            countTime.setVisibility(View.INVISIBLE);
-//                        }
-//                    }
-//                }, Throwable::printStackTrace);
-    }
-
-
+    //        subscribe2 = Observable.timer(1, 1, TimeUnit.SECONDS)
+    //                .onBackpressureDrop()
+    //                .map(aLong -> calcLeftTime(left))
+    //                .observeOn(AndroidSchedulers.mainThread())
+    //                .subscribe(new Action1<Long>() {
+    //                    @Override
+    //                    public void call(Long aLong) {
+    //                        if (aLong > 0) {
+    //                            countTime.updateShow(aLong);
+    //                        } else {
+    //                            countTime.setVisibility(View.INVISIBLE);
+    //                        }
+    //                    }
+    //                }, Throwable::printStackTrace);
+  }
 
   private void initLeftTime() {
     if (thread == null) {
@@ -323,5 +334,11 @@ public class TodayV2Fragment extends BaseFragment {
     if (subscribe3 != null && subscribe3.isUnsubscribed()) {
       subscribe3.unsubscribe();
     }
+    EventBus.getDefault().unregister(this);
+  }
+
+  @Override public void onDestroy() {
+    super.onDestroy();
+
   }
 }
