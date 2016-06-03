@@ -1,4 +1,4 @@
-package com.jimei.library.event;
+package com.jimei.xiaolumeimei.event;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/06/02.

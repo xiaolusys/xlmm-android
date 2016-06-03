@@ -17,7 +17,7 @@ import cn.iwgang.countdownview.CountdownView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
-import com.jimei.library.event.TimeEvent;
+import com.jimei.xiaolumeimei.event.TimeEvent;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.TodayAdapter;
 import com.jimei.xiaolumeimei.base.BaseFragment;
@@ -259,7 +259,6 @@ public class TomorrowV2Fragment extends BaseFragment {
 
   @Override public void onStart() {
     super.onStart();
-    EventBus.getDefault().register(this);
   }
 
   private void loadMoreData(int page, int page_size) {
@@ -335,6 +334,5 @@ public class TomorrowV2Fragment extends BaseFragment {
       subscribe3.unsubscribe();
     }
 
-    EventBus.getDefault().unregister(this);
   }
 }

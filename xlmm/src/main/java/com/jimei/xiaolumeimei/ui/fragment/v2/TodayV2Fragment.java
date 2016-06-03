@@ -1,5 +1,7 @@
 package com.jimei.xiaolumeimei.ui.fragment.v2;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -18,12 +20,13 @@ import cn.iwgang.countdownview.CountdownView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
-import com.jimei.library.event.TimeEvent;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.TodayAdapter;
 import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
+import com.jimei.xiaolumeimei.event.TimeEvent;
 import com.jimei.xiaolumeimei.model.ProductModel;
+import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
@@ -59,6 +62,8 @@ public class TodayV2Fragment extends BaseFragment {
   private View view;
   private CountdownView countTime;
   private long left;
+  private String upshelfStarttime;
+  private Activity activity;
 
   public static TodayV2Fragment newInstance(String title) {
     TodayV2Fragment todayV2Fragment = new TodayV2Fragment();
@@ -73,10 +78,15 @@ public class TodayV2Fragment extends BaseFragment {
     setRetainInstance(true);
   }
 
+  @Override public void onAttach(Context context) {
+    super.onAttach(context);
+    activity = (MainActivity) context;
+  }
+
   @Override public void onStart() {
     super.onStart();
-    EventBus.getDefault().register(this);
   }
+
   @Override protected View initViews(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     view = inflater.inflate(R.layout.fragment_todayv2, container, false);
@@ -104,12 +114,12 @@ public class TodayV2Fragment extends BaseFragment {
         .subscribe(new ServiceResponse<ProductListBean>() {
           @Override public void onNext(ProductListBean productListBean) {
             if (null != productListBean) {
-              String upshelfStarttime = productListBean.getUpshelfStarttime();
+              JUtils.Log(TAG, Thread.currentThread().getName());
+              upshelfStarttime = productListBean.getUpshelfStarttime();
               EventBus.getDefault().post(new TimeEvent(upshelfStarttime));
             }
           }
         });
-
   }
 
   private long calcLeftTime(String crtTime) {
@@ -334,11 +344,9 @@ public class TodayV2Fragment extends BaseFragment {
     if (subscribe3 != null && subscribe3.isUnsubscribed()) {
       subscribe3.unsubscribe();
     }
-    EventBus.getDefault().unregister(this);
   }
 
   @Override public void onDestroy() {
     super.onDestroy();
-
   }
 }

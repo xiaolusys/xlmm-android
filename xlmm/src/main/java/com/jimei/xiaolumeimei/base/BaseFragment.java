@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableHelper;
 import com.jude.utils.JUtils;
-import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by itxuye on 16/04/23

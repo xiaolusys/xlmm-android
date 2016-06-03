@@ -28,7 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
-import com.jimei.library.event.TimeEvent;
+import com.jimei.xiaolumeimei.event.TimeEvent;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.BrandlistAdapter;
 import com.jimei.xiaolumeimei.base.BaseActivity;
@@ -87,6 +87,7 @@ import okhttp3.Call;
 import okhttp3.ResponseBody;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -141,6 +142,7 @@ public class MainActivity extends BaseActivity
   private ImageView loginFlag;
   private View llayout;
   private String newTime;
+  private TodayV2Fragment todayV2Fragment;
 
   public static int dp2px(Context context, int dp) {
     float scale = context.getResources().getDisplayMetrics().density;
@@ -317,6 +319,7 @@ public class MainActivity extends BaseActivity
     mask = sharedPreferencesMask.getInt("mask", 0);
     MyFragmentAdapter adapter = new MyFragmentAdapter(getSupportFragmentManager());
     list.add(YesterdayV2Fragment.newInstance("昨天"));
+    TodayV2Fragment.newInstance("今天");
     list.add(TodayV2Fragment.newInstance("今天"));
     list.add(TomorrowV2Fragment.newInstance("明天"));
     vp.setAdapter(adapter);
@@ -379,12 +382,12 @@ public class MainActivity extends BaseActivity
     addSubscription(subscribe2);
   }
 
-  @Subscribe private void onTimeEvent(TimeEvent event) {
-
+  @Subscribe(threadMode = ThreadMode.ASYNC)
+  public void onEvent(TimeEvent event) {
     newTime = event.time;
   }
-
   public void initPost(PortalBean postBean) throws NullPointerException {
+
     JUtils.Log(TAG, "refreshPost");
     if (post_activity_layout != null) {
       post_activity_layout.removeAllViews();
@@ -1087,5 +1090,10 @@ public class MainActivity extends BaseActivity
     @Override public int getCount() {
       return list == null ? 0 : list.size();
     }
+  }
+
+  @Override protected void onDestroy() {
+    super.onDestroy();
+    EventBus.getDefault().unregister(this);
   }
 }
