@@ -45,7 +45,6 @@
                     android:layout_alignParentTop="true"
                     android:text=""
                     android:textColor="@color/colorPrimary"
-                    android:textColorHighlight="@color/colorAccent"
                     android:textSize="14sp" />
 
                 <TextView
@@ -71,11 +70,11 @@
                     android:id="@+id/time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="6px"
                     android:gravity="center_vertical"
                     android:paddingRight="18px"
-                    android:layout_margin="6px"
                     android:text="下单时间:"
-                    android:layout_alignParentRight="true"
                     android:textColor="@color/text_color_9B"
                     android:textSize="13sp" />
             </RelativeLayout>
@@ -140,6 +139,40 @@
                     android:src="@mipmap/common_icon_right_arrow" />
 
             </RelativeLayout>
+
+            <include layout="@layout/common_gap" />
+
+            <LinearLayout
+                android:id="@+id/logistics_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:padding="24px">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="物流配送"
+                    android:textColor="@color/text_color_62" />
+
+                <TextView
+                    android:id="@+id/logistics"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:text="小鹿推荐"
+                    android:textColor="@color/text_color_62" />
+
+                <ImageView
+                    android:id="@+id/logistics_right"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:src="@drawable/to_right_ic" />
+
+            </LinearLayout>
 
             <include layout="@layout/common_gap" />
 

@@ -47,7 +47,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
     private String timeStr;
     private String stateStr;
     private String tid;
-    private String logisticsCompanyName;
+
     private OrderDetailBean orderDetailEntity;
     private int count = 0;
     private String packetid = "";
@@ -81,11 +81,6 @@ public class OrderGoodsListAdapter extends BaseAdapter {
         stateStr = orderDetailBean.getStatus_display();
         timeStr = orderDetailBean.getCreated().replace("T", " ");
         tid = orderDetailBean.getTid();
-        if (orderDetailBean.getLogistics_company() != null) {
-            logisticsCompanyName = orderDetailBean.getLogistics_company().getName();
-        } else {
-            logisticsCompanyName = "小鹿推荐快递";
-        }
         saveData(orderDetailBean.getOrders());
         dataSource.addAll(orderDetailBean.getOrders());
         notifyDataSetChanged();
@@ -151,13 +146,6 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                     count++;
                 }
                 ((TextView) convertView.findViewById(R.id.tv_order_package)).setText("包裹" + NUM[count]);
-                String name = packageBeanList.get(position).getLogistics_company_name();
-                if ("".equals(name.trim())) {
-                    ((TextView) convertView.findViewById(R.id.tx_order_name)).setText(logisticsCompanyName);
-                } else {
-                    ((TextView) convertView.findViewById(R.id.tx_order_name)).setText(name);
-                }
-
                 ((TextView) convertView.findViewById(R.id.tx_order_crtstate)).setText(packageBeanList.get(position).getAssign_status_display());
                 packetid = packageBeanList.get(position).getOut_sid();
                 company_code = packageBeanList.get(position).getLogistics_company_code();
@@ -171,7 +159,6 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                 }
                 ((TextView) convertView.findViewById(R.id.tx_order_crtstate)).setText(stateStr);
                 ((TextView) convertView.findViewById(R.id.tv_order_package)).setText("包裹一");
-                ((TextView) convertView.findViewById(R.id.tx_order_name)).setText(logisticsCompanyName);
             }
             final String finalKey = key;
             layout.setOnClickListener(new View.OnClickListener() {
@@ -185,10 +172,8 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                     bundle.putString("state", stateStr);
                     bundle.putString("key", finalKey);
                     bundle.putString("company_code", company_code);
-                    bundle.putString("logisticsCompanyName", logisticsCompanyName);
                     bundle.putSerializable("list", packageBeanList);
                     bundle.putInt("id", orderDetailEntity.getId());
-                    bundle.putInt("address_id", orderDetailEntity.getUser_adress().getId());
                     intent.putExtras(bundle);
                     context.startActivity(intent);
                 }

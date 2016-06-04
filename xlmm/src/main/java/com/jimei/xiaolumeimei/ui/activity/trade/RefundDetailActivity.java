@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import butterknife.Bind;
@@ -80,6 +81,8 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     TextView addressTv;
     @Bind(R.id.btn_write)
     Button writeBtn;
+    @Bind(R.id.image_layout)
+    RelativeLayout imageLayout;
     AllRefundsBean.ResultsEntity refundDetail;
     private int refund_state;
     private int goods_id;
@@ -194,8 +197,12 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
         createTimeTv.setText(refundDetailBean.getCreated().replace("T", " "));
         lastTimeTv.setText(refundDetailBean.getModified().replace("T", " "));
         lastStateTv.setText(refundDetailBean.getStatus_display());
-        ViewUtils.loadImgToImgView(getApplicationContext(), imageView,
-                refundDetailBean.getPic_path());
+        if (refundDetailBean.getProof_pic().size() > 0) {
+            ViewUtils.loadImgToImgView(getApplicationContext(), imageView,
+                    refundDetailBean.getProof_pic().get(0));
+        } else {
+            imageLayout.setVisibility(View.GONE);
+        }
         JUtils.Log(TAG, "crt time " + refundDetailBean.getCreated());
         String desc = refundDetailBean.getAmount_flow().getDesc();
         refundTypeTv.setText(desc);
