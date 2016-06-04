@@ -7,39 +7,46 @@ import com.google.gson.annotations.SerializedName;
  */
 public class CodeBean {
 
-    /**
-     * rcode : 1
-     * msg : 亲，手机号码错啦！
-     */
+  /**
+   * rcode : 1
+   * msg : 亲，手机号码错啦！
+   */
 
-    @SerializedName("rcode")
-    private int rcode;
-    @SerializedName("msg")
-    private String msg;
-    @SerializedName("next")
-    private String next;
+  @SerializedName("rcode") private int rcode;
+  @SerializedName("info") private String info;
+  @SerializedName("next") private String next;
+  @SerializedName("code") private int code;
+  @SerializedName("msg") private String msg;
 
-    public int getRcode() {
-        return rcode;
-    }
+  public String getInfo() {
+    return info;
+  }
 
-    public void setRcode(int rcode) {
-        this.rcode = rcode;
-    }
+  public int getCode() {
+    return code;
+  }
 
-    public String getMsg() {
-        return msg;
-    }
+  public int getRcode() {
+    return rcode;
+  }
 
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
+  public void setRcode(int rcode) {
+    this.rcode = rcode;
+  }
 
-    public String getNext() {
-        return next;
-    }
+  public String getMsg() {
+    return msg;
+  }
 
-    public void setNext(String next) {
-        this.next = next;
-    }
+  public void setMsg(String msg) {
+    this.msg = msg;
+  }
+
+  public String getNext() {
+    return next;
+  }
+
+  public void setNext(String next) {
+    this.next = next;
+  }
 }
