@@ -13,31 +13,31 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="120px">
 
         <LinearLayout
             android:id="@+id/close_iv"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:gravity="center"
             android:padding="30px">
 
             <ImageView
-
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_close" />
+
         </LinearLayout>
 
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:gravity="center"
-            android:padding="20px"
             android:text="物流配送"
+            android:textSize="20sp"
             android:textColor="@color/text_color_62" />
     </RelativeLayout>
 
@@ -46,6 +46,19 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#33DADADA" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#33DADADA" />
+
 
     <ListView
         android:id="@+id/lv_logistics_company"
