@@ -74,6 +74,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.ResponseBody;
+import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
@@ -92,7 +93,7 @@ import rx.Observable;
  */
 public interface XlmmService {
 
-    //@formatter:off
+  //@formatter:off
 
     @FormUrlEncoded
     @POST("/rest/v1/register/customer_login")
@@ -204,7 +205,15 @@ public interface XlmmService {
     //获取购物信息列表
     @GET("/rest/v1/carts/carts_payinfo")
     Observable<CartsPayinfoBean> getCartsPayInfoList(
-            @Query("cart_ids") String cart_ids);
+            @Query("cart_ids") String cart_ids
+    );
+
+    //获取购物信息列表
+    @GET("/rest/v2/carts/carts_payinfo")
+    Observable<CartsPayinfoBean> getCartsPayInfoListV2(
+            @Query("cart_ids") String cart_ids,
+            @Query("device") String app
+    );
 
 
     //获取购物信息列表
@@ -251,7 +260,8 @@ public interface XlmmService {
             @Field("discount_fee") String discount_fee,
             @Field("total_fee") String total_fee,
             @Field("uuid") String uuid,
-            @Field("pay_extras") String pay_extras
+            @Field("pay_extras") String pay_extras,
+            @Field("logistics_company_id")String code
     );
 
 
@@ -496,19 +506,19 @@ public interface XlmmService {
 
     //购物车增加一件
     @POST("/rest/v2/carts/{id}/plus_product_carts")
-    Observable<ResponseBody> plus_product_carts(
+    Observable<Response<CodeBean>> plus_product_carts(
             @Path("id") String id
     );
 
     //购物车删除一件
     @POST("/rest/v2/carts/{id}/minus_product_carts")
-    Observable<ResponseBody> minus_product_carts(
+    Observable<Response<CodeBean>> minus_product_carts(
             @Path("id") String id
     );
 
     //删除一列
     @POST("/rest/v2/carts/{id}/delete_carts")
-    Observable<ResponseBody> delete_carts(
+    Observable<Response<CodeBean>> delete_carts(
             @Path("id") String id
     );
 

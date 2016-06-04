@@ -3,9 +3,8 @@
     android:orientation="vertical"
     android:padding="8px"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="200px">
   <ImageView
-      android:scaleType="centerCrop"
       android:layout_width="180px"
       android:id="@+id/cart_image"
       android:layout_height="180px"
@@ -71,8 +70,8 @@
         android:textSize="12sp"
         android:textColor="@color/colorPrimary"
         android:src="@drawable/img_dec"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40px"
+        android:layout_height="40px"
 
         />
     <TextView
@@ -91,8 +90,8 @@
         android:textSize="12sp"
         android:textColor="@color/colorPrimary"
         android:src="@drawable/img_inc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40px"
+        android:layout_height="40px"
         />
 
   </LinearLayout>
