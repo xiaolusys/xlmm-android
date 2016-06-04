@@ -194,7 +194,6 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
         createTimeTv.setText(refundDetailBean.getCreated().replace("T", " "));
         lastTimeTv.setText(refundDetailBean.getModified().replace("T", " "));
         lastStateTv.setText(refundDetailBean.getStatus_display());
-        // TODO: 16/5/31
         ViewUtils.loadImgToImgView(getApplicationContext(), imageView,
                 refundDetailBean.getPic_path());
         JUtils.Log(TAG, "crt time " + refundDetailBean.getCreated());

@@ -828,12 +828,13 @@ public interface XlmmService {
 
     @GET("/rest/v1/address/get_logistic_companys")
     Observable<List<LogisticCompany>> getLogisticCompany(
-            @Query("referal_trade_id") String referal_trade_id
+            @Query("referal_trade_id") int referal_trade_id
     );
 
     @FormUrlEncoded
-    @POST("/rest/v1/address/change_company_code")
+    @POST("/rest/v1/address/{address_id}/change_company_code")
     Observable<ResultBean> changeLogisticCompany(
+            @Path("address_id") int address_id,
             @Field("referal_trade_id") String referal_trade_id,
             @Field("logistic_company_code") String logistic_company_code
     );

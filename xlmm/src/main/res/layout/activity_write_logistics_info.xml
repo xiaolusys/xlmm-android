@@ -8,7 +8,7 @@
     <com.jimei.xiaolumeimei.widget.XlmmTitleView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:xlmm_title="填写物流信息"/>
+        app:xlmm_title="填写物流 信息"/>
 
     <EditText
         android:id="@+id/et_logistics_company"

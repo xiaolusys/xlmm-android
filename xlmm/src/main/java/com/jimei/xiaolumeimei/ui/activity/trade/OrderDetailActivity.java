@@ -73,6 +73,8 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     ImageView rightImage;
     @Bind(R.id.time)
     TextView timeText;
+    @Bind(R.id.lv_goods)
+    ListView lv_goods;
     private ArrayList<PackageBean> packageBeanList;
     int order_id = 0;
     OrderDetailBean orderDetail;
@@ -160,7 +162,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         timeText.setText("下单时间:" + orderDetailBean.getCreated().replace("T", "-"));
 
         JUtils.Log(TAG, "crt time " + orderDetailBean.getCreated());
-        ListView lv_goods = (ListView) findViewById(R.id.lv_goods);
         mGoodsAdapter = new OrderGoodsListAdapter(this);
 
         packageBeanList = new ArrayList<>();
@@ -291,6 +292,13 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                         orderDetail = orderDetailBean;
                         tx_custom_name.setText("姓名：" + orderDetailBean.getUser_adress().getReceiver_name());
                         tx_custom_address.setText("地址：" + orderDetailBean.getUser_adress().getReceiver_state() + orderDetailBean.getUser_adress().getReceiver_city() + orderDetailBean.getUser_adress().getReceiver_address());
+                        if (orderDetailBean.getLogistics_company() != null) {
+                            String name = orderDetailBean.getLogistics_company().getName();
+                            int count = mGoodsAdapter.getCount();
+                            for (int i = 0; i < count; i++) {
+                                ((TextView) lv_goods.getChildAt(i).findViewById(R.id.tx_order_name)).setText(name);
+                            }
+                        }
                     }
                 });
         addSubscription(subscription);

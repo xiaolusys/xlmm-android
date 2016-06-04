@@ -49,6 +49,16 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
 
     @Override
     protected void initData() {
+        String[] split = address.split("，");
+        for (String s : split) {
+            if (s.contains("市")) {
+//                addressTv.setText(s);
+            } else if (s.contains("小鹿")) {
+//                nameTv.setText("小鹿售后");
+            } else {
+//                phoneTv.setText(s);
+            }
+        }
     }
 
     @Override
@@ -66,7 +76,6 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
     protected void initViews() {
         et_logistics_company.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
-                //et_refund_reason.setInputType(InputType.TYPE_NULL); //关闭软键盘
                 if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
                     Log.d(TAG, "choose logistics commpay");
                     Intent intent = new Intent(WriteLogisticsInfoActivty.this,
