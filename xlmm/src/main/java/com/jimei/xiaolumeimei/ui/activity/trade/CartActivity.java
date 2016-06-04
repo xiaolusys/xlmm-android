@@ -25,12 +25,10 @@ import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
-import com.jimei.xiaolumeimei.widget.MyAnimator;
 import com.jimei.xiaolumeimei.widget.ScrollLinearLayoutManager;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.zhy.autolayout.utils.AutoUtils;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import retrofit2.Response;
@@ -44,7 +42,6 @@ import rx.schedulers.Schedulers;
  */
 public class CartActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener {
-  private static final String TAG = "CartActivity";
   List<String> ids = new ArrayList<>();
   @Bind(R.id.carts_recyclerview) RecyclerView cartsRecyclerview;
   @Bind(R.id.cartshis_recyclerview) RecyclerView cartshisRecyclerview;
@@ -90,6 +87,9 @@ public class CartActivity extends BaseSwipeBackCompatActivity
     view = getLayoutInflater().inflate(R.layout.footer, null);
 
     totalPrice_all_1 = (TextView) view.findViewById(R.id.total_price_all_1);
+    //extra_price_a = (TextView) view.findViewById(R.id.extra_price_a);
+    //haicha = (TextView) view.findViewById(R.id.haicha);
+
     cartsRecyclerview.setNestedScrollingEnabled(false);
     cartsRecyclerview.setHasFixedSize(false);
     cartsRecyclerview.addItemDecoration(
@@ -98,7 +98,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
         new ScrollLinearLayoutManager(this);
     scrollLinearLayoutManager.setAutoMeasureEnabled(true);
     cartsRecyclerview.setLayoutManager(scrollLinearLayoutManager);
-    cartsRecyclerview.setItemAnimator(new MyAnimator());
+
     mCartsAdapetr = new CartsAdapetr();
 
     cartsRecyclerview.setAdapter(mCartsAdapetr);
@@ -112,7 +112,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
         new ScrollLinearLayoutManager(this);
     scrollLinearLayoutManager1.setAutoMeasureEnabled(true);
     cartshisRecyclerview.setLayoutManager(scrollLinearLayoutManager1);
-    cartshisRecyclerview.setItemAnimator(new MyAnimator());
+
     mCartsHisAdapetr = new CartsHisAdapetr();
 
     cartshisRecyclerview.setAdapter(mCartsHisAdapetr);
@@ -138,7 +138,6 @@ public class CartActivity extends BaseSwipeBackCompatActivity
           JUtils.Log("CartActivity", s);
 
           startActivity(intent);
-          finish();
         }
 
         break;
@@ -186,8 +185,8 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                             }
                           });*/
 
-                        tvShow.setVisibility(View.GONE);
-                        showLine.setVisibility(View.GONE);
+                        tvShow.setVisibility(View.INVISIBLE);
+                        showLine.setVisibility(View.INVISIBLE);
                       }
                     }
                   });
@@ -250,8 +249,8 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                           }
                         });
 
-                        tvShow.setVisibility(View.GONE);
-                        showLine.setVisibility(View.GONE);
+                        tvShow.setVisibility(View.INVISIBLE);
+                        showLine.setVisibility(View.INVISIBLE);
                       }
                     }
                   });
@@ -319,11 +318,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
 
       String headImg = cartsinfoBean.getPicPath();
 
-      //if (!headImg.equals(holder.cartImage.getTag(holder.cartImage.getId()))) {
       ViewUtils.loadImgToImgView(mContext, holder.cartImage, headImg);
-      //}
-
-      //holder.cartImage.setTag(holder.cartImage.getId(), headImg);
 
       holder.add.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View v) {
@@ -333,32 +328,14 @@ public class CartActivity extends BaseSwipeBackCompatActivity
               .subscribeOn(Schedulers.io())
               .subscribe(new ServiceResponse<Response<CodeBean>>() {
                 @Override public void onNext(Response<CodeBean> responseBody) {
-
                   if (null != responseBody) {
-
-                    JUtils.Log(TAG, "json= "
-                        + responseBody.message()
-                        + "  "
-                        + responseBody.toString()
-                        + "  "
-                        + responseBody.code()
-                        + "  "
-                        + responseBody.isSuccessful());
-
-                    String code = String.valueOf(responseBody.code());
-                    if (code.startsWith("2")) {
-                      if (null != responseBody.body()) {
-                        CodeBean codeBean = responseBody.body();
-                        if (codeBean.getCode() == 0) {
-                          getCartsInfo(holder.getAdapterPosition());
-                        }
-                      }
+                    if (responseBody.isSuccessful()) {
+                      getCartsInfo(holder.getAdapterPosition());
                     } else {
-                      if (null != responseBody.body()) {
-                        CodeBean codeBean = responseBody.body();
-                        JUtils.Toast(codeBean.getInfo());
-                      }
+                      JUtils.Toast(responseBody.body().getInfo());
                     }
+                  } else {
+                    JUtils.Toast("数据发生问题，稍后尝试");
                   }
                 }
 
@@ -380,47 +357,28 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                   .subscribeOn(Schedulers.io())
                   .subscribe(new ServiceResponse<Response<CodeBean>>() {
                     @Override public void onNext(Response<CodeBean> responseBody) {
-                      if (null != responseBody) {
-                        try {
-                          JUtils.Log(TAG, "json="
-                              + responseBody.message()
-                              + responseBody.toString()
-                              + responseBody.errorBody().string()
-                              + responseBody.isSuccessful());
-                        } catch (IOException e) {
-                          e.printStackTrace();
-                        }
-                        String code = String.valueOf(responseBody.code());
-                        if (code.startsWith("2")) {
-                          if (null != responseBody.body()) {
-                            CodeBean codeBean = responseBody.body();
-                            if (codeBean.getCode() == 0) {
-                              Subscription subscribe = CartsModel.getInstance()
-                                  .getCartsHisList()
-                                  .subscribeOn(Schedulers.io())
-                                  .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
-                                    @Override public void onNext(
-                                        List<CartsinfoBean> cartsinfoBeen) {
-                                      if (null != cartsinfoBeen) {
-                                        mListhis = cartsinfoBeen;
-                                        mCartsHisAdapetr.notifyDataSetChanged();
-                                      } else {
-                                        tvShow.setVisibility(View.INVISIBLE);
-                                        showLine.setVisibility(View.INVISIBLE);
-                                      }
-                                    }
-                                  });
-                              addSubscription(subscribe);
+                      if (responseBody != null) {
+                        if (responseBody.isSuccessful()) {
+                          Subscription subscribe = CartsModel.getInstance()
+                              .getCartsHisList()
+                              .subscribeOn(Schedulers.io())
+                              .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
+                                @Override
+                                public void onNext(List<CartsinfoBean> cartsinfoBeen) {
+                                  if (null != cartsinfoBeen) {
+                                    mListhis = cartsinfoBeen;
+                                    mCartsHisAdapetr.notifyDataSetChanged();
+                                  } else {
+                                    tvShow.setVisibility(View.INVISIBLE);
+                                    showLine.setVisibility(View.INVISIBLE);
+                                  }
+                                }
+                              });
+                          addSubscription(subscribe);
 
-                              getCartsInfo(holder.getAdapterPosition());
-                              //notifyItemChanged(holder.getAdapterPosition());
-                            }
-                          }
+                          getCartsInfo(holder.getAdapterPosition());
                         } else {
-                          if (null != responseBody.body()) {
-                            CodeBean codeBean = responseBody.body();
-                            JUtils.Toast(codeBean.getInfo());
-                          }
+                          JUtils.Toast(responseBody.body().getInfo());
                         }
                       }
                     }
@@ -440,59 +398,36 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                           .subscribe(new ServiceResponse<Response<CodeBean>>() {
                             @Override
                             public void onNext(Response<CodeBean> responseBody) {
-                              if (null != responseBody) {
-                                try {
-                                  JUtils.Log(TAG, "json="
-                                      + responseBody.message()
-                                      + responseBody.toString()
-                                      + responseBody.errorBody().string()
-                                      + responseBody.isSuccessful());
-                                } catch (IOException e) {
-                                  e.printStackTrace();
-                                }
-                                String code = String.valueOf(responseBody.code());
-                                if (code.startsWith("2")) {
-                                  if (null != responseBody.body()) {
-                                    CodeBean codeBean = responseBody.body();
-                                    if (codeBean.getCode() == 0) {
-                                      Subscription subscribe = CartsModel.getInstance()
-                                          .getCartsHisList()
-                                          .subscribeOn(Schedulers.io())
-                                          .subscribe(
-                                              new ServiceResponse<List<CartsinfoBean>>() {
-                                                @Override public void onNext(
-                                                    List<CartsinfoBean> cartsinfoBeen) {
-                                                  if (null != cartsinfoBeen) {
-                                                    mListhis = cartsinfoBeen;
-                                                    mCartsHisAdapetr.notifyDataSetChanged();
-                                                  } else {
-                                                    tvShow.setVisibility(View.INVISIBLE);
-                                                    showLine.setVisibility(
-                                                        View.INVISIBLE);
-                                                  }
-                                                }
-                                              });
-                                      addSubscription(subscribe);
-                                      removeAt(holder.getAdapterPosition());
-                                      getCartsInfo();
-
-                                      dialog.dismiss();
-
-                                      startActivity(new Intent(CartActivity.this,
-                                          CartActivity.class));
-                                      finish();
-                                    }
-                                  }
-                                } else {
-                                  if (null != responseBody.body()) {
-                                    CodeBean codeBean = responseBody.body();
-                                    JUtils.Toast(codeBean.getInfo());
-                                  }
+                              if (responseBody != null) {
+                                if (responseBody.isSuccessful()) {
+                                  removeAt(holder.getAdapterPosition());
+                                  Subscription subscribe = CartsModel.getInstance()
+                                      .getCartsHisList()
+                                      .subscribeOn(Schedulers.io())
+                                      .subscribe(
+                                          new ServiceResponse<List<CartsinfoBean>>() {
+                                            @Override public void onNext(
+                                                List<CartsinfoBean> cartsinfoBeen) {
+                                              if (null != cartsinfoBeen) {
+                                                mListhis = cartsinfoBeen;
+                                                mCartsHisAdapetr.notifyDataSetChanged();
+                                              } else {
+                                                tvShow.setVisibility(View.INVISIBLE);
+                                                showLine.setVisibility(View.INVISIBLE);
+                                              }
+                                            }
+                                          });
+                                  addSubscription(subscribe);
+                                  getCartsInfo();
                                 }
                               }
                             }
                           });
                       addSubscription(subscription);
+                      dialog.dismiss();
+
+                      startActivity(new Intent(CartActivity.this, CartActivity.class));
+                      finish();
                     }
 
                     @Override public void onNegative(MaterialDialog dialog) {
@@ -512,29 +447,11 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                   .subscribeOn(Schedulers.io())
                   .subscribe(new ServiceResponse<Response<CodeBean>>() {
                     @Override public void onNext(Response<CodeBean> responseBody) {
-                      if (null != responseBody) {
-                        JUtils.Log(TAG, "json= "
-                            + responseBody.message()
-                            + "  "
-                            + responseBody.toString()
-                            + "  "
-                            + responseBody.code()
-                            + "  "
-                            + responseBody.isSuccessful());
-                        String code = String.valueOf(responseBody.code());
-                        if (code.startsWith("2")) {
-                          if (null != responseBody.body()) {
-                            CodeBean codeBean = responseBody.body();
-                            if (codeBean.getCode() == 0) {
-                              getCartsInfo(holder.getAdapterPosition());
-                              //notifyItemChanged(holder.getAdapterPosition());
-                            }
-                          }
+                      if (responseBody != null) {
+                        if (responseBody.isSuccessful()) {
+                          getCartsInfo(holder.getAdapterPosition());
                         } else {
-                          if (null != responseBody.body()) {
-                            CodeBean codeBean = responseBody.body();
-                            JUtils.Toast(codeBean.getInfo());
-                          }
+                          JUtils.Toast(responseBody.body().getInfo());
                         }
                       }
                     }
@@ -559,56 +476,34 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                         .subscribe(new ServiceResponse<Response<CodeBean>>() {
                           @Override public void onNext(Response<CodeBean> responseBody) {
                             if (null != responseBody) {
-
-                              JUtils.Log(TAG, "json= "
-                                  + responseBody.message()
-                                  + "  "
-                                  + responseBody.toString()
-                                  + "  "
-                                  + responseBody.code()
-                                  + "  "
-                                  + responseBody.isSuccessful());
-
-                              String code = String.valueOf(responseBody.code());
-                              if (code.startsWith("2")) {
-                                if (null != responseBody.body()) {
-                                  CodeBean codeBean = responseBody.body();
-                                  if (codeBean.getCode() == 0) {
-
-                                    removeAt(holder.getAdapterPosition());
-                                    Subscription subscribe = CartsModel.getInstance()
-                                        .getCartsHisList()
-                                        .subscribeOn(Schedulers.io())
-                                        .subscribe(
-                                            new ServiceResponse<List<CartsinfoBean>>() {
-                                              @Override public void onNext(
-                                                  List<CartsinfoBean> cartsinfoBeen) {
-                                                if (null != cartsinfoBeen) {
-                                                  mListhis = cartsinfoBeen;
-                                                  mCartsHisAdapetr.notifyDataSetChanged();
-                                                } else {
-                                                  tvShow.setVisibility(View.INVISIBLE);
-                                                  showLine.setVisibility(View.INVISIBLE);
-                                                }
-                                              }
-                                            });
-                                    addSubscription(subscribe);
-                                    getCartsInfo();
-
-                                    //notifyItemChanged(holder.getAdapterPosition());
-                                    dialog.dismiss();
-                                  }
-                                }
+                              if (responseBody.isSuccessful()) {
+                                removeAt(holder.getAdapterPosition());
+                                Subscription subscribe = CartsModel.getInstance()
+                                    .getCartsHisList()
+                                    .subscribeOn(Schedulers.io())
+                                    .subscribe(
+                                        new ServiceResponse<List<CartsinfoBean>>() {
+                                          @Override public void onNext(
+                                              List<CartsinfoBean> cartsinfoBeen) {
+                                            if (null != cartsinfoBeen) {
+                                              mListhis = cartsinfoBeen;
+                                              mCartsHisAdapetr.notifyDataSetChanged();
+                                            } else {
+                                              tvShow.setVisibility(View.INVISIBLE);
+                                              showLine.setVisibility(View.INVISIBLE);
+                                            }
+                                          }
+                                        });
+                                addSubscription(subscribe);
+                                getCartsInfo();
                               } else {
-                                if (null != responseBody.body()) {
-                                  CodeBean codeBean = responseBody.body();
-                                  JUtils.Toast(codeBean.getInfo());
-                                }
+                                JUtils.Toast(responseBody.body().getInfo());
                               }
                             }
                           }
                         });
                     addSubscription(subscription);
+                    dialog.dismiss();
                   }
 
                   @Override public void onNegative(MaterialDialog dialog) {
@@ -650,8 +545,11 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                   .subscribeOn(Schedulers.io())
                   .subscribe(new ServiceResponse<CartsPayinfoBean>() {
                     @Override public void onNext(CartsPayinfoBean cartsPayinfoBean) {
+                      super.onNext(cartsPayinfoBean);
                       if (cartsPayinfoBean != null) {
+
                         total_price = cartsPayinfoBean.getTotalFee();
+
                         totalPrice.setText("¥" + total_price);
                         totalPrice_all_1.setText("总金额¥" + total_price);
                       }
@@ -690,7 +588,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                 s = apendString(sb);
               }
 
-              Subscription subscribe = CartsModel.getInstance()
+              CartsModel.getInstance()
                   .getCartsInfoList(s)
                   .subscribeOn(Schedulers.io())
                   .subscribe(new ServiceResponse<CartsPayinfoBean>() {
@@ -705,7 +603,6 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                       }
                     }
                   });
-              addSubscription(subscribe);
             }
           });
       addSubscription(subscription);
@@ -720,7 +617,6 @@ public class CartActivity extends BaseSwipeBackCompatActivity
       mList.remove(position);
       notifyItemRemoved(position);
       notifyItemRangeChanged(position, mList.size());
-      notifyDataSetChanged();
     }
 
     class CartsVH extends RecyclerView.ViewHolder {
