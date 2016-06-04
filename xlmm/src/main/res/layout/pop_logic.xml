@@ -4,5 +4,7 @@
     android:orientation="vertical"
     android:background="@color/white"
     android:id="@+id/listview_wuliu"
+    android:divider="#33DADADA"
+    android:dividerHeight="1px"
     android:layout_width="match_parent"
     android:layout_height="match_parent"/>

@@ -28,7 +28,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
-import com.jimei.xiaolumeimei.event.TimeEvent;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.BrandlistAdapter;
 import com.jimei.xiaolumeimei.base.BaseActivity;
@@ -39,6 +38,7 @@ import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.event.TimeEvent;
 import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.ProductModel;
@@ -87,7 +87,6 @@ import okhttp3.Call;
 import okhttp3.ResponseBody;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -382,7 +381,7 @@ public class MainActivity extends BaseActivity
     addSubscription(subscribe2);
   }
 
-  @Subscribe(threadMode = ThreadMode.ASYNC)
+  @Subscribe
   public void onEvent(TimeEvent event) {
     newTime = event.time;
   }
