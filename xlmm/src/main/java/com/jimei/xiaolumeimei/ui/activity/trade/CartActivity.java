@@ -595,6 +595,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity
                                     addSubscription(subscribe);
                                     getCartsInfo();
 
+                                    //notifyItemChanged(holder.getAdapterPosition());
                                     dialog.dismiss();
                                   }
                                 }
@@ -718,7 +719,8 @@ public class CartActivity extends BaseSwipeBackCompatActivity
     public void removeAt(int position) {
       mList.remove(position);
       notifyItemRemoved(position);
-      //notifyItemRangeChanged(position, mList.size());
+      notifyItemRangeChanged(position, mList.size());
+      notifyDataSetChanged();
     }
 
     class CartsVH extends RecyclerView.ViewHolder {
