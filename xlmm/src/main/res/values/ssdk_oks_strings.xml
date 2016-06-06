@@ -2,7 +2,7 @@
 <resources>
     <string name="ssdk_oks_cancel">取消</string>
     <string name="ssdk_oks_finish">完成</string>
-    <string name="ssdk_oks_sharing">分享操作正在后台进行…</string>
+    <string name="ssdk_oks_sharing">谢谢你,</string>
     <string name="ssdk_oks_share_to">分享到</string>
 	<string name="ssdk_oks_share">分享</string>
 	<string name="ssdk_oks_multi_share">图文分享</string>
