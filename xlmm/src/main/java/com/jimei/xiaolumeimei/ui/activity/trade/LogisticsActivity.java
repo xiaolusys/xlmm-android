@@ -44,6 +44,8 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
     ListView mListView;
     @Bind(R.id.ll_container)
     LinearLayout containerLayout;
+    @Bind(R.id.tv_number)
+    TextView numTv;
 
     private ArrayList<PackageBean> packageBeanList;
     private String packetid = "";
@@ -113,7 +115,7 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
                 .subscribe(new ServiceResponse<OrderDetailBean>() {
                     @Override
                     public void onNext(OrderDetailBean orderDetailBean) {
-                        if (orderDetailBean.getUser_adress() != null) {
+                        if (orderDetailBean.getLogistics_company() != null) {
                             companyTv.setText(orderDetailBean.getLogistics_company().getName());
                             companyTv.setTextColor(getResources().getColor(R.color.colorAccent));
                         } else {
@@ -131,6 +133,7 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
         } else {
             orderTv.setTextColor(getResources().getColor(R.color.colorAccent));
             orderTv.setText(stateStr);
+            numTv.setText("包裹状态");
         }
 
         if (packageBeanList.size() != 0) {

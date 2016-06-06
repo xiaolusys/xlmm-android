@@ -91,6 +91,8 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     TextView logisticsTv;
     @Bind(R.id.logistics_layout)
     LinearLayout logisticsLayout;
+    @Bind(R.id.logistics_right)
+    ImageView logisticsRightImage;
     ListView listView;
     private ArrayList<PackageBean> packageBeanList;
     int order_id = 0;
@@ -131,8 +133,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         View closeIv = view.findViewById(R.id.close_iv);
         listView = (ListView) view.findViewById(R.id.lv_logistics_company);
         closeIv.setOnClickListener(this);
-
-
     }
 
     //从server端获得所有订单数据，可能要查询几次
@@ -158,6 +158,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                                 addressLayout.setOnClickListener(OrderDetailActivity.this);
                             } else {
                                 rightImage.setVisibility(View.GONE);
+                                logisticsRightImage.setVisibility(View.GONE);
                             }
                             Log.i(TAG, "order_id " + order_id + " " + orderDetailBean.toString());
 

@@ -150,7 +150,10 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                 packetid = packageBeanList.get(position).getOut_sid();
                 company_code = packageBeanList.get(position).getLogistics_company_code();
             } else {
-                if (position == 0) {
+                if ("待付款".equals(stateStr)) {
+                    view.setVisibility(View.VISIBLE);
+                    layout.setVisibility(View.GONE);
+                } else if (position == 0) {
                     view.setVisibility(View.VISIBLE);
                     layout.setVisibility(View.VISIBLE);
                 } else {
@@ -161,23 +164,25 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                 ((TextView) convertView.findViewById(R.id.tv_order_package)).setText("包裹一");
             }
             final String finalKey = key;
-            layout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(context, LogisticsActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("packetid", packetid);
-                    bundle.putString("time", timeStr);
-                    bundle.putString("tid", tid);
-                    bundle.putString("state", stateStr);
-                    bundle.putString("key", finalKey);
-                    bundle.putString("company_code", company_code);
-                    bundle.putSerializable("list", packageBeanList);
-                    bundle.putInt("id", orderDetailEntity.getId());
-                    intent.putExtras(bundle);
-                    context.startActivity(intent);
-                }
-            });
+            if (!"待付款".equals(stateStr)) {
+                layout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(context, LogisticsActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("packetid", packetid);
+                        bundle.putString("time", timeStr);
+                        bundle.putString("tid", tid);
+                        bundle.putString("state", stateStr);
+                        bundle.putString("key", finalKey);
+                        bundle.putString("company_code", company_code);
+                        bundle.putSerializable("list", packageBeanList);
+                        bundle.putInt("id", orderDetailEntity.getId());
+                        intent.putExtras(bundle);
+                        context.startActivity(intent);
+                    }
+                });
+            }
         }
 
         img_goods = (ImageView) convertView.findViewById(R.id.img_good);
