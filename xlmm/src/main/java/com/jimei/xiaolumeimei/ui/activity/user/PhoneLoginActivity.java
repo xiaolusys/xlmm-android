@@ -124,7 +124,7 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                       + codeBean.getMsg());
                   if (codeBean.getRcode() == 0) {
                     hideIndeterminateProgressDialog();
-                    EventBus.getDefault().postSticky(new EmptyEvent());
+
                     LoginUtils.saveLoginInfo(true, getApplicationContext(),
                         login_name_value, login_pass_value);
                     JUtils.Toast("登录成功!");
@@ -191,10 +191,12 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                         //bundle.putString("actlink", actlink);
                         //intent.putExtras(bundle);
                         //startActivity(intent);
+                        EventBus.getDefault().postSticky(new EmptyEvent());
                         JumpUtils.jumpToWebViewWithCookies(mContext, actlink, -1,
                             ProductPopDetailActvityWeb.class);
                         finish();
                       } else if (login.equals("goactivity")) {
+                        EventBus.getDefault().postSticky(new EmptyEvent());
                         JumpUtils.jumpToWebViewWithCookies(mContext, actlink, id,
                             ActivityWebViewActivity.class,title);
                         finish();

@@ -199,6 +199,7 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                                   //bundle.putString("actlink", actlink);
                                   //intent.putExtras(bundle);
                                   //startActivity(intent);
+                                  EventBus.getDefault().postSticky(new EmptyEvent());
                                   JumpUtils.jumpToWebViewWithCookies(mContext, actlink,
                                       -1, CommonWebViewActivity.class);
                                   finish();
@@ -208,6 +209,7 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                                       -1, ProductPopDetailActvityWeb.class);
                                   finish();
                                 } else if (login.equals("goactivity")) {
+                                  EventBus.getDefault().postSticky(new EmptyEvent());
                                   JumpUtils.jumpToWebViewWithCookies(mContext, actlink,
                                       id, ActivityWebViewActivity.class,title);
                                   finish();

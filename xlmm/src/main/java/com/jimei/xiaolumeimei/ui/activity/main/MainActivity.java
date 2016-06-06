@@ -141,7 +141,6 @@ public class MainActivity extends BaseActivity
   private ImageView loginFlag;
   private View llayout;
   private String newTime;
-  private TodayV2Fragment todayV2Fragment;
 
   public static int dp2px(Context context, int dp) {
     float scale = context.getResources().getDisplayMetrics().density;
@@ -222,7 +221,7 @@ public class MainActivity extends BaseActivity
           }
 
           @Override public void onDrawerOpened(View drawerView) {
-            initDrawer();
+            initDrawer(userInfoBean);
             invalidateOptionsMenu();
           }
         };
@@ -237,8 +236,12 @@ public class MainActivity extends BaseActivity
 
   @Subscribe(sticky = true)
   public void initLogin(EmptyEvent event){
-    getUserInfo();
-    initSlide();
+    JUtils.Log(TAG,"登录过后来刷新");
+    Intent intent = new Intent(MainActivity.this,MainActivity.class);
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    startActivity(intent);
+    finish();
+
   }
 
   //购物车数量
@@ -252,7 +255,7 @@ public class MainActivity extends BaseActivity
   }
 
   //侧滑栏初始化
-  public void initDrawer() {
+  public void initDrawer(UserInfoBean userInfoBean) {
     JUtils.Log(TAG, "侧滑栏初始化");
     if (!(LoginUtils.checkLoginState(getApplicationContext()))) {
       if (tvNickname != null) {
@@ -882,6 +885,7 @@ public class MainActivity extends BaseActivity
           @Override public void onNext(UserInfoBean userNewBean) {
             if (userNewBean != null) {
               userInfoBean = userNewBean;
+              initDrawer(userNewBean);
               if (LoginUtils.checkLoginState(getApplicationContext())) {
                 if ((userNewBean.getThumbnail() != null) && (!userNewBean.getThumbnail()
                     .isEmpty())) {
@@ -1089,6 +1093,7 @@ public class MainActivity extends BaseActivity
   @Override protected void onDestroy() {
     super.onDestroy();
     EventBus.getDefault().unregister(this);
+    EventBus.getDefault().removeAllStickyEvents();
   }
 
   private class MyFragmentAdapter extends FragmentPagerAdapter {
