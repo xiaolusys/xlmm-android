@@ -230,7 +230,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                 if (codeBean != null) {
                   int code = codeBean.getRcode();
                   if (0 == code) {
-                    EventBus.getDefault().postSticky(new EmptyEvent());
+
                     JUtils.Toast("登录成功");
                     Subscription subscribe = UserModel.getInstance()
                         .need_set_info()
@@ -245,6 +245,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                             //                                                        int codeInfo = needSetInfoBean.getCode();
                             //                                                        if (0 == codeInfo) {
                             hideIndeterminateProgressDialog();
+
                             LoginUtils.saveLoginSuccess(true, getApplicationContext());
                             String login = null;
                             if (null != getIntent() && getIntent().getExtras() != null) {
@@ -315,10 +316,12 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                 //bundle.putString("actlink", actlink);
                                 //intent.putExtras(bundle);
                                 //startActivity(intent);
+                                EventBus.getDefault().postSticky(new EmptyEvent());
                                 JumpUtils.jumpToWebViewWithCookies(mContext, actlink, -1,
                                     ProductPopDetailActvityWeb.class);
                                 finish();
                               } else if (login.equals("goactivity")) {
+                                EventBus.getDefault().postSticky(new EmptyEvent());
                                 JumpUtils.jumpToWebViewWithCookies(mContext, actlink, id,
                                     ActivityWebViewActivity.class, title);
                                 finish();
