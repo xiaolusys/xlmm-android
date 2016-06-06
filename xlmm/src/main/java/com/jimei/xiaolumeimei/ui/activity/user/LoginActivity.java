@@ -21,6 +21,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
+import com.jimei.xiaolumeimei.event.EmptyEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
@@ -36,6 +37,7 @@ import com.xiaomi.mipush.sdk.MiPushClient;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import org.greenrobot.eventbus.EventBus;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -228,6 +230,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                 if (codeBean != null) {
                   int code = codeBean.getRcode();
                   if (0 == code) {
+                    EventBus.getDefault().postSticky(new EmptyEvent());
                     JUtils.Toast("登录成功");
                     Subscription subscribe = UserModel.getInstance()
                         .need_set_info()
@@ -247,7 +250,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                             if (null != getIntent() && getIntent().getExtras() != null) {
                               login = getIntent().getExtras().getString("login");
                               actlink = getIntent().getExtras().getString("actlink");
-                              title = getIntent().getExtras().getString("title","");
+                              title = getIntent().getExtras().getString("title", "");
                               id = getIntent().getExtras().getInt("id");
                             }
 
@@ -317,7 +320,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                 finish();
                               } else if (login.equals("goactivity")) {
                                 JumpUtils.jumpToWebViewWithCookies(mContext, actlink, id,
-                                    ActivityWebViewActivity.class,title);
+                                    ActivityWebViewActivity.class, title);
                                 finish();
                               }
                             }
