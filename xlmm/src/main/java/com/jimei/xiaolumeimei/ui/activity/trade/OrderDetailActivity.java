@@ -133,8 +133,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         View closeIv = view.findViewById(R.id.close_iv);
         listView = (ListView) view.findViewById(R.id.lv_logistics_company);
         closeIv.setOnClickListener(this);
-
-
     }
 
     //从server端获得所有订单数据，可能要查询几次
