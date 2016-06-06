@@ -91,6 +91,8 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     TextView logisticsTv;
     @Bind(R.id.logistics_layout)
     LinearLayout logisticsLayout;
+    @Bind(R.id.logistics_right)
+    ImageView logisticsRightImage;
     ListView listView;
     private ArrayList<PackageBean> packageBeanList;
     int order_id = 0;
@@ -158,6 +160,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                                 addressLayout.setOnClickListener(OrderDetailActivity.this);
                             } else {
                                 rightImage.setVisibility(View.GONE);
+                                logisticsRightImage.setVisibility(View.GONE);
                             }
                             Log.i(TAG, "order_id " + order_id + " " + orderDetailBean.toString());
 
