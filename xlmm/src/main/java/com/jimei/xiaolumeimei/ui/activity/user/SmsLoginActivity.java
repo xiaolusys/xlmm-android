@@ -13,6 +13,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
+import com.jimei.xiaolumeimei.event.EmptyEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
@@ -24,6 +25,7 @@ import com.jimei.xiaolumeimei.widget.ClearEditText;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.xiaomi.mipush.sdk.MiPushClient;
+import org.greenrobot.eventbus.EventBus;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.functions.Action0;
@@ -141,6 +143,7 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                               //set xiaomi push useraccount
                               LoginUtils.setPushUserAccount(SmsLoginActivity.this,
                                   MiPushClient.getRegId(getApplicationContext()));
+                              EventBus.getDefault().postSticky(new EmptyEvent());
                               String login = null;
                               if (null != getIntent()
                                   && getIntent().getExtras() != null) {

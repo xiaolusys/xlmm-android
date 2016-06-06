@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -38,6 +37,7 @@ import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.event.EmptyEvent;
 import com.jimei.xiaolumeimei.event.TimeEvent;
 import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.model.CartsModel;
@@ -109,8 +109,8 @@ public class MainActivity extends BaseActivity
   @Bind(R.id.rv_cart) RelativeLayout carts;
 
   @Bind(R.id.img_mmentry) ImageView img_mmentry;
-  @Nullable @Bind(R.id.image_1) ImageView image1;
-  @Nullable @Bind(R.id.image_2) ImageView image2;
+  @Bind(R.id.image_1) ImageView image1;
+  @Bind(R.id.image_2) ImageView image2;
   @Bind(R.id.scrollableLayout) ScrollableLayout scrollableLayout;
   @Bind(R.id.swipe_layout) SwipeRefreshLayout swipeRefreshLayout;
   @Bind(R.id.drawer_layout) DrawerLayout drawer;
@@ -207,6 +207,13 @@ public class MainActivity extends BaseActivity
     findById();
     StatusBarUtil.setColorForDrawerLayout(this, drawer,
         getResources().getColor(R.color.colorAccent), 0);
+    initSlide();
+    showBadge();
+    swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
+    initViewsForTab();
+  }
+
+  private void initSlide() {
     ActionBarDrawerToggle toggle =
         new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open,
             R.string.navigation_drawer_close) {
@@ -226,9 +233,12 @@ public class MainActivity extends BaseActivity
     if (!(LoginUtils.checkLoginState(getApplicationContext()))) {
       tvNickname.setText("点击登录");
     }
-    showBadge();
-    swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
-    initViewsForTab();
+  }
+
+  @Subscribe(sticky = true)
+  public void initLogin(EmptyEvent event){
+    getUserInfo();
+    initSlide();
   }
 
   //购物车数量
@@ -381,10 +391,10 @@ public class MainActivity extends BaseActivity
     addSubscription(subscribe2);
   }
 
-  @Subscribe
-  public void onEvent(TimeEvent event) {
+  @Subscribe public void onEvent(TimeEvent event) {
     newTime = event.time;
   }
+
   public void initPost(PortalBean postBean) throws NullPointerException {
 
     JUtils.Log(TAG, "refreshPost");
@@ -1076,6 +1086,11 @@ public class MainActivity extends BaseActivity
         .setCurrentScrollableContainer(list.get(vp.getCurrentItem()));
   }
 
+  @Override protected void onDestroy() {
+    super.onDestroy();
+    EventBus.getDefault().unregister(this);
+  }
+
   private class MyFragmentAdapter extends FragmentPagerAdapter {
 
     public MyFragmentAdapter(FragmentManager fm) {
@@ -1089,10 +1104,5 @@ public class MainActivity extends BaseActivity
     @Override public int getCount() {
       return list == null ? 0 : list.size();
     }
-  }
-
-  @Override protected void onDestroy() {
-    super.onDestroy();
-    EventBus.getDefault().unregister(this);
   }
 }
