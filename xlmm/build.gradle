@@ -23,7 +23,7 @@ android {
 
         targetSdkVersion 23
 
-        versionCode 20160527
+        versionCode 20160530
         versionName "1.1.4"
 
         multiDexEnabled = true
@@ -108,7 +108,7 @@ android {
                     def outputFile = output.outputFile
                     if (outputFile != null && outputFile.name.endsWith('.apk')) {
                         // Xlmm_版本_yyyy-MM-dd_渠道.apk
-                        def fileName = "Xlmm_v${defaultConfig.versionName.replace(".","")}_${releaseTime()}_${variant.productFlavors[0].name}.apk"
+                        def fileName = "Xlmm_v${defaultConfig.versionName.replace(".", "")}_${releaseTime()}_${variant.productFlavors[0].name}.apk"
                         println("====== buildTypes.output ======")
                         println("AppName: " + fileName)
                         output.outputFile = new File(outputFile.parent, fileName)
@@ -187,20 +187,21 @@ dependencies {
     compile files('libs/UPPayAssistEx.jar')
     compile files('libs/UPPayPluginEx.jar')
     compile files('libs/commons-lang3-3.4.jar')
-    compile files('libs/ShareSDK-Core-2.6.6.jar')
-    compile files('libs/ShareSDK-QQ-2.6.6.jar')
-    compile files('libs/ShareSDK-QZone-2.6.6.jar')
-    compile files('libs/ShareSDK-SinaWeibo-2.6.6.jar')
-    compile files('libs/ShareSDK-Wechat-2.6.6.jar')
-    compile files('libs/ShareSDK-Wechat-Core-2.6.6.jar')
-    compile files('libs/ShareSDK-Wechat-Favorite-2.6.6.jar')
-    compile files('libs/ShareSDK-Wechat-Moments-2.6.6.jar')
     compile files('libs/MiPush_SDK_Client_2_2_21.jar')
     compile files('libs/umeng-update-v2.6.0.1.jar')
     compile project(':xlmmlibrary')
-
     //dagger2
     compile 'com.google.dagger:dagger:2.0.2'
     compile 'org.glassfish:javax.annotation:10.0-b28'
     apt 'com.google.dagger:dagger-compiler:2.0.2'
+    compile files('libs/MobCommons-2016.0426.1819.jar')
+    compile files('libs/MobTools-2016.0426.1819.jar')
+    compile files('libs/ShareSDK-Core-2.7.2.jar')
+    compile files('libs/ShareSDK-QQ-2.7.2.jar')
+    compile files('libs/ShareSDK-QZone-2.7.2.jar')
+    compile files('libs/ShareSDK-SinaWeibo-2.7.2.jar')
+    compile files('libs/ShareSDK-Wechat-2.7.2.jar')
+    compile files('libs/ShareSDK-Wechat-Core-2.7.2.jar')
+    compile files('libs/ShareSDK-Wechat-Favorite-2.7.2.jar')
+    compile files('libs/ShareSDK-Wechat-Moments-2.7.2.jar')
 }

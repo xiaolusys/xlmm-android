@@ -21,7 +21,6 @@
 
     </LinearLayout>
 
-
     <LinearLayout
         android:id="@+id/logistics_layout"
         android:layout_width="match_parent"
@@ -31,92 +30,41 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="4px"
+            android:layout_marginRight="4px"
             android:background="@color/white"
             android:gravity="center_vertical"
             android:orientation="horizontal"
+            android:padding="20px"
             android:visibility="visible">
 
-            <ImageView
-                android:id="@+id/image_slice"
+            <TextView
+                android:id="@+id/tv_order_package"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="8dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/slice" />
-
-            <LinearLayout
-                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:orientation="vertical">
+                android:text=""
+                android:textColor="@color/text_color_62"
+                android:textSize="13sp" />
 
-                <TextView
-                    android:id="@+id/tx_order_crttime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="4dp"
-                    android:text="时间："
-                    android:textColor="@color/text_color_62"
-                    android:textSize="13sp" />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tx_order_crtstate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:padding="4dp"
-                        android:singleLine="true"
-                        android:text=""
-                        android:textColor="@color/text_color_62"
-                        android:textSize="13sp" />
-
-                    <TextView
-                        android:id="@+id/name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:padding="4dp"
-                        android:singleLine="true"
-                        android:text=""
-                        android:textColor="@color/text_color_62"
-                        android:textSize="13sp" />
-
-                    <TextView
-                        android:id="@+id/code"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:padding="4dp"
-                        android:singleLine="true"
-                        android:text=""
-                        android:textColor="@color/text_color_62"
-                        android:textSize="13sp" />
-
-                </LinearLayout>
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="4dp"
-                    android:text="以下商品由同一个包裹发出"
-                    android:textColor="@color/text_color_62"
-                    android:textSize="13sp" />
-
-            </LinearLayout>
-
+            <TextView
+                android:id="@+id/tx_order_crtstate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:text=""
+                android:textColor="@color/colorAccent"
+                android:textSize="13sp" />
 
             <ImageView
                 android:id="@+id/right"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+                android:layout_marginLeft="8dp"
                 android:src="@mipmap/common_icon_right_arrow" />
 
         </LinearLayout>

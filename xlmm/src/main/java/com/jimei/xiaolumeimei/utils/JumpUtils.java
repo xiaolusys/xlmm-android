@@ -12,7 +12,7 @@ import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ChildListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.LadyListActivity;
-import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActvityWeb;
+import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
 import com.jimei.xiaolumeimei.ui.activity.product.TongkuanActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
@@ -86,10 +86,15 @@ public class JumpUtils {
       case XlmmConst.JUMP_PRODUCT_DETAIL:
         String product_id = get_jump_arg("product_id", jumpInfo.getUrl());
         if (null != product_id) {
-          intent = new Intent(context, ProductDetailActvityWeb.class);
-          intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-          intent.putExtra("product_id", product_id);
-          context.startActivity(intent);
+          //intent = new Intent(context, ProductPopDetailActvityWeb.class);
+          //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+          //Bundle bundle = new Bundle();
+          //bundle.putString("actlink", product_id);
+          //intent.putExtras(bundle);
+          //context.startActivity(intent);
+
+          jumpToWebViewWithCookies(context, product_id.replace("\"}", ""), -1,
+              ProductPopDetailActvityWeb.class);
         }
         break;
       case XlmmConst.JUMP_TRADE_DETAIL:
@@ -125,6 +130,7 @@ public class JumpUtils {
         bundle.putString("cookies", cookies);
         bundle.putString("domain", domain);
         bundle.putString("actlink", jumpInfo.getUrl());
+        bundle.putInt("id",jumpInfo.getId());
         intent.putExtras(bundle);
         context.startActivity(intent);
         break;
@@ -191,12 +197,20 @@ public class JumpUtils {
         } else if (content[1].contains("webview")) {
           jumpInfo.setType(XlmmConst.JUMP_WEBVIEW);
           String url = content[1].substring(content[1].lastIndexOf("http"));
+          int id = -1;
           if (url.contains("is_native")) {
             String temp[] = url.split("&is_native=");
             url = temp[0];
           }
+          if (content[1].contains("activity_id")){
+            String idStr[] = content[1].split("activity_id=");
+            id = Integer.getInteger(idStr[1].split("&")[0]);
+          }
           try {
             jumpInfo.setUrl(URLDecoder.decode(url, "utf-8"));
+            if (id!=-1) {
+              jumpInfo.setId(id);
+            }
           } catch (Exception e) {
             e.printStackTrace();
           }
@@ -231,9 +245,52 @@ public class JumpUtils {
     }
   }
 
+  public static void jumpToWebViewWithCookies(Context context, String actlink, int id,
+      Class<?> classname) {
+    Intent intent = new Intent(context, classname);
+    SharedPreferences sharedPreferences =
+        context.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+    String cookies = sharedPreferences.getString("cookiesString", "");
+    String domain = sharedPreferences.getString("cookiesDomain", "");
+    Bundle bundle = new Bundle();
+    bundle.putString("cookies", cookies);
+    bundle.putString("domain", domain);
+    bundle.putString("Cookie", sharedPreferences.getString("Cookie", ""));
+    bundle.putString("actlink", actlink);
+    bundle.putInt("id", id);
+    intent.putExtras(bundle);
+    context.startActivity(intent);
+  }
+  public static void jumpToWebViewWithCookies(Context context, String actlink, int id,
+                                              Class<?> classname,String title) {
+    Intent intent = new Intent(context, classname);
+    SharedPreferences sharedPreferences =
+            context.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+    String cookies = sharedPreferences.getString("cookiesString", "");
+    String domain = sharedPreferences.getString("cookiesDomain", "");
+    Bundle bundle = new Bundle();
+    bundle.putString("cookies", cookies);
+    bundle.putString("domain", domain);
+    bundle.putString("Cookie", sharedPreferences.getString("Cookie", ""));
+    bundle.putString("actlink", actlink);
+    bundle.putString("title",title);
+    bundle.putInt("id", id);
+    intent.putExtras(bundle);
+    context.startActivity(intent);
+  }
+
   public static class JumpInfo {
     int type;
     String url;
+    int id;
+
+    public int getId() {
+      return id;
+    }
+
+    public void setId(int id) {
+      this.id = id;
+    }
 
     public int getType() {
       return type;
@@ -257,23 +314,5 @@ public class JumpUtils {
           ", url='" + url + '\'' +
           '}';
     }
-  }
-
-  public static void jumpToWebViewWithCookies(Context context,String actlink,int id,
-      Class<?>
-      classname){
-    Intent intent = new Intent(context, classname);
-    SharedPreferences sharedPreferences =
-        context.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
-    String cookies = sharedPreferences.getString("cookiesString", "");
-    String domain = sharedPreferences.getString("cookiesDomain", "");
-    Bundle bundle = new Bundle();
-    bundle.putString("cookies", cookies);
-    bundle.putString("domain", domain);
-    bundle.putString("Cookie", sharedPreferences.getString("Cookie", ""));
-    bundle.putString("actlink", actlink);
-    bundle.putInt("id", id);
-    intent.putExtras(bundle);
-    context.startActivity(intent);
   }
 }

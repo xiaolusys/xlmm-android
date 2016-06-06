@@ -41,6 +41,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="8dp"
                 android:text=""
+                android:textColor="@color/text_color_62"
                 android:textSize="13sp" />
 
             <TextView
@@ -67,7 +68,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="8dp"
                 android:gravity="bottom"
-                android:text="尺码："
+                android:text=""
                 android:textColor="@color/grey"
                 android:textSize="12sp" />
 

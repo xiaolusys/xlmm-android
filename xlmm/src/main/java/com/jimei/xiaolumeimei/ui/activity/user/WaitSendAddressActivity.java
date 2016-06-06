@@ -157,6 +157,8 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
                                         if (addressResultBean.getCode() == 0) {
                                             JUtils.Toast("修改成功");
                                             finish();
+                                        }else {
+                                            JUtils.Toast("修改失败");
                                         }
                                     }
                                 }

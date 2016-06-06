@@ -63,6 +63,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
   private String unionid;
   private Bundle extras;
   private String actlink;
+  private String title;
   private int id;
 
   public static String getRandomString(int length) {
@@ -246,6 +247,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                             if (null != getIntent() && getIntent().getExtras() != null) {
                               login = getIntent().getExtras().getString("login");
                               actlink = getIntent().getExtras().getString("actlink");
+                              title = getIntent().getExtras().getString("title","");
                               id = getIntent().getExtras().getInt("id");
                             }
 
@@ -315,7 +317,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                 finish();
                               } else if (login.equals("goactivity")) {
                                 JumpUtils.jumpToWebViewWithCookies(mContext, actlink, id,
-                                    ActivityWebViewActivity.class);
+                                    ActivityWebViewActivity.class,title);
                                 finish();
                               }
                             }

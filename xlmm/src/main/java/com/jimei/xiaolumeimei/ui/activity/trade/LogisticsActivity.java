@@ -2,26 +2,32 @@ package com.jimei.xiaolumeimei.ui.activity.trade;
 
 import android.os.Bundle;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import butterknife.Bind;
 
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.adapter.GoodsListAdapter;
+import com.jimei.xiaolumeimei.adapter.GoodsListAdapter2;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.LogisticsBean;
+import com.jimei.xiaolumeimei.entities.OrderDetailBean;
+import com.jimei.xiaolumeimei.entities.PackageBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.widget.LogImageView;
 import com.jimei.xiaolumeimei.widget.LogMsgView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 public class LogisticsActivity extends BaseSwipeBackCompatActivity {
-    private static final java.lang.String TAG = LogisticsActivity.class.getSimpleName();
     @Bind(R.id.tv_company)
     TextView companyTv;
     @Bind(R.id.tv_order)
@@ -34,10 +40,19 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
     TextView lastTimeTv;
     @Bind(R.id.tv_order_last_state)
     TextView lastStateTv;
+    @Bind(R.id.lv)
+    ListView mListView;
+    @Bind(R.id.ll_container)
+    LinearLayout containerLayout;
+
+    private ArrayList<PackageBean> packageBeanList;
     private String packetid = "";
     private String company_code = "";
     private String time = "";
     private String tid = "";
+    private String stateStr = "";
+    private String key = "";
+    private int referal_trade_id;
 
     @Override
     protected void setListener() {
@@ -46,9 +61,9 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
 
     @Override
     protected void initData() {
-        if (!"".equals(packetid)&&!"".equals(company_code)) {
+        if (!"".equals(packetid) && !"".equals(company_code)) {
             Subscription subscribe = TradeModel.getInstance()
-                    .get_logistics_by_packagetid(packetid,company_code)
+                    .get_logistics_by_packagetid(packetid, company_code)
                     .subscribeOn(Schedulers.io())
                     .subscribe(new ServiceResponse<LogisticsBean>() {
 
@@ -85,25 +100,64 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
 
                         @Override
                         public void onError(Throwable e) {
+                            JUtils.Toast(e.getMessage());
                         }
                     });
             addSubscription(subscribe);
         } else {
-            JUtils.Toast("获取物流信息失败,请通过物流单号网上查询!");
+            JUtils.Toast("获取物流信息失败,请联系小鹿美美客服查询!");
         }
+        Subscription subscription = TradeModel.getInstance()
+                .getOrderDetailBean(referal_trade_id)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ServiceResponse<OrderDetailBean>() {
+                    @Override
+                    public void onNext(OrderDetailBean orderDetailBean) {
+                        if (orderDetailBean.getUser_adress() != null) {
+                            companyTv.setText(orderDetailBean.getLogistics_company().getName());
+                            companyTv.setTextColor(getResources().getColor(R.color.colorAccent));
+                        } else {
+                            companyTv.setText("小鹿推荐");
+                        }
+
+                    }
+                });
+        addSubscription(subscription);
     }
 
     private void fillDataToView(LogisticsBean logisticsBean) {
-        if (logisticsBean.getName() != "" && logisticsBean.getName() != null) {
-            companyTv.setText(logisticsBean.getName());
-        } else {
-            companyTv.setText("暂无物流信息");
-        }
         if (logisticsBean.getOrder() != "" && logisticsBean.getOrder() != null) {
             orderTv.setText(logisticsBean.getOrder());
         } else {
-            orderTv.setText("暂无物流信息");
+            orderTv.setTextColor(getResources().getColor(R.color.colorAccent));
+            orderTv.setText(stateStr);
         }
+
+        if (packageBeanList.size() != 0) {
+            List<PackageBean> data = new ArrayList<>();
+            for (PackageBean packageBean : packageBeanList) {
+                if (key.equals(packageBean.getPackage_group_key())) {
+                    data.add(packageBean);
+                }
+            }
+            mListView.setAdapter(new GoodsListAdapter(data, this));
+            OrderDetailActivity.setListViewHeightBasedOnChildren(mListView);
+        } else {
+            Subscription subscription = TradeModel.getInstance()
+                    .getOrderDetailBean(referal_trade_id)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(new ServiceResponse<OrderDetailBean>() {
+                        @Override
+                        public void onNext(OrderDetailBean orderDetailBean) {
+                            ArrayList<AllOrdersBean.ResultsEntity.OrdersEntity> orders = orderDetailBean.getOrders();
+                            mListView.setAdapter(new GoodsListAdapter2(orders, getApplicationContext()));
+                            OrderDetailActivity.setListViewHeightBasedOnChildren(mListView);
+
+                        }
+                    });
+            addSubscription(subscription);
+        }
+
         if ((logisticsBean.getData() != null) && (logisticsBean.getData().size() != 0)) {
             List<LogisticsBean.Msg> data = logisticsBean.getData();
             for (int i = 0; i < data.size(); i++) {
@@ -130,6 +184,10 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
         company_code = extras.getString("company_code");
         tid = extras.getString("tid");
         time = extras.getString("time");
+        stateStr = extras.getString("state");
+        packageBeanList = (ArrayList<PackageBean>) extras.getSerializable("list");
+        referal_trade_id = extras.getInt("id");
+        key = extras.getString("key");
     }
 
     @Override
@@ -150,4 +208,5 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
     protected TransitionMode getOverridePendingTransitionMode() {
         return null;
     }
+
 }

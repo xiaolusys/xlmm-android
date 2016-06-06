@@ -46,6 +46,7 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
   private String mobile, invalid_code;
   private Subscription subscribe;
   private String actlink;
+  private String title;
   private int id;
 
   @Override protected void setListener() {
@@ -145,6 +146,7 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                                   && getIntent().getExtras() != null) {
                                 login = getIntent().getExtras().getString("login");
                                 actlink = getIntent().getExtras().getString("actlink");
+                                title = getIntent().getExtras().getString("title");
                                 id = getIntent().getExtras().getInt("id");
                               }
 
@@ -204,7 +206,7 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                                   finish();
                                 } else if (login.equals("goactivity")) {
                                   JumpUtils.jumpToWebViewWithCookies(mContext, actlink,
-                                      id, ActivityWebViewActivity.class);
+                                      id, ActivityWebViewActivity.class,title);
                                   finish();
                                 }
                               }
