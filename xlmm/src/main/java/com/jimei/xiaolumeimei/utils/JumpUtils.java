@@ -130,6 +130,7 @@ public class JumpUtils {
         bundle.putString("cookies", cookies);
         bundle.putString("domain", domain);
         bundle.putString("actlink", jumpInfo.getUrl());
+        bundle.putInt("id",jumpInfo.getId());
         intent.putExtras(bundle);
         context.startActivity(intent);
         break;
@@ -196,12 +197,20 @@ public class JumpUtils {
         } else if (content[1].contains("webview")) {
           jumpInfo.setType(XlmmConst.JUMP_WEBVIEW);
           String url = content[1].substring(content[1].lastIndexOf("http"));
+          int id = -1;
           if (url.contains("is_native")) {
             String temp[] = url.split("&is_native=");
             url = temp[0];
           }
+          if (content[1].contains("activity_id")){
+            String idStr[] = content[1].split("activity_id=");
+            id = Integer.getInteger(idStr[1].split("&")[0]);
+          }
           try {
             jumpInfo.setUrl(URLDecoder.decode(url, "utf-8"));
+            if (id!=-1) {
+              jumpInfo.setId(id);
+            }
           } catch (Exception e) {
             e.printStackTrace();
           }
@@ -273,6 +282,15 @@ public class JumpUtils {
   public static class JumpInfo {
     int type;
     String url;
+    int id;
+
+    public int getId() {
+      return id;
+    }
+
+    public void setId(int id) {
+      this.id = id;
+    }
 
     public int getType() {
       return type;

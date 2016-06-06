@@ -2,13 +2,21 @@ package com.jimei.xiaolumeimei.ui.activity.trade;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,8 +32,11 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.OrderGoodsListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
+import com.jimei.xiaolumeimei.entities.LogisticCompany;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.PackageBean;
+import com.jimei.xiaolumeimei.entities.ResultBean;
+import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.ui.activity.user.WaitSendAddressActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -36,6 +47,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import okhttp3.ResponseBody;
 import rx.Subscription;
@@ -73,17 +85,28 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     ImageView rightImage;
     @Bind(R.id.time)
     TextView timeText;
+    @Bind(R.id.lv_goods)
+    ListView lv_goods;
+    @Bind(R.id.logistics)
+    TextView logisticsTv;
+    @Bind(R.id.logistics_layout)
+    LinearLayout logisticsLayout;
+    @Bind(R.id.logistics_right)
+    ImageView logisticsRightImage;
+    ListView listView;
     private ArrayList<PackageBean> packageBeanList;
     int order_id = 0;
     OrderDetailBean orderDetail;
     String source;
     String tid;
+    private Dialog dialog;
     private OrderGoodsListAdapter mGoodsAdapter;
 
     @Override
     protected void setListener() {
         btn_proc.setOnClickListener(this);
         btn_order_cancel.setOnClickListener(this);
+        logisticsLayout.setOnClickListener(this);
     }
 
     @Override
@@ -98,6 +121,19 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void initViews() {
+        View view = getLayoutInflater().inflate(R.layout.pop_layout, null);
+        dialog = new Dialog(this, R.style.dialog_style);
+        dialog.setContentView(view);
+        Window window = dialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        wlp.gravity = Gravity.BOTTOM;
+        wlp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        window.setAttributes(wlp);
+        window.setWindowAnimations(R.style.dialog_anim);
+        View closeIv = view.findViewById(R.id.close_iv);
+        listView = (ListView) view.findViewById(R.id.lv_logistics_company);
+        closeIv.setOnClickListener(this);
+
 
     }
 
@@ -117,14 +153,55 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                         public void onNext(OrderDetailBean orderDetailBean) {
                             tid = orderDetailBean.getTid();
                             orderDetail = orderDetailBean;
+
                             showProcBtn(orderDetailBean);
                             fillDataToView(orderDetailBean);
                             if ("已付款".equals(orderDetailBean.getStatus_display())) {
                                 addressLayout.setOnClickListener(OrderDetailActivity.this);
                             } else {
                                 rightImage.setVisibility(View.GONE);
+                                logisticsRightImage.setVisibility(View.GONE);
                             }
                             Log.i(TAG, "order_id " + order_id + " " + orderDetailBean.toString());
+
+                            Subscription subscribe = ActivityModel.getInstance()
+                                    .getLogisticCompany(order_id)
+                                    .subscribeOn(Schedulers.io())
+                                    .subscribe(new ServiceResponse<List<LogisticCompany>>() {
+                                        @Override
+                                        public void onNext(List<LogisticCompany> logisticCompanies) {
+                                            CompanyAdapter adapter = new CompanyAdapter(logisticCompanies, getApplicationContext());
+                                            listView.setAdapter(adapter);
+                                            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                                @Override
+                                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                    String code = logisticCompanies.get(position).getCode();
+                                                    ActivityModel.getInstance()
+                                                            .changeLogisticCompany(orderDetail.getUser_adress().getId(), order_id + "", code)
+                                                            .subscribeOn(Schedulers.io())
+                                                            .subscribe(new ServiceResponse<ResultBean>() {
+                                                                @Override
+                                                                public void onNext(ResultBean resultBean) {
+                                                                    switch (resultBean.getCode()) {
+                                                                        case 0:
+                                                                            logisticsTv.setText(logisticCompanies.get(position).getName());
+                                                                            break;
+                                                                    }
+                                                                    JUtils.Toast(resultBean.getInfo());
+                                                                    changeDialogWindowState();
+                                                                }
+
+                                                                @Override
+                                                                public void onError(Throwable e) {
+                                                                    JUtils.Toast(e.getMessage());
+                                                                    changeDialogWindowState();
+                                                                }
+                                                            });
+                                                }
+                                            });
+                                        }
+                                    });
+                            addSubscription(subscribe);
                         }
 
                         @Override
@@ -158,9 +235,10 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         tx_order_postfee.setText("¥" + orderDetailBean.getPost_fee());
         tx_order_payment.setText("¥" + orderDetailBean.getPayment());
         timeText.setText("下单时间:" + orderDetailBean.getCreated().replace("T", "-"));
-
+        if (orderDetailBean.getLogistics_company() != null) {
+            logisticsTv.setText(orderDetailBean.getLogistics_company().getName());
+        }
         JUtils.Log(TAG, "crt time " + orderDetailBean.getCreated());
-        ListView lv_goods = (ListView) findViewById(R.id.lv_goods);
         mGoodsAdapter = new OrderGoodsListAdapter(this);
 
         packageBeanList = new ArrayList<>();
@@ -178,8 +256,14 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                     }
                 });
         addSubscription(subscribe);
+    }
 
-
+    private void changeDialogWindowState() {
+        if (dialog.isShowing()) {
+            dialog.dismiss();
+        } else {
+            dialog.show();
+        }
     }
 
     private void showProcBtn(OrderDetailBean orderDetailBean) {
@@ -276,6 +360,14 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;
+            case R.id.logistics_layout:
+                if ("已付款".equals(orderDetail.getStatus_display())) {
+                    changeDialogWindowState();
+                }
+                break;
+            case R.id.close_iv:
+                changeDialogWindowState();
+                break;
         }
     }
 
@@ -291,6 +383,10 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                         orderDetail = orderDetailBean;
                         tx_custom_name.setText("姓名：" + orderDetailBean.getUser_adress().getReceiver_name());
                         tx_custom_address.setText("地址：" + orderDetailBean.getUser_adress().getReceiver_state() + orderDetailBean.getUser_adress().getReceiver_city() + orderDetailBean.getUser_adress().getReceiver_address());
+                        if (orderDetailBean.getLogistics_company() != null) {
+                            String name = orderDetailBean.getLogistics_company().getName();
+                            logisticsTv.setText(name);
+                        }
                     }
                 });
         addSubscription(subscription);
@@ -426,5 +522,53 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         params.height = totalHeight
                 + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
+    }
+
+    public class CompanyAdapter extends BaseAdapter {
+        private List<LogisticCompany> logisticCompanies;
+        private Context context;
+
+        public CompanyAdapter(List<LogisticCompany> logisticCompanies, Context context) {
+            this.logisticCompanies = logisticCompanies;
+            this.context = context;
+        }
+
+        @Override
+        public int getCount() {
+            return logisticCompanies.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return logisticCompanies.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder holder;
+            if (convertView == null) {
+                convertView = LayoutInflater.from(context).inflate(R.layout.item_logistics, null);
+                holder = new ViewHolder(convertView);
+                convertView.setTag(holder);
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+            holder.nameTv.setText(logisticCompanies.get(position).getName());
+            return convertView;
+        }
+
+        private class ViewHolder {
+            TextView nameTv;
+
+            public ViewHolder(View itemView) {
+                nameTv = ((TextView) itemView.findViewById(R.id.name));
+
+            }
+        }
     }
 }

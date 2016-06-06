@@ -47,10 +47,11 @@ public class OrderGoodsListAdapter extends BaseAdapter {
     private String timeStr;
     private String stateStr;
     private String tid;
+
     private OrderDetailBean orderDetailEntity;
     private int count = 0;
-    String packetid = "";
-    String company_code = "";
+    private String packetid = "";
+    private String company_code = "";
 
 
     public void setPackageBeanList(ArrayList<PackageBean> packageBeanList) {
@@ -145,13 +146,6 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                     count++;
                 }
                 ((TextView) convertView.findViewById(R.id.tv_order_package)).setText("包裹" + NUM[count]);
-                String name = packageBeanList.get(position).getLogistics_company_name();
-                if ("".equals(name.trim())) {
-                    ((TextView) convertView.findViewById(R.id.tx_order_name)).setText("小鹿推荐快递");
-                } else {
-                    ((TextView) convertView.findViewById(R.id.tx_order_name)).setText(name);
-                }
-
                 ((TextView) convertView.findViewById(R.id.tx_order_crtstate)).setText(packageBeanList.get(position).getAssign_status_display());
                 packetid = packageBeanList.get(position).getOut_sid();
                 company_code = packageBeanList.get(position).getLogistics_company_code();
@@ -165,7 +159,6 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                 }
                 ((TextView) convertView.findViewById(R.id.tx_order_crtstate)).setText(stateStr);
                 ((TextView) convertView.findViewById(R.id.tv_order_package)).setText("包裹一");
-                ((TextView) convertView.findViewById(R.id.tx_order_name)).setText("小鹿推荐快递");
             }
             final String finalKey = key;
             layout.setOnClickListener(new View.OnClickListener() {
