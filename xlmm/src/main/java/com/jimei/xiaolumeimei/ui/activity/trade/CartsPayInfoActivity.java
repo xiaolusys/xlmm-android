@@ -303,7 +303,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
               }
 
               tvWuliu.setText(logisticsCompanyses.get(0).getName());
-              code = logisticsCompanyses.get(0).getCode();
+              code = logisticsCompanyses.get(0).getId();
 
               budgetCash =
                   (double) (Math.round(cartsPayinfoBean.getBudget_cash() * 100)) / 100
@@ -1162,7 +1162,8 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
       listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-          code = logisticsCompanyses.get(position).getCode();
+          code = logisticsCompanyses.get(position).getId();
+
           tvWuliu.setText(logisticsCompanyses.get(position).getName());
           MyDialog1.this.dismiss();
         }
