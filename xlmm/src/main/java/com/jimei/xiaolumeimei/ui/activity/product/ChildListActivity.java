@@ -200,7 +200,7 @@ public class ChildListActivity extends BaseSwipeBackCompatActivity
               }
               @Override public void onCompleted() {
                 super.onCompleted();
-                xRecyclerView.post(xRecyclerView::loadMoreComplete);
+                byXRecyclerView.post(byXRecyclerView::loadMoreComplete);
               }
             });
         addSubscription(subscribe2);

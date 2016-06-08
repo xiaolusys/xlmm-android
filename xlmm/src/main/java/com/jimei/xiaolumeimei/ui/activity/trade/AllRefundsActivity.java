@@ -109,6 +109,7 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void onResume() {
+        showIndeterminateProgressDialog(false);
         super.onResume();
         page = 2;
         mAllRefundsAdapter.clear();
@@ -132,6 +133,7 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity
 
                     @Override
                     public void onCompleted() {
+                        hideIndeterminateProgressDialog();
                         super.onCompleted();
                     }
 

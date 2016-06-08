@@ -187,7 +187,7 @@ public class LadyListActivity extends BaseSwipeBackCompatActivity
               @Override public void onCompleted() {
                 super.onCompleted();
                 try {
-                  byXRecyclerView.post(xRecyclerView::refreshComplete);
+                  byXRecyclerView.post(byXRecyclerView::refreshComplete);
                 } catch (Exception e) {
                   e.printStackTrace();
                 }
