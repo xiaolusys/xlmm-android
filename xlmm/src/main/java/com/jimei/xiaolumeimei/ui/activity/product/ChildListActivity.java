@@ -153,7 +153,7 @@ public class ChildListActivity extends BaseSwipeBackCompatActivity
                     List<ChildListBean.ResultsEntity> results =
                         childListBean.getResults();
                     totalPages = childListBean.getCount() / page_size + 1;
-                    mChildListAdapter.update(results);
+                    mChildListAdapter.updateWithClear(results);
                   }
                 } catch (Exception ex) {
                 }
@@ -193,14 +193,14 @@ public class ChildListActivity extends BaseSwipeBackCompatActivity
                     List<ChildListBean.ResultsEntity> results =
                         childListBean.getResults();
                     totalPages2 = childListBean.getCount() / page_size + 1;
-                    mChildListAdapter2.update(results);
+                    mChildListAdapter2.updateWithClear(results);
                   }
                 } catch (Exception ex) {
                 }
               }
               @Override public void onCompleted() {
                 super.onCompleted();
-                byXRecyclerView.post(byXRecyclerView::loadMoreComplete);
+                byXRecyclerView.post(byXRecyclerView::refreshComplete);
               }
             });
         addSubscription(subscribe2);
