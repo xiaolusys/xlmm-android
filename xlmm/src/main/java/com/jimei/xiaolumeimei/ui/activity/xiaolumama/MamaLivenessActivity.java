@@ -74,7 +74,7 @@ public class MamaLivenessActivity extends BaseSwipeBackCompatActivity
     lv_liveness.setPullRefreshEnabled(false);
     lv_liveness.setLoadingMoreEnabled(true);
 
-    mAdapter = new MamaLivenessAdapter(this);
+    mAdapter = new MamaLivenessAdapter();
     lv_liveness.setAdapter(mAdapter);
 
     lv_liveness.setLoadingListener(new XRecyclerView.LoadingListener() {

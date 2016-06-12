@@ -1,45 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:padding="8dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <Button
+        android:id="@+id/change"
+        android:layout_width="60dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/shape_chooselist"
+        android:text="修改"
+        android:textColor="@color/colorPrimary" />
 
     <LinearLayout
         android:id="@+id/ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
+        android:layout_toLeftOf="@id/change"
+        android:orientation="horizontal">
 
         <TextView
-            android:layout_width="wrap_content"
             android:id="@+id/receiver_name"
-            android:layout_height="wrap_content"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <TextView
-            android:layout_marginLeft="16dp"
-            android:layout_toRightOf="@id/receiver_name"
-            android:layout_width="wrap_content"
             android:id="@+id/receiver_mobile"
-            android:layout_height="wrap_content"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_toRightOf="@id/receiver_name" />
 
     </LinearLayout>
 
 
-  <TextView
-      android:layout_marginTop="14dp"
-      android:layout_below="@id/ll"
-      android:id="@+id/receiver_address"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"/>
-    <Button
-        android:id="@+id/change"
-        android:text="修改"
-        android:background="@drawable/shape_chooselist"
-        android:textColor="@color/colorPrimary"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:layout_width="60dp"
-        android:layout_height="30dp"
-        />
+    <TextView
+        android:id="@+id/receiver_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll"
+        android:layout_marginTop="14dp"
+        android:layout_toLeftOf="@id/change" />
 </RelativeLayout>

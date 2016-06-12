@@ -33,7 +33,7 @@ public class MMVisitorsAdapter
   private List<MMVisitorsBean.ResultsEntity> mList;
 
   public MMVisitorsAdapter(Activity context) {
-    mList = new ArrayList<MMVisitorsBean.ResultsEntity>();
+    mList = new ArrayList<>();
     this.context = context;
   }
 

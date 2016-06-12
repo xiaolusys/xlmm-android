@@ -6,11 +6,9 @@ package com.jimei.xiaolumeimei.adapter;
  */
 
 import android.app.Activity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -38,11 +36,11 @@ public class WithdrawCashHisAdapter extends XRecyclerView.Adapter<WithdrawCashHi
     private List<WithdrawCashHisBean.WithdrawCashRecord> mList;
 
     public WithdrawCashHisAdapter(Activity context) {
-        mList = new ArrayList<WithdrawCashHisBean.WithdrawCashRecord>();
+        mList = new ArrayList<>();
         this.context = context;
     }
 
-    public void clear(){
+    public void clear() {
         mList.clear();
         notifyDataSetChanged();
     }

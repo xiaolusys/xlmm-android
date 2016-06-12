@@ -16,15 +16,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.MyHorizontalScrollView;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import com.jimei.xiaolumeimei.R;
@@ -37,7 +33,7 @@ public class WaitSendOrdersListAdapter extends BaseAdapter {
     private List<AllOrdersBean.ResultsEntity> mList;
 
     public WaitSendOrdersListAdapter(Activity context) {
-        mList = new ArrayList<AllOrdersBean.ResultsEntity>();
+        mList = new ArrayList<>();
         this.context = context;
     }
 
@@ -55,27 +51,7 @@ public class WaitSendOrdersListAdapter extends BaseAdapter {
     }
 
     public void update(List<AllOrdersBean.ResultsEntity> list) {
-
-        float payment = 0;
-        String orderState = "";
-        String picpath;
-        int state;
-
         Log.d(TAG, "dataSource.size " + list.size());
-        for (int i = 0; i < list.size(); i++) {
-            HashMap<String, String> map = new HashMap<String, String>();
-            payment = (float) list.get(i).getPayment();
-            orderState = list.get(i).getStatusDisplay();
-            picpath = list.get(i).getOrderPic();
-            state = list.get(i).getStatus();
-
-            map.put("payment", Float.toString(payment));
-            map.put("orderState", orderState);
-            map.put("img_url", picpath);
-            map.put("state", Integer.toString(state));
-
-
-        }
         mList.addAll(list);
         notifyDataSetChanged();
     }
@@ -98,10 +74,8 @@ public class WaitSendOrdersListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Log.d(TAG, "getView ");
-
-        TextView tx_payment = null;
-        TextView tx_order_sate = null;
-        ViewHolder holder = null;
+        TextView tx_order_sate;
+        ViewHolder holder;
         LinearLayout llayout;
         final int order_id = mList.get(position).getId();
 
@@ -164,44 +138,6 @@ public class WaitSendOrdersListAdapter extends BaseAdapter {
         tx_order_sate = (TextView) convertView.findViewById(R.id.tx_order_state);
         tx_order_sate.setText(mList.get(position).getStatusDisplay());
         return convertView;
-    }
-
-    private void showTime(int state, String crtTime, View convertView, int order_id) {
-
-
-        if (XlmmConst.ORDER_STATE_WAITPAY == state) {
-            TextView tx_order_left_paytime =
-                    (TextView) convertView.findViewById(R.id.tx_order_left_paytime);
-            cn.iwgang.countdownview.CountdownView cv_lefttime =
-                    (cn.iwgang.countdownview.CountdownView) convertView.findViewById(
-                            R.id.cv_lefttime);
-
-            tx_order_left_paytime.setVisibility(View.VISIBLE);
-            cv_lefttime.setVisibility(View.VISIBLE);
-            cv_lefttime.start(calcLeftTime(crtTime));
-
-        }
-    }
-
-    private long calcLeftTime(String crtTime) {
-        long left = 0;
-        Date now = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        try {
-            crtTime = crtTime.replace("T", " ");
-            Date crtdate = format.parse(crtTime);
-            Log.d(TAG, " crtdate  " + crtdate.getTime() + "now " + now.getTime());
-            if (crtdate.getTime() + 20 * 60 * 1000 - now.getTime() > 0) {
-                left = crtdate.getTime() + 20 * 60 * 1000 - now.getTime();
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "left time get failed ");
-            e.printStackTrace();
-        }
-
-        Log.d(TAG, "left time  " + left);
-
-        return left;
     }
 
     private LinearLayout crt_one_goods_view(int position, int order_id) {

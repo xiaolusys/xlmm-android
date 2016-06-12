@@ -208,7 +208,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
 
                         @Override
                         public void onError(Throwable e) {
-
                             Log.e(TAG, " error:, " + e.toString());
                             super.onError(e);
                         }

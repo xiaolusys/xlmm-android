@@ -48,12 +48,6 @@ public class ImageAdapter extends PagerAdapter {
     View view = inflater.inflate(R.layout.item_pager_image, container, false);
     if (view != null) {
       final ImageView imageView = (ImageView) view.findViewById(R.id.image);
-      //预览imageView
-      //final ImageView smallImageView = new ImageView(context);
-      //
-      //smallImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-      //((FrameLayout) view).addView(smallImageView);
-      //loading
       final ProgressBar loading = new ProgressBar(context);
       FrameLayout.LayoutParams loadingLayoutParams =
           new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,

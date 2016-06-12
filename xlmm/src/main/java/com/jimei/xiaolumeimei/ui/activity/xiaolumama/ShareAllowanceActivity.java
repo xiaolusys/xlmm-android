@@ -63,7 +63,7 @@ public class ShareAllowanceActivity extends BaseSwipeBackCompatActivity
     lv_allowance.setPullRefreshEnabled(false);
     lv_allowance.setLoadingMoreEnabled(true);
 
-    mAdapter = new AllowanceAdapter(this);
+    mAdapter = new AllowanceAdapter();
     lv_allowance.setAdapter(mAdapter);
 
     lv_allowance.setLoadingListener(new XRecyclerView.LoadingListener() {
