@@ -187,16 +187,16 @@
             android:text="修改地址"
             android:textColor="@color/white" />
 
-        <Button
-            android:id="@+id/delete"
-            android:layout_width="660px"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/save"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/shape_chooselist"
-            android:text="删除地址"
-            android:textColor="@color/colorPrimary" />
+        <!--<Button-->
+            <!--android:id="@+id/delete"-->
+            <!--android:layout_width="660px"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@id/save"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:layout_marginTop="12dp"-->
+            <!--android:background="@drawable/shape_chooselist"-->
+            <!--android:text="删除地址"-->
+            <!--android:textColor="@color/colorPrimary" />-->
 
     </RelativeLayout>
 

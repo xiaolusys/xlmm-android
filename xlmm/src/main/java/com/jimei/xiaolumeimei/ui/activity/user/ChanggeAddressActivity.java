@@ -1,10 +1,11 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
-
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.SwitchCompat;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -39,12 +40,12 @@ public class ChanggeAddressActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.clear_address) EditText clearAddress;
   @Bind(R.id.switch_button) SwitchCompat switchButton;
   @Bind(R.id.save) Button save;
-  @Bind(R.id.delete) Button delete;
   @Bind(R.id.main) LinearLayout main;
   private String id;
   private PopupWindow popupWindow;
   private View view;
   private CityPicker cityPicker;
+  //@Bind(R.id.delete) Button delete;
   private View parent;
 
   private String city_string;
@@ -60,8 +61,8 @@ public class ChanggeAddressActivity extends BaseSwipeBackCompatActivity
   @Override protected void setListener() {
     save.setOnClickListener(this);
     address.setOnClickListener(this);
-    delete.setOnClickListener(this);
-    switchButton.setOnCheckedChangeListener(this);
+    //delete.setOnClickListener(this);
+    //switchButton.setOnCheckedChangeListener(this);
   }
 
   @Override protected void initData() {
@@ -149,38 +150,52 @@ public class ChanggeAddressActivity extends BaseSwipeBackCompatActivity
 
                       JUtils.Toast("修改成功");
                       finish();
-//                      if (isDefault) {
-//                        Subscription subscribe1 = AddressModel.getInstance()
-//                            .change_default(id)
-//                            .subscribeOn(Schedulers.io())
-//                            .subscribe(new ServiceResponse<AddressResultBean>() {
-//                              @Override
-//                              public void onNext(AddressResultBean addressResultBean1) {
-//                                if (addressResultBean1 != null
-//                                    && addressResultBean1.isRet()) {
-//                                  //startActivity(new Intent(ChanggeAddressActivity.this,
-//                                  //    AddressActivity.class));
-//                                  finish();
-//                                }
-//                              }
-//                            });
-//                        addSubscription(subscribe1);
-//                      } else {
-//                        //startActivity(new Intent(ChanggeAddressActivity.this,
-//                        //    AddressActivity.class));
-//                        finish();
-//                      }
+                      //                      if (isDefault) {
+                      //                        Subscription subscribe1 = AddressModel.getInstance()
+                      //                            .change_default(id)
+                      //                            .subscribeOn(Schedulers.io())
+                      //                            .subscribe(new ServiceResponse<AddressResultBean>() {
+                      //                              @Override
+                      //                              public void onNext(AddressResultBean addressResultBean1) {
+                      //                                if (addressResultBean1 != null
+                      //                                    && addressResultBean1.isRet()) {
+                      //                                  //startActivity(new Intent(ChanggeAddressActivity.this,
+                      //                                  //    AddressActivity.class));
+                      //                                  finish();
+                      //                                }
+                      //                              }
+                      //                            });
+                      //                        addSubscription(subscribe1);
+                      //                      } else {
+                      //                        //startActivity(new Intent(ChanggeAddressActivity.this,
+                      //                        //    AddressActivity.class));
+                      //                        finish();
+                      //                      }
                     }
                   }
                 }
               });
           addSubscription(subscribe);
         }
-
         break;
 
-      case R.id.delete:
+      //case R.id.delete:
+      //
+      //
+      //
+      //  break;
+    }
+  }
 
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.menu_select, menu);
+    return super.onCreateOptionsMenu(menu);
+  }
+
+  @Override public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      case R.id.action_delete:
         Subscription subscribe = AddressModel.getInstance()
             .delete_address(id)
             .subscribeOn(Schedulers.io())
@@ -192,9 +207,11 @@ public class ChanggeAddressActivity extends BaseSwipeBackCompatActivity
               }
             });
         addSubscription(subscribe);
-
         break;
+
     }
+
+    return super.onOptionsItemSelected(item);
   }
 
   public boolean checkInput(String receivername, String mobile, String address1,
