@@ -138,7 +138,6 @@ public class MMHaveChooseAdapter
 
         public MMHaveChooseVH(View itemView) {
             super(itemView);
-
             ButterKnife.bind(this, itemView);
             AutoUtils.auto(itemView);
         }

@@ -62,9 +62,8 @@ public class ShoppingListAdapter
 
     @Override
     public void onBindViewHolder(ShoppingListVH holder, int position) {
-
+        holder.flagRl.setVisibility(View.GONE);
         OderCarryBean.ResultsEntity resultsEntity = mList.get(position);
-
         try {
             if (position == 0) {
                 showCategory(holder);
@@ -97,8 +96,11 @@ public class ShoppingListAdapter
         holder.wxordernick.setText(resultsEntity.getContributorNick());
         holder.timeDisplay.setText(resultsEntity.getCreated().substring(11, 16));
         holder.totalMoneyTv.setText("实付" + resultsEntity.getOrderValue());
-        String carryTypeName = resultsEntity.getCarryTypeName();
-        if (carryTypeName.contains("订单")) {
+        if (resultsEntity.getCarryType() == 2) {
+            holder.flagTv.setText("APP");
+            holder.flagRl.setVisibility(View.VISIBLE);
+        } else if (resultsEntity.getCarryType() == 3) {
+            holder.flagTv.setText("下属订单");
             holder.flagRl.setVisibility(View.VISIBLE);
         } else {
             holder.flagRl.setVisibility(View.GONE);
@@ -150,6 +152,8 @@ public class ShoppingListAdapter
         TextView totalMoneyTv;
         @Bind(R.id.flag)
         RelativeLayout flagRl;
+        @Bind(R.id.flag_tv)
+        TextView flagTv;
 
         public ShoppingListVH(View itemView) {
             super(itemView);

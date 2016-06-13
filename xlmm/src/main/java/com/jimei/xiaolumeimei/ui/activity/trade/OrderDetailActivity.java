@@ -42,6 +42,7 @@ import com.jimei.xiaolumeimei.ui.activity.user.WaitSendAddressActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.pingplusplus.android.PaymentActivity;
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -386,6 +387,8 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onPageStart(this.getClass().getSimpleName());
+        MobclickAgent.onResume(this);
         Subscription subscription = TradeModel.getInstance()
                 .getOrderDetailBean(order_id)
                 .subscribeOn(Schedulers.io())
@@ -593,5 +596,12 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                 iconImg = ((ImageView) itemView.findViewById(R.id.icon));
             }
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+        MobclickAgent.onPause(this);
     }
 }

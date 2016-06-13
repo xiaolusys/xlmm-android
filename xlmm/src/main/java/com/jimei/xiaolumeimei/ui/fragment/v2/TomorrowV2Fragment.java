@@ -28,6 +28,7 @@ import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import com.umeng.analytics.MobclickAgent;
 
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
@@ -237,6 +238,7 @@ public class TomorrowV2Fragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        MobclickAgent.onPageStart(this.getClass().getSimpleName());
         ProductModel.getInstance()
                 .getTodayList(1, 1)
                 .subscribeOn(Schedulers.io())
@@ -336,4 +338,12 @@ public class TomorrowV2Fragment extends BaseFragment {
         }
 
     }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+    }
+
 }

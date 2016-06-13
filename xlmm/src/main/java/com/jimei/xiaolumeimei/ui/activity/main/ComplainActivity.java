@@ -17,6 +17,8 @@ import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import com.umeng.analytics.MobclickAgent;
+
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -103,5 +105,18 @@ public class ComplainActivity extends BaseSwipeBackCompatActivity
     InputMethodManager m =
         (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
     m.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
+  }
+  @Override
+  protected void onResume() {
+    super.onResume();
+    MobclickAgent.onPageStart(this.getClass().getSimpleName());
+    MobclickAgent.onResume(this);
+  }
+
+  @Override
+  protected void onPause() {
+    super.onPause();
+    MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+    MobclickAgent.onPause(this);
   }
 }
