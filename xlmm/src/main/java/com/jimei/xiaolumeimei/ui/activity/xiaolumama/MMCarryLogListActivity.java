@@ -86,7 +86,7 @@ public class MMCarryLogListActivity extends BaseSwipeBackCompatActivity {
     carryloglistXry.setPullRefreshEnabled(false);
     carryloglistXry.setLoadingMoreEnabled(true);
 
-    adapter = new CarryLogAllAdapter(this);
+    adapter = new CarryLogAllAdapter();
     carryloglistXry.setAdapter(adapter);
 
     carryloglistXry.setLoadingListener(new XRecyclerView.LoadingListener() {

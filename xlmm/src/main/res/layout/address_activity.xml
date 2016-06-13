@@ -1,28 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-  <com.jimei.xiaolumeimei.widget.XlmmTitleView
-      android:id="@+id/app_bar_layout"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      app:xlmm_title="地址管理"/>
-  <android.support.v7.widget.RecyclerView
-      android:layout_below="@id/app_bar_layout"
-      android:id="@+id/address_recyclerView"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"/>
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
 
-  <Button
-      android:layout_marginBottom="16dp"
-      android:layout_centerHorizontal="true"
-      android:textColor="@color/white"
-      android:layout_width="660px"
-      android:text="添加地址"
-      android:id="@+id/addAdress"
-      android:background="@drawable/shape_common"
-      android:layout_alignParentBottom="true"
-      android:layout_height="wrap_content"/>
-</RelativeLayout>
+    <com.jimei.xiaolumeimei.widget.XlmmTitleView
+        android:id="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:xlmm_title="地址管理" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/address_recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/addAdress"
+        android:layout_width="660px"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/shape_common"
+        android:text="添加地址"
+        android:textColor="@color/white" />
+</LinearLayout>

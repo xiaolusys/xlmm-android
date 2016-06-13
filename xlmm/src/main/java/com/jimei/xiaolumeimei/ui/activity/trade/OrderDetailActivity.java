@@ -94,6 +94,10 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     @Bind(R.id.logistics_right)
     ImageView logisticsRightImage;
     ListView listView;
+    @Bind(R.id.rl_pay)
+    RelativeLayout relativeLayout;
+    @Bind(R.id.iv_pay)
+    ImageView imageView;
     private ArrayList<PackageBean> packageBeanList;
     int order_id = 0;
     OrderDetailBean orderDetail;
@@ -204,7 +208,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
 
                         @Override
                         public void onError(Throwable e) {
-
                             Log.e(TAG, " error:, " + e.toString());
                             super.onError(e);
                         }
@@ -238,7 +241,18 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         }
         JUtils.Log(TAG, "crt time " + orderDetailBean.getCreated());
         mGoodsAdapter = new OrderGoodsListAdapter(this);
-
+        String channel = orderDetailBean.getChannel();
+        if ("".equals(channel)) {
+            relativeLayout.setVisibility(View.GONE);
+        } else if (channel.contains("budget")) {
+            imageView.setImageResource(R.drawable.icon_xiaolu);
+        } else if (channel.contains("alipay")) {
+            imageView.setImageResource(R.drawable.alipay);
+        } else if (channel.contains("wx")) {
+            imageView.setImageResource(R.drawable.wx);
+        } else {
+            relativeLayout.setVisibility(View.GONE);
+        }
         packageBeanList = new ArrayList<>();
         Subscription subscribe = TradeModel.getInstance()
                 .getPackageList(tid)
@@ -556,16 +570,27 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
-            holder.nameTv.setText(logisticCompanies.get(position).getName());
+            String name = logisticCompanies.get(position).getName();
+            if (name.contains("申通")) {
+                holder.iconImg.setImageResource(R.drawable.icon_sto);
+            } else if (name.contains("邮政")) {
+                holder.iconImg.setImageResource(R.drawable.icon_ems);
+            } else if (name.contains("韵达")) {
+                holder.iconImg.setImageResource(R.drawable.icon_yunda);
+            } else if (name.contains("小鹿")) {
+                holder.iconImg.setImageResource(R.drawable.icon_xiaolu);
+            }
+            holder.nameTv.setText(name);
             return convertView;
         }
 
         private class ViewHolder {
             TextView nameTv;
+            ImageView iconImg;
 
             public ViewHolder(View itemView) {
                 nameTv = ((TextView) itemView.findViewById(R.id.name));
-
+                iconImg = ((ImageView) itemView.findViewById(R.id.icon));
             }
         }
     }

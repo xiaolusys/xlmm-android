@@ -38,7 +38,7 @@ public class AllRefundsListAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    public void clear(){
+    public void clear() {
         datas.clear();
         notifyDataSetChanged();
     }

@@ -131,7 +131,7 @@ public class CarryLogAllFragment extends BaseFragment {
         xRecyclerView.setPullRefreshEnabled(false);
         xRecyclerView.setLoadingMoreEnabled(true);
 
-        adapter = new CarryLogAllAdapter(getActivity());
+        adapter = new CarryLogAllAdapter();
         xRecyclerView.setAdapter(adapter);
 
         xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {

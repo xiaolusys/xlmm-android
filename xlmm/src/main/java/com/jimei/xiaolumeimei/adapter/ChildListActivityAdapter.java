@@ -30,15 +30,9 @@ public class ChildListActivityAdapter
 
   private Context mContext;
 
-  private onItemClickListener listener;
-
   public ChildListActivityAdapter(Context mContext) {
     this.mContext = mContext;
     mList = new ArrayList<>();
-  }
-
-  public void setOnItemClickListener(onItemClickListener listener) {
-    this.listener = listener;
   }
 
   public void updateWithClear(List<ChildListBean.ResultsEntity> list) {
@@ -48,16 +42,10 @@ public class ChildListActivityAdapter
   }
 
   public void update(List<ChildListBean.ResultsEntity> list) {
-
     mList.addAll(list);
     notifyDataSetChanged();
   }
 
-  public void updateStart(List<ChildListBean.ResultsEntity> list) {
-
-    mList.addAll(0, list);
-    notifyDataSetChanged();
-  }
 
   public ChildListBean.ResultsEntity getData(int postion) {
 
@@ -117,62 +105,9 @@ public class ChildListActivityAdapter
       e.printStackTrace();
     }
 
-    //String[] temp = headImg.split("http://image.xiaolu.so/");
-    //String head_img = "";
-    //if (temp.length > 1) {
-    //  try {
-    //    head_img += "http://image.xiaolu.so/"
-    //        + URLEncoder.encode(temp[1], "utf-8")
-    //        + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
-    //  } catch (UnsupportedEncodingException e) {
-    //    e.printStackTrace();
-    //  }
-    //}
-
     holder.card.setTag(new Object());
-    //Glide.with(mContext)
-    //    .load(head_img)
-    //    .diskCacheStrategy(DiskCacheStrategy.ALL)
-    //    .placeholder(R.drawable.parceholder)
-    //    .centerCrop()
-    //    .into(holder.childlistImage)
-    //    .getSize((width, height) -> {
-    //      if (!holder.card.isShown()) holder.card.setVisibility(View.VISIBLE);
-    //    });
     ViewUtils.loadImgToImgViewWithPlaceholder(mContext, holder.childlistImage, headImg);
     holder.card.setOnClickListener(v -> {
-
-      //String product_id = null;
-      //int model_id = 0;
-      //String name = null;
-      //Bundle bundle;
-      //
-      //ChildListBean.ResultsEntity.ProductModelEntity model =
-      //    mList.get(position).getProductModel();
-      //try {
-      //  product_id = mList.get(position).getId();
-      //  model_id = mList.get(position).getModelId();
-      //  name = model.getName();
-      //} catch (Exception e) {
-      //  e.printStackTrace();
-      //}
-      //
-      //bundle = new Bundle();
-      //bundle.putString("product_id", product_id);
-      //bundle.putInt("model_id", model_id);
-      //if (name != null) {
-      //  bundle.putString("name", name.split("/")[0]);
-      //}
-      //if (model == null || !model.isIsSingleSpec()) {
-      //  Intent intent = new Intent(mContext, TongkuanActivity.class);
-      //  intent.putExtras(bundle);
-      //  mContext.startActivity(intent);
-      //} else {
-      //  Intent intent = new Intent(mContext, ProductDetailActvityWeb.class);
-      //  intent.putExtras(bundle);
-      //  mContext.startActivity(intent);
-      //}
-
       int modelId = mList.get(position).getModelId();
 
       JumpUtils.jumpToWebViewWithCookies(mContext,mList.get(position).getWebUrl(),
@@ -185,9 +120,6 @@ public class ChildListActivityAdapter
     return mList == null ? 0 : mList.size();
   }
 
-  public interface onItemClickListener {
-    void itemClick(View view, int position);
-  }
 
   static class ChildListVH extends RecyclerView.ViewHolder
       implements View.OnClickListener {
@@ -198,7 +130,6 @@ public class ChildListActivityAdapter
     @Bind(R.id.childlist_agent_price) TextView childlistAgentPrice;
     @Bind(R.id.childlist_stdsale_price) TextView childlistStdsalePrice;
     @Bind(R.id.saleout) TextView saleout;
-    private onItemClickListener listener;//点击事件
 
     public ChildListVH(View itemView) {
       super(itemView);

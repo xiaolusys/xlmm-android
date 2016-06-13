@@ -137,7 +137,7 @@ public class LadyListActivity extends BaseSwipeBackCompatActivity
                   if (ladyListBean != null) {
                     List<LadyListBean.ResultsEntity> results = ladyListBean.getResults();
                     totalPages = ladyListBean.getCount() / page_size + 1;
-                    mLadyListAdapter.update(results);
+                    mLadyListAdapter.updateWithClear(results);
                   }
                 } catch (Exception ex) {
                 }
@@ -178,7 +178,7 @@ public class LadyListActivity extends BaseSwipeBackCompatActivity
                   if (ladyListBean != null) {
                     List<LadyListBean.ResultsEntity> results = ladyListBean.getResults();
                     totalPages = ladyListBean.getCount() / page_size + 1;
-                    mLadyListAdapter2.update(results);
+                    mLadyListAdapter2.updateWithClear(results);
                   }
                 } catch (Exception ex) {
                 }
@@ -187,7 +187,7 @@ public class LadyListActivity extends BaseSwipeBackCompatActivity
               @Override public void onCompleted() {
                 super.onCompleted();
                 try {
-                  byXRecyclerView.post(xRecyclerView::refreshComplete);
+                  byXRecyclerView.post(byXRecyclerView::refreshComplete);
                 } catch (Exception e) {
                   e.printStackTrace();
                 }

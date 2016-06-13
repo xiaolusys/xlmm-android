@@ -137,7 +137,7 @@ public class CarryLogCashbackFragment extends BaseFragment {
     xRecyclerView.setPullRefreshEnabled(false);
     xRecyclerView.setLoadingMoreEnabled(true);
 
-    adapter = new ClickCarryLogAdapter(getActivity());
+    adapter = new ClickCarryLogAdapter();
     xRecyclerView.setAdapter(adapter);
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
