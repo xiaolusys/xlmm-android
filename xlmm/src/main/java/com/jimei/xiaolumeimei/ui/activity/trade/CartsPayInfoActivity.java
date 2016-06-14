@@ -7,7 +7,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatSpinner;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -77,7 +76,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.payinfo_listview) NestedListView payinfoListview;
   @Bind(R.id.total_price) TextView totalPrice;
   @Bind(R.id.total_price_all) TextView totalPrice_all;
-  @Nullable @Bind(R.id.jiesheng) TextView jiesheng;
+  @Bind(R.id.jiesheng) TextView jiesheng;
   @Bind(R.id.confirm) Button confirm;
   @Bind(R.id.post_fee) TextView tv_postfee;
   @Bind(R.id.coupon_layout) RelativeLayout coupon_layout;
@@ -304,7 +303,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
               }
 
               tvWuliu.setText(logisticsCompanyses.get(0).getName());
-              code = logisticsCompanyses.get(0).getCode();
+              code = logisticsCompanyses.get(0).getId();
 
               budgetCash =
                   (double) (Math.round(cartsPayinfoBean.getBudget_cash() * 100)) / 100
@@ -1108,6 +1107,9 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
       LinearLayout wx_layout = (LinearLayout) mView.findViewById(R.id.wx_layout);
       LinearLayout alipay_layout = (LinearLayout) mView.findViewById(R.id.alipay_layout);
+      TextView textView = (TextView) mView.findViewById(R.id.total_price);
+
+      textView.setText("¥" + (double) (Math.round(paymentInfo * 100)) / 100);
 
       alipay_layout.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View v) {
@@ -1160,7 +1162,8 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
       listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-          code = logisticsCompanyses.get(position).getCode();
+          code = logisticsCompanyses.get(position).getId();
+
           tvWuliu.setText(logisticsCompanyses.get(position).getName());
           MyDialog1.this.dismiss();
         }

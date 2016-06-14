@@ -21,6 +21,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.PreviousAdapter;
 import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
+import com.jimei.xiaolumeimei.event.TimeEvent;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -29,6 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import org.greenrobot.eventbus.EventBus;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -207,6 +209,21 @@ public class YesterdayV2Fragment extends BaseFragment {
         }
       }
     });
+  }
+
+  @Override public void onResume() {
+    super.onResume();
+    ProductModel.getInstance()
+        .getTodayList(1, 1)
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<ProductListBean>() {
+          @Override public void onNext(ProductListBean productListBean) {
+            if (null != productListBean) {
+              String upshelfStarttime = productListBean.getUpshelfStarttime();
+              EventBus.getDefault().post(new TimeEvent(upshelfStarttime));
+            }
+          }
+        });
   }
 
   private void loadMoreData(int page, int page_size) {

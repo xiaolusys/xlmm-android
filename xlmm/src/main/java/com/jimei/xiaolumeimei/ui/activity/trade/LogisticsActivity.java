@@ -1,20 +1,8 @@
 package com.jimei.xiaolumeimei.ui.activity.trade;
 
-import android.content.Context;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import butterknife.Bind;
@@ -24,12 +12,9 @@ import com.jimei.xiaolumeimei.adapter.GoodsListAdapter;
 import com.jimei.xiaolumeimei.adapter.GoodsListAdapter2;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
-import com.jimei.xiaolumeimei.entities.LogisticCompany;
 import com.jimei.xiaolumeimei.entities.LogisticsBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.PackageBean;
-import com.jimei.xiaolumeimei.entities.ResultBean;
-import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.widget.LogImageView;
 import com.jimei.xiaolumeimei.widget.LogMsgView;
@@ -42,7 +27,7 @@ import java.util.List;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
-public class LogisticsActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener {
+public class LogisticsActivity extends BaseSwipeBackCompatActivity {
     @Bind(R.id.tv_company)
     TextView companyTv;
     @Bind(R.id.tv_order)
@@ -57,14 +42,9 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity implements Vi
     TextView lastStateTv;
     @Bind(R.id.lv)
     ListView mListView;
-    @Bind(R.id.right)
-    ImageView rightImage;
-    @Bind(R.id.company_layout)
-    LinearLayout layout;
     @Bind(R.id.ll_container)
     LinearLayout containerLayout;
 
-    PopupWindow pop;
     private ArrayList<PackageBean> packageBeanList;
     private String packetid = "";
     private String company_code = "";
@@ -72,7 +52,7 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity implements Vi
     private String tid = "";
     private String stateStr = "";
     private String key = "";
-    private int id;
+    private int referal_trade_id;
 
     @Override
     protected void setListener() {
@@ -120,30 +100,32 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity implements Vi
 
                         @Override
                         public void onError(Throwable e) {
+                            JUtils.Toast(e.getMessage());
                         }
                     });
             addSubscription(subscribe);
         } else {
             JUtils.Toast("获取物流信息失败,请联系小鹿美美客服查询!");
         }
+        Subscription subscription = TradeModel.getInstance()
+                .getOrderDetailBean(referal_trade_id)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ServiceResponse<OrderDetailBean>() {
+                    @Override
+                    public void onNext(OrderDetailBean orderDetailBean) {
+                        if (orderDetailBean.getUser_adress() != null) {
+                            companyTv.setText(orderDetailBean.getLogistics_company().getName());
+                            companyTv.setTextColor(getResources().getColor(R.color.colorAccent));
+                        } else {
+                            companyTv.setText("小鹿推荐");
+                        }
 
+                    }
+                });
+        addSubscription(subscription);
     }
 
     private void fillDataToView(LogisticsBean logisticsBean) {
-        if (logisticsBean.getName() != "" && logisticsBean.getName() != null) {
-            companyTv.setText(logisticsBean.getName());
-            companyTv.setTextColor(getResources().getColor(R.color.colorAccent));
-        } else {
-            companyTv.setText("小鹿推荐快递");
-        }
-
-        if ("已付款".equals(stateStr)) {
-            rightImage.setVisibility(View.VISIBLE);
-            layout.setOnClickListener(this);
-        } else {
-            rightImage.setVisibility(View.GONE);
-        }
-
         if (logisticsBean.getOrder() != "" && logisticsBean.getOrder() != null) {
             orderTv.setText(logisticsBean.getOrder());
         } else {
@@ -162,13 +144,15 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity implements Vi
             OrderDetailActivity.setListViewHeightBasedOnChildren(mListView);
         } else {
             Subscription subscription = TradeModel.getInstance()
-                    .getOrderDetailBean(id)
+                    .getOrderDetailBean(referal_trade_id)
                     .subscribeOn(Schedulers.io())
                     .subscribe(new ServiceResponse<OrderDetailBean>() {
                         @Override
                         public void onNext(OrderDetailBean orderDetailBean) {
                             ArrayList<AllOrdersBean.ResultsEntity.OrdersEntity> orders = orderDetailBean.getOrders();
                             mListView.setAdapter(new GoodsListAdapter2(orders, getApplicationContext()));
+                            OrderDetailActivity.setListViewHeightBasedOnChildren(mListView);
+
                         }
                     });
             addSubscription(subscription);
@@ -202,7 +186,7 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity implements Vi
         time = extras.getString("time");
         stateStr = extras.getString("state");
         packageBeanList = (ArrayList<PackageBean>) extras.getSerializable("list");
-        id = extras.getInt("id");
+        referal_trade_id = extras.getInt("id");
         key = extras.getString("key");
     }
 
@@ -213,49 +197,6 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity implements Vi
 
     @Override
     protected void initViews() {
-        View view = getLayoutInflater().inflate(R.layout.pop_layout, null);
-        pop = new PopupWindow(view, LayoutParams.MATCH_PARENT,
-                LayoutParams.WRAP_CONTENT, true);
-        pop.setBackgroundDrawable(new BitmapDrawable());
-        pop.setOutsideTouchable(false);
-        pop.setFocusable(true);
-        pop.setTouchable(true);
-        View closeIv = view.findViewById(R.id.close_iv);
-        ListView listView = (ListView) view.findViewById(R.id.lv_logistics_company);
-
-        closeIv.setOnClickListener(this);
-        Subscription subscribe = ActivityModel.getInstance()
-                .getLogisticCompany(id + "")
-                .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<List<LogisticCompany>>() {
-                    @Override
-                    public void onNext(List<LogisticCompany> logisticCompanies) {
-                        CompanyAdapter adapter = new CompanyAdapter(logisticCompanies, getApplicationContext());
-                        listView.setAdapter(adapter);
-                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                String code = logisticCompanies.get(position).getCode();
-                                ActivityModel.getInstance()
-                                        .changeLogisticCompany(id + "", code)
-                                        .subscribeOn(Schedulers.io())
-                                        .subscribe(new ServiceResponse<ResultBean>() {
-                                            @Override
-                                            public void onNext(ResultBean resultBean) {
-                                                JUtils.Toast(resultBean.getMessage());
-                                                changePopupWindowState();
-                                            }
-
-                                            @Override
-                                            public void onError(Throwable e) {
-                                                JUtils.Toast("修改异常");
-                                            }
-                                        });
-                            }
-                        });
-                    }
-                });
-        addSubscription(subscribe);
     }
 
     @Override
@@ -268,71 +209,4 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity implements Vi
         return null;
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.company_layout:
-                changePopupWindowState();
-                break;
-            case R.id.close_iv:
-                changePopupWindowState();
-                break;
-        }
-    }
-
-    private void changePopupWindowState() {
-        if (pop.isShowing()) {
-            pop.dismiss();
-        } else {
-            pop.showAtLocation(containerLayout, Gravity.BOTTOM, 0, 0);
-        }
-    }
-
-    public class CompanyAdapter extends BaseAdapter {
-        private List<LogisticCompany> logisticCompanies;
-        private Context context;
-
-        public CompanyAdapter(List<LogisticCompany> logisticCompanies, Context context) {
-            this.logisticCompanies = logisticCompanies;
-            this.context = context;
-        }
-
-        @Override
-        public int getCount() {
-            return logisticCompanies.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return logisticCompanies.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder holder;
-            if (convertView == null) {
-                convertView = LayoutInflater.from(context).inflate(R.layout.item_logistics, null);
-                holder = new ViewHolder(convertView);
-                convertView.setTag(holder);
-            } else {
-                holder = (ViewHolder) convertView.getTag();
-            }
-            holder.nameTv.setText(logisticCompanies.get(position).getName());
-            return convertView;
-        }
-
-        private class ViewHolder {
-            TextView nameTv;
-
-            public ViewHolder(View itemView) {
-                nameTv = ((TextView) itemView.findViewById(R.id.name));
-
-            }
-        }
-    }
 }

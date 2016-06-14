@@ -20,6 +20,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
+import com.jimei.xiaolumeimei.event.EmptyEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
@@ -32,6 +33,7 @@ import com.jimei.xiaolumeimei.widget.PasswordEditText;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.xiaomi.mipush.sdk.MiPushClient;
+import org.greenrobot.eventbus.EventBus;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -122,6 +124,7 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                       + codeBean.getMsg());
                   if (codeBean.getRcode() == 0) {
                     hideIndeterminateProgressDialog();
+
                     LoginUtils.saveLoginInfo(true, getApplicationContext(),
                         login_name_value, login_pass_value);
                     JUtils.Toast("登录成功!");
@@ -188,10 +191,12 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                         //bundle.putString("actlink", actlink);
                         //intent.putExtras(bundle);
                         //startActivity(intent);
+                        EventBus.getDefault().postSticky(new EmptyEvent());
                         JumpUtils.jumpToWebViewWithCookies(mContext, actlink, -1,
                             ProductPopDetailActvityWeb.class);
                         finish();
                       } else if (login.equals("goactivity")) {
+                        EventBus.getDefault().postSticky(new EmptyEvent());
                         JumpUtils.jumpToWebViewWithCookies(mContext, actlink, id,
                             ActivityWebViewActivity.class,title);
                         finish();

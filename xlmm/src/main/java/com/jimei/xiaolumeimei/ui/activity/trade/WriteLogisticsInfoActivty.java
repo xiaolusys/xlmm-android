@@ -3,11 +3,15 @@ package com.jimei.xiaolumeimei.ui.activity.trade;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MotionEventCompat;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import butterknife.Bind;
 
@@ -37,7 +41,14 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
     EditText et_logistics_number;
     @Bind(R.id.btn_commit)
     Button btn_commit;
-
+    @Bind(R.id.tv_name)
+    TextView nameTv;
+    @Bind(R.id.tv_phone)
+    TextView phoneTv;
+    @Bind(R.id.tv_address)
+    TextView addressTv;
+    @Bind(R.id.tv_reason)
+    TextView reasonTv;
     private String address;
     String company;
     int goods_id;
@@ -49,6 +60,16 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
 
     @Override
     protected void initData() {
+        String[] split = address.split("，");
+        for (String s : split) {
+            if (s.contains("市")) {
+                addressTv.setText(s);
+            } else if (s.contains("小鹿")) {
+                nameTv.setText("收件人:小鹿售后");
+            } else {
+                phoneTv.setText("联系电话:" + s);
+            }
+        }
     }
 
     @Override
@@ -66,7 +87,6 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
     protected void initViews() {
         et_logistics_company.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
-                //et_refund_reason.setInputType(InputType.TYPE_NULL); //关闭软键盘
                 if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
                     Log.d(TAG, "choose logistics commpay");
                     Intent intent = new Intent(WriteLogisticsInfoActivty.this,
@@ -78,6 +98,12 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
                 return false;
             }
         });
+        SpannableStringBuilder builder = new SpannableStringBuilder(reasonTv.getText().toString());
+        //ForegroundColorSpan 为文字前景色，BackgroundColorSpan为文字背景色
+        ForegroundColorSpan colorSpan = new ForegroundColorSpan(getResources().getColor(R.color.colorAccent));
+        builder.setSpan(colorSpan, 20, reasonTv.getText().toString().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        reasonTv.setText(builder);
+
     }
 
     @Override

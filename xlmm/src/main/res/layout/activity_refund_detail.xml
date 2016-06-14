@@ -326,6 +326,7 @@
                 android:textSize="14sp" />
 
             <RelativeLayout
+                android:id="@+id/image_layout"
                 android:layout_width="110px"
                 android:layout_height="110px"
                 android:layout_margin="8dp"

@@ -39,18 +39,10 @@
 
                 <TextView
                     android:id="@+id/tv_company"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:gravity="end"
                     android:textColor="@color/text_color_62" />
-
-                <ImageView
-                    android:id="@+id/right"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:src="@mipmap/common_icon_right_arrow" />
 
             </LinearLayout>
 
@@ -94,10 +86,17 @@
 
             <include layout="@layout/common_gap" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="@color/bg_grey" />
+
+            <include layout="@layout/common_gap" />
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/bg_grey">
+                android:background="@color/white">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -159,6 +158,8 @@
 
                 </LinearLayout>
             </RelativeLayout>
+
+            <include layout="@layout/common_gap" />
 
             <View
                 android:layout_width="match_parent"

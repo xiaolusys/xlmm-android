@@ -4,13 +4,34 @@
     android:layout_width="match_parent"
     android:background="@color/white"
     android:layout_height="wrap_content">
-  <RelativeLayout
-
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content">
-
-  </RelativeLayout>
   <LinearLayout
+      android:id="@+id/ll"
+      android:layout_width="match_parent"
+      android:layout_height="70px"
+      android:layout_marginTop="19px"
+      android:gravity="center"
+      android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="应付款金额"
+        android:textColor="#26262e"
+        android:textSize="30px"/>
+
+    <TextView
+        android:id="@+id/total_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2px"
+        android:text=""
+        android:textColor="@color/colorPrimary"
+        android:textSize="30px"/>
+
+  </LinearLayout>
+  <include layout="@layout/common_gap"/>
+  <LinearLayout
+      android:layout_below="@id/ll"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:background="@color/white"
