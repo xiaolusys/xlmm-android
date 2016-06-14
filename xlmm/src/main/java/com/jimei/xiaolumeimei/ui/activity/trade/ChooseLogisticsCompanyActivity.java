@@ -14,6 +14,8 @@ import com.jimei.xiaolumeimei.adapter.CompanyAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.LogisticsCompanyInfo;
 import com.jimei.xiaolumeimei.widget.SideBar;
+import com.umeng.analytics.MobclickAgent;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,6 +98,20 @@ public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
     switch (v.getId()) {
 
     }
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    MobclickAgent.onPageStart(this.getClass().getSimpleName());
+    MobclickAgent.onResume(this);
+  }
+
+  @Override
+  protected void onPause() {
+    super.onPause();
+    MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+    MobclickAgent.onPause(this);
   }
 
   private void fillCompanyInfo() {

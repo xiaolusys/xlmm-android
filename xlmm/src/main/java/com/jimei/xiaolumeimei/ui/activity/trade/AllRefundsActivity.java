@@ -22,6 +22,7 @@ import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
@@ -111,6 +112,8 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity
     protected void onResume() {
         showIndeterminateProgressDialog(false);
         super.onResume();
+        MobclickAgent.onPageStart(this.getClass().getSimpleName());
+        MobclickAgent.onResume(this);
         page = 2;
         mAllRefundsAdapter.clear();
         Subscription subscription = TradeModel.getInstance()
@@ -191,5 +194,12 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity
                     }
                 });
         addSubscription(subscription2);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+        MobclickAgent.onPause(this);
     }
 }

@@ -19,6 +19,7 @@ import com.jimei.xiaolumeimei.ui.fragment.v2.CarryLogCashbackFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.CarryLogCommissionFragment;
 import com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableHelper;
 import com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableLayout;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,11 +66,15 @@ public class MMcarryLogActivity extends BaseSwipeBackCompatActivity implements V
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onPageStart(this.getClass().getSimpleName());
+        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+        MobclickAgent.onPause(this);
     }
 
     @Override

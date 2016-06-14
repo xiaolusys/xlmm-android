@@ -38,6 +38,8 @@ import com.jimei.xiaolumeimei.widget.FlowLayout;
 import com.jimei.xiaolumeimei.widget.TagAdapter;
 import com.jimei.xiaolumeimei.widget.TagFlowLayout;
 import com.jude.utils.JUtils;
+import com.umeng.analytics.MobclickAgent;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -265,6 +267,8 @@ public class ProductPopDetailActvityWeb extends BaseSwipeBackCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+        MobclickAgent.onPause(this);
         CookieSyncManager.createInstance(this);
         CookieSyncManager.getInstance().stopSync();
         mWebView.onPause();
@@ -273,6 +277,8 @@ public class ProductPopDetailActvityWeb extends BaseSwipeBackCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onPageStart(this.getClass().getSimpleName());
+        MobclickAgent.onResume(this);
         CookieSyncManager.createInstance(this);
         CookieSyncManager.getInstance().startSync();
         mWebView.onResume();

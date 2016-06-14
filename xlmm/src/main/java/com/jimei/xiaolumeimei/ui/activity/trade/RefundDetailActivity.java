@@ -25,6 +25,7 @@ import com.jimei.xiaolumeimei.widget.MyHorizontalScrollView;
 import com.jimei.xiaolumeimei.widget.RoundCornerImageView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -223,11 +224,6 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_write:
@@ -258,5 +254,19 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
                 finish();
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(this.getClass().getSimpleName());
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+        MobclickAgent.onPause(this);
     }
 }

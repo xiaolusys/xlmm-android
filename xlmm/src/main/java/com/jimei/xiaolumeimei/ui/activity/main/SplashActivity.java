@@ -10,6 +10,7 @@ import android.view.WindowManager;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseAppCompatActivityForDetail;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -77,5 +78,19 @@ public class SplashActivity extends BaseAppCompatActivityForDetail {
     @Override
     protected int getContentViewLayoutID() {
         return R.layout.activity_splash;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(this.getClass().getSimpleName());
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+        MobclickAgent.onPause(this);
     }
 }

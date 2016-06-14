@@ -20,6 +20,7 @@ import com.jimei.xiaolumeimei.widget.LogImageView;
 import com.jimei.xiaolumeimei.widget.LogMsgView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -212,4 +213,17 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
         return null;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(this.getClass().getSimpleName());
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+        MobclickAgent.onPause(this);
+    }
 }
