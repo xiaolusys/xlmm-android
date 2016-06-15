@@ -20,6 +20,7 @@ import com.jimei.xiaolumeimei.widget.LogImageView;
 import com.jimei.xiaolumeimei.widget.LogMsgView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +45,8 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
     ListView mListView;
     @Bind(R.id.ll_container)
     LinearLayout containerLayout;
+    @Bind(R.id.tv_number)
+    TextView numTv;
 
     private ArrayList<PackageBean> packageBeanList;
     private String packetid = "";
@@ -113,7 +116,7 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
                 .subscribe(new ServiceResponse<OrderDetailBean>() {
                     @Override
                     public void onNext(OrderDetailBean orderDetailBean) {
-                        if (orderDetailBean.getUser_adress() != null) {
+                        if (orderDetailBean.getLogistics_company() != null) {
                             companyTv.setText(orderDetailBean.getLogistics_company().getName());
                             companyTv.setTextColor(getResources().getColor(R.color.colorAccent));
                         } else {
@@ -131,6 +134,7 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
         } else {
             orderTv.setTextColor(getResources().getColor(R.color.colorAccent));
             orderTv.setText(stateStr);
+            numTv.setText("包裹状态");
         }
 
         if (packageBeanList.size() != 0) {
@@ -209,4 +213,17 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
         return null;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(this.getClass().getSimpleName());
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+        MobclickAgent.onPause(this);
+    }
 }

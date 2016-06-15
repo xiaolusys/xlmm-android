@@ -20,6 +20,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import com.umeng.analytics.MobclickAgent;
 
 import okhttp3.ResponseBody;
 import rx.Subscription;
@@ -183,5 +184,19 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
                     }
                 });
         addSubscription(subscription);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(this.getClass().getSimpleName());
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+        MobclickAgent.onPause(this);
     }
 }

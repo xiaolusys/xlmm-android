@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -13,15 +12,15 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="120px">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:id="@+id/close_iv"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:gravity="center"
-            android:padding="30px">
+            android:padding="20px">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -33,32 +32,19 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:gravity="center"
+            android:padding="20px"
             android:text="物流配送"
-            android:textSize="20sp"
-            android:textColor="@color/text_color_62" />
+            android:textColor="@color/text_color_62"
+            android:textSize="20sp" />
     </RelativeLayout>
 
-
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#33DADADA" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#33DADADA" />
-
 
     <ListView
         android:id="@+id/lv_logistics_company"

@@ -57,8 +57,8 @@
 
   <!-- ShareByAppClient标识是否使用微博客户端分享，默认是false -->
   <SinaWeibo
-      Id="1"
-      SortId="1"
+      Id="5"
+      SortId="5"
       AppKey="2475629754"
       AppSecret="a3daa39a501ac9fcdb00cb73840fd7a1"
       RedirectUrl="http://m.xiaolumeimei.com/"
@@ -75,8 +75,8 @@
 
   <!-- ShareByAppClient标识是否使用微博客户端分享，默认是false -->
   <QZone
-      Id="3"
-      SortId="3"
+      Id="4"
+      SortId="4"
       AppId="1105166296"
       AppKey="KEYVEM8PJeqBE384GvD"
       ShareByAppClient="true"
@@ -95,16 +95,16 @@
   默认值为false。此外，微信收藏不支持此字段。
 -->
   <Wechat
-      Id="4"
-      SortId="4"
+      Id="1"
+      SortId="1"
       AppId="wx25fcb32689872499"
       AppSecret="3c7b4e3eb5ae4cfb132b2ac060a872ee"
       BypassApproval="false"
       Enable="true"/>
 
   <WechatMoments
-      Id="5"
-      SortId="5"
+      Id="2"
+      SortId="2"
       AppId="wx25fcb32689872499"
       AppSecret="3c7b4e3eb5ae4cfb132b2ac060a872ee"
       BypassApproval="false"
@@ -119,8 +119,8 @@
 
   <!-- ShareByAppClient标识是否使用微博客户端分享，默认是false -->
   <QQ
-      Id="7"
-      SortId="7"
+      Id="3"
+      SortId="3"
       AppId="1105166296"
       AppKey="KEYVEM8PJeqBE384GvD"
       ShareByAppClient="true"

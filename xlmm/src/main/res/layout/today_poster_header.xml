@@ -57,6 +57,10 @@
         app:isHideTimeBackground="false"
         app:timeBgColor="@color/white"
         app:isShowTimeBgDivisionLine="false"
+        app:suffixDay="天"
+        app:suffixHour="时"
+        app:suffixMinute="分"
+        app:suffixSecond="秒"
         />
 
 </RelativeLayout>

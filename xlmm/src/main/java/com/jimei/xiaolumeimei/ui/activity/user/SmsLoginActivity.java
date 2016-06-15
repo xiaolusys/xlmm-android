@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import butterknife.Bind;
+
 import com.jimei.library.rx.RxCountDown;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -24,8 +24,12 @@ import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.widget.ClearEditText;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import com.umeng.analytics.MobclickAgent;
 import com.xiaomi.mipush.sdk.MiPushClient;
+
 import org.greenrobot.eventbus.EventBus;
+
+import butterknife.Bind;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.functions.Action0;
@@ -268,5 +272,19 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
     if (subscribe != null && subscribe.isUnsubscribed()) {
       subscribe.unsubscribe();
     }
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    MobclickAgent.onPageStart(this.getClass().getSimpleName());
+    MobclickAgent.onResume(this);
+  }
+
+  @Override
+  protected void onPause() {
+    super.onPause();
+    MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+    MobclickAgent.onPause(this);
   }
 }

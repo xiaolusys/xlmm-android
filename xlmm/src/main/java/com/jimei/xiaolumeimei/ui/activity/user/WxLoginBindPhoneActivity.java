@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import butterknife.Bind;
+
 import com.jimei.library.rx.RxCountDown;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -21,8 +21,11 @@ import com.jimei.xiaolumeimei.widget.CircleImageView;
 import com.jimei.xiaolumeimei.widget.ClearEditText;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import com.umeng.analytics.MobclickAgent;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
+
+import butterknife.Bind;
 import okhttp3.Call;
 import rx.Subscriber;
 import rx.Subscription;
@@ -244,5 +247,19 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
     if (subscribe != null && subscribe.isUnsubscribed()) {
       subscribe.unsubscribe();
     }
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    MobclickAgent.onPageStart(this.getClass().getSimpleName());
+    MobclickAgent.onResume(this);
+  }
+
+  @Override
+  protected void onPause() {
+    super.onPause();
+    MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+    MobclickAgent.onPause(this);
   }
 }

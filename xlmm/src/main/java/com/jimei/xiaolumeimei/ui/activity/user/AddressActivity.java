@@ -6,7 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
-import butterknife.Bind;
+
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.AddressAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -14,7 +14,11 @@ import com.jimei.xiaolumeimei.entities.AddressBean;
 import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.umeng.analytics.MobclickAgent;
+
 import java.util.List;
+
+import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -39,22 +43,13 @@ public class AddressActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void initData() {
-        //model.getAddressList()
-        //    .subscribeOn(Schedulers.io())
-        //    .subscribe(new ServiceResponse<List<AddressBean>>() {
-        //      @Override public void onNext(List<AddressBean> list) {
-        //        super.onNext(list);
-        //        if (list != null) {
-        //          adapter.update(list);
-        //        }
-        //
-        //      }
-        //    });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onPageStart(this.getClass().getSimpleName());
+        MobclickAgent.onResume(this);
         Subscription subscribe = AddressModel.getInstance()
                 .getAddressList()
                 .subscribeOn(Schedulers.io())
@@ -107,5 +102,14 @@ public class AddressActivity extends BaseSwipeBackCompatActivity
                 startActivity(new Intent(AddressActivity.this, AddAddressActivity.class));
                 break;
         }
+    }
+
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+        MobclickAgent.onPause(this);
     }
 }

@@ -22,6 +22,7 @@ import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.widget.citypicker.CityPicker;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -201,5 +202,19 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
 
         break;
     }
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    MobclickAgent.onPageStart(this.getClass().getSimpleName());
+    MobclickAgent.onResume(this);
+  }
+
+  @Override
+  protected void onPause() {
+    super.onPause();
+    MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+    MobclickAgent.onPause(this);
   }
 }

@@ -22,6 +22,8 @@ import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.widget.DividerItemDecorationForFooter;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import com.umeng.analytics.MobclickAgent;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -137,7 +139,7 @@ public class CarryLogBounsFragment extends BaseFragment {
     xRecyclerView.setPullRefreshEnabled(false);
     xRecyclerView.setLoadingMoreEnabled(true);
 
-    adapter = new AwardCarryLogAdapter(getActivity());
+    adapter = new AwardCarryLogAdapter();
     xRecyclerView.setAdapter(adapter);
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
@@ -226,5 +228,17 @@ public class CarryLogBounsFragment extends BaseFragment {
   @Override
   public View getScrollableView() {
     return xRecyclerView;
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    MobclickAgent.onPageStart(this.getClass().getSimpleName());
+  }
+
+  @Override
+  public void onPause() {
+    super.onPause();
+    MobclickAgent.onPageEnd(this.getClass().getSimpleName());
   }
 }

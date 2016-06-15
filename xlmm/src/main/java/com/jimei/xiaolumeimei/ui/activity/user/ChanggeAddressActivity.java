@@ -14,7 +14,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import butterknife.Bind;
+
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
@@ -22,6 +22,9 @@ import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.widget.citypicker.CityPicker;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import com.umeng.analytics.MobclickAgent;
+
+import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -261,5 +264,19 @@ public class ChanggeAddressActivity extends BaseSwipeBackCompatActivity
 
         break;
     }
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    MobclickAgent.onPageStart(this.getClass().getSimpleName());
+    MobclickAgent.onResume(this);
+  }
+
+  @Override
+  protected void onPause() {
+    super.onPause();
+    MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+    MobclickAgent.onPause(this);
   }
 }

@@ -74,6 +74,7 @@ import com.jimei.xiaolumeimei.widget.banner.SliderTypes.DefaultSliderView;
 import com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableLayout;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
@@ -919,7 +920,8 @@ public class MainActivity extends BaseActivity
 
   @Override protected void onResume() {
     super.onResume();
-
+    MobclickAgent.onPageStart(this.getClass().getSimpleName());
+    MobclickAgent.onResume(this);
     resumeData();
 
     Subscription subscribe = CartsModel.getInstance()
@@ -1109,5 +1111,12 @@ public class MainActivity extends BaseActivity
     @Override public int getCount() {
       return list == null ? 0 : list.size();
     }
+  }
+
+  @Override
+  protected void onPause() {
+    super.onPause();
+    MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+    MobclickAgent.onPause(this);
   }
 }

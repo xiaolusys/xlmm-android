@@ -83,10 +83,6 @@ public class BrandActivityAdapter
     return mList.size();
   }
 
-  public interface itemOnclickListener {
-    void itemClick();
-  }
-
   static class BrandlistVH extends RecyclerView.ViewHolder {
 
     private final View cardview;

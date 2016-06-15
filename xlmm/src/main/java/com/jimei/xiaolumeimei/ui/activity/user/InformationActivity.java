@@ -19,6 +19,7 @@ import com.jimei.xiaolumeimei.widget.CircleImageView;
 import com.jimei.xiaolumeimei.widget.MyPreferenceView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import com.umeng.analytics.MobclickAgent;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
 import butterknife.Bind;
@@ -81,6 +82,8 @@ public class InformationActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onPageStart(this.getClass().getSimpleName());
+        MobclickAgent.onResume(this);
         Subscription subscribe = UserModel.getInstance()
                 .getUserInfo()
                 .subscribeOn(Schedulers.io())
@@ -188,5 +191,13 @@ public class InformationActivity extends BaseSwipeBackCompatActivity
                 break;
 
         }
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+        MobclickAgent.onPause(this);
     }
 }

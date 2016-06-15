@@ -6,6 +6,7 @@ import android.widget.Button;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 
@@ -55,5 +56,19 @@ public class DrawCashCompleteActivity extends BaseSwipeBackCompatActivity implem
                 finish();
                 break;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(this.getClass().getSimpleName());
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+        MobclickAgent.onPause(this);
     }
 }

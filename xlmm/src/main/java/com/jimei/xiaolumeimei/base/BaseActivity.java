@@ -64,12 +64,10 @@ public abstract class BaseActivity extends AutoLayoutActivity{
   @Override protected void onResume() {
     super.onResume();
     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-    MobclickAgent.onResume(this);
   }
 
   @Override protected void onPause() {
     super.onPause();
-    MobclickAgent.onPause(this);
   }
 
   public void finishBack(Toolbar toolbar) {

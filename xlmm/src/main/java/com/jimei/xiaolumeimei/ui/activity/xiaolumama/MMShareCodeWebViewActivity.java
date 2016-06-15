@@ -4,6 +4,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/03/10.
@@ -13,11 +14,11 @@ import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 
 public class MMShareCodeWebViewActivity extends CommonWebViewActivity {
 
-//    private String title, sharelink, desc, shareimg;
+    //    private String title, sharelink, desc, shareimg;
     @Override
     protected void initViews() {
         super.initViews();
-      webviewTitle.setText("我的邀请");
+        webviewTitle.setText("我的邀请");
     }
 
     @Override
@@ -52,5 +53,19 @@ public class MMShareCodeWebViewActivity extends CommonWebViewActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return false;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(this.getClass().getSimpleName());
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+        MobclickAgent.onPause(this);
     }
 }

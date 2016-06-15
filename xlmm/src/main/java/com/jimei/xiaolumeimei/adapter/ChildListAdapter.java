@@ -33,16 +33,10 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Chil
   private Fragment context;
   private Context mContext;
 
-  private onItemClickListener listener;
-
   public ChildListAdapter(Fragment context, Context mContext) {
     this.context = context;
     this.mContext = mContext;
     mList = new ArrayList<>();
-  }
-
-  public void setOnItemClickListener(onItemClickListener listener) {
-    this.listener = listener;
   }
 
   public void updateWithClear(List<ChildListBean.ResultsEntity> list) {
@@ -54,12 +48,6 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Chil
   public void update(List<ChildListBean.ResultsEntity> list) {
 
     mList.addAll(list);
-    notifyDataSetChanged();
-  }
-
-  public void updateStart(List<ChildListBean.ResultsEntity> list) {
-
-    mList.addAll(0, list);
     notifyDataSetChanged();
   }
 
@@ -122,28 +110,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Chil
       e.printStackTrace();
     }
 
-    //String[] temp = headImg.split("http://image.xiaolu.so/");
-    //String head_img = "";
-    //if (temp.length > 1) {
-    //  try {
-    //    head_img += "http://image.xiaolu.so/"
-    //        + URLEncoder.encode(temp[1], "utf-8")
-    //        + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
-    //  } catch (UnsupportedEncodingException e) {
-    //    e.printStackTrace();
-    //  }
-    //}
-
     holder.card.setTag(new Object());
-    //Glide.with(mContext)
-    //    .load(head_img)
-    //    .diskCacheStrategy(DiskCacheStrategy.ALL)
-    //    .placeholder(R.drawable.parceholder)
-    //    .centerCrop()
-    //    .into(holder.childlistImage)
-    //    .getSize((width, height) -> {
-    //      if (!holder.card.isShown()) holder.card.setVisibility(View.VISIBLE);
-    //    });
     ViewUtils.loadImgToImgViewWithPlaceholderFragment(context, holder.childlistImage,
         headImg);
     holder.card.setOnClickListener(v -> {
@@ -183,10 +150,6 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Chil
     return mList == null ? 0 : mList.size();
   }
 
-  public interface onItemClickListener {
-    void itemClick(View view, int position);
-  }
-
   static class ChildListVH extends RecyclerView.ViewHolder
       implements View.OnClickListener {
     //int id = R.layout.item_childlist;
@@ -196,7 +159,6 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.Chil
     @Bind(R.id.childlist_agent_price) TextView childlistAgentPrice;
     @Bind(R.id.childlist_stdsale_price) TextView childlistStdsalePrice;
     @Bind(R.id.saleout) TextView saleout;
-    private onItemClickListener listener;//点击事件
 
     public ChildListVH(View itemView) {
       super(itemView);

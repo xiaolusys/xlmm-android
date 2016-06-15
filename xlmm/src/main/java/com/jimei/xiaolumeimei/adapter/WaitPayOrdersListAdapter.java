@@ -24,7 +24,6 @@ import com.jimei.xiaolumeimei.widget.MyHorizontalScrollView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import com.jimei.xiaolumeimei.R;
