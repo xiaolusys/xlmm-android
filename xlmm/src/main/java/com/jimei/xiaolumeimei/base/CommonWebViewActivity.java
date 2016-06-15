@@ -35,12 +35,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.PlatformActionListener;
-import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.onekeyshare.OnekeyShare;
-import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
-import cn.sharesdk.wechat.moments.WechatMoments;
+
 import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
@@ -52,11 +47,20 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.mob.tools.utils.UIHandler;
 import com.tbruyelle.rxpermissions.RxPermissions;
+import com.umeng.analytics.MobclickAgent;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
+import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
+import cn.sharesdk.wechat.moments.WechatMoments;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -340,6 +344,11 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
 
   @Override
   public void onComplete(Platform platform, int action, HashMap<String, Object> arg2) {
+    Map<String, String> map = new HashMap<String, String>();
+    map.put("id","name");
+
+    map.put(platform.getId()+"", platform.getName());
+    MobclickAgent.onEvent(mContext, "ShareID", map);
     // 成功
     Message msg = new Message();
     msg.what = MSG_ACTION_CCALLBACK;
