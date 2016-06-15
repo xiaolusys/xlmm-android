@@ -5,6 +5,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.SwitchCompat;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -22,6 +24,7 @@ import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.widget.citypicker.CityPicker;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 import rx.Subscription;
@@ -46,10 +49,9 @@ public class ChanggeSelectAddressActivity extends BaseSwipeBackCompatActivity
     EditText clearAddress;
     @Bind(R.id.switch_button)
     SwitchCompat switchButton;
-    @Bind(R.id.save)
-    Button save;
-    @Bind(R.id.delete)
-    Button delete;
+    @Bind(R.id.save) Button save;
+    //@Bind(R.id.delete)
+    //Button delete;
     @Bind(R.id.main)
     LinearLayout main;
     private String id;
@@ -73,7 +75,7 @@ public class ChanggeSelectAddressActivity extends BaseSwipeBackCompatActivity
     protected void setListener() {
         save.setOnClickListener(this);
         address.setOnClickListener(this);
-        delete.setOnClickListener(this);
+        //delete.stOnClickListener(this);
         switchButton.setOnCheckedChangeListener(this);
     }
 
@@ -150,6 +152,7 @@ public class ChanggeSelectAddressActivity extends BaseSwipeBackCompatActivity
                     }
                 });
                 break;
+
             case R.id.save:
                 receiver_name = name.getText().toString().trim();
                 receiver_address = address.getText().toString().trim();
@@ -157,69 +160,82 @@ public class ChanggeSelectAddressActivity extends BaseSwipeBackCompatActivity
                 clearaddressa = clearAddress.getText().toString().trim();
 
                 JUtils.Log(TAG,
-                        receiver_mobile + "====" + receiver_state + "====" + receiver_city + "====" +
-                                receiver_district + "====" +
-                                clearaddressa + "====" + receiver_name);
+                    receiver_mobile + "====" + receiver_state + "====" + receiver_city + "====" +
+                        receiver_district + "====" +
+                        clearaddressa + "====" + receiver_name);
 
                 if (checkInput(receiver_name, receiver_mobile, city_string, clearaddressa)) {
                     Subscription subscribe = AddressModel.getInstance()
-                            .update_address(id, receiver_state, receiver_city, receiver_district,
-                                    clearaddressa, receiver_name, receiver_mobile, defalut)
-                            .subscribeOn(Schedulers.io())
-                            .subscribe(new ServiceResponse<AddressResultBean>() {
-                                @Override
-                                public void onNext(AddressResultBean addressResultBean) {
-                                    if (addressResultBean != null) {
-                                        if (addressResultBean.getCode()==0) {
-                                            JUtils.Toast("修改成功");
-                                            finish();
-//                      if (isDefault) {
-//                        Subscription subscribe1 = AddressModel.getInstance()
-//                            .change_default(id)
-//                            .subscribeOn(Schedulers.io())
-//                            .subscribe(new ServiceResponse<AddressResultBean>() {
-//                              @Override
-//                              public void onNext(AddressResultBean addressResultBean1) {
-//                                if (addressResultBean1 != null
-//                                    && addressResultBean1.isRet()) {
-//                                  //startActivity(new Intent(ChanggeAddressActivity.this,
-//                                  //    AddressActivity.class));
-//                                  finish();
-//                                }
-//                              }
-//                            });
-//                        addSubscription(subscribe1);
-//                      } else {
-//                        //startActivity(new Intent(ChanggeAddressActivity.this,
-//                        //    AddressActivity.class));
-//                        finish();
-//                      }
-                                        }
-                                    }
-                                }
-                            });
-                    addSubscription(subscribe);
-                }
-
-                break;
-
-            case R.id.delete:
-
-                Subscription subscribe = AddressModel.getInstance()
-                        .delete_address(id)
+                        .update_address(id, receiver_state, receiver_city, receiver_district,
+                            clearaddressa, receiver_name, receiver_mobile, defalut)
                         .subscribeOn(Schedulers.io())
                         .subscribe(new ServiceResponse<AddressResultBean>() {
                             @Override
                             public void onNext(AddressResultBean addressResultBean) {
-                                if (addressResultBean != null && addressResultBean.isRet()) {
-                                    finish();
+                                if (addressResultBean != null) {
+                                    if (addressResultBean.getCode()==0) {
+                                        JUtils.Toast("修改成功");
+                                        finish();
+                                        //                      if (isDefault) {
+                                        //                        Subscription subscribe1 = AddressModel.getInstance()
+                                        //                            .change_default(id)
+                                        //                            .subscribeOn(Schedulers.io())
+                                        //                            .subscribe(new ServiceResponse<AddressResultBean>() {
+                                        //                              @Override
+                                        //                              public void onNext(AddressResultBean addressResultBean1) {
+                                        //                                if (addressResultBean1 != null
+                                        //                                    && addressResultBean1.isRet()) {
+                                        //                                  //startActivity(new Intent(ChanggeAddressActivity.this,
+                                        //                                  //    AddressActivity.class));
+                                        //                                  finish();
+                                        //                                }
+                                        //                              }
+                                        //                            });
+                                        //                        addSubscription(subscribe1);
+                                        //                      } else {
+                                        //                        //startActivity(new Intent(ChanggeAddressActivity.this,
+                                        //                        //    AddressActivity.class));
+                                        //                        finish();
+                                        //                      }
+                                    }
                                 }
                             }
                         });
-                addSubscription(subscribe);
+                    addSubscription(subscribe);
+                }
 
                 break;
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_select, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case R.id.action_delete:
+                Subscription subscribe = AddressModel.getInstance()
+                    .delete_address(id)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(new ServiceResponse<AddressResultBean>() {
+                        @Override
+                        public void onNext(AddressResultBean addressResultBean) {
+                            if (addressResultBean != null && addressResultBean.isRet()) {
+                                finish();
+                            }
+                        }
+                    });
+                addSubscription(subscribe);
+                break;
+
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public boolean checkInput(String receivername, String mobile, String address1,
@@ -271,5 +287,19 @@ public class ChanggeSelectAddressActivity extends BaseSwipeBackCompatActivity
 
                 break;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(this.getClass().getSimpleName());
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+        MobclickAgent.onPause(this);
     }
 }

@@ -25,8 +25,6 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import butterknife.Bind;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
 import com.jimei.xiaolumeimei.R;
@@ -52,6 +50,7 @@ import com.umeng.analytics.MobclickAgent;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -335,7 +334,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                             }
 
                             tvWuliu.setText(logisticsCompanyses.get(0).getName());
-                            code = logisticsCompanyses.get(0).getCode();
+                            code = logisticsCompanyses.get(0).getId();
 
                             budgetCash =
                                     (double) (Math.round(cartsPayinfoBean.getBudget_cash() * 100)) / 100
@@ -1216,7 +1215,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    code = logisticsCompanyses.get(position).getCode();
+                    code = logisticsCompanyses.get(position).getId();
                     tvWuliu.setText(logisticsCompanyses.get(position).getName());
                     MyDialog1.this.dismiss();
                 }

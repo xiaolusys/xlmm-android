@@ -7,12 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.utils.AppUtils;
 import com.jimei.xiaolumeimei.utils.DataClearManager;
+import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
 import com.umeng.update.UmengUpdateListener;
 import com.umeng.update.UpdateResponse;
@@ -28,11 +30,6 @@ public class SettingActivity extends BaseSwipeBackCompatActivity {
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        settingFragment.updatePref();
-    }
 
     @Override
     protected void initData() {
@@ -141,5 +138,20 @@ public class SettingActivity extends BaseSwipeBackCompatActivity {
             super.onStop();
             UmengUpdateAgent.setUpdateListener(null);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        settingFragment.updatePref();
+        MobclickAgent.onPageStart(this.getClass().getSimpleName());
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+        MobclickAgent.onPause(this);
     }
 }
