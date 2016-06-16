@@ -767,7 +767,7 @@ public class MainActivity extends BaseActivity
       } else if (id == R.id.nav_problem) {
         intent = new Intent(new Intent(MainActivity.this, CustomProblemActivity.class));
         Bundle bundle1 = new Bundle();
-        bundle1.putString("actlink", "http://m.xiaolumeimei.com/mall/#/faq");
+        bundle1.putString("actlink", "http://m.xiaolumeimei.com/mall/faq");
         intent.putExtras(bundle1);
         startActivity(intent);
       } else if (id == R.id.nav_complain) {

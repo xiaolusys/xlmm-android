@@ -11,7 +11,7 @@ public class ComplainWebActivity extends CommonWebViewActivity {
 
     @Override protected void initViews() {
         super.initViews();
-        webviewTitle.setText("投诉建议");
+        webviewTitle.setText("历史记录");
     }
 
     @Override

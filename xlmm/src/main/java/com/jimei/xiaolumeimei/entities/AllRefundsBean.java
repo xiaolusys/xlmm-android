@@ -2,7 +2,6 @@ package com.jimei.xiaolumeimei.entities;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -109,413 +108,403 @@ public class AllRefundsBean {
     }
 
     public static class ResultsEntity {
-        @SerializedName("id")
+
+        /**
+         * id : 42945
+         * url : http://staging.xiaolumeimei.com/rest/v1/refunds/42945
+         * refund_no : RF1606155761330c6a7c7
+         * trade_id : 333756
+         * order_id : 369966
+         * buyer_id : 1
+         * item_id : 40471
+         * title : 新款防晒超大雪纺披肩/西瓜红
+         * sku_id : 163262
+         * sku_name : 均码
+         * refund_num : 1
+         * buyer_nick : meron@小鹿美美
+         * mobile : 13888888888
+         * phone :
+         * proof_pic : []
+         * total_fee : 19.9
+         * payment : 17.9
+         * created : 2016-06-15T18:50:52
+         * modified : 2016-06-15T18:50:53
+         * company_name :
+         * sid :
+         * reason : 七天无理由退换货
+         * pic_path : http://image.xiaolu.so/MG_14614007618135.jpg
+         * desc : 七天无理由退货
+         * feedback :
+         * has_good_return : false
+         * has_good_change : false
+         * good_status : 0
+         * status : 7
+         * refund_fee : 17.9
+         * return_address : 上海市松江区佘山镇吉业路245号5号楼，021-50939326，小鹿美美售后(收)
+         * status_display : 退款成功
+         * amount_flow : {"desc":""}
+         * status_shaft : [{"status_display":"申请退款","time":"2016-06-15T18:50:52"},{"status_display":"等待返款","time":"2016-06-15T18:50:53"},{"status_display":"退款成功","time":"2016-06-15T18:50:53"}]
+         * refund_channel : budget
+         */
+
         private int id;
-        @SerializedName("url")
         private String url;
-        @SerializedName("refund_no")
         private String refund_no;
-        @SerializedName("trade_id")
         private int trade_id;
-        @SerializedName("order_id")
         private int order_id;
-        @SerializedName("buyer_id")
         private int buyer_id;
-        @SerializedName("item_id")
         private int item_id;
-        @SerializedName("title")
         private String title;
-        @SerializedName("sku_id")
         private int sku_id;
-        @SerializedName("sku_name")
         private String sku_name;
-        @SerializedName("refund_num")
         private int refund_num;
-        @SerializedName("buyer_nick")
         private String buyer_nick;
-        @SerializedName("mobile")
         private String mobile;
-        @SerializedName("phone")
         private String phone;
-        @SerializedName("proof_pic")
-        private ArrayList<String> proof_pic;
-        @SerializedName("total_fee")
         private double total_fee;
-        @SerializedName("payment")
         private double payment;
-        @SerializedName("created")
         private String created;
-        @SerializedName("modified")
         private String modified;
-        @SerializedName("company_name")
         private String company_name;
-        @SerializedName("sid")
         private String sid;
-        @SerializedName("reason")
         private String reason;
-        @SerializedName("pic_path")
         private String pic_path;
-        @SerializedName("desc")
         private String desc;
-        @SerializedName("feedback")
         private String feedback;
-        @SerializedName("has_good_return")
         private boolean has_good_return;
-        @SerializedName("has_good_change")
         private boolean has_good_change;
-        @SerializedName("good_status")
         private int good_status;
-        @SerializedName("status")
         private int status;
-        @SerializedName("refund_fee")
         private double refund_fee;
-        @SerializedName("status_display")
-        private String status_display;
-        @SerializedName("return_address")
         private String return_address;
-        @SerializedName("amount_flow")
-        private Amount_flowEntity amount_flow;
+        private String status_display;
+        /**
+         * desc :
+         */
 
-        public Amount_flowEntity getAmount_flow() {
-            return amount_flow;
-        }
+        private AmountFlowBean amount_flow;
+        private String refund_channel;
+        private List<String> proof_pic;
+        /**
+         * status_display : 申请退款
+         * time : 2016-06-15T18:50:52
+         */
 
-        public void setAmount_flow(Amount_flowEntity amount_flow) {
-            this.amount_flow = amount_flow;
+        private List<StatusShaftBean> status_shaft;
+
+        public int getId() {
+            return id;
         }
 
         public void setId(int id) {
             this.id = id;
         }
 
-        public void setUrl(String url) {
-            this.url = url;
-        }
-
-        public void setRefund_no(String refund_no) {
-            this.refund_no = refund_no;
-        }
-
-        public void setTrade_id(int trade_id) {
-            this.trade_id = trade_id;
-        }
-
-        public void setOrder_id(int order_id) {
-            this.order_id = order_id;
-        }
-
-        public void setBuyer_id(int buyer_id) {
-            this.buyer_id = buyer_id;
-        }
-
-        public void setItem_id(int item_id) {
-            this.item_id = item_id;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-        public void setSku_id(int sku_id) {
-            this.sku_id = sku_id;
-        }
-
-        public void setSku_name(String sku_name) {
-            this.sku_name = sku_name;
-        }
-
-        public void setRefund_num(int refund_num) {
-            this.refund_num = refund_num;
-        }
-
-        public void setBuyer_nick(String buyer_nick) {
-            this.buyer_nick = buyer_nick;
-        }
-
-        public void setMobile(String mobile) {
-            this.mobile = mobile;
-        }
-
-        public void setPhone(String phone) {
-            this.phone = phone;
-        }
-
-        public void setProof_pic(ArrayList<String> proof_pic) {
-            this.proof_pic = proof_pic;
-        }
-
-        public void setTotal_fee(double total_fee) {
-            this.total_fee = total_fee;
-        }
-
-        public void setPayment(double payment) {
-            this.payment = payment;
-        }
-
-        public void setCreated(String created) {
-            this.created = created;
-        }
-
-        public void setModified(String modified) {
-            this.modified = modified;
-        }
-
-        public void setCompany_name(String company_name) {
-            this.company_name = company_name;
-        }
-
-        public void setSid(String sid) {
-            this.sid = sid;
-        }
-
-        public void setReason(String reason) {
-            this.reason = reason;
-        }
-
-        public void setPic_path(String pic_path) {
-            this.pic_path = pic_path;
-        }
-
-        public void setDesc(String desc) {
-            this.desc = desc;
-        }
-
-        public void setFeedback(String feedback) {
-            this.feedback = feedback;
-        }
-
-        public void setHas_good_return(boolean has_good_return) {
-            this.has_good_return = has_good_return;
-        }
-
-        public void setHas_good_change(boolean has_good_change) {
-            this.has_good_change = has_good_change;
-        }
-
-        public void setGood_status(int good_status) {
-            this.good_status = good_status;
-        }
-
-        public void setStatus(int status) {
-            this.status = status;
-        }
-
-        public void setRefund_fee(double refund_fee) {
-            this.refund_fee = refund_fee;
-        }
-
-        public void setStatus_display(String status_display) {
-            this.status_display = status_display;
-        }
-
-        public void setReturn_address(String return_address) {
-            this.return_address = return_address;
-        }
-
-        public int getId() {
-            return id;
-        }
-
         public String getUrl() {
             return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
         }
 
         public String getRefund_no() {
             return refund_no;
         }
 
+        public void setRefund_no(String refund_no) {
+            this.refund_no = refund_no;
+        }
+
         public int getTrade_id() {
             return trade_id;
+        }
+
+        public void setTrade_id(int trade_id) {
+            this.trade_id = trade_id;
         }
 
         public int getOrder_id() {
             return order_id;
         }
 
+        public void setOrder_id(int order_id) {
+            this.order_id = order_id;
+        }
+
         public int getBuyer_id() {
             return buyer_id;
+        }
+
+        public void setBuyer_id(int buyer_id) {
+            this.buyer_id = buyer_id;
         }
 
         public int getItem_id() {
             return item_id;
         }
 
+        public void setItem_id(int item_id) {
+            this.item_id = item_id;
+        }
+
         public String getTitle() {
             return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
         }
 
         public int getSku_id() {
             return sku_id;
         }
 
+        public void setSku_id(int sku_id) {
+            this.sku_id = sku_id;
+        }
+
         public String getSku_name() {
             return sku_name;
+        }
+
+        public void setSku_name(String sku_name) {
+            this.sku_name = sku_name;
         }
 
         public int getRefund_num() {
             return refund_num;
         }
 
+        public void setRefund_num(int refund_num) {
+            this.refund_num = refund_num;
+        }
+
         public String getBuyer_nick() {
             return buyer_nick;
+        }
+
+        public void setBuyer_nick(String buyer_nick) {
+            this.buyer_nick = buyer_nick;
         }
 
         public String getMobile() {
             return mobile;
         }
 
+        public void setMobile(String mobile) {
+            this.mobile = mobile;
+        }
+
         public String getPhone() {
             return phone;
         }
 
-        public ArrayList<String> getProof_pic() {
-            return proof_pic;
+        public void setPhone(String phone) {
+            this.phone = phone;
         }
 
         public double getTotal_fee() {
             return total_fee;
         }
 
+        public void setTotal_fee(double total_fee) {
+            this.total_fee = total_fee;
+        }
+
         public double getPayment() {
             return payment;
+        }
+
+        public void setPayment(double payment) {
+            this.payment = payment;
         }
 
         public String getCreated() {
             return created;
         }
 
+        public void setCreated(String created) {
+            this.created = created;
+        }
+
         public String getModified() {
             return modified;
+        }
+
+        public void setModified(String modified) {
+            this.modified = modified;
         }
 
         public String getCompany_name() {
             return company_name;
         }
 
+        public void setCompany_name(String company_name) {
+            this.company_name = company_name;
+        }
+
         public String getSid() {
             return sid;
+        }
+
+        public void setSid(String sid) {
+            this.sid = sid;
         }
 
         public String getReason() {
             return reason;
         }
 
+        public void setReason(String reason) {
+            this.reason = reason;
+        }
+
         public String getPic_path() {
             return pic_path;
+        }
+
+        public void setPic_path(String pic_path) {
+            this.pic_path = pic_path;
         }
 
         public String getDesc() {
             return desc;
         }
 
+        public void setDesc(String desc) {
+            this.desc = desc;
+        }
+
         public String getFeedback() {
             return feedback;
+        }
+
+        public void setFeedback(String feedback) {
+            this.feedback = feedback;
         }
 
         public boolean isHas_good_return() {
             return has_good_return;
         }
 
+        public void setHas_good_return(boolean has_good_return) {
+            this.has_good_return = has_good_return;
+        }
+
         public boolean isHas_good_change() {
             return has_good_change;
+        }
+
+        public void setHas_good_change(boolean has_good_change) {
+            this.has_good_change = has_good_change;
         }
 
         public int getGood_status() {
             return good_status;
         }
 
+        public void setGood_status(int good_status) {
+            this.good_status = good_status;
+        }
+
         public int getStatus() {
             return status;
+        }
+
+        public void setStatus(int status) {
+            this.status = status;
         }
 
         public double getRefund_fee() {
             return refund_fee;
         }
 
-        public String getStatus_display() {
-            return status_display;
+        public void setRefund_fee(double refund_fee) {
+            this.refund_fee = refund_fee;
         }
 
         public String getReturn_address() {
             return return_address;
         }
 
-        @Override
-        public String toString() {
-            return "ResultsEntity{" +
-                    "id=" + id +
-                    ", url='" + url + '\'' +
-                    ", refund_no='" + refund_no + '\'' +
-                    ", trade_id=" + trade_id +
-                    ", order_id=" + order_id +
-                    ", buyer_id=" + buyer_id +
-                    ", item_id=" + item_id +
-                    ", title='" + title + '\'' +
-                    ", sku_id=" + sku_id +
-                    ", sku_name='" + sku_name + '\'' +
-                    ", refund_num=" + refund_num +
-                    ", buyer_nick='" + buyer_nick + '\'' +
-                    ", mobile='" + mobile + '\'' +
-                    ", phone='" + phone + '\'' +
-                    ", proof_pic=" + proof_pic +
-                    ", total_fee=" + total_fee +
-                    ", payment=" + payment +
-                    ", created='" + created + '\'' +
-                    ", modified='" + modified + '\'' +
-                    ", company_name='" + company_name + '\'' +
-                    ", sid='" + sid + '\'' +
-                    ", reason='" + reason + '\'' +
-                    ", pic_path='" + pic_path + '\'' +
-                    ", desc='" + desc + '\'' +
-                    ", feedback='" + feedback + '\'' +
-                    ", has_good_return=" + has_good_return +
-                    ", has_good_change=" + has_good_change +
-                    ", good_status=" + good_status +
-                    ", status=" + status +
-                    ", refund_fee=" + refund_fee +
-                    ", status_display='" + status_display + '\'' +
-                    '}';
+        public void setReturn_address(String return_address) {
+            this.return_address = return_address;
+        }
+
+        public String getStatus_display() {
+            return status_display;
+        }
+
+        public void setStatus_display(String status_display) {
+            this.status_display = status_display;
+        }
+
+        public AmountFlowBean getAmount_flow() {
+            return amount_flow;
+        }
+
+        public void setAmount_flow(AmountFlowBean amount_flow) {
+            this.amount_flow = amount_flow;
+        }
+
+        public String getRefund_channel() {
+            return refund_channel;
+        }
+
+        public void setRefund_channel(String refund_channel) {
+            this.refund_channel = refund_channel;
+        }
+
+        public List<String> getProof_pic() {
+            return proof_pic;
+        }
+
+        public void setProof_pic(List<String> proof_pic) {
+            this.proof_pic = proof_pic;
+        }
+
+        public List<StatusShaftBean> getStatus_shaft() {
+            return status_shaft;
+        }
+
+        public void setStatus_shaft(List<StatusShaftBean> status_shaft) {
+            this.status_shaft = status_shaft;
+        }
+
+        public static class AmountFlowBean {
+            private String desc;
+
+            public String getDesc() {
+                return desc;
+            }
+
+            public void setDesc(String desc) {
+                this.desc = desc;
+            }
+        }
+
+        public static class StatusShaftBean {
+            private String status_display;
+            private String time;
+
+            public String getStatus_display() {
+                return status_display;
+            }
+
+            public void setStatus_display(String status_display) {
+                this.status_display = status_display;
+            }
+
+            public String getTime() {
+                return time;
+            }
+
+            public void setTime(String time) {
+                this.time = time;
+            }
         }
     }
-/*
-    "count": 7,
-            "next": null,
-            "previous": null,
-            "results": [
-    {
-        "id": 8514,
-            "url": "http://m.xiaolumeimei.com/rest/v1/refunds/8514",
-            "refund_no": "RF15091555f7943868910",
-            "trade_id": 108531,
-            "order_id": 104427,
-            "buyer_id": 15977,
-            "item_id": 17682,
-            "title": "可爱卡通印花哈衣/红色草莓",
-            "sku_id": 68991,
-            "sku_name": "6M/66",
-            "refund_num": 1,
-            "buyer_nick": "小鹿美美",
-            "mobile": "13816404857",
-            "phone": "",
-            "proof_pic": null,
-            "total_fee": 29.0,
-            "payment": 29.0,
-            "created": "2015-09-15T11:44:56",
-            "modified": "2015-09-17T12:12:04",
-            "company_name": "",
-            "sid": "",
-            "reason": "错拍",
-            "pic_path": "https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLvlAphyfwwyVle7KJbyNjk97CTC2baR370KldvKvMxokGRtyVibcBTN9oQCd3XGrzmaj9ibVFicnpFuA/0?wx_fmt=png",
-            "desc": "123",
-            "feedback": "",
-            "has_good_return": false,
-            "has_good_change": false,
-            "good_status": 0,
-            "status": 3,
-            "refund_fee": 12.0,
-            "status_display": "买家已经申请退款"
-    },
-    ]
-    */
+
 
 }
