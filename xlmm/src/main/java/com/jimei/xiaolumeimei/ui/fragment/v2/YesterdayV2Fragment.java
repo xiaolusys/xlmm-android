@@ -333,4 +333,7 @@ public class YesterdayV2Fragment extends BaseFragment {
         super.onPause();
         MobclickAgent.onPageEnd(this.getClass().getSimpleName());
     }
+    public void goToTop() {
+        xRecyclerView.scrollToPosition(0);
+    }
 }
