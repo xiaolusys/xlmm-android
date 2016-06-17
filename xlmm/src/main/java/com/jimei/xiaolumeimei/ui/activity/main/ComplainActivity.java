@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.ui.activity.main;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -17,7 +18,9 @@ import android.widget.TextView;
 import butterknife.Bind;
 
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.user.UserDrawCashActivity;
@@ -164,6 +167,18 @@ public class ComplainActivity extends BaseSwipeBackCompatActivity
         switch (item.getItemId()) {
             case R.id.action_complain:
                 Intent intent = new Intent(this, ComplainWebActivity.class);
+                Bundle bundle = new Bundle();
+                SharedPreferences sharedPreferences = getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+                bundle.putString("cookies", sharedPreferences.getString("cookiesString", ""));
+                bundle.putString("domain", sharedPreferences.getString("cook8`iesDomain", ""));
+                bundle.putString("Cookie", sharedPreferences.getString("Cookie", ""));
+                SharedPreferences sharedPreferences2 = XlmmApp.getmContext().getSharedPreferences("APICLIENT", Context.MODE_PRIVATE);
+                String baseUrl = "http://" + sharedPreferences2.getString("BASE_URL", "");
+                if (baseUrl.equals("http://")) {
+                    baseUrl = XlmmApi.APP_BASE_URL;
+                }
+                bundle.putString("actlink", baseUrl + "/mall/complaint/history");
+                intent.putExtras(bundle);
                 startActivity(intent);
                 break;
             default:

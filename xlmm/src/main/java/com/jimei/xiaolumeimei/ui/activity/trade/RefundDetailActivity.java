@@ -92,6 +92,8 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     ImageView imageView4;
     @Bind(R.id.iv_5)
     ImageView imageView5;
+    @Bind(R.id.iv)
+    ImageView iView;
     @Bind(R.id.line_2)
     ImageView lineImage2;
     @Bind(R.id.line_3)
@@ -102,6 +104,8 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     ImageView lineImage5;
     @Bind(R.id.line_6)
     ImageView lineImage6;
+    @Bind(R.id.line)
+    ImageView lineImage;
     @Bind(R.id.tv_1)
     TextView textView1;
     @Bind(R.id.tv_2)
@@ -112,6 +116,8 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     TextView textView4;
     @Bind(R.id.tv_5)
     TextView textView5;
+    @Bind(R.id.tv)
+    TextView textView;
     @Bind(R.id.status_layout)
     LinearLayout statusLayout;
 
@@ -129,11 +135,6 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
             refund_state = getIntent().getExtras().getInt("refund_state");
         }
         Log.d(TAG, "refund_state " + refund_state);
-        if (refund_state == XlmmConst.REFUND_STATE_SELLER_AGREED) {
-            returnLayout.setVisibility(View.VISIBLE);
-        } else if (refund_state != XlmmConst.REFUND_STATE_BUYER_APPLY) {
-            lastLayout.setVisibility(View.VISIBLE);
-        }
         JUtils.Log(TAG, "initData goods_id " + goods_id);
         showIndeterminateProgressDialog(false);
         Subscription subscription = TradeModel.getInstance()
@@ -197,6 +198,12 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     }
 
     private void fillDataToView(AllRefundsBean.ResultsEntity refundDetailBean) {
+        if (refund_state == XlmmConst.REFUND_STATE_SELLER_AGREED && refundDetailBean.isHas_good_return()) {
+            returnLayout.setVisibility(View.VISIBLE);
+
+        } else if (refund_state != XlmmConst.REFUND_STATE_BUYER_APPLY) {
+            lastLayout.setVisibility(View.VISIBLE);
+        }
         JUtils.Log(TAG, "fillDataToView ");
         orderIdTv.setText(refundDetailBean.getRefund_no());
         statusTv.setText(refundDetailBean.getStatus_display());
@@ -242,15 +249,25 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
         } else {
             refundLayout.setVisibility(View.GONE);
         }
+
         if ("拒绝退款".equals(refundDetailBean.getStatus_display()) || "没有退款".equals(refundDetailBean.getStatus_display()) ||
                 "退款关闭".equals(refundDetailBean.getStatus_display())) {
             statusLayout.setVisibility(View.GONE);
         } else {
-            showRefundStatus(refundDetailBean.getStatus_shaft());
+            showRefundStatus(refundDetailBean);
         }
     }
 
-    private void showRefundStatus(List<StatusShaftBean> status_shaft) {
+    private void showRefundStatus(AllRefundsBean.ResultsEntity refundDetailBean) {
+        List<StatusShaftBean> status_shaft = refundDetailBean.getStatus_shaft();
+        if (refundDetailBean.isHas_good_return()) {
+            textView3.setVisibility(View.VISIBLE);
+            lineImage3.setVisibility(View.VISIBLE);
+            imageView3.setVisibility(View.VISIBLE);
+            iView.setVisibility(View.VISIBLE);
+            lineImage.setVisibility(View.VISIBLE);
+            textView.setVisibility(View.VISIBLE);
+        }
         if (status_shaft.size() > 1) {
             String display = status_shaft.get(status_shaft.size() - 1).getStatus_display();
             if ("同意申请".equals(display)) {
@@ -265,6 +282,15 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
         }
     }
 
+    private void setView2() {
+        setView1();
+        textView2.setTextColor(getResources().getColor(R.color.text_color_62));
+        textView.setTextColor(getResources().getColor(R.color.colorAccent));
+        imageView2.setImageResource(R.drawable.state_oval);
+        iView.setImageResource(R.drawable.state_last);
+        lineImage.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+    }
+
     private void setView4() {
         setView3();
         textView4.setTextColor(getResources().getColor(R.color.text_color_62));
@@ -275,22 +301,17 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
         lineImage6.setBackgroundColor(getResources().getColor(R.color.colorAccent));
     }
 
+
     private void setView3() {
         setView2();
+        textView.setTextColor(getResources().getColor(R.color.text_color_62));
         textView3.setTextColor(getResources().getColor(R.color.text_color_62));
         textView4.setTextColor(getResources().getColor(R.color.colorAccent));
+        iView.setImageResource(R.drawable.state_oval);
         imageView3.setImageResource(R.drawable.state_oval);
         imageView4.setImageResource(R.drawable.state_last);
-        lineImage4.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-    }
-
-    private void setView2() {
-        setView1();
-        textView2.setTextColor(getResources().getColor(R.color.text_color_62));
-        textView3.setTextColor(getResources().getColor(R.color.colorAccent));
-        imageView2.setImageResource(R.drawable.state_oval);
-        imageView3.setImageResource(R.drawable.state_last);
         lineImage3.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+        lineImage4.setBackgroundColor(getResources().getColor(R.color.colorAccent));
     }
 
     private void setView1() {
