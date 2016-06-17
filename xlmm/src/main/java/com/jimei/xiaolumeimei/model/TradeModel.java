@@ -9,6 +9,7 @@ import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.PackageBean;
 import com.jimei.xiaolumeimei.entities.PayInfoBean;
 import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
+import com.jimei.xiaolumeimei.entities.RefundMsgBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 import java.util.ArrayList;
@@ -147,10 +148,10 @@ public class TradeModel {
   }
 
   //创建退货单数据
-  public Observable<ResponseBody> refund_create(int goods_id, int reason, int num,
-      double sum_price, String description, String proof_pic) {
+  public Observable<RefundMsgBean> refund_create(int goods_id, int reason, int num,
+                                                 double sum_price, String description, String proof_pic, String refund_channel) {
     return XlmmRetrofitClient.getService()
-        .refund_create(goods_id, reason, num, sum_price, description, proof_pic)
+        .refund_create(goods_id, reason, num, sum_price, description, proof_pic,refund_channel)
         .compose(new DefaultTransform<>());
   }
 
