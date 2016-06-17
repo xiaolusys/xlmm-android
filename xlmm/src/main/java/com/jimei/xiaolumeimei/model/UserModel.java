@@ -19,6 +19,7 @@ import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.UserWithdrawResult;
 import com.jimei.xiaolumeimei.entities.WxPubAuthInfo;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
+
 import rx.Observable;
 
 /**
@@ -58,9 +59,9 @@ public class UserModel {
     }
 
     //投诉建议
-    public Observable<AddressResultBean> complain(String com_content) {
+    public Observable<AddressResultBean> complain(String com_type, String com_content) {
         return XlmmRetrofitClient.getService()
-                .complain(com_content)
+                .complain(com_type, com_content, "问题反馈")
                 .compose(new DefaultTransform<>());
     }
 
@@ -151,9 +152,9 @@ public class UserModel {
 
     //微信登录
     public Observable<CodeBean> wxapp_login(String noncestr, String timestamp,
-                                                   String sign, String headimgurl, String nickname, String openid, String unionid) {
+                                            String sign, String headimgurl, String nickname, String openid, String unionid) {
         return XlmmRetrofitClient.getService()
-                .wxapp_login(noncestr, timestamp, sign, headimgurl, nickname, openid, unionid,"android")
+                .wxapp_login(noncestr, timestamp, sign, headimgurl, nickname, openid, unionid, "android")
                 .compose(new DefaultTransform<>());
     }
 
@@ -219,7 +220,7 @@ public class UserModel {
     //验证码验证
     public Observable<CodeBean> verify_code(String mobile, String action, String code) {
         return XlmmRetrofitClient.getService()
-                .verify_code(mobile, action, code,"android")
+                .verify_code(mobile, action, code, "android")
                 .compose(new DefaultTransform<>());
     }
 
@@ -233,11 +234,11 @@ public class UserModel {
     //用户账号密码登录
     public Observable<CodeBean> passwordlogin(String username, String password, String next) {
         return XlmmRetrofitClient.getService()
-                .passwordlogin(username, password, next,"android")
+                .passwordlogin(username, password, next, "android")
                 .compose(new DefaultTransform<>());
     }
 
-    public Observable<CodeBean> openDebug(String debug_secret){
+    public Observable<CodeBean> openDebug(String debug_secret) {
 
         return XlmmRetrofitClient.getService().openDebug(debug_secret)
                 .compose(new DefaultTransform<>());

@@ -50,6 +50,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
     private int count = 0;
     private String packetid = "";
     private String company_code = "";
+    private OrderDetailBean.ExtrasBean extras;
 
 
     public void setPackageBeanList(ArrayList<PackageBean> packageBeanList) {
@@ -74,6 +75,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
 
     public void setData(OrderDetailBean orderDetailBean) {
         orderDetailEntity = orderDetailBean;
+        extras = orderDetailBean.getExtras();
         stateStr = orderDetailBean.getStatus_display();
         timeStr = orderDetailBean.getCreated().replace("T", " ");
         tid = orderDetailBean.getTid();
@@ -277,7 +279,10 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                                 //enter apply refund
                                 Log.d(TAG, "enter apply refund ");
                                 Intent intent = new Intent(context, ApplyRefundActivity.class);
-                                intent.putExtra("goods_info", goods_info);
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("goods_info",goods_info);
+                                bundle.putSerializable("extras",extras);
+                                intent.putExtras(bundle);
                                 Log.d(TAG,
                                         "transfer good  " + goods_info.getId() + " to " + "ApplyRefundActivity");
                                 context.startActivity(intent);
@@ -310,7 +315,10 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                                 //enter apply return goods
                                 Log.d(TAG, "enter apply return goods ");
                                 Intent intent = new Intent(context, ApplyReturnGoodsActivity.class);
-                                intent.putExtra("goods_info", goods_info);
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("goods_info",goods_info);
+                                bundle.putSerializable("extras",extras);
+                                intent.putExtras(bundle);
                                 Log.d(TAG, "transfer good  "
                                         + goods_info.getId()
                                         + " to "

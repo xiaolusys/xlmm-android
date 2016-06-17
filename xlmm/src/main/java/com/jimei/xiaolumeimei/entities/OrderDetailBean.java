@@ -1,5 +1,7 @@
 package com.jimei.xiaolumeimei.entities;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,27 +13,28 @@ import java.util.List;
 public class OrderDetailBean implements Serializable {
 
     /**
-     * id : 348481
-     * url : http://m.xiaolumeimei.com/rest/v2/trades/348481
-     * orders : [{"id":387662,"oid":"xo160525574544aa02e57","item_id":"37324","title":"帅气卡通五分短裤/灰色","sku_id":"148904","num":1,"outer_id":"917229320118","total_fee":29.9,"payment":27.9,"discount_fee":2,"sku_name":"150","pic_path":"http://image.xiaolu.so/MG_1459151663881主图1.png","status":2,"status_display":"已付款","refund_status":3,"refund_status_display":"申请退款","refund_id":45167,"kill_title":false,"is_seckill":false}]
-     * tid : xd160525574544a75a94a
+     * id : 333742
+     * url : http://staging.xiaolumeimei.com/rest/v2/trades/333742
+     * orders : [{"id":369952,"oid":"xo1606085757b5645e2eb","item_id":"40471","title":"新款防晒超大雪纺披肩/西瓜红","sku_id":"163262","num":1,"outer_id":"824291010013","total_fee":19.9,"payment":17.9,"discount_fee":2,"sku_name":"均码","pic_path":"http://image.xiaolu.so/MG_14614007618135.jpg","status":2,"status_display":"已付款","refund_status":0,"refund_status_display":"没有退款","refund_id":42916,"kill_title":false,"is_seckill":false}]
+     * tid : xd1606085757b55e9506a
      * buyer_nick : meron@小鹿美美
      * buyer_id : 1
      * channel : budget
-     * payment : 27.9
+     * payment : 17.9
      * post_fee : 0.0
-     * total_fee : 29.9
+     * total_fee : 19.9
      * discount_fee : 2.0
      * status : 2
      * status_display : 已付款
      * buyer_message :
      * trade_type : 0
-     * created : 2016-05-25T14:22:33
-     * pay_time : 2016-05-25T14:22:34
+     * created : 2016-06-08T14:04:20
+     * pay_time : 2016-06-08T14:04:20
      * consign_time : null
      * out_sid :
-     * logistics_company : null
-     * user_adress : {"receiver_address":"仓库","receiver_district":"松江区","receiver_city":"市辖区","receiver_state":"上海市","receiver_name":"测试","receiver_mobile":"15645658665","receiver_phone":"","id":117350}
+     * logistics_company : {"id":-2,"code":"YUNDA_QR","name":"韵达热敏"}
+     * user_adress : {"receiver_address":"哦你信2fh","receiver_district":"天通苑","receiver_city":"朝阳区","receiver_state":"北京","default":"","receiver_name":"狗狗","receiver_mobile":"13469586914","receiver_phone":"","id":113994}
+     * extras : {"refund_choices":[{"refund_channel":"budget","name":"极速退款","desc":"申请退款后，退款金额立即退到小鹿钱包，并可立即支付使用，无需等待."}]}
      */
 
     private int id;
@@ -52,51 +55,50 @@ public class OrderDetailBean implements Serializable {
     private String pay_time;
     private Object consign_time;
     private String out_sid;
-
-    private LogisticCompany logistics_company;
-
     /**
-     * receiver_address : 仓库
-     * receiver_district : 松江区
-     * receiver_city : 市辖区
-     * receiver_state : 上海市
-     * receiver_name : 测试
-     * receiver_mobile : 15645658665
+     * id : -2
+     * code : YUNDA_QR
+     * name : 韵达热敏
+     */
+
+    private LogisticsCompanyBean logistics_company;
+    /**
+     * receiver_address : 哦你信2fh
+     * receiver_district : 天通苑
+     * receiver_city : 朝阳区
+     * receiver_state : 北京
+     * default :
+     * receiver_name : 狗狗
+     * receiver_mobile : 13469586914
      * receiver_phone :
-     * id : 117350
+     * id : 113994
      */
 
     private UserAdressBean user_adress;
+    private ExtrasBean extras;
     /**
-     * id : 387662
-     * oid : xo160525574544aa02e57
-     * item_id : 37324
-     * title : 帅气卡通五分短裤/灰色
-     * sku_id : 148904
+     * id : 369952
+     * oid : xo1606085757b5645e2eb
+     * item_id : 40471
+     * title : 新款防晒超大雪纺披肩/西瓜红
+     * sku_id : 163262
      * num : 1
-     * outer_id : 917229320118
-     * total_fee : 29.9
-     * payment : 27.9
+     * outer_id : 824291010013
+     * total_fee : 19.9
+     * payment : 17.9
      * discount_fee : 2.0
-     * sku_name : 150
-     * pic_path : http://image.xiaolu.so/MG_1459151663881主图1.png
+     * sku_name : 均码
+     * pic_path : http://image.xiaolu.so/MG_14614007618135.jpg
      * status : 2
      * status_display : 已付款
-     * refund_status : 3
-     * refund_status_display : 申请退款
-     * refund_id : 45167
+     * refund_status : 0
+     * refund_status_display : 没有退款
+     * refund_id : 42916
      * kill_title : false
      * is_seckill : false
      */
 
     private ArrayList<AllOrdersBean.ResultsEntity.OrdersEntity> orders;
-    /**
-     * code : YUNDA_QR
-     * name : 韵达热敏
-     */
-
-    private String code;
-    private String name;
 
     public int getId() {
         return id;
@@ -242,12 +244,28 @@ public class OrderDetailBean implements Serializable {
         this.out_sid = out_sid;
     }
 
+    public LogisticsCompanyBean getLogistics_company() {
+        return logistics_company;
+    }
+
+    public void setLogistics_company(LogisticsCompanyBean logistics_company) {
+        this.logistics_company = logistics_company;
+    }
+
     public UserAdressBean getUser_adress() {
         return user_adress;
     }
 
     public void setUser_adress(UserAdressBean user_adress) {
         this.user_adress = user_adress;
+    }
+
+    public ExtrasBean getExtras() {
+        return extras;
+    }
+
+    public void setExtras(ExtrasBean extras) {
+        this.extras = extras;
     }
 
     public ArrayList<AllOrdersBean.ResultsEntity.OrdersEntity> getOrders() {
@@ -258,35 +276,43 @@ public class OrderDetailBean implements Serializable {
         this.orders = orders;
     }
 
-    public String getCode() {
-        return code;
+    public static class LogisticsCompanyBean {
+        private int id;
+        private String code;
+        private String name;
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
     }
 
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public LogisticCompany getLogistics_company() {
-        return logistics_company;
-    }
-
-    public void setLogistics_company(LogisticCompany logistics_company) {
-        this.logistics_company = logistics_company;
-    }
-
-    public static class UserAdressBean implements Serializable{
+    public static class UserAdressBean {
         private String receiver_address;
         private String receiver_district;
         private String receiver_city;
         private String receiver_state;
+        @SerializedName("default")
+        private String defaultX;
         private String receiver_name;
         private String receiver_mobile;
         private String receiver_phone;
@@ -324,6 +350,14 @@ public class OrderDetailBean implements Serializable {
             this.receiver_state = receiver_state;
         }
 
+        public String getDefaultX() {
+            return defaultX;
+        }
+
+        public void setDefaultX(String defaultX) {
+            this.defaultX = defaultX;
+        }
+
         public String getReceiver_name() {
             return receiver_name;
         }
@@ -354,6 +388,54 @@ public class OrderDetailBean implements Serializable {
 
         public void setId(int id) {
             this.id = id;
+        }
+    }
+
+    public static class ExtrasBean implements Serializable{
+        /**
+         * refund_channel : budget
+         * name : 极速退款
+         * desc : 申请退款后，退款金额立即退到小鹿钱包，并可立即支付使用，无需等待.
+         */
+
+        private List<RefundChoicesBean> refund_choices;
+
+        public List<RefundChoicesBean> getRefund_choices() {
+            return refund_choices;
+        }
+
+        public void setRefund_choices(List<RefundChoicesBean> refund_choices) {
+            this.refund_choices = refund_choices;
+        }
+
+        public static class RefundChoicesBean implements Serializable{
+            private String refund_channel;
+            private String name;
+            private String desc;
+
+            public String getRefund_channel() {
+                return refund_channel;
+            }
+
+            public void setRefund_channel(String refund_channel) {
+                this.refund_channel = refund_channel;
+            }
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
+            public String getDesc() {
+                return desc;
+            }
+
+            public void setDesc(String desc) {
+                this.desc = desc;
+            }
         }
     }
 }
