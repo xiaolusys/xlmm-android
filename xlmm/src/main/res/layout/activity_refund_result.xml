@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context="com.jimei.xiaolumeimei.ui.activity.trade.RefundResultActivity">
+
+    <com.jimei.xiaolumeimei.widget.XlmmTitleView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:xlmm_title="申请成功" />
+
+    <TextView
+        android:id="@+id/tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="60dp"
+        android:gravity="center"
+        android:text="@string/refund_msg"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/btn"
+        android:layout_width="660px"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv"
+        android:layout_gravity="center"
+        android:background="@drawable/shape_common"
+        android:text="确定"
+        android:textColor="@color/white"
+        android:textSize="15sp" />
+
+</LinearLayout>

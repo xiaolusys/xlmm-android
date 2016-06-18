@@ -110,8 +110,7 @@ public class MainActivity extends BaseActivity
 
   @Bind(R.id.tool_bar) Toolbar toolbar;
   @Bind(R.id.rv_cart) RelativeLayout carts;
-
-  @Bind(R.id.img_mmentry) ImageView img_mmentry;
+  @Bind(R.id.rl_mmentry)RelativeLayout rl_mmentry;
   @Bind(R.id.image_1) ImageView image1;
   @Bind(R.id.image_2) ImageView image2;
   @Bind(R.id.scrollableLayout) ScrollableLayout scrollableLayout;
@@ -175,7 +174,7 @@ public class MainActivity extends BaseActivity
 
   @Override protected void setListener() {
     carts.setOnClickListener(this);
-    img_mmentry.setOnClickListener(this);
+    rl_mmentry.setOnClickListener(this);
     textYesterday.setOnClickListener(this);
     textTomorror.setOnClickListener(this);
     textToday.setOnClickListener(this);
@@ -763,7 +762,7 @@ public class MainActivity extends BaseActivity
         intent = new Intent(MainActivity.this, CartActivity.class);
         flag = "cart";
         break;
-      case R.id.img_mmentry:
+      case R.id.rl_mmentry:
         JUtils.Log(TAG, "xiaolu mama entry");
         intent = new Intent(MainActivity.this, MamaInfoActivity.class);
         break;
@@ -867,9 +866,9 @@ public class MainActivity extends BaseActivity
                 JUtils.Log(TAG, "mamaid " + userInfoBean.getXiaolumm().getId());
                 if ((userInfoBean.getXiaolumm() != null) && (userInfoBean.getXiaolumm().getId()
                     != 0)) {
-                  img_mmentry.setVisibility(View.VISIBLE);
+                  rl_mmentry.setVisibility(View.VISIBLE);
                 } else {
-                  img_mmentry.setVisibility(View.INVISIBLE);
+                  rl_mmentry.setVisibility(View.INVISIBLE);
                 }
               }
             }

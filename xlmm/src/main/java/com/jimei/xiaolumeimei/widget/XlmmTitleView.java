@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jimei.xiaolumeimei.R;
@@ -20,7 +21,7 @@ public class XlmmTitleView extends AppBarLayout {
     private TextView name;
     private AppBarLayout layout;
     private Toolbar toolbar;
-    private ImageView finishIv;
+    private RelativeLayout finishLayout;
 
     public XlmmTitleView(Context context) {
         super(context);
@@ -37,17 +38,17 @@ public class XlmmTitleView extends AppBarLayout {
         name = ((TextView) view.findViewById(R.id.tv_title));
         layout = ((AppBarLayout) view.findViewById(R.id.app_bar_layout));
         toolbar = ((Toolbar) view.findViewById(R.id.toolbar));
-        finishIv = (ImageView) view.findViewById(R.id.finish_iv);
+        finishLayout = (RelativeLayout) view.findViewById(R.id.finish_rl);
         if (attrs != null) {
             TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.XlmmTitleView);
             name.setText(array.getString(R.styleable.XlmmTitleView_xlmm_title));
         }
         toolbar.setTitle("");
-        ((AppCompatActivity)context).setSupportActionBar(toolbar);
-        finishIv.setOnClickListener(new View.OnClickListener() {
+        ((AppCompatActivity) context).setSupportActionBar(toolbar);
+        finishLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((AppCompatActivity)context).finish();
+                ((AppCompatActivity) context).finish();
             }
         });
     }

@@ -50,8 +50,6 @@ public class ChanggeSelectAddressActivity extends BaseSwipeBackCompatActivity
     @Bind(R.id.switch_button)
     SwitchCompat switchButton;
     @Bind(R.id.save) Button save;
-    //@Bind(R.id.delete)
-    //Button delete;
     @Bind(R.id.main)
     LinearLayout main;
     private String id;
@@ -75,7 +73,6 @@ public class ChanggeSelectAddressActivity extends BaseSwipeBackCompatActivity
     protected void setListener() {
         save.setOnClickListener(this);
         address.setOnClickListener(this);
-        //delete.stOnClickListener(this);
         switchButton.setOnCheckedChangeListener(this);
     }
 

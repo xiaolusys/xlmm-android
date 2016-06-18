@@ -3,10 +3,12 @@ package com.jimei.xiaolumeimei.ui.activity.trade;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.FrameLayout.LayoutParams;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -267,6 +269,10 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
             iView.setVisibility(View.VISIBLE);
             lineImage.setVisibility(View.VISIBLE);
             textView.setVisibility(View.VISIBLE);
+        } else {
+            LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+            lp.gravity = Gravity.CENTER;
+            statusLayout.setLayoutParams(lp);
         }
         if (status_shaft.size() > 1) {
             String display = status_shaft.get(status_shaft.size() - 1).getStatus_display();

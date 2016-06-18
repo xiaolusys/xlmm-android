@@ -123,7 +123,7 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
             textView.setTextColor(getResources().getColor(R.color.text_color_62));
             textView.setText(refund_choice.getName());
             textView.setGravity(Gravity.LEFT);
-            textView.setPadding(0, 12, 0, 12);
+            textView.setPadding(0, 15, 0, 15);
             button.setTag(textView);
             radioGroup.addView(button);
             tvLayout.addView(textView);
@@ -231,6 +231,10 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
                     @Override
                     public void onNext(RefundMsgBean resp) {
                         JUtils.Toast(resp.getInfo());
+                        if (resp.getCode() == 0) {
+                            Intent intent = new Intent(ApplyRefundActivity.this, RefundResultActivity.class);
+                            startActivity(intent);
+                        }
                         Log.i(TAG, "commit_apply success " + resp.toString());
                         finish();
                     }
