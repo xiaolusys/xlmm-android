@@ -11,12 +11,14 @@ import android.provider.MediaStore;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -101,6 +103,8 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
     RadioGroup radioGroup;
     @Bind(R.id.msg_tv)
     TextView msgTv;
+    @Bind(R.id.ll_tv)
+    LinearLayout tvLayout;
 
     ImageView img_proof_pic1;
     ImageView img_proof_pic2;
@@ -215,8 +219,15 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
         List<OrderDetailBean.ExtrasBean.RefundChoicesBean> refund_choices = extraBean.getRefund_choices();
         for (OrderDetailBean.ExtrasBean.RefundChoicesBean refund_choice : refund_choices) {
             RadioButton button = new RadioButton(this);
-            button.setText(refund_choice.getName());
+            TextView textView = new TextView(this);
+            textView.setTextSize(15);
+            textView.setTextColor(getResources().getColor(R.color.text_color_62));
+            textView.setText(refund_choice.getName());
+            textView.setGravity(Gravity.LEFT);
+            textView.setPadding(0, 15, 0, 15);
+            button.setTag(textView);
             radioGroup.addView(button);
+            tvLayout.addView(textView);
         }
     }
 
@@ -327,7 +338,7 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
         int radioButtonId = radioGroup.getCheckedRadioButtonId();
         RadioButton radioButton = (RadioButton) radioGroup.findViewById(radioButtonId);
         for (OrderDetailBean.ExtrasBean.RefundChoicesBean bean : extraBean.getRefund_choices()) {
-            if (bean.getName().equals(radioButton.getText().toString())) {
+            if (bean.getName().equals(((TextView) radioButton.getTag()).getText().toString())) {
                 refund_channel = bean.getRefund_channel();
             }
         }
@@ -351,6 +362,10 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
                     @Override
                     public void onNext(RefundMsgBean resp) {
                         JUtils.Toast(resp.getInfo());
+                        if (resp.getCode() == 0) {
+                            Intent intent = new Intent(ApplyReturnGoodsActivity.this, RefundResultActivity.class);
+                            startActivity(intent);
+                        }
                         Log.i(TAG, "commit_apply " + resp.toString());
                         finish();
                     }

@@ -26,14 +26,22 @@
                 android:layout_gravity="center"
                 android:src="@drawable/icon_xlmm" />
 
-            <ImageView
-                android:id="@+id/img_mmentry"
+            <RelativeLayout
+                android:id="@+id/rl_mmentry"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="right"
-                android:layout_marginRight="12dp"
-                android:src="@drawable/ic_setting"
-                android:visibility="invisible" />
+                android:gravity="center"
+                android:visibility="invisible">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="12dp"
+                    android:src="@drawable/ic_setting" />
+            </RelativeLayout>
+
 
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
@@ -66,20 +74,19 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:visibility="invisible"
         android:id="@+id/rv_top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="8dp"
-        android:background="@drawable/shape_top">
+        android:background="@drawable/shape_top"
+        android:visibility="invisible">
 
         <ImageView
             android:id="@+id/image_top"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@drawable/go_top"
-            />
+            android:src="@drawable/go_top" />
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

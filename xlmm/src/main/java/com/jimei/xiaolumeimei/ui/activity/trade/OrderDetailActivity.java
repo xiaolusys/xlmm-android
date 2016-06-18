@@ -231,7 +231,10 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         tx_order_id.setText("订单编号: " + orderDetailBean.getTid());
         tx_order_state.setText(orderDetailBean.getStatus_display());
         tx_custom_name.setText("姓名：" + orderDetailBean.getUser_adress().getReceiver_name());
-        tx_custom_address.setText("地址：" + orderDetailBean.getUser_adress().getReceiver_state() + orderDetailBean.getUser_adress().getReceiver_city() + orderDetailBean.getUser_adress().getReceiver_address());
+        tx_custom_address.setText("地址：" + orderDetailBean.getUser_adress().getReceiver_state()
+                + orderDetailBean.getUser_adress().getReceiver_city()
+                + orderDetailBean.getUser_adress().getReceiver_district()
+                + orderDetailBean.getUser_adress().getReceiver_address());
         tx_order_totalfee.setText("¥" + orderDetailBean.getTotal_fee());
         tx_order_discountfee.setText("¥" + orderDetailBean.getDiscount_fee());
         tx_order_postfee.setText("¥" + orderDetailBean.getPost_fee());
@@ -363,7 +366,9 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                 Bundle bundle = new Bundle();
                 bundle.putString("receiver_name", orderDetail.getUser_adress().getReceiver_name());
                 bundle.putString("mobile", orderDetail.getUser_adress().getReceiver_mobile());
-                bundle.putString("address1", orderDetail.getUser_adress().getReceiver_state() + orderDetail.getUser_adress().getReceiver_city() + orderDetail.getUser_adress().getReceiver_district());
+                bundle.putString("address1", orderDetail.getUser_adress().getReceiver_state()
+                        + orderDetail.getUser_adress().getReceiver_city()
+                        + orderDetail.getUser_adress().getReceiver_district());
                 bundle.putString("address2", orderDetail.getUser_adress().getReceiver_address());
                 bundle.putString("receiver_state", orderDetail.getUser_adress().getReceiver_state());
                 bundle.putString("receiver_city", orderDetail.getUser_adress().getReceiver_city());
@@ -397,7 +402,10 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                     public void onNext(OrderDetailBean orderDetailBean) {
                         orderDetail = orderDetailBean;
                         tx_custom_name.setText("姓名：" + orderDetailBean.getUser_adress().getReceiver_name());
-                        tx_custom_address.setText("地址：" + orderDetailBean.getUser_adress().getReceiver_state() + orderDetailBean.getUser_adress().getReceiver_city() + orderDetailBean.getUser_adress().getReceiver_address());
+                        tx_custom_address.setText("地址：" + orderDetailBean.getUser_adress().getReceiver_state()
+                                + orderDetailBean.getUser_adress().getReceiver_city()
+                                + orderDetailBean.getUser_adress().getReceiver_district()
+                                + orderDetailBean.getUser_adress().getReceiver_address());
                         if (orderDetailBean.getLogistics_company() != null) {
                             String name = orderDetailBean.getLogistics_company().getName();
                             logisticsTv.setText(name);
