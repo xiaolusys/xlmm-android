@@ -40,6 +40,7 @@ public class CartsinfoBean {
   @SerializedName("sku_name") private String mSkuName;
   @SerializedName("id") private String mId;
   @SerializedName("buyer_id") private String mBuyerId;
+  @SerializedName("item_weburl") private String mItemWeburl;
   /**
    * is_sale_out : false
    */
@@ -54,10 +55,12 @@ public class CartsinfoBean {
     this.mStatus = status;
   }
 
+  public String getItemWeburl() {
+    return mItemWeburl;
+  }
   public String getSkuId() {
     return mSkuId;
   }
-
   public void setSkuId(String skuId) {
     this.mSkuId = skuId;
   }
