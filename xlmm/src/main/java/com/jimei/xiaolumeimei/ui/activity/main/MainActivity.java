@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -58,6 +59,7 @@ import com.jimei.xiaolumeimei.ui.activity.user.WalletActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.WxLoginBindPhoneActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaInfoActivity;
 import com.jimei.xiaolumeimei.ui.fragment.v1.view.MastFragment;
+import com.jimei.xiaolumeimei.ui.fragment.v2.FirstFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.TodayV2Fragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.TomorrowV2Fragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.YesterdayV2Fragment;
@@ -191,6 +193,12 @@ public class MainActivity extends BaseActivity
   @Override protected void initData() {
 
     init(null);
+
+    if (LoginUtils.isJumpToLogin(getApplicationContext())) {
+      FirstFragment firstFragment = FirstFragment.newInstance("first");
+      firstFragment.setStyle(DialogFragment.STYLE_NORMAL,R.style.Translucent_NoTitle);
+      firstFragment.show(getFragmentManager(), "first");
+    }
 
     new Thread(() -> {
       try {
@@ -661,18 +669,6 @@ public class MainActivity extends BaseActivity
             if (!TextUtils.isEmpty(extra)) {
               JumpUtils.JumpInfo jump_info = JumpUtils.get_jump_info(extra);
               if (extra.startsWith("http://")) {
-                //intent = new Intent(MainActivity.this,
-                //        ActivityWebViewActivity.class);
-                //SharedPreferences sharedPreferences =
-                //        getSharedPreferences("xlmmCookiesAxiba",
-                //                Context.MODE_PRIVATE);
-                //String cookies = sharedPreferences.getString("Cookie", "");
-                //Bundle bundle = new Bundle();
-                //bundle.putString("cookies", cookies);
-                //bundle.putString("actlink", extra);
-                //intent.putExtras(bundle);
-                //startActivity(intent);
-
                 JumpUtils.jumpToWebViewWithCookies(MainActivity
                     .this, extra, -1, ActivityWebViewActivity.class);
               } else {
@@ -951,18 +947,22 @@ public class MainActivity extends BaseActivity
           });
       addSubscription(subscribe2);
 
-      switch (vp.getCurrentItem()) {
-        case 0:
-          ((YesterdayV2Fragment) list.get(0)).load(swipeRefreshLayout);
-          break;
-        case 1:
-          ((TodayV2Fragment) list.get(1)).load(swipeRefreshLayout);
-          break;
-        case 2:
-          ((TomorrowV2Fragment) list.get(2)).load(swipeRefreshLayout);
-          break;
+      try {
+        switch (vp.getCurrentItem()) {
+          case 0:
+            ((YesterdayV2Fragment) list.get(0)).load(swipeRefreshLayout);
+            break;
+          case 1:
+            ((TodayV2Fragment) list.get(1)).load(swipeRefreshLayout);
+            break;
+          case 2:
+            ((TomorrowV2Fragment) list.get(2)).load(swipeRefreshLayout);
+            break;
+        }
+        scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(vp.getCurrentItem()));
+      } catch (Exception e) {
+        e.printStackTrace();
       }
-      scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(vp.getCurrentItem()));
 
       SharedPreferences.Editor edit = sharedPreferencesTime.edit();
       edit.putString("resumetime", newTime);
@@ -1002,7 +1002,11 @@ public class MainActivity extends BaseActivity
   }
 
   @Override public void onPageSelected(int position) {
-    scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(position));
+    try {
+      scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(position));
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     switch (position) {
       case 0:
         //radioGroup.check(R.id.rb_yesterday);
@@ -1066,18 +1070,22 @@ public class MainActivity extends BaseActivity
 
   @Override public void onRefresh() {
     init(swipeRefreshLayout);
-    switch (vp.getCurrentItem()) {
-      case 0:
-        ((YesterdayV2Fragment) list.get(0)).load(swipeRefreshLayout);
-        break;
-      case 1:
-        ((TodayV2Fragment) list.get(1)).load(swipeRefreshLayout);
-        break;
-      case 2:
-        ((TomorrowV2Fragment) list.get(2)).load(swipeRefreshLayout);
-        break;
+    try {
+      switch (vp.getCurrentItem()) {
+        case 0:
+          ((YesterdayV2Fragment) list.get(0)).load(swipeRefreshLayout);
+          break;
+        case 1:
+          ((TodayV2Fragment) list.get(1)).load(swipeRefreshLayout);
+          break;
+        case 2:
+          ((TomorrowV2Fragment) list.get(2)).load(swipeRefreshLayout);
+          break;
+      }
+      scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(vp.getCurrentItem()));
+    } catch (Exception e) {
+      e.printStackTrace();
     }
-    scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(vp.getCurrentItem()));
   }
 
   @Override protected void onDestroy() {

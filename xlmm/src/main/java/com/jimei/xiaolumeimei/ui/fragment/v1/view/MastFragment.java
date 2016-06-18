@@ -295,12 +295,6 @@ public class MastFragment extends DialogFragment {
                 dismiss();
             }
         });
-
-        //maskImage.setOnClickListener(new View.OnClickListener() {
-        //  @Override public void onClick(View v) {
-        //
-        //  }
-        //});
     }
 
     @Override
