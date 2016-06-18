@@ -23,8 +23,10 @@ public class LoginUtils {
   static String TAG = "LoginUtils";
   static SharedPreferences sharedPreferences;
   static SharedPreferences sharedPreferences1;
+  static SharedPreferences sharedPreferences2;
   static SharedPreferences.Editor editor;
   static SharedPreferences.Editor editor1;
+  static SharedPreferences.Editor editor2;
   static UserInfoBean userinfo;
 
   public static void saveLoginInfo(boolean isSuccess, Context context, String username,
@@ -114,6 +116,28 @@ public class LoginUtils {
       Log.d(TAG, "have not logined, " + "jump to LoginActivity");
       context.startActivity(intent);
     }
+  }
+
+  public static void saveFirst(Context context,boolean isFirst){
+    sharedPreferences2 = context.getSharedPreferences("first", Context.MODE_PRIVATE);
+    editor2= sharedPreferences2.edit();
+    editor2.putBoolean("success", isFirst);
+    editor2.apply();
+  }
+
+  public static boolean checkFirst(Context context){
+    sharedPreferences2 = context.getSharedPreferences("first", Context.MODE_PRIVATE);
+
+    return sharedPreferences2.getBoolean("success", false);
+  }
+
+  public static boolean isJumpToLogin(Context context) {
+    if (!checkLoginState(context)) {
+      if (!checkFirst(context)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   public static void setPushUserAccount(Context context, String mRegId) {
