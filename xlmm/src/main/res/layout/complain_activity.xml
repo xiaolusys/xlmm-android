@@ -15,9 +15,9 @@
         android:id="@+id/rg"
         android:layout_width="match_parent"
         android:layout_height="120px"
-        android:padding="8dp"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="8dp">
 
         <RadioButton
             android:id="@+id/rb_1"
@@ -27,16 +27,16 @@
             android:checked="true"
             android:text="订单相关"
             android:textColor="@color/text_color_62"
-            android:textSize="13sp" />
+            android:textSize="12sp" />
 
         <RadioButton
             android:id="@+id/rb_2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="意见/建议"
+            android:text="意见建议"
             android:textColor="@color/text_color_62"
-            android:textSize="13sp" />
+            android:textSize="12sp" />
 
         <RadioButton
             android:id="@+id/rb_3"
@@ -45,7 +45,7 @@
             android:layout_weight="1"
             android:text="售后问题"
             android:textColor="@color/text_color_62"
-            android:textSize="13sp" />
+            android:textSize="12sp" />
 
         <RadioButton
             android:id="@+id/rb_4"
@@ -54,7 +54,7 @@
             android:layout_weight="1"
             android:text="其它问题"
             android:textColor="@color/text_color_62"
-            android:textSize="13sp" />
+            android:textSize="12sp" />
 
     </RadioGroup>
 
