@@ -196,11 +196,11 @@ public interface XlmmService {
 
     //获取购物车信息
 
-    @GET("/rest/v1/carts")
+    @GET("/rest/v2/carts")
     Observable<List<CartsinfoBean>> getCartsList();
 
     //获取历史购物车信息
-    @GET("/rest/v1/carts/show_carts_history")
+    @GET("/rest/v2/carts/show_carts_history")
     Observable<List<CartsinfoBean>> getCartsHisList();
 
     //获取购物信息列表
