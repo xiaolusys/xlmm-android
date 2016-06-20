@@ -4,9 +4,6 @@
     <string name="navigation_drawer_open">打开</string>
     <string name="navigation_drawer_close">关闭</string>
     <string name="today_new">今日上新</string>
-    <string name="productprice">¥ 79.9</string>
-    <string name="productstdprice">¥ 149.9</string>
-    <string name="productname">松紧腰小脚加绒铅笔裤</string>
     <string name="login">登录</string>
     <string name="register">注册</string>
     <string name="title_activity_allorders">所有订单</string>
@@ -41,7 +38,7 @@
     <string name="not_enough_cash1">您的余额不足，不能提现哦</string>
     <string name="publish_info">发布产品就会\n有机会获得更多的返利现金哦~</string>
     <string name="chooselist">选品列表</string>
-    <string name="complaininfo">请输入您的建议,以便我们更好的服务于您</string>
+    <string name="complaininfo">请描述您的具体问题，我们将尽快为你解决！</string>
     <string name="logining">正在登录</string>
     <string name="auth_cancel">取消授权</string>
     <string name="auth_error">授权失败</string>
@@ -77,4 +74,5 @@
     <string name="huodong">活动</string>
     <string name="rebuy">重新购买</string>
     <string name="modify_name">修改昵称</string>
+    <string name="refund_msg">退货请求提交成功，客服会在24小时完成审核，您可以通过退换货订单详情页面查询进展，审核通过后您需要在退换货界面填写退货快递单号，方便我们为你快速处理退款</string>
 </resources>

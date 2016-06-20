@@ -11,26 +11,32 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import cn.iwgang.countdownview.CountdownView;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
-import com.jimei.xiaolumeimei.event.TimeEvent;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.TodayAdapter;
 import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
+import com.jimei.xiaolumeimei.event.TimeEvent;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jude.utils.JUtils;
+import com.umeng.analytics.MobclickAgent;
+
+import org.greenrobot.eventbus.EventBus;
+
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import org.greenrobot.eventbus.EventBus;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import cn.iwgang.countdownview.CountdownView;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -43,7 +49,7 @@ public class TomorrowV2Fragment extends BaseFragment {
 
   @Bind(R.id.xrcy_tomorrorv2) XRecyclerView xRecyclerView;
   int page_size = 10;
-  private List<ProductListBean.ResultsEntity> list = new ArrayList<>();
+  private List<ProductListBean.ResultsEntity> list;
   private MaterialDialog materialDialog;
   private int page = 2;
   private int totalPages;//总的分页数
@@ -68,6 +74,7 @@ public class TomorrowV2Fragment extends BaseFragment {
 
   @Override public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    list = new ArrayList<>();
     setRetainInstance(true);
   }
 
@@ -76,7 +83,6 @@ public class TomorrowV2Fragment extends BaseFragment {
     view = inflater.inflate(R.layout.fragment_tomorrorv2, container, false);
     ButterKnife.bind(this, view);
     initViews();
-
     return view;
   }
 
@@ -99,7 +105,7 @@ public class TomorrowV2Fragment extends BaseFragment {
         time = crtdate.getTime() - now.getTime();
       }
     } catch (Exception e) {
-
+      JUtils.Log("时间转换异常");
     }
     return time;
   }
@@ -107,6 +113,12 @@ public class TomorrowV2Fragment extends BaseFragment {
   public void load(SwipeRefreshLayout swipeRefreshLayout) {
     list.clear();
     page = 2;
+    if (mTodayAdapter == null) {
+      mTodayAdapter = new TodayAdapter(this, getActivity());
+    }
+    if (list == null) {
+      list = new ArrayList<>();
+    }
     mTodayAdapter.updateWithClear(list);
     if (swipeRefreshLayout == null) {
       showIndeterminateProgressDialog(false);
@@ -125,8 +137,7 @@ public class TomorrowV2Fragment extends BaseFragment {
             try {
 
               if (productListBean != null) {
-                List<ProductListBean.ResultsEntity> results =
-                    productListBean.getResults();
+                List<ProductListBean.ResultsEntity> results = productListBean.getResults();
                 totalPages = productListBean.getCount() / page_size;
                 list.clear();
                 list.addAll(results);
@@ -148,20 +159,6 @@ public class TomorrowV2Fragment extends BaseFragment {
             }
           }
         });
-
-    //Subscription subscribe = Observable.timer(1, 1, TimeUnit.SECONDS)
-    //    .onBackpressureDrop()
-    //    .map(aLong -> calcLeftTime(left))
-    //    .observeOn(AndroidSchedulers.mainThread())
-    //    .subscribe(new Action1<Long>() {
-    //      @Override public void call(Long aLong) {
-    //        if (aLong > 0) {
-    //          countTime.updateShow(aLong);
-    //        } else {
-    //          countTime.setVisibility(View.INVISIBLE);
-    //        }
-    //      }
-    //    }, Throwable::printStackTrace);
   }
 
   private void initLeftTime() {
@@ -189,8 +186,8 @@ public class TomorrowV2Fragment extends BaseFragment {
   private void initViews() {
 
     head = LayoutInflater.from(getActivity())
-        .inflate(R.layout.tomorrow_poster_header,
-            (ViewGroup) view.findViewById(R.id.head_today), false);
+        .inflate(R.layout.tomorrow_poster_header, (ViewGroup) view.findViewById(R.id.head_today),
+            false);
     countTime = (CountdownView) head.findViewById(R.id.countTime);
     GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
     //manager.setOrientation(GridLayoutManager.VERTICAL);
@@ -210,24 +207,6 @@ public class TomorrowV2Fragment extends BaseFragment {
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
       @Override public void onRefresh() {
-        //subscribe2 = ProductModel.getInstance()
-        //    .getChildList(1, page * page_size)
-        //    .subscribeOn(Schedulers.io())
-        //    .subscribe(new ServiceResponse<ChildListBean>() {
-        //      @Override public void onNext(ChildListBean childListBean) {
-        //        List<ChildListBean.ResultsEntity> results = childListBean.getResults();
-        //        mChildListAdapter.updateWithClear(results);
-        //      }
-        //
-        //      @Override public void onCompleted() {
-        //        super.onCompleted();
-        //        try {
-        //          xRecyclerView.post(xRecyclerView::refreshComplete);
-        //        } catch (Exception e) {
-        //          e.printStackTrace();
-        //        }
-        //      }
-        //    });
       }
 
       @Override public void onLoadMore() {
@@ -244,6 +223,7 @@ public class TomorrowV2Fragment extends BaseFragment {
 
   @Override public void onResume() {
     super.onResume();
+    MobclickAgent.onPageStart(this.getClass().getSimpleName());
     ProductModel.getInstance()
         .getTodayList(1, 1)
         .subscribeOn(Schedulers.io())
@@ -291,8 +271,7 @@ public class TomorrowV2Fragment extends BaseFragment {
   @Override public void onDetach() {
     super.onDetach();
     try {
-      Field childFragmentManager =
-          Fragment.class.getDeclaredField("mChildFragmentManager");
+      Field childFragmentManager = Fragment.class.getDeclaredField("mChildFragmentManager");
       childFragmentManager.setAccessible(true);
       childFragmentManager.set(this, null);
     } catch (NoSuchFieldException e) {
@@ -333,6 +312,17 @@ public class TomorrowV2Fragment extends BaseFragment {
     if (subscribe3 != null && subscribe3.isUnsubscribed()) {
       subscribe3.unsubscribe();
     }
+  }
 
+  @Override public void onPause() {
+    super.onPause();
+    MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+  }
+  public void goToTop() {
+    try {
+      xRecyclerView.scrollToPosition(0);
+    } catch (NullPointerException e) {
+      e.printStackTrace();
+    }
   }
 }

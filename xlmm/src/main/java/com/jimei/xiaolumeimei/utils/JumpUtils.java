@@ -204,7 +204,8 @@ public class JumpUtils {
           }
           if (content[1].contains("activity_id")){
             String idStr[] = content[1].split("activity_id=");
-            id = Integer.getInteger(idStr[1].split("&")[0]);
+            String s = idStr[1].split("&")[0];
+            id = Integer.parseInt(s);
           }
           try {
             jumpInfo.setUrl(URLDecoder.decode(url, "utf-8"));

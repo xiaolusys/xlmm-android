@@ -42,6 +42,7 @@ import com.jimei.xiaolumeimei.ui.activity.user.WaitSendAddressActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.pingplusplus.android.PaymentActivity;
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -94,6 +95,10 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     @Bind(R.id.logistics_right)
     ImageView logisticsRightImage;
     ListView listView;
+    @Bind(R.id.rl_pay)
+    RelativeLayout relativeLayout;
+    @Bind(R.id.iv_pay)
+    ImageView imageView;
     private ArrayList<PackageBean> packageBeanList;
     int order_id = 0;
     OrderDetailBean orderDetail;
@@ -204,7 +209,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
 
                         @Override
                         public void onError(Throwable e) {
-
                             Log.e(TAG, " error:, " + e.toString());
                             super.onError(e);
                         }
@@ -227,7 +231,10 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         tx_order_id.setText("订单编号: " + orderDetailBean.getTid());
         tx_order_state.setText(orderDetailBean.getStatus_display());
         tx_custom_name.setText("姓名：" + orderDetailBean.getUser_adress().getReceiver_name());
-        tx_custom_address.setText("地址：" + orderDetailBean.getUser_adress().getReceiver_state() + orderDetailBean.getUser_adress().getReceiver_city() + orderDetailBean.getUser_adress().getReceiver_address());
+        tx_custom_address.setText("地址：" + orderDetailBean.getUser_adress().getReceiver_state()
+                + orderDetailBean.getUser_adress().getReceiver_city()
+                + orderDetailBean.getUser_adress().getReceiver_district()
+                + orderDetailBean.getUser_adress().getReceiver_address());
         tx_order_totalfee.setText("¥" + orderDetailBean.getTotal_fee());
         tx_order_discountfee.setText("¥" + orderDetailBean.getDiscount_fee());
         tx_order_postfee.setText("¥" + orderDetailBean.getPost_fee());
@@ -238,7 +245,18 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         }
         JUtils.Log(TAG, "crt time " + orderDetailBean.getCreated());
         mGoodsAdapter = new OrderGoodsListAdapter(this);
-
+        String channel = orderDetailBean.getChannel();
+        if ("".equals(channel)) {
+            relativeLayout.setVisibility(View.GONE);
+        } else if (channel.contains("budget")) {
+            imageView.setImageResource(R.drawable.icon_xiaolu);
+        } else if (channel.contains("alipay")) {
+            imageView.setImageResource(R.drawable.alipay);
+        } else if (channel.contains("wx")) {
+            imageView.setImageResource(R.drawable.wx);
+        } else {
+            relativeLayout.setVisibility(View.GONE);
+        }
         packageBeanList = new ArrayList<>();
         Subscription subscribe = TradeModel.getInstance()
                 .getPackageList(tid)
@@ -348,7 +366,9 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                 Bundle bundle = new Bundle();
                 bundle.putString("receiver_name", orderDetail.getUser_adress().getReceiver_name());
                 bundle.putString("mobile", orderDetail.getUser_adress().getReceiver_mobile());
-                bundle.putString("address1", orderDetail.getUser_adress().getReceiver_state() + orderDetail.getUser_adress().getReceiver_city() + orderDetail.getUser_adress().getReceiver_district());
+                bundle.putString("address1", orderDetail.getUser_adress().getReceiver_state()
+                        + orderDetail.getUser_adress().getReceiver_city()
+                        + orderDetail.getUser_adress().getReceiver_district());
                 bundle.putString("address2", orderDetail.getUser_adress().getReceiver_address());
                 bundle.putString("receiver_state", orderDetail.getUser_adress().getReceiver_state());
                 bundle.putString("receiver_city", orderDetail.getUser_adress().getReceiver_city());
@@ -372,6 +392,8 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onPageStart(this.getClass().getSimpleName());
+        MobclickAgent.onResume(this);
         Subscription subscription = TradeModel.getInstance()
                 .getOrderDetailBean(order_id)
                 .subscribeOn(Schedulers.io())
@@ -380,7 +402,10 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                     public void onNext(OrderDetailBean orderDetailBean) {
                         orderDetail = orderDetailBean;
                         tx_custom_name.setText("姓名：" + orderDetailBean.getUser_adress().getReceiver_name());
-                        tx_custom_address.setText("地址：" + orderDetailBean.getUser_adress().getReceiver_state() + orderDetailBean.getUser_adress().getReceiver_city() + orderDetailBean.getUser_adress().getReceiver_address());
+                        tx_custom_address.setText("地址：" + orderDetailBean.getUser_adress().getReceiver_state()
+                                + orderDetailBean.getUser_adress().getReceiver_city()
+                                + orderDetailBean.getUser_adress().getReceiver_district()
+                                + orderDetailBean.getUser_adress().getReceiver_address());
                         if (orderDetailBean.getLogistics_company() != null) {
                             String name = orderDetailBean.getLogistics_company().getName();
                             logisticsTv.setText(name);
@@ -556,17 +581,35 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
-            holder.nameTv.setText(logisticCompanies.get(position).getName());
+            String name = logisticCompanies.get(position).getName();
+            if (name.contains("申通")) {
+                holder.iconImg.setImageResource(R.drawable.icon_sto);
+            } else if (name.contains("邮政")) {
+                holder.iconImg.setImageResource(R.drawable.icon_ems);
+            } else if (name.contains("韵达")) {
+                holder.iconImg.setImageResource(R.drawable.icon_yunda);
+            } else if (name.contains("小鹿")) {
+                holder.iconImg.setImageResource(R.drawable.icon_xiaolu);
+            }
+            holder.nameTv.setText(name);
             return convertView;
         }
 
         private class ViewHolder {
             TextView nameTv;
+            ImageView iconImg;
 
             public ViewHolder(View itemView) {
                 nameTv = ((TextView) itemView.findViewById(R.id.name));
-
+                iconImg = ((ImageView) itemView.findViewById(R.id.icon));
             }
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+        MobclickAgent.onPause(this);
     }
 }

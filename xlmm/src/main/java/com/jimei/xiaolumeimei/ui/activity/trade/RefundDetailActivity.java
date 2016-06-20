@@ -2,29 +2,29 @@ package com.jimei.xiaolumeimei.ui.activity.trade;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.FrameLayout.LayoutParams;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import butterknife.Bind;
 
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.HorizontalScrollViewAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
+import com.jimei.xiaolumeimei.entities.AllRefundsBean.ResultsEntity.StatusShaftBean;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
-import com.jimei.xiaolumeimei.widget.MyHorizontalScrollView;
 import com.jimei.xiaolumeimei.widget.RoundCornerImageView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,6 +84,45 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     @Bind(R.id.image_layout)
     RelativeLayout imageLayout;
     AllRefundsBean.ResultsEntity refundDetail;
+    @Bind(R.id.iv_1)
+    ImageView imageView1;
+    @Bind(R.id.iv_2)
+    ImageView imageView2;
+    @Bind(R.id.iv_3)
+    ImageView imageView3;
+    @Bind(R.id.iv_4)
+    ImageView imageView4;
+    @Bind(R.id.iv_5)
+    ImageView imageView5;
+    @Bind(R.id.iv)
+    ImageView iView;
+    @Bind(R.id.line_2)
+    ImageView lineImage2;
+    @Bind(R.id.line_3)
+    ImageView lineImage3;
+    @Bind(R.id.line_4)
+    ImageView lineImage4;
+    @Bind(R.id.line_5)
+    ImageView lineImage5;
+    @Bind(R.id.line_6)
+    ImageView lineImage6;
+    @Bind(R.id.line)
+    ImageView lineImage;
+    @Bind(R.id.tv_1)
+    TextView textView1;
+    @Bind(R.id.tv_2)
+    TextView textView2;
+    @Bind(R.id.tv_3)
+    TextView textView3;
+    @Bind(R.id.tv_4)
+    TextView textView4;
+    @Bind(R.id.tv_5)
+    TextView textView5;
+    @Bind(R.id.tv)
+    TextView textView;
+    @Bind(R.id.status_layout)
+    LinearLayout statusLayout;
+
     private int refund_state;
     private int goods_id;
 
@@ -98,11 +137,6 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
             refund_state = getIntent().getExtras().getInt("refund_state");
         }
         Log.d(TAG, "refund_state " + refund_state);
-        if (refund_state == XlmmConst.REFUND_STATE_SELLER_AGREED) {
-            returnLayout.setVisibility(View.VISIBLE);
-        } else if (refund_state != XlmmConst.REFUND_STATE_BUYER_APPLY) {
-            lastLayout.setVisibility(View.VISIBLE);
-        }
         JUtils.Log(TAG, "initData goods_id " + goods_id);
         showIndeterminateProgressDialog(false);
         Subscription subscription = TradeModel.getInstance()
@@ -166,6 +200,12 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     }
 
     private void fillDataToView(AllRefundsBean.ResultsEntity refundDetailBean) {
+        if (refund_state == XlmmConst.REFUND_STATE_SELLER_AGREED && refundDetailBean.isHas_good_return()) {
+            returnLayout.setVisibility(View.VISIBLE);
+
+        } else if (refund_state != XlmmConst.REFUND_STATE_BUYER_APPLY) {
+            lastLayout.setVisibility(View.VISIBLE);
+        }
         JUtils.Log(TAG, "fillDataToView ");
         orderIdTv.setText(refundDetailBean.getRefund_no());
         statusTv.setText(refundDetailBean.getStatus_display());
@@ -211,7 +251,83 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
         } else {
             refundLayout.setVisibility(View.GONE);
         }
+
+        if ("拒绝退款".equals(refundDetailBean.getStatus_display()) || "没有退款".equals(refundDetailBean.getStatus_display()) ||
+                "退款关闭".equals(refundDetailBean.getStatus_display())) {
+            statusLayout.setVisibility(View.GONE);
+        } else {
+            showRefundStatus(refundDetailBean);
+        }
     }
+
+    private void showRefundStatus(AllRefundsBean.ResultsEntity refundDetailBean) {
+        List<StatusShaftBean> status_shaft = refundDetailBean.getStatus_shaft();
+        if (refundDetailBean.isHas_good_return()) {
+            textView3.setVisibility(View.VISIBLE);
+            lineImage3.setVisibility(View.VISIBLE);
+            imageView3.setVisibility(View.VISIBLE);
+            iView.setVisibility(View.VISIBLE);
+            lineImage.setVisibility(View.VISIBLE);
+            textView.setVisibility(View.VISIBLE);
+        } else {
+            LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+            lp.gravity = Gravity.CENTER;
+            statusLayout.setLayoutParams(lp);
+        }
+        if (status_shaft.size() > 1) {
+            String display = status_shaft.get(status_shaft.size() - 1).getStatus_display();
+            if ("同意申请".equals(display)) {
+                setView1();
+            } else if ("退货待收".equals(display)) {
+                setView2();
+            } else if ("等待返款".equals(display)) {
+                setView3();
+            } else if ("退款成功".equals(display)) {
+                setView4();
+            }
+        }
+    }
+
+    private void setView2() {
+        setView1();
+        textView2.setTextColor(getResources().getColor(R.color.text_color_62));
+        textView.setTextColor(getResources().getColor(R.color.colorAccent));
+        imageView2.setImageResource(R.drawable.state_oval);
+        iView.setImageResource(R.drawable.state_last);
+        lineImage.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+    }
+
+    private void setView4() {
+        setView3();
+        textView4.setTextColor(getResources().getColor(R.color.text_color_62));
+        textView5.setTextColor(getResources().getColor(R.color.colorAccent));
+        imageView4.setImageResource(R.drawable.state_oval);
+        imageView5.setImageResource(R.drawable.state_last);
+        lineImage5.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+        lineImage6.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+    }
+
+
+    private void setView3() {
+        setView2();
+        textView.setTextColor(getResources().getColor(R.color.text_color_62));
+        textView3.setTextColor(getResources().getColor(R.color.text_color_62));
+        textView4.setTextColor(getResources().getColor(R.color.colorAccent));
+        iView.setImageResource(R.drawable.state_oval);
+        imageView3.setImageResource(R.drawable.state_oval);
+        imageView4.setImageResource(R.drawable.state_last);
+        lineImage3.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+        lineImage4.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+    }
+
+    private void setView1() {
+        textView1.setTextColor(getResources().getColor(R.color.text_color_62));
+        textView2.setTextColor(getResources().getColor(R.color.colorAccent));
+        imageView1.setImageResource(R.drawable.state_oval);
+        imageView2.setImageResource(R.drawable.state_last);
+        lineImage2.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+    }
+
 
     private void fillPicPath(List<String> mDatas, String pics) {
         if ((null == pics) || (pics.equals("")) || (pics.equals("[]"))) return;
@@ -220,11 +336,6 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
         for (int i = 0; i < strArray.length; i++) {
             mDatas.add(strArray[i]);
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 
     @Override
@@ -258,5 +369,19 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
                 finish();
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(this.getClass().getSimpleName());
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+        MobclickAgent.onPause(this);
     }
 }

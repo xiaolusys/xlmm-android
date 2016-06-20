@@ -32,7 +32,7 @@ public class MamaFansAdapter extends RecyclerView.Adapter<MamaFansAdapter.ViewHo
   private List<MamaFansBean.ResultsEntity> mList;
 
   public MamaFansAdapter(Activity context) {
-    mList = new ArrayList<MamaFansBean.ResultsEntity>();
+    mList = new ArrayList<>();
     this.context = context;
   }
 

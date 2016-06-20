@@ -18,6 +18,7 @@ import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -35,14 +36,10 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.PlatformActionListener;
-import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.onekeyshare.OnekeyShare;
-import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
-import cn.sharesdk.wechat.moments.WechatMoments;
+
 import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.htmlJsBridge.modules.AndroidJsBridge;
 import com.jimei.xiaolumeimei.model.ActivityModel;
@@ -52,11 +49,20 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.mob.tools.utils.UIHandler;
 import com.tbruyelle.rxpermissions.RxPermissions;
+import com.umeng.analytics.MobclickAgent;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
+import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
+import cn.sharesdk.wechat.moments.WechatMoments;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -124,9 +130,8 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
       actlink = extras.getString("actlink");
       id = extras.getInt("id");
       sessionid = extras.getString("Cookie");
-      JUtils.Log(TAG,
-          "GET cookie:" + cookies + " actlink:" + actlink + " domain:" + domain +
-              " sessionid:" + sessionid);
+      JUtils.Log(TAG, "GET cookie:" + cookies + " actlink:" + actlink + " domain:" + domain +
+          " sessionid:" + sessionid);
     }
   }
 
@@ -157,7 +162,14 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
       }
 
       String userAgentString = mWebView.getSettings().getUserAgentString();
-      mWebView.getSettings().setUserAgentString(userAgentString + "; xlmm;");
+      mWebView.getSettings()
+          .setUserAgentString(userAgentString
+              + "; xlmm/"
+              + BuildConfig.VERSION_NAME
+              + "; "
+              + "uuid/"
+              + ((TelephonyManager) XlmmApp.getInstance()
+              .getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId());
       mWebView.getSettings().setJavaScriptEnabled(true);
       mWebView.addJavascriptInterface(new AndroidJsBridge(this), "AndroidBridge");
 
@@ -198,8 +210,8 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
         }
 
         @Override
-        public void onReceivedHttpAuthRequest(WebView view, HttpAuthHandler handler,
-            String host, String realm) {
+        public void onReceivedHttpAuthRequest(WebView view, HttpAuthHandler handler, String host,
+            String realm) {
           JUtils.Log(TAG, "onReceivedHttpAuthRequest");
           view.reload();
         }
@@ -210,8 +222,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
           return super.shouldOverrideUrlLoading(view, url);
         }
 
-        public void onReceivedSslError(WebView view, SslErrorHandler handler,
-            SslError error) {
+        public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
           JUtils.Log(TAG, "onReceivedSslError:");
           //handler.cancel(); 默认的处理方式，WebView变成空白页
           //                        //接受证书
@@ -338,8 +349,12 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     UIHandler.sendMessage(msg, this);
   }
 
-  @Override
-  public void onComplete(Platform platform, int action, HashMap<String, Object> arg2) {
+  @Override public void onComplete(Platform platform, int action, HashMap<String, Object> arg2) {
+    Map<String, String> map = new HashMap<String, String>();
+    map.put("id", "name");
+
+    map.put(platform.getId() + "", platform.getName());
+    MobclickAgent.onEvent(mContext, "ShareID", map);
     // 成功
     Message msg = new Message();
     msg.what = MSG_ACTION_CCALLBACK;
@@ -411,8 +426,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     addSubscription(subscribe);
   }
 
-  protected void share_shopping(String title, String sharelink, String desc,
-      String shareimg) {
+  protected void share_shopping(String title, String sharelink, String desc, String shareimg) {
     OnekeyShare oks = new OnekeyShare();
     //关闭sso授权
     oks.disableSSOWhenAuthorize();
@@ -436,10 +450,8 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     if (partyShareInfo == null) return;
 
     JUtils.Log(TAG, " title =" + partyShareInfo.getTitle());
-    JUtils.Log(TAG, " desc="
-        + partyShareInfo.getActiveDec()
-        + " url="
-        + partyShareInfo.getShareLink());
+    JUtils.Log(TAG,
+        " desc=" + partyShareInfo.getActiveDec() + " url=" + partyShareInfo.getShareLink());
 
     OnekeyShare oks = new OnekeyShare();
     //关闭sso授权
@@ -467,8 +479,8 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     //oks.setSite(getString(R.string.app_name));
     // siteUrl是分享此内容的网站地址，仅在QQ空间使用
     //oks.setSiteUrl("http://sharesdk.cn");
-    Bitmap enableLogo = BitmapFactory.decodeResource(mContext.getResources(),
-        R.drawable.ssdk_oks_logo_copy);
+    Bitmap enableLogo =
+        BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ssdk_oks_logo_copy);
     String label = "二维码";
 
     View.OnClickListener listener = new View.OnClickListener() {
@@ -480,8 +492,8 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     };
     oks.setCustomerLogo(enableLogo, label, listener);
     // 启动分享GUI
-    oks.setShareContentCustomizeCallback(new ShareContentCustom(
-        partyShareInfo.getActiveDec() + partyShareInfo.getShareLink()));
+    oks.setShareContentCustomizeCallback(
+        new ShareContentCustom(partyShareInfo.getActiveDec() + partyShareInfo.getShareLink()));
     oks.show(this);
   }
 
@@ -548,8 +560,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
 
               Uri uri = Uri.fromFile(new File(fileName));
               // 通知图库更新
-              Intent scannerIntent =
-                  new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
+              Intent scannerIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
               scannerIntent.setData(uri);
 
               sendBroadcast(scannerIntent);
@@ -584,8 +595,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
   private void requestPermission() {
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
 
-      if (ContextCompat.checkSelfPermission(this,
-          Manifest.permission.WRITE_EXTERNAL_STORAGE)
+      if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
           != PackageManager.PERMISSION_GRANTED) {
         //申请WRITE_EXTERNAL_STORAGE权限
         ActivityCompat.requestPermissions(this,
@@ -607,8 +617,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
 
   public void copy(String content, Context context) {
     // 得到剪贴板管理器
-    ClipboardManager cmb =
-        (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+    ClipboardManager cmb = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
     cmb.setText(content.trim());
   }
 

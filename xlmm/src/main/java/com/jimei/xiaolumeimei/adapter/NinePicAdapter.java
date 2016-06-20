@@ -54,10 +54,6 @@ public class NinePicAdapter extends BaseAdapter {
         cmb.setText(content.trim());
     }
 
-    public List<NinePicBean> getDatas() {
-        return mlist;
-    }
-
     public void setDatas(List<NinePicBean> datas) {
         if (datas != null) {
             this.mlist = datas;
@@ -123,7 +119,7 @@ public class NinePicAdapter extends BaseAdapter {
                 break;
         }
         holder.headIv.setImageResource(0);
-        if (id!=-1){
+        if (id != -1) {
             holder.headIv.setImageResource(id);
         }
         holder.contentTv.setText(mlist.get(position).getDescription());

@@ -20,6 +20,7 @@ import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.widget.citypicker.CityPicker;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 import rx.Subscription;
@@ -38,8 +39,6 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
     EditText clearAddress;
     @Bind(R.id.save)
     Button save;
-    @Bind(R.id.delete)
-    Button delete;
     @Bind(R.id.main)
     LinearLayout main;
     @Bind(R.id.rl_default)
@@ -98,7 +97,6 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
     @Override
     protected void initViews() {
         parent = findViewById(R.id.main);
-        delete.setVisibility(View.GONE);
         relativeLayout.setVisibility(View.GONE);
         initPopupWindow();
     }
@@ -157,7 +155,7 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
                                         if (addressResultBean.getCode() == 0) {
                                             JUtils.Toast("修改成功");
                                             finish();
-                                        }else {
+                                        } else {
                                             JUtils.Toast("修改失败");
                                         }
                                     }
@@ -204,5 +202,19 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
         popupWindow.setOutsideTouchable(true);
         cityPicker = (CityPicker) view.findViewById(R.id.city_picker);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(this.getClass().getSimpleName());
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+        MobclickAgent.onPause(this);
     }
 }

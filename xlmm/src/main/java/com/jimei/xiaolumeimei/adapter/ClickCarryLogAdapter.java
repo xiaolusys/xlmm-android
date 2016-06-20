@@ -1,6 +1,5 @@
 package com.jimei.xiaolumeimei.adapter;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,10 +25,8 @@ public class ClickCarryLogAdapter
 
 
   private List<ClickcarryBean.ResultsEntity> mList;
-  private Context mContext;
 
-  public ClickCarryLogAdapter(Context context) {
-    this.mContext = context;
+  public ClickCarryLogAdapter() {
     mList = new ArrayList<>();
   }
 

@@ -89,6 +89,15 @@
                 android:text="注册新用户"
                 android:textColor="@color/text_color_9B"
                 android:textSize="17sp" />
+
+            <TextView
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="35px"
+                android:background="@null"
+                android:text="注:微信首次登录,自动创建账户"
+                android:textColor="@color/text_color_9B"
+                android:textSize="10sp" />
         </LinearLayout>
 
     </LinearLayout>

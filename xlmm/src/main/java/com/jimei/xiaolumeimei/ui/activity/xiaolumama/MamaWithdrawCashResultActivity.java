@@ -19,6 +19,7 @@ import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.model.UserNewModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * Created by wulei on 2016/2/4.
@@ -80,11 +81,11 @@ public class MamaWithdrawCashResultActivity extends BaseSwipeBackCompatActivity
         Subscription subscribe = UserNewModel.getInstance()
                 .getProfile()
                 .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<UserInfoBean>(){
+                .subscribe(new ServiceResponse<UserInfoBean>() {
                     @Override
                     public void onNext(UserInfoBean userInfoBean) {
                         nickName = userInfoBean.getNick();
-                        nickNameTv.setText("微信账号:"+nickName);
+                        nickNameTv.setText("微信账号:" + nickName);
                     }
                 });
         addSubscription(subscribe);
@@ -128,5 +129,19 @@ public class MamaWithdrawCashResultActivity extends BaseSwipeBackCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_withdrawcash, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(this.getClass().getSimpleName());
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+        MobclickAgent.onPause(this);
     }
 }

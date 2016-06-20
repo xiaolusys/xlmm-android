@@ -65,12 +65,10 @@ public abstract class BaseSwipeBackCompatActivity extends BaseAppCompatActivity
   @Override protected void onResume() {
     super.onResume();
     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-    MobclickAgent.onResume(this);
   }
 
   @Override protected void onPause() {
     super.onPause();
-    MobclickAgent.onPause(this);
   }
 
   @Override protected void onStop() {

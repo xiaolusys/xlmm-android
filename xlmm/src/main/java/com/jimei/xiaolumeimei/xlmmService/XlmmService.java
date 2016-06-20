@@ -54,6 +54,7 @@ import com.jimei.xiaolumeimei.entities.ProductDetailBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
+import com.jimei.xiaolumeimei.entities.RefundMsgBean;
 import com.jimei.xiaolumeimei.entities.RegisterBean;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.ResultBean;
@@ -93,7 +94,7 @@ import rx.Observable;
  */
 public interface XlmmService {
 
-  //@formatter:off
+    //@formatter:off
 
     @FormUrlEncoded
     @POST("/rest/v1/register/customer_login")
@@ -195,11 +196,11 @@ public interface XlmmService {
 
     //获取购物车信息
 
-    @GET("/rest/v1/carts")
+    @GET("/rest/v2/carts")
     Observable<List<CartsinfoBean>> getCartsList();
 
     //获取历史购物车信息
-    @GET("/rest/v1/carts/show_carts_history")
+    @GET("/rest/v2/carts/show_carts_history")
     Observable<List<CartsinfoBean>> getCartsHisList();
 
     //获取购物信息列表
@@ -261,7 +262,7 @@ public interface XlmmService {
             @Field("total_fee") String total_fee,
             @Field("uuid") String uuid,
             @Field("pay_extras") String pay_extras,
-            @Field("logistics_company_id")String code
+            @Field("logistics_company_id") String code
     );
 
 
@@ -434,7 +435,9 @@ public interface XlmmService {
     @FormUrlEncoded
     @POST("/rest/v1/complain")
     Observable<AddressResultBean> complain(
-            @Field("com_content") String com_content);
+            @Field("com_type")String com_type,
+            @Field("com_content") String com_content,
+            @Field("com_title") String com_title);
 
     //设置用户昵称
     @PATCH("/rest/v1/users" + "/{id}")
@@ -446,7 +449,6 @@ public interface XlmmService {
     @FormUrlEncoded
     @POST("/rest/v1/register/change_user_pwd")
     Observable<UserBean> changePassword(
-
             @Field("username") String username,
             @Field("valid_code") String valid_code,
             @Field("password1") String password1,
@@ -542,14 +544,14 @@ public interface XlmmService {
 
     @FormUrlEncoded
     @POST("/rest/v1/refunds")
-    Observable<ResponseBody> refund_create(
+    Observable<RefundMsgBean> refund_create(
             @Field("id") int goods_id,
             @Field("reason") int reason,
             @Field("num") int num,
             @Field("sum_price") double sum_price,
             @Field("description") String description,
-            @Field("proof_pic") String proof_pic
-
+            @Field("proof_pic") String proof_pic,
+            @Field("refund_channel") String refund_channel
     );
 
     //修改退款单

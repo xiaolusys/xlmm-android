@@ -11,15 +11,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
+import com.umeng.analytics.MobclickAgent;
 import com.zhy.autolayout.utils.AutoUtils;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by 优尼世界 on 15/12/31.
@@ -148,6 +154,13 @@ public class PreviousAdapter extends RecyclerView.Adapter<PreviousAdapter.Previo
       //  intent.putExtras(bundle);
       //  mContext.startActivity(intent);
       //}
+
+      Map<String, String> map = new HashMap<String, String>();
+      map.put("modelId","modelName");
+
+      map.put(productModel.getId(), productModel.getName());
+      MobclickAgent.onEvent(mContext, "ProductID", map);
+
 
       int modelId = mList.get(position).getModelId();
       Intent intent = new Intent(mContext, ProductPopDetailActvityWeb.class);

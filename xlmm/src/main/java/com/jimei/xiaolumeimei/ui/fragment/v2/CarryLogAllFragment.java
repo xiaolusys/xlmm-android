@@ -9,8 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -22,9 +24,12 @@ import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.widget.DividerItemDecorationForFooter;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import com.umeng.analytics.MobclickAgent;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -131,7 +136,7 @@ public class CarryLogAllFragment extends BaseFragment {
         xRecyclerView.setPullRefreshEnabled(false);
         xRecyclerView.setLoadingMoreEnabled(true);
 
-        adapter = new CarryLogAllAdapter(getActivity());
+        adapter = new CarryLogAllAdapter();
         xRecyclerView.setAdapter(adapter);
 
         xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
@@ -160,7 +165,7 @@ public class CarryLogAllFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-      ButterKnife.unbind(this);
+        ButterKnife.unbind(this);
     }
 
     private void loadMoreData(String page, Context context) {
@@ -243,8 +248,21 @@ public class CarryLogAllFragment extends BaseFragment {
             throw new RuntimeException(e);
         }
     }
+
     @Override
     public View getScrollableView() {
         return xRecyclerView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(this.getClass().getSimpleName());
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
     }
 }

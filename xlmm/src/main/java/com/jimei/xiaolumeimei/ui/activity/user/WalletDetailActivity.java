@@ -2,10 +2,13 @@ package com.jimei.xiaolumeimei.ui.activity.user;
 
 import android.os.Bundle;
 import android.widget.TextView;
-import butterknife.Bind;
+
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.BudgetdetailBean;
+import com.umeng.analytics.MobclickAgent;
+
+import butterknife.Bind;
 
 public class WalletDetailActivity extends BaseSwipeBackCompatActivity {
 
@@ -50,5 +53,20 @@ public class WalletDetailActivity extends BaseSwipeBackCompatActivity {
 
   @Override protected TransitionMode getOverridePendingTransitionMode() {
     return null;
+  }
+
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    MobclickAgent.onPageStart(this.getClass().getSimpleName());
+    MobclickAgent.onResume(this);
+  }
+
+  @Override
+  protected void onPause() {
+    super.onPause();
+    MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+    MobclickAgent.onPause(this);
   }
 }

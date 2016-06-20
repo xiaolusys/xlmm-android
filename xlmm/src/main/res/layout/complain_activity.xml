@@ -1,50 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:gravity="center_horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-  <com.jimei.xiaolumeimei.widget.XlmmTitleView
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      app:xlmm_title="投诉建议"/>
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
 
-  <RelativeLayout
-      android:layout_width="match_parent"
-      android:layout_margin="8dp"
-      android:padding="8dp"
-      android:onClick="getSoftInput"
-      android:background="@drawable/complain_bg"
-      android:layout_height="200dp">
-    <EditText
-        android:id="@+id/complain_text"
-        android:textColorHint="#666"
-        android:textSize="16sp"
-        android:textCursorDrawable="@drawable/color_cursor"
-        android:background="@null"
+    <com.jimei.xiaolumeimei.widget.XlmmTitleView
         android:layout_width="match_parent"
-        android:hint="@string/complaininfo"
         android:layout_height="wrap_content"
-        android:maxLength="200"
-        />
-    <TextView
-        android:id="@+id/count_text"
-        android:text="0/200"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-  </RelativeLayout>
+        app:xlmm_title="投诉建议" />
+
+    <RadioGroup
+        android:id="@+id/rg"
+        android:layout_width="match_parent"
+        android:layout_height="120px"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <RadioButton
+            android:id="@+id/rb_1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="订单相关"
+            android:textColor="@color/text_color_62"
+            android:textSize="12sp" />
+
+        <RadioButton
+            android:id="@+id/rb_2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="意见建议"
+            android:textColor="@color/text_color_62"
+            android:textSize="12sp" />
+
+        <RadioButton
+            android:id="@+id/rb_3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="售后问题"
+            android:textColor="@color/text_color_62"
+            android:textSize="12sp" />
+
+        <RadioButton
+            android:id="@+id/rb_4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="其它问题"
+            android:textColor="@color/text_color_62"
+            android:textSize="12sp" />
+
+    </RadioGroup>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@color/bg_grey" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_margin="8dp"
+        android:background="@drawable/complain_bg"
+        android:onClick="getSoftInput"
+        android:padding="8dp">
+
+        <EditText
+            android:id="@+id/complain_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:hint="@string/complaininfo"
+            android:maxLength="200"
+            android:textColorHint="#666"
+            android:textCursorDrawable="@drawable/color_cursor"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/count_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:text="0/200" />
+    </RelativeLayout>
 
 
-  <Button
-      android:textColor="@color/white"
-      android:layout_marginTop="16dp"
-      android:text="提交"
-      android:layout_width="656px"
-      android:layout_height="90px"
-      android:id="@+id/tijiao"
-      android:background="@drawable/shape_common"
-      />
+    <Button
+        android:id="@+id/commit"
+        android:layout_width="656px"
+        android:layout_height="90px"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/shape_common"
+        android:text="提交"
+        android:textColor="@color/white" />
 </LinearLayout>

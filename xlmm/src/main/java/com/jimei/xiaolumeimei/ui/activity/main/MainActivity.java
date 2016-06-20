@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -58,6 +59,7 @@ import com.jimei.xiaolumeimei.ui.activity.user.WalletActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.WxLoginBindPhoneActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaInfoActivity;
 import com.jimei.xiaolumeimei.ui.fragment.v1.view.MastFragment;
+import com.jimei.xiaolumeimei.ui.fragment.v2.FirstFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.TodayV2Fragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.TomorrowV2Fragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.YesterdayV2Fragment;
@@ -74,6 +76,7 @@ import com.jimei.xiaolumeimei.widget.banner.SliderTypes.DefaultSliderView;
 import com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableLayout;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
@@ -107,8 +110,7 @@ public class MainActivity extends BaseActivity
 
   @Bind(R.id.tool_bar) Toolbar toolbar;
   @Bind(R.id.rv_cart) RelativeLayout carts;
-
-  @Bind(R.id.img_mmentry) ImageView img_mmentry;
+  @Bind(R.id.rl_mmentry)RelativeLayout rl_mmentry;
   @Bind(R.id.image_1) ImageView image1;
   @Bind(R.id.image_2) ImageView image2;
   @Bind(R.id.scrollableLayout) ScrollableLayout scrollableLayout;
@@ -124,6 +126,7 @@ public class MainActivity extends BaseActivity
   @Bind(R.id.nav_view) NavigationView navigationView;
   @Bind(R.id.slider) SliderLayout mSliderLayout;
   @Bind(R.id.viewPager) ViewPager vp;
+  @Bind(R.id.rv_top) RelativeLayout rvTop;
   List<PortalBean.PostersBean> posters = new ArrayList<>();
   SharedPreferences sharedPreferencesTime;
   private String cookies;
@@ -141,14 +144,14 @@ public class MainActivity extends BaseActivity
   private ImageView loginFlag;
   private View llayout;
   private String newTime;
+  private int rvTopHeight;
 
   public static int dp2px(Context context, int dp) {
     float scale = context.getResources().getDisplayMetrics().density;
     return (int) (dp * scale + 0.5f);
   }
 
-  public static LinearLayout.LayoutParams getLayoutParams(Bitmap bitmap,
-      int screenWidth) {
+  public static LinearLayout.LayoutParams getLayoutParams(Bitmap bitmap, int screenWidth) {
     float rawWidth = bitmap.getWidth();
     float rawHeight = bitmap.getHeight();
     float width;
@@ -171,7 +174,7 @@ public class MainActivity extends BaseActivity
 
   @Override protected void setListener() {
     carts.setOnClickListener(this);
-    img_mmentry.setOnClickListener(this);
+    rl_mmentry.setOnClickListener(this);
     textYesterday.setOnClickListener(this);
     textTomorror.setOnClickListener(this);
     textToday.setOnClickListener(this);
@@ -190,6 +193,12 @@ public class MainActivity extends BaseActivity
   @Override protected void initData() {
 
     init(null);
+
+    if (LoginUtils.isJumpToLogin(getApplicationContext())) {
+      FirstFragment firstFragment = FirstFragment.newInstance("first");
+      firstFragment.setStyle(DialogFragment.STYLE_NORMAL,R.style.Translucent_NoTitle);
+      firstFragment.show(getFragmentManager(), "first");
+    }
 
     new Thread(() -> {
       try {
@@ -234,14 +243,12 @@ public class MainActivity extends BaseActivity
     }
   }
 
-  @Subscribe(sticky = true)
-  public void initLogin(EmptyEvent event){
-    JUtils.Log(TAG,"登录过后来刷新");
-    Intent intent = new Intent(MainActivity.this,MainActivity.class);
+  @Subscribe(sticky = true) public void initLogin(EmptyEvent event) {
+    JUtils.Log(TAG, "登录过后来刷新");
+    Intent intent = new Intent(MainActivity.this, MainActivity.class);
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     startActivity(intent);
     finish();
-
   }
 
   //购物车数量
@@ -266,8 +273,7 @@ public class MainActivity extends BaseActivity
         tvNickname.setText(userInfoBean.getNick());
       }
       if ((userInfoBean != null) && (!TextUtils.isEmpty(userInfoBean.getThumbnail()))) {
-        ViewUtils.loadImgToImgView(MainActivity.this, imgUser,
-            userInfoBean.getThumbnail());
+        ViewUtils.loadImgToImgView(MainActivity.this, imgUser, userInfoBean.getThumbnail());
       }
       if ((null != userInfoBean) && (userInfoBean.getWaitpayNum() > 0)) {
         msg1.setVisibility(View.VISIBLE);
@@ -294,8 +300,7 @@ public class MainActivity extends BaseActivity
       tvPoint.setText(pointStr);
       if (userInfoBean.getUserBudget() != null) {
         String moneyStr =
-            (float) (Math.round(userInfoBean.getUserBudget().getBudgetCash() * 100)) / 100
-                + "";
+            (float) (Math.round(userInfoBean.getUserBudget().getBudgetCash() * 100)) / 100 + "";
         tvMoney.setText(moneyStr);
       }
       String couponStr = userInfoBean.getCouponNum() + "";
@@ -311,17 +316,14 @@ public class MainActivity extends BaseActivity
     imgUser = (ImageView) llayout.findViewById(R.id.imgUser);
     loginFlag = (ImageView) llayout.findViewById(R.id.login_flag);
     tvNickname = (TextView) llayout.findViewById(R.id.tvNickname);
-    LinearLayout nav_tobepaid = (LinearLayout) navigationView.getMenu()
-        .findItem(R.id.nav_tobepaid)
-        .getActionView();
+    LinearLayout nav_tobepaid =
+        (LinearLayout) navigationView.getMenu().findItem(R.id.nav_tobepaid).getActionView();
     msg1 = (TextView) nav_tobepaid.findViewById(R.id.msg);
-    LinearLayout nav_tobereceived = (LinearLayout) navigationView.getMenu()
-        .findItem(R.id.nav_tobereceived)
-        .getActionView();
+    LinearLayout nav_tobereceived =
+        (LinearLayout) navigationView.getMenu().findItem(R.id.nav_tobereceived).getActionView();
     msg2 = (TextView) nav_tobereceived.findViewById(R.id.msg);
-    LinearLayout nav_refund = (LinearLayout) navigationView.getMenu()
-        .findItem(R.id.nav_returned)
-        .getActionView();
+    LinearLayout nav_refund =
+        (LinearLayout) navigationView.getMenu().findItem(R.id.nav_returned).getActionView();
     msg3 = (TextView) nav_refund.findViewById(R.id.msg);
   }
 
@@ -430,122 +432,101 @@ public class MainActivity extends BaseActivity
                 if (response != null) {
                   imageViewList.get(finalI).setAdjustViewBounds(true);
                   int screenWidth = DisplayUtils.getScreenW(MainActivity.this);
-                  LinearLayout.LayoutParams lp =
-                      new LinearLayout.LayoutParams(screenWidth,
-                          LinearLayout.LayoutParams.WRAP_CONTENT);
+                  LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(screenWidth,
+                      LinearLayout.LayoutParams.WRAP_CONTENT);
                   imageViewList.get(finalI).setLayoutParams(lp);
                   imageViewList.get(finalI).setMaxWidth(screenWidth);
                   imageViewList.get(finalI).setMaxHeight(screenWidth * 5);
                   imageViewList.get(finalI).setImageBitmap(response);
                   if (postActivityBean.get(finalI).getAct_type().equals("webview")) {
-                    imageViewList.get(finalI)
-                        .setOnClickListener(new View.OnClickListener() {
-                          @Override public void onClick(View v) {
-                            if (postActivityBean.get(finalI).isLogin_required()) {
-                              if (LoginUtils.checkLoginState(MainActivity.this) && (null
-                                  != getUserInfoBean()
-                                  && (null
-                                  != getUserInfoBean().getMobile())
-                                  && !getUserInfoBean().getMobile().isEmpty())) {
-                                Intent intent = new Intent(MainActivity.this,
-                                    ActivityWebViewActivity.class);
-                                sharedPreferences =
-                                    getSharedPreferences("xlmmCookiesAxiba",
-                                        Context.MODE_PRIVATE);
-                                cookies =
-                                    sharedPreferences.getString("cookiesString", "");
-                                domain = sharedPreferences.getString("cookiesDomain", "");
-                                Bundle bundle = new Bundle();
-                                bundle.putString("cookies", cookies);
-                                bundle.putString("domain", domain);
-                                bundle.putString("Cookie",
-                                    sharedPreferences.getString("Cookie", ""));
-                                bundle.putString("actlink",
-                                    postActivityBean.get(finalI).getAct_link());
-                                bundle.putString("title",
-                                    postActivityBean.get(finalI).getTitle());
-                                bundle.putInt("id", postActivityBean.get(finalI).getId());
-                                intent.putExtras(bundle);
-                                startActivity(intent);
-                              } else {
-                                if (!LoginUtils.checkLoginState(MainActivity.this)) {
-                                  JUtils.Toast("登录并绑定手机号后才可参加活动");
-                                  Intent intent =
-                                      new Intent(MainActivity.this, LoginActivity.class);
-                                  Bundle bundle = new Bundle();
-                                  bundle.putString("login", "goactivity");
-                                  bundle.putString("actlink",
-                                      postActivityBean.get(finalI).getAct_link());
-
-                                  bundle.putInt("id",
-                                      postActivityBean.get(finalI).getId());
-                                  bundle.putString("title",
-                                      postActivityBean.get(finalI).getTitle());
-
-                                  intent.putExtras(bundle);
-                                  startActivity(intent);
-                                } else {
-                                  JUtils.Toast("登录成功,前往绑定手机号后才可参加活动");
-                                  Intent intent = new Intent(MainActivity.this,
-                                      WxLoginBindPhoneActivity.class);
-                                  if (null != getUserInfoBean()) {
-                                    Bundle bundle = new Bundle();
-                                    bundle.putString("headimgurl",
-                                        getUserInfoBean().getThumbnail());
-                                    bundle.putString("nickname",
-                                        getUserInfoBean().getNick());
-                                    intent.putExtras(bundle);
-                                  }
-                                  startActivity(intent);
-                                }
-                              }
-                            } else {
-                              Intent intent = new Intent(MainActivity.this,
-                                  ActivityWebViewActivity.class);
-                              sharedPreferences = getSharedPreferences("xlmmCookiesAxiba",
-                                  Context.MODE_PRIVATE);
-                              cookies = sharedPreferences.getString("cookiesString", "");
-                              domain = sharedPreferences.getString("cookiesDomain", "");
+                    imageViewList.get(finalI).setOnClickListener(new View.OnClickListener() {
+                      @Override public void onClick(View v) {
+                        if (postActivityBean.get(finalI).isLogin_required()) {
+                          if (LoginUtils.checkLoginState(MainActivity.this) && (null
+                              != getUserInfoBean()
+                              && (null != getUserInfoBean().getMobile())
+                              && !getUserInfoBean().getMobile().isEmpty())) {
+                            Intent intent =
+                                new Intent(MainActivity.this, ActivityWebViewActivity.class);
+                            sharedPreferences =
+                                getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+                            cookies = sharedPreferences.getString("cookiesString", "");
+                            domain = sharedPreferences.getString("cookiesDomain", "");
+                            Bundle bundle = new Bundle();
+                            bundle.putString("cookies", cookies);
+                            bundle.putString("domain", domain);
+                            bundle.putString("Cookie", sharedPreferences.getString("Cookie", ""));
+                            bundle.putString("actlink", postActivityBean.get(finalI).getAct_link());
+                            bundle.putString("title", postActivityBean.get(finalI).getTitle());
+                            bundle.putInt("id", postActivityBean.get(finalI).getId());
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                          } else {
+                            if (!LoginUtils.checkLoginState(MainActivity.this)) {
+                              JUtils.Toast("登录并绑定手机号后才可参加活动");
+                              Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                               Bundle bundle = new Bundle();
-                              bundle.putInt("id", postActivityBean.get(finalI).getId());
-                              bundle.putString("cookies", cookies);
-                              bundle.putString("domain", domain);
+                              bundle.putString("login", "goactivity");
                               bundle.putString("actlink",
                                   postActivityBean.get(finalI).getAct_link());
-                              bundle.putString("title",
-                                  postActivityBean.get(finalI).getTitle());
+
+                              bundle.putInt("id", postActivityBean.get(finalI).getId());
+                              bundle.putString("title", postActivityBean.get(finalI).getTitle());
+
                               intent.putExtras(bundle);
+                              startActivity(intent);
+                            } else {
+                              JUtils.Toast("登录成功,前往绑定手机号后才可参加活动");
+                              Intent intent =
+                                  new Intent(MainActivity.this, WxLoginBindPhoneActivity.class);
+                              if (null != getUserInfoBean()) {
+                                Bundle bundle = new Bundle();
+                                bundle.putString("headimgurl", getUserInfoBean().getThumbnail());
+                                bundle.putString("nickname", getUserInfoBean().getNick());
+                                intent.putExtras(bundle);
+                              }
                               startActivity(intent);
                             }
                           }
-                        });
-                  } else if (postActivityBean.get(finalI)
-                      .getAct_type()
-                      .equals("coupon")) {
-                    imageViewList.get(finalI)
-                        .setOnClickListener(new View.OnClickListener() {
-                          @Override public void onClick(View v) {
-                            Subscription subscribe7 = ActivityModel.getInstance()
-                                .getUsercoupons(postActivityBean.get(finalI)
-                                    .getExtras()
-                                    .getTemplateId())
-                                .subscribeOn(Schedulers.io())
-                                .subscribe(new ServiceResponse<ResponseBody>() {
-                                  @Override
-                                  public void onNext(ResponseBody responseBody) {
-                                    if (null != responseBody) {
-                                      try {
-                                        JUtils.Log("TodayListView",
-                                            responseBody.string());
-                                      } catch (IOException e) {
-                                        e.printStackTrace();
-                                      }
-                                    }
+                        } else {
+                          Intent intent =
+                              new Intent(MainActivity.this, ActivityWebViewActivity.class);
+                          sharedPreferences =
+                              getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+                          cookies = sharedPreferences.getString("cookiesString", "");
+                          domain = sharedPreferences.getString("cookiesDomain", "");
+                          Bundle bundle = new Bundle();
+                          bundle.putInt("id", postActivityBean.get(finalI).getId());
+                          bundle.putString("cookies", cookies);
+                          bundle.putString("domain", domain);
+                          bundle.putString("actlink", postActivityBean.get(finalI).getAct_link());
+                          bundle.putString("title", postActivityBean.get(finalI).getTitle());
+                          intent.putExtras(bundle);
+                          startActivity(intent);
+                        }
+                      }
+                    });
+                  } else if (postActivityBean.get(finalI).getAct_type().equals("coupon")) {
+                    imageViewList.get(finalI).setOnClickListener(new View.OnClickListener() {
+                      @Override public void onClick(View v) {
+                        Subscription subscribe7 = ActivityModel.getInstance()
+                            .getUsercoupons(
+                                postActivityBean.get(finalI).getExtras().getTemplateId())
+                            .subscribeOn(Schedulers.io())
+                            .subscribe(new ServiceResponse<ResponseBody>() {
+                              @Override public void onNext(ResponseBody responseBody) {
+                                if (null != responseBody) {
+                                  try {
+                                    JUtils.Log("TodayListView", responseBody.string());
+                                  } catch (IOException e) {
+                                    e.printStackTrace();
                                   }
-                                });
-                            addSubscription(subscribe7);
-                          }
-                        });
+                                }
+                              }
+                            });
+                        addSubscription(subscribe7);
+                      }
+                    });
                   }
                 }
               }
@@ -572,8 +553,7 @@ public class MainActivity extends BaseActivity
     if (postBean.getPromotion_brands() != null) {
       brand.setVisibility(View.VISIBLE);
 
-      List<PortalBean.PromotionBrandsBean> brandPromotionEntities =
-          postBean.getPromotion_brands();
+      List<PortalBean.PromotionBrandsBean> brandPromotionEntities = postBean.getPromotion_brands();
       if (brandPromotionEntities.size() != 0) {
         BrandlistAdapter brandlistAdapter;
         BrandView brandView;
@@ -588,10 +568,8 @@ public class MainActivity extends BaseActivity
 
         JUtils.Log(TAG, "brandlistAdapters.size()====" + brandListAdapters.size());
         for (int i = 0; i < brandListAdapters.size(); i++) {
-          brandViews.get(i)
-              .setBrandtitleImage(brandPromotionEntities.get(i).getBrand_pic());
-          brandViews.get(i)
-              .setBrandDesText(brandPromotionEntities.get(i).getBrand_desc());
+          brandViews.get(i).setBrandtitleImage(brandPromotionEntities.get(i).getBrand_pic());
+          brandViews.get(i).setBrandDesText(brandPromotionEntities.get(i).getBrand_desc());
           brandViews.get(i).setAdapter(brandListAdapters.get(i));
           final int finalI = i;
           ProductModel.getInstance()
@@ -613,8 +591,7 @@ public class MainActivity extends BaseActivity
                   if (null != brandpromotionBean) {
                     if (null != brandpromotionBean.getResults()) {
                       JUtils.Log(TAG, brandpromotionBean.toString());
-                      brandListAdapters.get(finalI)
-                          .update(brandpromotionBean.getResults());
+                      brandListAdapters.get(finalI).update(brandpromotionBean.getResults());
                     }
                   }
                 }
@@ -631,16 +608,15 @@ public class MainActivity extends BaseActivity
             }
           });
 
-          brandListAdapters.get(i)
-              .setListener(new BrandlistAdapter.itemOnclickListener() {
-                @Override public void itemClick() {
-                  Intent intent = new Intent(MainActivity.this, BrandListActivity.class);
-                  Bundle bundle = new Bundle();
-                  bundle.putInt("id", brandPromotionEntities.get(finalI1).getId());
-                  intent.putExtras(bundle);
-                  startActivity(intent);
-                }
-              });
+          brandListAdapters.get(i).setListener(new BrandlistAdapter.itemOnclickListener() {
+            @Override public void itemClick() {
+              Intent intent = new Intent(MainActivity.this, BrandListActivity.class);
+              Bundle bundle = new Bundle();
+              bundle.putInt("id", brandPromotionEntities.get(finalI1).getId());
+              intent.putExtras(bundle);
+              startActivity(intent);
+            }
+          });
         }
       }
     } else {
@@ -654,10 +630,8 @@ public class MainActivity extends BaseActivity
       ladyImage.setImageResource(0);
       childImage.setImageResource(0);
       List<PortalBean.CategorysBean> categorys = postBean.getCategorys();
-      ViewUtils.loadImageWithOkhttp(categorys.get(1).getCat_img(), MainActivity.this,
-          ladyImage);
-      ViewUtils.loadImageWithOkhttp(categorys.get(0).getCat_img(), MainActivity.this,
-          childImage);
+      ViewUtils.loadImageWithOkhttp(categorys.get(1).getCat_img(), MainActivity.this, ladyImage);
+      ViewUtils.loadImageWithOkhttp(categorys.get(0).getCat_img(), MainActivity.this, childImage);
     }
   }
 
@@ -680,8 +654,7 @@ public class MainActivity extends BaseActivity
       DefaultSliderView textSliderView = new DefaultSliderView(MainActivity
           .this);
       // initialize a SliderLayout
-      textSliderView.image(name + POST_URL)
-          .setScaleType(BaseSliderView.ScaleType.CenterInside);
+      textSliderView.image(name + POST_URL).setScaleType(BaseSliderView.ScaleType.CenterInside);
       //add your extra information
       textSliderView.bundle(new Bundle());
       textSliderView.getBundle().putString("extra", map.get(name));
@@ -696,18 +669,6 @@ public class MainActivity extends BaseActivity
             if (!TextUtils.isEmpty(extra)) {
               JumpUtils.JumpInfo jump_info = JumpUtils.get_jump_info(extra);
               if (extra.startsWith("http://")) {
-                //intent = new Intent(MainActivity.this,
-                //        ActivityWebViewActivity.class);
-                //SharedPreferences sharedPreferences =
-                //        getSharedPreferences("xlmmCookiesAxiba",
-                //                Context.MODE_PRIVATE);
-                //String cookies = sharedPreferences.getString("Cookie", "");
-                //Bundle bundle = new Bundle();
-                //bundle.putString("cookies", cookies);
-                //bundle.putString("actlink", extra);
-                //intent.putExtras(bundle);
-                //startActivity(intent);
-
                 JumpUtils.jumpToWebViewWithCookies(MainActivity
                     .this, extra, -1, ActivityWebViewActivity.class);
               } else {
@@ -766,7 +727,7 @@ public class MainActivity extends BaseActivity
       } else if (id == R.id.nav_problem) {
         intent = new Intent(new Intent(MainActivity.this, CustomProblemActivity.class));
         Bundle bundle1 = new Bundle();
-        bundle1.putString("actlink", "http://m.xiaolumeimei.com/mall/#/faq");
+        bundle1.putString("actlink", "http://m.xiaolumeimei.com/mall/faq");
         intent.putExtras(bundle1);
         startActivity(intent);
       } else if (id == R.id.nav_complain) {
@@ -801,7 +762,7 @@ public class MainActivity extends BaseActivity
         intent = new Intent(MainActivity.this, CartActivity.class);
         flag = "cart";
         break;
-      case R.id.img_mmentry:
+      case R.id.rl_mmentry:
         JUtils.Log(TAG, "xiaolu mama entry");
         intent = new Intent(MainActivity.this, MamaInfoActivity.class);
         break;
@@ -893,8 +854,7 @@ public class MainActivity extends BaseActivity
                       userNewBean.getThumbnail());
                 }
                 if (userInfoBean != null) {
-                  if (userInfoBean.isHasUsablePassword()
-                      && userInfoBean.getMobile() != "") {
+                  if (userInfoBean.isHasUsablePassword() && userInfoBean.getMobile() != "") {
                     loginFlag.setVisibility(View.GONE);
                   } else {
                     loginFlag.setVisibility(View.VISIBLE);
@@ -904,11 +864,11 @@ public class MainActivity extends BaseActivity
                   budgetCash = userNewBean.getUserBudget().getBudgetCash();
                 }
                 JUtils.Log(TAG, "mamaid " + userInfoBean.getXiaolumm().getId());
-                if ((userInfoBean.getXiaolumm() != null) && (userInfoBean.getXiaolumm()
-                    .getId() != 0)) {
-                  img_mmentry.setVisibility(View.VISIBLE);
+                if ((userInfoBean.getXiaolumm() != null) && (userInfoBean.getXiaolumm().getId()
+                    != 0)) {
+                  rl_mmentry.setVisibility(View.VISIBLE);
                 } else {
-                  img_mmentry.setVisibility(View.INVISIBLE);
+                  rl_mmentry.setVisibility(View.INVISIBLE);
                 }
               }
             }
@@ -919,7 +879,8 @@ public class MainActivity extends BaseActivity
 
   @Override protected void onResume() {
     super.onResume();
-
+    MobclickAgent.onPageStart(this.getClass().getSimpleName());
+    MobclickAgent.onResume(this);
     resumeData();
 
     Subscription subscribe = CartsModel.getInstance()
@@ -986,19 +947,22 @@ public class MainActivity extends BaseActivity
           });
       addSubscription(subscribe2);
 
-      switch (vp.getCurrentItem()) {
-        case 0:
-          ((YesterdayV2Fragment) list.get(0)).load(swipeRefreshLayout);
-          break;
-        case 1:
-          ((TodayV2Fragment) list.get(1)).load(swipeRefreshLayout);
-          break;
-        case 2:
-          ((TomorrowV2Fragment) list.get(2)).load(swipeRefreshLayout);
-          break;
+      try {
+        switch (vp.getCurrentItem()) {
+          case 0:
+            ((YesterdayV2Fragment) list.get(0)).load(swipeRefreshLayout);
+            break;
+          case 1:
+            ((TodayV2Fragment) list.get(1)).load(swipeRefreshLayout);
+            break;
+          case 2:
+            ((TomorrowV2Fragment) list.get(2)).load(swipeRefreshLayout);
+            break;
+        }
+        scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(vp.getCurrentItem()));
+      } catch (Exception e) {
+        e.printStackTrace();
       }
-      scrollableLayout.getHelper()
-          .setCurrentScrollableContainer(list.get(vp.getCurrentItem()));
 
       SharedPreferences.Editor edit = sharedPreferencesTime.edit();
       edit.putString("resumetime", newTime);
@@ -1032,13 +996,17 @@ public class MainActivity extends BaseActivity
     return (int) (dip * getResources().getDisplayMetrics().density + 0.5f);
   }
 
-  @Override public void onPageScrolled(int position, float positionOffset,
-      int positionOffsetPixels) {
+  @Override
+  public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
     swipeRefreshLayout.setEnabled(false);
   }
 
   @Override public void onPageSelected(int position) {
-    scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(position));
+    try {
+      scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(position));
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     switch (position) {
       case 0:
         //radioGroup.check(R.id.rb_yesterday);
@@ -1065,8 +1033,35 @@ public class MainActivity extends BaseActivity
     swipeRefreshLayout.setEnabled(true);
   }
 
-  @Override public void onScroll(int currentY, int maxY) {
-    if (currentY > 0) {
+  @Override public void onScroll(int transY, int maxY) {
+    JUtils.Log(TAG, "onScroll");
+    transY = -transY;
+    if (rvTopHeight == (DisplayUtils.getScreenH(this)*2 - 16)) {
+      rvTopHeight = carts.getTop();
+    }
+    if (0 > rvTopHeight + transY) {
+      rvTop.setVisibility(View.VISIBLE);
+      rvTop.setOnClickListener(new View.OnClickListener() {
+        @Override public void onClick(View v) {
+          scrollableLayout.scrollTo(0, 0);
+          switch (vp.getCurrentItem()) {
+            case 0:
+              ((YesterdayV2Fragment) list.get(0)).goToTop();
+              break;
+            case 1:
+              ((TodayV2Fragment) list.get(1)).goToTop();
+              break;
+            case 2:
+              ((TomorrowV2Fragment) list.get(2)).goToTop();
+              break;
+          }
+        }
+      });
+    } else {
+      rvTop.setVisibility(View.GONE);
+    }
+
+    if (transY > 0) {
       swipeRefreshLayout.setEnabled(false);
     } else {
       swipeRefreshLayout.setEnabled(true);
@@ -1075,19 +1070,22 @@ public class MainActivity extends BaseActivity
 
   @Override public void onRefresh() {
     init(swipeRefreshLayout);
-    switch (vp.getCurrentItem()) {
-      case 0:
-        ((YesterdayV2Fragment) list.get(0)).load(swipeRefreshLayout);
-        break;
-      case 1:
-        ((TodayV2Fragment) list.get(1)).load(swipeRefreshLayout);
-        break;
-      case 2:
-        ((TomorrowV2Fragment) list.get(2)).load(swipeRefreshLayout);
-        break;
+    try {
+      switch (vp.getCurrentItem()) {
+        case 0:
+          ((YesterdayV2Fragment) list.get(0)).load(swipeRefreshLayout);
+          break;
+        case 1:
+          ((TodayV2Fragment) list.get(1)).load(swipeRefreshLayout);
+          break;
+        case 2:
+          ((TomorrowV2Fragment) list.get(2)).load(swipeRefreshLayout);
+          break;
+      }
+      scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(vp.getCurrentItem()));
+    } catch (Exception e) {
+      e.printStackTrace();
     }
-    scrollableLayout.getHelper()
-        .setCurrentScrollableContainer(list.get(vp.getCurrentItem()));
   }
 
   @Override protected void onDestroy() {
@@ -1109,5 +1107,11 @@ public class MainActivity extends BaseActivity
     @Override public int getCount() {
       return list == null ? 0 : list.size();
     }
+  }
+
+  @Override protected void onPause() {
+    super.onPause();
+    MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+    MobclickAgent.onPause(this);
   }
 }

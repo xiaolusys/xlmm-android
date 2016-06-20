@@ -3,6 +3,8 @@ package com.jimei.xiaolumeimei.entities;
 import android.os.Parcel;
 import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -365,7 +367,7 @@ public class AllOrdersBean {
       return mOrders;
     }
 
-    public static class OrdersEntity implements Parcelable {
+    public static class OrdersEntity implements Parcelable,Serializable {
       public OrdersEntity() {
         // TODO Auto-generated constructor stub
       }
