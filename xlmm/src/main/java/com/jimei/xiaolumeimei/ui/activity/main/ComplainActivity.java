@@ -170,7 +170,7 @@ public class ComplainActivity extends BaseSwipeBackCompatActivity
                 Bundle bundle = new Bundle();
                 SharedPreferences sharedPreferences = getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
                 bundle.putString("cookies", sharedPreferences.getString("cookiesString", ""));
-                bundle.putString("domain", sharedPreferences.getString("cook8`iesDomain", ""));
+                bundle.putString("domain", sharedPreferences.getString("cookiesDomain", ""));
                 bundle.putString("Cookie", sharedPreferences.getString("Cookie", ""));
                 SharedPreferences sharedPreferences2 = XlmmApp.getmContext().getSharedPreferences("APICLIENT", Context.MODE_PRIVATE);
                 String baseUrl = "http://" + sharedPreferences2.getString("BASE_URL", "");
