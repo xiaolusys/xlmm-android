@@ -394,9 +394,7 @@
         <activity
             android:name=".ui.activity.user.WaitSendAddressActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
-        <activity
-            android:name=".ui.activity.trade.RefundResultActivity"
-            android:theme="@style/AppTheme.TransparentActivity" />
+
         <service
             android:name="com.xiaomi.push.service.XMPushService"
             android:enabled="true"

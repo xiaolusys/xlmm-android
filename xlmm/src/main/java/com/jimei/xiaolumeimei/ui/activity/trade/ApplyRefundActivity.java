@@ -231,10 +231,6 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
                     @Override
                     public void onNext(RefundMsgBean resp) {
                         JUtils.Toast(resp.getInfo());
-                        if (resp.getCode() == 0) {
-                            Intent intent = new Intent(ApplyRefundActivity.this, RefundResultActivity.class);
-                            startActivity(intent);
-                        }
                         Log.i(TAG, "commit_apply success " + resp.toString());
                         finish();
                     }

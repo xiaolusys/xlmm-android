@@ -48,8 +48,6 @@ public class OrderGoodsListAdapter extends BaseAdapter {
 
     private OrderDetailBean orderDetailEntity;
     private int count = 0;
-    private String packetid = "";
-    private String company_code = "";
     private OrderDetailBean.ExtrasBean extras;
 
 
@@ -143,8 +141,6 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                 }
                 ((TextView) convertView.findViewById(R.id.tv_order_package)).setText("包裹" + NUM[count]);
                 ((TextView) convertView.findViewById(R.id.tx_order_crtstate)).setText(packageBeanList.get(position).getAssign_status_display());
-                packetid = packageBeanList.get(position).getOut_sid();
-                company_code = packageBeanList.get(position).getLogistics_company_code();
             } else {
                 if ("待付款".equals(stateStr)) {
                     view.setVisibility(View.VISIBLE);
@@ -166,12 +162,12 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                     public void onClick(View v) {
                         Intent intent = new Intent(context, LogisticsActivity.class);
                         Bundle bundle = new Bundle();
-                        bundle.putString("packetid", packetid);
+                        bundle.putString("packetid", packageBeanList.get(position).getOut_sid());
                         bundle.putString("time", timeStr);
                         bundle.putString("tid", tid);
                         bundle.putString("state", stateStr);
                         bundle.putString("key", finalKey);
-                        bundle.putString("company_code", company_code);
+                        bundle.putString("company_code", packageBeanList.get(position).getLogistics_company_code());
                         bundle.putSerializable("list", packageBeanList);
                         bundle.putInt("id", orderDetailEntity.getId());
                         intent.putExtras(bundle);

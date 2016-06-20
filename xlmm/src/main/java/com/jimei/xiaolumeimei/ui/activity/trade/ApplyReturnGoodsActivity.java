@@ -362,12 +362,22 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
                     @Override
                     public void onNext(RefundMsgBean resp) {
                         JUtils.Toast(resp.getInfo());
-                        if (resp.getCode() == 0) {
-                            Intent intent = new Intent(ApplyReturnGoodsActivity.this, RefundResultActivity.class);
-                            startActivity(intent);
-                        }
                         Log.i(TAG, "commit_apply " + resp.toString());
-                        finish();
+                        if (resp.getCode() == 0) {
+                            AlertDialog dialog = new AlertDialog.Builder(ApplyReturnGoodsActivity.this)
+                                    .setMessage(getResources().getString(R.string.refund_msg))
+                                    .setCancelable(false)
+                                    .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            ApplyReturnGoodsActivity.this.finish();
+                                        }
+                                    })
+                                    .create();
+                            dialog.show();
+                        } else {
+                            finish();
+                        }
                     }
 
                     @Override
