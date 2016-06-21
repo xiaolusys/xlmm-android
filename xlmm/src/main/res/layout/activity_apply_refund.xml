@@ -100,7 +100,6 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
                     android:gravity="center"
-                    android:padding="8dp"
                     android:text="￥120"
                     android:textSize="15sp" />
             </RelativeLayout>
@@ -211,6 +210,10 @@
                 android:text="提交申请"
                 android:textColor="@color/white"
                 android:textSize="15sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="30dp" />
 
         </LinearLayout>
     </ScrollView>

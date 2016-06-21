@@ -125,6 +125,8 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
     // 重用 uploadManager。一般地，只需要创建一个 uploadManager 对象
     UploadManager uploadManager = new UploadManager();
     private OrderDetailBean.ExtrasBean extraBean;
+    private int id;
+    private int position;
 
     @Override
     protected void setListener() {
@@ -195,9 +197,8 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-        if (extras != null) {
-            extraBean = ((OrderDetailBean.ExtrasBean) extras.getSerializable("extras"));
-        }
+        id = extras.getInt("id");
+        position = extras.getInt("position");
     }
 
     @Override
@@ -216,6 +217,28 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
         img_delete2 = (ImageView) rl_proof_pic2.findViewById(R.id.img_delete);
         img_delete3 = (ImageView) rl_proof_pic3.findViewById(R.id.img_delete);
 
+        Subscription subscribe = TradeModel.getInstance()
+                .getOrderDetailBean(id)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ServiceResponse<OrderDetailBean>() {
+                    @Override
+                    public void onNext(OrderDetailBean orderDetailBean) {
+                        extraBean = orderDetailBean.getExtras();
+                        goods_info = orderDetailBean.getOrders().get(position);
+                        fillDataIntoView();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        JUtils.Toast("加载失败");
+                    }
+                });
+        addSubscription(subscribe);
+
+
+    }
+
+    private void fillDataIntoView() {
         List<OrderDetailBean.ExtrasBean.RefundChoicesBean> refund_choices = extraBean.getRefund_choices();
         for (OrderDetailBean.ExtrasBean.RefundChoicesBean refund_choice : refund_choices) {
             RadioButton button = new RadioButton(this);
@@ -229,16 +252,13 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
             radioGroup.addView(button);
             tvLayout.addView(textView);
         }
+        fillDataToView(goods_info);
+        getQiniuToken();
     }
 
     //从server端获得所有订单数据，可能要查询几次
     @Override
     protected void initData() {
-        if ((getIntent() != null) && (getIntent().getExtras() != null)) {
-            goods_info = getIntent().getExtras().getParcelable("goods_info");
-        }
-        fillDataToView(goods_info);
-        getQiniuToken();
     }
 
     @Override
