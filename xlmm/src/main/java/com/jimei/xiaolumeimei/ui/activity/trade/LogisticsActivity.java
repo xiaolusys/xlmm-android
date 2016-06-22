@@ -184,8 +184,8 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-        packetid = extras.getString("packetid");
-        company_code = extras.getString("company_code");
+        packetid = extras.getString("packetid","");
+        company_code = extras.getString("company_code","");
         tid = extras.getString("tid");
         time = extras.getString("time");
         stateStr = extras.getString("state");

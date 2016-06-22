@@ -118,7 +118,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                 setBtnInfo(convertView, state, refund_state,
                         dataSource.get(position).isKillTitle());
                 setBtnListener(convertView, state, refund_state, dataSource.get(position).getId(),
-                        dataSource.get(position));
+                        dataSource.get(position),position);
             } else {
                 convertView.findViewById(R.id.rl_info).setVisibility(View.GONE);
             }
@@ -162,12 +162,14 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                     public void onClick(View v) {
                         Intent intent = new Intent(context, LogisticsActivity.class);
                         Bundle bundle = new Bundle();
-                        bundle.putString("packetid", packageBeanList.get(position).getOut_sid());
+                        if (packageBeanList.size() > position) {
+                            bundle.putString("packetid", packageBeanList.get(position).getOut_sid());
+                            bundle.putString("company_code", packageBeanList.get(position).getLogistics_company_code());
+                        }
                         bundle.putString("time", timeStr);
                         bundle.putString("tid", tid);
                         bundle.putString("state", stateStr);
                         bundle.putString("key", finalKey);
-                        bundle.putString("company_code", packageBeanList.get(position).getLogistics_company_code());
                         bundle.putSerializable("list", packageBeanList);
                         bundle.putInt("id", orderDetailEntity.getId());
                         intent.putExtras(bundle);
@@ -263,7 +265,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
     }
 
     private void setBtnListener(View convertView, int state, int refund_state, int goods_id,
-                                AllOrdersBean.ResultsEntity.OrdersEntity goods_info) {
+                                AllOrdersBean.ResultsEntity.OrdersEntity goods_info,int position) {
         Button btn = (Button) convertView.findViewById(R.id.btn_order_proc);
         switch (state) {
             case XlmmConst.ORDER_STATE_PAYED: {
@@ -276,8 +278,8 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                                 Log.d(TAG, "enter apply refund ");
                                 Intent intent = new Intent(context, ApplyRefundActivity.class);
                                 Bundle bundle = new Bundle();
-                                bundle.putSerializable("goods_info",goods_info);
-                                bundle.putSerializable("extras",extras);
+                                bundle.putInt("id",orderDetailEntity.getId());
+                                bundle.putInt("position",position);
                                 intent.putExtras(bundle);
                                 Log.d(TAG,
                                         "transfer good  " + goods_info.getId() + " to " + "ApplyRefundActivity");
@@ -312,8 +314,8 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                                 Log.d(TAG, "enter apply return goods ");
                                 Intent intent = new Intent(context, ApplyReturnGoodsActivity.class);
                                 Bundle bundle = new Bundle();
-                                bundle.putSerializable("goods_info",goods_info);
-                                bundle.putSerializable("extras",extras);
+                                bundle.putInt("id",orderDetailEntity.getId());
+                                bundle.putInt("position",position);
                                 intent.putExtras(bundle);
                                 Log.d(TAG, "transfer good  "
                                         + goods_info.getId()
