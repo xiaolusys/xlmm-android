@@ -179,7 +179,7 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
                     public void onError(Throwable e) {
                         e.printStackTrace();
                         Log.e(TAG, " error:commit_logistics_info " + e.toString());
-                        JUtils.Toast("网络异常，提交信息失败，请重试！");
+                        JUtils.Toast("提交信息失败，请重试！");
                         super.onError(e);
                     }
                 });

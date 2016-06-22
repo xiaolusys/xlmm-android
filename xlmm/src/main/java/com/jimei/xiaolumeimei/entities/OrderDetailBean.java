@@ -1,5 +1,8 @@
 package com.jimei.xiaolumeimei.entities;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -391,13 +394,14 @@ public class OrderDetailBean implements Serializable {
         }
     }
 
-    public static class ExtrasBean implements Serializable{
+    public static class ExtrasBean implements Serializable, Parcelable {
         /**
          * refund_channel : budget
          * name : 极速退款
          * desc : 申请退款后，退款金额立即退到小鹿钱包，并可立即支付使用，无需等待.
          */
 
+        @SerializedName("refund_choices")
         private List<RefundChoicesBean> refund_choices;
 
         public List<RefundChoicesBean> getRefund_choices() {
@@ -408,9 +412,12 @@ public class OrderDetailBean implements Serializable {
             this.refund_choices = refund_choices;
         }
 
-        public static class RefundChoicesBean implements Serializable{
+        public static class RefundChoicesBean implements Serializable,Parcelable {
+            @SerializedName("refund_channel")
             private String refund_channel;
+            @SerializedName("name")
             private String name;
+            @SerializedName("desc")
             private String desc;
 
             public String getRefund_channel() {
@@ -436,6 +443,69 @@ public class OrderDetailBean implements Serializable {
             public void setDesc(String desc) {
                 this.desc = desc;
             }
+
+            @Override
+            public int describeContents() {
+                return 0;
+            }
+
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+                dest.writeString(this.refund_channel);
+                dest.writeString(this.name);
+                dest.writeString(this.desc);
+            }
+
+            public RefundChoicesBean() {
+            }
+
+            protected RefundChoicesBean(Parcel in) {
+                this.refund_channel = in.readString();
+                this.name = in.readString();
+                this.desc = in.readString();
+            }
+
+            public static final Creator<RefundChoicesBean> CREATOR = new Creator<RefundChoicesBean>() {
+                @Override
+                public RefundChoicesBean createFromParcel(Parcel source) {
+                    return new RefundChoicesBean(source);
+                }
+
+                @Override
+                public RefundChoicesBean[] newArray(int size) {
+                    return new RefundChoicesBean[size];
+                }
+            };
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeList(this.refund_choices);
+        }
+
+        public ExtrasBean() {
+        }
+
+        protected ExtrasBean(Parcel in) {
+            this.refund_choices = new ArrayList<RefundChoicesBean>();
+            in.readList(this.refund_choices, RefundChoicesBean.class.getClassLoader());
+        }
+
+        public static final Parcelable.Creator<ExtrasBean> CREATOR = new Parcelable.Creator<ExtrasBean>() {
+            @Override
+            public ExtrasBean createFromParcel(Parcel source) {
+                return new ExtrasBean(source);
+            }
+
+            @Override
+            public ExtrasBean[] newArray(int size) {
+                return new ExtrasBean[size];
+            }
+        };
     }
 }

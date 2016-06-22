@@ -81,6 +81,8 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
     String desc = "";
     String proof_pic = "";
     private OrderDetailBean.ExtrasBean extraBean;
+    private int id;
+    private int position;
 
     @Override
     protected void setListener() {
@@ -103,9 +105,8 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-        if (extras != null) {
-            extraBean = ((OrderDetailBean.ExtrasBean) extras.getSerializable("extras"));
-        }
+        id = extras.getInt("id");
+        position = extras.getInt("position");
     }
 
     @Override
@@ -115,6 +116,26 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void initViews() {
+        Subscription subscribe = TradeModel.getInstance()
+                .getOrderDetailBean(id)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ServiceResponse<OrderDetailBean>() {
+                    @Override
+                    public void onNext(OrderDetailBean orderDetailBean) {
+                        extraBean = orderDetailBean.getExtras();
+                        goods_info = orderDetailBean.getOrders().get(position);
+                        fillDataIntoView();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        JUtils.Toast("加载失败");
+                    }
+                });
+        addSubscription(subscribe);
+    }
+
+    private void fillDataIntoView() {
         List<OrderDetailBean.ExtrasBean.RefundChoicesBean> refund_choices = extraBean.getRefund_choices();
         for (OrderDetailBean.ExtrasBean.RefundChoicesBean refund_choice : refund_choices) {
             RadioButton button = new RadioButton(this);
@@ -128,14 +149,6 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
             radioGroup.addView(button);
             tvLayout.addView(textView);
         }
-    }
-
-    //从server端获得所有订单数据，可能要查询几次
-    @Override
-    protected void initData() {
-        if (null != getIntent() && null != getIntent().getExtras()) {
-            goods_info = getIntent().getExtras().getParcelable("goods_info");
-        }
         if (goods_info != null) {
             fillDataToView(goods_info);
         } else {
@@ -146,6 +159,12 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
             intent.putExtras(bundle);
             startActivity(intent);
         }
+    }
+
+    //从server端获得所有订单数据，可能要查询几次
+    @Override
+    protected void initData() {
+
     }
 
     @Override
