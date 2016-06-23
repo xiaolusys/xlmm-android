@@ -9,6 +9,7 @@ import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.PackageBean;
 import com.jimei.xiaolumeimei.entities.PayInfoBean;
 import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
+import com.jimei.xiaolumeimei.entities.RedBagBean;
 import com.jimei.xiaolumeimei.entities.RefundMsgBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
@@ -196,6 +197,12 @@ public class TradeModel {
   public Observable<LogisticsBean> get_logistics_by_packagetid(String packetid,String company_code) {
     return XlmmRetrofitClient.getService()
             .get_logistics_by_packagetid(packetid,company_code)
+            .compose(new DefaultTransform<>());
+  }
+
+  public Observable<RedBagBean> getRedBag(String uniq_id){
+    return  XlmmRetrofitClient.getService()
+            .getRedBag(uniq_id)
             .compose(new DefaultTransform<>());
   }
 }

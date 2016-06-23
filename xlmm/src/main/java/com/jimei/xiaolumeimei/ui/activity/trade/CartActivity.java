@@ -228,6 +228,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
             } else {
 
               emptyContent1.setVisibility(View.VISIBLE);
+              cartsRecyclerview.setVisibility(View.GONE);
               goMain1.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                   startActivity(new Intent(CartActivity.this, MainActivity.class));
@@ -245,7 +246,6 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
                         showLine.setVisibility(View.VISIBLE);
                         mCartsHisAdapetr.updateWithClear(cartsinfoBeen);
                       } else {
-
                         emptyContent.setVisibility(View.VISIBLE);
                         goMain.setOnClickListener(new View.OnClickListener() {
                           @Override public void onClick(View v) {
@@ -331,7 +331,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
       });
       holder.add.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View v) {
-
+          showIndeterminateProgressDialog(false);
           Subscription subscription = CartsModel.getInstance()
               .plus_product_carts(cartsinfoBean.getId())
               .subscribeOn(Schedulers.io())
@@ -348,176 +348,221 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
                   }
                 }
 
+                @Override
+                public void onCompleted() {
+                  hideIndeterminateProgressDialog();
+                }
+
                 @Override public void onError(Throwable e) {
+                  hideIndeterminateProgressDialog();
                   super.onError(e);
                 }
               });
           addSubscription(subscription);
         }
       });
+      holder.delete.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          if (mList.size() == 1) {
+                if (Integer.parseInt(cartsinfoBean.getNum()) > 1) {
+                  showIndeterminateProgressDialog(false);
+                  Subscription subscription = CartsModel.getInstance()
+                          .minus_product_carts(cartsinfoBean.getId())
+                          .subscribeOn(Schedulers.io())
+                          .subscribe(new ServiceResponse<Response<CodeBean>>() {
+                            @Override public void onNext(Response<CodeBean> responseBody) {
+                              if (responseBody != null) {
+                                if (responseBody.isSuccessful()) {
+                                  Subscription subscribe = CartsModel.getInstance()
+                                          .getCartsHisList()
+                                          .subscribeOn(Schedulers.io())
+                                          .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
+                                            @Override public void onNext(List<CartsinfoBean> cartsinfoBeen) {
+                                              if (null != cartsinfoBeen) {
+                                                mListhis = cartsinfoBeen;
+                                                mCartsHisAdapetr.notifyDataSetChanged();
+                                              } else {
+                                                tvShow.setVisibility(View.INVISIBLE);
+                                                showLine.setVisibility(View.INVISIBLE);
+                                              }
+                                            }
 
-      if (mList.size() == 1) {
-        holder.delete.setOnClickListener(new View.OnClickListener() {
-          @Override public void onClick(View v) {
-            if (Integer.parseInt(cartsinfoBean.getNum()) > 1) {
+                                            @Override
+                                            public void onCompleted() {
+                                              hideIndeterminateProgressDialog();
+                                            }
+                                          });
+                                  addSubscription(subscribe);
 
-              Subscription subscription = CartsModel.getInstance()
-                  .minus_product_carts(cartsinfoBean.getId())
-                  .subscribeOn(Schedulers.io())
-                  .subscribe(new ServiceResponse<Response<CodeBean>>() {
-                    @Override public void onNext(Response<CodeBean> responseBody) {
-                      if (responseBody != null) {
-                        if (responseBody.isSuccessful()) {
-                          Subscription subscribe = CartsModel.getInstance()
-                              .getCartsHisList()
-                              .subscribeOn(Schedulers.io())
-                              .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
-                                @Override public void onNext(List<CartsinfoBean> cartsinfoBeen) {
-                                  if (null != cartsinfoBeen) {
-                                    mListhis = cartsinfoBeen;
-                                    mCartsHisAdapetr.notifyDataSetChanged();
-                                  } else {
-                                    tvShow.setVisibility(View.INVISIBLE);
-                                    showLine.setVisibility(View.INVISIBLE);
-                                  }
+                                  getCartsInfo(holder.getAdapterPosition());
+                                } else {
+                                  hideIndeterminateProgressDialog();
+                                  JUtils.Toast(responseBody.body().getInfo());
                                 }
-                              });
-                          addSubscription(subscribe);
+                              }
+                            }
+                          });
+                  addSubscription(subscription);
+                } else {
+                  new MaterialDialog.Builder(CartActivity.this).
+                          title("删除商品").
+                          content("您确定要删除吗？").
+                          positiveText("确定").
+                          negativeText("取消").
+                          callback(new MaterialDialog.ButtonCallback() {
+                            @Override public void onPositive(MaterialDialog dialog) {
+                              showIndeterminateProgressDialog(false);
+                              Subscription subscription = CartsModel.getInstance()
+                                      .delete_carts(cartsinfoBean.getId())
+                                      .subscribeOn(Schedulers.io())
+                                      .subscribe(new ServiceResponse<Response<CodeBean>>() {
+                                        @Override public void onNext(Response<CodeBean> responseBody) {
+                                          if (responseBody != null) {
+                                            if (responseBody.isSuccessful()) {
+                                              emptyContent1.setVisibility(View.VISIBLE);
+                                              cartsRecyclerview.setVisibility(View.GONE);
+                                              removeAt(holder.getAdapterPosition());
+                                              Subscription subscribe = CartsModel.getInstance()
+                                                      .getCartsHisList()
+                                                      .subscribeOn(Schedulers.io())
+                                                      .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
+                                                        @Override
+                                                        public void onNext(List<CartsinfoBean> cartsinfoBeen) {
+                                                          if (null != cartsinfoBeen) {
+                                                            mListhis = cartsinfoBeen;
+                                                            mCartsHisAdapetr.notifyDataSetChanged();
+                                                          } else {
+                                                            tvShow.setVisibility(View.INVISIBLE);
+                                                            showLine.setVisibility(View.INVISIBLE);
+                                                          }
+                                                          hideIndeterminateProgressDialog();
+                                                        }
 
-                          getCartsInfo(holder.getAdapterPosition());
-                        } else {
-                          JUtils.Toast(responseBody.body().getInfo());
-                        }
-                      }
-                    }
-                  });
-              addSubscription(subscription);
-            } else {
-              new MaterialDialog.Builder(CartActivity.this).
+                                                        @Override
+                                                        public void onError(Throwable e) {
+                                                          hideIndeterminateProgressDialog();
+                                                        }
+                                                      });
+                                              addSubscription(subscribe);
+                                              getCartsInfo();
+                                            }
+                                          }
+                                        }
+
+                                        @Override
+                                        public void onError(Throwable e) {
+                                          hideIndeterminateProgressDialog();
+                                        }
+                                      });
+                              addSubscription(subscription);
+                              dialog.dismiss();
+                            }
+
+                            @Override public void onNegative(MaterialDialog dialog) {
+                              dialog.dismiss();
+                            }
+                          }).show();
+                }
+          } else {
+                if (Integer.parseInt(cartsinfoBean.getNum()) > 1) {
+                  showIndeterminateProgressDialog(false);
+                  Subscription subscription = CartsModel.getInstance()
+                          .minus_product_carts(cartsinfoBean.getId())
+                          .subscribeOn(Schedulers.io())
+                          .subscribe(new ServiceResponse<Response<CodeBean>>() {
+                            @Override public void onNext(Response<CodeBean> responseBody) {
+                              if (responseBody != null) {
+                                if (responseBody.isSuccessful()) {
+                                  getCartsInfo(holder.getAdapterPosition());
+                                } else {
+                                  JUtils.Toast(responseBody.body().getInfo());
+                                }
+                                hideIndeterminateProgressDialog();
+                              }
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                              hideIndeterminateProgressDialog();
+                            }
+                          });
+                  addSubscription(subscription);
+                } else {
+                  oneDelete();
+                }
+          }
+        }
+
+        private void oneDelete() {
+          new MaterialDialog.Builder(CartActivity.this).
                   title("删除商品").
                   content("您确定要删除吗？").
                   positiveText("确定").
                   negativeText("取消").
                   callback(new MaterialDialog.ButtonCallback() {
                     @Override public void onPositive(MaterialDialog dialog) {
+                      showIndeterminateProgressDialog(false);
                       Subscription subscription = CartsModel.getInstance()
-                          .delete_carts(cartsinfoBean.getId())
-                          .subscribeOn(Schedulers.io())
-                          .subscribe(new ServiceResponse<Response<CodeBean>>() {
-                            @Override public void onNext(Response<CodeBean> responseBody) {
-                              if (responseBody != null) {
-                                if (responseBody.isSuccessful()) {
-                                  removeAt(holder.getAdapterPosition());
-                                  Subscription subscribe = CartsModel.getInstance()
-                                      .getCartsHisList()
-                                      .subscribeOn(Schedulers.io())
-                                      .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
-                                        @Override
-                                        public void onNext(List<CartsinfoBean> cartsinfoBeen) {
-                                          if (null != cartsinfoBeen) {
-                                            mListhis = cartsinfoBeen;
-                                            mCartsHisAdapetr.notifyDataSetChanged();
-                                          } else {
-                                            tvShow.setVisibility(View.INVISIBLE);
-                                            showLine.setVisibility(View.INVISIBLE);
-                                          }
-                                        }
-                                      });
-                                  addSubscription(subscribe);
-                                  getCartsInfo();
+                              .delete_carts(cartsinfoBean.getId())
+                              .subscribeOn(Schedulers.io())
+                              .subscribe(new ServiceResponse<Response<CodeBean>>() {
+                                @Override public void onNext(Response<CodeBean> responseBody) {
+                                  if (null != responseBody) {
+                                    if (responseBody.isSuccessful()) {
+                                      removeAt(holder.getAdapterPosition());
+                                      CartsModel.getInstance()
+                                              .getCartsList()
+                                              .subscribeOn(Schedulers.io())
+                                              .subscribe(new ServiceResponse<List<CartsinfoBean>>(){
+                                                @Override
+                                                public void onNext(List<CartsinfoBean> cartsinfoBeen) {
+                                                  mList = cartsinfoBeen;
+                                                  hideIndeterminateProgressDialog();
+                                                }
+                                              });
+                                      Subscription subscribe = CartsModel.getInstance()
+                                              .getCartsHisList()
+                                              .subscribeOn(Schedulers.io())
+                                              .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
+                                                @Override
+                                                public void onNext(List<CartsinfoBean> cartsinfoBeen) {
+                                                  if (null != cartsinfoBeen) {
+                                                    mListhis = cartsinfoBeen;
+                                                    mCartsHisAdapetr.notifyDataSetChanged();
+                                                  } else {
+                                                    tvShow.setVisibility(View.INVISIBLE);
+                                                    showLine.setVisibility(View.INVISIBLE);
+                                                  }
+                                                }
+                                              });
+                                      addSubscription(subscribe);
+                                      getCartsInfo();
+                                    } else {
+                                      JUtils.Toast(responseBody.body().getInfo());
+                                      hideIndeterminateProgressDialog();
+                                    }
+                                  }else {
+                                    hideIndeterminateProgressDialog();
+                                  }
                                 }
-                              }
-                            }
-                          });
+
+                                @Override
+                                public void onError(Throwable e) {
+                                  hideIndeterminateProgressDialog();
+                                }
+                              });
                       addSubscription(subscription);
                       dialog.dismiss();
-
-                      startActivity(new Intent(CartActivity.this, CartActivity.class));
-                      finish();
                     }
 
                     @Override public void onNegative(MaterialDialog dialog) {
                       dialog.dismiss();
                     }
                   }).show();
-            }
-          }
-        });
-      } else {
-        holder.delete.setOnClickListener(new View.OnClickListener() {
-          @Override public void onClick(View v) {
-            if (Integer.parseInt(cartsinfoBean.getNum()) > 1) {
+        }
+      });
 
-              Subscription subscription = CartsModel.getInstance()
-                  .minus_product_carts(cartsinfoBean.getId())
-                  .subscribeOn(Schedulers.io())
-                  .subscribe(new ServiceResponse<Response<CodeBean>>() {
-                    @Override public void onNext(Response<CodeBean> responseBody) {
-                      if (responseBody != null) {
-                        if (responseBody.isSuccessful()) {
-                          getCartsInfo(holder.getAdapterPosition());
-                        } else {
-                          JUtils.Toast(responseBody.body().getInfo());
-                        }
-                      }
-                    }
-                  });
-              addSubscription(subscription);
-            } else {
-              oneDelete();
-            }
-          }
-
-          private void oneDelete() {
-            new MaterialDialog.Builder(CartActivity.this).
-                title("删除商品").
-                content("您确定要删除吗？").
-                positiveText("确定").
-                negativeText("取消").
-                callback(new MaterialDialog.ButtonCallback() {
-                  @Override public void onPositive(MaterialDialog dialog) {
-                    Subscription subscription = CartsModel.getInstance()
-                        .delete_carts(cartsinfoBean.getId())
-                        .subscribeOn(Schedulers.io())
-                        .subscribe(new ServiceResponse<Response<CodeBean>>() {
-                          @Override public void onNext(Response<CodeBean> responseBody) {
-                            if (null != responseBody) {
-                              if (responseBody.isSuccessful()) {
-                                removeAt(holder.getAdapterPosition());
-                                Subscription subscribe = CartsModel.getInstance()
-                                    .getCartsHisList()
-                                    .subscribeOn(Schedulers.io())
-                                    .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
-                                      @Override
-                                      public void onNext(List<CartsinfoBean> cartsinfoBeen) {
-                                        if (null != cartsinfoBeen) {
-                                          mListhis = cartsinfoBeen;
-                                          mCartsHisAdapetr.notifyDataSetChanged();
-                                        } else {
-                                          tvShow.setVisibility(View.INVISIBLE);
-                                          showLine.setVisibility(View.INVISIBLE);
-                                        }
-                                      }
-                                    });
-                                addSubscription(subscribe);
-                                getCartsInfo();
-                              } else {
-                                JUtils.Toast(responseBody.body().getInfo());
-                              }
-                            }
-                          }
-                        });
-                    addSubscription(subscription);
-                    dialog.dismiss();
-                  }
-
-                  @Override public void onNegative(MaterialDialog dialog) {
-                    dialog.dismiss();
-                  }
-                }).show();
-          }
-        });
-      }
     }
 
     private void getCartsInfo(int position) {
@@ -689,7 +734,6 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
                 @Override public void onNext(CartsHisBean cartsHisBean) {
                   if (null != cartsHisBean) {
                     if (cartsHisBean.getCode() == 0) {
-                      emptyContent1.setVisibility(View.INVISIBLE);
                       removeAt(holder.getAdapterPosition());
                       Subscription subscription = CartsModel.getInstance()
                           .getCartsList()
@@ -699,6 +743,8 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
                               if (cartsinfoBeen != null) {
                                 mList = cartsinfoBeen;
                                 mCartsAdapetr.notifyDataSetChanged();
+                                emptyContent1.setVisibility(View.GONE);
+                                cartsRecyclerview.setVisibility(View.VISIBLE);
                                 getCartsInfo();
                               }
                             }
