@@ -294,7 +294,6 @@ public abstract class BaseAppCompatActivity extends AutoLayoutActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 finish();
             }
         });

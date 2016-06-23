@@ -54,6 +54,7 @@ import com.jimei.xiaolumeimei.entities.ProductDetailBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
+import com.jimei.xiaolumeimei.entities.RedBagBean;
 import com.jimei.xiaolumeimei.entities.RefundMsgBean;
 import com.jimei.xiaolumeimei.entities.RegisterBean;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
@@ -960,5 +961,11 @@ public interface XlmmService {
     @POST("/rest/v1/users/open_debug_for_app")
     Observable<CodeBean> openDebug(
             @Field("debug_secret") String debug_secret
+    );
+
+    @FormUrlEncoded
+    @POST("/rest/v2/sharecoupon/create_order_share")
+    Observable<RedBagBean> getRedBag(
+            @Field("uniq_id") String uniq_id
     );
 }

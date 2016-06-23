@@ -154,6 +154,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             new ArrayList<>();
     private List<String> logisticsCompanysesString = new ArrayList<>();
     private String code;
+    private String order_no = "";
 
     @Override
     protected void setListener() {
@@ -879,6 +880,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     public void onNext(PayInfoBean payInfoBean) {
 
                         if (null != payInfoBean) {
+                            order_no = payInfoBean.getTrade().getTid();
                             JUtils.Log(TAG, payInfoBean.toString());
                             Gson gson = new Gson();
                             JUtils.Log(TAG, gson.toJson(payInfoBean.getCharge()));
@@ -901,10 +903,9 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                             } else {
                                 if (payInfoBean.getCode() == 0) {
                                     JUtils.Toast("支付成功");
-                                    Intent intent =
-                                            new Intent(CartsPayInfoActivity.this, AllOrdersActivity.class);
+                                    Intent intent = new Intent(CartsPayInfoActivity.this, RedBagActivity.class);
                                     Bundle bundle = new Bundle();
-                                    bundle.putInt("fragment", 3);
+                                    bundle.putString("tid", order_no);
                                     intent.putExtras(bundle);
                                     startActivity(intent);
                                     finish();
@@ -947,9 +948,9 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     JUtils.Toast("支付成功！");
                     //startActivity(new Intent(CartsPayInfoActivity.this, AllOrdersActivity.class));
                     //finish();
-                    Intent intent = new Intent(CartsPayInfoActivity.this, AllOrdersActivity.class);
+                    Intent intent = new Intent(CartsPayInfoActivity.this, RedBagActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putInt("fragment", 3);
+                    bundle.putString("tid", order_no);
                     intent.putExtras(bundle);
                     startActivity(intent);
                     finish();
