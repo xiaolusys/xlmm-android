@@ -4,89 +4,103 @@
     android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    >
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar_layout"
+  <android.support.design.widget.AppBarLayout
+      android:id="@+id/app_bar_layout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      >
+
+    <com.jimei.xiaolumeimei.widget.AutoToolbar
+        android:id="@+id/tool_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:subtitleTextAppearance="@style/ToolbarSubTitleTextAppearance"
+        app:theme="@style/ToolBarMenuStyle"
+        app:titleTextAppearance="@style/ToolbarTitleTextAppearance"
+        >
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/tool_bar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+      <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerInParent="true"
+          android:layout_gravity="center"
+          android:src="@drawable/icon_xlmm"
+          />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center"
-                android:src="@drawable/icon_xlmm" />
+      <RelativeLayout
+          android:id="@+id/rl_mmentry"
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:layout_gravity="right"
+          android:gravity="center"
+          android:visibility="invisible"
+          >
 
-            <RelativeLayout
-                android:id="@+id/rl_mmentry"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="right"
-                android:gravity="center"
-                android:visibility="invisible">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="40dp"
-                    android:layout_marginRight="12dp"
-                    android:src="@drawable/ic_setting" />
-            </RelativeLayout>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="12dp"
+            android:src="@drawable/ic_setting"
+            />
+      </RelativeLayout>
 
 
-        </android.support.v7.widget.Toolbar>
-    </android.support.design.widget.AppBarLayout>
+    </com.jimei.xiaolumeimei.widget.AutoToolbar>
+  </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/include_mainscrollcontent" />
+  <include layout="@layout/include_mainscrollcontent"/>
 
-    <RelativeLayout
-        android:id="@+id/rv_cart"
+  <RelativeLayout
+      android:id="@+id/rv_cart"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="bottom|start"
+      android:layout_margin="8dp"
+      android:background="@drawable/shape_maincarts"
+      >
+
+    <ImageView
+        android:id="@+id/image_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|start"
-        android:layout_margin="8dp"
-        android:background="@drawable/shape_maincarts">
+        android:layout_centerInParent="true"
+        android:src="@drawable/ic_carts"
+        android:visibility="invisible"
+        />
 
-        <ImageView
-            android:id="@+id/image_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:src="@drawable/ic_carts"
-            android:visibility="invisible" />
-
-        <ImageView
-            android:id="@+id/image_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:src="@drawable/ic_carts" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/rv_top"
+    <ImageView
+        android:id="@+id/image_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="8dp"
-        android:background="@drawable/shape_top"
-        android:visibility="invisible">
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:src="@drawable/ic_carts"
+        />
+  </RelativeLayout>
 
-        <ImageView
-            android:id="@+id/image_top"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:src="@drawable/go_top" />
-    </RelativeLayout>
+  <RelativeLayout
+      android:id="@+id/rv_top"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="bottom|end"
+      android:layout_margin="8dp"
+      android:background="@drawable/shape_top"
+      android:visibility="invisible"
+      >
+
+    <ImageView
+        android:id="@+id/image_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@drawable/go_top"
+        />
+  </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>
