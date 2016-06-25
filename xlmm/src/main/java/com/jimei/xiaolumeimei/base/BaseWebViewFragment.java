@@ -1,11 +1,10 @@
 package com.jimei.xiaolumeimei.base;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -15,16 +14,12 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.Toolbar;
+import android.support.annotation.Nullable;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.HttpAuthHandler;
@@ -34,13 +29,20 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
-
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
+import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
+import cn.sharesdk.wechat.moments.WechatMoments;
 import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
+import com.jimei.xiaolumeimei.event.WebViewEvent;
 import com.jimei.xiaolumeimei.htmlJsBridge.modules.AndroidJsBridge;
 import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.utils.CameraUtils;
@@ -50,39 +52,30 @@ import com.jude.utils.JUtils;
 import com.mob.tools.utils.UIHandler;
 import com.tbruyelle.rxpermissions.RxPermissions;
 import com.umeng.analytics.MobclickAgent;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.PlatformActionListener;
-import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.onekeyshare.OnekeyShare;
-import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
-import cn.sharesdk.wechat.moments.WechatMoments;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by itxuye(www.itxuye.com) on 2016/02/04.
- *
- * Copyright 2015年 上海己美. All rights reserved.
+ * Created by itxuye on 2016/6/24.
  */
-public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
+public class BaseWebViewFragment extends BaseFragment
     implements PlatformActionListener, Handler.Callback {
+
+  private static final String TAG = "BaseWebViewFragment";
 
   private static final int MSG_ACTION_CCALLBACK = 2;
   private static final int WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 200;
-  private static final String TAG = CommonWebViewActivity.class.getSimpleName();
-  public WebView mWebView;
-  protected TextView webviewTitle;
-  LinearLayout ll_actwebview;
+  @Bind(R.id.ll_actwebview) LinearLayout ll_actwebview;
+  @Bind(R.id.pb_view) ProgressBar mProgressBar;
+  @Bind(R.id.wb_view) WebView mWebView;
   private Bitmap bitmap;
-  private Toolbar mToolbar;
-  private ProgressBar mProgressBar;
   private String cookies;
   private String actlink;
   private ActivityBean partyShareInfo;
@@ -90,69 +83,62 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
   private String sessionid;
   private int id;
 
-  @Override protected void setListener() {
-    mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        JUtils.Log(TAG, "setNavigationOnClickListener finish");
-        finish();
-      }
-    });
+  public Activity activity;
+  private View view;
+  private Subscription subscribe;
+
+  @Override public void onAttach(Context context) {
+    super.onAttach(context);
+    activity = (Activity) context;
   }
 
-  @Override protected void initData() {
-    JUtils.Log(TAG, "initData");
-    runOnUiThread(new Runnable() {
-      @Override public void run() {
-        JUtils.Log(TAG, "initData--" + actlink);
+  public static BaseWebViewFragment newInstance(String title) {
+    BaseWebViewFragment mmFansFragment = new BaseWebViewFragment();
+    Bundle bundle = new Bundle();
+    bundle.putString("keyword", title);
+    mmFansFragment.setArguments(bundle);
+    return mmFansFragment;
+  }
 
+  @Override public void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setRetainInstance(true);
+  }
+
+  @Override public void onStart() {
+    super.onStart();
+  }
+
+  private void load() {
+    activity.runOnUiThread(new Runnable() {
+      @Override public void run() {
         try {
           Map<String, String> extraHeaders = new HashMap<>();
 
           extraHeaders.put("Cookie", sessionid);
-
+          JUtils.Log(TAG, "GET cookie:" + cookies + " actlink:" + actlink + " domain:" + domain +
+              " sessionid:" + sessionid);
           mWebView.loadUrl(actlink, extraHeaders);
         } catch (Exception e) {
           e.printStackTrace();
-          JUtils.Log(TAG, "loadUrl--error");
         }
-
-        JUtils.Log(TAG, "loadUrl--end");
       }
     });
 
     get_party_share_content(id + "");
   }
 
-  @Override public void getBundleExtras(Bundle extras) {
-    if (extras != null) {
-      cookies   = extras.getString("cookies");
-      domain    = extras.getString("domain");
-      actlink   = extras.getString("actlink");
-      id        = extras.getInt("id");
-      sessionid = extras.getString("Cookie");
-      JUtils.Log(TAG, "GET cookie:" + cookies + " actlink:" + actlink + " domain:" + domain +
-          " sessionid:" + sessionid);
-    }
+  @Override protected View initViews(LayoutInflater inflater, ViewGroup container,
+      Bundle savedInstanceState) {
+    ShareSDK.initSDK(activity);
+    EventBus.getDefault().register(this);
+    view = inflater.inflate(R.layout.fragment_basewebview, container, false);
+    ButterKnife.bind(this, view);
+    initViews();
+    return view;
   }
 
-  @Override protected int getContentViewLayoutID() {
-    return R.layout.activity_actwebview;
-  }
-
-  @SuppressLint("JavascriptInterface") @Override protected void initViews() {
-    JUtils.Log(TAG, "initViews");
-    ShareSDK.initSDK(this);
-
-    webviewTitle = (TextView) findViewById(R.id.webview_title);
-    ll_actwebview = (LinearLayout) findViewById(R.id.ll_actwebview);
-    mProgressBar = (ProgressBar) findViewById(R.id.pb_view);
-    mWebView = (WebView) findViewById(R.id.wb_view);
-    mToolbar = (Toolbar) findViewById(R.id.toolbar);
-    mToolbar.setTitle("");
-    setSupportActionBar(mToolbar);
-    mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+  private void initViews() {
     try {
       if (Build.VERSION.SDK_INT >= 19) {
         mWebView.getSettings().setLoadsImagesAutomatically(true);
@@ -170,7 +156,8 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
               + ((TelephonyManager) XlmmApp.getInstance()
               .getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId());
       mWebView.getSettings().setJavaScriptEnabled(true);
-      mWebView.addJavascriptInterface(new AndroidJsBridge(this), "AndroidBridge");
+      mWebView.addJavascriptInterface(new AndroidJsBridge((BaseSwipeBackCompatActivity) activity),
+          "AndroidBridge");
 
       mWebView.getSettings().setAllowFileAccess(true);
       //如果访问的页面中有Javascript，则webview必须设置支持Javascript
@@ -188,7 +175,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
 
       mWebView.setWebChromeClient(new WebChromeClient() {
         @Override public void onProgressChanged(WebView view, int newProgress) {
-          JUtils.Log(TAG, "process:" + newProgress);
           mProgressBar.setProgress(newProgress);
           if (newProgress == 100) {
             mProgressBar.setVisibility(View.GONE);
@@ -201,7 +187,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
       mWebView.setWebViewClient(new WebViewClient() {
 
         @Override public void onPageFinished(WebView view, String url) {
-          JUtils.Log(TAG, "onPageFinished:" + url);
           CookieSyncManager.getInstance().sync();
           if (!mWebView.getSettings().getLoadsImagesAutomatically()) {
             mWebView.getSettings().setLoadsImagesAutomatically(true);
@@ -211,92 +196,51 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
         @Override
         public void onReceivedHttpAuthRequest(WebView view, HttpAuthHandler handler, String host,
             String realm) {
-          JUtils.Log(TAG, "onReceivedHttpAuthRequest");
           view.reload();
         }
 
         @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
-          JUtils.Log(TAG, "shouldOverrideUrlLoading:" + url);
           view.loadUrl(url);
           return super.shouldOverrideUrlLoading(view, url);
         }
 
         public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-          JUtils.Log(TAG, "onReceivedSslError:");
-          //handler.cancel(); 默认的处理方式，WebView变成空白页
-          //                        //接受证书
           handler.proceed();
-          //handleMessage(Message msg); 其他处理
         }
       });
     } catch (Exception e) {
       e.printStackTrace();
-      JUtils.Log(TAG, "set webview err");
     }
 
-    syncCookie(this);
+    syncCookie(activity);
   }
 
-  @Override protected boolean toggleOverridePendingTransition() {
-    return false;
+  @Subscribe(sticky = true) public void getWebViewInfo(WebViewEvent event) {
+    cookies = event.cookies;
+    domain = event.domain;
+    actlink = event.actlink;
+    id = event.id;
+    sessionid = event.sessionid;
+
+    JUtils.Log(TAG, "GET cookie:" + cookies + " actlink:" + actlink + " domain:" + domain +
+        " sessionid:" + sessionid);
   }
 
-  @Override protected TransitionMode getOverridePendingTransitionMode() {
+  @Override protected void initData() {
+    load();
+  }
+
+  @Override protected void setDefaultFragmentTitle(String title) {
+
+  }
+
+  @Override public View getScrollableView() {
     return null;
   }
 
-  @Override public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-    if (keyCode == KeyEvent.KEYCODE_BACK) {
-      if (mWebView.canGoBack()) {
-        JUtils.Log(TAG, "onKeyDown webview goback");
-        mWebView.goBack();
-      } else {
-        JUtils.Log(TAG, "onKeyDown finish");
-        finish();
-      }
-      return true;
-    }
-
-    return super.onKeyDown(keyCode, event);
-  }
-
-  @Override public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-      case R.id.action_share:
-        JUtils.Log(TAG, "party share");
-        sharePartyInfo();
-        break;
-      default:
-        break;
-    }
-    return super.onOptionsItemSelected(item);
-  }
-
-  @Override public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.menu_shareproduct, menu);
-    return super.onCreateOptionsMenu(menu);
-  }
-
-  @Override protected void onPause() {
-    super.onPause();
-    CookieSyncManager.createInstance(this);
-    CookieSyncManager.getInstance().stopSync();
-    mWebView.onPause();
-  }
-
-  @Override protected void onResume() {
-    super.onResume();
-    CookieSyncManager.createInstance(this);
-    CookieSyncManager.getInstance().startSync();
-    mWebView.onResume();
-    ShareSDK.initSDK(this);
-  }
-
-  @Override protected void onDestroy() {
-    JUtils.Log(TAG, "onDestroy");
-    super.onDestroy();
-    ShareSDK.stopSDK(this);
+  @Override public void onDestroyView() {
+    super.onDestroyView();
+    ShareSDK.stopSDK();
     if (ll_actwebview != null) {
       ll_actwebview.removeView(mWebView);
     }
@@ -309,16 +253,41 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     if (bitmap != null) {
       bitmap.recycle();
     }
+
+    if (subscribe != null && subscribe.isUnsubscribed()) {
+      subscribe.unsubscribe();
+    }
+
+    ButterKnife.unbind(this);
+
+    WebViewEvent stickyEvent = EventBus.getDefault().getStickyEvent(WebViewEvent.class);
+
+    // Better check that an event was actually posted before
+    if (stickyEvent != null) {
+      // "Consume" the sticky event
+      EventBus.getDefault().removeStickyEvent(stickyEvent);
+      // Now do something with it
+    }
+    EventBus.getDefault().unregister(this);
   }
 
-  @Override protected void onStop() {
-    super.onStop();
+  @Override public void onPause() {
+    super.onPause();
+    CookieSyncManager.createInstance(activity);
+    CookieSyncManager.getInstance().stopSync();
+    mWebView.onPause();
+  }
+
+  @Override public void onResume() {
+    super.onResume();
+    CookieSyncManager.createInstance(activity);
+    CookieSyncManager.getInstance().startSync();
+    mWebView.onResume();
   }
 
   public void syncCookie(Context context) {
 
     try {
-      JUtils.Log(TAG, "syncCookie bgn");
       CookieSyncManager.createInstance(context);
 
       CookieManager cookieManager = CookieManager.getInstance();
@@ -331,10 +300,8 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
       cookieManager.setCookie(domain, cookies);
 
       CookieSyncManager.getInstance().sync();
-      JUtils.Log(TAG, "syncCookie end");
     } catch (Exception e) {
       e.printStackTrace();
-      JUtils.Log(TAG, "syncCookie err:" + e.toString());
     }
   }
 
@@ -353,7 +320,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     map.put("id", "name");
 
     map.put(platform.getId() + "", platform.getName());
-    MobclickAgent.onEvent(mContext, "ShareID", map);
+    MobclickAgent.onEvent(activity, "ShareID", map);
     // 成功
     Message msg = new Message();
     msg.what = MSG_ACTION_CCALLBACK;
@@ -380,18 +347,17 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     switch (msg.arg1) {
       case 1: {
         // 成功
-        Toast.makeText(this, "分享成功", Toast.LENGTH_SHORT).show();
-        JUtils.Log(TAG, "分享回调成功------------");
+        Toast.makeText(activity, "分享成功", Toast.LENGTH_SHORT).show();
       }
       break;
       case 2: {
         // 失败
-        Toast.makeText(this, "分享失败", Toast.LENGTH_SHORT).show();
+        Toast.makeText(activity, "分享失败", Toast.LENGTH_SHORT).show();
       }
       break;
       case 3: {
         // 取消
-        Toast.makeText(this, "分享取消", Toast.LENGTH_SHORT).show();
+        Toast.makeText(activity, "分享取消", Toast.LENGTH_SHORT).show();
       }
       break;
     }
@@ -400,9 +366,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
   }
 
   public void get_party_share_content(String id) {
-    JUtils.Log(TAG, "get_party_share_content id " + id);
-
-    Subscription subscribe = ActivityModel.getInstance()
+    subscribe = ActivityModel.getInstance()
         .get_party_share_content(id)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ActivityBean>() {
@@ -411,18 +375,9 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
             if (null != activityBean) {
               partyShareInfo = activityBean;
               partyShareInfo.setQrcodeLink(activityBean.getQrcodeLink());
-
-              JUtils.Log(TAG, "partyShareInfo: desc="
-                  + partyShareInfo.getActiveDec()
-                  + " "
-                  + "qrcode="
-                  + partyShareInfo.getQrcodeLink()
-                  + " title="
-                  + partyShareInfo.getTitle());
             }
           }
         });
-    addSubscription(subscribe);
   }
 
   protected void share_shopping(String title, String sharelink, String desc, String shareimg) {
@@ -442,16 +397,11 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     oks.setUrl(sharelink);
     oks.setShareContentCustomizeCallback(new ShareContentCustom(desc));
     // 启动分享GUI
-    oks.show(this);
+    oks.show(activity);
   }
 
   private void sharePartyInfo() {
     if (partyShareInfo == null) return;
-
-    JUtils.Log(TAG, " title =" + partyShareInfo.getTitle());
-    JUtils.Log(TAG,
-        " desc=" + partyShareInfo.getActiveDec() + " url=" + partyShareInfo.getShareLink());
-
     OnekeyShare oks = new OnekeyShare();
     //关闭sso授权
     oks.disableSSOWhenAuthorize();
@@ -479,64 +429,33 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     // siteUrl是分享此内容的网站地址，仅在QQ空间使用
     //oks.setSiteUrl("http://sharesdk.cn");
     Bitmap enableLogo =
-        BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ssdk_oks_logo_copy);
+        BitmapFactory.decodeResource(activity.getResources(), R.drawable.ssdk_oks_logo_copy);
     String label = "二维码";
 
     View.OnClickListener listener = new View.OnClickListener() {
       public void onClick(View v) {
         //if (shareProductBean.getShareLink()) {
         //}
-        saveTwoDimenCode(mContext);
+        saveTwoDimenCode(activity);
       }
     };
     oks.setCustomerLogo(enableLogo, label, listener);
     // 启动分享GUI
     oks.setShareContentCustomizeCallback(
         new ShareContentCustom(partyShareInfo.getActiveDec() + partyShareInfo.getShareLink()));
-    oks.show(this);
+    oks.show(activity);
   }
 
   public void saveTwoDimenCode(Context context) {
 
     if (partyShareInfo == null || TextUtils.isEmpty(partyShareInfo.getShareLink())) {
 
-      JUtils.Log(TAG, "saveTowDimenCode : fail,Qrcodelink=null");
       return;
     }
 
-    JUtils.Log(TAG, "saveTowDimenCode : Qrcodelink=" + partyShareInfo.getShareLink());
     try {
-      //WebView webView = new WebView(this);
-      //webView.setLayoutParams(new Toolbar.LayoutParams(Toolbar.LayoutParams.MATCH_PARENT,
-      //    Toolbar.LayoutParams.MATCH_PARENT));
-      //webView.getSettings().setJavaScriptEnabled(true);
-      //
-      //webView.getSettings().setAllowFileAccess(true);
-      ////如果访问的页面中有Javascript，则webview必须设置支持Javascript
-      ////mWebView.getSettings().setUserAgentString(MyApplication.getUserAgent());
-      //webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-      //webView.getSettings().setAllowFileAccess(true);
-      //webView.getSettings().setAppCacheEnabled(true);
-      //webView.getSettings().setDomStorageEnabled(true);
-      //webView.getSettings().setDatabaseEnabled(true);
-      //webView.setDrawingCacheEnabled(true);
-      //
-      //webView.setWebChromeClient(new WebChromeClient() {
-      //  @Override public void onProgressChanged(WebView view, int newProgress) {
-      //
-      //  }
-      //});
-      //webView.setWebViewClient(new WebViewClient() {
-      //  @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
-      //    view.loadUrl(url);
-      //    return true;
-      //  }
-      //});
-      //
-      //webView.loadUrl(partyShareInfo.getQrcodeLink());
       bitmap = mWebView.getDrawingCache();
-      JUtils.Log(TAG, "bitmap====" + bitmap.getByteCount());
-      RxPermissions.getInstance(this)
+      RxPermissions.getInstance(activity)
           .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
           .subscribe(granted -> {
             if (granted) {
@@ -562,9 +481,8 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
               Intent scannerIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
               scannerIntent.setData(uri);
 
-              sendBroadcast(scannerIntent);
-              JUtils.Log(TAG, "filename===" + FileUtils.isFileExist(fileName));
-              Toast.makeText(this, "截取快照成功至/xlmm/xiaolumeimei", Toast.LENGTH_LONG).show();
+              activity.sendBroadcast(scannerIntent);
+              Toast.makeText(activity, "截取快照成功至/xlmm/xiaolumeimei", Toast.LENGTH_LONG).show();
             } else {
               // Oups permission denied
               JUtils.Toast("小鹿美美需要存储权限存储图片,请再次点击保存并打开权限许可.");
@@ -576,41 +494,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
       //if (null!=bitmap) {
       //  bitmap.recycle();
       //}
-    }
-  }
-
-  /**
-   * 当系统版本大于5.0时 开启enableSlowWholeDocumentDraw 获取整个html文档内容
-   */
-  private void checkSdkVersion() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      WebView.enableSlowWholeDocumentDraw();
-    }
-  }
-
-  /**
-   * 当build target为23时，需要动态申请权限
-   */
-  private void requestPermission() {
-    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
-
-      if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-          != PackageManager.PERMISSION_GRANTED) {
-        //申请WRITE_EXTERNAL_STORAGE权限
-        ActivityCompat.requestPermissions(this,
-            new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
-            WRITE_EXTERNAL_STORAGE_REQUEST_CODE);
-      }
-    }
-  }
-
-  @Override public void onRequestPermissionsResult(int requestCode, String[] permissions,
-      int[] grantResults) {
-    switch (requestCode) {
-      case 200:
-        boolean writeAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-        Log.d(TAG, "writeAcceped--" + writeAccepted);
-        break;
     }
   }
 

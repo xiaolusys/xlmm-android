@@ -6,7 +6,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
-import com.umeng.analytics.MobclickAgent;
 import com.zhy.autolayout.AutoLayoutActivity;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
@@ -59,6 +58,7 @@ public abstract class BaseActivity extends AutoLayoutActivity{
 
   @Override protected void onDestroy() {
     super.onDestroy();
+    ButterKnife.unbind(this);
   }
 
   @Override protected void onResume() {
@@ -83,6 +83,7 @@ public abstract class BaseActivity extends AutoLayoutActivity{
     super.onStop();
     if (this.mCompositeSubscription != null) {
       this.mCompositeSubscription.unsubscribe();
+      mCompositeSubscription = null;
     }
   }
 }

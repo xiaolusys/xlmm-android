@@ -1,5 +1,6 @@
 package com.jimei.xiaolumeimei.ui.fragment.v2;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,27 +10,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.CarryLogAllAdapter;
+import com.jimei.xiaolumeimei.adapter.MamaPotentialFansAdapter;
 import com.jimei.xiaolumeimei.base.BaseFragment;
-import com.jimei.xiaolumeimei.entities.CarryLogListBean;
-import com.jimei.xiaolumeimei.model.MMProductModel;
+import com.jimei.xiaolumeimei.entities.PotentialFans;
+import com.jimei.xiaolumeimei.model.MamaInfoModel;
+import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.widget.DividerItemDecorationForFooter;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -38,21 +35,29 @@ import rx.schedulers.Schedulers;
  * <p>
  * Copyright 2016年 上海己美. All rights reserved.
  */
-public class CarryLogAllFragment extends BaseFragment {
-  @Bind(R.id.carrylogall_xry) XRecyclerView xRecyclerView;
-  List<CarryLogListBean.ResultsEntity> list = new ArrayList<>();
-  private CarryLogAllAdapter adapter;
+public class MMPotentialFansFragment extends BaseFragment {
+  @Bind(R.id.xrv_mmvisitors) XRecyclerView xrvMmvisitors;
   private int page = 2;
+  private MamaPotentialFansAdapter mAdapter;
+
+  List<PotentialFans.ResultsBean> list = new ArrayList<>();
+
   private Subscription subscription1;
   private Subscription subscription2;
   private MaterialDialog materialDialog;
+  private Activity mActivity;
 
-  public static CarryLogAllFragment newInstance(String title) {
-    CarryLogAllFragment carryLogAllFragment = new CarryLogAllFragment();
+  @Override public void onAttach(Context context) {
+    super.onAttach(context);
+    mActivity = (Activity) context;
+  }
+
+  public static MMPotentialFansFragment newInstance(String title) {
+    MMPotentialFansFragment mmFansFragment = new MMPotentialFansFragment();
     Bundle bundle = new Bundle();
     bundle.putString("keyword", title);
-    carryLogAllFragment.setArguments(bundle);
-    return carryLogAllFragment;
+    mmFansFragment.setArguments(bundle);
+    return mmFansFragment;
   }
 
   @Override public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,10 +87,10 @@ public class CarryLogAllFragment extends BaseFragment {
 
   private void load() {
     showIndeterminateProgressDialog(false);
-    subscription1 = MMProductModel.getInstance()
-        .getMamaAllCarryLogs("1")
+    subscription1 = MamaInfoModel.getInstance()
+        .getPotentialFans("1")
         .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<CarryLogListBean>() {
+        .subscribe(new ServiceResponse<PotentialFans>() {
           @Override public void onCompleted() {
             super.onCompleted();
             hideIndeterminateProgressDialog();
@@ -96,16 +101,16 @@ public class CarryLogAllFragment extends BaseFragment {
             e.printStackTrace();
           }
 
-          @Override public void onNext(CarryLogListBean carryLogListBean) {
-            if (carryLogListBean != null) {
-              list.addAll(carryLogListBean.getResults());
-              adapter.update(list);
-
-              if (null == carryLogListBean.getNext()) {
-                xRecyclerView.setLoadingMoreEnabled(false);
+          @Override public void onNext(PotentialFans fansBeen) {
+            if (fansBeen != null) {
+              if (0 == fansBeen.getCount()) {
+              } else {
+                list.addAll(fansBeen.getResults());
+                mAdapter.update(list);
               }
-
-              JUtils.Log("carrylog", carryLogListBean.toString());
+              if (null == fansBeen.getNext()) {
+                xrvMmvisitors.setLoadingMoreEnabled(false);
+              }
             }
           }
         });
@@ -117,25 +122,24 @@ public class CarryLogAllFragment extends BaseFragment {
   }
 
   private void initViews(View view) {
-    xRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-    xRecyclerView.addItemDecoration(new DividerItemDecorationForFooter(getActivity(),
-        DividerItemDecorationForFooter.VERTICAL_LIST));
-    xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-    xRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
-    xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
-    xRecyclerView.setPullRefreshEnabled(false);
-    xRecyclerView.setLoadingMoreEnabled(true);
+    xrvMmvisitors.setLayoutManager(new LinearLayoutManager(mActivity));
+    xrvMmvisitors.addItemDecoration(
+        new DividerItemDecorationForFooter(mActivity, DividerItemDecoration.VERTICAL_LIST));
+    xrvMmvisitors.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
+    xrvMmvisitors.setLoadingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
+    xrvMmvisitors.setArrowImageView(R.drawable.iconfont_downgrey);
+    xrvMmvisitors.setPullRefreshEnabled(false);
+    xrvMmvisitors.setLoadingMoreEnabled(true);
+    mAdapter = new MamaPotentialFansAdapter(mActivity);
+    xrvMmvisitors.setAdapter(mAdapter);
 
-    adapter = new CarryLogAllAdapter();
-    xRecyclerView.setAdapter(adapter);
-
-    xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+    xrvMmvisitors.setLoadingListener(new XRecyclerView.LoadingListener() {
       @Override public void onRefresh() {
 
       }
 
       @Override public void onLoadMore() {
-        loadMoreData(page + "", getActivity());
+        loadMoreData(page + "");
         page++;
       }
     });
@@ -144,7 +148,7 @@ public class CarryLogAllFragment extends BaseFragment {
   @Nullable @Override
   public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
-    View view = inflater.inflate(R.layout.fragment_carrylogall, container, false);
+    View view = inflater.inflate(R.layout.fragment_mmfans, container, false);
     ButterKnife.bind(this, view);
     return view;
   }
@@ -154,36 +158,26 @@ public class CarryLogAllFragment extends BaseFragment {
     ButterKnife.unbind(this);
   }
 
-  private void loadMoreData(String page, Context context) {
-
-    subscription2 = MMProductModel.getInstance()
-        .getMamaAllCarryLogs(page)
+  private void loadMoreData(String page) {
+    subscription2 = MamaInfoModel.getInstance()
+        .getPotentialFans(page)
         .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<CarryLogListBean>() {
-          @Override public void onNext(CarryLogListBean carryLogListBean) {
-            if (carryLogListBean != null) {
-              if (null != carryLogListBean.getNext()) {
-                if (null != carryLogListBean.getResults()) {
-                  adapter.update(carryLogListBean.getResults());
-                }
+        .subscribe(new ServiceResponse<PotentialFans>() {
+          @Override public void onNext(PotentialFans fansBeen) {
+            super.onNext(fansBeen);
+            if (fansBeen != null) {
+              mAdapter.update(fansBeen.getResults());
+              if (null != fansBeen.getNext()) {
               } else {
-                Toast.makeText(context, "没有更多了", Toast.LENGTH_SHORT).show();
-                try {
-                  xRecyclerView.post(xRecyclerView::loadMoreComplete);
-                } catch (Exception e) {
-                  e.printStackTrace();
-                }
+                Toast.makeText(mActivity, "没有更多了", Toast.LENGTH_SHORT).show();
+                xrvMmvisitors.post(xrvMmvisitors::loadMoreComplete);
               }
             }
           }
 
           @Override public void onCompleted() {
             super.onCompleted();
-            try {
-              xRecyclerView.post(xRecyclerView::loadMoreComplete);
-            } catch (NullPointerException e) {
-              e.printStackTrace();
-            }
+            xrvMmvisitors.post(xrvMmvisitors::loadMoreComplete);
           }
         });
   }
@@ -231,7 +225,7 @@ public class CarryLogAllFragment extends BaseFragment {
   }
 
   @Override public View getScrollableView() {
-    return xRecyclerView;
+    return xrvMmvisitors;
   }
 
   @Override public void onResume() {
