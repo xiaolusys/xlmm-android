@@ -174,7 +174,7 @@ public interface XlmmService {
             @Path("model_id") int model_id);
 
     //获取所有订单
-    @GET("/rest/v1/trades")
+    @GET("/rest/v2/trades")
     Observable<AllOrdersBean> getAllOdersList(
             @Query("page") String page);
 

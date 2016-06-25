@@ -7,6 +7,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -18,6 +19,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
@@ -99,6 +101,41 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     RelativeLayout relativeLayout;
     @Bind(R.id.iv_pay)
     ImageView imageView;
+    @Bind(R.id.line_1)
+    ImageView line1;
+    @Bind(R.id.line_2)
+    ImageView line2;
+    @Bind(R.id.line_3)
+    ImageView line3;
+    @Bind(R.id.line_4)
+    ImageView line4;
+    @Bind(R.id.line_5)
+    ImageView line5;
+    @Bind(R.id.line_6)
+    ImageView line6;
+    @Bind(R.id.iv_1)
+    ImageView imageView1;
+    @Bind(R.id.iv_2)
+    ImageView imageView2;
+    @Bind(R.id.iv_3)
+    ImageView imageView3;
+    @Bind(R.id.iv_4)
+    ImageView imageView4;
+    @Bind(R.id.iv_5)
+    ImageView imageView5;
+    @Bind(R.id.tv_1)
+    TextView tv1;
+    @Bind(R.id.tv_2)
+    TextView tv2;
+    @Bind(R.id.tv_3)
+    TextView tv3;
+    @Bind(R.id.tv_4)
+    TextView tv4;
+    @Bind(R.id.tv_5)
+    TextView tv5;
+    @Bind(R.id.hsv)
+    HorizontalScrollView hsv;
+
     private ArrayList<PackageBean> packageBeanList;
     int order_id = 0;
     OrderDetailBean orderDetail;
@@ -129,6 +166,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         View view = getLayoutInflater().inflate(R.layout.pop_layout, null);
         dialog = new Dialog(this, R.style.dialog_style);
         dialog.setContentView(view);
+        dialog.setCancelable(true);
         Window window = dialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
         wlp.gravity = Gravity.BOTTOM;
@@ -156,7 +194,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                         public void onNext(OrderDetailBean orderDetailBean) {
                             tid = orderDetailBean.getTid();
                             orderDetail = orderDetailBean;
-
                             showProcBtn(orderDetailBean);
                             fillDataToView(orderDetailBean);
                             if ("已付款".equals(orderDetailBean.getStatus_display())) {
@@ -228,6 +265,9 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     }
 
     private void fillDataToView(OrderDetailBean orderDetailBean) {
+        if (!"退款中".equals(orderDetailBean.getStatus_display())) {
+            setStatusView(orderDetailBean.getStatus());
+        }
         tx_order_id.setText("订单编号: " + orderDetailBean.getTid());
         tx_order_state.setText(orderDetailBean.getStatus_display());
         tx_custom_name.setText("姓名：" + orderDetailBean.getUser_adress().getReceiver_name());
@@ -272,6 +312,65 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                     }
                 });
         addSubscription(subscribe);
+    }
+
+    private void setStatusView(int status) {
+        switch (status) {
+            case 5:
+                setView5();
+                break;
+            case 4:
+                setView4();
+                break;
+            case 3:
+                setView3();
+                break;
+            case 2:
+                setView2();
+                break;
+            case 0:
+            case 1:
+                hsv.setVisibility(View.VISIBLE);
+                break;
+        }
+
+    }
+
+    private void setView2() {
+        tv1.setTextColor(getResources().getColor(R.color.text_color_62));
+        tv2.setTextColor(getResources().getColor(R.color.colorAccent));
+        imageView1.setImageResource(R.drawable.state_oval);
+        imageView2.setImageResource(R.drawable.state_last);
+        line2.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+        hsv.setVisibility(View.VISIBLE);
+    }
+
+    private void setView3() {
+        setView2();
+        tv2.setTextColor(getResources().getColor(R.color.text_color_62));
+        tv3.setTextColor(getResources().getColor(R.color.colorAccent));
+        imageView2.setImageResource(R.drawable.state_oval);
+        imageView3.setImageResource(R.drawable.state_last);
+        line3.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+    }
+
+    private void setView4() {
+        setView3();
+        tv3.setTextColor(getResources().getColor(R.color.text_color_62));
+        tv4.setTextColor(getResources().getColor(R.color.colorAccent));
+        imageView3.setImageResource(R.drawable.state_oval);
+        imageView4.setImageResource(R.drawable.state_last);
+        line4.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+    }
+
+    private void setView5() {
+        setView4();
+        tv4.setTextColor(getResources().getColor(R.color.text_color_62));
+        tv5.setTextColor(getResources().getColor(R.color.colorAccent));
+        imageView4.setImageResource(R.drawable.state_oval);
+        imageView5.setImageResource(R.drawable.state_last);
+        line5.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+        line6.setBackgroundColor(getResources().getColor(R.color.colorAccent));
     }
 
     private void changeDialogWindowState() {
