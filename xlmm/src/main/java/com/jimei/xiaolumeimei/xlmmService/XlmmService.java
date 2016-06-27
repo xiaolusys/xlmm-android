@@ -49,6 +49,7 @@ import com.jimei.xiaolumeimei.entities.PointLogBean;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.PostActivityBean;
 import com.jimei.xiaolumeimei.entities.PostBean;
+import com.jimei.xiaolumeimei.entities.PotentialFans;
 import com.jimei.xiaolumeimei.entities.ProductBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
@@ -963,9 +964,17 @@ public interface XlmmService {
             @Field("debug_secret") String debug_secret
     );
 
+
+    //获得未来粉丝列表
+    @GET("/rest/v2/potential_fans")
+    Observable<PotentialFans> getPotentialFans(
+        @Query("page")String page
+    );
+
     @FormUrlEncoded
     @POST("/rest/v2/sharecoupon/create_order_share")
     Observable<RedBagBean> getRedBag(
             @Field("uniq_id") String uniq_id
+
     );
 }

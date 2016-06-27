@@ -19,30 +19,31 @@ import butterknife.ButterKnife;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.entities.MamaFansBean;
+import com.jimei.xiaolumeimei.entities.PotentialFans;
 import com.jimei.xiaolumeimei.glidemoudle.CropCircleTransformation;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jude.utils.JUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MamaFansAdapter extends RecyclerView.Adapter<MamaFansAdapter.ViewHolder> {
-  private static final String TAG = "MamaFansAdapter";
+public class MamaPotentialFansAdapter
+    extends RecyclerView.Adapter<MamaPotentialFansAdapter.ViewHolder> {
+  private static final String TAG = "MamaPotentialFansAdapter";
   private Activity context;
-  private List<MamaFansBean.ResultsEntity> mList;
+  private List<PotentialFans.ResultsBean> mList;
 
-  public MamaFansAdapter(Activity context) {
+  public MamaPotentialFansAdapter(Activity context) {
     mList = new ArrayList<>();
     this.context = context;
   }
 
-  public void updateWithClear(List<MamaFansBean.ResultsEntity> list) {
+  public void updateWithClear(List<PotentialFans.ResultsBean> list) {
     mList.clear();
     mList.addAll(list);
     notifyDataSetChanged();
   }
 
-  public void update(List<MamaFansBean.ResultsEntity> list) {
+  public void update(List<PotentialFans.ResultsBean> list) {
 
     mList.addAll(list);
     notifyDataSetChanged();
@@ -61,12 +62,12 @@ public class MamaFansAdapter extends RecyclerView.Adapter<MamaFansAdapter.ViewHo
   @Override public void onBindViewHolder(ViewHolder holder, int position) {
     JUtils.Log(TAG, "getView ");
 
-    MamaFansBean.ResultsEntity resultsEntity = mList.get(position);
+    PotentialFans.ResultsBean resultsEntity = mList.get(position);
 
-    holder.tvFans.setText(resultsEntity.getFansNick());
-    holder.tvInfo.setText(resultsEntity.getFansDescription());
+    holder.tvFans.setText(resultsEntity.getNick());
+    //holder.tvInfo.setText(resultsEntity.ge());
     holder.tvTime.setText(resultsEntity.getCreated().replace("T", " ").substring(6, 16));
-    if (TextUtils.isEmpty(resultsEntity.getFansThumbnail())) {
+    if (TextUtils.isEmpty(resultsEntity.getHeadimgurl())) {
       Glide.with(context)
           .load(R.mipmap.ic_launcher)
           .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -75,7 +76,7 @@ public class MamaFansAdapter extends RecyclerView.Adapter<MamaFansAdapter.ViewHo
     } else {
 
       ViewUtils.loadImgToImgViewWithTransformCircle(context, holder.imgFans,
-          resultsEntity.getFansThumbnail());
+          resultsEntity.getHeadimgurl());
     }
   }
 

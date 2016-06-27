@@ -17,7 +17,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -68,6 +67,7 @@ import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
+import com.jimei.xiaolumeimei.widget.AutoToolbar;
 import com.jimei.xiaolumeimei.widget.BrandView;
 import com.jimei.xiaolumeimei.widget.badgelib.BadgeView;
 import com.jimei.xiaolumeimei.widget.banner.SliderLayout;
@@ -108,7 +108,7 @@ public class MainActivity extends BaseActivity
   TextView tvMoney;
   UserInfoBean userInfoBean = new UserInfoBean();
 
-  @Bind(R.id.tool_bar) Toolbar toolbar;
+  @Bind(R.id.tool_bar) AutoToolbar toolbar;
   @Bind(R.id.rv_cart) RelativeLayout carts;
   @Bind(R.id.rl_mmentry)RelativeLayout rl_mmentry;
   @Bind(R.id.image_1) ImageView image1;

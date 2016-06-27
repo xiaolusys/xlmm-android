@@ -58,7 +58,6 @@ public class XlmmApp extends MultiDexApplication {
 
   @Override public void onCreate() {
     super.onCreate();
-
     //LeakCanary.install(this);
     //    Thread.setDefaultUncaughtExceptionHandler(new MyUnCaughtExceptionHandler());
     initComponent();
