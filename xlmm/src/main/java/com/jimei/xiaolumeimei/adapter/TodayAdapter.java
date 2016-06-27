@@ -16,6 +16,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
+import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.zhy.autolayout.utils.AutoUtils;
 
@@ -59,8 +60,7 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.TodayVH> {
   @Override public TodayVH onCreateViewHolder(ViewGroup parent, int viewType) {
     View view;
 
-    view = LayoutInflater.from(parent.getContext())
-        .inflate(R.layout.item_todaylist, parent, false);
+    view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_todaylist, parent, false);
     return new TodayVH(view);
   }
 
@@ -68,8 +68,7 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.TodayVH> {
 
     ProductListBean.ResultsEntity products = mList.get(position);
 
-    ProductListBean.ResultsEntity.ProductModelEntity productModel =
-        products.getProductModel();
+    ProductListBean.ResultsEntity.ProductModelEntity productModel = products.getProductModel();
 
     boolean isSaleopen = products.isIsSaleopen();
     try {
@@ -128,8 +127,7 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.TodayVH> {
     //      if (!holder.card.isShown()) holder.card.setVisibility(View.VISIBLE);
     //    });
 
-    ViewUtils.loadImgToImgViewWithPlaceholderFragment(context, holder.childlistImage,
-        headImg);
+    ViewUtils.loadImgToImgViewWithPlaceholderFragment(context, holder.childlistImage, headImg);
 
     holder.card.setOnClickListener(v -> {
 
@@ -167,10 +165,10 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.TodayVH> {
       //  e.printStackTrace();
       //}
       Map<String, String> map = new HashMap<String, String>();
-      map.put("modelId","modelName");
+      map.put("modelId", "modelName");
       map.put(productModel.getId(), productModel.getName());
       MobclickAgent.onEvent(mContext, "ProductID", map);
-
+      JUtils.Log("UmengTest", "platfrom===" + productModel.getName());
       int modelId = mList.get(position).getModelId();
       Intent intent = new Intent(mContext, ProductPopDetailActvityWeb.class);
 

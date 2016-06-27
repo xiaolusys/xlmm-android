@@ -24,6 +24,7 @@ public class SplashActivity extends BaseAppCompatActivityForDetail {
 
     @Override
     protected void initViews() {
+        MobclickAgent.setDebugMode( true );
         Window window = getWindow();
         //4.4版本及以上
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {

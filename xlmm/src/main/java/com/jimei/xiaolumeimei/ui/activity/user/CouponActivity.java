@@ -64,6 +64,7 @@ public class CouponActivity extends BaseSwipeBackCompatActivity {
 
   //从server端获得所有订单数据，可能要查询几次
   @Override protected void initData() {
+    showIndeterminateProgressDialog(false);
     UserModel.getInstance()
         .getUnusedCouponBean()
         .subscribeOn(Schedulers.io())
@@ -92,6 +93,7 @@ public class CouponActivity extends BaseSwipeBackCompatActivity {
                 mUsedCouponAdapter.update(usedList, 3, "");
               }
             }
+            hideIndeterminateProgressDialog();
 
             UserModel.getInstance()
                 .getPastCouponBean()

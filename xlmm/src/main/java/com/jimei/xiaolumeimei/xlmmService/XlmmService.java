@@ -55,6 +55,7 @@ import com.jimei.xiaolumeimei.entities.ProductDetailBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
+import com.jimei.xiaolumeimei.entities.RedBagBean;
 import com.jimei.xiaolumeimei.entities.RefundMsgBean;
 import com.jimei.xiaolumeimei.entities.RegisterBean;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
@@ -174,7 +175,7 @@ public interface XlmmService {
             @Path("model_id") int model_id);
 
     //获取所有订单
-    @GET("/rest/v1/trades")
+    @GET("/rest/v2/trades")
     Observable<AllOrdersBean> getAllOdersList(
             @Query("page") String page);
 
@@ -963,9 +964,17 @@ public interface XlmmService {
             @Field("debug_secret") String debug_secret
     );
 
+
     //获得未来粉丝列表
     @GET("/rest/v2/potential_fans")
     Observable<PotentialFans> getPotentialFans(
         @Query("page")String page
+    );
+
+    @FormUrlEncoded
+    @POST("/rest/v2/sharecoupon/create_order_share")
+    Observable<RedBagBean> getRedBag(
+            @Field("uniq_id") String uniq_id
+
     );
 }

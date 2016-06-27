@@ -36,7 +36,12 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
+import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
+import cn.sharesdk.wechat.moments.WechatMoments;
 import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
@@ -50,19 +55,11 @@ import com.jude.utils.JUtils;
 import com.mob.tools.utils.UIHandler;
 import com.tbruyelle.rxpermissions.RxPermissions;
 import com.umeng.analytics.MobclickAgent;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.PlatformActionListener;
-import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.onekeyshare.OnekeyShare;
-import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
-import cn.sharesdk.wechat.moments.WechatMoments;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -125,10 +122,10 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
 
   @Override public void getBundleExtras(Bundle extras) {
     if (extras != null) {
-      cookies   = extras.getString("cookies");
-      domain    = extras.getString("domain");
-      actlink   = extras.getString("actlink");
-      id        = extras.getInt("id");
+      cookies = extras.getString("cookies");
+      domain = extras.getString("domain");
+      actlink = extras.getString("actlink");
+      id = extras.getInt("id");
       sessionid = extras.getString("Cookie");
       JUtils.Log(TAG, "GET cookie:" + cookies + " actlink:" + actlink + " domain:" + domain +
           " sessionid:" + sessionid);
@@ -349,11 +346,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override public void onComplete(Platform platform, int action, HashMap<String, Object> arg2) {
-    Map<String, String> map = new HashMap<String, String>();
-    map.put("id", "name");
 
-    map.put(platform.getId() + "", platform.getName());
-    MobclickAgent.onEvent(mContext, "ShareID", map);
     // 成功
     Message msg = new Message();
     msg.what = MSG_ACTION_CCALLBACK;
@@ -379,6 +372,12 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
   public boolean handleMessage(Message msg) {
     switch (msg.arg1) {
       case 1: {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("id", "name");
+
+        map.put(((Platform) (msg.obj)).getId() + "", ((Platform) (msg.obj)).getName());
+        MobclickAgent.onEvent(mContext, "ShareID", map);
+        JUtils.Log("UmengTest", "platfrom===" + ((Platform) (msg.obj)).getName());
         // 成功
         Toast.makeText(this, "分享成功", Toast.LENGTH_SHORT).show();
         JUtils.Log(TAG, "分享回调成功------------");

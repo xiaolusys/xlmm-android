@@ -316,11 +316,6 @@ public class BaseWebViewFragment extends BaseFragment
   }
 
   @Override public void onComplete(Platform platform, int action, HashMap<String, Object> arg2) {
-    Map<String, String> map = new HashMap<String, String>();
-    map.put("id", "name");
-
-    map.put(platform.getId() + "", platform.getName());
-    MobclickAgent.onEvent(activity, "ShareID", map);
     // 成功
     Message msg = new Message();
     msg.what = MSG_ACTION_CCALLBACK;
@@ -347,6 +342,12 @@ public class BaseWebViewFragment extends BaseFragment
     switch (msg.arg1) {
       case 1: {
         // 成功
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("id", "name");
+
+        map.put(((Platform) (msg.obj)).getId() + "", ((Platform) (msg.obj)).getName());
+        MobclickAgent.onEvent(activity, "ShareID", map);
+        JUtils.Log("UmengTest", "platfrom===" + ((Platform) (msg.obj)).getName());
         Toast.makeText(activity, "分享成功", Toast.LENGTH_SHORT).show();
       }
       break;

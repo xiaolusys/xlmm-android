@@ -9,9 +9,7 @@ import butterknife.Bind;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.GoodsListAdapter;
-import com.jimei.xiaolumeimei.adapter.GoodsListAdapter2;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.LogisticsBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.PackageBean;
@@ -49,12 +47,12 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
     TextView numTv;
 
     private ArrayList<PackageBean> packageBeanList;
+    List<PackageBean> data;
     private String packetid = "";
     private String company_code = "";
-    private String time = "";
-    private String tid = "";
     private String stateStr = "";
     private String key = "";
+    private String tid = "";
     private int referal_trade_id;
 
     @Override
@@ -82,6 +80,8 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
 
                         @Override
                         public void onError(Throwable e) {
+                            fillDataToView(null);
+                            JUtils.Toast("更新失败!");
                         }
                     });
             addSubscription(subscribe);
@@ -108,7 +108,7 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
                     });
             addSubscription(subscribe);
         } else {
-            JUtils.Toast("获取物流信息失败,请联系小鹿美美客服查询!");
+            fillDataToView(null);
         }
         Subscription subscription = TradeModel.getInstance()
                 .getOrderDetailBean(referal_trade_id)
@@ -129,69 +129,171 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
     }
 
     private void fillDataToView(LogisticsBean logisticsBean) {
-        if (logisticsBean.getOrder() != "" && logisticsBean.getOrder() != null) {
-            orderTv.setText(logisticsBean.getOrder());
-        } else {
-            orderTv.setTextColor(getResources().getColor(R.color.colorAccent));
-            orderTv.setText(stateStr);
-            numTv.setText("包裹状态");
-        }
-
-        if (packageBeanList.size() != 0) {
-            List<PackageBean> data = new ArrayList<>();
-            for (PackageBean packageBean : packageBeanList) {
-                if (key.equals(packageBean.getPackage_group_key())) {
-                    data.add(packageBean);
-                }
+        data = new ArrayList<>();
+        for (PackageBean packageBean : packageBeanList) {
+            if (key.equals(packageBean.getPackage_group_key())) {
+                data.add(packageBean);
             }
-            mListView.setAdapter(new GoodsListAdapter(data, this));
-            OrderDetailActivity.setListViewHeightBasedOnChildren(mListView);
-        } else {
-            Subscription subscription = TradeModel.getInstance()
-                    .getOrderDetailBean(referal_trade_id)
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(new ServiceResponse<OrderDetailBean>() {
-                        @Override
-                        public void onNext(OrderDetailBean orderDetailBean) {
-                            ArrayList<AllOrdersBean.ResultsEntity.OrdersEntity> orders = orderDetailBean.getOrders();
-                            mListView.setAdapter(new GoodsListAdapter2(orders, getApplicationContext()));
-                            OrderDetailActivity.setListViewHeightBasedOnChildren(mListView);
-
+        }
+        mListView.setAdapter(new GoodsListAdapter(data, this));
+        OrderDetailActivity.setListViewHeightBasedOnChildren(mListView);
+        if (logisticsBean != null) {
+            if (logisticsBean.getOrder() != "" && logisticsBean.getOrder() != null) {
+                orderTv.setText(logisticsBean.getOrder());
+            } else {
+                orderTv.setTextColor(getResources().getColor(R.color.colorAccent));
+                orderTv.setText(stateStr);
+                numTv.setText("包裹状态");
+            }
+            if ((logisticsBean.getData() != null) && (logisticsBean.getData().size() != 0)) {
+                List<LogisticsBean.Msg> data1 = logisticsBean.getData();
+                for (int i = 0; i < data1.size(); i++) {
+                    if (i == 0) {
+                        if (data.size() > 0) {
+                            if (data.get(0).getCancel_time() != null) {
+                                lastStateTv.setText("取消订单");
+                                lastTimeTv.setText(data.get(0).getCancel_time().replace("T", " "));
+                                logImageLayout.addView(new LogImageView(this));
+                                LogMsgView logMsgView = new LogMsgView(this);
+                                logMsgView.setMsg(data1.get(0).getContent());
+                                logMsgView.setTime(data1.get(0).getTime().replace("T", " "));
+                                logMsgLayout.addView(logMsgView);
+                            } else {
+                                lastStateTv.setText(data1.get(0).getContent());
+                                lastTimeTv.setText(data1.get(0).getTime().replace("T", " "));
+                            }
+                        } else {
+                            lastStateTv.setText(data1.get(0).getContent());
+                            lastTimeTv.setText(data1.get(0).getTime().replace("T", " "));
                         }
-                    });
-            addSubscription(subscription);
+                    } else {
+                        logImageLayout.addView(new LogImageView(this));
+                        LogMsgView logMsgView = new LogMsgView(this);
+                        logMsgView.setMsg(data1.get(i).getContent());
+                        logMsgView.setTime(data1.get(i).getTime().replace("T", " "));
+                        logMsgLayout.addView(logMsgView);
+                    }
+                }
+                if (data.size() > 0) {
+                    if (data.get(0).getFinish_time() != null) {
+                        logImageLayout.addView(new LogImageView(this));
+                        LogMsgView logMsgView = new LogMsgView(this);
+                        logMsgView.setMsg("产品发货中");
+                        logMsgView.setTime(data.get(0).getFinish_time().replace("T", " "));
+                        logMsgLayout.addView(logMsgView);
+                    }
+                    if (data.get(0).getAssign_time() != null) {
+                        logImageLayout.addView(new LogImageView(this));
+                        LogMsgView logMsgView = new LogMsgView(this);
+                        logMsgView.setMsg("仓库质检");
+                        logMsgView.setTime(data.get(0).getAssign_time().replace("T", " "));
+                        logMsgLayout.addView(logMsgView);
+                    }
+                    if (data.get(0).getBook_time() != null) {
+                        logImageLayout.addView(new LogImageView(this));
+                        LogMsgView logMsgView = new LogMsgView(this);
+                        logMsgView.setMsg("订货中,订单暂时无法取消");
+                        logMsgView.setTime(data.get(0).getBook_time().replace("T", " "));
+                        logMsgLayout.addView(logMsgView);
+                    }
+                    if (data.get(0).getPay_time() != null) {
+                        logImageLayout.addView(new LogImageView(this));
+                        LogMsgView logMsgView = new LogMsgView(this);
+                        logMsgView.setMsg("支付成功");
+                        logMsgView.setTime(data.get(0).getPay_time().replace("T", " "));
+                        logMsgLayout.addView(logMsgView);
+                    }
+                }
+            } else {
+                fillStatusView();
+            }
+        } else {
+            fillStatusView();
         }
 
-        if ((logisticsBean.getData() != null) && (logisticsBean.getData().size() != 0)) {
-            List<LogisticsBean.Msg> data = logisticsBean.getData();
-            for (int i = 0; i < data.size(); i++) {
-                if (i == 0) {
-                    lastStateTv.setText(data.get(0).getContent());
-                    lastTimeTv.setText(data.get(0).getTime().replace("T", " "));
-                } else {
-                    logImageLayout.addView(new LogImageView(this));
-                    LogMsgView logMsgView = new LogMsgView(this);
-                    logMsgView.setMsg(data.get(i).getContent());
-                    logMsgView.setTime(data.get(i).getTime().replace("T", " "));
-                    logMsgLayout.addView(logMsgView);
-                }
+    }
+
+    private void fillStatusView() {
+        if (data.size() > 0) {
+            if (data.get(0).getCancel_time() != null) {
+                lastStateTv.setText("取消订单");
+                lastTimeTv.setText(data.get(0).getCancel_time().replace("T", " "));
+                addFinishTime();
+            } else if (data.get(0).getFinish_time() != null) {
+                lastStateTv.setText("产品发货中");
+                lastTimeTv.setText(data.get(0).getFinish_time().replace("T", " "));
+                addAssignTime();
+            } else if (data.get(0).getAssign_time() != null) {
+                lastStateTv.setText("仓库质检");
+                lastTimeTv.setText(data.get(0).getAssign_time().replace("T", " "));
+                addBookTime();
+            } else if (data.get(0).getBook_time() != null) {
+                lastStateTv.setText("订货中,订单暂时无法取消");
+                lastTimeTv.setText(data.get(0).getBook_time().replace("T", " "));
+                addPaytime();
+            } else if (data.get(0).getPay_time() != null) {
+                lastStateTv.setText("支付成功");
+                lastTimeTv.setText(data.get(0).getPay_time().replace("T", " "));
+            } else {
+                lastStateTv.setText("订单已成功创建!");
             }
         } else {
             lastStateTv.setText("订单已成功创建!");
-            lastTimeTv.setText(time);
+        }
+    }
+
+    private void addFinishTime() {
+        if (data.get(0).getFinish_time() != null) {
+            logImageLayout.addView(new LogImageView(this));
+            LogMsgView logMsgView = new LogMsgView(this);
+            logMsgView.setMsg("产品发货");
+            logMsgView.setTime(data.get(0).getFinish_time().replace("T", " "));
+            logMsgLayout.addView(logMsgView);
+        }
+        addAssignTime();
+    }
+
+    private void addAssignTime() {
+        if (data.get(0).getAssign_time() != null) {
+            logImageLayout.addView(new LogImageView(this));
+            LogMsgView logMsgView = new LogMsgView(this);
+            logMsgView.setMsg("仓库质检");
+            logMsgView.setTime(data.get(0).getAssign_time().replace("T", " "));
+            logMsgLayout.addView(logMsgView);
+        }
+        addBookTime();
+    }
+
+    private void addBookTime() {
+        if (data.get(0).getBook_time() != null) {
+            logImageLayout.addView(new LogImageView(this));
+            LogMsgView logMsgView = new LogMsgView(this);
+            logMsgView.setMsg("订货中,订单暂时无法取消");
+            logMsgView.setTime(data.get(0).getBook_time().replace("T", " "));
+            logMsgLayout.addView(logMsgView);
+        }
+        addPaytime();
+    }
+
+    private void addPaytime() {
+        if (data.get(0).getPay_time() != null) {
+            logImageLayout.addView(new LogImageView(this));
+            LogMsgView logMsgView = new LogMsgView(this);
+            logMsgView.setMsg("支付成功");
+            logMsgView.setTime(data.get(0).getPay_time().replace("T", " "));
+            logMsgLayout.addView(logMsgView);
         }
     }
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-        packetid = extras.getString("packetid","");
-        company_code = extras.getString("company_code","");
-        tid = extras.getString("tid");
-        time = extras.getString("time");
+        packetid = extras.getString("packetid");
+        company_code = extras.getString("company_code");
         stateStr = extras.getString("state");
         packageBeanList = (ArrayList<PackageBean>) extras.getSerializable("list");
         referal_trade_id = extras.getInt("id");
         key = extras.getString("key");
+        tid = extras.getString("tid");
     }
 
     @Override

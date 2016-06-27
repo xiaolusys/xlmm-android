@@ -23,26 +23,16 @@
 
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="vertical">
 
         <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:gravity="bottom"
             android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tx_good_name"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="8dp"
-                android:text=""
-                android:textColor="@color/text_color_62"
-                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/tx_good_price"
@@ -50,22 +40,33 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="10px"
                 android:text=""
                 android:textColor="@color/colorPrimary"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tx_good_name"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="8dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_toLeftOf="@id/tx_good_price"
+                android:text=""
+                android:textColor="@color/text_color_62"
                 android:textSize="13sp" />
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tx_good_size"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:gravity="bottom"
                 android:text=""
@@ -75,11 +76,10 @@
             <TextView
                 android:id="@+id/tx_good_num"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginRight="10px"
                 android:gravity="bottom"
                 android:text="× 1"
                 android:textColor="@color/grey"
