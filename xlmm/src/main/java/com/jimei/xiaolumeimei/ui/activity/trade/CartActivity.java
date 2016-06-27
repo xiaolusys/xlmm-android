@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -226,7 +227,6 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
                   });
               addSubscription(subscription1);
             } else {
-
               emptyContent1.setVisibility(View.VISIBLE);
               cartsRecyclerview.setVisibility(View.GONE);
               goMain1.setOnClickListener(new View.OnClickListener() {
@@ -421,6 +421,12 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
                                           if (responseBody != null) {
                                             if (responseBody.isSuccessful()) {
                                               emptyContent1.setVisibility(View.VISIBLE);
+                                              goMain1.setOnClickListener(new View.OnClickListener() {
+                                                @Override public void onClick(View v) {
+                                                  startActivity(new Intent(CartActivity.this, MainActivity.class));
+                                                  finish();
+                                                }
+                                              });
                                               cartsRecyclerview.setVisibility(View.GONE);
                                               removeAt(holder.getAdapterPosition());
                                               Subscription subscribe = CartsModel.getInstance()
