@@ -62,6 +62,7 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
 
     @Override
     protected void initData() {
+        showIndeterminateProgressDialog(false);
         if (!"".equals(packetid) && !"".equals(company_code)) {
             Subscription subscribe = TradeModel.getInstance()
                     .get_logistics_by_packagetid(packetid, company_code)
@@ -210,7 +211,7 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
         } else {
             fillStatusView();
         }
-
+        hideIndeterminateProgressDialog();
     }
 
     private void fillStatusView() {

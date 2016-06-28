@@ -184,7 +184,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         if ((getIntent() != null) && (getIntent().getExtras() != null)) {
             order_id = getIntent().getExtras().getInt("orderinfo");
             source = getIntent().getExtras().getString("source");
-
+            showIndeterminateProgressDialog(false);
             Subscription subscription = TradeModel.getInstance()
                     .getOrderDetailBean(order_id)
                     .subscribeOn(Schedulers.io())
@@ -242,6 +242,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                                         }
                                     });
                             addSubscription(subscribe);
+                            hideIndeterminateProgressDialog();
                         }
 
                         @Override
