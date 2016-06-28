@@ -13,6 +13,7 @@ import com.jimei.xiaolumeimei.base.BasePresenterActivity;
 import com.jimei.xiaolumeimei.base.RxManager;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * Created by itxuye on 2016/6/24.
@@ -123,5 +124,17 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
 
   @Override public void onClick(View v) {
 
+  }
+
+  @Override protected void onResume() {
+    super.onResume();
+    MobclickAgent.onPageStart(this.getClass().getSimpleName());
+    MobclickAgent.onResume(this);
+  }
+
+  @Override protected void onPause() {
+    super.onPause();
+    MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+    MobclickAgent.onPause(this);
   }
 }
