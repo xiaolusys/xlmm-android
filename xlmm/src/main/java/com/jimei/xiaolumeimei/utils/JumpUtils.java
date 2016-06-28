@@ -99,7 +99,7 @@ public class JumpUtils {
               URLDecoder.decode(get_jump_arg("product_id", jumpInfo.getUrl()), "utf-8");
           JUtils.Log(TAG, "product_idpush==" + product_idpush);
           if (null != product_idpush) {
-            jumpToWebViewWithCookiesWithTask(context, product_idpush.replace(" ",""), -1,
+            jumpToWebViewWithCookiesWithTask(context, product_idpush.replace(" ", ""), -1,
                 ProductPopDetailActvityWeb.class);
           }
         } catch (UnsupportedEncodingException e) {
@@ -208,18 +208,36 @@ public class JumpUtils {
           jumpInfo.setType(XlmmConst.JUMP_USER_COUPON);
           jumpInfo.setUrl(content[1]);
         } else if (content[1].contains("webview")) {
-          jumpInfo.setType(XlmmConst.JUMP_WEBVIEW);
-          String url = content[1].substring(content[1].lastIndexOf("http"));
           int id = -1;
-          if (url.contains("is_native")) {
-            String temp[] = url.split("&is_native=");
+          String url = null;
+          jumpInfo.setType(XlmmConst.JUMP_WEBVIEW);
+          String urlContent = content[1].substring(content[1].lastIndexOf("?")).replace("?", "");
+          JUtils.Log(TAG, "content[1] ===" + urlContent);
+          String[] split = urlContent.split("&");
+          for (int i = 0; i < split.length; i++) {
+            JUtils.Log(TAG, "split[i]" + split[i]);
+            if (split[i].contains("url")) {
+              String idStr[] = split[i].split("url=");
+              url = idStr[1];
+              JUtils.Log(TAG, "url" + url);
+            } else if (split[i].contains("activity_id")) {
+              String idStr[] = split[i].split("activity_id=");
+              String s = idStr[1];
+              id = Integer.parseInt(s);
+              JUtils.Log(TAG, "id" + id);
+            }
+          }
+          String url1 = content[1].substring(content[1].lastIndexOf("http"));
+
+          if (url1.contains("is_native")) {
+            String temp[] = url1.split("&is_native=");
             url = temp[0];
           }
-          if (content[1].contains("activity_id")) {
-            String idStr[] = content[1].split("activity_id=");
-            String s = idStr[1].split("&")[0];
-            id = Integer.parseInt(s);
-          }
+          //if (content[1].contains("activity_id")) {
+          //  String idStr[] = content[1].split("activity_id=");
+          //  String s = idStr[1].split("&")[0];
+          //  id = Integer.parseInt(s);
+          //}
           try {
             jumpInfo.setUrl(URLDecoder.decode(url, "utf-8"));
             if (id != -1) {
