@@ -22,6 +22,7 @@ import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMNinePicActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaInfoActivity;
 import com.jude.utils.JUtils;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
 /**
@@ -86,16 +87,25 @@ public class JumpUtils {
       case XlmmConst.JUMP_PRODUCT_DETAIL:
         String product_id = get_jump_arg("product_id", jumpInfo.getUrl());
         if (null != product_id) {
-          //intent = new Intent(context, ProductPopDetailActvityWeb.class);
-          //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-          //Bundle bundle = new Bundle();
-          //bundle.putString("actlink", product_id);
-          //intent.putExtras(bundle);
-          //context.startActivity(intent);
-
-          jumpToWebViewWithCookies(context, product_id.replace("\"}", ""), -1,
+          jumpToWebViewWithCookiesWithTask(context, product_id.replace("\"}", ""), -1,
               ProductPopDetailActvityWeb.class);
         }
+        break;
+
+      case XlmmConst.JUMP_PRODUCT_DETAIL_PUSH:
+        String product_idpush;
+        try {
+          product_idpush =
+              URLDecoder.decode(get_jump_arg("product_id", jumpInfo.getUrl()), "utf-8");
+          JUtils.Log(TAG, "product_idpush==" + product_idpush);
+          if (null != product_idpush) {
+            jumpToWebViewWithCookiesWithTask(context, product_idpush.replace(" ",""), -1,
+                ProductPopDetailActvityWeb.class);
+          }
+        } catch (UnsupportedEncodingException e) {
+          e.printStackTrace();
+        }
+
         break;
       case XlmmConst.JUMP_TRADE_DETAIL:
         String trade_id = get_jump_arg("trade_id", jumpInfo.getUrl());
@@ -105,8 +115,7 @@ public class JumpUtils {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra("orderinfo", Integer.valueOf(trade_id));
             intent.putExtra("source", "Main");
-            Log.d(TAG,
-                "LinearLayout transfer orderid  " + trade_id + " to OrderDetailActivity");
+            Log.d(TAG, "LinearLayout transfer orderid  " + trade_id + " to OrderDetailActivity");
             context.startActivity(intent);
           } catch (NumberFormatException e) {
             e.printStackTrace();
@@ -130,7 +139,7 @@ public class JumpUtils {
         bundle.putString("cookies", cookies);
         bundle.putString("domain", domain);
         bundle.putString("actlink", jumpInfo.getUrl());
-        bundle.putInt("id",jumpInfo.getId());
+        bundle.putInt("id", jumpInfo.getId());
         intent.putExtras(bundle);
         context.startActivity(intent);
         break;
@@ -186,7 +195,11 @@ public class JumpUtils {
           jumpInfo.setType(XlmmConst.JUMP_PRODUCT_MODELLIST);
           jumpInfo.setUrl(content[1]);
         } else if (content[1].contains("product_id")) {
-          jumpInfo.setType(XlmmConst.JUMP_PRODUCT_DETAIL);
+          if (content[1].contains("%")) {
+            jumpInfo.setType(XlmmConst.JUMP_PRODUCT_DETAIL_PUSH);
+          } else {
+            jumpInfo.setType(XlmmConst.JUMP_PRODUCT_DETAIL);
+          }
           jumpInfo.setUrl(content[1]);
         } else if (content[1].contains("trade_id")) {
           jumpInfo.setType(XlmmConst.JUMP_TRADE_DETAIL);
@@ -202,14 +215,14 @@ public class JumpUtils {
             String temp[] = url.split("&is_native=");
             url = temp[0];
           }
-          if (content[1].contains("activity_id")){
+          if (content[1].contains("activity_id")) {
             String idStr[] = content[1].split("activity_id=");
             String s = idStr[1].split("&")[0];
             id = Integer.parseInt(s);
           }
           try {
             jumpInfo.setUrl(URLDecoder.decode(url, "utf-8"));
-            if (id!=-1) {
+            if (id != -1) {
               jumpInfo.setId(id);
             }
           } catch (Exception e) {
@@ -262,11 +275,12 @@ public class JumpUtils {
     intent.putExtras(bundle);
     context.startActivity(intent);
   }
-  public static void jumpToWebViewWithCookies(Context context, String actlink, int id,
-                                              Class<?> classname,String title) {
+
+  public static void jumpToWebViewWithCookiesWithTask(Context context, String actlink, int id,
+      Class<?> classname) {
     Intent intent = new Intent(context, classname);
     SharedPreferences sharedPreferences =
-            context.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+        context.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
     String cookies = sharedPreferences.getString("cookiesString", "");
     String domain = sharedPreferences.getString("cookiesDomain", "");
     Bundle bundle = new Bundle();
@@ -274,7 +288,25 @@ public class JumpUtils {
     bundle.putString("domain", domain);
     bundle.putString("Cookie", sharedPreferences.getString("Cookie", ""));
     bundle.putString("actlink", actlink);
-    bundle.putString("title",title);
+    bundle.putInt("id", id);
+    intent.putExtras(bundle);
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    context.startActivity(intent);
+  }
+
+  public static void jumpToWebViewWithCookies(Context context, String actlink, int id,
+      Class<?> classname, String title) {
+    Intent intent = new Intent(context, classname);
+    SharedPreferences sharedPreferences =
+        context.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+    String cookies = sharedPreferences.getString("cookiesString", "");
+    String domain = sharedPreferences.getString("cookiesDomain", "");
+    Bundle bundle = new Bundle();
+    bundle.putString("cookies", cookies);
+    bundle.putString("domain", domain);
+    bundle.putString("Cookie", sharedPreferences.getString("Cookie", ""));
+    bundle.putString("actlink", actlink);
+    bundle.putString("title", title);
     bundle.putInt("id", id);
     intent.putExtras(bundle);
     context.startActivity(intent);
