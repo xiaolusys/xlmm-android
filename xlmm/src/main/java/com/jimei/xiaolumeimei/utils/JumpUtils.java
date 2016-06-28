@@ -211,7 +211,7 @@ public class JumpUtils {
           int id = -1;
           String url = null;
           jumpInfo.setType(XlmmConst.JUMP_WEBVIEW);
-          String urlContent = content[1].substring(content[1].lastIndexOf("?")).replace("?", "");
+          String urlContent = (content[1].split("webview?"))[1];
           JUtils.Log(TAG, "content[1] ===" + urlContent);
           String[] split = urlContent.split("&");
           for (int i = 0; i < split.length; i++) {
