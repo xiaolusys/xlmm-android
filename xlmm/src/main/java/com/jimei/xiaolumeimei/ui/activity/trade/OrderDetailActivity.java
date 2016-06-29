@@ -533,7 +533,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                             intent.setComponent(componentName);
                             intent.putExtra(PaymentActivity.EXTRA_CHARGE, charge);
                             startActivityForResult(intent, REQUEST_CODE_PAYMENT);
-                            finish();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -564,7 +563,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                     public void onNext(ResponseBody responseBody) {
                         super.onNext(responseBody);
                         try {
-
                             finish();
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -578,7 +576,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
 
                     @Override
                     public void onError(Throwable e) {
-
                         Log.e(TAG, "delRefund error:, " + e.toString());
                         super.onError(e);
                     }
@@ -598,6 +595,11 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                     //wexin alipay already showmsg
                 } else if (result.equals("success")) {
                     JUtils.Toast("支付成功！");
+                    Intent intent = new Intent(this, RedBagActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("tid", orderDetail.getTid());
+                    intent.putExtras(bundle);
+                    startActivity(intent);
                     finish();
                 } else {
                     showMsg(result, errorMsg, extraMsg);
