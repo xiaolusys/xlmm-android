@@ -319,7 +319,7 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
         tv_today_visit2.setText(
                 Integer.toString(mPresenter.his_refund.get(mPresenter.his_refund.size() - 1).getVisitorNum()));
         tv_today_order2.setText(
-                Integer.toString((int) (mPresenter.his_refund.get(mPresenter.his_refund.size() - 1).getOrderNum())));
+                Integer.toString(mPresenter.his_refund.get(mPresenter.his_refund.size() - 1).getOrderNum()));
         tv_today_fund2.setText(Double.toString(
                 (double) (Math.round(mPresenter.his_refund.get(mPresenter.his_refund.size() - 1).getCarry() * 100)) / 100));
         break;
