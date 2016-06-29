@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.ui.mminfo;
 
 import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
 import com.jimei.xiaolumeimei.base.BaseModel;
 import com.jimei.xiaolumeimei.base.BasePresenter;
 import com.jimei.xiaolumeimei.base.BaseView;
@@ -33,6 +34,9 @@ public interface MMInfoContract {
      void init_chart();
      void initMMdata(MamaFortune fortune);
      void initPointBean(AgentInfoBean pointBean);
+     void setRlVisiBility();
+     void setChartData(LineData data);
+     void initTodatText(List<RecentCarryBean.ResultsEntity> his_refund);
 
   }
 
@@ -45,7 +49,9 @@ public interface MMInfoContract {
     public abstract void setDataOfPreviousWeek();
     public abstract boolean isEmptyData(List<RecentCarryBean.ResultsEntity> list_refund);
     public abstract void setData(ArrayList<String> xVals, ArrayList<Entry> yVals);
-    public abstract void getRecentCarry(String from, String day);
+    public abstract void getRecentCarry();
+    public abstract void getRefund();
+
 
     @Override
     public void onStart() {}

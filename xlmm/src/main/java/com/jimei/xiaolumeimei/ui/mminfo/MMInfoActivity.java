@@ -12,9 +12,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.jimei.xiaolumeimei.R;
@@ -25,6 +27,7 @@ import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.entities.AgentInfoBean;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
+import com.jimei.xiaolumeimei.entities.RecentCarryBean;
 import com.jimei.xiaolumeimei.event.WebViewEvent;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.BoutiqueWebviewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMChooseListActivity;
@@ -42,6 +45,8 @@ import com.umeng.analytics.MobclickAgent;
 import com.zhy.autolayout.AutoRelativeLayout;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.util.List;
 
 import butterknife.Bind;
 
@@ -248,6 +253,31 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
     mamaAgentInfo = pointBean;
   }
 
+  @Override
+  public void setRlVisiBility() {
+    rl_empty_chart.setVisibility(View.VISIBLE);
+    rl_chart.setVisibility(View.INVISIBLE);
+  }
+
+  @Override
+  public void setChartData(LineData data) {
+    mChart.setData(data);
+    mChart.setVisibility(View.VISIBLE);
+    mChart.animateX(2500, Easing.EasingOption.EaseInOutQuart);
+    mChart.setVisibleXRangeMaximum(6);
+  }
+
+  @Override
+  public void initTodatText(List<RecentCarryBean.ResultsEntity> his_refund) {
+    tv_today_visit2.setText(
+            Integer.toString(his_refund.get(his_refund.size() - 1).getVisitorNum()));
+    tv_today_order2.setText(
+            Integer.toString(his_refund.get(his_refund.size() - 1).getOrderNum()));
+    tv_today_fund2.setText(Double.toString(
+            (double) (Math.round(his_refund.get(his_refund.size() - 1).getCarry() * 100))
+                    / 100));
+  }
+
 
   @Override public void onClick(View v) {
     Intent intent;
@@ -422,7 +452,7 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
     tv_today_visit2.setText(Integer.toString(mPresenter.his_refund.get(e.getXIndex()).getVisitorNum()));
     from = (MAX_RECENT_DAYS - 1 - e.getXIndex()) + "";
     JUtils.Log(TAG, "第" + e.getXIndex() + "个");
-    tv_today_order2.setText(Integer.toString((int) (mPresenter.his_refund.get(e.getXIndex()).getOrderNum())));
+    tv_today_order2.setText(Integer.toString(mPresenter.his_refund.get(e.getXIndex()).getOrderNum()));
     tv_today_fund2.setText(Double.toString(
             (double) (Math.round(mPresenter.his_refund.get(e.getXIndex()).getCarry() * 100)) / 100));
   }

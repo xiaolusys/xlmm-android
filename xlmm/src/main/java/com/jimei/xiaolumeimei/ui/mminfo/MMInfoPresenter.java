@@ -15,10 +15,13 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
+import rx.functions.Action1;
+
 /**
  * Created by itxuye on 2016/6/24.
  */
 public class MMInfoPresenter extends MMInfoContract.Presenter {
+
   private static final int MAX_RECENT_DAYS = 15;
   List<RecentCarryBean.ResultsEntity> his_refund = new ArrayList<>();
   List<RecentCarryBean.ResultsEntity> show_refund = new ArrayList<>();
@@ -62,27 +65,59 @@ public class MMInfoPresenter extends MMInfoContract.Presenter {
     }
 
     //show_refund.clear();
-    //ArrayList<Entry> yVals = new ArrayList<Entry>();
-    //for (int i = 0; i < days; i++) {
-    //  float val = 0;
-    //  if (his_refund.size() > 0) {
-    //    val = (float) his_refund.get(MAX_RECENT_DAYS - days + i).getCarry();
-    //    show_refund.add(his_refund.get(MAX_RECENT_DAYS - days + i));
-    //  }
-    //  yVals.add(new Entry(val, i));
-    //}
-    //
-    //// set data
-    //
-    //setData(xVals, yVals);
-    //if (isEmptyData(show_refund)) {
-    //  rl_empty_chart.setVisibility(View.VISIBLE);
-    //  rl_chart.setVisibility(View.INVISIBLE);
-    //}
+    ArrayList<Entry> yVals = new ArrayList<Entry>();
+    for (int i = 0; i < days; i++) {
+      float val = 0;
+      if (his_refund.size() > 0) {
+        val = (float) his_refund.get(MAX_RECENT_DAYS - days + i).getCarry();
+        show_refund.add(his_refund.get(MAX_RECENT_DAYS - days + i));
+      }
+      yVals.add(new Entry(val, i));
+    }
+
+    // set data
+
+    setData(xVals, yVals);
+    if (isEmptyData(show_refund)) {
+      mView.setRlVisiBility();
+    }
   }
 
   @Override public void setDataOfPreviousWeek() {
+    Calendar cal = Calendar.getInstance();
+    int month = cal.get(Calendar.MONTH) + 1;//得到月，因为从0开始的，所以要加1
+    int day = cal.get(Calendar.DAY_OF_MONTH);//得到天
+    int days = 0;
+    if (cal.get(Calendar.DAY_OF_WEEK) == 1) {
+      days = 7;
+    } else {
+      days = cal.get(Calendar.DAY_OF_WEEK) - 1;
+    }
+    cal.add(Calendar.DAY_OF_YEAR, 0 - days - 7);//日期减days天数
 
+    ArrayList<String> xVals = new ArrayList<String>();
+    for (int i = 0; i < 7; i++) {
+      cal.add(Calendar.DAY_OF_YEAR, 1);//日期+1
+      xVals.add("" + (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.DAY_OF_MONTH));
+    }
+
+    show_refund.clear();
+    ArrayList<Entry> yVals = new ArrayList<Entry>();
+    for (int i = 0; i < 7; i++) {
+      float val = 0;
+      if (his_refund.size() > 0) {
+        val = (float) his_refund.get(MAX_RECENT_DAYS - days + i - 7).getCarry();
+        show_refund.add(his_refund.get(MAX_RECENT_DAYS - days + i - 7));
+      }
+      yVals.add(new Entry(val, i));
+    }
+
+    // set data
+
+    setData(xVals, yVals);
+    if (isEmptyData(show_refund)) {
+      mView.setRlVisiBility();
+    }
   }
 
   @Override public boolean isEmptyData(List<RecentCarryBean.ResultsEntity> list_refund) {
@@ -119,16 +154,42 @@ public class MMInfoPresenter extends MMInfoContract.Presenter {
     // create a data object with the datasets
     LineData data = new LineData(xVals, dataSets);
 
-    // set data
-    //mChart.setData(data);
-    //mChart.setVisibility(View.VISIBLE);
-    //
-    //mChart.animateX(2500, Easing.EasingOption.EaseInOutQuart);
-    //mChart.setVisibleXRangeMaximum(6);
+    mView.setChartData(data);
   }
 
 
-  @Override public void getRecentCarry(String from, String day) {
+  @Override public void getRecentCarry() {
+      mRxManager.add(mModel.getRecentCarry("0",Integer.toString(MAX_RECENT_DAYS)).subscribe(new Action1<RecentCarryBean>() {
+        @Override
+        public void call(RecentCarryBean recentCarryBean) {
+          if (null != recentCarryBean) {
+            his_refund.clear();
+            his_refund.addAll(recentCarryBean.getResults());
+
+            if ((his_refund.size() > 0)) {
+              mView.init_chart();
+              setDataOfThisWeek();
+
+              if (his_refund.get(0) != null) {
+                mView.initTodatText(his_refund);
+              }
+            }
+          }
+        }
+      }));
+  }
+
+  @Override
+  public void getRefund() {
+    for (int i = 0; i < MAX_RECENT_DAYS; i++) {
+      RecentCarryBean.ResultsEntity hisRefund = new RecentCarryBean.ResultsEntity();
+      hisRefund.setVisitorNum(0);
+      hisRefund.setOrderNum(0);
+      hisRefund.setCarry(0.0);
+      his_refund.add(i, hisRefund);
+    }
+
+    getRecentCarry();
 
   }
 }
