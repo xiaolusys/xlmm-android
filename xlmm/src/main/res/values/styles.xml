@@ -188,4 +188,16 @@
     <item name="android:colorBackgroundCacheHint">@null</item>
     <item name="android:windowIsTranslucent">true</item>
   </style>
+  <style name="ToolBarMenuStyle" parent="ThemeOverlay.AppCompat.ActionBar">
+    <item name="actionMenuTextColor">@android:color/darker_gray</item>
+    <item name="android:textSize">50px</item>
+  </style>
+
+  <style name="ToolbarTitleTextAppearance" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+    <item name="android:textSize">60px</item>
+  </style>
+
+  <style name="ToolbarSubTitleTextAppearance" parent="TextAppearance.Widget.AppCompat.Toolbar.Subtitle">
+    <item name="android:textSize">40px</item>
+  </style>
 </resources>

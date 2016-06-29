@@ -5,7 +5,7 @@ package com.jimei.xiaolumeimei.data;
  */
 public class XlmmConst {
 
-    public static final String VERSION = "1.1.6.1";
+    public static final String VERSION = "1.1.7.1";
 
     public static  final int ORDER_STATE_CREATE = 0;
     public static  final int ORDER_STATE_WAITPAY = 1;
@@ -42,6 +42,7 @@ public class XlmmConst {
     public static  final int JUMP_XIAOLUMAMA_DAILYPOST = 11;
     public static  final int JUMP_REFUNDS =12;
     public static  final int JUMP_CARTS =13;
+    public static  final int JUMP_PRODUCT_DETAIL_PUSH =14;
 
     public static  final String JUMP_PREFIX = "com.jimei.xlmm://app/v1/";
 

@@ -1,7 +1,5 @@
 package com.jimei.xiaolumeimei.entities;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.io.Serializable;
 
 /**
@@ -9,18 +7,24 @@ import java.io.Serializable;
  */
 public class PackageBean implements Serializable {
 
+
     /**
-     * title : 蝙蝠袖蕾丝拼接衬衣/乳白色
-     * pic_path : http://image.xiaolu.so/MG_14612426673693.jpg
+     * title : 新款防晒超大雪纺披肩/红色
+     * pic_path : http://image.xiaolu.so/MG_14614007497992.jpg
      * num : 1
-     * payment : 47.27
-     * assign_status_display : 外贸厂调货中...
-     * ware_by_display : 广州/上海2号仓
+     * payment : 17.9
+     * assign_status_display : 已取消
+     * ware_by_display : 1号仓
      * out_sid :
      * logistics_company_name :
      * logistics_company_code :
-     * process_time :
-     * package_group_key : 0-2-
+     * process_time : 2016-06-22 11:37:41
+     * pay_time : 2016-06-22T11:37:41
+     * book_time : null
+     * assign_time : null
+     * finish_time : null
+     * cancel_time : null
+     * package_group_key : 3-1-0-
      */
 
     private String title;
@@ -33,6 +37,11 @@ public class PackageBean implements Serializable {
     private String logistics_company_name;
     private String logistics_company_code;
     private String process_time;
+    private String pay_time;
+    private String book_time;
+    private String assign_time;
+    private String finish_time;
+    private String cancel_time;
     private String package_group_key;
 
     public String getTitle() {
@@ -113,6 +122,46 @@ public class PackageBean implements Serializable {
 
     public void setProcess_time(String process_time) {
         this.process_time = process_time;
+    }
+
+    public String getPay_time() {
+        return pay_time;
+    }
+
+    public void setPay_time(String pay_time) {
+        this.pay_time = pay_time;
+    }
+
+    public String getBook_time() {
+        return book_time;
+    }
+
+    public void setBook_time(String book_time) {
+        this.book_time = book_time;
+    }
+
+    public String getAssign_time() {
+        return assign_time;
+    }
+
+    public void setAssign_time(String assign_time) {
+        this.assign_time = assign_time;
+    }
+
+    public String getFinish_time() {
+        return finish_time;
+    }
+
+    public void setFinish_time(String finish_time) {
+        this.finish_time = finish_time;
+    }
+
+    public String getCancel_time() {
+        return cancel_time;
+    }
+
+    public void setCancel_time(String cancel_time) {
+        this.cancel_time = cancel_time;
     }
 
     public String getPackage_group_key() {

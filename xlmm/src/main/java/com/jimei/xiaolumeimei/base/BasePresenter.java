@@ -16,6 +16,23 @@
 
 package com.jimei.xiaolumeimei.base;
 
-public interface BasePresenter {
+import android.content.Context;
 
+public abstract class BasePresenter<E, T> {
+  public Context context;
+  public E mModel;
+  public T mView;
+  public RxManager mRxManager = new RxManager();
+
+  public void setVM(T v, E m) {
+    this.mView = v;
+    this.mModel = m;
+    this.onStart();
+  }
+
+  public abstract void onStart();
+
+  public void onDestroy() {
+    mRxManager.clear();
+  }
 }

@@ -210,7 +210,14 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
         orderIdTv.setText(refundDetailBean.getRefund_no());
         statusTv.setText(refundDetailBean.getStatus_display());
         String address = refundDetailBean.getReturn_address();
-        String[] split = address.split("，");
+        String[] split;
+        if (address.contains("，")) {
+            split = address.split("，");
+        }else if (address.contains(",")){
+            split = address.split(",");
+        }else {
+            split = address.split(";");
+        }
         for (String s : split) {
             if (s.contains("市")) {
                 addressTv.setText(s);
@@ -293,7 +300,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
         textView2.setTextColor(getResources().getColor(R.color.text_color_62));
         textView.setTextColor(getResources().getColor(R.color.colorAccent));
         imageView2.setImageResource(R.drawable.state_oval);
-        iView.setImageResource(R.drawable.state_last);
+        iView.setImageResource(R.drawable.state_in);
         lineImage.setBackgroundColor(getResources().getColor(R.color.colorAccent));
     }
 
@@ -302,7 +309,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
         textView4.setTextColor(getResources().getColor(R.color.text_color_62));
         textView5.setTextColor(getResources().getColor(R.color.colorAccent));
         imageView4.setImageResource(R.drawable.state_oval);
-        imageView5.setImageResource(R.drawable.state_last);
+        imageView5.setImageResource(R.drawable.state_in);
         lineImage5.setBackgroundColor(getResources().getColor(R.color.colorAccent));
         lineImage6.setBackgroundColor(getResources().getColor(R.color.colorAccent));
     }
@@ -315,7 +322,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
         textView4.setTextColor(getResources().getColor(R.color.colorAccent));
         iView.setImageResource(R.drawable.state_oval);
         imageView3.setImageResource(R.drawable.state_oval);
-        imageView4.setImageResource(R.drawable.state_last);
+        imageView4.setImageResource(R.drawable.state_in);
         lineImage3.setBackgroundColor(getResources().getColor(R.color.colorAccent));
         lineImage4.setBackgroundColor(getResources().getColor(R.color.colorAccent));
     }
@@ -324,7 +331,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
         textView1.setTextColor(getResources().getColor(R.color.text_color_62));
         textView2.setTextColor(getResources().getColor(R.color.colorAccent));
         imageView1.setImageResource(R.drawable.state_oval);
-        imageView2.setImageResource(R.drawable.state_last);
+        imageView2.setImageResource(R.drawable.state_in);
         lineImage2.setBackgroundColor(getResources().getColor(R.color.colorAccent));
     }
 

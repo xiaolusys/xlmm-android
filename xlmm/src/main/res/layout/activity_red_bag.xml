@@ -7,10 +7,45 @@
     android:orientation="vertical"
     tools:context="com.jimei.xiaolumeimei.ui.activity.trade.RedBagActivity">
 
-    <com.jimei.xiaolumeimei.widget.XlmmTitleView
+    <android.support.design.widget.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:xlmm_title="支付成功" />
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:background="@color/colorAccent"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+            <RelativeLayout
+                android:id="@+id/finish_rl"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30px"
+                    android:src="@drawable/ic_arrow_back_white_24dp" />
+            </RelativeLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:text="支付成功"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -46,17 +81,6 @@
 
     <include layout="@layout/common_gap" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white">
-
-
-
-    </RelativeLayout>
-
-    <include layout="@layout/common_gap" />
-
     <View
         android:layout_width="match_parent"
         android:layout_height="16dp"
@@ -64,15 +88,57 @@
 
     <include layout="@layout/common_gap" />
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/red_wallet"
+        android:gravity="bottom|center_horizontal"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="恭喜您获得"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tv_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/white"
+                android:textSize="30sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="个红包"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="分享红包给好友可抵扣在线支付金额"
+            android:textColor="@color/colorAccent"
+            android:textSize="15sp" />
 
         <ImageView
-            android:layout_width="match_parent"
+            android:id="@+id/iv_share"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:scaleType="fitXY"
-            android:src="@drawable/red_wallet" />
+            android:layout_margin="16dp"
+            android:background="@drawable/red_bag_button" />
 
-    </RelativeLayout>
+    </LinearLayout>
 </LinearLayout>

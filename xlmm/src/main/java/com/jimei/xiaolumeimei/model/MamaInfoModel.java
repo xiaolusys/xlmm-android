@@ -7,6 +7,7 @@ import com.jimei.xiaolumeimei.entities.MMVisitorsBean;
 import com.jimei.xiaolumeimei.entities.MamaFansBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.MamaLivenessBean;
+import com.jimei.xiaolumeimei.entities.PotentialFans;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
@@ -37,9 +38,7 @@ public class MamaInfoModel {
 
   //得到全部订单数据列表
   public Observable<AgentInfoBean> getAgentInfoBean() {
-    return XlmmRetrofitClient.getService()
-        .getAgentInfoBean()
-        .compose(new DefaultTransform<>());
+    return XlmmRetrofitClient.getService().getAgentInfoBean().compose(new DefaultTransform<>());
   }
 
   //得到提现历史
@@ -51,9 +50,7 @@ public class MamaInfoModel {
 
   //得到妈妈粉丝列表
   public Observable<MamaFansBean> getMamaFans(String page) {
-    return XlmmRetrofitClient.getService()
-        .getMamaFans(page)
-        .compose(new DefaultTransform<>());
+    return XlmmRetrofitClient.getService().getMamaFans(page).compose(new DefaultTransform<>());
   }
 
   //得到妈妈访客列表
@@ -73,8 +70,8 @@ public class MamaInfoModel {
   //转账到小鹿钱包
   public Observable<ResponseResultBean> toWallet(String cashout_amount) {
     return XlmmRetrofitClient.getService()
-            .toWallet(cashout_amount)
-            .compose(new DefaultTransform<>());
+        .toWallet(cashout_amount)
+        .compose(new DefaultTransform<>());
   }
 
   //cancel提款单信息
@@ -86,22 +83,21 @@ public class MamaInfoModel {
 
   //得到分享补贴
   public Observable<AllowanceBean> getAllowance(String page) {
-    return XlmmRetrofitClient.getService()
-        .getAllowance(page)
-        .compose(new DefaultTransform<>());
+    return XlmmRetrofitClient.getService().getAllowance(page).compose(new DefaultTransform<>());
   }
 
   //得到妈妈财富
   public Observable<MamaFortune> getMamaFortune() {
-    return XlmmRetrofitClient.getService()
-        .getMamaFortune()
-        .compose(new DefaultTransform<>());
+    return XlmmRetrofitClient.getService().getMamaFortune().compose(new DefaultTransform<>());
   }
 
   //得到妈妈活跃值
   public Observable<MamaLivenessBean> getMamaLiveness(String page) {
-    return XlmmRetrofitClient.getService()
-        .getMamaLiveness(page)
-        .compose(new DefaultTransform<>());
+    return XlmmRetrofitClient.getService().getMamaLiveness(page).compose(new DefaultTransform<>());
+  }
+
+  //得到妈妈活跃值
+  public Observable<PotentialFans> getPotentialFans(String page) {
+    return XlmmRetrofitClient.getService().getPotentialFans(page).compose(new DefaultTransform<>());
   }
 }

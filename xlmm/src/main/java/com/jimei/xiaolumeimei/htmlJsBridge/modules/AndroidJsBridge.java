@@ -23,7 +23,16 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
-
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
+import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
+import cn.sharesdk.sina.weibo.SinaWeibo;
+import cn.sharesdk.tencent.qq.QQ;
+import cn.sharesdk.tencent.qzone.QZone;
+import cn.sharesdk.wechat.friends.Wechat;
+import cn.sharesdk.wechat.moments.WechatMoments;
 import com.google.gson.Gson;
 import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.R;
@@ -42,23 +51,11 @@ import com.jude.utils.JUtils;
 import com.mob.tools.utils.UIHandler;
 import com.tbruyelle.rxpermissions.RxPermissions;
 import com.umeng.analytics.MobclickAgent;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.PlatformActionListener;
-import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.onekeyshare.OnekeyShare;
-import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
-import cn.sharesdk.sina.weibo.SinaWeibo;
-import cn.sharesdk.tencent.qq.QQ;
-import cn.sharesdk.tencent.qzone.QZone;
-import cn.sharesdk.wechat.friends.Wechat;
-import cn.sharesdk.wechat.moments.WechatMoments;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -293,10 +290,8 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     if (partyShareInfo == null) return;
 
     JUtils.Log(TAG, " title =" + partyShareInfo.getTitle());
-    JUtils.Log(TAG, " desc="
-        + partyShareInfo.getActiveDec()
-        + " url="
-        + partyShareInfo.getShareLink());
+    JUtils.Log(TAG,
+        " desc=" + partyShareInfo.getActiveDec() + " url=" + partyShareInfo.getShareLink());
 
     OnekeyShare oks = new OnekeyShare();
     //关闭sso授权
@@ -308,8 +303,8 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     oks.setImageUrl(partyShareInfo.getShareIcon());
     oks.setUrl(partyShareInfo.getShareLink());
 
-    Bitmap enableLogo = BitmapFactory.decodeResource(mContext.getResources(),
-        R.drawable.ssdk_oks_logo_copy);
+    Bitmap enableLogo =
+        BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ssdk_oks_logo_copy);
     String label = "复制链接";
 
     View.OnClickListener listener = new View.OnClickListener() {
@@ -338,9 +333,8 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
       JUtils.Log(TAG, "saveTowDimenCode : Qrcodelink=" + partyShareInfo.getQrcodeLink());
       try {
         WebView webView = new WebView(context);
-        webView.setLayoutParams(
-            new Toolbar.LayoutParams(Toolbar.LayoutParams.MATCH_PARENT,
-                Toolbar.LayoutParams.MATCH_PARENT));
+        webView.setLayoutParams(new Toolbar.LayoutParams(Toolbar.LayoutParams.MATCH_PARENT,
+            Toolbar.LayoutParams.MATCH_PARENT));
         webView.getSettings().setJavaScriptEnabled(true);
 
         webView.getSettings().setAllowFileAccess(true);
@@ -399,14 +393,12 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
 
                 Uri uri = Uri.fromFile(new File(fileName));
                 // 通知图库更新
-                Intent scannerIntent =
-                    new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
+                Intent scannerIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
                 scannerIntent.setData(uri);
 
                 context.sendBroadcast(scannerIntent);
                 JUtils.Log(TAG, "filename===" + FileUtils.isFileExist(fileName));
-                Toast.makeText(context, "截取快照成功至/xlmm/xiaolumeimei", Toast.LENGTH_LONG)
-                    .show();
+                Toast.makeText(context, "截取快照成功至/xlmm/xiaolumeimei", Toast.LENGTH_LONG).show();
               } else {
                 // Oups permission denied
                 JUtils.Toast("小鹿美美需要存储权限存储图片,请再次点击保存并打开权限许可.");
@@ -428,8 +420,7 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
    */
   public Bitmap catchWebScreenshot(final WebView w, final int containerWidth,
       final int containerHeight, final String baseUrl, final Context context) {
-    final Bitmap b =
-        Bitmap.createBitmap(containerWidth, containerHeight, Bitmap.Config.ARGB_8888);
+    final Bitmap b = Bitmap.createBitmap(containerWidth, containerHeight, Bitmap.Config.ARGB_8888);
     w.post(new Runnable() {
       public void run() {
         w.setWebViewClient(new WebViewClient() {
@@ -474,15 +465,7 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     UIHandler.sendMessage(msg, this);
   }
 
-  @Override
-  public void onComplete(Platform platform, int action, HashMap<String, Object> arg2) {
-
-    Map<String, String> map = new HashMap<String, String>();
-    map.put("id","name");
-
-    map.put(platform.getId()+"", platform.getName());
-    MobclickAgent.onEvent(mContext, "ShareID", map);
-
+  @Override public void onComplete(Platform platform, int action, HashMap<String, Object> arg2) {
     // 成功
     Message msg = new Message();
     msg.what = MSG_ACTION_CCALLBACK;
@@ -508,6 +491,11 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
   public boolean handleMessage(Message msg) {
     switch (msg.arg1) {
       case 1: {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("id", "name");
+        map.put(((Platform) (msg.obj)).getId() + "", ((Platform) (msg.obj)).getName());
+        MobclickAgent.onEvent(mContext, "ShareID", map);
+        JUtils.Log("UmengTest", "platfrom===" + ((Platform) (msg.obj)).getName());
         // 成功
         Toast.makeText(mContext, "分享成功", Toast.LENGTH_SHORT).show();
         JUtils.Log(TAG, "分享回调成功------------");
@@ -544,8 +532,7 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
 
   public void copy(String content, Context context) {
     // 得到剪贴板管理器
-    ClipboardManager cmb =
-        (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+    ClipboardManager cmb = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
     cmb.setText(content.trim());
   }
 
@@ -575,11 +562,10 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     JUtils.Log(TAG, "callNativeUniShareFunc====" + json);
     if (!TextUtils.isEmpty(json)) {
       Gson gson = new Gson();
-      CallNativeFuncBean callNativeFuncBean =
-          gson.fromJson(json, CallNativeFuncBean.class);
+      CallNativeFuncBean callNativeFuncBean = gson.fromJson(json, CallNativeFuncBean.class);
       if (null != callNativeFuncBean) {
-        if (!TextUtils.isEmpty(callNativeFuncBean.getShareTo())
-            && callNativeFuncBean.getShareTo().equals("wxapp")) {
+        if (!TextUtils.isEmpty(callNativeFuncBean.getShareTo()) && callNativeFuncBean.getShareTo()
+            .equals("wxapp")) {
           shareToWx(callNativeFuncBean);
         } else if (!TextUtils.isEmpty(callNativeFuncBean.getShareTo())
             && callNativeFuncBean.getShareTo().equals("pyq")) {
@@ -691,8 +677,8 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     oks.setImageUrl(shareimg);
     oks.setUrl(sharelink);
 
-    Bitmap enableLogo = BitmapFactory.decodeResource(mContext.getResources(),
-        R.drawable.ssdk_oks_logo_copy);
+    Bitmap enableLogo =
+        BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ssdk_oks_logo_copy);
     String label = "二维码";
 
     View.OnClickListener listener = new View.OnClickListener() {

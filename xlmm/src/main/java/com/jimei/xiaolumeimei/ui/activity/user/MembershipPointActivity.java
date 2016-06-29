@@ -82,6 +82,7 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity
     //从server端获得所有订单数据，可能要查询几次
     @Override
     protected void initData() {
+        showIndeterminateProgressDialog(false);
         Subscription subscribe = UserModel.getInstance()
                 .getMembershipPointBean()
                 .subscribeOn(Schedulers.io())
@@ -95,27 +96,32 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity
                         } else {
                             Log.d(TAG, "point record not exist. ");
                         }
+                        Subscription subscribe1 = UserModel.getInstance()
+                                .getPointLogBean("1")
+                                .subscribeOn(Schedulers.io())
+                                .subscribe(new ServiceResponse<PointLogBean>() {
+                                    @Override
+                                    public void onNext(PointLogBean pointLogBean) {
+                                        List<PointLogBean.ResultsBean> results = pointLogBean.getResults();
+                                        if (0 == results.size()) {
+                                            Log.d(TAG, "pointlog 0 ");
+                                            rlayout_order_empty.setVisibility(View.VISIBLE);
+                                        } else {
+                                            Log.d(TAG, "pointlog " + results.get(0).toString());
+                                            mPointAdapter.update(results);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCompleted() {
+                                        hideIndeterminateProgressDialog();
+                                    }
+                                });
+                        addSubscription(subscribe1);
                     }
+
                 });
         addSubscription(subscribe);
-
-        Subscription subscribe1 = UserModel.getInstance()
-                .getPointLogBean("1")
-                .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<PointLogBean>() {
-                    @Override
-                    public void onNext(PointLogBean pointLogBean) {
-                        List<PointLogBean.ResultsBean> results = pointLogBean.getResults();
-                        if (0 == results.size()) {
-                            Log.d(TAG, "pointlog 0 ");
-                            rlayout_order_empty.setVisibility(View.VISIBLE);
-                        } else {
-                            Log.d(TAG, "pointlog " + results.get(0).toString());
-                            mPointAdapter.update(results);
-                        }
-                    }
-                });
-        addSubscription(subscribe1);
     }
 
     @Override

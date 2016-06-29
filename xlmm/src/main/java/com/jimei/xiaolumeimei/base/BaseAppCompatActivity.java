@@ -167,6 +167,7 @@ public abstract class BaseAppCompatActivity extends AutoLayoutActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        ButterKnife.unbind(this);
     }
 
     /**
@@ -294,7 +295,6 @@ public abstract class BaseAppCompatActivity extends AutoLayoutActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 finish();
             }
         });

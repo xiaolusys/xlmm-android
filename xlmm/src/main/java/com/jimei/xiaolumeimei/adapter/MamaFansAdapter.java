@@ -53,8 +53,8 @@ public class MamaFansAdapter extends RecyclerView.Adapter<MamaFansAdapter.ViewHo
   }
 
   @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-    View v = LayoutInflater.from(parent.getContext())
-        .inflate(R.layout.item_mamafans, parent, false);
+    View v =
+        LayoutInflater.from(parent.getContext()).inflate(R.layout.item_mamafans, parent, false);
     return new ViewHolder(v);
   }
 
@@ -65,7 +65,7 @@ public class MamaFansAdapter extends RecyclerView.Adapter<MamaFansAdapter.ViewHo
 
     holder.tvFans.setText(resultsEntity.getFansNick());
     holder.tvInfo.setText(resultsEntity.getFansDescription());
-    holder.tvTime.setText(resultsEntity.getCreated().substring(6, 10));
+    holder.tvTime.setText(resultsEntity.getCreated().replace("T", " ").substring(6, 16));
     if (TextUtils.isEmpty(resultsEntity.getFansThumbnail())) {
       Glide.with(context)
           .load(R.mipmap.ic_launcher)

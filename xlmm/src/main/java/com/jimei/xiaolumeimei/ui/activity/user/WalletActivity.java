@@ -47,6 +47,7 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
     ScrollableLayout scrollableLayout;
     private Double money = 0d;
     private UserWalletAdapter adapter;
+    Subscription subscribe;
 
     private int page = 2;
 
@@ -71,29 +72,9 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
+        showIndeterminateProgressDialog(false);
         MobclickAgent.onPageStart(this.getClass().getSimpleName());
         MobclickAgent.onResume(this);
-
-        Subscription subscribe = UserNewModel.getInstance()
-                .getProfile()
-                .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<UserInfoBean>() {
-                    @Override
-                    public void onNext(UserInfoBean userNewBean) {
-
-                        if (userNewBean != null) {
-                            if (null != userNewBean.getUserBudget()) {
-                                money = userNewBean.getUserBudget().getBudgetCash();
-                            }
-                            tvMoney.setText((float) (Math.round(money * 100)) / 100 + "");
-                            if (money > 0) {
-                                ll_wallet_empty.setVisibility(View.INVISIBLE);
-                            }
-                        }
-                    }
-                });
-
         Subscription subscribe1 = UserNewModel.getInstance()
                 .budGetdetailBean("1")
                 .subscribeOn(Schedulers.io())
@@ -113,9 +94,34 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
                             walletRcv.setVisibility(View.INVISIBLE);
                             ll_wallet_empty.setVisibility(View.VISIBLE);
                         }
+                        subscribe = UserNewModel.getInstance()
+                                .getProfile()
+                                .subscribeOn(Schedulers.io())
+                                .subscribe(new ServiceResponse<UserInfoBean>() {
+                                    @Override
+                                    public void onNext(UserInfoBean userNewBean) {
+
+                                        if (userNewBean != null) {
+                                            if (null != userNewBean.getUserBudget()) {
+                                                money = userNewBean.getUserBudget().getBudgetCash();
+                                            }
+                                            tvMoney.setText((float) (Math.round(money * 100)) / 100 + "");
+                                            if (money > 0) {
+                                                ll_wallet_empty.setVisibility(View.INVISIBLE);
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCompleted() {
+                                        hideIndeterminateProgressDialog();
+                                    }
+                                });
+                        addSubscription(subscribe);
                     }
+
                 });
-        addSubscription(subscribe);
+
         addSubscription(subscribe1);
     }
 
