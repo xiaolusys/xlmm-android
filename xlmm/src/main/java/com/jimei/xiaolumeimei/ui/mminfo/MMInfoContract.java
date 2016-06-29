@@ -28,9 +28,11 @@ public interface MMInfoContract {
   interface View extends BaseView {
 
      void initMMview(MamaFortune mamaFortune);
+     void initShareInfo(MMShoppingBean shoppingBean);
      void show_liveness(int liveness);
      void init_chart();
-    void initShareInfo();
+     void initMMdata(MamaFortune fortune);
+     void initPointBean(AgentInfoBean pointBean);
 
   }
 
@@ -39,12 +41,10 @@ public interface MMInfoContract {
     public abstract void getShareShopping();
     public abstract void getMamaFortune();
     public abstract void getAgentInfoBean();
-    public abstract void initPointBean();
     public abstract void setDataOfThisWeek();
     public abstract void setDataOfPreviousWeek();
     public abstract boolean isEmptyData(List<RecentCarryBean.ResultsEntity> list_refund);
     public abstract void setData(ArrayList<String> xVals, ArrayList<Entry> yVals);
-    public abstract void initMMdata(MamaFortune mamaFortune);
     public abstract void getRecentCarry(String from, String day);
 
     @Override

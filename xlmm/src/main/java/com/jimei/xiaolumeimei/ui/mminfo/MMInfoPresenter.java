@@ -1,14 +1,15 @@
 package com.jimei.xiaolumeimei.ui.mminfo;
 
 import android.graphics.Color;
+
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ViewPortHandler;
-import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -18,32 +19,35 @@ import java.util.List;
  * Created by itxuye on 2016/6/24.
  */
 public class MMInfoPresenter extends MMInfoContract.Presenter {
-  public String title;
-  public String sharelink;
-  public String shareimg;
-  public String desc;
+  private static final int MAX_RECENT_DAYS = 15;
+  List<RecentCarryBean.ResultsEntity> his_refund = new ArrayList<>();
+  List<RecentCarryBean.ResultsEntity> show_refund = new ArrayList<>();
 
   @Override public void getShareShopping() {
     mRxManager.add(mModel.getShareShopping().subscribe(mmShoppingBean -> {
-      mRxManager.post("mmShoppingBean",mmShoppingBean);
+      /*mRxManager.post("mmShoppingBean",mmShoppingBean);*/
+      if (null!=mmShoppingBean)
+      mView.initShareInfo(mmShoppingBean);
+    }, Throwable::printStackTrace));
 
-    }, throwable -> {
-
-    }));
   }
 
   @Override public void getMamaFortune() {
-
+        mRxManager.add(mModel.getMamaFortune().subscribe(mamaFortune -> {
+          if (null!=mamaFortune) {
+            mView.initMMdata(mamaFortune);
+            mView.initMMview(mamaFortune);
+          }
+        }, Throwable::printStackTrace));
   }
 
   @Override public void getAgentInfoBean() {
-
+        mRxManager.add(mModel.getAgentInfoBean().subscribe(agentInfoBean -> {
+          if (null!=agentInfoBean)
+          mView.initPointBean(agentInfoBean);
+        }));
   }
 
-
-  @Override public void initPointBean() {
-
-  }
 
   @Override public void setDataOfThisWeek() {
     ArrayList<String> xVals =
@@ -123,9 +127,6 @@ public class MMInfoPresenter extends MMInfoContract.Presenter {
     //mChart.setVisibleXRangeMaximum(6);
   }
 
-  @Override public void initMMdata(MamaFortune mamaFortune) {
-
-  }
 
   @Override public void getRecentCarry(String from, String day) {
 
