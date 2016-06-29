@@ -190,7 +190,6 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
   private void initMMdata(MamaFortune fortune) {
     mamaFortune = fortune;
     actlink = fortune.getMama_fortune().getmMamaEventLink();
-    JUtils.Log(TAG,"actlink"+actlink);
     carrylogMoney = ((double) (Math.round(fortune.getMama_fortune().getCarry_value() * 100)) / 100);
     s = Integer.toString(fortune.getMama_fortune().getOrder_num());
   }
