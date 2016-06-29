@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -22,8 +21,6 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.github.mikephil.charting.listener.ChartTouchListener;
-import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.jimei.xiaolumeimei.R;
@@ -42,13 +39,14 @@ import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.zhy.autolayout.AutoRelativeLayout;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
 import butterknife.Bind;
-import org.greenrobot.eventbus.EventBus;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -56,7 +54,7 @@ import rx.schedulers.Schedulers;
  * Created by wulei on 2016/2/4.
  */
 public class MamaInfoActivity extends BaseSwipeBackCompatActivity
-    implements View.OnClickListener, OnChartGestureListener, OnChartValueSelectedListener {
+    implements View.OnClickListener, OnChartValueSelectedListener {
   private static final int MAX_RECENT_DAYS = 15;
   String TAG = "MamaInfoActivity";
   List<RecentCarryBean.ResultsEntity> his_refund = new ArrayList<>();
@@ -533,46 +531,6 @@ public class MamaInfoActivity extends BaseSwipeBackCompatActivity
     }
   }
 
-  @Override public void onChartGestureStart(MotionEvent me,
-      ChartTouchListener.ChartGesture lastPerformedGesture) {
-    Log.i("Gesture", "START");
-  }
-
-  @Override public void onChartGestureEnd(MotionEvent me,
-      ChartTouchListener.ChartGesture lastPerformedGesture) {
-    Log.i("Gesture", "END, lastGesture: " + lastPerformedGesture);
-
-    // un-highlight values after the gesture is finished and no single-tap
-    if (lastPerformedGesture != ChartTouchListener.ChartGesture.SINGLE_TAP) {
-      mChart.highlightValues(
-          null); // or highlightTouch(null) for callback to onNothingSelected(...)
-    }
-  }
-
-  @Override public void onChartLongPressed(MotionEvent me) {
-    Log.i("LongPress", "Chart longpressed.");
-  }
-
-  @Override public void onChartDoubleTapped(MotionEvent me) {
-    Log.i("DoubleTap", "Chart double-tapped.");
-  }
-
-  @Override public void onChartSingleTapped(MotionEvent me) {
-    Log.i("SingleTap", "Chart single-tapped.");
-  }
-
-  @Override
-  public void onChartFling(MotionEvent me1, MotionEvent me2, float velocityX, float velocityY) {
-    Log.i("Fling", "Chart flinged. VeloX: " + velocityX + ", VeloY: " + velocityY);
-  }
-
-  @Override public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
-    Log.i("Scale / Zoom", "ScaleX: " + scaleX + ", ScaleY: " + scaleY);
-  }
-
-  @Override public void onChartTranslate(MotionEvent me, float dX, float dY) {
-    Log.i("Translate / Move", "dX: " + dX + ", dY: " + dY);
-  }
 
   @Override public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
     Log.i("Entry selected", e.toString());
