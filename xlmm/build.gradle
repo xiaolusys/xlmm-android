@@ -23,8 +23,8 @@ android {
 
         targetSdkVersion 23
 
-        versionCode 20160623
-        versionName "1.1.6.1"
+        versionCode 20160629
+        versionName "1.1.7.1"
 
         multiDexEnabled = true
 
@@ -172,6 +172,16 @@ android {
 
         umeng {
             manifestPlaceholders = [CHANNEL_NAME: "umeng",
+                                    UMENG_APPKEY: "569f78a667e58ee15300094b"]
+        }
+
+        vivo {
+            manifestPlaceholders = [CHANNEL_NAME: "vivo",
+                                    UMENG_APPKEY: "569f78a667e58ee15300094b"]
+        }
+
+        samsung {
+            manifestPlaceholders = [CHANNEL_NAME: "samsung",
                                     UMENG_APPKEY: "569f78a667e58ee15300094b"]
         }
 

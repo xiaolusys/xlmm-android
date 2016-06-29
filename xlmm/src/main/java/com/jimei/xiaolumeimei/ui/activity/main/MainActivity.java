@@ -390,7 +390,7 @@ public class MainActivity extends BaseActivity
             if (swipeRefreshLayout != null) {
               swipeRefreshLayout.setRefreshing(false);
             }
-            JUtils.ToastLong("数据加载失败,请确认网络是否正常!");
+            JUtils.ToastLong("数据加载有误,请下拉刷新重试!");
           }
         });
     addSubscription(subscribe2);

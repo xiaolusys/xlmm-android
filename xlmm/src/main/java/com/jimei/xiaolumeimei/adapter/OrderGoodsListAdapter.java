@@ -6,8 +6,10 @@ package com.jimei.xiaolumeimei.adapter;
  */
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
@@ -126,7 +129,24 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                         || packageBeanList.get(position).getAssign_time() != null
                         || packageBeanList.get(position).getFinish_time() != null
                 ) && "已付款".equals(stateStr)) {
-                    convertView.findViewById(R.id.rl_info).setVisibility(View.GONE);
+                    Button btn = (Button) convertView.findViewById(R.id.btn_order_proc);
+                    btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            new MaterialDialog.Builder(context)
+                                    .cancelable(true)
+                                    .positiveText("确认")
+                                    .positiveColorRes(R.color.colorAccent)
+                                    .callback(new MaterialDialog.ButtonCallback() {
+                                        @Override
+                                        public void onPositive(MaterialDialog dialog) {
+                                            dialog.dismiss();
+                                        }
+                                    })
+                                    .content("您的订单已经向工厂订货，暂不支持退款，请您耐心等待，在收货确认签收后申请退货，如有疑问请咨询小鹿美美公众号或客服4008235355。")
+                                    .show();
+                        }
+                    });
                 }
                 if (position == 0) {
                     view.setVisibility(View.VISIBLE);
@@ -200,34 +220,27 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                         btn.setVisibility(View.INVISIBLE);
                         tv_order_state.setVisibility(View.VISIBLE);
                         switch (refund_state) {
-                            case XlmmConst.REFUND_STATE_BUYER_APPLY: {
+                            case XlmmConst.REFUND_STATE_BUYER_APPLY:
                                 tv_order_state.setText("已经申请退款");
                                 break;
-                            }
-                            case XlmmConst.REFUND_STATE_SELLER_AGREED: {
+                            case XlmmConst.REFUND_STATE_SELLER_AGREED:
                                 tv_order_state.setText("卖家同意退款");
                                 break;
-                            }
-                            case XlmmConst.REFUND_STATE_BUYER_RETURNED_GOODS: {
+                            case XlmmConst.REFUND_STATE_BUYER_RETURNED_GOODS:
                                 tv_order_state.setText("已经退货");
                                 break;
-                            }
-                            case XlmmConst.REFUND_STATE_SELLER_REJECTED: {
+                            case XlmmConst.REFUND_STATE_SELLER_REJECTED:
                                 tv_order_state.setText("卖家拒绝退款");
                                 break;
-                            }
-                            case XlmmConst.REFUND_STATE_WAIT_RETURN_FEE: {
+                            case XlmmConst.REFUND_STATE_WAIT_RETURN_FEE:
                                 tv_order_state.setText("退款中");
                                 break;
-                            }
-                            case XlmmConst.REFUND_STATE_REFUND_CLOSE: {
+                            case XlmmConst.REFUND_STATE_REFUND_CLOSE:
                                 tv_order_state.setText("退款关闭");
                                 break;
-                            }
-                            case XlmmConst.REFUND_STATE_REFUND_SUCCESS: {
+                            case XlmmConst.REFUND_STATE_REFUND_SUCCESS:
                                 tv_order_state.setText("退款成功");
                                 break;
-                            }
                             default:
                                 break;
                         }
@@ -287,7 +300,6 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                 });
                 break;
             }
-
             case XlmmConst.ORDER_STATE_CONFIRM_RECEIVE: {
                 switch (refund_state) {
                     case XlmmConst.REFUND_STATE_NO_REFUND: {
