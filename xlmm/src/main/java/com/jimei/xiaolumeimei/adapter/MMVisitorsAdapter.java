@@ -66,7 +66,7 @@ public class MMVisitorsAdapter
 
     holder.tvFans.setText(resultsEntity.getVisitorNick());
     holder.tvInfo.setText(resultsEntity.getVisitorDescription());
-    holder.tvTime.setText(resultsEntity.getCreated().substring(6, 10));
+    holder.tvTime.setText(resultsEntity.getCreated().replace("T", " ").substring(6, 16));
     if (TextUtils.isEmpty(resultsEntity.getVisitorImg())) {
       Glide.with(context)
           .load(R.mipmap.ic_launcher)

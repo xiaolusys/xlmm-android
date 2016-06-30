@@ -27,7 +27,6 @@ public interface MMInfoContract {
   }
 
   interface View extends BaseView {
-
      void initMMview(MamaFortune mamaFortune);
      void initShareInfo(MMShoppingBean shoppingBean);
      void show_liveness(int liveness);

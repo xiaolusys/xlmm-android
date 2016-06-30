@@ -42,9 +42,9 @@ import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaVisitorActivity;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.zhy.autolayout.AutoRelativeLayout;
+import java.util.Calendar;
 import java.util.List;
 import org.greenrobot.eventbus.EventBus;
-
 
 /**
  * Created by itxuye on 2016/6/24.
@@ -98,6 +98,7 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
   private String from;
   private String actlink;
   private String shareMmcode;
+  private boolean isThisWeek = true;
 
   @Override protected void initData() {
     mPresenter.getShareShopping();
@@ -152,23 +153,21 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
 
   @Override public void initMMview(MamaFortune fortune) {
     tv_cash.setText(Double.toString(
-            (double) (Math.round(fortune.getMama_fortune().getCash_value() * 100)) / 100));
+        (double) (Math.round(fortune.getMama_fortune().getCash_value() * 100)) / 100));
     tv_fund.setText(Double.toString(
-            (double) (Math.round(fortune.getMama_fortune().getCarry_value() * 100)) / 100) + "元");
+        (double) (Math.round(fortune.getMama_fortune().getCarry_value() * 100)) / 100) + "元");
     tv_invite_num.setText(fortune.getMama_fortune().getInvite_num() + "位");
     tv_fansnum.setText(fortune.getMama_fortune().getFans_num() + "人");
     show_liveness(fortune.getMama_fortune().getActive_value_num());
     tv_order.setText(s + "个");
   }
 
-  @Override
-  public void initShareInfo(MMShoppingBean shoppingBean) {
+  @Override public void initShareInfo(MMShoppingBean shoppingBean) {
 
     title = shoppingBean.getShopInfo().getName();
     sharelink = shoppingBean.getShopInfo().getPreviewShopLink();
     shareimg = shoppingBean.getShopInfo().getThumbnail();
     desc = shoppingBean.getShopInfo().getDesc();
-
   }
 
   @Override public void show_liveness(int liveness) {
@@ -176,16 +175,16 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
     img_liveness.setText(Integer.toString(liveness));
     if (liveness > 100) liveness = 100;
     AutoRelativeLayout.LayoutParams laParams1 =
-            new AutoRelativeLayout.LayoutParams(AutoRelativeLayout.LayoutParams.WRAP_CONTENT,
-                    AutoRelativeLayout.LayoutParams.WRAP_CONTENT);
+        new AutoRelativeLayout.LayoutParams(AutoRelativeLayout.LayoutParams.WRAP_CONTENT,
+            AutoRelativeLayout.LayoutParams.WRAP_CONTENT);
     JUtils.Log(TAG, "" + laParams1.leftMargin + " " + laParams1.height);
     JUtils.Log(TAG, "show_liveness left:"
-            + getWindowManager().getDefaultDisplay().getWidth() * liveness / 100
-            + "width:"
-            + img_liveness.getWidth());
+        + getWindowManager().getDefaultDisplay().getWidth() * liveness / 100
+        + "width:"
+        + img_liveness.getWidth());
 
     laParams1.setMargins(getWindowManager().getDefaultDisplay().getWidth() * liveness / 100
-            - img_liveness.getWidth(), rlMamaInfo.getHeight() - img_liveness.getHeight(), 0, 0);
+        - img_liveness.getWidth(), rlMamaInfo.getHeight() - img_liveness.getHeight(), 0, 0);
 
     img_liveness.setLayoutParams(laParams1);
   }
@@ -218,7 +217,7 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
     xAxis.setGridColor(Color.parseColor("#F5B123")); //X轴上的刻度竖线的颜色
     xAxis.setGridLineWidth(1); //X轴上的刻度竖线的宽 float类型
     xAxis.enableGridDashedLine(3, 8,
-            0); //虚线表示X轴上的刻度竖线(float lineLength, float spaceLength, float phase)三个参数，1.线长，2.虚线间距，3.虚线开始坐标
+        0); //虚线表示X轴上的刻度竖线(float lineLength, float spaceLength, float phase)三个参数，1.线长，2.虚线间距，3.虚线开始坐标
 
     mChart.getLegend().setEnabled(false);
     mChart.getAxisLeft().setDrawGridLines(false);
@@ -234,46 +233,38 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
     // add data
   }
 
-  @Override
-  public void initMMdata(MamaFortune fortune) {
+  @Override public void initMMdata(MamaFortune fortune) {
     mamaFortune = fortune;
     actlink = fortune.getMama_fortune().getmMamaEventLink();
-    JUtils.Log(TAG,"actlink"+actlink);
+    JUtils.Log(TAG, "actlink" + actlink);
     carrylogMoney = ((double) (Math.round(fortune.getMama_fortune().getCarry_value() * 100)) / 100);
     s = Integer.toString(fortune.getMama_fortune().getOrder_num());
   }
 
-  @Override
-  public void initPointBean(AgentInfoBean pointBean) {
+  @Override public void initPointBean(AgentInfoBean pointBean) {
     shareMmcode = pointBean.getShareMmcode();
     mamaAgentInfo = pointBean;
   }
 
-  @Override
-  public void setRlVisiBility() {
+  @Override public void setRlVisiBility() {
     rl_empty_chart.setVisibility(View.VISIBLE);
     rl_chart.setVisibility(View.INVISIBLE);
   }
 
-  @Override
-  public void setChartData(LineData data) {
+  @Override public void setChartData(LineData data) {
     mChart.setData(data);
     mChart.setVisibility(View.VISIBLE);
     mChart.animateX(2500, Easing.EasingOption.EaseInOutQuart);
     mChart.setVisibleXRangeMaximum(6);
   }
 
-  @Override
-  public void initTodatText(List<RecentCarryBean.ResultsEntity> his_refund) {
+  @Override public void initTodatText(List<RecentCarryBean.ResultsEntity> his_refund) {
     tv_today_visit2.setText(
-            Integer.toString(his_refund.get(his_refund.size() - 1).getVisitorNum()));
-    tv_today_order2.setText(
-            Integer.toString(his_refund.get(his_refund.size() - 1).getOrderNum()));
+        Integer.toString(his_refund.get(his_refund.size() - 1).getVisitorNum()));
+    tv_today_order2.setText(Integer.toString(his_refund.get(his_refund.size() - 1).getOrderNum()));
     tv_today_fund2.setText(Double.toString(
-            (double) (Math.round(his_refund.get(his_refund.size() - 1).getCarry() * 100))
-                    / 100));
+        (double) (Math.round(his_refund.get(his_refund.size() - 1).getCarry() * 100)) / 100));
   }
-
 
   @Override public void onClick(View v) {
     Intent intent;
@@ -296,28 +287,30 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
         }
         break;
       case R.id.img_left:
+        isThisWeek = false;
         rl_empty_chart.setVisibility(View.INVISIBLE);
         rl_chart.setVisibility(View.VISIBLE);
         mChart.clear();
         mPresenter.setDataOfPreviousWeek();
-        tv_today_visit2.setText(
-                Integer.toString(mPresenter.his_refund.get(mPresenter.his_refund.size() - 1).getVisitorNum()));
-        tv_today_order2.setText(
-                Integer.toString((int) (mPresenter.his_refund.get(mPresenter.his_refund.size() - 1).getOrderNum())));
-        tv_today_fund2.setText(Double.toString(
-                (double) (Math.round(mPresenter.his_refund.get(mPresenter.his_refund.size() - 1).getCarry() * 100)) / 100));
+        tv_today_visit2.setText(Integer.toString(
+            mPresenter.his_refund.get(mPresenter.his_refund.size() - 1).getVisitorNum()));
+        tv_today_order2.setText(Integer.toString(
+            (int) (mPresenter.his_refund.get(mPresenter.his_refund.size() - 1).getOrderNum())));
+        tv_today_fund2.setText(Double.toString((double) (Math.round(
+            mPresenter.his_refund.get(mPresenter.his_refund.size() - 1).getCarry() * 100)) / 100));
         break;
       case R.id.img_right:
+        isThisWeek = true;
         rl_empty_chart.setVisibility(View.INVISIBLE);
         rl_chart.setVisibility(View.VISIBLE);
         mChart.clear();
         mPresenter.setDataOfThisWeek();
-        tv_today_visit2.setText(
-                Integer.toString(mPresenter.his_refund.get(mPresenter.his_refund.size() - 1).getVisitorNum()));
-        tv_today_order2.setText(
-                Integer.toString(mPresenter.his_refund.get(mPresenter.his_refund.size() - 1).getOrderNum()));
-        tv_today_fund2.setText(Double.toString(
-                (double) (Math.round(mPresenter.his_refund.get(mPresenter.his_refund.size() - 1).getCarry() * 100)) / 100));
+        tv_today_visit2.setText(Integer.toString(
+            mPresenter.his_refund.get(mPresenter.his_refund.size() - 1).getVisitorNum()));
+        tv_today_order2.setText(Integer.toString(
+            mPresenter.his_refund.get(mPresenter.his_refund.size() - 1).getOrderNum()));
+        tv_today_fund2.setText(Double.toString((double) (Math.round(
+            mPresenter.his_refund.get(mPresenter.his_refund.size() - 1).getCarry() * 100)) / 100));
         break;
       case R.id.rl_chooselist:
         startActivity(new Intent(this, MMChooseListActivity.class));
@@ -373,7 +366,7 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
       case R.id.rl_fans:
         sharedPreferences = getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
         SharedPreferences sharedPreferences2 =
-                XlmmApp.getmContext().getSharedPreferences("APICLIENT", Context.MODE_PRIVATE);
+            XlmmApp.getmContext().getSharedPreferences("APICLIENT", Context.MODE_PRIVATE);
         String baseUrl = "http://" + sharedPreferences2.getString("BASE_URL", "");
         if (baseUrl.equals("http://")) {
           baseUrl = XlmmApi.APP_BASE_URL;
@@ -384,7 +377,7 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
         String sessionid = sharedPreferences.getString("Cookie", "");
 
         JUtils.Log(TAG, "GET cookie:" + cookies + " actlink:" + actlink + " domain:" + domain +
-                " sessionid:" + sessionid);
+            " sessionid:" + sessionid);
 
         EventBus.getDefault().postSticky(new WebViewEvent(cookies, domain, actlink, -1, sessionid));
 
@@ -440,21 +433,33 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
     MobclickAgent.onPause(this);
   }
 
-  @Override
-  public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
+  @Override public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
     Log.i("Entry selected", e.toString());
     Log.i("Entry selected",
-            "low: " + mChart.getLowestVisibleXIndex() + ", high: " + mChart.getHighestVisibleXIndex());
-    tv_today_visit2.setText(Integer.toString(mPresenter.show_refund.get(e.getXIndex()).getVisitorNum()));
-    from = (MAX_RECENT_DAYS - 1 - e.getXIndex()) + "";
-    JUtils.Log(TAG, "第" + e.getXIndex() + "个");
-    tv_today_order2.setText(Integer.toString(mPresenter.show_refund.get(e.getXIndex()).getOrderNum()));
+        "low: " + mChart.getLowestVisibleXIndex() + ", high: " + mChart.getHighestVisibleXIndex());
+    tv_today_visit2.setText(
+        Integer.toString(mPresenter.show_refund.get(e.getXIndex()).getVisitorNum()));
+    //from = (MAX_RECENT_DAYS - 1 - e.getXIndex()) + "";
+    if (isThisWeek) {
+      from = (mPresenter.show_refund.size() - e.getXIndex() - 1) + "";
+    } else {
+      from = (mPresenter.show_refund.size() - e.getXIndex() - 1 + Calendar.getInstance()
+          .get(Calendar.DAY_OF_WEEK)-1) + "";
+    }
+
+
+    JUtils.Log(TAG, "mPresenter.his_refund.size()   "
+        + mPresenter.show_refund.size()
+        + "  e.getXIndex() "
+        + e.getXIndex()+"   "+Calendar.getInstance()
+        .get(Calendar.DAY_OF_WEEK));
+    tv_today_order2.setText(
+        Integer.toString(mPresenter.show_refund.get(e.getXIndex()).getOrderNum()));
     tv_today_fund2.setText(Double.toString(
-            (double) (Math.round(mPresenter.show_refund.get(e.getXIndex()).getCarry() * 100)) / 100));
+        (double) (Math.round(mPresenter.show_refund.get(e.getXIndex()).getCarry() * 100)) / 100));
   }
 
-  @Override
-  public void onNothingSelected() {
+  @Override public void onNothingSelected() {
 
   }
 }

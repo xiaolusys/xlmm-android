@@ -28,7 +28,6 @@ public class MMInfoPresenter extends MMInfoContract.Presenter {
       if (null!=mmShoppingBean)
       mView.initShareInfo(mmShoppingBean);
     }, Throwable::printStackTrace));
-
   }
 
   @Override public void getMamaFortune() {
@@ -59,8 +58,7 @@ public class MMInfoPresenter extends MMInfoContract.Presenter {
     } else {
       days = cal.get(Calendar.DAY_OF_WEEK) - 1;
     }
-
-    //show_refund.clear();
+    show_refund.clear();
     ArrayList<Entry> yVals = new ArrayList<Entry>();
     for (int i = 0; i < days; i++) {
       float val = 0;
@@ -70,9 +68,7 @@ public class MMInfoPresenter extends MMInfoContract.Presenter {
       }
       yVals.add(new Entry(val, i));
     }
-
     // set data
-
     setData(xVals, yVals);
     if (isEmptyData(show_refund)) {
       mView.setRlVisiBility();
@@ -94,7 +90,7 @@ public class MMInfoPresenter extends MMInfoContract.Presenter {
     ArrayList<String> xVals = new ArrayList<String>();
     for (int i = 0; i < 7; i++) {
       cal.add(Calendar.DAY_OF_YEAR, 1);//日期+1
-      xVals.add("" + (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.DAY_OF_MONTH));
+      xVals.add((cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.DAY_OF_MONTH));
     }
 
     show_refund.clear();
@@ -117,7 +113,16 @@ public class MMInfoPresenter extends MMInfoContract.Presenter {
   }
 
   @Override public boolean isEmptyData(List<RecentCarryBean.ResultsEntity> list_refund) {
-    return false;
+    boolean result = true;
+    if (list_refund != null) {
+      for (int i = 0; i < list_refund.size(); i++) {
+        if (Double.compare(list_refund.get(i).getCarry(), 0) != 0) {
+          result = false;
+          break;
+        }
+      }
+    }
+    return result;
   }
 
   @Override public void setData(ArrayList<String> xVals, ArrayList<Entry> yVals) {
