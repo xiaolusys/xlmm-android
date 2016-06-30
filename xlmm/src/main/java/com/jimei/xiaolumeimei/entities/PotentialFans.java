@@ -9,7 +9,8 @@ public class PotentialFans {
 
   private int count;
   private String next;
-  private String previous;
+  private Object previous;
+
   private List<ResultsBean> results;
 
   public int getCount() {
@@ -28,11 +29,11 @@ public class PotentialFans {
     this.next = next;
   }
 
-  public String getPrevious() {
+  public Object getPrevious() {
     return previous;
   }
 
-  public void setPrevious(String previous) {
+  public void setPrevious(Object previous) {
     this.previous = previous;
   }
 
@@ -45,65 +46,11 @@ public class PotentialFans {
   }
 
   public static class ResultsBean {
-    private int id;
-    private String created;
-    private String modified;
-    private int from_customer;
-    private String openid;
-    private String unionid;
     private String headimgurl;
     private String nick;
-    private boolean status;
     private String mobile;
-    private String ufrom;
-
-    public int getId() {
-      return id;
-    }
-
-    public void setId(int id) {
-      this.id = id;
-    }
-
-    public String getCreated() {
-      return created;
-    }
-
-    public void setCreated(String created) {
-      this.created = created;
-    }
-
-    public String getModified() {
-      return modified;
-    }
-
-    public void setModified(String modified) {
-      this.modified = modified;
-    }
-
-    public int getFrom_customer() {
-      return from_customer;
-    }
-
-    public void setFrom_customer(int from_customer) {
-      this.from_customer = from_customer;
-    }
-
-    public String getOpenid() {
-      return openid;
-    }
-
-    public void setOpenid(String openid) {
-      this.openid = openid;
-    }
-
-    public String getUnionid() {
-      return unionid;
-    }
-
-    public void setUnionid(String unionid) {
-      this.unionid = unionid;
-    }
+    private String note;
+    private String modified;
 
     public String getHeadimgurl() {
       return headimgurl;
@@ -121,14 +68,6 @@ public class PotentialFans {
       this.nick = nick;
     }
 
-    public boolean isStatus() {
-      return status;
-    }
-
-    public void setStatus(boolean status) {
-      this.status = status;
-    }
-
     public String getMobile() {
       return mobile;
     }
@@ -137,12 +76,20 @@ public class PotentialFans {
       this.mobile = mobile;
     }
 
-    public String getUfrom() {
-      return ufrom;
+    public String getNote() {
+      return note;
     }
 
-    public void setUfrom(String ufrom) {
-      this.ufrom = ufrom;
+    public void setNote(String note) {
+      this.note = note;
+    }
+
+    public String getModified() {
+      return modified;
+    }
+
+    public void setModified(String modified) {
+      this.modified = modified;
     }
   }
 }

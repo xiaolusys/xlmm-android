@@ -65,8 +65,8 @@ public class MamaPotentialFansAdapter
     PotentialFans.ResultsBean resultsEntity = mList.get(position);
 
     holder.tvFans.setText(resultsEntity.getNick());
-    //holder.tvInfo.setText(resultsEntity.ge());
-    holder.tvTime.setText(resultsEntity.getCreated().replace("T", " ").substring(6, 16));
+    holder.tvInfo.setText(resultsEntity.getNote());
+    holder.tvTime.setText(resultsEntity.getModified().replace("T", " ").substring(6, 16));
     if (TextUtils.isEmpty(resultsEntity.getHeadimgurl())) {
       Glide.with(context)
           .load(R.mipmap.ic_launcher)

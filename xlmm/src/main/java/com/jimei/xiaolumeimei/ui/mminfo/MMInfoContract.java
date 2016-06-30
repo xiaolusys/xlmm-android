@@ -49,7 +49,6 @@ public interface MMInfoContract {
     public abstract void setDataOfPreviousWeek();
     public abstract boolean isEmptyData(List<RecentCarryBean.ResultsEntity> list_refund);
     public abstract void setData(ArrayList<String> xVals, ArrayList<Entry> yVals);
-    public abstract void getRecentCarry();
     public abstract void getRefund();
 
 

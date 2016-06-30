@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
+import butterknife.Bind;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -22,7 +22,6 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BasePresenterActivity;
-import com.jimei.xiaolumeimei.base.RxManager;
 import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.entities.AgentInfoBean;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
@@ -43,12 +42,8 @@ import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaVisitorActivity;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.zhy.autolayout.AutoRelativeLayout;
-
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.List;
-
-import butterknife.Bind;
+import org.greenrobot.eventbus.EventBus;
 
 
 /**
@@ -56,13 +51,8 @@ import butterknife.Bind;
  */
 public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInfoModel>
     implements MMInfoContract.View, View.OnClickListener, OnChartValueSelectedListener {
-
-
   private static final int MAX_RECENT_DAYS = 15;
   String TAG = "MamaInfoActivity";
- 
-  int get_num = 0;
-
   @Bind(R.id.imgUser) ImageView imgUser;
   @Bind(R.id.btn_two_dimen) TextView btn_two_dimen;
   @Bind(R.id.tv_cashinfo) TextView tv_cashinfo;
@@ -96,7 +86,6 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
   @Bind(R.id.order_layout) LinearLayout orderLayout;
   @Bind(R.id.fund_layout) LinearLayout fundLayout;
 
-  RxManager mRxManager = new RxManager();
   private String title, sharelink, desc, shareimg;
 
   AgentInfoBean mamaAgentInfo;
@@ -109,6 +98,13 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
   private String from;
   private String actlink;
   private String shareMmcode;
+
+  @Override protected void initData() {
+    mPresenter.getShareShopping();
+    mPresenter.getAgentInfoBean();
+    mPresenter.getMamaFortune();
+    mPresenter.getRefund();
+  }
 
   @Override protected void setListener() {
     tv_cashinfo.setOnClickListener(this);
@@ -449,12 +445,12 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
     Log.i("Entry selected", e.toString());
     Log.i("Entry selected",
             "low: " + mChart.getLowestVisibleXIndex() + ", high: " + mChart.getHighestVisibleXIndex());
-    tv_today_visit2.setText(Integer.toString(mPresenter.his_refund.get(e.getXIndex()).getVisitorNum()));
+    tv_today_visit2.setText(Integer.toString(mPresenter.show_refund.get(e.getXIndex()).getVisitorNum()));
     from = (MAX_RECENT_DAYS - 1 - e.getXIndex()) + "";
     JUtils.Log(TAG, "第" + e.getXIndex() + "个");
-    tv_today_order2.setText(Integer.toString(mPresenter.his_refund.get(e.getXIndex()).getOrderNum()));
+    tv_today_order2.setText(Integer.toString(mPresenter.show_refund.get(e.getXIndex()).getOrderNum()));
     tv_today_fund2.setText(Double.toString(
-            (double) (Math.round(mPresenter.his_refund.get(e.getXIndex()).getCarry() * 100)) / 100));
+            (double) (Math.round(mPresenter.show_refund.get(e.getXIndex()).getCarry() * 100)) / 100));
   }
 
   @Override

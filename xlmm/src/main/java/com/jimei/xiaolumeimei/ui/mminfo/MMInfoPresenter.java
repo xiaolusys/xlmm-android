@@ -1,7 +1,6 @@
 package com.jimei.xiaolumeimei.ui.mminfo;
 
 import android.graphics.Color;
-
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -9,13 +8,10 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
-
-import rx.functions.Action1;
 
 /**
  * Created by itxuye on 2016/6/24.
@@ -158,25 +154,23 @@ public class MMInfoPresenter extends MMInfoContract.Presenter {
   }
 
 
-  @Override public void getRecentCarry() {
-      mRxManager.add(mModel.getRecentCarry("0",Integer.toString(MAX_RECENT_DAYS)).subscribe(new Action1<RecentCarryBean>() {
-        @Override
-        public void call(RecentCarryBean recentCarryBean) {
-          if (null != recentCarryBean) {
-            his_refund.clear();
-            his_refund.addAll(recentCarryBean.getResults());
+ public void getRecentCarry() {
+      mRxManager.add(mModel.getRecentCarry("0",Integer.toString(MAX_RECENT_DAYS)).subscribe(
+          recentCarryBean -> {
+            if (null != recentCarryBean) {
+              his_refund.clear();
+              his_refund.addAll(recentCarryBean.getResults());
 
-            if ((his_refund.size() > 0)) {
-              mView.init_chart();
-              setDataOfThisWeek();
+              if ((his_refund.size() > 0)) {
+                mView.init_chart();
+                setDataOfThisWeek();
 
-              if (his_refund.get(0) != null) {
-                mView.initTodatText(his_refund);
+                if (his_refund.get(0) != null) {
+                  mView.initTodatText(his_refund);
+                }
               }
             }
-          }
-        }
-      }));
+          }));
   }
 
   @Override

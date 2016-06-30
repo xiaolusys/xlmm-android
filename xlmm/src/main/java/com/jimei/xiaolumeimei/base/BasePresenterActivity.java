@@ -98,8 +98,11 @@ public abstract class BasePresenterActivity<T extends BasePresenter, E extends B
     mModel = TUtil.getT(this, 1);
     this.initViews();
     if (this instanceof BaseView) mPresenter.setVM(this, mModel);
+    this.initData();
     setListener();
   }
+
+  protected abstract void initData();
 
   protected abstract void setListener();
 

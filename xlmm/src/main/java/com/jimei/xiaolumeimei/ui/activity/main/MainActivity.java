@@ -195,15 +195,13 @@ public class MainActivity extends BaseActivity
   }
 
   @Override protected void initData() {
-
+    getUserInfo();
     init(null);
-
     if (LoginUtils.isJumpToLogin(getApplicationContext())) {
       FirstFragment firstFragment = FirstFragment.newInstance("first");
       firstFragment.setStyle(DialogFragment.STYLE_NORMAL,R.style.Translucent_NoTitle);
       firstFragment.show(getFragmentManager(), "first");
     }
-
     new Thread(() -> {
       try {
         Thread.sleep(500 * 60);
@@ -910,7 +908,7 @@ public class MainActivity extends BaseActivity
           }
         });
     addSubscription(subscribe);
-    getUserInfo();
+
     JUtils.Log(TAG, "resume");
   }
 
