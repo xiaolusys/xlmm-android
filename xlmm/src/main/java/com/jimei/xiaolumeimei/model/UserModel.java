@@ -5,6 +5,7 @@ import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.entities.BindInfoBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.CouponBean;
+import com.jimei.xiaolumeimei.entities.GetCouponbean;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.entities.MembershipPointBean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
@@ -20,6 +21,7 @@ import com.jimei.xiaolumeimei.entities.UserWithdrawResult;
 import com.jimei.xiaolumeimei.entities.WxPubAuthInfo;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 
+import retrofit2.Response;
 import rx.Observable;
 
 /**
@@ -241,6 +243,13 @@ public class UserModel {
     public Observable<CodeBean> openDebug(String debug_secret) {
 
         return XlmmRetrofitClient.getService().openDebug(debug_secret)
+                .compose(new DefaultTransform<>());
+    }
+
+
+    public Observable<Response<GetCouponbean>> getCouPon() {
+
+        return XlmmRetrofitClient.getService().getCouPon()
                 .compose(new DefaultTransform<>());
     }
 }

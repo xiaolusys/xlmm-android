@@ -17,6 +17,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
+import com.jimei.xiaolumeimei.entities.GetCouponbean;
 import com.jimei.xiaolumeimei.event.EmptyEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
@@ -38,6 +39,8 @@ import butterknife.Bind;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.wechat.friends.Wechat;
+import retrofit2.Response;
+import retrofit2.adapter.rxjava.HttpException;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -204,6 +207,31 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                         JumpUtils.jumpToWebViewWithCookies(mContext, actlink, id,
                             ActivityWebViewActivity.class,title);
                         finish();
+                      }else if (login.equals("getCoupon")) {
+                        UserModel.getInstance()
+                            .getCouPon()
+                            .subscribeOn(Schedulers.io())
+                            .subscribe(new ServiceResponse<Response<GetCouponbean>>() {
+                              @Override public void onNext(
+                                  Response<GetCouponbean> getCouponbeanResponse) {
+                                if (getCouponbeanResponse != null) {
+                                  if (getCouponbeanResponse.isSuccessful()
+                                      && getCouponbeanResponse.code() == 200) {
+                                    JUtils.Toast(getCouponbeanResponse.body().getInfo());
+                                    Intent intent = new Intent(mContext, MainActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                  }
+                                }
+                              }
+
+                              @Override public void onError(Throwable e) {
+                                super.onError(e);
+                                if (e instanceof HttpException) {
+                                  JUtils.Toast("优惠券领取失败");
+                                }
+                              }
+                            });
                       }
                     }
                   } else {

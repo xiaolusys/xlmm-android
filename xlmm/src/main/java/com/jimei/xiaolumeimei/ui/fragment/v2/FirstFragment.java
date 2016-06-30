@@ -76,10 +76,11 @@ public class FirstFragment extends DialogFragment {
         LoginUtils.saveFirst(mActivity, true);
         Intent intent = new Intent(mActivity, LoginActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putString("login", "main");
+        bundle.putString("login", "getCoupon");
         intent.putExtras(bundle);
         dismiss();
         startActivity(intent);
+        mActivity.finish();
       }
     });
   }
