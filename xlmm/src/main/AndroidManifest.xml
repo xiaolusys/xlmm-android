@@ -284,9 +284,6 @@
         <!-- android:exported="true"/> -->
 
         <activity
-            android:name=".ui.activity.xiaolumama.MamaInfoActivity"
-            android:theme="@style/AppTheme.TransparentActivity" />
-        <activity
             android:name=".ui.activity.xiaolumama.MamaWithdrawCashHistoryActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity

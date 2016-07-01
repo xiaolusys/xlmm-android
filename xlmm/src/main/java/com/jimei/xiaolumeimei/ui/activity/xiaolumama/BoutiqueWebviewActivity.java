@@ -36,7 +36,7 @@ public class BoutiqueWebviewActivity extends CommonWebViewActivity {
               @Override
               public void onNext(MamaFortune mamaFortune) {
                 title = "精选活动";
-                link = mamaFortune.getMama_fortune().getmMamaEventLink();
+                link = mamaFortune.getMamaFortune().getMamaEventLink();
                 desc = "更多精选活动,尽在小鹿美美~~";
                 img = "http://7xogkj.com2.z0.glb.qiniucdn.com/1181123466.jpg";
               }

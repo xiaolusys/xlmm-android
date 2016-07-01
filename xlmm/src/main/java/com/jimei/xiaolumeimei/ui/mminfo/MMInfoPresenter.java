@@ -25,27 +25,18 @@ public class MMInfoPresenter extends MMInfoContract.Presenter {
   @Override public void getShareShopping() {
     mRxManager.add(mModel.getShareShopping().subscribe(mmShoppingBean -> {
       /*mRxManager.post("mmShoppingBean",mmShoppingBean);*/
-      if (null!=mmShoppingBean)
-      mView.initShareInfo(mmShoppingBean);
+      if (null != mmShoppingBean) mView.initShareInfo(mmShoppingBean);
     }, Throwable::printStackTrace));
   }
 
   @Override public void getMamaFortune() {
-        mRxManager.add(mModel.getMamaFortune().subscribe(mamaFortune -> {
-          if (null!=mamaFortune) {
-            mView.initMMdata(mamaFortune);
-            mView.initMMview(mamaFortune);
-          }
-        }, Throwable::printStackTrace));
+    mRxManager.add(mModel.getMamaFortune().subscribe(mamaFortune -> {
+      if (null != mamaFortune) {
+        mView.initMMdata(mamaFortune);
+        mView.initMMview(mamaFortune);
+      }
+    }, Throwable::printStackTrace));
   }
-
-  @Override public void getAgentInfoBean() {
-        mRxManager.add(mModel.getAgentInfoBean().subscribe(agentInfoBean -> {
-          if (null!=agentInfoBean)
-          mView.initPointBean(agentInfoBean);
-        }));
-  }
-
 
   @Override public void setDataOfThisWeek() {
     ArrayList<String> xVals =
@@ -158,28 +149,26 @@ public class MMInfoPresenter extends MMInfoContract.Presenter {
     mView.setChartData(data);
   }
 
+  public void getRecentCarry() {
+    mRxManager.add(
+        mModel.getRecentCarry("0", Integer.toString(MAX_RECENT_DAYS)).subscribe(recentCarryBean -> {
+          if (null != recentCarryBean) {
+            his_refund.clear();
+            his_refund.addAll(recentCarryBean.getResults());
 
- public void getRecentCarry() {
-      mRxManager.add(mModel.getRecentCarry("0",Integer.toString(MAX_RECENT_DAYS)).subscribe(
-          recentCarryBean -> {
-            if (null != recentCarryBean) {
-              his_refund.clear();
-              his_refund.addAll(recentCarryBean.getResults());
+            if ((his_refund.size() > 0)) {
+              mView.init_chart();
+              setDataOfThisWeek();
 
-              if ((his_refund.size() > 0)) {
-                mView.init_chart();
-                setDataOfThisWeek();
-
-                if (his_refund.get(0) != null) {
-                  mView.initTodatText(his_refund);
-                }
+              if (his_refund.get(0) != null) {
+                mView.initTodatText(his_refund);
               }
             }
-          }));
+          }
+        }));
   }
 
-  @Override
-  public void getRefund() {
+  @Override public void getRefund() {
     for (int i = 0; i < MAX_RECENT_DAYS; i++) {
       RecentCarryBean.ResultsEntity hisRefund = new RecentCarryBean.ResultsEntity();
       hisRefund.setVisitorNum(0);
@@ -189,6 +178,5 @@ public class MMInfoPresenter extends MMInfoContract.Presenter {
     }
 
     getRecentCarry();
-
   }
 }

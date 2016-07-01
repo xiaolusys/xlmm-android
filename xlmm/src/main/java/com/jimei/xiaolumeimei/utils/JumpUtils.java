@@ -20,7 +20,7 @@ import com.jimei.xiaolumeimei.ui.activity.trade.OrderDetailActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.CouponActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMNinePicActivity;
-import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaInfoActivity;
+import com.jimei.xiaolumeimei.ui.mminfo.MMInfoActivity;
 import com.jude.utils.JUtils;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -144,7 +144,7 @@ public class JumpUtils {
         context.startActivity(intent);
         break;
       case XlmmConst.JUMP_XIAOLUMAMA:
-        intent = new Intent(context, MamaInfoActivity.class);
+        intent = new Intent(context, MMInfoActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
         break;
