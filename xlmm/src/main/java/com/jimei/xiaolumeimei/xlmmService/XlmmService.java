@@ -24,6 +24,7 @@ import com.jimei.xiaolumeimei.entities.ClickcarryBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.CouponBean;
 import com.jimei.xiaolumeimei.entities.DrawCouponBean;
+import com.jimei.xiaolumeimei.entities.GetCouponbean;
 import com.jimei.xiaolumeimei.entities.IndexBean;
 import com.jimei.xiaolumeimei.entities.LadyListBean;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
@@ -994,6 +995,11 @@ public interface XlmmService {
     @POST("/rest/v2/sharecoupon/create_order_share")
     Observable<RedBagBean> getRedBag(
             @Field("uniq_id") String uniq_id
+
+    );
+
+    @GET("rest/v1/usercoupons/register_gift_coupon")
+    Observable<Response<GetCouponbean>> getCouPon(
 
     );
 }

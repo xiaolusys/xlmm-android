@@ -29,7 +29,7 @@ import rx.schedulers.Schedulers;
  * <p>
  * Copyright 2015年 上海己美. All rights reserved.
  */
-public class ChildListActivity extends BaseSwipeBackCompatActivity
+public class  ChildListActivity extends BaseSwipeBackCompatActivity
         implements View.OnClickListener {
     @Bind(R.id.text_1)
     TextView textView1;
@@ -42,7 +42,6 @@ public class ChildListActivity extends BaseSwipeBackCompatActivity
     private int page1 = 2;
     private int page2 = 2;
     private int totalPages;//总的分页数
-    private int totalPages2;
     private XRecyclerView xRecyclerView;
     private ChildListActivityAdapter mChildListAdapter;
     private ChildListActivityAdapter mChildListAdapter2;
@@ -62,12 +61,14 @@ public class ChildListActivity extends BaseSwipeBackCompatActivity
                 .subscribe(new ServiceResponse<ChildListBean>() {
                     @Override
                     public void onNext(ChildListBean childListBean) {
-
                         try {
-
                             if (childListBean != null) {
                                 List<ChildListBean.ResultsEntity> results = childListBean.getResults();
-                                totalPages = childListBean.getCount() / page_size + 1;
+                                if (childListBean.getCount() %page_size == 0) {
+                                    totalPages = childListBean.getCount() / page_size;
+                                } else {
+                                    totalPages = childListBean.getCount() / page_size + 1;
+                                }
                                 mChildListAdapter.update(results);
                             }
                         } catch (Exception ex) {
@@ -91,17 +92,15 @@ public class ChildListActivity extends BaseSwipeBackCompatActivity
 
                             if (childListBean != null) {
                                 List<ChildListBean.ResultsEntity> results = childListBean.getResults();
-                                totalPages2 = childListBean.getCount() / page_size + 1;
+                                if (childListBean.getCount() %page_size == 0) {
+                                    totalPages = childListBean.getCount() / page_size;
+                                } else {
+                                    totalPages = childListBean.getCount() / page_size + 1;
+                                }
                                 mChildListAdapter2.update(results);
                             }
                         } catch (Exception ex) {
                         }
-                    }
-
-                    @Override
-                    public void onCompleted() {
-                        super.onCompleted();
-                        byXRecyclerView.post(xRecyclerView::loadMoreComplete);
                     }
                 });
         addSubscription(subscribe);
@@ -173,7 +172,11 @@ public class ChildListActivity extends BaseSwipeBackCompatActivity
                                     if (childListBean != null) {
                                         List<ChildListBean.ResultsEntity> results =
                                                 childListBean.getResults();
-                                        totalPages = childListBean.getCount() / page_size + 1;
+                                        if (childListBean.getCount() %page_size == 0) {
+                                            totalPages = childListBean.getCount() / page_size;
+                                        } else {
+                                            totalPages = childListBean.getCount() / page_size + 1;
+                                        }
                                         mChildListAdapter.updateWithClear(results);
                                     }
                                 } catch (Exception ex) {
@@ -217,7 +220,11 @@ public class ChildListActivity extends BaseSwipeBackCompatActivity
                                     if (childListBean != null) {
                                         List<ChildListBean.ResultsEntity> results =
                                                 childListBean.getResults();
-                                        totalPages2 = childListBean.getCount() / page_size + 1;
+                                        if (childListBean.getCount() %page_size == 0) {
+                                            totalPages = childListBean.getCount() / page_size;
+                                        } else {
+                                            totalPages = childListBean.getCount() / page_size + 1;
+                                        }
                                         mChildListAdapter2.updateWithClear(results);
                                     }
                                 } catch (Exception ex) {
@@ -235,7 +242,7 @@ public class ChildListActivity extends BaseSwipeBackCompatActivity
 
             @Override
             public void onLoadMore() {
-                if (page2 <= totalPages2) {
+                if (page2 <= totalPages) {
                     loadMoreData(page2, 10, "price");
                     page2++;
                 } else {
