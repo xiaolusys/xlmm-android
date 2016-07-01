@@ -299,6 +299,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
             relativeLayout.setVisibility(View.GONE);
         }
         packageBeanList = new ArrayList<>();
+
         Subscription subscribe = TradeModel.getInstance()
                 .getPackageList(tid)
                 .subscribeOn(Schedulers.io())
@@ -479,7 +480,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                 startActivity(intent);
                 break;
             case R.id.logistics_layout:
-                if ("已付款".equals(orderDetail.getStatus_display())) {
+                 if (orderDetail.getStatus() == 2) {
                     changeDialogWindowState();
                 }
                 break;

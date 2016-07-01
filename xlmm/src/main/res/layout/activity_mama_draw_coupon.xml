@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaDrawCouponActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_grey"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <com.jimei.xiaolumeimei.widget.XlmmTitleView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:xlmm_title="提现" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="115px"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="妈妈账户余额:  "
+                android:textColor="@color/text_color_62"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_money"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="0元"
+                android:textColor="@color/text_color_62"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <include layout="@layout/common_gap" />
+
+        <TextView
+            android:id="@+id/tv_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            android:gravity="right|end"
+            android:text="您的余额小于100元无法提现"
+            android:textColor="@color/coupon_red"
+            android:textSize="13sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="8dp"
+            android:text="兑换现金券" />
+
+        <RelativeLayout
+            android:id="@+id/rl_20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/iv_coupon_20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/img_coupon_20" />
+
+            <ImageView
+                android:id="@+id/iv_flag20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@id/iv_coupon_20"
+                android:layout_marginRight="3dp"
+                android:layout_marginTop="1dp"
+                android:src="@drawable/img_mark_selected_coupon"
+                android:visibility="invisible" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_50"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+
+            <ImageView
+                android:id="@+id/iv_coupon_50"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/img_coupon_50" />
+
+            <ImageView
+                android:id="@+id/iv_flag50"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@id/iv_coupon_50"
+                android:layout_marginRight="3dp"
+                android:layout_marginTop="1dp"
+                android:src="@drawable/img_mark_selected_coupon"
+                android:visibility="invisible" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/btn_draw_coupon"
+            android:layout_width="660px"
+            android:layout_height="80px"
+            android:layout_margin="30px"
+            android:background="@drawable/shape_common"
+            android:text="确认提现"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+    </LinearLayout>
+
+
+</FrameLayout>

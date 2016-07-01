@@ -64,6 +64,7 @@
   <color name="grey50">#fafafa</color>
   <color name="grey100">#f5f5f5</color>
   <color name="text_color_62">#626262</color>
+  <color name="text_color_32">#323232</color>
   <color name="text_color_26">#26262E</color>
   <color name="text_color_9B">#9B9B9B</color>
   <color name="white">#FFFFFF</color><!--白色 -->
@@ -97,6 +98,7 @@
   <color name="fuchsia">#FF00FF</color><!--紫红色 -->
   <color name="magenta">#FF00FF</color><!--红紫色 -->
   <color name="red">#FF0000</color><!--红色 -->
+  <color name="coupon_red">#FF3840</color><!--红色 -->
   <color name="oldlace">#FDF5E6</color><!--老花色 -->
   <color name="lightgoldenrodyellow">#FAFAD2</color><!--亮金黄色 -->
   <color name="linen">#FAF0E6</color><!--亚麻色 -->

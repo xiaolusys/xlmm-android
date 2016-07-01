@@ -60,7 +60,7 @@ import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
-        implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
+        implements View.OnClickListener {
 
     String TAG = "ApplyReturnGoodsActivity";
     String slect_reason[] = new String[]{
@@ -99,12 +99,6 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
     RelativeLayout rl_proof_pic2;
     @Bind(R.id.rl_proof_pic3)
     RelativeLayout rl_proof_pic3;
-    @Bind(R.id.rg)
-    RadioGroup radioGroup;
-    @Bind(R.id.msg_tv)
-    TextView msgTv;
-    @Bind(R.id.ll_tv)
-    LinearLayout tvLayout;
 
     ImageView img_proof_pic1;
     ImageView img_proof_pic2;
@@ -192,7 +186,6 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
                 return false;
             }
         });
-        radioGroup.setOnCheckedChangeListener(this);
     }
 
     @Override
@@ -239,19 +232,6 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
     }
 
     private void fillDataIntoView() {
-        List<OrderDetailBean.ExtrasBean.RefundChoicesBean> refund_choices = extraBean.getRefund_choices();
-        for (OrderDetailBean.ExtrasBean.RefundChoicesBean refund_choice : refund_choices) {
-            RadioButton button = new RadioButton(this);
-            TextView textView = new TextView(this);
-            textView.setTextSize(15);
-            textView.setTextColor(getResources().getColor(R.color.text_color_62));
-            textView.setText(refund_choice.getName());
-            textView.setGravity(Gravity.LEFT);
-            textView.setPadding(0, 15, 0, 15);
-            button.setTag(textView);
-            radioGroup.addView(button);
-            tvLayout.addView(textView);
-        }
         fillDataToView(goods_info);
         getQiniuToken();
     }
@@ -304,8 +284,6 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
                 }
                 if (reason.equals("")) {
                     JUtils.Toast("请选择退货原因！");
-                } else if (radioGroup.getCheckedRadioButtonId() == -1) {
-                    JUtils.Toast("请选择退款方式");
                 } else {
                     commit_apply();
                 }
@@ -354,14 +332,6 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
     }
 
     private void commit_apply() {
-        String refund_channel = "";
-        int radioButtonId = radioGroup.getCheckedRadioButtonId();
-        RadioButton radioButton = (RadioButton) radioGroup.findViewById(radioButtonId);
-        for (OrderDetailBean.ExtrasBean.RefundChoicesBean bean : extraBean.getRefund_choices()) {
-            if (bean.getName().equals(((TextView) radioButton.getTag()).getText().toString())) {
-                refund_channel = bean.getRefund_channel();
-            }
-        }
         Log.i(TAG, "commit_apply "
                 + goods_info.getId()
                 + " "
@@ -376,7 +346,7 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
                 + proof_pic);
         Subscription subscription = TradeModel.getInstance()
                 .refund_create(goods_info.getId(), XlmmConst.get_reason_num(reason), num,
-                        apply_fee, desc, proof_pic, refund_channel)
+                        apply_fee, desc, proof_pic)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<RefundMsgBean>() {
                     @Override
@@ -707,14 +677,5 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
         super.onPause();
         MobclickAgent.onPageEnd(this.getClass().getSimpleName());
         MobclickAgent.onPause(this);
-    }
-
-    @Override
-    public void onCheckedChanged(RadioGroup group, int checkedId) {
-        for (OrderDetailBean.ExtrasBean.RefundChoicesBean bean : extraBean.getRefund_choices()) {
-            if (bean.getName().equals(((RadioButton) group.findViewById(checkedId)).getText().toString())) {
-                msgTv.setText(bean.getDesc());
-            }
-        }
     }
 }

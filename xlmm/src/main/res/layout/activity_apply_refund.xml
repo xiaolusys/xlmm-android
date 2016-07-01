@@ -27,7 +27,60 @@
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/refund_iv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="30px" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/refund_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_color_62"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/refund_tv_desc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_color_9B"
+                        android:textSize="13sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <include layout="@layout/common_gap" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="30px"
+                android:background="@color/grey100" />
+
+            <include layout="@layout/common_gap" />
+
             <include layout="@layout/one_order_item" />
+
+            <include layout="@layout/common_gap" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="30px"
+                android:background="@color/grey100" />
 
             <include layout="@layout/common_gap" />
 
@@ -170,42 +223,11 @@
 
             <include layout="@layout/common_gap" />
 
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-
-                <RadioGroup
-                    android:id="@+id/rg"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="end"
-                    android:orientation="vertical"
-                    android:padding="8dp" />
-
-                <LinearLayout
-                    android:id="@+id/ll_tv"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="8dp" />
-            </RelativeLayout>
-
-            <TextView
-                android:id="@+id/msg_tv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="20dp"
-                android:gravity="center"
-                android:textSize="10sp" />
-
-
             <Button
                 android:id="@+id/btn_commit"
                 android:layout_width="690px"
                 android:layout_height="80px"
+                android:layout_marginTop="40dp"
                 android:background="@color/colorAccent"
                 android:text="提交申请"
                 android:textColor="@color/white"
