@@ -22,8 +22,8 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BasePresenterActivity;
+import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.data.XlmmApi;
-import com.jimei.xiaolumeimei.entities.AgentInfoBean;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
@@ -39,9 +39,9 @@ import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMcarryLogActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaDrawCashActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaLivenessActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaVisitorActivity;
+import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
-import com.zhy.autolayout.AutoRelativeLayout;
 import java.util.Calendar;
 import java.util.List;
 import org.greenrobot.eventbus.EventBus;
@@ -51,16 +51,11 @@ import org.greenrobot.eventbus.EventBus;
  */
 public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInfoModel>
     implements MMInfoContract.View, View.OnClickListener, OnChartValueSelectedListener {
-  private static final int MAX_RECENT_DAYS = 15;
-  String TAG = "MamaInfoActivity";
+  String TAG = "MMInfoActivity";
   @Bind(R.id.imgUser) ImageView imgUser;
   @Bind(R.id.btn_two_dimen) TextView btn_two_dimen;
-  @Bind(R.id.tv_cashinfo) TextView tv_cashinfo;
   @Bind(R.id.rl_chart) RelativeLayout rl_chart;
-  @Bind(R.id.tv_cash) TextView tv_cash;
   @Bind(R.id.btn_chooselist) TextView btn_chooselist;
-  @Bind(R.id.tv_liveness) TextView tv_liveness;
-  @Bind(R.id.img_liveness) com.jimei.xiaolumeimei.widget.RotateTextView img_liveness;
   @Bind(R.id.chart1) LineChart mChart;
   @Bind(R.id.img_left) ImageView img_left;
   @Bind(R.id.img_right) ImageView img_right;
@@ -86,9 +81,18 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
   @Bind(R.id.order_layout) LinearLayout orderLayout;
   @Bind(R.id.fund_layout) LinearLayout fundLayout;
 
+  @Bind(R.id.tv_mamalevel) TextView tvMamalevel;
+  @Bind(R.id.tv_mamashengyu) TextView tvShengyu;
+  @Bind(R.id.imgExam) ImageView imgExam;
+  @Bind(R.id.tv_yue) TextView tvYue;
+  @Bind(R.id.yue_layout) LinearLayout yueLayout;
+  @Bind(R.id.tv_leiji) TextView tvLeiji;
+  @Bind(R.id.leiji_layout) LinearLayout leijiLayout;
+  @Bind(R.id.tv_huoyue) TextView tvHuoyue;
+  @Bind(R.id.huoyue_layout) LinearLayout huoyueLayout;
+
   private String title, sharelink, desc, shareimg;
 
-  AgentInfoBean mamaAgentInfo;
   MamaFortune mamaFortune;
   private SharedPreferences sharedPreferences;
   private String cookies;
@@ -102,20 +106,17 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
 
   @Override protected void initData() {
     mPresenter.getShareShopping();
-    mPresenter.getAgentInfoBean();
     mPresenter.getMamaFortune();
     mPresenter.getRefund();
   }
 
   @Override protected void setListener() {
-    tv_cashinfo.setOnClickListener(this);
-    tv_cash.setOnClickListener(this);
-
-    tv_liveness.setOnClickListener(this);
-    img_liveness.setOnClickListener(this);
-
     img_left.setOnClickListener(this);
     img_right.setOnClickListener(this);
+    yueLayout.setOnClickListener(this);
+    leijiLayout.setOnClickListener(this);
+    huoyueLayout.setOnClickListener(this);
+    imgExam.setOnClickListener(this);
 
     rlTwoDimen.setOnClickListener(this);
     rl_fans.setOnClickListener(this);
@@ -152,41 +153,27 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
   }
 
   @Override public void initMMview(MamaFortune fortune) {
-    tv_cash.setText(Double.toString(
-        (double) (Math.round(fortune.getMama_fortune().getCash_value() * 100)) / 100));
-    tv_fund.setText(Double.toString(
-        (double) (Math.round(fortune.getMama_fortune().getCarry_value() * 100)) / 100) + "元");
-    tv_invite_num.setText(fortune.getMama_fortune().getInvite_num() + "位");
-    tv_fansnum.setText(fortune.getMama_fortune().getFans_num() + "人");
-    show_liveness(fortune.getMama_fortune().getActive_value_num());
+    JUtils.Log(TAG,fortune.toString());
+    tv_fund.setText(
+        Double.toString((double) (Math.round(fortune.getMamaFortune().getCarryValue() * 100)) / 100)
+            + "元");
+    tv_invite_num.setText(fortune.getMamaFortune().getInviteNum() + "位");
+    tv_fansnum.setText(fortune.getMamaFortune().getFansNum() + "人");
     tv_order.setText(s + "个");
+
+    tvYue.setText(
+        fortune.getMamaFortune().getCashValue()+"");
+    tvLeiji.setText(fortune.getMamaFortune().getCarryValue()+"");
+    tvHuoyue.setText(fortune.getMamaFortune().getActiveValueNum()+"");
+    tvMamalevel.setText(fortune.getMamaFortune().getMamaLevelDisplay());
+    tvShengyu.setText(fortune.getMamaFortune().getExtraInfo().getSurplusDays());
   }
 
   @Override public void initShareInfo(MMShoppingBean shoppingBean) {
-
     title = shoppingBean.getShopInfo().getName();
     sharelink = shoppingBean.getShopInfo().getPreviewShopLink();
     shareimg = shoppingBean.getShopInfo().getThumbnail();
     desc = shoppingBean.getShopInfo().getDesc();
-  }
-
-  @Override public void show_liveness(int liveness) {
-    JUtils.Log(TAG, "liveness:" + liveness);
-    img_liveness.setText(Integer.toString(liveness));
-    if (liveness > 100) liveness = 100;
-    AutoRelativeLayout.LayoutParams laParams1 =
-        new AutoRelativeLayout.LayoutParams(AutoRelativeLayout.LayoutParams.WRAP_CONTENT,
-            AutoRelativeLayout.LayoutParams.WRAP_CONTENT);
-    JUtils.Log(TAG, "" + laParams1.leftMargin + " " + laParams1.height);
-    JUtils.Log(TAG, "show_liveness left:"
-        + getWindowManager().getDefaultDisplay().getWidth() * liveness / 100
-        + "width:"
-        + img_liveness.getWidth());
-
-    laParams1.setMargins(getWindowManager().getDefaultDisplay().getWidth() * liveness / 100
-        - img_liveness.getWidth(), rlMamaInfo.getHeight() - img_liveness.getHeight(), 0, 0);
-
-    img_liveness.setLayoutParams(laParams1);
   }
 
   @Override public void init_chart() {
@@ -235,15 +222,11 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
 
   @Override public void initMMdata(MamaFortune fortune) {
     mamaFortune = fortune;
-    actlink = fortune.getMama_fortune().getmMamaEventLink();
+    shareMmcode = fortune.getMamaFortune().getExtraInfo().getInviteUrl();
+    actlink = fortune.getMamaFortune().getMamaEventLink();
     JUtils.Log(TAG, "actlink" + actlink);
-    carrylogMoney = ((double) (Math.round(fortune.getMama_fortune().getCarry_value() * 100)) / 100);
-    s = Integer.toString(fortune.getMama_fortune().getOrder_num());
-  }
-
-  @Override public void initPointBean(AgentInfoBean pointBean) {
-    shareMmcode = pointBean.getShareMmcode();
-    mamaAgentInfo = pointBean;
+    carrylogMoney = ((double) (Math.round(fortune.getMamaFortune().getCarryValue() * 100)) / 100);
+    s = Integer.toString(fortune.getMamaFortune().getOrderNum());
   }
 
   @Override public void setRlVisiBility() {
@@ -269,20 +252,17 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
   @Override public void onClick(View v) {
     Intent intent;
     switch (v.getId()) {
-      case R.id.tv_cash:
-      case R.id.tv_cashinfo:
-        if (mamaFortune != null) {
+      case R.id.yue_layout:
+        if (mamaFortune != null
+            && mamaFortune.getMamaFortune().getExtraInfo().getCouldCashOut() == 0) {
+          //intent = new Intent(this, MamaDrawCouponActivity.class);
+          //intent.putExtra("cash", mamaFortune.getMamaFortune().getCashValue());
+          //intent.putExtra("msg", mamaFortune.getMamaFortune().getExtraInfo().getCashoutReason());
+          //startActivity(intent);
+        } else if (mamaFortune != null
+            && mamaFortune.getMamaFortune().getExtraInfo().getCouldCashOut() == 1) {
           intent = new Intent(this, MamaDrawCashActivity.class);
-          intent.putExtra("cash", mamaFortune.getMama_fortune().getCash_value());
-          startActivity(intent);
-        }
-        break;
-      case R.id.tv_liveness:
-      case R.id.img_liveness:
-        if (mamaFortune != null) {
-          intent = new Intent(this, MamaLivenessActivity.class);
-          intent.putExtra("liveness", mamaFortune.getMama_fortune().getActive_value_num());
-
+          intent.putExtra("cash", mamaFortune.getMamaFortune().getCashValue());
           startActivity(intent);
         }
         break;
@@ -295,7 +275,7 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
         tv_today_visit2.setText(Integer.toString(
             mPresenter.his_refund.get(mPresenter.his_refund.size() - 1).getVisitorNum()));
         tv_today_order2.setText(Integer.toString(
-            (int) (mPresenter.his_refund.get(mPresenter.his_refund.size() - 1).getOrderNum())));
+            mPresenter.his_refund.get(mPresenter.his_refund.size() - 1).getOrderNum()));
         tv_today_fund2.setText(Double.toString((double) (Math.round(
             mPresenter.his_refund.get(mPresenter.his_refund.size() - 1).getCarry() * 100)) / 100));
         break;
@@ -398,18 +378,14 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
         startActivity(intent3);
         break;
       case R.id.rl_income:
-        Intent intent1 = new Intent(this, MMcarryLogActivity.class);
-        Bundle bundlerl_income = new Bundle();
-        bundlerl_income.putString("carrylogMoney", carrylogMoney + "");
-        intent1.putExtras(bundlerl_income);
-        startActivity(intent1);
+        jumpTpMMCarryLogActivity();
+        break;
+
+      case R.id.leiji_layout:
+        jumpTpMMCarryLogActivity();
         break;
       case R.id.fund_layout:
-        Intent intent4 = new Intent(this, MMcarryLogActivity.class);
-        Bundle bundle4 = new Bundle();
-        bundle4.putString("carrylogMoney", carrylogMoney + "");
-        intent4.putExtras(bundle4);
-        startActivity(intent4);
+        jumpTpMMCarryLogActivity();
         break;
       case R.id.visit_layout:
         Intent intent5 = new Intent(new Intent(this, MamaVisitorActivity.class));
@@ -418,7 +394,30 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
         intent5.putExtras(bundle2);
         startActivity(intent5);
         break;
+      case R.id.huoyue_layout:
+        if (mamaFortune != null) {
+          intent = new Intent(this, MamaLivenessActivity.class);
+          intent.putExtra("liveness", mamaFortune.getMamaFortune().getActiveValueNum());
+          startActivity(intent);
+        }
+        break;
+
+      case R.id.imgExam:
+        if (mamaFortune != null) {
+          JumpUtils.jumpToWebViewWithCookies(this,
+              mamaFortune.getMamaFortune().getExtraInfo().getNextLevelExamUrl(), -1,
+              CommonWebViewActivity.class, "妈妈考试");
+        }
+        break;
     }
+  }
+
+  private void jumpTpMMCarryLogActivity() {
+    Intent intent1 = new Intent(this, MMcarryLogActivity.class);
+    Bundle bundlerl_income = new Bundle();
+    bundlerl_income.putString("carrylogMoney", carrylogMoney + "");
+    intent1.putExtras(bundlerl_income);
+    startActivity(intent1);
   }
 
   @Override protected void onResume() {
@@ -444,15 +443,8 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
       from = (mPresenter.show_refund.size() - e.getXIndex() - 1) + "";
     } else {
       from = (mPresenter.show_refund.size() - e.getXIndex() - 1 + Calendar.getInstance()
-          .get(Calendar.DAY_OF_WEEK)-1) + "";
+          .get(Calendar.DAY_OF_WEEK) - 1) + "";
     }
-
-
-    JUtils.Log(TAG, "mPresenter.his_refund.size()   "
-        + mPresenter.show_refund.size()
-        + "  e.getXIndex() "
-        + e.getXIndex()+"   "+Calendar.getInstance()
-        .get(Calendar.DAY_OF_WEEK));
     tv_today_order2.setText(
         Integer.toString(mPresenter.show_refund.get(e.getXIndex()).getOrderNum()));
     tv_today_fund2.setText(Double.toString(

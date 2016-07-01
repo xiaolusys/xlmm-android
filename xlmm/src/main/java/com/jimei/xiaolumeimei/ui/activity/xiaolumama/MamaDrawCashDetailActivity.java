@@ -74,8 +74,8 @@ public class MamaDrawCashDetailActivity extends BaseSwipeBackCompatActivity {
                 .subscribe(new ServiceResponse<MamaFortune>() {
                     @Override
                     public void onNext(MamaFortune mamaFortune) {
-                        String moneyText = mamaFortune.getMama_fortune().getCash_value() + "";
-                        String activityText = mamaFortune.getMama_fortune().getActive_value_num() + "";
+                        String moneyText = mamaFortune.getMamaFortune().getCashValue() + "";
+                        String activityText = mamaFortune.getMamaFortune().getActiveValueNum() + "";
                         moneyTv.setText(moneyText);
                         activityTv.setText(activityText);
                     }
