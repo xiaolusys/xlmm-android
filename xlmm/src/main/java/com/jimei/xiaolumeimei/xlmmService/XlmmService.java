@@ -23,6 +23,7 @@ import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.entities.ClickcarryBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.CouponBean;
+import com.jimei.xiaolumeimei.entities.DrawCouponBean;
 import com.jimei.xiaolumeimei.entities.IndexBean;
 import com.jimei.xiaolumeimei.entities.LadyListBean;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
@@ -437,7 +438,7 @@ public interface XlmmService {
     @FormUrlEncoded
     @POST("/rest/v1/complain")
     Observable<AddressResultBean> complain(
-            @Field("com_type")String com_type,
+            @Field("com_type") String com_type,
             @Field("com_content") String com_content,
             @Field("com_title") String com_title);
 
@@ -543,7 +544,6 @@ public interface XlmmService {
             @Path("pk") int order_id);
 
     //创建退款单接口
-
     @FormUrlEncoded
     @POST("/rest/v1/refunds")
     Observable<RefundMsgBean> refund_create(
@@ -554,6 +554,18 @@ public interface XlmmService {
             @Field("description") String description,
             @Field("proof_pic") String proof_pic,
             @Field("refund_channel") String refund_channel
+    );
+
+    //创建退款单接口
+    @FormUrlEncoded
+    @POST("/rest/v1/refunds")
+    Observable<RefundMsgBean> refund_create(
+            @Field("id") int goods_id,
+            @Field("reason") int reason,
+            @Field("num") int num,
+            @Field("sum_price") double sum_price,
+            @Field("description") String description,
+            @Field("proof_pic") String proof_pic
     );
 
     //修改退款单
@@ -611,6 +623,13 @@ public interface XlmmService {
     @GET("/rest/v2/mama/fans")
     Observable<MamaFansBean> getMamaFans(
             @Query("page") String page
+    );
+
+    //妈妈余额兑换现金消费券
+    @GET("/rest/v1/pmt/cashout/exchange_coupon")
+    Observable<DrawCouponBean> drawCoupon(
+            @Query("template_id") String template_id,
+            @Query("exchange_num") String exchange_num
     );
 
     //获取访客列表
@@ -968,7 +987,7 @@ public interface XlmmService {
     //获得未来粉丝列表
     @GET("/rest/v2/potential_fans")
     Observable<PotentialFans> getPotentialFans(
-        @Query("page")String page
+            @Query("page") String page
     );
 
     @FormUrlEncoded

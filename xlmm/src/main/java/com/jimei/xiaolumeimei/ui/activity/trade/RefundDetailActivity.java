@@ -3,6 +3,7 @@ package com.jimei.xiaolumeimei.ui.activity.trade;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -57,14 +58,6 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     TextView priceTv;
     @Bind(R.id.reason)
     TextView reasonTv;
-    @Bind(R.id.tv_order_create_time)
-    TextView createTimeTv;
-    @Bind(R.id.tv_order_last_time)
-    TextView lastTimeTv;
-    @Bind(R.id.tv_order_last_state)
-    TextView lastStateTv;
-    @Bind(R.id.ll_last)
-    LinearLayout lastLayout;
     @Bind(R.id.round_image)
     RoundCornerImageView imageView;
     @Bind(R.id.refund_type)
@@ -202,9 +195,6 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     private void fillDataToView(AllRefundsBean.ResultsEntity refundDetailBean) {
         if (refund_state == XlmmConst.REFUND_STATE_SELLER_AGREED && refundDetailBean.isHas_good_return()) {
             returnLayout.setVisibility(View.VISIBLE);
-
-        } else if (refund_state != XlmmConst.REFUND_STATE_BUYER_APPLY) {
-            lastLayout.setVisibility(View.VISIBLE);
         }
         JUtils.Log(TAG, "fillDataToView ");
         orderIdTv.setText(refundDetailBean.getRefund_no());
@@ -241,9 +231,6 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
         numTv.setText(Integer.toString(refundDetailBean.getRefund_num()));
         priceTv.setText("¥" + refundDetailBean.getRefund_fee());
         reasonTv.setText(refundDetailBean.getReason());
-        createTimeTv.setText(refundDetailBean.getCreated().replace("T", " "));
-        lastTimeTv.setText(refundDetailBean.getModified().replace("T", " "));
-        lastStateTv.setText(refundDetailBean.getStatus_display());
         if (refundDetailBean.getProof_pic().size() > 0) {
             ViewUtils.loadImgToImgView(getApplicationContext(), imageView,
                     refundDetailBean.getProof_pic().get(0));
@@ -297,42 +284,51 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
 
     private void setView2() {
         setView1();
-        textView2.setTextColor(getResources().getColor(R.color.text_color_62));
+        textView2.setTextColor(getResources().getColor(R.color.text_color_32));
+        textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP,12);
         textView.setTextColor(getResources().getColor(R.color.colorAccent));
-        imageView2.setImageResource(R.drawable.state_oval);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP,15);
+        imageView2.setImageResource(R.drawable.status_black);
         iView.setImageResource(R.drawable.state_in);
-        lineImage.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+        lineImage.setBackgroundColor(getResources().getColor(R.color.text_color_32));
     }
 
     private void setView4() {
         setView3();
-        textView4.setTextColor(getResources().getColor(R.color.text_color_62));
+        textView4.setTextColor(getResources().getColor(R.color.text_color_32));
+        textView4.setTextSize(TypedValue.COMPLEX_UNIT_SP,12);
         textView5.setTextColor(getResources().getColor(R.color.colorAccent));
-        imageView4.setImageResource(R.drawable.state_oval);
+        textView5.setTextSize(TypedValue.COMPLEX_UNIT_SP,15);
+        imageView4.setImageResource(R.drawable.status_black);
         imageView5.setImageResource(R.drawable.state_in);
-        lineImage5.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-        lineImage6.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+        lineImage5.setBackgroundColor(getResources().getColor(R.color.text_color_32));
+        lineImage6.setBackgroundColor(getResources().getColor(R.color.text_color_32));
     }
 
 
     private void setView3() {
         setView2();
-        textView.setTextColor(getResources().getColor(R.color.text_color_62));
-        textView3.setTextColor(getResources().getColor(R.color.text_color_62));
+        textView.setTextColor(getResources().getColor(R.color.text_color_32));
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP,12);
+        textView3.setTextColor(getResources().getColor(R.color.text_color_32));
+        textView3.setTextSize(TypedValue.COMPLEX_UNIT_SP,12);
         textView4.setTextColor(getResources().getColor(R.color.colorAccent));
-        iView.setImageResource(R.drawable.state_oval);
-        imageView3.setImageResource(R.drawable.state_oval);
+        textView4.setTextSize(TypedValue.COMPLEX_UNIT_SP,15);
+        iView.setImageResource(R.drawable.status_black);
+        imageView3.setImageResource(R.drawable.status_black);
         imageView4.setImageResource(R.drawable.state_in);
-        lineImage3.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-        lineImage4.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+        lineImage3.setBackgroundColor(getResources().getColor(R.color.text_color_32));
+        lineImage4.setBackgroundColor(getResources().getColor(R.color.text_color_32));
     }
 
     private void setView1() {
-        textView1.setTextColor(getResources().getColor(R.color.text_color_62));
+        textView1.setTextColor(getResources().getColor(R.color.text_color_32));
+        textView1.setTextSize(TypedValue.COMPLEX_UNIT_SP,12);
         textView2.setTextColor(getResources().getColor(R.color.colorAccent));
-        imageView1.setImageResource(R.drawable.state_oval);
+        textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP,15);
+        imageView1.setImageResource(R.drawable.status_black);
         imageView2.setImageResource(R.drawable.state_in);
-        lineImage2.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+        lineImage2.setBackgroundColor(getResources().getColor(R.color.text_color_32));
     }
 
 

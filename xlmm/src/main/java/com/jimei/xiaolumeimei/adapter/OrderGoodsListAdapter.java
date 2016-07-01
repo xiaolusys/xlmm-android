@@ -6,18 +6,24 @@ package com.jimei.xiaolumeimei.adapter;
  */
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -100,7 +106,6 @@ public class OrderGoodsListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Log.d(TAG, "getView " + position);
-
         ImageView img_goods;
         TextView tx_good_name;
         TextView tx_good_price;
@@ -125,10 +130,10 @@ public class OrderGoodsListAdapter extends BaseAdapter {
             LinearLayout itemLayout = (LinearLayout) convertView.findViewById(R.id.ll_item);
             View view = convertView.findViewById(R.id.divider);
             if (packageBeanList.size() > position) {
-                if ((packageBeanList.get(position).getBook_time() != null
-                        || packageBeanList.get(position).getAssign_time() != null
-                        || packageBeanList.get(position).getFinish_time() != null
-                ) && "已付款".equals(stateStr)) {
+                if (packageBeanList.get(position).getBook_time() != null
+                        && packageBeanList.get(position).getAssign_time() == null
+                        && packageBeanList.get(position).getFinish_time() == null
+                         && "已付款".equals(stateStr)) {
                     Button btn = (Button) convertView.findViewById(R.id.btn_order_proc);
                     btn.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -273,15 +278,44 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                             public void onClick(View v) {
                                 //enter apply refund
                                 Log.d(TAG, "enter apply refund ");
-                                Intent intent = new Intent(context, ApplyRefundActivity.class);
-                                Bundle bundle = new Bundle();
-                                bundle.putInt("id", orderDetailEntity.getId());
-                                bundle.putInt("position", position);
-                                intent.putExtras(bundle);
-                                Log.d(TAG,
-                                        "transfer good  " + goods_info.getId() + " to " + "ApplyRefundActivity");
-                                context.startActivity(intent);
-                                context.finish();
+                                // TODO: 16/6/30
+                                View view = context.getLayoutInflater().inflate(R.layout.pop_refund_layout, null);
+                                Dialog dialog = new Dialog(context, R.style.dialog_style);
+                                dialog.setContentView(view);
+                                dialog.setCancelable(true);
+                                Window window = dialog.getWindow();
+                                WindowManager.LayoutParams wlp = window.getAttributes();
+                                wlp.gravity = Gravity.BOTTOM;
+                                wlp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                                window.setAttributes(wlp);
+                                window.setWindowAnimations(R.style.dialog_anim);
+                                View closeIv = view.findViewById(R.id.close_iv);
+                                ListView listView = (ListView) view.findViewById(R.id.lv_refund);
+                                closeIv.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                                listView.setAdapter(new RefundTypeAdapter(context,orderDetailEntity.getExtras().getRefund_choices()));
+                                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                        Intent intent = new Intent(context, ApplyRefundActivity.class);
+                                        Bundle bundle = new Bundle();
+                                        bundle.putInt("id", orderDetailEntity.getId());
+                                        bundle.putInt("position", position);
+                                        bundle.putString("refund_channel",orderDetailEntity.getExtras().getRefund_choices().get(position).getRefund_channel());
+                                        bundle.putString("name",orderDetailEntity.getExtras().getRefund_choices().get(position).getName());
+                                        bundle.putString("desc",orderDetailEntity.getExtras().getRefund_choices().get(position).getDesc());
+                                        intent.putExtras(bundle);
+                                        Log.d(TAG, "transfer good  " + goods_info.getId() + " to " + "ApplyRefundActivity");
+                                        context.startActivity(intent);
+                                        dialog.dismiss();
+                                        context.finish();
+                                    }
+                                });
+                                dialog.show();
                             }
                         });
                         break;

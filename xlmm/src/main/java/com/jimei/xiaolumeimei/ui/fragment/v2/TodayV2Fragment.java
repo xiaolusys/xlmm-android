@@ -189,7 +189,11 @@ public class TodayV2Fragment extends BaseFragment {
 
                                 List<ProductListBean.ResultsEntity> results =
                                         productListBean.getResults();
-                                totalPages = productListBean.getCount() / page_size + 1;
+                                if (productListBean.getCount()%page_size==0) {
+                                    totalPages = productListBean.getCount() / page_size;
+                                }else {
+                                    totalPages = productListBean.getCount() / page_size+1;
+                                }
                                 list.clear();
                                 list.addAll(results);
                                 mTodayAdapter.updateWithClear(list);

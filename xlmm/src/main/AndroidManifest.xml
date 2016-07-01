@@ -397,9 +397,14 @@
         <activity
             android:name=".ui.activity.trade.RedBagActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
-
         <activity
             android:name=".ui.activity.xiaolumama.MMFans1Activity"
+            android:theme="@style/AppTheme.TransparentActivity" />
+        <activity
+            android:name=".ui.activity.xiaolumama.MamaDrawCouponActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
+        <activity
+            android:name=".ui.activity.xiaolumama.DrawCouponResultActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
 
         <service
@@ -444,7 +449,6 @@
                 <action android:name="com.xiaomi.mipush.ERROR" />
             </intent-filter>
         </receiver>
-
     </application>
 
 </manifest>
