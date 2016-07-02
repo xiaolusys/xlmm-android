@@ -1,19 +1,20 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
+import android.view.Menu;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.umeng.analytics.MobclickAgent;
 
 /**
- * Created by itxuye(www.itxuye.com) on 2016/03/10.
- * <p>
- * Copyright 2015年 上海己美. All rights reserved.
+ * Created by itxuye on 2016/7/2.
  */
-
-public class MMShareCodeWebViewActivity extends CommonWebViewActivity {
-
+public class MMLevelExamWebViewActivity extends CommonWebViewActivity {
   @Override protected void initViews() {
     super.initViews();
-    webviewTitle.setText("我的邀请");
+    webviewTitle.setText("妈妈考试");
+  }
+
+  @Override public boolean onCreateOptionsMenu(Menu menu) {
+    return true;
   }
 
   @Override protected void onResume() {
