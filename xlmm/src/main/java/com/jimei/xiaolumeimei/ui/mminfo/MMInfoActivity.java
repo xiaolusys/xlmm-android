@@ -3,8 +3,10 @@ package com.jimei.xiaolumeimei.ui.mminfo;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -22,7 +24,6 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BasePresenterActivity;
-import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
@@ -31,6 +32,7 @@ import com.jimei.xiaolumeimei.event.WebViewEvent;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.BoutiqueWebviewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMChooseListActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMFans1Activity;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMLevelExamWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMNinePicActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShareCodeWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShoppingListActivity;
@@ -41,10 +43,14 @@ import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaDrawCouponActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaLivenessActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaVisitorActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
+import com.jimei.xiaolumeimei.widget.CircleImageView;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.BitmapCallback;
 import java.util.Calendar;
 import java.util.List;
+import okhttp3.Call;
 import org.greenrobot.eventbus.EventBus;
 
 /**
@@ -53,7 +59,7 @@ import org.greenrobot.eventbus.EventBus;
 public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInfoModel>
     implements MMInfoContract.View, View.OnClickListener, OnChartValueSelectedListener {
   String TAG = "MMInfoActivity";
-  @Bind(R.id.imgUser) ImageView imgUser;
+  @Bind(R.id.imgUser) CircleImageView imgUser;
   @Bind(R.id.btn_two_dimen) TextView btn_two_dimen;
   @Bind(R.id.rl_chart) RelativeLayout rl_chart;
   @Bind(R.id.btn_chooselist) TextView btn_chooselist;
@@ -154,7 +160,9 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
   }
 
   @Override public void initMMview(MamaFortune fortune) {
-    JUtils.Log(TAG,fortune.toString());
+    JUtils.Log(TAG, fortune.toString()
+        + "fortune.getMamaFortune().getExtraInfo().getSurplusDays()"
+        + fortune.getMamaFortune().getExtraInfo().getSurplusDays());
     tv_fund.setText(
         Double.toString((double) (Math.round(fortune.getMamaFortune().getCarryValue() * 100)) / 100)
             + "元");
@@ -162,12 +170,35 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
     tv_fansnum.setText(fortune.getMamaFortune().getFansNum() + "人");
     tv_order.setText(s + "个");
 
-    tvYue.setText(
-        fortune.getMamaFortune().getCashValue()+"");
-    tvLeiji.setText(fortune.getMamaFortune().getCarryValue()+"");
-    tvHuoyue.setText(fortune.getMamaFortune().getActiveValueNum()+"");
-    tvMamalevel.setText(fortune.getMamaFortune().getMamaLevelDisplay());
-    tvShengyu.setText(fortune.getMamaFortune().getExtraInfo().getSurplusDays());
+    tvShengyu.setText(fortune.getMamaFortune().getExtraInfo().getSurplusDays() + "");
+    tvYue.setText(fortune.getMamaFortune().getCashValue() + "");
+    tvLeiji.setText(fortune.getMamaFortune().getCarryValue() + "");
+    tvHuoyue.setText(fortune.getMamaFortune().getActiveValueNum() + "");
+    tvMamalevel.setText(fortune.getMamaFortune().getMamaLevelDisplay() + "");
+    if (!TextUtils.isEmpty(fortune.getMamaFortune().getExtraInfo().getThumbnail())) {
+      setUserImage(fortune);
+    }
+  }
+
+  private void setUserImage(MamaFortune fortune) {
+    try {
+      OkHttpUtils.get()
+          .url(fortune.getMamaFortune().getExtraInfo().getThumbnail())
+          .build()
+          .execute(new BitmapCallback() {
+            @Override public void onError(Call call, Exception e) {
+              e.printStackTrace();
+            }
+
+            @Override public void onResponse(Bitmap response) {
+              if (null != response) {
+                imgUser.setImageBitmap(response);
+              }
+            }
+          });
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   @Override public void initShareInfo(MMShoppingBean shoppingBean) {
@@ -330,19 +361,8 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
 
         break;
       case R.id.rl_two_dimen:
-
-        Intent intentrl_two_dimen = new Intent(this, MMShareCodeWebViewActivity.class);
-        sharedPreferences = getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
-        cookies = sharedPreferences.getString("cookiesString", "");
-        domain = sharedPreferences.getString("cookiesDomain", "");
-
-        Bundle bundlerl_two_dimen = new Bundle();
-        bundlerl_two_dimen.putString("cookies", cookies);
-        bundlerl_two_dimen.putString("domain", domain);
-        bundlerl_two_dimen.putString("Cookie", sharedPreferences.getString("Cookie", ""));
-        bundlerl_two_dimen.putString("actlink", shareMmcode);
-        intentrl_two_dimen.putExtras(bundlerl_two_dimen);
-        startActivity(intentrl_two_dimen);
+        JumpUtils.jumpToWebViewWithCookies(this, shareMmcode, 4, MMShareCodeWebViewActivity.class,
+            "我的邀请");
         break;
       case R.id.rl_fans:
         sharedPreferences = getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
@@ -407,7 +427,7 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
         if (mamaFortune != null) {
           JumpUtils.jumpToWebViewWithCookies(this,
               mamaFortune.getMamaFortune().getExtraInfo().getNextLevelExamUrl(), -1,
-              CommonWebViewActivity.class, "妈妈考试");
+              MMLevelExamWebViewActivity.class, "妈妈考试");
         }
         break;
     }

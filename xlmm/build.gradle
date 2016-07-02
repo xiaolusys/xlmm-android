@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
-apply plugin: 'com.neenbedankt.android-apt'
 
 def releaseTime() {
     return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
@@ -200,10 +199,7 @@ dependencies {
     compile files('libs/MiPush_SDK_Client_2_2_21.jar')
     compile files('libs/umeng-update-v2.6.0.1.jar')
     compile project(':xlmmlibrary')
-    //dagger2
-    compile 'com.google.dagger:dagger:2.0.2'
-    compile 'org.glassfish:javax.annotation:10.0-b28'
-    apt 'com.google.dagger:dagger-compiler:2.0.2'
+
     compile files('libs/MobCommons-2016.0426.1819.jar')
     compile files('libs/MobTools-2016.0426.1819.jar')
     compile files('libs/ShareSDK-Core-2.7.2.jar')
