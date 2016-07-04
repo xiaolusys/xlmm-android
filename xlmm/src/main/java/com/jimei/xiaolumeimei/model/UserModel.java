@@ -6,6 +6,7 @@ import com.jimei.xiaolumeimei.entities.BindInfoBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.CouponBean;
 import com.jimei.xiaolumeimei.entities.GetCouponbean;
+import com.jimei.xiaolumeimei.entities.IsGetcoupon;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.entities.MembershipPointBean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
@@ -250,6 +251,12 @@ public class UserModel {
     public Observable<Response<GetCouponbean>> getCouPon() {
 
         return XlmmRetrofitClient.getService().getCouPon()
+                .compose(new DefaultTransform<>());
+    }
+
+    public Observable<Response<IsGetcoupon>> isCouPon() {
+
+        return XlmmRetrofitClient.getService().isCouPon()
                 .compose(new DefaultTransform<>());
     }
 }

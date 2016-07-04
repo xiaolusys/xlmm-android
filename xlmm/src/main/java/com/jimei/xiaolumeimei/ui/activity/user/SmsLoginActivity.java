@@ -227,6 +227,7 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                                       .subscribe(new ServiceResponse<Response<GetCouponbean>>() {
                                         @Override public void onNext(
                                             Response<GetCouponbean> getCouponbeanResponse) {
+
                                           if (getCouponbeanResponse != null) {
                                             if (getCouponbeanResponse.isSuccessful()
                                                 && getCouponbeanResponse.code() == 200) {
