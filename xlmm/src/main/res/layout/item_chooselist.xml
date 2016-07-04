@@ -22,7 +22,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="192px"
-        android:layout_marginRight="100px"
         android:layout_toRightOf="@id/img_layout"
         android:orientation="vertical"
         android:paddingLeft="18px">
@@ -31,6 +30,7 @@
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginRight="100px"
             android:layout_weight="1"
             android:ellipsize="end"
             android:gravity="center_vertical"
@@ -91,7 +91,7 @@
                 android:layout_height="wrap_content"
                 android:text="返利佣金"
                 android:textColor="@color/c26262E"
-                android:textSize="13sp" />
+                android:textSize="12sp" />
 
             <View
                 android:layout_width="0dp"
@@ -113,7 +113,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
                 android:textColor="@color/c26262E"
-                android:textSize="13sp" />
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/vip_money"
@@ -121,8 +121,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
                 android:textColor="@color/colorAccent"
-                android:textSize="13sp" />
-
+                android:textSize="12sp" />
 
         </LinearLayout>
 

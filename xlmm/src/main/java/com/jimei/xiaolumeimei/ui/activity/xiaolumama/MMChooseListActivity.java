@@ -422,7 +422,8 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
             holder.rebetAmount.setText("你的" + mmChooselistBean.getLevel_info().getRebet_amount_des());
             holder.lockNum.setText(mmChooselistBean.getLevel_info().getSale_num_des());
             holder.vip.setText(mmChooselistBean.getLevel_info().getNext_agencylevel_desc());
-            holder.vipMoney.setText(mmChooselistBean.getLevel_info().getNext_rebet_amount_des());
+            String des = mmChooselistBean.getLevel_info().getNext_rebet_amount_des();
+            holder.vipMoney.setText(des);
             int inCustomerShop = mmChooselistBean.getIn_customer_shop();
             if (0 == inCustomerShop) {
                 holder.add.setVisibility(View.VISIBLE);
