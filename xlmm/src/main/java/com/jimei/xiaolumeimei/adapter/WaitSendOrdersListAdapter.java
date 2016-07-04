@@ -40,7 +40,7 @@ public class WaitSendOrdersListAdapter extends BaseAdapter {
     public static void fillPicPath(List<String> mDatas,
                                    List<AllOrdersBean.ResultsEntity.OrdersEntity> good_list) {
         for (int i = 0; i < good_list.size(); i++) {
-            mDatas.add(good_list.get(i).getPicPath());
+            mDatas.add(good_list.get(i).getPic_path());
         }
     }
 
@@ -167,7 +167,7 @@ public class WaitSendOrdersListAdapter extends BaseAdapter {
         TextView tx_good_num = (TextView) ll_one_order.findViewById(R.id.tx_good_num);
         tx_good_name.setText(mList.get(position).getOrders().get(0).getTitle());
         tx_good_price.setText("¥" + mList.get(position).getOrders().get(0).getPayment());
-        tx_good_size.setText("尺码:" + mList.get(position).getOrders().get(0).getSkuName());
+        tx_good_size.setText("尺码:" + mList.get(position).getOrders().get(0).getSku_name());
         tx_good_num.setText(
                 "x" + Integer.toString(mList.get(position).getOrders().get(0).getNum()));
 

@@ -659,7 +659,7 @@ public interface XlmmService {
             @Field("id") String id);
 
     //选品默认列表
-    @GET("/rest/v1/products/my_choice_pro")
+    @GET("/rest/v2/products/my_choice_pro")
     Observable<MMChooselistBean> getMMChooseList(
             @Query("page") String page,
             @Query("page_size") String pagesize
@@ -670,7 +670,7 @@ public interface XlmmService {
     Observable<List<MMStoreBean>> getMMStoreList();
 
     //选品默认列表排序
-    @GET("/rest/v1/products/my_choice_pro")
+    @GET("/rest/v2/products/my_choice_pro")
     Observable<MMChooselistBean> getMMChooseSortList(
             @Query("sort_field") String sort_field,
             @Query("page") String page,
@@ -678,7 +678,7 @@ public interface XlmmService {
     );
 
     //选品女装或者童装列表
-    @GET("/rest/v1/products/my_choice_pro")
+    @GET("/rest/v2/products/my_choice_pro")
     Observable<MMChooselistBean> getMMChooseLadyOrChildList(
 
             @Query("category") String category,
@@ -687,7 +687,7 @@ public interface XlmmService {
     );
 
     //选品排序列表
-    @GET("/rest/v1/products/my_choice_pro")
+    @GET("/rest/v2/products/my_choice_pro")
     Observable<MMChooselistBean> getMMChooseLadyOrChildSortListSort(
             @Query("sort_field") String sort_field,
             @Query("category") String category,

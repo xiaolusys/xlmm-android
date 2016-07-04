@@ -169,12 +169,12 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
     }
 
     private void fillDataToView(AllOrdersBean.ResultsEntity.OrdersEntity goods) {
-        ViewUtils.loadImgToImgView(this, img_good, goods.getPicPath());
+        ViewUtils.loadImgToImgView(this, img_good, goods.getPic_path());
 
         tx_good_name.setText(goods.getTitle());
-        tx_good_price.setText("￥" + goods.getTotalFee());
+        tx_good_price.setText("￥" + goods.getTotal_fee());
 
-        tx_good_size.setText("尺码：" + goods.getSkuName());
+        tx_good_size.setText("尺码：" + goods.getSku_name());
         tx_good_num.setText("×" + goods.getNum());
 
         num = goods.getNum();

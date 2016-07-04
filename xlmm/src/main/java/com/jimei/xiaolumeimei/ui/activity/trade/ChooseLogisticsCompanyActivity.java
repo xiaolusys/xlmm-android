@@ -170,7 +170,6 @@ public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
         company_list.add(new LogisticsCompanyInfo("Q", "驱达国际快递"));
         company_list.add(new LogisticsCompanyInfo("Q", "全一快运"));
         company_list.add(new LogisticsCompanyInfo("Q", "全峰快递"));
-        company_list.add(new LogisticsCompanyInfo("Q", "其他快递"));
         company_list.add(new LogisticsCompanyInfo("S", "申通快递"));
         company_list.add(new LogisticsCompanyInfo("S", "顺丰快递"));
         company_list.add(new LogisticsCompanyInfo("S", "顺风快递"));
