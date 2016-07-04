@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.PackageBean;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 
@@ -19,10 +20,10 @@ import java.util.List;
  */
 public class GoodsListAdapter extends BaseAdapter {
 
-    private List<PackageBean> packageBeanList;
+    private List<AllOrdersBean.ResultsEntity.OrdersEntity> packageBeanList;
     private Context context;
 
-    public GoodsListAdapter(List<PackageBean> packageBeanList, Context context) {
+    public GoodsListAdapter(List<AllOrdersBean.ResultsEntity.OrdersEntity> packageBeanList, Context context) {
         this.packageBeanList = packageBeanList;
         this.context = context;
     }
@@ -52,16 +53,17 @@ public class GoodsListAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        PackageBean bean = packageBeanList.get(position);
+        AllOrdersBean.ResultsEntity.OrdersEntity bean = packageBeanList.get(position);
         ViewUtils.loadImgToImgView(context, holder.imageView, bean.getPic_path());
         holder.name.setText(bean.getTitle());
         holder.price.setText(bean.getPayment() + "");
         holder.num.setText("x" + bean.getNum());
+        holder.size.setText(bean.getSku_name());
         return convertView;
     }
 
     private class ViewHolder {
-        TextView name, price, num;
+        TextView name, price, num, size;
         ImageView imageView;
 
 
@@ -70,6 +72,7 @@ public class GoodsListAdapter extends BaseAdapter {
             name = ((TextView) itemView.findViewById(R.id.tx_good_name));
             price = ((TextView) itemView.findViewById(R.id.tx_good_price));
             num = ((TextView) itemView.findViewById(R.id.tx_good_num));
+            size = ((TextView) itemView.findViewById(R.id.tx_good_size));
         }
     }
 }

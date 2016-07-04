@@ -20,8 +20,9 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:layout_width="360px"
+        android:layout_width="match_parent"
         android:layout_height="192px"
+        android:layout_marginRight="100px"
         android:layout_toRightOf="@id/img_layout"
         android:orientation="vertical"
         android:paddingLeft="18px">
@@ -48,9 +49,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:text=""
                 android:textColor="@color/c26262E"
-                android:textSize="20sp" />
+                android:textSize="13sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/std_sale_price"
@@ -58,11 +59,24 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@id/agent_price"
                 android:layout_toRightOf="@id/agent_price"
-                android:gravity="bottom"
-                android:text=""
                 android:textSize="13sp" />
 
+            <TextView
+                android:id="@+id/lock_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/agent_price"
+                android:layout_marginLeft="18px"
+                android:layout_toRightOf="@id/std_sale_price"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textColor="@color/c26262E"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
         </RelativeLayout>
+
+        <include layout="@layout/common_gap" />
 
 
         <LinearLayout
@@ -73,23 +87,43 @@
             android:orientation="horizontal">
 
             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="返利佣金"
+                android:textColor="@color/c26262E"
+                android:textSize="13sp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <TextView
                 android:id="@+id/rebet_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
                 android:text=""
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/c26262E"
                 android:textSize="12sp" />
 
             <TextView
-                android:id="@+id/lock_num"
+                android:id="@+id/vip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="18px"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:text=""
+                android:layout_marginRight="8dp"
+                android:textColor="@color/c26262E"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/vip_money"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
                 android:textColor="@color/colorAccent"
-                android:textSize="12sp" />
+                android:textSize="13sp" />
+
+
         </LinearLayout>
 
 
@@ -100,7 +134,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
         android:layout_marginRight="23px"
         android:gravity="center"
         android:orientation="vertical">
@@ -109,18 +142,8 @@
             android:id="@+id/add1"
             android:layout_width="73px"
             android:layout_height="73px"
-            android:src="@drawable/ic_havechoose"
-            android:textColor="@color/colorPrimary" />
+            android:src="@drawable/ic_havechoose" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/add1"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="11px"
-            android:text="加入精选"
-            android:textColor="@color/c26262E"
-            android:textSize="19px" />
     </LinearLayout>
 
     <LinearLayout
@@ -128,7 +151,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
         android:layout_marginRight="23px"
         android:clickable="false"
         android:gravity="center"
@@ -139,18 +161,8 @@
             android:id="@+id/remove1"
             android:layout_width="73px"
             android:layout_height="73px"
-            android:src="@drawable/ic_choosed"
-            android:textColor="@color/colorPrimary" />
+            android:src="@drawable/ic_choosed" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/remove1"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="8dp"
-            android:text="已加入"
-            android:textColor="@color/c26262E"
-            android:textSize="19px" />
     </LinearLayout>
 
 </RelativeLayout>

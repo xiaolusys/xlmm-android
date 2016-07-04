@@ -25,6 +25,7 @@ import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import java.lang.reflect.Field;
@@ -134,17 +135,11 @@ public class AllOrdersFragment extends Fragment {
                     @Override
                     public void onNext(AllOrdersBean allOrdersBean) {
                         if (allOrdersBean != null) {
-
                             adapter.update(allOrdersBean.getResults());
                             if (null == allOrdersBean.getNext()) {
                                 Toast.makeText(context, "没有更多了", Toast.LENGTH_SHORT).show();
                             }
                         }
-                    }
-
-                    @Override
-                    public void onCompleted() {
-                        super.onCompleted();
                     }
                 });
     }

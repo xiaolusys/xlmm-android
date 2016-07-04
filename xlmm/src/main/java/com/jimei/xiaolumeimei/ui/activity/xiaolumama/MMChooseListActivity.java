@@ -333,7 +333,7 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
                             if ((mmChooselistBeans != null) && (mmChooselistBeans.getResults()
                                     != null)) {
                                 mmChooseAdapter.update(mmChooselistBeans.getResults());
-                                chooseNum = mmChooselistBeans.getResults().get(0).getShopProductNum();
+                                chooseNum = mmChooselistBeans.getResults().get(0).getShop_product_num();
                                 choosenum.setText("" + chooseNum);
                             }
                         } catch (NullPointerException ex) {
@@ -378,7 +378,7 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
 
         private final String TAG = MMChooseAdapter.class.getSimpleName();
 
-        private List<MMChooselistBean.ResultsEntity> mList;
+        private List<MMChooselistBean.ResultsBean> mList;
         private Context mContext;
         private MaterialDialog materialDialog;
 
@@ -387,13 +387,13 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
             mList = new ArrayList<>();
         }
 
-        public void updateWithClear(List<MMChooselistBean.ResultsEntity> list) {
+        public void updateWithClear(List<MMChooselistBean.ResultsBean> list) {
             mList.clear();
             mList.addAll(list);
             notifyDataSetChanged();
         }
 
-        public void update(List<MMChooselistBean.ResultsEntity> list) {
+        public void update(List<MMChooselistBean.ResultsBean> list) {
 
             mList.addAll(list);
             notifyDataSetChanged();
@@ -411,18 +411,19 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
 
         @Override
         public void onBindViewHolder(MMChooseVH holder, int position) {
-            MMChooselistBean.ResultsEntity mmChooselistBean = mList.get(position);
+            MMChooselistBean.ResultsBean mmChooselistBean = mList.get(position);
             holder.name.setText(mmChooselistBean.getName());
             ViewUtils.loadImgToImgView(mContext, holder.imageChooselist,
-                    mmChooselistBean.getPicPath());
+                    mmChooselistBean.getPic_path());
             holder.agentPrice.setText(
-                    "¥" + (float) (Math.round(mmChooselistBean.getAgentPrice() * 100)) / 100);
+                    "¥" + (float) (Math.round(mmChooselistBean.getAgent_price() * 100)) / 100);
             holder.stdSalePrice.setText(
-                    "/¥" + (float) (Math.round(mmChooselistBean.getStdSalePrice() * 100)) / 100);
-            holder.rebetAmount.setText(mmChooselistBean.getRebetAmountDes());
-            holder.lockNum.setText(mmChooselistBean.getSaleNumDes());
-
-            int inCustomerShop = mmChooselistBean.getInCustomerShop();
+                    "/¥" + (float) (Math.round(mmChooselistBean.getStd_sale_price() * 100)) / 100);
+            holder.rebetAmount.setText("你的" + mmChooselistBean.getLevel_info().getRebet_amount_des());
+            holder.lockNum.setText(mmChooselistBean.getLevel_info().getSale_num_des());
+            holder.vip.setText(mmChooselistBean.getLevel_info().getNext_agencylevel_desc());
+            holder.vipMoney.setText(mmChooselistBean.getLevel_info().getNext_rebet_amount_des());
+            int inCustomerShop = mmChooselistBean.getIn_customer_shop();
             if (0 == inCustomerShop) {
                 holder.add.setVisibility(View.VISIBLE);
                 holder.remove.setVisibility(View.INVISIBLE);
@@ -447,7 +448,7 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
                                                 holder.remove.setVisibility(View.VISIBLE);
                                                 holder.add.setClickable(false);
                                                 holder.remove.setClickable(true);
-                                                mmChooselistBean.setInCustomerShop(1);
+                                                mmChooselistBean.setIn_customer_shop(1);
                                                 notifyItemChanged(position);
                                                 chooseNum++;
                                                 choosenum.setText("" + chooseNum);
@@ -495,7 +496,7 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
                                                 holder.remove.setVisibility(View.INVISIBLE);
                                                 holder.add.setClickable(true);
                                                 holder.remove.setClickable(false);
-                                                mmChooselistBean.setInCustomerShop(0);
+                                                mmChooselistBean.setIn_customer_shop(0);
                                                 notifyItemChanged(position);
                                                 chooseNum--;
                                                 choosenum.setText("" + chooseNum);
@@ -545,6 +546,10 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
             LinearLayout add;
             @Bind(R.id.remove)
             LinearLayout remove;
+            @Bind(R.id.vip)
+            TextView vip;
+            @Bind(R.id.vip_money)
+            TextView vipMoney;
 
             public MMChooseVH(View itemView) {
                 super(itemView);
