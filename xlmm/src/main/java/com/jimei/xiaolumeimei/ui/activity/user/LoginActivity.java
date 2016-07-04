@@ -307,16 +307,6 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                 startActivity(intent);
                                 finish();
                               } else if (login.equals("prodcutweb")) {
-                                //Intent intent = new Intent(mContext, ProductPopDetailActvityWeb.class);
-                                ////intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                //SharedPreferences sharedPreferences =
-                                //    getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
-                                //String cookies = sharedPreferences.getString("Cookie", "");
-                                //Bundle bundle = new Bundle();
-                                //bundle.putString("cookies", cookies);
-                                //bundle.putString("actlink", actlink);
-                                //intent.putExtras(bundle);
-                                //startActivity(intent);
                                 EventBus.getDefault().postSticky(new EmptyEvent());
                                 JumpUtils.jumpToWebViewWithCookies(mContext, actlink, -1,
                                     ProductPopDetailActvityWeb.class);
@@ -333,9 +323,12 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                     .subscribe(new ServiceResponse<Response<GetCouponbean>>() {
                                       @Override public void onNext(
                                           Response<GetCouponbean> getCouponbeanResponse) {
+                                        JUtils.Log("getCoupon", "onnext");
                                         if (getCouponbeanResponse != null) {
-                                          if (getCouponbeanResponse.isSuccessful()
-                                              && getCouponbeanResponse.code() == 200) {
+                                          if (getCouponbeanResponse.isSuccessful()) {
+                                            JUtils.Log("getCoupon",
+                                                "onnext == " + getCouponbeanResponse.body()
+                                                    .toString());
                                             JUtils.Toast(getCouponbeanResponse.body().getInfo());
                                             Intent intent =
                                                 new Intent(mContext, MainActivity.class);

@@ -6,6 +6,13 @@ import java.util.List;
  * Created by itxuye on 2016/6/30.
  */
 public class GetCouponbean {
+  @Override public String toString() {
+    return "GetCouponbean{" +
+        "info='" + info + '\'' +
+        ", code=" + code +
+        ", coupons=" + coupons +
+        '}';
+  }
 
   private String info;
   private int code;
@@ -36,6 +43,32 @@ public class GetCouponbean {
   }
 
   public static class CouponsBean {
+    @Override public String toString() {
+      return "CouponsBean{" +
+          "id=" + id +
+          ", template_id=" + template_id +
+          ", coupon_type=" + coupon_type +
+          ", coupon_type_display='" + coupon_type_display + '\'' +
+          ", title='" + title + '\'' +
+          ", customer=" + customer +
+          ", coupon_no='" + coupon_no + '\'' +
+          ", coupon_value=" + coupon_value +
+          ", valid=" + valid +
+          ", deadline='" + deadline + '\'' +
+          ", start_use_time='" + start_use_time + '\'' +
+          ", status=" + status +
+          ", created='" + created + '\'' +
+          ", use_fee=" + use_fee +
+          ", use_fee_des='" + use_fee_des + '\'' +
+          ", pros_desc='" + pros_desc + '\'' +
+          ", start_time='" + start_time + '\'' +
+          ", poll_status=" + poll_status +
+          ", wisecrack='" + wisecrack + '\'' +
+          ", nick='" + nick + '\'' +
+          ", head_img='" + head_img + '\'' +
+          '}';
+    }
+
     private int id;
     private int template_id;
     private int coupon_type;
