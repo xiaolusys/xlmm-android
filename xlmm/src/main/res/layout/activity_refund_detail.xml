@@ -509,22 +509,78 @@
 
             <include layout="@layout/common_gap" />
 
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/image_layout"
-                android:layout_width="110px"
-                android:layout_height="110px"
-                android:layout_margin="8dp"
-                android:background="@drawable/choose_img_bg"
-                android:gravity="center">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
 
-                <com.jimei.xiaolumeimei.widget.RoundCornerImageView
-                    android:id="@+id/round_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/logo" />
+                <RelativeLayout
+                    android:layout_width="110px"
+                    android:layout_height="110px"
+                    android:layout_margin="8dp"
+                    android:background="@drawable/choose_img_bg"
+                    android:gravity="center">
 
-            </RelativeLayout>
+                    <com.jimei.xiaolumeimei.widget.RoundCornerImageView
+                        android:id="@+id/round_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/logo" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="110px"
+                    android:layout_height="110px"
+                    android:layout_margin="8dp"
+                    android:background="@drawable/choose_img_bg"
+                    android:gravity="center">
+
+                    <com.jimei.xiaolumeimei.widget.RoundCornerImageView
+                        android:id="@+id/round_image1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/logo" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="110px"
+                    android:layout_height="110px"
+                    android:layout_margin="8dp"
+                    android:background="@drawable/choose_img_bg"
+                    android:gravity="center">
+
+                    <com.jimei.xiaolumeimei.widget.RoundCornerImageView
+                        android:id="@+id/round_image2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/logo" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="110px"
+                    android:layout_height="110px"
+                    android:layout_margin="8dp"
+                    android:background="@drawable/choose_img_bg"
+                    android:gravity="center">
+
+                    <com.jimei.xiaolumeimei.widget.RoundCornerImageView
+                        android:id="@+id/round_image3"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/logo" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
 
             <include layout="@layout/common_gap" />
 

@@ -41,10 +41,6 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
     TextView lastStateTv;
     @Bind(R.id.lv)
     ListView mListView;
-    @Bind(R.id.ll_container)
-    LinearLayout containerLayout;
-    @Bind(R.id.tv_number)
-    TextView numTv;
     private int id;
     OrderDetailBean.PackageOrdersBean packageOrdersBean;
     private List<AllOrdersBean.ResultsEntity.OrdersEntity> data;
@@ -101,7 +97,12 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
                 .subscribe(new ServiceResponse<OrderDetailBean>() {
                     @Override
                     public void onNext(OrderDetailBean orderDetailBean) {
-                        data.addAll(orderDetailBean.getOrders());
+                        ArrayList<AllOrdersBean.ResultsEntity.OrdersEntity> orders = orderDetailBean.getOrders();
+                        for (int i = 0; i < orders.size(); i++) {
+                            if (orders.get(i).getPackage_order_id().equals(packageOrdersBean.getId())) {
+                                data.add(orders.get(i));
+                            }
+                        }
                         mListView.setAdapter(new GoodsListAdapter(data, LogisticsActivity.this));
                         OrderDetailActivity.setListViewHeightBasedOnChildren(mListView);
                     }

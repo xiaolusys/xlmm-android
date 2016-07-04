@@ -35,9 +35,9 @@ public class MamaDrawCouponActivity extends BaseSwipeBackCompatActivity implemen
     Button button;
 
     private String id;
-    private String num;
+    private Double num;
     private String msg;
-    private String money;
+    private Double money;
 
     @Override
     protected void setListener() {
@@ -54,7 +54,7 @@ public class MamaDrawCouponActivity extends BaseSwipeBackCompatActivity implemen
     @Override
     protected void getBundleExtras(Bundle extras) {
         msg = extras.getString("msg");
-        money = extras.getDouble("cash")+"";
+        money = extras.getDouble("cash");
     }
 
     @Override
@@ -64,7 +64,7 @@ public class MamaDrawCouponActivity extends BaseSwipeBackCompatActivity implemen
 
     @Override
     protected void initViews() {
-        moneyTv.setText(money);
+        moneyTv.setText(money + "");
         msgTv.setText(msg);
     }
 
@@ -84,13 +84,13 @@ public class MamaDrawCouponActivity extends BaseSwipeBackCompatActivity implemen
             case R.id.rl_20:
                 flag20.setVisibility(View.VISIBLE);
                 flag50.setVisibility(View.INVISIBLE);
-                num = "20";
+                num = 20d;
                 id = "72";
                 break;
             case R.id.rl_50:
                 flag20.setVisibility(View.INVISIBLE);
                 flag50.setVisibility(View.VISIBLE);
-                num = "50";
+                num = 50d;
                 id = "73";
                 break;
             case R.id.btn_draw_coupon:
@@ -107,10 +107,17 @@ public class MamaDrawCouponActivity extends BaseSwipeBackCompatActivity implemen
                                     if (drawCouponBean.getCode() == 0) {
                                         Intent intent = new Intent(MamaDrawCouponActivity.this, DrawCouponResultActivity.class);
                                         Bundle bundle = new Bundle();
-                                        bundle.putString("num", num);
+                                        bundle.putString("num", num + "");
                                         intent.putExtras(bundle);
                                         startActivity(intent);
-                                        finish();
+                                        money = money - num;
+                                        moneyTv.setText(money + "");
+                                        flag20.setVisibility(View.INVISIBLE);
+                                        flag50.setVisibility(View.INVISIBLE);
+                                        id = "";
+                                        if (money < 20) {
+                                            finish();
+                                        }
                                     }
                                 }
                             });
@@ -118,4 +125,5 @@ public class MamaDrawCouponActivity extends BaseSwipeBackCompatActivity implemen
                 break;
         }
     }
+
 }

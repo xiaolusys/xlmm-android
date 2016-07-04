@@ -488,7 +488,9 @@ public interface XlmmService {
 
     //获取用户未使用优惠券信息
     @GET("/rest/v1/usercoupons")
-    Observable<CouponBean> getUnusedCouponBean();
+    Observable<CouponBean> getUnusedCouponBean(
+            @Query("page") String page
+    );
 
     //获取用户过期优惠券信息
     @GET("/rest/v1/usercoupons/list_past_coupon")
