@@ -59,7 +59,13 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     @Bind(R.id.reason)
     TextView reasonTv;
     @Bind(R.id.round_image)
-    RoundCornerImageView imageView;
+    RoundCornerImageView round_image;
+    @Bind(R.id.round_image1)
+    RoundCornerImageView round_image1;
+    @Bind(R.id.round_image2)
+    RoundCornerImageView round_image2;
+    @Bind(R.id.round_image3)
+    RoundCornerImageView round_image3;
     @Bind(R.id.refund_type)
     TextView refundTypeTv;
     @Bind(R.id.refund_layout)
@@ -75,7 +81,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     @Bind(R.id.btn_write)
     Button writeBtn;
     @Bind(R.id.image_layout)
-    RelativeLayout imageLayout;
+    LinearLayout imageLayout;
     AllRefundsBean.ResultsEntity refundDetail;
     @Bind(R.id.iv_1)
     ImageView imageView1;
@@ -203,9 +209,9 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
         String[] split;
         if (address.contains("，")) {
             split = address.split("，");
-        }else if (address.contains(",")){
+        } else if (address.contains(",")) {
             split = address.split(",");
-        }else {
+        } else {
             split = address.split(";");
         }
         for (String s : split) {
@@ -231,11 +237,14 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
         numTv.setText(Integer.toString(refundDetailBean.getRefund_num()));
         priceTv.setText("¥" + refundDetailBean.getRefund_fee());
         reasonTv.setText(refundDetailBean.getReason());
+        RoundCornerImageView[] images = {round_image, round_image1, round_image2, round_image3};
         if (refundDetailBean.getProof_pic().size() > 0) {
-            ViewUtils.loadImgToImgView(getApplicationContext(), imageView,
-                    refundDetailBean.getProof_pic().get(0));
-        } else {
-            imageLayout.setVisibility(View.GONE);
+            for (int i = 0; i < refundDetailBean.getProof_pic().size(); i++) {
+                ViewUtils.loadImgToImgView(getApplicationContext(), images[i],
+                        refundDetailBean.getProof_pic().get(i));
+                images[i].setVisibility(View.VISIBLE);
+            }
+            imageLayout.setVisibility(View.VISIBLE);
         }
         JUtils.Log(TAG, "crt time " + refundDetailBean.getCreated());
         String desc = refundDetailBean.getAmount_flow().getDesc();
@@ -285,9 +294,9 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     private void setView2() {
         setView1();
         textView2.setTextColor(getResources().getColor(R.color.text_color_32));
-        textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP,12);
+        textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
         textView.setTextColor(getResources().getColor(R.color.colorAccent));
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP,15);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
         imageView2.setImageResource(R.drawable.status_black);
         iView.setImageResource(R.drawable.state_in);
         lineImage.setBackgroundColor(getResources().getColor(R.color.text_color_32));
@@ -296,9 +305,9 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     private void setView4() {
         setView3();
         textView4.setTextColor(getResources().getColor(R.color.text_color_32));
-        textView4.setTextSize(TypedValue.COMPLEX_UNIT_SP,12);
+        textView4.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
         textView5.setTextColor(getResources().getColor(R.color.colorAccent));
-        textView5.setTextSize(TypedValue.COMPLEX_UNIT_SP,15);
+        textView5.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
         imageView4.setImageResource(R.drawable.status_black);
         imageView5.setImageResource(R.drawable.state_in);
         lineImage5.setBackgroundColor(getResources().getColor(R.color.text_color_32));
@@ -309,11 +318,11 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     private void setView3() {
         setView2();
         textView.setTextColor(getResources().getColor(R.color.text_color_32));
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP,12);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
         textView3.setTextColor(getResources().getColor(R.color.text_color_32));
-        textView3.setTextSize(TypedValue.COMPLEX_UNIT_SP,12);
+        textView3.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
         textView4.setTextColor(getResources().getColor(R.color.colorAccent));
-        textView4.setTextSize(TypedValue.COMPLEX_UNIT_SP,15);
+        textView4.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
         iView.setImageResource(R.drawable.status_black);
         imageView3.setImageResource(R.drawable.status_black);
         imageView4.setImageResource(R.drawable.state_in);
@@ -323,9 +332,9 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
 
     private void setView1() {
         textView1.setTextColor(getResources().getColor(R.color.text_color_32));
-        textView1.setTextSize(TypedValue.COMPLEX_UNIT_SP,12);
+        textView1.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
         textView2.setTextColor(getResources().getColor(R.color.colorAccent));
-        textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP,15);
+        textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
         imageView1.setImageResource(R.drawable.status_black);
         imageView2.setImageResource(R.drawable.state_in);
         lineImage2.setBackgroundColor(getResources().getColor(R.color.text_color_32));

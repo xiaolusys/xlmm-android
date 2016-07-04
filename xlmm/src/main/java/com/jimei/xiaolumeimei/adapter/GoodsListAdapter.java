@@ -58,7 +58,7 @@ public class GoodsListAdapter extends BaseAdapter {
         holder.name.setText(bean.getTitle());
         holder.price.setText(bean.getPayment() + "");
         holder.num.setText("x" + bean.getNum());
-        holder.size.setText(bean.getSku_name());
+        holder.size.setText("尺码"+bean.getSku_name());
         return convertView;
     }
 

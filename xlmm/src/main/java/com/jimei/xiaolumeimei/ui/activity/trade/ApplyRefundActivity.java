@@ -1,24 +1,23 @@
 package com.jimei.xiaolumeimei.ui.activity.trade;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import butterknife.Bind;
 
+import com.afollestad.materialdialogs.util.DialogUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
@@ -31,10 +30,6 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
-import java.util.List;
-
-import okhttp3.ResponseBody;
-import retrofit2.adapter.rxjava.HttpException;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -201,7 +196,26 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
                 if (reason.equals("")) {
                     JUtils.Toast("请选择退货原因！");
                 } else {
-                    commit_apply();
+                    View view = LayoutInflater.from(this).inflate(R.layout.dialog_refund_layout, null);
+                    View yesView = view.findViewById(R.id.yes_btn);
+                    View noView = view.findViewById(R.id.no_btn);
+                    AlertDialog dialog = new AlertDialog.Builder(this)
+                            .setCancelable(false)
+                            .setView(view)
+                            .create();
+                    yesView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                            commit_apply();
+                        }
+                    });
+                    noView.setOnClickListener(this);
+                    if ("budget".equals(refund_channel)) {
+                        dialog.show();
+                    } else {
+                        commit_apply();
+                    }
                 }
 
                 break;
@@ -226,6 +240,9 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
                     num--;
                 }
                 tx_refund_num.setText(Integer.toString(num));
+                break;
+            case R.id.no_btn:
+                finish();
                 break;
         }
     }

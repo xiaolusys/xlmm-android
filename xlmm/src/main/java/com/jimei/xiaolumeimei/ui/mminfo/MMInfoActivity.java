@@ -285,17 +285,21 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
     Intent intent;
     switch (v.getId()) {
       case R.id.yue_layout:
-        if (mamaFortune != null
-            && mamaFortune.getMamaFortune().getExtraInfo().getCouldCashOut() == 0) {
-          intent = new Intent(this, MamaDrawCouponActivity.class);
-          intent.putExtra("cash", mamaFortune.getMamaFortune().getCashValue());
-          intent.putExtra("msg", mamaFortune.getMamaFortune().getExtraInfo().getCashoutReason());
-          startActivity(intent);
-        } else if (mamaFortune != null
-            && mamaFortune.getMamaFortune().getExtraInfo().getCouldCashOut() == 1) {
-          intent = new Intent(this, MamaDrawCashActivity.class);
-          intent.putExtra("cash", mamaFortune.getMamaFortune().getCashValue());
-          startActivity(intent);
+        if (mamaFortune.getMamaFortune().getCashValue()<20){
+          JUtils.Toast("余额小于20,不能提现哦!");
+        }else {
+          if (mamaFortune != null
+                  && mamaFortune.getMamaFortune().getExtraInfo().getCouldCashOut() == 0) {
+            intent = new Intent(this, MamaDrawCouponActivity.class);
+            intent.putExtra("cash", mamaFortune.getMamaFortune().getCashValue());
+            intent.putExtra("msg", mamaFortune.getMamaFortune().getExtraInfo().getCashoutReason());
+            startActivity(intent);
+          } else if (mamaFortune != null
+                  && mamaFortune.getMamaFortune().getExtraInfo().getCouldCashOut() == 1) {
+            intent = new Intent(this, MamaDrawCashActivity.class);
+            intent.putExtra("cash", mamaFortune.getMamaFortune().getCashValue());
+            startActivity(intent);
+          }
         }
         break;
       case R.id.img_left:
