@@ -26,7 +26,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
+import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.BrandlistAdapter;
 import com.jimei.xiaolumeimei.base.BaseActivity;
@@ -34,6 +34,7 @@ import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.BrandListBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
+import com.jimei.xiaolumeimei.entities.IsGetcoupon;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
@@ -42,6 +43,7 @@ import com.jimei.xiaolumeimei.event.TimeEvent;
 import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.ProductModel;
+import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.model.UserNewModel;
 import com.jimei.xiaolumeimei.ui.activity.product.BrandListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ChildListActivity;
@@ -58,6 +60,7 @@ import com.jimei.xiaolumeimei.ui.activity.user.WalletActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.WxLoginBindPhoneActivity;
 import com.jimei.xiaolumeimei.ui.fragment.v1.view.MastFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.FirstFragment;
+import com.jimei.xiaolumeimei.ui.fragment.v2.GetCouponFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.TodayV2Fragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.TomorrowV2Fragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.YesterdayV2Fragment;
@@ -80,20 +83,17 @@ import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import butterknife.Bind;
 import okhttp3.Call;
 import okhttp3.ResponseBody;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import retrofit2.Response;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -114,7 +114,7 @@ public class MainActivity extends BaseActivity
 
   @Bind(R.id.tool_bar) AutoToolbar toolbar;
   @Bind(R.id.rv_cart) RelativeLayout carts;
-  @Bind(R.id.rl_mmentry)RelativeLayout rl_mmentry;
+  @Bind(R.id.rl_mmentry) RelativeLayout rl_mmentry;
   @Bind(R.id.image_1) ImageView image1;
   @Bind(R.id.image_2) ImageView image2;
   @Bind(R.id.scrollableLayout) ScrollableLayout scrollableLayout;
@@ -199,9 +199,14 @@ public class MainActivity extends BaseActivity
     init(null);
     if (LoginUtils.isJumpToLogin(getApplicationContext())) {
       FirstFragment firstFragment = FirstFragment.newInstance("first");
-      firstFragment.setStyle(DialogFragment.STYLE_NORMAL,R.style.Translucent_NoTitle);
+      firstFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.Translucent_NoTitle);
       firstFragment.show(getFragmentManager(), "first");
     }
+
+    if (LoginUtils.checkLoginState(getApplicationContext())) {
+      getCoupon();
+    }
+
     new Thread(() -> {
       try {
         Thread.sleep(500 * 60);
@@ -210,6 +215,25 @@ public class MainActivity extends BaseActivity
       }
       UmengUpdateAgent.update(MainActivity.this);
     }).start();
+  }
+
+  private void getCoupon() {
+    UserModel.getInstance()
+        .isCouPon()
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<Response<IsGetcoupon>>() {
+          @Override public void onNext(Response<IsGetcoupon> isGetcouponResponse) {
+            if (null != isGetcouponResponse) {
+              if (isGetcouponResponse.isSuccessful()) {
+                if (isGetcouponResponse.body().getIsPicked() == 0) {
+                  GetCouponFragment firstFragment = GetCouponFragment.newInstance("getCoupon");
+                  firstFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.Translucent_NoTitle);
+                  firstFragment.show(getFragmentManager(), "getCoupon");
+                }
+              }
+            }
+          }
+        });
   }
 
   @Override protected void initView() {
@@ -1038,7 +1062,7 @@ public class MainActivity extends BaseActivity
   @Override public void onScroll(int transY, int maxY) {
     JUtils.Log(TAG, "onScroll");
     transY = -transY;
-    if (rvTopHeight == (DisplayUtils.getScreenH(this)*2 - 16)) {
+    if (rvTopHeight == (DisplayUtils.getScreenH(this) * 2 - 16)) {
       rvTopHeight = carts.getTop();
     }
     if (0 > rvTopHeight + transY) {
