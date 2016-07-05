@@ -150,11 +150,6 @@ public class MainActivity extends BaseActivity
   private String newTime;
   private int rvTopHeight;
 
-  public static int dp2px(Context context, int dp) {
-    float scale = context.getResources().getDisplayMetrics().density;
-    return (int) (dp * scale + 0.5f);
-  }
-
   public static LinearLayout.LayoutParams getLayoutParams(Bitmap bitmap, int screenWidth) {
     float rawWidth = bitmap.getWidth();
     float rawHeight = bitmap.getHeight();
@@ -218,7 +213,7 @@ public class MainActivity extends BaseActivity
   }
 
   private void getCoupon() {
-    UserModel.getInstance()
+    Subscription subscribe = UserModel.getInstance()
         .isCouPon()
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<Response<IsGetcoupon>>() {
@@ -234,6 +229,7 @@ public class MainActivity extends BaseActivity
             }
           }
         });
+    addSubscription(subscribe);
   }
 
   @Override protected void initView() {
