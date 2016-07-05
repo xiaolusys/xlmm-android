@@ -22,6 +22,7 @@ import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
@@ -142,7 +143,8 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity
 
                     @Override
                     public void onError(Throwable e) {
-
+                        hideIndeterminateProgressDialog();
+                        JUtils.Toast("数据加载异常!");
                         Log.e(TAG, " error:, " + e.toString());
                         super.onError(e);
                     }
@@ -172,7 +174,6 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity
     }
 
     private void loadMoreData(String page, Context context) {
-
         Subscription subscription2 = TradeModel.getInstance()
                 .getRefundsBean(page)
                 .subscribeOn(Schedulers.io())

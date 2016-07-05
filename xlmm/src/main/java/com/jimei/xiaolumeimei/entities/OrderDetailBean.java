@@ -102,6 +102,21 @@ public class OrderDetailBean implements Serializable {
      */
 
     private ArrayList<AllOrdersBean.ResultsEntity.OrdersEntity> orders;
+    /**
+     * id : 163316-111983-2-1
+     * logistics_company : {"id":-2,"code":"YUNDA_QR","name":"韵达热敏"}
+     * process_time : 2016-05-24 11:28:28
+     * pay_time : 2016-04-15 23:35:56
+     * book_time : null
+     * assign_time : 2016-05-24 11:28:28
+     * finish_time : null
+     * cancel_time : null
+     * assign_status_display : 已备货
+     * ware_by_display : 广州仓
+     * out_sid : 2016-05-24 11:28:28
+     */
+
+    private List<PackageOrdersBean> package_orders;
 
     public int getId() {
         return id;
@@ -279,6 +294,14 @@ public class OrderDetailBean implements Serializable {
         this.orders = orders;
     }
 
+    public List<PackageOrdersBean> getPackage_orders() {
+        return package_orders;
+    }
+
+    public void setPackage_orders(List<PackageOrdersBean> package_orders) {
+        this.package_orders = package_orders;
+    }
+
     public static class LogisticsCompanyBean {
         private int id;
         private String code;
@@ -412,7 +435,8 @@ public class OrderDetailBean implements Serializable {
             this.refund_choices = refund_choices;
         }
 
-        public static class RefundChoicesBean implements Serializable,Parcelable {
+
+        public static class RefundChoicesBean implements Serializable, Parcelable {
             @SerializedName("refund_channel")
             private String refund_channel;
             @SerializedName("name")
@@ -496,7 +520,7 @@ public class OrderDetailBean implements Serializable {
             in.readList(this.refund_choices, RefundChoicesBean.class.getClassLoader());
         }
 
-        public static final Parcelable.Creator<ExtrasBean> CREATOR = new Parcelable.Creator<ExtrasBean>() {
+        public static final Creator<ExtrasBean> CREATOR = new Creator<ExtrasBean>() {
             @Override
             public ExtrasBean createFromParcel(Parcel source) {
                 return new ExtrasBean(source);
@@ -507,5 +531,110 @@ public class OrderDetailBean implements Serializable {
                 return new ExtrasBean[size];
             }
         };
+
+
+    }
+
+
+    public static class PackageOrdersBean implements Serializable {
+        private String id;
+        private LogisticCompany logistics_company;
+        private String process_time;
+        private String pay_time;
+        private String book_time;
+        private String assign_time;
+        private String finish_time;
+        private String cancel_time;
+        private String assign_status_display;
+        private String ware_by_display;
+        private String out_sid;
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public LogisticCompany getLogistics_company() {
+            return logistics_company;
+        }
+
+        public void setLogistics_company(LogisticCompany logistics_company) {
+            this.logistics_company = logistics_company;
+        }
+
+        public String getProcess_time() {
+            return process_time;
+        }
+
+        public void setProcess_time(String process_time) {
+            this.process_time = process_time;
+        }
+
+        public String getPay_time() {
+            return pay_time;
+        }
+
+        public void setPay_time(String pay_time) {
+            this.pay_time = pay_time;
+        }
+
+        public String getBook_time() {
+            return book_time;
+        }
+
+        public void setBook_time(String book_time) {
+            this.book_time = book_time;
+        }
+
+        public String getAssign_time() {
+            return assign_time;
+        }
+
+        public void setAssign_time(String assign_time) {
+            this.assign_time = assign_time;
+        }
+
+        public String getFinish_time() {
+            return finish_time;
+        }
+
+        public void setFinish_time(String finish_time) {
+            this.finish_time = finish_time;
+        }
+
+        public String getCancel_time() {
+            return cancel_time;
+        }
+
+        public void setCancel_time(String cancel_time) {
+            this.cancel_time = cancel_time;
+        }
+
+        public String getAssign_status_display() {
+            return assign_status_display;
+        }
+
+        public void setAssign_status_display(String assign_status_display) {
+            this.assign_status_display = assign_status_display;
+        }
+
+        public String getWare_by_display() {
+            return ware_by_display;
+        }
+
+        public void setWare_by_display(String ware_by_display) {
+            this.ware_by_display = ware_by_display;
+        }
+
+        public String getOut_sid() {
+            return out_sid;
+        }
+
+        public void setOut_sid(String out_sid) {
+            this.out_sid = out_sid;
+        }
     }
 }

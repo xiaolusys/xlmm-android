@@ -160,10 +160,7 @@ public class ProductPopDetailActvityWeb extends BaseSwipeBackCompatActivity {
           .setUserAgentString(userAgentString
               + "; xlmm/"
               + BuildConfig.VERSION_NAME
-              + "; "
-              + "uuid/"
-              + ((TelephonyManager) XlmmApp.getInstance()
-              .getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId());
+              + ";");
       mWebView.getSettings().setJavaScriptEnabled(true);
       mWebView.addJavascriptInterface(new AndroidJsBridge(this), "AndroidBridge");
       //      mPonto = new Ponto(mWebView, PONTO_MODULES_PACKAGE);
@@ -223,6 +220,7 @@ public class ProductPopDetailActvityWeb extends BaseSwipeBackCompatActivity {
       });
     } catch (Exception e) {
       e.printStackTrace();
+      JUtils.Log("+++++++++++"+e.getMessage());
       JUtils.Log(TAG, "set webview err");
     }
 

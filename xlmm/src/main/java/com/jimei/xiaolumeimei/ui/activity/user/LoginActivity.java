@@ -16,6 +16,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
+import com.jimei.xiaolumeimei.entities.GetCouponbean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
 import com.jimei.xiaolumeimei.event.EmptyEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
@@ -43,6 +44,8 @@ import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.wechat.friends.Wechat;
+import retrofit2.Response;
+import retrofit2.adapter.rxjava.HttpException;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -174,8 +177,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
   private void sha1() {
     timestamp = System.currentTimeMillis() / 1000 + "";//时间戳
     noncestr = getRandomString(8);//随机八位字符串
-    sign_params =
-        "noncestr=" + noncestr + "&secret=" + SECRET + "&timestamp=" + timestamp;
+    sign_params = "noncestr=" + noncestr + "&secret=" + SECRET + "&timestamp=" + timestamp;
   }
 
   private void login(String plat, String userId, HashMap<String, Object> userInfo) {
@@ -200,8 +202,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
       }
     }
     plat.setPlatformActionListener(new PlatformActionListener() {
-      @Override
-      public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
+      @Override public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
         if (i == Platform.ACTION_USER_INFOR) {
           UIHandler.sendEmptyMessage(MSG_AUTH_COMPLETE, LoginActivity.this);
           login(platform.getName(), platform.getDb().getUserId(), hashMap);
@@ -274,13 +275,11 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                 startActivity(intent);
                                 finish();
                               } else if (login.equals("point")) {
-                                Intent intent =
-                                    new Intent(mContext, MembershipPointActivity.class);
+                                Intent intent = new Intent(mContext, MembershipPointActivity.class);
                                 startActivity(intent);
                                 finish();
                               } else if (login.equals("money")) {
-                                Intent intent =
-                                    new Intent(mContext, WalletActivity.class);
+                                Intent intent = new Intent(mContext, WalletActivity.class);
                                 startActivity(intent);
                                 finish();
                               } else if (login.equals("axiba")) {
@@ -288,23 +287,18 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                 startActivity(intent);
                                 finish();
                               } else if (login.equals("coupon")) {
-                                Intent intent =
-                                    new Intent(mContext, CouponActivity.class);
+                                Intent intent = new Intent(mContext, CouponActivity.class);
                                 startActivity(intent);
                                 finish();
                               } else if (login.equals("productdetail")) {
                                 finish();
                               } else if (login.equals("h5")) {
-                                Intent intent =
-                                    new Intent(mContext, CommonWebViewActivity.class);
+                                Intent intent = new Intent(mContext, CommonWebViewActivity.class);
                                 //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 SharedPreferences sharedPreferences =
-                                    getSharedPreferences("xlmmCookiesAxiba",
-                                        Context.MODE_PRIVATE);
-                                String cookies =
-                                    sharedPreferences.getString("cookiesString", "");
-                                String domain =
-                                    sharedPreferences.getString("cookiesDomain", "");
+                                    getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+                                String cookies = sharedPreferences.getString("cookiesString", "");
+                                String domain = sharedPreferences.getString("cookiesDomain", "");
                                 Bundle bundle = new Bundle();
                                 bundle.putString("cookies", cookies);
                                 bundle.putString("domain", domain);
@@ -313,16 +307,6 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                 startActivity(intent);
                                 finish();
                               } else if (login.equals("prodcutweb")) {
-                                //Intent intent = new Intent(mContext, ProductPopDetailActvityWeb.class);
-                                ////intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                //SharedPreferences sharedPreferences =
-                                //    getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
-                                //String cookies = sharedPreferences.getString("Cookie", "");
-                                //Bundle bundle = new Bundle();
-                                //bundle.putString("cookies", cookies);
-                                //bundle.putString("actlink", actlink);
-                                //intent.putExtras(bundle);
-                                //startActivity(intent);
                                 EventBus.getDefault().postSticky(new EmptyEvent());
                                 JumpUtils.jumpToWebViewWithCookies(mContext, actlink, -1,
                                     ProductPopDetailActvityWeb.class);
@@ -332,6 +316,36 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                 JumpUtils.jumpToWebViewWithCookies(mContext, actlink, id,
                                     ActivityWebViewActivity.class, title);
                                 finish();
+                              } else if (login.equals("getCoupon")) {
+                                Subscription subscription1 = UserModel.getInstance()
+                                    .getCouPon()
+                                    .subscribeOn(Schedulers.io())
+                                    .subscribe(new ServiceResponse<Response<GetCouponbean>>() {
+                                      @Override public void onNext(
+                                          Response<GetCouponbean> getCouponbeanResponse) {
+                                        JUtils.Log("getCoupon", "onnext");
+                                        if (getCouponbeanResponse != null) {
+                                          if (getCouponbeanResponse.isSuccessful()) {
+                                            JUtils.Log("getCoupon",
+                                                "onnext == " + getCouponbeanResponse.body()
+                                                    .toString());
+                                            JUtils.Toast(getCouponbeanResponse.body().getInfo());
+                                            Intent intent =
+                                                new Intent(mContext, MainActivity.class);
+                                            startActivity(intent);
+                                            finish();
+                                          }
+                                        }
+                                      }
+
+                                      @Override public void onError(Throwable e) {
+                                        super.onError(e);
+                                        if (e instanceof HttpException) {
+                                          JUtils.Toast("优惠券领取失败");
+                                        }
+                                      }
+                                    });
+                                addSubscription(subscription1);
                               }
                             }
                             //                                                        } else if (1 == codeInfo) {
@@ -429,9 +443,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
     }
   }
 
-
-  @Override
-  protected void onPause() {
+  @Override protected void onPause() {
     super.onPause();
     MobclickAgent.onPageEnd(this.getClass().getSimpleName());
     MobclickAgent.onPause(this);

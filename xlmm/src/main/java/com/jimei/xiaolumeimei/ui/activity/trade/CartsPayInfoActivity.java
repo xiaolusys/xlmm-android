@@ -708,6 +708,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             if (isCoupon) {
                 if (!isAlipay && !isWx && !isBudget) {
                     if (paymentInfo == 0) {
+                        setConfirmClickAble();
                         pay_extras = "pid:"
                                 + 2
                                 + ":couponid:"
@@ -726,6 +727,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     }
                 } else if (isBudget && !isAlipay && !isWx) {
                     if (paymentInfo == 0) {
+                        setConfirmClickAble();
                         pay_extras = "pid:"
                                 + 2
                                 + ":couponid:"
@@ -775,6 +777,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                                 + ";";
                     }
                     if (paymentInfo == 0) {
+                        setConfirmClickAble();
                         channel = BUDGET;
                         payV2(channel, (paymentInfo + real_use_yue) + "", pay_extras,
                                 (jieshengjine) + "");
@@ -807,12 +810,12 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                         new MyDialog(this).show();
                     } else {
                         if (paymentInfo == 0) {
+                            setConfirmClickAble();
                             channel = BUDGET;
                             pay_extras = APP_PAY + appcut + ";" + BUDGET_PAY + yue + ";";
                             payV2(channel, (paymentInfo + real_use_yue) + "", pay_extras,
                                     jieshengjine + "");
                         } else {
-
                             if (isAlipay) {
                                 channel = ALIPAY;
                                 new MyDialog(this).show();
@@ -827,7 +830,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         } else {
             JUtils.Toast("你还未设置地址");
         }
-
         JUtils.Log(TAG, "pay_extras ======" + pay_extras);
     }
 
@@ -1146,7 +1148,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             confirm.setEnabled(false);
         }
     }
-
     class MyDialog extends Dialog {
         public MyDialog(Context context) {
             super(context, R.style.MyDialog);
@@ -1166,6 +1167,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             alipay_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    alipay_layout.setClickable(false);
                     isAlipay = true;
                     isWx = false;
                     xlmmPay();
@@ -1176,6 +1178,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             wx_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    wx_layout.setClickable(false);
                     isAlipay = false;
                     isWx = true;
                     xlmmPay();
@@ -1232,6 +1235,10 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             win.setAttributes(lp);
             super.setContentView(mView);
         }
+
+        @Override public void dismiss() {
+            super.dismiss();
+        }
     }
 
     @Override
@@ -1239,5 +1246,9 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         super.onPause();
         MobclickAgent.onPageEnd(this.getClass().getSimpleName());
         MobclickAgent.onPause(this);
+    }
+
+    private void setConfirmClickAble(){
+        confirm.setClickable(false);
     }
 }

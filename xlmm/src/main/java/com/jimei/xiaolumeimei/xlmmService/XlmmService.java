@@ -23,7 +23,10 @@ import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.entities.ClickcarryBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.CouponBean;
+import com.jimei.xiaolumeimei.entities.DrawCouponBean;
+import com.jimei.xiaolumeimei.entities.GetCouponbean;
 import com.jimei.xiaolumeimei.entities.IndexBean;
+import com.jimei.xiaolumeimei.entities.IsGetcoupon;
 import com.jimei.xiaolumeimei.entities.LadyListBean;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.entities.LogisticCompany;
@@ -437,7 +440,7 @@ public interface XlmmService {
     @FormUrlEncoded
     @POST("/rest/v1/complain")
     Observable<AddressResultBean> complain(
-            @Field("com_type")String com_type,
+            @Field("com_type") String com_type,
             @Field("com_content") String com_content,
             @Field("com_title") String com_title);
 
@@ -485,7 +488,9 @@ public interface XlmmService {
 
     //获取用户未使用优惠券信息
     @GET("/rest/v1/usercoupons")
-    Observable<CouponBean> getUnusedCouponBean();
+    Observable<CouponBean> getUnusedCouponBean(
+            @Query("page") String page
+    );
 
     //获取用户过期优惠券信息
     @GET("/rest/v1/usercoupons/list_past_coupon")
@@ -543,7 +548,6 @@ public interface XlmmService {
             @Path("pk") int order_id);
 
     //创建退款单接口
-
     @FormUrlEncoded
     @POST("/rest/v1/refunds")
     Observable<RefundMsgBean> refund_create(
@@ -554,6 +558,18 @@ public interface XlmmService {
             @Field("description") String description,
             @Field("proof_pic") String proof_pic,
             @Field("refund_channel") String refund_channel
+    );
+
+    //创建退款单接口
+    @FormUrlEncoded
+    @POST("/rest/v1/refunds")
+    Observable<RefundMsgBean> refund_create(
+            @Field("id") int goods_id,
+            @Field("reason") int reason,
+            @Field("num") int num,
+            @Field("sum_price") double sum_price,
+            @Field("description") String description,
+            @Field("proof_pic") String proof_pic
     );
 
     //修改退款单
@@ -613,6 +629,13 @@ public interface XlmmService {
             @Query("page") String page
     );
 
+    //妈妈余额兑换现金消费券
+    @GET("/rest/v1/pmt/cashout/exchange_coupon")
+    Observable<DrawCouponBean> drawCoupon(
+            @Query("template_id") String template_id,
+            @Query("exchange_num") String exchange_num
+    );
+
     //获取访客列表
     @GET("/rest/v2/mama/visitor")
     Observable<MMVisitorsBean> getMamavisitor(
@@ -639,7 +662,7 @@ public interface XlmmService {
             @Field("id") String id);
 
     //选品默认列表
-    @GET("/rest/v1/products/my_choice_pro")
+    @GET("/rest/v2/products/my_choice_pro")
     Observable<MMChooselistBean> getMMChooseList(
             @Query("page") String page,
             @Query("page_size") String pagesize
@@ -650,7 +673,7 @@ public interface XlmmService {
     Observable<List<MMStoreBean>> getMMStoreList();
 
     //选品默认列表排序
-    @GET("/rest/v1/products/my_choice_pro")
+    @GET("/rest/v2/products/my_choice_pro")
     Observable<MMChooselistBean> getMMChooseSortList(
             @Query("sort_field") String sort_field,
             @Query("page") String page,
@@ -658,7 +681,7 @@ public interface XlmmService {
     );
 
     //选品女装或者童装列表
-    @GET("/rest/v1/products/my_choice_pro")
+    @GET("/rest/v2/products/my_choice_pro")
     Observable<MMChooselistBean> getMMChooseLadyOrChildList(
 
             @Query("category") String category,
@@ -667,7 +690,7 @@ public interface XlmmService {
     );
 
     //选品排序列表
-    @GET("/rest/v1/products/my_choice_pro")
+    @GET("/rest/v2/products/my_choice_pro")
     Observable<MMChooselistBean> getMMChooseLadyOrChildSortListSort(
             @Query("sort_field") String sort_field,
             @Query("category") String category,
@@ -968,7 +991,7 @@ public interface XlmmService {
     //获得未来粉丝列表
     @GET("/rest/v2/potential_fans")
     Observable<PotentialFans> getPotentialFans(
-        @Query("page")String page
+            @Query("page") String page
     );
 
     @FormUrlEncoded
@@ -976,5 +999,14 @@ public interface XlmmService {
     Observable<RedBagBean> getRedBag(
             @Field("uniq_id") String uniq_id
 
+    );
+
+    @GET("rest/v1/usercoupons/get_register_gift_coupon")
+    Observable<Response<GetCouponbean>> getCouPon(
+    );
+
+
+    @GET("/rest/v1/usercoupons/is_picked_register_gift_coupon")
+    Observable<Response<IsGetcoupon>> isCouPon(
     );
 }

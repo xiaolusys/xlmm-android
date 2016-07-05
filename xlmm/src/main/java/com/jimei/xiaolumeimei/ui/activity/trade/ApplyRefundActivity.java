@@ -1,24 +1,23 @@
 package com.jimei.xiaolumeimei.ui.activity.trade;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import butterknife.Bind;
 
+import com.afollestad.materialdialogs.util.DialogUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
@@ -31,15 +30,11 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
-import java.util.List;
-
-import okhttp3.ResponseBody;
-import retrofit2.adapter.rxjava.HttpException;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
-        implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
+        implements View.OnClickListener {
     String TAG = "ApplyRefundActivity";
     String slect_reason[] = new String[]{"七天无理由退换", "缺货", "错拍", "没有发货", "与描述不符", "其他"};
 
@@ -67,12 +62,12 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
     EditText et_refund_reason;
     @Bind(R.id.btn_commit)
     Button btn_commit;
-    @Bind(R.id.rg)
-    RadioGroup radioGroup;
-    @Bind(R.id.msg_tv)
-    TextView msgTv;
-    @Bind(R.id.ll_tv)
-    LinearLayout tvLayout;
+    @Bind(R.id.refund_iv)
+    ImageView typeIcon;
+    @Bind(R.id.refund_tv)
+    TextView typeName;
+    @Bind(R.id.refund_tv_desc)
+    TextView typeTvDesc;
 
     AllOrdersBean.ResultsEntity.OrdersEntity goods_info;
     String reason = "";
@@ -80,9 +75,11 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
     double apply_fee = 0;
     String desc = "";
     String proof_pic = "";
-    private OrderDetailBean.ExtrasBean extraBean;
     private int id;
     private int position;
+    private String refund_channel;
+    private String name;
+    private String typeDesc;
 
     @Override
     protected void setListener() {
@@ -100,13 +97,15 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
                 return false;
             }
         });
-        radioGroup.setOnCheckedChangeListener(this);
     }
 
     @Override
     protected void getBundleExtras(Bundle extras) {
         id = extras.getInt("id");
         position = extras.getInt("position");
+        refund_channel = extras.getString("refund_channel");
+        name = extras.getString("name");
+        typeDesc = extras.getString("desc");
     }
 
     @Override
@@ -116,13 +115,13 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void initViews() {
+        showIndeterminateProgressDialog(false);
         Subscription subscribe = TradeModel.getInstance()
                 .getOrderDetailBean(id)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<OrderDetailBean>() {
                     @Override
                     public void onNext(OrderDetailBean orderDetailBean) {
-                        extraBean = orderDetailBean.getExtras();
                         goods_info = orderDetailBean.getOrders().get(position);
                         fillDataIntoView();
                     }
@@ -136,19 +135,6 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
     }
 
     private void fillDataIntoView() {
-        List<OrderDetailBean.ExtrasBean.RefundChoicesBean> refund_choices = extraBean.getRefund_choices();
-        for (OrderDetailBean.ExtrasBean.RefundChoicesBean refund_choice : refund_choices) {
-            RadioButton button = new RadioButton(this);
-            TextView textView = new TextView(this);
-            textView.setTextSize(15);
-            textView.setTextColor(getResources().getColor(R.color.text_color_62));
-            textView.setText(refund_choice.getName());
-            textView.setGravity(Gravity.LEFT);
-            textView.setPadding(0, 15, 0, 15);
-            button.setTag(textView);
-            radioGroup.addView(button);
-            tvLayout.addView(textView);
-        }
         if (goods_info != null) {
             fillDataToView(goods_info);
         } else {
@@ -178,17 +164,25 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
     }
 
     private void fillDataToView(AllOrdersBean.ResultsEntity.OrdersEntity goods) {
-        ViewUtils.loadImgToImgView(this, img_good, goods.getPicPath());
+        ViewUtils.loadImgToImgView(this, img_good, goods.getPic_path());
 
         tx_good_name.setText(goods.getTitle());
-        tx_good_price.setText("￥" + goods.getTotalFee());
+        tx_good_price.setText("￥" + goods.getTotal_fee());
 
-        tx_good_size.setText("尺码：" + goods.getSkuName());
+        tx_good_size.setText("尺码：" + goods.getSku_name());
         tx_good_num.setText("×" + goods.getNum());
 
         num = goods.getNum();
         tx_refund_num.setText(Integer.toString(num));
         tx_refundfee.setText("￥" + goods.getPayment());
+        typeName.setText(name);
+        typeTvDesc.setText(typeDesc);
+        if ("budget".equals(refund_channel)) {
+            typeIcon.setImageResource(R.drawable.icon_fast_return);
+        } else {
+            typeIcon.setImageResource(R.drawable.icon_return);
+        }
+        hideIndeterminateProgressDialog();
     }
 
     @Override
@@ -201,10 +195,27 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
                 desc = et_refund_info.getText().toString().trim();
                 if (reason.equals("")) {
                     JUtils.Toast("请选择退货原因！");
-                } else if (radioGroup.getCheckedRadioButtonId() == -1) {
-                    JUtils.Toast("请选择退款方式");
                 } else {
-                    commit_apply();
+                    View view = LayoutInflater.from(this).inflate(R.layout.dialog_refund_layout, null);
+                    View yesView = view.findViewById(R.id.yes_btn);
+                    View noView = view.findViewById(R.id.no_btn);
+                    AlertDialog dialog = new AlertDialog.Builder(this)
+                            .setCancelable(false)
+                            .setView(view)
+                            .create();
+                    yesView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                            commit_apply();
+                        }
+                    });
+                    noView.setOnClickListener(this);
+                    if ("budget".equals(refund_channel)) {
+                        dialog.show();
+                    } else {
+                        commit_apply();
+                    }
                 }
 
                 break;
@@ -230,18 +241,14 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
                 }
                 tx_refund_num.setText(Integer.toString(num));
                 break;
+            case R.id.no_btn:
+                finish();
+                break;
         }
     }
 
     private void commit_apply() {
-        String refund_channel = "";
-        int radioButtonId = radioGroup.getCheckedRadioButtonId();
-        RadioButton radioButton = (RadioButton) radioGroup.findViewById(radioButtonId);
-        for (OrderDetailBean.ExtrasBean.RefundChoicesBean bean : extraBean.getRefund_choices()) {
-            if (bean.getName().equals(((TextView) radioButton.getTag()).getText().toString())) {
-                refund_channel = bean.getRefund_channel();
-            }
-        }
+        showIndeterminateProgressDialog(false);
         Subscription subscription = TradeModel.getInstance()
                 .refund_create(goods_info.getId(), XlmmConst.get_reason_num(reason), num,
                         apply_fee, desc, proof_pic, refund_channel)
@@ -251,6 +258,7 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
                     public void onNext(RefundMsgBean resp) {
                         JUtils.Toast(resp.getInfo());
                         Log.i(TAG, "commit_apply success " + resp.toString());
+                        hideIndeterminateProgressDialog();
                         finish();
                     }
 
@@ -261,7 +269,8 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
 
                     @Override
                     public void onError(Throwable e) {
-//
+                        hideIndeterminateProgressDialog();
+                        JUtils.Toast("提交失败,请重新提交");
 //                        if (e instanceof HttpException) {
 //                            JUtils.Toast(((HttpException) e).code() + "");
 //                        }
@@ -303,14 +312,5 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
         super.onPause();
         MobclickAgent.onPageEnd(this.getClass().getSimpleName());
         MobclickAgent.onPause(this);
-    }
-
-    @Override
-    public void onCheckedChanged(RadioGroup group, int checkedId) {
-        for (OrderDetailBean.ExtrasBean.RefundChoicesBean bean : extraBean.getRefund_choices()) {
-            if (bean.getName().equals(((TextView) group.findViewById(checkedId).getTag()).getText().toString())) {
-                msgTv.setText(bean.getDesc());
-            }
-        }
     }
 }

@@ -136,13 +136,11 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     @Bind(R.id.hsv)
     HorizontalScrollView hsv;
 
-    private ArrayList<PackageBean> packageBeanList;
     int order_id = 0;
     OrderDetailBean orderDetail;
     String source;
     String tid;
     private Dialog dialog;
-    private OrderGoodsListAdapter mGoodsAdapter;
 
     @Override
     protected void setListener() {
@@ -196,7 +194,8 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                             orderDetail = orderDetailBean;
                             showProcBtn(orderDetailBean);
                             fillDataToView(orderDetailBean);
-                            if ("已付款".equals(orderDetailBean.getStatus_display())) {
+                            String display = orderDetailBean.getStatus_display();
+                            if ("已付款".equals(display)) {
                                 addressLayout.setOnClickListener(OrderDetailActivity.this);
                             } else {
                                 rightImage.setVisibility(View.GONE);
@@ -285,7 +284,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
             logisticsTv.setText(orderDetailBean.getLogistics_company().getName());
         }
         JUtils.Log(TAG, "crt time " + orderDetailBean.getCreated());
-        mGoodsAdapter = new OrderGoodsListAdapter(this);
+
         String channel = orderDetailBean.getChannel();
         if ("".equals(channel)) {
             relativeLayout.setVisibility(View.GONE);
@@ -298,21 +297,9 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         } else {
             relativeLayout.setVisibility(View.GONE);
         }
-        packageBeanList = new ArrayList<>();
-        Subscription subscribe = TradeModel.getInstance()
-                .getPackageList(tid)
-                .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<ArrayList<PackageBean>>() {
-                    @Override
-                    public void onNext(ArrayList<PackageBean> packageBeen) {
-                        packageBeanList.addAll(packageBeen);
-                        mGoodsAdapter.setPackageBeanList(packageBeanList);
-                        mGoodsAdapter.setData(orderDetailBean);
-                        lv_goods.setAdapter(mGoodsAdapter);
-                        setListViewHeightBasedOnChildren(lv_goods);
-                    }
-                });
-        addSubscription(subscribe);
+        OrderGoodsListAdapter mGoodsAdapter = new OrderGoodsListAdapter(this, orderDetailBean);
+        lv_goods.setAdapter(mGoodsAdapter);
+        setListViewHeightBasedOnChildren(lv_goods);
     }
 
     private void setStatusView(int status) {

@@ -65,7 +65,11 @@ public class LadyListActivity extends BaseSwipeBackCompatActivity
                         try {
                             if (ladyListBean != null) {
                                 List<LadyListBean.ResultsEntity> results = ladyListBean.getResults();
-                                totalPages = ladyListBean.getCount() / page_size + 1;
+                                if (ladyListBean.getCount() % page_size  == 0) {
+                                    totalPages = ladyListBean.getCount() / page_size ;
+                                } else {
+                                    totalPages = ladyListBean.getCount() / page_size + 1;
+                                }
                                 mLadyListAdapter.update(results);
                             }
                         } catch (Exception ex) {
@@ -89,7 +93,11 @@ public class LadyListActivity extends BaseSwipeBackCompatActivity
                         try {
                             if (ladyListBean != null) {
                                 List<LadyListBean.ResultsEntity> results = ladyListBean.getResults();
-                                totalPages = ladyListBean.getCount() / page_size + 1;
+                                if (ladyListBean.getCount() % page_size  == 0) {
+                                    totalPages = ladyListBean.getCount() / page_size ;
+                                } else {
+                                    totalPages = ladyListBean.getCount() / page_size + 1;
+                                }
                                 mLadyListAdapter2.update(results);
                             }
                         } catch (Exception ex) {
@@ -154,7 +162,11 @@ public class LadyListActivity extends BaseSwipeBackCompatActivity
                                 try {
                                     if (ladyListBean != null) {
                                         List<LadyListBean.ResultsEntity> results = ladyListBean.getResults();
-                                        totalPages = ladyListBean.getCount() / page_size + 1;
+                                        if (ladyListBean.getCount() % page_size  == 0) {
+                                            totalPages = ladyListBean.getCount() / page_size ;
+                                        } else {
+                                            totalPages = ladyListBean.getCount() / page_size + 1;
+                                        }
                                         mLadyListAdapter.updateWithClear(results);
                                     }
                                 } catch (Exception ex) {
@@ -199,7 +211,11 @@ public class LadyListActivity extends BaseSwipeBackCompatActivity
                                 try {
                                     if (ladyListBean != null) {
                                         List<LadyListBean.ResultsEntity> results = ladyListBean.getResults();
-                                        totalPages = ladyListBean.getCount() / page_size + 1;
+                                        if (ladyListBean.getCount() % page_size  == 0) {
+                                            totalPages = ladyListBean.getCount() / page_size ;
+                                        } else {
+                                            totalPages = ladyListBean.getCount() / page_size + 1;
+                                        }
                                         mLadyListAdapter2.updateWithClear(results);
                                     }
                                 } catch (Exception ex) {

@@ -64,7 +64,7 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
         String[] split = address.split("，");
         for (String s : split) {
             if (s.contains("市")) {
-                addressTv.setText(s);
+                addressTv.setText("收货地址:" + s);
             } else if (s.contains("小鹿")) {
                 nameTv.setText("收件人:小鹿售后");
             } else {

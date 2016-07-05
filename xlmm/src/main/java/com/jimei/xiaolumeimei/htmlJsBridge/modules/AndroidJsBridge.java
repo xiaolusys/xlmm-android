@@ -90,8 +90,7 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
   }
 
   @JavascriptInterface public String getNativeMobileSNCode() {
-    return ((TelephonyManager) XlmmApp.getInstance()
-        .getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
+    return "";
   }
 
   @JavascriptInterface public void showLoading(String isShow) {
@@ -537,6 +536,7 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
   }
 
   @JavascriptInterface public void callNativeLoginActivity(String pageUrl) {
+    JUtils.Log(TAG,"pageUrl"+pageUrl);
     Intent intent = new Intent(mContext, LoginActivity.class);
     Bundle bundle = new Bundle();
     bundle.putString("login", "h5");

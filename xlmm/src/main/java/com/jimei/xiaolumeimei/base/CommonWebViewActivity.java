@@ -15,8 +15,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -162,10 +160,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
           .setUserAgentString(userAgentString
               + "; xlmm/"
               + BuildConfig.VERSION_NAME
-              + "; "
-              + "uuid/"
-              + ((TelephonyManager) XlmmApp.getInstance()
-              .getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId());
+              + ";");
       mWebView.getSettings().setJavaScriptEnabled(true);
       mWebView.addJavascriptInterface(new AndroidJsBridge(this), "AndroidBridge");
 
@@ -575,31 +570,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
       //if (null!=bitmap) {
       //  bitmap.recycle();
       //}
-    }
-  }
-
-  /**
-   * 当系统版本大于5.0时 开启enableSlowWholeDocumentDraw 获取整个html文档内容
-   */
-  private void checkSdkVersion() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      WebView.enableSlowWholeDocumentDraw();
-    }
-  }
-
-  /**
-   * 当build target为23时，需要动态申请权限
-   */
-  private void requestPermission() {
-    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
-
-      if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-          != PackageManager.PERMISSION_GRANTED) {
-        //申请WRITE_EXTERNAL_STORAGE权限
-        ActivityCompat.requestPermissions(this,
-            new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
-            WRITE_EXTERNAL_STORAGE_REQUEST_CODE);
-      }
     }
   }
 

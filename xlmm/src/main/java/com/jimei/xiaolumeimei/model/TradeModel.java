@@ -156,6 +156,14 @@ public class TradeModel {
         .compose(new DefaultTransform<>());
   }
 
+  //创建退货单数据
+  public Observable<RefundMsgBean> refund_create(int goods_id, int reason, int num,
+                                                 double sum_price, String description, String proof_pic) {
+    return XlmmRetrofitClient.getService()
+            .refund_create(goods_id, reason, num, sum_price, description, proof_pic)
+            .compose(new DefaultTransform<>());
+  }
+
   //得到退货单详细数据
   public Observable<QiniuTokenBean> getQiniuToken() {
     return XlmmRetrofitClient.getService()
