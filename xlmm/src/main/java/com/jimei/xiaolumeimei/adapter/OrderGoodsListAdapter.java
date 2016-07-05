@@ -265,14 +265,14 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                                 listView.setAdapter(new RefundTypeAdapter(context, orderDetailEntity.getExtras().getRefund_choices()));
                                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                     @Override
-                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    public void onItemClick(AdapterView<?> parent, View view, int position1, long id) {
                                         Intent intent = new Intent(context, ApplyRefundActivity.class);
                                         Bundle bundle = new Bundle();
                                         bundle.putInt("id", orderDetailEntity.getId());
                                         bundle.putInt("position", position);
-                                        bundle.putString("refund_channel", orderDetailEntity.getExtras().getRefund_choices().get(position).getRefund_channel());
-                                        bundle.putString("name", orderDetailEntity.getExtras().getRefund_choices().get(position).getName());
-                                        bundle.putString("desc", orderDetailEntity.getExtras().getRefund_choices().get(position).getDesc());
+                                        bundle.putString("refund_channel", orderDetailEntity.getExtras().getRefund_choices().get(position1).getRefund_channel());
+                                        bundle.putString("name", orderDetailEntity.getExtras().getRefund_choices().get(position1).getName());
+                                        bundle.putString("desc", orderDetailEntity.getExtras().getRefund_choices().get(position1).getDesc());
                                         intent.putExtras(bundle);
                                         Log.d(TAG, "transfer good  " + goods_info.getId() + " to " + "ApplyRefundActivity");
                                         context.startActivity(intent);
