@@ -33,7 +33,7 @@
           android:background="@color/colorAccent"
           >
 
-        <ImageView
+        <RelativeLayout
             android:id="@+id/imgCircleStar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -41,7 +41,16 @@
             android:layout_marginTop="20px"
             android:clickable="true"
             android:src="@drawable/img_circlestar"
-            />
+            android:background="@drawable/img_circlestar"
+            >
+          <com.jimei.xiaolumeimei.widget.CircleImageView
+              android:layout_centerInParent="true"
+              android:id="@+id/imgUser"
+              android:layout_width="125px"
+              android:layout_height="125px"
+              android:clickable="true"
+              />
+        </RelativeLayout>
         <LinearLayout
             android:id="@+id/ll"
             android:layout_width="wrap_content"
@@ -91,14 +100,6 @@
               />
         </LinearLayout>
 
-        <com.jimei.xiaolumeimei.widget.CircleImageView
-            android:id="@+id/imgUser"
-            android:layout_width="125px"
-            android:layout_height="125px"
-            android:layout_marginLeft="80px"
-            android:layout_marginTop="25px"
-            android:clickable="true"
-            />
 
         <ImageView
             android:id="@+id/imgExam"
