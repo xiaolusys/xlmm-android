@@ -21,6 +21,16 @@ public class AddressResultBean {
 
   @SerializedName("code") private int mCode;
 
+  private String info;
+
+  public String getInfo() {
+    return info;
+  }
+
+  public void setInfo(String info) {
+    this.info = info;
+  }
+
   public void setRet(boolean ret) {
     this.mRet = ret;
   }
