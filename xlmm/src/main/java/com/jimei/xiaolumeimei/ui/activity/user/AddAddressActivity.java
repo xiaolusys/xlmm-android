@@ -142,7 +142,8 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
                         startActivity(
                             new Intent(AddAddressActivity.this, AddressActivity.class));
                         AddAddressActivity.this.finish();
-
+                    }else {
+                      JUtils.Toast(addressResultBean.getInfo());
                     }
                   }
                 }

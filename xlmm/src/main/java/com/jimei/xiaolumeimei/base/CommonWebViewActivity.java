@@ -160,10 +160,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
           .setUserAgentString(userAgentString
               + "; xlmm/"
               + BuildConfig.VERSION_NAME
-              + "; "
-              + "uuid/"
-              + ((TelephonyManager) XlmmApp.getInstance()
-              .getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId());
+              + ";");
       mWebView.getSettings().setJavaScriptEnabled(true);
       mWebView.addJavascriptInterface(new AndroidJsBridge(this), "AndroidBridge");
 

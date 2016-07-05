@@ -86,7 +86,7 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
                 fillDataToView(null);
             }
         } else {
-            companyTv.setText("小鹿推荐");
+            fillDataToView(null);
         }
     }
 
@@ -105,6 +105,13 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
                         }
                         mListView.setAdapter(new GoodsListAdapter(data, LogisticsActivity.this));
                         OrderDetailActivity.setListViewHeightBasedOnChildren(mListView);
+                        if (logisticsBean == null) {
+                            if (orderDetailBean.getLogistics_company() == null) {
+                                companyTv.setText("小鹿推荐");
+                            } else {
+                                companyTv.setText(orderDetailBean.getLogistics_company().getName());
+                            }
+                        }
                     }
                 });
         addSubscription(subscription);
@@ -143,6 +150,7 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
                 fillStatusView();
             }
         } else {
+            orderTv.setText("未揽件");
             fillStatusView();
         }
         hideIndeterminateProgressDialog();
