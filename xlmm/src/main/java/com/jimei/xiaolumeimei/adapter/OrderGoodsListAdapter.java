@@ -27,6 +27,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
+import com.jimei.xiaolumeimei.entities.LogisticCompany;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
@@ -103,7 +104,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
             divider.setVisibility(View.VISIBLE);
             if (!"".equals(data.get(position).getPackage_order_id())) {
                 logisticsLayout.setVisibility(View.VISIBLE);
-                ((TextView) convertView.findViewById(R.id.tv_order_package)).setText("包裹" + NUM[count]);
+                ((TextView) convertView.findViewById(R.id.tv_order_package)).setText("包裹" + NUM[count] + ":");
             } else {
                 logisticsLayout.setVisibility(View.GONE);
             }
@@ -111,13 +112,18 @@ public class OrderGoodsListAdapter extends BaseAdapter {
             divider.setVisibility(View.VISIBLE);
             logisticsLayout.setVisibility(View.VISIBLE);
             count++;
-            ((TextView) convertView.findViewById(R.id.tv_order_package)).setText("包裹" + NUM[count]);
+            ((TextView) convertView.findViewById(R.id.tv_order_package)).setText("包裹" + NUM[count] + ":");
         } else {
             divider.setVisibility(View.GONE);
             logisticsLayout.setVisibility(View.GONE);
         }
+
         for (int i = 0; i < orderDetailEntity.getPackage_orders().size(); i++) {
             if (data.get(position).getPackage_order_id().equals(orderDetailEntity.getPackage_orders().get(i).getId())) {
+                LogisticCompany company = orderDetailEntity.getPackage_orders().get(i).getLogistics_company();
+                if (company != null) {
+                    ((TextView) convertView.findViewById(R.id.tv_order_log)).setText(company.getName());
+                }
                 String assign_status_display = orderDetailEntity.getPackage_orders().get(i).getAssign_status_display();
                 if (assign_status_display != null) {
                     ((TextView) convertView.findViewById(R.id.tx_order_crtstate)).setText(assign_status_display);
@@ -143,18 +149,20 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                         }
                     });
                 }
-                final int finalI = i;
-                convertView.findViewById(R.id.ll_item).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(context, LogisticsActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putInt("id", orderDetailEntity.getId());
-                        bundle.putSerializable("packageOrdersBean", orderDetailEntity.getPackage_orders().get(finalI));
-                        intent.putExtras(bundle);
-                        context.startActivity(intent);
-                    }
-                });
+                if (!"已取消".equals(orderDetailEntity.getPackage_orders().get(i).getAssign_status_display())) {
+                    final int finalI = i;
+                    convertView.findViewById(R.id.ll_item).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(context, LogisticsActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("id", orderDetailEntity.getId());
+                            bundle.putSerializable("packageOrdersBean", orderDetailEntity.getPackage_orders().get(finalI));
+                            intent.putExtras(bundle);
+                            context.startActivity(intent);
+                        }
+                    });
+                }
                 break;
             }
         }
@@ -257,14 +265,14 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                                 listView.setAdapter(new RefundTypeAdapter(context, orderDetailEntity.getExtras().getRefund_choices()));
                                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                     @Override
-                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    public void onItemClick(AdapterView<?> parent, View view, int position1, long id) {
                                         Intent intent = new Intent(context, ApplyRefundActivity.class);
                                         Bundle bundle = new Bundle();
                                         bundle.putInt("id", orderDetailEntity.getId());
                                         bundle.putInt("position", position);
-                                        bundle.putString("refund_channel", orderDetailEntity.getExtras().getRefund_choices().get(position).getRefund_channel());
-                                        bundle.putString("name", orderDetailEntity.getExtras().getRefund_choices().get(position).getName());
-                                        bundle.putString("desc", orderDetailEntity.getExtras().getRefund_choices().get(position).getDesc());
+                                        bundle.putString("refund_channel", orderDetailEntity.getExtras().getRefund_choices().get(position1).getRefund_channel());
+                                        bundle.putString("name", orderDetailEntity.getExtras().getRefund_choices().get(position1).getName());
+                                        bundle.putString("desc", orderDetailEntity.getExtras().getRefund_choices().get(position1).getDesc());
                                         intent.putExtras(bundle);
                                         Log.d(TAG, "transfer good  " + goods_info.getId() + " to " + "ApplyRefundActivity");
                                         context.startActivity(intent);

@@ -49,8 +49,15 @@
                     android:id="@+id/tv_order_package"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
                     android:textColor="@color/text_color_62"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tv_order_log"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:textColor="@color/text_color_9B"
                     android:textSize="13sp" />
 
                 <View

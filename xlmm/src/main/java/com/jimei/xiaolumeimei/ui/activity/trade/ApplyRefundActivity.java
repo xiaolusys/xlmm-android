@@ -248,6 +248,7 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
     }
 
     private void commit_apply() {
+        showIndeterminateProgressDialog(false);
         Subscription subscription = TradeModel.getInstance()
                 .refund_create(goods_info.getId(), XlmmConst.get_reason_num(reason), num,
                         apply_fee, desc, proof_pic, refund_channel)
@@ -257,6 +258,7 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
                     public void onNext(RefundMsgBean resp) {
                         JUtils.Toast(resp.getInfo());
                         Log.i(TAG, "commit_apply success " + resp.toString());
+                        hideIndeterminateProgressDialog();
                         finish();
                     }
 
@@ -267,7 +269,8 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
 
                     @Override
                     public void onError(Throwable e) {
-//
+                        hideIndeterminateProgressDialog();
+                        JUtils.Toast("提交失败,请重新提交");
 //                        if (e instanceof HttpException) {
 //                            JUtils.Toast(((HttpException) e).code() + "");
 //                        }

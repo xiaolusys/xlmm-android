@@ -141,7 +141,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     String source;
     String tid;
     private Dialog dialog;
-    private OrderGoodsListAdapter mGoodsAdapter;
 
     @Override
     protected void setListener() {
@@ -298,7 +297,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         } else {
             relativeLayout.setVisibility(View.GONE);
         }
-        mGoodsAdapter = new OrderGoodsListAdapter(this, orderDetailBean);
+        OrderGoodsListAdapter mGoodsAdapter = new OrderGoodsListAdapter(this, orderDetailBean);
         lv_goods.setAdapter(mGoodsAdapter);
         setListViewHeightBasedOnChildren(lv_goods);
     }
@@ -467,7 +466,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                 startActivity(intent);
                 break;
             case R.id.logistics_layout:
-                if (orderDetail.getStatus() == 2) {
+                if ("已付款".equals(orderDetail.getStatus_display())) {
                     changeDialogWindowState();
                 }
                 break;

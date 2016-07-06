@@ -90,8 +90,7 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
   }
 
   @JavascriptInterface public String getNativeMobileSNCode() {
-    return ((TelephonyManager) XlmmApp.getInstance()
-        .getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
+    return "";
   }
 
   @JavascriptInterface public void showLoading(String isShow) {
