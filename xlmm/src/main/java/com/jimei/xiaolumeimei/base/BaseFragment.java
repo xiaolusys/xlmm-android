@@ -1,5 +1,7 @@
 package com.jimei.xiaolumeimei.base;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -35,6 +37,12 @@ public abstract class BaseFragment extends Fragment
    */
   private boolean isFirstLoad = true;
 
+  protected Activity activity;
+
+  @Override public void onAttach(Context context) {
+    super.onAttach(context);
+    activity = (Activity) context;
+  }
 
   @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {

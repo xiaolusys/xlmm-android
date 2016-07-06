@@ -412,6 +412,10 @@
             android:name=".ui.activity.xiaolumama.MMLevelExamWebViewActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
 
+        <activity
+            android:name=".ui.xlmmmain.MainActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
+
         <service
             android:name="com.xiaomi.push.service.XMPushService"
             android:enabled="true"
