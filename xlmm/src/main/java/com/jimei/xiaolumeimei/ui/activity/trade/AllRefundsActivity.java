@@ -67,10 +67,10 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity
         all_refunds_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                Log.d(TAG, "onItemClick " + arg2 + " " + arg3);
-                int goods_id = mAllRefundsAdapter.getGoodsId(arg2);
-                int refund_state = mAllRefundsAdapter.getRefundStatus(arg2);
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(TAG, "onItemClick " + position + " " + id);
+                int goods_id = mAllRefundsAdapter.getGoodsId(position);
+                int refund_state = mAllRefundsAdapter.getRefundStatus(position);
                 Intent intent = new Intent(AllRefundsActivity.this, RefundDetailActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putInt("goods_id", goods_id);

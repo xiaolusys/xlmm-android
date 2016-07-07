@@ -208,7 +208,8 @@
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".ui.activity.trade.WriteLogisticsInfoActivty"
-            android:theme="@style/AppTheme.TransparentActivity" />
+            android:theme="@style/AppTheme.TransparentActivity"
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".ui.activity.product.SizeActivity"
             android:theme="@style/AppTheme.TransparentActivity" />

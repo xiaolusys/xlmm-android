@@ -2,8 +2,12 @@ package com.jimei.xiaolumeimei.ui.activity.trade;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -123,6 +127,52 @@ public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
                 }
                 break;
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_logistic, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.write:
+                View view = LayoutInflater.from(this).inflate(R.layout.dialog_write_logistic, null);
+                AlertDialog dialog = new AlertDialog.Builder(this)
+                        .setCancelable(false)
+                        .setView(view)
+                        .create();
+                dialog.show();
+                EditText editText = (EditText) view.findViewById(R.id.et);
+                View cancelBtn = view.findViewById(R.id.cancel);
+                View commitBtn = view.findViewById(R.id.commit);
+                cancelBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                commitBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (editText.getText().toString().trim().length() >= 2) {
+                            Intent intent = new Intent(ChooseLogisticsCompanyActivity.this,
+                                    WriteLogisticsInfoActivty.class);
+                            intent.putExtra("company", editText.getText().toString().trim());
+                            setResult(1, intent);
+                            dialog.dismiss();
+                            finish();
+                        } else {
+                            JUtils.Toast("请输入正确的快递名称");
+                        }
+                    }
+                });
+                dialog.show();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

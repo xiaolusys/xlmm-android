@@ -101,8 +101,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     RelativeLayout relativeLayout;
     @Bind(R.id.iv_pay)
     ImageView imageView;
-    @Bind(R.id.line_1)
-    ImageView line1;
     @Bind(R.id.line_2)
     ImageView line2;
     @Bind(R.id.line_3)
@@ -162,7 +160,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void initViews() {
         View view = getLayoutInflater().inflate(R.layout.pop_layout, null);
-        dialog = new Dialog(this, R.style.dialog_style);
+        dialog = new Dialog(this, R.style.CustomDialog);
         dialog.setContentView(view);
         dialog.setCancelable(true);
         Window window = dialog.getWindow();

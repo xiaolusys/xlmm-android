@@ -10,69 +10,133 @@
         android:background="@color/white"
         android:orientation="vertical">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="70px"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tx_refund_no"
+            <ImageView
+                android:id="@+id/flag"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="20px"
-                android:gravity="center"
-                android:text="订单编号"
-                android:textSize="13sp" />
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30px" />
 
             <TextView
-                android:id="@+id/tx_refund_state"
+                android:id="@+id/type"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginRight="20px"
-                android:gravity="center"
-                android:text="交易关闭"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10px"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:id="@+id/warn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_warn"
+                android:visibility="gone" />
+
+
+            <TextView
+                android:id="@+id/state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="30px"
+                android:layout_marginLeft="10px"
                 android:textColor="@color/colorAccent"
                 android:textSize="13sp" />
-        </RelativeLayout>
+        </LinearLayout>
 
         <include layout="@layout/common_gap" />
 
-        <include layout="@layout/one_order_item" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingBottom="20px"
+            android:paddingLeft="30px"
+            android:paddingRight="30px"
+            android:paddingTop="20px">
 
-        <include layout="@layout/common_gap" />
+            <RelativeLayout
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/choose_img_bg"
+                android:gravity="center">
 
+                <com.jimei.xiaolumeimei.widget.RoundCornerImageView
+                    android:id="@+id/good"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/logo" />
 
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="32dp"
-            android:orientation="horizontal">
+            </RelativeLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
                 android:layout_marginLeft="20px"
-                android:gravity="center"
-                android:text="可退金额："
-                android:textSize="13sp" />
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tx_refundfee"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginRight="20px"
-                android:gravity="center"
-                android:text="￥0"
-                android:textSize="13sp" />
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:singleLine="true"
+                    android:textColor="@color/text_color_62"
+                    android:textSize="25px"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/size"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/text_color_B4"
+                    android:textSize="25px" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/payment"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="@color/text_color_62"
+                        android:textSize="25px" />
+
+                    <TextView
+                        android:id="@+id/refund"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="@color/text_color_62"
+                        android:textSize="25px"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
 
         <include layout="@layout/common_gap" />
 
