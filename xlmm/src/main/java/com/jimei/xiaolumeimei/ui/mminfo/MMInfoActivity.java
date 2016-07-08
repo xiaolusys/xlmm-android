@@ -286,9 +286,6 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
     Intent intent;
     switch (v.getId()) {
       case R.id.yue_layout:
-        if (mamaFortune.getMamaFortune().getCashValue()<20){
-          JUtils.Toast("余额小于20,不能提现哦!");
-        }else {
           if (mamaFortune != null
                   && mamaFortune.getMamaFortune().getExtraInfo().getCouldCashOut() == 0) {
             intent = new Intent(this, MamaDrawCouponActivity.class);
@@ -301,7 +298,6 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
             intent.putExtra("cash", mamaFortune.getMamaFortune().getCashValue());
             startActivity(intent);
           }
-        }
         break;
       case R.id.img_left:
         isThisWeek = false;

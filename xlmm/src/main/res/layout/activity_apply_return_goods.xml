@@ -16,6 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/title_view"
+        android:background="@color/bg_grey"
         android:padding="4dp">
 
         <LinearLayout
@@ -30,9 +31,17 @@
 
             <include layout="@layout/common_gap" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="30px"
+                android:background="@color/bg_grey" />
+
+            <include layout="@layout/common_gap" />
+
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="92px"
+                android:background="@color/white"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:padding="8dp">
@@ -80,6 +89,7 @@
             <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="92px"
+                android:background="@color/white"
                 android:orientation="horizontal"
                 android:padding="8dp">
 
@@ -101,6 +111,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
                     android:gravity="center"
+                    android:textColor="@color/colorAccent"
                     android:text="￥120"
                     android:textSize="15sp" />
             </RelativeLayout>
@@ -110,7 +121,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="30px"
-                android:background="@color/grey100" />
+                android:background="@color/bg_grey" />
 
             <include layout="@layout/common_gap" />
 
@@ -191,15 +202,16 @@
                     android:layout_height="120px"
                     android:layout_below="@+id/tv_upload">
 
-                    <ImageButton
+                    <ImageView
                         android:id="@+id/imgbtn_camera_pic"
-                        android:layout_width="120px"
-                        android:layout_height="120px"
-                        android:src="@drawable/ic_photo_camera_black_48dp" />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/icon_camera" />
 
                     <RelativeLayout
                         android:id="@+id/rl_proof_pic1"
                         android:layout_width="120px"
+                        android:layout_marginLeft="10dp"
                         android:layout_height="match_parent"
                         android:layout_toRightOf="@+id/imgbtn_camera_pic"
                         android:visibility="invisible">
@@ -211,6 +223,7 @@
                         android:id="@+id/rl_proof_pic2"
                         android:layout_width="120px"
                         android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
                         android:layout_toRightOf="@+id/rl_proof_pic1"
                         android:visibility="invisible">
 
@@ -220,6 +233,7 @@
                     <RelativeLayout
                         android:id="@+id/rl_proof_pic3"
                         android:layout_width="120px"
+                        android:layout_marginLeft="10dp"
                         android:layout_height="match_parent"
                         android:layout_toRightOf="@+id/rl_proof_pic2"
                         android:visibility="invisible">

@@ -50,8 +50,6 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     TextView goodPriceTv;
     @Bind(R.id.tv_good_size)
     TextView goodSizeTv;
-    @Bind(R.id.tv_good_num)
-    TextView goodNumTv;
     @Bind(R.id.num)
     TextView numTv;
     @Bind(R.id.price)
@@ -230,9 +228,8 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
         } else {
             goodNameTv.setText(refundDetailBean.getTitle());
         }
-        goodPriceTv.setText("¥" + refundDetailBean.getPayment());
+        goodPriceTv.setText("¥" + refundDetailBean.getPayment() + "x" + refundDetailBean.getRefund_num());
         goodSizeTv.setText("尺码：" + refundDetailBean.getSku_name());
-        goodNumTv.setText("");
         timeTv.setText("下单时间:" + refundDetailBean.getCreated().replace("T", " "));
         numTv.setText(Integer.toString(refundDetailBean.getRefund_num()));
         priceTv.setText("¥" + refundDetailBean.getRefund_fee());
@@ -249,12 +246,11 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
         JUtils.Log(TAG, "crt time " + refundDetailBean.getCreated());
         String desc = refundDetailBean.getAmount_flow().getDesc();
         refundTypeTv.setText(desc);
-        if (refundDetailBean.getStatus_display().equals("退款成功")) {
+        if (!"".equals(desc)) {
             refundLayout.setVisibility(View.VISIBLE);
         } else {
             refundLayout.setVisibility(View.GONE);
         }
-
         if ("拒绝退款".equals(refundDetailBean.getStatus_display()) || "没有退款".equals(refundDetailBean.getStatus_display()) ||
                 "退款关闭".equals(refundDetailBean.getStatus_display())) {
             statusLayout.setVisibility(View.GONE);

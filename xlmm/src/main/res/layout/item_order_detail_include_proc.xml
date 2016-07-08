@@ -118,18 +118,21 @@
                     android:elevation="0dp"
                     android:gravity="center"
                     android:text="申请退款"
-                    android:textColor="@color/colorAccent"
+                    android:textColor="@color/text_color_62"
                     android:textSize="10sp" />
 
-                <TextView
+                <Button
                     android:id="@+id/tv_order_state"
-                    android:layout_width="48dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="60dp"
+                    android:layout_height="20dp"
                     android:layout_centerInParent="true"
+                    android:background="@drawable/refund_btn"
+                    android:elevation="0dp"
                     android:gravity="center"
-                    android:text="申请退款"
-                    android:textSize="13sp"
-                    android:visibility="invisible" />
+                    android:text="处理中"
+                    android:textColor="@color/text_color_62"
+                    android:textSize="10sp"
+                    android:visibility="invisible"/>
 
 
             </RelativeLayout>

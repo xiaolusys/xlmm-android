@@ -209,7 +209,7 @@ public class AllOrdersListAdapter extends BaseAdapter {
         TextView tx_good_num = (TextView) ll_one_order.findViewById(R.id.tx_good_num);
         tx_good_name.setText(mList.get(position).getOrders().get(0).getTitle());
         tx_good_price.setText("¥" + mList.get(position).getOrders().get(0).getPayment());
-        tx_good_size.setText("尺码:" + mList.get(position).getOrders().get(0).getSku_name());
+        tx_good_size.setText(mList.get(position).getOrders().get(0).getSku_name());
         tx_good_num.setText(
                 "x" + Integer.toString(mList.get(position).getOrders().get(0).getNum()));
 
