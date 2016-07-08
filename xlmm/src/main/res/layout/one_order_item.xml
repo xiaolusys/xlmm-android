@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
     android:background="@color/white"
+    android:orientation="horizontal"
     android:padding="8dp">
 
     <RelativeLayout
@@ -30,6 +30,11 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
         <TextView
             android:id="@+id/tx_good_name"
             android:layout_width="match_parent"
@@ -41,7 +46,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="4" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -78,5 +83,10 @@
                 android:textSize="13sp" />
 
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
     </LinearLayout>
 </LinearLayout>

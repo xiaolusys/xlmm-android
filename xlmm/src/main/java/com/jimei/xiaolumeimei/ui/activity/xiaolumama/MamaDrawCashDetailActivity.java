@@ -66,6 +66,11 @@ public class MamaDrawCashDetailActivity extends BaseSwipeBackCompatActivity {
                         dateTv1.setText(entity.getBudgetDate());
                         dateTv2.setText(entity.getBudgetDate());
                         dateTv3.setText(entity.getBudgetDate());
+                        if (!"".equals(account)) {
+                            accountTv.setText(account);
+                        } else {
+                            accountLayout.setVisibility(View.GONE);
+                        }
                     }
                 });
         Subscription subscribe1 = MamaInfoModel.getInstance()
@@ -98,11 +103,7 @@ public class MamaDrawCashDetailActivity extends BaseSwipeBackCompatActivity {
 
     @Override
     protected void initViews() {
-        if (!"".equals(account)) {
-            accountTv.setText(account);
-        } else {
-            accountLayout.setVisibility(View.GONE);
-        }
+
     }
 
     @Override

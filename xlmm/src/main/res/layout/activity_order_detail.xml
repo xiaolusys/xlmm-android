@@ -217,7 +217,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="60px"
                 android:background="@color/bg_grey">
 
                 <TextView
@@ -225,8 +225,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_margin="6px"
-                    android:gravity="center_vertical"
+                    android:layout_centerVertical="true"
                     android:paddingRight="18px"
                     android:text="下单时间:"
                     android:textColor="@color/text_color_9B"
@@ -268,7 +267,6 @@
                     android:layout_marginLeft="12dp"
                     android:layout_marginRight="12dp"
                     android:layout_toRightOf="@id/image_location"
-                    android:text=""
                     android:textSize="14sp" />
 
                 <TextView
@@ -399,8 +397,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
-                    android:text="￥49"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/text_color_62"
                     android:textSize="14sp" />
             </RelativeLayout>
 
@@ -416,7 +413,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:text="优惠券："
+                    android:text="优惠金额："
                     android:textSize="14sp" />
 
                 <TextView
@@ -426,8 +423,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
-                    android:text="￥0"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/text_color_62"
                     android:textSize="14sp" />
             </RelativeLayout>
 
@@ -453,8 +449,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
-                    android:text="￥5"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/text_color_62"
                     android:textSize="14sp" />
             </RelativeLayout>
 
@@ -463,16 +458,14 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingRight="24px"
-                android:paddingTop="10px">
+                android:padding="24px">
 
                 <TextView
                     android:id="@+id/tv_money"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
-                    android:layout_toLeftOf="@+id/tx_order_payment"
-                    android:text="总金额:   "
+                    android:text="实付款:   "
                     android:textSize="14sp" />
 
                 <TextView
@@ -482,8 +475,7 @@
                     android:layout_alignBaseline="@id/tv_money"
                     android:layout_alignParentRight="true"
                     android:layout_gravity="right"
-                    android:text="￥"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/colorAccent"
                     android:textSize="17sp" />
             </RelativeLayout>
 

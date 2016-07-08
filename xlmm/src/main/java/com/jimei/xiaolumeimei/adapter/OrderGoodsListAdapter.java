@@ -266,6 +266,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                                 window.setAttributes(wlp);
                                 window.setWindowAnimations(R.style.dialog_anim);
                                 View closeIv = dialog.findViewById(R.id.close_iv);
+                                View sure = dialog.findViewById(R.id.sure);
                                 ListView listView = (ListView) dialog.findViewById(R.id.lv_refund);
                                 closeIv.setOnClickListener(new View.OnClickListener() {
                                     @Override
@@ -273,17 +274,18 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                                         dialog.dismiss();
                                     }
                                 });
-                                listView.setAdapter(new RefundTypeAdapter(context, orderDetailEntity.getExtras().getRefund_choices()));
-                                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                RefundTypeAdapter adapter = new RefundTypeAdapter(context, orderDetailEntity.getExtras().getRefund_choices());
+                                listView.setAdapter(adapter);
+                                sure.setOnClickListener(new View.OnClickListener() {
                                     @Override
-                                    public void onItemClick(AdapterView<?> parent, View view, int position1, long id) {
+                                    public void onClick(View v) {
                                         Intent intent = new Intent(context, ApplyRefundActivity.class);
                                         Bundle bundle = new Bundle();
                                         bundle.putInt("id", orderDetailEntity.getId());
                                         bundle.putInt("position", position);
-                                        bundle.putString("refund_channel", orderDetailEntity.getExtras().getRefund_choices().get(position1).getRefund_channel());
-                                        bundle.putString("name", orderDetailEntity.getExtras().getRefund_choices().get(position1).getName());
-                                        bundle.putString("desc", orderDetailEntity.getExtras().getRefund_choices().get(position1).getDesc());
+                                        bundle.putString("refund_channel", adapter.getItem(adapter.getSelect()).getRefund_channel());
+                                        bundle.putString("name", adapter.getItem(adapter.getSelect()).getName());
+                                        bundle.putString("desc", adapter.getItem(adapter.getSelect()).getDesc());
                                         intent.putExtras(bundle);
                                         Log.d(TAG, "transfer good  " + goods_info.getId() + " to " + "ApplyRefundActivity");
                                         context.startActivity(intent);

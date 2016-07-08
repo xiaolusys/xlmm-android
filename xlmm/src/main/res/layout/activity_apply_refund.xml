@@ -100,6 +100,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="申请数量："
+                    android:textColor="@color/text_color_62"
                     android:textSize="15sp" />
 
                 <View
@@ -120,6 +121,7 @@
                     android:layout_marginLeft="10px"
                     android:gravity="center"
                     android:text="1"
+                    android:textColor="@color/text_color_62"
                     android:textSize="16sp" />
 
                 <TextView
@@ -149,6 +151,7 @@
                     android:layout_alignParentTop="true"
                     android:gravity="center"
                     android:text="可退金额："
+                    android:textColor="@color/text_color_62"
                     android:textSize="15sp" />
 
                 <TextView
@@ -202,6 +205,7 @@
                 android:paddingLeft="13dp"
                 android:paddingRight="13dp"
                 android:paddingTop="10dp"
+                android:textColorHint="@color/text_color_9B"
                 android:textCursorDrawable="@drawable/color_cursor"
                 android:textSize="15sp" />
 
@@ -218,8 +222,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:gravity="center"
         android:background="@color/white"
+        android:gravity="center"
         android:padding="30px">
 
         <Button

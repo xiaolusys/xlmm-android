@@ -109,8 +109,8 @@
                             android:layout_width="0dp"
                             android:layout_height="1dp"
                             android:layout_weight="1"
-                            android:visibility="invisible"
-                            android:background="@color/text_color_32" />
+                            android:background="@color/text_color_32"
+                            android:visibility="invisible" />
 
                         <ImageView
                             android:id="@+id/iv_1"
@@ -192,8 +192,8 @@
                             android:layout_width="0dp"
                             android:layout_height="1dp"
                             android:layout_weight="1"
-                            android:visibility="invisible"
-                            android:background="@color/text_color_9B" />
+                            android:background="@color/text_color_9B"
+                            android:visibility="invisible" />
 
                     </LinearLayout>
                 </LinearLayout>
@@ -308,9 +308,11 @@
                     <Button
                         android:id="@+id/btn_write"
                         android:layout_width="wrap_content"
-                        android:layout_height="60px"
+                        android:layout_height="50px"
                         android:background="@drawable/shape_chooselist"
-                        android:text="填写快递单" />
+                        android:text="填写快递单"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="12sp" />
 
                 </LinearLayout>
 
@@ -347,65 +349,60 @@
                 </RelativeLayout>
 
                 <LinearLayout
-                    android:layout_width="fill_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <RelativeLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="bottom"
-                        android:orientation="horizontal">
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
 
-                        <TextView
-                            android:id="@+id/tv_good_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="8dp"
-                            android:text=""
-                            android:textSize="13sp" />
+                    <TextView
+                        android:id="@+id/tv_good_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:textColor="@color/text_color_62"
+                        android:textSize="14sp" />
 
-                        <TextView
-                            android:id="@+id/tv_good_price"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="10px"
-                            android:text=""
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="13sp" />
-                    </RelativeLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="4" />
 
-                    <RelativeLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
                         <TextView
                             android:id="@+id/tv_good_size"
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="8dp"
-                            android:gravity="bottom"
+                            android:layout_height="wrap_content"
                             android:text="尺码："
-                            android:textSize="15sp" />
+                            android:textColor="@color/text_color_B4"
+                            android:textSize="14sp" />
 
                         <TextView
-                            android:id="@+id/tv_good_num"
+                            android:id="@+id/tv_good_price"
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_alignParentTop="true"
-                            android:layout_marginRight="10px"
-                            android:gravity="bottom"
-                            android:text=""
-                            android:textSize="15sp" />
-                    </RelativeLayout>
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20px"
+                            android:textColor="@color/text_color_62"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
                 </LinearLayout>
             </LinearLayout>
 
@@ -465,14 +462,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="退回账户:" />
+                    android:text="退款方式:" />
 
                 <TextView
                     android:id="@+id/refund_type"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="end"
-                    android:text="暂无退款" />
+                    android:gravity="end" />
             </LinearLayout>
 
             <include layout="@layout/common_gap" />
