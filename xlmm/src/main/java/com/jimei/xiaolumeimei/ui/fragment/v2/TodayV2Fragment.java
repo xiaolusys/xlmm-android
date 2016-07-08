@@ -1,8 +1,5 @@
 package com.jimei.xiaolumeimei.ui.fragment.v2;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
@@ -26,7 +23,6 @@ import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.event.TimeEvent;
 import com.jimei.xiaolumeimei.model.ProductModel;
-import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
@@ -48,7 +44,6 @@ import rx.schedulers.Schedulers;
 public class TodayV2Fragment extends BaseFragment {
 
     private static final java.lang.String TAG = TodayV2Fragment.class.getSimpleName();
-    SharedPreferences sharedPreferences;
     @Bind(R.id.xrcy_todayv2)
     XRecyclerView xRecyclerView;
     int page_size = 10;
@@ -65,7 +60,6 @@ public class TodayV2Fragment extends BaseFragment {
     private CountdownView countTime;
     private long left;
     private String upshelfStarttime;
-    private Activity activity;
 
     public static TodayV2Fragment newInstance(String title) {
         TodayV2Fragment todayV2Fragment = new TodayV2Fragment();
@@ -79,12 +73,6 @@ public class TodayV2Fragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        activity = (MainActivity) context;
     }
 
     @Override
@@ -342,13 +330,13 @@ public class TodayV2Fragment extends BaseFragment {
     }
 
     public void showIndeterminateProgressDialog(boolean horizontal) {
-        materialDialog = new MaterialDialog.Builder(getActivity())
-                //.title(R.string.progress_dialog)
-                .content(R.string.please_wait)
-                .progress(true, 0)
-                .widgetColorRes(R.color.colorAccent)
-                .progressIndeterminateStyle(horizontal)
-                .show();
+        materialDialog = new MaterialDialog.Builder(activity)
+            //.title(R.string.progress_dialog)
+            .content(R.string.please_wait)
+            .progress(true, 0)
+            .widgetColorRes(R.color.colorAccent)
+            .progressIndeterminateStyle(horizontal)
+            .show();
     }
 
     public void hideIndeterminateProgressDialog() {

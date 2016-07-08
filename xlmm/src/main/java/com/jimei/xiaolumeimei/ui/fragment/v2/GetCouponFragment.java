@@ -13,10 +13,14 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.GetCouponbean;
+import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.event.UserInfoEmptyEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
+import com.jimei.xiaolumeimei.model.UserNewModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
+import org.greenrobot.eventbus.EventBus;
 import retrofit2.Response;
 import retrofit2.adapter.rxjava.HttpException;
 import rx.Subscription;
@@ -33,6 +37,7 @@ public class GetCouponFragment extends DialogFragment {
   @Bind(R.id.close) ImageView close;
   private Activity mActivity;
   private Subscription subscription1;
+  private Subscription subscription;
 
   public static GetCouponFragment newInstance(String title) {
     GetCouponFragment todayFragment = new GetCouponFragment();
@@ -85,9 +90,9 @@ public class GetCouponFragment extends DialogFragment {
                 JUtils.Log("getCoupon", "onnext");
                 if (getCouponbeanResponse != null) {
                   if (getCouponbeanResponse.isSuccessful()) {
-                    dismiss();
                     JUtils.Log("getCoupon", "onnext == " + getCouponbeanResponse.body().toString());
                     JUtils.Toast(getCouponbeanResponse.body().getInfo());
+                    getUserInfo();
                   }
                 }
               }
@@ -103,9 +108,36 @@ public class GetCouponFragment extends DialogFragment {
     });
   }
 
+  public void getUserInfo() {
+    subscription = UserNewModel.getInstance()
+        .getProfile()
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<UserInfoBean>() {
+          @Override public void onNext(UserInfoBean userInfoBean) {
+            if (null != userInfoBean) {
+              EventBus.getDefault().post(new UserInfoEmptyEvent());
+              dismiss();
+            }
+          }
+
+          @Override public void onCompleted() {
+            super.onCompleted();
+          }
+
+          @Override public void onError(Throwable e) {
+            super.onError(e);
+          }
+        });
+  }
+
   @Override public void onDestroyView() {
     super.onDestroyView();
-    if (subscription1 != null && subscription1.isUnsubscribed()) subscription1.unsubscribe();
+    if (subscription1 != null && subscription1.isUnsubscribed()) {
+      subscription1.unsubscribe();
+    }
+    if (subscription != null && subscription.isUnsubscribed()) {
+      subscription.unsubscribe();
+    }
     ButterKnife.unbind(this);
   }
 
@@ -121,5 +153,9 @@ public class GetCouponFragment extends DialogFragment {
   @Override public void onPause() {
     super.onPause();
     MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+  }
+
+  @Override public void onDestroy() {
+    super.onDestroy();
   }
 }

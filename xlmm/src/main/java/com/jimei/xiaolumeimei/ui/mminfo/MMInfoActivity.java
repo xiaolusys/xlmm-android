@@ -43,6 +43,7 @@ import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaDrawCouponActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaLivenessActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaVisitorActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
+import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.widget.CircleImageView;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
@@ -148,15 +149,15 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
   }
 
   @Override protected void initViews() {
-
+    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent), 0);
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
-    return false;
+    return true;
   }
 
   @Override protected TransitionMode getOverridePendingTransitionMode() {
-    return null;
+    return  TransitionMode.SCALE;
   }
 
   @Override public void initMMview(MamaFortune fortune) {

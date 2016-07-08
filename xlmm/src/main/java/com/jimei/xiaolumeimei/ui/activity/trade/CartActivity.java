@@ -152,6 +152,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.confirm:
+                MobclickAgent.onEvent(this, "BuyID");
                 Intent intent = new Intent(CartActivity.this, CartsPayInfoActivity.class);
                 StringBuilder sb = new StringBuilder();
                 if (ids.size() > 0) {
@@ -773,6 +774,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
             holder.rebuy.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    MobclickAgent.onEvent(CartActivity.this, "ReAddCartsID");
                     Subscription subscribe = CartsModel.getInstance()
                             .rebuy(cartsinfoBean.getItemId(), cartsinfoBean.getSkuId(), cartsinfoBean.getId())
                             .subscribeOn(Schedulers.io())
