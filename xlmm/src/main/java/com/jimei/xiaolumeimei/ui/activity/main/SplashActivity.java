@@ -7,11 +7,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseAppCompatActivityForDetail;
 import com.umeng.analytics.MobclickAgent;
-
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -44,7 +42,8 @@ public class SplashActivity extends BaseAppCompatActivityForDetail {
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                startActivity(new Intent(SplashActivity.this,
+                    com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity.class));
                 finish();
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }

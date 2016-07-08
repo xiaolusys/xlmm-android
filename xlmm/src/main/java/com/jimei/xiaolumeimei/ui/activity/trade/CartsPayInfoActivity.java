@@ -541,6 +541,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 }
                 break;
             case R.id.confirm:
+                MobclickAgent.onEvent(this,"PayId");
                 xlmmPayWithDialog();
                 break;
 
@@ -943,6 +944,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
                 if (result.equals("cancel")) {
                     //wexin alipay already showmsg
+                    MobclickAgent.onEvent(CartsPayInfoActivity.this,"PayCancelID");
                     JUtils.Toast("你已取消支付!");
                     startActivity(new Intent(CartsPayInfoActivity.this, CartActivity.class));
                     finish();
@@ -950,6 +952,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     JUtils.Toast("支付成功！");
                     //startActivity(new Intent(CartsPayInfoActivity.this, AllOrdersActivity.class));
                     //finish();
+                    MobclickAgent.onEvent(CartsPayInfoActivity.this,"PaySuccessID");
                     Intent intent = new Intent(CartsPayInfoActivity.this, RedBagActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("tid", order_no);
@@ -957,6 +960,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     startActivity(intent);
                     finish();
                 } else {
+                    MobclickAgent.onEvent(CartsPayInfoActivity.this,"PayFailID");
                     showMsg(result, errorMsg, extraMsg);
                     startActivity(new Intent(CartsPayInfoActivity.this, CartActivity.class));
                     finish();

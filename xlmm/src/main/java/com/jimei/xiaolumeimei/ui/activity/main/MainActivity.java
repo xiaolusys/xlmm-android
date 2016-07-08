@@ -40,6 +40,7 @@ import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.event.EmptyEvent;
 import com.jimei.xiaolumeimei.event.TimeEvent;
+import com.jimei.xiaolumeimei.event.UserEvent;
 import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.ProductModel;
@@ -149,23 +150,6 @@ public class MainActivity extends BaseActivity
   private View llayout;
   private String newTime;
   private int rvTopHeight;
-
-  public static LinearLayout.LayoutParams getLayoutParams(Bitmap bitmap, int screenWidth) {
-    float rawWidth = bitmap.getWidth();
-    float rawHeight = bitmap.getHeight();
-    float width;
-    float height;
-    if (rawWidth > screenWidth) {
-      height = (rawHeight / rawWidth) * screenWidth;
-      width = screenWidth;
-    } else {
-      width = rawWidth;
-      height = rawHeight;
-    }
-    LinearLayout.LayoutParams layoutParams =
-        new LinearLayout.LayoutParams((int) width, (int) height);
-    return layoutParams;
-  }
 
   @Override protected int provideContentViewId() {
     return R.layout.activity_main;
@@ -1112,8 +1096,20 @@ public class MainActivity extends BaseActivity
 
   @Override protected void onDestroy() {
     super.onDestroy();
+    removeStickyEvent();
     EventBus.getDefault().unregister(this);
-    EventBus.getDefault().removeAllStickyEvents();
+  }
+
+  private void removeStickyEvent() {
+    EmptyEvent emptyEvent = EventBus.getDefault().getStickyEvent(EmptyEvent.class);
+    if (emptyEvent != null) {
+      EventBus.getDefault().removeStickyEvent(emptyEvent);
+    }
+
+    UserEvent userEvent = EventBus.getDefault().getStickyEvent(UserEvent.class);
+    if (userEvent != null) {
+      EventBus.getDefault().removeStickyEvent(userEvent);
+    }
   }
 
   private class MyFragmentAdapter extends FragmentPagerAdapter {

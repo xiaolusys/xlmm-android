@@ -16,9 +16,10 @@ import butterknife.ButterKnife;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.utils.CommonUtils;
-import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.utils.TUtil;
 import com.zhy.autolayout.AutoLayoutActivity;
+import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by itxuye on 2016/6/24.
@@ -46,6 +47,23 @@ public abstract class BasePresenterActivity<T extends BasePresenter, E extends B
   private MaterialDialog materialDialog;
   public T mPresenter;
   public E mModel;
+  private CompositeSubscription mCompositeSubscription;
+
+  public CompositeSubscription getCompositeSubscription() {
+    if (this.mCompositeSubscription == null) {
+      this.mCompositeSubscription = new CompositeSubscription();
+    }
+
+    return this.mCompositeSubscription;
+  }
+
+  public void addSubscription(Subscription s) {
+    if (this.mCompositeSubscription == null) {
+      this.mCompositeSubscription = new CompositeSubscription();
+    }
+
+    this.mCompositeSubscription.add(s);
+  }
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     if (toggleOverridePendingTransition()) {
@@ -93,7 +111,7 @@ public abstract class BasePresenterActivity<T extends BasePresenter, E extends B
     } else {
       throw new IllegalArgumentException("You must return a right contentView layout resource Id");
     }
-    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent), 0);
+
     mPresenter = TUtil.getT(this, 0);
     mModel = TUtil.getT(this, 1);
     this.initViews();
@@ -312,5 +330,9 @@ public abstract class BasePresenterActivity<T extends BasePresenter, E extends B
 
   @Override protected void onStop() {
     super.onStop();
+    if (this.mCompositeSubscription != null) {
+      this.mCompositeSubscription.unsubscribe();
+      mCompositeSubscription = null;
+    }
   }
 }
