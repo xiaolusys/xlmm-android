@@ -5,6 +5,7 @@ import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import java.util.Date;
 
 /**
  * Created by itxuye on 2016/7/4.
@@ -20,6 +21,26 @@ public class MainPresenter extends MainContract.Presenter {
         mView.initUserView(userInfoBean);
       }
     }, Throwable::printStackTrace));
+  }
+
+  @Override public void getUserInfoBeanFromLogin() {
+    mRxManager.add(mModel.getProfile().subscribe(new ServiceResponse<UserInfoBean>(){
+      @Override public void onNext(UserInfoBean userInfoBean) {
+        if (null != userInfoBean) {
+          userInfoNewBean = userInfoBean;
+          mView.initDrawer(userInfoBean);
+          mView.initUserView(userInfoBean);
+        }
+      }
+
+      @Override public void onCompleted() {
+        super.onCompleted();
+      }
+
+      @Override public void onError(Throwable e) {
+        super.onError(e);
+      }
+    }));
   }
 
   @Override public void isCouPon() {
@@ -77,6 +98,19 @@ public class MainPresenter extends MainContract.Presenter {
         mView.clickGetCounpon(responseBody);
       }
     }, Throwable::printStackTrace));
+  }
+
+  @Override public long calcLefttowTime(long crtTime) {
+    long left = 0;
+    Date now = new Date();
+    try {
+      if (crtTime * 1000 - now.getTime() > 0) {
+        left = crtTime * 1000 - now.getTime();
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return left;
   }
 
   @Override public void onStart() {

@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
+import butterknife.Bind;
 import com.jimei.library.rx.RxCountDown;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -14,10 +14,9 @@ import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.GetCouponbean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
-import com.jimei.xiaolumeimei.event.EmptyEvent;
+import com.jimei.xiaolumeimei.event.UserInfoEmptyEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
-import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
@@ -27,10 +26,7 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.xiaomi.mipush.sdk.MiPushClient;
-
 import org.greenrobot.eventbus.EventBus;
-
-import butterknife.Bind;
 import retrofit2.Response;
 import retrofit2.adapter.rxjava.HttpException;
 import rx.Subscriber;
@@ -136,7 +132,7 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                   int code = codeBean.getRcode();
 
                   if (code == 0) {
-
+                    EventBus.getDefault().post(new UserInfoEmptyEvent());
                     subscribe = UserModel.getInstance()
                         .need_set_info()
                         .subscribeOn(Schedulers.io())
@@ -150,7 +146,6 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                               //set xiaomi push useraccount
                               LoginUtils.setPushUserAccount(SmsLoginActivity.this,
                                   MiPushClient.getRegId(getApplicationContext()));
-                              EventBus.getDefault().postSticky(new EmptyEvent());
                               String login = null;
                               if (null != getIntent()
                                   && getIntent().getExtras() != null) {
@@ -169,9 +164,6 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                                 } else if (login.equals("product")) {
                                   finish();
                                 } else if (login.equals("main")) {
-                                  Intent intent =
-                                      new Intent(mContext, MainActivity.class);
-                                  startActivity(intent);
                                   finish();
                                 } else if (login.equals("point")) {
                                   Intent intent =
@@ -184,9 +176,6 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                                   startActivity(intent);
                                   finish();
                                 } else if (login.equals("axiba")) {
-                                  Intent intent =
-                                      new Intent(mContext, MainActivity.class);
-                                  startActivity(intent);
                                   finish();
                                 } else if (login.equals("coupon")) {
                                   Intent intent =
@@ -206,7 +195,6 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                                   //bundle.putString("actlink", actlink);
                                   //intent.putExtras(bundle);
                                   //startActivity(intent);
-                                  EventBus.getDefault().postSticky(new EmptyEvent());
                                   JumpUtils.jumpToWebViewWithCookies(mContext, actlink,
                                       -1, CommonWebViewActivity.class);
                                   finish();
@@ -216,7 +204,6 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                                       -1, ProductPopDetailActvityWeb.class);
                                   finish();
                                 } else if (login.equals("goactivity")) {
-                                  EventBus.getDefault().postSticky(new EmptyEvent());
                                   JumpUtils.jumpToWebViewWithCookies(mContext, actlink,
                                       id, ActivityWebViewActivity.class,title);
                                   finish();
@@ -232,8 +219,6 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                                             if (getCouponbeanResponse.isSuccessful()
                                                 && getCouponbeanResponse.code() == 200) {
                                               JUtils.Toast(getCouponbeanResponse.body().getInfo());
-                                              Intent intent = new Intent(mContext, MainActivity.class);
-                                              startActivity(intent);
                                               finish();
                                             }
                                           }

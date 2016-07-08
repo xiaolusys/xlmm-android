@@ -1,18 +1,17 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
-
+import butterknife.Bind;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.event.UserInfoEmptyEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
-import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.CircleImageView;
@@ -21,8 +20,7 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.xiaomi.mipush.sdk.MiPushClient;
-
-import butterknife.Bind;
+import org.greenrobot.eventbus.EventBus;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -171,10 +169,11 @@ public class InformationActivity extends BaseSwipeBackCompatActivity
                                                         MiPushClient.unsetUserAccount(getApplicationContext(),
                                                                 finalAccount, null);
                                                     }
-                                                    Intent intent =
-                                                            new Intent(getApplicationContext(), MainActivity.class);
                                                     LoginUtils.delLoginInfo(getApplicationContext());
-                                                    startActivity(intent);
+                                                    //Intent intent =
+                                                    //        new Intent(InformationActivity.this, MainActivity.class);
+                                                    //startActivity(intent);
+                                                    EventBus.getDefault().post(new UserInfoEmptyEvent());
                                                     finish();
                                                 }
                                             }

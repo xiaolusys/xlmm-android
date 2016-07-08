@@ -1,6 +1,5 @@
 package com.jimei.xiaolumeimei.ui.fragment.v2;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
@@ -45,7 +44,6 @@ import rx.schedulers.Schedulers;
 public class TodayV2Fragment extends BaseFragment {
 
     private static final java.lang.String TAG = TodayV2Fragment.class.getSimpleName();
-    SharedPreferences sharedPreferences;
     @Bind(R.id.xrcy_todayv2)
     XRecyclerView xRecyclerView;
     int page_size = 10;
@@ -332,13 +330,13 @@ public class TodayV2Fragment extends BaseFragment {
     }
 
     public void showIndeterminateProgressDialog(boolean horizontal) {
-        materialDialog = new MaterialDialog.Builder(getActivity())
-                //.title(R.string.progress_dialog)
-                .content(R.string.please_wait)
-                .progress(true, 0)
-                .widgetColorRes(R.color.colorAccent)
-                .progressIndeterminateStyle(horizontal)
-                .show();
+        materialDialog = new MaterialDialog.Builder(activity)
+            //.title(R.string.progress_dialog)
+            .content(R.string.please_wait)
+            .progress(true, 0)
+            .widgetColorRes(R.color.colorAccent)
+            .progressIndeterminateStyle(horizontal)
+            .show();
     }
 
     public void hideIndeterminateProgressDialog() {

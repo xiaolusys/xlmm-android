@@ -65,6 +65,8 @@ public interface MainContract {
   abstract class Presenter extends BasePresenter<Model, View> {
     public abstract void getUserInfoBean();
 
+    public abstract void getUserInfoBeanFromLogin();
+
     public abstract void isCouPon();
 
     public abstract void getCartsNum();
@@ -74,6 +76,9 @@ public interface MainContract {
     public abstract void getTodayList(int page, int page_size);
 
     public abstract void getUsercoupons(String template_id);
+
+    public abstract long calcLefttowTime(long crtTime);
+
 
     @Override public void onStart() {
     }

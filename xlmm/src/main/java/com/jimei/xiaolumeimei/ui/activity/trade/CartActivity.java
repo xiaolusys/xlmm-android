@@ -9,14 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -35,10 +32,8 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.zhy.autolayout.utils.AutoUtils;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import retrofit2.Response;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
@@ -134,6 +129,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
   @Override public void onClick(View v) {
     switch (v.getId()) {
       case R.id.confirm:
+        MobclickAgent.onEvent(this,"BuyID");
         Intent intent = new Intent(CartActivity.this, CartsPayInfoActivity.class);
         StringBuilder sb = new StringBuilder();
         if (ids.size() > 0) {
@@ -733,6 +729,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
 
       holder.rebuy.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View v) {
+          MobclickAgent.onEvent(CartActivity.this,"ReAddCartsID");
           Subscription subscribe = CartsModel.getInstance()
               .rebuy(cartsinfoBean.getItemId(), cartsinfoBean.getSkuId(), cartsinfoBean.getId())
               .subscribeOn(Schedulers.io())
