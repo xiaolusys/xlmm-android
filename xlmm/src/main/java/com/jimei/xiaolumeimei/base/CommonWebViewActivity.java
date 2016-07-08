@@ -16,7 +16,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.Toolbar;
-import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -42,7 +41,6 @@ import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
 import cn.sharesdk.wechat.moments.WechatMoments;
 import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.htmlJsBridge.modules.AndroidJsBridge;
 import com.jimei.xiaolumeimei.model.ActivityModel;
@@ -341,7 +339,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override public void onComplete(Platform platform, int action, HashMap<String, Object> arg2) {
-
     // 成功
     Message msg = new Message();
     msg.what = MSG_ACTION_CCALLBACK;
@@ -367,12 +364,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
   public boolean handleMessage(Message msg) {
     switch (msg.arg1) {
       case 1: {
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("id", "name");
-
-        map.put(((Platform) (msg.obj)).getId() + "", ((Platform) (msg.obj)).getName());
-        MobclickAgent.onEvent(mContext, "ShareID", map);
-        JUtils.Log("UmengTest", "platfrom===" + ((Platform) (msg.obj)).getName());
         // 成功
         Toast.makeText(this, "分享成功", Toast.LENGTH_SHORT).show();
         JUtils.Log(TAG, "分享回调成功------------");
@@ -598,6 +589,11 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override public void onShare(Platform platform, Platform.ShareParams paramsToShare) {
+      Map<String, String> map = new HashMap<String, String>();
+      map.put("id", "name");
+      map.put(platform.getId()+ "", platform.getName());
+      JUtils.Log("ShareID",platform.getId()+ "    "+platform.getName());
+      MobclickAgent.onEvent(mContext, "ShareID", map);
       if (WechatMoments.NAME.equals(platform.getName())) {
         paramsToShare.setTitle(text);
       }

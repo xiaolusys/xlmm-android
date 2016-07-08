@@ -14,7 +14,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.Toolbar;
-import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.webkit.JavascriptInterface;
@@ -36,7 +35,6 @@ import cn.sharesdk.wechat.moments.WechatMoments;
 import com.google.gson.Gson;
 import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.entities.CallNativeFuncBean;
@@ -159,6 +157,12 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     Platform wx = ShareSDK.getPlatform(mContext, Wechat.NAME);
     wx.setPlatformActionListener(this); // 设置分享事件回调
     // 执行图文分享
+
+    Map<String, String> map = new HashMap<String, String>();
+    map.put("id", "name");
+    map.put(wx.getId()+ "", wx.getName());
+    MobclickAgent.onEvent(mContext, "ShareID", map);
+
     wx.share(sp);
   }
 
@@ -179,6 +183,11 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     Platform pyq = ShareSDK.getPlatform(mContext, WechatMoments.NAME);
     pyq.setPlatformActionListener(this); // 设置分享事件回调
     // 执行图文分享
+
+    Map<String, String> map = new HashMap<String, String>();
+    map.put("id", "name");
+    map.put(pyq.getId()+ "", pyq.getName());
+    MobclickAgent.onEvent(mContext, "ShareID", map);
     pyq.share(sp);
   }
 
@@ -197,6 +206,12 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     Platform qq = ShareSDK.getPlatform(mContext, QQ.NAME);
     qq.setPlatformActionListener(this); // 设置分享事件回调
     // 执行图文分享
+
+    Map<String, String> map = new HashMap<String, String>();
+    map.put("id", "name");
+    map.put(qq.getId()+ "", qq.getName());
+    MobclickAgent.onEvent(mContext, "ShareID", map);
+
     qq.share(sp);
   }
 
@@ -216,6 +231,11 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     Platform qzone = ShareSDK.getPlatform(mContext, QZone.NAME);
     qzone.setPlatformActionListener(this); // 设置分享事件回调
     // 执行图文分享
+
+    Map<String, String> map = new HashMap<String, String>();
+    map.put("id", "name");
+    map.put(qzone.getId()+ "", qzone.getName());
+    MobclickAgent.onEvent(mContext, "ShareID", map);
     qzone.share(sp);
   }
 
@@ -232,6 +252,11 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     Platform weibo = ShareSDK.getPlatform(mContext, SinaWeibo.NAME);
     weibo.setPlatformActionListener((PlatformActionListener) mContext); // 设置分享事件回调
     // 执行图文分享
+
+    Map<String, String> map = new HashMap<String, String>();
+    map.put("id", "name");
+    map.put(weibo.getId()+ "", weibo.getName());
+    MobclickAgent.onEvent(mContext, "ShareID", map);
     weibo.share(sp);
   }
 
@@ -490,11 +515,6 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
   public boolean handleMessage(Message msg) {
     switch (msg.arg1) {
       case 1: {
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("id", "name");
-        map.put(((Platform) (msg.obj)).getId() + "", ((Platform) (msg.obj)).getName());
-        MobclickAgent.onEvent(mContext, "ShareID", map);
-        JUtils.Log("UmengTest", "platfrom===" + ((Platform) (msg.obj)).getName());
         // 成功
         Toast.makeText(mContext, "分享成功", Toast.LENGTH_SHORT).show();
         JUtils.Log(TAG, "分享回调成功------------");
@@ -599,6 +619,11 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     Platform weibo = ShareSDK.getPlatform(mContext, SinaWeibo.NAME);
     weibo.setPlatformActionListener((PlatformActionListener) mContext); // 设置分享事件回调
     // 执行图文分享
+
+    Map<String, String> map = new HashMap<String, String>();
+    map.put("id", "name");
+    map.put(weibo.getId()+ "", weibo.getName());
+    MobclickAgent.onEvent(mContext, "ShareID", map);
     weibo.share(sp);
   }
 
@@ -615,6 +640,10 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     Platform qzone = ShareSDK.getPlatform(mContext, QZone.NAME);
     qzone.setPlatformActionListener(this); // 设置分享事件回调
     // 执行图文分享
+    Map<String, String> map = new HashMap<String, String>();
+    map.put("id", "name");
+    map.put(qzone.getId()+ "", qzone.getName());
+    MobclickAgent.onEvent(mContext, "ShareID", map);
     qzone.share(sp);
   }
 
@@ -630,6 +659,11 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     Platform qq = ShareSDK.getPlatform(mContext, QQ.NAME);
     qq.setPlatformActionListener(this); // 设置分享事件回调
     // 执行图文分享
+
+    Map<String, String> map = new HashMap<String, String>();
+    map.put("id", "name");
+    map.put(qq.getId()+ "", qq.getName());
+    MobclickAgent.onEvent(mContext, "ShareID", map);
     qq.share(sp);
   }
 
@@ -642,6 +676,10 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     Platform pyq = ShareSDK.getPlatform(mContext, WechatMoments.NAME);
     pyq.setPlatformActionListener(this); // 设置分享事件回调
     // 执行图文分享
+    Map<String, String> map = new HashMap<String, String>();
+    map.put("id", "name");
+    map.put(pyq.getId()+ "", pyq.getName());
+    MobclickAgent.onEvent(mContext, "ShareID", map);
     pyq.share(sp);
   }
 
@@ -658,6 +696,12 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     Platform wx = ShareSDK.getPlatform(mContext, Wechat.NAME);
     wx.setPlatformActionListener(this); // 设置分享事件回调
     // 执行图文分享
+
+    Map<String, String> map = new HashMap<String, String>();
+    map.put("id", "name");
+    map.put(wx.getId()+ "", wx.getName());
+    MobclickAgent.onEvent(mContext, "ShareID", map);
+
     wx.share(sp);
   }
 
@@ -691,7 +735,6 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     oks.setCustomerLogo(enableLogo, label, listener);
     // 启动分享GUI
     oks.setShareContentCustomizeCallback(new ShareContentCustom(desc));
-
     oks.show(mContext);
   }
 
@@ -708,6 +751,12 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     }
 
     @Override public void onShare(Platform platform, Platform.ShareParams paramsToShare) {
+      Map<String, String> map = new HashMap<String, String>();
+      map.put("id", "name");
+      map.put(platform.getId()+ "", platform.getName());
+      JUtils.Log("ShareID",platform.getId()+ "    "+platform.getName());
+      MobclickAgent.onEvent(mContext, "ShareID", map);
+
       if (WechatMoments.NAME.equals(platform.getName())) {
         paramsToShare.setTitle(text);
       }
