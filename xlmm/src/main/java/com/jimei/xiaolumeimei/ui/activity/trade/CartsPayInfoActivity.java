@@ -88,8 +88,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     TextView totalPrice;
     @Bind(R.id.total_price_all)
     TextView totalPrice_all;
-    @Bind(R.id.jiesheng)
-    TextView jiesheng;
     @Bind(R.id.confirm)
     Button confirm;
     @Bind(R.id.post_fee)
@@ -108,16 +106,10 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     TextView tv_app_discount;
     @Bind(R.id.extra_budget)
     TextView extraBudget;
-    //@Bind(R.id.iv_wx) ImageView wxImg;
-    //@Bind(R.id.iv_alipay) ImageView alipayImg;
-    //@Bind(R.id.wx_layout) LinearLayout wxLayout;
-    //@Bind(R.id.alipay_layout) LinearLayout alipayLayout;
     @Bind(R.id.cb_rule)
     CheckBox ruleCb;
     @Bind(R.id.tv_rule)
     TextView ruleTv;
-    @Bind(R.id.spinner)
-    AppCompatSpinner spinner;
     @Bind(R.id.tv_wuliu)
     TextView tvWuliu;
     @Bind(R.id.wuliu_layout)
@@ -170,20 +162,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void initData() {
-        //Subscription subscribe = ActivityModel.getInstance()
-        //    .getLogisticCompany()
-        //    .subscribeOn(Schedulers.io())
-        //    .subscribe(new ServiceResponse<List<LogisticCompany>>() {
-        //      @Override public void onNext(List<LogisticCompany> logisticCompanies) {
-        //        logisticCompanyList = logisticCompanies;
-        //        ArrayAdapter<LogisticCompany> adapter =
-        //            new ArrayAdapter<>(getApplicationContext(), R.layout.item_choosespinner,
-        //                logisticCompanyList);
-        //        adapter.setDropDownViewResource(R.layout.item_choosespinner_dropdown);
-        //        spinner.setAdapter(adapter);
-        //      }
-        //    });
-        //addSubscription(subscribe);
 
         list = new ArrayList<>();
         downLoadCartsInfoWithout();
@@ -232,7 +210,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                             JUtils.Log(TAG, "合计" + (cartsPayinfoBean.getTotalFee()));
                             JUtils.Log(TAG, "已节省" + discount_fee);
 
-                            tv_postfee.setText("¥" + post_fee + "元");
+                            tv_postfee.setText("¥" + post_fee);
 
                             if (null != cartsPayinfoBean.getmPayExtras()) {
                                 List<CartsPayinfoBean.payExtrasEntityApp> payExtrasEntityApps =
@@ -362,7 +340,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                             JUtils.Log(TAG, "合计" + (cartsPayinfoBean.getTotalFee()));
                             JUtils.Log(TAG, "已节省" + discount_fee);
 
-                            tv_postfee.setText("¥" + post_fee + "元");
+                            tv_postfee.setText("¥" + post_fee);
 
                             if (null != cartsPayinfoBean.getmPayExtras()) {
                                 List<CartsPayinfoBean.payExtrasEntityApp> payExtrasEntityApps =
@@ -489,12 +467,10 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 + " jieshengjine:"
                 + jieshengjine);
 
-        tv_app_discount.setText("-" + (double) (Math.round(appcut * 100)) / 100 + "元");
-        extraBudget.setText(
-                "余额抵扣:   剩余" + budgetCash + " 本次可使用 " + (double) (Math.round(yue * 100)) / 100);
+        tv_app_discount.setText("-" + (double) (Math.round(appcut * 100)) / 100);
+        extraBudget.setText("¥" + budgetCash);
         totalPrice.setText("¥" + (double) (Math.round(paymentInfo * 100)) / 100);
-        totalPrice_all.setText("合计: ¥" + (double) (Math.round(paymentInfo * 100)) / 100 + "");
-        jiesheng.setText("已节省" + (double) (Math.round(jieshengjine * 100)) / 100 + "");
+        totalPrice_all.setText("¥" + (double) (Math.round(paymentInfo * 100)) / 100);
     }
 
     @Override
@@ -946,7 +922,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     //wexin alipay already showmsg
                     MobclickAgent.onEvent(CartsPayInfoActivity.this,"PayCancelID");
                     JUtils.Toast("你已取消支付!");
-                    startActivity(new Intent(CartsPayInfoActivity.this, CartActivity.class));
+//                    startActivity(new Intent(CartsPayInfoActivity.this, CartActivity.class));
                     finish();
                 } else if (result.equals("success")) {
                     JUtils.Toast("支付成功！");
@@ -962,7 +938,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 } else {
                     MobclickAgent.onEvent(CartsPayInfoActivity.this,"PayFailID");
                     showMsg(result, errorMsg, extraMsg);
-                    startActivity(new Intent(CartsPayInfoActivity.this, CartActivity.class));
+//                    startActivity(new Intent(CartsPayInfoActivity.this, CartActivity.class));
                     finish();
                     //JUtils.Toast(result + "" + errorMsg + "" + extraMsg);
                 }
@@ -1152,6 +1128,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             confirm.setEnabled(false);
         }
     }
+
     class MyDialog extends Dialog {
         public MyDialog(Context context) {
             super(context, R.style.MyDialog);
@@ -1240,7 +1217,8 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             super.setContentView(mView);
         }
 
-        @Override public void dismiss() {
+        @Override
+        public void dismiss() {
             super.dismiss();
         }
     }
@@ -1252,7 +1230,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         MobclickAgent.onPause(this);
     }
 
-    private void setConfirmClickAble(){
+    private void setConfirmClickAble() {
         confirm.setClickable(false);
     }
 }

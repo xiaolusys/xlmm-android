@@ -6,8 +6,6 @@ import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -18,7 +16,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -36,7 +33,6 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.LogisticCompany;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
-import com.jimei.xiaolumeimei.entities.PackageBean;
 import com.jimei.xiaolumeimei.entities.ResultBean;
 import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.model.TradeModel;
@@ -48,7 +44,6 @@ import com.umeng.analytics.MobclickAgent;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -61,9 +56,9 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     private static final int REQUEST_CODE_PAYMENT = 1;
     String TAG = "OrderDetailActivity";
     @Bind(R.id.btn_order_proc)
-    Button btn_proc;
+    ImageView btn_proc;
     @Bind(R.id.btn_order_cancel)
-    Button btn_order_cancel;
+    ImageView btn_order_cancel;
     @Bind(R.id.rlayout_order_lefttime)
     RelativeLayout rlayout_order_lefttime;
     @Bind(R.id.tx_order_id)
@@ -101,8 +96,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     RelativeLayout relativeLayout;
     @Bind(R.id.iv_pay)
     ImageView imageView;
-    @Bind(R.id.line_1)
-    ImageView line1;
     @Bind(R.id.line_2)
     ImageView line2;
     @Bind(R.id.line_3)
@@ -162,7 +155,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void initViews() {
         View view = getLayoutInflater().inflate(R.layout.pop_layout, null);
-        dialog = new Dialog(this, R.style.dialog_style);
+        dialog = new Dialog(this, R.style.CustomDialog);
         dialog.setContentView(view);
         dialog.setCancelable(true);
         Window window = dialog.getWindow();
@@ -270,8 +263,8 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         }
         tx_order_id.setText("订单编号: " + orderDetailBean.getTid());
         tx_order_state.setText(orderDetailBean.getStatus_display());
-        tx_custom_name.setText("姓名：" + orderDetailBean.getUser_adress().getReceiver_name());
-        tx_custom_address.setText("地址：" + orderDetailBean.getUser_adress().getReceiver_state()
+        tx_custom_name.setText(orderDetailBean.getUser_adress().getReceiver_name());
+        tx_custom_address.setText(orderDetailBean.getUser_adress().getReceiver_state()
                 + orderDetailBean.getUser_adress().getReceiver_city()
                 + orderDetailBean.getUser_adress().getReceiver_district()
                 + orderDetailBean.getUser_adress().getReceiver_address());
@@ -392,16 +385,16 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                                     public void onEnd(CountdownView cv) {
                                         JUtils.Log(TAG, "timeout");
                                         btn_proc.setClickable(false);
-                                        btn_proc.setBackgroundColor(Color.parseColor("#f3f3f4"));
+                                        btn_proc.setImageResource(R.drawable.pay_order_not);
                                     }
                                 });
                     } else {
                         JUtils.Log(TAG, "left time 0");
                         btn_proc.setClickable(false);
-                        btn_proc.setBackgroundColor(Color.parseColor("#f3f3f4"));
+                        btn_proc.setImageResource(R.drawable.pay_order_not);
                     }
 
-                    Button btn_order_cancel = (Button) findViewById(R.id.btn_order_cancel);
+                    ImageView btn_order_cancel = (ImageView) findViewById(R.id.btn_order_cancel);
                     btn_order_cancel.setVisibility(View.VISIBLE);
                     break;
                 }
@@ -488,8 +481,8 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                     @Override
                     public void onNext(OrderDetailBean orderDetailBean) {
                         orderDetail = orderDetailBean;
-                        tx_custom_name.setText("姓名：" + orderDetailBean.getUser_adress().getReceiver_name());
-                        tx_custom_address.setText("地址：" + orderDetailBean.getUser_adress().getReceiver_state()
+                        tx_custom_name.setText(orderDetailBean.getUser_adress().getReceiver_name());
+                        tx_custom_address.setText(orderDetailBean.getUser_adress().getReceiver_state()
                                 + orderDetailBean.getUser_adress().getReceiver_city()
                                 + orderDetailBean.getUser_adress().getReceiver_district()
                                 + orderDetailBean.getUser_adress().getReceiver_address());

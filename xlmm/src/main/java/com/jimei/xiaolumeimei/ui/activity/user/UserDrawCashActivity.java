@@ -111,11 +111,13 @@ public class UserDrawCashActivity extends BaseSwipeBackCompatActivity
             if (money >= 200) {
                 moneyEt.setText("200");
                 moneyEt.setSelection(3);
+                drawMoney = 200;
             } else {
                 moneyEt.setText(money + "");
             }
         } else {
             moneyEt.setText("");
+            drawMoney = 0;
         }
     }
 
@@ -152,6 +154,7 @@ public class UserDrawCashActivity extends BaseSwipeBackCompatActivity
     public void afterTextChanged(Editable s) {
         if (s.length() == 0) {
             moneyEt.setTextSize(14);
+            drawMoney = 0;
         } else {
             moneyEt.setTextSize(32);
             if (!s.toString().startsWith(".")) {

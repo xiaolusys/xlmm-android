@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import butterknife.Bind;
 
-import com.afollestad.materialdialogs.util.DialogUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
@@ -169,7 +168,7 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
         tx_good_name.setText(goods.getTitle());
         tx_good_price.setText("￥" + goods.getTotal_fee());
 
-        tx_good_size.setText("尺码：" + goods.getSku_name());
+        tx_good_size.setText(goods.getSku_name());
         tx_good_num.setText("×" + goods.getNum());
 
         num = goods.getNum();
@@ -199,10 +198,9 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
                     View view = LayoutInflater.from(this).inflate(R.layout.dialog_refund_layout, null);
                     View yesView = view.findViewById(R.id.yes_btn);
                     View noView = view.findViewById(R.id.no_btn);
-                    AlertDialog dialog = new AlertDialog.Builder(this)
-                            .setCancelable(false)
-                            .setView(view)
-                            .create();
+                    Dialog dialog = new Dialog(this, R.style.CustomDialog);
+                    dialog.setContentView(view);
+                    dialog.setCancelable(true);
                     yesView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -210,14 +208,18 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
                             commit_apply();
                         }
                     });
-                    noView.setOnClickListener(this);
+                    noView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
                     if ("budget".equals(refund_channel)) {
                         dialog.show();
                     } else {
                         commit_apply();
                     }
                 }
-
                 break;
             case R.id.et_refund_info:
                 Log.i(TAG, "click et_refund_info ");
@@ -240,9 +242,6 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
                     num--;
                 }
                 tx_refund_num.setText(Integer.toString(num));
-                break;
-            case R.id.no_btn:
-                finish();
                 break;
         }
     }

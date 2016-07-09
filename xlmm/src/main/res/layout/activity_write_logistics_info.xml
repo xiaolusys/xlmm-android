@@ -12,7 +12,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/bg_grey">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -22,13 +23,13 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/bg_grey"
                 android:padding="40px">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
+                    android:elevation="10dp"
                     android:orientation="vertical"
                     android:padding="40px">
 
@@ -43,7 +44,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="40px"
+                        android:layout_marginTop="30px"
                         android:orientation="horizontal">
 
                         <TextView
@@ -122,14 +123,16 @@
                         android:textSize="14sp" />
                 </LinearLayout>
 
-
             </RelativeLayout>
+
+            <include layout="@layout/common_gap" />
 
             <EditText
                 android:id="@+id/et_logistics_company"
                 android:layout_width="match_parent"
                 android:layout_height="110px"
-                android:background="@drawable/text_frame"
+                android:background="@color/white"
+                android:focusable="false"
                 android:hint="请输入物流公司"
                 android:paddingBottom="10sp"
                 android:paddingLeft="10sp"
@@ -138,12 +141,13 @@
                 android:singleLine="true"
                 android:textCursorDrawable="@drawable/color_cursor" />
 
+            <include layout="@layout/common_gap" />
 
             <EditText
                 android:id="@+id/et_logistics_number"
                 android:layout_width="match_parent"
                 android:layout_height="110px"
-                android:background="@drawable/text_frame"
+                android:background="@color/white"
                 android:hint="请输入快递单号"
                 android:paddingBottom="10sp"
                 android:paddingLeft="10sp"
@@ -152,6 +156,7 @@
                 android:singleLine="true"
                 android:textCursorDrawable="@drawable/color_cursor" />
 
+            <include layout="@layout/common_gap" />
 
             <Button
                 android:id="@+id/btn_commit"
