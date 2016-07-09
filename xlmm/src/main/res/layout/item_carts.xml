@@ -38,6 +38,8 @@
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:textColor="@color/text_color_62"
             android:textSize="14sp" />
 

@@ -9,9 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import butterknife.Bind;
@@ -58,8 +59,6 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
     Button confirmTrade;
     @Bind(R.id.total_price)
     TextView totalPrice;
-    @Bind(R.id.tv_show)
-    TextView tvShow;
     @Bind(R.id.go_main)
     Button goMain;
     @Bind(R.id.go_main1)
@@ -70,15 +69,14 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
     RelativeLayout emptyContent;
     @Bind(R.id.empty_content1)
     RelativeLayout emptyContent1;
-    @Bind(R.id.showline)
-    View showLine;
+    @Bind(R.id.scroll_view)
+    ScrollView scrollView;
     private TextView totalPrice_all_1;
     private CartsAdapetr mCartsAdapetr;
     private CartsHisAdapetr mCartsHisAdapetr;
     private double total_price;
     private List<CartsinfoBean> mList;
     private List<CartsinfoBean> mListhis;
-    private View view;
 
     @Override
     protected void setListener() {
@@ -102,12 +100,11 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
 
     @Override
     protected void initViews() {
-
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
         finishBack(toolbar);
 
-        view = getLayoutInflater().inflate(R.layout.footer, null);
+        View view = getLayoutInflater().inflate(R.layout.footer, null);
 
         totalPrice_all_1 = (TextView) view.findViewById(R.id.total_price_all_1);
         //extra_price_a = (TextView) view.findViewById(R.id.extra_price_a);
@@ -190,24 +187,17 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
                 .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
                     @Override
                     public void onNext(List<CartsinfoBean> cartsinfoBeans) {
-
                         if ((cartsinfoBeans != null) && (cartsinfoBeans.size() > 0)) {
-
+                            hideIndeterminateProgressDialog();
                             mCartsAdapetr.updateWithClear(cartsinfoBeans);
-
                             Subscription subscribe = CartsModel.getInstance()
                                     .getCartsHisList()
                                     .subscribeOn(Schedulers.io())
                                     .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
                                         @Override
-                                        public void onNext(List<CartsinfoBean> cartsinfoBeen) {
-                                            if (null != cartsinfoBeen) {
-                                                tvShow.setVisibility(View.VISIBLE);
-                                                showLine.setVisibility(View.VISIBLE);
-                                                mCartsHisAdapetr.updateWithClear(cartsinfoBeen);
-                                            } else {
-                                                tvShow.setVisibility(View.INVISIBLE);
-                                                showLine.setVisibility(View.INVISIBLE);
+                                        public void onNext(List<CartsinfoBean> cartsinfoList) {
+                                            if (null != cartsinfoList) {
+                                                mCartsHisAdapetr.updateWithClear(cartsinfoList);
                                             }
                                         }
                                     });
@@ -257,11 +247,9 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
                                     .subscribeOn(Schedulers.io())
                                     .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
                                         @Override
-                                        public void onNext(List<CartsinfoBean> cartsinfoBeen) {
-                                            if (null != cartsinfoBeen) {
-                                                tvShow.setVisibility(View.VISIBLE);
-                                                showLine.setVisibility(View.VISIBLE);
-                                                mCartsHisAdapetr.updateWithClear(cartsinfoBeen);
+                                        public void onNext(List<CartsinfoBean> cartsinfoList) {
+                                            if (null != cartsinfoList) {
+                                                mCartsHisAdapetr.updateWithClear(cartsinfoList);
                                             } else {
                                                 emptyContent.setVisibility(View.VISIBLE);
                                                 goMain.setOnClickListener(new View.OnClickListener() {
@@ -271,9 +259,6 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
                                                         finish();
                                                     }
                                                 });
-
-                                                tvShow.setVisibility(View.INVISIBLE);
-                                                showLine.setVisibility(View.INVISIBLE);
                                             }
                                         }
                                     });
@@ -394,13 +379,10 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
                                                             .subscribeOn(Schedulers.io())
                                                             .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
                                                                 @Override
-                                                                public void onNext(List<CartsinfoBean> cartsinfoBeen) {
-                                                                    if (null != cartsinfoBeen) {
-                                                                        mListhis = cartsinfoBeen;
+                                                                public void onNext(List<CartsinfoBean> cartsinfolist) {
+                                                                    if (null != cartsinfolist) {
+                                                                        mListhis = cartsinfolist;
                                                                         mCartsHisAdapetr.notifyDataSetChanged();
-                                                                    } else {
-                                                                        tvShow.setVisibility(View.INVISIBLE);
-                                                                        showLine.setVisibility(View.INVISIBLE);
                                                                     }
                                                                 }
 
@@ -453,13 +435,10 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
                                                                             .subscribeOn(Schedulers.io())
                                                                             .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
                                                                                 @Override
-                                                                                public void onNext(List<CartsinfoBean> cartsinfoBeen) {
-                                                                                    if (null != cartsinfoBeen) {
-                                                                                        mListhis = cartsinfoBeen;
+                                                                                public void onNext(List<CartsinfoBean> cartsinfolist) {
+                                                                                    if (null != cartsinfolist) {
+                                                                                        mListhis = cartsinfolist;
                                                                                         mCartsHisAdapetr.notifyDataSetChanged();
-                                                                                    } else {
-                                                                                        tvShow.setVisibility(View.INVISIBLE);
-                                                                                        showLine.setVisibility(View.INVISIBLE);
                                                                                     }
                                                                                     hideIndeterminateProgressDialog();
                                                                                 }
@@ -545,8 +524,8 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
                                                                     .subscribeOn(Schedulers.io())
                                                                     .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
                                                                         @Override
-                                                                        public void onNext(List<CartsinfoBean> cartsinfoBeen) {
-                                                                            mList = cartsinfoBeen;
+                                                                        public void onNext(List<CartsinfoBean> cartsinfolist) {
+                                                                            mList = cartsinfolist;
                                                                             hideIndeterminateProgressDialog();
                                                                         }
                                                                     });
@@ -555,13 +534,10 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
                                                                     .subscribeOn(Schedulers.io())
                                                                     .subscribe(new ServiceResponse<List<CartsinfoBean>>() {
                                                                         @Override
-                                                                        public void onNext(List<CartsinfoBean> cartsinfoBeen) {
-                                                                            if (null != cartsinfoBeen) {
-                                                                                mListhis = cartsinfoBeen;
+                                                                        public void onNext(List<CartsinfoBean> cartsinfolist) {
+                                                                            if (null != cartsinfolist) {
+                                                                                mListhis = cartsinfolist;
                                                                                 mCartsHisAdapetr.notifyDataSetChanged();
-                                                                            } else {
-                                                                                tvShow.setVisibility(View.INVISIBLE);
-                                                                                showLine.setVisibility(View.INVISIBLE);
                                                                             }
                                                                         }
                                                                     });
@@ -657,7 +633,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
                             }
                             mList.clear();
                             mList.addAll(list);
-
+                            scrollView.scrollTo(0, 0);
                             if (ids != null) {
                                 ids.clear();
                             }
@@ -670,7 +646,6 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
                             if (ids.size() > 0) {
                                 s = apendString(sb);
                             }
-
                             CartsModel.getInstance()
                                     .getCartsInfoList(s)
                                     .subscribeOn(Schedulers.io())
@@ -679,9 +654,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
                                         public void onNext(CartsPayinfoBean cartsPayinfoBean) {
                                             super.onNext(cartsPayinfoBean);
                                             if (cartsPayinfoBean != null) {
-
                                                 total_price = cartsPayinfoBean.getTotalFee();
-
                                                 totalPrice.setText("¥" + total_price);
                                                 totalPrice_all_1.setText("总金额¥" + total_price);
                                             }
@@ -795,6 +768,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
                                                                 mCartsAdapetr.notifyDataSetChanged();
                                                                 emptyContent1.setVisibility(View.GONE);
                                                                 cartsRecyclerview.setVisibility(View.VISIBLE);
+                                                                scrollView.scrollTo(0, 0);
                                                                 getCartsInfo();
                                                             }
                                                         }
@@ -859,9 +833,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
                                         public void onNext(CartsPayinfoBean cartsPayinfoBean) {
                                             super.onNext(cartsPayinfoBean);
                                             if (cartsPayinfoBean != null) {
-
                                                 total_price = cartsPayinfoBean.getTotalFee();
-
                                                 totalPrice.setText("¥" + total_price);
                                                 totalPrice_all_1.setText("总金额¥" + total_price);
                                             }

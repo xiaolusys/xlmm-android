@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="200px"
+    android:layout_height="wrap_content"
     android:padding="8dp">
 
-
-    <ImageView
-        android:id="@+id/location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <Button
+        android:id="@+id/change"
+        android:layout_width="60dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:src="@drawable/location" />
+        android:background="@drawable/shape_chooselist"
+        android:text="修改"
+        android:textColor="@color/colorPrimary" />
 
     <LinearLayout
         android:id="@+id/ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_toRightOf="@id/location"
+        android:layout_marginRight="12dp"
+        android:layout_toLeftOf="@id/change"
         android:orientation="horizontal">
 
         <TextView
@@ -45,22 +45,12 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/change"
-        android:layout_width="60dp"
-        android:layout_height="30dp"
-        android:layout_alignParentRight="true"
-        android:background="@drawable/shape_chooselist"
-        android:text="修改"
-        android:textColor="@color/colorPrimary" />
-
     <TextView
         android:id="@+id/receiver_address"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginLeft="16dp"
-        android:layout_toLeftOf="@id/change"
-        android:layout_toRightOf="@id/location"
-        android:text="" />
+        android:layout_below="@id/ll"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="4dp"
+        android:layout_toLeftOf="@id/change" />
 </RelativeLayout>

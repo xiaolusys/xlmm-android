@@ -147,6 +147,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     private List<String> logisticsCompanysesString = new ArrayList<>();
     private String code;
     private String order_no = "";
+    private int order_id = -1;
 
     @Override
     protected void setListener() {
@@ -517,7 +518,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 }
                 break;
             case R.id.confirm:
-                MobclickAgent.onEvent(this,"PayId");
+                MobclickAgent.onEvent(this, "PayId");
                 xlmmPayWithDialog();
                 break;
 
@@ -859,6 +860,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     public void onNext(PayInfoBean payInfoBean) {
 
                         if (null != payInfoBean) {
+                            order_id = payInfoBean.getTrade().getId();
                             order_no = payInfoBean.getTrade().getTid();
                             JUtils.Log(TAG, payInfoBean.toString());
                             Gson gson = new Gson();
@@ -874,7 +876,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                                     ComponentName componentName = new ComponentName(packageName,
                                             packageName + ".wxapi.WXPayEntryActivity");
                                     intent.setComponent(componentName);
-
                                     intent.putExtra(PaymentActivity.EXTRA_CHARGE,
                                             gson.toJson(payInfoBean.getCharge()));
                                     startActivityForResult(intent, REQUEST_CODE_PAYMENT);
@@ -920,15 +921,23 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
                 if (result.equals("cancel")) {
                     //wexin alipay already showmsg
-                    MobclickAgent.onEvent(CartsPayInfoActivity.this,"PayCancelID");
+                    MobclickAgent.onEvent(CartsPayInfoActivity.this, "PayCancelID");
                     JUtils.Toast("你已取消支付!");
 //                    startActivity(new Intent(CartsPayInfoActivity.this, CartActivity.class));
+                    if (order_id != -1) {
+                        Intent intent = new Intent(this, OrderDetailActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("orderinfo", order_id);
+                        bundle.putString("source", CartsPayInfoActivity.class.getSimpleName());
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                    }
                     finish();
                 } else if (result.equals("success")) {
                     JUtils.Toast("支付成功！");
                     //startActivity(new Intent(CartsPayInfoActivity.this, AllOrdersActivity.class));
                     //finish();
-                    MobclickAgent.onEvent(CartsPayInfoActivity.this,"PaySuccessID");
+                    MobclickAgent.onEvent(CartsPayInfoActivity.this, "PaySuccessID");
                     Intent intent = new Intent(CartsPayInfoActivity.this, RedBagActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("tid", order_no);
@@ -936,7 +945,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     startActivity(intent);
                     finish();
                 } else {
-                    MobclickAgent.onEvent(CartsPayInfoActivity.this,"PayFailID");
+                    MobclickAgent.onEvent(CartsPayInfoActivity.this, "PayFailID");
                     showMsg(result, errorMsg, extraMsg);
 //                    startActivity(new Intent(CartsPayInfoActivity.this, CartActivity.class));
                     finish();
@@ -1142,6 +1151,12 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             LinearLayout wx_layout = (LinearLayout) mView.findViewById(R.id.wx_layout);
             LinearLayout alipay_layout = (LinearLayout) mView.findViewById(R.id.alipay_layout);
             TextView textView = (TextView) mView.findViewById(R.id.total_price);
+            mView.findViewById(R.id.finish_iv).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MyDialog.this.dismiss();
+                }
+            });
 
             textView.setText("¥" + (double) (Math.round(paymentInfo * 100)) / 100);
 

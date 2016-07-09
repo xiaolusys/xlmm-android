@@ -1,7 +1,9 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,6 +42,7 @@ public class MamaDrawCouponActivity extends BaseSwipeBackCompatActivity implemen
     private Double num;
     private String msg;
     private Double money;
+    private AlertDialog alertDialog;
 
     @Override
     protected void setListener() {
@@ -67,6 +70,45 @@ public class MamaDrawCouponActivity extends BaseSwipeBackCompatActivity implemen
     protected void initViews() {
         moneyTv.setText(money + "");
         msgTv.setText(msg);
+        alertDialog = new AlertDialog.Builder(this)
+                .setMessage("兑换优惠券金额将直接从妈妈账户余额扣除!")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        alertDialog.dismiss();
+                        MamaInfoModel.getInstance()
+                                .drawCoupon(id)
+                                .subscribeOn(Schedulers.io())
+                                .subscribe(new ServiceResponse<DrawCouponBean>() {
+                                    @Override
+                                    public void onNext(DrawCouponBean drawCouponBean) {
+                                        JUtils.Toast(drawCouponBean.getInfo());
+                                        if (drawCouponBean.getCode() == 0) {
+                                            Intent intent = new Intent(MamaDrawCouponActivity.this, DrawCouponResultActivity.class);
+                                            Bundle bundle = new Bundle();
+                                            bundle.putString("num", num + "");
+                                            intent.putExtras(bundle);
+                                            startActivity(intent);
+                                            money = money - num;
+                                            moneyTv.setText(money + "");
+                                            flag20.setVisibility(View.INVISIBLE);
+                                            flag50.setVisibility(View.INVISIBLE);
+                                            id = "";
+                                            if (money < 20) {
+                                                finish();
+                                            }
+                                        }
+                                    }
+                                });
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        alertDialog.dismiss();
+                    }
+                })
+                .create();
     }
 
     @Override
@@ -100,30 +142,7 @@ public class MamaDrawCouponActivity extends BaseSwipeBackCompatActivity implemen
                 } else if (money < 20) {
                     JUtils.Toast("余额不足,无法兑换");
                 } else {
-                    MamaInfoModel.getInstance()
-                            .drawCoupon(id)
-                            .subscribeOn(Schedulers.io())
-                            .subscribe(new ServiceResponse<DrawCouponBean>() {
-                                @Override
-                                public void onNext(DrawCouponBean drawCouponBean) {
-                                    JUtils.Toast(drawCouponBean.getInfo());
-                                    if (drawCouponBean.getCode() == 0) {
-                                        Intent intent = new Intent(MamaDrawCouponActivity.this, DrawCouponResultActivity.class);
-                                        Bundle bundle = new Bundle();
-                                        bundle.putString("num", num + "");
-                                        intent.putExtras(bundle);
-                                        startActivity(intent);
-                                        money = money - num;
-                                        moneyTv.setText(money + "");
-                                        flag20.setVisibility(View.INVISIBLE);
-                                        flag50.setVisibility(View.INVISIBLE);
-                                        id = "";
-                                        if (money < 20) {
-                                            finish();
-                                        }
-                                    }
-                                }
-                            });
+                    alertDialog.show();
                 }
                 break;
         }
