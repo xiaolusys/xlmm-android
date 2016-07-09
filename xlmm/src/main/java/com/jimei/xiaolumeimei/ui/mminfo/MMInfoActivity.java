@@ -183,20 +183,24 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
 
   private void setUserImage(MamaFortune fortune) {
     try {
-      OkHttpUtils.get()
-          .url(fortune.getMamaFortune().getExtraInfo().getThumbnail())
-          .build()
-          .execute(new BitmapCallback() {
-            @Override public void onError(Call call, Exception e) {
-              e.printStackTrace();
-            }
-
-            @Override public void onResponse(Bitmap response) {
-              if (null != response) {
-                imgUser.setImageBitmap(response);
+      if (!TextUtils.isEmpty(fortune.getMamaFortune().getExtraInfo().getThumbnail())) {
+        OkHttpUtils.get()
+            .url(fortune.getMamaFortune().getExtraInfo().getThumbnail())
+            .build()
+            .execute(new BitmapCallback() {
+              @Override public void onError(Call call, Exception e) {
+                e.printStackTrace();
               }
-            }
-          });
+
+              @Override public void onResponse(Bitmap response) {
+                if (null != response) {
+                  imgUser.setImageBitmap(response);
+                }
+              }
+            });
+      } else {
+        imgUser.setImageResource(R.drawable.img_diamond);
+      }
     } catch (Exception e) {
       e.printStackTrace();
     }

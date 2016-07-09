@@ -103,9 +103,9 @@ public class XlmmApp extends MultiDexApplication {
   //初始化OkHttpClient
   private OkHttpClient initOkHttpClient() {
 
-    return new OkHttpClient.Builder().readTimeout(10000, TimeUnit.MILLISECONDS)
-        .connectTimeout(10000, TimeUnit.MILLISECONDS)
-        .writeTimeout(1000, TimeUnit.MILLISECONDS)
+    return new OkHttpClient.Builder().readTimeout(60000, TimeUnit.MILLISECONDS)
+        .connectTimeout(60000, TimeUnit.MILLISECONDS)
+        .writeTimeout(6000, TimeUnit.MILLISECONDS)
         .cookieJar(new PersistentCookieJar(new SetCookieCache(),
             new SharedPrefsCookiePersistor(mContext)))
         .build();
