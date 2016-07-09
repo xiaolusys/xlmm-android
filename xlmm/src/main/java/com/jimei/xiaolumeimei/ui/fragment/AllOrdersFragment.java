@@ -1,5 +1,6 @@
 package com.jimei.xiaolumeimei.ui.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,24 +15,19 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.AllOrdersListAdapter;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
+import com.jimei.xiaolumeimei.widget.loadingdialog.XlmmLoadingDialog;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
-
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
-
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -56,6 +52,8 @@ public class AllOrdersFragment extends Fragment {
     private Subscription subscription1;
     private Subscription subscription2;
     private MaterialDialog materialDialog;
+    private XlmmLoadingDialog loadingdialog;
+    Activity activity;
 
     public static AllOrdersFragment newInstance(String title) {
         AllOrdersFragment allOrdersFragment = new AllOrdersFragment();
@@ -63,6 +61,11 @@ public class AllOrdersFragment extends Fragment {
         bundle.putString("keyword", title);
         allOrdersFragment.setArguments(bundle);
         return allOrdersFragment;
+    }
+
+    @Override public void onAttach(Context context) {
+        super.onAttach(context);
+        activity = (Activity) context;
     }
 
     @Override
@@ -156,18 +159,15 @@ public class AllOrdersFragment extends Fragment {
     }
 
     public void showIndeterminateProgressDialog(boolean horizontal) {
-        materialDialog = new MaterialDialog.Builder(getActivity())
-                //.title(R.string.progress_dialog)
-                .content(R.string.please_wait)
-                .progress(true, 0)
-                .widgetColorRes(R.color.colorAccent)
-                .progressIndeterminateStyle(horizontal)
-                .show();
+        loadingdialog = XlmmLoadingDialog.create(activity)
+            .setStyle(XlmmLoadingDialog.Style.SPIN_INDETERMINATE)
+            .setCancellable(!horizontal)
+            .show();
     }
 
     public void hideIndeterminateProgressDialog() {
         try {
-            materialDialog.dismiss();
+            loadingdialog.dismiss();
         } catch (Exception e) {
             e.printStackTrace();
         }

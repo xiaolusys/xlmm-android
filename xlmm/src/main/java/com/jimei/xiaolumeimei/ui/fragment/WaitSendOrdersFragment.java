@@ -1,5 +1,6 @@
 package com.jimei.xiaolumeimei.ui.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import com.jimei.xiaolumeimei.adapter.WaitSendOrdersListAdapter;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
+import com.jimei.xiaolumeimei.widget.loadingdialog.XlmmLoadingDialog;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
@@ -57,6 +59,8 @@ public class WaitSendOrdersFragment extends Fragment {
     private Subscription subscription1;
     private Subscription subscription2;
     private MaterialDialog materialDialog;
+    Activity activity;
+    private XlmmLoadingDialog loadingdialog;
 
     public static WaitSendOrdersFragment newInstance(String title) {
         WaitSendOrdersFragment allOrdersFragment = new WaitSendOrdersFragment();
@@ -64,6 +68,11 @@ public class WaitSendOrdersFragment extends Fragment {
         bundle.putString("keyword", title);
         allOrdersFragment.setArguments(bundle);
         return allOrdersFragment;
+    }
+
+    @Override public void onAttach(Context context) {
+        super.onAttach(context);
+        activity = (Activity) context;
     }
 
     @Override
@@ -167,18 +176,15 @@ public class WaitSendOrdersFragment extends Fragment {
     }
 
     public void showIndeterminateProgressDialog(boolean horizontal) {
-        materialDialog = new MaterialDialog.Builder(getActivity())
-                //.title(R.string.progress_dialog)
-                .content(R.string.please_wait)
-                .progress(true, 0)
-                .widgetColorRes(R.color.colorAccent)
-                .progressIndeterminateStyle(horizontal)
-                .show();
+        loadingdialog = XlmmLoadingDialog.create(activity)
+            .setStyle(XlmmLoadingDialog.Style.SPIN_INDETERMINATE)
+            .setCancellable(!horizontal)
+            .show();
     }
 
     public void hideIndeterminateProgressDialog() {
         try {
-            materialDialog.dismiss();
+            loadingdialog.dismiss();
         } catch (Exception e) {
             e.printStackTrace();
         }
