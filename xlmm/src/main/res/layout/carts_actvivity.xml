@@ -31,8 +31,9 @@
     </android.support.design.widget.AppBarLayout>
 
     <ScrollView
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="#f3f3f4"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -49,7 +50,6 @@
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/carts_recyclerview"
@@ -154,23 +154,29 @@
                 </RelativeLayout>
             </FrameLayout>
 
-            <TextView
-                android:id="@+id/tv_show"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="16dp"
-                android:text="可重新购买的商品"
-                android:visibility="invisible"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-            <View
-                android:id="@+id/showline"
+            <LinearLayout
+                android:id="@+id/msg_layout"
                 android:layout_width="match_parent"
-                android:layout_height="1dip"
-                android:layout_marginTop="12dp"
-                android:background="@color/greytow"
-                android:visibility="invisible" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_show"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="16dp"
+                    android:text="可重新购买的商品"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+                <View
+                    android:id="@+id/showline"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:layout_marginTop="12dp"
+                    android:background="@color/greytow" />
+
+            </LinearLayout>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/cartshis_recyclerview"

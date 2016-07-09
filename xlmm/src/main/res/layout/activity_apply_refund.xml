@@ -88,12 +88,11 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="90px"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
                 android:background="@color/white"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="8dp">
+                android:paddingLeft="13dp"
+                android:paddingRight="13dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -138,10 +137,9 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="90px"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
                 android:background="@color/white"
-                android:padding="8dp">
+                android:paddingLeft="13dp"
+                android:paddingRight="13dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -205,7 +203,7 @@
                 android:paddingLeft="13dp"
                 android:paddingRight="13dp"
                 android:paddingTop="10dp"
-                android:textColorHint="@color/text_color_9B"
+                android:textColorHint="@color/text_color_B4"
                 android:textCursorDrawable="@drawable/color_cursor"
                 android:textSize="15sp" />
 
@@ -224,12 +222,12 @@
         android:layout_alignParentBottom="true"
         android:background="@color/white"
         android:gravity="center"
-        android:padding="30px">
+        android:padding="15dp">
 
         <Button
             android:id="@+id/btn_commit"
-            android:layout_width="660px"
-            android:layout_height="80px"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
             android:background="@color/colorAccent"
             android:text="提交申请"
             android:textColor="@color/white"

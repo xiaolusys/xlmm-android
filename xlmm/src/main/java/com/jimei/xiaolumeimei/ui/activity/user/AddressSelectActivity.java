@@ -13,6 +13,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AddressBean;
 import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
+import com.jimei.xiaolumeimei.widget.RecycleViewDivider;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
@@ -76,8 +77,10 @@ public class AddressSelectActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void initViews() {
     addressRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-    addressRecyclerView.addItemDecoration(
-        new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+    RecycleViewDivider divider = new RecycleViewDivider(RecycleViewDivider.VERTICAL);
+    divider.setSize(3);
+    divider.setColor(getResources().getColor(R.color.bg_grey));
+    addressRecyclerView.addItemDecoration(divider);
     adapter = new AddressSelectAdapter(this);
     addressRecyclerView.setAdapter(adapter);
   }

@@ -573,6 +573,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                 String extraMsg = data.getExtras().getString("extra_msg"); // 错误信息
                 if (result.equals("cancel")) {
                     //wexin alipay already showmsg
+                    JUtils.Toast("已取消支付!");
                 } else if (result.equals("success")) {
                     JUtils.Toast("支付成功！");
                     Intent intent = new Intent(this, RedBagActivity.class);

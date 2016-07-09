@@ -3,29 +3,27 @@
     android:layout_width="120px"
     android:layout_height="120px">
 
-  <RelativeLayout
-      android:layout_width="fill_parent"
-      android:layout_height="fill_parent"
-      >
-    <ImageView
-        android:layout_width="120px"
-        android:layout_height="120px"
-        android:src="@drawable/logo"
-        android:id="@+id/img_proof_pic"
-        />
-  </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
 
-  <RelativeLayout
-      android:layout_width="fill_parent"
-      android:layout_height="fill_parent"
-      >
-    <ImageView
-        android:layout_width="30px"
-        android:layout_height="30px"
-        android:id="@+id/img_delete"
-        android:src="@drawable/clear_text"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        />
-  </RelativeLayout>
+        <ImageView
+            android:id="@+id/img_proof_pic"
+            android:layout_width="120px"
+            android:layout_height="120px"
+            android:src="@drawable/logo" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <ImageView
+            android:id="@+id/img_delete"
+            android:layout_width="30px"
+            android:layout_height="30px"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/clear_text" />
+    </RelativeLayout>
 </FrameLayout>

@@ -223,11 +223,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
         }
         ViewUtils.loadImgToImgView(getApplicationContext(), goodImageView,
                 refundDetailBean.getPic_path());
-        if (refundDetailBean.getTitle().length() >= 15) {
-            goodNameTv.setText(refundDetailBean.getTitle().substring(0, 8) + "...");
-        } else {
-            goodNameTv.setText(refundDetailBean.getTitle());
-        }
+        goodNameTv.setText(refundDetailBean.getTitle());
         goodPriceTv.setText("¥" + refundDetailBean.getPayment() + "x" + refundDetailBean.getRefund_num());
         goodSizeTv.setText("尺码：" + refundDetailBean.getSku_name());
         timeTv.setText("下单时间:" + refundDetailBean.getCreated().replace("T", " "));
