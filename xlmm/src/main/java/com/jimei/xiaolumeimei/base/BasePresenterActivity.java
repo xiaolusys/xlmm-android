@@ -17,6 +17,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.utils.CommonUtils;
 import com.jimei.xiaolumeimei.utils.TUtil;
+import com.jimei.xiaolumeimei.widget.loadingdialog.XlmmLoadingDialog;
 import com.zhy.autolayout.AutoLayoutActivity;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
@@ -48,6 +49,7 @@ public abstract class BasePresenterActivity<T extends BasePresenter, E extends B
   public T mPresenter;
   public E mModel;
   private CompositeSubscription mCompositeSubscription;
+  private XlmmLoadingDialog loadingdialog;
 
   public CompositeSubscription getCompositeSubscription() {
     if (this.mCompositeSubscription == null) {
@@ -301,21 +303,15 @@ public abstract class BasePresenterActivity<T extends BasePresenter, E extends B
   }
 
   public void showIndeterminateProgressDialog(boolean horizontal) {
-    if (materialDialog == null) {
-      materialDialog = new MaterialDialog.Builder(this)
-          //.title(R.string.progress_dialog)
-          .content(R.string.please_wait)
-          .progress(true, 0)
-          .widgetColorRes(R.color.colorAccent)
-          .progressIndeterminateStyle(horizontal)
-          .show();
-    }
+    loadingdialog = XlmmLoadingDialog.create(this)
+        .setStyle(XlmmLoadingDialog.Style.SPIN_INDETERMINATE)
+        .setCancellable(!horizontal)
+        .show();
   }
 
   public void hideIndeterminateProgressDialog() {
     try {
-      materialDialog.dismiss();
-      materialDialog = null;
+      loadingdialog.dismiss();
     } catch (Exception e) {
       e.printStackTrace();
     }

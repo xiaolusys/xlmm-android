@@ -16,6 +16,7 @@ import butterknife.ButterKnife;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.utils.CommonUtils;
+import com.jimei.xiaolumeimei.widget.loadingdialog.XlmmLoadingDialog;
 import com.zhy.autolayout.AutoLayoutActivity;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
@@ -45,6 +46,7 @@ public abstract class   BaseAppCompatActivityForDetail extends AutoLayoutActivit
   private SharedPreferences sharedPreferences;
   private MaterialDialog materialDialog;
   private CompositeSubscription mCompositeSubscription;
+  private XlmmLoadingDialog loadingdialog;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     if (toggleOverridePendingTransition()) {
@@ -279,18 +281,15 @@ public abstract class   BaseAppCompatActivityForDetail extends AutoLayoutActivit
   }
 
   public void showIndeterminateProgressDialog(boolean horizontal) {
-    materialDialog = new MaterialDialog.Builder(this)
-        //.title(R.string.progress_dialog)
-        .content(R.string.please_wait)
-        .progress(true, 0)
-        .widgetColorRes(R.color.colorAccent)
-        .progressIndeterminateStyle(horizontal)
+    loadingdialog = XlmmLoadingDialog.create(this)
+        .setStyle(XlmmLoadingDialog.Style.SPIN_INDETERMINATE)
+        .setCancellable(!horizontal)
         .show();
   }
 
   public void hideIndeterminateProgressDialog() {
     try {
-      materialDialog.dismiss();
+      loadingdialog.dismiss();
     } catch (Exception e) {
       e.printStackTrace();
     }
