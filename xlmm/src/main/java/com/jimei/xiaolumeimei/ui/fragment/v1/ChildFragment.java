@@ -3,16 +3,13 @@ package com.jimei.xiaolumeimei.ui.fragment.v1;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -22,14 +19,13 @@ import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
+import com.jimei.xiaolumeimei.widget.loadingdialog.XlmmLoadingDialog;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -53,7 +49,7 @@ public class ChildFragment extends BaseFragment {
     private Subscription subscribe2;
     private Subscription subscribe3;
     private MaterialDialog materialDialog;
-
+    private XlmmLoadingDialog loadingdialog;
 
     public static ChildFragment newInstance(String title) {
         ChildFragment todayFragment = new ChildFragment();
@@ -240,18 +236,15 @@ public class ChildFragment extends BaseFragment {
     }
 
     public void showIndeterminateProgressDialog(boolean horizontal) {
-        materialDialog = new MaterialDialog.Builder(getActivity())
-                //.title(R.string.progress_dialog)
-                .content(R.string.please_wait)
-                .progress(true, 0)
-                .widgetColorRes(R.color.colorAccent)
-                .progressIndeterminateStyle(horizontal)
-                .show();
+        loadingdialog = XlmmLoadingDialog.create(activity)
+            .setStyle(XlmmLoadingDialog.Style.SPIN_INDETERMINATE)
+            .setCancellable(!horizontal)
+            .show();
     }
 
     public void hideIndeterminateProgressDialog() {
         try {
-            materialDialog.dismiss();
+            loadingdialog.dismiss();
         } catch (Exception e) {
             e.printStackTrace();
         }

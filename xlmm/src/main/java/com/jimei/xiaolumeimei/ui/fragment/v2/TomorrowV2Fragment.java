@@ -23,6 +23,7 @@ import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.event.TimeEvent;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
+import com.jimei.xiaolumeimei.widget.loadingdialog.XlmmLoadingDialog;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
@@ -58,6 +59,7 @@ public class TomorrowV2Fragment extends BaseFragment {
   private CountdownView countTime;
   private long left;
   private Thread thread;
+  private XlmmLoadingDialog loadingdialog;
 
   public static TomorrowV2Fragment newInstance(String title) {
     TomorrowV2Fragment tomorrowV2Fragment = new TomorrowV2Fragment();
@@ -279,19 +281,17 @@ public class TomorrowV2Fragment extends BaseFragment {
     }
   }
 
+
   public void showIndeterminateProgressDialog(boolean horizontal) {
-    materialDialog = new MaterialDialog.Builder(activity)
-        //.title(R.string.progress_dialog)
-        .content(R.string.please_wait)
-        .progress(true, 0)
-        .widgetColorRes(R.color.colorAccent)
-        .progressIndeterminateStyle(horizontal)
+    loadingdialog = XlmmLoadingDialog.create(activity)
+        .setStyle(XlmmLoadingDialog.Style.SPIN_INDETERMINATE)
+        .setCancellable(!horizontal)
         .show();
   }
 
   public void hideIndeterminateProgressDialog() {
     try {
-      materialDialog.dismiss();
+      loadingdialog.dismiss();
     } catch (Exception e) {
       e.printStackTrace();
     }
