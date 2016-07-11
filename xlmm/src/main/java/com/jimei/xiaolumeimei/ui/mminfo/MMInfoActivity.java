@@ -288,6 +288,14 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
         (double) (Math.round(his_refund.get(his_refund.size() - 1).getCarry() * 100)) / 100));
   }
 
+  @Override public void showLoading() {
+    showIndeterminateProgressDialog(false);
+  }
+
+  @Override public void hideLoading() {
+    hideIndeterminateProgressDialog();
+  }
+
   @Override public void onClick(View v) {
     Intent intent;
     switch (v.getId()) {
