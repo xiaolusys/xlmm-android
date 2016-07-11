@@ -22,6 +22,7 @@ import com.jimei.xiaolumeimei.entities.PotentialFans;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.widget.DividerItemDecorationForFooter;
+import com.jimei.xiaolumeimei.widget.loadingdialog.XlmmLoadingDialog;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 import java.lang.reflect.Field;
@@ -46,6 +47,7 @@ public class MMPotentialFansFragment extends BaseFragment {
   private Subscription subscription2;
   private MaterialDialog materialDialog;
   private Activity mActivity;
+  private XlmmLoadingDialog loadingdialog;
 
   @Override public void onAttach(Context context) {
     super.onAttach(context);
@@ -193,19 +195,15 @@ public class MMPotentialFansFragment extends BaseFragment {
   }
 
   public void showIndeterminateProgressDialog(boolean horizontal) {
-    materialDialog = new MaterialDialog.Builder(getActivity())
-
-        //.title(R.string.progress_dialog)
-        .content(R.string.please_wait)
-        .progress(true, 0)
-        .widgetColorRes(R.color.colorAccent)
-        .progressIndeterminateStyle(horizontal)
+    loadingdialog = XlmmLoadingDialog.create(activity)
+        .setStyle(XlmmLoadingDialog.Style.SPIN_INDETERMINATE)
+        .setCancellable(!horizontal)
         .show();
   }
 
   public void hideIndeterminateProgressDialog() {
     try {
-      materialDialog.dismiss();
+      loadingdialog.dismiss();
     } catch (Exception e) {
       e.printStackTrace();
     }

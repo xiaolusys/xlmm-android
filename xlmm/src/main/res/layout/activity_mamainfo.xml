@@ -69,6 +69,28 @@
               android:textSize="28px"
               />
         </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/ll1"
+            android:paddingBottom="4px"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10px"
+            android:layout_marginTop="30px"
+            android:layout_toRightOf="@id/ll"
+            android:background="@drawable/vip_icon"
+            >
+          <TextView
+              android:layout_marginLeft="8px"
+              android:layout_alignParentLeft="true"
+              android:layout_alignParentBottom="true"
+              android:id="@+id/tv_mamavip"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="@color/colorAccent"
+              android:textSize="23px"
+              />
+        </RelativeLayout>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -39,6 +39,10 @@ public interface MMInfoContract {
     void setChartData(LineData data);
 
     void initTodatText(List<RecentCarryBean.ResultsEntity> his_refund);
+
+    void showLoading();
+
+    void hideLoading();
   }
 
   abstract class Presenter extends BasePresenter<Model, View> {
