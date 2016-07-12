@@ -22,10 +22,9 @@ import com.zhy.autolayout.utils.AutoUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BrandActivityAdapter
-    extends RecyclerView.Adapter<BrandActivityAdapter.BrandlistVH> {
+public class BrandActivityAdapter extends RecyclerView.Adapter<BrandActivityAdapter.BrandlistVH> {
 
-  private List<BrandListBean.ResultsBean> mList;
+  private List<BrandListBean.ProductsBean> mList;
 
   private Context mContext;
 
@@ -35,48 +34,52 @@ public class BrandActivityAdapter
     mList = new ArrayList<>();
   }
 
-  public void updateWithClear(List<BrandListBean.ResultsBean> list) {
+  public void updateWithClear(List<BrandListBean.ProductsBean> list) {
     mList.clear();
     mList.addAll(list);
     notifyDataSetChanged();
   }
 
-  public void update(List<BrandListBean.ResultsBean> list) {
+  public void update(List<BrandListBean.ProductsBean> list) {
 
     mList.addAll(list);
     notifyDataSetChanged();
   }
 
   @Override public BrandlistVH onCreateViewHolder(ViewGroup parent, int viewType) {
-    View view = LayoutInflater.from(parent.getContext())
-        .inflate(R.layout.item_todaylist, parent, false);
+    View view =
+        LayoutInflater.from(parent.getContext()).inflate(R.layout.item_todaylist, parent, false);
     return new BrandlistVH(view);
   }
 
   @Override public void onBindViewHolder(BrandlistVH holder, int position) {
 
-    BrandListBean.ResultsBean resultsEntity = mList.get(position);
-    String picPath = resultsEntity.getProduct_img();
-    Glide.with(mContext)
-        .load(picPath)
-        .diskCacheStrategy(DiskCacheStrategy.ALL)
-        .centerCrop()
-        .into(holder.brandImag);
+    try {
+      BrandListBean.ProductsBean resultsEntity = mList.get(holder.getAdapterPosition());
+      String picPath = resultsEntity.getProductImg();
+      Glide.with(mContext)
+          .load(picPath)
+          .diskCacheStrategy(DiskCacheStrategy.ALL)
+          .centerCrop()
+          .into(holder.brandImag);
 
-    holder.productLowestPrice.setText("¥" + resultsEntity.getProduct_lowest_price());
-    holder.productStdSalePrice.setText("/¥" + resultsEntity.getProduct_std_sale_price());
-    holder.nameTv.setText(resultsEntity.getProduct_name());
+      holder.productLowestPrice.setText("¥" + resultsEntity.getProductLowestPrice());
+      holder.productStdSalePrice.setText("/¥" + resultsEntity.getProductStdSalePrice());
+      holder.nameTv.setText(resultsEntity.getProductName());
 
-    holder.cardview.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        Intent intent = new Intent(mContext, ProductDetailActvityWeb.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("product_id", resultsEntity.getProduct_id() + "");
-        intent.putExtras(bundle);
-        mContext.startActivity(intent);
-        ((Activity) mContext).finish();
-      }
-    });
+      holder.cardview.setOnClickListener(new View.OnClickListener() {
+        @Override public void onClick(View v) {
+          Intent intent = new Intent(mContext, ProductDetailActvityWeb.class);
+          Bundle bundle = new Bundle();
+          bundle.putString("product_id", resultsEntity.getModelId() + "");
+          intent.putExtras(bundle);
+          mContext.startActivity(intent);
+          ((Activity) mContext).finish();
+        }
+      });
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   @Override public int getItemCount() {

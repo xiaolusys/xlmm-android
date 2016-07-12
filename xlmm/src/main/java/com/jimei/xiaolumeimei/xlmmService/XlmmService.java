@@ -771,6 +771,10 @@ public interface XlmmService {
     @GET("/rest/v1/activitys/{id}/get_share_params")
     Observable<ActivityBean> get_party_share_content(@Path("id") String id);
 
+    //品牌
+    @GET("/rest/v1/activitys/{id}")
+    Observable<BrandListBean> getBrandList(@Path("id") String id);
+
     //获得one day小鹿妈妈订单记录
     @GET("/rest/v1/pmt/shopping/shops_by_day")
     Observable<OneDayAgentOrdersBean> getOneDayAgentOrders(

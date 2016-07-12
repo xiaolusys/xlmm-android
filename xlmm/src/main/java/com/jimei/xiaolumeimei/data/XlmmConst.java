@@ -43,6 +43,7 @@ public class XlmmConst {
     public static  final int JUMP_REFUNDS =12;
     public static  final int JUMP_CARTS =13;
     public static  final int JUMP_PRODUCT_DETAIL_PUSH =14;
+    public static  final int JUMP_TOPIC =15;
 
     public static  final String JUMP_PREFIX = "com.jimei.xlmm://app/v1/";
 

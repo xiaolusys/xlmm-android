@@ -61,6 +61,7 @@ public class MainPresenter extends MainContract.Presenter {
     mRxManager.add(mModel.getPortalBean().subscribe(new ServiceResponse<PortalBean>() {
       @Override public void onNext(PortalBean portalBean) {
         if (null != portalBean) {
+          JUtils.Log("MainPresenter",portalBean.toString());
           mView.initSliderLayout(portalBean);
 
           mView.initCategory(portalBean);
@@ -81,6 +82,7 @@ public class MainPresenter extends MainContract.Presenter {
         if (swipeRefreshLayout != null) {
           swipeRefreshLayout.setRefreshing(false);
         }
+        JUtils.Log("MainPresenter","    "+e.getMessage());
         JUtils.ToastLong("数据加载有误,请下拉刷新重试!");
       }
     }));
