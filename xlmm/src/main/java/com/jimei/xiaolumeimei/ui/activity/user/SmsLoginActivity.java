@@ -179,7 +179,7 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                                   finish();
                                 } else if (login.equals("coupon")) {
                                   Intent intent =
-                                      new Intent(mContext, CouponActivity.class);
+                                      new Intent(mContext, AllCouponActivity.class);
                                   startActivity(intent);
                                   finish();
                                 } else if (login.equals("productdetail")) {

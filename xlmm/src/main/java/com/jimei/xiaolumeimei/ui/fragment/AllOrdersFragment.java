@@ -51,7 +51,6 @@ public class AllOrdersFragment extends Fragment {
     private int page = 2;
     private Subscription subscription1;
     private Subscription subscription2;
-    private MaterialDialog materialDialog;
     private XlmmLoadingDialog loadingdialog;
     Activity activity;
 
@@ -100,7 +99,6 @@ public class AllOrdersFragment extends Fragment {
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
                                  int totalItemCount) {
-                //lastItem = firstVisibleItem + visibleItemCount - 1 ;
             }
         });
 
@@ -130,7 +128,6 @@ public class AllOrdersFragment extends Fragment {
     }
 
     private void loadMoreData(String page, Context context) {
-
         subscription2 = TradeModel.getInstance()
                 .getAlloderBean(page)
                 .subscribeOn(Schedulers.io())

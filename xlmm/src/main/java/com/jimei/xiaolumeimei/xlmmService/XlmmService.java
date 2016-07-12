@@ -23,6 +23,7 @@ import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.entities.ClickcarryBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.CouponBean;
+import com.jimei.xiaolumeimei.entities.CouponEntity;
 import com.jimei.xiaolumeimei.entities.DrawCouponBean;
 import com.jimei.xiaolumeimei.entities.GetCouponbean;
 import com.jimei.xiaolumeimei.entities.IndexBean;
@@ -193,7 +194,6 @@ public interface XlmmService {
     @FormUrlEncoded
     @POST("/rest/v1/carts")
     Observable<AddCartsBean> addCarts(
-
             @Field("item_id") String itemId,
             @Field("sku_id") String skuId
     );
@@ -485,15 +485,23 @@ public interface XlmmService {
             @Query("page") String page
     );
 
+    //获取优惠券
+    @GET("/rest/v1/usercoupons/get_user_coupons")
+    Observable<ArrayList<CouponEntity>> getCouponList(
+            @Query("status") int status
+    );
+
     //获取用户未使用优惠券信息
     @GET("/rest/v1/usercoupons")
     Observable<CouponBean> getUnusedCouponBean(
-            @Query("page") String page
+            @Query("page") int page
     );
 
     //获取用户过期优惠券信息
     @GET("/rest/v1/usercoupons/list_past_coupon")
-    Observable<CouponBean> getPastCouponBean();
+    Observable<CouponBean> getPastCouponBean(
+            @Query("page") String page
+    );
 
     //获取短信登录验证码
     @FormUrlEncoded

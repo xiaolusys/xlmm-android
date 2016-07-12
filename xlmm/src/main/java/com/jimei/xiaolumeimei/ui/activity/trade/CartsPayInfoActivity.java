@@ -39,7 +39,7 @@ import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.AddNoAddressActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.AddressSelectActivity;
-import com.jimei.xiaolumeimei.ui.activity.user.CouponSelectActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.SelectCouponActivity;
 import com.jimei.xiaolumeimei.widget.NestedListView;
 import com.jimei.xiaolumeimei.widget.SmoothCheckBox;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -523,12 +523,15 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 break;
 
             case R.id.coupon_layout:
-                Intent intent = new Intent(CartsPayInfoActivity.this, CouponSelectActivity.class);
+                Intent intent = new Intent(CartsPayInfoActivity.this, SelectCouponActivity.class);
                 Bundle bundle = new Bundle();
                 if ((coupon_id != null) && (!coupon_id.isEmpty())) {
                     bundle.putString("coupon_id", coupon_id);
-                    intent.putExtras(bundle);
                 }
+                bundle.putString("cart_ids",cart_ids);
+                bundle.putDouble("money", (double) (Math.round(paymentInfo * 100)) / 100);
+                bundle.putDouble("coupon_price",coupon_price);
+                intent.putExtras(bundle);
                 startActivityForResult(intent, REQUEST_CODE_COUPONT);
                 break;
             //case R.id.wx_layout:

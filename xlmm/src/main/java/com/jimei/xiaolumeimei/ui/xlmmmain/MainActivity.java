@@ -46,7 +46,7 @@ import com.jimei.xiaolumeimei.ui.activity.product.LadyListActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllOrdersActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
-import com.jimei.xiaolumeimei.ui.activity.user.CouponActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.AllCouponActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.CustomProblemActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.InformationActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
@@ -236,7 +236,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         break;
       case R.id.ll_discount:
         flag = "coupon";
-        intent = new Intent(MainActivity.this, CouponActivity.class);
+        intent = new Intent(MainActivity.this, AllCouponActivity.class);
         break;
       case R.id.imgUser:
         intent = new Intent(MainActivity.this, InformationActivity.class);

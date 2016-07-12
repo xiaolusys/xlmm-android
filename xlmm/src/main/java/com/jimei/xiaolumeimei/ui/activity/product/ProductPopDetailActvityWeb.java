@@ -192,8 +192,10 @@ public class ProductPopDetailActvityWeb extends BaseSwipeBackCompatActivity {
         @Override public void onPageFinished(WebView view, String url) {
           JUtils.Log(TAG, "onPageFinished:" + url);
           CookieSyncManager.getInstance().sync();
-          if (!mWebView.getSettings().getLoadsImagesAutomatically()) {
-            mWebView.getSettings().setLoadsImagesAutomatically(true);
+          if (mWebView!=null) {
+            if (!mWebView.getSettings().getLoadsImagesAutomatically()) {
+              mWebView.getSettings().setLoadsImagesAutomatically(true);
+            }
           }
         }
 

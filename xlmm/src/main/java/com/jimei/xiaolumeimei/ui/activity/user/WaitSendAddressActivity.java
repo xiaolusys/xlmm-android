@@ -68,7 +68,11 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
     protected void initData() {
         if (receiver_name != null) {
             name.setText(receiver_name);
-            name.setSelection(receiver_name.length());
+            if (receiver_name.length() < 20) {
+                name.setSelection(receiver_name.length());
+            } else {
+                name.setSelection(20);
+            }
         }
         mobile.setText(receiver_mobile);
         address.setText(city_string);
