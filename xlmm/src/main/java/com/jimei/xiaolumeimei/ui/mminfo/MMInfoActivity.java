@@ -90,6 +90,8 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
   @Bind(R.id.fund_layout) LinearLayout fundLayout;
 
   @Bind(R.id.tv_mamalevel) TextView tvMamalevel;
+  @Bind(R.id.tv_mamavip) TextView tvMamaVip;
+  @Bind(R.id.mama_id) TextView mamaId;
   @Bind(R.id.tv_mamashengyu) TextView tvShengyu;
   @Bind(R.id.imgExam) ImageView imgExam;
   @Bind(R.id.tv_yue) TextView tvYue;
@@ -176,6 +178,8 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
     tvLeiji.setText(fortune.getMamaFortune().getCarryValue() + "");
     tvHuoyue.setText(fortune.getMamaFortune().getActiveValueNum() + "");
     tvMamalevel.setText(fortune.getMamaFortune().getMamaLevelDisplay() + "");
+    tvMamaVip.setText(fortune.getMamaFortune().getExtraInfo().getAgencylevelDisplay() + "");
+    mamaId.setText("id: "+fortune.getMamaFortune().getMamaId() + "");
     if (!TextUtils.isEmpty(fortune.getMamaFortune().getExtraInfo().getThumbnail())) {
       setUserImage(fortune);
     }
@@ -284,6 +288,14 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
     tv_today_order2.setText(Integer.toString(his_refund.get(his_refund.size() - 1).getOrderNum()));
     tv_today_fund2.setText(Double.toString(
         (double) (Math.round(his_refund.get(his_refund.size() - 1).getCarry() * 100)) / 100));
+  }
+
+  @Override public void showLoading() {
+    showIndeterminateProgressDialog(false);
+  }
+
+  @Override public void hideLoading() {
+    hideIndeterminateProgressDialog();
   }
 
   @Override public void onClick(View v) {

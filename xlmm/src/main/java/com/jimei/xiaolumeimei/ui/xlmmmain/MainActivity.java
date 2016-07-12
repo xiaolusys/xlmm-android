@@ -27,20 +27,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.BrandlistAdapter;
 import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.base.BasePresenterActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
-import com.jimei.xiaolumeimei.entities.BrandListBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.IsGetcoupon;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.event.UserInfoEmptyEvent;
-import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.main.ComplainActivity;
-import com.jimei.xiaolumeimei.ui.activity.product.BrandListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ChildListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.LadyListActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllOrdersActivity;
@@ -72,7 +68,6 @@ import com.jimei.xiaolumeimei.widget.banner.SliderLayout;
 import com.jimei.xiaolumeimei.widget.banner.SliderTypes.BaseSliderView;
 import com.jimei.xiaolumeimei.widget.banner.SliderTypes.DefaultSliderView;
 import com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableLayout;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
@@ -88,7 +83,6 @@ import okhttp3.ResponseBody;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import retrofit2.Response;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye on 2016/7/4.
@@ -242,26 +236,26 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         intent = new Intent(MainActivity.this, InformationActivity.class);
         break;
       case R.id.child_img:
-        MobclickAgent.onEvent(MainActivity.this,"ChildID");
+        MobclickAgent.onEvent(MainActivity.this, "ChildID");
         readyGo(ChildListActivity.class);
         break;
       case R.id.lady_img:
-        MobclickAgent.onEvent(MainActivity.this,"LadyID");
+        MobclickAgent.onEvent(MainActivity.this, "LadyID");
         readyGo(LadyListActivity.class);
         break;
 
       case R.id.text_yesterday:
-        MobclickAgent.onEvent(this,"YesterdayID");
+        MobclickAgent.onEvent(this, "YesterdayID");
         currentNum = 0;
         setYesterday();
         break;
       case R.id.text_today:
-        MobclickAgent.onEvent(this,"TodayID");
+        MobclickAgent.onEvent(this, "TodayID");
         currentNum = 1;
         setToday();
         break;
       case R.id.text_tomorror:
-        MobclickAgent.onEvent(this,"TomorrorID");
+        MobclickAgent.onEvent(this, "TomorrorID");
         currentNum = 2;
         setTommrror();
         break;
@@ -395,7 +389,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
       rvTop.setVisibility(View.GONE);
     }
 
-    if (transY > 0) {
+    if ((-transY) > 0) {
       swipeRefreshLayout.setEnabled(false);
     } else {
       swipeRefreshLayout.setEnabled(true);
@@ -615,7 +609,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
       textSliderView.setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
         @Override public void onSliderClick(BaseSliderView slider) {
           if (slider.getBundle() != null) {
-            MobclickAgent.onEvent(MainActivity.this,"BannerID");
+            MobclickAgent.onEvent(MainActivity.this, "BannerID");
             String extra = slider.getBundle().getString("extra");
             if (!TextUtils.isEmpty(extra)) {
               JumpUtils.JumpInfo jump_info = JumpUtils.get_jump_info(extra);
@@ -650,8 +644,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   }
 
   @Override public void initBrand(PortalBean postBean) throws NullPointerException {
-    JUtils.Log(TAG, "refreshBrand");
-    List<BrandlistAdapter> brandListAdapters = new ArrayList<>();
     List<BrandView> brandViews = new ArrayList<>();
     brand.removeAllViews();
     brandViews.clear();
@@ -660,66 +652,27 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
 
       List<PortalBean.PromotionBrandsBean> brandPromotionEntities = postBean.getPromotion_brands();
       if (brandPromotionEntities.size() != 0) {
-        BrandlistAdapter brandlistAdapter;
         BrandView brandView;
         for (int i = 0; i < brandPromotionEntities.size(); i++) {
-          brandlistAdapter = new BrandlistAdapter(MainActivity.this);
-          brandListAdapters.add(brandlistAdapter);
           brandView = new BrandView(MainActivity.this);
-          brandView.addItemDecoration(20);
           brandViews.add(brandView);
           brand.addView(brandView);
         }
-
-        JUtils.Log(TAG, "brandlistAdapters.size()====" + brandListAdapters.size());
-        for (int i = 0; i < brandListAdapters.size(); i++) {
-          brandViews.get(i).setBrandtitleImage(brandPromotionEntities.get(i).getBrand_pic());
-          brandViews.get(i).setBrandDesText(brandPromotionEntities.get(i).getBrand_desc());
-          brandViews.get(i).setAdapter(brandListAdapters.get(i));
-          final int finalI = i;
-          ProductModel.getInstance()
-              .getBrandlistProducts(brandPromotionEntities.get(i).getId(), 1, 10)
-              .subscribeOn(Schedulers.io())
-              .subscribe(new ServiceResponse<BrandListBean>() {
-
-                @Override public void onError(Throwable e) {
-                  super.onError(e);
-                  JUtils.Log(TAG, "-------onError");
-                }
-
-                @Override public void onCompleted() {
-                  super.onCompleted();
-                  JUtils.Log(TAG, "-------onCompleted");
-                }
-
-                @Override public void onNext(BrandListBean brandpromotionBean) {
-                  if (null != brandpromotionBean) {
-                    if (null != brandpromotionBean.getResults()) {
-                      JUtils.Log(TAG, brandpromotionBean.toString());
-                      brandListAdapters.get(finalI).update(brandpromotionBean.getResults());
-                    }
-                  }
-                }
-              });
-
+        for (int i = 0; i < brandPromotionEntities.size(); i++) {
+          brandViews.get(i).setBrandtitleImage(brandPromotionEntities.get(i).getActLogo());
+          brandViews.get(i)
+              .setBrandDesText(
+                  brandPromotionEntities.get(i).getExtras().getBrandinfo().getTailTitle());
+          brandViews.get(i).setBrandTitle(brandPromotionEntities.get(i).getTitle());
+          brandViews.get(i).setBrandListImage(brandPromotionEntities.get(i).getActImg());
           final int finalI1 = i;
           brandViews.get(i).setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-              Intent intent = new Intent(MainActivity.this, BrandListActivity.class);
-              Bundle bundle = new Bundle();
-              bundle.putInt("id", brandPromotionEntities.get(finalI1).getId());
-              intent.putExtras(bundle);
-              startActivity(intent);
-            }
-          });
 
-          brandListAdapters.get(i).setListener(new BrandlistAdapter.itemOnclickListener() {
-            @Override public void itemClick() {
-              Intent intent = new Intent(MainActivity.this, BrandListActivity.class);
-              Bundle bundle = new Bundle();
-              bundle.putInt("id", brandPromotionEntities.get(finalI1).getId());
-              intent.putExtras(bundle);
-              startActivity(intent);
+              if (!TextUtils.isEmpty(brandPromotionEntities.get(finalI1).getActApplink())) {
+                JumpUtils.push_jump_proc(mContext,
+                    brandPromotionEntities.get(finalI1).getActApplink());
+              }
             }
           });
         }
@@ -769,7 +722,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
                   if (postActivityBean.get(finalI).getAct_type().equals("webview")) {
                     imageViewList.get(finalI).setOnClickListener(new View.OnClickListener() {
                       @Override public void onClick(View v) {
-                        MobclickAgent.onEvent(MainActivity.this,"ActivityID");
+                        MobclickAgent.onEvent(MainActivity.this, "ActivityID");
                         if (postActivityBean.get(finalI).isLogin_required()) {
                           if (LoginUtils.checkLoginState(MainActivity.this) && (null
                               != mPresenter.userInfoNewBean
@@ -871,8 +824,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     }
   }
 
-  @Subscribe
-  public void initLoginInfo(UserInfoEmptyEvent event) {
+  @Subscribe public void initLoginInfo(UserInfoEmptyEvent event) {
     //UserNewModel.getInstance()
     //    .getProfile()
     //    .subscribeOn(Schedulers.io())
@@ -893,7 +845,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     startActivity(intent);
     finish();
-
   }
   //
   //@Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
