@@ -28,11 +28,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.BrandlistAdapter;
 import com.jimei.xiaolumeimei.base.BaseActivity;
 import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.data.XlmmConst;
-import com.jimei.xiaolumeimei.entities.BrandListBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.IsGetcoupon;
 import com.jimei.xiaolumeimei.entities.PortalBean;
@@ -46,7 +44,6 @@ import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.model.UserNewModel;
-import com.jimei.xiaolumeimei.ui.activity.product.BrandListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ChildListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.LadyListActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllOrdersActivity;
@@ -551,8 +548,6 @@ public class MainActivity extends BaseActivity
   }
 
   public void initBrand(PortalBean postBean) throws NullPointerException {
-    JUtils.Log(TAG, "refreshBrand");
-    List<BrandlistAdapter> brandListAdapters = new ArrayList<>();
     List<BrandView> brandViews = new ArrayList<>();
     brand.removeAllViews();
     brandViews.clear();
@@ -561,68 +556,32 @@ public class MainActivity extends BaseActivity
 
       List<PortalBean.PromotionBrandsBean> brandPromotionEntities = postBean.getPromotion_brands();
       if (brandPromotionEntities.size() != 0) {
-        BrandlistAdapter brandlistAdapter;
         BrandView brandView;
         for (int i = 0; i < brandPromotionEntities.size(); i++) {
-          brandlistAdapter = new BrandlistAdapter(MainActivity.this);
-          brandListAdapters.add(brandlistAdapter);
           brandView = new BrandView(MainActivity.this);
-          brandView.addItemDecoration(20);
           brandViews.add(brandView);
           brand.addView(brandView);
         }
-
-        JUtils.Log(TAG, "brandlistAdapters.size()====" + brandListAdapters.size());
-        for (int i = 0; i < brandListAdapters.size(); i++) {
-          brandViews.get(i).setBrandtitleImage(brandPromotionEntities.get(i).getBrand_pic());
-          brandViews.get(i).setBrandDesText(brandPromotionEntities.get(i).getBrand_desc());
-          brandViews.get(i).setAdapter(brandListAdapters.get(i));
-          final int finalI = i;
-          ProductModel.getInstance()
-              .getBrandlistProducts(brandPromotionEntities.get(i).getId(), 1, 10)
-              .subscribeOn(Schedulers.io())
-              .subscribe(new ServiceResponse<BrandListBean>() {
-
-                @Override public void onError(Throwable e) {
-                  super.onError(e);
-                  JUtils.Log(TAG, "-------onError");
-                }
-
-                @Override public void onCompleted() {
-                  super.onCompleted();
-                  JUtils.Log(TAG, "-------onCompleted");
-                }
-
-                @Override public void onNext(BrandListBean brandpromotionBean) {
-                  if (null != brandpromotionBean) {
-                    if (null != brandpromotionBean.getResults()) {
-                      JUtils.Log(TAG, brandpromotionBean.toString());
-                      brandListAdapters.get(finalI).update(brandpromotionBean.getResults());
-                    }
-                  }
-                }
-              });
-
+        for (int i = 0; i < brandPromotionEntities.size(); i++) {
+          brandViews.get(i).setBrandtitleImage(brandPromotionEntities.get(i).getActLogo());
+          brandViews.get(i).setBrandDesText(brandPromotionEntities.get(i).getActDesc());
+          brandViews.get(i).setBrandListImage(brandPromotionEntities.get(i).getActImg());
           final int finalI1 = i;
           brandViews.get(i).setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-              Intent intent = new Intent(MainActivity.this, BrandListActivity.class);
-              Bundle bundle = new Bundle();
-              bundle.putInt("id", brandPromotionEntities.get(finalI1).getId());
-              intent.putExtras(bundle);
-              startActivity(intent);
+
             }
           });
 
-          brandListAdapters.get(i).setListener(new BrandlistAdapter.itemOnclickListener() {
-            @Override public void itemClick() {
-              Intent intent = new Intent(MainActivity.this, BrandListActivity.class);
-              Bundle bundle = new Bundle();
-              bundle.putInt("id", brandPromotionEntities.get(finalI1).getId());
-              intent.putExtras(bundle);
-              startActivity(intent);
-            }
-          });
+          //brandListAdapters.get(i).setListener(new BrandlistAdapter.itemOnclickListener() {
+          //  @Override public void itemClick() {
+          //    Intent intent = new Intent(MainActivity.this, BrandListActivity.class);
+          //    Bundle bundle = new Bundle();
+          //    bundle.putInt("id", brandPromotionEntities.get(finalI1).getId());
+          //    intent.putExtras(bundle);
+          //    startActivity(intent);
+          //  }
+          //});
         }
       }
     } else {

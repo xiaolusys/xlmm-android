@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.model;
 
 import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
+import com.jimei.xiaolumeimei.entities.BrandListBean;
 import com.jimei.xiaolumeimei.entities.LogisticCompany;
 import com.jimei.xiaolumeimei.entities.PostActivityBean;
 import com.jimei.xiaolumeimei.entities.ResultBean;
@@ -39,6 +40,13 @@ public class ActivityModel {
     public Observable<ActivityBean> get_party_share_content(String id) {
         return XlmmRetrofitClient.getService()
                 .get_party_share_content(id)
+                .compose(new DefaultTransform<>());
+    }
+
+
+    public Observable<BrandListBean> getBrandList(String id) {
+        return XlmmRetrofitClient.getService()
+                .getBrandList(id)
                 .compose(new DefaultTransform<>());
     }
 

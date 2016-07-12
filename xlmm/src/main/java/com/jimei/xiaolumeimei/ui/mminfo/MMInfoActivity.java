@@ -91,6 +91,7 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
 
   @Bind(R.id.tv_mamalevel) TextView tvMamalevel;
   @Bind(R.id.tv_mamavip) TextView tvMamaVip;
+  @Bind(R.id.mama_id) TextView mamaId;
   @Bind(R.id.tv_mamashengyu) TextView tvShengyu;
   @Bind(R.id.imgExam) ImageView imgExam;
   @Bind(R.id.tv_yue) TextView tvYue;
@@ -178,6 +179,7 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
     tvHuoyue.setText(fortune.getMamaFortune().getActiveValueNum() + "");
     tvMamalevel.setText(fortune.getMamaFortune().getMamaLevelDisplay() + "");
     tvMamaVip.setText(fortune.getMamaFortune().getExtraInfo().getAgencylevelDisplay() + "");
+    mamaId.setText("id: "+fortune.getMamaFortune().getMamaId() + "");
     if (!TextUtils.isEmpty(fortune.getMamaFortune().getExtraInfo().getThumbnail())) {
       setUserImage(fortune);
     }
