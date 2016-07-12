@@ -180,7 +180,6 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
         super.onResume();
         MobclickAgent.onPageStart(this.getClass().getSimpleName());
         MobclickAgent.onResume(this);
-
         Subscription subscription = CartsModel.getInstance()
                 .getCartsList()
                 .subscribeOn(Schedulers.io())

@@ -76,7 +76,6 @@ public class SelectCouponActivity extends BaseSwipeBackCompatActivity {
 
     public class SelectCouponAdapter extends FragmentPagerAdapter implements Serializable {
         FragmentManager fm;
-
         public SelectCouponAdapter(FragmentManager fm) {
             super(fm);
             this.fm = fm;
