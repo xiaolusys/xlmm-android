@@ -3,6 +3,7 @@ package com.jimei.xiaolumeimei.ui.mminfo;
 import com.jimei.xiaolumeimei.base.RxSchedulers;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
+import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 import rx.Observable;
@@ -23,5 +24,12 @@ public class MMInfoModel implements MMInfoContract.Model {
     return XlmmRetrofitClient.getService()
         .getRecentCarry(from, day)
         .compose(RxSchedulers.io_main());
+  }
+
+  @Override
+  public Observable<MamaUrl> getMamaUrl() {
+    return XlmmRetrofitClient.getService()
+            .getMamaUrl("1.0")
+            .compose(RxSchedulers.io_main());
   }
 }

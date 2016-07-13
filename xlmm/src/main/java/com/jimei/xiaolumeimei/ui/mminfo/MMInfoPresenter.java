@@ -7,12 +7,20 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
+import com.jimei.xiaolumeimei.entities.RedBagBean;
+import com.jimei.xiaolumeimei.model.MamaInfoModel;
+import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jude.utils.JUtils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+
+import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye on 2016/6/24.
@@ -37,6 +45,13 @@ public class MMInfoPresenter extends MMInfoContract.Presenter {
         mView.initMMdata(mamaFortune);
         mView.initMMview(mamaFortune);
       }
+    }, Throwable::printStackTrace));
+  }
+
+  @Override
+  public void getMamaUrl() {
+    mRxManager.add(mModel.getMamaUrl().subscribe(mamaUrl -> {
+      mView.initMamaUrl(mamaUrl);
     }, Throwable::printStackTrace));
   }
 
