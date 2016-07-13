@@ -7,9 +7,11 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -22,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import butterknife.Bind;
@@ -57,7 +60,7 @@ import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 public class OrderDetailActivity extends BaseSwipeBackCompatActivity
-        implements View.OnClickListener {
+        implements View.OnClickListener, View.OnTouchListener {
     private static final int REQUEST_CODE_PAYMENT = 1;
     String TAG = "OrderDetailActivity";
     @Bind(R.id.btn_order_proc)
@@ -133,6 +136,8 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     HorizontalScrollView hsv;
     @Bind(R.id.red_bag)
     LinearLayout redBagLayout;
+    @Bind(R.id.scroll_view)
+    ScrollView scrollView;
 
     int order_id = 0;
     OrderDetailBean orderDetail;
@@ -140,6 +145,8 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     String tid;
     private Dialog dialog;
     private RedBagBean redBagEntity;
+    private boolean alive = false;
+    private boolean flag = true;
 
     @Override
     protected void setListener() {
@@ -147,6 +154,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         btn_order_cancel.setOnClickListener(this);
         logisticsLayout.setOnClickListener(this);
         redBagLayout.setOnClickListener(this);
+        scrollView.setOnTouchListener(this);
     }
 
     @Override
@@ -280,6 +288,24 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                                     if (redBagBean.getShare_times_limit() > 0) {
                                         redBagLayout.setVisibility(View.VISIBLE);
                                         redBagEntity = redBagBean;
+                                        new Thread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                while (flag) {
+                                                    SystemClock.sleep(1500);
+                                                    runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            if (flag && !alive) {
+                                                                redBagLayout.setVisibility(View.VISIBLE);
+                                                            }
+
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        }).start();
+
                                     } else {
                                         redBagLayout.setVisibility(View.GONE);
                                     }
@@ -320,6 +346,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         OrderGoodsListAdapter mGoodsAdapter = new OrderGoodsListAdapter(this, orderDetailBean);
         lv_goods.setAdapter(mGoodsAdapter);
         setListViewHeightBasedOnChildren(lv_goods);
+        scrollView.scrollTo(0, 0);
     }
 
     private void setStatusView(int status) {
@@ -341,7 +368,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                 hsv.setVisibility(View.VISIBLE);
                 break;
         }
-
     }
 
     private void setView2() {
@@ -660,6 +686,27 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         listView.setLayoutParams(params);
     }
 
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_SCROLL:
+            case MotionEvent.ACTION_MOVE:
+                redBagLayout.setVisibility(View.GONE);
+                alive = true;
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        SystemClock.sleep(1500);
+                        alive = false;
+                    }
+                }).start();
+                break;
+        }
+        return false;
+    }
+
     public class CompanyAdapter extends BaseAdapter {
         private List<LogisticCompany> logisticCompanies;
         private Context context;
@@ -724,6 +771,12 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         super.onPause();
         MobclickAgent.onPageEnd(this.getClass().getSimpleName());
         MobclickAgent.onPause(this);
+    }
+
+    @Override
+    protected void onStop() {
+        flag = false;
+        super.onStop();
     }
 
     class ShareContentCustom implements ShareContentCustomizeCallback {
