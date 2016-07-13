@@ -4,35 +4,40 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import butterknife.Bind;
 import cn.iwgang.countdownview.CountdownView;
 
+import com.google.gson.Gson;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.adapter.CompanyAdapter;
 import com.jimei.xiaolumeimei.adapter.OrderGoodsListAdapter;
+import com.jimei.xiaolumeimei.adapter.PayAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.LogisticCompany;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
+import com.jimei.xiaolumeimei.entities.PayInfoBean;
+import com.jimei.xiaolumeimei.entities.RedBagBean;
 import com.jimei.xiaolumeimei.entities.ResultBean;
 import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.model.TradeModel;
@@ -42,17 +47,20 @@ import com.jude.utils.JUtils;
 import com.pingplusplus.android.PaymentActivity;
 import com.umeng.analytics.MobclickAgent;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.onekeyshare.OnekeyShare;
+import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
+import cn.sharesdk.wechat.moments.WechatMoments;
 import okhttp3.ResponseBody;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 public class OrderDetailActivity extends BaseSwipeBackCompatActivity
-        implements View.OnClickListener {
+        implements View.OnClickListener, View.OnTouchListener, AdapterView.OnItemClickListener {
     private static final int REQUEST_CODE_PAYMENT = 1;
     String TAG = "OrderDetailActivity";
     @Bind(R.id.btn_order_proc)
@@ -63,8 +71,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     RelativeLayout rlayout_order_lefttime;
     @Bind(R.id.tx_order_id)
     TextView tx_order_id;
-    @Bind(R.id.tx_order_state)
-    TextView tx_order_state;
     @Bind(R.id.tx_custom_name)
     TextView tx_custom_name;
     @Bind(R.id.tx_custom_address)
@@ -91,7 +97,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     LinearLayout logisticsLayout;
     @Bind(R.id.logistics_right)
     ImageView logisticsRightImage;
-    ListView listView;
     @Bind(R.id.rl_pay)
     RelativeLayout relativeLayout;
     @Bind(R.id.iv_pay)
@@ -128,18 +133,32 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     TextView tv5;
     @Bind(R.id.hsv)
     HorizontalScrollView hsv;
+    @Bind(R.id.red_bag)
+    LinearLayout redBagLayout;
+    @Bind(R.id.scroll_view)
+    ScrollView scrollView;
+
+    ListView listView;
+    ListView listView2;
 
     int order_id = 0;
     OrderDetailBean orderDetail;
     String source;
     String tid;
     private Dialog dialog;
+    private Dialog dialog2;
+    private RedBagBean redBagEntity;
+    private boolean alive = false;
+    private boolean flag = true;
 
     @Override
     protected void setListener() {
         btn_proc.setOnClickListener(this);
         btn_order_cancel.setOnClickListener(this);
         logisticsLayout.setOnClickListener(this);
+        redBagLayout.setOnClickListener(this);
+        scrollView.setOnTouchListener(this);
+        listView2.setOnItemClickListener(this);
     }
 
     @Override
@@ -167,6 +186,20 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         View closeIv = view.findViewById(R.id.close_iv);
         listView = (ListView) view.findViewById(R.id.lv_logistics_company);
         closeIv.setOnClickListener(this);
+
+        View view2 = getLayoutInflater().inflate(R.layout.pop_pay, null);
+        dialog2 = new Dialog(this, R.style.CustomDialog);
+        dialog2.setContentView(view2);
+        dialog2.setCancelable(true);
+        Window window2 = dialog2.getWindow();
+        WindowManager.LayoutParams wlp2 = window2.getAttributes();
+        wlp2.gravity = Gravity.BOTTOM;
+        wlp2.width = WindowManager.LayoutParams.MATCH_PARENT;
+        window2.setAttributes(wlp);
+        window2.setWindowAnimations(R.style.dialog_anim);
+        View closeIv2 = view2.findViewById(R.id.close_iv);
+        listView2 = (ListView) view2.findViewById(R.id.lv_logistics_company);
+        closeIv2.setOnClickListener(this);
     }
 
     //从server端获得所有订单数据，可能要查询几次
@@ -220,13 +253,13 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                                                                             break;
                                                                     }
                                                                     JUtils.Toast(resultBean.getInfo());
-                                                                    changeDialogWindowState();
+                                                                    dialog.dismiss();
                                                                 }
 
                                                                 @Override
                                                                 public void onError(Throwable e) {
                                                                     JUtils.Toast(e.getMessage());
-                                                                    changeDialogWindowState();
+                                                                    dialog.dismiss();
                                                                 }
                                                             });
                                                 }
@@ -244,6 +277,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                         }
                     });
             addSubscription(subscription);
+
         }
     }
 
@@ -258,21 +292,60 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     }
 
     private void fillDataToView(OrderDetailBean orderDetailBean) {
-        if (!"退款中".equals(orderDetailBean.getStatus_display())) {
-            setStatusView(orderDetailBean.getStatus());
+        PayAdapter payAdapter = new PayAdapter(orderDetailBean.getExtras().getChannels(), this);
+        listView2.setAdapter(payAdapter);
+        int status = orderDetailBean.getStatus();
+        if (!"退款中".equals(orderDetailBean.getStatus_display()) && !"退货中".equals(orderDetailBean.getStatus_display())) {
+            setStatusView(status);
+            if (status == 2 || status == 3 || status == 4 || status == 5) {
+                Subscription subscribe = TradeModel.getInstance()
+                        .getRedBag(tid)
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(new ServiceResponse<RedBagBean>() {
+                            @Override
+                            public void onNext(RedBagBean redBagBean) {
+                                if (redBagBean.getCode() == 0) {
+                                    if (redBagBean.getShare_times_limit() > 0) {
+                                        redBagLayout.setVisibility(View.VISIBLE);
+                                        redBagEntity = redBagBean;
+                                        new Thread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                while (flag) {
+                                                    SystemClock.sleep(1500);
+                                                    runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            if (flag && !alive) {
+                                                                redBagLayout.setVisibility(View.VISIBLE);
+                                                            }
+
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        }).start();
+
+                                    } else {
+                                        redBagLayout.setVisibility(View.GONE);
+                                    }
+                                }
+                            }
+                        });
+                addSubscription(subscribe);
+            }
         }
-        tx_order_id.setText("订单编号: " + orderDetailBean.getTid());
-        tx_order_state.setText(orderDetailBean.getStatus_display());
+        tx_order_id.setText(orderDetailBean.getTid());
         tx_custom_name.setText(orderDetailBean.getUser_adress().getReceiver_name());
         tx_custom_address.setText(orderDetailBean.getUser_adress().getReceiver_state()
                 + orderDetailBean.getUser_adress().getReceiver_city()
                 + orderDetailBean.getUser_adress().getReceiver_district()
                 + orderDetailBean.getUser_adress().getReceiver_address());
         tx_order_totalfee.setText("¥" + orderDetailBean.getTotal_fee());
-        tx_order_discountfee.setText("¥" + orderDetailBean.getDiscount_fee());
+        tx_order_discountfee.setText("-¥" + orderDetailBean.getDiscount_fee());
         tx_order_postfee.setText("¥" + orderDetailBean.getPost_fee());
         tx_order_payment.setText("¥" + orderDetailBean.getPayment());
-        timeText.setText("下单时间:" + orderDetailBean.getCreated().replace("T", "-"));
+        timeText.setText(orderDetailBean.getCreated().replace("T", " "));
         if (orderDetailBean.getLogistics_company() != null) {
             logisticsTv.setText(orderDetailBean.getLogistics_company().getName());
         }
@@ -293,6 +366,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         OrderGoodsListAdapter mGoodsAdapter = new OrderGoodsListAdapter(this, orderDetailBean);
         lv_goods.setAdapter(mGoodsAdapter);
         setListViewHeightBasedOnChildren(lv_goods);
+        scrollView.scrollTo(0, 0);
     }
 
     private void setStatusView(int status) {
@@ -314,52 +388,43 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                 hsv.setVisibility(View.VISIBLE);
                 break;
         }
-
     }
 
     private void setView2() {
-        tv1.setTextColor(getResources().getColor(R.color.text_color_62));
+        tv1.setTextColor(getResources().getColor(R.color.text_color_32));
         tv2.setTextColor(getResources().getColor(R.color.colorAccent));
-        imageView1.setImageResource(R.drawable.state_oval);
-        imageView2.setImageResource(R.drawable.state_last);
-        line2.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+        imageView1.setImageResource(R.drawable.status_black);
+        imageView2.setImageResource(R.drawable.state_in);
+        line2.setBackgroundColor(getResources().getColor(R.color.text_color_32));
         hsv.setVisibility(View.VISIBLE);
     }
 
     private void setView3() {
         setView2();
-        tv2.setTextColor(getResources().getColor(R.color.text_color_62));
+        tv2.setTextColor(getResources().getColor(R.color.text_color_32));
         tv3.setTextColor(getResources().getColor(R.color.colorAccent));
-        imageView2.setImageResource(R.drawable.state_oval);
-        imageView3.setImageResource(R.drawable.state_last);
-        line3.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+        imageView2.setImageResource(R.drawable.status_black);
+        imageView3.setImageResource(R.drawable.state_in);
+        line3.setBackgroundColor(getResources().getColor(R.color.text_color_32));
     }
 
     private void setView4() {
         setView3();
-        tv3.setTextColor(getResources().getColor(R.color.text_color_62));
+        tv3.setTextColor(getResources().getColor(R.color.text_color_32));
         tv4.setTextColor(getResources().getColor(R.color.colorAccent));
-        imageView3.setImageResource(R.drawable.state_oval);
-        imageView4.setImageResource(R.drawable.state_last);
-        line4.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+        imageView3.setImageResource(R.drawable.status_black);
+        imageView4.setImageResource(R.drawable.state_in);
+        line4.setBackgroundColor(getResources().getColor(R.color.text_color_32));
     }
 
     private void setView5() {
         setView4();
-        tv4.setTextColor(getResources().getColor(R.color.text_color_62));
+        tv4.setTextColor(getResources().getColor(R.color.text_color_32));
         tv5.setTextColor(getResources().getColor(R.color.colorAccent));
-        imageView4.setImageResource(R.drawable.state_oval);
-        imageView5.setImageResource(R.drawable.state_last);
-        line5.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-        line6.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-    }
-
-    private void changeDialogWindowState() {
-        if (dialog.isShowing()) {
-            dialog.dismiss();
-        } else {
-            dialog.show();
-        }
+        imageView4.setImageResource(R.drawable.status_black);
+        imageView5.setImageResource(R.drawable.state_in);
+        line5.setBackgroundColor(getResources().getColor(R.color.text_color_32));
+        line6.setBackgroundColor(getResources().getColor(R.color.text_color_32));
     }
 
     private void showProcBtn(OrderDetailBean orderDetailBean) {
@@ -371,6 +436,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                     Log.i(TAG, "wait pay lefttime show");
 
                     rlayout_order_lefttime.setVisibility(View.VISIBLE);
+                    relativeLayout.setVisibility(View.GONE);
                     LinearLayout llayout_order_lefttime =
                             (LinearLayout) findViewById(R.id.llayout_order_lefttime);
                     llayout_order_lefttime.setVisibility(View.VISIBLE);
@@ -434,7 +500,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
             case R.id.btn_order_proc:
                 if (orderDetail.getStatus() == XlmmConst.ORDER_STATE_WAITPAY) {
                     JUtils.Log(TAG, "onClick paynow");
-                    payNow();
+                    dialog2.show();
                 }
                 break;
             case R.id.btn_order_cancel:
@@ -460,11 +526,27 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                 break;
             case R.id.logistics_layout:
                 if ("已付款".equals(orderDetail.getStatus_display())) {
-                    changeDialogWindowState();
+                    dialog.show();
                 }
                 break;
             case R.id.close_iv:
-                changeDialogWindowState();
+                if (dialog2.isShowing()) {
+                    dialog2.dismiss();
+                }
+                if (dialog.isShowing()) {
+                    dialog.dismiss();
+                }
+                break;
+            case R.id.red_bag:
+                OnekeyShare oks = new OnekeyShare();
+                oks.disableSSOWhenAuthorize();
+                oks.setTitle(redBagEntity.getTitle());
+                oks.setTitleUrl(redBagEntity.getShare_link());
+                oks.setText(redBagEntity.getDescription());
+                oks.setImageUrl(redBagEntity.getPost_img());
+                oks.setUrl(redBagEntity.getShare_link());
+                oks.setShareContentCustomizeCallback(new ShareContentCustom(redBagEntity.getDescription()));
+                oks.show(this);
                 break;
         }
     }
@@ -481,41 +563,28 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                     @Override
                     public void onNext(OrderDetailBean orderDetailBean) {
                         orderDetail = orderDetailBean;
-                        tx_custom_name.setText(orderDetailBean.getUser_adress().getReceiver_name());
-                        tx_custom_address.setText(orderDetailBean.getUser_adress().getReceiver_state()
-                                + orderDetailBean.getUser_adress().getReceiver_city()
-                                + orderDetailBean.getUser_adress().getReceiver_district()
-                                + orderDetailBean.getUser_adress().getReceiver_address());
-                        if (orderDetailBean.getLogistics_company() != null) {
-                            String name = orderDetailBean.getLogistics_company().getName();
-                            logisticsTv.setText(name);
-                        }
+                        fillDataToView(orderDetailBean);
                     }
                 });
         addSubscription(subscription);
     }
 
-    private void payNow() {
+    private void payNow(String channel) {
         Subscription subscription = TradeModel.getInstance()
-                .shoppingcart_paynow(order_id)
+                .orderPayWithChannel(order_id, channel)
                 .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<ResponseBody>() {
+                .subscribe(new ServiceResponse<PayInfoBean>() {
                     @Override
-                    public void onNext(ResponseBody responseBody) {
-                        super.onNext(responseBody);
-                        try {
-                            String charge = responseBody.string();
-                            Log.i("charge", charge);
-                            Intent intent = new Intent();
-                            String packageName = getPackageName();
-                            ComponentName componentName = new ComponentName(packageName,
-                                    packageName + ".wxapi.WXPayEntryActivity");
-                            intent.setComponent(componentName);
-                            intent.putExtra(PaymentActivity.EXTRA_CHARGE, charge);
-                            startActivityForResult(intent, REQUEST_CODE_PAYMENT);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                    public void onNext(PayInfoBean payInfoBean) {
+                        super.onNext(payInfoBean);
+                        Intent intent = new Intent();
+                        String packageName = getPackageName();
+                        ComponentName componentName = new ComponentName(packageName,
+                                packageName + ".wxapi.WXPayEntryActivity");
+                        intent.setComponent(componentName);
+                        intent.putExtra(PaymentActivity.EXTRA_CHARGE,
+                                new Gson().toJson(payInfoBean.getCharge()));
+                        startActivityForResult(intent, REQUEST_CODE_PAYMENT);
                     }
 
                     @Override
@@ -630,63 +699,25 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         listView.setLayoutParams(params);
     }
 
-    public class CompanyAdapter extends BaseAdapter {
-        private List<LogisticCompany> logisticCompanies;
-        private Context context;
-
-        public CompanyAdapter(List<LogisticCompany> logisticCompanies, Context context) {
-            this.logisticCompanies = logisticCompanies;
-            this.context = context;
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_SCROLL:
+            case MotionEvent.ACTION_MOVE:
+                redBagLayout.setVisibility(View.GONE);
+                alive = true;
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        SystemClock.sleep(1500);
+                        alive = false;
+                    }
+                }).start();
+                break;
         }
-
-        @Override
-        public int getCount() {
-            return logisticCompanies.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return logisticCompanies.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder holder;
-            if (convertView == null) {
-                convertView = LayoutInflater.from(context).inflate(R.layout.item_logistics, null);
-                holder = new ViewHolder(convertView);
-                convertView.setTag(holder);
-            } else {
-                holder = (ViewHolder) convertView.getTag();
-            }
-            String name = logisticCompanies.get(position).getName();
-            if (name.contains("申通")) {
-                holder.iconImg.setImageResource(R.drawable.icon_sto);
-            } else if (name.contains("邮政")) {
-                holder.iconImg.setImageResource(R.drawable.icon_ems);
-            } else if (name.contains("韵达")) {
-                holder.iconImg.setImageResource(R.drawable.icon_yunda);
-            } else if (name.contains("小鹿")) {
-                holder.iconImg.setImageResource(R.drawable.icon_xiaolu);
-            }
-            holder.nameTv.setText(name);
-            return convertView;
-        }
-
-        private class ViewHolder {
-            TextView nameTv;
-            ImageView iconImg;
-
-            public ViewHolder(View itemView) {
-                nameTv = ((TextView) itemView.findViewById(R.id.name));
-                iconImg = ((ImageView) itemView.findViewById(R.id.icon));
-            }
-        }
+        return false;
     }
 
     @Override
@@ -695,4 +726,34 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         MobclickAgent.onPageEnd(this.getClass().getSimpleName());
         MobclickAgent.onPause(this);
     }
+
+    @Override
+    protected void onStop() {
+        flag = false;
+        super.onStop();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        String channel = orderDetail.getExtras().getChannels().get(position).getId();
+        dialog2.dismiss();
+        payNow(channel);
+    }
+
+    class ShareContentCustom implements ShareContentCustomizeCallback {
+
+        private String text;
+
+        public ShareContentCustom(String text) {
+            this.text = text;
+        }
+
+        @Override
+        public void onShare(Platform platform, Platform.ShareParams paramsToShare) {
+            if (WechatMoments.NAME.equals(platform.getName())) {
+                paramsToShare.setTitle(text);
+            }
+        }
+    }
+
 }

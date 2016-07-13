@@ -8,6 +8,7 @@ import com.jimei.xiaolumeimei.entities.MMVisitorsBean;
 import com.jimei.xiaolumeimei.entities.MamaFansBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.MamaLivenessBean;
+import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.entities.PotentialFans;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
@@ -107,5 +108,9 @@ public class MamaInfoModel {
   //得到妈妈活跃值
   public Observable<PotentialFans> getPotentialFans(String page) {
     return XlmmRetrofitClient.getService().getPotentialFans(page).compose(new DefaultTransform<>());
+  }
+
+  public Observable<MamaUrl> getMamaUrl(){
+    return XlmmRetrofitClient.getService().getMamaUrl("1.0").compose(new DefaultTransform<>());
   }
 }

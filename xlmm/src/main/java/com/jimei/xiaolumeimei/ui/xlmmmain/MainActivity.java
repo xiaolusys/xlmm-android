@@ -42,7 +42,7 @@ import com.jimei.xiaolumeimei.ui.activity.product.LadyListActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllOrdersActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
-import com.jimei.xiaolumeimei.ui.activity.user.CouponActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.AllCouponActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.CustomProblemActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.InformationActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
@@ -160,6 +160,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     }).start();
   }
 
+
   @Override protected void setListener() {
     carts.setOnClickListener(this);
     rl_mmentry.setOnClickListener(this);
@@ -230,7 +231,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         break;
       case R.id.ll_discount:
         flag = "coupon";
-        intent = new Intent(MainActivity.this, CouponActivity.class);
+        intent = new Intent(MainActivity.this, AllCouponActivity.class);
         break;
       case R.id.imgUser:
         intent = new Intent(MainActivity.this, InformationActivity.class);
@@ -719,58 +720,58 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
                   imageViewList.get(finalI).setMaxWidth(screenWidth);
                   imageViewList.get(finalI).setMaxHeight(screenWidth * 5);
                   imageViewList.get(finalI).setImageBitmap(response);
-                  if (postActivityBean.get(finalI).getAct_type().equals("webview")) {
-                    imageViewList.get(finalI).setOnClickListener(new View.OnClickListener() {
-                      @Override public void onClick(View v) {
-                        MobclickAgent.onEvent(MainActivity.this, "ActivityID");
-                        if (postActivityBean.get(finalI).isLogin_required()) {
-                          if (LoginUtils.checkLoginState(MainActivity.this) && (null
-                              != mPresenter.userInfoNewBean
-                              && (null
-                              != mPresenter.userInfoNewBean.getMobile())
-                              && !mPresenter.userInfoNewBean.getMobile().isEmpty())) {
-                            JumpUtils.jumpToWebViewWithCookies(MainActivity.this,
-                                postActivityBean.get(finalI).getAct_link(),
-                                postActivityBean.get(finalI).getId(), ActivityWebViewActivity.class,
-                                postActivityBean.get(finalI).getTitle());
-                          } else {
-                            if (!LoginUtils.checkLoginState(MainActivity.this)) {
-                              JUtils.Toast("登录并绑定手机号后才可参加活动");
-                              Bundle bundle = new Bundle();
-                              bundle.putString("login", "goactivity");
-                              bundle.putString("actlink",
-                                  postActivityBean.get(finalI).getAct_link());
-                              bundle.putInt("id", postActivityBean.get(finalI).getId());
-                              bundle.putString("title", postActivityBean.get(finalI).getTitle());
-
-                              readyGo(LoginActivity.class, bundle);
-                            } else {
-                              JUtils.Toast("登录成功,前往绑定手机号后才可参加活动");
-                              if (null != mPresenter.userInfoNewBean) {
-                                Bundle bundle = new Bundle();
-                                bundle.putString("headimgurl",
-                                    mPresenter.userInfoNewBean.getThumbnail());
-                                bundle.putString("nickname", mPresenter.userInfoNewBean.getNick());
-                                readyGo(WxLoginBindPhoneActivity.class, bundle);
-                              }
-                            }
-                          }
-                        } else {
-                          JumpUtils.jumpToWebViewWithCookies(MainActivity.this,
-                              postActivityBean.get(finalI).getAct_link(),
-                              postActivityBean.get(finalI).getId(), ActivityWebViewActivity.class,
-                              postActivityBean.get(finalI).getTitle());
-                        }
-                      }
-                    });
-                  } else if (postActivityBean.get(finalI).getAct_type().equals("coupon")) {
+                   if (postActivityBean.get(finalI).getAct_type().equals("coupon")) {
                     imageViewList.get(finalI).setOnClickListener(new View.OnClickListener() {
                       @Override public void onClick(View v) {
                         mPresenter.getUsercoupons(
                             postActivityBean.get(finalI).getExtras().getTemplateId());
                       }
                     });
-                  }
+                  }else {
+                     imageViewList.get(finalI).setOnClickListener(new View.OnClickListener() {
+                       @Override public void onClick(View v) {
+                         MobclickAgent.onEvent(MainActivity.this, "ActivityID");
+                         if (postActivityBean.get(finalI).isLogin_required()) {
+                           if (LoginUtils.checkLoginState(MainActivity.this) && (null
+                                   != mPresenter.userInfoNewBean
+                                   && (null
+                                   != mPresenter.userInfoNewBean.getMobile())
+                                   && !mPresenter.userInfoNewBean.getMobile().isEmpty())) {
+                             JumpUtils.jumpToWebViewWithCookies(MainActivity.this,
+                                     postActivityBean.get(finalI).getAct_link(),
+                                     postActivityBean.get(finalI).getId(), ActivityWebViewActivity.class,
+                                     postActivityBean.get(finalI).getTitle());
+                           } else {
+                             if (!LoginUtils.checkLoginState(MainActivity.this)) {
+                               JUtils.Toast("登录并绑定手机号后才可参加活动");
+                               Bundle bundle = new Bundle();
+                               bundle.putString("login", "goactivity");
+                               bundle.putString("actlink",
+                                       postActivityBean.get(finalI).getAct_link());
+                               bundle.putInt("id", postActivityBean.get(finalI).getId());
+                               bundle.putString("title", postActivityBean.get(finalI).getTitle());
+
+                               readyGo(LoginActivity.class, bundle);
+                             } else {
+                               JUtils.Toast("登录成功,前往绑定手机号后才可参加活动");
+                               if (null != mPresenter.userInfoNewBean) {
+                                 Bundle bundle = new Bundle();
+                                 bundle.putString("headimgurl",
+                                         mPresenter.userInfoNewBean.getThumbnail());
+                                 bundle.putString("nickname", mPresenter.userInfoNewBean.getNick());
+                                 readyGo(WxLoginBindPhoneActivity.class, bundle);
+                               }
+                             }
+                           }
+                         } else {
+                           JumpUtils.jumpToWebViewWithCookies(MainActivity.this,
+                                   postActivityBean.get(finalI).getAct_link(),
+                                   postActivityBean.get(finalI).getId(), ActivityWebViewActivity.class,
+                                   postActivityBean.get(finalI).getTitle());
+                         }
+                       }
+                     });
+                   }
                 }
               }
             });
@@ -866,6 +867,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     //resumeData();
 
     mPresenter.getCartsNum();
+    mPresenter.getUserInfoBean();
 
     JUtils.Log(TAG, "resume");
   }

@@ -31,6 +31,7 @@
             android:layout_marginBottom="16dp"
             android:layout_marginTop="16dp"
             android:background="@drawable/shape_common"
-            android:text="添加地址" />
+            android:text="添加地址"
+            android:textColor="@color/white" />
     </LinearLayout>
 </FrameLayout>

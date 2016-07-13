@@ -40,7 +40,7 @@ public class CouponBean {
      * start_time : 2016-05-08 10:00:00
      */
     @SerializedName("results")
-    private List<ResultsBean> results;
+    private List<CouponEntity> results;
 
     public int getCount() {
         return count;
@@ -66,194 +66,12 @@ public class CouponBean {
         this.previous = previous;
     }
 
-    public List<ResultsBean> getResults() {
+    public List<CouponEntity> getResults() {
         return results;
     }
 
-    public void setResults(List<ResultsBean> results) {
+    public void setResults(List<CouponEntity> results) {
         this.results = results;
     }
 
-    public static class ResultsBean {
-        @SerializedName("id")
-        private int id;
-        @SerializedName("coupon_type")
-        private int coupon_type;
-        @SerializedName("title")
-        private String title;
-        @SerializedName("customer")
-        private String customer;
-        @SerializedName("coupon_no")
-        private String coupon_no;
-        @SerializedName("coupon_value")
-        private double coupon_value;
-        @SerializedName("valid")
-        private boolean valid;
-        @SerializedName("poll_status")
-        private int poll_status;
-        @SerializedName("deadline")
-        private String deadline;
-        @SerializedName("sale_trade")
-        private String sale_trade;
-        @SerializedName("status")
-        private int status;
-        @SerializedName("created")
-        private String created;
-        @SerializedName("modified")
-        private String modified;
-        @SerializedName("use_fee")
-        private double use_fee;
-        @SerializedName("coupon_type_display")
-        private String coupon_type_display;
-        @SerializedName("use_fee_des")
-        private String use_fee_des;
-        @SerializedName("pros_desc")
-        private String pros_desc;
-        @SerializedName("start_time")
-        private String start_time;
-
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public int getCoupon_type() {
-            return coupon_type;
-        }
-
-        public void setCoupon_type(int coupon_type) {
-            this.coupon_type = coupon_type;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-        public String getCustomer() {
-            return customer;
-        }
-
-        public void setCustomer(String customer) {
-            this.customer = customer;
-        }
-
-        public String getCoupon_no() {
-            return coupon_no;
-        }
-
-        public void setCoupon_no(String coupon_no) {
-            this.coupon_no = coupon_no;
-        }
-
-        public double getCoupon_value() {
-            return coupon_value;
-        }
-
-        public void setCoupon_value(double coupon_value) {
-            this.coupon_value = coupon_value;
-        }
-
-        public boolean isValid() {
-            return valid;
-        }
-
-        public void setValid(boolean valid) {
-            this.valid = valid;
-        }
-
-        public int getPoll_status() {
-            return poll_status;
-        }
-
-        public void setPoll_status(int poll_status) {
-            this.poll_status = poll_status;
-        }
-
-        public String getDeadline() {
-            return deadline;
-        }
-
-        public void setDeadline(String deadline) {
-            this.deadline = deadline;
-        }
-
-        public String getSale_trade() {
-            return sale_trade;
-        }
-
-        public void setSale_trade(String sale_trade) {
-            this.sale_trade = sale_trade;
-        }
-
-        public int getStatus() {
-            return status;
-        }
-
-        public void setStatus(int status) {
-            this.status = status;
-        }
-
-        public String getCreated() {
-            return created;
-        }
-
-        public void setCreated(String created) {
-            this.created = created;
-        }
-
-        public String getModified() {
-            return modified;
-        }
-
-        public void setModified(String modified) {
-            this.modified = modified;
-        }
-
-        public double getUse_fee() {
-            return use_fee;
-        }
-
-        public void setUse_fee(double use_fee) {
-            this.use_fee = use_fee;
-        }
-
-        public String getCoupon_type_display() {
-            return coupon_type_display;
-        }
-
-        public void setCoupon_type_display(String coupon_type_display) {
-            this.coupon_type_display = coupon_type_display;
-        }
-
-        public String getUse_fee_des() {
-            return use_fee_des;
-        }
-
-        public void setUse_fee_des(String use_fee_des) {
-            this.use_fee_des = use_fee_des;
-        }
-
-        public String getPros_desc() {
-            return pros_desc;
-        }
-
-        public void setPros_desc(String pros_desc) {
-            this.pros_desc = pros_desc;
-        }
-
-        public String getStart_time() {
-            return start_time;
-        }
-
-        public void setStart_time(String start_time) {
-            this.start_time = start_time;
-        }
-    }
 }

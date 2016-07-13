@@ -99,7 +99,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     List<CartsPayinfoBean.CartListEntity> list;
     @Bind(R.id.go_main)
     Button goMain;
-    //@Bind(R.id.empty_content) RelativeLayout emptyContent;
     @Bind(R.id.scb)
     SmoothCheckBox scb;
     @Bind(R.id.tv_app_discount)
@@ -527,8 +526,11 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 Bundle bundle = new Bundle();
                 if ((coupon_id != null) && (!coupon_id.isEmpty())) {
                     bundle.putString("coupon_id", coupon_id);
-                    intent.putExtras(bundle);
                 }
+//                bundle.putString("cart_ids",cart_ids);
+//                bundle.putDouble("money", (double) (Math.round(paymentInfo * 100)) / 100);
+//                bundle.putDouble("coupon_price",coupon_price);
+                intent.putExtras(bundle);
                 startActivityForResult(intent, REQUEST_CODE_COUPONT);
                 break;
             //case R.id.wx_layout:
@@ -858,8 +860,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
                     @Override
                     public void onNext(PayInfoBean payInfoBean) {
-
-                        if (null != payInfoBean) {
+                        if (null != payInfoBean && payInfoBean.getTrade() != null) {
                             order_id = payInfoBean.getTrade().getId();
                             order_no = payInfoBean.getTrade().getTid();
                             JUtils.Log(TAG, payInfoBean.toString());

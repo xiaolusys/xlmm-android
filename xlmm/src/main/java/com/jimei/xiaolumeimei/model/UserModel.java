@@ -5,6 +5,7 @@ import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.entities.BindInfoBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.CouponBean;
+import com.jimei.xiaolumeimei.entities.CouponEntity;
 import com.jimei.xiaolumeimei.entities.GetCouponbean;
 import com.jimei.xiaolumeimei.entities.IsGetcoupon;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
@@ -21,6 +22,8 @@ import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.UserWithdrawResult;
 import com.jimei.xiaolumeimei.entities.WxPubAuthInfo;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
+
+import java.util.ArrayList;
 
 import retrofit2.Response;
 import rx.Observable;
@@ -125,17 +128,24 @@ public class UserModel {
                 .compose(new DefaultTransform<>());
     }
 
+    //获取优惠券
+    public Observable<ArrayList<CouponEntity>> getCouponList( int status) {
+        return XlmmRetrofitClient.getService()
+                .getCouponList(status)
+                .compose(new DefaultTransform<>());
+    }
+
     //得到用户优惠券信息
-    public Observable<CouponBean> getUnusedCouponBean(String page) {
+    public Observable<CouponBean> getUnusedCouponBean(int page) {
         return XlmmRetrofitClient.getService()
                 .getUnusedCouponBean(page)
                 .compose(new DefaultTransform<>());
     }
 
     //得到用户过期优惠券信息
-    public Observable<CouponBean> getPastCouponBean() {
+    public Observable<CouponBean> getPastCouponBean(String page) {
         return XlmmRetrofitClient.getService()
-                .getPastCouponBean()
+                .getPastCouponBean(page)
                 .compose(new DefaultTransform<>());
     }
 

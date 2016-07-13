@@ -256,44 +256,59 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                             @Override
                             public void onClick(View v) {
                                 Log.d(TAG, "enter apply refund ");
-                                Dialog dialog = new Dialog(context, R.style.CustomDialog);
-                                dialog.setContentView(R.layout.pop_refund_layout);
-                                dialog.setCancelable(true);
-                                Window window = dialog.getWindow();
-                                WindowManager.LayoutParams wlp = window.getAttributes();
-                                wlp.gravity = Gravity.BOTTOM;
-                                wlp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                                window.setAttributes(wlp);
-                                window.setWindowAnimations(R.style.dialog_anim);
-                                View closeIv = dialog.findViewById(R.id.close_iv);
-                                View sure = dialog.findViewById(R.id.sure);
-                                ListView listView = (ListView) dialog.findViewById(R.id.lv_refund);
-                                closeIv.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        dialog.dismiss();
-                                    }
-                                });
-                                RefundTypeAdapter adapter = new RefundTypeAdapter(context, orderDetailEntity.getExtras().getRefund_choices());
-                                listView.setAdapter(adapter);
-                                sure.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        Intent intent = new Intent(context, ApplyRefundActivity.class);
-                                        Bundle bundle = new Bundle();
-                                        bundle.putInt("id", orderDetailEntity.getId());
-                                        bundle.putInt("position", position);
-                                        bundle.putString("refund_channel", adapter.getItem(adapter.getSelect()).getRefund_channel());
-                                        bundle.putString("name", adapter.getItem(adapter.getSelect()).getName());
-                                        bundle.putString("desc", adapter.getItem(adapter.getSelect()).getDesc());
-                                        intent.putExtras(bundle);
-                                        Log.d(TAG, "transfer good  " + goods_info.getId() + " to " + "ApplyRefundActivity");
-                                        context.startActivity(intent);
-                                        dialog.dismiss();
-                                        context.finish();
-                                    }
-                                });
-                                dialog.show();
+                                List<OrderDetailBean.ExtrasBean.RefundChoicesBean> choices = orderDetailEntity.getExtras().getRefund_choices();
+                                if (choices.size() > 1) {
+                                    Dialog dialog = new Dialog(context, R.style.CustomDialog);
+                                    dialog.setContentView(R.layout.pop_refund_layout);
+                                    dialog.setCancelable(true);
+                                    Window window = dialog.getWindow();
+                                    WindowManager.LayoutParams wlp = window.getAttributes();
+                                    wlp.gravity = Gravity.BOTTOM;
+                                    wlp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                                    window.setAttributes(wlp);
+                                    window.setWindowAnimations(R.style.dialog_anim);
+                                    View closeIv = dialog.findViewById(R.id.close_iv);
+                                    View sure = dialog.findViewById(R.id.sure);
+                                    ListView listView = (ListView) dialog.findViewById(R.id.lv_refund);
+                                    closeIv.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                                    RefundTypeAdapter adapter = new RefundTypeAdapter(context, choices);
+                                    listView.setAdapter(adapter);
+                                    sure.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent intent = new Intent(context, ApplyRefundActivity.class);
+                                            Bundle bundle = new Bundle();
+                                            bundle.putInt("id", orderDetailEntity.getId());
+                                            bundle.putInt("position", position);
+                                            bundle.putString("refund_channel", adapter.getItem(adapter.getSelect()).getRefund_channel());
+                                            bundle.putString("name", adapter.getItem(adapter.getSelect()).getName());
+                                            bundle.putString("desc", adapter.getItem(adapter.getSelect()).getDesc());
+                                            intent.putExtras(bundle);
+                                            Log.d(TAG, "transfer good  " + goods_info.getId() + " to " + "ApplyRefundActivity");
+                                            context.startActivity(intent);
+                                            dialog.dismiss();
+                                            context.finish();
+                                        }
+                                    });
+                                    dialog.show();
+                                } else if (choices.size() == 1) {
+                                    Intent intent = new Intent(context, ApplyRefundActivity.class);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putInt("id", orderDetailEntity.getId());
+                                    bundle.putInt("position", position);
+                                    bundle.putString("refund_channel", choices.get(0).getRefund_channel());
+                                    bundle.putString("name", choices.get(0).getName());
+                                    bundle.putString("desc", choices.get(0).getDesc());
+                                    intent.putExtras(bundle);
+                                    Log.d(TAG, "transfer good  " + goods_info.getId() + " to " + "ApplyRefundActivity");
+                                    context.startActivity(intent);
+                                    context.finish();
+                                }
                             }
                         });
                         break;

@@ -160,7 +160,7 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                       } else if (login.equals("axiba")) {
                         finish();
                       } else if (login.equals("coupon")) {
-                        Intent intent = new Intent(mContext, CouponActivity.class);
+                        Intent intent = new Intent(mContext, AllCouponActivity.class);
                         startActivity(intent);
                         finish();
                       } else if (login.equals("productdetail")) {

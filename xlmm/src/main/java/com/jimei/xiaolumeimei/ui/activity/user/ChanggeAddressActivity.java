@@ -65,7 +65,7 @@ public class ChanggeAddressActivity extends BaseSwipeBackCompatActivity
     save.setOnClickListener(this);
     address.setOnClickListener(this);
     //delete.setOnClickListener(this);
-    //switchButton.setOnCheckedChangeListener(this);
+    switchButton.setOnCheckedChangeListener(this);
   }
 
   @Override protected void initData() {

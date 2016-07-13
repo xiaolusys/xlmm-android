@@ -226,7 +226,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
         goodNameTv.setText(refundDetailBean.getTitle());
         goodPriceTv.setText("¥" + refundDetailBean.getPayment() + "x" + refundDetailBean.getRefund_num());
         goodSizeTv.setText("尺码：" + refundDetailBean.getSku_name());
-        timeTv.setText("下单时间:" + refundDetailBean.getCreated().replace("T", " "));
+        timeTv.setText("申请时间:" + refundDetailBean.getCreated().replace("T", " "));
         numTv.setText(Integer.toString(refundDetailBean.getRefund_num()));
         priceTv.setText("¥" + refundDetailBean.getRefund_fee());
         reasonTv.setText(refundDetailBean.getReason());

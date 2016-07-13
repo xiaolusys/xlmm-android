@@ -99,10 +99,17 @@ public class TradeModel {
         .compose(new DefaultTransform<>());
   }
 
+  //立即支付订单
+  public Observable<PayInfoBean> orderPayWithChannel(int order_id,String channel) {
+    return XlmmRetrofitClient.getService()
+            .orderPayWithChannel(order_id,channel)
+            .compose(new DefaultTransform<>());
+  }
+
   //得到某个订单详细数据列表
   public Observable<OrderDetailBean> getOrderDetailBean(int order_id) {
     return XlmmRetrofitClient.getService()
-        .getOrderDetail(order_id)
+        .getOrderDetail(order_id,"app")
         .compose(new DefaultTransform<>());
   }
 

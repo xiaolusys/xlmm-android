@@ -74,13 +74,6 @@
                     android:textColor="@color/colorAccent"
                     android:textSize="13sp" />
 
-                <ImageView
-                    android:id="@+id/right"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:src="@mipmap/common_icon_right_arrow" />
-
             </LinearLayout>
 
             <include layout="@layout/common_gap" />
@@ -126,13 +119,13 @@
                     android:layout_width="60dp"
                     android:layout_height="20dp"
                     android:layout_centerInParent="true"
-                    android:background="@drawable/refund_btn"
+                    android:background="@drawable/refund_btn_yellow"
                     android:elevation="0dp"
                     android:gravity="center"
                     android:text="处理中"
-                    android:textColor="@color/text_color_62"
+                    android:textColor="#F29909"
                     android:textSize="10sp"
-                    android:visibility="invisible"/>
+                    android:visibility="invisible" />
 
 
             </RelativeLayout>

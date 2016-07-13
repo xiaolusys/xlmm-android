@@ -23,6 +23,7 @@ import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.entities.ClickcarryBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.CouponBean;
+import com.jimei.xiaolumeimei.entities.CouponEntity;
 import com.jimei.xiaolumeimei.entities.DrawCouponBean;
 import com.jimei.xiaolumeimei.entities.GetCouponbean;
 import com.jimei.xiaolumeimei.entities.IndexBean;
@@ -39,6 +40,7 @@ import com.jimei.xiaolumeimei.entities.MMVisitorsBean;
 import com.jimei.xiaolumeimei.entities.MamaFansBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.MamaLivenessBean;
+import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.entities.MembershipPointBean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
 import com.jimei.xiaolumeimei.entities.NicknameBean;
@@ -193,7 +195,6 @@ public interface XlmmService {
     @FormUrlEncoded
     @POST("/rest/v1/carts")
     Observable<AddCartsBean> addCarts(
-
             @Field("item_id") String itemId,
             @Field("sku_id") String skuId
     );
@@ -321,13 +322,23 @@ public interface XlmmService {
     @POST("/rest/v1/trades/{pk}/charge")
     Observable<ResponseBody> shoppingcart_paynow(
             @Path("pk") int order_id
-
     );
+
+    //立即支付订单接口
+    @FormUrlEncoded
+    @POST("/rest/v2/trades/{pk}/charge")
+    Observable<PayInfoBean> orderPayWithChannel(
+            @Path("pk") int order_id,
+            @Field("channel") String channel
+    );
+
 
     //获得订单数据
     @GET("/rest/v2/trades/{pk}")
     Observable<OrderDetailBean> getOrderDetail(
-            @Path("pk") int order_id);
+            @Path("pk") int order_id,
+            @Query("device") String device
+    );
 
     //根据订单号获取包裹信息
     @GET("/rest/packageskuitem")
@@ -485,15 +496,23 @@ public interface XlmmService {
             @Query("page") String page
     );
 
+    //获取优惠券
+    @GET("/rest/v1/usercoupons/get_user_coupons")
+    Observable<ArrayList<CouponEntity>> getCouponList(
+            @Query("status") int status
+    );
+
     //获取用户未使用优惠券信息
     @GET("/rest/v1/usercoupons")
     Observable<CouponBean> getUnusedCouponBean(
-            @Query("page") String page
+            @Query("page") int page
     );
 
     //获取用户过期优惠券信息
     @GET("/rest/v1/usercoupons/list_past_coupon")
-    Observable<CouponBean> getPastCouponBean();
+    Observable<CouponBean> getPastCouponBean(
+            @Query("page") String page
+    );
 
     //获取短信登录验证码
     @FormUrlEncoded
@@ -1011,5 +1030,10 @@ public interface XlmmService {
 
     @GET("/rest/v1/usercoupons/is_picked_register_gift_coupon")
     Observable<Response<IsGetcoupon>> isCouPon(
+    );
+
+    @GET("/rest/v1/mmwebviewconfig")
+    Observable<MamaUrl> getMamaUrl(
+            @Query("version") String version
     );
 }
