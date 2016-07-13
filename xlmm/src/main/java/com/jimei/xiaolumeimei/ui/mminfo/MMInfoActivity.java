@@ -93,6 +93,7 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
   @Bind(R.id.tv_mamavip) TextView tvMamaVip;
   @Bind(R.id.mama_id) TextView mamaId;
   @Bind(R.id.tv_mamashengyu) TextView tvShengyu;
+  @Bind(R.id.mama_pay) TextView mamaPay;
   @Bind(R.id.imgExam) ImageView imgExam;
   @Bind(R.id.tv_yue) TextView tvYue;
   @Bind(R.id.yue_layout) LinearLayout yueLayout;

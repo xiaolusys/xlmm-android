@@ -92,7 +92,8 @@
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".ui.activity.trade.CartActivity"
-            android:theme="@style/AppTheme.TransparentActivity" />
+            android:theme="@style/AppTheme.TransparentActivity"
+            android:launchMode="singleTask"/>
         <activity
             android:name=".ui.activity.trade.CartsPayInfoActivity"
             android:theme="@style/AppTheme.TransparentActivity"

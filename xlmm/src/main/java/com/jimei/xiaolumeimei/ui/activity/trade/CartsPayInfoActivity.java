@@ -860,8 +860,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
                     @Override
                     public void onNext(PayInfoBean payInfoBean) {
-
-                        if (null != payInfoBean) {
+                        if (null != payInfoBean && payInfoBean.getTrade() != null) {
                             order_id = payInfoBean.getTrade().getId();
                             order_no = payInfoBean.getTrade().getTid();
                             JUtils.Log(TAG, payInfoBean.toString());

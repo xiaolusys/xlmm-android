@@ -3,7 +3,6 @@ package com.jimei.xiaolumeimei.ui.activity.trade;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,7 +17,7 @@ import android.widget.TextView;
 import butterknife.Bind;
 
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.CompanyAdapter;
+import com.jimei.xiaolumeimei.adapter.LogisticCompanyAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.LogisticsCompanyInfo;
 import com.jimei.xiaolumeimei.widget.SideBar;
@@ -45,7 +44,7 @@ public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
      */
     @Bind(R.id.dialog)
     TextView dialog;
-    private CompanyAdapter mCompanyAdapter;
+    private LogisticCompanyAdapter mCompanyAdapter;
 
     @Override
     protected void setListener() {
@@ -67,7 +66,7 @@ public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
         //ListView all_orders_listview = (ListView) findViewById(R.id.all_orders_listview);
 
         fillCompanyInfo();
-        mCompanyAdapter = new CompanyAdapter(this, company_list);
+        mCompanyAdapter = new LogisticCompanyAdapter(this, company_list);
         lv_logistics_company.setAdapter(mCompanyAdapter);
         lv_logistics_company.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

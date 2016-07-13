@@ -162,15 +162,15 @@ public class JumpUtils {
       case XlmmConst.JUMP_CARTS:
         if (LoginUtils.checkLoginState(context)) {
           intent = new Intent(context, CartActivity.class);
-          context.startActivity(intent);
         } else {
           intent = new Intent(context, LoginActivity.class);
           bundle = new Bundle();
           bundle.putString("login", "cart");
           intent.putExtras(bundle);
-          context.startActivity(intent);
-          ((Activity) context).finish();
         }
+        context.startActivity(intent);
+        ((Activity) context).finish();
+        break;
       case XlmmConst.JUMP_TOPIC:
         intent = new Intent(context, BrandListActivity.class);
         bundle = new Bundle();

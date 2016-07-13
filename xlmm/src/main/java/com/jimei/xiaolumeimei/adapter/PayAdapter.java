@@ -9,30 +9,27 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.entities.LogisticCompany;
+import com.jimei.xiaolumeimei.entities.OrderDetailBean.ExtrasBean.ChannelsBean;
 
 import java.util.List;
 
-/**
- * Created by wisdom on 16/7/13.
- */
-public class CompanyAdapter extends BaseAdapter {
-    private List<LogisticCompany> logisticCompanies;
+public class PayAdapter extends BaseAdapter {
+    private List<ChannelsBean> channelsBeanList;
     private Context context;
 
-    public CompanyAdapter(List<LogisticCompany> logisticCompanies, Context context) {
-        this.logisticCompanies = logisticCompanies;
+    public PayAdapter(List<ChannelsBean> channelsBeanList, Context context) {
+        this.channelsBeanList = channelsBeanList;
         this.context = context;
     }
 
     @Override
     public int getCount() {
-        return logisticCompanies.size();
+        return channelsBeanList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return logisticCompanies.get(position);
+        return channelsBeanList.get(position);
     }
 
     @Override
@@ -44,23 +41,19 @@ public class CompanyAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_logistics, null);
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_pay, null);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        String name = logisticCompanies.get(position).getName();
-        if (name.contains("申通")) {
-            holder.iconImg.setImageResource(R.drawable.icon_sto);
-        } else if (name.contains("邮政")) {
-            holder.iconImg.setImageResource(R.drawable.icon_ems);
-        } else if (name.contains("韵达")) {
-            holder.iconImg.setImageResource(R.drawable.icon_yunda);
-        } else if (name.contains("小鹿")) {
-            holder.iconImg.setImageResource(R.drawable.icon_xiaolu);
+        holder.nameTv.setText(channelsBeanList.get(position).getName());
+        String id = channelsBeanList.get(position).getId();
+        if (id.contains("wx")) {
+            holder.iconImg.setImageResource(R.drawable.wx);
+        } else if (id.contains("alipay")) {
+            holder.iconImg.setImageResource(R.drawable.alipay);
         }
-        holder.nameTv.setText(name);
         return convertView;
     }
 

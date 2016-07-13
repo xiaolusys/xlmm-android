@@ -40,6 +40,7 @@ import com.jimei.xiaolumeimei.entities.MMVisitorsBean;
 import com.jimei.xiaolumeimei.entities.MamaFansBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.MamaLivenessBean;
+import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.entities.MembershipPointBean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
 import com.jimei.xiaolumeimei.entities.NicknameBean;
@@ -321,13 +322,23 @@ public interface XlmmService {
     @POST("/rest/v1/trades/{pk}/charge")
     Observable<ResponseBody> shoppingcart_paynow(
             @Path("pk") int order_id
-
     );
+
+    //立即支付订单接口
+    @FormUrlEncoded
+    @POST("/rest/v2/trades/{pk}/charge")
+    Observable<PayInfoBean> orderPayWithChannel(
+            @Path("pk") int order_id,
+            @Field("channel") String channel
+    );
+
 
     //获得订单数据
     @GET("/rest/v2/trades/{pk}")
     Observable<OrderDetailBean> getOrderDetail(
-            @Path("pk") int order_id);
+            @Path("pk") int order_id,
+            @Query("device") String device
+    );
 
     //根据订单号获取包裹信息
     @GET("/rest/packageskuitem")
@@ -1019,5 +1030,10 @@ public interface XlmmService {
 
     @GET("/rest/v1/usercoupons/is_picked_register_gift_coupon")
     Observable<Response<IsGetcoupon>> isCouPon(
+    );
+
+    @GET("/rest/v1/mmwebviewconfig")
+    Observable<MamaUrl> getMamaUrl(
+            @Query("version") String version
     );
 }

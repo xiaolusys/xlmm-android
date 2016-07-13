@@ -22,7 +22,7 @@ android {
 
         targetSdkVersion 23
 
-        versionCode 20160709
+        versionCode 20160713
         versionName "1.1.9"
 
         multiDexEnabled = true
