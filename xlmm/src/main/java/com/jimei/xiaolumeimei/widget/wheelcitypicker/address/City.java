@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class City {
 
-  private ArrayList<County> counties = new ArrayList<County>();
+  @SerializedName("childs")private ArrayList<County> counties;
   @SerializedName("id") private String id;
   @SerializedName("name") private String name;
   /**

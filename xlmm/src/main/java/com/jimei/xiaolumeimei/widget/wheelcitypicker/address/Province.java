@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Province {
 
-  ArrayList<City> cities = new ArrayList<City>();
+  @SerializedName("childs")private ArrayList<City> cities;
   @SerializedName("id") private String id;
   @SerializedName("name") private String name;
   /**

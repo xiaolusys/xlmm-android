@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.Bind;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
@@ -32,7 +33,7 @@ import com.umeng.analytics.MobclickAgent;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import org.json.JSONArray;
+import java.util.List;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -304,14 +305,9 @@ public class ChanggeAddressActivity extends BaseSwipeBackCompatActivity
         byte[] arrayOfByte = new byte[in.available()];
         in.read(arrayOfByte);
         address = new String(arrayOfByte, "UTF-8");
-        JSONArray jsonList = new JSONArray(address);
         Gson gson = new Gson();
-        for (int i = 0; i < jsonList.length(); i++) {
-          try {
-            provinces.add(gson.fromJson(jsonList.getString(i), Province.class));
-          } catch (Exception e) {
-          }
-        }
+        provinces = gson.fromJson(address, new TypeToken<List<Province>>() {
+        }.getType());
         return true;
       } catch (Exception e) {
       } finally {
