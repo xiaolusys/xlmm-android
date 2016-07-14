@@ -9,28 +9,49 @@
         android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:background="@color/white"
         android:orientation="vertical">
 
         <!-- Title -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="170dp"
+            android:gravity="bottom">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="95dp"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/update_top_bg" />
+
+            <ImageView
+                android:layout_width="240dp"
+                android:layout_height="160dp"
+                android:layout_centerHorizontal="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/img_update" />
+
+        </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="40dp">
+            android:layout_height="wrap_content"
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/umeng_update_wifi_indicator"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_centerVertical="true"
+                android:layout_alignParentBottom="true"
                 android:layout_marginLeft="10dp"
                 android:contentDescription="@string/UMGprsCondition"
                 android:src="@drawable/umeng_update_wifi_disable" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:background="@color/white"
                 android:text="@string/UMUpdateTitle"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/text_color_26" />
@@ -39,8 +60,8 @@
                 android:id="@+id/umeng_update_id_close"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
                 android:background="@drawable/umeng_update_button_close_bg_selector"
                 android:focusable="true"
@@ -48,18 +69,13 @@
 
         </RelativeLayout>
 
-        <!-- split -->
-
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1px"
-            android:background="@color/colorAccent" />
         <!-- Content -->
 
         <ScrollView
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:background="@color/white"
             android:padding="10dp">
 
             <LinearLayout
@@ -75,7 +91,9 @@
                     android:layout_marginRight="5dp"
                     android:layout_marginTop="10dp"
                     android:focusable="true"
-                    android:textColor="#000" />
+                    android:lineSpacingExtra="3dp"
+                    android:textColor="#646464"
+                    android:textSize="15sp" />
             </LinearLayout>
         </ScrollView>
 
@@ -92,58 +110,66 @@
             android:visibility="gone" />
 
         <!-- OK&Cancel Button -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/text_color_B4" />
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#DADADA" />
-
-            <Button
-                android:id="@+id/umeng_update_id_ok"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:focusable="true"
-                android:gravity="center"
-                android:padding="8dp"
-                android:textSize="18sp"
-                android:text="@string/UMUpdateNow"
-                android:textColor="@color/colorAccent" />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#DADADA" />
-
-
-            <Button
-                android:id="@+id/umeng_update_id_cancel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:focusable="true"
-                android:gravity="center"
-                android:padding="8dp"
-                android:textSize="18sp"
-                android:text="@string/UMNotNow"
-                android:textColor="@color/colorAccent" />
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/update_button_bg"
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/umeng_update_id_ignore"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/umeng_update_button_cancel_bg_selector"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null"
                 android:focusable="true"
                 android:gravity="center"
-                android:padding="8dp"
-                android:textSize="18sp"
                 android:text="@string/UMIgnore"
-                android:textColor="#AAABAF"
+                android:textColor="#646464"
+                android:textSize="17sp" />
+
+            <View
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:background="@color/text_color_B4" />
+
+            <Button
+                android:id="@+id/umeng_update_id_ok"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="@string/UMUpdateNow"
+                android:textColor="@color/colorAccent"
+                android:textSize="17sp" />
+
+            <View
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:background="@color/text_color_B4"
                 android:visibility="gone" />
+
+            <Button
+                android:id="@+id/umeng_update_id_cancel"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="@string/UMNotNow"
+                android:textColor="@color/colorAccent"
+                android:textSize="16sp"
+                android:visibility="gone" />
+
+
         </LinearLayout>
     </LinearLayout>
 
