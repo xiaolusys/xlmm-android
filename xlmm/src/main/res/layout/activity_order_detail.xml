@@ -524,17 +524,15 @@
             android:src="@drawable/red_bag_bottom" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
+            android:singleLine="true"
+            android:ellipsize="end"
             android:text="您获得一个红包可以分享给好友"
             android:textColor="@color/white"
             android:textSize="14sp" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1" />
 
         <ImageView
             android:layout_width="wrap_content"

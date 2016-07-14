@@ -594,7 +594,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
 
                     @Override
                     public void onError(Throwable e) {
-
+                        JUtils.Toast("支付请求失败!");
                         Log.e(TAG, " error:, " + e.toString());
                         super.onError(e);
                     }
