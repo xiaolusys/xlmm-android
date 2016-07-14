@@ -13,7 +13,7 @@ public class MMShareCodeWebViewActivity extends CommonWebViewActivity {
 
   @Override protected void initViews() {
     super.initViews();
-    webviewTitle.setText("我的邀请");
+    webviewTitle.setText("邀请一元开店");
   }
 
   @Override protected void onResume() {
@@ -27,4 +27,6 @@ public class MMShareCodeWebViewActivity extends CommonWebViewActivity {
     MobclickAgent.onPageEnd(this.getClass().getSimpleName());
     MobclickAgent.onPause(this);
   }
+
+
 }
