@@ -406,6 +406,9 @@
             android:name=".ui.activity.xiaolumama.MMLevelExamWebViewActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
+            android:name=".ui.activity.xiaolumama.MamaReNewActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
+        <activity
             android:name=".ui.xlmmmain.MainActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity

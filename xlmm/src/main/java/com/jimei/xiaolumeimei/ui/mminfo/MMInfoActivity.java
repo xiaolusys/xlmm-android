@@ -27,6 +27,7 @@ import com.jimei.xiaolumeimei.base.BasePresenterActivity;
 import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
+import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
 import com.jimei.xiaolumeimei.event.WebViewEvent;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.BoutiqueWebviewActivity;
@@ -41,6 +42,7 @@ import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMcarryLogActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaDrawCashActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaDrawCouponActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaLivenessActivity;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaReNewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaVisitorActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.StatusBarUtil;
@@ -114,11 +116,13 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
   private String actlink;
   private String shareMmcode;
   private boolean isThisWeek = true;
+  private MamaUrl.ResultsBean.ExtraBean mamaResult;
 
   @Override protected void initData() {
     mPresenter.getShareShopping();
     mPresenter.getMamaFortune();
     mPresenter.getRefund();
+    mPresenter.getMamaUrl();
   }
 
   @Override protected void setListener() {
@@ -128,6 +132,7 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
     leijiLayout.setOnClickListener(this);
     huoyueLayout.setOnClickListener(this);
     imgExam.setOnClickListener(this);
+    mamaPay.setOnClickListener(this);
 
     rlTwoDimen.setOnClickListener(this);
     rl_fans.setOnClickListener(this);
@@ -163,18 +168,27 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
     return  TransitionMode.SCALE;
   }
 
+  @Override
+  public void initMamaUrl(MamaUrl mamaUrl) {
+    mamaResult = mamaUrl.getResults().get(0).getExtra();
+  }
+
   @Override public void initMMview(MamaFortune fortune) {
+    int days = fortune.getMamaFortune().getExtraInfo().getSurplusDays();
     JUtils.Log(TAG, fortune.toString()
         + "fortune.getMamaFortune().getExtraInfo().getSurplusDays()"
-        + fortune.getMamaFortune().getExtraInfo().getSurplusDays());
+        + days);
     tv_fund.setText(
         Double.toString((double) (Math.round(fortune.getMamaFortune().getCarryValue() * 100)) / 100)
             + "元");
     tv_invite_num.setText(fortune.getMamaFortune().getInviteNum() + "位");
     tv_fansnum.setText(fortune.getMamaFortune().getFansNum() + "人");
     tv_order.setText(s + "个");
+    if (days<=15) {
+      mamaPay.setVisibility(View.VISIBLE);
+    }
 
-    tvShengyu.setText(fortune.getMamaFortune().getExtraInfo().getSurplusDays() + "");
+    tvShengyu.setText(days + "");
     tvYue.setText(fortune.getMamaFortune().getCashValue() + "");
     tvLeiji.setText(fortune.getMamaFortune().getCarryValue() + "");
     tvHuoyue.setText(fortune.getMamaFortune().getActiveValueNum() + "");
@@ -355,7 +369,7 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
         bundlerl_party.putString("cookies", cookies);
         bundlerl_party.putString("domain", domain);
         bundlerl_party.putString("Cookie", sharedPreferences.getString("Cookie", ""));
-        bundlerl_party.putString("actlink", actlink);
+        bundlerl_party.putString("actlink", mamaResult.getAct_info());
         intent.putExtras(bundlerl_party);
         startActivity(intent);
         break;
@@ -378,8 +392,13 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
         startActivity(intentrl_shop);
 
         break;
+      case  R.id.mama_pay:
+        JumpUtils.jumpToWebViewWithCookies(this,
+                mamaResult.getRenew(), -1,
+                MamaReNewActivity.class, "续费");
+        break;
       case R.id.rl_two_dimen:
-        JumpUtils.jumpToWebViewWithCookies(this, shareMmcode, 4, MMShareCodeWebViewActivity.class,
+        JumpUtils.jumpToWebViewWithCookies(this, mamaResult.getInvite(), 4, MMShareCodeWebViewActivity.class,
             "我的邀请");
         break;
       case R.id.rl_fans:
@@ -391,7 +410,7 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
           baseUrl = XlmmApi.APP_BASE_URL;
         }
         String cookies = sharedPreferences.getString("cookiesString", "");
-        String actlink = baseUrl + "/pages/fans-explain.html";
+        String actlink = mamaResult.getFans_explain();
         String domain = sharedPreferences.getString("cookiesDomain", "");
         String sessionid = sharedPreferences.getString("Cookie", "");
 
@@ -444,7 +463,7 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
       case R.id.imgExam:
         if (mamaFortune != null) {
           JumpUtils.jumpToWebViewWithCookies(this,
-              mamaFortune.getMamaFortune().getExtraInfo().getNextLevelExamUrl(), -1,
+                  mamaResult.getExam(), -1,
               MMLevelExamWebViewActivity.class, "妈妈考试");
         }
         break;

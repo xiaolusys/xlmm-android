@@ -7,6 +7,7 @@ import com.jimei.xiaolumeimei.base.BasePresenter;
 import com.jimei.xiaolumeimei.base.BaseView;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
+import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +24,13 @@ public interface MMInfoContract {
     Observable<MamaFortune> getMamaFortune();
 
     Observable<RecentCarryBean> getRecentCarry(String from, String day);
+
+    Observable<MamaUrl> getMamaUrl();
   }
 
   interface View extends BaseView {
+    void initMamaUrl(MamaUrl mamaUrl);
+
     void initMMview(MamaFortune mamaFortune);
 
     void initShareInfo(MMShoppingBean shoppingBean);
@@ -50,6 +55,8 @@ public interface MMInfoContract {
     public abstract void getShareShopping();
 
     public abstract void getMamaFortune();
+
+    public abstract void getMamaUrl();
 
     public abstract void setDataOfThisWeek();
 
