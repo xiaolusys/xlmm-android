@@ -143,7 +143,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
 
     int order_id = 0;
     OrderDetailBean orderDetail;
-    String source;
     String tid;
     private Dialog dialog;
     private Dialog dialog2;
@@ -207,7 +206,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     protected void initData() {
         if ((getIntent() != null) && (getIntent().getExtras() != null)) {
             order_id = getIntent().getExtras().getInt("orderinfo");
-            source = getIntent().getExtras().getString("source");
             showIndeterminateProgressDialog(false);
             Subscription subscription = TradeModel.getInstance()
                     .getOrderDetailBean(order_id)
@@ -220,6 +218,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                             orderDetail = orderDetailBean;
                             showProcBtn(orderDetailBean);
                             fillDataToView(orderDetailBean);
+                            scrollView.scrollTo(0, 0);
                             String display = orderDetailBean.getStatus_display();
                             if ("已付款".equals(display)) {
                                 addressLayout.setOnClickListener(OrderDetailActivity.this);
@@ -366,7 +365,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         OrderGoodsListAdapter mGoodsAdapter = new OrderGoodsListAdapter(this, orderDetailBean);
         lv_goods.setAdapter(mGoodsAdapter);
         setListViewHeightBasedOnChildren(lv_goods);
-        scrollView.scrollTo(0, 0);
     }
 
     private void setStatusView(int status) {

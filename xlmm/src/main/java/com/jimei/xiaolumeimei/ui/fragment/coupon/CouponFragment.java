@@ -34,9 +34,6 @@ public class CouponFragment extends BaseFragment {
     private int num;
     private MainTabAdapter mAdapter;
 
-    public CouponFragment() {
-    }
-
     public static CouponFragment newInstance(int type, String title, MainTabAdapter mAdapter) {
         CouponFragment fragment = new CouponFragment();
         Bundle args = new Bundle();

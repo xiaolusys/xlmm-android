@@ -12,9 +12,8 @@ import butterknife.Bind;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.ui.fragment.AllOrdersFragment;
-import com.jimei.xiaolumeimei.ui.fragment.WaitPayOrdersFragment;
-import com.jimei.xiaolumeimei.ui.fragment.WaitSendOrdersFragment;
+import com.jimei.xiaolumeimei.data.XlmmConst;
+import com.jimei.xiaolumeimei.ui.fragment.v2.OrderListFragment;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
@@ -28,8 +27,7 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity
     TabLayout mTabLayout;
     @Bind(R.id.view_pager)
     ViewPager mViewPager;
-    List<Fragment> fragments;
-    List<String> titles;
+    List<OrderListFragment> fragments;
 
     @Override
     protected void setListener() {
@@ -53,37 +51,24 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void initData() {
         initFragment();
-
-        initTitles();
-
         initTabLayout();
-
         swith_fragment();
-
     }
 
     private void initTabLayout() {
-        MainTabAdapter mAdapter =
-                new MainTabAdapter(getSupportFragmentManager(), fragments, titles);
+        MainTabAdapter mAdapter = new MainTabAdapter(getSupportFragmentManager(), fragments);
         mViewPager.setAdapter(mAdapter);
         mViewPager.setOffscreenPageLimit(3);
         mTabLayout.setupWithViewPager(mViewPager);
         mTabLayout.setTabMode(TabLayout.MODE_FIXED);
     }
 
-    private void initTitles() {
-        titles = new ArrayList<>();
-        titles.add("所有订单");
-        titles.add("待付款");
-        titles.add("待收货");
-    }
 
     private void initFragment() {
         fragments = new ArrayList<>();
-        fragments.add(AllOrdersFragment.newInstance("所有订单"));
-        fragments.add(WaitPayOrdersFragment.newInstance("待付款"));
-        fragments.add(WaitSendOrdersFragment.newInstance("待收货"));
-
+        fragments.add(OrderListFragment.newInstance(XlmmConst.ALL_ORDER, "所有订单"));
+        fragments.add(OrderListFragment.newInstance(XlmmConst.WAIT_PAY, "待付款"));
+        fragments.add(OrderListFragment.newInstance(XlmmConst.WAIT_SEND, "待收货"));
     }
 
     @Override
@@ -102,9 +87,9 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity
     }
 
     public void swith_fragment() {
-        int tabid = 0;
+        int tabid;
         if (getIntent().getExtras() != null) {
-            tabid = getIntent().getExtras().getInt("fragment");
+            tabid = getIntent().getExtras().getInt("fragment",0);
             JUtils.Log(TAG, "jump to fragment:" + tabid);
             if ((tabid >= 1) && (tabid <= 3)) {
                 try {
@@ -118,14 +103,11 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity
     }
 
     class MainTabAdapter extends FragmentPagerAdapter {
-        private List<Fragment> listFragment;
-        private List<String> listTitle;
+        private List<OrderListFragment> listFragment;
 
-        public MainTabAdapter(FragmentManager fm, List<Fragment> listFragment,
-                              List<String> listTitle) {
+        public MainTabAdapter(FragmentManager fm, List<OrderListFragment> listFragment) {
             super(fm);
             this.listFragment = listFragment;
-            this.listTitle = listTitle;
         }
 
         @Override
@@ -140,7 +122,7 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return listTitle.get(position);
+            return listFragment.get(position).getTitle();
         }
     }
 

@@ -30,19 +30,11 @@ public class ActivityModel {
     }
 
     //活动内容分享
-  /*public Observable<ActivityBean> get_share_content(String ufrom) {
-    return XlmmRetrofitClient.getService()
-        .get_share_content(ufrom)
-        .compose(new DefaultTransform<>());
-  }*/
-
-    //活动内容分享
     public Observable<ActivityBean> get_party_share_content(String id) {
         return XlmmRetrofitClient.getService()
                 .get_party_share_content(id)
                 .compose(new DefaultTransform<>());
     }
-
 
     public Observable<BrandListBean> getBrandList(String id) {
         return XlmmRetrofitClient.getService()
@@ -54,13 +46,6 @@ public class ActivityModel {
     public Observable<List<PostActivityBean>> getPostActivity() {
         return XlmmRetrofitClient.getService()
                 .getPostActivity()
-                .compose(new DefaultTransform<>());
-    }
-
-    //物流列表
-    public Observable<List<LogisticCompany>> getLogisticCompany() {
-        return XlmmRetrofitClient.getService()
-                .getLogisticCompany()
                 .compose(new DefaultTransform<>());
     }
 

@@ -605,14 +605,4 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
       }
     }
   }
-
-  public void setId(String id){
-    try {
-      JSONObject jsonObject = new JSONObject(id);
-      int id1 = jsonObject.getInt("id");
-      get_party_share_content(id1 + "");
-    } catch (JSONException e) {
-      e.printStackTrace();
-    }
-  }
 }

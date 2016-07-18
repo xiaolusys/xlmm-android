@@ -71,20 +71,6 @@ public class UserModel {
                 .compose(new DefaultTransform<>());
     }
 
-    //获取注册验证码
-    public Observable<RegisterBean> getRegisterCheckCode(String vmobile) {
-        return XlmmRetrofitClient.getService()
-                .getRegisterCheckCode(vmobile)
-                .compose(new DefaultTransform<>());
-    }
-
-    //获取注册验证码
-    public Observable<RegisterBean> check_code_user(String username, String valid_code) {
-        return XlmmRetrofitClient.getService()
-                .check_code_user(username, valid_code)
-                .compose(new DefaultTransform<>());
-    }
-
     //设置昵称
     public Observable<UserBean> setNickname(int userid, NicknameBean nickname) {
         return XlmmRetrofitClient.getService()
@@ -97,13 +83,6 @@ public class UserModel {
                                                String password1, String password2) {
         return XlmmRetrofitClient.getService()
                 .changePassword(username, valid_code, password1, password2)
-                .compose(new DefaultTransform<>());
-    }
-
-    //获取修改密码时验证码
-    public Observable<RegisterBean> getChgPasswordCheckCode(String vmobile) {
-        return XlmmRetrofitClient.getService()
-                .getChgPasswordCheckCode(vmobile)
                 .compose(new DefaultTransform<>());
     }
 
@@ -142,27 +121,6 @@ public class UserModel {
                 .compose(new DefaultTransform<>());
     }
 
-    //得到用户过期优惠券信息
-    public Observable<CouponBean> getPastCouponBean(String page) {
-        return XlmmRetrofitClient.getService()
-                .getPastCouponBean(page)
-                .compose(new DefaultTransform<>());
-    }
-
-    //获取短信登录验证码
-    public Observable<SmsLoginBean> getSmsCheckCode(String mobile) {
-        return XlmmRetrofitClient.getService()
-                .getSmsCheckCode(mobile)
-                .compose(new DefaultTransform<>());
-    }
-
-    //短信登录
-    public Observable<SmsLoginUserBean> smsLogin(String mobile, String code) {
-        return XlmmRetrofitClient.getService()
-                .smsLogin(mobile, code)
-                .compose(new DefaultTransform<>());
-    }
-
     //微信登录
     public Observable<CodeBean> wxapp_login(String noncestr, String timestamp,
                                             String sign, String headimgurl, String nickname, String openid, String unionid) {
@@ -178,26 +136,11 @@ public class UserModel {
                 .compose(new DefaultTransform<>());
     }
 
-    //绑定手机获取验证码
-    public Observable<BindInfoBean> bang_mobile_code(String vmobile) {
-
-        return XlmmRetrofitClient.getService()
-                .bang_mobile_code(vmobile)
-                .compose(new DefaultTransform<>());
-    }
-
     //绑定手机
     public Observable<BindInfoBean> bang_mobile(String username, String password1,
                                                 String password2, String valid_code) {
         return XlmmRetrofitClient.getService()
                 .bang_mobile(username, password1, password2, valid_code)
-                .compose(new DefaultTransform<>());
-    }
-
-    public Observable<BindInfoBean> bang_mobile_unpassword(String username,
-                                                           String valid_code) {
-        return XlmmRetrofitClient.getService()
-                .bang_mobile_unpassword(username, valid_code)
                 .compose(new DefaultTransform<>());
     }
 
@@ -252,20 +195,16 @@ public class UserModel {
     }
 
     public Observable<CodeBean> openDebug(String debug_secret) {
-
         return XlmmRetrofitClient.getService().openDebug(debug_secret)
                 .compose(new DefaultTransform<>());
     }
 
-
     public Observable<Response<GetCouponbean>> getCouPon() {
-
         return XlmmRetrofitClient.getService().getCouPon()
                 .compose(new DefaultTransform<>());
     }
 
     public Observable<Response<IsGetcoupon>> isCouPon() {
-
         return XlmmRetrofitClient.getService().isCouPon()
                 .compose(new DefaultTransform<>());
     }

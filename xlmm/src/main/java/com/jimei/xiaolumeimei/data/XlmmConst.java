@@ -29,6 +29,10 @@ public class XlmmConst {
     public static final int PAST_COUPON = 1;
     public static final int USED_COUPON = 2;
 
+    public static final int ALL_ORDER = 0;
+    public static final int WAIT_PAY = 1;
+    public static final int WAIT_SEND = 2;
+
     public static  final int JUMP_PROMOTE_TODAY = 1;
     public static  final int JUMP_PROMOTE_PREVIOUS = 2;
     public static  final int JUMP_PRODUCT_CHILDLIST= 3;

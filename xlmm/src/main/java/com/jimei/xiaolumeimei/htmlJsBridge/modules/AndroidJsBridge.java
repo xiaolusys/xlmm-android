@@ -36,12 +36,12 @@ import com.google.gson.Gson;
 import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.entities.CallNativeFuncBean;
 import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShareCodeWebViewActivity;
 import com.jimei.xiaolumeimei.utils.CameraUtils;
 import com.jimei.xiaolumeimei.utils.FileUtils;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
@@ -50,9 +50,6 @@ import com.jude.utils.JUtils;
 import com.mob.tools.utils.UIHandler;
 import com.tbruyelle.rxpermissions.RxPermissions;
 import com.umeng.analytics.MobclickAgent;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -104,8 +101,8 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     }
   }
 
-  @JavascriptInterface public void changeId(String id) {
-    ((CommonWebViewActivity) mContext).setId(id);
+  @JavascriptInterface public void changeId(String str) {
+    ((MMShareCodeWebViewActivity) mContext).setId(str);
   }
 
   public void getPromotionParams(String uform, String activity_id) {
