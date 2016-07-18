@@ -13,14 +13,10 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.GetCouponbean;
-import com.jimei.xiaolumeimei.entities.UserInfoBean;
-import com.jimei.xiaolumeimei.event.UserInfoEmptyEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
-import com.jimei.xiaolumeimei.model.UserNewModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
-import org.greenrobot.eventbus.EventBus;
 import retrofit2.Response;
 import retrofit2.adapter.rxjava.HttpException;
 import rx.Subscription;
@@ -92,7 +88,7 @@ public class GetCouponFragment extends DialogFragment {
                   if (getCouponbeanResponse.isSuccessful()) {
                     JUtils.Log("getCoupon", "onnext == " + getCouponbeanResponse.body().toString());
                     JUtils.Toast(getCouponbeanResponse.body().getInfo());
-                    getUserInfo();
+                    dismiss();
                   }
                 }
               }
@@ -106,28 +102,6 @@ public class GetCouponFragment extends DialogFragment {
             });
       }
     });
-  }
-
-  public void getUserInfo() {
-    subscription = UserNewModel.getInstance()
-        .getProfile()
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<UserInfoBean>() {
-          @Override public void onNext(UserInfoBean userInfoBean) {
-            if (null != userInfoBean) {
-              EventBus.getDefault().post(new UserInfoEmptyEvent());
-              dismiss();
-            }
-          }
-
-          @Override public void onCompleted() {
-            super.onCompleted();
-          }
-
-          @Override public void onError(Throwable e) {
-            super.onError(e);
-          }
-        });
   }
 
   @Override public void onDestroyView() {

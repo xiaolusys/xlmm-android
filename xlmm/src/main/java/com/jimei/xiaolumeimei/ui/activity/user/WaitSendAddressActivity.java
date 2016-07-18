@@ -1,28 +1,40 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
-
-import android.graphics.drawable.BitmapDrawable;
+import android.app.Dialog;
+import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.Gravity;
+import android.os.Environment;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
+import android.widget.Toast;
+import butterknife.Bind;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.model.AddressModel;
-import com.jimei.xiaolumeimei.widget.citypicker.CityPicker;
+import com.jimei.xiaolumeimei.utils.FileUtils;
+import com.jimei.xiaolumeimei.widget.wheelcitypicker.CityPickerDialog;
+import com.jimei.xiaolumeimei.widget.wheelcitypicker.Util;
+import com.jimei.xiaolumeimei.widget.wheelcitypicker.address.City;
+import com.jimei.xiaolumeimei.widget.wheelcitypicker.address.County;
+import com.jimei.xiaolumeimei.widget.wheelcitypicker.address.Province;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
-
-import butterknife.Bind;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -44,11 +56,8 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
     @Bind(R.id.rl_default)
     RelativeLayout relativeLayout;
     private String id;
-    private PopupWindow popupWindow;
-    private View view;
-    private CityPicker cityPicker;
-    private View parent;
 
+    private ArrayList<Province> provinces = new ArrayList<Province>();
     private String city_string;
     private String clearaddressa;
     private String receiver_state;
@@ -57,6 +66,12 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
     private String receiver_name;
     private String receiver_mobile;
     private String referal_trade_id;
+
+    private County county;
+    private City city;
+    private Province province;
+    private ArrayList<City> cities;
+    private ArrayList<County> counties;
 
     @Override
     protected void setListener() {
@@ -100,9 +115,7 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
 
     @Override
     protected void initViews() {
-        parent = findViewById(R.id.main);
         relativeLayout.setVisibility(View.GONE);
-        initPopupWindow();
     }
 
     @Override
@@ -119,24 +132,16 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.address:
-                //为popWindow添加动画效果
-                popupWindow.setAnimationStyle(R.style.popWindow_animation);
-                // 点击弹出泡泡窗口
-                popupWindow.showAtLocation(parent, Gravity.BOTTOM, 0, 0);
-                cityPicker.setOnSelectingListener(new CityPicker.OnSelectingListener() {
-                    @Override
-                    public void selected(boolean selected) {
-                        if (selected) {
-                            city_string = cityPicker.getCity_string();
-                            address.setText(cityPicker.getCity_string());
+                InputMethodManager imm =
+                    (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(mobile.getWindowToken(), 0);
 
-                            receiver_state = cityPicker.getCity_receiver_state();
-                            receiver_district = cityPicker.getCity_receiver_district();
-                            receiver_city = cityPicker.getCity_receiver_city();
-                            JUtils.Log(TAG, receiver_state + receiver_district + receiver_city);
-                        }
-                    }
-                });
+                if (provinces.size() > 0) {
+                    showAddressDialog();
+                } else {
+                    new InitAreaTask(this).execute(0);
+                }
+
                 break;
             case R.id.save:
                 receiver_name = name.getText().toString().trim();
@@ -196,16 +201,18 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
         return false;
     }
 
-    private void initPopupWindow() {
-        view = getLayoutInflater().inflate(R.layout.item_popwindow, null);
-
-        popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        popupWindow.setFocusable(true);
-        popupWindow.setBackgroundDrawable(new BitmapDrawable());
-        popupWindow.setOutsideTouchable(true);
-        cityPicker = (CityPicker) view.findViewById(R.id.city_picker);
+    private void showAddressDialog() {
+        new CityPickerDialog(this, provinces, province, city, county,
+            new CityPickerDialog.onCityPickedListener() {
+                @Override
+                public void onPicked(Province selectProvince, City selectCity, County selectCounty) {
+                    receiver_state = selectProvince != null ? selectProvince.getName() : "";
+                    receiver_district = selectCounty != null ? selectCounty.getName() : "";
+                    receiver_city = selectCity != null ? selectCity.getName() : "";
+                    city_string = receiver_state + receiver_city + receiver_district;
+                    address.setText(city_string);
+                }
+            }).show();
     }
 
     @Override
@@ -220,5 +227,84 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
         super.onPause();
         MobclickAgent.onPageEnd(this.getClass().getSimpleName());
         MobclickAgent.onPause(this);
+    }
+    private class InitAreaTask extends AsyncTask<Integer, Integer, Boolean> {
+
+        Context mContext;
+
+        Dialog progressDialog;
+
+        public InitAreaTask(Context context) {
+            mContext = context;
+            progressDialog = Util.createLoadingDialog(mContext, "请稍等...", true, 0);
+        }
+
+        @Override protected void onPreExecute() {
+
+            progressDialog.show();
+        }
+
+        @Override protected void onPostExecute(Boolean result) {
+            progressDialog.dismiss();
+            if (provinces.size() > 0) {
+                showAddressDialog();
+            } else {
+                Toast.makeText(mContext, "数据初始化失败", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override protected Boolean doInBackground(Integer... params) {
+            String address;
+            InputStream in = null;
+            try {
+                if (FileUtils.isFileExist(Environment.getExternalStorageDirectory().getAbsolutePath()
+                    + "/xlmmaddress/"
+                    + "areas.json")) {
+                    File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
+                        + "/xlmmaddress/"
+                        + "areas.json");
+                    in = new FileInputStream(file);
+                } else {
+                    in = mContext.getResources().getAssets().open("areas.json");
+                }
+                byte[] arrayOfByte = new byte[in.available()];
+                in.read(arrayOfByte);
+                address = new String(arrayOfByte, "UTF-8");
+                Gson gson = new Gson();
+                provinces = gson.fromJson(address, new TypeToken<List<Province>>() {
+                }.getType());
+
+                for (int i = 0; i < provinces.size(); i++) {
+                    if (provinces.get(i).getName().equals(receiver_state)) {
+                        province = provinces.get(i);
+                        cities = provinces.get(i).getCities();
+                    }
+                }
+
+                for (int i = 0; i < cities.size(); i++) {
+                    if (cities.get(i).getName().equals(receiver_city)) {
+                        city = cities.get(i);
+                        counties = cities.get(i).getCounties();
+                    }
+                }
+
+                for (int i = 0; i < counties.size(); i++) {
+                    if (counties.get(i).getName().equals(receiver_district)) {
+                        county = counties.get(i);
+                    }
+                }
+
+                return true;
+            } catch (Exception e) {
+            } finally {
+                if (in != null) {
+                    try {
+                        in.close();
+                    } catch (IOException e) {
+                    }
+                }
+            }
+            return false;
+        }
     }
 }

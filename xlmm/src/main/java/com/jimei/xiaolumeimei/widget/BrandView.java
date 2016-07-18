@@ -85,11 +85,11 @@ public class BrandView extends LinearLayout {
             .url(picPath)
             .build()
             .execute(new BitmapCallback() {
-                @Override public void onError(Call call, Exception e) {
+                @Override public void onError(Call call, Exception e,int id) {
                     e.printStackTrace();
                 }
 
-                @Override public void onResponse(Bitmap response) {
+                @Override public void onResponse(Bitmap response,int id) {
                     brandListImage.setAdjustViewBounds(true);
                     int screenWidth = DisplayUtils.getScreenW((Activity) mContext);
                     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(screenWidth,

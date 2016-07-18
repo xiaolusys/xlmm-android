@@ -6,6 +6,7 @@ import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import java.util.Date;
+import retrofit2.adapter.rxjava.HttpException;
 
 /**
  * Created by itxuye on 2016/7/4.
@@ -24,7 +25,7 @@ public class MainPresenter extends MainContract.Presenter {
   }
 
   @Override public void getUserInfoBeanFromLogin() {
-    mRxManager.add(mModel.getProfile().subscribe(new ServiceResponse<UserInfoBean>(){
+    mRxManager.add(mModel.getProfile().subscribe(new ServiceResponse<UserInfoBean>() {
       @Override public void onNext(UserInfoBean userInfoBean) {
         if (null != userInfoBean) {
           userInfoNewBean = userInfoBean;
@@ -39,6 +40,9 @@ public class MainPresenter extends MainContract.Presenter {
 
       @Override public void onError(Throwable e) {
         super.onError(e);
+        if (e instanceof HttpException) {
+          e.printStackTrace();
+        }
       }
     }));
   }
@@ -61,7 +65,7 @@ public class MainPresenter extends MainContract.Presenter {
     mRxManager.add(mModel.getPortalBean().subscribe(new ServiceResponse<PortalBean>() {
       @Override public void onNext(PortalBean portalBean) {
         if (null != portalBean) {
-          JUtils.Log("MainPresenter",portalBean.toString());
+          JUtils.Log("MainPresenter", portalBean.toString());
           mView.initSliderLayout(portalBean);
 
           mView.initCategory(portalBean);
@@ -82,7 +86,7 @@ public class MainPresenter extends MainContract.Presenter {
         if (swipeRefreshLayout != null) {
           swipeRefreshLayout.setRefreshing(false);
         }
-        JUtils.Log("MainPresenter","    "+e.getMessage());
+        JUtils.Log("MainPresenter", "    " + e.getMessage());
         JUtils.ToastLong("数据加载有误,请下拉刷新重试!");
       }
     }));
@@ -113,6 +117,15 @@ public class MainPresenter extends MainContract.Presenter {
       e.printStackTrace();
     }
     return left;
+  }
+
+  @Override public void getAddressVersionAndUrl() {
+    mRxManager.add(mModel.getAddressVersionAndUrl().subscribe(addressDownloadResultBean -> {
+
+      if (null != addressDownloadResultBean) {
+        mView.downLoaAddressFile(addressDownloadResultBean);
+      }
+    }, Throwable::printStackTrace));
   }
 
   @Override public void onStart() {

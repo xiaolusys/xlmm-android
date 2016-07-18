@@ -494,11 +494,11 @@ public final class ViewUtils {
   public static void loadImageWithOkhttp(String picpath, Activity context,
       ImageView imageView) {
     OkHttpUtils.get().url(picpath).build().execute(new BitmapCallback() {
-      @Override public void onError(Call call, Exception e) {
+      @Override public void onError(Call call, Exception e,int id) {
         e.printStackTrace();
       }
 
-      @Override public void onResponse(Bitmap response) {
+      @Override public void onResponse(Bitmap response,int id) {
         if (null != response) {
 
           imageView.setAdjustViewBounds(true);
