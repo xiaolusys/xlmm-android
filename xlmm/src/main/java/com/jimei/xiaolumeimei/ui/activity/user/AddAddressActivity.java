@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.widget.SwitchCompat;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -21,6 +22,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.model.AddressModel;
+import com.jimei.xiaolumeimei.utils.FileUtils;
 import com.jimei.xiaolumeimei.widget.wheelcitypicker.CityPickerDialog;
 import com.jimei.xiaolumeimei.widget.wheelcitypicker.Util;
 import com.jimei.xiaolumeimei.widget.wheelcitypicker.address.City;
@@ -29,6 +31,8 @@ import com.jimei.xiaolumeimei.widget.wheelcitypicker.address.Province;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -113,7 +117,7 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
         } else {
           new InitAreaTask(this).execute(0);
         }
-
+        //readAddressAndShowDialog();
         break;
       case R.id.save:
 
@@ -151,7 +155,6 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
         new CityPickerDialog.onCityPickedListener() {
           @Override
           public void onPicked(Province selectProvince, City selectCity, County selectCounty) {
-
             receiver_state = selectProvince != null ? selectProvince.getName() : "";
             receiver_district = selectCounty != null ? selectCounty.getName() : "";
             receiver_city = selectCity != null ? selectCity.getName() : "";
@@ -238,10 +241,20 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
       String address;
       InputStream in = null;
       try {
+        if (FileUtils.isFileExist(Environment.getExternalStorageDirectory().getAbsolutePath()
+            + "/xlmmaddress/"
+            + "areas.json")) {
+          File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
+              + "/xlmmaddress/"
+              + "areas.json");
+          in = new FileInputStream(file);
+        } else {
+          in = mContext.getResources().getAssets().open("areas.json");
+        }
         in = mContext.getResources().getAssets().open("areas.json");
         byte[] arrayOfByte = new byte[in.available()];
         in.read(arrayOfByte);
-        address = new String(arrayOfByte,"UTF-8");
+        address = new String(arrayOfByte, "UTF-8");
 
         Gson gson = new Gson();
 
@@ -261,4 +274,42 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
       return false;
     }
   }
+
+  //public void readAddressAndShowDialog(){
+  //  Observable.create(new Observable.OnSubscribe<List<Province>>() {
+  //    @Override public void call(Subscriber<? super List<Province>> subscriber) {
+  //      String address;
+  //      InputStream in = null;
+  //      try {
+  //        in = mContext.getResources().getAssets().open("areas.json");
+  //        byte[] arrayOfByte = new byte[in.available()];
+  //        in.read(arrayOfByte);
+  //        address = new String(arrayOfByte,"UTF-8");
+  //
+  //        Gson gson = new Gson();
+  //        provinces = gson.fromJson(address, new TypeToken<List<Province>>() {
+  //        }.getType());
+  //        if (provinces.size() == 0) {
+  //          subscriber.onError(new Exception(""));
+  //        }
+  //        subscriber.onNext(provinces);
+  //        subscriber.onCompleted();
+  //
+  //      } catch (Exception e) {
+  //      } finally {
+  //        if (in != null) {
+  //          try {
+  //            in.close();
+  //          } catch (IOException e) {
+  //          }
+  //        }
+  //      }
+  //    }
+  //  }).subscribeOn(Schedulers.io())
+  //      .subscribe(new Action1<List<Province>>() {
+  //    @Override public void call(List<Province> provinces) {
+  //      showAddressDialog(provinces);
+  //    }
+  //  });
+  //}
 }

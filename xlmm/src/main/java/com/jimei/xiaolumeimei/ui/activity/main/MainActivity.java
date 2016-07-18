@@ -428,10 +428,10 @@ public class MainActivity extends BaseActivity
             .url(postActivityBean.get(i).getAct_img())
             .build()
             .execute(new BitmapCallback() {
-              @Override public void onError(Call call, Exception e) {
+              @Override public void onError(Call call, Exception e,int id) {
               }
 
-              @Override public void onResponse(Bitmap response) {
+              @Override public void onResponse(Bitmap response,int id) {
                 if (response != null) {
                   imageViewList.get(finalI).setAdjustViewBounds(true);
                   int screenWidth = DisplayUtils.getScreenW(MainActivity.this);

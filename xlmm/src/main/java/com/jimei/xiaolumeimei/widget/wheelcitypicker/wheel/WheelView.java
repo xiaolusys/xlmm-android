@@ -367,8 +367,8 @@ public class WheelView extends View
      * @param index the item index
      * @param animated the animation flag
      */
-    public void setCurrentItem(int index, boolean animated) {
-    	setCurrentItem(index, animated, 0);	
+    public boolean setCurrentItem(int index, boolean animated) {
+    	setCurrentItem(index, animated, 0);return true;
     }
     
     

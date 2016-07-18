@@ -14,7 +14,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.data.FilePara;
@@ -27,11 +26,9 @@ import com.jimei.xiaolumeimei.widget.ninepicimagview.MultiImageView;
 import com.jude.utils.JUtils;
 import com.tbruyelle.rxpermissions.RxPermissions;
 import com.zhy.http.okhttp.OkHttpUtils;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
 import okhttp3.Call;
 
 /**
@@ -196,12 +193,12 @@ public class NinePicAdapter extends BaseAdapter {
                                 .build()
                                 .execute(new FileParaCallback() {
                                     @Override
-                                    public void onError(Call call, Exception e) {
+                                    public void onError(Call call, Exception e,int id) {
                                         bflag[0] = true;
                                     }
 
                                     @Override
-                                    public void onResponse(FilePara response) {
+                                    public void onResponse(FilePara response,int id) {
                                         if (response != null) {
                                             bflag[0] = true;
                                             JUtils.Log("NinePic", "download " + finalI + " finished.");

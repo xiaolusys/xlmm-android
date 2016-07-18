@@ -4,6 +4,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import com.jimei.xiaolumeimei.base.BaseModel;
 import com.jimei.xiaolumeimei.base.BasePresenter;
 import com.jimei.xiaolumeimei.base.BaseView;
+import com.jimei.xiaolumeimei.entities.AddressDownloadResultBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.IsGetcoupon;
 import com.jimei.xiaolumeimei.entities.PortalBean;
@@ -30,6 +31,8 @@ public interface MainContract {
     Observable<ProductListBean> getTodayList(int page, int page_size);
 
     Observable<ResponseBody> getUsercoupons(String template_id);
+
+    Observable<AddressDownloadResultBean> getAddressVersionAndUrl();
   }
 
   interface View extends BaseView {
@@ -60,6 +63,8 @@ public interface MainContract {
     void iniCartsNum(CartsNumResultBean cartsNumResultBean);
 
     void  clickGetCounpon(ResponseBody responseBody);
+
+    void downLoaAddressFile(AddressDownloadResultBean addressDownloadResultBean);
   }
 
   abstract class Presenter extends BasePresenter<Model, View> {
@@ -78,6 +83,8 @@ public interface MainContract {
     public abstract void getUsercoupons(String template_id);
 
     public abstract long calcLefttowTime(long crtTime);
+
+    public abstract void getAddressVersionAndUrl();
 
 
     @Override public void onStart() {

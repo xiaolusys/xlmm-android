@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.ui.xlmmmain;
 
 import com.jimei.xiaolumeimei.base.RxSchedulers;
+import com.jimei.xiaolumeimei.entities.AddressDownloadResultBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.IsGetcoupon;
 import com.jimei.xiaolumeimei.entities.PortalBean;
@@ -54,6 +55,13 @@ public class MainModel implements MainContract.Model {
     return XlmmRetrofitClient
         .getService()
         .getUsercoupons(template_id)
+        .compose(RxSchedulers.io_main());
+  }
+
+  @Override public Observable<AddressDownloadResultBean> getAddressVersionAndUrl() {
+    return XlmmRetrofitClient
+        .getService()
+        .getAddressVersionAndUrl()
         .compose(RxSchedulers.io_main());
   }
 }

@@ -207,11 +207,11 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
             .url(fortune.getMamaFortune().getExtraInfo().getThumbnail())
             .build()
             .execute(new BitmapCallback() {
-              @Override public void onError(Call call, Exception e) {
+              @Override public void onError(Call call, Exception e,int id) {
                 e.printStackTrace();
               }
 
-              @Override public void onResponse(Bitmap response) {
+              @Override public void onResponse(Bitmap response,int id) {
                 if (null != response) {
                   imgUser.setImageBitmap(response);
                 }
@@ -226,6 +226,9 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
   }
 
   @Override public void initShareInfo(MMShoppingBean shoppingBean) {
+
+
+
     title = shoppingBean.getShopInfo().getName();
     sharelink = shoppingBean.getShopInfo().getPreviewShopLink();
     shareimg = shoppingBean.getShopInfo().getThumbnail();

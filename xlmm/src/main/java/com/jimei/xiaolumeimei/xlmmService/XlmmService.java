@@ -3,6 +3,7 @@ package com.jimei.xiaolumeimei.xlmmService;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.entities.AddCartsBean;
 import com.jimei.xiaolumeimei.entities.AddressBean;
+import com.jimei.xiaolumeimei.entities.AddressDownloadResultBean;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.entities.AgentInfoBean;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
@@ -1035,5 +1036,10 @@ public interface XlmmService {
     @GET("/rest/v1/mmwebviewconfig")
     Observable<MamaUrl> getMamaUrl(
             @Query("version") String version
+    );
+
+    @GET("/rest/v1/districts/latest_version")
+    Observable<AddressDownloadResultBean> getAddressVersionAndUrl(
+
     );
 }

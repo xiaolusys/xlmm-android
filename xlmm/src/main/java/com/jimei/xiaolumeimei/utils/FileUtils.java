@@ -16,8 +16,10 @@
 package com.jimei.xiaolumeimei.utils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
@@ -63,6 +65,8 @@ public final class FileUtils {
     public static final String JPG_REG = "^.*\\.(gif|jpg|png)$";
 
     private static final String FILENAME_REGIX = "^[^\\/?\"*:<>\\]{1,255}$";
+    static SharedPreferences sharedPreferences;
+    static SharedPreferences.Editor editor;
 
     /**
      * Don't let anyone instantiate this class.
@@ -785,27 +789,6 @@ public final class FileUtils {
         return (filePosi >= extenPosi) ? "" : filePath.substring(extenPosi + 1);
     }
 
-    /**
-     * Creates the directory named by the trailing filename of this file,
-     * including the complete directory path required to create this directory. <br/>
-     * <br/>
-     * <ul>
-     * <strong>Attentions:</strong>
-     * <li>makeDirs("C:\\Users\\Trinea") can only create users folder</li>
-     * <li>makeFolder("C:\\Users\\Trinea\\") can create Trinea folder</li>
-     * </ul>
-     *
-     * @param filePath 文件路径
-     * @return true if the necessary directories have been created or the target
-     * directory already exists, false one of the directories can not be
-     * created.
-     * <ul>
-     * <li>if {@link FileUtils#getFolderName(String)} return null,
-     * return false</li>
-     * <li>if target directory already exists, return true</li>
-     * <li>return {@link File#makeFolder}</li>
-     * </ul>
-     */
     public static boolean makeDirs(String filePath) {
         String folderName = getFolderName(filePath);
         if (TextUtils.isEmpty(folderName)) {
@@ -944,6 +927,29 @@ public final class FileUtils {
             cursor.moveToFirst();
             return new File(cursor.getString(column_index));
         }
+    }
+
+    public static void saveAddressFile(Context context,String hash) {
+        sharedPreferences = context.getSharedPreferences("addressInfo", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString("hash", hash);
+        editor.apply();
+    }
+
+    public static void deleteAddressFile(Context context) {
+        sharedPreferences = context.getSharedPreferences("addressInfo", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+    }
+
+    public static boolean isAddressFileHashSame(Context context,String hash) {
+        sharedPreferences = context.getSharedPreferences("addressInfo", Context.MODE_PRIVATE);
+        String hash1 = sharedPreferences.getString("hash", "");
+        if (!TextUtils.isEmpty(hash1) && (hash1.equals(hash))) {
+            return true;
+        }
+        return false;
     }
 
 }

@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -19,6 +20,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.model.AddressModel;
+import com.jimei.xiaolumeimei.utils.FileUtils;
 import com.jimei.xiaolumeimei.widget.wheelcitypicker.CityPickerDialog;
 import com.jimei.xiaolumeimei.widget.wheelcitypicker.Util;
 import com.jimei.xiaolumeimei.widget.wheelcitypicker.address.City;
@@ -27,6 +29,8 @@ import com.jimei.xiaolumeimei.widget.wheelcitypicker.address.Province;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -62,6 +66,12 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
     private String receiver_name;
     private String receiver_mobile;
     private String referal_trade_id;
+
+    private County county;
+    private City city;
+    private Province province;
+    private ArrayList<City> cities;
+    private ArrayList<County> counties;
 
     @Override
     protected void setListener() {
@@ -192,11 +202,10 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
     }
 
     private void showAddressDialog() {
-        new CityPickerDialog(this, provinces, null, null, null,
+        new CityPickerDialog(this, provinces, province, city, county,
             new CityPickerDialog.onCityPickedListener() {
                 @Override
                 public void onPicked(Province selectProvince, City selectCity, County selectCounty) {
-
                     receiver_state = selectProvince != null ? selectProvince.getName() : "";
                     receiver_district = selectCounty != null ? selectCounty.getName() : "";
                     receiver_city = selectCity != null ? selectCity.getName() : "";
@@ -248,13 +257,43 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
             String address;
             InputStream in = null;
             try {
-                in = mContext.getResources().getAssets().open("address.json");
+                if (FileUtils.isFileExist(Environment.getExternalStorageDirectory().getAbsolutePath()
+                    + "/xlmmaddress/"
+                    + "areas.json")) {
+                    File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
+                        + "/xlmmaddress/"
+                        + "areas.json");
+                    in = new FileInputStream(file);
+                } else {
+                    in = mContext.getResources().getAssets().open("areas.json");
+                }
                 byte[] arrayOfByte = new byte[in.available()];
                 in.read(arrayOfByte);
                 address = new String(arrayOfByte, "UTF-8");
                 Gson gson = new Gson();
                 provinces = gson.fromJson(address, new TypeToken<List<Province>>() {
                 }.getType());
+
+                for (int i = 0; i < provinces.size(); i++) {
+                    if (provinces.get(i).getName().equals(receiver_state)) {
+                        province = provinces.get(i);
+                        cities = provinces.get(i).getCities();
+                    }
+                }
+
+                for (int i = 0; i < cities.size(); i++) {
+                    if (cities.get(i).getName().equals(receiver_city)) {
+                        city = cities.get(i);
+                        counties = cities.get(i).getCounties();
+                    }
+                }
+
+                for (int i = 0; i < counties.size(); i++) {
+                    if (counties.get(i).getName().equals(receiver_district)) {
+                        county = counties.get(i);
+                    }
+                }
+
                 return true;
             } catch (Exception e) {
             } finally {

@@ -179,6 +179,10 @@ public class CityPickerDialog extends Dialog {
           }
         }
       }
+
+			provinceWheel.invalidateWheel(true);
+			citiesWheel.invalidateWheel(true);
+			countiesWheel.invalidateWheel(true);
 			provinceWheel.setCurrentItem(provinceItem, false);
 			citiesWheel.setCurrentItem(cityItem, false);
 			countiesWheel.setCurrentItem(countyItem, false);

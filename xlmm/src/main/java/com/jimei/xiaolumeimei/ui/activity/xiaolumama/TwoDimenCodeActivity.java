@@ -82,12 +82,12 @@ public class TwoDimenCodeActivity extends BaseSwipeBackCompatActivity
                         // I can control the camera now
                         OkHttpUtils.get().url(myurl).build().execute(new FileParaCallback() {
                             @Override
-                            public void onError(Call call, Exception e) {
+                            public void onError(Call call, Exception e,int id) {
 
                             }
 
                             @Override
-                            public void onResponse(FilePara response) {
+                            public void onResponse(FilePara response,int id) {
                                 if (response != null) {
                                     filePara = response;
                                     try {

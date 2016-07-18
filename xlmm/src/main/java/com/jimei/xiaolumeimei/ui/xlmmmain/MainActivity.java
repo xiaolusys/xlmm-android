@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -30,6 +31,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.base.BasePresenterActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
+import com.jimei.xiaolumeimei.entities.AddressDownloadResultBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.IsGetcoupon;
 import com.jimei.xiaolumeimei.entities.PortalBean;
@@ -57,6 +59,7 @@ import com.jimei.xiaolumeimei.ui.fragment.v2.TomorrowV2Fragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.YesterdayV2Fragment;
 import com.jimei.xiaolumeimei.ui.mminfo.MMInfoActivity;
 import com.jimei.xiaolumeimei.utils.DisplayUtils;
+import com.jimei.xiaolumeimei.utils.FileUtils;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.utils.StatusBarUtil;
@@ -73,6 +76,8 @@ import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
+import com.zhy.http.okhttp.callback.FileCallBack;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -139,6 +144,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
 
   @Override protected void initData() {
     mPresenter.getUserInfoBean();
+    mPresenter.getAddressVersionAndUrl();
     initMainView(null);
     if (LoginUtils.isJumpToLogin(getApplicationContext())) {
       FirstFragment firstFragment = FirstFragment.newInstance("first");
@@ -159,7 +165,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
       UmengUpdateAgent.update(MainActivity.this);
     }).start();
   }
-
 
   @Override protected void setListener() {
     carts.setOnClickListener(this);
@@ -412,6 +417,9 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
           break;
       }
       scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(vp.getCurrentItem()));
+
+      mPresenter.getAddressVersionAndUrl();
+
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -707,10 +715,10 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
             .url(postActivityBean.get(i).getAct_img())
             .build()
             .execute(new BitmapCallback() {
-              @Override public void onError(Call call, Exception e) {
+              @Override public void onError(Call call, Exception e, int id) {
               }
 
-              @Override public void onResponse(Bitmap response) {
+              @Override public void onResponse(Bitmap response, int id) {
                 if (response != null) {
                   imageViewList.get(finalI).setAdjustViewBounds(true);
                   int screenWidth = DisplayUtils.getScreenW(MainActivity.this);
@@ -720,58 +728,58 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
                   imageViewList.get(finalI).setMaxWidth(screenWidth);
                   imageViewList.get(finalI).setMaxHeight(screenWidth * 5);
                   imageViewList.get(finalI).setImageBitmap(response);
-                   if (postActivityBean.get(finalI).getAct_type().equals("coupon")) {
+                  if (postActivityBean.get(finalI).getAct_type().equals("coupon")) {
                     imageViewList.get(finalI).setOnClickListener(new View.OnClickListener() {
                       @Override public void onClick(View v) {
                         mPresenter.getUsercoupons(
                             postActivityBean.get(finalI).getExtras().getTemplateId());
                       }
                     });
-                  }else {
-                     imageViewList.get(finalI).setOnClickListener(new View.OnClickListener() {
-                       @Override public void onClick(View v) {
-                         MobclickAgent.onEvent(MainActivity.this, "ActivityID");
-                         if (postActivityBean.get(finalI).isLogin_required()) {
-                           if (LoginUtils.checkLoginState(MainActivity.this) && (null
-                                   != mPresenter.userInfoNewBean
-                                   && (null
-                                   != mPresenter.userInfoNewBean.getMobile())
-                                   && !mPresenter.userInfoNewBean.getMobile().isEmpty())) {
-                             JumpUtils.jumpToWebViewWithCookies(MainActivity.this,
-                                     postActivityBean.get(finalI).getAct_link(),
-                                     postActivityBean.get(finalI).getId(), ActivityWebViewActivity.class,
-                                     postActivityBean.get(finalI).getTitle());
-                           } else {
-                             if (!LoginUtils.checkLoginState(MainActivity.this)) {
-                               JUtils.Toast("登录并绑定手机号后才可参加活动");
-                               Bundle bundle = new Bundle();
-                               bundle.putString("login", "goactivity");
-                               bundle.putString("actlink",
-                                       postActivityBean.get(finalI).getAct_link());
-                               bundle.putInt("id", postActivityBean.get(finalI).getId());
-                               bundle.putString("title", postActivityBean.get(finalI).getTitle());
+                  } else {
+                    imageViewList.get(finalI).setOnClickListener(new View.OnClickListener() {
+                      @Override public void onClick(View v) {
+                        MobclickAgent.onEvent(MainActivity.this, "ActivityID");
+                        if (postActivityBean.get(finalI).isLogin_required()) {
+                          if (LoginUtils.checkLoginState(MainActivity.this) && (null
+                              != mPresenter.userInfoNewBean
+                              && (null
+                              != mPresenter.userInfoNewBean.getMobile())
+                              && !mPresenter.userInfoNewBean.getMobile().isEmpty())) {
+                            JumpUtils.jumpToWebViewWithCookies(MainActivity.this,
+                                postActivityBean.get(finalI).getAct_link(),
+                                postActivityBean.get(finalI).getId(), ActivityWebViewActivity.class,
+                                postActivityBean.get(finalI).getTitle());
+                          } else {
+                            if (!LoginUtils.checkLoginState(MainActivity.this)) {
+                              JUtils.Toast("登录并绑定手机号后才可参加活动");
+                              Bundle bundle = new Bundle();
+                              bundle.putString("login", "goactivity");
+                              bundle.putString("actlink",
+                                  postActivityBean.get(finalI).getAct_link());
+                              bundle.putInt("id", postActivityBean.get(finalI).getId());
+                              bundle.putString("title", postActivityBean.get(finalI).getTitle());
 
-                               readyGo(LoginActivity.class, bundle);
-                             } else {
-                               JUtils.Toast("登录成功,前往绑定手机号后才可参加活动");
-                               if (null != mPresenter.userInfoNewBean) {
-                                 Bundle bundle = new Bundle();
-                                 bundle.putString("headimgurl",
-                                         mPresenter.userInfoNewBean.getThumbnail());
-                                 bundle.putString("nickname", mPresenter.userInfoNewBean.getNick());
-                                 readyGo(WxLoginBindPhoneActivity.class, bundle);
-                               }
-                             }
-                           }
-                         } else {
-                           JumpUtils.jumpToWebViewWithCookies(MainActivity.this,
-                                   postActivityBean.get(finalI).getAct_link(),
-                                   postActivityBean.get(finalI).getId(), ActivityWebViewActivity.class,
-                                   postActivityBean.get(finalI).getTitle());
-                         }
-                       }
-                     });
-                   }
+                              readyGo(LoginActivity.class, bundle);
+                            } else {
+                              JUtils.Toast("登录成功,前往绑定手机号后才可参加活动");
+                              if (null != mPresenter.userInfoNewBean) {
+                                Bundle bundle = new Bundle();
+                                bundle.putString("headimgurl",
+                                    mPresenter.userInfoNewBean.getThumbnail());
+                                bundle.putString("nickname", mPresenter.userInfoNewBean.getNick());
+                                readyGo(WxLoginBindPhoneActivity.class, bundle);
+                              }
+                            }
+                          }
+                        } else {
+                          JumpUtils.jumpToWebViewWithCookies(MainActivity.this,
+                              postActivityBean.get(finalI).getAct_link(),
+                              postActivityBean.get(finalI).getId(), ActivityWebViewActivity.class,
+                              postActivityBean.get(finalI).getTitle());
+                        }
+                      }
+                    });
+                  }
                 }
               }
             });
@@ -796,6 +804,41 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         e.printStackTrace();
       }
     }
+  }
+
+  @Override public void downLoaAddressFile(AddressDownloadResultBean addressDownloadResultBean) {
+    JUtils.Log(TAG, addressDownloadResultBean.toString());
+    String downloadUrl = addressDownloadResultBean.getDownloadUrl();
+    String hash = addressDownloadResultBean.getHash();
+    if (!FileUtils.isAddressFileHashSame(getApplicationContext(), hash)) {
+      OkHttpUtils.get()
+          .url(downloadUrl)
+          .build()
+          .execute(new FileCallBack(
+              Environment.getExternalStorageDirectory().getAbsolutePath() + "/xlmmaddress/",
+              "areas.json") {
+            @Override public void inProgress(float progress, long total, int id) {
+              JUtils.Log(TAG, "                          " + (int) (100 * (progress / total)) + "");
+            }
+
+            @Override public void onError(Call call, Exception e, int id) {
+              JUtils.Log(TAG, e.getMessage());
+              if (FileUtils.isFolderExist(
+                  Environment.getExternalStorageDirectory().getAbsolutePath() + "/xlmmaddress/" +
+                      "areas.json")) {
+                FileUtils.deleteFile(
+                    Environment.getExternalStorageDirectory().getAbsolutePath() + "/xlmmaddress/" +
+                        "areas.json");
+              }
+            }
+
+            @Override public void onResponse(File response, int id) {
+              JUtils.Log(TAG, response.getAbsolutePath());
+              FileUtils.saveAddressFile(getApplicationContext(), hash);
+            }
+          });
+    }
+
   }
 
   private class MyFragmentAdapter extends FragmentPagerAdapter {
