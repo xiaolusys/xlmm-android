@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="88dp"
     android:background="@color/white"
     android:orientation="horizontal"
     android:padding="8dp">
 
     <RelativeLayout
         android:id="@+id/img_layout"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
         android:layout_marginLeft="5dp"
         android:background="@drawable/choose_img_bg"
         android:gravity="center">
@@ -18,6 +18,7 @@
             android:id="@+id/img_good"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scaleType="fitXY"
             android:src="@drawable/logo" />
 
     </RelativeLayout>
@@ -25,7 +26,7 @@
 
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="70dp"
         android:layout_marginLeft="12dp"
         android:layout_weight="1"
         android:orientation="vertical">
@@ -39,7 +40,9 @@
             android:id="@+id/tx_good_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
             android:gravity="center_vertical"
+            android:singleLine="true"
             android:textColor="@color/text_color_62"
             android:textSize="13sp" />
 
@@ -51,27 +54,41 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="尺寸:"
-                android:textColor="@color/text_color_B4"
+                android:textColor="@color/text_color_A0"
                 android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/tx_good_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/text_color_B4"
+                android:textColor="@color/text_color_A0"
                 android:textSize="13sp" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
 
             <TextView
                 android:id="@+id/tx_good_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
                 android:textColor="@color/text_color_62"
                 android:textSize="13sp" />
 
@@ -79,7 +96,8 @@
                 android:id="@+id/tx_good_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/text_color_62"
+                android:layout_marginLeft="20dp"
+                android:textColor="@color/text_color_9B"
                 android:textSize="13sp" />
 
         </LinearLayout>

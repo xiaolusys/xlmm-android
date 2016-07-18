@@ -399,7 +399,7 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
         break;
       case R.id.rl_two_dimen:
         JumpUtils.jumpToWebViewWithCookies(this, mamaResult.getInvite(), 26, MMShareCodeWebViewActivity.class,
-            "邀请一元开店");
+            "");
         break;
       case R.id.rl_fans:
         sharedPreferences = getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);

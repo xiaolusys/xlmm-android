@@ -38,11 +38,6 @@ public class MamaInfoModel {
     return single_model;
   }
 
-  //得到全部订单数据列表
-  public Observable<AgentInfoBean> getAgentInfoBean() {
-    return XlmmRetrofitClient.getService().getAgentInfoBean().compose(new DefaultTransform<>());
-  }
-
   //得到提现历史
   public Observable<WithdrawCashHisBean> getWithdrawCashHis(String page) {
     return XlmmRetrofitClient.getService()
@@ -108,9 +103,5 @@ public class MamaInfoModel {
   //得到妈妈活跃值
   public Observable<PotentialFans> getPotentialFans(String page) {
     return XlmmRetrofitClient.getService().getPotentialFans(page).compose(new DefaultTransform<>());
-  }
-
-  public Observable<MamaUrl> getMamaUrl(){
-    return XlmmRetrofitClient.getService().getMamaUrl("1.0").compose(new DefaultTransform<>());
   }
 }

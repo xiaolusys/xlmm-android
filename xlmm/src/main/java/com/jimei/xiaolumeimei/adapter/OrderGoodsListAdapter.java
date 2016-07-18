@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -150,25 +149,23 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                         }
                     });
                 }
-                if (!"已取消".equals(orderDetailEntity.getPackage_orders().get(i).getAssign_status_display())) {
-                    final int finalI = i;
-                    convertView.findViewById(R.id.ll_item).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(context, LogisticsActivity.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putInt("id", orderDetailEntity.getId());
-                            bundle.putSerializable("packageOrdersBean", orderDetailEntity.getPackage_orders().get(finalI));
-                            intent.putExtras(bundle);
-                            context.startActivity(intent);
-                        }
-                    });
-                }
+                final int finalI = i;
+                convertView.findViewById(R.id.ll_item).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(context, LogisticsActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("id", orderDetailEntity.getId());
+                        bundle.putSerializable("packageOrdersBean", orderDetailEntity.getPackage_orders().get(finalI));
+                        intent.putExtras(bundle);
+                        context.startActivity(intent);
+                    }
+                });
                 break;
             }
         }
         ((TextView) convertView.findViewById(R.id.tx_good_name)).setText(data.get(position).getTitle());
-        ((TextView) convertView.findViewById(R.id.tx_good_price)).setText("¥" + data.get(position).getPayment());
+        ((TextView) convertView.findViewById(R.id.tx_good_price)).setText("¥" + data.get(position).getTotal_fee());
         ((TextView) convertView.findViewById(R.id.tx_good_size)).setText(data.get(position).getSku_name());
         ((TextView) convertView.findViewById(R.id.tx_good_num)).setText("x" + data.get(position).getNum());
         ImageView img_goods = (ImageView) convertView.findViewById(R.id.img_good);

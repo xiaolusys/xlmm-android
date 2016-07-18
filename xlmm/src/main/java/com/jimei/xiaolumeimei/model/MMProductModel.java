@@ -43,27 +43,6 @@ public class MMProductModel {
                 .compose(new DefaultTransform<>());
     }
 
-  /*//得到默认选品列表
-  public Observable<List<MMChooselistBean>> getMMChooseList() {
-    return XlmmRetrofitClient.getService()
-        .getMMChooseList()
-        .compose(new DefaultTransform<>());
-  }
-
-  //得到默认选品列表排序
-  public Observable<List<MMChooselistBean>> getMMChooseSortList(String sort_field) {
-    return XlmmRetrofitClient.getService()
-        .getMMChooseSortList(sort_field)
-        .compose(new DefaultTransform<>());
-  }
-
-  //选品女装或者童装列表
-  public Observable<List<MMChooselistBean>> getMMChooseLadyOrChildList(String category) {
-    return XlmmRetrofitClient.getService()
-        .getMMChooseLadyOrChildList(category)
-        .compose(new DefaultTransform<>());
-  }*/
-
     //选品女装或者童装列表排序
     public Observable<MMChooselistBean> getMMChooseLadyOrChildSortListSort(
             String sort_field, String category, String page, String pagesize) {
@@ -105,53 +84,28 @@ public class MMProductModel {
     }
 
     //MM订单历史
-    public Observable<ShoppingListBean> getShoppingList(String page) {
-        return XlmmRetrofitClient.getService()
-                .getShoppingList(page)
-                .compose(new DefaultTransform<>());
-    }
-
-    //MM订单历史
     public Observable<CarryLogListBean> getCarryLogList(String page) {
         return XlmmRetrofitClient.getService()
                 .getCarrylogList(page)
                 .compose(new DefaultTransform<>());
     }
 
-    //MM one day订单
-    public Observable<OneDayAgentOrdersBean> getOneDayAgentOrders(int day) {
-        return XlmmRetrofitClient.getService()
-                .getOneDayAgentOrders(Integer.toString(day))
-                .compose(new DefaultTransform<>());
-    }
-
-    //MM latest day订单number
-    public Observable<List<Integer>> getLatestAgentOrders(int day) {
-        return XlmmRetrofitClient.getService()
-                .getLatestAgentOrders(Integer.toString(day))
-                .compose(new DefaultTransform<>());
-    }
-
     public Observable<List<NinePicBean>> getNinePic() {
-
         return XlmmRetrofitClient.getService().getNinepic().compose(new DefaultTransform<>());
     }
 
     public Observable<MMShoppingBean> getShareShopping() {
-
         return XlmmRetrofitClient.getService().getShareShopping();
     }
 
     //得到全部历史收益
     public Observable<CarryLogListBean> getMamaAllCarryLogs(String page) {
-
         return XlmmRetrofitClient.getService()
                 .getMamaAllCarryLogs(page)
                 .compose(new DefaultTransform<>());
     }
 
     public Observable<OderCarryBean> getMamaAllOderCarryLogs(String page) {
-
         return XlmmRetrofitClient.getService()
                 .getMamaAllOderCarryLogs(page)
                 .compose(new DefaultTransform<>());
@@ -159,30 +113,20 @@ public class MMProductModel {
 
     public Observable<OderCarryBean> getMamaAllOderCarryLogs(String carry_type,
                                                              String page) {
-
         return XlmmRetrofitClient.getService()
                 .getMamaAllOderCarryLogs(carry_type, page)
                 .compose(new DefaultTransform<>());
     }
 
     public Observable<AwardCarryBean> getMamaAllAwardCarryLogs(String page) {
-
         return XlmmRetrofitClient.getService()
                 .getMamaAllAwardCarryLogs(page)
                 .compose(new DefaultTransform<>());
     }
 
     public Observable<ClickcarryBean> getMamaAllClickCarryLogs(String page) {
-
         return XlmmRetrofitClient.getService()
                 .getMamaAllClickCarryLogs(page)
-                .compose(new DefaultTransform<>());
-    }
-
-    //MM recent days carry
-    public Observable<RecentCarryBean> getRecentCarry(String from, String day) {
-        return XlmmRetrofitClient.getService()
-                .getRecentCarry(from, day)
                 .compose(new DefaultTransform<>());
     }
 
@@ -199,7 +143,6 @@ public class MMProductModel {
 
     public Observable<MMHavaChooseResultBean> removeProFromShop(String id) {
         return XlmmRetrofitClient.getService().removeProFromShop(id)
-
                 .compose(new DefaultTransform<>());
     }
 
