@@ -161,11 +161,10 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
 
   @Subscribe(threadMode = ThreadMode.BACKGROUND)
   public void updateMaMaInfo(MaMaInfoEmptyEvent event) {
-    MamaInfoModel
-        .getInstance()
+    MamaInfoModel.getInstance()
         .getMamaFortune()
         .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<MamaFortune>(){
+        .subscribe(new ServiceResponse<MamaFortune>() {
           @Override public void onNext(MamaFortune mamaFortune) {
             if (mamaFortune != null) {
               EventBus.getDefault().post(new MaMaInfoEvent(mamaFortune));
@@ -423,8 +422,10 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
             "续费");
         break;
       case R.id.rl_two_dimen:
-        JumpUtils.jumpToWebViewWithCookies(this, mamaResult.getInvite(), 4,
-            MMShareCodeWebViewActivity.class, "我的邀请");
+
+        JumpUtils.jumpToWebViewWithCookies(this, mamaResult.getInvite(), 26,
+            MMShareCodeWebViewActivity.class, "");
+
         break;
       case R.id.rl_fans:
         sharedPreferences = getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);

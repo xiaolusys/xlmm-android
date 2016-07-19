@@ -31,13 +31,6 @@ public class AddressModel {
         .compose(new DefaultTransform<>());
   }
 
-  //获取某个地址
-  public Observable<AddressBean> getOneAddressList() {
-    return XlmmRetrofitClient.getService()
-        .getOneAddressList()
-        .compose(new DefaultTransform<>());
-  }
-
   //删除某个地址
   public Observable<AddressResultBean> delete_address(String id) {
     return XlmmRetrofitClient.getService()
@@ -45,18 +38,10 @@ public class AddressModel {
         .compose(new DefaultTransform<>());
   }
 
-  //获取某个地址
-  public Observable<AddressResultBean> change_default(String id) {
-    return XlmmRetrofitClient.getService()
-        .change_default(id)
-        .compose(new DefaultTransform<>());
-  }
-
   //创建新的地址
   public Observable<AddressResultBean> create_address(String receiver_state,
       String receiver_city, String receiver_district, String receiver_address,
       String receiver_name, String receiver_mobile,String defaulta) {
-
     return XlmmRetrofitClient.getService()
         .create_address(receiver_state, receiver_city, receiver_district,
             receiver_address, receiver_name, receiver_mobile,defaulta)
@@ -67,7 +52,6 @@ public class AddressModel {
   public Observable<AddressResultBean> update_address(String id,String receiver_state,
       String receiver_city, String receiver_district, String receiver_address,
       String receiver_name, String receiver_mobile,String defalut) {
-
     return XlmmRetrofitClient.getService()
         .update_address(id, receiver_state, receiver_city, receiver_district,
             receiver_address, receiver_name, receiver_mobile,defalut)
@@ -78,7 +62,6 @@ public class AddressModel {
   public Observable<AddressResultBean> update_address(String id,String receiver_state,
       String receiver_city, String receiver_district, String receiver_address,
       String receiver_name, String receiver_mobile,String logistic_company_code, String referal_trade_id) {
-
     return XlmmRetrofitClient.getService()
         .update_address(id, receiver_state, receiver_city, receiver_district,
             receiver_address, receiver_name, receiver_mobile,logistic_company_code,referal_trade_id)

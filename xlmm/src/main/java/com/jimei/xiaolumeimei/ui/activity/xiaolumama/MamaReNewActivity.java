@@ -33,13 +33,13 @@ import retrofit2.Response;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by wisdom on 16/7/13.
+ * Created by itxuye on 16/7/19.
  */
 public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener {
 
   private static final int REQUEST_CODE_PAYMENT = 1;
-  @Bind(R.id.image_99) ImageView image991;
-  @Bind(R.id.image_991) ImageView image99;
+  @Bind(R.id.image_99) ImageView image99;
+  @Bind(R.id.image_991) ImageView image991;
   @Bind(R.id.image_188) ImageView image188;
   @Bind(R.id.image_1881) ImageView image1881;
 
@@ -77,16 +77,13 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
 
   @Override protected void setListener() {
     image99.setOnClickListener(this);
+    image991.setOnClickListener(this);
+    image188.setOnClickListener(this);
+    image1881.setOnClickListener(this);
     confirm.setOnClickListener(this);
   }
 
   @Override protected void initData() {
-    radio_99Choose = true;
-    radio_188Choose = false;
-    image991.setVisibility(View.INVISIBLE);
-    image99.setVisibility(View.VISIBLE);
-    image188.setVisibility(View.INVISIBLE);
-    image1881.setVisibility(View.VISIBLE);
     MamaInfoModel.getInstance()
         .getRegisterProInfo()
         .subscribeOn(Schedulers.io())
@@ -135,7 +132,12 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
   }
 
   @Override protected void initViews() {
-
+    radio_99Choose = true;
+    radio_188Choose = false;
+    image991.setVisibility(View.GONE);
+    image99.setVisibility(View.VISIBLE);
+    image188.setVisibility(View.GONE);
+    image1881.setVisibility(View.VISIBLE);
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
@@ -187,22 +189,22 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
         new MyDialog(this).show();
         break;
 
-      case R.id.image_99:
+      case R.id.image_991:
         radio_99Choose = true;
         radio_188Choose = false;
-        image991.setVisibility(View.INVISIBLE);
+        image991.setVisibility(View.GONE);
         image99.setVisibility(View.VISIBLE);
-        image188.setVisibility(View.INVISIBLE);
+        image188.setVisibility(View.GONE);
         image1881.setVisibility(View.VISIBLE);
         break;
 
-      case R.id.image_188:
+      case R.id.image_1881:
         radio_99Choose = false;
         radio_188Choose = true;
         image991.setVisibility(View.VISIBLE);
-        image99.setVisibility(View.INVISIBLE);
+        image99.setVisibility(View.GONE);
         image188.setVisibility(View.VISIBLE);
-        image1881.setVisibility(View.INVISIBLE);
+        image1881.setVisibility(View.GONE);
         break;
     }
   }

@@ -894,6 +894,8 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                                     JUtils.Toast(payInfoBean.getInfo());
                                 }
                             }
+                        } else if (null != payInfoBean) {
+                            JUtils.Toast(payInfoBean.getInfo());
                         }
                     }
                 });

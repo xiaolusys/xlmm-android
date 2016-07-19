@@ -115,7 +115,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
         cartsRecyclerview.addItemDecoration(
                 new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         ScrollLinearLayoutManager scrollLinearLayoutManager = new ScrollLinearLayoutManager(this);
-        scrollLinearLayoutManager.setAutoMeasureEnabled(true);
+        scrollLinearLayoutManager.setAutoMeasureEnabled(false);
         cartsRecyclerview.setLayoutManager(scrollLinearLayoutManager);
 
         mCartsAdapetr = new CartsAdapetr();
@@ -127,7 +127,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
         cartshisRecyclerview.addItemDecoration(
                 new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         ScrollLinearLayoutManager scrollLinearLayoutManager1 = new ScrollLinearLayoutManager(this);
-        scrollLinearLayoutManager1.setAutoMeasureEnabled(true);
+        scrollLinearLayoutManager1.setAutoMeasureEnabled(false);
         cartshisRecyclerview.setLayoutManager(scrollLinearLayoutManager1);
 
         mCartsHisAdapetr = new CartsHisAdapetr();
@@ -317,7 +317,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
 
             ViewUtils.loadImgToImgView(mContext, holder.cartImage, headImg);
 
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
+            holder.cartImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     JumpUtils.jumpToWebViewWithCookies(CartActivity.this, cartsinfoBean.getItemWeburl(), -1,
@@ -735,7 +735,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
                     "/¥" + (float) (Math.round(cartsinfoBean.getStdSalePrice() * 100)) / 100);
 
             ViewUtils.loadImgToImgView(mContext, holder.cartImage, cartsinfoBean.getPicPath());
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
+            holder.cartImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     JumpUtils.jumpToWebViewWithCookies(CartActivity.this, cartsinfoBean.getItemWeburl(), -1,

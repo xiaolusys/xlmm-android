@@ -81,10 +81,11 @@
     </LinearLayout>
   </ScrollView>
   <RelativeLayout
+      android:background="@color/white"
       android:id="@+id/confirm"
       android:gravity="center"
       android:layout_alignParentBottom="true"
-      android:padding="10px"
+      android:padding="15px"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       >

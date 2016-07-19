@@ -88,67 +88,11 @@ public class ProductModel {
             .compose(new DefaultTransform<>());
   }
 
-  //得到昨日数据
-  public Observable<IndexBean> getPreviousList() {
-
-    return XlmmRetrofitClient.getService()
-        .getYestDayList()
-        .compose(new DefaultTransform<>());
-  }
-
-  //得到女装数据列表
-  public Observable<LadyListBean> getLadyList() {
-
-    return XlmmRetrofitClient.getService()
-        .getLadyList()
-        .compose(new DefaultTransform<>());
-  }
-
   //得到同款数据列表
   public Observable<List<ProductBean>> getTongkuanList(int model_id) {
 
     return XlmmRetrofitClient.getService()
         .getTongKuanList(model_id)
-        .compose(new DefaultTransform<>());
-  }
-
-  //得到今日海报数据列表
-  public Observable<PostBean> getTodayPost() {
-
-    return XlmmRetrofitClient.getService()
-        .getTodayPost()
-        .compose(new DefaultTransform<>());
-  }
-
-  //得到昨日海报数据列表
-  public Observable<PostBean> getYestdayPost() {
-
-    return XlmmRetrofitClient.getService()
-        .getYestDayPost()
-        .compose(new DefaultTransform<>());
-  }
-
-//  //品牌数据列表
-//  public Observable<BrandpromotionBean> getBrandlist(int page, int page_size, int brand) {
-//
-//    return XlmmRetrofitClient.getService()
-//        .getBrandlist(page, page_size, brand)
-//        .compose(new DefaultTransform<>());
-//  }
-
-  //品牌数据列表
-  public Observable<BrandpromotionBean> getBrandList(int id, int page, int page_size) {
-
-    return XlmmRetrofitClient.getService()
-        .getBrandList(id, page, page_size)
-        .compose(new DefaultTransform<>());
-  }
-
-  //品牌数据列表
-  public Observable<BrandListBean> getBrandlistProducts(int id, int page, int page_size) {
-
-    return XlmmRetrofitClient.getService()
-        .getBrandListProducts(id, page, page_size)
         .compose(new DefaultTransform<>());
   }
 

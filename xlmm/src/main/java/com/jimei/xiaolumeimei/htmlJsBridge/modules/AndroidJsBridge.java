@@ -41,6 +41,7 @@ import com.jimei.xiaolumeimei.entities.CallNativeFuncBean;
 import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShareCodeWebViewActivity;
 import com.jimei.xiaolumeimei.utils.CameraUtils;
 import com.jimei.xiaolumeimei.utils.FileUtils;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
@@ -49,6 +50,7 @@ import com.jude.utils.JUtils;
 import com.mob.tools.utils.UIHandler;
 import com.tbruyelle.rxpermissions.RxPermissions;
 import com.umeng.analytics.MobclickAgent;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -97,6 +99,10 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     } else if (isShow.contains("false")) {
       mContext.hideIndeterminateProgressDialog();
     }
+  }
+
+  @JavascriptInterface public void changeId(String str) {
+    ((MMShareCodeWebViewActivity) mContext).setId(str);
   }
 
   public void getPromotionParams(String uform, String activity_id) {
@@ -309,6 +315,7 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
         });
     ((BaseSwipeBackCompatActivity) mContext).addSubscription(subscribe);
   }
+
 
   private void sharePartyInfo() {
     if (partyShareInfo == null) return;
