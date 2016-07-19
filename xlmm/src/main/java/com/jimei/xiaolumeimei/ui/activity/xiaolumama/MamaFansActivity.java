@@ -132,6 +132,7 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity {
               } else {
                 Toast.makeText(MamaFansActivity.this, "没有更多了", Toast.LENGTH_SHORT).show();
                 xrvMmvisitors.post(xrvMmvisitors::loadMoreComplete);
+                xrvMmvisitors.setLoadingMoreEnabled(false);;
               }
             }
           }
