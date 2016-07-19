@@ -164,16 +164,13 @@ public class InformationActivity extends BaseSwipeBackCompatActivity
                                             public void onNext(LogOutBean responseBody) {
                                                 super.onNext(responseBody);
                                                 if (responseBody.getCode() == 0) {
+                                                    EventBus.getDefault().post(new UserInfoEmptyEvent());
                                                     JUtils.Toast("退出成功");
                                                     if ((finalAccount != null) && ((!finalAccount.isEmpty()))) {
                                                         MiPushClient.unsetUserAccount(getApplicationContext(),
                                                                 finalAccount, null);
                                                     }
                                                     LoginUtils.delLoginInfo(getApplicationContext());
-                                                    //Intent intent =
-                                                    //        new Intent(InformationActivity.this, MainActivity.class);
-                                                    //startActivity(intent);
-                                                    EventBus.getDefault().post(new UserInfoEmptyEvent());
                                                     finish();
                                                 }
                                             }

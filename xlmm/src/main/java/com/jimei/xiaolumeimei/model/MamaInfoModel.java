@@ -5,6 +5,7 @@ import com.jimei.xiaolumeimei.entities.AgentInfoBean;
 import com.jimei.xiaolumeimei.entities.AllowanceBean;
 import com.jimei.xiaolumeimei.entities.DrawCouponBean;
 import com.jimei.xiaolumeimei.entities.MMVisitorsBean;
+import com.jimei.xiaolumeimei.entities.MaMaReNewBean;
 import com.jimei.xiaolumeimei.entities.MamaFansBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.MamaLivenessBean;
@@ -13,6 +14,8 @@ import com.jimei.xiaolumeimei.entities.PotentialFans;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
+import okhttp3.ResponseBody;
+import retrofit2.Response;
 import rx.Observable;
 
 /**
@@ -58,8 +61,8 @@ public class MamaInfoModel {
   //妈妈余额兑换现金消费券
   public Observable<DrawCouponBean> drawCoupon(String template_id) {
     return XlmmRetrofitClient.getService()
-            .drawCoupon(template_id,"1")
-            .compose(new DefaultTransform<>());
+        .drawCoupon(template_id, "1")
+        .compose(new DefaultTransform<>());
   }
 
   //得到妈妈访客列表
@@ -110,7 +113,22 @@ public class MamaInfoModel {
     return XlmmRetrofitClient.getService().getPotentialFans(page).compose(new DefaultTransform<>());
   }
 
-  public Observable<MamaUrl> getMamaUrl(){
+  public Observable<MamaUrl> getMamaUrl() {
     return XlmmRetrofitClient.getService().getMamaUrl("1.0").compose(new DefaultTransform<>());
+  }
+
+  public Observable<MaMaReNewBean> getRegisterProInfo() {
+
+    return XlmmRetrofitClient.getService().getRegisterProInfo().compose(new DefaultTransform<>());
+  }
+
+  public Observable<Response<ResponseBody>> mamaRegisterPay(String product_id, String sku_id,
+      String payment, String channel, String num, String post_fee, String discount_fee, String uuid,
+      String total_fee) {
+
+    return XlmmRetrofitClient.getService()
+        .mamaRegisterPay(product_id, sku_id, payment, channel, num, post_fee, discount_fee, uuid,
+            total_fee)
+        .compose(new DefaultTransform<>());
   }
 }
