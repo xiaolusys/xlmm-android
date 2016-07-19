@@ -38,7 +38,7 @@ import rx.schedulers.Schedulers;
  */
 public class MMFansFragment extends BaseFragment {
   @Bind(R.id.xrv_mmvisitors) XRecyclerView xrvMmvisitors;
-  private int page = 2;
+  private int pageNext = 2;
   private MamaFansAdapter mAdapter;
 
   List<MamaFansBean.ResultsEntity> list = new ArrayList<>();
@@ -141,8 +141,8 @@ public class MMFansFragment extends BaseFragment {
       }
 
       @Override public void onLoadMore() {
-        loadMoreData(page + "");
-        page++;
+        loadMoreData(pageNext + "");
+        //pageNext++;
       }
     });
   }
@@ -171,6 +171,7 @@ public class MMFansFragment extends BaseFragment {
               mAdapter.update(fansBeen.getResults());
               if (null != fansBeen.getNext()) {
               } else {
+                pageNext++;
                 Toast.makeText(mActivity, "没有更多了", Toast.LENGTH_SHORT).show();
                 xrvMmvisitors.post(xrvMmvisitors::loadMoreComplete);
               }
