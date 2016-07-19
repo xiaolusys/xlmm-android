@@ -29,7 +29,10 @@ import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
+import com.jimei.xiaolumeimei.event.MaMaInfoEmptyEvent;
+import com.jimei.xiaolumeimei.event.MaMaInfoEvent;
 import com.jimei.xiaolumeimei.event.WebViewEvent;
+import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.BoutiqueWebviewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMChooseListActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMFans1Activity;
@@ -47,6 +50,7 @@ import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaVisitorActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.widget.CircleImageView;
+import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -55,6 +59,9 @@ import java.util.Calendar;
 import java.util.List;
 import okhttp3.Call;
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye on 2016/6/24.
@@ -152,11 +159,30 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
 
   }
 
+  @Subscribe(threadMode = ThreadMode.BACKGROUND)
+  public void updateMaMaInfo(MaMaInfoEmptyEvent event) {
+    MamaInfoModel.getInstance()
+        .getMamaFortune()
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<MamaFortune>() {
+          @Override public void onNext(MamaFortune mamaFortune) {
+            if (mamaFortune != null) {
+              EventBus.getDefault().post(new MaMaInfoEvent(mamaFortune));
+            }
+          }
+        });
+  }
+
+  @Subscribe(threadMode = ThreadMode.MAIN) public void updateMaMaUi(MaMaInfoEvent event) {
+    tvShengyu.setText(event.mamaFortune.getMamaFortune().getExtraInfo().getSurplusDays() + "");
+  }
+
   @Override protected int getContentViewLayoutID() {
     return R.layout.activity_mamainfo;
   }
 
   @Override protected void initViews() {
+    EventBus.getDefault().register(this);
     StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent), 0);
   }
 
@@ -165,28 +191,26 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
   }
 
   @Override protected TransitionMode getOverridePendingTransitionMode() {
-    return  TransitionMode.SCALE;
+    return TransitionMode.SCALE;
   }
 
-  @Override
-  public void initMamaUrl(MamaUrl mamaUrl) {
+  @Override public void initMamaUrl(MamaUrl mamaUrl) {
     mamaResult = mamaUrl.getResults().get(0).getExtra();
   }
 
   @Override public void initMMview(MamaFortune fortune) {
     int days = fortune.getMamaFortune().getExtraInfo().getSurplusDays();
-    JUtils.Log(TAG, fortune.toString()
-        + "fortune.getMamaFortune().getExtraInfo().getSurplusDays()"
-        + days);
+    JUtils.Log(TAG,
+        fortune.toString() + "fortune.getMamaFortune().getExtraInfo().getSurplusDays()" + days);
     tv_fund.setText(
         Double.toString((double) (Math.round(fortune.getMamaFortune().getCarryValue() * 100)) / 100)
             + "元");
     tv_invite_num.setText(fortune.getMamaFortune().getInviteNum() + "位");
     tv_fansnum.setText(fortune.getMamaFortune().getFansNum() + "人");
     tv_order.setText(s + "个");
-    if (days<=15) {
-      mamaPay.setVisibility(View.VISIBLE);
-    }
+    //if (days<=15) {
+    mamaPay.setVisibility(View.VISIBLE);
+    //}
 
     tvShengyu.setText(days + "");
     tvYue.setText(fortune.getMamaFortune().getCashValue() + "");
@@ -194,7 +218,7 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
     tvHuoyue.setText(fortune.getMamaFortune().getActiveValueNum() + "");
     tvMamalevel.setText(fortune.getMamaFortune().getMamaLevelDisplay() + "");
     tvMamaVip.setText(fortune.getMamaFortune().getExtraInfo().getAgencylevelDisplay() + "");
-    mamaId.setText("id: "+fortune.getMamaFortune().getMamaId() + "");
+    mamaId.setText("id: " + fortune.getMamaFortune().getMamaId() + "");
     if (!TextUtils.isEmpty(fortune.getMamaFortune().getExtraInfo().getThumbnail())) {
       setUserImage(fortune);
     }
@@ -207,11 +231,11 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
             .url(fortune.getMamaFortune().getExtraInfo().getThumbnail())
             .build()
             .execute(new BitmapCallback() {
-              @Override public void onError(Call call, Exception e,int id) {
+              @Override public void onError(Call call, Exception e, int id) {
                 e.printStackTrace();
               }
 
-              @Override public void onResponse(Bitmap response,int id) {
+              @Override public void onResponse(Bitmap response, int id) {
                 if (null != response) {
                   imgUser.setImageBitmap(response);
                 }
@@ -226,8 +250,6 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
   }
 
   @Override public void initShareInfo(MMShoppingBean shoppingBean) {
-
-
 
     title = shoppingBean.getShopInfo().getName();
     sharelink = shoppingBean.getShopInfo().getPreviewShopLink();
@@ -320,18 +342,18 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
     Intent intent;
     switch (v.getId()) {
       case R.id.yue_layout:
-          if (mamaFortune != null
-                  && mamaFortune.getMamaFortune().getExtraInfo().getCouldCashOut() == 0) {
-            intent = new Intent(this, MamaDrawCouponActivity.class);
-            intent.putExtra("cash", mamaFortune.getMamaFortune().getCashValue());
-            intent.putExtra("msg", mamaFortune.getMamaFortune().getExtraInfo().getCashoutReason());
-            startActivity(intent);
-          } else if (mamaFortune != null
-                  && mamaFortune.getMamaFortune().getExtraInfo().getCouldCashOut() == 1) {
-            intent = new Intent(this, MamaDrawCashActivity.class);
-            intent.putExtra("cash", mamaFortune.getMamaFortune().getCashValue());
-            startActivity(intent);
-          }
+        if (mamaFortune != null
+            && mamaFortune.getMamaFortune().getExtraInfo().getCouldCashOut() == 0) {
+          intent = new Intent(this, MamaDrawCouponActivity.class);
+          intent.putExtra("cash", mamaFortune.getMamaFortune().getCashValue());
+          intent.putExtra("msg", mamaFortune.getMamaFortune().getExtraInfo().getCashoutReason());
+          startActivity(intent);
+        } else if (mamaFortune != null
+            && mamaFortune.getMamaFortune().getExtraInfo().getCouldCashOut() == 1) {
+          intent = new Intent(this, MamaDrawCashActivity.class);
+          intent.putExtra("cash", mamaFortune.getMamaFortune().getCashValue());
+          startActivity(intent);
+        }
         break;
       case R.id.img_left:
         isThisWeek = false;
@@ -395,14 +417,15 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
         startActivity(intentrl_shop);
 
         break;
-      case  R.id.mama_pay:
-        JumpUtils.jumpToWebViewWithCookies(this,
-                mamaResult.getRenew(), -1,
-                MamaReNewActivity.class, "续费");
+      case R.id.mama_pay:
+        JumpUtils.jumpToWebViewWithCookies(this, mamaResult.getRenew(), -1, MamaReNewActivity.class,
+            "续费");
         break;
       case R.id.rl_two_dimen:
-        JumpUtils.jumpToWebViewWithCookies(this, mamaResult.getInvite(), 26, MMShareCodeWebViewActivity.class,
-            "");
+
+        JumpUtils.jumpToWebViewWithCookies(this, mamaResult.getInvite(), 26,
+            MMShareCodeWebViewActivity.class, "");
+
         break;
       case R.id.rl_fans:
         sharedPreferences = getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
@@ -465,8 +488,7 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
 
       case R.id.imgExam:
         if (mamaFortune != null) {
-          JumpUtils.jumpToWebViewWithCookies(this,
-                  mamaResult.getExam(), -1,
+          JumpUtils.jumpToWebViewWithCookies(this, mamaResult.getExam(), -1,
               MMLevelExamWebViewActivity.class, "妈妈考试");
         }
         break;
@@ -514,5 +536,10 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
 
   @Override public void onNothingSelected() {
 
+  }
+
+  @Override protected void onDestroy() {
+    super.onDestroy();
+    EventBus.getDefault().unregister(this);
   }
 }
