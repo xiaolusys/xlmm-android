@@ -822,7 +822,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
             }
 
             @Override public void onError(Call call, Exception e, int id) {
-              JUtils.Log(TAG, e.getMessage());
               if (FileUtils.isFolderExist(
                   Environment.getExternalStorageDirectory().getAbsolutePath() + "/xlmmaddress/" +
                       "areas.json")) {

@@ -418,12 +418,14 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
 
         break;
       case R.id.mama_pay:
-        JumpUtils.jumpToWebViewWithCookies(this, mamaResult.getRenew(), -1, MamaReNewActivity.class,
-            "续费");
+        readyGo(MamaReNewActivity.class);
         break;
       case R.id.rl_two_dimen:
 
-        JumpUtils.jumpToWebViewWithCookies(this, mamaResult.getInvite(), 26,
+        /*JumpUtils.jumpToWebViewWithCookies(this, mamaResult.getInvite(), 26,
+            MMShareCodeWebViewActivity.class, "");*/
+
+        JumpUtils.jumpToWebViewWithCookies(this, "http://m.xiaolumeimei.com/mall/mama/invited", 26,
             MMShareCodeWebViewActivity.class, "");
 
         break;

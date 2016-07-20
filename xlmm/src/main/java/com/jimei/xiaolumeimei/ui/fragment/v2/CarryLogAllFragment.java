@@ -172,6 +172,7 @@ public class CarryLogAllFragment extends BaseFragment {
                 Toast.makeText(context, "没有更多了", Toast.LENGTH_SHORT).show();
                 try {
                   xRecyclerView.post(xRecyclerView::loadMoreComplete);
+                  xRecyclerView.setLoadingMoreEnabled(false);;
                 } catch (Exception e) {
                   e.printStackTrace();
                 }

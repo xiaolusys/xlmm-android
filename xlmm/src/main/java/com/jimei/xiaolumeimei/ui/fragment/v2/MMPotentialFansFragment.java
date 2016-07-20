@@ -180,6 +180,8 @@ public class MMPotentialFansFragment extends BaseFragment {
           @Override public void onCompleted() {
             super.onCompleted();
             xrvMmvisitors.post(xrvMmvisitors::loadMoreComplete);
+            xrvMmvisitors.setLoadingMoreEnabled(false);
+
           }
         });
   }
