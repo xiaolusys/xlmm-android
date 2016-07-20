@@ -122,12 +122,12 @@ public class MastFragment extends DialogFragment {
                                             .build()
                                             .execute(new BitmapCallback() {
                                                 @Override
-                                                public void onError(Call call, Exception e) {
+                                                public void onError(Call call, Exception e,int id) {
                                                     e.printStackTrace();
                                                 }
 
                                                 @Override
-                                                public void onResponse(Bitmap response) {
+                                                public void onResponse(Bitmap response,int id) {
                                                     if (null != response) {
                                                         JUtils.Log("Mask", "height:"
                                                                 + response.getHeight()

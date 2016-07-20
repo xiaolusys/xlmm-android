@@ -31,6 +31,7 @@
     </android.support.design.widget.AppBarLayout>
 
     <ScrollView
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#f3f3f4"
@@ -39,6 +40,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/bg_grey"
             android:orientation="vertical">
 
             <FrameLayout
@@ -49,19 +51,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/carts_recyclerview"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_below="@id/app_bar_layout"
+                        android:background="@color/white"
                         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
                     <RelativeLayout
                         android:id="@+id/empty_content1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="#f3f3f4"
+                        android:background="@color/bg_grey"
                         android:visibility="gone"
                         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -70,7 +71,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
-                            android:layout_marginTop="6dp"
+                            android:layout_marginTop="140px"
                             android:src="@drawable/cart_shopping" />
 
                         <TextView
@@ -78,28 +79,30 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/iv"
-                            android:layout_centerInParent="true"
-                            android:layout_marginTop="6dp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="45px"
                             android:text="您的购物车空空如也~快去装满它吧"
-                            android:textColor="@color/black" />
+                            android:textColor="@color/text_color_62" />
 
                         <TextView
                             android:id="@+id/tv11"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/tv21"
-                            android:layout_centerInParent="true"
-                            android:text="快去挑选几件喜欢的宝贝吧~" />
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="15px"
+                            android:text="快去挑选几件喜欢的宝贝吧~"
+                            android:textColor="@color/text_color_9B" />
 
-                        <Button
+                        <ImageView
                             android:id="@+id/go_main1"
-                            android:layout_width="320px"
-                            android:layout_height="80px"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_below="@id/tv11"
                             android:layout_centerHorizontal="true"
-                            android:layout_margin="10dp"
-                            android:background="@drawable/shape_common"
-                            android:text="随便逛逛"
+                            android:layout_marginBottom="120px"
+                            android:layout_marginTop="20px"
+                            android:background="@drawable/quick_buy"
                             android:textColor="@color/white" />
                     </RelativeLayout>
 
@@ -151,35 +154,41 @@
                 </RelativeLayout>
             </FrameLayout>
 
-            <TextView
-                android:id="@+id/tv_show"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="16dp"
-                android:text="可重新购买的商品"
-                android:visibility="invisible"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-            <View
-                android:id="@+id/showline"
+            <LinearLayout
+                android:id="@+id/msg_layout"
                 android:layout_width="match_parent"
-                android:layout_height="1dip"
-                android:layout_marginTop="4dp"
-                android:background="@color/greytow"
-                android:visibility="invisible" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_show"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="16dp"
+                    android:text="可重新购买的商品"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+                <View
+                    android:id="@+id/showline"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:layout_marginTop="12dp"
+                    android:background="@color/greytow" />
+
+            </LinearLayout>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/cartshis_recyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/app_bar_layout"
-                android:layout_marginTop="8dp"
+                android:background="@color/white"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="170px" />
+                android:layout_height="match_parent"
+                android:layout_marginTop="120dp" />
         </LinearLayout>
 
     </ScrollView>

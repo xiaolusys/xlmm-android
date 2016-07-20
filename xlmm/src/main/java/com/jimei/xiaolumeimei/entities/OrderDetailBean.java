@@ -424,8 +424,35 @@ public class OrderDetailBean implements Serializable {
          * desc : 申请退款后，退款金额立即退到小鹿钱包，并可立即支付使用，无需等待.
          */
 
+
         @SerializedName("refund_choices")
         private List<RefundChoicesBean> refund_choices;
+        /**
+         * msg :
+         * payable : true
+         * id : alipay_wap
+         * name : 支付宝
+         */
+
+        @SerializedName("channels")
+        private List<ChannelsBean> channels;
+
+        protected ExtrasBean(Parcel in) {
+            refund_choices = in.createTypedArrayList(RefundChoicesBean.CREATOR);
+            channels = in.createTypedArrayList(ChannelsBean.CREATOR);
+        }
+
+        public static final Creator<ExtrasBean> CREATOR = new Creator<ExtrasBean>() {
+            @Override
+            public ExtrasBean createFromParcel(Parcel in) {
+                return new ExtrasBean(in);
+            }
+
+            @Override
+            public ExtrasBean[] newArray(int size) {
+                return new ExtrasBean[size];
+            }
+        };
 
         public List<RefundChoicesBean> getRefund_choices() {
             return refund_choices;
@@ -433,6 +460,25 @@ public class OrderDetailBean implements Serializable {
 
         public void setRefund_choices(List<RefundChoicesBean> refund_choices) {
             this.refund_choices = refund_choices;
+        }
+
+        public List<ChannelsBean> getChannels() {
+            return channels;
+        }
+
+        public void setChannels(List<ChannelsBean> channels) {
+            this.channels = channels;
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeTypedList(refund_choices);
+            dest.writeTypedList(channels);
         }
 
 
@@ -502,37 +548,77 @@ public class OrderDetailBean implements Serializable {
             };
         }
 
-        @Override
-        public int describeContents() {
-            return 0;
-        }
 
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeList(this.refund_choices);
-        }
+        public static class ChannelsBean implements Serializable, Parcelable{
+            private String msg;
+            private boolean payable;
+            private String id;
+            private String name;
 
-        public ExtrasBean() {
-        }
+            protected ChannelsBean(Parcel in) {
+                msg = in.readString();
+                payable = in.readByte() != 0;
+                id = in.readString();
+                name = in.readString();
+            }
 
-        protected ExtrasBean(Parcel in) {
-            this.refund_choices = new ArrayList<RefundChoicesBean>();
-            in.readList(this.refund_choices, RefundChoicesBean.class.getClassLoader());
-        }
+            public static final Creator<ChannelsBean> CREATOR = new Creator<ChannelsBean>() {
+                @Override
+                public ChannelsBean createFromParcel(Parcel in) {
+                    return new ChannelsBean(in);
+                }
 
-        public static final Creator<ExtrasBean> CREATOR = new Creator<ExtrasBean>() {
-            @Override
-            public ExtrasBean createFromParcel(Parcel source) {
-                return new ExtrasBean(source);
+                @Override
+                public ChannelsBean[] newArray(int size) {
+                    return new ChannelsBean[size];
+                }
+            };
+
+            public String getMsg() {
+                return msg;
+            }
+
+            public void setMsg(String msg) {
+                this.msg = msg;
+            }
+
+            public boolean isPayable() {
+                return payable;
+            }
+
+            public void setPayable(boolean payable) {
+                this.payable = payable;
+            }
+
+            public String getId() {
+                return id;
+            }
+
+            public void setId(String id) {
+                this.id = id;
+            }
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
             }
 
             @Override
-            public ExtrasBean[] newArray(int size) {
-                return new ExtrasBean[size];
+            public int describeContents() {
+                return 0;
             }
-        };
 
-
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+                dest.writeString(msg);
+                dest.writeByte((byte) (payable ? 1 : 0));
+                dest.writeString(id);
+                dest.writeString(name);
+            }
+        }
     }
 
 

@@ -88,8 +88,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     TextView totalPrice;
     @Bind(R.id.total_price_all)
     TextView totalPrice_all;
-    @Bind(R.id.jiesheng)
-    TextView jiesheng;
     @Bind(R.id.confirm)
     Button confirm;
     @Bind(R.id.post_fee)
@@ -101,23 +99,16 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     List<CartsPayinfoBean.CartListEntity> list;
     @Bind(R.id.go_main)
     Button goMain;
-    //@Bind(R.id.empty_content) RelativeLayout emptyContent;
     @Bind(R.id.scb)
     SmoothCheckBox scb;
     @Bind(R.id.tv_app_discount)
     TextView tv_app_discount;
     @Bind(R.id.extra_budget)
     TextView extraBudget;
-    //@Bind(R.id.iv_wx) ImageView wxImg;
-    //@Bind(R.id.iv_alipay) ImageView alipayImg;
-    //@Bind(R.id.wx_layout) LinearLayout wxLayout;
-    //@Bind(R.id.alipay_layout) LinearLayout alipayLayout;
     @Bind(R.id.cb_rule)
     CheckBox ruleCb;
     @Bind(R.id.tv_rule)
     TextView ruleTv;
-    @Bind(R.id.spinner)
-    AppCompatSpinner spinner;
     @Bind(R.id.tv_wuliu)
     TextView tvWuliu;
     @Bind(R.id.wuliu_layout)
@@ -155,6 +146,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     private List<String> logisticsCompanysesString = new ArrayList<>();
     private String code;
     private String order_no = "";
+    private int order_id = -1;
 
     @Override
     protected void setListener() {
@@ -170,20 +162,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void initData() {
-        //Subscription subscribe = ActivityModel.getInstance()
-        //    .getLogisticCompany()
-        //    .subscribeOn(Schedulers.io())
-        //    .subscribe(new ServiceResponse<List<LogisticCompany>>() {
-        //      @Override public void onNext(List<LogisticCompany> logisticCompanies) {
-        //        logisticCompanyList = logisticCompanies;
-        //        ArrayAdapter<LogisticCompany> adapter =
-        //            new ArrayAdapter<>(getApplicationContext(), R.layout.item_choosespinner,
-        //                logisticCompanyList);
-        //        adapter.setDropDownViewResource(R.layout.item_choosespinner_dropdown);
-        //        spinner.setAdapter(adapter);
-        //      }
-        //    });
-        //addSubscription(subscribe);
 
         list = new ArrayList<>();
         downLoadCartsInfoWithout();
@@ -232,7 +210,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                             JUtils.Log(TAG, "合计" + (cartsPayinfoBean.getTotalFee()));
                             JUtils.Log(TAG, "已节省" + discount_fee);
 
-                            tv_postfee.setText("¥" + post_fee + "元");
+                            tv_postfee.setText("¥" + post_fee);
 
                             if (null != cartsPayinfoBean.getmPayExtras()) {
                                 List<CartsPayinfoBean.payExtrasEntityApp> payExtrasEntityApps =
@@ -362,7 +340,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                             JUtils.Log(TAG, "合计" + (cartsPayinfoBean.getTotalFee()));
                             JUtils.Log(TAG, "已节省" + discount_fee);
 
-                            tv_postfee.setText("¥" + post_fee + "元");
+                            tv_postfee.setText("¥" + post_fee);
 
                             if (null != cartsPayinfoBean.getmPayExtras()) {
                                 List<CartsPayinfoBean.payExtrasEntityApp> payExtrasEntityApps =
@@ -489,12 +467,10 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 + " jieshengjine:"
                 + jieshengjine);
 
-        tv_app_discount.setText("-" + (double) (Math.round(appcut * 100)) / 100 + "元");
-        extraBudget.setText(
-                "余额抵扣:   剩余" + budgetCash + " 本次可使用 " + (double) (Math.round(yue * 100)) / 100);
+        tv_app_discount.setText("-" + (double) (Math.round(appcut * 100)) / 100);
+        extraBudget.setText("¥" + budgetCash);
         totalPrice.setText("¥" + (double) (Math.round(paymentInfo * 100)) / 100);
-        totalPrice_all.setText("合计: ¥" + (double) (Math.round(paymentInfo * 100)) / 100 + "");
-        jiesheng.setText("已节省" + (double) (Math.round(jieshengjine * 100)) / 100 + "");
+        totalPrice_all.setText("¥" + (double) (Math.round(paymentInfo * 100)) / 100);
     }
 
     @Override
@@ -541,6 +517,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 }
                 break;
             case R.id.confirm:
+                MobclickAgent.onEvent(this, "PayId");
                 xlmmPayWithDialog();
                 break;
 
@@ -549,8 +526,11 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 Bundle bundle = new Bundle();
                 if ((coupon_id != null) && (!coupon_id.isEmpty())) {
                     bundle.putString("coupon_id", coupon_id);
-                    intent.putExtras(bundle);
                 }
+//                bundle.putString("cart_ids",cart_ids);
+//                bundle.putDouble("money", (double) (Math.round(paymentInfo * 100)) / 100);
+//                bundle.putDouble("coupon_price",coupon_price);
+                intent.putExtras(bundle);
                 startActivityForResult(intent, REQUEST_CODE_COUPONT);
                 break;
             //case R.id.wx_layout:
@@ -880,8 +860,8 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
                     @Override
                     public void onNext(PayInfoBean payInfoBean) {
-
-                        if (null != payInfoBean) {
+                        if (null != payInfoBean && payInfoBean.getTrade() != null) {
+                            order_id = payInfoBean.getTrade().getId();
                             order_no = payInfoBean.getTrade().getTid();
                             JUtils.Log(TAG, payInfoBean.toString());
                             Gson gson = new Gson();
@@ -897,7 +877,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                                     ComponentName componentName = new ComponentName(packageName,
                                             packageName + ".wxapi.WXPayEntryActivity");
                                     intent.setComponent(componentName);
-
                                     intent.putExtra(PaymentActivity.EXTRA_CHARGE,
                                             gson.toJson(payInfoBean.getCharge()));
                                     startActivityForResult(intent, REQUEST_CODE_PAYMENT);
@@ -915,6 +894,8 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                                     JUtils.Toast(payInfoBean.getInfo());
                                 }
                             }
+                        } else if (null != payInfoBean) {
+                            JUtils.Toast(payInfoBean.getInfo());
                         }
                     }
                 });
@@ -943,13 +924,23 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
                 if (result.equals("cancel")) {
                     //wexin alipay already showmsg
+                    MobclickAgent.onEvent(CartsPayInfoActivity.this, "PayCancelID");
                     JUtils.Toast("你已取消支付!");
-                    startActivity(new Intent(CartsPayInfoActivity.this, CartActivity.class));
+//                    startActivity(new Intent(CartsPayInfoActivity.this, CartActivity.class));
+                    if (order_id != -1) {
+                        Intent intent = new Intent(this, OrderDetailActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("orderinfo", order_id);
+                        bundle.putString("source", CartsPayInfoActivity.class.getSimpleName());
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                    }
                     finish();
                 } else if (result.equals("success")) {
                     JUtils.Toast("支付成功！");
                     //startActivity(new Intent(CartsPayInfoActivity.this, AllOrdersActivity.class));
                     //finish();
+                    MobclickAgent.onEvent(CartsPayInfoActivity.this, "PaySuccessID");
                     Intent intent = new Intent(CartsPayInfoActivity.this, RedBagActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("tid", order_no);
@@ -957,8 +948,9 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     startActivity(intent);
                     finish();
                 } else {
+                    MobclickAgent.onEvent(CartsPayInfoActivity.this, "PayFailID");
                     showMsg(result, errorMsg, extraMsg);
-                    startActivity(new Intent(CartsPayInfoActivity.this, CartActivity.class));
+//                    startActivity(new Intent(CartsPayInfoActivity.this, CartActivity.class));
                     finish();
                     //JUtils.Toast(result + "" + errorMsg + "" + extraMsg);
                 }
@@ -1148,6 +1140,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             confirm.setEnabled(false);
         }
     }
+
     class MyDialog extends Dialog {
         public MyDialog(Context context) {
             super(context, R.style.MyDialog);
@@ -1161,6 +1154,12 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             LinearLayout wx_layout = (LinearLayout) mView.findViewById(R.id.wx_layout);
             LinearLayout alipay_layout = (LinearLayout) mView.findViewById(R.id.alipay_layout);
             TextView textView = (TextView) mView.findViewById(R.id.total_price);
+            mView.findViewById(R.id.finish_iv).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MyDialog.this.dismiss();
+                }
+            });
 
             textView.setText("¥" + (double) (Math.round(paymentInfo * 100)) / 100);
 
@@ -1236,7 +1235,8 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             super.setContentView(mView);
         }
 
-        @Override public void dismiss() {
+        @Override
+        public void dismiss() {
             super.dismiss();
         }
     }
@@ -1248,7 +1248,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         MobclickAgent.onPause(this);
     }
 
-    private void setConfirmClickAble(){
+    private void setConfirmClickAble() {
         confirm.setClickable(false);
     }
 }

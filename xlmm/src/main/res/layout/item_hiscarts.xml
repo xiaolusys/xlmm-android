@@ -1,72 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="8px"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-  <ImageView
-      android:scaleType="centerCrop"
-      android:layout_width="180px"
-      android:id="@+id/cart_image"
-      android:layout_height="180px"
-  />
-  <RelativeLayout
-      android:id="@+id/ll"
-      android:layout_width="wrap_content"
-      android:orientation="vertical"
-      android:layout_marginLeft="8dp"
-      android:layout_toRightOf="@id/cart_image"
-      android:layout_height="180px">
-    <TextView
-        android:layout_alignParentTop="true"
-        android:textColor="@color/black"
-        android:id="@+id/title"
-        android:text=""
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="15px">
 
-    <TextView
-        android:layout_centerVertical="true"
-        android:layout_width="wrap_content"
-        android:id="@+id/sku_name"
-        android:text=""
-        android:layout_height="wrap_content"
-    />
+    <RelativeLayout
+        android:id="@+id/rl"
+        android:layout_width="180px"
+        android:layout_height="180px"
+        android:background="@drawable/choose_img_bg"
+        android:gravity="center">
+
+        <com.jimei.xiaolumeimei.widget.RoundCornerImageView
+            android:id="@+id/cart_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@drawable/logo" />
+
+    </RelativeLayout>
 
     <LinearLayout
-        android:layout_alignParentBottom="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-    >
-      <TextView
-          android:textSize="16sp"
-          android:id="@+id/price1"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text=""
-      />
-      <TextView
-          android:textColor="@color/colorPrimary"
-          android:textSize="14sp"
-          android:id="@+id/price2"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text=""
-      />
+        android:id="@+id/ll"
+        android:layout_width="match_parent"
+        android:layout_height="180px"
+        android:layout_marginLeft="25px"
+        android:layout_marginRight="12px"
+        android:layout_toRightOf="@id/rl"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_color_4A"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3" />
+
+
+        <TextView
+            android:id="@+id/sku_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_color_9B"
+            android:textSize="13sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2" />
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/price1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorAccent"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/price2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_color_9B"
+                android:textSize="12sp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:id="@+id/rebuy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/rebuy_btn" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
     </LinearLayout>
-  </RelativeLayout>
-  <Button
-      android:id="@+id/rebuy"
-      android:text="@string/rebuy"
-      android:textColor="@color/colorAccent"
-      android:background="@drawable/shape_chooselist"
-      android:layout_width="wrap_content"
-      android:orientation="horizontal"
-      android:layout_marginBottom="8dp"
-      android:layout_alignParentRight="true"
-      android:layout_alignParentBottom="true"
-      android:layout_height="30dp"
-  />
+
+
 </RelativeLayout>

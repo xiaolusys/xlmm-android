@@ -63,11 +63,11 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
   @Override protected void initData() {
     if ((headimgurl != null) && (!headimgurl.isEmpty())) {
       OkHttpUtils.get().url(headimgurl).build().execute(new BitmapCallback() {
-        @Override public void onError(Call call, Exception e) {
+        @Override public void onError(Call call, Exception e,int id) {
 
         }
 
-        @Override public void onResponse(Bitmap response) {
+        @Override public void onResponse(Bitmap response,int id) {
           if((headimage != null) && (response != null)) {
             headimage.setImageBitmap(response);
           }

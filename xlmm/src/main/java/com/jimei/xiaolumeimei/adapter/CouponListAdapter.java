@@ -1,10 +1,5 @@
 package com.jimei.xiaolumeimei.adapter;
 
-/**
- * Created by wulei on 15-12-17.
- * 商品订单数据适配
- */
-
 import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
@@ -13,21 +8,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jimei.xiaolumeimei.data.XlmmConst;
-import com.jimei.xiaolumeimei.entities.CouponBean;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.entities.CouponEntity;
 import com.jude.utils.JUtils;
 
 public class CouponListAdapter extends BaseAdapter {
     private static final String TAG = "CouponListAdapter";
     private Context context;
-    private List<CouponBean.ResultsBean> mList;
+    private List<CouponEntity> mList;
     private int mCouponTyp;
     private String mSelecteCouponid;
 
@@ -36,14 +32,13 @@ public class CouponListAdapter extends BaseAdapter {
         this.context = context;
     }
 
-    public void updateWithClear(List<CouponBean.ResultsBean> list) {
+    public void updateWithClear(List<CouponEntity> list) {
         mList.clear();
         mList.addAll(list);
         notifyDataSetChanged();
     }
 
-    public void update(List<CouponBean.ResultsBean> list, int coupon_type, String selected_couponid) {
-
+    public void update(List<CouponEntity> list, int coupon_type, String selected_couponid) {
         Log.d(TAG, "dataSource.size " + list.size());
         mCouponTyp = coupon_type;
         mSelecteCouponid = selected_couponid;
@@ -79,19 +74,20 @@ public class CouponListAdapter extends BaseAdapter {
         }
         if (mCouponTyp == XlmmConst.UNUSED_COUPON) {
             holder.tv_coupon_value.setTextColor(Color.parseColor("#F05050"));
-            convertView.setBackgroundResource(R.drawable.bg_img_coupon);
+            holder.rl.setBackgroundResource(R.drawable.bg_img_coupon);
         } else if (mCouponTyp == XlmmConst.PAST_COUPON) {
-            holder.tv_coupon_value.setTextColor(Color.parseColor("#D8D8D8"));
-            holder.tv_coupon_info.setTextColor(Color.parseColor("#D8D8D8"));
-            holder.tv_coupon_crttime.setTextColor(Color.parseColor("#D8D8D8"));
-            holder.use_fee.setTextColor(Color.parseColor("#D8D8D8"));
-            convertView.setBackgroundResource(R.drawable.bg_img_pastcoupon);
+            holder.tv_coupon_value.setTextColor(Color.parseColor("#B4B4B4"));
+            holder.tv_coupon_info.setTextColor(Color.parseColor("#D2D2D2"));
+            holder.tv_coupon_crttime.setTextColor(Color.parseColor("#D2D2D2"));
+            holder.titleTv.setTextColor(Color.parseColor("#D2D2D2"));
+            holder.use_fee.setTextColor(Color.parseColor("#D2D2D2"));
+            holder.rl.setBackgroundResource(R.drawable.bg_img_pastcoupon);
         } else if (mCouponTyp == XlmmConst.USED_COUPON) {
-            holder.tv_coupon_value.setTextColor(Color.parseColor("#4A4A4A"));
-            convertView.setBackgroundResource(R.drawable.bg_img_usedcoupon);
+            holder.tv_coupon_value.setTextColor(Color.parseColor("#646464"));
+            holder.rl.setBackgroundResource(R.drawable.bg_img_usedcoupon);
         } else if (mCouponTyp == 3) {
-            holder.tv_coupon_value.setTextColor(Color.parseColor("#4A4A4A"));
-            convertView.setBackgroundResource(R.drawable.bg_img_dcoupon);
+            holder.tv_coupon_value.setTextColor(Color.parseColor("#646464"));
+            holder.rl.setBackgroundResource(R.drawable.bg_img_dcoupon);
         }
         double coupon_value = mList.get(position).getCoupon_value();
         if (Math.round(coupon_value * 100) % 100 == 0) {
@@ -118,7 +114,6 @@ public class CouponListAdapter extends BaseAdapter {
         }
         return convertView;
     }
-
     class ViewHolder {
         TextView tv_coupon_value;
         TextView tv_coupon_info;
@@ -126,6 +121,7 @@ public class CouponListAdapter extends BaseAdapter {
         ImageView img_selected;
         TextView use_fee;
         TextView titleTv;
+        RelativeLayout rl;
 
         public ViewHolder(View itemView) {
             tv_coupon_value = (TextView) itemView.findViewById(R.id.tv_coupon_value);
@@ -134,6 +130,7 @@ public class CouponListAdapter extends BaseAdapter {
             img_selected = (ImageView) itemView.findViewById(R.id.img_selected);
             use_fee = (TextView) itemView.findViewById(R.id.use_fee);
             titleTv = (TextView) itemView.findViewById(R.id.title);
+            rl = (RelativeLayout) itemView.findViewById(R.id.rl);
         }
     }
 

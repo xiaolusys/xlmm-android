@@ -28,11 +28,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.BrandlistAdapter;
 import com.jimei.xiaolumeimei.base.BaseActivity;
 import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.data.XlmmConst;
-import com.jimei.xiaolumeimei.entities.BrandListBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.IsGetcoupon;
 import com.jimei.xiaolumeimei.entities.PortalBean;
@@ -40,18 +38,18 @@ import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.event.EmptyEvent;
 import com.jimei.xiaolumeimei.event.TimeEvent;
+import com.jimei.xiaolumeimei.event.UserEvent;
 import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.model.UserNewModel;
-import com.jimei.xiaolumeimei.ui.activity.product.BrandListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ChildListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.LadyListActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllOrdersActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
-import com.jimei.xiaolumeimei.ui.activity.user.CouponActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.AllCouponActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.CustomProblemActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.InformationActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
@@ -149,23 +147,6 @@ public class MainActivity extends BaseActivity
   private View llayout;
   private String newTime;
   private int rvTopHeight;
-
-  public static LinearLayout.LayoutParams getLayoutParams(Bitmap bitmap, int screenWidth) {
-    float rawWidth = bitmap.getWidth();
-    float rawHeight = bitmap.getHeight();
-    float width;
-    float height;
-    if (rawWidth > screenWidth) {
-      height = (rawHeight / rawWidth) * screenWidth;
-      width = screenWidth;
-    } else {
-      width = rawWidth;
-      height = rawHeight;
-    }
-    LinearLayout.LayoutParams layoutParams =
-        new LinearLayout.LayoutParams((int) width, (int) height);
-    return layoutParams;
-  }
 
   @Override protected int provideContentViewId() {
     return R.layout.activity_main;
@@ -447,10 +428,10 @@ public class MainActivity extends BaseActivity
             .url(postActivityBean.get(i).getAct_img())
             .build()
             .execute(new BitmapCallback() {
-              @Override public void onError(Call call, Exception e) {
+              @Override public void onError(Call call, Exception e,int id) {
               }
 
-              @Override public void onResponse(Bitmap response) {
+              @Override public void onResponse(Bitmap response,int id) {
                 if (response != null) {
                   imageViewList.get(finalI).setAdjustViewBounds(true);
                   int screenWidth = DisplayUtils.getScreenW(MainActivity.this);
@@ -567,8 +548,6 @@ public class MainActivity extends BaseActivity
   }
 
   public void initBrand(PortalBean postBean) throws NullPointerException {
-    JUtils.Log(TAG, "refreshBrand");
-    List<BrandlistAdapter> brandListAdapters = new ArrayList<>();
     List<BrandView> brandViews = new ArrayList<>();
     brand.removeAllViews();
     brandViews.clear();
@@ -577,68 +556,32 @@ public class MainActivity extends BaseActivity
 
       List<PortalBean.PromotionBrandsBean> brandPromotionEntities = postBean.getPromotion_brands();
       if (brandPromotionEntities.size() != 0) {
-        BrandlistAdapter brandlistAdapter;
         BrandView brandView;
         for (int i = 0; i < brandPromotionEntities.size(); i++) {
-          brandlistAdapter = new BrandlistAdapter(MainActivity.this);
-          brandListAdapters.add(brandlistAdapter);
           brandView = new BrandView(MainActivity.this);
-          brandView.addItemDecoration(20);
           brandViews.add(brandView);
           brand.addView(brandView);
         }
-
-        JUtils.Log(TAG, "brandlistAdapters.size()====" + brandListAdapters.size());
-        for (int i = 0; i < brandListAdapters.size(); i++) {
-          brandViews.get(i).setBrandtitleImage(brandPromotionEntities.get(i).getBrand_pic());
-          brandViews.get(i).setBrandDesText(brandPromotionEntities.get(i).getBrand_desc());
-          brandViews.get(i).setAdapter(brandListAdapters.get(i));
-          final int finalI = i;
-          ProductModel.getInstance()
-              .getBrandlistProducts(brandPromotionEntities.get(i).getId(), 1, 10)
-              .subscribeOn(Schedulers.io())
-              .subscribe(new ServiceResponse<BrandListBean>() {
-
-                @Override public void onError(Throwable e) {
-                  super.onError(e);
-                  JUtils.Log(TAG, "-------onError");
-                }
-
-                @Override public void onCompleted() {
-                  super.onCompleted();
-                  JUtils.Log(TAG, "-------onCompleted");
-                }
-
-                @Override public void onNext(BrandListBean brandpromotionBean) {
-                  if (null != brandpromotionBean) {
-                    if (null != brandpromotionBean.getResults()) {
-                      JUtils.Log(TAG, brandpromotionBean.toString());
-                      brandListAdapters.get(finalI).update(brandpromotionBean.getResults());
-                    }
-                  }
-                }
-              });
-
+        for (int i = 0; i < brandPromotionEntities.size(); i++) {
+          brandViews.get(i).setBrandtitleImage(brandPromotionEntities.get(i).getActLogo());
+          brandViews.get(i).setBrandDesText(brandPromotionEntities.get(i).getActDesc());
+          brandViews.get(i).setBrandListImage(brandPromotionEntities.get(i).getActImg());
           final int finalI1 = i;
           brandViews.get(i).setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-              Intent intent = new Intent(MainActivity.this, BrandListActivity.class);
-              Bundle bundle = new Bundle();
-              bundle.putInt("id", brandPromotionEntities.get(finalI1).getId());
-              intent.putExtras(bundle);
-              startActivity(intent);
+
             }
           });
 
-          brandListAdapters.get(i).setListener(new BrandlistAdapter.itemOnclickListener() {
-            @Override public void itemClick() {
-              Intent intent = new Intent(MainActivity.this, BrandListActivity.class);
-              Bundle bundle = new Bundle();
-              bundle.putInt("id", brandPromotionEntities.get(finalI1).getId());
-              intent.putExtras(bundle);
-              startActivity(intent);
-            }
-          });
+          //brandListAdapters.get(i).setListener(new BrandlistAdapter.itemOnclickListener() {
+          //  @Override public void itemClick() {
+          //    Intent intent = new Intent(MainActivity.this, BrandListActivity.class);
+          //    Bundle bundle = new Bundle();
+          //    bundle.putInt("id", brandPromotionEntities.get(finalI1).getId());
+          //    intent.putExtras(bundle);
+          //    startActivity(intent);
+          //  }
+          //});
         }
       }
     } else {
@@ -801,7 +744,7 @@ public class MainActivity extends BaseActivity
         break;
       case R.id.ll_discount:
         flag = "coupon";
-        intent = new Intent(MainActivity.this, CouponActivity.class);
+        intent = new Intent(MainActivity.this, AllCouponActivity.class);
         break;
       case R.id.imgUser:
         intent = new Intent(MainActivity.this, InformationActivity.class);
@@ -1112,8 +1055,20 @@ public class MainActivity extends BaseActivity
 
   @Override protected void onDestroy() {
     super.onDestroy();
+    removeStickyEvent();
     EventBus.getDefault().unregister(this);
-    EventBus.getDefault().removeAllStickyEvents();
+  }
+
+  private void removeStickyEvent() {
+    EmptyEvent emptyEvent = EventBus.getDefault().getStickyEvent(EmptyEvent.class);
+    if (emptyEvent != null) {
+      EventBus.getDefault().removeStickyEvent(emptyEvent);
+    }
+
+    UserEvent userEvent = EventBus.getDefault().getStickyEvent(UserEvent.class);
+    if (userEvent != null) {
+      EventBus.getDefault().removeStickyEvent(userEvent);
+    }
   }
 
   private class MyFragmentAdapter extends FragmentPagerAdapter {

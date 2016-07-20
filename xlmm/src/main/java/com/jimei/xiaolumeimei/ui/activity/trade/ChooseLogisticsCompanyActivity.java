@@ -2,8 +2,11 @@ package com.jimei.xiaolumeimei.ui.activity.trade;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -14,7 +17,7 @@ import android.widget.TextView;
 import butterknife.Bind;
 
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.CompanyAdapter;
+import com.jimei.xiaolumeimei.adapter.LogisticCompanyAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.LogisticsCompanyInfo;
 import com.jimei.xiaolumeimei.widget.SideBar;
@@ -41,7 +44,7 @@ public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
      */
     @Bind(R.id.dialog)
     TextView dialog;
-    private CompanyAdapter mCompanyAdapter;
+    private LogisticCompanyAdapter mCompanyAdapter;
 
     @Override
     protected void setListener() {
@@ -63,7 +66,7 @@ public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
         //ListView all_orders_listview = (ListView) findViewById(R.id.all_orders_listview);
 
         fillCompanyInfo();
-        mCompanyAdapter = new CompanyAdapter(this, company_list);
+        mCompanyAdapter = new LogisticCompanyAdapter(this, company_list);
         lv_logistics_company.setAdapter(mCompanyAdapter);
         lv_logistics_company.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -123,6 +126,52 @@ public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
                 }
                 break;
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_logistic, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.write:
+                View view = LayoutInflater.from(this).inflate(R.layout.dialog_write_logistic, null);
+                AlertDialog dialog = new AlertDialog.Builder(this)
+                        .setCancelable(false)
+                        .setView(view)
+                        .create();
+                dialog.show();
+                EditText editText = (EditText) view.findViewById(R.id.et);
+                View cancelBtn = view.findViewById(R.id.cancel);
+                View commitBtn = view.findViewById(R.id.commit);
+                cancelBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                commitBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (editText.getText().toString().trim().length() >= 2) {
+                            Intent intent = new Intent(ChooseLogisticsCompanyActivity.this,
+                                    WriteLogisticsInfoActivty.class);
+                            intent.putExtra("company", editText.getText().toString().trim());
+                            setResult(1, intent);
+                            dialog.dismiss();
+                            finish();
+                        } else {
+                            JUtils.Toast("请输入正确的快递名称");
+                        }
+                    }
+                });
+                dialog.show();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

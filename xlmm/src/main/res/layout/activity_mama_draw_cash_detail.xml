@@ -109,7 +109,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8px"
                     android:text=""
-                    android:textColor="#9b9b9b"
+                    android:textColor="@color/text_color_9B"
                     android:textSize="13sp" />
             </LinearLayout>
 
@@ -134,7 +134,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8px"
                     android:text=""
-                    android:textColor="#9b9b9b"
+                    android:textColor="@color/text_color_9B"
                     android:textSize="13sp" />
             </LinearLayout>
 
@@ -159,7 +159,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8px"
                     android:text=""
-                    android:textColor="#9b9b9b"
+                    android:textColor="@color/text_color_9B"
                     android:textSize="13sp" />
             </LinearLayout>
 
@@ -193,7 +193,7 @@
                 android:id="@+id/account_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#9B9B9B"
+                android:textColor="@color/text_color_9B"
                 android:textSize="14sp" />
         </LinearLayout>
 
@@ -214,7 +214,7 @@
                 android:id="@+id/tv_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#9B9B9B"
+                android:textColor="@color/text_color_9B"
                 android:textSize="14sp" />
         </LinearLayout>
 
@@ -236,7 +236,7 @@
                 android:id="@+id/tv_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#9B9B9B"
+                android:textColor="@color/text_color_9B"
                 android:textSize="14sp" />
 
         </LinearLayout>
@@ -258,7 +258,7 @@
                 android:id="@+id/tv_money"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#9B9B9B"
+                android:textColor="@color/text_color_9B"
                 android:textSize="14sp" />
 
         </LinearLayout>
@@ -280,7 +280,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#9B9B9B"
+                android:textColor="@color/text_color_9B"
                 android:textSize="14sp" />
 
         </LinearLayout>
@@ -302,7 +302,7 @@
                 android:id="@+id/tv_activity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#9B9B9B"
+                android:textColor="@color/text_color_9B"
                 android:textSize="14sp" />
 
         </LinearLayout>

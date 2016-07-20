@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -34,6 +33,7 @@ import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.ui.activity.trade.ApplyRefundActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.ApplyReturnGoodsActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.LogisticsActivity;
+import com.jimei.xiaolumeimei.ui.activity.trade.RefundDetailActivity;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 
@@ -91,7 +91,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                 (state == XlmmConst.ORDER_STATE_SENDED) ||
                 (state == XlmmConst.ORDER_STATE_CONFIRM_RECEIVE)) {
             setBtnInfo(convertView, state, refund_state,
-                    data.get(position).isKill_title());
+                    data.get(position).isKill_title(), data.get(position));
             setBtnListener(convertView, state, refund_state, data.get(position).getId(),
                     data.get(position), position);
         } else {
@@ -149,26 +149,24 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                         }
                     });
                 }
-                if (!"已取消".equals(orderDetailEntity.getPackage_orders().get(i).getAssign_status_display())) {
-                    final int finalI = i;
-                    convertView.findViewById(R.id.ll_item).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(context, LogisticsActivity.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putInt("id", orderDetailEntity.getId());
-                            bundle.putSerializable("packageOrdersBean", orderDetailEntity.getPackage_orders().get(finalI));
-                            intent.putExtras(bundle);
-                            context.startActivity(intent);
-                        }
-                    });
-                }
+                final int finalI = i;
+                convertView.findViewById(R.id.ll_item).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(context, LogisticsActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("id", orderDetailEntity.getId());
+                        bundle.putSerializable("packageOrdersBean", orderDetailEntity.getPackage_orders().get(finalI));
+                        intent.putExtras(bundle);
+                        context.startActivity(intent);
+                    }
+                });
                 break;
             }
         }
         ((TextView) convertView.findViewById(R.id.tx_good_name)).setText(data.get(position).getTitle());
-        ((TextView) convertView.findViewById(R.id.tx_good_price)).setText("¥" + data.get(position).getPayment());
-        ((TextView) convertView.findViewById(R.id.tx_good_size)).setText("尺码:" + data.get(position).getSku_name());
+        ((TextView) convertView.findViewById(R.id.tx_good_price)).setText("¥" + data.get(position).getTotal_fee());
+        ((TextView) convertView.findViewById(R.id.tx_good_size)).setText(data.get(position).getSku_name());
         ((TextView) convertView.findViewById(R.id.tx_good_num)).setText("x" + data.get(position).getNum());
         ImageView img_goods = (ImageView) convertView.findViewById(R.id.img_good);
         ViewUtils.loadImgToImgView(context, img_goods, data.get(position).getPic_path());
@@ -176,12 +174,12 @@ public class OrderGoodsListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private void setBtnInfo(View convertView, int state, int refund_state,
-                            boolean kill_title) {
+    private void setBtnInfo(View convertView, int state, int refund_state, boolean kill_title
+            , AllOrdersBean.ResultsEntity.OrdersEntity entity) {
         Log.d(TAG, " setBtnInfo" + state + " " + refund_state);
 
         Button btn = (Button) convertView.findViewById(R.id.btn_order_proc);
-        TextView tv_order_state = (TextView) convertView.findViewById(R.id.tv_order_state);
+        Button tv_order_state = (Button) convertView.findViewById(R.id.tv_order_state);
         switch (state) {
             case XlmmConst.ORDER_STATE_PAYED:
             case XlmmConst.ORDER_STATE_CONFIRM_RECEIVE: {
@@ -192,20 +190,20 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                         btn.setVisibility(View.INVISIBLE);
                         tv_order_state.setVisibility(View.VISIBLE);
                         switch (refund_state) {
-                            case XlmmConst.REFUND_STATE_BUYER_APPLY:
-                                tv_order_state.setText("已经申请退款");
-                                break;
-                            case XlmmConst.REFUND_STATE_SELLER_AGREED:
-                                tv_order_state.setText("卖家同意退款");
-                                break;
-                            case XlmmConst.REFUND_STATE_BUYER_RETURNED_GOODS:
-                                tv_order_state.setText("已经退货");
-                                break;
+//                            case XlmmConst.REFUND_STATE_BUYER_APPLY:
+//                                tv_order_state.setText("已经申请退款");
+//                                break;
+//                            case XlmmConst.REFUND_STATE_SELLER_AGREED:
+//                                tv_order_state.setText("卖家同意退款");
+//                                break;
+//                            case XlmmConst.REFUND_STATE_BUYER_RETURNED_GOODS:
+//                                tv_order_state.setText("已经退货");
+//                                break;
+//                            case XlmmConst.REFUND_STATE_WAIT_RETURN_FEE:
+//                                tv_order_state.setText("退款中");
+//                                break;
                             case XlmmConst.REFUND_STATE_SELLER_REJECTED:
-                                tv_order_state.setText("卖家拒绝退款");
-                                break;
-                            case XlmmConst.REFUND_STATE_WAIT_RETURN_FEE:
-                                tv_order_state.setText("退款中");
+                                tv_order_state.setText("拒绝退款");
                                 break;
                             case XlmmConst.REFUND_STATE_REFUND_CLOSE:
                                 tv_order_state.setText("退款关闭");
@@ -216,6 +214,17 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                             default:
                                 break;
                         }
+                        tv_order_state.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(context, RefundDetailActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putInt("goods_id", entity.getRefund_id());
+                                bundle.putInt("refund_state", entity.getRefund_status());
+                                intent.putExtras(bundle);
+                                context.startActivity(intent);
+                            }
+                        });
                     } else {
                         btn.setText("申请退款");
                         tv_order_state.setVisibility(View.INVISIBLE);
@@ -244,43 +253,59 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                             @Override
                             public void onClick(View v) {
                                 Log.d(TAG, "enter apply refund ");
-                                View view = context.getLayoutInflater().inflate(R.layout.pop_refund_layout, null);
-                                Dialog dialog = new Dialog(context, R.style.dialog_style);
-                                dialog.setContentView(view);
-                                dialog.setCancelable(true);
-                                Window window = dialog.getWindow();
-                                WindowManager.LayoutParams wlp = window.getAttributes();
-                                wlp.gravity = Gravity.BOTTOM;
-                                wlp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                                window.setAttributes(wlp);
-                                window.setWindowAnimations(R.style.dialog_anim);
-                                View closeIv = view.findViewById(R.id.close_iv);
-                                ListView listView = (ListView) view.findViewById(R.id.lv_refund);
-                                closeIv.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        dialog.dismiss();
-                                    }
-                                });
-                                listView.setAdapter(new RefundTypeAdapter(context, orderDetailEntity.getExtras().getRefund_choices()));
-                                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(AdapterView<?> parent, View view, int position1, long id) {
-                                        Intent intent = new Intent(context, ApplyRefundActivity.class);
-                                        Bundle bundle = new Bundle();
-                                        bundle.putInt("id", orderDetailEntity.getId());
-                                        bundle.putInt("position", position);
-                                        bundle.putString("refund_channel", orderDetailEntity.getExtras().getRefund_choices().get(position1).getRefund_channel());
-                                        bundle.putString("name", orderDetailEntity.getExtras().getRefund_choices().get(position1).getName());
-                                        bundle.putString("desc", orderDetailEntity.getExtras().getRefund_choices().get(position1).getDesc());
-                                        intent.putExtras(bundle);
-                                        Log.d(TAG, "transfer good  " + goods_info.getId() + " to " + "ApplyRefundActivity");
-                                        context.startActivity(intent);
-                                        dialog.dismiss();
-                                        context.finish();
-                                    }
-                                });
-                                dialog.show();
+                                List<OrderDetailBean.ExtrasBean.RefundChoicesBean> choices = orderDetailEntity.getExtras().getRefund_choices();
+                                if (choices.size() > 1) {
+                                    Dialog dialog = new Dialog(context, R.style.CustomDialog);
+                                    dialog.setContentView(R.layout.pop_refund_layout);
+                                    dialog.setCancelable(true);
+                                    Window window = dialog.getWindow();
+                                    WindowManager.LayoutParams wlp = window.getAttributes();
+                                    wlp.gravity = Gravity.BOTTOM;
+                                    wlp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                                    window.setAttributes(wlp);
+                                    window.setWindowAnimations(R.style.dialog_anim);
+                                    View closeIv = dialog.findViewById(R.id.close_iv);
+                                    View sure = dialog.findViewById(R.id.sure);
+                                    ListView listView = (ListView) dialog.findViewById(R.id.lv_refund);
+                                    closeIv.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                                    RefundTypeAdapter adapter = new RefundTypeAdapter(context, choices);
+                                    listView.setAdapter(adapter);
+                                    sure.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent intent = new Intent(context, ApplyRefundActivity.class);
+                                            Bundle bundle = new Bundle();
+                                            bundle.putInt("id", orderDetailEntity.getId());
+                                            bundle.putInt("position", position);
+                                            bundle.putString("refund_channel", adapter.getItem(adapter.getSelect()).getRefund_channel());
+                                            bundle.putString("name", adapter.getItem(adapter.getSelect()).getName());
+                                            bundle.putString("desc", adapter.getItem(adapter.getSelect()).getDesc());
+                                            intent.putExtras(bundle);
+                                            Log.d(TAG, "transfer good  " + goods_info.getId() + " to " + "ApplyRefundActivity");
+                                            context.startActivity(intent);
+                                            dialog.dismiss();
+                                            context.finish();
+                                        }
+                                    });
+                                    dialog.show();
+                                } else if (choices.size() == 1) {
+                                    Intent intent = new Intent(context, ApplyRefundActivity.class);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putInt("id", orderDetailEntity.getId());
+                                    bundle.putInt("position", position);
+                                    bundle.putString("refund_channel", choices.get(0).getRefund_channel());
+                                    bundle.putString("name", choices.get(0).getName());
+                                    bundle.putString("desc", choices.get(0).getDesc());
+                                    intent.putExtras(bundle);
+                                    Log.d(TAG, "transfer good  " + goods_info.getId() + " to " + "ApplyRefundActivity");
+                                    context.startActivity(intent);
+                                    context.finish();
+                                }
                             }
                         });
                         break;

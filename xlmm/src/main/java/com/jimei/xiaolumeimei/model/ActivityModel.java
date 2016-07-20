@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.model;
 
 import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
+import com.jimei.xiaolumeimei.entities.BrandListBean;
 import com.jimei.xiaolumeimei.entities.LogisticCompany;
 import com.jimei.xiaolumeimei.entities.PostActivityBean;
 import com.jimei.xiaolumeimei.entities.ResultBean;
@@ -29,16 +30,15 @@ public class ActivityModel {
     }
 
     //活动内容分享
-  /*public Observable<ActivityBean> get_share_content(String ufrom) {
-    return XlmmRetrofitClient.getService()
-        .get_share_content(ufrom)
-        .compose(new DefaultTransform<>());
-  }*/
-
-    //活动内容分享
     public Observable<ActivityBean> get_party_share_content(String id) {
         return XlmmRetrofitClient.getService()
                 .get_party_share_content(id)
+                .compose(new DefaultTransform<>());
+    }
+
+    public Observable<BrandListBean> getBrandList(String id) {
+        return XlmmRetrofitClient.getService()
+                .getBrandList(id)
                 .compose(new DefaultTransform<>());
     }
 
@@ -46,13 +46,6 @@ public class ActivityModel {
     public Observable<List<PostActivityBean>> getPostActivity() {
         return XlmmRetrofitClient.getService()
                 .getPostActivity()
-                .compose(new DefaultTransform<>());
-    }
-
-    //物流列表
-    public Observable<List<LogisticCompany>> getLogisticCompany() {
-        return XlmmRetrofitClient.getService()
-                .getLogisticCompany()
                 .compose(new DefaultTransform<>());
     }
 

@@ -27,8 +27,12 @@ import com.jimei.xiaolumeimei.base.BasePresenterActivity;
 import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
+import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
+import com.jimei.xiaolumeimei.event.MaMaInfoEmptyEvent;
+import com.jimei.xiaolumeimei.event.MaMaInfoEvent;
 import com.jimei.xiaolumeimei.event.WebViewEvent;
+import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.BoutiqueWebviewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMChooseListActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMFans1Activity;
@@ -41,9 +45,12 @@ import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMcarryLogActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaDrawCashActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaDrawCouponActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaLivenessActivity;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaReNewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaVisitorActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
+import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.widget.CircleImageView;
+import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -52,6 +59,9 @@ import java.util.Calendar;
 import java.util.List;
 import okhttp3.Call;
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye on 2016/6/24.
@@ -89,7 +99,10 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
   @Bind(R.id.fund_layout) LinearLayout fundLayout;
 
   @Bind(R.id.tv_mamalevel) TextView tvMamalevel;
+  @Bind(R.id.tv_mamavip) TextView tvMamaVip;
+  @Bind(R.id.mama_id) TextView mamaId;
   @Bind(R.id.tv_mamashengyu) TextView tvShengyu;
+  @Bind(R.id.mama_pay) TextView mamaPay;
   @Bind(R.id.imgExam) ImageView imgExam;
   @Bind(R.id.tv_yue) TextView tvYue;
   @Bind(R.id.yue_layout) LinearLayout yueLayout;
@@ -110,11 +123,13 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
   private String actlink;
   private String shareMmcode;
   private boolean isThisWeek = true;
+  private MamaUrl.ResultsBean.ExtraBean mamaResult;
 
   @Override protected void initData() {
     mPresenter.getShareShopping();
     mPresenter.getMamaFortune();
     mPresenter.getRefund();
+    mPresenter.getMamaUrl();
   }
 
   @Override protected void setListener() {
@@ -124,6 +139,7 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
     leijiLayout.setOnClickListener(this);
     huoyueLayout.setOnClickListener(this);
     imgExam.setOnClickListener(this);
+    mamaPay.setOnClickListener(this);
 
     rlTwoDimen.setOnClickListener(this);
     rl_fans.setOnClickListener(this);
@@ -143,38 +159,66 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
 
   }
 
+  @Subscribe(threadMode = ThreadMode.BACKGROUND)
+  public void updateMaMaInfo(MaMaInfoEmptyEvent event) {
+    MamaInfoModel.getInstance()
+        .getMamaFortune()
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<MamaFortune>() {
+          @Override public void onNext(MamaFortune mamaFortune) {
+            if (mamaFortune != null) {
+              EventBus.getDefault().post(new MaMaInfoEvent(mamaFortune));
+            }
+          }
+        });
+  }
+
+  @Subscribe(threadMode = ThreadMode.MAIN) public void updateMaMaUi(MaMaInfoEvent event) {
+    tvShengyu.setText(event.mamaFortune.getMamaFortune().getExtraInfo().getSurplusDays() + "");
+  }
+
   @Override protected int getContentViewLayoutID() {
     return R.layout.activity_mamainfo;
   }
 
   @Override protected void initViews() {
-
+    EventBus.getDefault().register(this);
+    StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent), 0);
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
-    return false;
+    return true;
   }
 
   @Override protected TransitionMode getOverridePendingTransitionMode() {
-    return null;
+    return TransitionMode.SCALE;
+  }
+
+  @Override public void initMamaUrl(MamaUrl mamaUrl) {
+    mamaResult = mamaUrl.getResults().get(0).getExtra();
   }
 
   @Override public void initMMview(MamaFortune fortune) {
-    JUtils.Log(TAG, fortune.toString()
-        + "fortune.getMamaFortune().getExtraInfo().getSurplusDays()"
-        + fortune.getMamaFortune().getExtraInfo().getSurplusDays());
+    int days = fortune.getMamaFortune().getExtraInfo().getSurplusDays();
+    JUtils.Log(TAG,
+        fortune.toString() + "fortune.getMamaFortune().getExtraInfo().getSurplusDays()" + days);
     tv_fund.setText(
         Double.toString((double) (Math.round(fortune.getMamaFortune().getCarryValue() * 100)) / 100)
             + "元");
     tv_invite_num.setText(fortune.getMamaFortune().getInviteNum() + "位");
     tv_fansnum.setText(fortune.getMamaFortune().getFansNum() + "人");
     tv_order.setText(s + "个");
+    //if (days<=15) {
+    mamaPay.setVisibility(View.VISIBLE);
+    //}
 
-    tvShengyu.setText(fortune.getMamaFortune().getExtraInfo().getSurplusDays() + "");
+    tvShengyu.setText(days + "");
     tvYue.setText(fortune.getMamaFortune().getCashValue() + "");
     tvLeiji.setText(fortune.getMamaFortune().getCarryValue() + "");
     tvHuoyue.setText(fortune.getMamaFortune().getActiveValueNum() + "");
     tvMamalevel.setText(fortune.getMamaFortune().getMamaLevelDisplay() + "");
+    tvMamaVip.setText(fortune.getMamaFortune().getExtraInfo().getAgencylevelDisplay() + "");
+    mamaId.setText("id: " + fortune.getMamaFortune().getMamaId() + "");
     if (!TextUtils.isEmpty(fortune.getMamaFortune().getExtraInfo().getThumbnail())) {
       setUserImage(fortune);
     }
@@ -182,26 +226,31 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
 
   private void setUserImage(MamaFortune fortune) {
     try {
-      OkHttpUtils.get()
-          .url(fortune.getMamaFortune().getExtraInfo().getThumbnail())
-          .build()
-          .execute(new BitmapCallback() {
-            @Override public void onError(Call call, Exception e) {
-              e.printStackTrace();
-            }
-
-            @Override public void onResponse(Bitmap response) {
-              if (null != response) {
-                imgUser.setImageBitmap(response);
+      if (!TextUtils.isEmpty(fortune.getMamaFortune().getExtraInfo().getThumbnail())) {
+        OkHttpUtils.get()
+            .url(fortune.getMamaFortune().getExtraInfo().getThumbnail())
+            .build()
+            .execute(new BitmapCallback() {
+              @Override public void onError(Call call, Exception e, int id) {
+                e.printStackTrace();
               }
-            }
-          });
+
+              @Override public void onResponse(Bitmap response, int id) {
+                if (null != response) {
+                  imgUser.setImageBitmap(response);
+                }
+              }
+            });
+      } else {
+        imgUser.setImageResource(R.drawable.img_diamond);
+      }
     } catch (Exception e) {
       e.printStackTrace();
     }
   }
 
   @Override public void initShareInfo(MMShoppingBean shoppingBean) {
+
     title = shoppingBean.getShopInfo().getName();
     sharelink = shoppingBean.getShopInfo().getPreviewShopLink();
     shareimg = shoppingBean.getShopInfo().getThumbnail();
@@ -281,25 +330,29 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
         (double) (Math.round(his_refund.get(his_refund.size() - 1).getCarry() * 100)) / 100));
   }
 
+  @Override public void showLoading() {
+    showIndeterminateProgressDialog(false);
+  }
+
+  @Override public void hideLoading() {
+    hideIndeterminateProgressDialog();
+  }
+
   @Override public void onClick(View v) {
     Intent intent;
     switch (v.getId()) {
       case R.id.yue_layout:
-        if (mamaFortune.getMamaFortune().getCashValue()<20){
-          JUtils.Toast("余额小于20,不能提现哦!");
-        }else {
-          if (mamaFortune != null
-                  && mamaFortune.getMamaFortune().getExtraInfo().getCouldCashOut() == 0) {
-            intent = new Intent(this, MamaDrawCouponActivity.class);
-            intent.putExtra("cash", mamaFortune.getMamaFortune().getCashValue());
-            intent.putExtra("msg", mamaFortune.getMamaFortune().getExtraInfo().getCashoutReason());
-            startActivity(intent);
-          } else if (mamaFortune != null
-                  && mamaFortune.getMamaFortune().getExtraInfo().getCouldCashOut() == 1) {
-            intent = new Intent(this, MamaDrawCashActivity.class);
-            intent.putExtra("cash", mamaFortune.getMamaFortune().getCashValue());
-            startActivity(intent);
-          }
+        if (mamaFortune != null
+            && mamaFortune.getMamaFortune().getExtraInfo().getCouldCashOut() == 0) {
+          intent = new Intent(this, MamaDrawCouponActivity.class);
+          intent.putExtra("cash", mamaFortune.getMamaFortune().getCashValue());
+          intent.putExtra("msg", mamaFortune.getMamaFortune().getExtraInfo().getCashoutReason());
+          startActivity(intent);
+        } else if (mamaFortune != null
+            && mamaFortune.getMamaFortune().getExtraInfo().getCouldCashOut() == 1) {
+          intent = new Intent(this, MamaDrawCashActivity.class);
+          intent.putExtra("cash", mamaFortune.getMamaFortune().getCashValue());
+          startActivity(intent);
         }
         break;
       case R.id.img_left:
@@ -341,7 +394,7 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
         bundlerl_party.putString("cookies", cookies);
         bundlerl_party.putString("domain", domain);
         bundlerl_party.putString("Cookie", sharedPreferences.getString("Cookie", ""));
-        bundlerl_party.putString("actlink", actlink);
+        bundlerl_party.putString("actlink", mamaResult.getAct_info());
         intent.putExtras(bundlerl_party);
         startActivity(intent);
         break;
@@ -364,9 +417,17 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
         startActivity(intentrl_shop);
 
         break;
+      case R.id.mama_pay:
+        readyGo(MamaReNewActivity.class);
+        break;
       case R.id.rl_two_dimen:
-        JumpUtils.jumpToWebViewWithCookies(this, shareMmcode, 4, MMShareCodeWebViewActivity.class,
-            "我的邀请");
+
+        /*JumpUtils.jumpToWebViewWithCookies(this, mamaResult.getInvite(), 26,
+            MMShareCodeWebViewActivity.class, "");*/
+
+        JumpUtils.jumpToWebViewWithCookies(this, "http://m.xiaolumeimei.com/mall/mama/invited", 26,
+            MMShareCodeWebViewActivity.class, "");
+
         break;
       case R.id.rl_fans:
         sharedPreferences = getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
@@ -377,7 +438,7 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
           baseUrl = XlmmApi.APP_BASE_URL;
         }
         String cookies = sharedPreferences.getString("cookiesString", "");
-        String actlink = baseUrl + "/pages/fans-explain.html";
+        String actlink = mamaResult.getFans_explain();
         String domain = sharedPreferences.getString("cookiesDomain", "");
         String sessionid = sharedPreferences.getString("Cookie", "");
 
@@ -429,8 +490,7 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
 
       case R.id.imgExam:
         if (mamaFortune != null) {
-          JumpUtils.jumpToWebViewWithCookies(this,
-              mamaFortune.getMamaFortune().getExtraInfo().getNextLevelExamUrl(), -1,
+          JumpUtils.jumpToWebViewWithCookies(this, mamaResult.getExam(), -1,
               MMLevelExamWebViewActivity.class, "妈妈考试");
         }
         break;
@@ -478,5 +538,10 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
 
   @Override public void onNothingSelected() {
 
+  }
+
+  @Override protected void onDestroy() {
+    super.onDestroy();
+    EventBus.getDefault().unregister(this);
   }
 }

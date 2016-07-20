@@ -1,96 +1,76 @@
 package com.jimei.xiaolumeimei.adapter;
 
-/**
- * Created by wulei on 2016/1/24.
- */
-
-import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.data.LogisticsCompanyInfo;
-
-import java.util.List;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.entities.LogisticCompany;
+
+import java.util.List;
+
+/**
+ * Created by wisdom on 16/7/13.
+ */
 public class CompanyAdapter extends BaseAdapter {
+    private List<LogisticCompany> logisticCompanies;
+    private Context context;
 
-    private List<LogisticsCompanyInfo> list = null;
-    private Context mContext;
-
-    public CompanyAdapter(Context mContext, List<LogisticsCompanyInfo> list) {
-        this.mContext = mContext;
-        this.list = list;
-
+    public CompanyAdapter(List<LogisticCompany> logisticCompanies, Context context) {
+        this.logisticCompanies = logisticCompanies;
+        this.context = context;
     }
 
+    @Override
     public int getCount() {
-        return this.list.size();
+        return logisticCompanies.size();
     }
 
+    @Override
     public Object getItem(int position) {
-        return null;
+        return logisticCompanies.get(position);
     }
 
+    @Override
     public long getItemId(int position) {
         return position;
     }
 
-    public View getView(final int position, View view, ViewGroup arg2) {
-        ViewHolder viewHolder;
-        if (view == null) {
-            view = LayoutInflater.from(mContext).inflate(R.layout.item_logistics_company, null);
-            viewHolder = new ViewHolder(view);
-            view.setTag(viewHolder);
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder holder;
+        if (convertView == null) {
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_logistics, null);
+            holder = new ViewHolder(convertView);
+            convertView.setTag(holder);
         } else {
-            viewHolder = (ViewHolder) view.getTag();
+            holder = (ViewHolder) convertView.getTag();
         }
-        final LogisticsCompanyInfo mContent = list.get(position);
-        if (position == 0) {
-            viewHolder.tvLetter.setVisibility(View.VISIBLE);
-            viewHolder.tvLetter.setText(mContent.getLetter());
-        } else {
-            String lastCatalog = list.get(position - 1).getLetter();
-            if (mContent.getLetter().equals(lastCatalog)) {
-                viewHolder.tvLetter.setVisibility(View.GONE);
-            } else {
-                viewHolder.tvLetter.setVisibility(View.VISIBLE);
-                viewHolder.tvLetter.setText(mContent.getLetter());
-            }
+        String name = logisticCompanies.get(position).getName();
+        if (name.contains("申通")) {
+            holder.iconImg.setImageResource(R.drawable.icon_sto);
+        } else if (name.contains("邮政")) {
+            holder.iconImg.setImageResource(R.drawable.icon_ems);
+        } else if (name.contains("韵达")) {
+            holder.iconImg.setImageResource(R.drawable.icon_yunda);
+        } else if (name.contains("小鹿")) {
+            holder.iconImg.setImageResource(R.drawable.icon_xiaolu);
         }
-        viewHolder.tvTitle.setText(this.list.get(position).getName());
-        return view;
+        holder.nameTv.setText(name);
+        return convertView;
     }
 
-    final static class ViewHolder {
-        TextView tvTitle;
-        TextView tvLetter;
+    private class ViewHolder {
+        TextView nameTv;
+        ImageView iconImg;
 
         public ViewHolder(View itemView) {
-            tvTitle = (TextView) itemView.findViewById(R.id.tv_title);
-            tvLetter = (TextView) itemView.findViewById(R.id.tv_catalog);
+            nameTv = ((TextView) itemView.findViewById(R.id.name));
+            iconImg = ((ImageView) itemView.findViewById(R.id.icon));
         }
-    }
-
-    public int getPositionForSection(int section) {
-        LogisticsCompanyInfo mContent;
-        String l;
-        if (section == '!') {
-            return 0;
-        } else {
-            for (int i = 0; i < getCount(); i++) {
-                mContent = list.get(i);
-                l = mContent.getLetter();
-                char firstChar = l.toUpperCase().charAt(0);
-                if (firstChar == section) {
-                    return i + 1;
-                }
-
-            }
-        }
-        return -1;
     }
 }

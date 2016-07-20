@@ -10,6 +10,7 @@ import android.util.Log;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
+import com.jimei.xiaolumeimei.ui.activity.product.BrandListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ChildListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.LadyListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
@@ -17,7 +18,7 @@ import com.jimei.xiaolumeimei.ui.activity.product.TongkuanActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.OrderDetailActivity;
-import com.jimei.xiaolumeimei.ui.activity.user.CouponActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.AllCouponActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMNinePicActivity;
 import com.jimei.xiaolumeimei.ui.mminfo.MMInfoActivity;
@@ -123,7 +124,7 @@ public class JumpUtils {
         }
         break;
       case XlmmConst.JUMP_USER_COUPON:
-        intent = new Intent(context, CouponActivity.class);
+        intent = new Intent(context, AllCouponActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
         break;
@@ -157,18 +158,27 @@ public class JumpUtils {
         intent = new Intent(context, AllRefundsActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
+        break;
       case XlmmConst.JUMP_CARTS:
         if (LoginUtils.checkLoginState(context)) {
           intent = new Intent(context, CartActivity.class);
-          context.startActivity(intent);
         } else {
           intent = new Intent(context, LoginActivity.class);
           bundle = new Bundle();
           bundle.putString("login", "cart");
           intent.putExtras(bundle);
-          context.startActivity(intent);
-          ((Activity) context).finish();
         }
+        context.startActivity(intent);
+        ((Activity) context).finish();
+        break;
+      case XlmmConst.JUMP_TOPIC:
+        intent = new Intent(context, BrandListActivity.class);
+        bundle = new Bundle();
+        bundle.putString("id", jumpInfo.getId()+"");
+        intent.putExtras(bundle);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+        break;
     }
   }
 
@@ -176,7 +186,7 @@ public class JumpUtils {
 
     JumpInfo jumpInfo = new JumpInfo();
     String[] content = recvContent.split(XlmmConst.JUMP_PREFIX);
-
+    JUtils.Log(TAG, "content[1] ===" + content[0]);
     try {
       if (!content[1].isEmpty()) {
         if (content[1].contains("promote_today")) {
@@ -259,6 +269,16 @@ public class JumpUtils {
           jumpInfo.setType(XlmmConst.JUMP_CARTS);
           jumpInfo.setUrl(content[1]);
         }
+        //else if (content[1].contains("brand")) {
+        //  jumpInfo.setType(XlmmConst.JUMP_TOPIC);
+        //  int id;
+        //  String idStr = ((content[1].split("brand?"))[1]).split("activity_id=")[1];
+        //  id = Integer.parseInt(idStr);
+        //  if (id != 0) {
+        //    jumpInfo.setId(id);
+        //  }
+        //  jumpInfo.setUrl(content[1]);
+        //}
       }
     } catch (ArrayIndexOutOfBoundsException e) {
       e.printStackTrace();

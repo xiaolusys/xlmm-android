@@ -52,13 +52,13 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
 
     @Override
     protected void initData() {
+        showIndeterminateProgressDialog(false);
         data = new ArrayList<>();
         if (packageOrdersBean.getLogistics_company() != null) {
             companyTv.setText(packageOrdersBean.getLogistics_company().getName());
             companyTv.setTextColor(getResources().getColor(R.color.colorAccent));
             String packetid = packageOrdersBean.getOut_sid();
             String company_code = packageOrdersBean.getLogistics_company().getCode();
-            showIndeterminateProgressDialog(false);
             if (!"".equals(packetid) && !"".equals(company_code)) {
                 Subscription subscribe = TradeModel.getInstance()
                         .get_logistics_by_packagetid(packetid, company_code)
@@ -105,6 +105,7 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
                         }
                         mListView.setAdapter(new GoodsListAdapter(data, LogisticsActivity.this));
                         OrderDetailActivity.setListViewHeightBasedOnChildren(mListView);
+                        hideIndeterminateProgressDialog();
                         if (logisticsBean == null) {
                             if (orderDetailBean.getLogistics_company() == null) {
                                 companyTv.setText("小鹿推荐");
@@ -153,7 +154,6 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
             orderTv.setText("未揽件");
             fillStatusView();
         }
-        hideIndeterminateProgressDialog();
     }
 
     private void fillStatusView() {

@@ -80,7 +80,6 @@ public class FirstFragment extends DialogFragment {
         intent.putExtras(bundle);
         dismiss();
         startActivity(intent);
-        mActivity.finish();
       }
     });
   }

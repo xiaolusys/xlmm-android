@@ -5,7 +5,7 @@ package com.jimei.xiaolumeimei.data;
  */
 public class XlmmConst {
 
-    public static final String VERSION = "1.1.8.1";
+    public static final String VERSION = "1.1.9";
 
     public static  final int ORDER_STATE_CREATE = 0;
     public static  final int ORDER_STATE_WAITPAY = 1;
@@ -29,6 +29,10 @@ public class XlmmConst {
     public static final int PAST_COUPON = 1;
     public static final int USED_COUPON = 2;
 
+    public static final int ALL_ORDER = 0;
+    public static final int WAIT_PAY = 1;
+    public static final int WAIT_SEND = 2;
+
     public static  final int JUMP_PROMOTE_TODAY = 1;
     public static  final int JUMP_PROMOTE_PREVIOUS = 2;
     public static  final int JUMP_PRODUCT_CHILDLIST= 3;
@@ -43,6 +47,7 @@ public class XlmmConst {
     public static  final int JUMP_REFUNDS =12;
     public static  final int JUMP_CARTS =13;
     public static  final int JUMP_PRODUCT_DETAIL_PUSH =14;
+    public static  final int JUMP_TOPIC =15;
 
     public static  final String JUMP_PREFIX = "com.jimei.xlmm://app/v1/";
 

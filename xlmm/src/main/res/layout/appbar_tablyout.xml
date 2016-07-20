@@ -35,8 +35,9 @@
 
       <RelativeLayout
           android:id="@+id/rl_mmentry"
+          android:minHeight="?attr/actionBarSize"
           android:layout_width="wrap_content"
-          android:layout_height="match_parent"
+          android:layout_height="wrap_content"
           android:layout_gravity="right"
           android:gravity="center"
           android:visibility="invisible"
@@ -46,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
-            android:layout_marginRight="12dp"
+            android:layout_marginRight="15dp"
             android:src="@drawable/ic_setting"
             />
       </RelativeLayout>

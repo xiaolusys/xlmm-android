@@ -22,6 +22,7 @@ import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.entities.CarryLogListBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.widget.DividerItemDecorationForFooter;
+import com.jimei.xiaolumeimei.widget.loadingdialog.XlmmLoadingDialog;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
@@ -46,6 +47,7 @@ public class CarryLogAllFragment extends BaseFragment {
   private Subscription subscription1;
   private Subscription subscription2;
   private MaterialDialog materialDialog;
+  private XlmmLoadingDialog loadingdialog;
 
   public static CarryLogAllFragment newInstance(String title) {
     CarryLogAllFragment carryLogAllFragment = new CarryLogAllFragment();
@@ -170,6 +172,7 @@ public class CarryLogAllFragment extends BaseFragment {
                 Toast.makeText(context, "没有更多了", Toast.LENGTH_SHORT).show();
                 try {
                   xRecyclerView.post(xRecyclerView::loadMoreComplete);
+                  xRecyclerView.setLoadingMoreEnabled(false);;
                 } catch (Exception e) {
                   e.printStackTrace();
                 }
@@ -199,19 +202,15 @@ public class CarryLogAllFragment extends BaseFragment {
   }
 
   public void showIndeterminateProgressDialog(boolean horizontal) {
-    materialDialog = new MaterialDialog.Builder(getActivity())
-
-        //.title(R.string.progress_dialog)
-        .content(R.string.please_wait)
-        .progress(true, 0)
-        .widgetColorRes(R.color.colorAccent)
-        .progressIndeterminateStyle(horizontal)
+    loadingdialog = XlmmLoadingDialog.create(activity)
+        .setStyle(XlmmLoadingDialog.Style.SPIN_INDETERMINATE)
+        .setCancellable(!horizontal)
         .show();
   }
 
   public void hideIndeterminateProgressDialog() {
     try {
-      materialDialog.dismiss();
+      loadingdialog.dismiss();
     } catch (Exception e) {
       e.printStackTrace();
     }

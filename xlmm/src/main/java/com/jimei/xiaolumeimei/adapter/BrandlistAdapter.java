@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class BrandlistAdapter extends RecyclerView.Adapter<BrandlistAdapter.BrandlistVH> {
 
-  private List<BrandListBean.ResultsBean> mList;
+  private List<BrandListBean.ProductsBean> mList;
 
   private Context mContext;
 
@@ -42,13 +42,13 @@ public class BrandlistAdapter extends RecyclerView.Adapter<BrandlistAdapter.Bran
     mList = new ArrayList<>();
   }
 
-  public void updateWithClear(List<BrandListBean.ResultsBean> list) {
+  public void updateWithClear(List<BrandListBean.ProductsBean> list) {
     mList.clear();
     mList.addAll(list);
     notifyDataSetChanged();
   }
 
-  public void update(List<BrandListBean.ResultsBean> list) {
+  public void update(List<BrandListBean.ProductsBean> list) {
 
     mList.addAll(list);
     notifyDataSetChanged();
@@ -56,21 +56,21 @@ public class BrandlistAdapter extends RecyclerView.Adapter<BrandlistAdapter.Bran
 
   @Override public BrandlistVH onCreateViewHolder(ViewGroup parent, int viewType) {
     View view = LayoutInflater.from(parent.getContext())
-        .inflate(R.layout.item_brand, parent, false);
+        .inflate(R.layout.item_today, parent, false);
     return new BrandlistVH(view);
   }
 
   @Override public void onBindViewHolder(BrandlistVH holder, int position) {
 
-      BrandListBean.ResultsBean resultsEntity = mList.get(position);
-    String picPath = resultsEntity.getProduct_img();
+      BrandListBean.ProductsBean resultsEntity = mList.get(position);
+    String picPath = resultsEntity.getProductImg();
     //ViewUtils.loadImgToImgViewWithPlaceholder(mContext, holder.brandImag, picPath);
     Glide.with(mContext).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
         //.placeholder(R.drawable.parceholder)
         .centerCrop().into(holder.brandImag);
 
-    holder.productLowestPrice.setText("¥" + resultsEntity.getProduct_lowest_price());
-    holder.productStdSalePrice.setText("/¥" + resultsEntity.getProduct_std_sale_price());
+    holder.productLowestPrice.setText("¥" + resultsEntity.getProductLowestPrice());
+    holder.productStdSalePrice.setText("/¥" + resultsEntity.getProductStdSalePrice());
 
     if (listener != null) {
       holder.cardview.setOnClickListener(new View.OnClickListener() {

@@ -21,10 +21,15 @@ public class RefundTypeAdapter extends BaseAdapter {
 
     private Context context;
     private List<OrderDetailBean.ExtrasBean.RefundChoicesBean> refund_choices;
+    private boolean[] flag;
 
     public RefundTypeAdapter(Context context, List<OrderDetailBean.ExtrasBean.RefundChoicesBean> refund_choices) {
         this.context = context;
         this.refund_choices = refund_choices;
+        flag = new boolean[refund_choices.size()];
+        for (int i = 0; i < flag.length; i++) {
+            flag[i] = false;
+        }
     }
 
     @Override
@@ -33,8 +38,8 @@ public class RefundTypeAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
-        return position;
+    public OrderDetailBean.ExtrasBean.RefundChoicesBean getItem(int position) {
+        return refund_choices.get(position);
     }
 
     @Override
@@ -48,6 +53,7 @@ public class RefundTypeAdapter extends BaseAdapter {
         ImageView icon = (ImageView) convertView.findViewById(R.id.refund_iv);
         TextView name = (TextView) convertView.findViewById(R.id.refund_tv);
         TextView desc = (TextView) convertView.findViewById(R.id.refund_tv_desc);
+        ((RadioButton) convertView.findViewById(R.id.refund_rb)).setChecked(flag[position]);
         name.setText(refund_choices.get(position).getName());
         desc.setText(refund_choices.get(position).getDesc());
         if ("budget".equals(refund_choices.get(position).getRefund_channel())) {
@@ -55,6 +61,28 @@ public class RefundTypeAdapter extends BaseAdapter {
         } else {
             icon.setImageResource(R.drawable.icon_return);
         }
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (int i = 0; i < flag.length; i++) {
+                    if (position == i) {
+                        flag[i] = true;
+                    } else {
+                        flag[i] = false;
+                    }
+                }
+                RefundTypeAdapter.this.notifyDataSetChanged();
+            }
+        });
         return convertView;
+    }
+
+    public int getSelect() {
+        for (int i = 0; i < flag.length; i++) {
+            if (flag[i]) {
+                return i;
+            }
+        }
+        return -1;
     }
 }

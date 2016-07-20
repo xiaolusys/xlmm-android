@@ -4,14 +4,15 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import cn.iwgang.countdownview.CountdownView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -22,20 +23,15 @@ import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.event.TimeEvent;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
+import com.jimei.xiaolumeimei.widget.loadingdialog.XlmmLoadingDialog;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
-
-import org.greenrobot.eventbus.EventBus;
-
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import cn.iwgang.countdownview.CountdownView;
+import org.greenrobot.eventbus.EventBus;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -64,6 +60,7 @@ public class YesterdayV2Fragment extends BaseFragment {
     private CountdownView countTime;
     private long left;
     private Thread thread;
+    private XlmmLoadingDialog loadingdialog;
 
     public static YesterdayV2Fragment newInstance(String title) {
         YesterdayV2Fragment yesterdayV2Fragment = new YesterdayV2Fragment();
@@ -175,7 +172,6 @@ public class YesterdayV2Fragment extends BaseFragment {
                     while (left > 0) {
                         left--;
                         SystemClock.sleep(1);
-                        FragmentActivity activity = getActivity();
                         if (activity != null) {
                             activity.runOnUiThread(new Runnable() {
                                 @Override
@@ -192,11 +188,11 @@ public class YesterdayV2Fragment extends BaseFragment {
     }
 
     private void initViews() {
-        head = LayoutInflater.from(getActivity())
+        head = LayoutInflater.from(activity)
                 .inflate(R.layout.today_poster_header,
                         (ViewGroup) view.findViewById(R.id.head_today), false);
         countTime = (CountdownView) head.findViewById(R.id.countTime);
-        GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
+        GridLayoutManager manager = new GridLayoutManager(activity, 2);
         //manager.setOrientation(GridLayoutManager.VERTICAL);
         //manager.setSmoothScrollbarEnabled(true);
         xRecyclerView.setLayoutManager(manager);
@@ -208,7 +204,7 @@ public class YesterdayV2Fragment extends BaseFragment {
         xRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
         xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
         xRecyclerView.setPullRefreshEnabled(false);
-        mPreviousAdapter = new PreviousAdapter(this, getActivity());
+        mPreviousAdapter = new PreviousAdapter(this, activity);
         xRecyclerView.addHeaderView(head);
         xRecyclerView.setAdapter(mPreviousAdapter);
 
@@ -225,7 +221,7 @@ public class YesterdayV2Fragment extends BaseFragment {
                     loadMoreData(page, 10);
                     page++;
                 } else {
-                    Toast.makeText(getActivity(), "没有更多了啦,去购物吧", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, "没有更多了啦,去购物吧", Toast.LENGTH_SHORT).show();
                     xRecyclerView.post(xRecyclerView::loadMoreComplete);
                 }
             }
@@ -295,19 +291,17 @@ public class YesterdayV2Fragment extends BaseFragment {
         }
     }
 
+
     public void showIndeterminateProgressDialog(boolean horizontal) {
-        materialDialog = new MaterialDialog.Builder(getActivity())
-                //.title(R.string.progress_dialog)
-                .content(R.string.please_wait)
-                .progress(true, 0)
-                .widgetColorRes(R.color.colorAccent)
-                .progressIndeterminateStyle(horizontal)
-                .show();
+        loadingdialog = XlmmLoadingDialog.create(activity)
+            .setStyle(XlmmLoadingDialog.Style.SPIN_INDETERMINATE)
+            .setCancellable(!horizontal)
+            .show();
     }
 
     public void hideIndeterminateProgressDialog() {
         try {
-            materialDialog.dismiss();
+            loadingdialog.dismiss();
         } catch (Exception e) {
             e.printStackTrace();
         }

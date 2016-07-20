@@ -7,11 +7,20 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
+import com.jimei.xiaolumeimei.entities.RedBagBean;
+import com.jimei.xiaolumeimei.model.MamaInfoModel;
+import com.jimei.xiaolumeimei.model.TradeModel;
+import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jude.utils.JUtils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+
+import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye on 2016/6/24.
@@ -23,6 +32,7 @@ public class MMInfoPresenter extends MMInfoContract.Presenter {
   List<RecentCarryBean.ResultsEntity> show_refund = new ArrayList<>();
 
   @Override public void getShareShopping() {
+    mView.showLoading();
     mRxManager.add(mModel.getShareShopping().subscribe(mmShoppingBean -> {
       /*mRxManager.post("mmShoppingBean",mmShoppingBean);*/
       if (null != mmShoppingBean) mView.initShareInfo(mmShoppingBean);
@@ -35,6 +45,13 @@ public class MMInfoPresenter extends MMInfoContract.Presenter {
         mView.initMMdata(mamaFortune);
         mView.initMMview(mamaFortune);
       }
+    }, Throwable::printStackTrace));
+  }
+
+  @Override
+  public void getMamaUrl() {
+    mRxManager.add(mModel.getMamaUrl().subscribe(mamaUrl -> {
+      mView.initMamaUrl(mamaUrl);
     }, Throwable::printStackTrace));
   }
 
@@ -150,20 +167,31 @@ public class MMInfoPresenter extends MMInfoContract.Presenter {
   }
 
   public void getRecentCarry() {
-    mRxManager.add(
-        mModel.getRecentCarry("0", Integer.toString(MAX_RECENT_DAYS)).subscribe(recentCarryBean -> {
-          if (null != recentCarryBean) {
-            his_refund.clear();
-            his_refund.addAll(recentCarryBean.getResults());
+    mRxManager.add(mModel.getRecentCarry("0", Integer.toString(MAX_RECENT_DAYS))
+        .subscribe(new ServiceResponse<RecentCarryBean>() {
+          @Override public void onError(Throwable e) {
+            super.onError(e);
+          }
 
-            if ((his_refund.size() > 0)) {
-              mView.init_chart();
-              setDataOfThisWeek();
+          @Override public void onNext(RecentCarryBean recentCarryBean) {
+            if (null != recentCarryBean) {
+              his_refund.clear();
+              his_refund.addAll(recentCarryBean.getResults());
 
-              if (his_refund.get(0) != null) {
-                mView.initTodatText(his_refund);
+              if ((his_refund.size() > 0)) {
+                mView.init_chart();
+                setDataOfThisWeek();
+
+                if (his_refund.get(0) != null) {
+                  mView.initTodatText(his_refund);
+                }
               }
             }
+          }
+
+          @Override public void onCompleted() {
+            super.onCompleted();
+            mView.hideLoading();
           }
         }));
   }

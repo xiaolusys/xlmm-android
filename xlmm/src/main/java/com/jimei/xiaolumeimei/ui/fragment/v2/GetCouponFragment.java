@@ -33,6 +33,7 @@ public class GetCouponFragment extends DialogFragment {
   @Bind(R.id.close) ImageView close;
   private Activity mActivity;
   private Subscription subscription1;
+  private Subscription subscription;
 
   public static GetCouponFragment newInstance(String title) {
     GetCouponFragment todayFragment = new GetCouponFragment();
@@ -85,9 +86,9 @@ public class GetCouponFragment extends DialogFragment {
                 JUtils.Log("getCoupon", "onnext");
                 if (getCouponbeanResponse != null) {
                   if (getCouponbeanResponse.isSuccessful()) {
-                    dismiss();
                     JUtils.Log("getCoupon", "onnext == " + getCouponbeanResponse.body().toString());
                     JUtils.Toast(getCouponbeanResponse.body().getInfo());
+                    dismiss();
                   }
                 }
               }
@@ -105,7 +106,12 @@ public class GetCouponFragment extends DialogFragment {
 
   @Override public void onDestroyView() {
     super.onDestroyView();
-    if (subscription1 != null && subscription1.isUnsubscribed()) subscription1.unsubscribe();
+    if (subscription1 != null && subscription1.isUnsubscribed()) {
+      subscription1.unsubscribe();
+    }
+    if (subscription != null && subscription.isUnsubscribed()) {
+      subscription.unsubscribe();
+    }
     ButterKnife.unbind(this);
   }
 
@@ -121,5 +127,9 @@ public class GetCouponFragment extends DialogFragment {
   @Override public void onPause() {
     super.onPause();
     MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+  }
+
+  @Override public void onDestroy() {
+    super.onDestroy();
   }
 }

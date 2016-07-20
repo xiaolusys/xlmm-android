@@ -2,18 +2,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rlayout_order_lefttime"
-    android:layout_width="fill_parent"
-    android:layout_height="60dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:layout_alignParentBottom="true"
     android:layout_gravity="bottom"
     android:background="#ffffff"
-    android:padding="4dp"
+    android:padding="10dp"
     android:visibility="invisible">
 
     <LinearLayout
         android:id="@+id/llayout_order_lefttime"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical"
         android:visibility="invisible">
@@ -52,32 +52,21 @@
 
     </LinearLayout>
 
-    <Button
+    <ImageView
         android:id="@+id/btn_order_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/btn_order_proc"
         android:layout_toStartOf="@+id/btn_order_proc"
-        android:background="@drawable/text_frame"
-        android:gravity="center"
-        android:text="取消订单"
-        android:textColor="@color/colorAccent"
-        android:textSize="10sp" />
+        android:background="@drawable/cancel_order_btn" />
 
-    <Button
+    <ImageView
         android:id="@+id/btn_order_proc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="8dp"
-        android:background="@drawable/shape_common"
-        android:gravity="center"
-        android:text="立即支付"
-        android:textColor="@color/white"
-        android:textSize="10sp" />
-
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/pay_order_btn" />
 
 </RelativeLayout>

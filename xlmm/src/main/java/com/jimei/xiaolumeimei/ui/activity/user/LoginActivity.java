@@ -11,17 +11,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-
+import butterknife.Bind;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.wechat.friends.Wechat;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.GetCouponbean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
-import com.jimei.xiaolumeimei.event.EmptyEvent;
+import com.jimei.xiaolumeimei.event.UserInfoEmptyEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
-import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
@@ -32,18 +35,10 @@ import com.jude.utils.JUtils;
 import com.mob.tools.utils.UIHandler;
 import com.umeng.analytics.MobclickAgent;
 import com.xiaomi.mipush.sdk.MiPushClient;
-
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-
-import butterknife.Bind;
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.PlatformActionListener;
-import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.wechat.friends.Wechat;
+import org.greenrobot.eventbus.EventBus;
 import retrofit2.Response;
 import retrofit2.adapter.rxjava.HttpException;
 import rx.Subscription;
@@ -75,6 +70,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
   private String actlink;
   private String title;
   private int id;
+  private Wechat wechat;
 
   public static String getRandomString(int length) {
     //length表示生成字符串的长度
@@ -104,7 +100,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void initData() {
     if (!LoginUtils.checkLoginState(getApplicationContext())) {
-      removeWX(new Wechat(this));
+      removeWX(wechat);
     }
   }
 
@@ -132,8 +128,6 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
     return false;
   }
 
-  //save user information
-
   @Override protected TransitionMode getOverridePendingTransitionMode() {
     return null;
   }
@@ -158,7 +152,8 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
         //sha1 签名
         sign = SHA1Utils.hex_sha1(sign_params);
         JUtils.Log(TAG, "sign=" + sign);
-        authorize(new Wechat(this));
+        wechat = new Wechat(this);
+        authorize(wechat);
         break;
       case R.id.sms_login:
         Intent intent = new Intent(LoginActivity.this, SmsLoginActivity.class);
@@ -238,7 +233,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                 if (codeBean != null) {
                   int code = codeBean.getRcode();
                   if (0 == code) {
-
+                  EventBus.getDefault().post(new UserInfoEmptyEvent());
                     JUtils.Toast("登录成功");
                     Subscription subscribe = UserModel.getInstance()
                         .need_set_info()
@@ -249,11 +244,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                             //set xiaomi push useraccount
                             LoginUtils.setPushUserAccount(LoginActivity.this,
                                 MiPushClient.getRegId(getApplicationContext()));
-
-                            //                                                        int codeInfo = needSetInfoBean.getCode();
-                            //                                                        if (0 == codeInfo) {
                             hideIndeterminateProgressDialog();
-
                             LoginUtils.saveLoginSuccess(true, getApplicationContext());
                             String login = null;
                             if (null != getIntent() && getIntent().getExtras() != null) {
@@ -271,8 +262,6 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                               } else if (login.equals("product")) {
                                 finish();
                               } else if (login.equals("main")) {
-                                Intent intent = new Intent(mContext, MainActivity.class);
-                                startActivity(intent);
                                 finish();
                               } else if (login.equals("point")) {
                                 Intent intent = new Intent(mContext, MembershipPointActivity.class);
@@ -283,11 +272,9 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                 startActivity(intent);
                                 finish();
                               } else if (login.equals("axiba")) {
-                                Intent intent = new Intent(mContext, MainActivity.class);
-                                startActivity(intent);
                                 finish();
                               } else if (login.equals("coupon")) {
-                                Intent intent = new Intent(mContext, CouponActivity.class);
+                                Intent intent = new Intent(mContext, AllCouponActivity.class);
                                 startActivity(intent);
                                 finish();
                               } else if (login.equals("productdetail")) {
@@ -307,12 +294,10 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                 startActivity(intent);
                                 finish();
                               } else if (login.equals("prodcutweb")) {
-                                EventBus.getDefault().postSticky(new EmptyEvent());
                                 JumpUtils.jumpToWebViewWithCookies(mContext, actlink, -1,
                                     ProductPopDetailActvityWeb.class);
                                 finish();
                               } else if (login.equals("goactivity")) {
-                                EventBus.getDefault().postSticky(new EmptyEvent());
                                 JumpUtils.jumpToWebViewWithCookies(mContext, actlink, id,
                                     ActivityWebViewActivity.class, title);
                                 finish();
@@ -330,9 +315,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                                 "onnext == " + getCouponbeanResponse.body()
                                                     .toString());
                                             JUtils.Toast(getCouponbeanResponse.body().getInfo());
-                                            Intent intent =
-                                                new Intent(mContext, MainActivity.class);
-                                            startActivity(intent);
+
                                             finish();
                                           }
                                         }
@@ -348,35 +331,11 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                 addSubscription(subscription1);
                               }
                             }
-                            //                                                        } else if (1 == codeInfo) {
-                            //                                                            hideIndeterminateProgressDialog();
-                            //                                                            LoginUtils.saveLoginSuccess(true, getApplicationContext());
-                            //                                                            JUtils.Toast("登录成功，已绑定手机号");
-                            //                                                            JUtils.Log(TAG, "code=1,login succ,need reset pwd");
-                            //                                                            Intent intent =
-                            //                                                                    new Intent(LoginActivity.this, MainActivity.class);
-                            //                                                            startActivity(intent);
-                            //
-                            //                                                            finish();
-                            //                                                        } else if (2 == codeInfo) {
-                            //                                                            hideIndeterminateProgressDialog();
-                            //                                                            LoginUtils.saveLoginSuccess(true, getApplicationContext());
-                            //                                                            JUtils.Toast("登录成功,前往绑定手机");
-                            //                                                            Intent intent = new Intent(LoginActivity.this,
-                            //                                                                    WxLoginBindPhoneActivity.class);
-                            //                                                            Bundle bundle = new Bundle();
-                            //                                                            bundle.putString("headimgurl", headimgurl);
-                            //                                                            bundle.putString("nickname", nickname);
-                            //                                                            intent.putExtras(bundle);
-                            //                                                            startActivity(intent);
-                            //
-                            //                                                            finish();
-                            //                                                        }
                           }
                         });
                     addSubscription(subscribe);
                   } else {
-                    removeWX(new Wechat(LoginActivity.this));
+                    removeWX(wechat);
                     hideIndeterminateProgressDialog();
                     JUtils.Toast(codeBean.getMsg());
                   }
@@ -388,11 +347,11 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
       }
 
       @Override public void onError(Platform platform, int i, Throwable throwable) {
-        removeWX(new Wechat(LoginActivity.this));
+        removeWX(wechat);
       }
 
       @Override public void onCancel(Platform platform, int i) {
-        removeWX(new Wechat(LoginActivity.this));
+        removeWX(wechat);
         hideIndeterminateProgressDialog();
       }
     });
@@ -428,11 +387,11 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void onStop() {
     super.onStop();
-    removeWX(new Wechat(this));
   }
 
   @Override protected void onDestroy() {
     super.onDestroy();
+    removeWX(wechat);
     ShareSDK.stopSDK(this);
   }
 
@@ -448,5 +407,6 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
     MobclickAgent.onPageEnd(this.getClass().getSimpleName());
     MobclickAgent.onPause(this);
   }
+
 }
 

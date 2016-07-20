@@ -3,16 +3,14 @@ package com.jimei.xiaolumeimei.xlmmService;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.entities.AddCartsBean;
 import com.jimei.xiaolumeimei.entities.AddressBean;
+import com.jimei.xiaolumeimei.entities.AddressDownloadResultBean;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
-import com.jimei.xiaolumeimei.entities.AgentInfoBean;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.entities.AllowanceBean;
 import com.jimei.xiaolumeimei.entities.AwardCarryBean;
 import com.jimei.xiaolumeimei.entities.BindInfoBean;
 import com.jimei.xiaolumeimei.entities.BrandListBean;
-import com.jimei.xiaolumeimei.entities.BrandpromotionBean;
-import com.jimei.xiaolumeimei.entities.BudgetPayBean;
 import com.jimei.xiaolumeimei.entities.BudgetdetailBean;
 import com.jimei.xiaolumeimei.entities.CarryLogListBean;
 import com.jimei.xiaolumeimei.entities.CartsHisBean;
@@ -23,9 +21,9 @@ import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.entities.ClickcarryBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.CouponBean;
+import com.jimei.xiaolumeimei.entities.CouponEntity;
 import com.jimei.xiaolumeimei.entities.DrawCouponBean;
 import com.jimei.xiaolumeimei.entities.GetCouponbean;
-import com.jimei.xiaolumeimei.entities.IndexBean;
 import com.jimei.xiaolumeimei.entities.IsGetcoupon;
 import com.jimei.xiaolumeimei.entities.LadyListBean;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
@@ -36,22 +34,21 @@ import com.jimei.xiaolumeimei.entities.MMHavaChooseResultBean;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.MMStoreBean;
 import com.jimei.xiaolumeimei.entities.MMVisitorsBean;
+import com.jimei.xiaolumeimei.entities.MaMaReNewBean;
 import com.jimei.xiaolumeimei.entities.MamaFansBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.MamaLivenessBean;
+import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.entities.MembershipPointBean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
 import com.jimei.xiaolumeimei.entities.NicknameBean;
 import com.jimei.xiaolumeimei.entities.NinePicBean;
 import com.jimei.xiaolumeimei.entities.OderCarryBean;
-import com.jimei.xiaolumeimei.entities.OneDayAgentOrdersBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
-import com.jimei.xiaolumeimei.entities.PackageBean;
 import com.jimei.xiaolumeimei.entities.PayInfoBean;
 import com.jimei.xiaolumeimei.entities.PointLogBean;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.PostActivityBean;
-import com.jimei.xiaolumeimei.entities.PostBean;
 import com.jimei.xiaolumeimei.entities.PotentialFans;
 import com.jimei.xiaolumeimei.entities.ProductBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
@@ -65,9 +62,6 @@ import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.ResultBean;
 import com.jimei.xiaolumeimei.entities.ShareProductBean;
 import com.jimei.xiaolumeimei.entities.ShopProductBean;
-import com.jimei.xiaolumeimei.entities.ShoppingListBean;
-import com.jimei.xiaolumeimei.entities.SmsLoginBean;
-import com.jimei.xiaolumeimei.entities.SmsLoginUserBean;
 import com.jimei.xiaolumeimei.entities.StartBean;
 import com.jimei.xiaolumeimei.entities.UserAccountBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
@@ -107,10 +101,6 @@ public interface XlmmService {
             @Field("username") String username,
             @Field("password") String password);
 
-    //童装列表
-    @GET("/rest/v1/products/childlist")
-    Observable<ChildListBean> getChildList();
-
     //童装分页列表
     @GET("/rest/v1/products/childlist")
     Observable<ChildListBean> getChildList(
@@ -123,11 +113,6 @@ public interface XlmmService {
             @Query("page") int page,
             @Query("page_size") int page_size,
             @Query("order_by") String order_by);
-
-
-    //女装列表
-    @GET("/rest/v1/products/ladylist")
-    Observable<LadyListBean> getLadyList();
 
     //女装分页列表
     @GET("/rest/v1/products/ladylist")
@@ -147,18 +132,6 @@ public interface XlmmService {
     Observable<ProductListBean> getTodayList(
             @Query("page") int page,
             @Query("page_size") int page_size);
-
-    //今日海报列表
-    @GET("/rest/v1/posters/today")
-    Observable<PostBean> getTodayPost();
-
-    //昨日海报列表
-    @GET("/rest/v1/posters/previous")
-    Observable<PostBean> getYestDayPost();
-
-    //昨日列表
-    @GET("/rest/v1/products/promote_previous")
-    Observable<IndexBean> getYestDayList();
 
     //昨日分页列表
     @GET("/rest/v2/products/yesterday")
@@ -188,19 +161,15 @@ public interface XlmmService {
     Observable<ProductDetailBean> getProductDetails(
             @Path("id") String id);
 
-
     //添加购物车
     @FormUrlEncoded
     @POST("/rest/v1/carts")
     Observable<AddCartsBean> addCarts(
-
             @Field("item_id") String itemId,
             @Field("sku_id") String skuId
     );
 
-
     //获取购物车信息
-
     @GET("/rest/v2/carts")
     Observable<List<CartsinfoBean>> getCartsList();
 
@@ -221,7 +190,6 @@ public interface XlmmService {
             @Query("device") String app
     );
 
-
     //获取购物信息列表
     @GET("/rest/v1/carts/carts_payinfo")
     Observable<CartsPayinfoBean> getCartsPayInfoList(
@@ -238,23 +206,6 @@ public interface XlmmService {
             @Field("cart_id") String cart_id
     );
 
-    //创建订单接口
-
-    @FormUrlEncoded
-    @POST("/rest/v1/trades/shoppingcart_create")
-    Observable<ResponseBody> shoppingcart_create(
-            @Field("cart_ids") String cart_ids,
-            @Field("addr_id") String addr_id,
-            @Field("channel") String channel,
-            @Field("payment") String payment,
-            @Field("post_fee") String post_fee,
-            @Field("discount_fee") String discount_fee,
-            @Field("total_fee") String total_fee,
-            @Field("pay_extras") String pay_extras,
-            @Field("uuid") String uuid
-    );
-
-
     @FormUrlEncoded
     @POST("/rest/v2/trades/shoppingcart_create")
     Observable<PayInfoBean> shoppingcart_create_v2(
@@ -270,79 +221,28 @@ public interface XlmmService {
             @Field("logistics_company_id") String code
     );
 
-
-    @FormUrlEncoded
-    @POST("/rest/v1/trades/shoppingcart_create")
-    Observable<BudgetPayBean> shoppingcart_createBudget(
-            @Field("cart_ids") String cart_ids,
-            @Field("addr_id") String addr_id,
-            @Field("channel") String channel,
-            @Field("payment") String payment,
-            @Field("post_fee") String post_fee,
-            @Field("discount_fee") String discount_fee,
-            @Field("total_fee") String total_fee,
-            @Field("pay_extras") String pay_extras,
-            @Field("uuid") String uuid
-    );
-
-    //使用优惠券
-    @FormUrlEncoded
-    @POST("/rest/v1/trades/shoppingcart_create")
-    Observable<ResponseBody> shoppingcart_create_with_coupon(
-            @Field("cart_ids") String cart_ids,
-            @Field("addr_id") String addr_id,
-            @Field("channel") String channel,
-            @Field("payment") String payment,
-            @Field("post_fee") String post_fee,
-            @Field("discount_fee") String discount_fee,
-            @Field("total_fee") String total_fee,
-            @Field("pay_extras") String pay_extras,
-            @Field("uuid") String uuid,
-            @Field("coupon_id") String coupon_id
-    );
-
-    //使用优惠券
-    @FormUrlEncoded
-    @POST("/rest/v1/trades/shoppingcart_create")
-    Observable<BudgetPayBean> shoppingcart_createBudget_with_coupon(
-            @Field("cart_ids") String cart_ids,
-            @Field("addr_id") String addr_id,
-            @Field("channel") String channel,
-            @Field("payment") String payment,
-            @Field("post_fee") String post_fee,
-            @Field("discount_fee") String discount_fee,
-            @Field("total_fee") String total_fee,
-            @Field("pay_extras") String pay_extras,
-            @Field("uuid") String uuid,
-            @Field("coupon_id") String coupon_id
-    );
-
     //立即支付订单接口
-
-    @POST("/rest/v1/trades/{pk}/charge")
-    Observable<ResponseBody> shoppingcart_paynow(
-            @Path("pk") int order_id
-
+    @FormUrlEncoded
+    @POST("/rest/v2/trades/{pk}/charge")
+    Observable<PayInfoBean> orderPayWithChannel(
+            @Path("pk") int order_id,
+            @Field("channel") String channel
     );
 
     //获得订单数据
     @GET("/rest/v2/trades/{pk}")
     Observable<OrderDetailBean> getOrderDetail(
-            @Path("pk") int order_id);
-
-    //根据订单号获取包裹信息
-    @GET("/rest/packageskuitem")
-    Observable<ArrayList<PackageBean>> getPackageList(
-            @Query("sale_trade_id") String sale_trade_id
+            @Path("pk") int order_id,
+            @Query("device") String device
     );
 
     //获取所有待支付订单
-    @GET("/rest/v1/trades/waitpay")
+    @GET("/rest/v2/trades/waitpay")
     Observable<AllOrdersBean> getWaitPayOrdersBean(
             @Query("page") String page);
 
     //获取所有待发货订单
-    @GET("/rest/v1/trades/waitsend")
+    @GET("/rest/v2/trades/waitsend")
     Observable<AllOrdersBean> getWaitSendOrdersBean(
             @Query("page") String page);
 
@@ -350,23 +250,6 @@ public interface XlmmService {
     @GET("/rest/v1/refunds")
     Observable<AllRefundsBean> getAllRedundsList(
             @Query("page") String page);
-
-
-    //获取注册验证码
-    @FormUrlEncoded
-    @POST("/rest/v1/register")
-    Observable<RegisterBean> getRegisterCheckCode(
-            @Field("vmobile") String vmobile
-    );
-
-    //注册
-    @FormUrlEncoded
-    @POST("/rest/v1/register/check_vcode")
-    Observable<RegisterBean> check_code_user(
-            @Field("mobile") String username,
-            @Field("vcode") String valid_code
-    );
-
 
     //创建新的地址
     @FormUrlEncoded
@@ -415,26 +298,15 @@ public interface XlmmService {
     @GET("/rest/v1/address")
     Observable<List<AddressBean>> getAddressList();
 
-    //获取某一个地址
-    @GET("/rest/v1/address")
-    Observable<AddressBean> getOneAddressList();
-
     //删除某一个地址
     @POST("/rest/v1/address/{id}/delete_address")
     Observable<AddressResultBean> delete_address(
             @Path("id") String id
     );
 
-    //设置默认地址
-    @POST("/rest/v1/address/{id}/change_default")
-    Observable<AddressResultBean> change_default(
-            @Path("id") String id
-    );
-
     //获取用户信息
     @GET("/rest/v1/users/profile")
     Observable<UserInfoBean> getUserInfo();
-
 
     //投诉建议
     @FormUrlEncoded
@@ -460,14 +332,6 @@ public interface XlmmService {
             @Field("password2") String password2
     );
 
-    //获取修改密码时验证码
-    @FormUrlEncoded
-    @POST("/rest/v1/register/change_pwd_code")
-    Observable<RegisterBean> getChgPasswordCheckCode(
-            @Field("vmobile") String vmobile
-    );
-
-
     @POST("/rest/v1/users/customer_logout")
     Observable<LogOutBean> customer_logout();
 
@@ -486,32 +350,17 @@ public interface XlmmService {
             @Query("page") String page
     );
 
+    //获取优惠券
+    @GET("/rest/v1/usercoupons/get_user_coupons")
+    Observable<ArrayList<CouponEntity>> getCouponList(
+            @Query("status") int status
+    );
+
     //获取用户未使用优惠券信息
     @GET("/rest/v1/usercoupons")
     Observable<CouponBean> getUnusedCouponBean(
-            @Query("page") String page
+            @Query("page") int page
     );
-
-    //获取用户过期优惠券信息
-    @GET("/rest/v1/usercoupons/list_past_coupon")
-    Observable<CouponBean> getPastCouponBean();
-
-    //获取短信登录验证码
-    @FormUrlEncoded
-    @POST("/rest/v1/register/send_code")
-    Observable<SmsLoginBean> getSmsCheckCode(
-            @Field("mobile") String mobile
-    );
-
-
-    //短信登录
-    @FormUrlEncoded
-    @POST("/rest/v1/register/sms_login")
-    Observable<SmsLoginUserBean> smsLogin(
-            @Field("mobile") String username,
-            @Field("sms_code") String valid_code
-    );
-
 
     //购物车增加一件
     @POST("/rest/v2/carts/{id}/plus_product_carts")
@@ -572,18 +421,6 @@ public interface XlmmService {
             @Field("proof_pic") String proof_pic
     );
 
-    //修改退款单
-    @FormUrlEncoded
-    @POST("/rest/v1/refunds")
-    Observable<ResponseBody> update_refund_info(
-            @Field("id") int goods_id,
-            @Field("modify") int type,
-            @Field("reason") int reason,
-            @Field("num") int num,
-            @Field("sum_price") double sum_price,
-            @Field("description") String description
-    );
-
     //添加退款物流信息
     @FormUrlEncoded
     @POST("/rest/v1/refunds")
@@ -613,10 +450,6 @@ public interface XlmmService {
             @Field("openid") String openid,
             @Field("unionid") String unionid,
             @Field("devtype") String devtype);
-
-    @GET("/rest/v1/pmt/xlmm/agency_info")
-    Observable<AgentInfoBean> getAgentInfoBean(
-    );
 
     @GET("/rest/v1/pmt/cashout")
     Observable<WithdrawCashHisBean> getWithdrawCashHis(
@@ -716,13 +549,6 @@ public interface XlmmService {
     Observable<NeedSetInfoBean> need_set_info(
     );
 
-    //绑定手机获取验证码
-    @FormUrlEncoded
-    @POST("/rest/v1/users/bang_mobile_code")
-    Observable<BindInfoBean> bang_mobile_code(
-            @Field("vmobile") String vmobile
-    );
-
     @FormUrlEncoded
     @POST("/rest/v1/users/bang_mobile")
     Observable<BindInfoBean> bang_mobile(
@@ -732,55 +558,24 @@ public interface XlmmService {
             @Field("valid_code") String valid_code
     );
 
-    @FormUrlEncoded
-    @POST("/rest/v1/users/bang_mobile_unpassword")
-    Observable<BindInfoBean> bang_mobile_unpassword(
-            @Field("username") String username,
-            @Field("valid_code") String valid_code
-    );
-
-
-    //MM订单历史
-    @GET("/rest/v1/pmt/shopping")
-    Observable<ShoppingListBean> getShoppingList(
-
-            @Query("page") String page
-    );
-
     //MM历史收益
     @GET("/rest/v1/pmt/carrylog")
     Observable<CarryLogListBean> getCarrylogList(
-
             @Query("page") String page
     );
-
 
     @GET("/rest/v1/pmt/carrylog/get_clk_list")
     Observable<AllowanceBean> getAllowance(
             @Query("page") String page
     );
 
-
-    //活动内容分享
-    @FormUrlEncoded
-    @POST("/rest/v1/pmt/free_order/get_share_content")
-    Observable<ActivityBean> get_share_content(
-            @Field("ufrom") String ufrom
-    );
-
     //活动内容分享
     @GET("/rest/v1/activitys/{id}/get_share_params")
     Observable<ActivityBean> get_party_share_content(@Path("id") String id);
 
-    //获得one day小鹿妈妈订单记录
-    @GET("/rest/v1/pmt/shopping/shops_by_day")
-    Observable<OneDayAgentOrdersBean> getOneDayAgentOrders(
-            @Query("days") String day);
-
-    //获得one day小鹿妈妈订单记录
-    @GET("/rest/v1/pmt/shopping/days_num")
-    Observable<List<Integer>> getLatestAgentOrders(
-            @Query("days") String day);
+    //品牌
+    @GET("/rest/v1/activitys/{id}")
+    Observable<BrandListBean> getBrandList(@Path("id") String id);
 
     //获得商品详情共享页面信息
     @GET("/rest/v1/share/product")
@@ -861,10 +656,6 @@ public interface XlmmService {
 
     @GET("/rest/v1/address/get_logistic_companys")
     Observable<List<LogisticCompany>> getLogisticCompany(
-    );
-
-    @GET("/rest/v1/address/get_logistic_companys")
-    Observable<List<LogisticCompany>> getLogisticCompany(
             @Query("referal_trade_id") int referal_trade_id
     );
 
@@ -906,7 +697,6 @@ public interface XlmmService {
             @Field("product") String id
     );
 
-
     //发送验证码
     @FormUrlEncoded
     @POST("/rest/v2/send_code")
@@ -914,7 +704,6 @@ public interface XlmmService {
             @Field("mobile") String mobile,
             @Field("action") String action
     );
-
 
     //验证码验证
     @FormUrlEncoded
@@ -944,16 +733,6 @@ public interface XlmmService {
             @Field("next") String next,
             @Field("devtype") String devtype);
 
-
-    @GET("/rest/v2/weixinapplogin")
-    Observable<CodeBean> wxlogin(@Query("noncestr") String noncestr,
-                                 @Query("timestamp") String timestamp,
-                                 @Query("sign") String sign);
-
-    //获取物流信息
-    @GET("/rest/v1/wuliu/get_wuliu_by_tid")
-    Observable<LogisticsBean> get_logistics(@Query("tid") String tid);
-
     //获取物流信息
     @GET("/rest/v1/wuliu/get_wuliu_by_packetid")
     Observable<LogisticsBean> get_logistics_by_packagetid(
@@ -961,25 +740,8 @@ public interface XlmmService {
             @Query("company_code") String company_code
     );
 
-
     @GET("/rest/v1/portal")
-    Observable<PortalBean> getPortalBean(
-
-    );
-
-    @GET("/rest/v1/brands/{id}/products")
-    Observable<BrandpromotionBean> getBrandList(
-            @Path("id") int id,
-            @Query("page") int page,
-            @Query("page_size") int page_size
-    );
-
-    @GET("/rest/v1/brands/{id}/products")
-    Observable<BrandListBean> getBrandListProducts(
-            @Path("id") int id,
-            @Query("page") int page,
-            @Query("page_size") int page_size
-    );
+    Observable<PortalBean> getPortalBean();
 
     @FormUrlEncoded
     @POST("/rest/v1/users/open_debug_for_app")
@@ -998,15 +760,40 @@ public interface XlmmService {
     @POST("/rest/v2/sharecoupon/create_order_share")
     Observable<RedBagBean> getRedBag(
             @Field("uniq_id") String uniq_id
-
     );
 
     @GET("rest/v1/usercoupons/get_register_gift_coupon")
-    Observable<Response<GetCouponbean>> getCouPon(
-    );
-
+    Observable<Response<GetCouponbean>> getCouPon();
 
     @GET("/rest/v1/usercoupons/is_picked_register_gift_coupon")
-    Observable<Response<IsGetcoupon>> isCouPon(
+    Observable<Response<IsGetcoupon>> isCouPon();
+
+    @GET("/rest/v1/mmwebviewconfig")
+    Observable<MamaUrl> getMamaUrl(
+            @Query("version") String version
+    );
+
+    @GET("/rest/v1/districts/latest_version")
+    Observable<AddressDownloadResultBean> getAddressVersionAndUrl(
+
+    );
+
+    @GET("/rest/v1/pmt/xlmm/get_register_pro_info")
+    Observable<MaMaReNewBean> getRegisterProInfo(
+
+    );
+
+    @FormUrlEncoded
+    @POST("/rest/v1/pmt/xlmm/mama_register_pay")
+    Observable<Response<ResponseBody>> mamaRegisterPay(
+        @Field("product_id")    String product_id,
+        @Field("sku_id")        String sku_id,
+        @Field("payment")       String payment,
+        @Field("channel")       String channel,
+        @Field("num")           String num,
+        @Field("post_fee")      String post_fee,
+        @Field("discount_fee")  String discount_fee,
+        @Field("uuid")          String uuid,
+        @Field("total_fee")     String total_fee
     );
 }

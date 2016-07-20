@@ -92,7 +92,8 @@
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".ui.activity.trade.CartActivity"
-            android:theme="@style/AppTheme.TransparentActivity" />
+            android:theme="@style/AppTheme.TransparentActivity"
+            android:launchMode="singleTask"/>
         <activity
             android:name=".ui.activity.trade.CartsPayInfoActivity"
             android:theme="@style/AppTheme.TransparentActivity"
@@ -175,12 +176,6 @@
             android:name=".ui.activity.user.EditPasswordActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
-            android:name=".ui.activity.user.CouponActivity"
-            android:theme="@style/AppTheme.TransparentActivity" />
-        <activity
-            android:name=".ui.activity.user.CouponSelectActivity"
-            android:theme="@style/AppTheme.TransparentActivity" />
-        <activity
             android:name=".ui.activity.user.VerifyPhoneForgetActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
@@ -208,7 +203,8 @@
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".ui.activity.trade.WriteLogisticsInfoActivty"
-            android:theme="@style/AppTheme.TransparentActivity" />
+            android:theme="@style/AppTheme.TransparentActivity"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ui.activity.product.SizeActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
@@ -403,13 +399,26 @@
         <activity
             android:name=".ui.activity.xiaolumama.DrawCouponResultActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
-
         <activity
             android:name=".ui.mminfo.MMInfoActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
-
         <activity
             android:name=".ui.activity.xiaolumama.MMLevelExamWebViewActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
+        <activity
+            android:name=".ui.activity.xiaolumama.MamaReNewActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
+        <activity
+            android:name=".ui.xlmmmain.MainActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
+        <activity
+            android:name=".ui.activity.user.AllCouponActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
+        <activity
+            android:name=".ui.activity.user.SelectCouponActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
+        <activity
+            android:name=".ui.activity.user.CouponSelectActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
 
         <service
@@ -454,6 +463,7 @@
                 <action android:name="com.xiaomi.mipush.ERROR" />
             </intent-filter>
         </receiver>
+
     </application>
 
 </manifest>

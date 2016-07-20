@@ -18,6 +18,7 @@ import com.jimei.xiaolumeimei.adapter.CouponListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.CouponBean;
+import com.jimei.xiaolumeimei.entities.CouponEntity;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -42,7 +43,7 @@ public class CouponSelectActivity extends BaseSwipeBackCompatActivity
     @Bind(R.id.lv_unused_coupon)
     ListView lv_unused_coupon;
     int unused_num = 0;
-    List<CouponBean.ResultsBean> list = new ArrayList<>();
+    List<CouponEntity> list = new ArrayList<>();
     String selected_couponid;
     private CouponListAdapter mCouponAdapter;
     private int page = 2;
@@ -93,7 +94,7 @@ public class CouponSelectActivity extends BaseSwipeBackCompatActivity
             public void onScrollStateChanged(AbsListView view, int scrollState) {
                 if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
                     if (view.getLastVisiblePosition() == view.getCount() - 1) {
-                        loadMoreData(page + "");
+                        loadMoreData(page);
                         page++;
                     }
                 }
@@ -111,23 +112,23 @@ public class CouponSelectActivity extends BaseSwipeBackCompatActivity
     //从server端获得所有订单数据，可能要查询几次
     @Override
     protected void initData() {
-        loadMoreData("1");
+        loadMoreData(1);
     }
 
-    private void loadMoreData(String page) {
+    private void loadMoreData(int page) {
         UserModel.getInstance()
                 .getUnusedCouponBean(page)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<CouponBean>() {
                     @Override
                     public void onNext(CouponBean couponBean) {
-                        List<CouponBean.ResultsBean> results = couponBean.getResults();
+                        List<CouponEntity> results = couponBean.getResults();
                         list.addAll(results);
                         unused_num = results.size();
                         if (0 != results.size()) {
                             rl_empty.setVisibility(View.INVISIBLE);
-                            List<CouponBean.ResultsBean> unusedList = new ArrayList<>();
-                            for (CouponBean.ResultsBean result : results) {
+                            List<CouponEntity> unusedList = new ArrayList<>();
+                            for (CouponEntity result : results) {
                                 if (result.getStatus() == 0) {
                                     unusedList.add(result);
                                 }
@@ -172,7 +173,7 @@ public class CouponSelectActivity extends BaseSwipeBackCompatActivity
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        CouponBean.ResultsBean resultsEntity = list.get(position);
+        CouponEntity resultsEntity = list.get(position);
         String coupon_id = resultsEntity.getId() + "";
         double coupon_value = resultsEntity.getCoupon_value();
         Intent intent = new Intent();

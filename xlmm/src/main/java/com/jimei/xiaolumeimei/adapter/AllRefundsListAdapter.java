@@ -62,6 +62,7 @@ public class AllRefundsListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         Log.d(TAG, "getView ");
         ViewHolder holder;
+        AllRefundsBean.ResultsEntity entity = datas.get(position);
         if (convertView == null) {
             convertView =
                     LayoutInflater.from(context).inflate(R.layout.refunds_list_item, null);
@@ -71,21 +72,31 @@ public class AllRefundsListAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.no.setText("退款编号：" + datas.get(position).getRefund_no());
-        holder.state.setText(datas.get(position).getStatus_display());
-        holder.refundfee.setText("¥" + datas.get(position).getRefund_fee());
-
-        ViewUtils.loadImgToImgView(context, holder.img_goods, datas.get(position).getPic_path());
-        if (datas.get(position).getTitle().length() >= 9) {
-            holder.name.setText(datas.get(position).getTitle().substring(0, 8) + "...");
+        holder.state.setTextColor(context.getResources().getColor(R.color.colorAccent));
+        holder.warn.setVisibility(View.GONE);
+        if (entity.isHas_good_return()) {
+            holder.flag.setImageResource(R.drawable.icon_return_goods_mini);
+            holder.type.setText("退货退款");
+        } else if ("".equals(entity.getRefund_channel())
+                || "budget".equals(entity.getRefund_channel())) {
+            holder.flag.setImageResource(R.drawable.icon_fast_return_mini);
+            holder.type.setText("极速退款");
         } else {
-            holder.name.setText(datas.get(position).getTitle());
+            holder.flag.setImageResource(R.drawable.icon_return_mini);
+            holder.type.setText("退款");
         }
-        holder.price.setText("¥" + datas.get(position).getPayment());
-        holder.size.setText("尺码:" + datas.get(position).getSku_name());
-        holder.num.setText("");
-
-
+        if (entity.getStatus() == 4) {
+            holder.state.setText("请寄回商品");
+            holder.state.setTextColor(context.getResources().getColor(R.color.coupon_red));
+            holder.warn.setVisibility(View.VISIBLE);
+        } else {
+            holder.state.setText(entity.getStatus_display());
+        }
+        ViewUtils.loadImgToImgView(context, holder.good, entity.getPic_path());
+        holder.name.setText(entity.getTitle());
+        holder.size.setText("尺寸:" + entity.getSku_name());
+        holder.payment.setText("交易金额:" + entity.getPayment() + "x" + entity.getRefund_num());
+        holder.refund.setText("退款金额:" + entity.getRefund_fee() + "x" + entity.getRefund_num());
         return convertView;
     }
 
@@ -98,18 +109,20 @@ public class AllRefundsListAdapter extends BaseAdapter {
     }
 
     private class ViewHolder {
-        ImageView img_goods;
-        TextView no, state, refundfee, name, price, size, num;
+
+        ImageView flag, good, warn;
+        TextView type, state, name, size, payment, refund;
 
         public ViewHolder(View itemView) {
-            no = (TextView) itemView.findViewById(R.id.tx_refund_no);
-            state = (TextView) itemView.findViewById(R.id.tx_refund_state);
-            refundfee = (TextView) itemView.findViewById(R.id.tx_refundfee);
-            name = (TextView) itemView.findViewById(R.id.tx_good_name);
-            price = (TextView) itemView.findViewById(R.id.tx_good_price);
-            size = (TextView) itemView.findViewById(R.id.tx_good_size);
-            num = (TextView) itemView.findViewById(R.id.tx_good_num);
-            img_goods = ((ImageView) itemView.findViewById(R.id.img_good));
+            flag = ((ImageView) itemView.findViewById(R.id.flag));
+            type = ((TextView) itemView.findViewById(R.id.type));
+            state = ((TextView) itemView.findViewById(R.id.state));
+            good = ((ImageView) itemView.findViewById(R.id.good));
+            warn = ((ImageView) itemView.findViewById(R.id.warn));
+            name = ((TextView) itemView.findViewById(R.id.name));
+            size = ((TextView) itemView.findViewById(R.id.size));
+            payment = ((TextView) itemView.findViewById(R.id.payment));
+            refund = ((TextView) itemView.findViewById(R.id.refund));
         }
     }
 }

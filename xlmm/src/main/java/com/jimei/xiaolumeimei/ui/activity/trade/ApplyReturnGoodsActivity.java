@@ -90,7 +90,7 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
     @Bind(R.id.et_refund_reason)
     EditText et_refund_reason;
     @Bind(R.id.imgbtn_camera_pic)
-    ImageButton imgbtn_camera_pic;
+    ImageView imgbtn_camera_pic;
     @Bind(R.id.btn_commit)
     Button btn_commit;
     @Bind(R.id.rl_proof_pic1)
@@ -259,7 +259,7 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
         tx_good_name.setText(goods.getTitle());
         tx_good_price.setText("￥" + goods.getTotal_fee());
 
-        tx_good_size.setText("尺码：" + goods.getSku_name());
+        tx_good_size.setText(goods.getSku_name());
         tx_good_num.setText("×" + goods.getNum());
 
         num = goods.getNum();

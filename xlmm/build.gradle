@@ -22,8 +22,8 @@ android {
 
         targetSdkVersion 23
 
-        versionCode 20160705
-        versionName "1.1.8.1"
+        versionCode 20160714
+        versionName "1.1.9"
 
         multiDexEnabled = true
 
@@ -210,4 +210,6 @@ dependencies {
     compile files('libs/ShareSDK-Wechat-Core-2.7.2.jar')
     compile files('libs/ShareSDK-Wechat-Favorite-2.7.2.jar')
     compile files('libs/ShareSDK-Wechat-Moments-2.7.2.jar')
+    compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.android.support:recyclerview-v7:23.4.0'
 }
