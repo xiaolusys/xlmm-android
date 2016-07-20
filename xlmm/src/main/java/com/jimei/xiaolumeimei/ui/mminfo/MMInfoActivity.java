@@ -422,7 +422,10 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
         break;
       case R.id.rl_two_dimen:
 
-        JumpUtils.jumpToWebViewWithCookies(this, mamaResult.getInvite(), 26,
+        /*JumpUtils.jumpToWebViewWithCookies(this, mamaResult.getInvite(), 26,
+            MMShareCodeWebViewActivity.class, "");*/
+
+        JumpUtils.jumpToWebViewWithCookies(this, "http://m.xiaolumeimei.com/mall/mama/invited", 26,
             MMShareCodeWebViewActivity.class, "");
 
         break;
