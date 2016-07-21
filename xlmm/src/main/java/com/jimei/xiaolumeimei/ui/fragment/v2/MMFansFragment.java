@@ -24,6 +24,7 @@ import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.widget.DividerItemDecorationForFooter;
 import com.jimei.xiaolumeimei.widget.loadingdialog.XlmmLoadingDialog;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ import rx.schedulers.Schedulers;
  */
 public class MMFansFragment extends BaseFragment {
   @Bind(R.id.xrv_mmvisitors) XRecyclerView xrvMmvisitors;
-  private int page = 2;
+  private int pageNext = 2;
   private MamaFansAdapter mAdapter;
 
   List<MamaFansBean.ResultsEntity> list = new ArrayList<>();
@@ -141,8 +142,9 @@ public class MMFansFragment extends BaseFragment {
       }
 
       @Override public void onLoadMore() {
-        loadMoreData(page + "");
-        page++;
+        loadMoreData(pageNext + "");
+        pageNext++;
+        JUtils.Log("fansXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",pageNext+"");
       }
     });
   }
@@ -170,15 +172,18 @@ public class MMFansFragment extends BaseFragment {
             if (fansBeen != null) {
               mAdapter.update(fansBeen.getResults());
               if (null != fansBeen.getNext()) {
+
               } else {
                 Toast.makeText(mActivity, "没有更多了", Toast.LENGTH_SHORT).show();
                 xrvMmvisitors.post(xrvMmvisitors::loadMoreComplete);
+                xrvMmvisitors.setLoadingMoreEnabled(false);
               }
             }
           }
 
           @Override public void onCompleted() {
             super.onCompleted();
+
             xrvMmvisitors.post(xrvMmvisitors::loadMoreComplete);
           }
         });

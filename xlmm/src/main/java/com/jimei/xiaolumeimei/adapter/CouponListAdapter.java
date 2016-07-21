@@ -114,7 +114,6 @@ public class CouponListAdapter extends BaseAdapter {
         }
         return convertView;
     }
-
     class ViewHolder {
         TextView tv_coupon_value;
         TextView tv_coupon_info;

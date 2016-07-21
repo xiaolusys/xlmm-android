@@ -183,6 +183,7 @@ public class CarryLogBounsFragment extends BaseFragment {
               } else {
                 Toast.makeText(context, "没有更多了", Toast.LENGTH_SHORT).show();
                 xRecyclerView.post(xRecyclerView::loadMoreComplete);
+                xRecyclerView.setLoadingMoreEnabled(false);
               }
             }
           }

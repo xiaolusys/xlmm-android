@@ -34,6 +34,7 @@ import com.jimei.xiaolumeimei.entities.MMHavaChooseResultBean;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.MMStoreBean;
 import com.jimei.xiaolumeimei.entities.MMVisitorsBean;
+import com.jimei.xiaolumeimei.entities.MaMaReNewBean;
 import com.jimei.xiaolumeimei.entities.MamaFansBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.MamaLivenessBean;
@@ -775,5 +776,24 @@ public interface XlmmService {
     @GET("/rest/v1/districts/latest_version")
     Observable<AddressDownloadResultBean> getAddressVersionAndUrl(
 
+    );
+
+    @GET("/rest/v1/pmt/xlmm/get_register_pro_info")
+    Observable<MaMaReNewBean> getRegisterProInfo(
+
+    );
+
+    @FormUrlEncoded
+    @POST("/rest/v1/pmt/xlmm/mama_register_pay")
+    Observable<Response<ResponseBody>> mamaRegisterPay(
+        @Field("product_id")    String product_id,
+        @Field("sku_id")        String sku_id,
+        @Field("payment")       String payment,
+        @Field("channel")       String channel,
+        @Field("num")           String num,
+        @Field("post_fee")      String post_fee,
+        @Field("discount_fee")  String discount_fee,
+        @Field("uuid")          String uuid,
+        @Field("total_fee")     String total_fee
     );
 }
