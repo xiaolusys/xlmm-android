@@ -12,6 +12,10 @@ import retrofit2.adapter.rxjava.HttpException;
  * Created by itxuye on 2016/7/4.
  */
 public class MainPresenter extends MainContract.Presenter {
+  public UserInfoBean getUserInfoNewBean() {
+    return userInfoNewBean;
+  }
+
   protected UserInfoBean userInfoNewBean;
 
   @Override public void getUserInfoBean() {

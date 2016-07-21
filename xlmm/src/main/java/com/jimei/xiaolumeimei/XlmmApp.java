@@ -14,7 +14,7 @@ import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.okhttp3.PersistentCookieJar;
 import com.jimei.xiaolumeimei.okhttp3.cache.SetCookieCache;
 import com.jimei.xiaolumeimei.okhttp3.persistence.SharedPrefsCookiePersistor;
-import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
+import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.utils.NetWorkUtil;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;

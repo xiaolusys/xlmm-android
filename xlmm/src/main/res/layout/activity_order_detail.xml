@@ -530,7 +530,7 @@
             android:layout_marginLeft="10dp"
             android:singleLine="true"
             android:ellipsize="end"
-            android:text="您获得一个红包可以分享给好友"
+            android:text="您获得十六个红包可以分享给好友"
             android:textColor="@color/white"
             android:textSize="14sp" />
 

@@ -23,9 +23,9 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.PostActivityBean;
 import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
-import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.WxLoginBindPhoneActivity;
+import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.widget.timecircleview.utils.DisplayUtil;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -157,11 +157,11 @@ public class MastFragment extends DialogFragment {
                                                                                 && (null
                                                                                 != mActivity)
                                                                                 && (null
-                                                                                != ((MainActivity) mActivity).getUserInfoBean())
+                                                                                != ((MainActivity) mActivity).mPresenter.getUserInfoNewBean())
                                                                                 && (null
-                                                                                != ((MainActivity) mActivity).getUserInfoBean()
+                                                                                != ((MainActivity) mActivity).mPresenter.getUserInfoNewBean()
                                                                                 .getMobile())
-                                                                                && !(((MainActivity) mActivity).getUserInfoBean()
+                                                                                && !(((MainActivity) mActivity).mPresenter.getUserInfoNewBean()
                                                                                 .getMobile()
                                                                                 .isEmpty())) {
                                                                             dismiss();
@@ -212,14 +212,13 @@ public class MastFragment extends DialogFragment {
                                                                                 JUtils.Toast("登录成功,前往绑定手机号后才可参加活动");
                                                                                 Intent intent = new Intent(mActivity,
                                                                                         WxLoginBindPhoneActivity.class);
-                                                                                if (null
-                                                                                        != ((MainActivity) mActivity).getUserInfoBean()) {
+                                                                                if (null!= ((MainActivity) mActivity).mPresenter.getUserInfoNewBean()) {
                                                                                     Bundle bundle = new Bundle();
                                                                                     bundle.putString("headimgurl",
-                                                                                            ((MainActivity) mActivity).getUserInfoBean()
+                                                                                            ((MainActivity) mActivity).mPresenter.getUserInfoNewBean()
                                                                                                     .getThumbnail());
                                                                                     bundle.putString("nickname",
-                                                                                            ((MainActivity) mActivity).getUserInfoBean()
+                                                                                            ((MainActivity) mActivity).mPresenter.getUserInfoNewBean()
                                                                                                     .getNick());
                                                                                     intent.putExtras(bundle);
                                                                                 }
