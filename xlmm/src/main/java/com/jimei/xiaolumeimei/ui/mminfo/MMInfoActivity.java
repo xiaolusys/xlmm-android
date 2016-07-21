@@ -208,9 +208,9 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
     tv_invite_num.setText(fortune.getMamaFortune().getInviteNum() + "位");
     tv_fansnum.setText(fortune.getMamaFortune().getFansNum() + "人");
     tv_order.setText(s + "个");
-    //if (days<=15) {
+    if (days<=15) {
     mamaPay.setVisibility(View.VISIBLE);
-    //}
+    }
 
     tvShengyu.setText(days + "");
     tvYue.setText(fortune.getMamaFortune().getCashValue() + "");
@@ -218,7 +218,7 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
     tvHuoyue.setText(fortune.getMamaFortune().getActiveValueNum() + "");
     tvMamalevel.setText(fortune.getMamaFortune().getMamaLevelDisplay() + "");
     tvMamaVip.setText(fortune.getMamaFortune().getExtraInfo().getAgencylevelDisplay() + "");
-    mamaId.setText("id: " + fortune.getMamaFortune().getMamaId() + "");
+    mamaId.setText("ID: " + fortune.getMamaFortune().getMamaId() + "");
     if (!TextUtils.isEmpty(fortune.getMamaFortune().getExtraInfo().getThumbnail())) {
       setUserImage(fortune);
     }
@@ -422,11 +422,11 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
         break;
       case R.id.rl_two_dimen:
 
-        /*JumpUtils.jumpToWebViewWithCookies(this, mamaResult.getInvite(), 26,
-            MMShareCodeWebViewActivity.class, "");*/
-
-        JumpUtils.jumpToWebViewWithCookies(this, "http://m.xiaolumeimei.com/mall/mama/invited", 26,
+        JumpUtils.jumpToWebViewWithCookies(this, mamaResult.getInvite(), 26,
             MMShareCodeWebViewActivity.class, "");
+
+        /*JumpUtils.jumpToWebViewWithCookies(this, "http://m.xiaolumeimei.com/mall/mama/invited", 26,
+            MMShareCodeWebViewActivity.class, "");*/
 
         break;
       case R.id.rl_fans:
