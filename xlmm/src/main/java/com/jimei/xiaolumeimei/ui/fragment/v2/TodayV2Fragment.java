@@ -20,10 +20,10 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.TodayAdapter;
 import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
-import com.jimei.xiaolumeimei.event.TimeEvent;
 import com.jimei.xiaolumeimei.model.ProductModel;
-import com.jimei.xiaolumeimei.widget.loadingdialog.CustomMDdialog;
+import com.jimei.xiaolumeimei.utils.RxUtils;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
+import com.jimei.xiaolumeimei.widget.loadingdialog.CustomMDdialog;
 import com.jimei.xiaolumeimei.widget.loadingdialog.XlmmLoadingDialog;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
@@ -33,7 +33,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import org.greenrobot.eventbus.EventBus;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -110,7 +109,7 @@ public class TodayV2Fragment extends BaseFragment {
             if (null != productListBean) {
               JUtils.Log(TAG, Thread.currentThread().getName());
               upshelfStarttime = productListBean.getUpshelfStarttime();
-              EventBus.getDefault().post(new TimeEvent(upshelfStarttime));
+              //EventBus.getDefault().post(new v (upshelfStarttime));
             }
           }
         });
@@ -149,6 +148,7 @@ public class TodayV2Fragment extends BaseFragment {
     }
     subscribe1 = ProductModel.getInstance()
         .getTodayList(1, 10)
+        .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ProductListBean>() {
           @Override public void onError(Throwable e) {

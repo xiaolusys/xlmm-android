@@ -11,6 +11,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.ui.fragment.coupon.CouponFragment;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,9 +45,9 @@ public class AllCouponActivity extends BaseSwipeBackCompatActivity {
     @Override
     protected void initViews() {
         MainTabAdapter mAdapter = new MainTabAdapter(getSupportFragmentManager());
-        fragments.add(CouponFragment.newInstance(XlmmConst.UNUSED_COUPON, "未使用"));
-        fragments.add(CouponFragment.newInstance(XlmmConst.PAST_COUPON, "已过期"));
-        fragments.add(CouponFragment.newInstance(XlmmConst.USED_COUPON, "已使用"));
+        fragments.add(CouponFragment.newInstance(XlmmConst.UNUSED_COUPON, "未使用",mAdapter));
+        fragments.add(CouponFragment.newInstance(XlmmConst.PAST_COUPON, "已过期",mAdapter));
+        fragments.add(CouponFragment.newInstance(XlmmConst.USED_COUPON, "已使用",mAdapter));
         viewPager.setAdapter(mAdapter);
         viewPager.setOffscreenPageLimit(3);
         tabLayout.setupWithViewPager(viewPager);
@@ -63,7 +64,7 @@ public class AllCouponActivity extends BaseSwipeBackCompatActivity {
         return null;
     }
 
-    public class MainTabAdapter extends FragmentPagerAdapter{
+    public class MainTabAdapter extends FragmentPagerAdapter implements Serializable {
         FragmentManager fm;
 
         public MainTabAdapter(FragmentManager fm) {
