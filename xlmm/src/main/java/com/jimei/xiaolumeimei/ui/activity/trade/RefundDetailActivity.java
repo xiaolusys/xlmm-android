@@ -64,6 +64,14 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     RoundCornerImageView round_image2;
     @Bind(R.id.round_image3)
     RoundCornerImageView round_image3;
+    @Bind(R.id.rl_img)
+    RelativeLayout rl_img;
+    @Bind(R.id.rl_img1)
+    RelativeLayout rl_img1;
+    @Bind(R.id.rl_img2)
+    RelativeLayout rl_img2;
+    @Bind(R.id.rl_img3)
+    RelativeLayout rl_img3;
     @Bind(R.id.refund_type)
     TextView refundTypeTv;
     @Bind(R.id.refund_layout)
@@ -231,11 +239,12 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
         priceTv.setText("¥" + refundDetailBean.getRefund_fee());
         reasonTv.setText(refundDetailBean.getReason());
         RoundCornerImageView[] images = {round_image, round_image1, round_image2, round_image3};
+        RelativeLayout[] rls = {rl_img,rl_img1,rl_img2,rl_img3};
         if (refundDetailBean.getProof_pic().size() > 0) {
             for (int i = 0; i < refundDetailBean.getProof_pic().size(); i++) {
                 ViewUtils.loadImgToImgView(getApplicationContext(), images[i],
                         refundDetailBean.getProof_pic().get(i));
-                images[i].setVisibility(View.VISIBLE);
+                rls[i].setVisibility(View.VISIBLE);
             }
             imageLayout.setVisibility(View.VISIBLE);
         }
