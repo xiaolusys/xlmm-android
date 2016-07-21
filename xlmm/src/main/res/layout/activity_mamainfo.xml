@@ -51,15 +51,23 @@
                         android:layout_margin="8px"
                         android:clickable="true" />
                 </RelativeLayout>
-
+                <RelativeLayout
+                    android:id="@+id/mama_idrv"
+                    android:layout_below="@id/imgCircleStar"
+                    android:layout_width="130px"
+                    android:layout_height="30px"
+                    android:layout_marginLeft="75px"
+                    android:layout_marginTop="8px"
+                    android:clickable="true"
+                    android:gravity="center">
                 <TextView
+                    android:textSize="25px"
+                    android:layout_centerInParent="true"
                     android:id="@+id/mama_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/imgCircleStar"
-                    android:layout_marginLeft="115px"
                     android:textColor="@color/white" />
-
+</RelativeLayout>
                 <LinearLayout
                     android:id="@+id/ll"
                     android:layout_width="160px"
@@ -162,7 +170,7 @@
                     android:id="@+id/view1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/mama_id"
+                    android:layout_below="@id/mama_idrv"
                     android:layout_marginTop="35px"
                     android:scaleType="fitXY"
                     android:src="@drawable/line" />
@@ -170,7 +178,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="110px"
-                    android:layout_below="@+id/mama_id"
+                    android:layout_below="@+id/mama_idrv"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="10px"
                     android:layout_marginTop="50px"
