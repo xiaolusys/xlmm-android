@@ -146,6 +146,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     private String code;
     private String order_no = "";
     private int order_id = -1;
+    @Bind(R.id.jiesheng_price) TextView jiesheng_price;
 
     @Override
     protected void setListener() {
@@ -470,6 +471,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         extraBudget.setText("¥" + budgetCash);
         totalPrice.setText("¥" + (double) (Math.round(paymentInfo * 100)) / 100);
         totalPrice_all.setText("¥" + (double) (Math.round(paymentInfo * 100)) / 100);
+        jiesheng_price.setText("¥" + (double) (Math.round(jieshengjine * 100)) / 100);
     }
 
     @Override
