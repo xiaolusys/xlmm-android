@@ -7,15 +7,20 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 
 import butterknife.Bind;
+import rx.schedulers.Schedulers;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
+import com.jimei.xiaolumeimei.entities.CouponEntity;
+import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.fragment.coupon.CouponFragment;
 import com.jimei.xiaolumeimei.widget.SerialFragmentAdapter;
+import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class AllCouponActivity extends BaseSwipeBackCompatActivity {
     @Bind(R.id.tab_layout)
@@ -23,6 +28,7 @@ public class AllCouponActivity extends BaseSwipeBackCompatActivity {
     @Bind(R.id.view_pager)
     ViewPager viewPager;
     ArrayList<CouponFragment> fragments = new ArrayList<>();
+    List<String> titles = new ArrayList<>();
 
     @Override
     protected void setListener() {
@@ -46,14 +52,44 @@ public class AllCouponActivity extends BaseSwipeBackCompatActivity {
 
     @Override
     protected void initViews() {
-        MainTabAdapter mAdapter = new MainTabAdapter(getSupportFragmentManager());
-        fragments.add(CouponFragment.newInstance(XlmmConst.UNUSED_COUPON, "未使用", mAdapter));
-        fragments.add(CouponFragment.newInstance(XlmmConst.PAST_COUPON, "已过期", mAdapter));
-        fragments.add(CouponFragment.newInstance(XlmmConst.USED_COUPON, "已使用", mAdapter));
-        viewPager.setAdapter(mAdapter);
-        viewPager.setOffscreenPageLimit(3);
-        tabLayout.setupWithViewPager(viewPager);
-        tabLayout.setTabMode(TabLayout.MODE_FIXED);
+        showIndeterminateProgressDialog(false);
+        UserModel.getInstance()
+                .getCouponList(0)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ServiceResponse<ArrayList<CouponEntity>>() {
+                    @Override
+                    public void onNext(ArrayList<CouponEntity> couponEntities) {
+                        titles.add("未使用(" + couponEntities.size() + ")");
+                        UserModel.getInstance()
+                                .getCouponList(3)
+                                .subscribeOn(Schedulers.io())
+                                .subscribe(new ServiceResponse<ArrayList<CouponEntity>>() {
+                                    @Override
+                                    public void onNext(ArrayList<CouponEntity> couponEntities) {
+                                        titles.add("已过期(" + couponEntities.size() + ")");
+                                        UserModel.getInstance()
+                                                .getCouponList(1)
+                                                .subscribeOn(Schedulers.io())
+                                                .subscribe(new ServiceResponse<ArrayList<CouponEntity>>() {
+                                                    @Override
+                                                    public void onNext(ArrayList<CouponEntity> couponEntities) {
+                                                        titles.add("已使用(" + couponEntities.size() + ")");
+                                                        fragments.add(CouponFragment.newInstance(XlmmConst.UNUSED_COUPON));
+                                                        fragments.add(CouponFragment.newInstance(XlmmConst.PAST_COUPON));
+                                                        fragments.add(CouponFragment.newInstance(XlmmConst.USED_COUPON));
+                                                        MainTabAdapter mAdapter = new MainTabAdapter(getSupportFragmentManager());
+                                                        viewPager.setAdapter(mAdapter);
+                                                        viewPager.setOffscreenPageLimit(3);
+                                                        tabLayout.setupWithViewPager(viewPager);
+                                                        tabLayout.setTabMode(TabLayout.MODE_FIXED);
+                                                        hideIndeterminateProgressDialog();
+                                                    }
+                                                });
+                                    }
+                                });
+                    }
+                });
+
     }
 
     @Override
@@ -66,7 +102,7 @@ public class AllCouponActivity extends BaseSwipeBackCompatActivity {
         return null;
     }
 
-    public class MainTabAdapter extends SerialFragmentAdapter implements Serializable{
+    public class MainTabAdapter extends SerialFragmentAdapter implements Serializable {
 
         FragmentManager fm;
 
@@ -87,7 +123,7 @@ public class AllCouponActivity extends BaseSwipeBackCompatActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return fragments.get(position).getTitle();
+            return titles.get(position);
         }
     }
 }
