@@ -55,5 +55,4 @@ public class XlmmRetrofitClient {
                 .client(XlmmApp.client)
                 .build();
     }
-
 }
