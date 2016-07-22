@@ -515,9 +515,11 @@
                 android:visibility="gone">
 
                 <RelativeLayout
+                    android:id="@+id/rl_img"
                     android:layout_width="110px"
                     android:layout_height="110px"
                     android:layout_margin="8dp"
+                    android:visibility="invisible"
                     android:background="@drawable/choose_img_bg"
                     android:gravity="center">
 
@@ -531,9 +533,11 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/rl_img1"
                     android:layout_width="110px"
                     android:layout_height="110px"
                     android:layout_margin="8dp"
+                    android:visibility="invisible"
                     android:background="@drawable/choose_img_bg"
                     android:gravity="center">
 
@@ -547,9 +551,11 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/rl_img2"
                     android:layout_width="110px"
                     android:layout_height="110px"
                     android:layout_margin="8dp"
+                    android:visibility="invisible"
                     android:background="@drawable/choose_img_bg"
                     android:gravity="center">
 
@@ -563,10 +569,12 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/rl_img3"
                     android:layout_width="110px"
                     android:layout_height="110px"
                     android:layout_margin="8dp"
                     android:background="@drawable/choose_img_bg"
+                    android:visibility="invisible"
                     android:gravity="center">
 
                     <com.jimei.xiaolumeimei.widget.RoundCornerImageView

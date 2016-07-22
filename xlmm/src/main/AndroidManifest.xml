@@ -77,7 +77,6 @@
                     android:scheme="xlmm" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.main.MainActivity" />
         <activity
             android:name=".ui.activity.user.LoginActivity"
             android:theme="@style/AppTheme.TransparentActivity" />

@@ -31,15 +31,11 @@ public class CouponFragment extends BaseFragment {
     private View emptyView;
     private int status = 0;
     private XlmmLoadingDialog loadingdialog;
-    private int num;
-    private MainTabAdapter mAdapter;
 
-    public static CouponFragment newInstance(int type, String title, MainTabAdapter mAdapter) {
+    public static CouponFragment newInstance(int type) {
         CouponFragment fragment = new CouponFragment();
         Bundle args = new Bundle();
         args.putInt(TYPE, type);
-        args.putSerializable("adapter", mAdapter);
-        args.putString("title", title);
         fragment.setArguments(args);
         return fragment;
     }
@@ -60,34 +56,30 @@ public class CouponFragment extends BaseFragment {
             adapter = new CouponListAdapter(getContext());
             listView.setAdapter(adapter);
             loadMoreData();
-            mAdapter = (MainTabAdapter) getArguments().getSerializable("adapter");
         }
     }
 
     private void loadMoreData() {
         UserModel.getInstance()
-            .getCouponList(status)
-            .subscribeOn(Schedulers.io())
-            .subscribe(new ServiceResponse<ArrayList<CouponEntity>>() {
-                @Override
-                public void onNext(ArrayList<CouponEntity> couponEntities) {
-                    if (couponEntities.size() > 0) {
-                        num = couponEntities.size();
-                        emptyView.setVisibility(View.GONE);
-                        adapter.update(couponEntities, type, "");
-                        mAdapter.notifyDataSetChanged();
-                    } else {
-                        num = 0;
-                        emptyView.setVisibility(View.VISIBLE);
+                .getCouponList(status)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ServiceResponse<ArrayList<CouponEntity>>() {
+                    @Override
+                    public void onNext(ArrayList<CouponEntity> couponEntities) {
+                        if (couponEntities.size() > 0) {
+                            emptyView.setVisibility(View.GONE);
+                            adapter.update(couponEntities, type, "");
+                        } else {
+                            emptyView.setVisibility(View.VISIBLE);
+                        }
+                        hideIndeterminateProgressDialog();
                     }
-                    hideIndeterminateProgressDialog();
-                }
-            });
+                });
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-        Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_coupon, container, false);
         listView = ((ListView) view.findViewById(R.id.lv));
         emptyView = view.findViewById(R.id.empty_ll);
@@ -117,9 +109,9 @@ public class CouponFragment extends BaseFragment {
 
     public void showIndeterminateProgressDialog(boolean horizontal) {
         loadingdialog = XlmmLoadingDialog.create(activity)
-            .setStyle(XlmmLoadingDialog.Style.SPIN_INDETERMINATE)
-            .setCancellable(!horizontal)
-            .show();
+                .setStyle(XlmmLoadingDialog.Style.SPIN_INDETERMINATE)
+                .setCancellable(!horizontal)
+                .show();
     }
 
     public void hideIndeterminateProgressDialog() {
@@ -128,14 +120,5 @@ public class CouponFragment extends BaseFragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public String getTitle() {
-        String title = "";
-        if (getArguments() != null) {
-            title = getArguments().getString("title") + "(" + num + ")";
-        }
-        return title;
     }
 }

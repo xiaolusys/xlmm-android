@@ -16,7 +16,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.AllOrderAdapter;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
-import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
+import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
 import com.jimei.xiaolumeimei.widget.loadingdialog.XlmmLoadingDialog;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;

@@ -236,7 +236,7 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
               }
 
               @Override public void onResponse(Bitmap response, int id) {
-                if (null != response) {
+                if (null != response&&null!=imgUser) {
                   imgUser.setImageBitmap(response);
                 }
               }

@@ -129,7 +129,9 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                     ((TextView) convertView.findViewById(R.id.tx_order_crtstate)).setText(assign_status_display);
                 }
                 if ((orderDetailEntity.getPackage_orders().get(i).getBook_time() != null)
-                        && (orderDetailEntity.getStatus() == 2)) {
+                        && orderDetailEntity.getPackage_orders().get(i).getAssign_time() == null
+                        && orderDetailEntity.getPackage_orders().get(i).getFinish_time() == null
+                        && orderDetailEntity.getOrders().get(position).getStatus() == 2) {
                     Button btn = (Button) convertView.findViewById(R.id.btn_order_proc);
                     btn.setOnClickListener(new View.OnClickListener() {
                         @Override
