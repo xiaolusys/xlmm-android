@@ -21,9 +21,13 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.zhy.autolayout.config.AutoLayoutConifg;
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import rx.schedulers.Schedulers;
 
 //import com.squareup.leakcanary.LeakCanary;
@@ -106,8 +110,10 @@ public class XlmmApp extends MultiDexApplication {
     return new OkHttpClient.Builder().readTimeout(60000, TimeUnit.MILLISECONDS)
         .connectTimeout(60000, TimeUnit.MILLISECONDS)
         .writeTimeout(6000, TimeUnit.MILLISECONDS)
-        .cookieJar(new PersistentCookieJar(new SetCookieCache(),
-            new SharedPrefsCookiePersistor(mContext)))
+        .addInterceptor(
+            new UserAgentInterceptor("Android " + String.valueOf(BuildConfig.VERSION_CODE)))
+        .cookieJar(
+            new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(mContext)))
         .build();
   }
 
@@ -118,8 +124,7 @@ public class XlmmApp extends MultiDexApplication {
 
   private boolean shouldInit() {
     ActivityManager am = ((ActivityManager) getSystemService(Context.ACTIVITY_SERVICE));
-    List<ActivityManager.RunningAppProcessInfo> processInfos =
-        am.getRunningAppProcesses();
+    List<ActivityManager.RunningAppProcessInfo> processInfos = am.getRunningAppProcesses();
     String mainProcessName = getPackageName();
     int myPid = android.os.Process.myPid();
     for (ActivityManager.RunningAppProcessInfo info : processInfos) {
@@ -130,7 +135,6 @@ public class XlmmApp extends MultiDexApplication {
     return false;
   }
 
-
   //异常退出的时候,自动重启
   class MyUnCaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
     @Override public void uncaughtException(Thread thread, Throwable ex) {
@@ -140,6 +144,23 @@ public class XlmmApp extends MultiDexApplication {
       XlmmApp.this.startActivity(intent);
       android.os.Process.killProcess(android.os.Process.myPid());
       System.exit(1);
+    }
+  }
+
+  /* This interceptor adds a custom User-Agent. */
+  public class UserAgentInterceptor implements Interceptor {
+
+    private final String userAgent;
+
+    public UserAgentInterceptor(String userAgent) {
+      this.userAgent = userAgent;
+    }
+
+    @Override public Response intercept(Chain chain) throws IOException {
+      Request originalRequest = chain.request();
+      Request requestWithUserAgent =
+          originalRequest.newBuilder().header("User-Agent", userAgent).build();
+      return chain.proceed(requestWithUserAgent);
     }
   }
 }
