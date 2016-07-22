@@ -6,11 +6,11 @@ buildscript {
     maven { url "https://jitpack.io" }
     maven { url "http://dl.bintray.com/tbruyelle/tbruyelle" }
     mavenCentral()
-
   }
   dependencies {
     classpath 'com.android.tools.build:gradle:2.1.2'
     classpath 'me.tatarka:gradle-retrolambda:3.2.5'
+    classpath 'com.tencent.mm:AndResGuard-gradle-plugin:1.1.9'
   }
 }
 

@@ -400,6 +400,23 @@
                 android:textColor="@color/colorPrimary"
                 android:textSize="16sp" />
 
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="已节省"
+                android:layout_marginLeft="8dp"
+                android:textColor="#26262e"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/jiesheng_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:textColor="@color/colorPrimary"
+                android:textSize="16sp" />
+
         </LinearLayout>
 
         <Button

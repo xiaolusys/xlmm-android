@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'AndResGuard'
 
 def releaseTime() {
     return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
@@ -11,6 +12,45 @@ def keyStore = file('../xlmm/xlmm.jks')
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
+andResGuard {
+    mappingFile = null
+    use7zip = true
+    useSign = true
+    keepRoot = false
+    whiteList = [
+        //your icon
+        "R.mipmap.ic_launcher",
+        //for fabric
+        "R.string.com.crashlytics.*",
+        //for umeng update
+        "R.string.umeng*",
+        "R.string.UM*",
+        "R.string.tb_*",
+        "R.layout.umeng*",
+        "R.layout.tb_*",
+        "R.drawable.umeng*",
+        "R.drawable.tb_*",
+        "R.anim.umeng*",
+        "R.color.umeng*",
+        "R.color.tb_*",
+        "R.style.*UM*",
+        "R.style.umeng*",
+        "R.id.umeng*",
+        //umeng share for sina
+        "R.drawable.sina*"
+    ]
+    compressFilePattern = [
+        "*.png",
+        "*.jpg",
+        "*.jpeg",
+        "*.gif",
+        "resources.arsc"
+    ]
+    sevenzip {
+        artifact = 'com.tencent.mm:SevenZip:1.1.9'
+        //path = "/usr/local/bin/7za"
+    }
+}
 
 android {
     compileSdkVersion 23
