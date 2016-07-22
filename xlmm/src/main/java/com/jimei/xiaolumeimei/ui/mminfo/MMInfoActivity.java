@@ -425,6 +425,9 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
         JumpUtils.jumpToWebViewWithCookies(this, mamaResult.getInvite(), 26,
             MMShareCodeWebViewActivity.class, "");
 
+        /*JumpUtils.jumpToWebViewWithCookies(this, "http://www.aipai.com/", 26,
+            MMShareCodeWebViewActivity.class, "");*/
+
         /*JumpUtils.jumpToWebViewWithCookies(this, "http://m.xiaolumeimei.com/mall/mama/invited", 26,
             MMShareCodeWebViewActivity.class, "");*/
 
