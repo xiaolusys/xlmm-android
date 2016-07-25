@@ -7,13 +7,11 @@ import android.content.SharedPreferences;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
+import com.facebook.stetho.Stetho;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.mipush.XiaoMiMessageReceiver;
 import com.jimei.xiaolumeimei.model.UserModel;
-import com.jimei.xiaolumeimei.okhttp3.PersistentCookieJar;
-import com.jimei.xiaolumeimei.okhttp3.cache.SetCookieCache;
-import com.jimei.xiaolumeimei.okhttp3.persistence.SharedPrefsCookiePersistor;
 import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.utils.NetWorkUtil;
@@ -21,13 +19,7 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.zhy.autolayout.config.AutoLayoutConifg;
-import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import rx.schedulers.Schedulers;
 
 //import com.squareup.leakcanary.LeakCanary;
@@ -39,7 +31,6 @@ import rx.schedulers.Schedulers;
  */
 public class XlmmApp extends MultiDexApplication {
 
-  public static OkHttpClient client;
   private static Context mContext;
   private static XiaoMiMessageReceiver.XiaoMiPushHandler handler = null;
   private SharedPreferences cookiePrefs;
@@ -62,7 +53,7 @@ public class XlmmApp extends MultiDexApplication {
     //    Thread.setDefaultUncaughtExceptionHandler(new MyUnCaughtExceptionHandler());
     mContext = getApplicationContext();
     cookiePrefs = getSharedPreferences("xlmmCookiesAxiba", 0);
-    client = initOkHttpClient();
+    Stetho.initializeWithDefaults(this);
     JUtils.initialize(this);
     JUtils.setDebug(true, "xlmm");
     //CrashWoodpecker.fly(false).to(this);
@@ -104,19 +95,6 @@ public class XlmmApp extends MultiDexApplication {
     }
   }
 
-  //初始化OkHttpClient
-  private OkHttpClient initOkHttpClient() {
-
-    return new OkHttpClient.Builder().readTimeout(60000, TimeUnit.MILLISECONDS)
-        .connectTimeout(60000, TimeUnit.MILLISECONDS)
-        .writeTimeout(6000, TimeUnit.MILLISECONDS)
-        .addInterceptor(
-            new UserAgentInterceptor("Android " + String.valueOf(BuildConfig.VERSION_CODE)))
-        .cookieJar(
-            new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(mContext)))
-        .build();
-  }
-
   @Override protected void attachBaseContext(Context base) {
     super.attachBaseContext(base);
     MultiDex.install(this);
@@ -144,23 +122,6 @@ public class XlmmApp extends MultiDexApplication {
       XlmmApp.this.startActivity(intent);
       android.os.Process.killProcess(android.os.Process.myPid());
       System.exit(1);
-    }
-  }
-
-  /* This interceptor adds a custom User-Agent. */
-  public class UserAgentInterceptor implements Interceptor {
-
-    private final String userAgent;
-
-    public UserAgentInterceptor(String userAgent) {
-      this.userAgent = userAgent;
-    }
-
-    @Override public Response intercept(Chain chain) throws IOException {
-      Request originalRequest = chain.request();
-      Request requestWithUserAgent =
-          originalRequest.newBuilder().header("User-Agent", userAgent).build();
-      return chain.proceed(requestWithUserAgent);
     }
   }
 }
