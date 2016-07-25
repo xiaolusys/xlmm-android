@@ -3,7 +3,6 @@ package com.jimei.xiaolumeimei.xlmmService;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
-import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.data.XlmmApi;
@@ -37,9 +36,6 @@ public class XlmmRetrofitClient {
 
   static {
     initOkHttpClient();
-    if (BuildConfig.DEBUG) {
-      mOkHttpClient.newBuilder().addNetworkInterceptor(new StethoInterceptor());
-    }
   }
 
   public static XlmmService getService() {
@@ -106,6 +102,7 @@ public class XlmmRetrofitClient {
                   return chain.proceed(requestWithUserAgent);
                 }
               })
+              //.addNetworkInterceptor(new StethoInterceptor())
               .cookieJar(new PersistentCookieJar(new SetCookieCache(),
                   new SharedPrefsCookiePersistor(XlmmApp.getmContext())))
               .build();
