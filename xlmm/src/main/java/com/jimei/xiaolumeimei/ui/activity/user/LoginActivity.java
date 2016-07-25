@@ -311,6 +311,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                         JUtils.Log("getCoupon", "onnext");
                                         if (getCouponbeanResponse != null) {
                                           if (getCouponbeanResponse.isSuccessful()) {
+
                                             JUtils.Log("getCoupon",
                                                 "onnext == " + getCouponbeanResponse.body()
                                                     .toString());
