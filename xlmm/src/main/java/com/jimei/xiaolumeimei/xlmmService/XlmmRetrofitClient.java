@@ -37,9 +37,6 @@ public class XlmmRetrofitClient {
 
   static {
     initOkHttpClient();
-    if (BuildConfig.DEBUG) {
-      mOkHttpClient.newBuilder().addNetworkInterceptor(new StethoInterceptor());
-    }
   }
 
   public static XlmmService getService() {
@@ -106,6 +103,7 @@ public class XlmmRetrofitClient {
                   return chain.proceed(requestWithUserAgent);
                 }
               })
+              .addNetworkInterceptor(new StethoInterceptor())
               .cookieJar(new PersistentCookieJar(new SetCookieCache(),
                   new SharedPrefsCookiePersistor(XlmmApp.getmContext())))
               .build();
