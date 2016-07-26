@@ -419,7 +419,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
       scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(vp.getCurrentItem()));
 
       mPresenter.getAddressVersionAndUrl();
-
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -499,23 +498,29 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   }
 
   private void initUserNewView(UserInfoBean userNewBean) {
-    JUtils.Log(TAG, "userNewBean" + userNewBean.toString());
-    if (!TextUtils.isEmpty(userNewBean.getThumbnail())) {
-      ViewUtils.loadImgToImgView(MainActivity.this, imgUser, userNewBean.getThumbnail());
-    }
-    if (userNewBean.isHasUsablePassword() && userNewBean.getMobile() != "") {
-      loginFlag.setVisibility(View.GONE);
-    } else {
-      loginFlag.setVisibility(View.VISIBLE);
-    }
+    if (null != userNewBean) {
+      if (!TextUtils.isEmpty(userNewBean.getThumbnail())) {
+        ViewUtils.loadImgToImgView(MainActivity.this, imgUser, userNewBean.getThumbnail());
+      }
+      if (userNewBean.isHasUsablePassword() && userNewBean.getMobile() != "") {
+        loginFlag.setVisibility(View.GONE);
+      } else {
+        loginFlag.setVisibility(View.VISIBLE);
+      }
 
-    if (null != userNewBean.getUserBudget()) {
-      budgetCash = userNewBean.getUserBudget().getBudgetCash();
-    }
-    //JUtils.Log(TAG, "mamaid " + userNewBean.getXiaolumm().getId());
-    if ((userNewBean.getXiaolumm() != null) && (userNewBean.getXiaolumm().getId() != 0)) {
-      rl_mmentry.setVisibility(View.VISIBLE);
+      if (null != userNewBean.getUserBudget()) {
+        budgetCash = userNewBean.getUserBudget().getBudgetCash();
+      }
+      //JUtils.Log(TAG, "mamaid " + userNewBean.getXiaolumm().getId());
+      if ((userNewBean.getXiaolumm() != null) && (userNewBean.getXiaolumm().getId() != 0)) {
+        rl_mmentry.setVisibility(View.VISIBLE);
+      } else {
+        rl_mmentry.setVisibility(View.INVISIBLE);
+      }
     } else {
+      rl_mmentry.setVisibility(View.INVISIBLE);
+      loginFlag.setVisibility(View.GONE);
+      imgUser.setImageResource(R.drawable.img_head);
       rl_mmentry.setVisibility(View.INVISIBLE);
     }
   }
@@ -529,15 +534,51 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   }
 
   private void initSlideDraw(UserInfoBean userInfoBean) {
-    JUtils.Log(TAG, "侧滑栏初始化");
-    if (!(LoginUtils.checkLoginState(getApplicationContext()))) {
-      if (tvNickname != null) {
-        tvNickname.setText("点击登录");
-      }
-    } else {
-      if (tvNickname != null) {
-        tvNickname.setText(userInfoBean.getNick());
-      }
+    //JUtils.Log(TAG, "侧滑栏初始化");
+    //if (!(LoginUtils.checkLoginState(getApplicationContext()))) {
+    //  if (tvNickname != null) {
+    //    tvNickname.setText("点击登录");
+    //  }
+    //} else {
+    //  if (tvNickname != null) {
+    //    tvNickname.setText(userInfoBean.getNick());
+    //  }
+    //  if (!TextUtils.isEmpty(userInfoBean.getThumbnail())) {
+    //    ViewUtils.loadImgToImgView(MainActivity.this, imgUser, userInfoBean.getThumbnail());
+    //  }
+    //  if (userInfoBean.getWaitpayNum() > 0) {
+    //    msg1.setVisibility(View.VISIBLE);
+    //    msg1.setText(userInfoBean.getWaitpayNum() + "");
+    //  } else {
+    //    msg1.setVisibility(View.INVISIBLE);
+    //  }
+    //  Log.i(TAG, "" + userInfoBean.getWaitpayNum());
+    //
+    //  if (userInfoBean.getWaitgoodsNum() > 0) {
+    //    msg2.setVisibility(View.VISIBLE);
+    //    msg2.setText(userInfoBean.getWaitgoodsNum() + "");
+    //  } else {
+    //    msg2.setVisibility(View.INVISIBLE);
+    //  }
+    //
+    //  if (userInfoBean.getRefundsNum() > 0) {
+    //    msg3.setVisibility(View.VISIBLE);
+    //    msg3.setText(userInfoBean.getRefundsNum() + "");
+    //  } else {
+    //    msg3.setVisibility(View.INVISIBLE);
+    //  }
+    //  String pointStr = userInfoBean.getScore() + "";
+    //  tvPoint.setText(pointStr);
+    //  if (userInfoBean.getUserBudget() != null) {
+    //    String moneyStr =
+    //        (float) (Math.round(userInfoBean.getUserBudget().getBudgetCash() * 100)) / 100 + "";
+    //    tvMoney.setText(moneyStr);
+    //  }
+    //  String couponStr = userInfoBean.getCouponNum() + "";
+    //  tvCoupon.setText(couponStr);
+    //}
+    if (null != userInfoBean) {
+      tvNickname.setText(userInfoBean.getNick());
       if (!TextUtils.isEmpty(userInfoBean.getThumbnail())) {
         ViewUtils.loadImgToImgView(MainActivity.this, imgUser, userInfoBean.getThumbnail());
       }
@@ -548,14 +589,12 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         msg1.setVisibility(View.INVISIBLE);
       }
       Log.i(TAG, "" + userInfoBean.getWaitpayNum());
-
       if (userInfoBean.getWaitgoodsNum() > 0) {
         msg2.setVisibility(View.VISIBLE);
         msg2.setText(userInfoBean.getWaitgoodsNum() + "");
       } else {
         msg2.setVisibility(View.INVISIBLE);
       }
-
       if (userInfoBean.getRefundsNum() > 0) {
         msg3.setVisibility(View.VISIBLE);
         msg3.setText(userInfoBean.getRefundsNum() + "");
@@ -571,6 +610,15 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
       }
       String couponStr = userInfoBean.getCouponNum() + "";
       tvCoupon.setText(couponStr);
+    } else {
+      tvPoint.setText("0.00");
+      tvMoney.setText("0.00");
+      tvCoupon.setText("0.00");
+      imgUser.setImageResource(R.drawable.img_head);
+      tvNickname.setText("点击登录");
+      msg1.setVisibility(View.INVISIBLE);
+      msg2.setVisibility(View.INVISIBLE);
+      msg3.setVisibility(View.INVISIBLE);
     }
   }
 
@@ -837,7 +885,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
             }
           });
     }
-
   }
 
   private class MyFragmentAdapter extends FragmentPagerAdapter {

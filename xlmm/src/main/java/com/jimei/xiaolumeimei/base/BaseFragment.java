@@ -37,7 +37,7 @@ public abstract class BaseFragment extends Fragment
    */
   private boolean isFirstLoad = true;
 
-  protected Activity activity;
+  public Activity activity;
 
   @Override public void onAttach(Context context) {
     super.onAttach(context);

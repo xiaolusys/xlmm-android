@@ -6,21 +6,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
-import android.util.Log;
 import com.facebook.stetho.Stetho;
 import com.jimei.xiaolumeimei.data.XlmmConst;
-import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.mipush.XiaoMiMessageReceiver;
-import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
-import com.jimei.xiaolumeimei.utils.LoginUtils;
-import com.jimei.xiaolumeimei.utils.NetWorkUtil;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.zhy.autolayout.config.AutoLayoutConifg;
 import java.util.List;
-import rx.schedulers.Schedulers;
 
 //import com.squareup.leakcanary.LeakCanary;
 
@@ -68,30 +61,6 @@ public class XlmmApp extends MultiDexApplication {
 
     if (handler == null) {
       handler = new XiaoMiMessageReceiver.XiaoMiPushHandler(getApplicationContext());
-    }
-
-    //获取用户信息失败，说明要重新登陆
-    if (NetWorkUtil.isNetWorkConnected(this)) {
-
-      UserModel.getInstance()
-          .getUserInfo()
-          .subscribeOn(Schedulers.io())
-          .subscribe(new ServiceResponse<UserInfoBean>() {
-            @Override public void onNext(UserInfoBean user) {
-              Log.d("XlmmApp", "getUserInfo: " + user.toString());
-            }
-
-            @Override public void onCompleted() {
-              super.onCompleted();
-            }
-
-            @Override public void onError(Throwable e) {
-              LoginUtils.delLoginInfo(mContext);
-              e.printStackTrace();
-              Log.e("XlmmApp", "error getUserInfo");
-              super.onError(e);
-            }
-          });
     }
   }
 
