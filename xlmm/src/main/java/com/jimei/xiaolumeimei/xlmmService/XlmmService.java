@@ -58,7 +58,6 @@ import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
 import com.jimei.xiaolumeimei.entities.RedBagBean;
 import com.jimei.xiaolumeimei.entities.RefundMsgBean;
-import com.jimei.xiaolumeimei.entities.RegisterBean;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.ResultBean;
 import com.jimei.xiaolumeimei.entities.ShareProductBean;
@@ -70,10 +69,8 @@ import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.UserWithdrawResult;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.entities.WxPubAuthInfo;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import retrofit2.http.Body;
@@ -344,6 +341,10 @@ public interface XlmmService {
     //获取用户信息
     @GET("/rest/v1/users/profile")
     Observable<UserInfoBean> getProfile();
+
+    //获取用户信息
+    @GET("/rest/v1/users/profile")
+    Observable<Response<UserInfoBean>> getUserLoginInfo();
 
     //获取用户积分记录信息
     @GET("/rest/v1/integrallog")

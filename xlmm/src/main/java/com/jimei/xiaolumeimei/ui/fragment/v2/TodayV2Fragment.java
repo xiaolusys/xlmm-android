@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
@@ -23,7 +22,6 @@ import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.utils.RxUtils;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
-import com.jimei.xiaolumeimei.widget.loadingdialog.CustomMDdialog;
 import com.jimei.xiaolumeimei.widget.loadingdialog.XlmmLoadingDialog;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
@@ -48,7 +46,6 @@ public class TodayV2Fragment extends BaseFragment {
   int page_size = 10;
   Thread thread;
   private List<ProductListBean.ResultsEntity> list = new ArrayList<>();
-  private CustomMDdialog materialDialog;
   private int page = 2;
   private int totalPages;//总的分页数
   private TodayAdapter mTodayAdapter;
@@ -213,7 +210,6 @@ public class TodayV2Fragment extends BaseFragment {
           while (left > 0) {
             left--;
             SystemClock.sleep(1);
-            FragmentActivity activity = getActivity();
             if (activity != null) {
               activity.runOnUiThread(new Runnable() {
                 @Override public void run() {

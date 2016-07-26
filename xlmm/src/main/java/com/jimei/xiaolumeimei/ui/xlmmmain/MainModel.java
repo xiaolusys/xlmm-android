@@ -16,10 +16,10 @@ import rx.Observable;
  * Created by itxuye on 2016/7/4.
  */
 public class MainModel implements MainContract.Model {
-  @Override public Observable<UserInfoBean> getProfile() {
+  @Override public Observable<Response<UserInfoBean>> getProfile() {
     return XlmmRetrofitClient
         .getService()
-        .getProfile()
+        .getUserLoginInfo()
         .compose(RxSchedulers.io_main());
   }
 

@@ -59,6 +59,18 @@ public final class NetUtil {
         return netstate;
     }
 
+    public static String getNetType(Context context) {
+        if (isWifi(context)) {
+            return "WiFi";
+        }
+        if (is3G(context)) {
+            return "3G";
+        }
+        if (is4G(context)) {
+            return "4G";
+        }
+        return "2GOrOthers";
+    }
     /**
      * GPS是否打开
      *

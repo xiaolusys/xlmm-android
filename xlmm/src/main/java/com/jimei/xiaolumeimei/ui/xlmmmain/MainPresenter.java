@@ -1,12 +1,15 @@
 package com.jimei.xiaolumeimei.ui.xlmmmain;
 
 import android.support.v4.widget.SwipeRefreshLayout;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.utils.RxUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import java.util.Date;
+import retrofit2.Response;
 import retrofit2.adapter.rxjava.HttpException;
 
 /**
@@ -22,24 +25,15 @@ public class MainPresenter extends MainContract.Presenter {
   @Override public void getUserInfoBean() {
     mRxManager.add(mModel.getProfile()
         .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
-        .subscribe(userInfoBean -> {
-          if (null != userInfoBean) {
-            userInfoNewBean = userInfoBean;
-            mView.initDrawer(userInfoBean);
-            mView.initUserView(userInfoBean);
-          }
-        }, Throwable::printStackTrace));
-  }
-
-  @Override public void getUserInfoBeanFromLogin() {
-    mRxManager.add(mModel.getProfile()
-        .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
-        .subscribe(new ServiceResponse<UserInfoBean>() {
-          @Override public void onNext(UserInfoBean userInfoBean) {
-            if (null != userInfoBean) {
-              userInfoNewBean = userInfoBean;
-              mView.initDrawer(userInfoBean);
-              mView.initUserView(userInfoBean);
+        .subscribe(new ServiceResponse<Response<UserInfoBean>>() {
+          @Override public void onNext(Response<UserInfoBean> userInfoBeanResponse) {
+            if (null != userInfoBeanResponse) {
+              if (userInfoBeanResponse.isSuccessful()) {
+                UserInfoBean userInfoBean = userInfoBeanResponse.body();
+                userInfoNewBean = userInfoBean;
+                mView.initDrawer(userInfoBean);
+                mView.initUserView(userInfoBean);
+              }
             }
           }
 
@@ -48,9 +42,16 @@ public class MainPresenter extends MainContract.Presenter {
           }
 
           @Override public void onError(Throwable e) {
-            super.onError(e);
             if (e instanceof HttpException) {
-              e.printStackTrace();
+              if (((HttpException) e).code() == 403) {
+                try {
+                  LoginUtils.delLoginInfo(XlmmApp.getmContext());
+                  mView.initDrawer(null);
+                  mView.initUserView(null);
+                } catch (Exception e1) {
+                  e1.printStackTrace();
+                }
+              }
             }
           }
         }));

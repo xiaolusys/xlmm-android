@@ -20,7 +20,7 @@ import rx.Observable;
 public interface MainContract {
   interface Model extends BaseModel {
 
-    Observable<UserInfoBean> getProfile();
+    Observable<Response<UserInfoBean>> getProfile();
 
     Observable<Response<IsGetcoupon>> isCouPon();
 
@@ -62,15 +62,13 @@ public interface MainContract {
 
     void iniCartsNum(CartsNumResultBean cartsNumResultBean);
 
-    void  clickGetCounpon(ResponseBody responseBody);
+    void clickGetCounpon(ResponseBody responseBody);
 
     void downLoaAddressFile(AddressDownloadResultBean addressDownloadResultBean);
   }
 
   abstract class Presenter extends BasePresenter<Model, View> {
     public abstract void getUserInfoBean();
-
-    public abstract void getUserInfoBeanFromLogin();
 
     public abstract void isCouPon();
 
@@ -85,7 +83,6 @@ public interface MainContract {
     public abstract long calcLefttowTime(long crtTime);
 
     public abstract void getAddressVersionAndUrl();
-
 
     @Override public void onStart() {
     }
