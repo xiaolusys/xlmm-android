@@ -61,7 +61,7 @@ public final class NetUtil {
 
     public static String getNetType(Context context) {
         if (isWifi(context)) {
-            return "Wifi";
+            return "WiFi";
         }
         if (is3G(context)) {
             return "3G";
