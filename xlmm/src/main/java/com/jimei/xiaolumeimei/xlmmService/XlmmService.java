@@ -22,6 +22,7 @@ import com.jimei.xiaolumeimei.entities.ClickcarryBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.CouponBean;
 import com.jimei.xiaolumeimei.entities.CouponEntity;
+import com.jimei.xiaolumeimei.entities.CouponSelectEntity;
 import com.jimei.xiaolumeimei.entities.DrawCouponBean;
 import com.jimei.xiaolumeimei.entities.GetCouponbean;
 import com.jimei.xiaolumeimei.entities.IsGetcoupon;
@@ -356,6 +357,12 @@ public interface XlmmService {
             @Query("status") int status
     );
 
+    //购物车选择优惠券
+    @GET("/rest/v1/usercoupons/coupon_able")
+    Observable<CouponSelectEntity> getCouponSelectEntity(
+            @Query("cart_ids") String cart_ids
+    );
+
     //获取用户未使用优惠券信息
     @GET("/rest/v1/usercoupons")
     Observable<CouponBean> getUnusedCouponBean(
@@ -380,7 +387,7 @@ public interface XlmmService {
             @Path("id") String id
     );
 
-    //设置用户昵称
+    //确认签收
     @POST("/rest/v1/order/{id}/confirm_sign")
     Observable<UserBean> receiveGoods(
             @Path("id") int id);

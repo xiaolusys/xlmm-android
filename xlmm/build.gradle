@@ -18,36 +18,39 @@ andResGuard {
     useSign = true
     keepRoot = false
     whiteList = [
-        //your icon
-        "R.mipmap.ic_launcher",
-        //for fabric
-        "R.string.com.crashlytics.*",
-        //for umeng update
-        "R.string.umeng*",
-        "R.string.UM*",
-        "R.string.tb_*",
-        "R.layout.umeng*",
-        "R.layout.tb_*",
-        "R.drawable.umeng*",
-        "R.drawable.ssdk*",
-        "R.drawable.img_update*",
-        "R.drawable.update_*",
-        "R.drawable.tb_*",
-        "R.anim.umeng*",
-        "R.color.umeng*",
-        "R.color.tb_*",
-        "R.style.*UM*",
-        "R.style.umeng*",
-        "R.id.umeng*",
-        //umeng share for sina
-        "R.drawable.sina*"
+            //your icon
+            "R.mipmap.ic_launcher",
+            //for fabric
+            "R.string.com.crashlytics.*",
+            //for umeng update
+            "R.string.umeng*",
+            "R.string.UM*",
+            "R.string.tb_*",
+            "R.string.ssdk*",
+            "R.layout.umeng*",
+            "R.layout.tb_*",
+            "R.drawable.umeng*",
+            "R.drawable.ssdk*",
+            "R.drawable.img_update*",
+            "R.drawable.update_*",
+            "R.drawable.tb_*",
+            "R.drawable.tb_*",
+            "R.anim.umeng*",
+            "R.color.umeng*",
+            "R.color.tb_*",
+            "R.color.tb_*",
+            "R.style.*UM*",
+            "R.style.umeng*",
+            "R.id.umeng*",
+            //umeng share for sina
+            "R.drawable.sina*"
     ]
     compressFilePattern = [
-        "*.png",
-        "*.jpg",
-        "*.jpeg",
-        "*.gif",
-        "resources.arsc"
+            "*.png",
+            "*.jpg",
+            "*.jpeg",
+            "*.gif",
+            "resources.arsc"
     ]
     sevenzip {
         artifact = 'com.tencent.mm:SevenZip:1.1.9'
@@ -65,8 +68,8 @@ android {
 
         targetSdkVersion 23
 
-        versionCode 20160718
-        versionName "1.2.0"
+        versionCode 20160723
+        versionName "1.2.1"
 
         multiDexEnabled = true
 
@@ -228,10 +231,16 @@ android {
         }
 
     }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
 }
 
 
 dependencies {
+    testCompile 'junit:junit:4.12'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile files('libs/alipaySDK-20150818.jar')
     compile files('libs/libammsdk.jar')
@@ -242,7 +251,6 @@ dependencies {
     compile files('libs/MiPush_SDK_Client_2_2_21.jar')
     compile files('libs/umeng-update-v2.6.0.1.jar')
     compile project(':xlmmlibrary')
-
     compile files('libs/MobCommons-2016.0707.1708.jar')
     compile files('libs/MobTools-2016.0707.1708.jar')
     compile files('libs/ShareSDK-Core-2.7.4.jar')

@@ -37,7 +37,7 @@ import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.ui.activity.user.AddNoAddressActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.AddressSelectActivity;
-import com.jimei.xiaolumeimei.ui.activity.user.CouponSelectActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.SelectCouponActivity;
 import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
 import com.jimei.xiaolumeimei.widget.NestedListView;
 import com.jimei.xiaolumeimei.widget.SmoothCheckBox;
@@ -523,14 +523,12 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 break;
 
             case R.id.coupon_layout:
-                Intent intent = new Intent(CartsPayInfoActivity.this, CouponSelectActivity.class);
+                Intent intent = new Intent(CartsPayInfoActivity.this, SelectCouponActivity.class);
                 Bundle bundle = new Bundle();
                 if ((coupon_id != null) && (!coupon_id.isEmpty())) {
                     bundle.putString("coupon_id", coupon_id);
                 }
-//                bundle.putString("cart_ids",cart_ids);
-//                bundle.putDouble("money", (double) (Math.round(paymentInfo * 100)) / 100);
-//                bundle.putDouble("coupon_price",coupon_price);
+                bundle.putString("cart_ids",cart_ids);
                 intent.putExtras(bundle);
                 startActivityForResult(intent, REQUEST_CODE_COUPONT);
                 break;
@@ -840,7 +838,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         showIndeterminateProgressDialog(false);
         //int position = spinner.getSelectedItemPosition();
         //String code = logisticCompanyList.get(position).getCode();
-        // TODO: 16/5/25 支付时是否传入物流参数待定
         Subscription subscription = TradeModel.getInstance()
                 .shoppingcart_create_v2(ids, addr_id, pay_method, paymentprice_v2, post_fee,
                         discount_fee_price, total_fee, uuid, pay_extrasaa, code)

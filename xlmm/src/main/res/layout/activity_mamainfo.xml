@@ -51,23 +51,26 @@
                         android:layout_margin="8px"
                         android:clickable="true" />
                 </RelativeLayout>
+
                 <RelativeLayout
                     android:id="@+id/mama_idrv"
-                    android:layout_below="@id/imgCircleStar"
                     android:layout_width="130px"
                     android:layout_height="30px"
+                    android:layout_below="@id/imgCircleStar"
                     android:layout_marginLeft="75px"
                     android:layout_marginTop="8px"
                     android:clickable="true"
                     android:gravity="center">
-                <TextView
-                    android:textSize="25px"
-                    android:layout_centerInParent="true"
-                    android:id="@+id/mama_id"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white" />
-</RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/mama_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:textColor="@color/white"
+                        android:textSize="25px" />
+                </RelativeLayout>
+
                 <LinearLayout
                     android:id="@+id/ll"
                     android:layout_width="160px"
@@ -137,22 +140,15 @@
                         android:textSize="15sp" />
                 </LinearLayout>
 
-                <TextView
+                <ImageView
                     android:id="@+id/mama_pay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/time_layout"
                     android:layout_marginLeft="50px"
                     android:layout_marginTop="15px"
+                    android:src="@drawable/icon_renew"
                     android:layout_toRightOf="@id/imgCircleStar"
-                    android:background="#99cc66"
-                    android:paddingBottom="1dp"
-                    android:paddingLeft="2dp"
-                    android:paddingRight="2dp"
-                    android:paddingTop="1dp"
-                    android:text="续费"
-                    android:textColor="@color/white"
-                    android:textSize="15sp"
                     android:visibility="gone" />
 
 

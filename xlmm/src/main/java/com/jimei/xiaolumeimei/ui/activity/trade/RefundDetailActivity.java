@@ -232,14 +232,14 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
         ViewUtils.loadImgToImgView(getApplicationContext(), goodImageView,
                 refundDetailBean.getPic_path());
         goodNameTv.setText(refundDetailBean.getTitle());
-        goodPriceTv.setText("¥" + refundDetailBean.getPayment() + "x" + refundDetailBean.getRefund_num());
+        goodPriceTv.setText("¥" + refundDetailBean.getTotal_fee() + "x" + refundDetailBean.getRefund_num());
         goodSizeTv.setText("尺码：" + refundDetailBean.getSku_name());
         timeTv.setText("申请时间:" + refundDetailBean.getCreated().replace("T", " "));
         numTv.setText(Integer.toString(refundDetailBean.getRefund_num()));
         priceTv.setText("¥" + refundDetailBean.getRefund_fee());
         reasonTv.setText(refundDetailBean.getReason());
         RoundCornerImageView[] images = {round_image, round_image1, round_image2, round_image3};
-        RelativeLayout[] rls = {rl_img,rl_img1,rl_img2,rl_img3};
+        RelativeLayout[] rls = {rl_img, rl_img1, rl_img2, rl_img3};
         if (refundDetailBean.getProof_pic().size() > 0) {
             for (int i = 0; i < refundDetailBean.getProof_pic().size(); i++) {
                 ViewUtils.loadImgToImgView(getApplicationContext(), images[i],
