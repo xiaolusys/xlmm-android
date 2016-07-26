@@ -9,6 +9,7 @@ import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.okhttp3.PersistentCookieJar;
 import com.jimei.xiaolumeimei.okhttp3.cache.SetCookieCache;
 import com.jimei.xiaolumeimei.okhttp3.persistence.SharedPrefsCookiePersistor;
+import com.jimei.xiaolumeimei.utils.NetUtil;
 import com.jude.utils.JUtils;
 import java.io.File;
 import java.io.IOException;
@@ -91,14 +92,23 @@ public class XlmmRetrofitClient {
           mOkHttpClient = new OkHttpClient.Builder().readTimeout(60000, TimeUnit.MILLISECONDS)
               .connectTimeout(60000, TimeUnit.MILLISECONDS)
               .writeTimeout(6000, TimeUnit.MILLISECONDS)
+              .retryOnConnectionFailure(true)
               .cache(cache)
               .addInterceptor(interceptor)
               .addInterceptor(new Interceptor() {
                 @Override public Response intercept(Chain chain) throws IOException {
                   Request originalRequest = chain.request();
                   Request requestWithUserAgent = originalRequest.newBuilder()
-                      .header("User-Agent", "Android " + String.valueOf(BuildConfig.VERSION_CODE))
+                      .header("User-Agent", "Android/"
+                          + android.os.Build.VERSION.RELEASE
+                          + " xlmmApp/"
+                          + String.valueOf(BuildConfig.VERSION_CODE)
+                          + " Mobile/"
+                          + android.os.Build.MODEL
+                          + " NetType/"
+                          + NetUtil.getNetType(XlmmApp.getmContext()))
                       .build();
+
                   return chain.proceed(requestWithUserAgent);
                 }
               })
