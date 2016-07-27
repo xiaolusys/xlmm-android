@@ -46,6 +46,7 @@ import com.jimei.xiaolumeimei.entities.NinePicBean;
 import com.jimei.xiaolumeimei.entities.OderCarryBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.PayInfoBean;
+import com.jimei.xiaolumeimei.entities.PersonalCarryRankBean;
 import com.jimei.xiaolumeimei.entities.PointLogBean;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.PostActivityBean;
@@ -796,5 +797,20 @@ public interface XlmmService {
         @Field("discount_fee")  String discount_fee,
         @Field("uuid")          String uuid,
         @Field("total_fee")     String total_fee
+    );
+
+    @GET("rest/v2/mama/rank/carry_total_rank")
+    Observable<Response<List<PersonalCarryRankBean>>> getPersonalCarryRankBean();
+
+    @GET("rest/v2/mama/rank/self_rank")
+    Observable<Response<PersonalCarryRankBean>> getPersonalSelfCarryRankBean();
+
+    @GET("/rest/v2/mama/rank/{id}/get_team_members")
+    Observable<Response<List<PersonalCarryRankBean>>> getTeamMembers(
+        @Path("id")String id
+    );
+
+    @GET("/rest/v2/mama/teamrank/self_rank")
+    Observable<Response<PersonalCarryRankBean>> getTeamSelfRank(
     );
 }

@@ -1,7 +1,6 @@
 package com.jimei.xiaolumeimei.model;
 
 import com.jimei.library.rx.DefaultTransform;
-import com.jimei.xiaolumeimei.entities.AgentInfoBean;
 import com.jimei.xiaolumeimei.entities.AllowanceBean;
 import com.jimei.xiaolumeimei.entities.DrawCouponBean;
 import com.jimei.xiaolumeimei.entities.MMVisitorsBean;
@@ -10,10 +9,12 @@ import com.jimei.xiaolumeimei.entities.MamaFansBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.MamaLivenessBean;
 import com.jimei.xiaolumeimei.entities.MamaUrl;
+import com.jimei.xiaolumeimei.entities.PersonalCarryRankBean;
 import com.jimei.xiaolumeimei.entities.PotentialFans;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
+import java.util.List;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import rx.Observable;
@@ -107,6 +108,7 @@ public class MamaInfoModel {
   public Observable<PotentialFans> getPotentialFans(String page) {
     return XlmmRetrofitClient.getService().getPotentialFans(page).compose(new DefaultTransform<>());
   }
+
   public Observable<MamaUrl> getMamaUrl() {
     return XlmmRetrofitClient.getService().getMamaUrl("1.0").compose(new DefaultTransform<>());
   }
@@ -123,6 +125,34 @@ public class MamaInfoModel {
     return XlmmRetrofitClient.getService()
         .mamaRegisterPay(product_id, sku_id, payment, channel, num, post_fee, discount_fee, uuid,
             total_fee)
+        .compose(new DefaultTransform<>());
+  }
+
+  public Observable<Response<List<PersonalCarryRankBean>>> getPersonalCarryRankBean() {
+
+    return XlmmRetrofitClient.getService()
+        .getPersonalCarryRankBean()
+        .compose(new DefaultTransform<>());
+  }
+
+  public Observable<Response<PersonalCarryRankBean>> getPersonalSelfCarryRankBean() {
+
+    return XlmmRetrofitClient.getService()
+        .getPersonalSelfCarryRankBean()
+        .compose(new DefaultTransform<>());
+  }
+
+  public Observable<Response<List<PersonalCarryRankBean>>> getTeamMembers(String id) {
+
+    return XlmmRetrofitClient.getService()
+        .getTeamMembers(id)
+        .compose(new DefaultTransform<>());
+  }
+
+  public Observable<Response<PersonalCarryRankBean>> getTeamSelfRank() {
+
+    return XlmmRetrofitClient.getService()
+        .getTeamSelfRank()
         .compose(new DefaultTransform<>());
   }
 }

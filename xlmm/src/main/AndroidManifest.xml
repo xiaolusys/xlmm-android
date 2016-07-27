@@ -420,6 +420,14 @@
             android:name=".ui.activity.user.CouponSelectActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
 
+        <activity
+            android:name=".ui.activity.xiaolumama.PersonalCarryRankActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
+
+        <activity
+            android:name=".ui.activity.xiaolumama.MMTeamActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
+
         <service
             android:name="com.xiaomi.push.service.XMPushService"
             android:enabled="true"

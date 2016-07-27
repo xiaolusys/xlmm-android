@@ -3,7 +3,6 @@ package com.jimei.xiaolumeimei.ui.mminfo;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -41,6 +40,7 @@ import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMNinePicActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShareCodeWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShoppingListActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMStoreWebViewActivity;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMTeamActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMcarryLogActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaDrawCashActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaDrawCouponActivity;
@@ -49,15 +49,12 @@ import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaReNewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaVisitorActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.StatusBarUtil;
-import com.jimei.xiaolumeimei.widget.CircleImageView;
+import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
-import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.BitmapCallback;
 import java.util.Calendar;
 import java.util.List;
-import okhttp3.Call;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -69,10 +66,9 @@ import rx.schedulers.Schedulers;
 public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInfoModel>
     implements MMInfoContract.View, View.OnClickListener, OnChartValueSelectedListener {
   String TAG = "MMInfoActivity";
-  @Bind(R.id.imgUser) CircleImageView imgUser;
+  @Bind(R.id.imgUser) ImageView imgUser;
   @Bind(R.id.btn_two_dimen) TextView btn_two_dimen;
   @Bind(R.id.rl_chart) RelativeLayout rl_chart;
-  @Bind(R.id.btn_chooselist) TextView btn_chooselist;
   @Bind(R.id.chart1) LineChart mChart;
   @Bind(R.id.img_left) ImageView img_left;
   @Bind(R.id.img_right) ImageView img_right;
@@ -86,7 +82,8 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
   @Bind(R.id.rl_party) RelativeLayout rl_party;
   @Bind(R.id.rl_push) RelativeLayout rl_push;
   @Bind(R.id.rl_shop) RelativeLayout rl_shop;
-  @Bind(R.id.rl_two_dimen) RelativeLayout rlTwoDimen;
+  @Bind(R.id.rl_team) RelativeLayout rlTeam;
+  @Bind(R.id.rl_invite_1kaidian) RelativeLayout rlInvite1yuanKaidian;
   @Bind(R.id.tv_invite_num) TextView tv_invite_num;
   @Bind(R.id.rl_fans) RelativeLayout rl_fans;
   @Bind(R.id.tv_fansnum) TextView tv_fansnum;
@@ -124,6 +121,7 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
   private String shareMmcode;
   private boolean isThisWeek = true;
   private MamaUrl.ResultsBean.ExtraBean mamaResult;
+  private int mmId;
 
   @Override protected void initData() {
     mPresenter.getShareShopping();
@@ -141,7 +139,7 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
     imgExam.setOnClickListener(this);
     mamaPay.setOnClickListener(this);
 
-    rlTwoDimen.setOnClickListener(this);
+    rlInvite1yuanKaidian.setOnClickListener(this);
     rl_fans.setOnClickListener(this);
     rl_orderlist.setOnClickListener(this);
     rl_income.setOnClickListener(this);
@@ -153,6 +151,7 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
     visitLayout.setOnClickListener(this);
     orderLayout.setOnClickListener(this);
     fundLayout.setOnClickListener(this);
+    rlTeam.setOnClickListener(this);
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -208,8 +207,8 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
     tv_invite_num.setText(fortune.getMamaFortune().getInviteNum() + "位");
     tv_fansnum.setText(fortune.getMamaFortune().getFansNum() + "人");
     tv_order.setText(s + "个");
-    if (days<=15) {
-    mamaPay.setVisibility(View.VISIBLE);
+    if (days <= 15) {
+      mamaPay.setVisibility(View.VISIBLE);
     }
 
     tvShengyu.setText(days + "");
@@ -218,7 +217,8 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
     tvHuoyue.setText(fortune.getMamaFortune().getActiveValueNum() + "");
     tvMamalevel.setText(fortune.getMamaFortune().getMamaLevelDisplay() + "");
     tvMamaVip.setText(fortune.getMamaFortune().getExtraInfo().getAgencylevelDisplay() + "");
-    mamaId.setText("ID: " + fortune.getMamaFortune().getMamaId() + "");
+     mmId = fortune.getMamaFortune().getMamaId();
+    this.mamaId.setText("ID: " + mamaId + "");
     if (!TextUtils.isEmpty(fortune.getMamaFortune().getExtraInfo().getThumbnail())) {
       setUserImage(fortune);
     }
@@ -227,20 +227,9 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
   private void setUserImage(MamaFortune fortune) {
     try {
       if (!TextUtils.isEmpty(fortune.getMamaFortune().getExtraInfo().getThumbnail())) {
-        OkHttpUtils.get()
-            .url(fortune.getMamaFortune().getExtraInfo().getThumbnail())
-            .build()
-            .execute(new BitmapCallback() {
-              @Override public void onError(Call call, Exception e, int id) {
-                e.printStackTrace();
-              }
 
-              @Override public void onResponse(Bitmap response, int id) {
-                if (null != response&&null!=imgUser) {
-                  imgUser.setImageBitmap(response);
-                }
-              }
-            });
+        ViewUtils.loadImgToImgViewWithTransformCircle(this, imgUser,
+            fortune.getMamaFortune().getExtraInfo().getThumbnail());
       } else {
         imgUser.setImageResource(R.drawable.img_diamond);
       }
@@ -420,7 +409,7 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
       case R.id.mama_pay:
         readyGo(MamaReNewActivity.class);
         break;
-      case R.id.rl_two_dimen:
+      case R.id.rl_invite_1kaidian:
 
         JumpUtils.jumpToWebViewWithCookies(this, mamaResult.getInvite(), 26,
             MMShareCodeWebViewActivity.class, "");
@@ -496,6 +485,11 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
           JumpUtils.jumpToWebViewWithCookies(this, mamaResult.getExam(), -1,
               MMLevelExamWebViewActivity.class, "妈妈考试");
         }
+        break;
+      case R.id.rl_team:
+        Bundle bundle = new Bundle();
+        bundle.putString("id", mmId + "");
+        readyGo(MMTeamActivity.class,bundle);
         break;
     }
   }
