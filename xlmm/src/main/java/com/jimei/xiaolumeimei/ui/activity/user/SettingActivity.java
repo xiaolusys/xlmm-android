@@ -1,24 +1,31 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
+import com.jimei.xiaolumeimei.entities.VersionBean;
+import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.utils.AppUtils;
 import com.jimei.xiaolumeimei.utils.DataClearManager;
+import com.jimei.xiaolumeimei.widget.VersionManager;
+import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jimei.xiaolumeimei.xlmmService.UpdateService;
+import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
-import com.umeng.update.UmengUpdateListener;
-import com.umeng.update.UpdateResponse;
-import com.umeng.update.UpdateStatus;
+
+import rx.schedulers.Schedulers;
 
 public class SettingActivity extends BaseSwipeBackCompatActivity {
 
@@ -98,31 +105,43 @@ public class SettingActivity extends BaseSwipeBackCompatActivity {
                 updateCache();
                 AppUtils.showSnackBar(view, R.string.update_cache);
             }
-
             if (preference.equals(updateVersion)) {
-                UmengUpdateAgent.setUpdateAutoPopup(false);
-                UmengUpdateAgent.setUpdateListener(new UmengUpdateListener() {
-                    @Override
-                    public void onUpdateReturned(int updateStatus, UpdateResponse updateInfo) {
-                        switch (updateStatus) {
-                            case UpdateStatus.Yes: // has update
-                                UmengUpdateAgent.showUpdateDialog(XlmmApp.getInstance(), updateInfo);
-                                break;
-                            case UpdateStatus.No: // has no update
-                                Toast.makeText(XlmmApp.getInstance(), "当前已是最新版本", Toast.LENGTH_SHORT)
-                                        .show();
-                                break;
-                            case UpdateStatus.NoneWifi: // none wifi
-                                Toast.makeText(XlmmApp.getInstance(), "温馨提示，当前无wifi连接， 只在wifi下更新",
-                                        Toast.LENGTH_LONG).show();
-                                break;
-                            case UpdateStatus.Timeout: // time out
-                                Toast.makeText(XlmmApp.getInstance(), "网络不给力", Toast.LENGTH_LONG).show();
-                                break;
-                        }
-                    }
-                });
-                UmengUpdateAgent.update(XlmmApp.getInstance());
+                ActivityModel.getInstance()
+                        .getVersion()
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(new ServiceResponse<VersionBean>() {
+                            @Override
+                            public void onNext(VersionBean versionBean) {
+                                VersionManager versionManager = new VersionManager() {
+
+                                    @Override
+                                    public int getServerVersion() {
+                                        return versionBean.getVersion_code();
+                                    }
+
+                                    @Override
+                                    public String getUpdateContent() {
+                                        return "最新版本:" + versionBean.getVersion() + "\n\n更新内容:\n" + versionBean.getMemo();
+                                    }
+
+                                    @Override
+                                    public boolean showMsg() {
+                                        return true;
+                                    }
+                                };
+                                versionManager.setPositiveListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent intent = new Intent(getActivity(), UpdateService.class);
+                                        intent.putExtra(UpdateService.EXTRAS_DOWNLOAD_URL, versionBean.getDownload_link());
+                                        getActivity().startService(intent);
+                                        versionManager.getDialog().dismiss();
+                                        JUtils.Toast("应用正在后台下载!");
+                                    }
+                                });
+                                versionManager.checkVersion(getActivity());
+                            }
+                        });
             }
             return false;
         }

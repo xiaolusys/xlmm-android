@@ -104,7 +104,6 @@ public class UpdateService extends Service {
                     mNotificationManager.notify(FLAG_UPDATE, mBuilder.build());
                     stopSelf();
                     break;
-
                 default:
                     stopSelf();
                     break;
@@ -113,9 +112,7 @@ public class UpdateService extends Service {
     }
 
     private class DownloadRunnable implements Runnable {
-
         Message mMessage = mHandler.obtainMessage();
-
         @Override
         public void run() {
             try {
@@ -128,7 +125,6 @@ public class UpdateService extends Service {
                 downloadFile();
                 mMessage.what = DOWNLOAD_COMPLETE;
                 mHandler.sendMessage(mMessage);
-
             } catch (IOException e) {
                 e.printStackTrace();
                 mMessage.what = DOWNLOAD_FAIL;

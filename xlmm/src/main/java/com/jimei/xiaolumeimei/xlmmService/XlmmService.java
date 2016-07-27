@@ -67,6 +67,7 @@ import com.jimei.xiaolumeimei.entities.UserAccountBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.UserWithdrawResult;
+import com.jimei.xiaolumeimei.entities.VersionBean;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.entities.WxPubAuthInfo;
 import java.util.ArrayList;
@@ -791,6 +792,9 @@ public interface XlmmService {
 
     );
 
+    @GET("/sale/apprelease/newversion")
+    Observable<VersionBean> getVersion();
+
     @FormUrlEncoded
     @POST("/rest/v1/pmt/xlmm/mama_register_pay")
     Observable<Response<ResponseBody>> mamaRegisterPay(
@@ -804,4 +808,5 @@ public interface XlmmService {
         @Field("uuid")          String uuid,
         @Field("total_fee")     String total_fee
     );
+
 }

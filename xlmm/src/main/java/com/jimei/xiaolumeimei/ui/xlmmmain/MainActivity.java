@@ -1,6 +1,8 @@
 package com.jimei.xiaolumeimei.ui.xlmmmain;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -37,6 +39,7 @@ import com.jimei.xiaolumeimei.entities.IsGetcoupon;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.event.UserInfoEmptyEvent;
+import com.jimei.xiaolumeimei.receiver.UpdateBroadReceiver;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.main.ComplainActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ChildListActivity;
@@ -66,11 +69,13 @@ import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.AutoToolbar;
 import com.jimei.xiaolumeimei.widget.BrandView;
+import com.jimei.xiaolumeimei.widget.VersionManager;
 import com.jimei.xiaolumeimei.widget.badgelib.BadgeView;
 import com.jimei.xiaolumeimei.widget.banner.SliderLayout;
 import com.jimei.xiaolumeimei.widget.banner.SliderTypes.BaseSliderView;
 import com.jimei.xiaolumeimei.widget.banner.SliderTypes.DefaultSliderView;
 import com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableLayout;
+import com.jimei.xiaolumeimei.xlmmService.UpdateService;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
@@ -98,7 +103,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     SwipeRefreshLayout.OnRefreshListener {
 
   private static final String POST_URL = "?imageMogr2/format/jpg/quality/80";
-  public static String TAG = "MainActivity";
+    public static String TAG = "MainActivity";
   Map<String, String> map = new HashMap<>();
   List<ImageView> imageViewList = new ArrayList<>();
   TextView tvNickname;
@@ -141,10 +146,21 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   private String newTime;
   private int rvTopHeight;
   private EventBus aDefault;
+  private UpdateBroadReceiver mUpdateBroadReceiver;
+
+  @Override
+  protected void onStart() {
+    super.onStart();
+    IntentFilter filter = new IntentFilter();
+    filter.addAction(UpdateBroadReceiver.ACTION_RETRY_DOWNLOAD);
+    mUpdateBroadReceiver = new UpdateBroadReceiver();
+    registerReceiver(mUpdateBroadReceiver, filter);
+  }
 
   @Override protected void initData() {
     mPresenter.getUserInfoBean();
     mPresenter.getAddressVersionAndUrl();
+    mPresenter.getVersion();
     initMainView(null);
     if (LoginUtils.isJumpToLogin(getApplicationContext())) {
       FirstFragment firstFragment = FirstFragment.newInstance("first");
@@ -980,7 +996,46 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   }
 
   @Override protected void onDestroy() {
+    unregisterReceiver(mUpdateBroadReceiver);
     super.onDestroy();
     aDefault.unregister(this);
+  }
+
+  @Override
+  public void checkVersion(int versionCode,String content,String downloadUrl,boolean isAutoUpdate) {
+    VersionManager versionManager = new VersionManager() {
+
+        @Override
+        public int getServerVersion() {
+            return versionCode;
+        }
+
+        @Override
+        public String getUpdateContent() {
+            return content;
+        }
+
+      @Override
+      public boolean showMsg() {
+        return false;
+      }
+    };
+    if (isAutoUpdate) {
+      versionManager.setPositiveListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          Intent intent = new Intent(MainActivity.this, UpdateService.class);
+          intent.putExtra(UpdateService.EXTRAS_DOWNLOAD_URL, downloadUrl);
+          startService(intent);
+          versionManager.getDialog().dismiss();
+          JUtils.Toast("应用正在后台下载!");
+        }
+      });
+      SharedPreferences updatePreferences = getSharedPreferences("update", Context.MODE_PRIVATE);
+      boolean update = updatePreferences.getBoolean("update", true);
+      if (update) {
+        versionManager.checkVersion(this);
+      }
+    }
   }
 }

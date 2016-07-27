@@ -10,6 +10,8 @@ import com.jimei.xiaolumeimei.entities.IsGetcoupon;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.entities.VersionBean;
+
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import rx.Observable;
@@ -33,6 +35,8 @@ public interface MainContract {
     Observable<ResponseBody> getUsercoupons(String template_id);
 
     Observable<AddressDownloadResultBean> getAddressVersionAndUrl();
+
+    Observable<VersionBean> getVersion();
   }
 
   interface View extends BaseView {
@@ -65,6 +69,8 @@ public interface MainContract {
     void clickGetCounpon(ResponseBody responseBody);
 
     void downLoaAddressFile(AddressDownloadResultBean addressDownloadResultBean);
+
+    void checkVersion(int versionCode,String content,String downloadUrl,boolean isAutoUpdate);
   }
 
   abstract class Presenter extends BasePresenter<Model, View> {
@@ -86,5 +92,7 @@ public interface MainContract {
 
     @Override public void onStart() {
     }
+
+    public abstract void getVersion();
   }
 }

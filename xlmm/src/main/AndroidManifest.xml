@@ -31,8 +31,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <uses-library android:name="android.test.runner" />
-
         <meta-data
             android:name="design_width"
             android:value="720" />
@@ -419,10 +417,9 @@
         <activity
             android:name=".ui.activity.user.SelectCouponActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
-        <activity
-            android:name=".ui.activity.user.CouponSelectActivity"
-            android:theme="@style/AppTheme.TransparentActivity" />
-
+        <service
+            android:name=".xlmmService.UpdateService"
+            android:exported="false" />
         <service
             android:name="com.xiaomi.push.service.XMPushService"
             android:enabled="true"
@@ -472,13 +469,5 @@
                 <action android:name="action.retry.download" />
             </intent-filter>
         </receiver>
-
-        <service
-            android:name=".xlmmService.UpdateService"
-            android:exported="false" />
     </application>
-
-    <instrumentation
-        android:name="android.test.InstrumentationTestRunner"
-        android:targetPackage="com.jimei.xiaolumeimei" />
 </manifest>
