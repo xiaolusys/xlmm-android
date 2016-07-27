@@ -102,7 +102,7 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
   @Bind(R.id.tv_mamavip) TextView tvMamaVip;
   @Bind(R.id.mama_id) TextView mamaId;
   @Bind(R.id.tv_mamashengyu) TextView tvShengyu;
-  @Bind(R.id.mama_pay) TextView mamaPay;
+  @Bind(R.id.mama_pay) ImageView mamaPay;
   @Bind(R.id.imgExam) ImageView imgExam;
   @Bind(R.id.tv_yue) TextView tvYue;
   @Bind(R.id.yue_layout) LinearLayout yueLayout;
@@ -342,18 +342,18 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
     Intent intent;
     switch (v.getId()) {
       case R.id.yue_layout:
-        if (mamaFortune != null
-            && mamaFortune.getMamaFortune().getExtraInfo().getCouldCashOut() == 0) {
-          intent = new Intent(this, MamaDrawCouponActivity.class);
-          intent.putExtra("cash", mamaFortune.getMamaFortune().getCashValue());
-          intent.putExtra("msg", mamaFortune.getMamaFortune().getExtraInfo().getCashoutReason());
-          startActivity(intent);
-        } else if (mamaFortune != null
-            && mamaFortune.getMamaFortune().getExtraInfo().getCouldCashOut() == 1) {
+//        if (mamaFortune != null
+//            && mamaFortune.getMamaFortune().getExtraInfo().getCouldCashOut() == 0) {
+//          intent = new Intent(this, MamaDrawCouponActivity.class);
+//          intent.putExtra("cash", mamaFortune.getMamaFortune().getCashValue());
+//          intent.putExtra("msg", mamaFortune.getMamaFortune().getExtraInfo().getCashoutReason());
+//          startActivity(intent);
+//        } else if (mamaFortune != null
+//            && mamaFortune.getMamaFortune().getExtraInfo().getCouldCashOut() == 1) {
           intent = new Intent(this, MamaDrawCashActivity.class);
           intent.putExtra("cash", mamaFortune.getMamaFortune().getCashValue());
           startActivity(intent);
-        }
+//        }
         break;
       case R.id.img_left:
         isThisWeek = false;

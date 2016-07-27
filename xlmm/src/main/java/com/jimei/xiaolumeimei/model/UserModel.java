@@ -6,6 +6,7 @@ import com.jimei.xiaolumeimei.entities.BindInfoBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.CouponBean;
 import com.jimei.xiaolumeimei.entities.CouponEntity;
+import com.jimei.xiaolumeimei.entities.CouponSelectEntity;
 import com.jimei.xiaolumeimei.entities.GetCouponbean;
 import com.jimei.xiaolumeimei.entities.IsGetcoupon;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
@@ -113,6 +114,14 @@ public class UserModel {
                 .getCouponList(status)
                 .compose(new DefaultTransform<>());
     }
+
+    //购物车选择优惠券
+    public Observable<CouponSelectEntity> getCouponSelectEntity(String cart_ids) {
+        return XlmmRetrofitClient.getService()
+                .getCouponSelectEntity(cart_ids)
+                .compose(new DefaultTransform<>());
+    }
+
 
     //得到用户优惠券信息
     public Observable<CouponBean> getUnusedCouponBean(int page) {

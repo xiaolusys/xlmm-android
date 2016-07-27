@@ -7,6 +7,7 @@ import com.jimei.xiaolumeimei.entities.IsGetcoupon;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.entities.VersionBean;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -63,5 +64,13 @@ public class MainModel implements MainContract.Model {
         .getService()
         .getAddressVersionAndUrl()
         .compose(RxSchedulers.io_main());
+  }
+
+  @Override
+  public Observable<VersionBean> getVersion() {
+    return XlmmRetrofitClient
+            .getService()
+            .getVersion()
+            .compose(RxSchedulers.io_main());
   }
 }

@@ -17,7 +17,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.PreviousAdapter;
+import com.jimei.xiaolumeimei.adapter.TodayAdapter;
 import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.event.TimeEvent;
@@ -49,7 +49,7 @@ public class YesterdayV2Fragment extends BaseFragment {
     private MaterialDialog materialDialog;
     private int page = 2;
     private int totalPages;//总的分页数
-    private PreviousAdapter mPreviousAdapter;
+    private TodayAdapter mPreviousAdapter;
     //private TextView mNormal, mOrder;
     private Subscription subscribe1;
     private Subscription subscribe2;
@@ -204,7 +204,7 @@ public class YesterdayV2Fragment extends BaseFragment {
         xRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
         xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
         xRecyclerView.setPullRefreshEnabled(false);
-        mPreviousAdapter = new PreviousAdapter(this, activity);
+        mPreviousAdapter = new TodayAdapter(this, activity);
         xRecyclerView.addHeaderView(head);
         xRecyclerView.setAdapter(mPreviousAdapter);
 

@@ -9,5 +9,4 @@ public class XlmmApi {
     public static final String APP_BASE_URL = "http://m.xiaolumeimei.com";
     public static final String QINIU_UPLOAD_URL_BASE =
             "http://7xkyoy.com2.z0.glb.qiniucdn.com/";
-    private String baseUrl;
 }

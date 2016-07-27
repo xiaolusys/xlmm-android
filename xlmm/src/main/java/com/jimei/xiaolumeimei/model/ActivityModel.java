@@ -7,7 +7,9 @@ import com.jimei.xiaolumeimei.entities.LogisticCompany;
 import com.jimei.xiaolumeimei.entities.PostActivityBean;
 import com.jimei.xiaolumeimei.entities.ResultBean;
 import com.jimei.xiaolumeimei.entities.StartBean;
+import com.jimei.xiaolumeimei.entities.VersionBean;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
+import com.jimei.xiaolumeimei.xlmmService.XlmmService;
 
 import java.util.List;
 
@@ -74,6 +76,12 @@ public class ActivityModel {
     public Observable<StartBean> getStarsBean() {
         return XlmmRetrofitClient.getService()
                 .getStarsBean()
+                .compose(new DefaultTransform<>());
+    }
+
+    public Observable<VersionBean> getVersion(){
+        return XlmmRetrofitClient.getService()
+                .getVersion()
                 .compose(new DefaultTransform<>());
     }
 }
