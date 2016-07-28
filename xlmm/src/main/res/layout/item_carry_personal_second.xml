@@ -10,9 +10,10 @@
   <RelativeLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:padding="20px"
+      android:padding="14px"
       >
     <ImageView
+        android:layout_marginLeft="8px"
         android:id="@+id/first"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

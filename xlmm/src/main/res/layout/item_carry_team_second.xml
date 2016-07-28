@@ -13,12 +13,12 @@
       android:padding="14px"
       >
     <ImageView
-        android:id="@+id/first"
         android:layout_marginLeft="8px"
+        android:id="@+id/first"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:src="@drawable/personal_first"
+        android:src="@drawable/team_second"
         />
     <ImageView
         android:id="@+id/user_image"
@@ -37,13 +37,13 @@
         android:text="@{item.mamaNick}"
         />
     <TextView
-        android:id="@+id/total_carry"
         android:textSize="20sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="20px"
+        android:id="@+id/total_carry"
         android:textColor="@color/colorAccent"
         />
   </RelativeLayout>

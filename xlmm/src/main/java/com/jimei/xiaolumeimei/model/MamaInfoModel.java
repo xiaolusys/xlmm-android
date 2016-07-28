@@ -155,4 +155,19 @@ public class MamaInfoModel {
         .getTeamSelfRank()
         .compose(new DefaultTransform<>());
   }
+
+
+  public Observable<Response<PersonalCarryRankBean>> getTeamMemberSelf(String id) {
+
+    return XlmmRetrofitClient.getService()
+        .getTeamMemberSelf(id)
+        .compose(new DefaultTransform<>());
+  }
+
+  public Observable<Response<List<PersonalCarryRankBean>>> getTeamCarryRankBean() {
+
+    return XlmmRetrofitClient.getService()
+        .getTeamCarryRankBean()
+        .compose(new DefaultTransform<>());
+  }
 }

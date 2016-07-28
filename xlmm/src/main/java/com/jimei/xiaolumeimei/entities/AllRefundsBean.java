@@ -22,46 +22,6 @@ public class AllRefundsBean {
     @SerializedName("previous")
     private Object previous;
 
-
-    /**
-     * "id": 41979,
-     * "url": "http://m.xiaolumeimei.com/rest/v1/refunds/41979",
-     * "refund_no": "RF1604165711b21b15c04",
-     * "trade_id": 326789,
-     * "order_id": 362204,
-     * "buyer_id": 1,
-     * "item_id": 39285,
-     * "title": "帅气卡通印花T恤/美国队长",
-     * "sku_id": 157679,
-     * "sku_name": "130",
-     * "refund_num": 1,
-     * "buyer_nick": "meron@小鹿美美",
-     * "mobile": "18565565655",
-     * "phone": "",
-     * "proof_pic": [],
-     * "total_fee": 39.9,
-     * "payment": 37.9,
-     * "created": "2016-04-16T11:31:39",
-     * "modified": "2016-04-21T15:25:45",
-     * "company_name": "",
-     * "sid": "",
-     * "reason": "其他",
-     * "pic_path": "http://image.xiaolu.so/MG_14604489807443.jpg",
-     * "desc": "请输入退款说明",
-     * "feedback": "",
-     * "has_good_return": false,
-     * "has_good_change": false,
-     * "good_status": 0,
-     * "status": 1,
-     * "refund_fee": 37.9,
-     * "return_address": "退货状态未确定",
-     * "status_display": "退款关闭",
-     * "amount_flow": {
-     * "desc": ""
-     * }
-     */
-
-
     @SerializedName("results")
     private List<ResultsEntity> results;
 
@@ -109,43 +69,6 @@ public class AllRefundsBean {
 
     public static class ResultsEntity {
 
-        /**
-         * id : 42945
-         * url : http://staging.xiaolumeimei.com/rest/v1/refunds/42945
-         * refund_no : RF1606155761330c6a7c7
-         * trade_id : 333756
-         * order_id : 369966
-         * buyer_id : 1
-         * item_id : 40471
-         * title : 新款防晒超大雪纺披肩/西瓜红
-         * sku_id : 163262
-         * sku_name : 均码
-         * refund_num : 1
-         * buyer_nick : meron@小鹿美美
-         * mobile : 13888888888
-         * phone :
-         * proof_pic : []
-         * total_fee : 19.9
-         * payment : 17.9
-         * created : 2016-06-15T18:50:52
-         * modified : 2016-06-15T18:50:53
-         * company_name :
-         * sid :
-         * reason : 七天无理由退换货
-         * pic_path : http://image.xiaolu.so/MG_14614007618135.jpg
-         * desc : 七天无理由退货
-         * feedback :
-         * has_good_return : false
-         * has_good_change : false
-         * good_status : 0
-         * status : 7
-         * refund_fee : 17.9
-         * return_address : 上海市松江区佘山镇吉业路245号5号楼，021-50939326，小鹿美美售后(收)
-         * status_display : 退款成功
-         * amount_flow : {"desc":""}
-         * status_shaft : [{"status_display":"申请退款","time":"2016-06-15T18:50:52"},{"status_display":"等待返款","time":"2016-06-15T18:50:53"},{"status_display":"退款成功","time":"2016-06-15T18:50:53"}]
-         * refund_channel : budget
-         */
 
         private int id;
         private String url;

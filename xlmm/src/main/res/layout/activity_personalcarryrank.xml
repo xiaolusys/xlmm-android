@@ -8,96 +8,137 @@
         type="com.jimei.xiaolumeimei.entities.PersonalCarryRankBean"
         />
   </data>
-  <LinearLayout
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+      <com.jimei.xiaolumeimei.widget.XlmmTitleView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          app:xlmm_title="个人收益排名"
+          app:elevation="0dp"
+          />
+  <com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableLayout
+      android:id="@+id/scrollableLayout"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:orientation="vertical"
       >
-    <com.jimei.xiaolumeimei.widget.XlmmTitleView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:xlmm_title="个人收益排名"
-        />
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="210px"
-        android:background="@color/colorAccent"
+        android:orientation="vertical"
         >
       <RelativeLayout
-          android:id="@+id/imgCircleStar"
-          android:layout_width="130px"
-          android:layout_height="130px"
-          android:layout_marginLeft="20px"
-          android:layout_marginTop="15px"
-          android:clickable="true"
-          android:gravity="center"
+          android:layout_width="match_parent"
+          android:layout_height="210px"
+          android:background="@color/colorAccent"
           >
-
-        <ImageView
+        <RelativeLayout
+            android:id="@+id/imgCircleStar"
             android:layout_width="130px"
             android:layout_height="130px"
-            android:scaleType="fitXY"
-            android:src="@drawable/img_circlestar"
-            />
-
-        <ImageView
-            android:id="@+id/imgUser"
-            android:layout_width="114px"
-            android:layout_height="114px"
-            android:layout_centerInParent="true"
-            android:layout_margin="8px"
+            android:layout_marginLeft="20px"
+            android:layout_marginTop="15px"
             android:clickable="true"
-            />
+            android:gravity="center"
+            >
+
+          <ImageView
+              android:layout_width="130px"
+              android:layout_height="130px"
+              android:scaleType="fitXY"
+              android:src="@drawable/img_circlestar"
+              />
+
+          <ImageView
+              android:id="@+id/imgUser"
+              android:layout_width="114px"
+              android:layout_height="114px"
+              android:layout_centerInParent="true"
+              android:layout_margin="8px"
+              android:clickable="true"
+              />
 
 
-      </RelativeLayout>
-      <RelativeLayout
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_below="@id/imgCircleStar"
-          android:layout_marginLeft="20px"
-          android:layout_marginTop="15px"
-          android:clickable="true"
-          android:gravity="center"
-          >
-        <TextView
+        </RelativeLayout>
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{personalInfo.mamaNick}"
+            android:layout_below="@id/imgCircleStar"
+            android:layout_marginLeft="20px"
+            android:layout_marginTop="15px"
+            android:clickable="true"
+            android:gravity="center"
+            >
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@{personalInfo.mamaNick}"
+              />
+
+        </RelativeLayout>
+        <TextView
+            android:id="@+id/tv_rank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20px"
+            android:layout_marginTop="20px"
+            android:layout_toRightOf="@id/imgCircleStar"
+            android:textColor="@color/white"
+            android:textSize="30px"
             />
 
+        <TextView
+            android:id="@+id/tv_carry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_rank"
+            android:layout_marginLeft="20px"
+            android:layout_marginTop="25px"
+            android:layout_toRightOf="@id/imgCircleStar"
+            android:textSize="30px"
+            />
+
+        <TextView
+            android:id="@+id/tv_rank_change"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_rank"
+            android:layout_marginLeft="40px"
+            android:layout_marginTop="25px"
+            android:layout_toRightOf="@id/tv_carry"
+            android:textSize="30px"
+            />
       </RelativeLayout>
-      <TextView
-          android:id="@+id/tv_rank"
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        >
+      <ImageView
+          android:id="@+id/jiangbei"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginLeft="20px"
-          android:layout_marginTop="20px"
-          android:layout_toRightOf="@id/imgCircleStar"
-          android:textColor="@color/white"
-          android:textSize="30px"
+          android:layout_centerVertical="true"
+          android:layout_marginBottom="30px"
+          android:layout_marginRight="5px"
+          android:layout_marginTop="30px"
+          android:src="@drawable/jiangbei"
           />
-
       <TextView
-          android:id="@+id/tv_carry"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_below="@id/tv_rank"
-          android:layout_marginLeft="20px"
-          android:layout_marginTop="25px"
-          android:layout_toRightOf="@id/imgCircleStar"
-          android:textSize="30px"
-          />
-
-      <TextView
-          android:id="@+id/tv_rank_change"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_below="@id/tv_rank"
-          android:layout_marginLeft="40px"
-          android:layout_marginTop="25px"
-          android:layout_toRightOf="@id/tv_carry"
-          android:textSize="30px"
+          android:layout_centerVertical="true"
+          android:layout_marginBottom="30px"
+          android:layout_marginLeft="15px"
+          android:layout_marginTop="35px"
+          android:layout_toRightOf="@id/jiangbei"
+          android:text="个人收益排行榜"
+          android:textSize="35px"
           />
     </RelativeLayout>
     <android.support.v7.widget.RecyclerView
@@ -105,5 +146,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         />
+  </com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableLayout>
   </LinearLayout>
 </layout>

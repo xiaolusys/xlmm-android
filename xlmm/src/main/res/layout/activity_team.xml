@@ -4,7 +4,7 @@
     >
   <data>
     <variable
-        name="teamInfo"
+        name="personalInfo"
         type="com.jimei.xiaolumeimei.entities.PersonalCarryRankBean"
         />
   </data>
@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:elevation="0dp"
-        app:xlmm_title="团队妈妈"
+        app:xlmm_title="团队收益排名"
         />
     <com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableLayout
         android:id="@+id/scrollableLayout"
@@ -31,6 +31,7 @@
           android:layout_height="wrap_content"
           android:orientation="vertical"
           >
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="210px"
@@ -64,24 +65,29 @@
 
 
           </RelativeLayout>
-
-          <ImageView
-              android:id="@+id/huangguan"
+          <RelativeLayout
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
+              android:layout_below="@id/imgCircleStar"
               android:layout_marginLeft="20px"
-              android:layout_marginTop="25px"
-              android:layout_toRightOf="@id/imgCircleStar"
-              android:src="@drawable/huangguan"
-              />
+              android:layout_marginTop="15px"
+              android:clickable="true"
+              android:gravity="center"
+              >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{personalInfo.mamaNick}"
+                />
+
+          </RelativeLayout>
           <TextView
               android:id="@+id/tv_rank"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_marginLeft="20px"
-              android:layout_marginTop="25px"
-              android:layout_toRightOf="@id/huangguan"
-              android:text="团队妈妈"
+              android:layout_marginTop="20px"
+              android:layout_toRightOf="@id/imgCircleStar"
               android:textColor="@color/white"
               android:textSize="30px"
               />
@@ -91,72 +97,39 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_below="@id/tv_rank"
-              android:layout_marginLeft="20px"
+              android:layout_marginLeft="28px"
               android:layout_marginTop="25px"
               android:layout_toRightOf="@id/imgCircleStar"
-              android:text=""
               android:textSize="30px"
               />
-          <Button
-              android:id="@+id/btn_team"
-              android:layout_width="220px"
-              android:layout_height="60px"
-              android:layout_marginLeft="50px"
-              android:layout_marginTop="25px"
-              android:layout_toRightOf="@id/tv_rank"
-              android:background="@drawable/shape_mamalevel"
-              android:text="查看团队收益"
-              android:textColor="@color/white"
-              />
-
         </RelativeLayout>
       </LinearLayout>
       <RelativeLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:padding="25px"
+          android:gravity="center"
           >
-        <TextView
-            android:id="@+id/nick_name"
+        <ImageView
+            android:id="@+id/jiangbei"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_marginBottom="10px"
-            android:layout_marginLeft="20px"
-            android:layout_marginTop="10px"
-            android:text="昵称"
-            android:textSize="30px"
-            />
-        <View
-            android:layout_width="2px"
-            android:layout_height="20px"
-            android:layout_toRightOf="@id/nick_name"
-            android:background="#11DADADA"
+            android:layout_marginBottom="30px"
+            android:layout_marginRight="5px"
+            android:layout_marginTop="30px"
+            android:src="@drawable/jiangbei"
             />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
             android:layout_centerVertical="true"
-            android:layout_marginBottom="10px"
-            android:layout_marginTop="10px"
-            android:text="订单数"
-            android:textSize="30px"
+            android:layout_marginBottom="30px"
+            android:layout_marginLeft="15px"
+            android:layout_marginTop="35px"
+            android:layout_toRightOf="@id/jiangbei"
+            android:text="团队收益排行榜"
+            android:textSize="35px"
             />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginBottom="10px"
-            android:layout_marginRight="20px"
-            android:layout_marginTop="10px"
-            android:text="收益"
-            android:textSize="30px"
-            />
-
       </RelativeLayout>
       <android.support.v7.widget.RecyclerView
           android:id="@+id/recyclerview"

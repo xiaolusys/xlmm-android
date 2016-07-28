@@ -60,6 +60,7 @@ public class AllCouponActivity extends BaseSwipeBackCompatActivity {
                     @Override
                     public void onNext(ArrayList<CouponEntity> couponEntities) {
                         titles.add("未使用(" + couponEntities.size() + ")");
+                        fragments.add(CouponFragment.newInstance(XlmmConst.UNUSED_COUPON,couponEntities));
                         UserModel.getInstance()
                                 .getCouponList(3)
                                 .subscribeOn(Schedulers.io())
@@ -67,6 +68,7 @@ public class AllCouponActivity extends BaseSwipeBackCompatActivity {
                                     @Override
                                     public void onNext(ArrayList<CouponEntity> couponEntities) {
                                         titles.add("已过期(" + couponEntities.size() + ")");
+                                        fragments.add(CouponFragment.newInstance(XlmmConst.PAST_COUPON,couponEntities));
                                         UserModel.getInstance()
                                                 .getCouponList(1)
                                                 .subscribeOn(Schedulers.io())
@@ -74,9 +76,7 @@ public class AllCouponActivity extends BaseSwipeBackCompatActivity {
                                                     @Override
                                                     public void onNext(ArrayList<CouponEntity> couponEntities) {
                                                         titles.add("已使用(" + couponEntities.size() + ")");
-                                                        fragments.add(CouponFragment.newInstance(XlmmConst.UNUSED_COUPON));
-                                                        fragments.add(CouponFragment.newInstance(XlmmConst.PAST_COUPON));
-                                                        fragments.add(CouponFragment.newInstance(XlmmConst.USED_COUPON));
+                                                        fragments.add(CouponFragment.newInstance(XlmmConst.USED_COUPON,couponEntities));
                                                         MainTabAdapter mAdapter = new MainTabAdapter(getSupportFragmentManager());
                                                         viewPager.setAdapter(mAdapter);
                                                         viewPager.setOffscreenPageLimit(3);

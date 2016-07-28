@@ -152,4 +152,17 @@ public class MainPresenter extends MainContract.Presenter {
   @Override public void onStart() {
 
   }
+
+    @Override
+    public void getVersion() {
+        mRxManager.add(mModel.getVersion().subscribe(versionBean-> {
+            if (versionBean!=null) {
+                mView.checkVersion(versionBean.getVersion_code()
+                        ,("最新版本:" + versionBean.getVersion() + "\n\n更新内容:\n"
+                                + versionBean.getMemo())
+                        ,versionBean.getDownload_link()
+                        ,versionBean.isAuto_update());
+            }
+        }, Throwable::printStackTrace));
+    }
 }

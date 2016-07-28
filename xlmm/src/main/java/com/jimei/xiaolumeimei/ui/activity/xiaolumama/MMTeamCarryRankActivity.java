@@ -5,9 +5,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.View;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.PersonalCarryRankAdapter;
+import com.jimei.xiaolumeimei.adapter.TeamCarryRankAdapter;
 import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
-import com.jimei.xiaolumeimei.databinding.ActivityPersonalcarryrankBinding;
+import com.jimei.xiaolumeimei.databinding.ActivityTeamBinding;
 import com.jimei.xiaolumeimei.entities.PersonalCarryRankBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
@@ -20,19 +20,18 @@ import retrofit2.Response;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by itxuye on 2016/7/27.
+ * Created by itxuye on 2016/7/28.
  */
-public class PersonalCarryRankActivity extends BaseMVVMActivity<ActivityPersonalcarryrankBinding>
+public class MMTeamCarryRankActivity extends BaseMVVMActivity<ActivityTeamBinding>
     implements ScrollableHelper.ScrollableContainer {
-
-  private PersonalCarryRankAdapter mPersonalCarryRankAdapter;
+  private TeamCarryRankAdapter mTeamCarryRankAdapter;
 
   @Override protected void initView() {
     b.recyclerview.setLayoutManager(new LinearLayoutManager(this));
     b.recyclerview.addItemDecoration(
         new DividerItemDecoration(this, DividerItemDecorationForFooter.VERTICAL_LIST));
-    mPersonalCarryRankAdapter = new PersonalCarryRankAdapter(this);
-    b.recyclerview.setAdapter(mPersonalCarryRankAdapter);
+    mTeamCarryRankAdapter = new TeamCarryRankAdapter(this);
+    b.recyclerview.setAdapter(mTeamCarryRankAdapter);
     b.scrollableLayout.getHelper().setCurrentScrollableContainer(b.recyclerview);
   }
 
@@ -42,7 +41,7 @@ public class PersonalCarryRankActivity extends BaseMVVMActivity<ActivityPersonal
 
   @Override protected void initData() {
     MamaInfoModel.getInstance()
-        .getPersonalCarryRankBean()
+        .getTeamCarryRankBean()
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<Response<List<PersonalCarryRankBean>>>() {
           @Override
@@ -51,7 +50,7 @@ public class PersonalCarryRankActivity extends BaseMVVMActivity<ActivityPersonal
               if (personalCarryRankBeanResponse.isSuccessful()) {
                 List<PersonalCarryRankBean> personalCarryRankBeanList =
                     personalCarryRankBeanResponse.body();
-                mPersonalCarryRankAdapter.addAll(personalCarryRankBeanList);
+                mTeamCarryRankAdapter.addAll(personalCarryRankBeanList);
               }
             }
           }
@@ -82,16 +81,9 @@ public class PersonalCarryRankActivity extends BaseMVVMActivity<ActivityPersonal
                 }
                 b.tvCarry.setText("收益" + personalCarryRankBean.getTotal() / 100.00 + "元");
                 try {
-                  if (personalCarryRankBean.getRankAdd() > 0) {
-                    b.tvRankChange.setText("比上周上升" + personalCarryRankBean.getRankAdd() + "名");
-                  } else {
-                    b.tvRankChange.setText(
-                        "本周下降" + Math.abs(personalCarryRankBean.getRankAdd()) + "名");
-                  }
-
                   if (!TextUtils.isEmpty(personalCarryRankBean.getThumbnail())) {
 
-                    ViewUtils.loadImgToImgViewWithTransformCircle(PersonalCarryRankActivity.this,
+                    ViewUtils.loadImgToImgViewWithTransformCircle(MMTeamCarryRankActivity.this,
                         b.imgUser, personalCarryRankBean.getThumbnail());
                   } else {
                     b.imgUser.setImageResource(R.drawable.img_diamond);
@@ -118,7 +110,7 @@ public class PersonalCarryRankActivity extends BaseMVVMActivity<ActivityPersonal
   }
 
   @Override protected int getContentViewLayoutID() {
-    return R.layout.activity_personalcarryrank;
+    return R.layout.activity_team;
   }
 
   @Override protected boolean toggleOverridePendingTransition() {

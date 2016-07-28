@@ -25,10 +25,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_marginLeft="10px"3
+        android:layout_marginLeft="10px"
         />
-
     <TextView
+        android:textColor="@color/colorAccent"
         android:layout_centerVertical="true"
         android:id="@+id/tv_carry"
         android:layout_width="wrap_content"

@@ -22,6 +22,7 @@ import com.jimei.xiaolumeimei.entities.ClickcarryBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.CouponBean;
 import com.jimei.xiaolumeimei.entities.CouponEntity;
+import com.jimei.xiaolumeimei.entities.CouponSelectEntity;
 import com.jimei.xiaolumeimei.entities.DrawCouponBean;
 import com.jimei.xiaolumeimei.entities.GetCouponbean;
 import com.jimei.xiaolumeimei.entities.IsGetcoupon;
@@ -67,6 +68,7 @@ import com.jimei.xiaolumeimei.entities.UserAccountBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.UserWithdrawResult;
+import com.jimei.xiaolumeimei.entities.VersionBean;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.entities.WxPubAuthInfo;
 import java.util.ArrayList;
@@ -358,6 +360,12 @@ public interface XlmmService {
             @Query("status") int status
     );
 
+    //购物车选择优惠券
+    @GET("/rest/v1/usercoupons/coupon_able")
+    Observable<CouponSelectEntity> getCouponSelectEntity(
+            @Query("cart_ids") String cart_ids
+    );
+
     //获取用户未使用优惠券信息
     @GET("/rest/v1/usercoupons")
     Observable<CouponBean> getUnusedCouponBean(
@@ -382,7 +390,7 @@ public interface XlmmService {
             @Path("id") String id
     );
 
-    //设置用户昵称
+    //确认签收
     @POST("/rest/v1/order/{id}/confirm_sign")
     Observable<UserBean> receiveGoods(
             @Path("id") int id);
@@ -785,6 +793,9 @@ public interface XlmmService {
 
     );
 
+    @GET("/sale/apprelease/newversion")
+    Observable<VersionBean> getVersion();
+
     @FormUrlEncoded
     @POST("/rest/v1/pmt/xlmm/mama_register_pay")
     Observable<Response<ResponseBody>> mamaRegisterPay(
@@ -799,10 +810,13 @@ public interface XlmmService {
         @Field("total_fee")     String total_fee
     );
 
-    @GET("rest/v2/mama/rank/carry_total_rank")
+    @GET("/rest/v2/mama/rank/carry_total_rank")
     Observable<Response<List<PersonalCarryRankBean>>> getPersonalCarryRankBean();
 
-    @GET("rest/v2/mama/rank/self_rank")
+    @GET("/rest/v2/mama/teamrank/carry_total_rank")
+    Observable<Response<List<PersonalCarryRankBean>>> getTeamCarryRankBean();
+
+    @GET("/rest/v2/mama/rank/self_rank")
     Observable<Response<PersonalCarryRankBean>> getPersonalSelfCarryRankBean();
 
     @GET("/rest/v2/mama/rank/{id}/get_team_members")
@@ -810,7 +824,13 @@ public interface XlmmService {
         @Path("id")String id
     );
 
+    @GET("/rest/v2/mama/teamrank/{id}")
+    Observable<Response<PersonalCarryRankBean>> getTeamMemberSelf(
+        @Path("id")String id
+    );
+
     @GET("/rest/v2/mama/teamrank/self_rank")
     Observable<Response<PersonalCarryRankBean>> getTeamSelfRank(
     );
+
 }

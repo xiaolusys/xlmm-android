@@ -1,9 +1,11 @@
 package com.jimei.xiaolumeimei.entities;
 
+import java.io.Serializable;
+
 /**
  * Created by wisdom on 16/7/11.
  */
-public class CouponEntity {
+public class CouponEntity implements Serializable{
 
     /**
      * id : 74661

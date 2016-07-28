@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:src="@drawable/personal_first"
+        android:src="@drawable/team_first"
         />
     <ImageView
         android:id="@+id/user_image"

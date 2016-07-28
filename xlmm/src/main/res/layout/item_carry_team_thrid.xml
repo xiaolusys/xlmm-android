@@ -14,11 +14,11 @@
       >
     <ImageView
         android:id="@+id/first"
-        android:layout_marginLeft="8px"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:src="@drawable/personal_first"
+        android:layout_marginLeft="8px"
+        android:src="@drawable/team_third"
         />
     <ImageView
         android:id="@+id/user_image"
@@ -29,22 +29,22 @@
         android:layout_toRightOf="@id/first"
         />
     <TextView
-        android:layout_centerVertical="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:layout_marginLeft="31px"
         android:layout_toRightOf="@id/user_image"
         android:text="@{item.mamaNick}"
         />
     <TextView
         android:id="@+id/total_carry"
-        android:textSize="20sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="20px"
         android:textColor="@color/colorAccent"
+        android:textSize="20sp"
         />
   </RelativeLayout>
 </layout>
