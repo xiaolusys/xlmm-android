@@ -7,13 +7,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseAppCompatActivityForDetail;
-import com.jimei.xiaolumeimei.data.XlmmConst;
-import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
-
 import java.util.Timer;
 import java.util.TimerTask;
 
