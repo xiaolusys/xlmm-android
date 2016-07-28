@@ -78,7 +78,6 @@ import com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableLayout;
 import com.jimei.xiaolumeimei.xlmmService.UpdateService;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
-import com.umeng.update.UmengUpdateAgent;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
 import com.zhy.http.okhttp.callback.FileCallBack;
@@ -171,15 +170,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     if (LoginUtils.checkLoginState(getApplicationContext())) {
       mPresenter.isCouPon();
     }
-
-    new Thread(() -> {
-      try {
-        Thread.sleep(500 * 60);
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
-      UmengUpdateAgent.update(MainActivity.this);
-    }).start();
   }
 
   @Override protected void setListener() {
@@ -1003,39 +993,52 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
 
   @Override
   public void checkVersion(int versionCode,String content,String downloadUrl,boolean isAutoUpdate) {
-    VersionManager versionManager = new VersionManager() {
-
-        @Override
-        public int getServerVersion() {
-            return versionCode;
-        }
-
-        @Override
-        public String getUpdateContent() {
-            return content;
-        }
-
-      @Override
-      public boolean showMsg() {
-        return false;
+    new Thread(() -> {
+      try {
+        Thread.sleep(500 * 10);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
       }
-    };
-    if (isAutoUpdate) {
-      versionManager.setPositiveListener(new View.OnClickListener() {
+
+      runOnUiThread(new Runnable() {
         @Override
-        public void onClick(View v) {
-          Intent intent = new Intent(MainActivity.this, UpdateService.class);
-          intent.putExtra(UpdateService.EXTRAS_DOWNLOAD_URL, downloadUrl);
-          startService(intent);
-          versionManager.getDialog().dismiss();
-          JUtils.Toast("应用正在后台下载!");
+        public void run() {
+          VersionManager versionManager = new VersionManager() {
+
+            @Override
+            public int getServerVersion() {
+              return versionCode;
+            }
+
+            @Override
+            public String getUpdateContent() {
+              return content;
+            }
+
+            @Override
+            public boolean showMsg() {
+              return false;
+            }
+          };
+          if (isAutoUpdate) {
+            versionManager.setPositiveListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, UpdateService.class);
+                intent.putExtra(UpdateService.EXTRAS_DOWNLOAD_URL, downloadUrl);
+                startService(intent);
+                versionManager.getDialog().dismiss();
+                JUtils.Toast("应用正在后台下载!");
+              }
+            });
+            SharedPreferences updatePreferences = getSharedPreferences("update", Context.MODE_PRIVATE);
+            boolean update = updatePreferences.getBoolean("update", true);
+            if (update) {
+              versionManager.checkVersion(MainActivity.this);
+            }
+          }
         }
       });
-      SharedPreferences updatePreferences = getSharedPreferences("update", Context.MODE_PRIVATE);
-      boolean update = updatePreferences.getBoolean("update", true);
-      if (update) {
-        versionManager.checkVersion(this);
-      }
-    }
+    }).start();
   }
 }
