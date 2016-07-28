@@ -117,7 +117,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="4px"
                 android:layout_toRightOf="@id/huangguan"
-                android:textSize="23px"
+                android:textSize="28px"
                 />
           </RelativeLayout>
 
