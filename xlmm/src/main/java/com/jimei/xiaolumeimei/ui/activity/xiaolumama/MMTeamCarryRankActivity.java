@@ -65,7 +65,7 @@ public class MMTeamCarryRankActivity extends BaseMVVMActivity<ActivityTeamBindin
         });
 
     MamaInfoModel.getInstance()
-        .getPersonalSelfCarryRankBean()
+        .getTeamSelfRank()
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<Response<PersonalCarryRankBean>>() {
           @Override
