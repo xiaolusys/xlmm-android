@@ -78,4 +78,8 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="collection_title">我的收藏</string>
+    <string name="collection_empty_msg_1">您还没有收藏的商品哦....</string>
+    <string name="collection_empty_msg_2">赶紧把你喜欢的商品加入收藏吧~</string>
+    <string name="collection_empty_btn">快去抢购</string>
 </resources>

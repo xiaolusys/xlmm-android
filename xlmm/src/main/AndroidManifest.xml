@@ -30,7 +30,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <meta-data
             android:name="design_width"
             android:value="720" />
@@ -417,6 +416,10 @@
         <activity
             android:name=".ui.activity.user.SelectCouponActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
+        <activity
+            android:name=".ui.activity.product.CollectionActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
+
         <service
             android:name=".xlmmService.UpdateService"
             android:exported="false" />
@@ -470,4 +473,5 @@
             </intent-filter>
         </receiver>
     </application>
+
 </manifest>

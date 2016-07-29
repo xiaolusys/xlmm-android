@@ -43,6 +43,7 @@ import com.jimei.xiaolumeimei.receiver.UpdateBroadReceiver;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.main.ComplainActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ChildListActivity;
+import com.jimei.xiaolumeimei.ui.activity.product.CollectionActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.LadyListActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllOrdersActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity;
@@ -115,10 +116,12 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   @Bind(R.id.rl_mmentry) RelativeLayout rl_mmentry;
   @Bind(R.id.image_1) ImageView image1;
   @Bind(R.id.image_2) ImageView image2;
+  @Bind(R.id.collect) ImageView collectIv;
   @Bind(R.id.scrollableLayout) ScrollableLayout scrollableLayout;
   @Bind(R.id.swipe_layout) SwipeRefreshLayout swipeRefreshLayout;
   @Bind(R.id.drawer_layout) DrawerLayout drawer;
   @Bind(R.id.brand) LinearLayout brand;
+  @Bind(R.id.cart_view) View cart_view;
   @Bind(R.id.post_mainactivity) LinearLayout post_activity_layout;
   @Bind(R.id.text_yesterday) TextView textYesterday;
   @Bind(R.id.text_today) TextView textToday;
@@ -174,6 +177,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
 
   @Override protected void setListener() {
     carts.setOnClickListener(this);
+    collectIv.setOnClickListener(this);
     rl_mmentry.setOnClickListener(this);
     textYesterday.setOnClickListener(this);
     textTomorror.setOnClickListener(this);
@@ -224,6 +228,10 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
       case R.id.rv_cart:
         intent = new Intent(MainActivity.this, CartActivity.class);
         flag = "cart";
+        break;
+      case R.id.collect:
+        intent = new Intent(MainActivity.this, CollectionActivity.class);
+        flag = "collect";
         break;
       case R.id.rl_mmentry:
         JUtils.Log(TAG, "xiaolu mama entry");
@@ -477,10 +485,10 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   @Override public void showBadge() {
     badge = new BadgeView(this);
     badge.setTextSizeOff(7);
-    badge.setBackground(4, Color.parseColor("#d3321b"));
+    badge.setBackground(4, Color.parseColor("#FF3840"));
     badge.setGravity(Gravity.END | Gravity.TOP);
     badge.setPadding(dip2Px(4), dip2Px(1), dip2Px(4), dip2Px(1));
-    badge.setTargetView(image2);
+    badge.setTargetView(cart_view);
   }
 
   @Override public void initViewsForTab() {
