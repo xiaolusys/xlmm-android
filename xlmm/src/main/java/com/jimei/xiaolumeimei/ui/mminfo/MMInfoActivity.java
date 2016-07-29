@@ -22,7 +22,6 @@ import com.jimei.xiaolumeimei.databinding.ActivityMamainfoBinding;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.MamaUrl;
-import com.jimei.xiaolumeimei.entities.PersonalCarryRankBean;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
 import com.jimei.xiaolumeimei.event.MaMaInfoEmptyEvent;
 import com.jimei.xiaolumeimei.event.MaMaInfoEvent;
@@ -161,8 +160,8 @@ public class MMInfoActivity
     b.tvFund.setText(
         Double.toString((double) (Math.round(fortune.getMamaFortune().getCarryValue() * 100)) / 100)
             + "元");
-    b.tvInviteNum.setText(fortune.getMamaFortune().getInviteNum() + "位");
-    b.tvFansnum.setText(fortune.getMamaFortune().getFansNum() + "人");
+    //b.tvInviteNum.setText(fortune.getMamaFortune().getInviteNum() + "位");
+    //b.tvFansnum.setText(fortune.getMamaFortune().getFansNum() + "人");
     b.tvOrder.setText(s + "个");
     if (days <= 15) {
       b.mamaPay.setVisibility(View.VISIBLE);
