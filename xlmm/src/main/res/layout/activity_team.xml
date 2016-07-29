@@ -127,7 +127,7 @@
             android:layout_marginLeft="15px"
             android:layout_marginTop="35px"
             android:layout_toRightOf="@id/jiangbei"
-            android:text="团队收益排行榜"
+            android:text="团队收益排行榜TOP10"
             android:textSize="35px"
             />
       </RelativeLayout>

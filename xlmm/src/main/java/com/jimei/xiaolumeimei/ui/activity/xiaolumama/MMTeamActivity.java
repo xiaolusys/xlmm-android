@@ -15,6 +15,7 @@ import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.widget.DividerItemDecorationForFooter;
+import com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableHelper;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import java.util.List;
 import retrofit2.Response;
@@ -24,7 +25,7 @@ import rx.schedulers.Schedulers;
  * Created by itxuye on 2016/7/27.
  */
 public class MMTeamActivity extends BaseMVVMActivity<ActivityMmteamBinding>
-    implements View.OnClickListener {
+    implements View.OnClickListener, ScrollableHelper.ScrollableContainer {
   private String id;
   private MMTeamAdapter mmTeamAdapter;
 
@@ -34,6 +35,7 @@ public class MMTeamActivity extends BaseMVVMActivity<ActivityMmteamBinding>
         new DividerItemDecoration(this, DividerItemDecorationForFooter.VERTICAL_LIST));
     mmTeamAdapter = new MMTeamAdapter(this);
     b.recyclerview.setAdapter(mmTeamAdapter);
+    b.scrollableLayout.getHelper().setCurrentScrollableContainer(b.recyclerview);
   }
 
   @Override protected void initListener() {
@@ -118,5 +120,9 @@ public class MMTeamActivity extends BaseMVVMActivity<ActivityMmteamBinding>
         readyGo(MMTeamCarryRankActivity.class);
         break;
     }
+  }
+
+  @Override public View getScrollableView() {
+    return b.recyclerview;
   }
 }
