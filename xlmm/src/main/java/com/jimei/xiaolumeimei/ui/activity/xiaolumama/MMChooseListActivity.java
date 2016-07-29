@@ -17,10 +17,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -33,12 +31,8 @@ import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 import com.zhy.autolayout.utils.AutoUtils;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -555,6 +549,7 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
             public MMChooseVH(View itemView) {
                 super(itemView);
                 ButterKnife.bind(this, itemView);
+                AutoUtils.auto(itemView);
             }
         }
     }
