@@ -419,7 +419,15 @@
         <activity
             android:name=".ui.activity.product.CollectionActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
-
+        <activity
+            android:name=".ui.activity.xiaolumama.PersonalCarryRankActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
+        <activity
+            android:name=".ui.activity.xiaolumama.MMTeamActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
+        <activity
+            android:name=".ui.activity.xiaolumama.MMTeamCarryRankActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
         <service
             android:name=".xlmmService.UpdateService"
             android:exported="false" />
