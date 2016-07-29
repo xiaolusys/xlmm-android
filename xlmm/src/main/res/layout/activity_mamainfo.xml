@@ -708,7 +708,7 @@
                   android:layout_gravity="center"
                   android:layout_marginTop="4dp"
                   android:layout_toRightOf="@+id/img_two_dimen"
-                  android:text="邀请小鹿妈妈"
+                  android:text="我的店铺"
                   android:textColor="@color/divider"
                   android:textSize="12sp"
                   />
@@ -757,7 +757,7 @@
                   android:layout_gravity="center"
                   android:layout_marginTop="4dp"
                   android:layout_toRightOf="@+id/img_share"
-                  android:text="粉丝数"
+                  android:text="精品推送"
                   android:textColor="@color/divider"
                   android:textSize="12sp"
                   />
@@ -813,7 +813,7 @@
                   android:layout_gravity="center"
                   android:layout_marginTop="4dp"
                   android:layout_toRightOf="@+id/img_order_invite_1kaidian"
-                  android:text="订单个数"
+                  android:text="我的邀请"
                   android:textColor="@color/divider"
                   android:textSize="12sp"
                   />
@@ -861,7 +861,7 @@
                   android:layout_gravity="center"
                   android:layout_marginTop="4dp"
                   android:layout_toRightOf="@+id/img_chooselist"
-                  android:text="账户余额"
+                  android:text="选择商品"
                   android:textColor="@color/divider"
                   android:textSize="12sp"
                   />
@@ -924,7 +924,7 @@
                   android:layout_gravity="center"
                   android:layout_marginTop="4dp"
                   android:layout_toRightOf="@+id/img_two_dimen1"
-                  android:text="邀请小鹿妈妈"
+                  android:text="妈妈课堂"
                   android:textColor="@color/divider"
                   android:textSize="12sp"
                   />
@@ -1029,7 +1029,7 @@
                   android:layout_gravity="center"
                   android:layout_marginTop="4dp"
                   android:layout_toRightOf="@+id/img_order1"
-                  android:text="订单个数"
+                  android:text="妈妈团队"
                   android:textColor="@color/divider"
                   android:textSize="12sp"
                   />
@@ -1077,7 +1077,7 @@
                   android:layout_gravity="center"
                   android:layout_marginTop="4dp"
                   android:layout_toRightOf="@+id/img_income1"
-                  android:text="个人排名"
+                  android:text="收益排名"
                   android:textColor="@color/divider"
                   android:textSize="12sp"
                   />
