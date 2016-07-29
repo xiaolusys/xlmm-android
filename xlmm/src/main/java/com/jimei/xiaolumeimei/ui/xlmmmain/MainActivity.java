@@ -45,6 +45,7 @@ import com.jimei.xiaolumeimei.receiver.UpdateBroadReceiver;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.main.ComplainActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ChildListActivity;
+import com.jimei.xiaolumeimei.ui.activity.product.CollectionActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.LadyListActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllOrdersActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity;
@@ -80,7 +81,6 @@ import com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableLayout;
 import com.jimei.xiaolumeimei.xlmmService.UpdateService;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
-import com.umeng.update.UmengUpdateAgent;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
 import com.zhy.http.okhttp.callback.FileCallBack;
@@ -119,10 +119,12 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   @Bind(R.id.rl_mmentry) RelativeLayout rl_mmentry;
   @Bind(R.id.image_1) ImageView image1;
   @Bind(R.id.image_2) ImageView image2;
+  @Bind(R.id.collect) ImageView collectIv;
   @Bind(R.id.scrollableLayout) ScrollableLayout scrollableLayout;
   @Bind(R.id.swipe_layout) SwipeRefreshLayout swipeRefreshLayout;
   @Bind(R.id.drawer_layout) DrawerLayout drawer;
   @Bind(R.id.brand) LinearLayout brand;
+  @Bind(R.id.cart_view) View cart_view;
   @Bind(R.id.post_mainactivity) LinearLayout post_activity_layout;
   @Bind(R.id.text_yesterday) TextView textYesterday;
   @Bind(R.id.text_today) TextView textToday;
@@ -140,7 +142,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   private List<BaseFragment> list = new ArrayList<>();
   private int num;
   private BadgeView badge;
-  private double budgetCash;
   private TextView msg1;
   private TextView msg2;
   private TextView msg3;
@@ -173,19 +174,11 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     if (LoginUtils.checkLoginState(getApplicationContext())) {
       mPresenter.isCouPon();
     }
-
-    new Thread(() -> {
-      try {
-        Thread.sleep(500 * 60);
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
-      UmengUpdateAgent.update(MainActivity.this);
-    }).start();
   }
 
   @Override protected void setListener() {
     carts.setOnClickListener(this);
+    collectIv.setOnClickListener(this);
     rl_mmentry.setOnClickListener(this);
     textYesterday.setOnClickListener(this);
     textTomorror.setOnClickListener(this);
@@ -237,15 +230,16 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         intent = new Intent(MainActivity.this, CartActivity.class);
         flag = "cart";
         break;
+      case R.id.collect:
+        intent = new Intent(MainActivity.this, CollectionActivity.class);
+        flag = "collect";
+        break;
       case R.id.rl_mmentry:
         JUtils.Log(TAG, "xiaolu mama entry");
         intent = new Intent(MainActivity.this, MMInfoActivity.class);
         break;
       case R.id.ll_money:
         intent = new Intent(MainActivity.this, WalletActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putDouble("money", budgetCash);
-        intent.putExtras(bundle);
         flag = "money";
         break;
       case R.id.ll_score:
@@ -489,10 +483,10 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   @Override public void showBadge() {
     badge = new BadgeView(this);
     badge.setTextSizeOff(7);
-    badge.setBackground(4, Color.parseColor("#d3321b"));
+    badge.setBackground(4, Color.parseColor("#FF3840"));
     badge.setGravity(Gravity.END | Gravity.TOP);
     badge.setPadding(dip2Px(4), dip2Px(1), dip2Px(4), dip2Px(1));
-    badge.setTargetView(image2);
+    badge.setTargetView(cart_view);
   }
 
   @Override public void initViewsForTab() {
@@ -524,10 +518,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         loginFlag.setVisibility(View.GONE);
       } else {
         loginFlag.setVisibility(View.VISIBLE);
-      }
-
-      if (null != userNewBean.getUserBudget()) {
-        budgetCash = userNewBean.getUserBudget().getBudgetCash();
       }
       //JUtils.Log(TAG, "mamaid " + userNewBean.getXiaolumm().getId());
       if ((userNewBean.getXiaolumm() != null) && (userNewBean.getXiaolumm().getId() != 0)) {
@@ -981,7 +971,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     MobclickAgent.onResume(this);
     //resumeData();
     mPresenter.getCartsNum();
-    //mPresenter.getUserInfoBean();
+//    mPresenter.getUserInfoBean();
 
     JUtils.Log(TAG, "resume");
   }
@@ -1015,37 +1005,55 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     super.onDestroy();
   }
 
-  @Override public void checkVersion(int versionCode, String content, String downloadUrl,
-      boolean isAutoUpdate) {
-    VersionManager versionManager = new VersionManager() {
-
-      @Override public int getServerVersion() {
-        return versionCode;
+  @Override
+  public void checkVersion(int versionCode,String content,String downloadUrl,boolean isAutoUpdate) {
+    new Thread(() -> {
+      try {
+        Thread.sleep(500 * 10);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
       }
 
-      @Override public String getUpdateContent() {
-        return content;
-      }
+      runOnUiThread(new Runnable() {
+        @Override
+        public void run() {
+          VersionManager versionManager = new VersionManager() {
 
-      @Override public boolean showMsg() {
-        return false;
-      }
-    };
-    if (isAutoUpdate) {
-      versionManager.setPositiveListener(new View.OnClickListener() {
-        @Override public void onClick(View v) {
-          Intent intent = new Intent(MainActivity.this, UpdateService.class);
-          intent.putExtra(UpdateService.EXTRAS_DOWNLOAD_URL, downloadUrl);
-          startService(intent);
-          versionManager.getDialog().dismiss();
-          JUtils.Toast("应用正在后台下载!");
+            @Override
+            public int getServerVersion() {
+              return versionCode;
+            }
+
+            @Override
+            public String getUpdateContent() {
+              return content;
+            }
+
+            @Override
+            public boolean showMsg() {
+              return false;
+            }
+          };
+          if (isAutoUpdate) {
+            versionManager.setPositiveListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, UpdateService.class);
+                intent.putExtra(UpdateService.EXTRAS_DOWNLOAD_URL, downloadUrl);
+                startService(intent);
+                versionManager.getDialog().dismiss();
+                JUtils.Toast("应用正在后台下载!");
+              }
+            });
+            SharedPreferences updatePreferences = getSharedPreferences("update", Context.MODE_PRIVATE);
+            boolean update = updatePreferences.getBoolean("update", true);
+            if (update) {
+              versionManager.checkVersion(MainActivity.this);
+            }
+          }
         }
+
       });
-      SharedPreferences updatePreferences = getSharedPreferences("update", Context.MODE_PRIVATE);
-      boolean update = updatePreferences.getBoolean("update", true);
-      if (update) {
-        versionManager.checkVersion(this);
-      }
-    }
+    }).start();
   }
 }

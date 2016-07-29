@@ -20,6 +20,9 @@ import com.jimei.xiaolumeimei.entities.CartsinfoBean;
 import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.entities.ClickcarryBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
+import com.jimei.xiaolumeimei.entities.CollectionAllBean;
+import com.jimei.xiaolumeimei.entities.CollectionDeleteBody;
+import com.jimei.xiaolumeimei.entities.CollectionResultBean;
 import com.jimei.xiaolumeimei.entities.CouponBean;
 import com.jimei.xiaolumeimei.entities.CouponEntity;
 import com.jimei.xiaolumeimei.entities.CouponSelectEntity;
@@ -71,8 +74,10 @@ import com.jimei.xiaolumeimei.entities.UserWithdrawResult;
 import com.jimei.xiaolumeimei.entities.VersionBean;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.entities.WxPubAuthInfo;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import retrofit2.http.Body;
@@ -80,6 +85,7 @@ import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -799,15 +805,30 @@ public interface XlmmService {
     @FormUrlEncoded
     @POST("/rest/v1/pmt/xlmm/mama_register_pay")
     Observable<Response<ResponseBody>> mamaRegisterPay(
-        @Field("product_id")    String product_id,
-        @Field("sku_id")        String sku_id,
-        @Field("payment")       String payment,
-        @Field("channel")       String channel,
-        @Field("num")           String num,
-        @Field("post_fee")      String post_fee,
-        @Field("discount_fee")  String discount_fee,
-        @Field("uuid")          String uuid,
-        @Field("total_fee")     String total_fee
+            @Field("product_id") String product_id,
+            @Field("sku_id") String sku_id,
+            @Field("payment") String payment,
+            @Field("channel") String channel,
+            @Field("num") String num,
+            @Field("post_fee") String post_fee,
+            @Field("discount_fee") String discount_fee,
+            @Field("uuid") String uuid,
+            @Field("total_fee") String total_fee
+    );
+
+    @GET("/rest/v1/favorites")
+    Observable<CollectionAllBean> getCollection(
+            @Query("page") int page
+    );
+
+    @HTTP(method = "POST", path = "/rest/v1/favorites", hasBody = true)
+    Observable<CollectionResultBean> addCollection(
+            @Body CollectionDeleteBody deleteBody
+    );
+
+    @HTTP(method = "DELETE", path = "/rest/v1/favorites", hasBody = true)
+    Observable<CollectionResultBean> deleteCollection(
+            @Body CollectionDeleteBody deleteBody
     );
 
     @GET("/rest/v2/mama/rank/carry_total_rank")
@@ -821,16 +842,15 @@ public interface XlmmService {
 
     @GET("/rest/v2/mama/rank/{id}/get_team_members")
     Observable<Response<List<PersonalCarryRankBean>>> getTeamMembers(
-        @Path("id")String id
+            @Path("id") String id
     );
 
     @GET("/rest/v2/mama/teamrank/{id}")
     Observable<Response<PersonalCarryRankBean>> getTeamMemberSelf(
-        @Path("id")String id
+            @Path("id") String id
     );
 
     @GET("/rest/v2/mama/teamrank/self_rank")
     Observable<Response<PersonalCarryRankBean>> getTeamSelfRank(
     );
-
 }

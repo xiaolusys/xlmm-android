@@ -62,11 +62,6 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-        if (null != extras) {
-            money = extras.getDouble("money");
-            JUtils.Log(TAG, "money:" + money);
-        }
-
     }
 
     @Override

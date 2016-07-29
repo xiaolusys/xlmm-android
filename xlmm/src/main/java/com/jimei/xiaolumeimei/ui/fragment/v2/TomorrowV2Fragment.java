@@ -9,7 +9,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.iwgang.countdownview.CountdownView;
@@ -214,7 +213,7 @@ public class TomorrowV2Fragment extends BaseFragment {
           loadMoreData(page, 10);
           page++;
         } else {
-          Toast.makeText(activity, "没有更多了拉,去购物吧", Toast.LENGTH_SHORT).show();
+          JUtils.Toast("没有更多了拉,去购物吧");
           xRecyclerView.post(xRecyclerView::loadMoreComplete);
         }
       }
