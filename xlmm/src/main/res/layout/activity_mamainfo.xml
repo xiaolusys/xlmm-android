@@ -684,7 +684,7 @@
                   android:layout_height="wrap_content"
                   android:layout_marginLeft="55px"
                   android:layout_marginTop="50px"
-                  android:src="@drawable/ic_qrcode"
+                  android:src="@drawable/wodejingxuan"
                   />
 
               <TextView
@@ -733,7 +733,7 @@
                   android:layout_height="wrap_content"
                   android:layout_marginLeft="55px"
                   android:layout_marginTop="50px"
-                  android:src="@drawable/ic_fans"
+                  android:src="@drawable/meirituisong"
                   />
 
               <TextView
@@ -789,7 +789,7 @@
                   android:layout_height="wrap_content"
                   android:layout_marginLeft="55px"
                   android:layout_marginTop="50px"
-                  android:src="@drawable/ic_order"
+                  android:src="@drawable/invite_kaidian"
                   />
 
               <TextView
@@ -837,7 +837,7 @@
                   android:layout_height="42px"
                   android:layout_marginLeft="55px"
                   android:layout_marginTop="50px"
-                  android:src="@drawable/ic_coin2"
+                  android:src="@drawable/xuanpinshangjia"
                   />
 
               <TextView
@@ -900,7 +900,7 @@
                   android:layout_height="wrap_content"
                   android:layout_marginLeft="55px"
                   android:layout_marginTop="50px"
-                  android:src="@drawable/ic_qrcode"
+                  android:src="@drawable/xiaoludaxue"
                   />
 
               <TextView
@@ -1005,7 +1005,7 @@
                   android:layout_height="wrap_content"
                   android:layout_marginLeft="55px"
                   android:layout_marginTop="50px"
-                  android:src="@drawable/ic_order"
+                  android:src="@drawable/wodetuandui"
                   />
 
               <TextView
@@ -1053,7 +1053,7 @@
                   android:layout_height="42px"
                   android:layout_marginLeft="55px"
                   android:layout_marginTop="50px"
-                  android:src="@drawable/ic_coin2"
+                  android:src="@drawable/wodepaihang"
                   />
 
               <TextView
