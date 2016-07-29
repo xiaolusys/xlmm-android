@@ -142,7 +142,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   private List<BaseFragment> list = new ArrayList<>();
   private int num;
   private BadgeView badge;
-  private double budgetCash;
   private TextView msg1;
   private TextView msg2;
   private TextView msg3;
@@ -241,9 +240,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         break;
       case R.id.ll_money:
         intent = new Intent(MainActivity.this, WalletActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putDouble("money", budgetCash);
-        intent.putExtras(bundle);
         flag = "money";
         break;
       case R.id.ll_score:
@@ -522,10 +518,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         loginFlag.setVisibility(View.GONE);
       } else {
         loginFlag.setVisibility(View.VISIBLE);
-      }
-
-      if (null != userNewBean.getUserBudget()) {
-        budgetCash = userNewBean.getUserBudget().getBudgetCash();
       }
       //JUtils.Log(TAG, "mamaid " + userNewBean.getXiaolumm().getId());
       if ((userNewBean.getXiaolumm() != null) && (userNewBean.getXiaolumm().getId() != 0)) {
@@ -979,7 +971,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     MobclickAgent.onResume(this);
     //resumeData();
     mPresenter.getCartsNum();
-    //mPresenter.getUserInfoBean();
+//    mPresenter.getUserInfoBean();
 
     JUtils.Log(TAG, "resume");
   }

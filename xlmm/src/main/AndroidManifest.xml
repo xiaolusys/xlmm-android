@@ -428,6 +428,10 @@
         <activity
             android:name=".ui.activity.xiaolumama.MMTeamCarryRankActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
+        <activity
+            android:name=".ui.activity.product.LadyZoneActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
+
         <service
             android:name=".xlmmService.UpdateService"
             android:exported="false" />
