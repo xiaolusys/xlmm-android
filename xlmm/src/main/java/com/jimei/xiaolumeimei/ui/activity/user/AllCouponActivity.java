@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import butterknife.Bind;
@@ -15,10 +16,8 @@ import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.CouponEntity;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.fragment.coupon.CouponFragment;
-import com.jimei.xiaolumeimei.widget.SerialFragmentAdapter;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,7 +101,7 @@ public class AllCouponActivity extends BaseSwipeBackCompatActivity {
         return null;
     }
 
-    public class MainTabAdapter extends SerialFragmentAdapter implements Serializable {
+    public class MainTabAdapter extends FragmentPagerAdapter {
 
         FragmentManager fm;
 

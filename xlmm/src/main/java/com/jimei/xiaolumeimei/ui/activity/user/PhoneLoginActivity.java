@@ -24,6 +24,7 @@ import com.jimei.xiaolumeimei.entities.GetCouponbean;
 import com.jimei.xiaolumeimei.event.UserInfoEmptyEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
+import com.jimei.xiaolumeimei.ui.activity.product.CollectionActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
@@ -148,7 +149,11 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                         finish();
                       } else if (login.equals("main")) {
                         finish();
-                      } else if (login.equals("point")) {
+                      } else if (login.equals("collect")){
+                        Intent intent = new Intent(mContext, CollectionActivity.class);
+                        startActivity(intent);
+                        finish();
+                      }else if (login.equals("point")) {
                         Intent intent =
                             new Intent(mContext, MembershipPointActivity.class);
                         startActivity(intent);
