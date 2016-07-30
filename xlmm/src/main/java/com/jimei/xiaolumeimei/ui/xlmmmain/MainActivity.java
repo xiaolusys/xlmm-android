@@ -151,6 +151,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   private int rvTopHeight;
   private EventBus aDefault;
   private UpdateBroadReceiver mUpdateBroadReceiver;
+  private double budgetCash;
 
   @Override protected void onStart() {
     super.onStart();
