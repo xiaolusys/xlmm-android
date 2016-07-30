@@ -238,7 +238,10 @@ public final class ViewUtils {
 
   public static void loadImgToImgView(Context context, ImageView img, String picPath) {
     if (null == picPath) return;
-    if ( picPath.startsWith("http://wx.qlogo.cn")||picPath.startsWith("https://mmbiz.qlogo.cn") ) {
+    if ( picPath.contains("wx.qlogo.cn") ) {
+      Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
+              .centerCrop().into(img);
+    }else if(picPath.contains("mmbiz.qlogo.cn")){
       Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
               .centerCrop().into(img);
     } else {
@@ -268,10 +271,13 @@ public final class ViewUtils {
 
   public static void loadImgToImgViewWithWaterMark(Context context, ImageView img, String picPath) {
     if (null == picPath) return;
-    if ( picPath.startsWith("http://wx.qlogo.cn")||picPath.startsWith("https://mmbiz.qlogo.cn") ) {
+    if ( picPath.contains("wx.qlogo.cn") ) {
       Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
               .centerCrop().into(img);
-    } else {
+    }else if(picPath.contains("mmbiz.qlogo.cn") ){
+      Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
+              .centerCrop().into(img);
+    } else{
       String head_img;
       Pattern p = Pattern.compile("(?<=//|)((\\w)+\\.)+\\w+");
       Matcher m = p.matcher(picPath);
@@ -299,9 +305,12 @@ public final class ViewUtils {
   public static void loadImgToImgView(Context context, ImageView img, String picPath,
       int radius) {
     if (null == picPath) return;
-      if (picPath.startsWith("https://mmbiz.qlogo.cn")||picPath.startsWith("https://wx.qlogo.cn")) {
+      if (picPath.contains("mmbiz.qlogo.cn")) {
           Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
                   .centerCrop().transform(new GlideRoundTransform(context, radius)).into(img);
+      } else if (picPath.contains("wx.qlogo.cn")){
+        Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
+                .centerCrop().transform(new GlideRoundTransform(context, radius)).into(img);
       } else {
           String head_img;
           Pattern p = Pattern.compile("(?<=//|)((\\w)+\\.)+\\w+");
@@ -331,7 +340,10 @@ public final class ViewUtils {
       String picPath) {
     if (null == picPath) return;
 
-    if (picPath.startsWith("https://mmbiz.qlogo.cn")||picPath.startsWith("https://wx.qlogo.cn")) {
+    if (picPath.contains("mmbiz.qlogo.cn")) {
+      Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
+              .bitmapTransform(new CropCircleTransformation(context)).into(img);
+    }else if (picPath.contains("wx.qlogo.cn")){
       Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
               .bitmapTransform(new CropCircleTransformation(context)).into(img);
     } else {
@@ -362,7 +374,10 @@ public final class ViewUtils {
   public static void loadImgToImgViewWithPlaceholder(Context context, ImageView img,
       String picPath) {
     if (null == picPath) return;
-    if (picPath.startsWith("https://mmbiz.qlogo.cn")||picPath.startsWith("https://wx.qlogo.cn")) {
+    if (picPath.contains("mmbiz.qlogo.cn")) {
+      Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
+              .centerCrop().into(img);
+    }else if(picPath.contains("wx.qlogo.cn")){
       Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
               .centerCrop().into(img);
     } else {
@@ -393,10 +408,13 @@ public final class ViewUtils {
   public static void loadImgToImgViewWithPlaceholderFragment(Fragment context,
       ImageView img, String picPath) {
     if (null == picPath) return;
-    if (picPath.startsWith("https://mmbiz.qlogo.cn")||picPath.startsWith("https://wx.qlogo.cn")) {
+    if (picPath.contains("mmbiz.qlogo.cn")) {
       Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
               .centerCrop().into(img);
-    } else {
+    } else if (picPath.contains("6wx.qlogo.cn")){
+      Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
+              .centerCrop().into(img);
+    }else {
       String head_img;
       Pattern p = Pattern.compile("(?<=//|)((\\w)+\\.)+\\w+");
       Matcher m = p.matcher(picPath);
