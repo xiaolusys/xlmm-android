@@ -79,7 +79,7 @@ public class MMTeamCarryRankActivity extends BaseMVVMActivity<ActivityTeamBindin
                 } else {
                   b.tvRank.setText("第" + personalCarryRankBean.getRank() + "名");
                 }
-                b.tvCarry.setText("收益" + personalCarryRankBean.getTotal() / 100.00 + "元");
+                b.tvCarry.setText("团队收益" + personalCarryRankBean.getTotal() / 100.00 + "元");
                 try {
                   if (!TextUtils.isEmpty(personalCarryRankBean.getThumbnail())) {
 
