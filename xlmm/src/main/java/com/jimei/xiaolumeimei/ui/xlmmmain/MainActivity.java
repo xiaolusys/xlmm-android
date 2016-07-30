@@ -39,7 +39,7 @@ import com.jimei.xiaolumeimei.entities.IsGetcoupon;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.event.LogOutEmptyEvent;
-import com.jimei.xiaolumeimei.event.UserEvent;
+import com.jimei.xiaolumeimei.event.UserChangeEvent;
 import com.jimei.xiaolumeimei.event.UserInfoEmptyEvent;
 import com.jimei.xiaolumeimei.receiver.UpdateBroadReceiver;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
@@ -151,6 +151,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   private int rvTopHeight;
   private EventBus aDefault;
   private UpdateBroadReceiver mUpdateBroadReceiver;
+  private double budgetCash;
 
   @Override protected void onStart() {
     super.onStart();
@@ -509,6 +510,62 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     initUserNewView(userNewBean);
   }
 
+  @Override public void initUserViewChange(UserInfoBean userNewBean) {
+    if (null != userNewBean) {
+
+      if (null != userNewBean.getUserBudget()) {
+        budgetCash = userNewBean.getUserBudget().getBudgetCash();
+      }
+      //JUtils.Log(TAG, "mamaid " + userNewBean.getXiaolumm().getId());
+    } else {
+      rl_mmentry.setVisibility(View.INVISIBLE);
+      loginFlag.setVisibility(View.GONE);
+      imgUser.setImageResource(R.drawable.img_head);
+      rl_mmentry.setVisibility(View.INVISIBLE);
+    }
+
+    if (null != userNewBean) {
+      tvNickname.setText(userNewBean.getNick());
+
+      if (userNewBean.getWaitpayNum() > 0) {
+        msg1.setVisibility(View.VISIBLE);
+        msg1.setText(userNewBean.getWaitpayNum() + "");
+      } else {
+        msg1.setVisibility(View.INVISIBLE);
+      }
+      if (userNewBean.getWaitgoodsNum() > 0) {
+        msg2.setVisibility(View.VISIBLE);
+        msg2.setText(userNewBean.getWaitgoodsNum() + "");
+      } else {
+        msg2.setVisibility(View.INVISIBLE);
+      }
+      if (userNewBean.getRefundsNum() > 0) {
+        msg3.setVisibility(View.VISIBLE);
+        msg3.setText(userNewBean.getRefundsNum() + "");
+      } else {
+        msg3.setVisibility(View.INVISIBLE);
+      }
+      String pointStr = userNewBean.getScore() + "";
+      tvPoint.setText(pointStr);
+      if (userNewBean.getUserBudget() != null) {
+        String moneyStr =
+            (float) (Math.round(userNewBean.getUserBudget().getBudgetCash() * 100)) / 100 + "";
+        tvMoney.setText(moneyStr);
+      }
+      String couponStr = userNewBean.getCouponNum() + "";
+      tvCoupon.setText(couponStr);
+    } else {
+      tvPoint.setText("0.00");
+      tvMoney.setText("0.00");
+      tvCoupon.setText("0.00");
+      imgUser.setImageResource(R.drawable.img_head);
+      tvNickname.setText("点击登录");
+      msg1.setVisibility(View.INVISIBLE);
+      msg2.setVisibility(View.INVISIBLE);
+      msg3.setVisibility(View.INVISIBLE);
+    }
+  }
+
   private void initUserNewView(UserInfoBean userNewBean) {
     if (null != userNewBean) {
       if (!TextUtils.isEmpty(userNewBean.getThumbnail())) {
@@ -542,49 +599,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   }
 
   private void initSlideDraw(UserInfoBean userInfoBean) {
-    //JUtils.Log(TAG, "侧滑栏初始化");
-    //if (!(LoginUtils.checkLoginState(getApplicationContext()))) {
-    //  if (tvNickname != null) {
-    //    tvNickname.setText("点击登录");
-    //  }
-    //} else {
-    //  if (tvNickname != null) {
-    //    tvNickname.setText(userInfoBean.getNick());
-    //  }
-    //  if (!TextUtils.isEmpty(userInfoBean.getThumbnail())) {
-    //    ViewUtils.loadImgToImgView(MainActivity.this, imgUser, userInfoBean.getThumbnail());
-    //  }
-    //  if (userInfoBean.getWaitpayNum() > 0) {
-    //    msg1.setVisibility(View.VISIBLE);
-    //    msg1.setText(userInfoBean.getWaitpayNum() + "");
-    //  } else {
-    //    msg1.setVisibility(View.INVISIBLE);
-    //  }
-    //  Log.i(TAG, "" + userInfoBean.getWaitpayNum());
-    //
-    //  if (userInfoBean.getWaitgoodsNum() > 0) {
-    //    msg2.setVisibility(View.VISIBLE);
-    //    msg2.setText(userInfoBean.getWaitgoodsNum() + "");
-    //  } else {
-    //    msg2.setVisibility(View.INVISIBLE);
-    //  }
-    //
-    //  if (userInfoBean.getRefundsNum() > 0) {
-    //    msg3.setVisibility(View.VISIBLE);
-    //    msg3.setText(userInfoBean.getRefundsNum() + "");
-    //  } else {
-    //    msg3.setVisibility(View.INVISIBLE);
-    //  }
-    //  String pointStr = userInfoBean.getScore() + "";
-    //  tvPoint.setText(pointStr);
-    //  if (userInfoBean.getUserBudget() != null) {
-    //    String moneyStr =
-    //        (float) (Math.round(userInfoBean.getUserBudget().getBudgetCash() * 100)) / 100 + "";
-    //    tvMoney.setText(moneyStr);
-    //  }
-    //  String couponStr = userInfoBean.getCouponNum() + "";
-    //  tvCoupon.setText(couponStr);
-    //}
     if (null != userInfoBean) {
       tvNickname.setText(userInfoBean.getNick());
       if (!TextUtils.isEmpty(userInfoBean.getThumbnail())) {
@@ -925,18 +939,9 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   @Subscribe(threadMode = ThreadMode.MAIN) public void initLoginInfo(UserInfoEmptyEvent event) {
     JUtils.Log(TAG, "=======initLoginInfo");
     mPresenter.getUserInfoBean();
-    //Intent intent = new Intent(MainActivity.this, MainActivity.class);
-    //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-    //startActivity(intent);
-    //finish();
   }
 
   @Subscribe(threadMode = ThreadMode.MAIN) public void initLogOutInfo(LogOutEmptyEvent event) {
-    //JUtils.Log(TAG, "=======initLoginInfo");
-    //Intent intent = new Intent(MainActivity.this, MainActivity.class);
-    //startActivity(intent);
-    //finish();
-
     tvPoint.setText("0.00");
     tvMoney.setText("0.00");
     tvCoupon.setText("0.00");
@@ -953,9 +958,9 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   }
 
   @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-  public void initLoginInfoView(UserEvent event) {
-    initUserNewView(event.userInfoBean);
-    initSlideDraw(event.userInfoBean);
+  public void initUserinfoInfoChange(UserChangeEvent event) {
+    JUtils.Log(TAG, "initUserinfoInfoChange()");
+    mPresenter.getUserInfoBeanChange();
   }
 
   @Override protected void onPause() {
@@ -996,12 +1001,16 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
 
   @Override protected void onStop() {
     super.onStop();
+    unregisterReceiver(mUpdateBroadReceiver);
     JUtils.Log(TAG, "onStop()");
   }
 
   @Override protected void onDestroy() {
     aDefault.unregister(this);
-    unregisterReceiver(mUpdateBroadReceiver);
+    UserChangeEvent stickyEvent = aDefault.getStickyEvent(UserChangeEvent.class);
+    if (stickyEvent != null) {
+      aDefault.removeStickyEvent(stickyEvent);
+    }
     super.onDestroy();
   }
 

@@ -23,7 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
+import butterknife.Bind;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
 import com.jimei.xiaolumeimei.R;
@@ -32,6 +32,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AddressBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.PayInfoBean;
+import com.jimei.xiaolumeimei.event.UserChangeEvent;
 import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.TradeModel;
@@ -45,11 +46,9 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.pingplusplus.android.PaymentActivity;
 import com.umeng.analytics.MobclickAgent;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.Bind;
+import org.greenrobot.eventbus.EventBus;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -921,6 +920,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 }
 
                 if (result.equals("cancel")) {
+                    EventBus.getDefault().postSticky(new UserChangeEvent());
                     //wexin alipay already showmsg
                     MobclickAgent.onEvent(CartsPayInfoActivity.this, "PayCancelID");
                     JUtils.Toast("你已取消支付!");
@@ -935,6 +935,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     }
                     finish();
                 } else if (result.equals("success")) {
+                    EventBus.getDefault().postSticky(new UserChangeEvent());
                     JUtils.Toast("支付成功！");
                     //startActivity(new Intent(CartsPayInfoActivity.this, AllOrdersActivity.class));
                     //finish();
@@ -946,6 +947,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     startActivity(intent);
                     finish();
                 } else {
+                    EventBus.getDefault().postSticky(new UserChangeEvent());
                     MobclickAgent.onEvent(CartsPayInfoActivity.this, "PayFailID");
                     showMsg(result, errorMsg, extraMsg);
 //                    startActivity(new Intent(CartsPayInfoActivity.this, CartActivity.class));
