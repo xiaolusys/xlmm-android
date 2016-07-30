@@ -10,6 +10,8 @@ import com.jimei.xiaolumeimei.entities.IsGetcoupon;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.entities.VersionBean;
+
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import rx.Observable;
@@ -20,7 +22,7 @@ import rx.Observable;
 public interface MainContract {
   interface Model extends BaseModel {
 
-    Observable<UserInfoBean> getProfile();
+    Observable<Response<UserInfoBean>> getProfile();
 
     Observable<Response<IsGetcoupon>> isCouPon();
 
@@ -33,6 +35,8 @@ public interface MainContract {
     Observable<ResponseBody> getUsercoupons(String template_id);
 
     Observable<AddressDownloadResultBean> getAddressVersionAndUrl();
+
+    Observable<VersionBean> getVersion();
   }
 
   interface View extends BaseView {
@@ -45,6 +49,8 @@ public interface MainContract {
     void initViewsForTab();
 
     void initUserView(UserInfoBean userNewBean);
+
+    void initUserViewChange(UserInfoBean userNewBean);
 
     void initDrawer(UserInfoBean userInfoBean);
 
@@ -62,15 +68,17 @@ public interface MainContract {
 
     void iniCartsNum(CartsNumResultBean cartsNumResultBean);
 
-    void  clickGetCounpon(ResponseBody responseBody);
+    void clickGetCounpon(ResponseBody responseBody);
 
     void downLoaAddressFile(AddressDownloadResultBean addressDownloadResultBean);
+
+    void checkVersion(int versionCode, String content, String downloadUrl, boolean isAutoUpdate);
   }
 
   abstract class Presenter extends BasePresenter<Model, View> {
     public abstract void getUserInfoBean();
 
-    public abstract void getUserInfoBeanFromLogin();
+    public abstract void getUserInfoBeanChange();
 
     public abstract void isCouPon();
 
@@ -86,8 +94,9 @@ public interface MainContract {
 
     public abstract void getAddressVersionAndUrl();
 
-
     @Override public void onStart() {
     }
+
+    public abstract void getVersion();
   }
 }

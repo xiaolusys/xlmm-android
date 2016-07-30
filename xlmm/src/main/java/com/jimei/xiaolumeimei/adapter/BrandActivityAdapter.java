@@ -29,7 +29,7 @@ public class BrandActivityAdapter extends RecyclerView.Adapter<BrandActivityAdap
   private Context mContext;
 
   public BrandActivityAdapter(Context mContext) {
-    JUtils.Log("MainActivity", "-----------BrandlistAdapter");
+    JUtils.Log("MainActivity", "-----------BrandActivityAdapter");
     this.mContext = mContext;
     mList = new ArrayList<>();
   }

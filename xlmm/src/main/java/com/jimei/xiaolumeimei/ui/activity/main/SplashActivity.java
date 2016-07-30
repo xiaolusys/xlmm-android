@@ -22,7 +22,7 @@ public class SplashActivity extends BaseAppCompatActivityForDetail {
 
     @Override
     protected void initViews() {
-        MobclickAgent.setDebugMode( true );
+        MobclickAgent.setDebugMode(true);
         Window window = getWindow();
         //4.4版本及以上
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -43,7 +43,7 @@ public class SplashActivity extends BaseAppCompatActivityForDetail {
             @Override
             public void run() {
                 startActivity(new Intent(SplashActivity.this,
-                    com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity.class));
+                        com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity.class));
                 finish();
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
@@ -67,7 +67,6 @@ public class SplashActivity extends BaseAppCompatActivityForDetail {
 
     @Override
     protected void initData() {
-
     }
 
     @Override

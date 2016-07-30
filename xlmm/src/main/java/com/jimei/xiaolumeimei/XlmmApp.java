@@ -6,25 +6,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
-import android.util.Log;
+import com.facebook.stetho.Stetho;
 import com.jimei.xiaolumeimei.data.XlmmConst;
-import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.mipush.XiaoMiMessageReceiver;
-import com.jimei.xiaolumeimei.model.UserModel;
-import com.jimei.xiaolumeimei.okhttp3.PersistentCookieJar;
-import com.jimei.xiaolumeimei.okhttp3.cache.SetCookieCache;
-import com.jimei.xiaolumeimei.okhttp3.persistence.SharedPrefsCookiePersistor;
-import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
-import com.jimei.xiaolumeimei.utils.LoginUtils;
-import com.jimei.xiaolumeimei.utils.NetWorkUtil;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
 import com.jude.utils.JUtils;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.zhy.autolayout.config.AutoLayoutConifg;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-import okhttp3.OkHttpClient;
-import rx.schedulers.Schedulers;
 
 //import com.squareup.leakcanary.LeakCanary;
 
@@ -35,7 +24,6 @@ import rx.schedulers.Schedulers;
  */
 public class XlmmApp extends MultiDexApplication {
 
-  public static OkHttpClient client;
   private static Context mContext;
   private static XiaoMiMessageReceiver.XiaoMiPushHandler handler = null;
   private SharedPreferences cookiePrefs;
@@ -58,7 +46,7 @@ public class XlmmApp extends MultiDexApplication {
     //    Thread.setDefaultUncaughtExceptionHandler(new MyUnCaughtExceptionHandler());
     mContext = getApplicationContext();
     cookiePrefs = getSharedPreferences("xlmmCookiesAxiba", 0);
-    client = initOkHttpClient();
+    Stetho.initializeWithDefaults(this);
     JUtils.initialize(this);
     JUtils.setDebug(true, "xlmm");
     //CrashWoodpecker.fly(false).to(this);
@@ -74,41 +62,6 @@ public class XlmmApp extends MultiDexApplication {
     if (handler == null) {
       handler = new XiaoMiMessageReceiver.XiaoMiPushHandler(getApplicationContext());
     }
-
-    //获取用户信息失败，说明要重新登陆
-    if (NetWorkUtil.isNetWorkConnected(this)) {
-
-      UserModel.getInstance()
-          .getUserInfo()
-          .subscribeOn(Schedulers.io())
-          .subscribe(new ServiceResponse<UserInfoBean>() {
-            @Override public void onNext(UserInfoBean user) {
-              Log.d("XlmmApp", "getUserInfo: " + user.toString());
-            }
-
-            @Override public void onCompleted() {
-              super.onCompleted();
-            }
-
-            @Override public void onError(Throwable e) {
-              LoginUtils.delLoginInfo(mContext);
-              e.printStackTrace();
-              Log.e("XlmmApp", "error getUserInfo");
-              super.onError(e);
-            }
-          });
-    }
-  }
-
-  //初始化OkHttpClient
-  private OkHttpClient initOkHttpClient() {
-
-    return new OkHttpClient.Builder().readTimeout(60000, TimeUnit.MILLISECONDS)
-        .connectTimeout(60000, TimeUnit.MILLISECONDS)
-        .writeTimeout(6000, TimeUnit.MILLISECONDS)
-        .cookieJar(new PersistentCookieJar(new SetCookieCache(),
-            new SharedPrefsCookiePersistor(mContext)))
-        .build();
   }
 
   @Override protected void attachBaseContext(Context base) {
@@ -118,8 +71,7 @@ public class XlmmApp extends MultiDexApplication {
 
   private boolean shouldInit() {
     ActivityManager am = ((ActivityManager) getSystemService(Context.ACTIVITY_SERVICE));
-    List<ActivityManager.RunningAppProcessInfo> processInfos =
-        am.getRunningAppProcesses();
+    List<ActivityManager.RunningAppProcessInfo> processInfos = am.getRunningAppProcesses();
     String mainProcessName = getPackageName();
     int myPid = android.os.Process.myPid();
     for (ActivityManager.RunningAppProcessInfo info : processInfos) {
@@ -129,7 +81,6 @@ public class XlmmApp extends MultiDexApplication {
     }
     return false;
   }
-
 
   //异常退出的时候,自动重启
   class MyUnCaughtExceptionHandler implements Thread.UncaughtExceptionHandler {

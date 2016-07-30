@@ -163,7 +163,6 @@ public class ProductPopDetailActvityWeb extends BaseSwipeBackCompatActivity {
               + ";");
       mWebView.getSettings().setJavaScriptEnabled(true);
       mWebView.addJavascriptInterface(new AndroidJsBridge(this), "AndroidBridge");
-      //      mPonto = new Ponto(mWebView, PONTO_MODULES_PACKAGE);
       mWebView.getSettings().setAllowFileAccess(true);
       //如果访问的页面中有Javascript，则webview必须设置支持Javascript
       //mWebView.getSettings().setUserAgentString(MyApplication.getUserAgent());

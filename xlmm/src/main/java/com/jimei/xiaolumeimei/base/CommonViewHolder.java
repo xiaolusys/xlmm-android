@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.jimei.xiaolumeimei.utils.ViewUtils;
 
 /**
  * Author  : itxuye(itxuye@gmail.com)|(http://itxuye.com)
@@ -98,9 +99,8 @@ public class CommonViewHolder {
   /*
       通过drawableI加载图片
    */
-  public CommonViewHolder setImageFromUrl(int viewId, int drawableId) {
-    ImageView imageView = findViewById(viewId);
-    imageView.setImageResource(drawableId);
+  public CommonViewHolder setImageFromUrl(Context context,ImageView imageView,String path) {
+    ViewUtils.loadImgToImgView(context,imageView,path);
 
     return this;
   }

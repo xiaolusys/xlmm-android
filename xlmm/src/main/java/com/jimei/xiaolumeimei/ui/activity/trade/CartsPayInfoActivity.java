@@ -7,7 +7,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.AppCompatSpinner;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -24,7 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
+import butterknife.Bind;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
 import com.jimei.xiaolumeimei.R;
@@ -33,24 +32,23 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AddressBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.PayInfoBean;
+import com.jimei.xiaolumeimei.event.UserChangeEvent;
 import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.TradeModel;
-import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.AddNoAddressActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.AddressSelectActivity;
-import com.jimei.xiaolumeimei.ui.activity.user.CouponSelectActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.SelectCouponActivity;
+import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
 import com.jimei.xiaolumeimei.widget.NestedListView;
 import com.jimei.xiaolumeimei.widget.SmoothCheckBox;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.pingplusplus.android.PaymentActivity;
 import com.umeng.analytics.MobclickAgent;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.Bind;
+import org.greenrobot.eventbus.EventBus;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -147,6 +145,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     private String code;
     private String order_no = "";
     private int order_id = -1;
+    @Bind(R.id.jiesheng_price) TextView jiesheng_price;
 
     @Override
     protected void setListener() {
@@ -471,6 +470,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         extraBudget.setText("¥" + budgetCash);
         totalPrice.setText("¥" + (double) (Math.round(paymentInfo * 100)) / 100);
         totalPrice_all.setText("¥" + (double) (Math.round(paymentInfo * 100)) / 100);
+        jiesheng_price.setText("¥" + (double) (Math.round(jieshengjine * 100)) / 100);
     }
 
     @Override
@@ -522,14 +522,12 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 break;
 
             case R.id.coupon_layout:
-                Intent intent = new Intent(CartsPayInfoActivity.this, CouponSelectActivity.class);
+                Intent intent = new Intent(CartsPayInfoActivity.this, SelectCouponActivity.class);
                 Bundle bundle = new Bundle();
                 if ((coupon_id != null) && (!coupon_id.isEmpty())) {
                     bundle.putString("coupon_id", coupon_id);
                 }
-//                bundle.putString("cart_ids",cart_ids);
-//                bundle.putDouble("money", (double) (Math.round(paymentInfo * 100)) / 100);
-//                bundle.putDouble("coupon_price",coupon_price);
+                bundle.putString("cart_ids",cart_ids);
                 intent.putExtras(bundle);
                 startActivityForResult(intent, REQUEST_CODE_COUPONT);
                 break;
@@ -839,7 +837,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         showIndeterminateProgressDialog(false);
         //int position = spinner.getSelectedItemPosition();
         //String code = logisticCompanyList.get(position).getCode();
-        // TODO: 16/5/25 支付时是否传入物流参数待定
         Subscription subscription = TradeModel.getInstance()
                 .shoppingcart_create_v2(ids, addr_id, pay_method, paymentprice_v2, post_fee,
                         discount_fee_price, total_fee, uuid, pay_extrasaa, code)
@@ -923,6 +920,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 }
 
                 if (result.equals("cancel")) {
+                    EventBus.getDefault().postSticky(new UserChangeEvent());
                     //wexin alipay already showmsg
                     MobclickAgent.onEvent(CartsPayInfoActivity.this, "PayCancelID");
                     JUtils.Toast("你已取消支付!");
@@ -937,6 +935,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     }
                     finish();
                 } else if (result.equals("success")) {
+                    EventBus.getDefault().postSticky(new UserChangeEvent());
                     JUtils.Toast("支付成功！");
                     //startActivity(new Intent(CartsPayInfoActivity.this, AllOrdersActivity.class));
                     //finish();
@@ -948,6 +947,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     startActivity(intent);
                     finish();
                 } else {
+                    EventBus.getDefault().postSticky(new UserChangeEvent());
                     MobclickAgent.onEvent(CartsPayInfoActivity.this, "PayFailID");
                     showMsg(result, errorMsg, extraMsg);
 //                    startActivity(new Intent(CartsPayInfoActivity.this, CartActivity.class));

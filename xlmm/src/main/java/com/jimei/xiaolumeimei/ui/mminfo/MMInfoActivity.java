@@ -3,19 +3,12 @@ package com.jimei.xiaolumeimei.ui.mminfo;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import butterknife.Bind;
 import com.github.mikephil.charting.animation.Easing;
-import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -23,8 +16,9 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
-import com.jimei.xiaolumeimei.base.BasePresenterActivity;
+import com.jimei.xiaolumeimei.base.BasePresenterMVVMActivity;
 import com.jimei.xiaolumeimei.data.XlmmApi;
+import com.jimei.xiaolumeimei.databinding.ActivityMamainfoBinding;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.MamaUrl;
@@ -41,23 +35,21 @@ import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMNinePicActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShareCodeWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShoppingListActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMStoreWebViewActivity;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMTeamActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMcarryLogActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaDrawCashActivity;
-import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaDrawCouponActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaLivenessActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaReNewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaVisitorActivity;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.PersonalCarryRankActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.StatusBarUtil;
-import com.jimei.xiaolumeimei.widget.CircleImageView;
+import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
-import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.BitmapCallback;
 import java.util.Calendar;
 import java.util.List;
-import okhttp3.Call;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -66,51 +58,10 @@ import rx.schedulers.Schedulers;
 /**
  * Created by itxuye on 2016/6/24.
  */
-public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInfoModel>
+public class MMInfoActivity
+    extends BasePresenterMVVMActivity<MMInfoPresenter, MMInfoModel, ActivityMamainfoBinding>
     implements MMInfoContract.View, View.OnClickListener, OnChartValueSelectedListener {
   String TAG = "MMInfoActivity";
-  @Bind(R.id.imgUser) CircleImageView imgUser;
-  @Bind(R.id.btn_two_dimen) TextView btn_two_dimen;
-  @Bind(R.id.rl_chart) RelativeLayout rl_chart;
-  @Bind(R.id.btn_chooselist) TextView btn_chooselist;
-  @Bind(R.id.chart1) LineChart mChart;
-  @Bind(R.id.img_left) ImageView img_left;
-  @Bind(R.id.img_right) ImageView img_right;
-  @Bind(R.id.rl_empty_chart) RelativeLayout rl_empty_chart;
-  @Bind(R.id.tv_visit2) TextView tv_today_visit2;
-  @Bind(R.id.tv_today_order2) TextView tv_today_order2;
-  @Bind(R.id.tv_today_fund2) TextView tv_today_fund2;
-  @Bind(R.id.rl_mama_info) RelativeLayout rlMamaInfo;
-  @Bind(R.id.rl_order) LinearLayout rlOrder;
-  @Bind(R.id.rl_chooselist) RelativeLayout rlChooselist;
-  @Bind(R.id.rl_party) RelativeLayout rl_party;
-  @Bind(R.id.rl_push) RelativeLayout rl_push;
-  @Bind(R.id.rl_shop) RelativeLayout rl_shop;
-  @Bind(R.id.rl_two_dimen) RelativeLayout rlTwoDimen;
-  @Bind(R.id.tv_invite_num) TextView tv_invite_num;
-  @Bind(R.id.rl_fans) RelativeLayout rl_fans;
-  @Bind(R.id.tv_fansnum) TextView tv_fansnum;
-  @Bind(R.id.rl_orderlist) RelativeLayout rl_orderlist;
-  @Bind(R.id.tv_order) TextView tv_order;
-  @Bind(R.id.rl_income) RelativeLayout rl_income;
-  @Bind(R.id.tv_fund) TextView tv_fund;
-  @Bind(R.id.visit_layout) LinearLayout visitLayout;
-  @Bind(R.id.order_layout) LinearLayout orderLayout;
-  @Bind(R.id.fund_layout) LinearLayout fundLayout;
-
-  @Bind(R.id.tv_mamalevel) TextView tvMamalevel;
-  @Bind(R.id.tv_mamavip) TextView tvMamaVip;
-  @Bind(R.id.mama_id) TextView mamaId;
-  @Bind(R.id.tv_mamashengyu) TextView tvShengyu;
-  @Bind(R.id.mama_pay) TextView mamaPay;
-  @Bind(R.id.imgExam) ImageView imgExam;
-  @Bind(R.id.tv_yue) TextView tvYue;
-  @Bind(R.id.yue_layout) LinearLayout yueLayout;
-  @Bind(R.id.tv_leiji) TextView tvLeiji;
-  @Bind(R.id.leiji_layout) LinearLayout leijiLayout;
-  @Bind(R.id.tv_huoyue) TextView tvHuoyue;
-  @Bind(R.id.huoyue_layout) LinearLayout huoyueLayout;
-
   private String title, sharelink, desc, shareimg;
 
   MamaFortune mamaFortune;
@@ -124,6 +75,7 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
   private String shareMmcode;
   private boolean isThisWeek = true;
   private MamaUrl.ResultsBean.ExtraBean mamaResult;
+  private int mmId;
 
   @Override protected void initData() {
     mPresenter.getShareShopping();
@@ -133,26 +85,28 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
   }
 
   @Override protected void setListener() {
-    img_left.setOnClickListener(this);
-    img_right.setOnClickListener(this);
-    yueLayout.setOnClickListener(this);
-    leijiLayout.setOnClickListener(this);
-    huoyueLayout.setOnClickListener(this);
-    imgExam.setOnClickListener(this);
-    mamaPay.setOnClickListener(this);
+    b.imgLeft.setOnClickListener(this);
+    b.imgRight.setOnClickListener(this);
+    b.yueLayout.setOnClickListener(this);
+    b.leijiLayout.setOnClickListener(this);
+    b.huoyueLayout.setOnClickListener(this);
+    b.imgExam.setOnClickListener(this);
+    b.mamaPay.setOnClickListener(this);
 
-    rlTwoDimen.setOnClickListener(this);
-    rl_fans.setOnClickListener(this);
-    rl_orderlist.setOnClickListener(this);
-    rl_income.setOnClickListener(this);
+    b.rlInvite1kaidian.setOnClickListener(this);
+    b.rlFans.setOnClickListener(this);
+    b.rlOrderlist.setOnClickListener(this);
+    b.rlIncome.setOnClickListener(this);
 
-    rlChooselist.setOnClickListener(this);
-    rl_party.setOnClickListener(this);
-    rl_push.setOnClickListener(this);
-    rl_shop.setOnClickListener(this);
-    visitLayout.setOnClickListener(this);
-    orderLayout.setOnClickListener(this);
-    fundLayout.setOnClickListener(this);
+    b.rlChooselist.setOnClickListener(this);
+    b.rlParty.setOnClickListener(this);
+    b.rlPush.setOnClickListener(this);
+    b.rlShop.setOnClickListener(this);
+    b.visitLayout.setOnClickListener(this);
+    b.orderLayout.setOnClickListener(this);
+    b.fundLayout.setOnClickListener(this);
+    b.rlTeam.setOnClickListener(this);
+    b.rlIncome1.setOnClickListener(this);
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -174,7 +128,8 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
   }
 
   @Subscribe(threadMode = ThreadMode.MAIN) public void updateMaMaUi(MaMaInfoEvent event) {
-    tvShengyu.setText(event.mamaFortune.getMamaFortune().getExtraInfo().getSurplusDays() + "");
+    b.tvMamashengyu.setText(
+        event.mamaFortune.getMamaFortune().getExtraInfo().getSurplusDays() + "");
   }
 
   @Override protected int getContentViewLayoutID() {
@@ -202,23 +157,25 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
     int days = fortune.getMamaFortune().getExtraInfo().getSurplusDays();
     JUtils.Log(TAG,
         fortune.toString() + "fortune.getMamaFortune().getExtraInfo().getSurplusDays()" + days);
-    tv_fund.setText(
+    b.tvFund.setText(
         Double.toString((double) (Math.round(fortune.getMamaFortune().getCarryValue() * 100)) / 100)
             + "元");
-    tv_invite_num.setText(fortune.getMamaFortune().getInviteNum() + "位");
-    tv_fansnum.setText(fortune.getMamaFortune().getFansNum() + "人");
-    tv_order.setText(s + "个");
-    //if (days<=15) {
-    mamaPay.setVisibility(View.VISIBLE);
-    //}
+    //b.tvInviteNum.setText(fortune.getMamaFortune().getInviteNum() + "位");
+    //b.tvFansnum.setText(fortune.getMamaFortune().getFansNum() + "人");
+    b.tvOrder.setText(s + "个");
+    if (days <= 15) {
+      b.mamaPay.setVisibility(View.VISIBLE);
+    }
 
-    tvShengyu.setText(days + "");
-    tvYue.setText(fortune.getMamaFortune().getCashValue() + "");
-    tvLeiji.setText(fortune.getMamaFortune().getCarryValue() + "");
-    tvHuoyue.setText(fortune.getMamaFortune().getActiveValueNum() + "");
-    tvMamalevel.setText(fortune.getMamaFortune().getMamaLevelDisplay() + "");
-    tvMamaVip.setText(fortune.getMamaFortune().getExtraInfo().getAgencylevelDisplay() + "");
-    mamaId.setText("id: " + fortune.getMamaFortune().getMamaId() + "");
+    b.tvFansnum1.setText(fortune.getMamaFortune().getFansNum() + "人");
+    b.tvMamashengyu.setText(days + "");
+    b.tvYue.setText(fortune.getMamaFortune().getCashValue() + "");
+    b.tvLeiji.setText(fortune.getMamaFortune().getCarryValue() + "");
+    b.tvHuoyue.setText(fortune.getMamaFortune().getActiveValueNum() + "");
+    b.tvMamalevel.setText(fortune.getMamaFortune().getMamaLevelDisplay() + "");
+    b.tvMamavip.setText(fortune.getMamaFortune().getExtraInfo().getAgencylevelDisplay() + "");
+    mmId = fortune.getMamaFortune().getMamaId();
+    b.mamaId.setText("ID: " + mmId);
     if (!TextUtils.isEmpty(fortune.getMamaFortune().getExtraInfo().getThumbnail())) {
       setUserImage(fortune);
     }
@@ -227,22 +184,11 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
   private void setUserImage(MamaFortune fortune) {
     try {
       if (!TextUtils.isEmpty(fortune.getMamaFortune().getExtraInfo().getThumbnail())) {
-        OkHttpUtils.get()
-            .url(fortune.getMamaFortune().getExtraInfo().getThumbnail())
-            .build()
-            .execute(new BitmapCallback() {
-              @Override public void onError(Call call, Exception e, int id) {
-                e.printStackTrace();
-              }
 
-              @Override public void onResponse(Bitmap response, int id) {
-                if (null != response) {
-                  imgUser.setImageBitmap(response);
-                }
-              }
-            });
+        ViewUtils.loadImgToImgViewWithTransformCircle(this, b.imgUser,
+            fortune.getMamaFortune().getExtraInfo().getThumbnail());
       } else {
-        imgUser.setImageResource(R.drawable.img_diamond);
+        b.imgUser.setImageResource(R.drawable.img_diamond);
       }
     } catch (Exception e) {
       e.printStackTrace();
@@ -259,21 +205,21 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
 
   @Override public void init_chart() {
     //mChart.setOnChartGestureListener(this);
-    mChart.setOnChartValueSelectedListener(this);
-    mChart.setDrawGridBackground(false);
+    b.chart1.setOnChartValueSelectedListener(this);
+    b.chart1.setDrawGridBackground(false);
 
     // no description text
-    mChart.setDescription("");
-    mChart.setNoDataText("");
+    b.chart1.setDescription("");
+    b.chart1.setNoDataText("");
 
-    mChart.setTouchEnabled(true);
+    b.chart1.setTouchEnabled(true);
 
     // enable scaling and dragging
-    mChart.setDragEnabled(true);
-    mChart.setScaleEnabled(false);
-    mChart.setBackgroundColor(Color.WHITE);
+    b.chart1.setDragEnabled(true);
+    b.chart1.setScaleEnabled(false);
+    b.chart1.setBackgroundColor(Color.WHITE);
 
-    XAxis xAxis = mChart.getXAxis();
+    XAxis xAxis = b.chart1.getXAxis();
     xAxis.setEnabled(true);     //是否显示X坐标轴 及 对应的刻度竖线，默认是true
     xAxis.setDrawAxisLine(true); //是否绘制坐标轴的线，即含有坐标的那条线，默认是true
     xAxis.setDrawGridLines(true); //是否显示X坐标轴上的刻度竖线，默认是true
@@ -287,16 +233,16 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
     xAxis.enableGridDashedLine(3, 8,
         0); //虚线表示X轴上的刻度竖线(float lineLength, float spaceLength, float phase)三个参数，1.线长，2.虚线间距，3.虚线开始坐标
 
-    mChart.getLegend().setEnabled(false);
-    mChart.getAxisLeft().setDrawGridLines(false);
-    mChart.getAxisRight().setDrawGridLines(false);
+    b.chart1.getLegend().setEnabled(false);
+    b.chart1.getAxisLeft().setDrawGridLines(false);
+    b.chart1.getAxisRight().setDrawGridLines(false);
 
-    mChart.getXAxis().setPosition(XAxis.XAxisPosition.TOP);
+    b.chart1.getXAxis().setPosition(XAxis.XAxisPosition.TOP);
 
     //x y 坐标是否显示
     //mChart.getXAxis().setEnabled(false);
-    mChart.getAxisRight().setEnabled(false);
-    mChart.getAxisLeft().setEnabled(false);
+    b.chart1.getAxisRight().setEnabled(false);
+    b.chart1.getAxisLeft().setEnabled(false);
 
     // add data
   }
@@ -311,22 +257,21 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
   }
 
   @Override public void setRlVisiBility() {
-    rl_empty_chart.setVisibility(View.VISIBLE);
-    rl_chart.setVisibility(View.INVISIBLE);
+    b.rlEmptyChart.setVisibility(View.VISIBLE);
+    b.rlChart.setVisibility(View.INVISIBLE);
   }
 
   @Override public void setChartData(LineData data) {
-    mChart.setData(data);
-    mChart.setVisibility(View.VISIBLE);
-    mChart.animateX(2500, Easing.EasingOption.EaseInOutQuart);
-    mChart.setVisibleXRangeMaximum(6);
+    b.chart1.setData(data);
+    b.chart1.setVisibility(View.VISIBLE);
+    b.chart1.animateX(2500, Easing.EasingOption.EaseInOutQuart);
+    b.chart1.setVisibleXRangeMaximum(6);
   }
 
   @Override public void initTodatText(List<RecentCarryBean.ResultsEntity> his_refund) {
-    tv_today_visit2.setText(
-        Integer.toString(his_refund.get(his_refund.size() - 1).getVisitorNum()));
-    tv_today_order2.setText(Integer.toString(his_refund.get(his_refund.size() - 1).getOrderNum()));
-    tv_today_fund2.setText(Double.toString(
+    b.tvVisit2.setText(Integer.toString(his_refund.get(his_refund.size() - 1).getVisitorNum()));
+    b.tvTodayOrder2.setText(Integer.toString(his_refund.get(his_refund.size() - 1).getOrderNum()));
+    b.tvTodayFund2.setText(Double.toString(
         (double) (Math.round(his_refund.get(his_refund.size() - 1).getCarry() * 100)) / 100));
   }
 
@@ -342,43 +287,43 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
     Intent intent;
     switch (v.getId()) {
       case R.id.yue_layout:
-        if (mamaFortune != null
-            && mamaFortune.getMamaFortune().getExtraInfo().getCouldCashOut() == 0) {
-          intent = new Intent(this, MamaDrawCouponActivity.class);
-          intent.putExtra("cash", mamaFortune.getMamaFortune().getCashValue());
-          intent.putExtra("msg", mamaFortune.getMamaFortune().getExtraInfo().getCashoutReason());
-          startActivity(intent);
-        } else if (mamaFortune != null
-            && mamaFortune.getMamaFortune().getExtraInfo().getCouldCashOut() == 1) {
-          intent = new Intent(this, MamaDrawCashActivity.class);
-          intent.putExtra("cash", mamaFortune.getMamaFortune().getCashValue());
-          startActivity(intent);
-        }
+        //        if (mamaFortune != null
+        //            && mamaFortune.getMamaFortune().getExtraInfo().getCouldCashOut() == 0) {
+        //          intent = new Intent(this, MamaDrawCouponActivity.class);
+        //          intent.putExtra("cash", mamaFortune.getMamaFortune().getCashValue());
+        //          intent.putExtra("msg", mamaFortune.getMamaFortune().getExtraInfo().getCashoutReason());
+        //          startActivity(intent);
+        //        } else if (mamaFortune != null
+        //            && mamaFortune.getMamaFortune().getExtraInfo().getCouldCashOut() == 1) {
+        intent = new Intent(this, MamaDrawCashActivity.class);
+        intent.putExtra("cash", mamaFortune.getMamaFortune().getCashValue());
+        startActivity(intent);
+        //        }
         break;
       case R.id.img_left:
         isThisWeek = false;
-        rl_empty_chart.setVisibility(View.INVISIBLE);
-        rl_chart.setVisibility(View.VISIBLE);
-        mChart.clear();
+        b.rlEmptyChart.setVisibility(View.INVISIBLE);
+        b.rlChart.setVisibility(View.VISIBLE);
+        b.chart1.clear();
         mPresenter.setDataOfPreviousWeek();
-        tv_today_visit2.setText(Integer.toString(
+        b.tvVisit2.setText(Integer.toString(
             mPresenter.his_refund.get(mPresenter.his_refund.size() - 1).getVisitorNum()));
-        tv_today_order2.setText(Integer.toString(
+        b.tvTodayOrder2.setText(Integer.toString(
             mPresenter.his_refund.get(mPresenter.his_refund.size() - 1).getOrderNum()));
-        tv_today_fund2.setText(Double.toString((double) (Math.round(
+        b.tvTodayFund2.setText(Double.toString((double) (Math.round(
             mPresenter.his_refund.get(mPresenter.his_refund.size() - 1).getCarry() * 100)) / 100));
         break;
       case R.id.img_right:
         isThisWeek = true;
-        rl_empty_chart.setVisibility(View.INVISIBLE);
-        rl_chart.setVisibility(View.VISIBLE);
-        mChart.clear();
+        b.rlEmptyChart.setVisibility(View.INVISIBLE);
+        b.chart1.setVisibility(View.VISIBLE);
+        b.chart1.clear();
         mPresenter.setDataOfThisWeek();
-        tv_today_visit2.setText(Integer.toString(
+        b.tvVisit2.setText(Integer.toString(
             mPresenter.his_refund.get(mPresenter.his_refund.size() - 1).getVisitorNum()));
-        tv_today_order2.setText(Integer.toString(
+        b.tvTodayOrder2.setText(Integer.toString(
             mPresenter.his_refund.get(mPresenter.his_refund.size() - 1).getOrderNum()));
-        tv_today_fund2.setText(Double.toString((double) (Math.round(
+        b.tvTodayFund2.setText(Double.toString((double) (Math.round(
             mPresenter.his_refund.get(mPresenter.his_refund.size() - 1).getCarry() * 100)) / 100));
         break;
       case R.id.rl_chooselist:
@@ -420,13 +365,16 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
       case R.id.mama_pay:
         readyGo(MamaReNewActivity.class);
         break;
-      case R.id.rl_two_dimen:
+      case R.id.rl_invite_1kaidian:
 
-        /*JumpUtils.jumpToWebViewWithCookies(this, mamaResult.getInvite(), 26,
+        JumpUtils.jumpToWebViewWithCookies(this, mamaResult.getInvite(), 26,
+            MMShareCodeWebViewActivity.class, "");
+
+        /*JumpUtils.jumpToWebViewWithCookies(this, "http://www.aipai.com/", 26,
             MMShareCodeWebViewActivity.class, "");*/
 
-        JumpUtils.jumpToWebViewWithCookies(this, "http://m.xiaolumeimei.com/mall/mama/invited", 26,
-            MMShareCodeWebViewActivity.class, "");
+        /*JumpUtils.jumpToWebViewWithCookies(this, "http://m.xiaolumeimei.com/mall/mama/invited", 26,
+            MMShareCodeWebViewActivity.class, "");*/
 
         break;
       case R.id.rl_fans:
@@ -494,6 +442,15 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
               MMLevelExamWebViewActivity.class, "妈妈考试");
         }
         break;
+      case R.id.rl_team:
+        Bundle bundle = new Bundle();
+        bundle.putString("id", mmId + "");
+        readyGo(MMTeamActivity.class, bundle);
+        break;
+
+      case R.id.rl_income1:
+        readyGo(PersonalCarryRankActivity.class);
+        break;
     }
   }
 
@@ -519,10 +476,7 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
 
   @Override public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
     Log.i("Entry selected", e.toString());
-    Log.i("Entry selected",
-        "low: " + mChart.getLowestVisibleXIndex() + ", high: " + mChart.getHighestVisibleXIndex());
-    tv_today_visit2.setText(
-        Integer.toString(mPresenter.show_refund.get(e.getXIndex()).getVisitorNum()));
+    b.tvVisit2.setText(Integer.toString(mPresenter.show_refund.get(e.getXIndex()).getVisitorNum()));
     //from = (MAX_RECENT_DAYS - 1 - e.getXIndex()) + "";
     if (isThisWeek) {
       from = (mPresenter.show_refund.size() - e.getXIndex() - 1) + "";
@@ -530,9 +484,9 @@ public class MMInfoActivity extends BasePresenterActivity<MMInfoPresenter, MMInf
       from = (mPresenter.show_refund.size() - e.getXIndex() - 1 + Calendar.getInstance()
           .get(Calendar.DAY_OF_WEEK) - 1) + "";
     }
-    tv_today_order2.setText(
+    b.tvTodayOrder2.setText(
         Integer.toString(mPresenter.show_refund.get(e.getXIndex()).getOrderNum()));
-    tv_today_fund2.setText(Double.toString(
+    b.tvTodayFund2.setText(Double.toString(
         (double) (Math.round(mPresenter.show_refund.get(e.getXIndex()).getCarry() * 100)) / 100));
   }
 

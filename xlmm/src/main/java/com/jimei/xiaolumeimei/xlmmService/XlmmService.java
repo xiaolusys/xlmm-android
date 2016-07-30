@@ -20,8 +20,12 @@ import com.jimei.xiaolumeimei.entities.CartsinfoBean;
 import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.entities.ClickcarryBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
+import com.jimei.xiaolumeimei.entities.CollectionAllBean;
+import com.jimei.xiaolumeimei.entities.CollectionDeleteBody;
+import com.jimei.xiaolumeimei.entities.CollectionResultBean;
 import com.jimei.xiaolumeimei.entities.CouponBean;
 import com.jimei.xiaolumeimei.entities.CouponEntity;
+import com.jimei.xiaolumeimei.entities.CouponSelectEntity;
 import com.jimei.xiaolumeimei.entities.DrawCouponBean;
 import com.jimei.xiaolumeimei.entities.GetCouponbean;
 import com.jimei.xiaolumeimei.entities.IsGetcoupon;
@@ -46,6 +50,7 @@ import com.jimei.xiaolumeimei.entities.NinePicBean;
 import com.jimei.xiaolumeimei.entities.OderCarryBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.PayInfoBean;
+import com.jimei.xiaolumeimei.entities.PersonalCarryRankBean;
 import com.jimei.xiaolumeimei.entities.PointLogBean;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.PostActivityBean;
@@ -57,7 +62,6 @@ import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
 import com.jimei.xiaolumeimei.entities.RedBagBean;
 import com.jimei.xiaolumeimei.entities.RefundMsgBean;
-import com.jimei.xiaolumeimei.entities.RegisterBean;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.ResultBean;
 import com.jimei.xiaolumeimei.entities.ShareProductBean;
@@ -67,6 +71,7 @@ import com.jimei.xiaolumeimei.entities.UserAccountBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.UserWithdrawResult;
+import com.jimei.xiaolumeimei.entities.VersionBean;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.entities.WxPubAuthInfo;
 
@@ -80,6 +85,7 @@ import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -344,6 +350,10 @@ public interface XlmmService {
     @GET("/rest/v1/users/profile")
     Observable<UserInfoBean> getProfile();
 
+    //获取用户信息
+    @GET("/rest/v1/users/profile")
+    Observable<Response<UserInfoBean>> getUserLoginInfo();
+
     //获取用户积分记录信息
     @GET("/rest/v1/integrallog")
     Observable<PointLogBean> getPointLogBean(
@@ -354,6 +364,12 @@ public interface XlmmService {
     @GET("/rest/v1/usercoupons/get_user_coupons")
     Observable<ArrayList<CouponEntity>> getCouponList(
             @Query("status") int status
+    );
+
+    //购物车选择优惠券
+    @GET("/rest/v1/usercoupons/coupon_able")
+    Observable<CouponSelectEntity> getCouponSelectEntity(
+            @Query("cart_ids") String cart_ids
     );
 
     //获取用户未使用优惠券信息
@@ -380,7 +396,7 @@ public interface XlmmService {
             @Path("id") String id
     );
 
-    //设置用户昵称
+    //确认签收
     @POST("/rest/v1/order/{id}/confirm_sign")
     Observable<UserBean> receiveGoods(
             @Path("id") int id);
@@ -783,17 +799,58 @@ public interface XlmmService {
 
     );
 
+    @GET("/sale/apprelease/newversion")
+    Observable<VersionBean> getVersion();
+
     @FormUrlEncoded
     @POST("/rest/v1/pmt/xlmm/mama_register_pay")
     Observable<Response<ResponseBody>> mamaRegisterPay(
-        @Field("product_id")    String product_id,
-        @Field("sku_id")        String sku_id,
-        @Field("payment")       String payment,
-        @Field("channel")       String channel,
-        @Field("num")           String num,
-        @Field("post_fee")      String post_fee,
-        @Field("discount_fee")  String discount_fee,
-        @Field("uuid")          String uuid,
-        @Field("total_fee")     String total_fee
+            @Field("product_id") String product_id,
+            @Field("sku_id") String sku_id,
+            @Field("payment") String payment,
+            @Field("channel") String channel,
+            @Field("num") String num,
+            @Field("post_fee") String post_fee,
+            @Field("discount_fee") String discount_fee,
+            @Field("uuid") String uuid,
+            @Field("total_fee") String total_fee
+    );
+
+    @GET("/rest/v1/favorites")
+    Observable<CollectionAllBean> getCollection(
+            @Query("page") int page
+    );
+
+    @HTTP(method = "POST", path = "/rest/v1/favorites", hasBody = true)
+    Observable<CollectionResultBean> addCollection(
+            @Body CollectionDeleteBody deleteBody
+    );
+
+    @HTTP(method = "DELETE", path = "/rest/v1/favorites", hasBody = true)
+    Observable<CollectionResultBean> deleteCollection(
+            @Body CollectionDeleteBody deleteBody
+    );
+
+    @GET("/rest/v2/mama/rank/carry_total_rank")
+    Observable<Response<List<PersonalCarryRankBean>>> getPersonalCarryRankBean();
+
+    @GET("/rest/v2/mama/teamrank/carry_total_rank")
+    Observable<Response<List<PersonalCarryRankBean>>> getTeamCarryRankBean();
+
+    @GET("/rest/v2/mama/rank/self_rank")
+    Observable<Response<PersonalCarryRankBean>> getPersonalSelfCarryRankBean();
+
+    @GET("/rest/v2/mama/rank/{id}/get_team_members")
+    Observable<Response<List<PersonalCarryRankBean>>> getTeamMembers(
+            @Path("id") String id
+    );
+
+    @GET("/rest/v2/mama/teamrank/{id}")
+    Observable<Response<PersonalCarryRankBean>> getTeamMemberSelf(
+            @Path("id") String id
+    );
+
+    @GET("/rest/v2/mama/teamrank/self_rank")
+    Observable<Response<PersonalCarryRankBean>> getTeamSelfRank(
     );
 }

@@ -4,13 +4,11 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.iwgang.countdownview.CountdownView;
@@ -20,9 +18,8 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.TodayAdapter;
 import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
-import com.jimei.xiaolumeimei.event.TimeEvent;
 import com.jimei.xiaolumeimei.model.ProductModel;
-import com.jimei.xiaolumeimei.widget.loadingdialog.CustomMDdialog;
+import com.jimei.xiaolumeimei.utils.RxUtils;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.widget.loadingdialog.XlmmLoadingDialog;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -33,7 +30,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import org.greenrobot.eventbus.EventBus;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -49,7 +45,6 @@ public class TodayV2Fragment extends BaseFragment {
   int page_size = 10;
   Thread thread;
   private List<ProductListBean.ResultsEntity> list = new ArrayList<>();
-  private CustomMDdialog materialDialog;
   private int page = 2;
   private int totalPages;//总的分页数
   private TodayAdapter mTodayAdapter;
@@ -110,7 +105,7 @@ public class TodayV2Fragment extends BaseFragment {
             if (null != productListBean) {
               JUtils.Log(TAG, Thread.currentThread().getName());
               upshelfStarttime = productListBean.getUpshelfStarttime();
-              EventBus.getDefault().post(new TimeEvent(upshelfStarttime));
+              //EventBus.getDefault().post(new v (upshelfStarttime));
             }
           }
         });
@@ -149,6 +144,7 @@ public class TodayV2Fragment extends BaseFragment {
     }
     subscribe1 = ProductModel.getInstance()
         .getTodayList(1, 10)
+        .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<ProductListBean>() {
           @Override public void onError(Throwable e) {
@@ -213,7 +209,6 @@ public class TodayV2Fragment extends BaseFragment {
           while (left > 0) {
             left--;
             SystemClock.sleep(1);
-            FragmentActivity activity = getActivity();
             if (activity != null) {
               activity.runOnUiThread(new Runnable() {
                 @Override public void run() {
@@ -258,7 +253,7 @@ public class TodayV2Fragment extends BaseFragment {
           page++;
           JUtils.Log(TAG, "page====" + page);
         } else {
-          Toast.makeText(getActivity(), "没有更多了拉,去购物吧", Toast.LENGTH_SHORT).show();
+          JUtils.Toast("没有更多了拉,去购物吧");
           xRecyclerView.post(xRecyclerView::loadMoreComplete);
         }
       }

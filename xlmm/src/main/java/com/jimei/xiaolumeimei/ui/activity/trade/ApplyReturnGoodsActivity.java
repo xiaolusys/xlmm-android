@@ -528,7 +528,6 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
     }
 
     public File read_img_from_uri() {
-        // User had pick an image.
         Cursor cursor = getContentResolver().query(CameraUtils.uri,
                 new String[]{android.provider.MediaStore.Images.ImageColumns.DATA}, null, null,
                 null);

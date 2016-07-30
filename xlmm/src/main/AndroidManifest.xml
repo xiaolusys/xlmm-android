@@ -77,7 +77,6 @@
                     android:scheme="xlmm" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.main.MainActivity" />
         <activity
             android:name=".ui.activity.user.LoginActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
@@ -92,8 +91,8 @@
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".ui.activity.trade.CartActivity"
-            android:theme="@style/AppTheme.TransparentActivity"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".ui.activity.trade.CartsPayInfoActivity"
             android:theme="@style/AppTheme.TransparentActivity"
@@ -418,9 +417,24 @@
             android:name=".ui.activity.user.SelectCouponActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
-            android:name=".ui.activity.user.CouponSelectActivity"
+            android:name=".ui.activity.product.CollectionActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
+        <activity
+            android:name=".ui.activity.xiaolumama.PersonalCarryRankActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
+        <activity
+            android:name=".ui.activity.xiaolumama.MMTeamActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
+        <activity
+            android:name=".ui.activity.xiaolumama.MMTeamCarryRankActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
+        <activity
+            android:name=".ui.activity.product.LadyZoneActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
 
+        <service
+            android:name=".xlmmService.UpdateService"
+            android:exported="false" />
         <service
             android:name="com.xiaomi.push.service.XMPushService"
             android:enabled="true"
@@ -463,7 +477,13 @@
                 <action android:name="com.xiaomi.mipush.ERROR" />
             </intent-filter>
         </receiver>
-
+        <receiver
+            android:name=".receiver.UpdateBroadReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="action.retry.download" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

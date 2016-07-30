@@ -24,9 +24,11 @@ public class LoginUtils {
   static SharedPreferences sharedPreferences;
   static SharedPreferences sharedPreferences1;
   static SharedPreferences sharedPreferences2;
+  static SharedPreferences sharedPreferences3;
   static SharedPreferences.Editor editor;
   static SharedPreferences.Editor editor1;
   static SharedPreferences.Editor editor2;
+  static SharedPreferences.Editor editor3;
   static UserInfoBean userinfo;
 
   public static void saveLoginInfo(boolean isSuccess, Context context, String username,
@@ -52,6 +54,8 @@ public class LoginUtils {
     sharedPreferences = context.getSharedPreferences("login_info", Context.MODE_PRIVATE);
     sharedPreferences1 =
         context.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+    sharedPreferences3 =
+        context.getSharedPreferences("CookiePersistence", Context.MODE_PRIVATE);
     editor = sharedPreferences.edit();
     editor.clear();
     editor.apply();
@@ -59,6 +63,10 @@ public class LoginUtils {
     editor1 = sharedPreferences1.edit();
     editor1.clear();
     editor1.apply();
+
+    editor3 = sharedPreferences3.edit();
+    editor3.clear();
+    editor3.apply();
     Log.d(TAG, "clear logininfo ");
   }
 

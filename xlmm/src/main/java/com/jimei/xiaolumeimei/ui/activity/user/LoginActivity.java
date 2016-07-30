@@ -25,6 +25,7 @@ import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
 import com.jimei.xiaolumeimei.event.UserInfoEmptyEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
+import com.jimei.xiaolumeimei.ui.activity.product.CollectionActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
@@ -243,93 +244,105 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                           @Override public void onNext(NeedSetInfoBean needSetInfoBean) {
                             //set xiaomi push useraccount
                             LoginUtils.setPushUserAccount(LoginActivity.this,
-                                MiPushClient.getRegId(getApplicationContext()));
+                                      MiPushClient.getRegId(getApplicationContext()));
                             hideIndeterminateProgressDialog();
                             LoginUtils.saveLoginSuccess(true, getApplicationContext());
-                            String login = null;
-                            if (null != getIntent() && getIntent().getExtras() != null) {
-                              login = getIntent().getExtras().getString("login");
-                              actlink = getIntent().getExtras().getString("actlink");
-                              title = getIntent().getExtras().getString("title", "");
-                              id = getIntent().getExtras().getInt("id");
-                            }
-
-                            if (null != login) {
-                              if (login.equals("cart")) {
-                                Intent intent = new Intent(mContext, CartActivity.class);
-                                startActivity(intent);
-                                finish();
-                              } else if (login.equals("product")) {
-                                finish();
-                              } else if (login.equals("main")) {
-                                finish();
-                              } else if (login.equals("point")) {
-                                Intent intent = new Intent(mContext, MembershipPointActivity.class);
-                                startActivity(intent);
-                                finish();
-                              } else if (login.equals("money")) {
-                                Intent intent = new Intent(mContext, WalletActivity.class);
-                                startActivity(intent);
-                                finish();
-                              } else if (login.equals("axiba")) {
-                                finish();
-                              } else if (login.equals("coupon")) {
-                                Intent intent = new Intent(mContext, AllCouponActivity.class);
-                                startActivity(intent);
-                                finish();
-                              } else if (login.equals("productdetail")) {
-                                finish();
-                              } else if (login.equals("h5")) {
-                                Intent intent = new Intent(mContext, CommonWebViewActivity.class);
-                                //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                SharedPreferences sharedPreferences =
-                                    getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
-                                String cookies = sharedPreferences.getString("cookiesString", "");
-                                String domain = sharedPreferences.getString("cookiesDomain", "");
-                                Bundle bundle = new Bundle();
-                                bundle.putString("cookies", cookies);
-                                bundle.putString("domain", domain);
-                                bundle.putString("actlink", actlink);
-                                intent.putExtras(bundle);
-                                startActivity(intent);
-                                finish();
-                              } else if (login.equals("prodcutweb")) {
-                                JumpUtils.jumpToWebViewWithCookies(mContext, actlink, -1,
-                                    ProductPopDetailActvityWeb.class);
-                                finish();
-                              } else if (login.equals("goactivity")) {
-                                JumpUtils.jumpToWebViewWithCookies(mContext, actlink, id,
-                                    ActivityWebViewActivity.class, title);
-                                finish();
-                              } else if (login.equals("getCoupon")) {
-                                Subscription subscription1 = UserModel.getInstance()
-                                    .getCouPon()
-                                    .subscribeOn(Schedulers.io())
-                                    .subscribe(new ServiceResponse<Response<GetCouponbean>>() {
-                                      @Override public void onNext(
-                                          Response<GetCouponbean> getCouponbeanResponse) {
-                                        JUtils.Log("getCoupon", "onnext");
-                                        if (getCouponbeanResponse != null) {
-                                          if (getCouponbeanResponse.isSuccessful()) {
-                                            JUtils.Log("getCoupon",
-                                                "onnext == " + getCouponbeanResponse.body()
-                                                    .toString());
-                                            JUtils.Toast(getCouponbeanResponse.body().getInfo());
-
-                                            finish();
-                                          }
-                                        }
-                                      }
-
-                                      @Override public void onError(Throwable e) {
-                                        super.onError(e);
-                                        if (e instanceof HttpException) {
-                                          JUtils.Toast("优惠券领取失败");
-                                        }
-                                      }
-                                    });
-                                addSubscription(subscription1);
+                            if (needSetInfoBean.getCode()==0) {
+                              String login = null;
+                              if (null != getIntent() && getIntent().getExtras() != null) {
+                                login = getIntent().getExtras().getString("login");
+                                actlink = getIntent().getExtras().getString("actlink");
+                                title = getIntent().getExtras().getString("title", "");
+                                id = getIntent().getExtras().getInt("id");
                               }
+
+                              if (null != login) {
+                                if (login.equals("cart")) {
+                                  Intent intent = new Intent(mContext, CartActivity.class);
+                                  startActivity(intent);
+                                  finish();
+                                } else if (login.equals("product")) {
+                                  finish();
+                                } else if (login.equals("main")) {
+                                  finish();
+                                } else if (login.equals("collect")){
+                                  Intent intent = new Intent(mContext, CollectionActivity.class);
+                                  startActivity(intent);
+                                  finish();
+                                } else if (login.equals("point")) {
+                                  Intent intent = new Intent(mContext, MembershipPointActivity.class);
+                                  startActivity(intent);
+                                  finish();
+                                } else if (login.equals("money")) {
+                                  Intent intent = new Intent(mContext, WalletActivity.class);
+                                  startActivity(intent);
+                                  finish();
+                                } else if (login.equals("axiba")) {
+                                  finish();
+                                } else if (login.equals("coupon")) {
+                                  Intent intent = new Intent(mContext, AllCouponActivity.class);
+                                  startActivity(intent);
+                                  finish();
+                                } else if (login.equals("productdetail")) {
+                                  finish();
+                                } else if (login.equals("h5")) {
+                                  Intent intent = new Intent(mContext, CommonWebViewActivity.class);
+                                  //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                  SharedPreferences sharedPreferences =
+                                          getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+                                  String cookies = sharedPreferences.getString("cookiesString", "");
+                                  String domain = sharedPreferences.getString("cookiesDomain", "");
+                                  Bundle bundle = new Bundle();
+                                  bundle.putString("cookies", cookies);
+                                  bundle.putString("domain", domain);
+                                  bundle.putString("actlink", actlink);
+                                  intent.putExtras(bundle);
+                                  startActivity(intent);
+                                  finish();
+                                } else if (login.equals("prodcutweb")) {
+                                  JumpUtils.jumpToWebViewWithCookies(mContext, actlink, -1,
+                                          ProductPopDetailActvityWeb.class);
+                                  finish();
+                                } else if (login.equals("goactivity")) {
+                                  JumpUtils.jumpToWebViewWithCookies(mContext, actlink, id,
+                                          ActivityWebViewActivity.class, title);
+                                  finish();
+                                } else if (login.equals("getCoupon")) {
+                                  Subscription subscription1 = UserModel.getInstance()
+                                          .getCouPon()
+                                          .subscribeOn(Schedulers.io())
+                                          .subscribe(new ServiceResponse<Response<GetCouponbean>>() {
+                                            @Override public void onNext(
+                                                    Response<GetCouponbean> getCouponbeanResponse) {
+                                              JUtils.Log("getCoupon", "onnext");
+                                              if (getCouponbeanResponse != null) {
+                                                if (getCouponbeanResponse.isSuccessful()) {
+
+                                                  JUtils.Log("getCoupon",
+                                                          "onnext == " + getCouponbeanResponse.body()
+                                                                  .toString());
+                                                  JUtils.Toast(getCouponbeanResponse.body().getInfo());
+
+                                                  finish();
+                                                }
+                                              }
+                                            }
+
+                                            @Override public void onError(Throwable e) {
+                                              super.onError(e);
+                                              if (e instanceof HttpException) {
+                                                JUtils.Toast("优惠券领取失败");
+                                              }
+                                            }
+                                          });
+                                  addSubscription(subscription1);
+                                }
+                              }
+                            }else {
+                              Intent intent = new Intent(mContext, WxLoginBindPhoneActivity.class);
+                              JUtils.Toast(needSetInfoBean.getInfo());
+                              startActivity(intent);
+                              finish();
                             }
                           }
                         });

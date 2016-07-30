@@ -1,18 +1,18 @@
 package com.jimei.xiaolumeimei.model;
 
 import com.jimei.library.rx.DefaultTransform;
-import com.jimei.xiaolumeimei.entities.BrandListBean;
-import com.jimei.xiaolumeimei.entities.BrandpromotionBean;
 import com.jimei.xiaolumeimei.entities.ChildListBean;
-import com.jimei.xiaolumeimei.entities.IndexBean;
+import com.jimei.xiaolumeimei.entities.CollectionAllBean;
+import com.jimei.xiaolumeimei.entities.CollectionDeleteBody;
+import com.jimei.xiaolumeimei.entities.CollectionResultBean;
 import com.jimei.xiaolumeimei.entities.LadyListBean;
 import com.jimei.xiaolumeimei.entities.PortalBean;
-import com.jimei.xiaolumeimei.entities.PostBean;
 import com.jimei.xiaolumeimei.entities.ProductBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.entities.ShareProductBean;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
+
 import java.util.List;
 import rx.Observable;
 
@@ -120,4 +120,24 @@ public class ProductModel {
             .compose(new DefaultTransform<>());
   }
 
+  //获得收藏列表
+  public Observable<CollectionAllBean> getCollection(int page){
+    return XlmmRetrofitClient.getService()
+            .getCollection(page)
+            .compose(new DefaultTransform<>());
+  }
+
+  //添加单品收藏
+  public Observable<CollectionResultBean> addCollection(int model_id){
+    return XlmmRetrofitClient.getService()
+            .addCollection(new CollectionDeleteBody(model_id))
+            .compose(new DefaultTransform<>());
+  }
+
+  //删除单品收藏
+  public Observable<CollectionResultBean> deleteCollection(int model_id){
+    return XlmmRetrofitClient.getService()
+            .deleteCollection(new CollectionDeleteBody(model_id))
+            .compose(new DefaultTransform<>());
+  }
 }

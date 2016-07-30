@@ -1,6 +1,8 @@
 package com.jimei.xiaolumeimei.ui.xlmmmain;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -36,10 +38,14 @@ import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.IsGetcoupon;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.event.LogOutEmptyEvent;
+import com.jimei.xiaolumeimei.event.UserChangeEvent;
 import com.jimei.xiaolumeimei.event.UserInfoEmptyEvent;
+import com.jimei.xiaolumeimei.receiver.UpdateBroadReceiver;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.main.ComplainActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ChildListActivity;
+import com.jimei.xiaolumeimei.ui.activity.product.CollectionActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.LadyListActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllOrdersActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity;
@@ -66,14 +72,15 @@ import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.AutoToolbar;
 import com.jimei.xiaolumeimei.widget.BrandView;
+import com.jimei.xiaolumeimei.widget.VersionManager;
 import com.jimei.xiaolumeimei.widget.badgelib.BadgeView;
 import com.jimei.xiaolumeimei.widget.banner.SliderLayout;
 import com.jimei.xiaolumeimei.widget.banner.SliderTypes.BaseSliderView;
 import com.jimei.xiaolumeimei.widget.banner.SliderTypes.DefaultSliderView;
 import com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableLayout;
+import com.jimei.xiaolumeimei.xlmmService.UpdateService;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
-import com.umeng.update.UmengUpdateAgent;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
 import com.zhy.http.okhttp.callback.FileCallBack;
@@ -87,6 +94,7 @@ import okhttp3.Call;
 import okhttp3.ResponseBody;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import retrofit2.Response;
 
 /**
@@ -111,10 +119,12 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   @Bind(R.id.rl_mmentry) RelativeLayout rl_mmentry;
   @Bind(R.id.image_1) ImageView image1;
   @Bind(R.id.image_2) ImageView image2;
+  @Bind(R.id.collect) ImageView collectIv;
   @Bind(R.id.scrollableLayout) ScrollableLayout scrollableLayout;
   @Bind(R.id.swipe_layout) SwipeRefreshLayout swipeRefreshLayout;
   @Bind(R.id.drawer_layout) DrawerLayout drawer;
   @Bind(R.id.brand) LinearLayout brand;
+  @Bind(R.id.cart_view) View cart_view;
   @Bind(R.id.post_mainactivity) LinearLayout post_activity_layout;
   @Bind(R.id.text_yesterday) TextView textYesterday;
   @Bind(R.id.text_today) TextView textToday;
@@ -132,7 +142,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   private List<BaseFragment> list = new ArrayList<>();
   private int num;
   private BadgeView badge;
-  private double budgetCash;
   private TextView msg1;
   private TextView msg2;
   private TextView msg3;
@@ -141,10 +150,21 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   private String newTime;
   private int rvTopHeight;
   private EventBus aDefault;
+  private UpdateBroadReceiver mUpdateBroadReceiver;
+  private double budgetCash;
+
+  @Override protected void onStart() {
+    super.onStart();
+    IntentFilter filter = new IntentFilter();
+    filter.addAction(UpdateBroadReceiver.ACTION_RETRY_DOWNLOAD);
+    mUpdateBroadReceiver = new UpdateBroadReceiver();
+    registerReceiver(mUpdateBroadReceiver, filter);
+  }
 
   @Override protected void initData() {
     mPresenter.getUserInfoBean();
     mPresenter.getAddressVersionAndUrl();
+    mPresenter.getVersion();
     initMainView(null);
     if (LoginUtils.isJumpToLogin(getApplicationContext())) {
       FirstFragment firstFragment = FirstFragment.newInstance("first");
@@ -155,19 +175,11 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     if (LoginUtils.checkLoginState(getApplicationContext())) {
       mPresenter.isCouPon();
     }
-
-    new Thread(() -> {
-      try {
-        Thread.sleep(500 * 60);
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
-      UmengUpdateAgent.update(MainActivity.this);
-    }).start();
   }
 
   @Override protected void setListener() {
     carts.setOnClickListener(this);
+    collectIv.setOnClickListener(this);
     rl_mmentry.setOnClickListener(this);
     textYesterday.setOnClickListener(this);
     textTomorror.setOnClickListener(this);
@@ -219,15 +231,16 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         intent = new Intent(MainActivity.this, CartActivity.class);
         flag = "cart";
         break;
+      case R.id.collect:
+        intent = new Intent(MainActivity.this, CollectionActivity.class);
+        flag = "collect";
+        break;
       case R.id.rl_mmentry:
         JUtils.Log(TAG, "xiaolu mama entry");
         intent = new Intent(MainActivity.this, MMInfoActivity.class);
         break;
       case R.id.ll_money:
         intent = new Intent(MainActivity.this, WalletActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putDouble("money", budgetCash);
-        intent.putExtras(bundle);
         flag = "money";
         break;
       case R.id.ll_score:
@@ -419,7 +432,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
       scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(vp.getCurrentItem()));
 
       mPresenter.getAddressVersionAndUrl();
-
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -460,7 +472,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
             invalidateOptionsMenu();
           }
         };
-    drawer.setDrawerListener(toggle);
+    drawer.addDrawerListener(toggle);
     toggle.syncState();
     toggle.setHomeAsUpIndicator(R.drawable.icon_nav);
     toolbar.setNavigationIcon(R.drawable.icon_nav);
@@ -472,10 +484,10 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   @Override public void showBadge() {
     badge = new BadgeView(this);
     badge.setTextSizeOff(7);
-    badge.setBackground(4, Color.parseColor("#d3321b"));
+    badge.setBackground(4, Color.parseColor("#FF3840"));
     badge.setGravity(Gravity.END | Gravity.TOP);
     badge.setPadding(dip2Px(4), dip2Px(1), dip2Px(4), dip2Px(1));
-    badge.setTargetView(image2);
+    badge.setTargetView(cart_view);
   }
 
   @Override public void initViewsForTab() {
@@ -498,24 +510,82 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     initUserNewView(userNewBean);
   }
 
-  private void initUserNewView(UserInfoBean userNewBean) {
-    JUtils.Log(TAG, "userNewBean" + userNewBean.toString());
-    if (!TextUtils.isEmpty(userNewBean.getThumbnail())) {
-      ViewUtils.loadImgToImgView(MainActivity.this, imgUser, userNewBean.getThumbnail());
-    }
-    if (userNewBean.isHasUsablePassword() && userNewBean.getMobile() != "") {
-      loginFlag.setVisibility(View.GONE);
+  @Override public void initUserViewChange(UserInfoBean userNewBean) {
+    if (null != userNewBean) {
+
+      if (null != userNewBean.getUserBudget()) {
+        budgetCash = userNewBean.getUserBudget().getBudgetCash();
+      }
+      //JUtils.Log(TAG, "mamaid " + userNewBean.getXiaolumm().getId());
     } else {
-      loginFlag.setVisibility(View.VISIBLE);
+      rl_mmentry.setVisibility(View.INVISIBLE);
+      loginFlag.setVisibility(View.GONE);
+      imgUser.setImageResource(R.drawable.img_head);
+      rl_mmentry.setVisibility(View.INVISIBLE);
     }
 
-    if (null != userNewBean.getUserBudget()) {
-      budgetCash = userNewBean.getUserBudget().getBudgetCash();
-    }
-    //JUtils.Log(TAG, "mamaid " + userNewBean.getXiaolumm().getId());
-    if ((userNewBean.getXiaolumm() != null) && (userNewBean.getXiaolumm().getId() != 0)) {
-      rl_mmentry.setVisibility(View.VISIBLE);
+    if (null != userNewBean) {
+      tvNickname.setText(userNewBean.getNick());
+
+      if (userNewBean.getWaitpayNum() > 0) {
+        msg1.setVisibility(View.VISIBLE);
+        msg1.setText(userNewBean.getWaitpayNum() + "");
+      } else {
+        msg1.setVisibility(View.INVISIBLE);
+      }
+      if (userNewBean.getWaitgoodsNum() > 0) {
+        msg2.setVisibility(View.VISIBLE);
+        msg2.setText(userNewBean.getWaitgoodsNum() + "");
+      } else {
+        msg2.setVisibility(View.INVISIBLE);
+      }
+      if (userNewBean.getRefundsNum() > 0) {
+        msg3.setVisibility(View.VISIBLE);
+        msg3.setText(userNewBean.getRefundsNum() + "");
+      } else {
+        msg3.setVisibility(View.INVISIBLE);
+      }
+      String pointStr = userNewBean.getScore() + "";
+      tvPoint.setText(pointStr);
+      if (userNewBean.getUserBudget() != null) {
+        String moneyStr =
+            (float) (Math.round(userNewBean.getUserBudget().getBudgetCash() * 100)) / 100 + "";
+        tvMoney.setText(moneyStr);
+      }
+      String couponStr = userNewBean.getCouponNum() + "";
+      tvCoupon.setText(couponStr);
     } else {
+      tvPoint.setText("0.00");
+      tvMoney.setText("0.00");
+      tvCoupon.setText("0.00");
+      imgUser.setImageResource(R.drawable.img_head);
+      tvNickname.setText("点击登录");
+      msg1.setVisibility(View.INVISIBLE);
+      msg2.setVisibility(View.INVISIBLE);
+      msg3.setVisibility(View.INVISIBLE);
+    }
+  }
+
+  private void initUserNewView(UserInfoBean userNewBean) {
+    if (null != userNewBean) {
+      if (!TextUtils.isEmpty(userNewBean.getThumbnail())) {
+        ViewUtils.loadImgToImgView(MainActivity.this, imgUser, userNewBean.getThumbnail());
+      }
+      if (userNewBean.isHasUsablePassword() && userNewBean.getMobile() != "") {
+        loginFlag.setVisibility(View.GONE);
+      } else {
+        loginFlag.setVisibility(View.VISIBLE);
+      }
+      //JUtils.Log(TAG, "mamaid " + userNewBean.getXiaolumm().getId());
+      if ((userNewBean.getXiaolumm() != null) && (userNewBean.getXiaolumm().getId() != 0)) {
+        rl_mmentry.setVisibility(View.VISIBLE);
+      } else {
+        rl_mmentry.setVisibility(View.INVISIBLE);
+      }
+    } else {
+      rl_mmentry.setVisibility(View.INVISIBLE);
+      loginFlag.setVisibility(View.GONE);
+      imgUser.setImageResource(R.drawable.img_head);
       rl_mmentry.setVisibility(View.INVISIBLE);
     }
   }
@@ -529,15 +599,8 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   }
 
   private void initSlideDraw(UserInfoBean userInfoBean) {
-    JUtils.Log(TAG, "侧滑栏初始化");
-    if (!(LoginUtils.checkLoginState(getApplicationContext()))) {
-      if (tvNickname != null) {
-        tvNickname.setText("点击登录");
-      }
-    } else {
-      if (tvNickname != null) {
-        tvNickname.setText(userInfoBean.getNick());
-      }
+    if (null != userInfoBean) {
+      tvNickname.setText(userInfoBean.getNick());
       if (!TextUtils.isEmpty(userInfoBean.getThumbnail())) {
         ViewUtils.loadImgToImgView(MainActivity.this, imgUser, userInfoBean.getThumbnail());
       }
@@ -548,14 +611,12 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         msg1.setVisibility(View.INVISIBLE);
       }
       Log.i(TAG, "" + userInfoBean.getWaitpayNum());
-
       if (userInfoBean.getWaitgoodsNum() > 0) {
         msg2.setVisibility(View.VISIBLE);
         msg2.setText(userInfoBean.getWaitgoodsNum() + "");
       } else {
         msg2.setVisibility(View.INVISIBLE);
       }
-
       if (userInfoBean.getRefundsNum() > 0) {
         msg3.setVisibility(View.VISIBLE);
         msg3.setText(userInfoBean.getRefundsNum() + "");
@@ -571,6 +632,15 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
       }
       String couponStr = userInfoBean.getCouponNum() + "";
       tvCoupon.setText(couponStr);
+    } else {
+      tvPoint.setText("0.00");
+      tvMoney.setText("0.00");
+      tvCoupon.setText("0.00");
+      imgUser.setImageResource(R.drawable.img_head);
+      tvNickname.setText("点击登录");
+      msg1.setVisibility(View.INVISIBLE);
+      msg2.setVisibility(View.INVISIBLE);
+      msg3.setVisibility(View.INVISIBLE);
     }
   }
 
@@ -837,7 +907,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
             }
           });
     }
-
   }
 
   private class MyFragmentAdapter extends FragmentPagerAdapter {
@@ -867,39 +936,38 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     }
   }
 
-  @Subscribe public void initLoginInfo(UserInfoEmptyEvent event) {
-    //UserNewModel.getInstance()
-    //    .getProfile()
-    //    .subscribeOn(Schedulers.io())
-    //    .subscribe(new ServiceResponse<UserInfoBean>() {
-    //      @Override public void onCompleted() {
-    //        super.onCompleted();
-    //      }
-    //
-    //      @Override public void onNext(UserInfoBean userInfoBean) {
-    //        if (null != userInfoBean) {
-    //          mPresenter.userInfoNewBean = userInfoBean;
-    //          EventBus.getDefault().postSticky(new UserEvent(userInfoBean));
-    //        }
-    //      }
-    //    });
-
-    Intent intent = new Intent(MainActivity.this, MainActivity.class);
-    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-    startActivity(intent);
-    finish();
+  @Subscribe(threadMode = ThreadMode.MAIN) public void initLoginInfo(UserInfoEmptyEvent event) {
+    JUtils.Log(TAG, "=======initLoginInfo");
+    mPresenter.getUserInfoBean();
   }
-  //
-  //@Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-  //public void initLoginInfoView(UserEvent event) {
-  //  initUserNewView(event.userInfoBean);
-  //  initSlideDraw(event.userInfoBean);
-  //}
+
+  @Subscribe(threadMode = ThreadMode.MAIN) public void initLogOutInfo(LogOutEmptyEvent event) {
+    tvPoint.setText("0.00");
+    tvMoney.setText("0.00");
+    tvCoupon.setText("0.00");
+    imgUser.setImageResource(R.drawable.img_head);
+    tvNickname.setText("点击登录");
+    msg1.setVisibility(View.INVISIBLE);
+    msg2.setVisibility(View.INVISIBLE);
+    msg3.setVisibility(View.INVISIBLE);
+
+    rl_mmentry.setVisibility(View.INVISIBLE);
+    loginFlag.setVisibility(View.GONE);
+    imgUser.setImageResource(R.drawable.img_head);
+    rl_mmentry.setVisibility(View.INVISIBLE);
+  }
+
+  @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+  public void initUserinfoInfoChange(UserChangeEvent event) {
+    JUtils.Log(TAG, "initUserinfoInfoChange()");
+    mPresenter.getUserInfoBeanChange();
+  }
 
   @Override protected void onPause() {
     super.onPause();
     MobclickAgent.onPageEnd(this.getClass().getSimpleName());
     MobclickAgent.onPause(this);
+    JUtils.Log(TAG, "onPause()");
   }
 
   @Override protected void onResume() {
@@ -907,9 +975,8 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     MobclickAgent.onPageStart(this.getClass().getSimpleName());
     MobclickAgent.onResume(this);
     //resumeData();
-
     mPresenter.getCartsNum();
-    mPresenter.getUserInfoBean();
+//    mPresenter.getUserInfoBean();
 
     JUtils.Log(TAG, "resume");
   }
@@ -932,8 +999,70 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     }
   }
 
+  @Override protected void onStop() {
+    super.onStop();
+    unregisterReceiver(mUpdateBroadReceiver);
+    JUtils.Log(TAG, "onStop()");
+  }
+
   @Override protected void onDestroy() {
-    super.onDestroy();
     aDefault.unregister(this);
+    UserChangeEvent stickyEvent = aDefault.getStickyEvent(UserChangeEvent.class);
+    if (stickyEvent != null) {
+      aDefault.removeStickyEvent(stickyEvent);
+    }
+    super.onDestroy();
+  }
+
+  @Override
+  public void checkVersion(int versionCode,String content,String downloadUrl,boolean isAutoUpdate) {
+    new Thread(() -> {
+      try {
+        Thread.sleep(500 * 10);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+
+      runOnUiThread(new Runnable() {
+        @Override
+        public void run() {
+          VersionManager versionManager = new VersionManager() {
+
+            @Override
+            public int getServerVersion() {
+              return versionCode;
+            }
+
+            @Override
+            public String getUpdateContent() {
+              return content;
+            }
+
+            @Override
+            public boolean showMsg() {
+              return false;
+            }
+          };
+          if (isAutoUpdate) {
+            versionManager.setPositiveListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, UpdateService.class);
+                intent.putExtra(UpdateService.EXTRAS_DOWNLOAD_URL, downloadUrl);
+                startService(intent);
+                versionManager.getDialog().dismiss();
+                JUtils.Toast("应用正在后台下载!");
+              }
+            });
+            SharedPreferences updatePreferences = getSharedPreferences("update", Context.MODE_PRIVATE);
+            boolean update = updatePreferences.getBoolean("update", true);
+            if (update) {
+              versionManager.checkVersion(MainActivity.this);
+            }
+          }
+        }
+
+      });
+    }).start();
   }
 }

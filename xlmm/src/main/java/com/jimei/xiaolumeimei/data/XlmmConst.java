@@ -1,29 +1,33 @@
 package com.jimei.xiaolumeimei.data;
 
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+
 /**
  * Created by wulei on 2016/1/22.
  */
 public class XlmmConst {
 
-    public static final String VERSION = "1.1.9";
+    public static final String VERSION = "1.2.1";
 
-    public static  final int ORDER_STATE_CREATE = 0;
-    public static  final int ORDER_STATE_WAITPAY = 1;
-    public static  final int ORDER_STATE_PAYED = 2;
-    public static  final int ORDER_STATE_SENDED = 3;
-    public static  final int ORDER_STATE_CONFIRM_RECEIVE = 4;
-    public static  final int ORDER_STATE_TRADE_SUCCESS = 5;
-    public static  final int ORDER_STATE_REFUND_CLOSE = 6;
-    public static  final int ORDER_STATE_TRADE_CLOSE = 7;
+    public static final int ORDER_STATE_CREATE = 0;
+    public static final int ORDER_STATE_WAITPAY = 1;
+    public static final int ORDER_STATE_PAYED = 2;
+    public static final int ORDER_STATE_SENDED = 3;
+    public static final int ORDER_STATE_CONFIRM_RECEIVE = 4;
+    public static final int ORDER_STATE_TRADE_SUCCESS = 5;
+    public static final int ORDER_STATE_REFUND_CLOSE = 6;
+    public static final int ORDER_STATE_TRADE_CLOSE = 7;
 
-    public static  final int REFUND_STATE_NO_REFUND = 0;
-    public static  final int REFUND_STATE_BUYER_APPLY = 3;
-    public static  final int REFUND_STATE_SELLER_AGREED = 4;
-    public static  final int REFUND_STATE_BUYER_RETURNED_GOODS = 5;
-    public static  final int REFUND_STATE_SELLER_REJECTED = 2;
-    public static  final int REFUND_STATE_WAIT_RETURN_FEE = 6;
-    public static  final int REFUND_STATE_REFUND_CLOSE = 1;
-    public static  final int REFUND_STATE_REFUND_SUCCESS = 7;
+    public static final int REFUND_STATE_NO_REFUND = 0;
+    public static final int REFUND_STATE_BUYER_APPLY = 3;
+    public static final int REFUND_STATE_SELLER_AGREED = 4;
+    public static final int REFUND_STATE_BUYER_RETURNED_GOODS = 5;
+    public static final int REFUND_STATE_SELLER_REJECTED = 2;
+    public static final int REFUND_STATE_WAIT_RETURN_FEE = 6;
+    public static final int REFUND_STATE_REFUND_CLOSE = 1;
+    public static final int REFUND_STATE_REFUND_SUCCESS = 7;
 
     public static final int UNUSED_COUPON = 0;
     public static final int PAST_COUPON = 1;
@@ -33,60 +37,77 @@ public class XlmmConst {
     public static final int WAIT_PAY = 1;
     public static final int WAIT_SEND = 2;
 
-    public static  final int JUMP_PROMOTE_TODAY = 1;
-    public static  final int JUMP_PROMOTE_PREVIOUS = 2;
-    public static  final int JUMP_PRODUCT_CHILDLIST= 3;
-    public static  final int JUMP_PRODUCT_LADYLIST = 4;
-    public static  final int JUMP_PRODUCT_MODELLIST = 5;
-    public static  final int JUMP_PRODUCT_DETAIL = 6;
-    public static  final int JUMP_TRADE_DETAIL = 7;
-    public static  final int JUMP_USER_COUPON = 8;
-    public static  final int JUMP_WEBVIEW = 9;
-    public static  final int JUMP_XIAOLUMAMA = 10;
-    public static  final int JUMP_XIAOLUMAMA_DAILYPOST = 11;
-    public static  final int JUMP_REFUNDS =12;
-    public static  final int JUMP_CARTS =13;
-    public static  final int JUMP_PRODUCT_DETAIL_PUSH =14;
-    public static  final int JUMP_TOPIC =15;
+    public static final int JUMP_PROMOTE_TODAY = 1;
+    public static final int JUMP_PROMOTE_PREVIOUS = 2;
+    public static final int JUMP_PRODUCT_CHILDLIST = 3;
+    public static final int JUMP_PRODUCT_LADYLIST = 4;
+    public static final int JUMP_PRODUCT_MODELLIST = 5;
+    public static final int JUMP_PRODUCT_DETAIL = 6;
+    public static final int JUMP_TRADE_DETAIL = 7;
+    public static final int JUMP_USER_COUPON = 8;
+    public static final int JUMP_WEBVIEW = 9;
+    public static final int JUMP_XIAOLUMAMA = 10;
+    public static final int JUMP_XIAOLUMAMA_DAILYPOST = 11;
+    public static final int JUMP_REFUNDS = 12;
+    public static final int JUMP_CARTS = 13;
+    public static final int JUMP_PRODUCT_DETAIL_PUSH = 14;
+    public static final int JUMP_TOPIC = 15;
 
-    public static  final String JUMP_PREFIX = "com.jimei.xlmm://app/v1/";
+    public static final String JUMP_PREFIX = "com.jimei.xlmm://app/v1/";
 
     public static final String XIAOMI_APP_ID = "2882303761517434918";
     public static final String XIAOMI_APP_KEY = "5551743422918";
 
-    public static int get_reason_num(String reason){
+    public static int get_reason_num(String reason) {
         int reason_num = 0;
 
-        if (reason.equals("其他")){
+        if (reason.equals("其他")) {
             reason_num = 0;
-        }
-        else if(reason.equals("错拍")){
+        } else if (reason.equals("错拍")) {
             reason_num = 1;
-        }
-        else if(reason.equals("缺货")){
+        } else if (reason.equals("缺货")) {
             reason_num = 2;
-        }
-        else if(reason.equals("开线/脱色/脱毛/有色差/有虫洞")){
+        } else if (reason.equals("开线/脱色/脱毛/有色差/有虫洞")) {
             reason_num = 3;
-        }
-        else if(reason.equals("发错货/漏发")){
+        } else if (reason.equals("发错货/漏发")) {
             reason_num = 4;
-        }
-        else if(reason.equals("没有发货")){
+        } else if (reason.equals("没有发货")) {
             reason_num = 5;
-        }
-        else if(reason.equals("未收到货")){
+        } else if (reason.equals("未收到货")) {
             reason_num = 6;
-        }
-        else if(reason.equals("与描述不符")){
+        } else if (reason.equals("与描述不符")) {
             reason_num = 7;
-        }
-        else if(reason.equals("发票问题")){
+        } else if (reason.equals("发票问题")) {
             reason_num = 9;
-        }
-        else if(reason.equals("七天无理由退换货")){
+        } else if (reason.equals("七天无理由退换货")) {
             reason_num = 10;
         }
-       return reason_num;
+        return reason_num;
+    }
+
+    public static int getVersionCode(Context context) {
+        PackageManager packageManager = context.getPackageManager();
+        PackageInfo packageInfo;
+        int versionCode = 0;
+        try {
+            packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+            versionCode = packageInfo.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return versionCode;
+    }
+
+    public static String getVersionName(Context context) {
+        PackageManager packageManager = context.getPackageManager();
+        PackageInfo packageInfo;
+        String versionName = "";
+        try {
+            packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+            versionName = packageInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return versionName;
     }
 }

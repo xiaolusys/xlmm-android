@@ -9,7 +9,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.iwgang.countdownview.CountdownView;
@@ -17,7 +16,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.PreviousAdapter;
+import com.jimei.xiaolumeimei.adapter.TodayAdapter;
 import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.event.TimeEvent;
@@ -25,6 +24,7 @@ import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.widget.loadingdialog.XlmmLoadingDialog;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
@@ -49,7 +49,7 @@ public class YesterdayV2Fragment extends BaseFragment {
     private MaterialDialog materialDialog;
     private int page = 2;
     private int totalPages;//总的分页数
-    private PreviousAdapter mPreviousAdapter;
+    private TodayAdapter mPreviousAdapter;
     //private TextView mNormal, mOrder;
     private Subscription subscribe1;
     private Subscription subscribe2;
@@ -204,7 +204,7 @@ public class YesterdayV2Fragment extends BaseFragment {
         xRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
         xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
         xRecyclerView.setPullRefreshEnabled(false);
-        mPreviousAdapter = new PreviousAdapter(this, activity);
+        mPreviousAdapter = new TodayAdapter(this, activity);
         xRecyclerView.addHeaderView(head);
         xRecyclerView.setAdapter(mPreviousAdapter);
 
@@ -221,7 +221,7 @@ public class YesterdayV2Fragment extends BaseFragment {
                     loadMoreData(page, 10);
                     page++;
                 } else {
-                    Toast.makeText(activity, "没有更多了啦,去购物吧", Toast.LENGTH_SHORT).show();
+                    JUtils.Toast("没有更多了拉,去购物吧");
                     xRecyclerView.post(xRecyclerView::loadMoreComplete);
                 }
             }
