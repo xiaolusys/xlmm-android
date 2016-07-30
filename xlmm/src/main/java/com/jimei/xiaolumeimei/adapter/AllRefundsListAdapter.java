@@ -85,7 +85,7 @@ public class AllRefundsListAdapter extends BaseAdapter {
             holder.flag.setImageResource(R.drawable.icon_return_mini);
             holder.type.setText("退款");
         }
-        if (entity.getStatus() == 4) {
+        if (entity.getStatus() == 4 && entity.isHas_good_return()) {
             holder.state.setText("请寄回商品");
             holder.state.setTextColor(context.getResources().getColor(R.color.coupon_red));
             holder.warn.setVisibility(View.VISIBLE);
