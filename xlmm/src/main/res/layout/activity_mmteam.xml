@@ -105,7 +105,7 @@
               android:layout_marginTop="25px"
               android:layout_toRightOf="@id/tv_rank"
               android:background="@drawable/shape_mamalevel"
-              android:text="查看团队收益"
+              android:text="查看团队排名"
               android:textColor="@color/white"
               />
 
