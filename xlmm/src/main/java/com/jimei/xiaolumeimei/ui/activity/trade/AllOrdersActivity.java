@@ -13,12 +13,14 @@ import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
+import com.jimei.xiaolumeimei.event.UserChangeEvent;
 import com.jimei.xiaolumeimei.ui.fragment.v2.OrderListFragment;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.greenrobot.eventbus.EventBus;
 
 public class AllOrdersActivity extends BaseSwipeBackCompatActivity
         implements View.OnClickListener {
@@ -138,5 +140,10 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity
         super.onPause();
         MobclickAgent.onPageEnd(this.getClass().getSimpleName());
         MobclickAgent.onPause(this);
+    }
+
+    @Override protected void onStop() {
+        super.onStop();
+      EventBus.getDefault().postSticky(new UserChangeEvent());
     }
 }

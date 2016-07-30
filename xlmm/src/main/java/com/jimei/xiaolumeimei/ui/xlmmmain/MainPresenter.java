@@ -57,6 +57,40 @@ public class MainPresenter extends MainContract.Presenter {
         }));
   }
 
+  @Override public void getUserInfoBeanChange() {
+    mRxManager.add(mModel.getProfile()
+        .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
+        .subscribe(new ServiceResponse<Response<UserInfoBean>>() {
+          @Override public void onNext(Response<UserInfoBean> userInfoBeanResponse) {
+            if (null != userInfoBeanResponse) {
+              if (userInfoBeanResponse.isSuccessful()) {
+                UserInfoBean userInfoBean = userInfoBeanResponse.body();
+                userInfoNewBean = userInfoBean;
+                mView.initUserViewChange(userInfoBean);
+              }
+            }
+          }
+
+          @Override public void onCompleted() {
+            super.onCompleted();
+          }
+
+          @Override public void onError(Throwable e) {
+            if (e instanceof HttpException) {
+              if (((HttpException) e).code() == 403) {
+                try {
+                  LoginUtils.delLoginInfo(XlmmApp.getmContext());
+                  mView.initDrawer(null);
+                  mView.initUserView(null);
+                } catch (Exception e1) {
+                  e1.printStackTrace();
+                }
+              }
+            }
+          }
+        }));
+  }
+
   @Override public void isCouPon() {
     mRxManager.add(mModel.isCouPon()
         .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))

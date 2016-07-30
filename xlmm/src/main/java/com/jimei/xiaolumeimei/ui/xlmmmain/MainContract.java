@@ -50,6 +50,8 @@ public interface MainContract {
 
     void initUserView(UserInfoBean userNewBean);
 
+    void initUserViewChange(UserInfoBean userNewBean);
+
     void initDrawer(UserInfoBean userInfoBean);
 
     void initShowCoiuponWindow(Response<IsGetcoupon> isGetcouponResponse);
@@ -70,11 +72,13 @@ public interface MainContract {
 
     void downLoaAddressFile(AddressDownloadResultBean addressDownloadResultBean);
 
-    void checkVersion(int versionCode,String content,String downloadUrl,boolean isAutoUpdate);
+    void checkVersion(int versionCode, String content, String downloadUrl, boolean isAutoUpdate);
   }
 
   abstract class Presenter extends BasePresenter<Model, View> {
     public abstract void getUserInfoBean();
+
+    public abstract void getUserInfoBeanChange();
 
     public abstract void isCouPon();
 
