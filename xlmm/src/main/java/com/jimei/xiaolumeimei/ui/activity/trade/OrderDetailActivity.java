@@ -24,9 +24,6 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import butterknife.Bind;
-import cn.iwgang.countdownview.CountdownView;
-
 import com.google.gson.Gson;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.CompanyAdapter;
@@ -51,6 +48,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import butterknife.Bind;
+import cn.iwgang.countdownview.CountdownView;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
@@ -73,6 +72,10 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     TextView tx_order_id;
     @Bind(R.id.tx_custom_name)
     TextView tx_custom_name;
+    @Bind(R.id.tx_custom_phone)
+    TextView tx_custom_phone;
+    @Bind(R.id.tx_custom_mobile)
+    TextView tx_custom_mobile;
     @Bind(R.id.tx_custom_address)
     TextView tx_custom_address;
     @Bind(R.id.tx_order_totalfee)
@@ -336,6 +339,8 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         }
         tx_order_id.setText(orderDetailBean.getTid());
         tx_custom_name.setText(orderDetailBean.getUser_adress().getReceiver_name());
+        tx_custom_mobile.setText(orderDetailBean.getUser_adress().getReceiver_mobile());
+        tx_custom_phone.setText(orderDetailBean.getUser_adress().getReceiver_phone());
         tx_custom_address.setText(orderDetailBean.getUser_adress().getReceiver_state()
                 + orderDetailBean.getUser_adress().getReceiver_city()
                 + orderDetailBean.getUser_adress().getReceiver_district()

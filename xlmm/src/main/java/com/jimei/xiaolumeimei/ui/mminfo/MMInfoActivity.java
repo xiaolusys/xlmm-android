@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
@@ -38,6 +39,7 @@ import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMStoreWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMTeamActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMcarryLogActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaDrawCashActivity;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaDrawCouponActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaLivenessActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaReNewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaVisitorActivity;
@@ -48,11 +50,14 @@ import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
-import java.util.Calendar;
-import java.util.List;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.Calendar;
+import java.util.List;
+
 import rx.schedulers.Schedulers;
 
 /**
@@ -287,18 +292,18 @@ public class MMInfoActivity
     Intent intent;
     switch (v.getId()) {
       case R.id.yue_layout:
-        //        if (mamaFortune != null
-        //            && mamaFortune.getMamaFortune().getExtraInfo().getCouldCashOut() == 0) {
-        //          intent = new Intent(this, MamaDrawCouponActivity.class);
-        //          intent.putExtra("cash", mamaFortune.getMamaFortune().getCashValue());
-        //          intent.putExtra("msg", mamaFortune.getMamaFortune().getExtraInfo().getCashoutReason());
-        //          startActivity(intent);
-        //        } else if (mamaFortune != null
-        //            && mamaFortune.getMamaFortune().getExtraInfo().getCouldCashOut() == 1) {
+                if (mamaFortune != null
+                    && mamaFortune.getMamaFortune().getExtraInfo().getCouldCashOut() == 0) {
+                  intent = new Intent(this, MamaDrawCouponActivity.class);
+                  intent.putExtra("cash", mamaFortune.getMamaFortune().getCashValue());
+                  intent.putExtra("msg", mamaFortune.getMamaFortune().getExtraInfo().getCashoutReason());
+                  startActivity(intent);
+                } else if (mamaFortune != null
+                    && mamaFortune.getMamaFortune().getExtraInfo().getCouldCashOut() == 1) {
         intent = new Intent(this, MamaDrawCashActivity.class);
         intent.putExtra("cash", mamaFortune.getMamaFortune().getCashValue());
         startActivity(intent);
-        //        }
+                }
         break;
       case R.id.img_left:
         isThisWeek = false;

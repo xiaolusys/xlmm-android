@@ -13,8 +13,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import butterknife.Bind;
-
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.AllRefundsListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -27,6 +25,7 @@ import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
+import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -74,7 +73,6 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity
                 Intent intent = new Intent(AllRefundsActivity.this, RefundDetailActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putInt("goods_id", goods_id);
-                bundle.putInt("refund_state", refund_state);
                 intent.putExtras(bundle);
                 Log.d(TAG, "transfer goods_id  " + goods_id + " to RefundDetailActivity");
                 startActivity(intent);

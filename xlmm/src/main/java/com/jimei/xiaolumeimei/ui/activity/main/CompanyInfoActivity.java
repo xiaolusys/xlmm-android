@@ -55,7 +55,7 @@ public class CompanyInfoActivity extends BaseSwipeBackCompatActivity implements 
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
         finishBack(toolbar);
-        tv_version.setText(XlmmConst.VERSION);
+        tv_version.setText(XlmmConst.getVersionName(this));
     }
 
     @Override
