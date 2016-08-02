@@ -41,7 +41,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="8dp"
             android:gravity="center"
-            android:text="小鹿妈妈" />
+            android:text="" />
     </RelativeLayout>
 
 

@@ -504,36 +504,41 @@
           </LinearLayout>
         </LinearLayout>
 
-        <!--<View-->
-        <!--android:id="@+id/view_1"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="1dip"-->
-        <!--android:layout_below="@id/rl_order"-->
-        <!--android:background="@color/greytow"-->
-        <!--/>-->
+        <View
+            android:id="@+id/view_1"
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:layout_below="@id/rl_order"
+            android:background="@color/greytow"
+            />
 
-        <!--<View-->
-        <!--android:id="@+id/view_2"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="1dip"-->
-        <!--android:layout_below="@id/view_1"-->
-        <!--android:layout_marginTop="12dp"-->
-        <!--android:background="@color/greytow"-->
-        <!--/>-->
+        <View
+            android:id="@+id/view_2"
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:layout_below="@id/view_1"
+            android:layout_marginTop="12dp"
+            android:background="@color/greytow"
+            />
         <!--<RelativeLayout-->
-        <!--android:id="@+id/ll_note"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="90px"-->
-        <!--android:layout_below="@id/view_2"-->
-        <!--android:background="@color/white"-->
-        <!--android:orientation="horizontal"-->
-        <!--&gt;-->
-        <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_centerVertical="true"-->
-        <!--android:text="hahahahahahah"-->
-        <!--/>-->
+            <!--android:id="@+id/ll_note"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="90px"-->
+            <!--android:layout_below="@id/view_2"-->
+            <!--android:background="@color/white"-->
+            <!--android:orientation="horizontal"-->
+            <!--&gt;-->
+          <!--<com.jimei.xiaolumeimei.widget.marqueenview.MarqueeView-->
+              <!--android:id="@+id/marqueeView"-->
+              <!--android:layout_width="200dp"-->
+              <!--android:layout_height="match_parent"-->
+              <!--android:layout_centerVertical="true"-->
+              <!--android:layout_marginLeft="8dp"-->
+              <!--app:mvAnimDuration="500"-->
+              <!--app:mvGravity="left"-->
+              <!--app:mvInterval="2000"-->
+              <!--app:mvTextColor="@color/colorAccent"-->
+              <!--/>-->
         <!--</RelativeLayout>-->
         <View
             android:id="@+id/view_5"
