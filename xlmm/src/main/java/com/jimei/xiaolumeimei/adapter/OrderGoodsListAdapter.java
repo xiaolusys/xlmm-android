@@ -222,7 +222,6 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                                 Intent intent = new Intent(context, RefundDetailActivity.class);
                                 Bundle bundle = new Bundle();
                                 bundle.putInt("goods_id", entity.getRefund_id());
-                                bundle.putInt("refund_state", entity.getRefund_status());
                                 intent.putExtras(bundle);
                                 context.startActivity(intent);
                             }

@@ -28,7 +28,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import butterknife.Bind;
+
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.base.BasePresenterActivity;
@@ -84,17 +84,21 @@ import com.umeng.analytics.MobclickAgent;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
 import com.zhy.http.okhttp.callback.FileCallBack;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import butterknife.Bind;
 import okhttp3.Call;
 import okhttp3.ResponseBody;
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 import retrofit2.Response;
 
 /**

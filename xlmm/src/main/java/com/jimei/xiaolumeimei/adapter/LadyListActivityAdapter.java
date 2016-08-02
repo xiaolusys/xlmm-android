@@ -11,9 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
@@ -25,6 +22,11 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by 优尼世界 on 15/12/29.
@@ -110,16 +112,23 @@ public class LadyListActivityAdapter
         holder.childlistAgentPrice.setText("¥" + resultsEntity.getProductLowestPrice());
         holder.childlistStdsalePrice.setText("/¥" + resultsEntity.getStdSalePrice());
 
-        String[] temp = headImg.split("http://image.xiaolu.so/");
         String head_img = "";
-        if (temp.length > 1) {
-            try {
-                head_img += "http://image.xiaolu.so/"
-                        + URLEncoder.encode(temp[1], "utf-8")
-                        + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+        Pattern p = Pattern.compile("(?<=//|)((\\w)+\\.)+\\w+");
+        Matcher m = p.matcher(headImg);
+        if (m.find()) {
+            String group = m.group();
+            String[] temp = headImg.split(group + "/");
+            if (temp.length > 1) {
+                try {
+                    head_img = "http://" + group + "/"
+                            + URLEncoder.encode(temp[1], "utf-8")
+                            + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
+                } catch (UnsupportedEncodingException e) {
+                    head_img = headImg;
+                }
             }
+        } else {
+            head_img = headImg;
         }
 
         holder.card.setTag(new Object());

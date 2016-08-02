@@ -1,8 +1,6 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -23,7 +21,6 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jimei.xiaolumeimei.xlmmService.UpdateService;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
-import com.umeng.update.UmengUpdateAgent;
 
 import rx.schedulers.Schedulers;
 
@@ -148,14 +145,13 @@ public class SettingActivity extends BaseSwipeBackCompatActivity {
 
         public void updatePref() {
             about_company = findPreference(getResources().getString(R.string.about_company));
-            about_company.setSummary(XlmmConst.VERSION);
+            about_company.setSummary(XlmmConst.getVersionName(getActivity()));
         }
 
 
         @Override
         public void onStop() {
             super.onStop();
-            UmengUpdateAgent.setUpdateListener(null);
         }
     }
 

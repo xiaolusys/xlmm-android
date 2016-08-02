@@ -9,8 +9,6 @@ import android.content.pm.PackageManager;
  */
 public class XlmmConst {
 
-    public static final String VERSION = "1.2.1";
-
     public static final int ORDER_STATE_CREATE = 0;
     public static final int ORDER_STATE_WAITPAY = 1;
     public static final int ORDER_STATE_PAYED = 2;
@@ -52,6 +50,9 @@ public class XlmmConst {
     public static final int JUMP_CARTS = 13;
     public static final int JUMP_PRODUCT_DETAIL_PUSH = 14;
     public static final int JUMP_TOPIC = 15;
+
+    public static final int FLAG_PRICE = 0;
+    public static final int FLAG_COLOR = 1;
 
     public static final String JUMP_PREFIX = "com.jimei.xlmm://app/v1/";
 
