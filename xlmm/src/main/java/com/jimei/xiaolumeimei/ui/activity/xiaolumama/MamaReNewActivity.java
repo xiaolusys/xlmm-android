@@ -22,6 +22,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.MaMaReNewBean;
 import com.jimei.xiaolumeimei.event.MaMaInfoEmptyEvent;
+import com.jimei.xiaolumeimei.event.UserChangeEvent;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.pingplusplus.android.PaymentActivity;
@@ -290,6 +291,7 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
   @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
     //支付页面返回处理
+    EventBus.getDefault().postSticky(new UserChangeEvent());
     if (requestCode == REQUEST_CODE_PAYMENT) {
       if (resultCode == Activity.RESULT_OK) {
         String result = data.getExtras().getString("pay_result");

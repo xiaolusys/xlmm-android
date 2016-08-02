@@ -33,10 +33,12 @@ public class MMcarryLogActivity extends BaseSwipeBackCompatActivity
   @Bind(R.id.view_pager) ViewPager viewPager;
   @Bind(R.id.tv_leiji) TextView tvLeiji;
   @Bind(R.id.tv_num) TextView tvNum;
+  @Bind(R.id.tv_his) TextView tvHis;
   @Bind(R.id.scrollable_layout) ScrollableLayout scrollableLayout;
   List<BaseFragment> fragments = new ArrayList<>();
   private String carrylogMoney;
   private TabLayout.Tab[] tabs;
+  private String hisConfirmedCashOut;
 
   @Override protected void setListener() {
   }
@@ -47,6 +49,7 @@ public class MMcarryLogActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void getBundleExtras(Bundle extras) {
     carrylogMoney = extras.getString("carrylogMoney");
+    hisConfirmedCashOut = extras.getString("hisConfirmedCashOut");
   }
 
   @Override protected int getContentViewLayoutID() {
@@ -69,7 +72,7 @@ public class MMcarryLogActivity extends BaseSwipeBackCompatActivity
 
     tvLeiji.setText("累计收益");
     tvNum.setText(carrylogMoney);
-
+    tvHis.setText("2016.3.24号系统升级之前的收益" + hisConfirmedCashOut);
     fragments.add(CarryLogAllFragment.newInstance("全部"));
     fragments.add(CarryLogCommissionFragment.newInstance("佣金"));
     fragments.add(CarryLogCashbackFragment.newInstance("返现"));

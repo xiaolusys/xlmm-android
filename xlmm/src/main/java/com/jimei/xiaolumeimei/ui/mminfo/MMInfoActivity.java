@@ -81,12 +81,19 @@ public class MMInfoActivity
   private boolean isThisWeek = true;
   private MamaUrl.ResultsBean.ExtraBean mamaResult;
   private int mmId;
+  private String hisConfirmedCashOut;
 
   @Override protected void initData() {
     mPresenter.getShareShopping();
     mPresenter.getMamaFortune();
     mPresenter.getRefund();
     mPresenter.getMamaUrl();
+    //List<String> list = new ArrayList();
+    //list.add("我是第一个啊");
+    //list.add("我是第二个啊");
+    //list.add("我是第三个啊");
+    //list.add("我是第四个啊");
+    //b.marqueeView.startWithList(list);
   }
 
   @Override protected void setListener() {
@@ -160,6 +167,7 @@ public class MMInfoActivity
 
   @Override public void initMMview(MamaFortune fortune) {
     int days = fortune.getMamaFortune().getExtraInfo().getSurplusDays();
+    hisConfirmedCashOut = fortune.getMamaFortune().getExtraInfo().getHisConfirmedCashOut();
     JUtils.Log(TAG,
         fortune.toString() + "fortune.getMamaFortune().getExtraInfo().getSurplusDays()" + days);
     b.tvFund.setText(
@@ -344,6 +352,7 @@ public class MMInfoActivity
         bundlerl_party.putString("cookies", cookies);
         bundlerl_party.putString("domain", domain);
         bundlerl_party.putString("Cookie", sharedPreferences.getString("Cookie", ""));
+        //bundlerl_party.putString("actlink", mamaResult.getAct_info());
         bundlerl_party.putString("actlink", mamaResult.getAct_info());
         intent.putExtras(bundlerl_party);
         startActivity(intent);
@@ -460,11 +469,10 @@ public class MMInfoActivity
   }
 
   private void jumpTpMMCarryLogActivity() {
-    Intent intent1 = new Intent(this, MMcarryLogActivity.class);
     Bundle bundlerl_income = new Bundle();
     bundlerl_income.putString("carrylogMoney", carrylogMoney + "");
-    intent1.putExtras(bundlerl_income);
-    startActivity(intent1);
+    bundlerl_income.putString("hisConfirmedCashOut", hisConfirmedCashOut + "");
+    readyGo(MMcarryLogActivity.class, bundlerl_income);
   }
 
   @Override protected void onResume() {
