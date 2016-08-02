@@ -805,7 +805,7 @@
                   android:layout_marginLeft="42px"
                   android:layout_marginTop="30px"
                   android:layout_toRightOf="@id/img_order_invite_1kaidian"
-                  android:text="邀请一元开店"
+                  android:text="邀请开店"
                   android:textSize="15sp"
                   />
 
@@ -853,7 +853,7 @@
                   android:layout_marginLeft="42px"
                   android:layout_marginTop="30px"
                   android:layout_toRightOf="@id/img_chooselist"
-                  android:text="选品上架"
+                  android:text="选品佣金"
                   android:textSize="15sp"
                   />
 
@@ -929,7 +929,7 @@
                   android:layout_gravity="center"
                   android:layout_marginTop="4dp"
                   android:layout_toRightOf="@+id/img_two_dimen1"
-                  android:text="妈妈课堂"
+                  android:text="课堂活动"
                   android:textColor="@color/divider"
                   android:textSize="12sp"
                   />
