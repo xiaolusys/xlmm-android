@@ -246,6 +246,12 @@ public class MamaFortune {
       @SerializedName("thumbnail") private String thumbnail;
       @SerializedName("cashout_reason") private String cashoutReason;
 
+      public String getHisConfirmedCashOut() {
+        return hisConfirmedCashOut;
+      }
+
+      @SerializedName("his_confirmed_cash_out") private String hisConfirmedCashOut;
+
       public String getAgencylevelDisplay() {
         return agencylevelDisplay;
       }

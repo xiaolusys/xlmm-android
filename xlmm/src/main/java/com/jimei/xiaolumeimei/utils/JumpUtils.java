@@ -25,6 +25,8 @@ import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
 import com.jude.utils.JUtils;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by wulei on 3/12/16.
@@ -174,7 +176,7 @@ public class JumpUtils {
       case XlmmConst.JUMP_TOPIC:
         intent = new Intent(context, BrandListActivity.class);
         bundle = new Bundle();
-        bundle.putString("id", jumpInfo.getId()+"");
+        bundle.putString("id", jumpInfo.getId() + "");
         intent.putExtras(bundle);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
@@ -183,10 +185,10 @@ public class JumpUtils {
   }
 
   public static JumpInfo get_jump_info(String recvContent) {
-
+    JUtils.Log(TAG, "content===" + recvContent);
     JumpInfo jumpInfo = new JumpInfo();
     String[] content = recvContent.split(XlmmConst.JUMP_PREFIX);
-    JUtils.Log(TAG, "content[1] ===" + content[0]);
+    JUtils.Log(TAG, "content[1] ===" + content[1]);
     try {
       if (!content[1].isEmpty()) {
         if (content[1].contains("promote_today")) {
@@ -221,28 +223,53 @@ public class JumpUtils {
           int id = -1;
           String url = null;
           jumpInfo.setType(XlmmConst.JUMP_WEBVIEW);
-          String urlContent = (content[1].split("webview?"))[1];
-          JUtils.Log(TAG, "content[1] ===" + urlContent);
-          String[] split = urlContent.split("&");
-          for (int i = 0; i < split.length; i++) {
-            JUtils.Log(TAG, "split[i]" + split[i]);
-            if (split[i].contains("url")) {
-              String idStr[] = split[i].split("url=");
-              url = idStr[1];
-              JUtils.Log(TAG, "url" + url);
-            } else if (split[i].contains("activity_id")) {
-              String idStr[] = split[i].split("activity_id=");
-              String s = idStr[1];
-              id = Integer.parseInt(s);
-              JUtils.Log(TAG, "id" + id);
-            }
-          }
-          String url1 = content[1].substring(content[1].lastIndexOf("http"));
+          JUtils.Log(TAG, "&=======" + (int) ("&".charAt(0)));
+          if (content[1].contains("activity_id")) {
+            String urlContent = (content[1].split("webview?"))[1];
+            JUtils.Log(TAG, "content[1] ===" + urlContent);
 
-          if (url1.contains("is_native")) {
-            String temp[] = url1.split("&is_native=");
-            url = temp[0];
+            List<Integer> integers = new ArrayList<>();
+            for (int i = 0; i < urlContent.length(); i++) {
+              if (content[1].charAt(i) == 38) {
+                integers.add(i);
+              }
+            }
+
+            int integer = integers.get(0);
+            JUtils.Log(TAG, "integer ===" + integer);
+            List<String> split = new ArrayList<>();
+            JUtils.Log(TAG, "urlContent.substring(integer -6)" + urlContent.substring(integer-6,
+                urlContent.length()));
+            JUtils.Log(TAG,
+                "urlContent.substring(0, integer - 7)" + urlContent.substring(1, integer-7));
+            split.add(urlContent.substring(integer -6, urlContent.length()));
+            split.add(urlContent.substring(1, integer - 7));
+
+            //String[] split = urlContent.split("&");
+            for (int i = 0; i < split.size(); i++) {
+              JUtils.Log(TAG, "split[i]" + split.get(i));
+              if (split.get(i).contains("url")) {
+                String idStr[] = split.get(i).split("url=");
+                url = idStr[1];
+                JUtils.Log(TAG, "url" + url);
+              } else if (split.get(i).contains("activity_id")) {
+                String idStr[] = split.get(i).split("activity_id=");
+                String s = idStr[1];
+                id = Integer.parseInt(s);
+                JUtils.Log(TAG, "id" + id);
+              }
+            }
+          } else {
+            url = content[1].substring(content[1].lastIndexOf("http"));
           }
+
+          //String url1 = content[1].substring(content[1].lastIndexOf("http"));
+          //JUtils.Log(TAG, "url1 ===" + url1);
+          //if (url1.contains("is_native")) {
+          //  String temp[] = url1.split("&is_native=");
+          //  url = temp[0];
+          //  JUtils.Log(TAG, "url====" + url);
+          //}
           //if (content[1].contains("activity_id")) {
           //  String idStr[] = content[1].split("activity_id=");
           //  String s = idStr[1].split("&")[0];
