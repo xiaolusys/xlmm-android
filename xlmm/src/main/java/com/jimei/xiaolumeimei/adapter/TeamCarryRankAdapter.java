@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.adapter;
 
 import android.content.Context;
+import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.support.v7.widget.RecyclerView;
@@ -8,17 +9,12 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.BR;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseRevHolder;
 import com.jimei.xiaolumeimei.databinding.ItemCarryPersonalBinding;
-import com.jimei.xiaolumeimei.databinding.ItemCarryTeamBinding;
-import com.jimei.xiaolumeimei.databinding.ItemCarryTeamFirstBinding;
-import com.jimei.xiaolumeimei.databinding.ItemCarryTeamSecondBinding;
-import com.jimei.xiaolumeimei.databinding.ItemCarryTeamThridBinding;
 import com.jimei.xiaolumeimei.entities.PersonalCarryRankBean;
 import com.jimei.xiaolumeimei.glidemoudle.CropCircleTransformation;
 import java.util.ArrayList;
@@ -82,52 +78,20 @@ public class TeamCarryRankAdapter extends RecyclerView.Adapter<BaseRevHolder> {
   @Override public void onBindViewHolder(BaseRevHolder holder, int position) {
     final PersonalCarryRankBean personalCarryRankBean = mPersonalCarryRankBeanList.get(position);
     holder.getBinding().setVariable(BR.item, personalCarryRankBean);
-    ViewDataBinding binding = holder.getBinding();
-    if (binding instanceof ItemCarryTeamFirstBinding) {
-      loadImageAndText(personalCarryRankBean.getThumbnail(),
-          ((ItemCarryTeamFirstBinding) binding).userImage, mContext,
-          ((ItemCarryTeamFirstBinding) binding).userImage,
-          ((ItemCarryTeamFirstBinding) binding).totalCarry,
-          personalCarryRankBean.getTotal() / 100.00 + "");
-    }
-
-    if (binding instanceof ItemCarryTeamSecondBinding) {
-      loadImageAndText(personalCarryRankBean.getThumbnail(),
-          ((ItemCarryTeamSecondBinding) binding).userImage, mContext,
-          ((ItemCarryTeamSecondBinding) binding).userImage,
-          ((ItemCarryTeamSecondBinding) binding).totalCarry,
-          personalCarryRankBean.getTotal() / 100.00 + "");
-    }
-    if (binding instanceof ItemCarryTeamThridBinding) {
-      loadImageAndText(personalCarryRankBean.getThumbnail(),
-          ((ItemCarryTeamThridBinding) binding).userImage, mContext,
-          ((ItemCarryTeamThridBinding) binding).userImage,
-          ((ItemCarryTeamThridBinding) binding).totalCarry,
-          personalCarryRankBean.getTotal() / 100.00 + "");
-    }
-
-    if (binding instanceof ItemCarryTeamBinding) {
-      loadImageAndText(personalCarryRankBean.getThumbnail(),
-          ((ItemCarryTeamBinding) binding).userImage, mContext,
-          ((ItemCarryTeamBinding) binding).userImage, ((ItemCarryTeamBinding) binding).totalCarry,
-          personalCarryRankBean.getTotal() / 100.00 + "");
-    }
-
     holder.getBinding().executePendingBindings();
   }
 
-  private void loadImageAndText(String thumbnail, ImageView userImage, Context mContext,
-      ImageView userImage2, TextView textView, String text) {
-    textView.setText(text);
-    if (TextUtils.isEmpty(thumbnail)) {
-      Glide.with(mContext)
+  @BindingAdapter({"imageUrl"})
+  public static void loadImage(ImageView view, String url) {
+    if (TextUtils.isEmpty(url)) {
+      Glide.with(view.getContext())
           .load(R.mipmap.ic_launcher)
           .diskCacheStrategy(DiskCacheStrategy.ALL)
-          .bitmapTransform(new CropCircleTransformation(mContext))
-          .into(userImage);
+          .bitmapTransform(new CropCircleTransformation(view.getContext()))
+          .into(view);
     } else {
-      com.jimei.xiaolumeimei.utils.ViewUtils.loadImgToImgViewWithTransformCircle(mContext,
-          userImage2, thumbnail);
+      com.jimei.xiaolumeimei.utils.ViewUtils.loadImgToImgViewWithTransformCircle(view.getContext(),
+          view, url);
     }
   }
 

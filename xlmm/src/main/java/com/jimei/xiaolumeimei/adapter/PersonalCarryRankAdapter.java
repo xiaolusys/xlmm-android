@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.adapter;
 
 import android.content.Context;
+import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.support.v7.widget.RecyclerView;
@@ -8,16 +9,12 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.BR;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseRevHolder;
 import com.jimei.xiaolumeimei.databinding.ItemCarryPersonalBinding;
-import com.jimei.xiaolumeimei.databinding.ItemCarryPersonalFirstBinding;
-import com.jimei.xiaolumeimei.databinding.ItemCarryPersonalSecondBinding;
-import com.jimei.xiaolumeimei.databinding.ItemCarryPersonalThridBinding;
 import com.jimei.xiaolumeimei.entities.PersonalCarryRankBean;
 import com.jimei.xiaolumeimei.glidemoudle.CropCircleTransformation;
 import java.util.ArrayList;
@@ -36,10 +33,8 @@ public class PersonalCarryRankAdapter extends RecyclerView.Adapter<BaseRevHolder
   private final LayoutInflater mLayoutInflater;
 
   private List<PersonalCarryRankBean> mPersonalCarryRankBeanList;
-  private Context mContext;
 
   public PersonalCarryRankAdapter(Context context) {
-    this.mContext = context;
     mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     mPersonalCarryRankBeanList = new ArrayList<>();
   }
@@ -81,53 +76,20 @@ public class PersonalCarryRankAdapter extends RecyclerView.Adapter<BaseRevHolder
   @Override public void onBindViewHolder(BaseRevHolder holder, int position) {
     final PersonalCarryRankBean personalCarryRankBean = mPersonalCarryRankBeanList.get(position);
     holder.getBinding().setVariable(BR.item, personalCarryRankBean);
-    ViewDataBinding binding = holder.getBinding();
-    if (binding instanceof ItemCarryPersonalFirstBinding) {
-      loadImageAndText(personalCarryRankBean.getThumbnail(),
-          ((ItemCarryPersonalFirstBinding) binding).userImage, mContext,
-          ((ItemCarryPersonalFirstBinding) binding).userImage,
-          ((ItemCarryPersonalFirstBinding) binding).totalCarry,
-          personalCarryRankBean.getTotal() / 100.00 + "");
-    }
-
-    if (binding instanceof ItemCarryPersonalSecondBinding) {
-      loadImageAndText(personalCarryRankBean.getThumbnail(),
-          ((ItemCarryPersonalSecondBinding) binding).userImage, mContext,
-          ((ItemCarryPersonalSecondBinding) binding).userImage,
-          ((ItemCarryPersonalSecondBinding) binding).totalCarry,
-          personalCarryRankBean.getTotal() / 100.00 + "");
-    }
-    if (binding instanceof ItemCarryPersonalThridBinding) {
-      loadImageAndText(personalCarryRankBean.getThumbnail(),
-          ((ItemCarryPersonalThridBinding) binding).userImage, mContext,
-          ((ItemCarryPersonalThridBinding) binding).userImage,
-          ((ItemCarryPersonalThridBinding) binding).totalCarry,
-          personalCarryRankBean.getTotal() / 100.00 + "");
-    }
-
-    if (binding instanceof ItemCarryPersonalBinding) {
-      loadImageAndText(personalCarryRankBean.getThumbnail(),
-          ((ItemCarryPersonalBinding) binding).userImage, mContext,
-          ((ItemCarryPersonalBinding) binding).userImage,
-          ((ItemCarryPersonalBinding) binding).totalCarry,
-          personalCarryRankBean.getTotal() / 100.00 + "");
-    }
-
     holder.getBinding().executePendingBindings();
   }
 
-  private void loadImageAndText(String thumbnail, ImageView userImage, Context mContext,
-      ImageView userImage2, TextView textView, String text) {
-    textView.setText(text);
-    if (TextUtils.isEmpty(thumbnail)) {
-      Glide.with(mContext)
+  @BindingAdapter({"imageUrl"})
+  public static void loadImage(ImageView view, String url) {
+    if (TextUtils.isEmpty(url)) {
+      Glide.with(view.getContext())
           .load(R.mipmap.ic_launcher)
           .diskCacheStrategy(DiskCacheStrategy.ALL)
-          .bitmapTransform(new CropCircleTransformation(mContext))
-          .into(userImage);
+          .bitmapTransform(new CropCircleTransformation(view.getContext()))
+          .into(view);
     } else {
-      com.jimei.xiaolumeimei.utils.ViewUtils.loadImgToImgViewWithTransformCircle(mContext,
-          userImage2, thumbnail);
+      com.jimei.xiaolumeimei.utils.ViewUtils.loadImgToImgViewWithTransformCircle(view.getContext(),
+          view, url);
     }
   }
 

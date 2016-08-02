@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     >
   <data>
     <variable
@@ -27,6 +28,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="25px"
         android:layout_toRightOf="@id/first"
+        app:imageUrl="@{item.thumbnail}"
         />
     <TextView
         android:layout_width="wrap_content"
@@ -43,6 +45,7 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="20px"
+        android:text="@{String.valueOf(Double.valueOf(item.total)/Double.valueOf(100))}"
         android:textColor="@color/colorAccent"
         android:textSize="20sp"
         />

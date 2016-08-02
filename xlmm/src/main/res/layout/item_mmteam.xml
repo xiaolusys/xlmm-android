@@ -12,10 +12,10 @@
       android:layout_height="120px"
       >
     <TextView
-        android:layout_centerVertical="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
         android:layout_marginLeft="10px"
         android:text="@{item.mamaNick}"
         />
@@ -26,15 +26,17 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_marginLeft="10px"
+        android:text="@{String.valueOf(item.num)+'个'}"
         />
     <TextView
-        android:textColor="@color/colorAccent"
-        android:layout_centerVertical="true"
         android:id="@+id/tv_carry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
         android:layout_marginRight="10px"
+        android:text="@{String.valueOf(Double.valueOf(item.total)/Double.valueOf(100))}"
+        android:textColor="@color/colorAccent"
         />
 
   </RelativeLayout>
