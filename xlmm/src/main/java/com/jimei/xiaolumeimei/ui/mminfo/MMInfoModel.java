@@ -26,6 +26,7 @@ public class MMInfoModel implements MMInfoContract.Model {
         .compose(RxSchedulers.io_main());
   }
 
+  //test
   @Override
   public Observable<MamaUrl> getMamaUrl() {
     return XlmmRetrofitClient.getService()
