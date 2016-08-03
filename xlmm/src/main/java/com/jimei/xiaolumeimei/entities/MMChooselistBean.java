@@ -9,28 +9,9 @@ import java.util.List;
  */
 public class MMChooselistBean {
 
-  /**
-   * count : 170
-   * next : http://staging.xiaolumeimei.com/rest/v2/products/my_choice_pro?category=0&page=2&page_size=20
-   * previous : null
-   * results : [{"id":56962,"pic_path":"http://image.xiaolu.so/MG_1467270479779fen.jpg","name":"韩版时尚T恤阔腿裤两件套/粉色ZF0013","std_sale_price":299,"agent_price":69.9,"remain_num":100,"in_customer_shop":0,"shop_product_num":15,"level_info":{"agencylevel_desc":"VIP1","agencylevel":2,"next_agencylevel":12,"next_rebet_amount":14,"next_agencylevel_desc":"VIP2","next_rebet_amount_des":"佣 ￥14.00","rebet_amount_des":"佣 ￥12.00","sale_num_des":"1525人在卖","sale_num":1525,"rebet_amount":12}},{"id":56585,"pic_path":"http://image.xiaolu.so/MG_146708762421619.jpg","name":"波西米亚棉绸沙滩裙/19号色","std_sale_price":189,"agent_price":89.9,"remain_num":120,"in_customer_shop":1,"shop_product_num":15,"level_info":{"agencylevel_desc":"VIP1","agencylevel":2,"next_agencylevel":12,"next_rebet_amount":14,"next_agencylevel_desc":"VIP2","next_rebet_amount_des":"佣 ￥14.00","rebet_amount_des":"佣 ￥12.00","sale_num_des":"1525人在卖","sale_num":1525,"rebet_amount":12}},{"id":56414,"pic_path":"http://image.xiaolu.so/MG_1467084237380-.jpg","name":"人气爆款卡通亲子装/妈妈/黄色","std_sale_price":89,"agent_price":39.9,"remain_num":80,"in_customer_shop":0,"shop_product_num":15,"level_info":{"agencylevel_desc":"VIP1","agencylevel":2,"next_agencylevel":12,"next_rebet_amount":14,"next_agencylevel_desc":"VIP2","next_rebet_amount_des":"佣 ￥14.00","rebet_amount_des":"佣 ￥12.00","sale_num_des":"1525人在卖","sale_num":1525,"rebet_amount":12}},{"id":56394,"pic_path":"http://image.xiaolu.so/MG_1467119539779.jpg","name":"小士兵短袖短裤套装/粉+灰","std_sale_price":399,"agent_price":69.9,"remain_num":140,"in_customer_shop":0,"shop_product_num":15,"level_info":{"agencylevel_desc":"VIP1","agencylevel":2,"next_agencylevel":12,"next_rebet_amount":14,"next_agencylevel_desc":"VIP2","next_rebet_amount_des":"佣 ￥14.00","rebet_amount_des":"佣 ￥12.00","sale_num_des":"1525人在卖","sale_num":1525,"rebet_amount":12}},{"id":56390,"pic_path":"http://image.xiaolu.so/MG_1467118544910-.jpg","name":"中大童短袖短裤休闲套装/黄+灰","std_sale_price":399,"agent_price":79.9,"remain_num":140,"in_customer_shop":0,"shop_product_num":15,"level_info":{"agencylevel_desc":"VIP1","agencylevel":2,"next_agencylevel":12,"next_rebet_amount":14,"next_agencylevel_desc":"VIP2","next_rebet_amount_des":"佣 ￥14.00","rebet_amount_des":"佣 ￥12.00","sale_num_des":"1525人在卖","sale_num":1525,"rebet_amount":12}},{"id":56388,"pic_path":"http://image.xiaolu.so/MG_14671159490641.jpg","name":"立体花朵公主蓬蓬裙/粉色","std_sale_price":399,"agent_price":79.9,"remain_num":100,"in_customer_shop":0,"shop_product_num":15,"level_info":{"agencylevel_desc":"VIP1","agencylevel":2,"next_agencylevel":12,"next_rebet_amount":14,"next_agencylevel_desc":"VIP2","next_rebet_amount_des":"佣 ￥14.00","rebet_amount_des":"佣 ￥12.00","sale_num_des":"1525人在卖","sale_num":1525,"rebet_amount":12}},{"id":56386,"pic_path":"http://image.xiaolu.so/MG_14671145769321.jpg","name":"韩版气质时尚公主裙/粉色","std_sale_price":299,"agent_price":69.9,"remain_num":120,"in_customer_shop":0,"shop_product_num":15,"level_info":{"agencylevel_desc":"VIP1","agencylevel":2,"next_agencylevel":12,"next_rebet_amount":14,"next_agencylevel_desc":"VIP2","next_rebet_amount_des":"佣 ￥14.00","rebet_amount_des":"佣 ￥12.00","sale_num_des":"1525人在卖","sale_num":1525,"rebet_amount":12}},{"id":56383,"pic_path":"http://image.xiaolu.so/MG_14671140023643.jpg","name":"中大童花朵公主裙/粉色","std_sale_price":299,"agent_price":69.9,"remain_num":100,"in_customer_shop":0,"shop_product_num":15,"level_info":{"agencylevel_desc":"VIP1","agencylevel":2,"next_agencylevel":12,"next_rebet_amount":14,"next_agencylevel_desc":"VIP2","next_rebet_amount_des":"佣 ￥14.00","rebet_amount_des":"佣 ￥12.00","sale_num_des":"1525人在卖","sale_num":1525,"rebet_amount":12}},{"id":56367,"pic_path":"http://image.xiaolu.so/MG_14671136941182.jpg","name":"韩版梅花刺绣公主裙/粉色","std_sale_price":499,"agent_price":89.9,"remain_num":100,"in_customer_shop":0,"shop_product_num":15,"level_info":{"agencylevel_desc":"VIP1","agencylevel":2,"next_agencylevel":12,"next_rebet_amount":14,"next_agencylevel_desc":"VIP2","next_rebet_amount_des":"佣 ￥14.00","rebet_amount_des":"佣 ￥12.00","sale_num_des":"1525人在卖","sale_num":1525,"rebet_amount":12}},{"id":56359,"pic_path":"http://image.xiaolu.so/MG_1467091364313.jpg","name":"休闲透气钢铁侠套装/黑＋黑","std_sale_price":399,"agent_price":79.9,"remain_num":140,"in_customer_shop":0,"shop_product_num":15,"level_info":{"agencylevel_desc":"VIP1","agencylevel":2,"next_agencylevel":12,"next_rebet_amount":14,"next_agencylevel_desc":"VIP2","next_rebet_amount_des":"佣 ￥14.00","rebet_amount_des":"佣 ￥12.00","sale_num_des":"1525人在卖","sale_num":1525,"rebet_amount":12}},{"id":56351,"pic_path":"http://image.xiaolu.so/MG_14671086962761.jpg","name":"韩版小香风露肩A字裙/粉色","std_sale_price":218,"agent_price":69.9,"remain_num":100,"in_customer_shop":0,"shop_product_num":15,"level_info":{"agencylevel_desc":"VIP1","agencylevel":2,"next_agencylevel":12,"next_rebet_amount":14,"next_agencylevel_desc":"VIP2","next_rebet_amount_des":"佣 ￥14.00","rebet_amount_des":"佣 ￥12.00","sale_num_des":"1525人在卖","sale_num":1525,"rebet_amount":12}},{"id":56349,"pic_path":"https://cbu01.alicdn.com/img/ibank/2016/694/473/3137374496_1953661467.400x400.jpg","name":"韩版碎花吊带连衣裙","std_sale_price":298,"agent_price":119.9,"remain_num":80,"in_customer_shop":0,"shop_product_num":15,"level_info":{"agencylevel_desc":"VIP1","agencylevel":2,"next_agencylevel":12,"next_rebet_amount":14,"next_agencylevel_desc":"VIP2","next_rebet_amount_des":"佣 ￥14.00","rebet_amount_des":"佣 ￥12.00","sale_num_des":"1525人在卖","sale_num":1525,"rebet_amount":12}},{"id":56345,"pic_path":"http://image.xiaolu.so/MG_14671065808922.jpg","name":"高腰显瘦百搭九分裤/蓝色","std_sale_price":128,"agent_price":59.9,"remain_num":80,"in_customer_shop":0,"shop_product_num":15,"level_info":{"agencylevel_desc":"VIP1","agencylevel":2,"next_agencylevel":12,"next_rebet_amount":14,"next_agencylevel_desc":"VIP2","next_rebet_amount_des":"佣 ￥14.00","rebet_amount_des":"佣 ￥12.00","sale_num_des":"1525人在卖","sale_num":1525,"rebet_amount":12}},{"id":56343,"pic_path":"http://image.xiaolu.so/MG_1467114011609fen-.jpg","name":"时尚简约露肩花边喇叭袖T恤/粉色","std_sale_price":198,"agent_price":89.9,"remain_num":80,"in_customer_shop":0,"shop_product_num":15,"level_info":{"agencylevel_desc":"VIP1","agencylevel":2,"next_agencylevel":12,"next_rebet_amount":14,"next_agencylevel_desc":"VIP2","next_rebet_amount_des":"佣 ￥14.00","rebet_amount_des":"佣 ￥12.00","sale_num_des":"1525人在卖","sale_num":1525,"rebet_amount":12}},{"id":56340,"pic_path":"http://image.xiaolu.so/MG_14671080842421.jpg","name":"气质高腰显瘦雪纺裙/宝蓝色","std_sale_price":128,"agent_price":59.9,"remain_num":80,"in_customer_shop":0,"shop_product_num":15,"level_info":{"agencylevel_desc":"VIP1","agencylevel":2,"next_agencylevel":12,"next_rebet_amount":14,"next_agencylevel_desc":"VIP2","next_rebet_amount_des":"佣 ￥14.00","rebet_amount_des":"佣 ￥12.00","sale_num_des":"1525人在卖","sale_num":1525,"rebet_amount":12}},{"id":56339,"pic_path":"http://image.xiaolu.so/MG_1467112952656-.jpg","name":"黑白横条纹短袖T恤连衣裙/图片色","std_sale_price":219,"agent_price":99.9,"remain_num":80,"in_customer_shop":0,"shop_product_num":15,"level_info":{"agencylevel_desc":"VIP1","agencylevel":2,"next_agencylevel":12,"next_rebet_amount":14,"next_agencylevel_desc":"VIP2","next_rebet_amount_des":"佣 ￥14.00","rebet_amount_des":"佣 ￥12.00","sale_num_des":"1525人在卖","sale_num":1525,"rebet_amount":12}},{"id":56338,"pic_path":"http://image.xiaolu.so/MG_1467112286919-.jpg","name":"街头背心T恤阔腿裤三件套/图片色","std_sale_price":289,"agent_price":189.9,"remain_num":120,"in_customer_shop":0,"shop_product_num":15,"level_info":{"agencylevel_desc":"VIP1","agencylevel":2,"next_agencylevel":12,"next_rebet_amount":14,"next_agencylevel_desc":"VIP2","next_rebet_amount_des":"佣 ￥14.00","rebet_amount_des":"佣 ￥12.00","sale_num_des":"1525人在卖","sale_num":1525,"rebet_amount":12}},{"id":56335,"pic_path":"http://image.xiaolu.so/MG_1467115063082-.jpg","name":"时尚V领宽松阔腿裤两件套/白色","std_sale_price":348,"agent_price":169.9,"remain_num":8,"in_customer_shop":0,"shop_product_num":15,"level_info":{"agencylevel_desc":"VIP1","agencylevel":2,"next_agencylevel":12,"next_rebet_amount":14,"next_agencylevel_desc":"VIP2","next_rebet_amount_des":"佣 ￥14.00","rebet_amount_des":"佣 ￥12.00","sale_num_des":"1525人在卖","sale_num":1525,"rebet_amount":12}},{"id":56334,"pic_path":"http://image.xiaolu.so/MG_1467104468878.jpg","name":"时尚简约百搭背带裙/图片色","std_sale_price":178,"agent_price":99.9,"remain_num":70,"in_customer_shop":0,"shop_product_num":15,"level_info":{"agencylevel_desc":"VIP1","agencylevel":2,"next_agencylevel":12,"next_rebet_amount":14,"next_agencylevel_desc":"VIP2","next_rebet_amount_des":"佣 ￥14.00","rebet_amount_des":"佣 ￥12.00","sale_num_des":"1525人在卖","sale_num":1525,"rebet_amount":12}},{"id":56331,"pic_path":"http://image.xiaolu.so/MG_14671057371282.jpg","name":"黑白条纹百褶连衣裙/白色","std_sale_price":238,"agent_price":119.9,"remain_num":80,"in_customer_shop":0,"shop_product_num":15,"level_info":{"agencylevel_desc":"VIP1","agencylevel":2,"next_agencylevel":12,"next_rebet_amount":14,"next_agencylevel_desc":"VIP2","next_rebet_amount_des":"佣 ￥14.00","rebet_amount_des":"佣 ￥12.00","sale_num_des":"1525人在卖","sale_num":1525,"rebet_amount":12}}]
-   */
-
   private int count;
   private String next;
   private Object previous;
-  /**
-   * id : 56962
-   * pic_path : http://image.xiaolu.so/MG_1467270479779fen.jpg
-   * name : 韩版时尚T恤阔腿裤两件套/粉色ZF0013
-   * std_sale_price : 299.0
-   * agent_price : 69.9
-   * remain_num : 100
-   * in_customer_shop : 0
-   * shop_product_num : 15
-   * level_info : {"agencylevel_desc":"VIP1","agencylevel":2,"next_agencylevel":12,"next_rebet_amount":14,"next_agencylevel_desc":"VIP2","next_rebet_amount_des":"佣 ￥14.00","rebet_amount_des":"佣 ￥12.00","sale_num_des":"1525人在卖","sale_num":1525,"rebet_amount":12}
-   */
-
   private List<ResultsBean> results;
 
   public int getCount() {
@@ -165,13 +146,13 @@ public class MMChooselistBean {
       private String agencylevel_desc;
       private int agencylevel;
       private int next_agencylevel;
-      private int next_rebet_amount;
+      private double next_rebet_amount;
       private String next_agencylevel_desc;
       private String next_rebet_amount_des;
       private String rebet_amount_des;
       private String sale_num_des;
       private int sale_num;
-      private int rebet_amount;
+      private double rebet_amount;
 
       public String getAgencylevel_desc() {
         return agencylevel_desc;
@@ -197,7 +178,7 @@ public class MMChooselistBean {
         this.next_agencylevel = next_agencylevel;
       }
 
-      public int getNext_rebet_amount() {
+      public double getNext_rebet_amount() {
         return next_rebet_amount;
       }
 
@@ -245,7 +226,7 @@ public class MMChooselistBean {
         this.sale_num = sale_num;
       }
 
-      public int getRebet_amount() {
+      public double getRebet_amount() {
         return rebet_amount;
       }
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     >
   <data>
     <variable
@@ -14,10 +15,10 @@
       >
     <ImageView
         android:id="@+id/first"
-        android:layout_marginLeft="8px"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:layout_marginLeft="8px"
         android:src="@drawable/personal_first"
         />
     <ImageView
@@ -27,24 +28,26 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="25px"
         android:layout_toRightOf="@id/first"
+        app:imageUrl="@{item.thumbnail}"
         />
     <TextView
-        android:layout_centerVertical="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:layout_marginLeft="31px"
         android:layout_toRightOf="@id/user_image"
         android:text="@{item.mamaNick}"
         />
     <TextView
         android:id="@+id/total_carry"
-        android:textSize="20sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="20px"
+        android:text="@{String.valueOf(Double.valueOf(item.total)/Double.valueOf(100))}"
         android:textColor="@color/colorAccent"
+        android:textSize="20sp"
         />
   </RelativeLayout>
 </layout>
