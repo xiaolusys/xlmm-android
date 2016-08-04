@@ -7,20 +7,15 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ViewPortHandler;
-import com.jimei.xiaolumeimei.entities.MamaUrl;
+import com.jimei.xiaolumeimei.entities.MaMaRenwuListBean;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
-import com.jimei.xiaolumeimei.entities.RedBagBean;
-import com.jimei.xiaolumeimei.model.MamaInfoModel;
-import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
-
-import rx.schedulers.Schedulers;
+import retrofit2.Response;
+import rx.Observer;
 
 /**
  * Created by itxuye on 2016/6/24.
@@ -48,8 +43,7 @@ public class MMInfoPresenter extends MMInfoContract.Presenter {
     }, Throwable::printStackTrace));
   }
 
-  @Override
-  public void getMamaUrl() {
+  @Override public void getMamaUrl() {
     mRxManager.add(mModel.getMamaUrl().subscribe(mamaUrl -> {
       mView.initMamaUrl(mamaUrl);
     }, Throwable::printStackTrace));
@@ -206,5 +200,24 @@ public class MMInfoPresenter extends MMInfoContract.Presenter {
     }
 
     getRecentCarry();
+  }
+
+  @Override public void getMaMaRenwuListBean() {
+    mRxManager.add(
+        mModel.getMaMaRenwuListBean().subscribe(new Observer<Response<MaMaRenwuListBean>>() {
+          @Override public void onCompleted() {
+
+          }
+
+          @Override public void onError(Throwable e) {
+
+          }
+
+          @Override public void onNext(Response<MaMaRenwuListBean> maMaRenwuListBeanResponse) {
+            if (maMaRenwuListBeanResponse.isSuccessful()) {
+              mView.getMaMaRenwuListBean(maMaRenwuListBeanResponse.body());
+            }
+          }
+        }));
   }
 }

@@ -6,7 +6,5 @@ task :deploy do
   system "git commit -m \"#{message}\""
   puts "Publishing to GitRep"
   system "git push origin develop"
-  #puts "Publishing to GitCafe"
-  #system "git push gitcafe master:gitcafe-pages"
   puts "Your website is now published"
 end

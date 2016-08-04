@@ -20,6 +20,7 @@ import com.jimei.xiaolumeimei.base.BasePresenterMVVMActivity;
 import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.databinding.ActivityMamainfoBinding;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
+import com.jimei.xiaolumeimei.entities.MaMaRenwuListBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
@@ -42,12 +43,14 @@ import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaLivenessActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaReNewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaVisitorActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.PersonalCarryRankActivity;
+import com.jimei.xiaolumeimei.ui.fragment.v2.NewMMFragment;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import org.greenrobot.eventbus.EventBus;
@@ -83,12 +86,14 @@ public class MMInfoActivity
     mPresenter.getMamaFortune();
     mPresenter.getRefund();
     mPresenter.getMamaUrl();
-    //List<String> list = new ArrayList();
-    //list.add("我是第一个啊");
-    //list.add("我是第二个啊");
-    //list.add("我是第三个啊");
-    //list.add("我是第四个啊");
-    //b.marqueeView.startWithList(list);
+    mPresenter.getMaMaRenwuListBean();
+
+    List<String> list = new ArrayList();
+    list.add("我是第一个啊");
+    list.add("我是第二个啊");
+    list.add("我是第三个啊");
+    list.add("我是第四个啊");
+    b.marqueeView.startWithList(list);
   }
 
   @Override protected void setListener() {
@@ -289,6 +294,13 @@ public class MMInfoActivity
 
   @Override public void hideLoading() {
     hideIndeterminateProgressDialog();
+  }
+
+  @Override public void getMaMaRenwuListBean(MaMaRenwuListBean maMaRenwuListBean) {
+    if (maMaRenwuListBean.getConfig().isPage_pop()) {
+      NewMMFragment newMMFragment = NewMMFragment.newInstance(maMaRenwuListBean);
+      newMMFragment.show(getFragmentManager(), "mamalist");
+    }
   }
 
   @Override public void onClick(View v) {

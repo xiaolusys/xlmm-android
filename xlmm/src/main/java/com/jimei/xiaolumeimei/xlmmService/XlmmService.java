@@ -39,6 +39,7 @@ import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.MMStoreBean;
 import com.jimei.xiaolumeimei.entities.MMVisitorsBean;
 import com.jimei.xiaolumeimei.entities.MaMaReNewBean;
+import com.jimei.xiaolumeimei.entities.MaMaRenwuListBean;
 import com.jimei.xiaolumeimei.entities.MamaFansBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.MamaLivenessBean;
@@ -852,5 +853,9 @@ public interface XlmmService {
 
     @GET("/rest/v2/mama/teamrank/self_rank")
     Observable<Response<PersonalCarryRankBean>> getTeamSelfRank(
+    );
+
+    @GET("http://192.168.1.31:9000/rest/v1/pmt/xlmm/1461/new_mama_task_info")
+    Observable<Response<MaMaRenwuListBean>> getMaMaRenwuListBean(
     );
 }
