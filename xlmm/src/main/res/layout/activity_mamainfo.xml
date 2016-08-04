@@ -505,7 +505,7 @@
         </LinearLayout>
 
         <View
-            android:id="@+id/view_1"
+            android:id="@+id/view_11"
             android:layout_width="match_parent"
             android:layout_height="1dip"
             android:layout_below="@id/rl_order"
@@ -516,7 +516,7 @@
             android:id="@+id/view_2"
             android:layout_width="match_parent"
             android:layout_height="1dip"
-            android:layout_below="@id/view_1"
+            android:layout_below="@id/view_11"
             android:layout_marginTop="12dp"
             android:background="@color/greytow"
             />

@@ -47,6 +47,9 @@ import java.lang.reflect.Field;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import okhttp3.Call;
 
 /**
@@ -235,181 +238,204 @@ public final class ViewUtils {
 
   public static void loadImgToImgView(Context context, ImageView img, String picPath) {
     if (null == picPath) return;
-
-    if (picPath.startsWith("http://image.xiaolu.so")) {
-      String[] temp = picPath.split("http://image.xiaolu.so/");
-      String head_img = "";
-      if (temp.length > 1) {
-        try {
-          head_img = "http://image.xiaolu.so/"
-              + URLEncoder.encode(temp[1], "utf-8")
-              + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
-        } catch (UnsupportedEncodingException e) {
-          e.printStackTrace();
-        }
-      }
-
-      Glide.with(context).load(head_img).diskCacheStrategy(DiskCacheStrategy.ALL)
-          //.placeholder(R.drawable.parceholder)
-          .centerCrop().into(img);
-    } else {
+    if ( picPath.contains("wx.qlogo.cn") ) {
       Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
-          //.placeholder(R.drawable.parceholder)
-          .centerCrop().into(img);
+              .centerCrop().into(img);
+    }else if(picPath.contains("mmbiz.qlogo.cn")){
+      Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
+              .centerCrop().into(img);
+    } else {
+      String head_img;
+      Pattern p = Pattern.compile("(?<=//|)((\\w)+\\.)+\\w+");
+      Matcher m = p.matcher(picPath);
+      if (m.find()) {
+        String group = m.group();
+        String[] temp = picPath.split(group+"/");
+        if (temp.length > 1) {
+          try {
+            head_img = "http://" + group+"/"
+                    + URLEncoder.encode(temp[1], "utf-8")
+                    + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
+            Glide.with(context).load(head_img).diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .centerCrop().into(img);
+          } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+          }
+        }
+      }else {
+        Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
+                .centerCrop().into(img);
+      }
     }
   }
 
-  public static void loadImgToImgViewWithTag(Context context, ImageView img,
-      String picPath) {
+  public static void loadImgToImgViewWithWaterMark(Context context, ImageView img, String picPath) {
     if (null == picPath) return;
-
-    if (picPath.startsWith("http://image.xiaolu.so")) {
-      String[] temp = picPath.split("http://image.xiaolu.so/");
-      String head_img = "";
-      if (temp.length > 1) {
-        try {
-          head_img = "http://image.xiaolu.so/"
-              + URLEncoder.encode(temp[1], "utf-8")
-              + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
-        } catch (UnsupportedEncodingException e) {
-          e.printStackTrace();
-        }
-      }
-
-      Glide.with(context).load(head_img).diskCacheStrategy(DiskCacheStrategy.ALL)
-          //.placeholder(R.drawable.parceholder)
-          .centerCrop().into(img);
-    } else {
+    if ( picPath.contains("wx.qlogo.cn") ) {
       Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
-          //.placeholder(R.drawable.parceholder)
-          .centerCrop().into(img);
+              .centerCrop().into(img);
+    }else if(picPath.contains("mmbiz.qlogo.cn") ){
+      Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
+              .centerCrop().into(img);
+    } else{
+      String head_img;
+      Pattern p = Pattern.compile("(?<=//|)((\\w)+\\.)+\\w+");
+      Matcher m = p.matcher(picPath);
+      if (m.find()) {
+        String group = m.group();
+        String[] temp = picPath.split(group+"/");
+        if (temp.length > 1) {
+          try {
+            head_img = "http://" + group+"/"
+                    + URLEncoder.encode(temp[1], "utf-8")
+                    + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
+            Glide.with(context).load(head_img).diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .centerCrop().into(img);
+          } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+          }
+        }
+      }else {
+        Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
+                .centerCrop().into(img);
+      }
     }
   }
 
   public static void loadImgToImgView(Context context, ImageView img, String picPath,
       int radius) {
     if (null == picPath) return;
-
-    if (picPath.startsWith("http://image.xiaolu.so")) {
-      String[] temp = picPath.split("http://image.xiaolu.so/");
-      String head_img = "";
-      if (temp.length > 1) {
-        try {
-          head_img = "http://image.xiaolu.so/"
-              + URLEncoder.encode(temp[1], "utf-8")
-              + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
-        } catch (UnsupportedEncodingException e) {
-          e.printStackTrace();
-        }
+      if (picPath.contains("mmbiz.qlogo.cn")) {
+          Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
+                  .centerCrop().transform(new GlideRoundTransform(context, radius)).into(img);
+      } else if (picPath.contains("wx.qlogo.cn")){
+        Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
+                .centerCrop().transform(new GlideRoundTransform(context, radius)).into(img);
+      } else {
+          String head_img;
+          Pattern p = Pattern.compile("(?<=//|)((\\w)+\\.)+\\w+");
+          Matcher m = p.matcher(picPath);
+          if (m.find()) {
+              String group = m.group();
+              String[] temp = picPath.split(group+"/");
+              if (temp.length > 1) {
+                  try {
+                      head_img = "http://" + group+"/"
+                              + URLEncoder.encode(temp[1], "utf-8")
+                              + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
+                      Glide.with(context).load(head_img).diskCacheStrategy(DiskCacheStrategy.ALL)
+                              .centerCrop().transform(new GlideRoundTransform(context, radius)).into(img);
+                  } catch (UnsupportedEncodingException e) {
+                      e.printStackTrace();
+                  }
+              }
+          }else {
+              Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
+                      .centerCrop().transform(new GlideRoundTransform(context, radius)).into(img);
+          }
       }
-
-      Glide.with(context).load(head_img).diskCacheStrategy(DiskCacheStrategy.ALL)
-          //.placeholder(R.drawable.parceholder)
-          .centerCrop().transform(new GlideRoundTransform(context, radius)).into(img);
-    } else {
-      Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
-          //.placeholder(R.drawable.parceholder)
-          .centerCrop().transform(new GlideRoundTransform(context, radius)).into(img);
-    }
   }
 
   public static void loadImgToImgViewWithTransformCircle(Context context, ImageView img,
       String picPath) {
     if (null == picPath) return;
 
-    if (picPath.startsWith("http://image.xiaolu.so")) {
-      String[] temp = picPath.split("http://image.xiaolu.so/");
-      String head_img = "";
-      if (temp.length > 1) {
-        try {
-          head_img = "http://image.xiaolu.so/"
-              + URLEncoder.encode(temp[1], "utf-8")
-              + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
-        } catch (UnsupportedEncodingException e) {
-          e.printStackTrace();
-        }
-      }
-
-      Glide.with(context)
-          .load(head_img)
-          .diskCacheStrategy(DiskCacheStrategy.ALL)
-          .bitmapTransform(new CropCircleTransformation(context))
-          //.placeholder(R.drawable.parceholder)
-          //.centerCrop()
-          .into(img);
+    if (picPath.contains("mmbiz.qlogo.cn")) {
+      Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
+              .bitmapTransform(new CropCircleTransformation(context)).into(img);
+    }else if (picPath.contains("wx.qlogo.cn")){
+      Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
+              .bitmapTransform(new CropCircleTransformation(context)).into(img);
     } else {
-      Glide.with(context)
-          .load(picPath)
-          .diskCacheStrategy(DiskCacheStrategy.ALL)
-          .bitmapTransform(new CropCircleTransformation(context))
-
-          //.placeholder(R.drawable.parceholder)
-          //.centerCrop()
-          .into(img);
+      String head_img;
+      Pattern p = Pattern.compile("(?<=//|)((\\w)+\\.)+\\w+");
+      Matcher m = p.matcher(picPath);
+      if (m.find()) {
+        String group = m.group();
+        String[] temp = picPath.split(group+"/");
+        if (temp.length > 1) {
+          try {
+            head_img = "http://" + group+"/"
+                    + URLEncoder.encode(temp[1], "utf-8")
+                    + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
+            Glide.with(context).load(head_img).diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .bitmapTransform(new CropCircleTransformation(context)).into(img);
+          } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+          }
+        }
+      }else {
+        Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
+                .bitmapTransform(new CropCircleTransformation(context)).into(img);
+      }
     }
   }
 
   public static void loadImgToImgViewWithPlaceholder(Context context, ImageView img,
       String picPath) {
     if (null == picPath) return;
-
-    if (picPath.startsWith("http://image.xiaolu.so")) {
-      String[] temp = picPath.split("http://image.xiaolu.so/");
-      String head_img = "";
-      if (temp.length > 1) {
-        try {
-          head_img = "http://image.xiaolu.so/"
-              + URLEncoder.encode(temp[1], "utf-8")
-              + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
-        } catch (UnsupportedEncodingException e) {
-          e.printStackTrace();
-        }
-      }
-
-      Glide.with(context)
-          .load(head_img)
-          .diskCacheStrategy(DiskCacheStrategy.ALL)
-          .placeholder(R.drawable.parceholder)
-          .centerCrop()
-          .into(img);
-    } else {
-      JUtils.Log("MainActivity", "picPath1===" + picPath);
-      //if (picPath.startsWith("https://mmbiz.qlogo.cn")) {
+    if (picPath.contains("mmbiz.qlogo.cn")) {
       Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
-          //.placeholder(R.drawable.parceholder)
-          .centerCrop().into(img);
-      JUtils.Log("MainActivity", "picPath2===" + picPath);
+              .centerCrop().into(img);
+    }else if(picPath.contains("wx.qlogo.cn")){
+      Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
+              .centerCrop().into(img);
+    } else {
+      String head_img;
+      Pattern p = Pattern.compile("(?<=//|)((\\w)+\\.)+\\w+");
+      Matcher m = p.matcher(picPath);
+      if (m.find()) {
+        String group = m.group();
+        String[] temp = picPath.split(group+"/");
+        if (temp.length > 1) {
+          try {
+            head_img = "http://" + group+"/"
+                    + URLEncoder.encode(temp[1], "utf-8")
+                    + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
+            Glide.with(context).load(head_img).diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .centerCrop().placeholder(R.drawable.parceholder).into(img);
+          } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+          }
+        }
+      }else {
+        Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
+                .centerCrop().into(img);
+      }
     }
   }
 
   public static void loadImgToImgViewWithPlaceholderFragment(Fragment context,
       ImageView img, String picPath) {
     if (null == picPath) return;
-
-    if (picPath.startsWith("http://image.xiaolu.so")) {
-      String[] temp = picPath.split("http://image.xiaolu.so/");
-      String head_img = "";
-      if (temp.length > 1) {
-        try {
-          head_img = "http://image.xiaolu.so/"
-              + URLEncoder.encode(temp[1], "utf-8")
-              + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
-        } catch (UnsupportedEncodingException e) {
-          e.printStackTrace();
-        }
-      }
-
-      Glide.with(context)
-          .load(head_img)
-          .diskCacheStrategy(DiskCacheStrategy.ALL)
-          .placeholder(R.drawable.parceholder)
-          .centerCrop()
-          .into(img);
-    } else {
-      //if (picPath.startsWith("https://mmbiz.qlogo.cn")) {
+    if (picPath.contains("mmbiz.qlogo.cn")) {
       Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
-          //.placeholder(R.drawable.parceholder)
-          .centerCrop().into(img);
+              .centerCrop().into(img);
+    } else if (picPath.contains("6wx.qlogo.cn")){
+      Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
+              .centerCrop().into(img);
+    }else {
+      String head_img;
+      Pattern p = Pattern.compile("(?<=//|)((\\w)+\\.)+\\w+");
+      Matcher m = p.matcher(picPath);
+      if (m.find()) {
+        String group = m.group();
+        String[] temp = picPath.split(group+"/");
+        if (temp.length > 1) {
+          try {
+            head_img = "http://" + group+"/"
+                    + URLEncoder.encode(temp[1], "utf-8")
+                    + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
+            Glide.with(context).load(head_img).diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .centerCrop().placeholder(R.drawable.parceholder).into(img);
+          } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+          }
+        }
+      }else {
+        Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
+                .centerCrop().into(img);
+      }
     }
   }
 

@@ -8,11 +8,15 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.CommonAbsListviewBaseAdapter;
 import com.jimei.xiaolumeimei.base.CommonViewHolder;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
+import com.jimei.xiaolumeimei.utils.ViewUtils;
+import com.jude.utils.JUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/01/19.
@@ -51,17 +55,24 @@ public class CartsPayInfoAdapter
         if (picPath.startsWith("https://mmbiz.qlogo.cn")) {
             holder.setImageFromUrl(mContext, R.id.cart_image, picPath);
         } else {
-            String[] temp = picPath.split("http://image.xiaolu.so/");
-            String head_img = "";
-            if (temp.length > 1) {
-                try {
-                    head_img = "http://image.xiaolu.so/"
-                            + URLEncoder.encode(temp[1], "utf-8")
-                            + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
-                    holder.setImageFromUrl(mContext, R.id.cart_image, head_img);
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
+            String head_img;
+            Pattern p = Pattern.compile("(?<=//|)((\\w)+\\.)+\\w+");
+            Matcher m = p.matcher(picPath);
+            if (m.find()) {
+                String group = m.group();
+                String[] temp = picPath.split(group+"/");
+                if (temp.length > 1) {
+                    try {
+                        head_img = "http://" + group+"/"
+                                + URLEncoder.encode(temp[1], "utf-8")
+                                + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
+                        holder.setImageFromUrl(mContext, R.id.cart_image, head_img);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
                 }
+            }else {
+                holder.setImageFromUrl(mContext, R.id.cart_image, picPath);
             }
         }
         if (cartListEntity.getTitle().length() <= 9) {

@@ -7,19 +7,17 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.FrameLayout.LayoutParams;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import butterknife.Bind;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
-import com.jimei.xiaolumeimei.entities.AllRefundsBean.ResultsEntity.StatusShaftBean;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
+import com.jimei.xiaolumeimei.entities.AllRefundsBean.ResultsEntity.StatusShaftBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.RoundCornerImageView;
@@ -27,9 +25,9 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -128,7 +126,6 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     @Bind(R.id.status_layout)
     LinearLayout statusLayout;
 
-    private int refund_state;
     private int goods_id;
 
     @Override
@@ -138,10 +135,6 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void initData() {
-        if ((getIntent() != null) && (getIntent().getExtras() != null)) {
-            refund_state = getIntent().getExtras().getInt("refund_state");
-        }
-        Log.d(TAG, "refund_state " + refund_state);
         JUtils.Log(TAG, "initData goods_id " + goods_id);
         showIndeterminateProgressDialog(false);
         Subscription subscription = TradeModel.getInstance()
@@ -155,12 +148,6 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
                         fillDataToView(refundDetailBean);
                         Log.i(TAG, refundDetailBean.toString());
                         Log.i(TAG, "status " + refundDetailBean.getStatus());
-                        if ((refund_state == XlmmConst.REFUND_STATE_SELLER_AGREED) || (refund_state
-                                == XlmmConst.REFUND_STATE_BUYER_APPLY)) {
-                            List<String> mDatas = new ArrayList<String>();
-                            fillPicPath(mDatas, refundDetailBean.getProof_pic().toString());
-                            Log.d(TAG, "proofpic " + refundDetailBean.getProof_pic());
-                        }
                     }
 
                     @Override
@@ -205,8 +192,25 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     }
 
     private void fillDataToView(AllRefundsBean.ResultsEntity refundDetailBean) {
-        if (refund_state == XlmmConst.REFUND_STATE_SELLER_AGREED && refundDetailBean.isHas_good_return()) {
-            returnLayout.setVisibility(View.VISIBLE);
+        if (refundDetailBean.isHas_good_return()) {
+            switch (refundDetailBean.getStatus()) {
+                case XlmmConst.REFUND_STATE_SELLER_AGREED:
+                    returnLayout.setVisibility(View.VISIBLE);
+                    writeBtn.setText("填写快递单");
+                    break;
+                case XlmmConst.REFUND_STATE_WAIT_RETURN_FEE:
+                case XlmmConst.REFUND_STATE_REFUND_SUCCESS:
+                    returnLayout.setVisibility(View.VISIBLE);
+                    writeBtn.setText("已验收");
+                    break;
+                case XlmmConst.REFUND_STATE_BUYER_RETURNED_GOODS:
+                    returnLayout.setVisibility(View.VISIBLE);
+                    writeBtn.setText("查看进度");
+                    break;
+                default:
+                    returnLayout.setVisibility(View.GONE);
+                    break;
+            }
         }
         JUtils.Log(TAG, "fillDataToView ");
         orderIdTv.setText(refundDetailBean.getRefund_no());
@@ -339,16 +343,6 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
         imageView1.setImageResource(R.drawable.status_black);
         imageView2.setImageResource(R.drawable.state_in);
         lineImage2.setBackgroundColor(getResources().getColor(R.color.text_color_32));
-    }
-
-
-    private void fillPicPath(List<String> mDatas, String pics) {
-        if ((null == pics) || (pics.equals("")) || (pics.equals("[]"))) return;
-        String[] strArray = null;
-        strArray = pics.split(",");
-        for (int i = 0; i < strArray.length; i++) {
-            mDatas.add(strArray[i]);
-        }
     }
 
     @Override
