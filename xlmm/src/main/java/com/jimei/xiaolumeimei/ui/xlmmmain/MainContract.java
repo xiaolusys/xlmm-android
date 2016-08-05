@@ -6,6 +6,7 @@ import com.jimei.xiaolumeimei.base.BasePresenter;
 import com.jimei.xiaolumeimei.base.BaseView;
 import com.jimei.xiaolumeimei.entities.AddressDownloadResultBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
+import com.jimei.xiaolumeimei.entities.CategoryDownBean;
 import com.jimei.xiaolumeimei.entities.IsGetcoupon;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
@@ -37,6 +38,8 @@ public interface MainContract {
     Observable<AddressDownloadResultBean> getAddressVersionAndUrl();
 
     Observable<VersionBean> getVersion();
+
+    Observable<CategoryDownBean> getCategoryDown();
   }
 
   interface View extends BaseView {
@@ -72,6 +75,8 @@ public interface MainContract {
 
     void downLoaAddressFile(AddressDownloadResultBean addressDownloadResultBean);
 
+    void downCategoryFile(CategoryDownBean categroyDownBean);
+
     void checkVersion(int versionCode, String content, String downloadUrl, boolean isAutoUpdate);
   }
 
@@ -93,6 +98,8 @@ public interface MainContract {
     public abstract long calcLefttowTime(long crtTime);
 
     public abstract void getAddressVersionAndUrl();
+
+    public abstract void getCategoryDown();
 
     @Override public void onStart() {
     }

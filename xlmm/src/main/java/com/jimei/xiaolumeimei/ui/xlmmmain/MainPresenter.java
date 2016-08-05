@@ -183,7 +183,18 @@ public class MainPresenter extends MainContract.Presenter {
         }, Throwable::printStackTrace));
   }
 
-  @Override public void onStart() {
+    @Override
+    public void getCategoryDown() {
+        mRxManager.add(mModel.getCategoryDown()
+        .retryWhen(new RxUtils.RetryWhenNoInternet(100,2000))
+        .subscribe(categoryDownBean -> {
+            if (categoryDownBean != null) {
+                mView.downCategoryFile(categoryDownBean);
+            }
+        }, Throwable::printStackTrace));
+    }
+
+    @Override public void onStart() {
 
   }
 

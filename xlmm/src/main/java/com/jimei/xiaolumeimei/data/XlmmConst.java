@@ -54,10 +54,15 @@ public class XlmmConst {
     public static final int FLAG_PRICE = 0;
     public static final int FLAG_COLOR = 1;
 
+    public static final int TYPE_LADY = 2;
+    public static final int TYPE_CHILD = 1;
+    public static final int TYPE_HEALTH = 3;
+
     public static final String JUMP_PREFIX = "com.jimei.xlmm://app/v1/";
 
     public static final String XIAOMI_APP_ID = "2882303761517434918";
     public static final String XIAOMI_APP_KEY = "5551743422918";
+
 
     public static int get_reason_num(String reason) {
         int reason_num = 0;

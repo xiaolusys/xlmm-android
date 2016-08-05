@@ -1,6 +1,8 @@
 package com.jimei.xiaolumeimei.ui.activity.product;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.SystemClock;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.Menu;
@@ -13,14 +15,25 @@ import android.widget.LinearLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.adapter.CategoryAdapter;
 import com.jimei.xiaolumeimei.adapter.ColorTagAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
+import com.jimei.xiaolumeimei.entities.CategoryBean;
+import com.jimei.xiaolumeimei.utils.FileUtils;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
+import com.jimei.xiaolumeimei.widget.XlmmTitleView;
+import com.jude.utils.JUtils;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,6 +60,10 @@ public class LadyZoneActivity extends BaseSwipeBackCompatActivity implements Vie
     TextView tvColor;
     @Bind(R.id.iv_color)
     ImageView ivColor;
+    @Bind(R.id.xrv_category)
+    XRecyclerView xRecyclerView;
+    @Bind(R.id.title)
+    XlmmTitleView titleView;
 
     public int flag;
 
@@ -66,6 +83,10 @@ public class LadyZoneActivity extends BaseSwipeBackCompatActivity implements Vie
     int[] colorTo = {R.id.img, R.id.color, R.id.iv_bg};
     private ColorTagAdapter colorAdapter;
     private List<Map<String, Object>> colorData;
+    private int type;
+    private String title;
+
+    private CategoryAdapter adapter;
 
     @Override
     protected void setListener() {
@@ -80,6 +101,11 @@ public class LadyZoneActivity extends BaseSwipeBackCompatActivity implements Vie
         flag = -1;
         initPriceData();
         initColorData();
+        initCategory();
+    }
+
+    private void initCategory() {
+        new CategoryTask(adapter).execute(type);
     }
 
     private void initColorData() {
@@ -127,7 +153,10 @@ public class LadyZoneActivity extends BaseSwipeBackCompatActivity implements Vie
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-
+        if (extras != null) {
+            type = extras.getInt("type");
+            title = extras.getString("title");
+        }
     }
 
     @Override
@@ -137,6 +166,7 @@ public class LadyZoneActivity extends BaseSwipeBackCompatActivity implements Vie
 
     @Override
     protected void initViews() {
+        titleView.setName(title);
         GridLayoutManager manager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(manager);
         recyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
@@ -148,6 +178,7 @@ public class LadyZoneActivity extends BaseSwipeBackCompatActivity implements Vie
         recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
+
             }
 
             @Override
@@ -155,6 +186,16 @@ public class LadyZoneActivity extends BaseSwipeBackCompatActivity implements Vie
 
             }
         });
+
+
+        GridLayoutManager manager2 = new GridLayoutManager(this, 3);
+        xRecyclerView.setLayoutManager(manager2);
+        xRecyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        xRecyclerView.addItemDecoration(new SpaceItemDecoration(10));
+        xRecyclerView.setPullRefreshEnabled(false);
+        xRecyclerView.setLoadingMoreEnabled(false);
+        adapter = new CategoryAdapter(this, new ArrayList<>());
+        xRecyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -217,7 +258,11 @@ public class LadyZoneActivity extends BaseSwipeBackCompatActivity implements Vie
                 priceAdapter.notifyDataSetChanged();
                 new Thread(() -> {
                     SystemClock.sleep(200);
-                    runOnUiThread(() -> priceGridView.setVisibility(View.GONE));
+                    runOnUiThread(() -> {
+                        priceGridView.setVisibility(View.GONE);
+                        tvPrice.setTextColor(getResources().getColor(R.color.text_color_A0));
+                        ivPrice.setImageDrawable(getResources().getDrawable(R.drawable.icon_down_category));
+                    });
                 }).start();
                 break;
             case XlmmConst.FLAG_COLOR:
@@ -228,7 +273,11 @@ public class LadyZoneActivity extends BaseSwipeBackCompatActivity implements Vie
                 colorAdapter.notifyDataSetChanged();
                 new Thread(() -> {
                     SystemClock.sleep(200);
-                    runOnUiThread(() -> colorGridView.setVisibility(View.GONE));
+                    runOnUiThread(() -> {
+                        colorGridView.setVisibility(View.GONE);
+                        tvColor.setTextColor(getResources().getColor(R.color.text_color_A0));
+                        ivColor.setImageDrawable(getResources().getDrawable(R.drawable.icon_down_category));
+                    });
                 }).start();
                 break;
             default:
@@ -246,9 +295,75 @@ public class LadyZoneActivity extends BaseSwipeBackCompatActivity implements Vie
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.category:
-                // TODO: 16/8/2 分类按钮
+                colorGridView.setVisibility(View.GONE);
+                priceGridView.setVisibility(View.GONE);
+                tvPrice.setTextColor(getResources().getColor(R.color.text_color_A0));
+                ivPrice.setImageDrawable(getResources().getDrawable(R.drawable.icon_down_category));
+                tvColor.setTextColor(getResources().getColor(R.color.text_color_A0));
+                ivColor.setImageDrawable(getResources().getDrawable(R.drawable.icon_down_category));
+                if (xRecyclerView.getVisibility() == View.VISIBLE) {
+                    xRecyclerView.setVisibility(View.GONE);
+                } else {
+                    xRecyclerView.setVisibility(View.VISIBLE);
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private class CategoryTask extends AsyncTask<Integer, Integer, List<CategoryBean.ChildsBean>> {
+
+        private CategoryAdapter adapter;
+
+        public CategoryTask(CategoryAdapter adapter) {
+            this.adapter = adapter;
+        }
+
+        @Override
+        protected List<CategoryBean.ChildsBean> doInBackground(Integer... params) {
+            String categoryStr;
+            InputStream in = null;
+            String fileaddress = Environment.getExternalStorageDirectory().getAbsolutePath()
+                    + "/xlmmcategory/" + "category.json";
+            try {
+                if (FileUtils.isFileExist(fileaddress)) {
+                    File file = new File(fileaddress);
+                    in = new FileInputStream(file);
+                } else {
+                    return null;
+                }
+                byte[] arrayOfByte = new byte[in.available()];
+                in.read(arrayOfByte);
+                categoryStr = new String(arrayOfByte, "UTF-8");
+                Gson gson = new Gson();
+                List<CategoryBean> list = gson.fromJson(categoryStr, new TypeToken<List<CategoryBean>>() {
+                }.getType());
+
+                for (int i = 0; i < list.size(); i++) {
+                    if (list.get(i).getCid() == params[0]) {
+                        return list.get(i).getChilds();
+                    }
+                }
+                return null;
+            } catch (Exception e) {
+                JUtils.Log(e.getMessage());
+            } finally {
+                if (in != null) {
+                    try {
+                        in.close();
+                    } catch (IOException e) {
+                        JUtils.Log(e.getMessage());
+                    }
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(List<CategoryBean.ChildsBean> list) {
+            if (list != null) {
+                adapter.update(list);
+            }
+        }
     }
 }
