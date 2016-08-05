@@ -127,6 +127,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     LinearLayout statusLayout;
 
     private int goods_id;
+    private boolean isWrited;
 
     @Override
     protected void setListener() {
@@ -197,18 +198,22 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
                 case XlmmConst.REFUND_STATE_SELLER_AGREED:
                     returnLayout.setVisibility(View.VISIBLE);
                     writeBtn.setText("填写快递单");
+                    isWrited = false;
                     break;
                 case XlmmConst.REFUND_STATE_WAIT_RETURN_FEE:
                 case XlmmConst.REFUND_STATE_REFUND_SUCCESS:
                     returnLayout.setVisibility(View.VISIBLE);
                     writeBtn.setText("已验收");
+                    isWrited = true;
                     break;
                 case XlmmConst.REFUND_STATE_BUYER_RETURNED_GOODS:
                     returnLayout.setVisibility(View.VISIBLE);
                     writeBtn.setText("查看进度");
+                    isWrited = true;
                     break;
                 default:
                     returnLayout.setVisibility(View.GONE);
+                    isWrited = true;
                     break;
             }
         }
@@ -351,15 +356,25 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
             case R.id.btn_write:
                 Log.d(TAG, "write logistics");
                 Intent intent = new Intent(this, WriteLogisticsInfoActivty.class);
-                intent.putExtra("goods_id", refundDetail.getOrder_id());
+                Bundle bundle = new Bundle();
+                bundle.putInt("goods_id", refundDetail.getOrder_id());
                 if (refundDetail != null) {
                     if ((refundDetail.getReturn_address() != null)
                             && (!refundDetail.getReturn_address().isEmpty())) {
-                        intent.putExtra("address", refundDetail.getReturn_address());
+                        bundle.putString("address", refundDetail.getReturn_address());
                     }
                 }
-                Log.d(TAG, " to WriteLogisticsInfoActivty");
-                startActivityForResult(intent, 0);
+                bundle.putBoolean("flag", isWrited);
+                if (isWrited) {
+                    bundle.putString("company_name", refundDetail.getCompany_name());
+                    bundle.putString("packetid", refundDetail.getSid());
+
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                } else {
+                    intent.putExtras(bundle);
+                    startActivityForResult(intent, 0);
+                }
                 break;
         }
     }

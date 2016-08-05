@@ -104,15 +104,14 @@ public class OrderGoodsListAdapter extends BaseAdapter {
             divider.setVisibility(View.VISIBLE);
             if (!"".equals(data.get(position).getPackage_order_id())) {
                 logisticsLayout.setVisibility(View.VISIBLE);
-                ((TextView) convertView.findViewById(R.id.tv_order_package)).setText("包裹" + NUM[count] + ":");
+                ((TextView) convertView.findViewById(R.id.tv_order_package)).setText("包裹" + NUM[count++] + ":");
             } else {
                 logisticsLayout.setVisibility(View.GONE);
             }
         } else if (!data.get(position).getPackage_order_id().equals(data.get(position - 1).getPackage_order_id())) {
             divider.setVisibility(View.VISIBLE);
             logisticsLayout.setVisibility(View.VISIBLE);
-            count++;
-            ((TextView) convertView.findViewById(R.id.tv_order_package)).setText("包裹" + NUM[count] + ":");
+            ((TextView) convertView.findViewById(R.id.tv_order_package)).setText("包裹" + NUM[count++] + ":");
         } else {
             divider.setVisibility(View.GONE);
             logisticsLayout.setVisibility(View.GONE);
@@ -167,7 +166,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
             }
         }
         ((TextView) convertView.findViewById(R.id.tx_good_name)).setText(data.get(position).getTitle());
-        ((TextView) convertView.findViewById(R.id.tx_good_price)).setText("¥" + data.get(position).getTotal_fee());
+        ((TextView) convertView.findViewById(R.id.tx_good_price)).setText("¥" + (data.get(position).getTotal_fee() / data.get(position).getNum()));
         ((TextView) convertView.findViewById(R.id.tx_good_size)).setText(data.get(position).getSku_name());
         ((TextView) convertView.findViewById(R.id.tx_good_num)).setText("x" + data.get(position).getNum());
         ImageView img_goods = (ImageView) convertView.findViewById(R.id.img_good);

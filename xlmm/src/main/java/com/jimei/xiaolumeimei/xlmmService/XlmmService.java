@@ -17,6 +17,7 @@ import com.jimei.xiaolumeimei.entities.CartsHisBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.CartsinfoBean;
+import com.jimei.xiaolumeimei.entities.CategoryDownBean;
 import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.entities.ClickcarryBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
@@ -32,6 +33,7 @@ import com.jimei.xiaolumeimei.entities.IsGetcoupon;
 import com.jimei.xiaolumeimei.entities.LadyListBean;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.entities.LogisticCompany;
+import com.jimei.xiaolumeimei.entities.LogisticCompanyBean;
 import com.jimei.xiaolumeimei.entities.LogisticsBean;
 import com.jimei.xiaolumeimei.entities.MMChooselistBean;
 import com.jimei.xiaolumeimei.entities.MMHavaChooseResultBean;
@@ -756,6 +758,19 @@ public interface XlmmService {
             @Query("company_code") String company_code
     );
 
+    //获取退货物流信息
+    @GET("/rest/v1/rtnwuliu/get_wuliu_by_packetid")
+    Observable<LogisticsBean> getRefundLogistic(
+            @Query("packetid") String packetid,
+            @Query("company_name") String company_name
+    );
+
+    //获取物流公司信息
+    @GET("/rest/v1/rtnwuliu/get_wuliu_company_code")
+    Observable<LogisticCompanyBean> getLogisticComPany(
+            @Query("company_name") String company_name
+    );
+
     @GET("/rest/v1/portal")
     Observable<PortalBean> getPortalBean();
 
@@ -853,4 +868,7 @@ public interface XlmmService {
     @GET("/rest/v2/mama/teamrank/self_rank")
     Observable<Response<PersonalCarryRankBean>> getTeamSelfRank(
     );
+
+    @GET("/rest/v2/categorys/latest_version")
+    Observable<CategoryDownBean> getCategoryDown();
 }

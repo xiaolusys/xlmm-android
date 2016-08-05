@@ -952,4 +952,17 @@ public final class FileUtils {
         return false;
     }
 
+    public static void saveCategoryFile(Context context,String sha) {
+        sharedPreferences = context.getSharedPreferences("category", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString("sha", sha);
+        editor.apply();
+    }
+
+    public static boolean isCategorySame(Context context,String sha){
+        sharedPreferences = context.getSharedPreferences("category", Context.MODE_PRIVATE);
+        String sha1 = sharedPreferences.getString("sha", "");
+        return !TextUtils.isEmpty(sha1) && (sha1.equals(sha));
+    }
+
 }
