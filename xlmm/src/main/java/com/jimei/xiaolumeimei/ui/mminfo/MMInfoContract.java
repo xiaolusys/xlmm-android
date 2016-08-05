@@ -8,6 +8,7 @@ import com.jimei.xiaolumeimei.base.BaseView;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.MaMaRenwuListBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
+import com.jimei.xiaolumeimei.entities.MamaSelfListBean;
 import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
 import java.util.ArrayList;
@@ -30,6 +31,8 @@ public interface MMInfoContract {
     Observable<MamaUrl> getMamaUrl();
 
     Observable<Response<MaMaRenwuListBean>> getMaMaRenwuListBean();
+
+    Observable<Response<MamaSelfListBean>> getMaMaselfList();
   }
 
   interface View extends BaseView {
@@ -54,6 +57,8 @@ public interface MMInfoContract {
     void hideLoading();
 
     void getMaMaRenwuListBean(MaMaRenwuListBean maMaRenwuListBean);
+
+    void getMaMaRenwuListBean(MamaSelfListBean mamaSelfListBean);
   }
 
   abstract class Presenter extends BasePresenter<Model, View> {
@@ -75,6 +80,8 @@ public interface MMInfoContract {
     public abstract void getRefund();
 
     public abstract void getMaMaRenwuListBean();
+
+    public abstract void getMaMaselfList();
 
     @Override public void onStart() {
     }

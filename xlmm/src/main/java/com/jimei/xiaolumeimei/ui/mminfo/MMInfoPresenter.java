@@ -8,6 +8,7 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.jimei.xiaolumeimei.entities.MaMaRenwuListBean;
+import com.jimei.xiaolumeimei.entities.MamaSelfListBean;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import java.util.ArrayList;
@@ -219,5 +220,23 @@ public class MMInfoPresenter extends MMInfoContract.Presenter {
             }
           }
         }));
+  }
+
+  @Override public void getMaMaselfList() {
+    mRxManager.add(mModel.getMaMaselfList().subscribe(new Observer<Response<MamaSelfListBean>>() {
+      @Override public void onCompleted() {
+
+      }
+
+      @Override public void onError(Throwable e) {
+
+      }
+
+      @Override public void onNext(Response<MamaSelfListBean> mamaSelfListBeanResponse) {
+        if (mamaSelfListBeanResponse.isSuccessful()) {
+          mView.getMaMaRenwuListBean(mamaSelfListBeanResponse.body());
+        }
+      }
+    }));
   }
 }

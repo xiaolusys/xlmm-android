@@ -12,6 +12,7 @@ import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.entities.PersonalCarryRankBean;
 import com.jimei.xiaolumeimei.entities.PotentialFans;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
+import com.jimei.xiaolumeimei.entities.ResultBean;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 import java.util.List;
@@ -120,11 +121,18 @@ public class MamaInfoModel {
 
   public Observable<Response<ResponseBody>> mamaRegisterPay(String product_id, String sku_id,
       String payment, String channel, String num, String post_fee, String discount_fee, String uuid,
-      String total_fee) {
+      String total_fee, String wallet_renew_deposit) {
 
     return XlmmRetrofitClient.getService()
         .mamaRegisterPay(product_id, sku_id, payment, channel, num, post_fee, discount_fee, uuid,
-            total_fee)
+            total_fee, wallet_renew_deposit)
+        .compose(new DefaultTransform<>());
+  }
+
+  public Observable<Response<ResultBean>> exchangeDeposit(String exchange_type) {
+
+    return XlmmRetrofitClient.getService()
+        .exchangeDeposit(exchange_type)
         .compose(new DefaultTransform<>());
   }
 
@@ -144,30 +152,21 @@ public class MamaInfoModel {
 
   public Observable<Response<List<PersonalCarryRankBean>>> getTeamMembers(String id) {
 
-    return XlmmRetrofitClient.getService()
-        .getTeamMembers(id)
-        .compose(new DefaultTransform<>());
+    return XlmmRetrofitClient.getService().getTeamMembers(id).compose(new DefaultTransform<>());
   }
 
   public Observable<Response<PersonalCarryRankBean>> getTeamSelfRank() {
 
-    return XlmmRetrofitClient.getService()
-        .getTeamSelfRank()
-        .compose(new DefaultTransform<>());
+    return XlmmRetrofitClient.getService().getTeamSelfRank().compose(new DefaultTransform<>());
   }
-
 
   public Observable<Response<PersonalCarryRankBean>> getTeamMemberSelf(String id) {
 
-    return XlmmRetrofitClient.getService()
-        .getTeamMemberSelf(id)
-        .compose(new DefaultTransform<>());
+    return XlmmRetrofitClient.getService().getTeamMemberSelf(id).compose(new DefaultTransform<>());
   }
 
   public Observable<Response<List<PersonalCarryRankBean>>> getTeamCarryRankBean() {
 
-    return XlmmRetrofitClient.getService()
-        .getTeamCarryRankBean()
-        .compose(new DefaultTransform<>());
+    return XlmmRetrofitClient.getService().getTeamCarryRankBean().compose(new DefaultTransform<>());
   }
 }

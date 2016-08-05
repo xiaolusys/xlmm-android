@@ -530,23 +530,44 @@
             >
           <ImageView
               android:id="@+id/notice"
-              android:layout_marginLeft="8dp"
-              android:layout_centerVertical="true"
-              android:src="@drawable/ic_notice"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
+              android:layout_centerVertical="true"
+              android:layout_marginLeft="8dp"
+              android:src="@drawable/ic_notice"
+              />
+          <com.jimei.xiaolumeimei.widget.CircleImageView
+              android:id="@+id/image_notice"
+              android:layout_width="6dp"
+              android:layout_height="6dp"
+              android:layout_alignRight="@id/notice"
+              android:layout_alignTop="@id/notice"
+              android:layout_marginRight="6px"
+              android:layout_marginTop="2px"
+              android:src="@color/red"
+              android:visibility="gone"
               />
           <com.jimei.xiaolumeimei.widget.marqueeview.MarqueeView
-              android:layout_toRightOf="@id/notice"
               android:id="@+id/marqueeView"
               android:layout_width="200dp"
               android:layout_height="match_parent"
               android:layout_centerVertical="true"
               android:layout_marginLeft="8dp"
+              android:layout_toRightOf="@id/notice"
               app:mvAnimDuration="500"
               app:mvGravity="left"
               app:mvInterval="2000"
               app:mvTextColor="@color/colorAccent"
+              />
+          <TextView
+              android:id="@+id/tv_noticesee"
+              android:textColor="@color/cornflowerblue"
+              android:layout_marginRight="8dp"
+              android:layout_alignParentRight="true"
+              android:layout_centerVertical="true"
+              android:text="马上看看"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
               />
         </RelativeLayout>
         <View

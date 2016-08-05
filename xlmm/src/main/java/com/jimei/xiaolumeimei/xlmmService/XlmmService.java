@@ -43,6 +43,7 @@ import com.jimei.xiaolumeimei.entities.MaMaRenwuListBean;
 import com.jimei.xiaolumeimei.entities.MamaFansBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.MamaLivenessBean;
+import com.jimei.xiaolumeimei.entities.MamaSelfListBean;
 import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.entities.MembershipPointBean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
@@ -75,10 +76,8 @@ import com.jimei.xiaolumeimei.entities.UserWithdrawResult;
 import com.jimei.xiaolumeimei.entities.VersionBean;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.entities.WxPubAuthInfo;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import retrofit2.http.Body;
@@ -814,7 +813,14 @@ public interface XlmmService {
             @Field("post_fee") String post_fee,
             @Field("discount_fee") String discount_fee,
             @Field("uuid") String uuid,
-            @Field("total_fee") String total_fee
+            @Field("total_fee") String total_fee,
+            @Field("wallet_renew_deposit") String wallet_renew_deposit
+    );
+
+    @FormUrlEncoded
+    @POST("/rest/v1/pmt/cashout/exchange_deposit")
+    Observable<Response<ResultBean>> exchangeDeposit(
+            @Field("exchange_type") String exchange_type
     );
 
     @GET("/rest/v1/favorites")
@@ -855,7 +861,13 @@ public interface XlmmService {
     Observable<Response<PersonalCarryRankBean>> getTeamSelfRank(
     );
 
-    @GET("http://192.168.1.31:9000/rest/v1/pmt/xlmm/1461/new_mama_task_info")
+    @GET("/rest/v1/pmt/xlmm/1461/new_mama_task_info")
     Observable<Response<MaMaRenwuListBean>> getMaMaRenwuListBean(
     );
+
+    @GET("rest/v2/mama/message/self_list")
+    Observable<Response<MamaSelfListBean>> getMaMaselfList(
+    );
+
+
 }
