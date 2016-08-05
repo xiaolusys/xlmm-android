@@ -127,6 +127,8 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                       + ", user.getResult() "
                       + codeBean.getMsg());
                   if (codeBean.getRcode() == 0) {
+                    LoginUtils.setPushUserAccount(PhoneLoginActivity.this,
+                        MiPushClient.getRegId(getApplicationContext()));
                     hideIndeterminateProgressDialog();
                     EventBus.getDefault().post(new UserInfoEmptyEvent());
                     LoginUtils.saveLoginInfo(true, getApplicationContext(),
@@ -222,8 +224,6 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                     LoginUtils.saveLoginInfo(false, getApplicationContext(), "", "");
                     JUtils.Toast(codeBean.getMsg());
                   }
-                  LoginUtils.setPushUserAccount(PhoneLoginActivity.this,
-                          MiPushClient.getRegId(getApplicationContext()));
                 }
 
                 @Override public void onCompleted() {

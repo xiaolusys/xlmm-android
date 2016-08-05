@@ -1,5 +1,6 @@
 package com.jimei.xiaolumeimei.utils;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +12,7 @@ import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import com.tbruyelle.rxpermissions.RxPermissions;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import rx.schedulers.Schedulers;
 
@@ -52,10 +54,8 @@ public class LoginUtils {
 
   public static void delLoginInfo(Context context) {
     sharedPreferences = context.getSharedPreferences("login_info", Context.MODE_PRIVATE);
-    sharedPreferences1 =
-        context.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
-    sharedPreferences3 =
-        context.getSharedPreferences("CookiePersistence", Context.MODE_PRIVATE);
+    sharedPreferences1 = context.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+    sharedPreferences3 = context.getSharedPreferences("CookiePersistence", Context.MODE_PRIVATE);
     editor = sharedPreferences.edit();
     editor.clear();
     editor.apply();
@@ -126,14 +126,14 @@ public class LoginUtils {
     }
   }
 
-  public static void saveFirst(Context context,boolean isFirst){
+  public static void saveFirst(Context context, boolean isFirst) {
     sharedPreferences2 = context.getSharedPreferences("first", Context.MODE_PRIVATE);
-    editor2= sharedPreferences2.edit();
+    editor2 = sharedPreferences2.edit();
     editor2.putBoolean("success", isFirst);
     editor2.apply();
   }
 
-  public static boolean checkFirst(Context context){
+  public static boolean checkFirst(Context context) {
     sharedPreferences2 = context.getSharedPreferences("first", Context.MODE_PRIVATE);
 
     return sharedPreferences2.getBoolean("success", false);
@@ -149,38 +149,50 @@ public class LoginUtils {
   }
 
   public static void setPushUserAccount(Context context, String mRegId) {
-    //register xiaomi push
-    JUtils.Log(TAG,
-        "regid: " + mRegId + " devid:" + ((TelephonyManager) context.getSystemService(
-            Context.TELEPHONY_SERVICE)).getDeviceId());
-    UserModel.getInstance()
-        .getUserAccount("android", mRegId, ((TelephonyManager) context.getSystemService(
-            Context.TELEPHONY_SERVICE)).getDeviceId())
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<UserAccountBean>() {
-          @Override public void onNext(UserAccountBean user) {
-            JUtils.Log(TAG, "UserAccountBean:, " + user.toString());
-            if ((getUserAccount(context) != null) && ((!getUserAccount(
-                context).isEmpty())) && (!getUserAccount(context).equals(
-                user.getUserAccount()))) {
-              MiPushClient.unsetUserAccount(context.getApplicationContext(),
-                  getUserAccount(context), null);
-              JUtils.Log(TAG, "unset useraccount: " + getUserAccount(context));
+    try {
+      //register xiaomi push
+      RxPermissions.getInstance(context)
+          .request(Manifest.permission.READ_PHONE_STATE)
+          .subscribe(aBoolean -> {
+            if (aBoolean) {
+              JUtils.Log(TAG,
+                  "regid: " + mRegId + " devid:" + ((TelephonyManager) context.getSystemService(
+                      Context.TELEPHONY_SERVICE)).getDeviceId());
+              UserModel.getInstance()
+                  .getUserAccount("android", mRegId, ((TelephonyManager) context.getSystemService(
+                      Context.TELEPHONY_SERVICE)).getDeviceId())
+                  .subscribeOn(Schedulers.io())
+                  .subscribe(new ServiceResponse<UserAccountBean>() {
+                    @Override public void onNext(UserAccountBean user) {
+                      JUtils.Log(TAG, "UserAccountBean:, " + user.toString());
+                      if ((getUserAccount(context) != null) && ((!getUserAccount(
+                          context).isEmpty())) && (!getUserAccount(context).equals(
+                          user.getUserAccount()))) {
+                        MiPushClient.unsetUserAccount(context.getApplicationContext(),
+                            getUserAccount(context), null);
+                        JUtils.Log(TAG, "unset useraccount: " + getUserAccount(context));
+                      }
+                      MiPushClient.setUserAccount(context.getApplicationContext(),
+                          user.getUserAccount(), null);
+                    }
+
+                    @Override public void onCompleted() {
+                      super.onCompleted();
+                    }
+
+                    @Override public void onError(Throwable e) {
+                      e.printStackTrace();
+                      Log.e(TAG, "error: getUserAccount" + e.getLocalizedMessage());
+                      super.onError(e);
+                    }
+                  });
+            } else {
+              JUtils.Log(TAG,"读取设备权限被关闭");
             }
-            MiPushClient.setUserAccount(context.getApplicationContext(),
-                user.getUserAccount(), null);
-          }
-
-          @Override public void onCompleted() {
-            super.onCompleted();
-          }
-
-          @Override public void onError(Throwable e) {
-            e.printStackTrace();
-            Log.e(TAG, "error: getUserAccount");
-            super.onError(e);
-          }
-        });
+          });
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   public static void saveUserAccount(Context context, String userAccount) {

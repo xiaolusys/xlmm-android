@@ -6,11 +6,14 @@ import com.jimei.xiaolumeimei.base.BaseModel;
 import com.jimei.xiaolumeimei.base.BasePresenter;
 import com.jimei.xiaolumeimei.base.BaseView;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
+import com.jimei.xiaolumeimei.entities.MaMaRenwuListBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
+import com.jimei.xiaolumeimei.entities.MamaSelfListBean;
 import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
 import java.util.ArrayList;
 import java.util.List;
+import retrofit2.Response;
 import rx.Observable;
 
 /**
@@ -26,6 +29,10 @@ public interface MMInfoContract {
     Observable<RecentCarryBean> getRecentCarry(String from, String day);
 
     Observable<MamaUrl> getMamaUrl();
+
+    Observable<Response<MaMaRenwuListBean>> getMaMaRenwuListBean();
+
+    Observable<Response<MamaSelfListBean>> getMaMaselfList();
   }
 
   interface View extends BaseView {
@@ -48,6 +55,10 @@ public interface MMInfoContract {
     void showLoading();
 
     void hideLoading();
+
+    void getMaMaRenwuListBean(MaMaRenwuListBean maMaRenwuListBean);
+
+    void getMaMaRenwuListBean(MamaSelfListBean mamaSelfListBean);
   }
 
   abstract class Presenter extends BasePresenter<Model, View> {
@@ -67,6 +78,10 @@ public interface MMInfoContract {
     public abstract void setData(ArrayList<String> xVals, ArrayList<Entry> yVals);
 
     public abstract void getRefund();
+
+    public abstract void getMaMaRenwuListBean();
+
+    public abstract void getMaMaselfList();
 
     @Override public void onStart() {
     }

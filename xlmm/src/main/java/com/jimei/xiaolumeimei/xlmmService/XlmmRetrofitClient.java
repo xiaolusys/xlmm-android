@@ -94,7 +94,7 @@ public class XlmmRetrofitClient {
               .writeTimeout(6000, TimeUnit.MILLISECONDS)
               .retryOnConnectionFailure(true)
               .cache(cache)
-              .addInterceptor(interceptor)
+              //.addInterceptor(interceptor)
               .addInterceptor(new Interceptor() {
                 @Override public Response intercept(Chain chain) throws IOException {
                   Request originalRequest = chain.request();

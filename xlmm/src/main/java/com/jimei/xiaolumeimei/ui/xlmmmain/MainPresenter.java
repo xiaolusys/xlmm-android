@@ -138,7 +138,7 @@ public class MainPresenter extends MainContract.Presenter {
             }
 
             JUtils.Log("MainPresenter", "    " + e.getClass().getName());
-            JUtils.ToastLong("数据加载有误,请下拉刷新重试!");
+            JUtils.ToastLong("数据加载有误,检查网络设置，尝试下拉刷新");
           }
         }));
   }

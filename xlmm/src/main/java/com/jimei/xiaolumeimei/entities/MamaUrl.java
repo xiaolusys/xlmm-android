@@ -132,6 +132,12 @@ public class MamaUrl {
             private String fans_explain;
             private String exam;
 
+            public String getNotice() {
+                return notice;
+            }
+
+            private String notice;
+
             public String getRenew() {
                 return renew;
             }

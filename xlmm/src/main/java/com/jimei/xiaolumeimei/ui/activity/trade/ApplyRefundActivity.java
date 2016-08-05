@@ -256,6 +256,7 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
                     @Override
                     public void onNext(RefundMsgBean resp) {
                         JUtils.Toast(resp.getInfo());
+                        JUtils.Log("OKHTTP","commit_apply success "+resp.getInfo());
                         Log.i(TAG, "commit_apply success " + resp.toString());
                         hideIndeterminateProgressDialog();
                         finish();
