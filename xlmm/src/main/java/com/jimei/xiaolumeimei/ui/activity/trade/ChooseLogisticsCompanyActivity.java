@@ -14,8 +14,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import butterknife.Bind;
-
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.LogisticCompanyAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -26,6 +24,8 @@ import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
 
 public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
         implements View.OnClickListener {
@@ -190,6 +190,7 @@ public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
 
     private void fillCompanyInfo() {
         company_list.add(new LogisticsCompanyInfo("A", "安信达快递"));
+        company_list.add(new LogisticsCompanyInfo("B", "百世汇通"));
         company_list.add(new LogisticsCompanyInfo("C", "超联物流"));
         company_list.add(new LogisticsCompanyInfo("D", "大田快运"));
         company_list.add(new LogisticsCompanyInfo("D", "德邦快递"));
@@ -203,13 +204,12 @@ public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
         company_list.add(new LogisticsCompanyInfo("G", "国鑫快递"));
         company_list.add(new LogisticsCompanyInfo("H", "华运通物流"));
         company_list.add(new LogisticsCompanyInfo("H", "华宇物流"));
-        company_list.add(new LogisticsCompanyInfo("H", "汇通快递"));
         company_list.add(new LogisticsCompanyInfo("J", "佳吉快运"));
         company_list.add(new LogisticsCompanyInfo("J", "佳加物流"));
         company_list.add(new LogisticsCompanyInfo("J", "捷安快递"));
         company_list.add(new LogisticsCompanyInfo("J", "捷森物流"));
         company_list.add(new LogisticsCompanyInfo("J", "京广快递"));
-        company_list.add(new LogisticsCompanyInfo("K", "快捷顺速递"));
+        company_list.add(new LogisticsCompanyInfo("K", "快捷快递"));
         company_list.add(new LogisticsCompanyInfo("K", "快马运输"));
         company_list.add(new LogisticsCompanyInfo("L", "联邦快递"));
         company_list.add(new LogisticsCompanyInfo("L", "联通快递"));
@@ -220,7 +220,7 @@ public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
         company_list.add(new LogisticsCompanyInfo("Q", "全一快运"));
         company_list.add(new LogisticsCompanyInfo("Q", "全峰快递"));
         company_list.add(new LogisticsCompanyInfo("S", "申通快递"));
-        company_list.add(new LogisticsCompanyInfo("S", "顺丰快递"));
+        company_list.add(new LogisticsCompanyInfo("S", "顺丰速运"));
         company_list.add(new LogisticsCompanyInfo("S", "顺风快递"));
         company_list.add(new LogisticsCompanyInfo("T", "天天快递"));
         company_list.add(new LogisticsCompanyInfo("U", "UPS快递"));
@@ -236,14 +236,14 @@ public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
         company_list.add(new LogisticsCompanyInfo("Y", "远顺物流"));
         company_list.add(new LogisticsCompanyInfo("Y", "圆通速递"));
         company_list.add(new LogisticsCompanyInfo("Y", "越丰物流"));
-        company_list.add(new LogisticsCompanyInfo("Y", "韵达货运"));
-        company_list.add(new LogisticsCompanyInfo("Z", "宅急送快递"));
+        company_list.add(new LogisticsCompanyInfo("Y", "韵达快递"));
+        company_list.add(new LogisticsCompanyInfo("Z", "宅急送"));
         company_list.add(new LogisticsCompanyInfo("Z", "泽龙物流"));
         company_list.add(new LogisticsCompanyInfo("Z", "中邦速递"));
         company_list.add(new LogisticsCompanyInfo("Z", "中诚快递"));
         company_list.add(new LogisticsCompanyInfo("Z", "中国速递"));
         company_list.add(new LogisticsCompanyInfo("Z", "中铁快运"));
-        company_list.add(new LogisticsCompanyInfo("Z", "中通速递"));
+        company_list.add(new LogisticsCompanyInfo("Z", "中通快递"));
         company_list.add(new LogisticsCompanyInfo("Z", "中外运"));
         company_list.add(new LogisticsCompanyInfo("Z", "中驿快递"));
     }

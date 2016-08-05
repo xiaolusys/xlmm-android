@@ -4,17 +4,16 @@ import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
-import com.jimei.xiaolumeimei.entities.BudgetPayBean;
+import com.jimei.xiaolumeimei.entities.LogisticCompanyBean;
 import com.jimei.xiaolumeimei.entities.LogisticsBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
-import com.jimei.xiaolumeimei.entities.PackageBean;
 import com.jimei.xiaolumeimei.entities.PayInfoBean;
 import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
 import com.jimei.xiaolumeimei.entities.RedBagBean;
 import com.jimei.xiaolumeimei.entities.RefundMsgBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
-import java.util.ArrayList;
+
 import okhttp3.ResponseBody;
 import rx.Observable;
 
@@ -152,6 +151,20 @@ public class TradeModel {
   public Observable<LogisticsBean> get_logistics_by_packagetid(String packetid,String company_code) {
     return XlmmRetrofitClient.getService()
             .get_logistics_by_packagetid(packetid,company_code)
+            .compose(new DefaultTransform<>());
+  }
+
+
+  //获取物流信息
+  public Observable<LogisticsBean> getRefundLogistic(String packetid,String company_name) {
+    return XlmmRetrofitClient.getService()
+            .getRefundLogistic(packetid,company_name)
+            .compose(new DefaultTransform<>());
+  }
+
+  public Observable<LogisticCompanyBean> getLogisticCompany(String company_name){
+    return XlmmRetrofitClient.getService()
+            .getLogisticComPany(company_name)
             .compose(new DefaultTransform<>());
   }
 

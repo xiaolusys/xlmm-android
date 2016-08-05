@@ -88,10 +88,9 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
                         JUtils.Toast("取消失败!");
                     }
                 }));
-        holder.item.setOnClickListener(v -> {
-            JumpUtils.jumpToWebViewWithCookies(mContext, modelproductBean.getWeb_url(), bean.getId(),
-                    ProductPopDetailActvityWeb.class);
-        });
+        holder.item.setOnClickListener(v -> JumpUtils.jumpToWebViewWithCookies(
+                mContext, modelproductBean.getWeb_url(),
+                bean.getId(), ProductPopDetailActvityWeb.class));
     }
 
     @Override

@@ -73,6 +73,7 @@
   <color name="text_color_A0">#A0A0A0</color>
   <color name="white">#FFFFFF</color><!--白色 -->
   <color name="white_loading">#99FFFFFF</color><!--白色 -->
+  <color name="white_bg">#F4FFFFFF</color><!--微透明白色 -->
   <color name="ivory">#FFFFF0</color><!--象牙色 -->
   <color name="lightyellow">#FFFFE0</color><!--亮黄色-->
   <color name="yellow">#FFFF00</color><!--黄色 -->
