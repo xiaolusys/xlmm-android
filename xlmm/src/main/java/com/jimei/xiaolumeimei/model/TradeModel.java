@@ -156,9 +156,9 @@ public class TradeModel {
 
 
   //获取物流信息
-  public Observable<LogisticsBean> getRefundLogistic(String packetid,String company_name) {
+  public Observable<LogisticsBean> getRefundLogistic(int rid,String packetid,String company_name) {
     return XlmmRetrofitClient.getService()
-            .getRefundLogistic(packetid,company_name)
+            .getRefundLogistic(rid,packetid,company_name)
             .compose(new DefaultTransform<>());
   }
 

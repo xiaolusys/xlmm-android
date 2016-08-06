@@ -20,6 +20,7 @@ import com.jimei.xiaolumeimei.entities.LogisticsBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.widget.LogImageView;
 import com.jimei.xiaolumeimei.widget.LogMsgView;
+import com.jimei.xiaolumeimei.widget.XlmmTitleView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
@@ -43,6 +44,8 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
 
     String TAG = "WriteLogisticsInfoActivty";
 
+    @Bind(R.id.title_view)
+    XlmmTitleView titleView;
     @Bind(R.id.et_logistics_company)
     EditText et_logistics_company;
     @Bind(R.id.et_logistics_number)
@@ -81,6 +84,7 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
     private boolean flag;
     private String company_name;
     private String packetid;
+    private int rid;
 
     @Override
     protected void setListener() {
@@ -101,7 +105,7 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
         }
         if (flag) {
             Subscription subscribe = TradeModel.getInstance()
-                    .getRefundLogistic(packetid, company_name)
+                    .getRefundLogistic(rid, packetid, company_name)
                     .subscribeOn(Schedulers.io())
                     .subscribe(new ServiceResponse<LogisticsBean>() {
                         @Override
@@ -152,6 +156,7 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
             flag = extras.getBoolean("flag");
             company_name = extras.getString("company_name", "");
             packetid = extras.getString("packetid", "");
+            rid = extras.getInt("rid");
         }
     }
 
@@ -164,6 +169,8 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
     protected void initViews() {
         if (!flag) {
             writeLayout.setVisibility(View.VISIBLE);
+        }else {
+            titleView.setName("查询物流信息");
         }
         et_logistics_company.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {

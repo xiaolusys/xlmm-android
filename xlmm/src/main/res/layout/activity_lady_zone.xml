@@ -27,7 +27,8 @@
                 android:layout_height="80px"
                 android:background="@color/white"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:id="@+id/layout_price"
@@ -89,7 +90,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@color/bg_grey2" />
+                android:background="@color/bg_grey2"
+                android:visibility="gone" />
 
             <FrameLayout
                 android:layout_width="match_parent"

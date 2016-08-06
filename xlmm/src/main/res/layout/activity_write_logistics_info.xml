@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <com.jimei.xiaolumeimei.widget.XlmmTitleView
+        android:id="@+id/title_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:xlmm_title="填写物流信息" />
@@ -232,7 +233,7 @@
 
                     <LinearLayout
                         android:id="@+id/msg_layout"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:padding="8dp">
@@ -241,42 +242,43 @@
                             android:id="@+id/log_image_layout"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
+                            android:gravity="center_horizontal"
                             android:orientation="vertical"
                             android:padding="8dp">
 
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:src="@drawable/state_last" />
+                            <View
+                                android:layout_width="10px"
+                                android:layout_height="10px"
+                                android:layout_marginTop="10px"
+                                android:background="@drawable/state_on_bg" />
 
                         </LinearLayout>
 
                         <LinearLayout
                             android:id="@+id/log_msg_layout"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:padding="8dp">
 
                             <LinearLayout
-                                android:layout_width="fill_parent"
-                                android:layout_height="65dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="120px"
                                 android:orientation="vertical">
 
                                 <TextView
                                     android:id="@+id/tv_order_last_time"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginLeft="16px"
+                                    android:layout_marginLeft="12px"
                                     android:textColor="@color/text_color_B4"
                                     android:textSize="12sp" />
 
                                 <TextView
                                     android:id="@+id/tv_order_last_state"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="16px"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginLeft="12px"
                                     android:layout_marginTop="4dp"
                                     android:textColor="@color/text_color_62"
                                     android:textSize="14sp" />

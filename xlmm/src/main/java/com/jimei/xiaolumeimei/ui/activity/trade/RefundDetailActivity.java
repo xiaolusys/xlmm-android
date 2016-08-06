@@ -366,9 +366,9 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
                 }
                 bundle.putBoolean("flag", isWrited);
                 if (isWrited) {
+                    bundle.putInt("rid",refundDetail.getId());
                     bundle.putString("company_name", refundDetail.getCompany_name());
                     bundle.putString("packetid", refundDetail.getSid());
-
                     intent.putExtras(bundle);
                     startActivity(intent);
                 } else {
@@ -388,7 +388,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
                 flag = data.getBooleanExtra("flag", false);
             }
             if (flag) {
-                finish();
+                initData();
             }
         }
     }
