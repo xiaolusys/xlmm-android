@@ -21,13 +21,17 @@ import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.CategoryAdapter;
+import com.jimei.xiaolumeimei.adapter.CategoryProductAdapter;
 import com.jimei.xiaolumeimei.adapter.ColorTagAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
+import com.jimei.xiaolumeimei.entities.CategoryProductListBean;
+import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.utils.FileUtils;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.widget.XlmmTitleView;
+import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 
 import java.io.File;
@@ -40,6 +44,8 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.Bind;
+import rx.Subscription;
+import rx.schedulers.Schedulers;
 
 public class LadyZoneActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
     @Bind(R.id.layout_price)
@@ -85,8 +91,13 @@ public class LadyZoneActivity extends BaseSwipeBackCompatActivity implements Vie
     private List<Map<String, Object>> colorData;
     private int type;
     private String title;
+    private int page;
 
     private CategoryAdapter adapter;
+    private Menu menu;
+    private CategoryProductAdapter categoryProductAdapter;
+    private int cid;
+    private String next;
 
     @Override
     protected void setListener() {
@@ -99,13 +110,13 @@ public class LadyZoneActivity extends BaseSwipeBackCompatActivity implements Vie
     @Override
     protected void initData() {
         flag = -1;
+        page = 1;
         initPriceData();
         initColorData();
-        initCategory();
     }
 
     private void initCategory() {
-        new CategoryTask(adapter).execute(type);
+        new CategoryTask(adapter, menu).execute(type);
     }
 
     private void initColorData() {
@@ -175,15 +186,21 @@ public class LadyZoneActivity extends BaseSwipeBackCompatActivity implements Vie
         recyclerView.setLoadingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
         recyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
         recyclerView.setPullRefreshEnabled(false);
+        categoryProductAdapter = new CategoryProductAdapter(new ArrayList<>(), this);
+        recyclerView.setAdapter(categoryProductAdapter);
         recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
-
             }
 
             @Override
             public void onLoadMore() {
-
+                if (next != null && !"".equals(next)) {
+                    refreshData(cid,false);
+                } else {
+                    JUtils.Toast("已经到底啦!");
+                    recyclerView.post(recyclerView::loadMoreComplete);
+                }
             }
         });
 
@@ -288,6 +305,8 @@ public class LadyZoneActivity extends BaseSwipeBackCompatActivity implements Vie
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_category, menu);
+        this.menu = menu;
+        initCategory();
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -311,12 +330,49 @@ public class LadyZoneActivity extends BaseSwipeBackCompatActivity implements Vie
         return super.onOptionsItemSelected(item);
     }
 
+    public void refreshData(int cid,boolean clear) {
+        this.cid = cid;
+        xRecyclerView.setVisibility(View.GONE);
+        showIndeterminateProgressDialog(false);
+        Subscription subscribe = ProductModel.getInstance()
+                .getCategoryProductList(cid, page)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ServiceResponse<CategoryProductListBean>() {
+
+
+                    @Override
+                    public void onNext(CategoryProductListBean categoryProductListBean) {
+                        List<CategoryProductListBean.ResultsBean> results = categoryProductListBean.getResults();
+                        if (results != null && results.size() > 0) {
+                            categoryProductAdapter.update(results);
+                        }
+                        next = categoryProductListBean.getNext();
+                        if (next != null && !"".equals(next)) {
+                            page++;
+                        }
+                        hideIndeterminateProgressDialog();
+                        recyclerView.post(recyclerView::loadMoreComplete);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        hideIndeterminateProgressDialog();
+                        recyclerView.post(recyclerView::loadMoreComplete);
+                        JUtils.Toast("数据加载有误!");
+                    }
+                });
+        addSubscription(subscribe);
+    }
+
     private class CategoryTask extends AsyncTask<Integer, Integer, List<CategoryBean.ChildsBean>> {
 
         private CategoryAdapter adapter;
+        private Menu menu;
 
-        public CategoryTask(CategoryAdapter adapter) {
+        public CategoryTask(CategoryAdapter adapter, Menu menu) {
             this.adapter = adapter;
+            this.menu = menu;
         }
 
         @Override
@@ -361,8 +417,10 @@ public class LadyZoneActivity extends BaseSwipeBackCompatActivity implements Vie
 
         @Override
         protected void onPostExecute(List<CategoryBean.ChildsBean> list) {
-            if (list != null) {
+            if (list != null && list.size() > 0) {
                 adapter.update(list);
+            } else {
+                menu.removeItem(R.id.category);
             }
         }
     }

@@ -18,6 +18,7 @@ import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.CartsinfoBean;
 import com.jimei.xiaolumeimei.entities.CategoryDownBean;
+import com.jimei.xiaolumeimei.entities.CategoryProductListBean;
 import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.entities.ClickcarryBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
@@ -128,7 +129,7 @@ public interface XlmmService {
             @Query("page") int page,
             @Query("page_size") int page_size);
 
-    //女装分页列表,升价排序
+    //女装分页列表,升价排序x
     @GET("/rest/v1/products/ladylist")
     Observable<LadyListBean> getLadyList(
             @Query("page") int page,
@@ -761,6 +762,7 @@ public interface XlmmService {
     //获取退货物流信息
     @GET("/rest/v1/rtnwuliu/get_wuliu_by_packetid")
     Observable<LogisticsBean> getRefundLogistic(
+            @Query("rid") int rid,
             @Query("packetid") String packetid,
             @Query("company_name") String company_name
     );
@@ -840,12 +842,14 @@ public interface XlmmService {
 
     @GET("/rest/v1/favorites")
     Observable<CollectionAllBean> getCollection(
-            @Query("page") int page
+            @Query("page") int page,
+            @Query("shelf_status") String shelf_status
     );
 
-    @HTTP(method = "POST", path = "/rest/v1/favorites", hasBody = true)
+    @FormUrlEncoded
+    @POST("/rest/v1/favorites")
     Observable<CollectionResultBean> addCollection(
-            @Body CollectionDeleteBody deleteBody
+            @Field("model_id") int model_id
     );
 
     @HTTP(method = "DELETE", path = "/rest/v1/favorites", hasBody = true)
@@ -886,4 +890,10 @@ public interface XlmmService {
 
     @GET("/rest/v2/categorys/latest_version")
     Observable<CategoryDownBean> getCategoryDown();
+
+    @GET("/rest/v2/modelproducts")
+    Observable<CategoryProductListBean> getCategoryProductList(
+            @Query("category_id") int category_id,
+            @Query("page") int page
+    );
 }
