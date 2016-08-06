@@ -157,6 +157,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   private EventBus aDefault;
   private UpdateBroadReceiver mUpdateBroadReceiver;
   private double budgetCash;
+  private String mamaid;
 
   @Override protected void onStart() {
     super.onStart();
@@ -238,16 +239,19 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         flag = "cart";
         break;
       case R.id.collect:
-//        intent = new Intent(MainActivity.this, CollectionActivity.class);
-                Bundle ladyBundle = new Bundle();
-        ladyBundle.putInt("type",XlmmConst.TYPE_CHILD);
-        ladyBundle.putString("title","女装专区");
-        readyGo(LadyZoneActivity.class,ladyBundle);
+        //        intent = new Intent(MainActivity.this, CollectionActivity.class);
+        Bundle ladyBundle = new Bundle();
+        ladyBundle.putInt("type", XlmmConst.TYPE_CHILD);
+        ladyBundle.putString("title", "女装专区");
+        readyGo(LadyZoneActivity.class, ladyBundle);
         flag = "collect";
         break;
       case R.id.rl_mmentry:
         JUtils.Log(TAG, "xiaolu mama entry");
         intent = new Intent(MainActivity.this, MMInfoActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("mamaid", mamaid);
+        intent.putExtras(bundle);
         break;
       case R.id.ll_money:
         intent = new Intent(MainActivity.this, WalletActivity.class);
@@ -266,18 +270,18 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         break;
       case R.id.child_img:
         MobclickAgent.onEvent(MainActivity.this, "ChildID");
-//        Bundle childBundle = new Bundle();
-//        childBundle.putInt("type",XlmmConst.TYPE_CHILD);
-//        childBundle.putString("title","童装专区");
-//        readyGo(LadyZoneActivity.class,childBundle);
+        //        Bundle childBundle = new Bundle();
+        //        childBundle.putInt("type",XlmmConst.TYPE_CHILD);
+        //        childBundle.putString("title","童装专区");
+        //        readyGo(LadyZoneActivity.class,childBundle);
         readyGo(ChildListActivity.class);
         break;
       case R.id.lady_img:
         MobclickAgent.onEvent(MainActivity.this, "LadyID");
-//        Bundle ladyBundle = new Bundle();
-//        ladyBundle.putInt("type",XlmmConst.TYPE_CHILD);
-//        ladyBundle.putString("title","女装专区");
-//        readyGo(LadyZoneActivity.class,ladyBundle);
+        //        Bundle ladyBundle = new Bundle();
+        //        ladyBundle.putInt("type",XlmmConst.TYPE_CHILD);
+        //        ladyBundle.putString("title","女装专区");
+        //        readyGo(LadyZoneActivity.class,ladyBundle);
         readyGo(LadyListActivity.class);
         break;
 
@@ -303,7 +307,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         && v.getId() != R.id.text_tomorror
         && v.getId() != R.id.text_yesterday
         && v.getId() != R.id.lady_img
-            && v.getId() !=R.id.collect
+        && v.getId() != R.id.collect
         && v.getId() != R.id.child_img) {
       if (!(LoginUtils.checkLoginState(getApplicationContext()))) {
         login(flag);
@@ -536,7 +540,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
       if (null != userNewBean.getUserBudget()) {
         budgetCash = userNewBean.getUserBudget().getBudgetCash();
       }
-      //JUtils.Log(TAG, "mamaid " + userNewBean.getXiaolumm().getId());
+      mamaid = userNewBean.getXiaolumm().getId() + "";
     } else {
       rl_mmentry.setVisibility(View.INVISIBLE);
       loginFlag.setVisibility(View.GONE);
@@ -596,6 +600,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
       } else {
         loginFlag.setVisibility(View.VISIBLE);
       }
+      mamaid = userNewBean.getXiaolumm().getId() + "";
       //JUtils.Log(TAG, "mamaid " + userNewBean.getXiaolumm().getId());
       if ((userNewBean.getXiaolumm() != null) && (userNewBean.getXiaolumm().getId() != 0)) {
         rl_mmentry.setVisibility(View.VISIBLE);
@@ -929,33 +934,33 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     }
   }
 
-  @Override
-  public void downCategoryFile(CategoryDownBean categoryDownBean) {
-    JUtils.Log(TAG,categoryDownBean.toString());
+  @Override public void downCategoryFile(CategoryDownBean categoryDownBean) {
+    JUtils.Log(TAG, categoryDownBean.toString());
     String downloadUrl = categoryDownBean.getDownload_url();
     String sha1 = categoryDownBean.getSha1();
-    if(!FileUtils.isCategorySame(getApplicationContext(),sha1)){
+    if (!FileUtils.isCategorySame(getApplicationContext(), sha1)) {
       OkHttpUtils.get()
-              .url(downloadUrl)
-              .build()
-              .execute(new FileCallBack(
-                      Environment.getExternalStorageDirectory().getAbsolutePath()+"/xlmmcategory/",
-                      "category.json") {
-                @Override
-                public void onError(Call call, Exception e, int id) {
-                  if (FileUtils.isFolderExist(Environment.getExternalStorageDirectory().getAbsolutePath()
-                          +"/xlmmcategory/"+ "category.json")) {
-                    FileUtils.deleteFile(Environment.getExternalStorageDirectory().getAbsolutePath()
-                            +"/xlmmcategory/"+ "category.json");
-                  }
-                }
+          .url(downloadUrl)
+          .build()
+          .execute(new FileCallBack(
+              Environment.getExternalStorageDirectory().getAbsolutePath() + "/xlmmcategory/",
+              "category.json") {
+            @Override public void onError(Call call, Exception e, int id) {
+              if (FileUtils.isFolderExist(
+                  Environment.getExternalStorageDirectory().getAbsolutePath()
+                      + "/xlmmcategory/"
+                      + "category.json")) {
+                FileUtils.deleteFile(Environment.getExternalStorageDirectory().getAbsolutePath()
+                    + "/xlmmcategory/"
+                    + "category.json");
+              }
+            }
 
-                @Override
-                public void onResponse(File response, int id) {
-                  JUtils.Log(TAG,response.getAbsolutePath());
-                  FileUtils.saveCategoryFile(getApplicationContext(),sha1);
-                }
-              });
+            @Override public void onResponse(File response, int id) {
+              JUtils.Log(TAG, response.getAbsolutePath());
+              FileUtils.saveCategoryFile(getApplicationContext(), sha1);
+            }
+          });
     }
   }
 
@@ -1026,7 +1031,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     MobclickAgent.onResume(this);
     //resumeData();
     mPresenter.getCartsNum();
-//    mPresenter.getUserInfoBean();
+    //    mPresenter.getUserInfoBean();
 
     JUtils.Log(TAG, "resume");
   }
@@ -1064,8 +1069,8 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     super.onDestroy();
   }
 
-  @Override
-  public void checkVersion(int versionCode,String content,String downloadUrl,boolean isAutoUpdate) {
+  @Override public void checkVersion(int versionCode, String content, String downloadUrl,
+      boolean isAutoUpdate) {
     new Thread(() -> {
       try {
         Thread.sleep(500 * 10);
@@ -1074,29 +1079,24 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
       }
 
       runOnUiThread(new Runnable() {
-        @Override
-        public void run() {
+        @Override public void run() {
           VersionManager versionManager = new VersionManager() {
 
-            @Override
-            public int getServerVersion() {
+            @Override public int getServerVersion() {
               return versionCode;
             }
 
-            @Override
-            public String getUpdateContent() {
+            @Override public String getUpdateContent() {
               return content;
             }
 
-            @Override
-            public boolean showMsg() {
+            @Override public boolean showMsg() {
               return false;
             }
           };
           if (isAutoUpdate) {
             versionManager.setPositiveListener(new View.OnClickListener() {
-              @Override
-              public void onClick(View v) {
+              @Override public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, UpdateService.class);
                 intent.putExtra(UpdateService.EXTRAS_DOWNLOAD_URL, downloadUrl);
                 startService(intent);
@@ -1104,14 +1104,14 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
                 JUtils.Toast("应用正在后台下载!");
               }
             });
-            SharedPreferences updatePreferences = getSharedPreferences("update", Context.MODE_PRIVATE);
+            SharedPreferences updatePreferences =
+                getSharedPreferences("update", Context.MODE_PRIVATE);
             boolean update = updatePreferences.getBoolean("update", true);
             if (update) {
               versionManager.checkVersion(MainActivity.this);
             }
           }
         }
-
       });
     }).start();
   }

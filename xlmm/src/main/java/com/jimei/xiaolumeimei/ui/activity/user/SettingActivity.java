@@ -50,9 +50,9 @@ public class SettingActivity extends BaseMVVMActivity<ActivitySettingBinding>
 
   @Override protected void initData() {
     if (LoginUtils.isMipushOk(getApplicationContext())) {
-      b.openNoticeA.setChecked(true);
+      b.openNoticeA.setActivated(true);
     } else {
-      b.openNoticeA.setChecked(false);
+      b.openNoticeA.setActivated(false);
     }
   }
 
@@ -104,7 +104,7 @@ public class SettingActivity extends BaseMVVMActivity<ActivitySettingBinding>
         break;
 
       case R.id.open_notice_a:
-        if (b.openNoticeA.isChecked()) {
+        if (b.openNoticeA.isActivated()) {
           new MaterialDialog.Builder(this).title("关闭推送")
               .content("您确定要关闭推送吗？")
               .positiveText("确定")
@@ -117,7 +117,7 @@ public class SettingActivity extends BaseMVVMActivity<ActivitySettingBinding>
                   if ((finalAccount != null) && ((!finalAccount.isEmpty()))) {
                     MiPushClient.unsetUserAccount(getApplicationContext(), finalAccount, null);
                   }
-                  b.openNoticeA.setChecked(false);
+                  b.openNoticeA.setActivated(false);
                   dialog.dismiss();
                 }
 
@@ -197,7 +197,7 @@ public class SettingActivity extends BaseMVVMActivity<ActivitySettingBinding>
                       }
                       MiPushClient.setUserAccount(context.getApplicationContext(),
                           user.getUserAccount(), null);
-                      b.openNoticeA.setChecked(true);
+                      b.openNoticeA.setActivated(true);
                     }
 
                     @Override public void onCompleted() {
@@ -208,11 +208,11 @@ public class SettingActivity extends BaseMVVMActivity<ActivitySettingBinding>
                       e.printStackTrace();
                       super.onError(e);
                       LoginUtils.deleteIsMipushOk(context);
-                      b.openNoticeA.setChecked(false);
+                      b.openNoticeA.setActivated(false);
                     }
                   });
             } else {
-              b.openNoticeA.setChecked(false);
+              b.openNoticeA.setActivated(false);
               LoginUtils.deleteIsMipushOk(context);
               JUtils.Toast("读取设备权限被关闭,可以前往应用设置打开权限");
             }

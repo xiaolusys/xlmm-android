@@ -876,11 +876,12 @@ public interface XlmmService {
     Observable<Response<PersonalCarryRankBean>> getTeamSelfRank(
     );
 
-    @GET("/rest/v1/pmt/xlmm/1461/new_mama_task_info")
+    @GET("/rest/v1/pmt/xlmm/{id}/new_mama_task_info")
     Observable<Response<MaMaRenwuListBean>> getMaMaRenwuListBean(
+        @Path("id")String id
     );
 
-    @GET("rest/v2/mama/message/self_list")
+    @GET("/rest/v2/mama/message/self_list")
     Observable<Response<MamaSelfListBean>> getMaMaselfList(
     );
 

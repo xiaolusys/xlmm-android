@@ -203,9 +203,9 @@ public class MMInfoPresenter extends MMInfoContract.Presenter {
     getRecentCarry();
   }
 
-  @Override public void getMaMaRenwuListBean() {
+  @Override public void getMaMaRenwuListBean(String id) {
     mRxManager.add(
-        mModel.getMaMaRenwuListBean().subscribe(new Observer<Response<MaMaRenwuListBean>>() {
+        mModel.getMaMaRenwuListBean(id).subscribe(new Observer<Response<MaMaRenwuListBean>>() {
           @Override public void onCompleted() {
 
           }
