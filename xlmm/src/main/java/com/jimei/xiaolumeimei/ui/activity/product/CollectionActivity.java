@@ -27,9 +27,10 @@ public class CollectionActivity extends BaseAppCompatActivity {
 
     @Override
     protected void initData() {
+        showIndeterminateProgressDialog(false);
         List<CollectionFragment> fragments = new ArrayList<>();
-        fragments.add(CollectionFragment.newInstance("热销商品",1));
-        fragments.add(CollectionFragment.newInstance("下架商品",0));
+        fragments.add(CollectionFragment.newInstance("热销商品","on"));
+        fragments.add(CollectionFragment.newInstance("下架商品","off"));
         CollectionTabAdapter mAdapter = new CollectionTabAdapter(getSupportFragmentManager(), fragments);
         mViewPager.setAdapter(mAdapter);
         mViewPager.setOffscreenPageLimit(2);

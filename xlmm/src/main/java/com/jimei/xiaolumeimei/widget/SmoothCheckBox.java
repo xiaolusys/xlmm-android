@@ -59,6 +59,7 @@ public class SmoothCheckBox extends View implements Checkable {
   private boolean mChecked;
   private boolean mTickDrawing;
   private OnCheckedChangeListener mListener;
+  private boolean flag = true;
 
   public SmoothCheckBox(Context context) {
     this(context, null);
@@ -93,6 +94,10 @@ public class SmoothCheckBox extends View implements Checkable {
     int cg = (int) (sg * (1 - percent) + eg * percent);
     int cb = (int) (sb * (1 - percent) + eb * percent);
     return Color.argb(0xff, cr, cg, cb);
+  }
+
+  public void setCanClickable(boolean b){
+    flag = b;
   }
 
   private void init(AttributeSet attrs) {
@@ -131,15 +136,18 @@ public class SmoothCheckBox extends View implements Checkable {
     mTickPoints[1] = new Point();
     mTickPoints[2] = new Point();
 
+    flag =true;
     setOnClickListener(new OnClickListener() {
       @Override public void onClick(View v) {
-        toggle();
-        mTickDrawing = false;
-        mDrewDistance = 0;
-        if (isChecked()) {
-          startCheckedAnimation();
-        } else {
-          startUnCheckedAnimation();
+        if (flag) {
+          toggle();
+          mTickDrawing = false;
+          mDrewDistance = 0;
+          if (isChecked()) {
+            startCheckedAnimation();
+          } else {
+            startUnCheckedAnimation();
+          }
         }
       }
     });

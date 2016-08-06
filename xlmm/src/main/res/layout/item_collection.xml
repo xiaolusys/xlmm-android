@@ -27,12 +27,19 @@
             android:textColor="@color/text_color_32"
             android:textSize="28px" />
 
-        <ImageView
+        <RelativeLayout
             android:id="@+id/flag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="20px"
-            android:src="@drawable/icon_collection_item" />
+            android:layout_width="70px"
+            android:layout_height="70px">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/icon_collection_item" />
+
+        </RelativeLayout>
+
 
     </LinearLayout>
 

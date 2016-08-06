@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.model;
 
 import com.jimei.library.rx.DefaultTransform;
+import com.jimei.xiaolumeimei.entities.CategoryProductListBean;
 import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.entities.CollectionAllBean;
 import com.jimei.xiaolumeimei.entities.CollectionDeleteBody;
@@ -14,6 +15,7 @@ import com.jimei.xiaolumeimei.entities.ShareProductBean;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 
 import java.util.List;
+
 import rx.Observable;
 
 /**
@@ -121,16 +123,16 @@ public class ProductModel {
   }
 
   //获得收藏列表
-  public Observable<CollectionAllBean> getCollection(int page){
+  public Observable<CollectionAllBean> getCollection(int page,String shelf_status){
     return XlmmRetrofitClient.getService()
-            .getCollection(page)
+            .getCollection(page,shelf_status)
             .compose(new DefaultTransform<>());
   }
 
   //添加单品收藏
   public Observable<CollectionResultBean> addCollection(int model_id){
     return XlmmRetrofitClient.getService()
-            .addCollection(new CollectionDeleteBody(model_id))
+            .addCollection(model_id)
             .compose(new DefaultTransform<>());
   }
 
@@ -138,6 +140,12 @@ public class ProductModel {
   public Observable<CollectionResultBean> deleteCollection(int model_id){
     return XlmmRetrofitClient.getService()
             .deleteCollection(new CollectionDeleteBody(model_id))
+            .compose(new DefaultTransform<>());
+  }
+
+  public Observable<CategoryProductListBean> getCategoryProductList(int category_id,int page) {
+    return XlmmRetrofitClient.getService()
+            .getCategoryProductList(category_id,page)
             .compose(new DefaultTransform<>());
   }
 }
