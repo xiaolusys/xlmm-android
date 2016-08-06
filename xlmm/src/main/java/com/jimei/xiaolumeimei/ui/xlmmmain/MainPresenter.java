@@ -10,7 +10,6 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import java.util.Date;
 import retrofit2.Response;
-import retrofit2.adapter.rxjava.HttpException;
 
 /**
  * Created by itxuye on 2016/7/4.
@@ -33,6 +32,10 @@ public class MainPresenter extends MainContract.Presenter {
                 userInfoNewBean = userInfoBean;
                 mView.initDrawer(userInfoBean);
                 mView.initUserView(userInfoBean);
+              } else if (userInfoBeanResponse.code() == 403) {
+                LoginUtils.delLoginInfo(XlmmApp.getmContext());
+                mView.initDrawer(null);
+                mView.initUserView(null);
               }
             }
           }
@@ -42,17 +45,7 @@ public class MainPresenter extends MainContract.Presenter {
           }
 
           @Override public void onError(Throwable e) {
-            if (e instanceof HttpException) {
-              if (((HttpException) e).code() == 403) {
-                try {
-                  LoginUtils.delLoginInfo(XlmmApp.getmContext());
-                  mView.initDrawer(null);
-                  mView.initUserView(null);
-                } catch (Exception e1) {
-                  e1.printStackTrace();
-                }
-              }
-            }
+            e.printStackTrace();
           }
         }));
   }
@@ -67,6 +60,10 @@ public class MainPresenter extends MainContract.Presenter {
                 UserInfoBean userInfoBean = userInfoBeanResponse.body();
                 userInfoNewBean = userInfoBean;
                 mView.initUserViewChange(userInfoBean);
+              } else if (userInfoBeanResponse.code() == 403) {
+                LoginUtils.delLoginInfo(XlmmApp.getmContext());
+                mView.initDrawer(null);
+                mView.initUserView(null);
               }
             }
           }
@@ -76,17 +73,7 @@ public class MainPresenter extends MainContract.Presenter {
           }
 
           @Override public void onError(Throwable e) {
-            if (e instanceof HttpException) {
-              if (((HttpException) e).code() == 403) {
-                try {
-                  LoginUtils.delLoginInfo(XlmmApp.getmContext());
-                  mView.initDrawer(null);
-                  mView.initUserView(null);
-                } catch (Exception e1) {
-                  e1.printStackTrace();
-                }
-              }
-            }
+            e.printStackTrace();
           }
         }));
   }
@@ -183,31 +170,27 @@ public class MainPresenter extends MainContract.Presenter {
         }, Throwable::printStackTrace));
   }
 
-    @Override
-    public void getCategoryDown() {
-        mRxManager.add(mModel.getCategoryDown()
-        .retryWhen(new RxUtils.RetryWhenNoInternet(100,2000))
+  @Override public void getCategoryDown() {
+    mRxManager.add(mModel.getCategoryDown()
+        .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
         .subscribe(categoryDownBean -> {
-            if (categoryDownBean != null) {
-                mView.downCategoryFile(categoryDownBean);
-            }
+          if (categoryDownBean != null) {
+            mView.downCategoryFile(categoryDownBean);
+          }
         }, Throwable::printStackTrace));
-    }
+  }
 
-    @Override public void onStart() {
+  @Override public void onStart() {
 
   }
 
-    @Override
-    public void getVersion() {
-        mRxManager.add(mModel.getVersion().subscribe(versionBean-> {
-            if (versionBean!=null) {
-                mView.checkVersion(versionBean.getVersion_code()
-                        ,("最新版本:" + versionBean.getVersion() + "\n\n更新内容:\n"
-                                + versionBean.getMemo())
-                        ,versionBean.getDownload_link()
-                        ,versionBean.isAuto_update());
-            }
-        }, Throwable::printStackTrace));
-    }
+  @Override public void getVersion() {
+    mRxManager.add(mModel.getVersion().subscribe(versionBean -> {
+      if (versionBean != null) {
+        mView.checkVersion(versionBean.getVersion_code(),
+            ("最新版本:" + versionBean.getVersion() + "\n\n更新内容:\n" + versionBean.getMemo()),
+            versionBean.getDownload_link(), versionBean.isAuto_update());
+      }
+    }, Throwable::printStackTrace));
+  }
 }

@@ -27,10 +27,14 @@ public class LoginUtils {
   static SharedPreferences sharedPreferences1;
   static SharedPreferences sharedPreferences2;
   static SharedPreferences sharedPreferences3;
+  static SharedPreferences sharedPreferences4;
+  static SharedPreferences sharedPreferences5;
   static SharedPreferences.Editor editor;
   static SharedPreferences.Editor editor1;
   static SharedPreferences.Editor editor2;
   static SharedPreferences.Editor editor3;
+  static SharedPreferences.Editor editor4;
+  static SharedPreferences.Editor editor5;
   static UserInfoBean userinfo;
 
   public static void saveLoginInfo(boolean isSuccess, Context context, String username,
@@ -53,6 +57,7 @@ public class LoginUtils {
   }
 
   public static void delLoginInfo(Context context) {
+    delUserAccount(context, null);
     sharedPreferences = context.getSharedPreferences("login_info", Context.MODE_PRIVATE);
     sharedPreferences1 = context.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
     sharedPreferences3 = context.getSharedPreferences("CookiePersistence", Context.MODE_PRIVATE);
@@ -155,9 +160,6 @@ public class LoginUtils {
           .request(Manifest.permission.READ_PHONE_STATE)
           .subscribe(aBoolean -> {
             if (aBoolean) {
-              JUtils.Log(TAG,
-                  "regid: " + mRegId + " devid:" + ((TelephonyManager) context.getSystemService(
-                      Context.TELEPHONY_SERVICE)).getDeviceId());
               UserModel.getInstance()
                   .getUserAccount("android", mRegId, ((TelephonyManager) context.getSystemService(
                       Context.TELEPHONY_SERVICE)).getDeviceId())
@@ -168,6 +170,7 @@ public class LoginUtils {
                       if ((getUserAccount(context) != null) && ((!getUserAccount(
                           context).isEmpty())) && (!getUserAccount(context).equals(
                           user.getUserAccount()))) {
+                        saveMipushOk(context, true);
                         MiPushClient.unsetUserAccount(context.getApplicationContext(),
                             getUserAccount(context), null);
                         JUtils.Log(TAG, "unset useraccount: " + getUserAccount(context));
@@ -184,10 +187,12 @@ public class LoginUtils {
                       e.printStackTrace();
                       Log.e(TAG, "error: getUserAccount" + e.getLocalizedMessage());
                       super.onError(e);
+                      deleteIsMipushOk(context);
                     }
                   });
             } else {
-              JUtils.Log(TAG,"读取设备权限被关闭");
+              deleteIsMipushOk(context);
+
             }
           });
     } catch (Exception e) {
@@ -195,27 +200,46 @@ public class LoginUtils {
     }
   }
 
+  public static void saveMipushOk(Context context, boolean isOk) {
+    sharedPreferences5 = context.getSharedPreferences("login_info_mipushok", Context.MODE_PRIVATE);
+    editor5 = sharedPreferences5.edit();
+    editor5.putBoolean("ismipush", isOk);
+    editor5.apply();
+  }
+
+  public static boolean isMipushOk(Context context) {
+    sharedPreferences5 = context.getSharedPreferences("login_info_mipushok", Context.MODE_PRIVATE);
+    return sharedPreferences5.getBoolean("ismipush", false);
+  }
+
+  public static void deleteIsMipushOk(Context context) {
+    sharedPreferences5 = context.getSharedPreferences("login_info_mipushok", Context.MODE_PRIVATE);
+    editor5 = sharedPreferences5.edit();
+    editor5.putBoolean("ismipush", false);
+    editor5.apply();
+  }
+
   public static void saveUserAccount(Context context, String userAccount) {
-    sharedPreferences = context.getSharedPreferences("login_info", Context.MODE_PRIVATE);
-    editor = sharedPreferences.edit();
-    editor.putString("userAccount", userAccount);
-    editor.apply();
+    sharedPreferences4 = context.getSharedPreferences("login_info_mipush", Context.MODE_PRIVATE);
+    editor4 = sharedPreferences4.edit();
+    editor4.putString("userAccount", userAccount);
+    editor4.apply();
     Log.d(TAG, "save saveUserAccount ");
   }
 
   public static void delUserAccount(Context context, String userAccount) {
-    sharedPreferences = context.getSharedPreferences("login_info", Context.MODE_PRIVATE);
-    editor = sharedPreferences.edit();
-    editor.putString("userAccount", "");
-    editor.apply();
+    sharedPreferences4 = context.getSharedPreferences("login_info_mipush", Context.MODE_PRIVATE);
+    editor4 = sharedPreferences4.edit();
+    editor4.putString("userAccount", "");
+    editor4.apply();
     Log.d(TAG, "delUserAccount ");
   }
 
   public static String getUserAccount(Context context) {
 
-    sharedPreferences = context.getSharedPreferences("login_info", Context.MODE_PRIVATE);
+    sharedPreferences4 = context.getSharedPreferences("login_info_mipush", Context.MODE_PRIVATE);
 
-    String account = sharedPreferences.getString("userAccount", "");
+    String account = sharedPreferences4.getString("userAccount", "");
 
     return account;
   }
