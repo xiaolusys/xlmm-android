@@ -51,6 +51,7 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
   @Bind(R.id.image_1881) ImageView image1881;
 
   @Bind(R.id.confirm) RelativeLayout confirm;
+  @Bind(R.id.tv_moren) TextView tvMoren;
   private int productId;
   private int skuId188;
   private int skuId99;
@@ -146,6 +147,7 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
     image99.setVisibility(View.VISIBLE);
     image188.setVisibility(View.GONE);
     image1881.setVisibility(View.VISIBLE);
+    tvMoren.setText("默认使用小鹿妈妈钱包金额抵扣" + mamaCarryValue);
   }
 
   @Override protected boolean toggleOverridePendingTransition() {

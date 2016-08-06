@@ -3,8 +3,10 @@ package com.jimei.xiaolumeimei.base;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -14,8 +16,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.utils.CommonUtils;
 import com.jimei.xiaolumeimei.widget.loadingdialog.XlmmLoadingDialog;
 import com.zhy.autolayout.AutoLayoutActivity;
@@ -247,7 +251,11 @@ public abstract class BaseMVVMActivity<T extends ViewDataBinding> extends AutoLa
    */
   protected void showToast(String msg) {
     if (null != msg && !CommonUtils.isEmpty(msg)) {
-      Snackbar.make(getWindow().getDecorView(), msg, Snackbar.LENGTH_SHORT).show();
+      Resources resources = XlmmApp.getInstance().getResources();
+      Snackbar snackbar = Snackbar.make(getWindow().getDecorView(), msg, Snackbar.LENGTH_SHORT);
+      setSnackbarMessageTextColor(snackbar);
+      snackbar.getView().setBackgroundColor(resources.getColor(R.color.white));
+      snackbar.show();
     }
   }
 
@@ -306,5 +314,10 @@ public abstract class BaseMVVMActivity<T extends ViewDataBinding> extends AutoLa
       this.mCompositeSubscription.unsubscribe();
       mCompositeSubscription = null;
     }
+  }
+
+  public void setSnackbarMessageTextColor(Snackbar snackbar) {
+    View view = snackbar.getView();
+    ((TextView) view.findViewById(R.id.snackbar_text)).setTextColor(Color.parseColor("#448AFF"));
   }
 }
