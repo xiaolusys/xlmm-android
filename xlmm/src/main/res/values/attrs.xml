@@ -277,6 +277,10 @@
     <attr name="brand_title" format="string"/>
   </declare-styleable>
 
+  <declare-styleable name="MamalistView">
+    <attr name="tv_renwulist" format="string"/>
+  </declare-styleable>
+
 
   //适配tablayout高度问题初步
   <declare-styleable name="AutoTabLayout">

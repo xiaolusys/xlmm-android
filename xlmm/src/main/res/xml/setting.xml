@@ -1,24 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <Preference
-        android:key="@string/clear_cache"
-        android:layout="@layout/preference_setting_item"
-        android:summary="0kb"
-        android:title="清理缓存"></Preference>
-    <Preference
-        android:key="@string/update"
-        android:layout="@layout/preference_setting_item"
-        android:summary=""
-        android:title="@string/update"></Preference>
-    <Preference
-        android:key="关于小鹿美美"
-        android:layout="@layout/preference_setting_item"
-        android:summary=""
-        android:title="关于小鹿美美">
-        <intent
-            android:action="android.intent.action.MAIN"
-            android:targetClass="com.jimei.xiaolumeimei.ui.activity.main.CompanyInfoActivity"
-            android:targetPackage="com.jimei.xiaolumeimei" />
-    </Preference>
+  <Preference
+      android:key="@string/clear_cache"
+      android:layout="@layout/preference_setting_item"
+      android:summary="0kb"
+      android:title="清理缓存"/>
+  <Preference
+      android:key="@string/update"
+      android:layout="@layout/preference_setting_item"
+      android:summary=""
+      android:title="@string/update"/>
+  <com.jimei.xiaolumeimei.widget.SwitchPreferenceCompat
+      android:defaultValue="true"
+      android:key="@string/open_notice"
+      android:summary=""
+      android:title="推送通知"/>
+  <Preference
+      android:key="关于小鹿美美"
+      android:layout="@layout/preference_setting_item"
+      android:summary=""
+      android:title="关于小鹿美美">
+    <intent
+        android:action="android.intent.action.MAIN"
+        android:targetClass="com.jimei.xiaolumeimei.ui.activity.main.CompanyInfoActivity"
+        android:targetPackage="com.jimei.xiaolumeimei"/>
+  </Preference>
 
 </PreferenceScreen>

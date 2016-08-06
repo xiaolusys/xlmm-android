@@ -72,6 +72,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
   private String title;
   private int id;
   private Wechat wechat;
+  private String login;
 
   public static String getRandomString(int length) {
     //length表示生成字符串的长度
@@ -115,6 +116,12 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void getBundleExtras(Bundle extras) {
     this.extras = extras;
+    if (null != getIntent() && getIntent().getExtras() != null) {
+      login = getIntent().getExtras().getString("login");
+      actlink = getIntent().getExtras().getString("actlink");
+      title = getIntent().getExtras().getString("title", "");
+      id = getIntent().getExtras().getInt("id");
+    }
   }
 
   @Override protected int getContentViewLayoutID() {
@@ -234,28 +241,24 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                 if (codeBean != null) {
                   int code = codeBean.getRcode();
                   if (0 == code) {
-                  EventBus.getDefault().post(new UserInfoEmptyEvent());
+                    EventBus.getDefault().post(new UserInfoEmptyEvent());
                     JUtils.Toast("登录成功");
                     Subscription subscribe = UserModel.getInstance()
                         .need_set_info()
                         .subscribeOn(Schedulers.io())
                         .subscribe(new ServiceResponse<NeedSetInfoBean>() {
+                          @Override public void onError(Throwable e) {
+                            super.onError(e);
+                            JUtils.Log(TAG, "e.getMessage()" + e.getMessage());
+                          }
 
                           @Override public void onNext(NeedSetInfoBean needSetInfoBean) {
                             //set xiaomi push useraccount
                             LoginUtils.setPushUserAccount(LoginActivity.this,
-                                      MiPushClient.getRegId(getApplicationContext()));
+                                MiPushClient.getRegId(getApplicationContext()));
                             hideIndeterminateProgressDialog();
                             LoginUtils.saveLoginSuccess(true, getApplicationContext());
-                            if (needSetInfoBean.getCode()==0) {
-                              String login = null;
-                              if (null != getIntent() && getIntent().getExtras() != null) {
-                                login = getIntent().getExtras().getString("login");
-                                actlink = getIntent().getExtras().getString("actlink");
-                                title = getIntent().getExtras().getString("title", "");
-                                id = getIntent().getExtras().getInt("id");
-                              }
-
+                            if (needSetInfoBean.getCode() == 0) {
                               if (null != login) {
                                 if (login.equals("cart")) {
                                   Intent intent = new Intent(mContext, CartActivity.class);
@@ -265,12 +268,13 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                   finish();
                                 } else if (login.equals("main")) {
                                   finish();
-                                } else if (login.equals("collect")){
+                                } else if (login.equals("collect")) {
                                   Intent intent = new Intent(mContext, CollectionActivity.class);
                                   startActivity(intent);
                                   finish();
                                 } else if (login.equals("point")) {
-                                  Intent intent = new Intent(mContext, MembershipPointActivity.class);
+                                  Intent intent =
+                                      new Intent(mContext, MembershipPointActivity.class);
                                   startActivity(intent);
                                   finish();
                                 } else if (login.equals("money")) {
@@ -289,7 +293,8 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                   Intent intent = new Intent(mContext, CommonWebViewActivity.class);
                                   //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                   SharedPreferences sharedPreferences =
-                                          getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+                                      getSharedPreferences("xlmmCookiesAxiba",
+                                          Context.MODE_PRIVATE);
                                   String cookies = sharedPreferences.getString("cookiesString", "");
                                   String domain = sharedPreferences.getString("cookiesDomain", "");
                                   Bundle bundle = new Bundle();
@@ -301,44 +306,44 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                   finish();
                                 } else if (login.equals("prodcutweb")) {
                                   JumpUtils.jumpToWebViewWithCookies(mContext, actlink, -1,
-                                          ProductPopDetailActvityWeb.class);
+                                      ProductPopDetailActvityWeb.class);
                                   finish();
                                 } else if (login.equals("goactivity")) {
                                   JumpUtils.jumpToWebViewWithCookies(mContext, actlink, id,
-                                          ActivityWebViewActivity.class, title);
+                                      ActivityWebViewActivity.class, title);
                                   finish();
                                 } else if (login.equals("getCoupon")) {
                                   Subscription subscription1 = UserModel.getInstance()
-                                          .getCouPon()
-                                          .subscribeOn(Schedulers.io())
-                                          .subscribe(new ServiceResponse<Response<GetCouponbean>>() {
-                                            @Override public void onNext(
-                                                    Response<GetCouponbean> getCouponbeanResponse) {
-                                              JUtils.Log("getCoupon", "onnext");
-                                              if (getCouponbeanResponse != null) {
-                                                if (getCouponbeanResponse.isSuccessful()) {
+                                      .getCouPon()
+                                      .subscribeOn(Schedulers.io())
+                                      .subscribe(new ServiceResponse<Response<GetCouponbean>>() {
+                                        @Override public void onNext(
+                                            Response<GetCouponbean> getCouponbeanResponse) {
+                                          JUtils.Log("getCoupon", "onnext");
+                                          if (getCouponbeanResponse != null) {
+                                            if (getCouponbeanResponse.isSuccessful()) {
 
-                                                  JUtils.Log("getCoupon",
-                                                          "onnext == " + getCouponbeanResponse.body()
-                                                                  .toString());
-                                                  JUtils.Toast(getCouponbeanResponse.body().getInfo());
+                                              JUtils.Log("getCoupon",
+                                                  "onnext == " + getCouponbeanResponse.body()
+                                                      .toString());
+                                              JUtils.Toast(getCouponbeanResponse.body().getInfo());
 
-                                                  finish();
-                                                }
-                                              }
+                                              finish();
                                             }
+                                          }
+                                        }
 
-                                            @Override public void onError(Throwable e) {
-                                              super.onError(e);
-                                              if (e instanceof HttpException) {
-                                                JUtils.Toast("优惠券领取失败");
-                                              }
-                                            }
-                                          });
+                                        @Override public void onError(Throwable e) {
+                                          super.onError(e);
+                                          if (e instanceof HttpException) {
+                                            JUtils.Toast("优惠券领取失败");
+                                          }
+                                        }
+                                      });
                                   addSubscription(subscription1);
                                 }
                               }
-                            }else {
+                            } else {
                               Intent intent = new Intent(mContext, WxLoginBindPhoneActivity.class);
                               JUtils.Toast(needSetInfoBean.getInfo());
                               startActivity(intent);
@@ -420,6 +425,5 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
     MobclickAgent.onPageEnd(this.getClass().getSimpleName());
     MobclickAgent.onPause(this);
   }
-
 }
 

@@ -39,7 +39,6 @@ import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.ui.activity.user.AddNoAddressActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.AddressSelectActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.SelectCouponActivity;
-import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
 import com.jimei.xiaolumeimei.widget.NestedListView;
 import com.jimei.xiaolumeimei.widget.SmoothCheckBox;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -284,14 +283,8 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                                             pay_extras);
                         } else {
                             //emptyContent.setVisibility(View.VISIBLE);
-                            goMain.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    startActivity(
-                                            new Intent(CartsPayInfoActivity.this, MainActivity.class));
-                                    finish();
-                                }
-                            });
+                            JUtils.Toast("商品已过期,请重新选购");
+                            readyGo(CartActivity.class);
                         }
                     }
                 });
@@ -414,14 +407,8 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                                             pay_extras);
                         } else {
                             //emptyContent.setVisibility(View.VISIBLE);
-                            goMain.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    startActivity(
-                                            new Intent(CartsPayInfoActivity.this, MainActivity.class));
-                                    finish();
-                                }
-                            });
+                          JUtils.Toast("商品已过期,请重新选购");
+                          readyGo(CartActivity.class);
                         }
                     }
                 });

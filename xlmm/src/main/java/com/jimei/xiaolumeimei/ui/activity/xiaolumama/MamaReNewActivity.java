@@ -21,10 +21,12 @@ import butterknife.Bind;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.MaMaReNewBean;
+import com.jimei.xiaolumeimei.entities.ResultBean;
 import com.jimei.xiaolumeimei.event.MaMaInfoEmptyEvent;
 import com.jimei.xiaolumeimei.event.UserChangeEvent;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jude.utils.JUtils;
 import com.pingplusplus.android.PaymentActivity;
 import com.umeng.analytics.MobclickAgent;
 import java.io.IOException;
@@ -39,12 +41,17 @@ import rx.schedulers.Schedulers;
 public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener {
 
   private static final int REQUEST_CODE_PAYMENT = 1;
+  private static final String HALF = "half";
+  private static final String FULL = "full";
+  private static final String ALIPAY = "alipay";
+  private static final String WX = "wx";
   @Bind(R.id.image_99) ImageView image99;
   @Bind(R.id.image_991) ImageView image991;
   @Bind(R.id.image_188) ImageView image188;
   @Bind(R.id.image_1881) ImageView image1881;
 
   @Bind(R.id.confirm) RelativeLayout confirm;
+  @Bind(R.id.tv_moren) TextView tvMoren;
   private int productId;
   private int skuId188;
   private int skuId99;
@@ -59,6 +66,7 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
   private double totalfee188;
   private double totalfee99;
   private String uuid;
+  private double mamaCarryValue;
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
     return true;
@@ -125,7 +133,7 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
-
+    mamaCarryValue = extras.getDouble("mamaCarryValue");
   }
 
   @Override protected int getContentViewLayoutID() {
@@ -139,6 +147,7 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
     image99.setVisibility(View.VISIBLE);
     image188.setVisibility(View.GONE);
     image1881.setVisibility(View.VISIBLE);
+    tvMoren.setText("默认使用小鹿妈妈钱包金额抵扣" + mamaCarryValue);
   }
 
   @Override protected boolean toggleOverridePendingTransition() {
@@ -150,11 +159,12 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
   }
 
   public void mamaPay(String product_id, String sku_id, String payment, String channel, String num,
-      String post_fee, String discount_fee, String uuid, String total_fee) {
+      String post_fee, String discount_fee, String uuid, String total_fee,
+      String wallet_renew_deposit) {
     showIndeterminateProgressDialog(false);
     MamaInfoModel.getInstance()
         .mamaRegisterPay(product_id, sku_id, payment, channel, num, post_fee, discount_fee, uuid,
-            total_fee)
+            total_fee, wallet_renew_deposit)
         .subscribeOn(Schedulers.io())
         .subscribe(new ServiceResponse<Response<ResponseBody>>() {
           @Override public void onNext(Response<ResponseBody> responseBodyResponse) {
@@ -184,10 +194,57 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
         });
   }
 
+  public void mamaCarryValuePay(String exchange_type) {
+    showIndeterminateProgressDialog(false);
+    MamaInfoModel.getInstance()
+        .exchangeDeposit(exchange_type)
+        .subscribeOn(Schedulers.io())
+        .subscribe(new ServiceResponse<Response<ResultBean>>() {
+          @Override public void onNext(Response<ResultBean> responseBodyResponse) {
+            if (responseBodyResponse.isSuccessful()) {
+              try {
+                ResultBean body = responseBodyResponse.body();
+                if (body.getCode() == 0) {
+                  JUtils.Toast("支付成功");
+                  EventBus.getDefault().post(new MaMaInfoEmptyEvent());
+                  finish();
+                } else {
+                  JUtils.Toast("支付失败");
+                }
+              } catch (Exception e) {
+                e.printStackTrace();
+              }
+            }
+          }
+
+          @Override public void onError(Throwable e) {
+            super.onError(e);
+          }
+
+          @Override public void onCompleted() {
+            super.onCompleted();
+            hideIndeterminateProgressDialog();
+          }
+        });
+  }
+
   @Override public void onClick(View v) {
     switch (v.getId()) {
       case R.id.confirm:
-        new MyDialog(this).show();
+        //new MyDialog(this).show();
+        if (radio_99Choose) {
+          if (mamaCarryValue >= 99.00) {
+            mamaCarryValuePay(HALF);
+          } else {
+            new MyDialog(this).show();
+          }
+        } else if (radio_188Choose) {
+          if (mamaCarryValue >= 188.00) {
+            mamaCarryValuePay(FULL);
+          } else {
+            new MyDialog(this).show();
+          }
+        }
         break;
 
       case R.id.image_991:
@@ -232,11 +289,11 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
       alipay_layout.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View v) {
           if (radio_188Choose) {
-            mamaPay(productId + "", skuId188 + "", payment188 + "", "alipay", "1", postfee188 + "",
-                discountfee188 + "", uuid, totalfee188 + "");
+            mamaPay(productId + "", skuId188 + "", (payment188 - mamaCarryValue) + "", ALIPAY, "1",
+                postfee188 + "", discountfee188 + "", uuid, totalfee188 + "", mamaCarryValue + "");
           } else if (radio_99Choose) {
-            mamaPay(productId + "", skuId99 + "", payment99 + "", "alipay", "1", postfee99 + "",
-                discountfee99 + "", uuid, totalfee99 + "");
+            mamaPay(productId + "", skuId99 + "", (payment99 - mamaCarryValue) + "", ALIPAY, "1",
+                postfee99 + "", discountfee99 + "", uuid, totalfee99 + "", mamaCarryValue + "");
           }
           dismiss();
         }
@@ -245,11 +302,11 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
       wx_layout.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View v) {
           if (radio_188Choose) {
-            mamaPay(productId + "", skuId188 + "", payment188 + "", "wx", "1", postfee188 + "",
-                discountfee188 + "", uuid, totalfee188 + "");
+            mamaPay(productId + "", skuId188 + "", (payment188 - mamaCarryValue) + "", WX, "1",
+                postfee188 + "", discountfee188 + "", uuid, totalfee188 + "", mamaCarryValue + "");
           } else if (radio_99Choose) {
-            mamaPay(productId + "", skuId99 + "", payment99 + "", "wx", "1", postfee99 + "",
-                discountfee99 + "", uuid, totalfee99 + "");
+            mamaPay(productId + "", skuId99 + "", (payment99 - mamaCarryValue) + "", WX, "1",
+                postfee99 + "", discountfee99 + "", uuid, totalfee99 + "", mamaCarryValue + "");
           }
           dismiss();
         }
