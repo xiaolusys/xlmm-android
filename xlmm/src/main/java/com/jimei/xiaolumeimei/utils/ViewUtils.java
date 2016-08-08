@@ -239,7 +239,7 @@ public final class ViewUtils {
 
   public static void loadImgToImgView(Context context, ImageView img, String picPath) {
     if (null == picPath) return;
-    if ( picPath.contains("wx.qlogo.cn")||picPath.contains("http://7xogkj.com1.z0.glb.clouddn.com/")
+    if ( picPath.contains("wx.qlogo.cn")||picPath.contains("7xogkj.com1.z0.glb.clouddn.com")
             ||picPath.contains("mmbiz.qlogo.cn")) {
       Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
               .centerCrop().into(img);
@@ -270,7 +270,7 @@ public final class ViewUtils {
 
   public static void loadImgToImgViewWithWaterMark(Context context, ImageView img, String picPath) {
     if (null == picPath) return;
-    if ( picPath.contains("wx.qlogo.cn")||picPath.contains("http://7xogkj.com1.z0.glb.clouddn.com/")
+    if ( picPath.contains("wx.qlogo.cn")||picPath.contains("7xogkj.com1.z0.glb.clouddn.com")
             ||picPath.contains("mmbiz.qlogo.cn") ) {
       Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
               .centerCrop().into(img);
@@ -302,10 +302,8 @@ public final class ViewUtils {
   public static void loadImgToImgView(Context context, ImageView img, String picPath,
       int radius) {
     if (null == picPath) return;
-      if (picPath.contains("mmbiz.qlogo.cn")) {
-          Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
-                  .centerCrop().transform(new GlideRoundTransform(context, radius)).into(img);
-      } else if (picPath.contains("wx.qlogo.cn")){
+      if (picPath.contains("mmbiz.qlogo.cn")||picPath.contains("wx.qlogo.cn")
+              ||picPath.contains("7xogkj.com1.z0.glb.clouddn.com")){
         Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
                 .centerCrop().transform(new GlideRoundTransform(context, radius)).into(img);
       } else {
@@ -337,7 +335,7 @@ public final class ViewUtils {
       String picPath) {
     if (null == picPath) return;
 
-    if (picPath.contains("wx.qlogo.cn")||picPath.contains("http://7xogkj.com1.z0.glb.clouddn.com/")
+    if (picPath.contains("wx.qlogo.cn")||picPath.contains("7xogkj.com1.z0.glb.clouddn.com")
             ||picPath.contains("mmbiz.qlogo.cn")) {
       Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
               .bitmapTransform(new CropCircleTransformation(context)).into(img);
@@ -369,7 +367,7 @@ public final class ViewUtils {
   public static void loadImgToImgViewWithPlaceholder(Context context, ImageView img,
       String picPath) {
     if (null == picPath) return;
-    if (picPath.contains("wx.qlogo.cn")||picPath.contains("http://7xogkj.com1.z0.glb.clouddn.com/")
+    if (picPath.contains("wx.qlogo.cn")||picPath.contains("7xogkj.com1.z0.glb.clouddn.com")
             ||picPath.contains("mmbiz.qlogo.cn")) {
       Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
               .centerCrop().into(img);
@@ -401,7 +399,7 @@ public final class ViewUtils {
   public static void loadImgToImgViewWithPlaceholderFragment(Fragment context,
       ImageView img, String picPath) {
     if (null == picPath) return;
-    if (picPath.contains("wx.qlogo.cn")||picPath.contains("http://7xogkj.com1.z0.glb.clouddn.com/")
+    if (picPath.contains("wx.qlogo.cn")||picPath.contains("7xogkj.com1.z0.glb.clouddn.com")
             ||picPath.contains("mmbiz.qlogo.cn")) {
       Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
               .centerCrop().into(img);
