@@ -21,6 +21,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.GetCouponbean;
+import com.jimei.xiaolumeimei.event.SetMiPushEvent;
 import com.jimei.xiaolumeimei.event.UserInfoEmptyEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
@@ -34,7 +35,6 @@ import com.jimei.xiaolumeimei.widget.PasswordEditText;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
-import com.xiaomi.mipush.sdk.MiPushClient;
 import org.greenrobot.eventbus.EventBus;
 import retrofit2.Response;
 import retrofit2.adapter.rxjava.HttpException;
@@ -127,10 +127,10 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                       + ", user.getResult() "
                       + codeBean.getMsg());
                   if (codeBean.getRcode() == 0) {
-                    LoginUtils.setPushUserAccount(PhoneLoginActivity.this,
-                        MiPushClient.getRegId(getApplicationContext()));
+
                     hideIndeterminateProgressDialog();
                     EventBus.getDefault().post(new UserInfoEmptyEvent());
+                    EventBus.getDefault().post(new SetMiPushEvent());
                     LoginUtils.saveLoginInfo(true, getApplicationContext(),
                         login_name_value, login_pass_value);
                     JUtils.Toast("登录成功!");

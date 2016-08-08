@@ -22,6 +22,7 @@ import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.GetCouponbean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
+import com.jimei.xiaolumeimei.event.SetMiPushEvent;
 import com.jimei.xiaolumeimei.event.UserInfoEmptyEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
@@ -35,7 +36,6 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.mob.tools.utils.UIHandler;
 import com.umeng.analytics.MobclickAgent;
-import com.xiaomi.mipush.sdk.MiPushClient;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -242,6 +242,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                   int code = codeBean.getRcode();
                   if (0 == code) {
                     EventBus.getDefault().post(new UserInfoEmptyEvent());
+                    EventBus.getDefault().post(new SetMiPushEvent());
                     JUtils.Toast("登录成功");
                     Subscription subscribe = UserModel.getInstance()
                         .need_set_info()
@@ -254,8 +255,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
 
                           @Override public void onNext(NeedSetInfoBean needSetInfoBean) {
                             //set xiaomi push useraccount
-                            LoginUtils.setPushUserAccount(LoginActivity.this,
-                                MiPushClient.getRegId(getApplicationContext()));
+
                             hideIndeterminateProgressDialog();
                             LoginUtils.saveLoginSuccess(true, getApplicationContext());
                             if (needSetInfoBean.getCode() == 0) {

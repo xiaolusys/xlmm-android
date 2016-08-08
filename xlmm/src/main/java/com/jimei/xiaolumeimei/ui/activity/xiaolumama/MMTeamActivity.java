@@ -17,6 +17,7 @@ import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.widget.DividerItemDecorationForFooter;
 import com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableHelper;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.umeng.analytics.MobclickAgent;
 import java.util.List;
 import retrofit2.Response;
 import rx.schedulers.Schedulers;
@@ -117,6 +118,7 @@ public class MMTeamActivity extends BaseMVVMActivity<ActivityMmteamBinding>
   @Override public void onClick(View v) {
     switch (v.getId()) {
       case R.id.btn_team:
+        MobclickAgent.onEvent(this, "TeamRankID");
         readyGo(MMTeamCarryRankActivity.class);
         break;
     }
@@ -124,5 +126,16 @@ public class MMTeamActivity extends BaseMVVMActivity<ActivityMmteamBinding>
 
   @Override public View getScrollableView() {
     return b.recyclerview;
+  }
+  @Override protected void onResume() {
+    super.onResume();
+    MobclickAgent.onPageStart(this.getClass().getSimpleName());
+    MobclickAgent.onResume(this);
+  }
+
+  @Override protected void onPause() {
+    super.onPause();
+    MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+    MobclickAgent.onPause(this);
   }
 }

@@ -3,7 +3,6 @@ package com.jimei.xiaolumeimei.ui.fragment.v2;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -15,6 +14,7 @@ import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.MaMaRenwuListBean;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.BoutiqueWebviewActivity;
+import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.widget.MaMaRenwuListView;
 import com.umeng.analytics.MobclickAgent;
 import java.util.ArrayList;
@@ -29,11 +29,13 @@ public class NewMMFragment extends DialogFragment {
 
   private Activity mActivity;
   private MaMaRenwuListBean maMaRenwuListBean;
+  private String actlink;
 
-  public static NewMMFragment newInstance(MaMaRenwuListBean title) {
+  public static NewMMFragment newInstance(MaMaRenwuListBean title, String actlink) {
     NewMMFragment todayFragment = new NewMMFragment();
     Bundle bundle = new Bundle();
     bundle.putParcelable("keyword", title);
+    bundle.putString("keyword1", actlink);
     todayFragment.setArguments(bundle);
     return todayFragment;
   }
@@ -46,6 +48,7 @@ public class NewMMFragment extends DialogFragment {
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     maMaRenwuListBean = getArguments().getParcelable("keyword");
+    actlink = getArguments().getString("keyword1");
     int style = DialogFragment.STYLE_NO_TITLE;
     setStyle(style, 0);
   }
@@ -78,8 +81,9 @@ public class NewMMFragment extends DialogFragment {
 
     confirm.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
-        Intent intent = new Intent(mActivity, BoutiqueWebviewActivity.class);
-        startActivity(intent);
+        MobclickAgent.onEvent(mActivity, "XLMMUniID");
+        JumpUtils.jumpToWebViewWithCookies(mActivity, actlink, -1, BoutiqueWebviewActivity.class,
+            "妈妈活动");
         dismiss();
       }
     });

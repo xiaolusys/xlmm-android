@@ -146,6 +146,7 @@ public class MMcarryLogActivity extends BaseSwipeBackCompatActivity
   @Override public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
       case R.id.action_personal:
+        MobclickAgent.onEvent(this, "PersonalRankID");
         readyGo(PersonalCarryRankActivity.class);
         break;
       default:

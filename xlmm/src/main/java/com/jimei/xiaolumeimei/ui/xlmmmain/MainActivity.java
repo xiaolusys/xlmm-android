@@ -40,13 +40,13 @@ import com.jimei.xiaolumeimei.entities.IsGetcoupon;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.event.LogOutEmptyEvent;
+import com.jimei.xiaolumeimei.event.SetMiPushEvent;
 import com.jimei.xiaolumeimei.event.UserChangeEvent;
 import com.jimei.xiaolumeimei.event.UserInfoEmptyEvent;
 import com.jimei.xiaolumeimei.receiver.UpdateBroadReceiver;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.main.ComplainActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ChildListActivity;
-import com.jimei.xiaolumeimei.ui.activity.product.CollectionActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.LadyListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.LadyZoneActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllOrdersActivity;
@@ -83,6 +83,7 @@ import com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableLayout;
 import com.jimei.xiaolumeimei.xlmmService.UpdateService;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
+import com.xiaomi.mipush.sdk.MiPushClient;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
 import com.zhy.http.okhttp.callback.FileCallBack;
@@ -244,10 +245,10 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         readyGo(LadyZoneActivity.class, ladyBundle);
 
         //intent = new Intent(MainActivity.this, CollectionActivity.class);
-//                Bundle ladyBundle1 = new Bundle();
-//        ladyBundle1.putInt("type",XlmmConst.TYPE_HEALTH);
-//        ladyBundle1.putString("title","健康专区");
-//        readyGo(LadyZoneActivity.class,ladyBundle1);
+        //                Bundle ladyBundle1 = new Bundle();
+        //        ladyBundle1.putInt("type",XlmmConst.TYPE_HEALTH);
+        //        ladyBundle1.putString("title","健康专区");
+        //        readyGo(LadyZoneActivity.class,ladyBundle1);
         flag = "collect";
         break;
       case R.id.rl_mmentry:
@@ -288,10 +289,10 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         //        ladyBundle.putString("title","女装专区");
         //        readyGo(LadyZoneActivity.class,ladyBundle);
 
-//        Bundle ladyBundle = new Bundle();
-//        ladyBundle.putInt("type",XlmmConst.TYPE_LADY);
-//        ladyBundle.putString("title","女装专区");
-//        readyGo(LadyZoneActivity.class,ladyBundle);
+        //        Bundle ladyBundle = new Bundle();
+        //        ladyBundle.putInt("type",XlmmConst.TYPE_LADY);
+        //        ladyBundle.putString("title","女装专区");
+        //        readyGo(LadyZoneActivity.class,ladyBundle);
 
         readyGo(LadyListActivity.class);
         break;
@@ -1028,6 +1029,12 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   public void initUserinfoInfoChange(UserChangeEvent event) {
     JUtils.Log(TAG, "initUserinfoInfoChange()");
     mPresenter.getUserInfoBeanChange();
+  }
+
+  @Subscribe(threadMode = ThreadMode.BACKGROUND)
+  public void setMipush(SetMiPushEvent event) {
+    JUtils.Log("regid", MiPushClient.getRegId(getApplicationContext()));
+    LoginUtils.setPushUserAccount(this, MiPushClient.getRegId(getApplicationContext()));
   }
 
   @Override protected void onPause() {

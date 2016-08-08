@@ -19,7 +19,6 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BasePresenterMVVMActivity;
-import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.databinding.ActivityMamainfoBinding;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
@@ -32,6 +31,7 @@ import com.jimei.xiaolumeimei.event.MaMaInfoEmptyEvent;
 import com.jimei.xiaolumeimei.event.MaMaInfoEvent;
 import com.jimei.xiaolumeimei.event.WebViewEvent;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
+import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.BoutiqueWebviewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMChooseListActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMFans1Activity;
@@ -61,8 +61,6 @@ import java.util.List;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import retrofit2.Response;
-import rx.Observer;
 import rx.schedulers.Schedulers;
 
 /**
@@ -89,14 +87,15 @@ public class MMInfoActivity
   private String hisConfirmedCashOut;
   private double mamaCarryValue;
   private String mamaid;
+  private String act_info;
 
   @Override protected void initData() {
-    mPresenter.getMaMaRenwuListBean(mamaid);
+    mPresenter.getMamaUrl();
     mPresenter.getShareShopping();
     mPresenter.getMamaFortune();
     mPresenter.getRefund();
-    mPresenter.getMamaUrl();
     mPresenter.getMaMaselfList();
+    mPresenter.getMaMaRenwuListBean(mamaid);
   }
 
   @Override protected void setListener() {
@@ -174,6 +173,7 @@ public class MMInfoActivity
 
   @Override public void initMamaUrl(MamaUrl mamaUrl) {
     mamaResult = mamaUrl.getResults().get(0).getExtra();
+    act_info = mamaUrl.getResults().get(0).getExtra().getAct_info();
     Glide.with(MMInfoActivity.this)
         .load(mamaResult.getPicturesBean().getExam_pic())
         .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -314,7 +314,8 @@ public class MMInfoActivity
 
   @Override public void getMaMaRenwuListBean(MaMaRenwuListBean maMaRenwuListBean) {
     if (maMaRenwuListBean.getConfig().isPage_pop()) {
-      NewMMFragment newMMFragment = NewMMFragment.newInstance(maMaRenwuListBean);
+      NewMMFragment newMMFragment =
+          NewMMFragment.newInstance(maMaRenwuListBean, mamaResult.getAct_info());
       newMMFragment.show(getFragmentManager(), "mamalist");
     }
   }
@@ -380,6 +381,7 @@ public class MMInfoActivity
         startActivity(new Intent(this, MMChooseListActivity.class));
         break;
       case R.id.rl_party:
+        MobclickAgent.onEvent(this, "XLMMUniID");
         intent = new Intent(this, BoutiqueWebviewActivity.class);
         sharedPreferences = getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
         cookies = sharedPreferences.getString("cookiesString", "");
@@ -496,6 +498,7 @@ public class MMInfoActivity
         }
         break;
       case R.id.rl_team:
+        MobclickAgent.onEvent(this, "TeamRankID");
         Bundle bundleAAA = new Bundle();
         bundleAAA.putString("id", mmId + "");
         readyGo(MMTeamActivity.class, bundleAAA);
@@ -506,8 +509,9 @@ public class MMInfoActivity
         break;
 
       case R.id.tv_noticesee:
+        MobclickAgent.onEvent(this, "XLMMNoticeID");
         JumpUtils.jumpToWebViewWithCookies(this, mamaResult.getNotice(), -1,
-            CommonWebViewActivity.class, "信息通知");
+            ActivityWebViewActivity.class, "信息通知");
         break;
     }
   }
