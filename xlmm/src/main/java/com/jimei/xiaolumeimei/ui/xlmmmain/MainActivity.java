@@ -28,7 +28,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import butterknife.Bind;
+
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.base.BasePresenterActivity;
@@ -47,6 +47,7 @@ import com.jimei.xiaolumeimei.receiver.UpdateBroadReceiver;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.main.ComplainActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ChildListActivity;
+import com.jimei.xiaolumeimei.ui.activity.product.CollectionActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.LadyListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.LadyZoneActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllOrdersActivity;
@@ -87,17 +88,21 @@ import com.xiaomi.mipush.sdk.MiPushClient;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
 import com.zhy.http.okhttp.callback.FileCallBack;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import butterknife.Bind;
 import okhttp3.Call;
 import okhttp3.ResponseBody;
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 import retrofit2.Response;
 
 /**
@@ -237,18 +242,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         flag = "cart";
         break;
       case R.id.collect:
-
-        //        intent = new Intent(MainActivity.this, CollectionActivity.class);
-        Bundle ladyBundle = new Bundle();
-        ladyBundle.putInt("type", XlmmConst.TYPE_CHILD);
-        ladyBundle.putString("title", "女装专区");
-        readyGo(LadyZoneActivity.class, ladyBundle);
-
-        //intent = new Intent(MainActivity.this, CollectionActivity.class);
-        //                Bundle ladyBundle1 = new Bundle();
-        //        ladyBundle1.putInt("type",XlmmConst.TYPE_HEALTH);
-        //        ladyBundle1.putString("title","健康专区");
-        //        readyGo(LadyZoneActivity.class,ladyBundle1);
+        intent = new Intent(MainActivity.this, CollectionActivity.class);
         flag = "collect";
         break;
       case R.id.rl_mmentry:
@@ -275,28 +269,20 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         break;
       case R.id.child_img:
         MobclickAgent.onEvent(MainActivity.this, "ChildID");
-        //        Bundle childBundle = new Bundle();
-        //        childBundle.putInt("type",XlmmConst.TYPE_CHILD);
-        //        childBundle.putString("title","童装专区");
-        //        readyGo(LadyZoneActivity.class,childBundle);
-        readyGo(ChildListActivity.class);
+        Bundle childBundle = new Bundle();
+        childBundle.putInt("type",XlmmConst.TYPE_CHILD);
+        childBundle.putString("title","童装专区");
+        readyGo(LadyZoneActivity.class,childBundle);
+//        readyGo(ChildListActivity.class);
         break;
       case R.id.lady_img:
         MobclickAgent.onEvent(MainActivity.this, "LadyID");
-
-        //        Bundle ladyBundle = new Bundle();
-        //        ladyBundle.putInt("type",XlmmConst.TYPE_CHILD);
-        //        ladyBundle.putString("title","女装专区");
-        //        readyGo(LadyZoneActivity.class,ladyBundle);
-
-        //        Bundle ladyBundle = new Bundle();
-        //        ladyBundle.putInt("type",XlmmConst.TYPE_LADY);
-        //        ladyBundle.putString("title","女装专区");
-        //        readyGo(LadyZoneActivity.class,ladyBundle);
-
-        readyGo(LadyListActivity.class);
+        Bundle ladyBundle = new Bundle();
+        ladyBundle.putInt("type",XlmmConst.TYPE_LADY);
+        ladyBundle.putString("title","女装专区");
+        readyGo(LadyZoneActivity.class,ladyBundle);
+//        readyGo(LadyListActivity.class);
         break;
-
       case R.id.text_yesterday:
         MobclickAgent.onEvent(this, "YesterdayID");
         currentNum = 0;
@@ -319,8 +305,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         && v.getId() != R.id.text_tomorror
         && v.getId() != R.id.text_yesterday
         && v.getId() != R.id.lady_img
-        && v.getId() != R.id.collect
-
         && v.getId() != R.id.child_img) {
       if (!(LoginUtils.checkLoginState(getApplicationContext()))) {
         login(flag);

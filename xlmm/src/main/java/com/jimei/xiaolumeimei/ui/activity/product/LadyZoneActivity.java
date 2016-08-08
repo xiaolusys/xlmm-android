@@ -9,11 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -23,14 +19,14 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.CategoryAdapter;
 import com.jimei.xiaolumeimei.adapter.CategoryProductAdapter;
 import com.jimei.xiaolumeimei.adapter.ColorTagAdapter;
-import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
+import com.jimei.xiaolumeimei.databinding.ActivityLadyZoneBinding;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
 import com.jimei.xiaolumeimei.entities.CategoryProductListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.utils.FileUtils;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
-import com.jimei.xiaolumeimei.widget.XlmmTitleView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 
@@ -43,33 +39,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
-public class LadyZoneActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
-    @Bind(R.id.layout_price)
-    LinearLayout priceLayout;
-    @Bind(R.id.layout_color)
-    LinearLayout colorLayout;
-    @Bind(R.id.xrv)
-    XRecyclerView recyclerView;
-    @Bind(R.id.gv_price)
-    GridView priceGridView;
-    @Bind(R.id.gv_color)
-    GridView colorGridView;
-    @Bind(R.id.tv_price)
-    TextView tvPrice;
-    @Bind(R.id.iv_price)
-    ImageView ivPrice;
-    @Bind(R.id.tv_color)
-    TextView tvColor;
-    @Bind(R.id.iv_color)
-    ImageView ivColor;
-    @Bind(R.id.xrv_category)
-    XRecyclerView xRecyclerView;
-    @Bind(R.id.title)
-    XlmmTitleView titleView;
+public class LadyZoneActivity extends BaseMVVMActivity<ActivityLadyZoneBinding> implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     public int flag;
 
@@ -100,11 +73,11 @@ public class LadyZoneActivity extends BaseSwipeBackCompatActivity implements Vie
     private String next;
 
     @Override
-    protected void setListener() {
-        priceLayout.setOnClickListener(this);
-        colorLayout.setOnClickListener(this);
-        priceGridView.setOnItemClickListener(this);
-        colorGridView.setOnItemClickListener(this);
+    protected void initListener() {
+        b.layoutPrice.setOnClickListener(this);
+        b.layoutColor.setOnClickListener(this);
+        b.gvColor.setOnItemClickListener(this);
+        b.gvPrice.setOnItemClickListener(this);
     }
 
     @Override
@@ -113,6 +86,7 @@ public class LadyZoneActivity extends BaseSwipeBackCompatActivity implements Vie
         page = 1;
         initPriceData();
         initColorData();
+        refreshData(type, true);
     }
 
     private void initCategory() {
@@ -123,7 +97,7 @@ public class LadyZoneActivity extends BaseSwipeBackCompatActivity implements Vie
         colorData = new ArrayList<>();
         setColorData();
         colorAdapter = new ColorTagAdapter(this, colorData, R.layout.item_color_tag, colorFrom, colorTo);
-        colorGridView.setAdapter(colorAdapter);
+        b.gvColor.setAdapter(colorAdapter);
     }
 
     private void setColorData() {
@@ -145,7 +119,7 @@ public class LadyZoneActivity extends BaseSwipeBackCompatActivity implements Vie
         priceData = new ArrayList<>();
         setPriceData();
         priceAdapter = new SimpleAdapter(this, priceData, R.layout.item_price_tag, priceFrom, priceTo);
-        priceGridView.setAdapter(priceAdapter);
+        b.gvPrice.setAdapter(priceAdapter);
     }
 
     private void setPriceData() {
@@ -176,19 +150,19 @@ public class LadyZoneActivity extends BaseSwipeBackCompatActivity implements Vie
     }
 
     @Override
-    protected void initViews() {
-        titleView.setName(title);
+    protected void initView() {
+        b.title.setName(title);
         GridLayoutManager manager = new GridLayoutManager(this, 2);
-        recyclerView.setLayoutManager(manager);
-        recyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
-        recyclerView.addItemDecoration(new SpaceItemDecoration(10));
-        recyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-        recyclerView.setLoadingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
-        recyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
-        recyclerView.setPullRefreshEnabled(false);
+        b.xrv.setLayoutManager(manager);
+        b.xrv.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        b.xrv.addItemDecoration(new SpaceItemDecoration(10));
+        b.xrv.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
+        b.xrv.setLoadingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
+        b.xrv.setArrowImageView(R.drawable.iconfont_downgrey);
+        b.xrv.setPullRefreshEnabled(false);
         categoryProductAdapter = new CategoryProductAdapter(new ArrayList<>(), this);
-        recyclerView.setAdapter(categoryProductAdapter);
-        recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+        b.xrv.setAdapter(categoryProductAdapter);
+        b.xrv.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
             }
@@ -196,23 +170,23 @@ public class LadyZoneActivity extends BaseSwipeBackCompatActivity implements Vie
             @Override
             public void onLoadMore() {
                 if (next != null && !"".equals(next)) {
-                    refreshData(cid,false);
+                    refreshData(cid, false);
                 } else {
                     JUtils.Toast("已经到底啦!");
-                    recyclerView.post(recyclerView::loadMoreComplete);
+                    b.xrv.post(b.xrv::loadMoreComplete);
                 }
             }
         });
 
 
         GridLayoutManager manager2 = new GridLayoutManager(this, 3);
-        xRecyclerView.setLayoutManager(manager2);
-        xRecyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
-        xRecyclerView.addItemDecoration(new SpaceItemDecoration(10));
-        xRecyclerView.setPullRefreshEnabled(false);
-        xRecyclerView.setLoadingMoreEnabled(false);
+        b.xrvCategory.setLayoutManager(manager2);
+        b.xrvCategory.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        b.xrvCategory.addItemDecoration(new SpaceItemDecoration(10));
+        b.xrvCategory.setPullRefreshEnabled(false);
+        b.xrvCategory.setLoadingMoreEnabled(false);
         adapter = new CategoryAdapter(this, new ArrayList<>());
-        xRecyclerView.setAdapter(adapter);
+        b.xrvCategory.setAdapter(adapter);
     }
 
     @Override
@@ -229,32 +203,32 @@ public class LadyZoneActivity extends BaseSwipeBackCompatActivity implements Vie
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.layout_price:
-                colorGridView.setVisibility(View.GONE);
-                tvColor.setTextColor(getResources().getColor(R.color.text_color_A0));
-                ivColor.setImageDrawable(getResources().getDrawable(R.drawable.icon_down_category));
-                if (priceGridView.getVisibility() == View.VISIBLE) {
-                    priceGridView.setVisibility(View.GONE);
-                    tvPrice.setTextColor(getResources().getColor(R.color.text_color_A0));
-                    ivPrice.setImageDrawable(getResources().getDrawable(R.drawable.icon_down_category));
+                b.gvColor.setVisibility(View.GONE);
+                b.tvColor.setTextColor(getResources().getColor(R.color.text_color_A0));
+                b.ivColor.setImageDrawable(getResources().getDrawable(R.drawable.icon_down_category));
+                if (b.gvPrice.getVisibility() == View.VISIBLE) {
+                    b.gvPrice.setVisibility(View.GONE);
+                    b.tvPrice.setTextColor(getResources().getColor(R.color.text_color_A0));
+                    b.ivPrice.setImageDrawable(getResources().getDrawable(R.drawable.icon_down_category));
                 } else {
-                    priceGridView.setVisibility(View.VISIBLE);
-                    tvPrice.setTextColor(getResources().getColor(R.color.text_color_32));
-                    ivPrice.setImageDrawable(getResources().getDrawable(R.drawable.icon_up_category));
+                    b.gvPrice.setVisibility(View.VISIBLE);
+                    b.tvPrice.setTextColor(getResources().getColor(R.color.text_color_32));
+                    b.ivPrice.setImageDrawable(getResources().getDrawable(R.drawable.icon_up_category));
                     flag = XlmmConst.FLAG_PRICE;
                 }
                 break;
             case R.id.layout_color:
-                priceGridView.setVisibility(View.GONE);
-                tvPrice.setTextColor(getResources().getColor(R.color.text_color_A0));
-                ivPrice.setImageDrawable(getResources().getDrawable(R.drawable.icon_down_category));
-                if (colorGridView.getVisibility() == View.VISIBLE) {
-                    colorGridView.setVisibility(View.GONE);
-                    tvColor.setTextColor(getResources().getColor(R.color.text_color_A0));
-                    ivColor.setImageDrawable(getResources().getDrawable(R.drawable.icon_down_category));
+                b.gvPrice.setVisibility(View.GONE);
+                b.tvPrice.setTextColor(getResources().getColor(R.color.text_color_A0));
+                b.ivPrice.setImageDrawable(getResources().getDrawable(R.drawable.icon_down_category));
+                if (b.gvColor.getVisibility() == View.VISIBLE) {
+                    b.gvColor.setVisibility(View.GONE);
+                    b.tvColor.setTextColor(getResources().getColor(R.color.text_color_A0));
+                    b.ivColor.setImageDrawable(getResources().getDrawable(R.drawable.icon_down_category));
                 } else {
-                    colorGridView.setVisibility(View.VISIBLE);
-                    tvColor.setTextColor(getResources().getColor(R.color.text_color_32));
-                    ivColor.setImageDrawable(getResources().getDrawable(R.drawable.icon_up_category));
+                    b.gvColor.setVisibility(View.VISIBLE);
+                    b.tvColor.setTextColor(getResources().getColor(R.color.text_color_32));
+                    b.ivColor.setImageDrawable(getResources().getDrawable(R.drawable.icon_up_category));
                     flag = XlmmConst.FLAG_COLOR;
                 }
                 break;
@@ -276,9 +250,9 @@ public class LadyZoneActivity extends BaseSwipeBackCompatActivity implements Vie
                 new Thread(() -> {
                     SystemClock.sleep(200);
                     runOnUiThread(() -> {
-                        priceGridView.setVisibility(View.GONE);
-                        tvPrice.setTextColor(getResources().getColor(R.color.text_color_A0));
-                        ivPrice.setImageDrawable(getResources().getDrawable(R.drawable.icon_down_category));
+                        b.gvPrice.setVisibility(View.GONE);
+                        b.tvPrice.setTextColor(getResources().getColor(R.color.text_color_A0));
+                        b.ivPrice.setImageDrawable(getResources().getDrawable(R.drawable.icon_down_category));
                     });
                 }).start();
                 break;
@@ -291,9 +265,9 @@ public class LadyZoneActivity extends BaseSwipeBackCompatActivity implements Vie
                 new Thread(() -> {
                     SystemClock.sleep(200);
                     runOnUiThread(() -> {
-                        colorGridView.setVisibility(View.GONE);
-                        tvColor.setTextColor(getResources().getColor(R.color.text_color_A0));
-                        ivColor.setImageDrawable(getResources().getDrawable(R.drawable.icon_down_category));
+                        b.gvColor.setVisibility(View.GONE);
+                        b.tvColor.setTextColor(getResources().getColor(R.color.text_color_A0));
+                        b.ivColor.setImageDrawable(getResources().getDrawable(R.drawable.icon_down_category));
                     });
                 }).start();
                 break;
@@ -314,51 +288,60 @@ public class LadyZoneActivity extends BaseSwipeBackCompatActivity implements Vie
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.category:
-                colorGridView.setVisibility(View.GONE);
-                priceGridView.setVisibility(View.GONE);
-                tvPrice.setTextColor(getResources().getColor(R.color.text_color_A0));
-                ivPrice.setImageDrawable(getResources().getDrawable(R.drawable.icon_down_category));
-                tvColor.setTextColor(getResources().getColor(R.color.text_color_A0));
-                ivColor.setImageDrawable(getResources().getDrawable(R.drawable.icon_down_category));
-                if (xRecyclerView.getVisibility() == View.VISIBLE) {
-                    xRecyclerView.setVisibility(View.GONE);
+                b.gvColor.setVisibility(View.GONE);
+                b.gvPrice.setVisibility(View.GONE);
+                b.tvPrice.setTextColor(getResources().getColor(R.color.text_color_A0));
+                b.ivPrice.setImageDrawable(getResources().getDrawable(R.drawable.icon_down_category));
+                b.tvColor.setTextColor(getResources().getColor(R.color.text_color_A0));
+                b.ivColor.setImageDrawable(getResources().getDrawable(R.drawable.icon_down_category));
+                if (b.xrvCategory.getVisibility() == View.VISIBLE) {
+                    b.xrvCategory.setVisibility(View.GONE);
                 } else {
-                    xRecyclerView.setVisibility(View.VISIBLE);
+                    b.xrvCategory.setVisibility(View.VISIBLE);
                 }
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void refreshData(int cid,boolean clear) {
+    public void refreshData(int cid, boolean clear) {
         this.cid = cid;
-        xRecyclerView.setVisibility(View.GONE);
-        showIndeterminateProgressDialog(false);
+        if (clear) {
+            showIndeterminateProgressDialog(false);
+            page = 1;
+        }
+        b.xrvCategory.setVisibility(View.GONE);
         Subscription subscribe = ProductModel.getInstance()
                 .getCategoryProductList(cid, page)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<CategoryProductListBean>() {
-
-
                     @Override
                     public void onNext(CategoryProductListBean categoryProductListBean) {
                         List<CategoryProductListBean.ResultsBean> results = categoryProductListBean.getResults();
                         if (results != null && results.size() > 0) {
-                            categoryProductAdapter.update(results);
+                            if (clear) {
+                                categoryProductAdapter.updateWithClear(results);
+                            } else {
+                                categoryProductAdapter.update(results);
+                            }
+                        } else {
+                            if (clear) {
+                                categoryProductAdapter.clear();
+                            }
                         }
                         next = categoryProductListBean.getNext();
                         if (next != null && !"".equals(next)) {
                             page++;
                         }
                         hideIndeterminateProgressDialog();
-                        recyclerView.post(recyclerView::loadMoreComplete);
+                        b.xrv.post(b.xrv::loadMoreComplete);
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         super.onError(e);
                         hideIndeterminateProgressDialog();
-                        recyclerView.post(recyclerView::loadMoreComplete);
+                        b.xrv.post(b.xrv::loadMoreComplete);
                         JUtils.Toast("数据加载有误!");
                     }
                 });

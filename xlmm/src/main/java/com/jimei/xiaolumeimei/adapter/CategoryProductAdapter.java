@@ -45,6 +45,11 @@ public class CategoryProductAdapter extends XRecyclerView.Adapter<CategoryProduc
         notifyDataSetChanged();
     }
 
+    public void clear(){
+        data.clear();
+        notifyDataSetChanged();
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_todaylist, parent, false);

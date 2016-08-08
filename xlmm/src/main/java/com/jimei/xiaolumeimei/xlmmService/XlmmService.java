@@ -894,7 +894,7 @@ public interface XlmmService {
 
     @GET("/rest/v2/modelproducts")
     Observable<CategoryProductListBean> getCategoryProductList(
-            @Query("category_id") int category_id,
+            @Query("cid") int cid,
             @Query("page") int page
     );
 }
