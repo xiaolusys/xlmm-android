@@ -23,8 +23,8 @@
         />
     <ImageView
         android:id="@+id/quit"
-        android:layout_width="55px"
-        android:layout_height="55px"
+        android:layout_width="80px"
+        android:layout_height="80px"
         android:layout_marginLeft="550px"
         android:src="@drawable/mama_quit"
         />

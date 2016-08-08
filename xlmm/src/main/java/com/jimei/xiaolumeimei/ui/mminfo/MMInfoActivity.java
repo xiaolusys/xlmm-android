@@ -50,6 +50,7 @@ import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaVisitorActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.PersonalCarryRankActivity;
 import com.jimei.xiaolumeimei.ui.fragment.v2.NewMMFragment;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
+import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -175,7 +176,7 @@ public class MMInfoActivity
     mamaResult = mamaUrl.getResults().get(0).getExtra();
     act_info = mamaUrl.getResults().get(0).getExtra().getAct_info();
     Glide.with(MMInfoActivity.this)
-        .load(mamaResult.getPicturesBean().getExam_pic())
+        .load(mamaResult.getPictures().getExam_pic())
         .diskCacheStrategy(DiskCacheStrategy.ALL)
         .into(b.imgExam);
   }
@@ -313,10 +314,17 @@ public class MMInfoActivity
   }
 
   @Override public void getMaMaRenwuListBean(MaMaRenwuListBean maMaRenwuListBean) {
-    if (maMaRenwuListBean.getConfig().isPage_pop()) {
-      NewMMFragment newMMFragment =
-          NewMMFragment.newInstance(maMaRenwuListBean, mamaResult.getAct_info());
-      newMMFragment.show(getFragmentManager(), "mamalist");
+    if (!LoginUtils.isMamaRenwulist(getApplicationContext())) {
+      try {
+        if (maMaRenwuListBean.getConfig().isPage_pop()) {
+          LoginUtils.saveMamaRenwulist(getApplicationContext(), true);
+          NewMMFragment newMMFragment =
+              NewMMFragment.newInstance(maMaRenwuListBean, mamaResult.getAct_info());
+          newMMFragment.show(getFragmentManager(), "mamalist");
+        }
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
     }
   }
 
@@ -494,7 +502,7 @@ public class MMInfoActivity
       case R.id.imgExam:
         if (mamaFortune != null) {
           JumpUtils.jumpToWebViewWithCookies(this, mamaResult.getExam(), -1,
-              MMLevelExamWebViewActivity.class, "妈妈考试");
+              MMLevelExamWebViewActivity.class, "活动");
         }
         break;
       case R.id.rl_team:

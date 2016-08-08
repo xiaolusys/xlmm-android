@@ -183,6 +183,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     if (LoginUtils.checkLoginState(getApplicationContext())) {
       mPresenter.isCouPon();
     }
+    LoginUtils.deleteIsMamaRenwulist(getApplicationContext());
   }
 
   @Override protected void setListener() {
@@ -1015,8 +1016,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     mPresenter.getUserInfoBeanChange();
   }
 
-  @Subscribe(threadMode = ThreadMode.BACKGROUND)
-  public void setMipush(SetMiPushEvent event) {
+  @Subscribe(threadMode = ThreadMode.BACKGROUND) public void setMipush(SetMiPushEvent event) {
     JUtils.Log("regid", MiPushClient.getRegId(getApplicationContext()));
     LoginUtils.setPushUserAccount(this, MiPushClient.getRegId(getApplicationContext()));
   }

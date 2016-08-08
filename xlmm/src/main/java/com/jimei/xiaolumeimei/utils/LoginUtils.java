@@ -28,12 +28,14 @@ public class LoginUtils {
   static SharedPreferences sharedPreferences3;
   static SharedPreferences sharedPreferences4;
   static SharedPreferences sharedPreferences5;
+  static SharedPreferences sharedPreferences6;
   static SharedPreferences.Editor editor;
   static SharedPreferences.Editor editor1;
   static SharedPreferences.Editor editor2;
   static SharedPreferences.Editor editor3;
   static SharedPreferences.Editor editor4;
   static SharedPreferences.Editor editor5;
+  static SharedPreferences.Editor editor6;
   static UserInfoBean userinfo;
 
   public static void saveLoginInfo(boolean isSuccess, Context context, String username,
@@ -212,6 +214,25 @@ public class LoginUtils {
     editor5 = sharedPreferences5.edit();
     editor5.clear();
     editor5.apply();
+  }
+
+  public static void saveMamaRenwulist(Context context, boolean isOk) {
+    sharedPreferences6 = context.getSharedPreferences("MamaRenwulist", Context.MODE_PRIVATE);
+    editor6 = sharedPreferences6.edit();
+    editor6.putBoolean("ismipush", isOk);
+    editor6.apply();
+  }
+
+  public static boolean isMamaRenwulist(Context context) {
+    sharedPreferences6 = context.getSharedPreferences("MamaRenwulist", Context.MODE_PRIVATE);
+    return sharedPreferences6.getBoolean("ismipush", false);
+  }
+
+  public static void deleteIsMamaRenwulist(Context context) {
+    sharedPreferences6 = context.getSharedPreferences("MamaRenwulist", Context.MODE_PRIVATE);
+    editor6 = sharedPreferences6.edit();
+    editor6.clear();
+    editor6.apply();
   }
 
   public static void saveUserAccount(Context context, String userAccount) {
