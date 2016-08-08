@@ -382,10 +382,9 @@ public class ProductListActivity extends BaseSwipeBackCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // TODO: 16/8/8 隐藏分类功能
-//        getMenuInflater().inflate(R.menu.menu_category, menu);
-//        this.menu = menu;
-//        initCategory();
+        getMenuInflater().inflate(R.menu.menu_category, menu);
+        this.menu = menu;
+        initCategory();
         return super.onCreateOptionsMenu(menu);
     }
 
