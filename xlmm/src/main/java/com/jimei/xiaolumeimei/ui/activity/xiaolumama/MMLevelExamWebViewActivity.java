@@ -10,7 +10,7 @@ import com.umeng.analytics.MobclickAgent;
 public class MMLevelExamWebViewActivity extends CommonWebViewActivity {
   @Override protected void initViews() {
     super.initViews();
-    webviewTitle.setText("妈妈考试");
+    webviewTitle.setText("活动");
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
