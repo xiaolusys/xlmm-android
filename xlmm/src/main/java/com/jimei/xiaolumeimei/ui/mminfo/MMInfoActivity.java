@@ -175,7 +175,7 @@ public class MMInfoActivity
     mamaResult = mamaUrl.getResults().get(0).getExtra();
     act_info = mamaUrl.getResults().get(0).getExtra().getAct_info();
     Glide.with(MMInfoActivity.this)
-        .load(mamaResult.getPicturesBean().getExam_pic())
+        .load(mamaResult.getPictures().getExam_pic())
         .diskCacheStrategy(DiskCacheStrategy.ALL)
         .into(b.imgExam);
   }
@@ -313,10 +313,14 @@ public class MMInfoActivity
   }
 
   @Override public void getMaMaRenwuListBean(MaMaRenwuListBean maMaRenwuListBean) {
-    if (maMaRenwuListBean.getConfig().isPage_pop()) {
-      NewMMFragment newMMFragment =
-          NewMMFragment.newInstance(maMaRenwuListBean, mamaResult.getAct_info());
-      newMMFragment.show(getFragmentManager(), "mamalist");
+    try {
+      if (maMaRenwuListBean.getConfig().isPage_pop()) {
+        NewMMFragment newMMFragment =
+            NewMMFragment.newInstance(maMaRenwuListBean, mamaResult.getAct_info());
+        newMMFragment.show(getFragmentManager(), "mamalist");
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
     }
   }
 
