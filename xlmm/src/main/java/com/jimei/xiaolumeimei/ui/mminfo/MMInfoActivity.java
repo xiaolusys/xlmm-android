@@ -502,7 +502,7 @@ public class MMInfoActivity
       case R.id.imgExam:
         if (mamaFortune != null) {
           JumpUtils.jumpToWebViewWithCookies(this, mamaResult.getExam(), -1,
-              MMLevelExamWebViewActivity.class, "妈妈考试");
+              MMLevelExamWebViewActivity.class, "活动");
         }
         break;
       case R.id.rl_team:
