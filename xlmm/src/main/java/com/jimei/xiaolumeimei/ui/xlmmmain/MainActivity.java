@@ -48,6 +48,7 @@ import com.jimei.xiaolumeimei.ui.activity.main.ComplainActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ChildListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.CollectionActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.LadyListActivity;
+import com.jimei.xiaolumeimei.ui.activity.product.LadyZoneActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllOrdersActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
@@ -266,19 +267,19 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         break;
       case R.id.child_img:
         MobclickAgent.onEvent(MainActivity.this, "ChildID");
-//        Bundle childBundle = new Bundle();
-//        childBundle.putInt("type",XlmmConst.TYPE_CHILD);
-//        childBundle.putString("title","童装专区");
-//        readyGo(LadyZoneActivity.class,childBundle);
-        readyGo(ChildListActivity.class);
+        Bundle childBundle = new Bundle();
+        childBundle.putInt("type",XlmmConst.TYPE_CHILD);
+        childBundle.putString("title","童装专区");
+        readyGo(LadyZoneActivity.class,childBundle);
+//        readyGo(ChildListActivity.class);
         break;
       case R.id.lady_img:
         MobclickAgent.onEvent(MainActivity.this, "LadyID");
-//        Bundle ladyBundle = new Bundle();
-//        ladyBundle.putInt("type",XlmmConst.TYPE_LADY);
-//        ladyBundle.putString("title","女装专区");
-//        readyGo(LadyZoneActivity.class,ladyBundle);
-        readyGo(LadyListActivity.class);
+        Bundle ladyBundle = new Bundle();
+        ladyBundle.putInt("type",XlmmConst.TYPE_LADY);
+        ladyBundle.putString("title","女装专区");
+        readyGo(LadyZoneActivity.class,ladyBundle);
+//        readyGo(LadyListActivity.class);
         break;
 
       case R.id.text_yesterday:

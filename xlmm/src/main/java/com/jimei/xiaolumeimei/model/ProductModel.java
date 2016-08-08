@@ -143,9 +143,9 @@ public class ProductModel {
             .compose(new DefaultTransform<>());
   }
 
-  public Observable<CategoryProductListBean> getCategoryProductList(int category_id,int page) {
+  public Observable<CategoryProductListBean> getCategoryProductList(int cid,int page) {
     return XlmmRetrofitClient.getService()
-            .getCategoryProductList(category_id,page)
+            .getCategoryProductList(cid,page)
             .compose(new DefaultTransform<>());
   }
 }
