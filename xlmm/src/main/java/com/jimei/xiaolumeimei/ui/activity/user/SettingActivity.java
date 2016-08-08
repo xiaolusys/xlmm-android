@@ -1,10 +1,9 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.CompoundButton;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -24,7 +23,6 @@ import com.jimei.xiaolumeimei.widget.VersionManager;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jimei.xiaolumeimei.xlmmService.UpdateService;
 import com.jude.utils.JUtils;
-import com.tbruyelle.rxpermissions.RxPermissions;
 import com.umeng.analytics.MobclickAgent;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import rx.schedulers.Schedulers;
@@ -45,14 +43,15 @@ public class SettingActivity extends BaseMVVMActivity<ActivitySettingBinding>
     b.update.setOnClickListener(this);
     b.aboutXlmm.setOnClickListener(this);
     b.openNoticeA.setOnCheckedChangeListener(this);
-    b.openNoticeA.setOnClickListener(this);
   }
 
   @Override protected void initData() {
-    if (LoginUtils.isMipushOk(getApplicationContext())) {
-      b.openNoticeA.setActivated(true);
+    boolean mipushOk = LoginUtils.isMipushOk(getApplicationContext());
+    JUtils.Log("regid", mipushOk + "");
+    if (mipushOk) {
+      b.openNoticeA.setChecked(true);
     } else {
-      b.openNoticeA.setActivated(false);
+      b.openNoticeA.setChecked(false);
     }
   }
 
@@ -104,31 +103,7 @@ public class SettingActivity extends BaseMVVMActivity<ActivitySettingBinding>
         break;
 
       case R.id.open_notice_a:
-        if (b.openNoticeA.isActivated()) {
-          new MaterialDialog.Builder(this).title("关闭推送")
-              .content("您确定要关闭推送吗？")
-              .positiveText("确定")
-              .positiveColorRes(R.color.colorAccent)
-              .negativeText("取消")
-              .negativeColorRes(R.color.colorAccent)
-              .callback(new MaterialDialog.ButtonCallback() {
-                @Override public void onPositive(MaterialDialog dialog) {
-                  final String finalAccount = LoginUtils.getUserAccount(getApplicationContext());
-                  if ((finalAccount != null) && ((!finalAccount.isEmpty()))) {
-                    MiPushClient.unsetUserAccount(getApplicationContext(), finalAccount, null);
-                  }
-                  b.openNoticeA.setActivated(false);
-                  dialog.dismiss();
-                }
 
-                @Override public void onNegative(MaterialDialog dialog) {
-                  dialog.dismiss();
-                }
-              })
-              .show();
-        } else {
-          setPushUserAccount(SettingActivity.this, MiPushClient.getRegId(getApplicationContext()));
-        }
         break;
     }
   }
@@ -171,50 +146,55 @@ public class SettingActivity extends BaseMVVMActivity<ActivitySettingBinding>
   }
 
   @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+    if (!b.openNoticeA.isChecked()) {
+      new MaterialDialog.Builder(this).title("关闭推送")
+          .content("您确定要关闭推送吗?\n\n关闭推送可能错过重要通知哦 !!!")
+          .positiveText("确定")
+          .positiveColorRes(R.color.colorAccent)
+          .negativeText("取消")
+          .negativeColorRes(R.color.colorAccent)
+          .callback(new MaterialDialog.ButtonCallback() {
+            @Override public void onPositive(MaterialDialog dialog) {
+              MiPushClient.unregisterPush(getApplicationContext());
+              LoginUtils.deleteIsMipushOk(SettingActivity.this);
+              dialog.dismiss();
+            }
 
+            @Override public void onNegative(MaterialDialog dialog) {
+              b.openNoticeA.setChecked(true);
+              dialog.dismiss();
+            }
+          })
+          .show();
+    } else {
+      setPushUserAccount(getApplicationContext(), MiPushClient.getRegId(getApplicationContext()));
+    }
   }
 
   public void setPushUserAccount(Context context, String mRegId) {
+    MiPushClient.registerPush(getApplicationContext(), XlmmConst.XIAOMI_APP_ID,
+        XlmmConst.XIAOMI_APP_KEY);
     try {
       //register xiaomi push
-      RxPermissions.getInstance(context)
-          .request(Manifest.permission.READ_PHONE_STATE)
-          .subscribe(aBoolean -> {
-            if (aBoolean) {
-              UserModel.getInstance()
-                  .getUserAccount("android", mRegId, ((TelephonyManager) context.getSystemService(
-                      Context.TELEPHONY_SERVICE)).getDeviceId())
-                  .subscribeOn(Schedulers.io())
-                  .subscribe(new ServiceResponse<UserAccountBean>() {
-                    @Override public void onNext(UserAccountBean user) {
+      UserModel.getInstance()
+          .getUserAccount("android", mRegId,
+              Settings.Secure.getString(XlmmApp.getmContext().getContentResolver(),
+                  Settings.Secure.ANDROID_ID))
+          .subscribeOn(Schedulers.io())
+          .subscribe(new ServiceResponse<UserAccountBean>() {
+            @Override public void onNext(UserAccountBean user) {
+              LoginUtils.saveMipushOk(context, true);
+              MiPushClient.setUserAccount(context, user.getUserAccount(), null);
+            }
 
-                      if ((LoginUtils.getUserAccount(context) != null)
-                          && ((!LoginUtils.getUserAccount(context).isEmpty()))
-                          && (!LoginUtils.getUserAccount(context).equals(user.getUserAccount()))) {
-                        LoginUtils.saveMipushOk(context, true);
-                        MiPushClient.unsetUserAccount(context.getApplicationContext(),
-                            LoginUtils.getUserAccount(context), null);
-                      }
-                      MiPushClient.setUserAccount(context.getApplicationContext(),
-                          user.getUserAccount(), null);
-                      b.openNoticeA.setActivated(true);
-                    }
+            @Override public void onCompleted() {
+              super.onCompleted();
+            }
 
-                    @Override public void onCompleted() {
-                      super.onCompleted();
-                    }
-
-                    @Override public void onError(Throwable e) {
-                      e.printStackTrace();
-                      super.onError(e);
-                      LoginUtils.deleteIsMipushOk(context);
-                      b.openNoticeA.setActivated(false);
-                    }
-                  });
-            } else {
-              b.openNoticeA.setActivated(false);
+            @Override public void onError(Throwable e) {
+              e.printStackTrace();
+              super.onError(e);
               LoginUtils.deleteIsMipushOk(context);
-              JUtils.Toast("读取设备权限被关闭,可以前往应用设置打开权限");
             }
           });
     } catch (Exception e) {

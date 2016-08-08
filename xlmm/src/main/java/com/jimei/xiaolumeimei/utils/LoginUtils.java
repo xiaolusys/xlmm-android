@@ -1,18 +1,17 @@
 package com.jimei.xiaolumeimei.utils;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.telephony.TelephonyManager;
+import android.provider.Settings;
 import android.util.Log;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.entities.UserAccountBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
-import com.tbruyelle.rxpermissions.RxPermissions;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import rx.schedulers.Schedulers;
 
@@ -156,43 +155,39 @@ public class LoginUtils {
   public static void setPushUserAccount(Context context, String mRegId) {
     try {
       //register xiaomi push
-      RxPermissions.getInstance(context)
-          .request(Manifest.permission.READ_PHONE_STATE)
-          .subscribe(aBoolean -> {
-            if (aBoolean) {
-              UserModel.getInstance()
-                  .getUserAccount("android", mRegId, ((TelephonyManager) context.getSystemService(
-                      Context.TELEPHONY_SERVICE)).getDeviceId())
-                  .subscribeOn(Schedulers.io())
-                  .subscribe(new ServiceResponse<UserAccountBean>() {
-                    @Override public void onNext(UserAccountBean user) {
-                      JUtils.Log(TAG, "UserAccountBean:, " + user.toString());
-                      if ((getUserAccount(context) != null) && ((!getUserAccount(
-                          context).isEmpty())) && (!getUserAccount(context).equals(
-                          user.getUserAccount()))) {
-                        saveMipushOk(context, true);
-                        MiPushClient.unsetUserAccount(context.getApplicationContext(),
-                            getUserAccount(context), null);
-                        JUtils.Log(TAG, "unset useraccount: " + getUserAccount(context));
-                      }
-                      MiPushClient.setUserAccount(context.getApplicationContext(),
-                          user.getUserAccount(), null);
-                    }
+      String android_id = Settings.Secure.getString(XlmmApp.getmContext().getContentResolver(),
+          Settings.Secure.ANDROID_ID);
+      JUtils.Log("regid", android_id);
+      UserModel.getInstance()
+          .getUserAccount("android", mRegId,
+              Settings.Secure.getString(XlmmApp.getmContext().getContentResolver(),
+                  Settings.Secure.ANDROID_ID))
+          .subscribeOn(Schedulers.io())
+          .subscribe(new ServiceResponse<UserAccountBean>() {
+            @Override public void onNext(UserAccountBean user) {
+              saveMipushOk(context, true);
+              JUtils.Log(TAG, "UserAccountBean:, " + user.toString());
+              if ((getUserAccount(context) != null)
+                  && ((!getUserAccount(context).isEmpty()))
+                  && (!getUserAccount(context).equals(user.getUserAccount()))) {
 
-                    @Override public void onCompleted() {
-                      super.onCompleted();
-                    }
+                MiPushClient.unsetUserAccount(context.getApplicationContext(),
+                    getUserAccount(context), null);
+                JUtils.Log(TAG, "unset useraccount: " + getUserAccount(context));
+              }
+              MiPushClient.setUserAccount(context.getApplicationContext(), user.getUserAccount(),
+                  null);
+            }
 
-                    @Override public void onError(Throwable e) {
-                      e.printStackTrace();
-                      Log.e(TAG, "error: getUserAccount" + e.getLocalizedMessage());
-                      super.onError(e);
-                      deleteIsMipushOk(context);
-                    }
-                  });
-            } else {
+            @Override public void onCompleted() {
+              super.onCompleted();
+            }
+
+            @Override public void onError(Throwable e) {
+              e.printStackTrace();
+              Log.e(TAG, "error: getUserAccount" + e.getLocalizedMessage());
+              super.onError(e);
               deleteIsMipushOk(context);
-
             }
           });
     } catch (Exception e) {
@@ -215,7 +210,7 @@ public class LoginUtils {
   public static void deleteIsMipushOk(Context context) {
     sharedPreferences5 = context.getSharedPreferences("login_info_mipushok", Context.MODE_PRIVATE);
     editor5 = sharedPreferences5.edit();
-    editor5.putBoolean("ismipush", false);
+    editor5.clear();
     editor5.apply();
   }
 
