@@ -50,6 +50,7 @@ import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaVisitorActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.PersonalCarryRankActivity;
 import com.jimei.xiaolumeimei.ui.fragment.v2.NewMMFragment;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
+import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -313,14 +314,17 @@ public class MMInfoActivity
   }
 
   @Override public void getMaMaRenwuListBean(MaMaRenwuListBean maMaRenwuListBean) {
-    try {
-      if (maMaRenwuListBean.getConfig().isPage_pop()) {
-        NewMMFragment newMMFragment =
-            NewMMFragment.newInstance(maMaRenwuListBean, mamaResult.getAct_info());
-        newMMFragment.show(getFragmentManager(), "mamalist");
+    if (!LoginUtils.isMamaRenwulist(getApplicationContext())) {
+      try {
+        if (maMaRenwuListBean.getConfig().isPage_pop()) {
+          LoginUtils.saveMamaRenwulist(getApplicationContext(), true);
+          NewMMFragment newMMFragment =
+              NewMMFragment.newInstance(maMaRenwuListBean, mamaResult.getAct_info());
+          newMMFragment.show(getFragmentManager(), "mamalist");
+        }
+      } catch (Exception e) {
+        e.printStackTrace();
       }
-    } catch (Exception e) {
-      e.printStackTrace();
     }
   }
 
