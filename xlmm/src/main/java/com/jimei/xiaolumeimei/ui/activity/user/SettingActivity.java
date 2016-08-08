@@ -148,7 +148,7 @@ public class SettingActivity extends BaseMVVMActivity<ActivitySettingBinding>
   @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
     if (!b.openNoticeA.isChecked()) {
       new MaterialDialog.Builder(this).title("关闭推送")
-          .content("您确定要关闭推送吗?\n\n关闭推送可能错过重要通知哦 !!!")
+          .content("关闭推送可能错过重要通知哦\n" + "\n您确定要关闭推送吗?")
           .positiveText("确定")
           .positiveColorRes(R.color.colorAccent)
           .negativeText("取消")
@@ -167,8 +167,11 @@ public class SettingActivity extends BaseMVVMActivity<ActivitySettingBinding>
           })
           .show();
     } else {
-      setPushUserAccount(getApplicationContext(), MiPushClient.getRegId(getApplicationContext()));
-      JUtils.Log("regid", MiPushClient.getRegId(getApplicationContext()));
+      try {
+        setPushUserAccount(getApplicationContext(), MiPushClient.getRegId(getApplicationContext()));
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
     }
   }
 
@@ -177,7 +180,6 @@ public class SettingActivity extends BaseMVVMActivity<ActivitySettingBinding>
         XlmmConst.XIAOMI_APP_KEY);
     try {
       //register xiaomi push
-      JUtils.Log("regid", MiPushClient.getRegId(getApplicationContext()));
       UserModel.getInstance()
           .getUserAccount("android", mRegId,
               Settings.Secure.getString(XlmmApp.getmContext().getContentResolver(),
