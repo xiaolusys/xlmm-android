@@ -168,6 +168,7 @@ public class SettingActivity extends BaseMVVMActivity<ActivitySettingBinding>
           .show();
     } else {
       setPushUserAccount(getApplicationContext(), MiPushClient.getRegId(getApplicationContext()));
+      JUtils.Log("regid", MiPushClient.getRegId(getApplicationContext()));
     }
   }
 
@@ -176,6 +177,7 @@ public class SettingActivity extends BaseMVVMActivity<ActivitySettingBinding>
         XlmmConst.XIAOMI_APP_KEY);
     try {
       //register xiaomi push
+      JUtils.Log("regid", MiPushClient.getRegId(getApplicationContext()));
       UserModel.getInstance()
           .getUserAccount("android", mRegId,
               Settings.Secure.getString(XlmmApp.getmContext().getContentResolver(),
