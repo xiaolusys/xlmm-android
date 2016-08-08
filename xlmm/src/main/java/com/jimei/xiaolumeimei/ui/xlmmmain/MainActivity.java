@@ -185,6 +185,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     if (LoginUtils.checkLoginState(getApplicationContext())) {
       mPresenter.isCouPon();
     }
+    LoginUtils.deleteIsMamaRenwulist(getApplicationContext());
   }
 
   @Override protected void setListener() {
@@ -270,18 +271,18 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
       case R.id.child_img:
         MobclickAgent.onEvent(MainActivity.this, "ChildID");
         Bundle childBundle = new Bundle();
-        childBundle.putInt("type",XlmmConst.TYPE_CHILD);
-        childBundle.putString("title","童装专区");
-        readyGo(LadyZoneActivity.class,childBundle);
-//        readyGo(ChildListActivity.class);
+        childBundle.putInt("type", XlmmConst.TYPE_CHILD);
+        childBundle.putString("title", "童装专区");
+        readyGo(LadyZoneActivity.class, childBundle);
+        //        readyGo(ChildListActivity.class);
         break;
       case R.id.lady_img:
         MobclickAgent.onEvent(MainActivity.this, "LadyID");
         Bundle ladyBundle = new Bundle();
-        ladyBundle.putInt("type",XlmmConst.TYPE_LADY);
-        ladyBundle.putString("title","女装专区");
-        readyGo(LadyZoneActivity.class,ladyBundle);
-//        readyGo(LadyListActivity.class);
+        ladyBundle.putInt("type", XlmmConst.TYPE_LADY);
+        ladyBundle.putString("title", "女装专区");
+        readyGo(LadyZoneActivity.class, ladyBundle);
+        //        readyGo(LadyListActivity.class);
         break;
       case R.id.text_yesterday:
         MobclickAgent.onEvent(this, "YesterdayID");
@@ -1015,8 +1016,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     mPresenter.getUserInfoBeanChange();
   }
 
-  @Subscribe(threadMode = ThreadMode.BACKGROUND)
-  public void setMipush(SetMiPushEvent event) {
+  @Subscribe(threadMode = ThreadMode.BACKGROUND) public void setMipush(SetMiPushEvent event) {
     JUtils.Log("regid", MiPushClient.getRegId(getApplicationContext()));
     LoginUtils.setPushUserAccount(this, MiPushClient.getRegId(getApplicationContext()));
   }
