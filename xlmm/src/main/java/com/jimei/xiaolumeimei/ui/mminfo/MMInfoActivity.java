@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
@@ -59,6 +61,8 @@ import java.util.List;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import retrofit2.Response;
+import rx.Observer;
 import rx.schedulers.Schedulers;
 
 /**
@@ -84,13 +88,14 @@ public class MMInfoActivity
   private int mmId;
   private String hisConfirmedCashOut;
   private double mamaCarryValue;
+  private String mamaid;
 
   @Override protected void initData() {
+    mPresenter.getMaMaRenwuListBean(mamaid);
     mPresenter.getShareShopping();
     mPresenter.getMamaFortune();
     mPresenter.getRefund();
     mPresenter.getMamaUrl();
-    mPresenter.getMaMaRenwuListBean();
     mPresenter.getMaMaselfList();
   }
 
@@ -121,7 +126,7 @@ public class MMInfoActivity
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
-
+    mamaid = extras.getString("mamaid");
   }
 
   @Subscribe(threadMode = ThreadMode.BACKGROUND)
@@ -169,6 +174,10 @@ public class MMInfoActivity
 
   @Override public void initMamaUrl(MamaUrl mamaUrl) {
     mamaResult = mamaUrl.getResults().get(0).getExtra();
+    Glide.with(MMInfoActivity.this)
+        .load(mamaResult.getPicturesBean().getExam_pic())
+        .diskCacheStrategy(DiskCacheStrategy.ALL)
+        .into(b.imgExam);
   }
 
   @Override public void initMMview(MamaFortune fortune) {
@@ -184,7 +193,7 @@ public class MMInfoActivity
     //b.tvFansnum.setText(fortune.getMamaFortune().getFansNum() + "人");
     b.tvOrder.setText(s + "个");
     if (days <= 15) {
-    b.mamaPay.setVisibility(View.VISIBLE);
+      b.mamaPay.setVisibility(View.VISIBLE);
     }
 
     b.tvFansnum1.setText(fortune.getMamaFortune().getFansNum() + "人");

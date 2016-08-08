@@ -30,7 +30,7 @@ public interface MMInfoContract {
 
     Observable<MamaUrl> getMamaUrl();
 
-    Observable<Response<MaMaRenwuListBean>> getMaMaRenwuListBean();
+    Observable<Response<MaMaRenwuListBean>> getMaMaRenwuListBean(String id);
 
     Observable<Response<MamaSelfListBean>> getMaMaselfList();
   }
@@ -79,7 +79,7 @@ public interface MMInfoContract {
 
     public abstract void getRefund();
 
-    public abstract void getMaMaRenwuListBean();
+    public abstract void getMaMaRenwuListBean(String id);
 
     public abstract void getMaMaselfList();
 

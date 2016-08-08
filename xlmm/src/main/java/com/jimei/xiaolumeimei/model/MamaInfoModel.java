@@ -5,6 +5,7 @@ import com.jimei.xiaolumeimei.entities.AllowanceBean;
 import com.jimei.xiaolumeimei.entities.DrawCouponBean;
 import com.jimei.xiaolumeimei.entities.MMVisitorsBean;
 import com.jimei.xiaolumeimei.entities.MaMaReNewBean;
+import com.jimei.xiaolumeimei.entities.MaMaRenwuListBean;
 import com.jimei.xiaolumeimei.entities.MamaFansBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.MamaLivenessBean;
@@ -168,5 +169,10 @@ public class MamaInfoModel {
   public Observable<Response<List<PersonalCarryRankBean>>> getTeamCarryRankBean() {
 
     return XlmmRetrofitClient.getService().getTeamCarryRankBean().compose(new DefaultTransform<>());
+  }
+
+  public Observable<Response<MaMaRenwuListBean>> getMaMaRenwuListBean(String id) {
+    return XlmmRetrofitClient.getService().getMaMaRenwuListBean(id).
+        compose(new DefaultTransform<>());
   }
 }

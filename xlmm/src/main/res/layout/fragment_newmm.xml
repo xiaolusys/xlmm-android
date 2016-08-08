@@ -21,6 +21,13 @@
         android:layout_marginTop="180px"
         android:src="@drawable/mama_renwudesc"
         />
+    <ImageView
+        android:id="@+id/quit"
+        android:layout_marginLeft="550px"
+        android:src="@drawable/mama_quit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
     <LinearLayout
         android:id="@+id/renwu_list"
         android:layout_width="wrap_content"

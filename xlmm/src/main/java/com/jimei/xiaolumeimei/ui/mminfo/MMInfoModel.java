@@ -37,9 +37,9 @@ public class MMInfoModel implements MMInfoContract.Model {
             .compose(RxSchedulers.io_main());
   }
 
-  @Override public Observable<Response<MaMaRenwuListBean>> getMaMaRenwuListBean() {
+  @Override public Observable<Response<MaMaRenwuListBean>> getMaMaRenwuListBean(String id) {
     return XlmmRetrofitClient.getService()
-        .getMaMaRenwuListBean()
+        .getMaMaRenwuListBean(id)
         .compose(RxSchedulers.io_main());
   }
 
