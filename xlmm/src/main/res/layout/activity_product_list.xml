@@ -7,6 +7,7 @@
     android:orientation="vertical">
 
     <com.jimei.xiaolumeimei.widget.XlmmTitleView
+        android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:xlmm_title="萌娃专区" />
@@ -60,7 +61,7 @@
                 android:background="#f3f3f4">
 
                 <com.jcodecraeer.xrecyclerview.XRecyclerView
-                    android:id="@+id/childlist_recyclerView"
+                    android:id="@+id/list_recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 

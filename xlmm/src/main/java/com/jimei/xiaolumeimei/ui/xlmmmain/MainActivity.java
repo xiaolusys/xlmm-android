@@ -46,10 +46,8 @@ import com.jimei.xiaolumeimei.event.UserInfoEmptyEvent;
 import com.jimei.xiaolumeimei.receiver.UpdateBroadReceiver;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.main.ComplainActivity;
-import com.jimei.xiaolumeimei.ui.activity.product.ChildListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.CollectionActivity;
-import com.jimei.xiaolumeimei.ui.activity.product.LadyListActivity;
-import com.jimei.xiaolumeimei.ui.activity.product.LadyZoneActivity;
+import com.jimei.xiaolumeimei.ui.activity.product.ProductListActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllOrdersActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
@@ -271,18 +269,16 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
       case R.id.child_img:
         MobclickAgent.onEvent(MainActivity.this, "ChildID");
         Bundle childBundle = new Bundle();
-        childBundle.putInt("type", XlmmConst.TYPE_CHILD);
-        childBundle.putString("title", "童装专区");
-        readyGo(LadyZoneActivity.class, childBundle);
-        //        readyGo(ChildListActivity.class);
+        childBundle.putInt("type",XlmmConst.TYPE_CHILD);
+//        readyGo(LadyZoneActivity.class,childBundle);
+        readyGo(ProductListActivity.class,childBundle);
         break;
       case R.id.lady_img:
         MobclickAgent.onEvent(MainActivity.this, "LadyID");
         Bundle ladyBundle = new Bundle();
-        ladyBundle.putInt("type", XlmmConst.TYPE_LADY);
-        ladyBundle.putString("title", "女装专区");
-        readyGo(LadyZoneActivity.class, ladyBundle);
-        //        readyGo(LadyListActivity.class);
+        ladyBundle.putInt("type",XlmmConst.TYPE_LADY);
+//        readyGo(LadyZoneActivity.class,ladyBundle);
+        readyGo(ProductListActivity.class,ladyBundle);
         break;
       case R.id.text_yesterday:
         MobclickAgent.onEvent(this, "YesterdayID");
@@ -720,9 +716,13 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
                     .this, extra, -1, ActivityWebViewActivity.class);
               } else {
                 if (jump_info.getType() == XlmmConst.JUMP_PRODUCT_CHILDLIST) {
-                  readyGo(ChildListActivity.class);
+                  Bundle childBundle = new Bundle();
+                  childBundle.putInt("type",XlmmConst.TYPE_CHILD);
+                  readyGo(ProductListActivity.class,childBundle);
                 } else if (jump_info.getType() == XlmmConst.JUMP_PRODUCT_LADYLIST) {
-                  readyGo(LadyListActivity.class);
+                  Bundle ladyBundle = new Bundle();
+                  ladyBundle.putInt("type",XlmmConst.TYPE_LADY);
+                  readyGo(ProductListActivity.class,ladyBundle);
                 } else {
                   JumpUtils.push_jump_proc(MainActivity.this, extra);
                 }
