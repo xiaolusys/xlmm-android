@@ -3,15 +3,18 @@ package com.jimei.xiaolumeimei.ui.fragment.v2;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import butterknife.ButterKnife;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.MaMaRenwuListBean;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.BoutiqueWebviewActivity;
 import com.jimei.xiaolumeimei.widget.MaMaRenwuListView;
 import com.umeng.analytics.MobclickAgent;
 import java.util.ArrayList;
@@ -65,7 +68,21 @@ public class NewMMFragment extends DialogFragment {
     List<String> stringList = new ArrayList<>();
     List<MaMaRenwuListView> mamarenwuviews = new ArrayList<>();
     LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.renwu_list);
+    ImageView quit = (ImageView) view.findViewById(R.id.quit);
+    ImageView confirm = (ImageView) view.findViewById(R.id.confirm);
+    quit.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        dismiss();
+      }
+    });
 
+    confirm.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        Intent intent = new Intent(mActivity, BoutiqueWebviewActivity.class);
+        startActivity(intent);
+        dismiss();
+      }
+    });
     for (int i = 0; i < data.size(); i++) {
       if (data.get(i).isShow()) {
         stringList.add(data.get(i).getDesc());

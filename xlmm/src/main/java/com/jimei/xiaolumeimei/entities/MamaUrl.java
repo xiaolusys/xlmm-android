@@ -132,6 +132,12 @@ public class MamaUrl {
             private String fans_explain;
             private String exam;
 
+            public ResultsBean.picturesBean getPicturesBean() {
+                return picturesBean;
+            }
+
+            private picturesBean picturesBean;
+
             public String getNotice() {
                 return notice;
             }
@@ -176,6 +182,13 @@ public class MamaUrl {
 
             public void setExam(String exam) {
                 this.exam = exam;
+            }
+        }
+        public static class picturesBean{
+            public String exam_pic;
+
+            public String getExam_pic() {
+                return exam_pic;
             }
         }
     }
