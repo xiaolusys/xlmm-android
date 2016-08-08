@@ -7,26 +7,27 @@ import java.util.List;
  */
 public class CategoryBean {
 
+
     /**
-     * childs : [{"grade":0,"cat_pic":"","cid":67,"name":"哈衣","parent_cid":1},{"grade":0,"cat_pic":"","cid":68,"name":"下装","parent_cid":1},{"grade":0,"cat_pic":"","cid":72,"name":"配饰","parent_cid":1},{"grade":0,"cat_pic":"","cid":74,"name":"亲子装","parent_cid":1},{"grade":0,"cat_pic":"","cid":75,"name":"内衣","parent_cid":1},{"grade":0,"cat_pic":"","cid":66,"name":"外套","parent_cid":1},{"grade":0,"cat_pic":"","cid":65,"name":"套装","parent_cid":1},{"grade":0,"cat_pic":"","cid":64,"name":"连衣裙","parent_cid":1},{"grade":0,"cat_pic":"","cid":63,"name":"上装","parent_cid":1}]
+     * childs : [{"grade":2,"cat_pic":"http://7xogkj.com1.z0.glb.clouddn.com/category/image/women1.jpg","parent_cid":"1","name":"上装","cid":"63"},{"grade":2,"cat_pic":"http://7xogkj.com1.z0.glb.clouddn.com/category/image/women1.jpg","parent_cid":"1","name":"连衣裙","cid":"64"},{"grade":2,"cat_pic":"http://7xogkj.com1.z0.glb.clouddn.com/category/image/women1.jpg","parent_cid":"1","name":"套装","cid":"65"},{"grade":2,"cat_pic":"http://7xogkj.com1.z0.glb.clouddn.com/category/image/women1.jpg","parent_cid":"1","name":"外套","cid":"66"},{"grade":2,"cat_pic":"http://7xogkj.com1.z0.glb.clouddn.com/category/image/women1.jpg","parent_cid":"1","name":"哈衣","cid":"67"},{"grade":2,"cat_pic":"http://7xogkj.com1.z0.glb.clouddn.com/category/image/women1.jpg","parent_cid":"1","name":"下装","cid":"68"},{"grade":2,"cat_pic":"http://7xogkj.com1.z0.glb.clouddn.com/category/image/women1.jpg","parent_cid":"1","name":"配饰","cid":"72"},{"grade":2,"cat_pic":"http://7xogkj.com1.z0.glb.clouddn.com/category/image/women1.jpg","parent_cid":"1","name":"亲子装","cid":"74"},{"grade":2,"cat_pic":"http://7xogkj.com1.z0.glb.clouddn.com/category/image/women1.jpg","parent_cid":"1","name":"内衣","cid":"75"}]
      * name : 童装
      * cid : 1
      * grade : 1
      * parent_cid : 0
-     * cat_pic :
+     * cat_pic : http://7xogkj.com1.z0.glb.clouddn.com/category/image/women1.jpg
      */
 
     private String name;
-    private int cid;
+    private String cid;
     private int grade;
-    private int parent_cid;
+    private String parent_cid;
     private String cat_pic;
     /**
-     * grade : 0
-     * cat_pic :
-     * cid : 67
-     * name : 哈衣
+     * grade : 2
+     * cat_pic : http://7xogkj.com1.z0.glb.clouddn.com/category/image/women1.jpg
      * parent_cid : 1
+     * name : 上装
+     * cid : 63
      */
 
     private List<ChildsBean> childs;
@@ -39,11 +40,11 @@ public class CategoryBean {
         this.name = name;
     }
 
-    public int getCid() {
+    public String getCid() {
         return cid;
     }
 
-    public void setCid(int cid) {
+    public void setCid(String cid) {
         this.cid = cid;
     }
 
@@ -55,11 +56,11 @@ public class CategoryBean {
         this.grade = grade;
     }
 
-    public int getParent_cid() {
+    public String getParent_cid() {
         return parent_cid;
     }
 
-    public void setParent_cid(int parent_cid) {
+    public void setParent_cid(String parent_cid) {
         this.parent_cid = parent_cid;
     }
 
@@ -82,9 +83,9 @@ public class CategoryBean {
     public static class ChildsBean {
         private int grade;
         private String cat_pic;
-        private int cid;
+        private String parent_cid;
         private String name;
-        private int parent_cid;
+        private String cid;
 
         public int getGrade() {
             return grade;
@@ -102,12 +103,12 @@ public class CategoryBean {
             this.cat_pic = cat_pic;
         }
 
-        public int getCid() {
-            return cid;
+        public String getParent_cid() {
+            return parent_cid;
         }
 
-        public void setCid(int cid) {
-            this.cid = cid;
+        public void setParent_cid(String parent_cid) {
+            this.parent_cid = parent_cid;
         }
 
         public String getName() {
@@ -118,12 +119,12 @@ public class CategoryBean {
             this.name = name;
         }
 
-        public int getParent_cid() {
-            return parent_cid;
+        public String getCid() {
+            return cid;
         }
 
-        public void setParent_cid(int parent_cid) {
-            this.parent_cid = parent_cid;
+        public void setCid(String cid) {
+            this.cid = cid;
         }
     }
 }

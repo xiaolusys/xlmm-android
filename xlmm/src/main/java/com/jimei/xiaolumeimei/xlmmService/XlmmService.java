@@ -63,6 +63,7 @@ import com.jimei.xiaolumeimei.entities.PotentialFans;
 import com.jimei.xiaolumeimei.entities.ProductBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
+import com.jimei.xiaolumeimei.entities.ProductListResultBean;
 import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
 import com.jimei.xiaolumeimei.entities.RedBagBean;
@@ -79,8 +80,10 @@ import com.jimei.xiaolumeimei.entities.UserWithdrawResult;
 import com.jimei.xiaolumeimei.entities.VersionBean;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.entities.WxPubAuthInfo;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import retrofit2.http.Body;
@@ -109,6 +112,32 @@ public interface XlmmService {
     Observable<UserBean> login(
             @Field("username") String username,
             @Field("password") String password);
+
+    //童装分页列表
+    @GET("/rest/v1/products/childlist")
+    Observable<ProductListResultBean> getChildList2(
+            @Query("page") int page,
+            @Query("page_size") int page_size);
+
+    //童装分页列表
+    @GET("/rest/v1/products/childlist")
+    Observable<ProductListResultBean> getChildList2(
+            @Query("page") int page,
+            @Query("page_size") int page_size,
+            @Query("order_by") String order_by);
+
+    //女装分页列表
+    @GET("/rest/v1/products/ladylist")
+    Observable<ProductListResultBean> getLadyList2(
+            @Query("page") int page,
+            @Query("page_size") int page_size);
+
+    //女装分页列表,升价排序x
+    @GET("/rest/v1/products/ladylist")
+    Observable<ProductListResultBean> getLadyList2(
+            @Query("page") int page,
+            @Query("page_size") int page_size,
+            @Query("order_by") String order_by);
 
     //童装分页列表
     @GET("/rest/v1/products/childlist")
@@ -894,7 +923,7 @@ public interface XlmmService {
 
     @GET("/rest/v2/modelproducts")
     Observable<CategoryProductListBean> getCategoryProductList(
-            @Query("cid") int cid,
+            @Query("cid") String cid,
             @Query("page") int page
     );
 }

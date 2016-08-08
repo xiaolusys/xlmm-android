@@ -1,8 +1,6 @@
 package com.jimei.xiaolumeimei.ui.activity.product;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.SystemClock;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.Menu;
@@ -11,8 +9,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.SimpleAdapter;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
@@ -22,18 +18,13 @@ import com.jimei.xiaolumeimei.adapter.ColorTagAdapter;
 import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.databinding.ActivityLadyZoneBinding;
-import com.jimei.xiaolumeimei.entities.CategoryBean;
 import com.jimei.xiaolumeimei.entities.CategoryProductListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
-import com.jimei.xiaolumeimei.utils.FileUtils;
+import com.jimei.xiaolumeimei.widget.CategoryTask;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -69,7 +60,7 @@ public class LadyZoneActivity extends BaseMVVMActivity<ActivityLadyZoneBinding> 
     private CategoryAdapter adapter;
     private Menu menu;
     private CategoryProductAdapter categoryProductAdapter;
-    private int cid;
+    private String cid;
     private String next;
 
     @Override
@@ -86,11 +77,11 @@ public class LadyZoneActivity extends BaseMVVMActivity<ActivityLadyZoneBinding> 
         page = 1;
         initPriceData();
         initColorData();
-        refreshData(type, true);
+        refreshData(type+"", true);
     }
 
     private void initCategory() {
-        new CategoryTask(adapter, menu).execute(type);
+        new CategoryTask(adapter, menu).execute(type+"");
     }
 
     private void initColorData() {
@@ -304,7 +295,7 @@ public class LadyZoneActivity extends BaseMVVMActivity<ActivityLadyZoneBinding> 
         return super.onOptionsItemSelected(item);
     }
 
-    public void refreshData(int cid, boolean clear) {
+    public void refreshData(String cid, boolean clear) {
         this.cid = cid;
         if (clear) {
             showIndeterminateProgressDialog(false);
@@ -346,65 +337,5 @@ public class LadyZoneActivity extends BaseMVVMActivity<ActivityLadyZoneBinding> 
                     }
                 });
         addSubscription(subscribe);
-    }
-
-    private class CategoryTask extends AsyncTask<Integer, Integer, List<CategoryBean.ChildsBean>> {
-
-        private CategoryAdapter adapter;
-        private Menu menu;
-
-        public CategoryTask(CategoryAdapter adapter, Menu menu) {
-            this.adapter = adapter;
-            this.menu = menu;
-        }
-
-        @Override
-        protected List<CategoryBean.ChildsBean> doInBackground(Integer... params) {
-            String categoryStr;
-            InputStream in = null;
-            String fileaddress = Environment.getExternalStorageDirectory().getAbsolutePath()
-                    + "/xlmmcategory/" + "category.json";
-            try {
-                if (FileUtils.isFileExist(fileaddress)) {
-                    File file = new File(fileaddress);
-                    in = new FileInputStream(file);
-                } else {
-                    return null;
-                }
-                byte[] arrayOfByte = new byte[in.available()];
-                in.read(arrayOfByte);
-                categoryStr = new String(arrayOfByte, "UTF-8");
-                Gson gson = new Gson();
-                List<CategoryBean> list = gson.fromJson(categoryStr, new TypeToken<List<CategoryBean>>() {
-                }.getType());
-
-                for (int i = 0; i < list.size(); i++) {
-                    if (list.get(i).getCid() == params[0]) {
-                        return list.get(i).getChilds();
-                    }
-                }
-                return null;
-            } catch (Exception e) {
-                JUtils.Log(e.getMessage());
-            } finally {
-                if (in != null) {
-                    try {
-                        in.close();
-                    } catch (IOException e) {
-                        JUtils.Log(e.getMessage());
-                    }
-                }
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(List<CategoryBean.ChildsBean> list) {
-            if (list != null && list.size() > 0) {
-                adapter.update(list);
-            } else {
-                menu.removeItem(R.id.category);
-            }
-        }
     }
 }

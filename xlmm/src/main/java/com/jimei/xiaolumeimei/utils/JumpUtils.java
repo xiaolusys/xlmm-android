@@ -7,11 +7,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.ui.activity.product.BrandListActivity;
-import com.jimei.xiaolumeimei.ui.activity.product.ChildListActivity;
-import com.jimei.xiaolumeimei.ui.activity.product.LadyListActivity;
+import com.jimei.xiaolumeimei.ui.activity.product.ProductListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
 import com.jimei.xiaolumeimei.ui.activity.product.TongkuanActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity;
@@ -23,6 +23,7 @@ import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMNinePicActivity;
 import com.jimei.xiaolumeimei.ui.mminfo.MMInfoActivity;
 import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
 import com.jude.utils.JUtils;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -60,15 +61,21 @@ public class JumpUtils {
         context.startActivity(intent);
         break;
       case XlmmConst.JUMP_PRODUCT_CHILDLIST:
-        intent = new Intent(context, ChildListActivity.class);
+        intent = new Intent(context, ProductListActivity.class);
         //        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         //        intent.putExtra("fragment", 3);
+        Bundle childBundle = new Bundle();
+        childBundle.putInt("type",XlmmConst.TYPE_CHILD);
+        intent.putExtras(childBundle);
         context.startActivity(intent);
         break;
       case XlmmConst.JUMP_PRODUCT_LADYLIST:
-        intent = new Intent(context, LadyListActivity.class);
+        intent = new Intent(context, ProductListActivity.class);
+        Bundle ladyBundle = new Bundle();
+        ladyBundle.putInt("type",XlmmConst.TYPE_LADY);
         //        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         //        intent.putExtra("fragment", 4);
+        intent.putExtras(ladyBundle);
         context.startActivity(intent);
         break;
       case XlmmConst.JUMP_PRODUCT_MODELLIST:
