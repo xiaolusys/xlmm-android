@@ -110,8 +110,17 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
                     .subscribe(new ServiceResponse<LogisticsBean>() {
                         @Override
                         public void onNext(LogisticsBean logisticsBean) {
-                            logistic_name.setText(logisticsBean.getName());
-                            logistic_num.setText("快递单号:  " + logisticsBean.getOrder());
+                            if ("".equals(logisticsBean.getName())) {
+                                logistic_name.setText("暂时无法查询物流信息,请稍后再试");
+                            } else {
+                                logistic_name.setText(logisticsBean.getName());
+                            }
+                            if ("".equals(logisticsBean.getOrder())) {
+                                DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                logistic_num.setText(df.format(new Date()));
+                            } else {
+                                logistic_num.setText("快递单号:  " + logisticsBean.getOrder());
+                            }
                             if (logisticsBean.getData().size() > 0) {
                                 for (int i = 0; i < logisticsBean.getData().size(); i++) {
                                     String content = logisticsBean.getData().get(i).getContent();
@@ -169,7 +178,7 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
     protected void initViews() {
         if (!flag) {
             writeLayout.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             titleView.setName("查询物流信息");
         }
         et_logistics_company.setOnTouchListener(new View.OnTouchListener() {
