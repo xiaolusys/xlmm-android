@@ -382,9 +382,9 @@ public class ProductListActivity extends BaseSwipeBackCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_category, menu);
-        this.menu = menu;
-        initCategory();
+//        getMenuInflater().inflate(R.menu.menu_category, menu);
+//        this.menu = menu;
+//        initCategory();
         return super.onCreateOptionsMenu(menu);
     }
 

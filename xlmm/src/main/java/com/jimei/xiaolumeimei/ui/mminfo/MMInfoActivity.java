@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.github.mikephil.charting.animation.Easing;
@@ -56,12 +57,15 @@ import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
 import rx.schedulers.Schedulers;
 
 /**
@@ -331,7 +335,7 @@ public class MMInfoActivity
   @Override public void getMaMaRenwuListBean(MamaSelfListBean mamaSelfListBean) {
     List<MamaSelfListBean.ResultsBean> results = mamaSelfListBean.getResults();
     List<String> list = new ArrayList<>();
-    if (results.size() > 0) {
+    if (mamaSelfListBean.getUnread_cnt() > 0) {
       b.imageNotice.setVisibility(View.VISIBLE);
       for (int i = 0; i < results.size(); i++) {
         if (!results.get(i).isRead()) {
