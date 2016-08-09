@@ -22,10 +22,8 @@ public class MMTeamAdapter extends RecyclerView.Adapter<BaseRevHolder<ItemMmteam
   private final LayoutInflater mLayoutInflater;
 
   private List<PersonalCarryRankBean> mPersonalCarryRankBeanList;
-  private Context mContext;
 
   public MMTeamAdapter(Context context) {
-    this.mContext = context;
     mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     mPersonalCarryRankBeanList = new ArrayList<>();
   }
@@ -47,8 +45,6 @@ public class MMTeamAdapter extends RecyclerView.Adapter<BaseRevHolder<ItemMmteam
   @Override public void onBindViewHolder(BaseRevHolder<ItemMmteamBinding> holder, int position) {
     final PersonalCarryRankBean personalCarryRankBean = mPersonalCarryRankBeanList.get(position);
     holder.getBinding().setVariable(BR.item, personalCarryRankBean);
-    holder.getBinding().tvNum.setText(personalCarryRankBean.getNum() + "个");
-    holder.getBinding().tvCarry.setText(personalCarryRankBean.getTotal() / 100.00 + "");
   }
 
   @Override public int getItemCount() {

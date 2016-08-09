@@ -17,6 +17,8 @@ import com.jimei.xiaolumeimei.entities.CartsHisBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.CartsinfoBean;
+import com.jimei.xiaolumeimei.entities.CategoryDownBean;
+import com.jimei.xiaolumeimei.entities.CategoryProductListBean;
 import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.entities.ClickcarryBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
@@ -32,6 +34,7 @@ import com.jimei.xiaolumeimei.entities.IsGetcoupon;
 import com.jimei.xiaolumeimei.entities.LadyListBean;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.entities.LogisticCompany;
+import com.jimei.xiaolumeimei.entities.LogisticCompanyBean;
 import com.jimei.xiaolumeimei.entities.LogisticsBean;
 import com.jimei.xiaolumeimei.entities.MMChooselistBean;
 import com.jimei.xiaolumeimei.entities.MMHavaChooseResultBean;
@@ -39,9 +42,11 @@ import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.MMStoreBean;
 import com.jimei.xiaolumeimei.entities.MMVisitorsBean;
 import com.jimei.xiaolumeimei.entities.MaMaReNewBean;
+import com.jimei.xiaolumeimei.entities.MaMaRenwuListBean;
 import com.jimei.xiaolumeimei.entities.MamaFansBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.MamaLivenessBean;
+import com.jimei.xiaolumeimei.entities.MamaSelfListBean;
 import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.entities.MembershipPointBean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
@@ -58,6 +63,7 @@ import com.jimei.xiaolumeimei.entities.PotentialFans;
 import com.jimei.xiaolumeimei.entities.ProductBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
+import com.jimei.xiaolumeimei.entities.ProductListResultBean;
 import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
 import com.jimei.xiaolumeimei.entities.RedBagBean;
@@ -109,6 +115,32 @@ public interface XlmmService {
 
     //童装分页列表
     @GET("/rest/v1/products/childlist")
+    Observable<ProductListResultBean> getChildList2(
+            @Query("page") int page,
+            @Query("page_size") int page_size);
+
+    //童装分页列表
+    @GET("/rest/v1/products/childlist")
+    Observable<ProductListResultBean> getChildList2(
+            @Query("page") int page,
+            @Query("page_size") int page_size,
+            @Query("order_by") String order_by);
+
+    //女装分页列表
+    @GET("/rest/v1/products/ladylist")
+    Observable<ProductListResultBean> getLadyList2(
+            @Query("page") int page,
+            @Query("page_size") int page_size);
+
+    //女装分页列表,升价排序x
+    @GET("/rest/v1/products/ladylist")
+    Observable<ProductListResultBean> getLadyList2(
+            @Query("page") int page,
+            @Query("page_size") int page_size,
+            @Query("order_by") String order_by);
+
+    //童装分页列表
+    @GET("/rest/v1/products/childlist")
     Observable<ChildListBean> getChildList(
             @Query("page") int page,
             @Query("page_size") int page_size);
@@ -126,7 +158,7 @@ public interface XlmmService {
             @Query("page") int page,
             @Query("page_size") int page_size);
 
-    //女装分页列表,升价排序
+    //女装分页列表,升价排序x
     @GET("/rest/v1/products/ladylist")
     Observable<LadyListBean> getLadyList(
             @Query("page") int page,
@@ -756,6 +788,20 @@ public interface XlmmService {
             @Query("company_code") String company_code
     );
 
+    //获取退货物流信息
+    @GET("/rest/v1/rtnwuliu/get_wuliu_by_packetid")
+    Observable<LogisticsBean> getRefundLogistic(
+            @Query("rid") int rid,
+            @Query("packetid") String packetid,
+            @Query("company_name") String company_name
+    );
+
+    //获取物流公司信息
+    @GET("/rest/v1/rtnwuliu/get_wuliu_company_code")
+    Observable<LogisticCompanyBean> getLogisticComPany(
+            @Query("company_name") String company_name
+    );
+
     @GET("/rest/v1/portal")
     Observable<PortalBean> getPortalBean();
 
@@ -813,17 +859,26 @@ public interface XlmmService {
             @Field("post_fee") String post_fee,
             @Field("discount_fee") String discount_fee,
             @Field("uuid") String uuid,
-            @Field("total_fee") String total_fee
+            @Field("total_fee") String total_fee,
+            @Field("wallet_renew_deposit") String wallet_renew_deposit
+    );
+
+    @FormUrlEncoded
+    @POST("/rest/v1/pmt/cashout/exchange_deposit")
+    Observable<Response<ResultBean>> exchangeDeposit(
+            @Field("exchange_type") String exchange_type
     );
 
     @GET("/rest/v1/favorites")
     Observable<CollectionAllBean> getCollection(
-            @Query("page") int page
+            @Query("page") int page,
+            @Query("shelf_status") String shelf_status
     );
 
-    @HTTP(method = "POST", path = "/rest/v1/favorites", hasBody = true)
+    @FormUrlEncoded
+    @POST("/rest/v1/favorites")
     Observable<CollectionResultBean> addCollection(
-            @Body CollectionDeleteBody deleteBody
+            @Field("model_id") int model_id
     );
 
     @HTTP(method = "DELETE", path = "/rest/v1/favorites", hasBody = true)
@@ -852,5 +907,23 @@ public interface XlmmService {
 
     @GET("/rest/v2/mama/teamrank/self_rank")
     Observable<Response<PersonalCarryRankBean>> getTeamSelfRank(
+    );
+
+    @GET("/rest/v1/pmt/xlmm/{id}/new_mama_task_info")
+    Observable<Response<MaMaRenwuListBean>> getMaMaRenwuListBean(
+        @Path("id")String id
+    );
+
+    @GET("/rest/v2/mama/message/self_list")
+    Observable<Response<MamaSelfListBean>> getMaMaselfList(
+    );
+
+    @GET("/rest/v2/categorys/latest_version")
+    Observable<CategoryDownBean> getCategoryDown();
+
+    @GET("/rest/v2/modelproducts")
+    Observable<CategoryProductListBean> getCategoryProductList(
+            @Query("cid") String cid,
+            @Query("page") int page
     );
 }

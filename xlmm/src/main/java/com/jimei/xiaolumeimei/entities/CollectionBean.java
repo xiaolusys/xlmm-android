@@ -53,7 +53,7 @@ public class CollectionBean implements Serializable {
 
     public static class ModelproductBean implements Serializable {
         private String name;
-        private int shelf_status;
+        private String shelf_status;
         private double lowest_std_sale_price;
         private String web_url;
         private double lowest_agent_price;
@@ -68,11 +68,11 @@ public class CollectionBean implements Serializable {
             this.name = name;
         }
 
-        public int getShelf_status() {
+        public String getShelf_status() {
             return shelf_status;
         }
 
-        public void setShelf_status(int shelf_status) {
+        public void setShelf_status(String shelf_status) {
             this.shelf_status = shelf_status;
         }
 

@@ -3,6 +3,7 @@ package com.jimei.xiaolumeimei.ui.xlmmmain;
 import com.jimei.xiaolumeimei.base.RxSchedulers;
 import com.jimei.xiaolumeimei.entities.AddressDownloadResultBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
+import com.jimei.xiaolumeimei.entities.CategoryDownBean;
 import com.jimei.xiaolumeimei.entities.IsGetcoupon;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
@@ -71,6 +72,14 @@ public class MainModel implements MainContract.Model {
     return XlmmRetrofitClient
             .getService()
             .getVersion()
+            .compose(RxSchedulers.io_main());
+  }
+
+  @Override
+  public Observable<CategoryDownBean> getCategoryDown() {
+    return XlmmRetrofitClient
+            .getService()
+            .getCategoryDown()
             .compose(RxSchedulers.io_main());
   }
 }

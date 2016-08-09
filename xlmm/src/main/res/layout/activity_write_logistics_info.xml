@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <com.jimei.xiaolumeimei.widget.XlmmTitleView
+        android:id="@+id/title_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:xlmm_title="填写物流信息" />
@@ -125,49 +126,175 @@
 
             </RelativeLayout>
 
-            <include layout="@layout/common_gap" />
-
-            <EditText
-                android:id="@+id/et_logistics_company"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="110px"
-                android:background="@color/white"
-                android:focusable="false"
-                android:hint="请输入物流公司"
-                android:paddingBottom="10sp"
-                android:paddingLeft="10sp"
-                android:paddingRight="10sp"
-                android:paddingTop="10sp"
-                android:singleLine="true"
-                android:textCursorDrawable="@drawable/color_cursor" />
+                android:layout_height="wrap_content">
 
-            <include layout="@layout/common_gap" />
+                <LinearLayout
+                    android:id="@+id/write_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
-            <EditText
-                android:id="@+id/et_logistics_number"
-                android:layout_width="match_parent"
-                android:layout_height="110px"
-                android:background="@color/white"
-                android:hint="请输入快递单号"
-                android:paddingBottom="10sp"
-                android:paddingLeft="10sp"
-                android:paddingRight="10sp"
-                android:paddingTop="10sp"
-                android:singleLine="true"
-                android:textCursorDrawable="@drawable/color_cursor" />
+                    <include layout="@layout/common_gap" />
 
-            <include layout="@layout/common_gap" />
+                    <EditText
+                        android:id="@+id/et_logistics_company"
+                        android:layout_width="match_parent"
+                        android:layout_height="110px"
+                        android:background="@color/white"
+                        android:focusable="false"
+                        android:hint="请输入物流公司"
+                        android:paddingBottom="10sp"
+                        android:paddingLeft="10sp"
+                        android:paddingRight="10sp"
+                        android:paddingTop="10sp"
+                        android:singleLine="true"
+                        android:textCursorDrawable="@drawable/color_cursor" />
 
-            <Button
-                android:id="@+id/btn_commit"
-                android:layout_width="656px"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="80px"
-                android:layout_marginTop="80px"
-                android:background="@drawable/shape_login"
-                android:text="提交"
-                android:textColor="@color/white" />
+                    <include layout="@layout/common_gap" />
+
+                    <EditText
+                        android:id="@+id/et_logistics_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="110px"
+                        android:background="@color/white"
+                        android:hint="请输入快递单号"
+                        android:paddingBottom="10sp"
+                        android:paddingLeft="10sp"
+                        android:paddingRight="10sp"
+                        android:paddingTop="10sp"
+                        android:singleLine="true"
+                        android:textCursorDrawable="@drawable/color_cursor" />
+
+                    <include layout="@layout/common_gap" />
+
+                    <Button
+                        android:id="@+id/btn_commit"
+                        android:layout_width="656px"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="80px"
+                        android:layout_marginTop="80px"
+                        android:background="@drawable/shape_login"
+                        android:text="提交"
+                        android:textColor="@color/white" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/logistic_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="120px"
+                        android:background="@color/white"
+                        android:orientation="vertical">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:id="@+id/logistic_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="40px"
+                            android:textColor="@color/text_color_62"
+                            android:textSize="14sp" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:id="@+id/logistic_num"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="40px"
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:textColor="@color/text_color_B4"
+                            android:textSize="13sp" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/msg_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="8dp">
+
+                        <LinearLayout
+                            android:id="@+id/log_image_layout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:orientation="vertical"
+                            android:padding="8dp">
+
+                            <View
+                                android:layout_width="10px"
+                                android:layout_height="10px"
+                                android:layout_marginTop="10px"
+                                android:background="@drawable/state_on_bg" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/log_msg_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="8dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="120px"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tv_order_last_time"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="12px"
+                                    android:textColor="@color/text_color_B4"
+                                    android:textSize="12sp" />
+
+                                <TextView
+                                    android:id="@+id/tv_order_last_state"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginLeft="12px"
+                                    android:layout_marginTop="4dp"
+                                    android:textColor="@color/text_color_62"
+                                    android:textSize="14sp" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp" />
+
+                </LinearLayout>
+            </FrameLayout>
 
         </LinearLayout>
 

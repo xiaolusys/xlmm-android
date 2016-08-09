@@ -11,17 +11,25 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import butterknife.Bind;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.entities.LogisticsBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
+import com.jimei.xiaolumeimei.widget.LogImageView;
+import com.jimei.xiaolumeimei.widget.LogMsgView;
+import com.jimei.xiaolumeimei.widget.XlmmTitleView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import butterknife.Bind;
 import okhttp3.ResponseBody;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
@@ -36,6 +44,8 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
 
     String TAG = "WriteLogisticsInfoActivty";
 
+    @Bind(R.id.title_view)
+    XlmmTitleView titleView;
     @Bind(R.id.et_logistics_company)
     EditText et_logistics_company;
     @Bind(R.id.et_logistics_number)
@@ -50,9 +60,31 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
     TextView addressTv;
     @Bind(R.id.tv_reason)
     TextView reasonTv;
+    @Bind(R.id.logistic_layout)
+    LinearLayout logisticLayout;
+    @Bind(R.id.msg_layout)
+    LinearLayout msgLayout;
+    @Bind(R.id.write_layout)
+    LinearLayout writeLayout;
+    @Bind(R.id.logistic_name)
+    TextView logistic_name;
+    @Bind(R.id.logistic_num)
+    TextView logistic_num;
+    @Bind(R.id.log_image_layout)
+    LinearLayout log_image_layout;
+    @Bind(R.id.log_msg_layout)
+    LinearLayout log_msg_layout;
+    @Bind(R.id.tv_order_last_time)
+    TextView tv_order_last_time;
+    @Bind(R.id.tv_order_last_state)
+    TextView tv_order_last_state;
     private String address;
     String company;
     int goods_id;
+    private boolean flag;
+    private String company_name;
+    private String packetid;
+    private int rid;
 
     @Override
     protected void setListener() {
@@ -71,12 +103,70 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
                 phoneTv.setText("联系电话:" + s);
             }
         }
+        if (flag) {
+            Subscription subscribe = TradeModel.getInstance()
+                    .getRefundLogistic(rid, packetid, company_name)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(new ServiceResponse<LogisticsBean>() {
+                        @Override
+                        public void onNext(LogisticsBean logisticsBean) {
+                            if ("".equals(logisticsBean.getName())) {
+                                logistic_name.setText("暂时无法查询物流信息,请稍后再试");
+                            } else {
+                                logistic_name.setText(logisticsBean.getName());
+                            }
+                            if ("".equals(logisticsBean.getOrder())) {
+                                DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                logistic_num.setText(df.format(new Date()));
+                            } else {
+                                logistic_num.setText("快递单号:  " + logisticsBean.getOrder());
+                            }
+                            if (logisticsBean.getData().size() > 0) {
+                                for (int i = 0; i < logisticsBean.getData().size(); i++) {
+                                    String content = logisticsBean.getData().get(i).getContent();
+                                    String time = logisticsBean.getData().get(i).getTime().replace("T", " ");
+                                    if (i == 0) {
+                                        tv_order_last_time.setText(time);
+                                        tv_order_last_state.setText(content);
+                                    } else {
+                                        log_image_layout.addView(new LogImageView(WriteLogisticsInfoActivty.this));
+                                        LogMsgView logMsgView = new LogMsgView(WriteLogisticsInfoActivty.this);
+                                        logMsgView.setMsg(content);
+                                        logMsgView.setTime(time);
+                                        log_msg_layout.addView(logMsgView);
+                                    }
+                                }
+                            } else {
+                                DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                tv_order_last_time.setText(df.format(new Date()));
+                                tv_order_last_state.setText("暂时无法查询物流信息,请稍后再试");
+                            }
+                            logisticLayout.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                            logistic_name.setText(df.format(new Date()));
+                            logistic_num.setText("暂时无法查询物流信息,请稍后再试");
+                            msgLayout.setVisibility(View.GONE);
+                            logisticLayout.setVisibility(View.VISIBLE);
+                        }
+                    });
+            addSubscription(subscribe);
+        }
     }
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-        goods_id = extras.getInt("goods_id");
-        address = extras.getString("address");
+        if (extras != null) {
+            goods_id = extras.getInt("goods_id");
+            address = extras.getString("address");
+            flag = extras.getBoolean("flag");
+            company_name = extras.getString("company_name", "");
+            packetid = extras.getString("packetid", "");
+            rid = extras.getInt("rid");
+        }
     }
 
     @Override
@@ -86,6 +176,11 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
 
     @Override
     protected void initViews() {
+        if (!flag) {
+            writeLayout.setVisibility(View.VISIBLE);
+        } else {
+            titleView.setName("查询物流信息");
+        }
         et_logistics_company.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
                 if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
@@ -104,7 +199,6 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
         ForegroundColorSpan colorSpan = new ForegroundColorSpan(getResources().getColor(R.color.colorAccent));
         builder.setSpan(colorSpan, 20, reasonTv.getText().toString().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         reasonTv.setText(builder);
-
     }
 
     @Override

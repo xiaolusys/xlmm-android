@@ -2,54 +2,45 @@ package com.jimei.xiaolumeimei.ui.activity.product;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.CollectionTabAdapter;
-import com.jimei.xiaolumeimei.base.BaseAppCompatActivity;
+import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
+import com.jimei.xiaolumeimei.databinding.ActivityCollectionBinding;
 import com.jimei.xiaolumeimei.ui.fragment.v1.CollectionFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
-
-public class CollectionActivity extends BaseAppCompatActivity {
-    @Bind(R.id.tab_layout)
-    TabLayout mTabLayout;
-    @Bind(R.id.view_pager)
-    ViewPager mViewPager;
+public class CollectionActivity extends BaseMVVMActivity<ActivityCollectionBinding> {
+    @Override
+    protected void initView() {
+    }
 
     @Override
-    protected void setListener() {
-
+    protected void initListener() {
     }
 
     @Override
     protected void initData() {
+        showIndeterminateProgressDialog(false);
         List<CollectionFragment> fragments = new ArrayList<>();
-        fragments.add(CollectionFragment.newInstance("热销商品",1));
-        fragments.add(CollectionFragment.newInstance("下架商品",0));
+        fragments.add(CollectionFragment.newInstance("热销商品", "on"));
+        fragments.add(CollectionFragment.newInstance("未上架商品", "off"));
         CollectionTabAdapter mAdapter = new CollectionTabAdapter(getSupportFragmentManager(), fragments);
-        mViewPager.setAdapter(mAdapter);
-        mViewPager.setOffscreenPageLimit(2);
-        mTabLayout.setupWithViewPager(mViewPager);
-        mTabLayout.setTabMode(TabLayout.MODE_FIXED);
+        b.viewPager.setAdapter(mAdapter);
+        b.viewPager.setOffscreenPageLimit(2);
+        b.tabLayout.setupWithViewPager(b.viewPager);
+        b.tabLayout.setTabMode(TabLayout.MODE_FIXED);
     }
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-
     }
 
     @Override
     protected int getContentViewLayoutID() {
         return R.layout.activity_collection;
-    }
-
-    @Override
-    protected void initViews() {
-
     }
 
     @Override

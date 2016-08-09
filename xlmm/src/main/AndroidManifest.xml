@@ -211,12 +211,6 @@
             android:name=".ui.activity.product.WashingIntrductionActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
-            android:name=".ui.activity.product.ChildListActivity"
-            android:theme="@style/AppTheme.TransparentActivity" />
-        <activity
-            android:name=".ui.activity.product.LadyListActivity"
-            android:theme="@style/AppTheme.TransparentActivity" />
-        <activity
             android:name=".base.CommonWebViewActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
@@ -431,6 +425,8 @@
         <activity
             android:name=".ui.activity.product.LadyZoneActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
+        <activity android:name=".ui.activity.product.ProductListActivity"
+            android:theme="@style/AppTheme.TransparentActivity"/>
 
         <service
             android:name=".xlmmService.UpdateService"

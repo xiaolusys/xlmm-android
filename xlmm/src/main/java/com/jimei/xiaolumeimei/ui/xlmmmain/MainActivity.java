@@ -28,25 +28,26 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import butterknife.Bind;
+
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.base.BasePresenterActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AddressDownloadResultBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
+import com.jimei.xiaolumeimei.entities.CategoryDownBean;
 import com.jimei.xiaolumeimei.entities.IsGetcoupon;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.event.LogOutEmptyEvent;
+import com.jimei.xiaolumeimei.event.SetMiPushEvent;
 import com.jimei.xiaolumeimei.event.UserChangeEvent;
 import com.jimei.xiaolumeimei.event.UserInfoEmptyEvent;
 import com.jimei.xiaolumeimei.receiver.UpdateBroadReceiver;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.main.ComplainActivity;
-import com.jimei.xiaolumeimei.ui.activity.product.ChildListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.CollectionActivity;
-import com.jimei.xiaolumeimei.ui.activity.product.LadyListActivity;
+import com.jimei.xiaolumeimei.ui.activity.product.ProductListActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllOrdersActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
@@ -81,20 +82,25 @@ import com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableLayout;
 import com.jimei.xiaolumeimei.xlmmService.UpdateService;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
+import com.xiaomi.mipush.sdk.MiPushClient;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
 import com.zhy.http.okhttp.callback.FileCallBack;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import butterknife.Bind;
 import okhttp3.Call;
 import okhttp3.ResponseBody;
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 import retrofit2.Response;
 
 /**
@@ -152,6 +158,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   private EventBus aDefault;
   private UpdateBroadReceiver mUpdateBroadReceiver;
   private double budgetCash;
+  private String mamaid;
 
   @Override protected void onStart() {
     super.onStart();
@@ -164,6 +171,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   @Override protected void initData() {
     mPresenter.getUserInfoBean();
     mPresenter.getAddressVersionAndUrl();
+    mPresenter.getCategoryDown();
     mPresenter.getVersion();
     initMainView(null);
     if (LoginUtils.isJumpToLogin(getApplicationContext())) {
@@ -175,6 +183,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     if (LoginUtils.checkLoginState(getApplicationContext())) {
       mPresenter.isCouPon();
     }
+    LoginUtils.deleteIsMamaRenwulist(getApplicationContext());
   }
 
   @Override protected void setListener() {
@@ -238,6 +247,9 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
       case R.id.rl_mmentry:
         JUtils.Log(TAG, "xiaolu mama entry");
         intent = new Intent(MainActivity.this, MMInfoActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("mamaid", mamaid);
+        intent.putExtras(bundle);
         break;
       case R.id.ll_money:
         intent = new Intent(MainActivity.this, WalletActivity.class);
@@ -256,13 +268,18 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         break;
       case R.id.child_img:
         MobclickAgent.onEvent(MainActivity.this, "ChildID");
-        readyGo(ChildListActivity.class);
+        Bundle childBundle = new Bundle();
+        childBundle.putInt("type",XlmmConst.TYPE_CHILD);
+//        readyGo(LadyZoneActivity.class,childBundle);
+        readyGo(ProductListActivity.class,childBundle);
         break;
       case R.id.lady_img:
         MobclickAgent.onEvent(MainActivity.this, "LadyID");
-        readyGo(LadyListActivity.class);
+        Bundle ladyBundle = new Bundle();
+        ladyBundle.putInt("type",XlmmConst.TYPE_LADY);
+//        readyGo(LadyZoneActivity.class,ladyBundle);
+        readyGo(ProductListActivity.class,ladyBundle);
         break;
-
       case R.id.text_yesterday:
         MobclickAgent.onEvent(this, "YesterdayID");
         currentNum = 0;
@@ -432,6 +449,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
       scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(vp.getCurrentItem()));
 
       mPresenter.getAddressVersionAndUrl();
+      mPresenter.getCategoryDown();
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -516,7 +534,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
       if (null != userNewBean.getUserBudget()) {
         budgetCash = userNewBean.getUserBudget().getBudgetCash();
       }
-      //JUtils.Log(TAG, "mamaid " + userNewBean.getXiaolumm().getId());
+      mamaid = userNewBean.getXiaolumm().getId() + "";
     } else {
       rl_mmentry.setVisibility(View.INVISIBLE);
       loginFlag.setVisibility(View.GONE);
@@ -576,6 +594,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
       } else {
         loginFlag.setVisibility(View.VISIBLE);
       }
+      mamaid = userNewBean.getXiaolumm().getId() + "";
       //JUtils.Log(TAG, "mamaid " + userNewBean.getXiaolumm().getId());
       if ((userNewBean.getXiaolumm() != null) && (userNewBean.getXiaolumm().getId() != 0)) {
         rl_mmentry.setVisibility(View.VISIBLE);
@@ -697,9 +716,13 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
                     .this, extra, -1, ActivityWebViewActivity.class);
               } else {
                 if (jump_info.getType() == XlmmConst.JUMP_PRODUCT_CHILDLIST) {
-                  readyGo(ChildListActivity.class);
+                  Bundle childBundle = new Bundle();
+                  childBundle.putInt("type",XlmmConst.TYPE_CHILD);
+                  readyGo(ProductListActivity.class,childBundle);
                 } else if (jump_info.getType() == XlmmConst.JUMP_PRODUCT_LADYLIST) {
-                  readyGo(LadyListActivity.class);
+                  Bundle ladyBundle = new Bundle();
+                  ladyBundle.putInt("type",XlmmConst.TYPE_LADY);
+                  readyGo(ProductListActivity.class,ladyBundle);
                 } else {
                   JumpUtils.push_jump_proc(MainActivity.this, extra);
                 }
@@ -909,6 +932,36 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     }
   }
 
+  @Override public void downCategoryFile(CategoryDownBean categoryDownBean) {
+    JUtils.Log(TAG, categoryDownBean.toString());
+    String downloadUrl = categoryDownBean.getDownload_url();
+    String sha1 = categoryDownBean.getSha1();
+    if (!FileUtils.isCategorySame(getApplicationContext(), sha1)) {
+      OkHttpUtils.get()
+          .url(downloadUrl)
+          .build()
+          .execute(new FileCallBack(
+              Environment.getExternalStorageDirectory().getAbsolutePath() + "/xlmmcategory/",
+              "category.json") {
+            @Override public void onError(Call call, Exception e, int id) {
+              if (FileUtils.isFolderExist(
+                  Environment.getExternalStorageDirectory().getAbsolutePath()
+                      + "/xlmmcategory/"
+                      + "category.json")) {
+                FileUtils.deleteFile(Environment.getExternalStorageDirectory().getAbsolutePath()
+                    + "/xlmmcategory/"
+                    + "category.json");
+              }
+            }
+
+            @Override public void onResponse(File response, int id) {
+              JUtils.Log(TAG, response.getAbsolutePath());
+              FileUtils.saveCategoryFile(getApplicationContext(), sha1);
+            }
+          });
+    }
+  }
+
   private class MyFragmentAdapter extends FragmentPagerAdapter {
 
     public MyFragmentAdapter(FragmentManager fm) {
@@ -963,6 +1016,11 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     mPresenter.getUserInfoBeanChange();
   }
 
+  @Subscribe(threadMode = ThreadMode.BACKGROUND) public void setMipush(SetMiPushEvent event) {
+    JUtils.Log("regid", MiPushClient.getRegId(getApplicationContext()));
+    LoginUtils.setPushUserAccount(this, MiPushClient.getRegId(getApplicationContext()));
+  }
+
   @Override protected void onPause() {
     super.onPause();
     MobclickAgent.onPageEnd(this.getClass().getSimpleName());
@@ -976,7 +1034,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     MobclickAgent.onResume(this);
     //resumeData();
     mPresenter.getCartsNum();
-//    mPresenter.getUserInfoBean();
+    //    mPresenter.getUserInfoBean();
 
     JUtils.Log(TAG, "resume");
   }
@@ -1014,8 +1072,8 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     super.onDestroy();
   }
 
-  @Override
-  public void checkVersion(int versionCode,String content,String downloadUrl,boolean isAutoUpdate) {
+  @Override public void checkVersion(int versionCode, String content, String downloadUrl,
+      boolean isAutoUpdate) {
     new Thread(() -> {
       try {
         Thread.sleep(500 * 10);
@@ -1024,29 +1082,24 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
       }
 
       runOnUiThread(new Runnable() {
-        @Override
-        public void run() {
+        @Override public void run() {
           VersionManager versionManager = new VersionManager() {
 
-            @Override
-            public int getServerVersion() {
+            @Override public int getServerVersion() {
               return versionCode;
             }
 
-            @Override
-            public String getUpdateContent() {
+            @Override public String getUpdateContent() {
               return content;
             }
 
-            @Override
-            public boolean showMsg() {
+            @Override public boolean showMsg() {
               return false;
             }
           };
           if (isAutoUpdate) {
             versionManager.setPositiveListener(new View.OnClickListener() {
-              @Override
-              public void onClick(View v) {
+              @Override public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, UpdateService.class);
                 intent.putExtra(UpdateService.EXTRAS_DOWNLOAD_URL, downloadUrl);
                 startService(intent);
@@ -1054,14 +1107,14 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
                 JUtils.Toast("应用正在后台下载!");
               }
             });
-            SharedPreferences updatePreferences = getSharedPreferences("update", Context.MODE_PRIVATE);
+            SharedPreferences updatePreferences =
+                getSharedPreferences("update", Context.MODE_PRIVATE);
             boolean update = updatePreferences.getBoolean("update", true);
             if (update) {
               versionManager.checkVersion(MainActivity.this);
             }
           }
         }
-
       });
     }).start();
   }

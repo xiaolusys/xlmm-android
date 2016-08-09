@@ -12,7 +12,6 @@ import com.jimei.xiaolumeimei.adapter.AddressSelectAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AddressBean;
 import com.jimei.xiaolumeimei.model.AddressModel;
-import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.widget.RecycleViewDivider;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
@@ -25,82 +24,99 @@ import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/01/18.
- *
+ * <p>
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class AddressSelectActivity extends BaseSwipeBackCompatActivity
-    implements View.OnClickListener {
+        implements View.OnClickListener {
 
-  @Bind(R.id.address_recyclerView) RecyclerView addressRecyclerView;
-  @Bind(R.id.addAdress) Button addAdress;
-  private AddressSelectAdapter adapter;
+    @Bind(R.id.address_recyclerView)
+    RecyclerView addressRecyclerView;
+    @Bind(R.id.addAdress)
+    Button addAdress;
+    private AddressSelectAdapter adapter;
+    private int position;
 
-  @Override protected void setListener() {
-    addAdress.setOnClickListener(this);
-  }
-
-  @Override protected void initData() {
-  }
-
-  @Override protected void onResume() {
-    super.onResume();
-    MobclickAgent.onPageStart(this.getClass().getSimpleName());
-    MobclickAgent.onResume(this);
-    Subscription subscribe = AddressModel.getInstance()
-        .getAddressList()
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<List<AddressBean>>() {
-          @Override public void onNext(List<AddressBean> list) {
-            super.onNext(list);
-            if (list != null) {
-              adapter.updateWithClear(list);
-            }
-          }
-        });
-    addSubscription(subscribe);
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-    MobclickAgent.onPause(this);
-  }
-
-  @Override protected void getBundleExtras(Bundle extras) {
-
-  }
-
-  @Override protected int getContentViewLayoutID() {
-    return R.layout.address_activity;
-  }
-
-  @Override protected void initViews() {
-    addressRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-    RecycleViewDivider divider = new RecycleViewDivider(RecycleViewDivider.VERTICAL);
-    divider.setSize(3);
-    divider.setColor(getResources().getColor(R.color.bg_grey));
-    addressRecyclerView.addItemDecoration(divider);
-    adapter = new AddressSelectAdapter(this);
-    addressRecyclerView.setAdapter(adapter);
-  }
-
-  @Override protected boolean toggleOverridePendingTransition() {
-    return false;
-  }
-
-  @Override protected TransitionMode getOverridePendingTransitionMode() {
-    return null;
-  }
-
-  @Override public void onClick(View v) {
-    switch (v.getId()) {
-      case R.id.addAdress:
-
-        startActivity(new Intent(AddressSelectActivity.this, AddNoAddressActivity.class));
-        break;
+    @Override
+    protected void setListener() {
+        addAdress.setOnClickListener(this);
     }
-  }
+
+    @Override
+    protected void initData() {
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        showIndeterminateProgressDialog(false);
+        MobclickAgent.onPageStart(this.getClass().getSimpleName());
+        MobclickAgent.onResume(this);
+        Subscription subscribe = AddressModel.getInstance()
+                .getAddressList()
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ServiceResponse<List<AddressBean>>() {
+                    @Override
+                    public void onNext(List<AddressBean> list) {
+                        super.onNext(list);
+                        if (list != null) {
+                            adapter.updateWithClear(list);
+                            hideIndeterminateProgressDialog();
+                        }
+                    }
+                });
+        addSubscription(subscribe);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+        MobclickAgent.onPause(this);
+    }
+
+    @Override
+    protected void getBundleExtras(Bundle extras) {
+        if (extras != null) {
+            position = extras.getInt("position");
+        }
+
+    }
+
+    @Override
+    protected int getContentViewLayoutID() {
+        return R.layout.address_activity;
+    }
+
+    @Override
+    protected void initViews() {
+        addressRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        RecycleViewDivider divider = new RecycleViewDivider(RecycleViewDivider.VERTICAL);
+        divider.setSize(3);
+        divider.setColor(getResources().getColor(R.color.bg_grey));
+        addressRecyclerView.addItemDecoration(divider);
+        adapter = new AddressSelectAdapter(this, position);
+        addressRecyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    protected boolean toggleOverridePendingTransition() {
+        return false;
+    }
+
+    @Override
+    protected TransitionMode getOverridePendingTransitionMode() {
+        return null;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.addAdress:
+                startActivity(new Intent(AddressSelectActivity.this, AddNoAddressActivity.class));
+                break;
+        }
+    }
 
 
 }

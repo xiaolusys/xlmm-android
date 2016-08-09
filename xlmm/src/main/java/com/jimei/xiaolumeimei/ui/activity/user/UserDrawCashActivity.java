@@ -23,8 +23,9 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
-import butterknife.Bind;
 import org.greenrobot.eventbus.EventBus;
+
+import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -95,6 +96,7 @@ public class UserDrawCashActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void initViews() {
         moneyTv.setText(money + "元");
+        smoothCheckBox.setCanClickable(true);
     }
 
     @Override

@@ -14,6 +14,7 @@ import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.GetCouponbean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
+import com.jimei.xiaolumeimei.event.SetMiPushEvent;
 import com.jimei.xiaolumeimei.event.UserInfoEmptyEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
@@ -26,7 +27,6 @@ import com.jimei.xiaolumeimei.widget.ClearEditText;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
-import com.xiaomi.mipush.sdk.MiPushClient;
 import org.greenrobot.eventbus.EventBus;
 import retrofit2.Response;
 import retrofit2.adapter.rxjava.HttpException;
@@ -134,6 +134,7 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
 
                   if (code == 0) {
                     EventBus.getDefault().post(new UserInfoEmptyEvent());
+                    EventBus.getDefault().post(new SetMiPushEvent());
                     subscribe = UserModel.getInstance()
                         .need_set_info()
                         .subscribeOn(Schedulers.io())
@@ -144,9 +145,6 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                             if (0 == codeInfo) {
                               LoginUtils.saveLoginSuccess(true, getApplicationContext());
 
-                              //set xiaomi push useraccount
-                              LoginUtils.setPushUserAccount(SmsLoginActivity.this,
-                                  MiPushClient.getRegId(getApplicationContext()));
                               String login = null;
                               if (null != getIntent()
                                   && getIntent().getExtras() != null) {

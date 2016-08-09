@@ -73,6 +73,7 @@
   <color name="text_color_A0">#A0A0A0</color>
   <color name="white">#FFFFFF</color><!--白色 -->
   <color name="white_loading">#99FFFFFF</color><!--白色 -->
+  <color name="white_bg">#F4FFFFFF</color><!--微透明白色 -->
   <color name="ivory">#FFFFF0</color><!--象牙色 -->
   <color name="lightyellow">#FFFFE0</color><!--亮黄色-->
   <color name="yellow">#FFFF00</color><!--黄色 -->
@@ -227,4 +228,14 @@
   <color name="c26262E">#DD26262E</color>
   <color name="bg_grey">#F3F3F4</color>
   <color name="bg_grey2">#DADADA</color>
+  <color name="color_1">#C71717</color>
+  <color name="color_2">#F0931D</color>
+  <color name="color_3">#F1DD57</color>
+  <color name="color_4">#179317</color>
+  <color name="color_5">#353A98</color>
+  <color name="color_6">#883598</color>
+  <color name="color_7">#E69090</color>
+  <color name="color_8">#000000</color>
+  <color name="color_9">#FFFFFF</color>
+  <color name="color_10">#9A9A9A</color>
 </resources>

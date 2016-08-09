@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
@@ -35,6 +36,7 @@ import cn.sharesdk.wechat.moments.WechatMoments;
 import com.google.gson.Gson;
 import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.entities.CallNativeFuncBean;
@@ -86,10 +88,18 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
 
   @JavascriptInterface public void jumpToNativeLocation(String url) {
     JUtils.Log("CommonWebViewActivity", url);
+    JUtils.Log("CommonWebViewActivity", "brook hahahahahah");
     jump_ToNativeLocation(url);
+    //jump_ToNativeLocation("");
   }
 
   @JavascriptInterface public String getNativeMobileSNCode() {
+    try {
+      return Settings.Secure.getString(XlmmApp.getmContext().getContentResolver(),
+          Settings.Secure.ANDROID_ID);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     return "";
   }
 
@@ -166,7 +176,7 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
 
     Map<String, String> map = new HashMap<String, String>();
     map.put("id", "name");
-    map.put(wx.getId()+ "", wx.getName());
+    map.put(wx.getId() + "", wx.getName());
     MobclickAgent.onEvent(mContext, "ShareID", map);
 
     wx.share(sp);
@@ -192,7 +202,7 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
 
     Map<String, String> map = new HashMap<String, String>();
     map.put("id", "name");
-    map.put(pyq.getId()+ "", pyq.getName());
+    map.put(pyq.getId() + "", pyq.getName());
     MobclickAgent.onEvent(mContext, "ShareID", map);
     pyq.share(sp);
   }
@@ -215,7 +225,7 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
 
     Map<String, String> map = new HashMap<String, String>();
     map.put("id", "name");
-    map.put(qq.getId()+ "", qq.getName());
+    map.put(qq.getId() + "", qq.getName());
     MobclickAgent.onEvent(mContext, "ShareID", map);
 
     qq.share(sp);
@@ -240,7 +250,7 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
 
     Map<String, String> map = new HashMap<String, String>();
     map.put("id", "name");
-    map.put(qzone.getId()+ "", qzone.getName());
+    map.put(qzone.getId() + "", qzone.getName());
     MobclickAgent.onEvent(mContext, "ShareID", map);
     qzone.share(sp);
   }
@@ -261,7 +271,7 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
 
     Map<String, String> map = new HashMap<String, String>();
     map.put("id", "name");
-    map.put(weibo.getId()+ "", weibo.getName());
+    map.put(weibo.getId() + "", weibo.getName());
     MobclickAgent.onEvent(mContext, "ShareID", map);
     weibo.share(sp);
   }
@@ -315,7 +325,6 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
         });
     ((BaseSwipeBackCompatActivity) mContext).addSubscription(subscribe);
   }
-
 
   private void sharePartyInfo() {
     if (partyShareInfo == null) return;
@@ -563,7 +572,7 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
   }
 
   @JavascriptInterface public void callNativeLoginActivity(String pageUrl) {
-    JUtils.Log(TAG,"pageUrl"+pageUrl);
+    JUtils.Log(TAG, "pageUrl" + pageUrl);
     Intent intent = new Intent(mContext, LoginActivity.class);
     Bundle bundle = new Bundle();
     bundle.putString("login", "h5");
@@ -629,7 +638,7 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
 
     Map<String, String> map = new HashMap<String, String>();
     map.put("id", "name");
-    map.put(weibo.getId()+ "", weibo.getName());
+    map.put(weibo.getId() + "", weibo.getName());
     MobclickAgent.onEvent(mContext, "ShareID", map);
     weibo.share(sp);
   }
@@ -649,7 +658,7 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     // 执行图文分享
     Map<String, String> map = new HashMap<String, String>();
     map.put("id", "name");
-    map.put(qzone.getId()+ "", qzone.getName());
+    map.put(qzone.getId() + "", qzone.getName());
     MobclickAgent.onEvent(mContext, "ShareID", map);
     qzone.share(sp);
   }
@@ -669,7 +678,7 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
 
     Map<String, String> map = new HashMap<String, String>();
     map.put("id", "name");
-    map.put(qq.getId()+ "", qq.getName());
+    map.put(qq.getId() + "", qq.getName());
     MobclickAgent.onEvent(mContext, "ShareID", map);
     qq.share(sp);
   }
@@ -685,7 +694,7 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     // 执行图文分享
     Map<String, String> map = new HashMap<String, String>();
     map.put("id", "name");
-    map.put(pyq.getId()+ "", pyq.getName());
+    map.put(pyq.getId() + "", pyq.getName());
     MobclickAgent.onEvent(mContext, "ShareID", map);
     pyq.share(sp);
   }
@@ -706,7 +715,7 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
 
     Map<String, String> map = new HashMap<String, String>();
     map.put("id", "name");
-    map.put(wx.getId()+ "", wx.getName());
+    map.put(wx.getId() + "", wx.getName());
     MobclickAgent.onEvent(mContext, "ShareID", map);
 
     wx.share(sp);
@@ -760,8 +769,8 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     @Override public void onShare(Platform platform, Platform.ShareParams paramsToShare) {
       Map<String, String> map = new HashMap<String, String>();
       map.put("id", "name");
-      map.put(platform.getId()+ "", platform.getName());
-      JUtils.Log("ShareID",platform.getId()+ "    "+platform.getName());
+      map.put(platform.getId() + "", platform.getName());
+      JUtils.Log("ShareID", platform.getId() + "    " + platform.getName());
       MobclickAgent.onEvent(mContext, "ShareID", map);
 
       if (WechatMoments.NAME.equals(platform.getName())) {

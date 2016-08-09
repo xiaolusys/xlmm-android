@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jimei.xiaolumeimei.R;
@@ -88,10 +89,9 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
                         JUtils.Toast("取消失败!");
                     }
                 }));
-        holder.item.setOnClickListener(v -> {
-            JumpUtils.jumpToWebViewWithCookies(mContext, modelproductBean.getWeb_url(), bean.getId(),
-                    ProductPopDetailActvityWeb.class);
-        });
+        holder.item.setOnClickListener(v -> JumpUtils.jumpToWebViewWithCookies(
+                mContext, modelproductBean.getWeb_url(),
+                bean.getId(), ProductPopDetailActvityWeb.class));
     }
 
     @Override
@@ -106,7 +106,7 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
         @Bind(R.id.name)
         TextView name;
         @Bind(R.id.flag)
-        ImageView flag;
+        RelativeLayout flag;
         @Bind(R.id.agent_price)
         TextView agentPrice;
         @Bind(R.id.sale_price)

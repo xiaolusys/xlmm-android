@@ -23,7 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import butterknife.Bind;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
 import com.jimei.xiaolumeimei.R;
@@ -39,16 +39,19 @@ import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.ui.activity.user.AddNoAddressActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.AddressSelectActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.SelectCouponActivity;
-import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
 import com.jimei.xiaolumeimei.widget.NestedListView;
 import com.jimei.xiaolumeimei.widget.SmoothCheckBox;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.pingplusplus.android.PaymentActivity;
 import com.umeng.analytics.MobclickAgent;
+
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.greenrobot.eventbus.EventBus;
+
+import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -146,6 +149,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     private String order_no = "";
     private int order_id = -1;
     @Bind(R.id.jiesheng_price) TextView jiesheng_price;
+    private int position;
 
     @Override
     protected void setListener() {
@@ -279,14 +283,8 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                                             pay_extras);
                         } else {
                             //emptyContent.setVisibility(View.VISIBLE);
-                            goMain.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    startActivity(
-                                            new Intent(CartsPayInfoActivity.this, MainActivity.class));
-                                    finish();
-                                }
-                            });
+                            JUtils.Toast("商品已过期,请重新选购");
+                            readyGo(CartActivity.class);
                         }
                     }
                 });
@@ -409,14 +407,8 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                                             pay_extras);
                         } else {
                             //emptyContent.setVisibility(View.VISIBLE);
-                            goMain.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    startActivity(
-                                            new Intent(CartsPayInfoActivity.this, MainActivity.class));
-                                    finish();
-                                }
-                            });
+                          JUtils.Toast("商品已过期,请重新选购");
+                          readyGo(CartActivity.class);
                         }
                     }
                 });
@@ -491,6 +483,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         view.setLayoutParams(
                 new LinearLayout.LayoutParams(200, ViewGroup.LayoutParams.WRAP_CONTENT));
         dialog = new AlertDialog.Builder(this).setView(view).create();
+        scb.setCanClickable(true);
     }
 
     @Override
@@ -510,6 +503,9 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 if (isHaveAddress) {
                     Intent intent =
                             new Intent(CartsPayInfoActivity.this, AddressSelectActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("position",position);
+                    intent.putExtras(bundle);
                     startActivityForResult(intent, REQUEST_CODE_ADDRESS);
                 } else {
                     startActivity(
@@ -1017,6 +1013,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 isSelectAddress = true;
                 nameSelect = data.getStringExtra("name");
                 phoneSelect = data.getStringExtra("phone");
+                position = data.getIntExtra("position",0);
                 addressDetailsSelect = data.getStringExtra("addressDetails");
                 addr_idSelect = data.getStringExtra("addr_id");
             } else {
@@ -1082,6 +1079,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                                 phone.setVisibility(View.VISIBLE);
                                 addressDetails.setVisibility(View.VISIBLE);
                                 AddressBean addressBean = list.get(0);
+                                position = 0;
 
                                 addr_id = addressBean.getId();
                                 JUtils.Log(TAG, addr_id + "addr_id");

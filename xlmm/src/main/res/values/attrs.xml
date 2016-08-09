@@ -277,10 +277,27 @@
     <attr name="brand_title" format="string"/>
   </declare-styleable>
 
+  <declare-styleable name="MamalistView">
+    <attr name="tv_renwulist" format="string"/>
+  </declare-styleable>
+
 
   //适配tablayout高度问题初步
   <declare-styleable name="AutoTabLayout">
     <attr name="auto_textSize_base_width" format="boolean"></attr>
+  </declare-styleable>
+
+  <declare-styleable name="MarqueeViewStyle">
+    <attr name="mvInterval" format="integer|reference"/>
+    <attr name="mvAnimDuration" format="integer|reference"/>
+    <attr name="mvTextSize" format="dimension|reference"/>
+    <attr name="mvTextColor" format="color|reference"/>
+    <attr name="mvSingleLine" format="boolean"/>
+    <attr name="mvGravity">
+      <enum name="left" value="0"/>
+      <enum name="center" value="1"/>
+      <enum name="right" value="2"/>
+    </attr>
   </declare-styleable>
 
 </resources>

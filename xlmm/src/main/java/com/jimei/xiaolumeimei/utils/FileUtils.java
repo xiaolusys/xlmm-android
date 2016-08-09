@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Zhenguo Jin
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,6 +26,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -44,8 +45,6 @@ import java.util.List;
 
 /**
  * 文件操作工具类
- *
- *
  */
 public final class FileUtils {
 
@@ -654,7 +653,7 @@ public final class FileUtils {
 
     /**
      * get file name from path, not include suffix
-     * <p/>
+     * <p>
      * <pre>
      *      getFileNameWithoutExtension(null)               =   null
      *      getFileNameWithoutExtension("")                 =   ""
@@ -694,7 +693,7 @@ public final class FileUtils {
 
     /**
      * get file name from path, include suffix
-     * <p/>
+     * <p>
      * <pre>
      *      getFileName(null)               =   null
      *      getFileName("")                 =   ""
@@ -724,7 +723,7 @@ public final class FileUtils {
 
     /**
      * get folder name from path
-     * <p/>
+     * <p>
      * <pre>
      *      getFolderName(null)               =   null
      *      getFolderName("")                 =   ""
@@ -756,7 +755,7 @@ public final class FileUtils {
 
     /**
      * get suffix of file from path
-     * <p/>
+     * <p>
      * <pre>
      *      getFileExtension(null)               =   ""
      *      getFileExtension("")                 =   ""
@@ -929,7 +928,7 @@ public final class FileUtils {
         }
     }
 
-    public static void saveAddressFile(Context context,String hash) {
+    public static void saveAddressFile(Context context, String hash) {
         sharedPreferences = context.getSharedPreferences("addressInfo", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.putString("hash", hash);
@@ -943,13 +942,26 @@ public final class FileUtils {
         editor.apply();
     }
 
-    public static boolean isAddressFileHashSame(Context context,String hash) {
+    public static boolean isAddressFileHashSame(Context context, String hash) {
         sharedPreferences = context.getSharedPreferences("addressInfo", Context.MODE_PRIVATE);
         String hash1 = sharedPreferences.getString("hash", "");
         if (!TextUtils.isEmpty(hash1) && (hash1.equals(hash))) {
             return true;
         }
         return false;
+    }
+
+    public static void saveCategoryFile(Context context, String sha) {
+        sharedPreferences = context.getSharedPreferences("category", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString("sha", sha);
+        editor.apply();
+    }
+
+    public static boolean isCategorySame(Context context, String sha) {
+        sharedPreferences = context.getSharedPreferences("category", Context.MODE_PRIVATE);
+        String sha1 = sharedPreferences.getString("sha", "");
+        return !TextUtils.isEmpty(sha1) && (sha1.equals(sha));
     }
 
 }

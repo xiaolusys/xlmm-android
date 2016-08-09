@@ -2,7 +2,9 @@ package com.jimei.xiaolumeimei.xlmmService;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.text.TextUtils;
+import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.data.XlmmApi;
@@ -34,9 +36,16 @@ public class XlmmRetrofitClient {
   private static XlmmService mService;
   static SharedPreferences sharedPreferences;
   private static OkHttpClient mOkHttpClient;
+  private static OkHttpClient.Builder builder;
 
   static {
-    initOkHttpClient();
+    builder = initOkHttpClient();
+    if (BuildConfig.DEBUG) {
+      HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+      interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+      builder.addInterceptor(interceptor).addNetworkInterceptor(new StethoInterceptor());
+    }
+    mOkHttpClient = builder.build();
   }
 
   public static XlmmService getService() {
@@ -78,46 +87,43 @@ public class XlmmRetrofitClient {
   /**
    * 初始化OKHttpClient
    */
-  private static void initOkHttpClient() {
+  private static OkHttpClient.Builder initOkHttpClient() {
 
-    HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-    interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
     if (mOkHttpClient == null) {
       synchronized (XlmmRetrofitClient.class) {
         if (mOkHttpClient == null) {
           //设置Http缓存
           Cache cache = new Cache(new File(XlmmApp.getmContext().getCacheDir(), "OkHttpCache"),
               1024 * 1024 * 100);
-
-          mOkHttpClient = new OkHttpClient.Builder().readTimeout(60000, TimeUnit.MILLISECONDS)
+          builder = new OkHttpClient.Builder().readTimeout(60000, TimeUnit.MILLISECONDS)
               .connectTimeout(60000, TimeUnit.MILLISECONDS)
               .writeTimeout(6000, TimeUnit.MILLISECONDS)
               .retryOnConnectionFailure(true)
               .cache(cache)
-              .addInterceptor(interceptor)
+              //.addInterceptor(interceptor)
               .addInterceptor(new Interceptor() {
                 @Override public Response intercept(Chain chain) throws IOException {
                   Request originalRequest = chain.request();
                   Request requestWithUserAgent = originalRequest.newBuilder()
-                      .header("User-Agent", "Android/"
-                          + android.os.Build.VERSION.RELEASE
-                          + " xlmmApp/"
-                          + String.valueOf(BuildConfig.VERSION_CODE)
-                          + " Mobile/"
-                          + android.os.Build.MODEL
-                          + " NetType/"
-                          + NetUtil.getNetType(XlmmApp.getmContext()))
+                      .header("User-Agent",
+                          "Android/"
+                              + Build.VERSION.RELEASE
+                              + " xlmmApp/"
+                              + String.valueOf(BuildConfig.VERSION_CODE)
+                              + " Mobile/"
+                              + Build.MODEL
+                              + " NetType/"
+                              + NetUtil.getNetType(XlmmApp.getmContext()))
                       .build();
 
                   return chain.proceed(requestWithUserAgent);
                 }
               })
-              //.addNetworkInterceptor(new StethoInterceptor())
               .cookieJar(new PersistentCookieJar(new SetCookieCache(),
-                  new SharedPrefsCookiePersistor(XlmmApp.getmContext())))
-              .build();
+                  new SharedPrefsCookiePersistor(XlmmApp.getmContext())));
         }
       }
     }
+    return builder;
   }
 }

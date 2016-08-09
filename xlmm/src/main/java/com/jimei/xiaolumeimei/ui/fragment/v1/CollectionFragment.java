@@ -17,6 +17,7 @@ import com.jimei.xiaolumeimei.adapter.CollectionAdapter;
 import com.jimei.xiaolumeimei.entities.CollectionAllBean;
 import com.jimei.xiaolumeimei.entities.CollectionBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
+import com.jimei.xiaolumeimei.ui.activity.product.CollectionActivity;
 import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -32,7 +33,7 @@ public class CollectionFragment extends Fragment implements View.OnClickListener
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private String title;
-    private int type;
+    private String type;
     private ArrayList<CollectionBean> collectionList;
     private View emptyLayout;
     private TextView emptyBtn;
@@ -41,11 +42,11 @@ public class CollectionFragment extends Fragment implements View.OnClickListener
     private int page;
     private String next;
 
-    public static CollectionFragment newInstance(String title, int type) {
+    public static CollectionFragment newInstance(String title, String type) {
         CollectionFragment fragment = new CollectionFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, title);
-        args.putInt(ARG_PARAM2, type);
+        args.putString(ARG_PARAM2, type);
         fragment.setArguments(args);
         return fragment;
     }
@@ -57,7 +58,7 @@ public class CollectionFragment extends Fragment implements View.OnClickListener
             page = 1;
             collectionList = new ArrayList<>();
             title = getArguments().getString(ARG_PARAM1);
-            type = getArguments().getInt(ARG_PARAM2);
+            type = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -96,13 +97,11 @@ public class CollectionFragment extends Fragment implements View.OnClickListener
                     JUtils.Toast("已经到底啦");
                     recyclerView.post(recyclerView::loadMoreComplete);
                 } else {
-                    initData(page);
-                    page++;
+                    initData();
                 }
             }
         });
-        initData(page);
-        page++;
+        initData();
     }
 
     public void showEmpty() {
@@ -110,31 +109,27 @@ public class CollectionFragment extends Fragment implements View.OnClickListener
         recyclerView.setVisibility(View.GONE);
     }
 
-    private void initData(int page) {
+    private void initData() {
         ProductModel.getInstance()
-                .getCollection(page)
+                .getCollection(page, type)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<CollectionAllBean>() {
                     @Override
                     public void onNext(CollectionAllBean collectionAllBean) {
                         List<CollectionBean> collectionBean = collectionAllBean.getResults();
-                        if (collectionBean != null) {
-                            for (int i = 0; i < collectionBean.size(); i++) {
-                                if (collectionBean.get(i).getModelproduct() != null) {
-                                    if (collectionBean.get(i).getModelproduct().getShelf_status() == type) {
-                                        collectionList.add(collectionBean.get(i));
-                                    }
-                                }
-                            }
-                            if (collectionList.size() > 0) {
-                                emptyLayout.setVisibility(View.GONE);
-                                recyclerView.setVisibility(View.VISIBLE);
-                            } else {
-                                showEmpty();
-                            }
-                            adapter.notifyDataSetChanged();
+                        collectionList.addAll(collectionBean);
+                        if (collectionBean.size() > 0) {
+                            emptyLayout.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.VISIBLE);
+                        } else {
+                            showEmpty();
                         }
+                        adapter.notifyDataSetChanged();
                         next = collectionAllBean.getNext();
+                        if (next != null && !"".equals(next)) {
+                            page++;
+                        }
+                        ((CollectionActivity) getActivity()).hideIndeterminateProgressDialog();
                     }
 
                     @Override
@@ -146,6 +141,8 @@ public class CollectionFragment extends Fragment implements View.OnClickListener
                     public void onError(Throwable e) {
                         e.printStackTrace();
                         recyclerView.post(recyclerView::loadMoreComplete);
+                        ((CollectionActivity) getActivity()).hideIndeterminateProgressDialog();
+                        JUtils.Toast("数据加载有误!");
                     }
                 });
     }
