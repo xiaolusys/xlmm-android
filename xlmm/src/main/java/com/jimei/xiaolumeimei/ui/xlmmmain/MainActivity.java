@@ -270,6 +270,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         MobclickAgent.onEvent(MainActivity.this, "ChildID");
         Bundle childBundle = new Bundle();
         childBundle.putInt("type",XlmmConst.TYPE_CHILD);
+        childBundle.putString("title","萌娃专区");
 //        readyGo(LadyZoneActivity.class,childBundle);
         readyGo(ProductListActivity.class,childBundle);
         break;
@@ -277,6 +278,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         MobclickAgent.onEvent(MainActivity.this, "LadyID");
         Bundle ladyBundle = new Bundle();
         ladyBundle.putInt("type",XlmmConst.TYPE_LADY);
+        ladyBundle.putString("title","时尚女装");
 //        readyGo(LadyZoneActivity.class,ladyBundle);
         readyGo(ProductListActivity.class,ladyBundle);
         break;

@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import butterknife.Bind;
+
 import com.jimei.library.rx.RxCountDown;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -19,6 +19,7 @@ import com.jimei.xiaolumeimei.event.UserInfoEmptyEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.CollectionActivity;
+import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
@@ -27,7 +28,10 @@ import com.jimei.xiaolumeimei.widget.ClearEditText;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
+
 import org.greenrobot.eventbus.EventBus;
+
+import butterknife.Bind;
 import retrofit2.Response;
 import retrofit2.adapter.rxjava.HttpException;
 import rx.Subscriber;
@@ -186,6 +190,11 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                                   startActivity(intent);
                                   finish();
                                 } else if (login.equals("productdetail")) {
+                                  Intent intent = new Intent(mContext, ProductDetailActivity.class);
+                                  Bundle bundle = new Bundle();
+                                  bundle.putInt("model_id",id);
+                                  intent.putExtras(bundle);
+                                  startActivity(intent);
                                   finish();
                                 } else if (login.equals("h5")) {
                                   //Intent intent = new Intent(mContext, CommonWebViewActivity.class);

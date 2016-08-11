@@ -382,9 +382,9 @@ public class ProductListActivity extends BaseSwipeBackCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu_category, menu);
-//        this.menu = menu;
-//        initCategory();
+        getMenuInflater().inflate(R.menu.menu_category, menu);
+        this.menu = menu;
+        initCategory();
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -396,7 +396,6 @@ public class ProductListActivity extends BaseSwipeBackCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.category:
-                layout.setVisibility(View.GONE);
                 if (xrvCategory.getVisibility() == View.VISIBLE) {
                     xrvCategory.setVisibility(View.GONE);
                 } else {
@@ -410,6 +409,7 @@ public class ProductListActivity extends BaseSwipeBackCompatActivity
 
     public void refreshData(String cid, boolean clear) {
         xrv.setVisibility(View.VISIBLE);
+        layout.setVisibility(View.GONE);
         xrvCategory.setVisibility(View.GONE);
         this.cid = cid;
         if (clear) {

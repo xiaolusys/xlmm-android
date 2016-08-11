@@ -11,8 +11,10 @@ import com.jimei.xiaolumeimei.entities.LadyListBean;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.ProductBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
+import com.jimei.xiaolumeimei.entities.ProductDetailOldBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.entities.ProductListResultBean;
+import com.jimei.xiaolumeimei.entities.ShareModelBean;
 import com.jimei.xiaolumeimei.entities.ShareProductBean;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 
@@ -128,10 +130,18 @@ public class ProductModel {
     }
 
     //得到商品详情
-    public Observable<ProductDetailBean> getProductDetails(String id) {
+    public Observable<ProductDetailOldBean> getProductDetails(String id) {
 
         return XlmmRetrofitClient.getService()
                 .getProductDetails(id)
+                .compose(new DefaultTransform<>());
+    }
+
+    //得到商品详情(新)
+    public Observable<ProductDetailBean> getProductDetail(int id) {
+
+        return XlmmRetrofitClient.getService()
+                .getProductDetail(id)
                 .compose(new DefaultTransform<>());
     }
 
@@ -140,6 +150,13 @@ public class ProductModel {
 
         return XlmmRetrofitClient.getService()
                 .getProductShareInfo(product_id)
+                .compose(new DefaultTransform<>());
+    }
+
+    //单肩商品分享数据
+    public Observable<ShareModelBean> getShareModel(int model_id) {
+        return XlmmRetrofitClient.getService()
+                .getShareModel(model_id)
                 .compose(new DefaultTransform<>());
     }
 

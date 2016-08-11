@@ -1,6 +1,8 @@
 package com.jimei.xiaolumeimei.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +12,7 @@ import android.widget.TextView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.CategoryProductListBean;
-import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
-import com.jimei.xiaolumeimei.utils.JumpUtils;
+import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.zhy.autolayout.utils.AutoUtils;
@@ -73,8 +74,13 @@ public class CategoryProductAdapter extends XRecyclerView.Adapter<CategoryProduc
         holder.card.setOnClickListener(v -> {
             MobclickAgent.onEvent(context, "ProductID");
             int modelId = resultsBean.getId();
-            JumpUtils.jumpToWebViewWithCookies(context, resultsBean.getWeb_url(), modelId,
-                    ProductPopDetailActvityWeb.class);
+//            JumpUtils.jumpToWebViewWithCookies(context, resultsBean.getWeb_url(), modelId,
+//                    ProductPopDetailActvityWeb.class);
+            Intent intent = new Intent(context, ProductDetailActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putInt("model_id",modelId);
+            intent.putExtras(bundle);
+            context.startActivity(intent);
         });
     }
 
