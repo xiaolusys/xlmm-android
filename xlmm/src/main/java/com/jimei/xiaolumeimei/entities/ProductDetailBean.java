@@ -1,616 +1,502 @@
 package com.jimei.xiaolumeimei.entities;
 
-import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 /**
- * Created by 优尼世界 on 15/12/29.
- *
- * Copyright 2015年 上海己美. All rights reserved.
+ * Created by wisdom on 16/8/9.
  */
 public class ProductDetailBean {
-
-  @SerializedName("id") private String mId;
-  @SerializedName("url") private String mUrl;
-  @SerializedName("name") private String mName;
-  @SerializedName("outer_id") private String mOuterId;
-  /**
-   * cid : 18
-   * parent_cid : 8
-   * name : 外套
-   * status : normal
-   * sort_order : 100
-   */
-
-  @SerializedName("category") private CategoryEntity mCategory;
-  @SerializedName("pic_path") private String mPicPath;
-  @SerializedName("remain_num") private int mRemainNum;
-  @SerializedName("is_saleout") private boolean mIsSaleout;
-  @SerializedName("head_img") private String mHeadImg;
-  @SerializedName("is_saleopen") private boolean mIsSaleopen;
-  @SerializedName("is_newgood") private boolean mIsNewgood;
-  @SerializedName("std_sale_price") private double mStdSalePrice;
-  @SerializedName("agent_price") private double mAgentPrice;
-  @SerializedName("sale_time") private String mSaleTime;
-  @SerializedName("offshelf_time") private String mOffshelfTime;
-  @SerializedName("memo") private String mMemo;
-  @SerializedName("lowest_price") private double mLowestPrice;
-  @SerializedName("product_lowest_price") private double mProductLowestPrice;
-  /**
-   * id : 4397
-   * name : 六粒扣中长款针织外套
-   * head_imgs : ["http://image.xiaolu.so/MG-1452585002171-1.jpg"]
-   * content_imgs : ["http://image.xiaolu.so/MG-1452509854473-827新内容页bbb_01.jpg","http://image.xiaolu.so/MG-1452509859635-827新内容页bbb_02.jpg","http://image.xiaolu.so/MG-1452509863681-827新内容页bbb_03.jpg"]
-   * is_single_spec : false
-   * is_sale_out : false
-   * buy_limit : false
-   * per_limit : 5
-   */
-
-  @SerializedName("product_model") private ProductModelEntity mProductModel;
-  @SerializedName("ware_by") private int mWareBy;
-  @SerializedName("is_verify") private boolean mIsVerify;
-  @SerializedName("model_id") private int mModelId;
-  @SerializedName("watermark_op") private String mWatermarkOp;
-  /**
-   * head_imgs : ["http://image.xiaolu.so/MG-1452509571614-2.jpg"]
-   * content_imgs : []
-   * mama_discount : 100
-   * is_recommend : false
-   * buy_limit : false
-   * per_limit : 5
-   * mama_rebeta : 0
-   * material : 针织混纺
-   * wash_instructions : 最高手洗温度为30度，翻面洗涤，减少摩擦，避免起球。使用中性洗涤剂， 平铺晾干，勿暴晒、熨烫。
-   * note : 时尚六粒扣设计，常规袖，修身显瘦。
-   * color : 黑色,粉色,米色,黄色,酒红色
-   */
-
-  @SerializedName("details") private DetailsEntity mDetails;
-  /**
-   * id : 96343
-   * outer_id : 1
-   * name : 均码
-   * remain_num : 100
-   * size_of_sku : {"free_num":"NO","result":{"肩宽":"37","胸围":"92","袖长":"55","衣长":"75"}}
-   * is_saleout : false
-   * std_sale_price : 349
-   * agent_price : 69.9
-   */
-
-  @SerializedName("normal_skus") private List<NormalSkusEntity> mNormalSkus;
-
-  public String getId() {
-    return mId;
-  }
-
-  public void setId(String id) {
-    this.mId = id;
-  }
-
-  public String getUrl() {
-    return mUrl;
-  }
-
-  public void setUrl(String url) {
-    this.mUrl = url;
-  }
-
-  public String getName() {
-    return mName;
-  }
-
-  public void setName(String name) {
-    this.mName = name;
-  }
-
-  public String getOuterId() {
-    return mOuterId;
-  }
-
-  public void setOuterId(String outerId) {
-    this.mOuterId = outerId;
-  }
-
-  public CategoryEntity getCategory() {
-    return mCategory;
-  }
-
-  public void setCategory(CategoryEntity category) {
-    this.mCategory = category;
-  }
-
-  public String getPicPath() {
-    return mPicPath;
-  }
-
-  public void setPicPath(String picPath) {
-    this.mPicPath = picPath;
-  }
-
-  public int getRemainNum() {
-    return mRemainNum;
-  }
-
-  public void setRemainNum(int remainNum) {
-    this.mRemainNum = remainNum;
-  }
-
-  public boolean isIsSaleout() {
-    return mIsSaleout;
-  }
-
-  public void setIsSaleout(boolean isSaleout) {
-    this.mIsSaleout = isSaleout;
-  }
-
-  public String getHeadImg() {
-    return mHeadImg;
-  }
-
-  public void setHeadImg(String headImg) {
-    this.mHeadImg = headImg;
-  }
-
-  public boolean isIsSaleopen() {
-    return mIsSaleopen;
-  }
-
-  public void setIsSaleopen(boolean isSaleopen) {
-    this.mIsSaleopen = isSaleopen;
-  }
-
-  public boolean isIsNewgood() {
-    return mIsNewgood;
-  }
-
-  public void setIsNewgood(boolean isNewgood) {
-    this.mIsNewgood = isNewgood;
-  }
-
-  public double getStdSalePrice() {
-    return mStdSalePrice;
-  }
-
-  public void setStdSalePrice(double stdSalePrice) {
-    this.mStdSalePrice = stdSalePrice;
-  }
-
-  public double getAgentPrice() {
-    return mAgentPrice;
-  }
-
-  public void setAgentPrice(double agentPrice) {
-    this.mAgentPrice = agentPrice;
-  }
-
-  public String getSaleTime() {
-    return mSaleTime;
-  }
-
-  public void setSaleTime(String saleTime) {
-    this.mSaleTime = saleTime;
-  }
-
-  public String getOffshelfTime() {
-    return mOffshelfTime;
-  }
-
-  public void setOffshelfTime(String offshelfTime) {
-    this.mOffshelfTime = offshelfTime;
-  }
-
-  public String getMemo() {
-    return mMemo;
-  }
-
-  public void setMemo(String memo) {
-    this.mMemo = memo;
-  }
-
-  public double getLowestPrice() {
-    return mLowestPrice;
-  }
-
-  public void setLowestPrice(double lowestPrice) {
-    this.mLowestPrice = lowestPrice;
-  }
-
-  public double getProductLowestPrice() {
-    return mProductLowestPrice;
-  }
-
-  public void setProductLowestPrice(double productLowestPrice) {
-    this.mProductLowestPrice = productLowestPrice;
-  }
-
-  public ProductModelEntity getProductModel() {
-    return mProductModel;
-  }
-
-  public void setProductModel(ProductModelEntity productModel) {
-    this.mProductModel = productModel;
-  }
-
-  public int getWareBy() {
-    return mWareBy;
-  }
-
-  public void setWareBy(int wareBy) {
-    this.mWareBy = wareBy;
-  }
-
-  public boolean isIsVerify() {
-    return mIsVerify;
-  }
-
-  public void setIsVerify(boolean isVerify) {
-    this.mIsVerify = isVerify;
-  }
-
-  public int getModelId() {
-    return mModelId;
-  }
-
-  public void setModelId(int modelId) {
-    this.mModelId = modelId;
-  }
-
-  public String getWatermarkOp() {
-    return mWatermarkOp;
-  }
-
-  public void setWatermarkOp(String watermarkOp) {
-    this.mWatermarkOp = watermarkOp;
-  }
-
-  public DetailsEntity getDetails() {
-    return mDetails;
-  }
-
-  public void setDetails(DetailsEntity details) {
-    this.mDetails = details;
-  }
-
-  public List<NormalSkusEntity> getNormalSkus() {
-    return mNormalSkus;
-  }
-
-  public void setNormalSkus(List<NormalSkusEntity> normalSkus) {
-    this.mNormalSkus = normalSkus;
-  }
-
-  public static class CategoryEntity {
-    @SerializedName("cid") private int mCid;
-    @SerializedName("parent_cid") private int mParentCid;
-    @SerializedName("name") private String mName;
-    @SerializedName("status") private String mStatus;
-    @SerializedName("sort_order") private int mSortOrder;
-
-    public int getCid() {
-      return mCid;
-    }
-
-    public void setCid(int cid) {
-      this.mCid = cid;
-    }
-
-    public int getParentCid() {
-      return mParentCid;
-    }
-
-    public void setParentCid(int parentCid) {
-      this.mParentCid = parentCid;
-    }
-
-    public String getName() {
-      return mName;
-    }
-
-    public void setName(String name) {
-      this.mName = name;
-    }
-
-    public String getStatus() {
-      return mStatus;
-    }
-
-    public void setStatus(String status) {
-      this.mStatus = status;
-    }
-
-    public int getSortOrder() {
-      return mSortOrder;
-    }
-
-    public void setSortOrder(int sortOrder) {
-      this.mSortOrder = sortOrder;
-    }
-  }
-
-  public static class ProductModelEntity {
-    @SerializedName("id") private int mId;
-    @SerializedName("name") private String mName;
-    @SerializedName("is_single_spec") private boolean mIsSingleSpec;
-    @SerializedName("is_sale_out") private boolean mIsSaleOut;
-    @SerializedName("buy_limit") private boolean mBuyLimit;
-    @SerializedName("per_limit") private int mPerLimit;
-    @SerializedName("head_imgs") private List<String> mHeadImgs;
-    @SerializedName("content_imgs") private List<String> mContentImgs;
+    /**
+     * id : 8432
+     * detail_content : {"category":{"id":15},"is_newsales":false,"model_code":"91528721002","name":"时尚潮品休闲套装","sale_time":"2016-08-08","watermark_op":"","offshelf_time":"2016-08-10T10:00:00","is_recommend":false,"head_imgs":["http://image.xiaolu.so/MG_14558670230841.png","http://image.xiaolu.so/MG_14558670323242.png"],"properties":{},"is_saleopen":true,"content_imgs":["http://image.xiaolu.so/MG_1456055816802模版_01.jpg","http://image.xiaolu.so/MG_1456055823636模版_02.jpg","http://image.xiaolu.so/MG_1456055823800模版_03.jpg","http://image.xiaolu.so/MG_1456055823881模版_04.jpg"],"lowest_agent_price":89.9,"is_flatten":false,"is_sale_out":false,"lowest_std_sale_price":449,"item_marks":["包邮"]}
+     * sku_info : [{"agent_price":89.9,"sku_items":[{"agent_price":89.9,"sku_id":130025,"name":"120","std_sale_price":449,"type":"size","free_num":15,"is_saleout":false},{"agent_price":89.9,"sku_id":130026,"name":"130","std_sale_price":449,"type":"size","free_num":15,"is_saleout":false},{"agent_price":89.9,"sku_id":130027,"name":"140","std_sale_price":449,"type":"size","free_num":15,"is_saleout":false},{"agent_price":89.9,"sku_id":130028,"name":"150","std_sale_price":449,"type":"size","free_num":15,"is_saleout":false},{"agent_price":89.9,"sku_id":130029,"name":"160","std_sale_price":449,"type":"size","free_num":13,"is_saleout":false}],"product_id":33097,"std_sale_price":449,"lowest_price":89.9,"outer_id":"915287210021","type":"color","product_img":"http://image.xiaolu.so/MG_14558670230841.png","name":"黑色"},{"agent_price":89.9,"sku_items":[{"agent_price":89.9,"sku_id":130030,"name":"120","std_sale_price":449,"type":"size","free_num":15,"is_saleout":false},{"agent_price":89.9,"sku_id":130031,"name":"130","std_sale_price":449,"type":"size","free_num":14,"is_saleout":false},{"agent_price":89.9,"sku_id":130032,"name":"140","std_sale_price":449,"type":"size","free_num":13,"is_saleout":false},{"agent_price":89.9,"sku_id":130033,"name":"150","std_sale_price":449,"type":"size","free_num":14,"is_saleout":false},{"agent_price":89.9,"sku_id":130034,"name":"160","std_sale_price":449,"type":"size","free_num":14,"is_saleout":false}],"product_id":33098,"std_sale_price":449,"lowest_price":89.9,"outer_id":"915287210022","type":"color","product_img":"http://image.xiaolu.so/MG_14558670323242.png","name":"灰色"}]
+     * comparison : {"metrics":{},"attributes":[{"name":"商品编码","value":"91528721002"},{"name":"商品材质","value":"棉混纺"},{"name":"可选颜色","value":"黑色,灰色"},{"name":"洗涤说明","value":"洗涤时请深色、浅色衣物分开洗涤。最高洗涤温度不要超过40度， 不可漂白。有涂层、印花表面不能进行熨烫，会导致表面剥落。不可干洗，悬挂晾干。(如是婴幼儿衣物，请于成人衣物分开洗涤，避免交叉感染。建议手洗水温30度，使用婴幼儿专用衣物洗涤剂。）"},{"name":"备注说明","value":"连帽拉链卫衣+长裤，男童套，松紧裤腰，柔软舒适。"}],"tables":[{"table":[["尺码","建议身高","裤腰","衣长","胸围","肩宽","臀围","裤长"],["120","110","54-64","48","72","29.5","72","70"],["130","120","56-66","51","76","31","76","75"],["140","130","58-68","54","80","32.5","80","80"],["150","140","60-70","57","84","34","84","85"],["160","150","62-72","60","88","35.5","88","90"]]}]}
+     * extras : {}
+     * custom_info : {"is_favorite":false}
+     */
+
+    private int id;
+    /**
+     * category : {"id":15}
+     * is_newsales : false
+     * model_code : 91528721002
+     * name : 时尚潮品休闲套装
+     * sale_time : 2016-08-08
+     * watermark_op :
+     * offshelf_time : 2016-08-10T10:00:00
+     * is_recommend : false
+     * head_imgs : ["http://image.xiaolu.so/MG_14558670230841.png","http://image.xiaolu.so/MG_14558670323242.png"]
+     * properties : {}
+     * is_saleopen : true
+     * content_imgs : ["http://image.xiaolu.so/MG_1456055816802模版_01.jpg","http://image.xiaolu.so/MG_1456055823636模版_02.jpg","http://image.xiaolu.so/MG_1456055823800模版_03.jpg","http://image.xiaolu.so/MG_1456055823881模版_04.jpg"]
+     * lowest_agent_price : 89.9
+     * is_flatten : false
+     * is_sale_out : false
+     * lowest_std_sale_price : 449
+     * item_marks : ["包邮"]
+     */
+
+    private DetailContentBean detail_content;
+    /**
+     * metrics : {}
+     * attributes : [{"name":"商品编码","value":"91528721002"},{"name":"商品材质","value":"棉混纺"},{"name":"可选颜色","value":"黑色,灰色"},{"name":"洗涤说明","value":"洗涤时请深色、浅色衣物分开洗涤。最高洗涤温度不要超过40度， 不可漂白。有涂层、印花表面不能进行熨烫，会导致表面剥落。不可干洗，悬挂晾干。(如是婴幼儿衣物，请于成人衣物分开洗涤，避免交叉感染。建议手洗水温30度，使用婴幼儿专用衣物洗涤剂。）"},{"name":"备注说明","value":"连帽拉链卫衣+长裤，男童套，松紧裤腰，柔软舒适。"}]
+     * tables : [{"table":[["尺码","建议身高","裤腰","衣长","胸围","肩宽","臀围","裤长"],["120","110","54-64","48","72","29.5","72","70"],["130","120","56-66","51","76","31","76","75"],["140","130","58-68","54","80","32.5","80","80"],["150","140","60-70","57","84","34","84","85"],["160","150","62-72","60","88","35.5","88","90"]]}]
+     */
+
+    private ComparisonBean comparison;
+    private ExtrasBean extras;
+    /**
+     * is_favorite : false
+     */
+
+    private CustomInfoBean custom_info;
+    /**
+     * agent_price : 89.9
+     * sku_items : [{"agent_price":89.9,"sku_id":130025,"name":"120","std_sale_price":449,"type":"size","free_num":15,"is_saleout":false},{"agent_price":89.9,"sku_id":130026,"name":"130","std_sale_price":449,"type":"size","free_num":15,"is_saleout":false},{"agent_price":89.9,"sku_id":130027,"name":"140","std_sale_price":449,"type":"size","free_num":15,"is_saleout":false},{"agent_price":89.9,"sku_id":130028,"name":"150","std_sale_price":449,"type":"size","free_num":15,"is_saleout":false},{"agent_price":89.9,"sku_id":130029,"name":"160","std_sale_price":449,"type":"size","free_num":13,"is_saleout":false}]
+     * product_id : 33097
+     * std_sale_price : 449
+     * lowest_price : 89.9
+     * outer_id : 915287210021
+     * type : color
+     * product_img : http://image.xiaolu.so/MG_14558670230841.png
+     * name : 黑色
+     */
+
+    private List<SkuInfoBean> sku_info;
 
     public int getId() {
-      return mId;
+        return id;
     }
 
     public void setId(int id) {
-      this.mId = id;
+        this.id = id;
     }
 
-    public String getName() {
-      return mName;
+    public DetailContentBean getDetail_content() {
+        return detail_content;
     }
 
-    public void setName(String name) {
-      this.mName = name;
+    public void setDetail_content(DetailContentBean detail_content) {
+        this.detail_content = detail_content;
     }
 
-    public boolean isIsSingleSpec() {
-      return mIsSingleSpec;
+    public ComparisonBean getComparison() {
+        return comparison;
     }
 
-    public void setIsSingleSpec(boolean isSingleSpec) {
-      this.mIsSingleSpec = isSingleSpec;
+    public void setComparison(ComparisonBean comparison) {
+        this.comparison = comparison;
     }
 
-    public boolean isIsSaleOut() {
-      return mIsSaleOut;
+    public ExtrasBean getExtras() {
+        return extras;
     }
 
-    public void setIsSaleOut(boolean isSaleOut) {
-      this.mIsSaleOut = isSaleOut;
+    public void setExtras(ExtrasBean extras) {
+        this.extras = extras;
     }
 
-    public boolean isBuyLimit() {
-      return mBuyLimit;
+    public CustomInfoBean getCustom_info() {
+        return custom_info;
     }
 
-    public void setBuyLimit(boolean buyLimit) {
-      this.mBuyLimit = buyLimit;
+    public void setCustom_info(CustomInfoBean custom_info) {
+        this.custom_info = custom_info;
     }
 
-    public int getPerLimit() {
-      return mPerLimit;
+    public List<SkuInfoBean> getSku_info() {
+        return sku_info;
     }
 
-    public void setPerLimit(int perLimit) {
-      this.mPerLimit = perLimit;
+    public void setSku_info(List<SkuInfoBean> sku_info) {
+        this.sku_info = sku_info;
     }
 
-    public List<String> getHeadImgs() {
-      return mHeadImgs;
+    public static class DetailContentBean {
+        /**
+         * id : 15
+         */
+
+        private CategoryBean category;
+        private boolean is_newsales;
+        private String model_code;
+        private String name;
+        private String sale_time;
+        private String watermark_op;
+        private String offshelf_time;
+        private boolean is_recommend;
+        private boolean is_saleopen;
+        private double lowest_agent_price;
+        private boolean is_flatten;
+        private boolean is_sale_out;
+        private int lowest_std_sale_price;
+        private List<String> head_imgs;
+        private List<String> content_imgs;
+        private List<String> item_marks;
+
+        public CategoryBean getCategory() {
+            return category;
+        }
+
+        public void setCategory(CategoryBean category) {
+            this.category = category;
+        }
+
+        public boolean isIs_newsales() {
+            return is_newsales;
+        }
+
+        public void setIs_newsales(boolean is_newsales) {
+            this.is_newsales = is_newsales;
+        }
+
+        public String getModel_code() {
+            return model_code;
+        }
+
+        public void setModel_code(String model_code) {
+            this.model_code = model_code;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getSale_time() {
+            return sale_time;
+        }
+
+        public void setSale_time(String sale_time) {
+            this.sale_time = sale_time;
+        }
+
+        public String getWatermark_op() {
+            return watermark_op;
+        }
+
+        public void setWatermark_op(String watermark_op) {
+            this.watermark_op = watermark_op;
+        }
+
+        public String getOffshelf_time() {
+            return offshelf_time;
+        }
+
+        public void setOffshelf_time(String offshelf_time) {
+            this.offshelf_time = offshelf_time;
+        }
+
+        public boolean isIs_recommend() {
+            return is_recommend;
+        }
+
+        public void setIs_recommend(boolean is_recommend) {
+            this.is_recommend = is_recommend;
+        }
+
+        public boolean isIs_saleopen() {
+            return is_saleopen;
+        }
+
+        public void setIs_saleopen(boolean is_saleopen) {
+            this.is_saleopen = is_saleopen;
+        }
+
+        public double getLowest_agent_price() {
+            return lowest_agent_price;
+        }
+
+        public void setLowest_agent_price(double lowest_agent_price) {
+            this.lowest_agent_price = lowest_agent_price;
+        }
+
+        public boolean isIs_flatten() {
+            return is_flatten;
+        }
+
+        public void setIs_flatten(boolean is_flatten) {
+            this.is_flatten = is_flatten;
+        }
+
+        public boolean isIs_sale_out() {
+            return is_sale_out;
+        }
+
+        public void setIs_sale_out(boolean is_sale_out) {
+            this.is_sale_out = is_sale_out;
+        }
+
+        public int getLowest_std_sale_price() {
+            return lowest_std_sale_price;
+        }
+
+        public void setLowest_std_sale_price(int lowest_std_sale_price) {
+            this.lowest_std_sale_price = lowest_std_sale_price;
+        }
+
+        public List<String> getHead_imgs() {
+            return head_imgs;
+        }
+
+        public void setHead_imgs(List<String> head_imgs) {
+            this.head_imgs = head_imgs;
+        }
+
+        public List<String> getContent_imgs() {
+            return content_imgs;
+        }
+
+        public void setContent_imgs(List<String> content_imgs) {
+            this.content_imgs = content_imgs;
+        }
+
+        public List<String> getItem_marks() {
+            return item_marks;
+        }
+
+        public void setItem_marks(List<String> item_marks) {
+            this.item_marks = item_marks;
+        }
+
+        public static class CategoryBean {
+            private int id;
+
+            public int getId() {
+                return id;
+            }
+
+            public void setId(int id) {
+                this.id = id;
+            }
+        }
     }
 
-    public void setHeadImgs(List<String> headImgs) {
-      this.mHeadImgs = headImgs;
+    public static class ComparisonBean {
+        /**
+         * name : 商品编码
+         * value : 91528721002
+         */
+
+        private List<AttributesBean> attributes;
+        private List<TablesBean> tables;
+
+        public List<AttributesBean> getAttributes() {
+            return attributes;
+        }
+
+        public void setAttributes(List<AttributesBean> attributes) {
+            this.attributes = attributes;
+        }
+
+        public List<TablesBean> getTables() {
+            return tables;
+        }
+
+        public void setTables(List<TablesBean> tables) {
+            this.tables = tables;
+        }
+
+        public static class AttributesBean {
+            private String name;
+            private String value;
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
+            public String getValue() {
+                return value;
+            }
+
+            public void setValue(String value) {
+                this.value = value;
+            }
+        }
+
+        public static class TablesBean {
+        }
     }
 
-    public List<String> getContentImgs() {
-      return mContentImgs;
+    public static class ExtrasBean {
     }
 
-    public void setContentImgs(List<String> contentImgs) {
-      this.mContentImgs = contentImgs;
-    }
-  }
+    public static class CustomInfoBean {
+        private boolean is_favorite;
 
-  public static class DetailsEntity {
-    @SerializedName("mama_discount") private int mMamaDiscount;
-    @SerializedName("is_recommend") private boolean mIsRecommend;
-    @SerializedName("buy_limit") private boolean mBuyLimit;
-    @SerializedName("per_limit") private int mPerLimit;
-    @SerializedName("mama_rebeta") private int mMamaRebeta;
-    @SerializedName("material") private String mMaterial;
-    @SerializedName("wash_instructions") private String mWashInstructions;
-    @SerializedName("note") private String mNote;
-    @SerializedName("color") private String mColor;
-    @SerializedName("head_imgs") private List<String> mHeadImgs;
-    @SerializedName("content_imgs") private List<String> mContentImgs;
+        public boolean isIs_favorite() {
+            return is_favorite;
+        }
 
-    public int getMamaDiscount() {
-      return mMamaDiscount;
+        public void setIs_favorite(boolean is_favorite) {
+            this.is_favorite = is_favorite;
+        }
     }
 
-    public void setMamaDiscount(int mamaDiscount) {
-      this.mMamaDiscount = mamaDiscount;
+    public static class SkuInfoBean {
+        private double agent_price;
+        private int product_id;
+        private int std_sale_price;
+        private double lowest_price;
+        private String outer_id;
+        private String type;
+        private String product_img;
+        private String name;
+        /**
+         * agent_price : 89.9
+         * sku_id : 130025
+         * name : 120
+         * std_sale_price : 449
+         * type : size
+         * free_num : 15
+         * is_saleout : false
+         */
+
+        private List<SkuItemsBean> sku_items;
+
+        public double getAgent_price() {
+            return agent_price;
+        }
+
+        public void setAgent_price(double agent_price) {
+            this.agent_price = agent_price;
+        }
+
+        public int getProduct_id() {
+            return product_id;
+        }
+
+        public void setProduct_id(int product_id) {
+            this.product_id = product_id;
+        }
+
+        public int getStd_sale_price() {
+            return std_sale_price;
+        }
+
+        public void setStd_sale_price(int std_sale_price) {
+            this.std_sale_price = std_sale_price;
+        }
+
+        public double getLowest_price() {
+            return lowest_price;
+        }
+
+        public void setLowest_price(double lowest_price) {
+            this.lowest_price = lowest_price;
+        }
+
+        public String getOuter_id() {
+            return outer_id;
+        }
+
+        public void setOuter_id(String outer_id) {
+            this.outer_id = outer_id;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getProduct_img() {
+            return product_img;
+        }
+
+        public void setProduct_img(String product_img) {
+            this.product_img = product_img;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public List<SkuItemsBean> getSku_items() {
+            return sku_items;
+        }
+
+        public void setSku_items(List<SkuItemsBean> sku_items) {
+            this.sku_items = sku_items;
+        }
+
+        public static class SkuItemsBean {
+            private double agent_price;
+            private int sku_id;
+            private String name;
+            private int std_sale_price;
+            private String type;
+            private int free_num;
+            private boolean is_saleout;
+
+            public double getAgent_price() {
+                return agent_price;
+            }
+
+            public void setAgent_price(double agent_price) {
+                this.agent_price = agent_price;
+            }
+
+            public int getSku_id() {
+                return sku_id;
+            }
+
+            public void setSku_id(int sku_id) {
+                this.sku_id = sku_id;
+            }
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
+            public int getStd_sale_price() {
+                return std_sale_price;
+            }
+
+            public void setStd_sale_price(int std_sale_price) {
+                this.std_sale_price = std_sale_price;
+            }
+
+            public String getType() {
+                return type;
+            }
+
+            public void setType(String type) {
+                this.type = type;
+            }
+
+            public int getFree_num() {
+                return free_num;
+            }
+
+            public void setFree_num(int free_num) {
+                this.free_num = free_num;
+            }
+
+            public boolean isIs_saleout() {
+                return is_saleout;
+            }
+
+            public void setIs_saleout(boolean is_saleout) {
+                this.is_saleout = is_saleout;
+            }
+        }
     }
-
-    public boolean isIsRecommend() {
-      return mIsRecommend;
-    }
-
-    public void setIsRecommend(boolean isRecommend) {
-      this.mIsRecommend = isRecommend;
-    }
-
-    public boolean isBuyLimit() {
-      return mBuyLimit;
-    }
-
-    public void setBuyLimit(boolean buyLimit) {
-      this.mBuyLimit = buyLimit;
-    }
-
-    public int getPerLimit() {
-      return mPerLimit;
-    }
-
-    public void setPerLimit(int perLimit) {
-      this.mPerLimit = perLimit;
-    }
-
-    public int getMamaRebeta() {
-      return mMamaRebeta;
-    }
-
-    public void setMamaRebeta(int mamaRebeta) {
-      this.mMamaRebeta = mamaRebeta;
-    }
-
-    public String getMaterial() {
-      return mMaterial;
-    }
-
-    public void setMaterial(String material) {
-      this.mMaterial = material;
-    }
-
-    public String getWashInstructions() {
-      return mWashInstructions;
-    }
-
-    public void setWashInstructions(String washInstructions) {
-      this.mWashInstructions = washInstructions;
-    }
-
-    public String getNote() {
-      return mNote;
-    }
-
-    public void setNote(String note) {
-      this.mNote = note;
-    }
-
-    public String getColor() {
-      return mColor;
-    }
-
-    public void setColor(String color) {
-      this.mColor = color;
-    }
-
-    public List<String> getHeadImgs() {
-      return mHeadImgs;
-    }
-
-    public void setHeadImgs(List<String> headImgs) {
-      this.mHeadImgs = headImgs;
-    }
-
-    public List<String> getContentImgs() {
-      return mContentImgs;
-    }
-
-    public void setContentImgs(List<String> contentImgs) {
-      this.mContentImgs = contentImgs;
-    }
-  }
-
-  public static class NormalSkusEntity {
-    @SerializedName("id") private String mId;
-    @SerializedName("outer_id") private String mOuterId;
-    @SerializedName("name") private String mName;
-    @SerializedName("remain_num") private int mRemainNum;
-    /**
-     * free_num : NO
-     * result : {"肩宽":"37","胸围":"92","袖长":"55","衣长":"75"}
-     */
-
-    @SerializedName("size_of_sku") private SizeOfSkuEntity mSizeOfSku;
-    @SerializedName("is_saleout") private boolean mIsSaleout;
-    @SerializedName("std_sale_price") private double mStdSalePrice;
-    @SerializedName("agent_price") private double mAgentPrice;
-
-    public String getId() {
-      return mId;
-    }
-
-    public void setId(String id) {
-      this.mId = id;
-    }
-
-    public String getOuterId() {
-      return mOuterId;
-    }
-
-    public void setOuterId(String outerId) {
-      this.mOuterId = outerId;
-    }
-
-    public String getName() {
-      return mName;
-    }
-
-    public void setName(String name) {
-      this.mName = name;
-    }
-
-    public int getRemainNum() {
-      return mRemainNum;
-    }
-
-    public void setRemainNum(int remainNum) {
-      this.mRemainNum = remainNum;
-    }
-
-    public SizeOfSkuEntity getSizeOfSku() {
-      return mSizeOfSku;
-    }
-
-    public void setSizeOfSku(SizeOfSkuEntity sizeOfSku) {
-      this.mSizeOfSku = sizeOfSku;
-    }
-
-    public boolean isIsSaleout() {
-      return mIsSaleout;
-    }
-
-    public void setIsSaleout(boolean isSaleout) {
-      this.mIsSaleout = isSaleout;
-    }
-
-    public double getStdSalePrice() {
-      return mStdSalePrice;
-    }
-
-    public void setStdSalePrice(int stdSalePrice) {
-      this.mStdSalePrice = stdSalePrice;
-    }
-
-    public double getAgentPrice() {
-      return mAgentPrice;
-    }
-
-    public void setAgentPrice(double agentPrice) {
-      this.mAgentPrice = agentPrice;
-    }
-
-    public static class SizeOfSkuEntity {
-      @SerializedName("free_num") private String mFreeNum;
-      /**
-       * 肩宽 : 37
-       * 胸围 : 92
-       * 袖长 : 55
-       * 衣长 : 75
-       */
-
-      @SerializedName("result") private Object mResult;
-
-      public String getFreeNum() {
-        return mFreeNum;
-      }
-
-      public void setFreeNum(String freeNum) {
-        this.mFreeNum = freeNum;
-      }
-
-      public Object getResult() {
-        return mResult;
-      }
-
-      public void setResult(Object result) {
-        this.mResult = result;
-      }
-    }
-  }
 }
-

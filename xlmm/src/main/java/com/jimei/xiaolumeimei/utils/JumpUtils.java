@@ -13,7 +13,6 @@ import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.ui.activity.product.BrandListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
-import com.jimei.xiaolumeimei.ui.activity.product.TongkuanActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.OrderDetailActivity;
@@ -77,22 +76,6 @@ public class JumpUtils {
         //        intent.putExtra("fragment", 4);
         intent.putExtras(ladyBundle);
         context.startActivity(intent);
-        break;
-      case XlmmConst.JUMP_PRODUCT_MODELLIST:
-        JUtils.Log(TAG, "jump to tongkuan");
-        String model_id = get_jump_arg("model_id", jumpInfo.getUrl());
-        JUtils.Log(TAG, "jump to tongkuan:" + model_id);
-        if (null != model_id) {
-          try {
-            intent = new Intent(context, TongkuanActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra("model_id", Integer.valueOf(model_id));
-            intent.putExtra("name", "同款");
-            context.startActivity(intent);
-          } catch (NumberFormatException e) {
-            e.printStackTrace();
-          }
-        }
         break;
       case XlmmConst.JUMP_PRODUCT_DETAIL:
         String product_id = get_jump_arg("product_id", jumpInfo.getUrl());

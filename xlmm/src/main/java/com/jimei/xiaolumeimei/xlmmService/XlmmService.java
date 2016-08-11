@@ -62,6 +62,7 @@ import com.jimei.xiaolumeimei.entities.PostActivityBean;
 import com.jimei.xiaolumeimei.entities.PotentialFans;
 import com.jimei.xiaolumeimei.entities.ProductBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
+import com.jimei.xiaolumeimei.entities.ProductDetailOldBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.entities.ProductListResultBean;
 import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
@@ -70,6 +71,8 @@ import com.jimei.xiaolumeimei.entities.RedBagBean;
 import com.jimei.xiaolumeimei.entities.RefundMsgBean;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.ResultBean;
+import com.jimei.xiaolumeimei.entities.ResultEntity;
+import com.jimei.xiaolumeimei.entities.ShareModelBean;
 import com.jimei.xiaolumeimei.entities.ShareProductBean;
 import com.jimei.xiaolumeimei.entities.ShopProductBean;
 import com.jimei.xiaolumeimei.entities.StartBean;
@@ -196,7 +199,7 @@ public interface XlmmService {
 
     //获得商品详情页面数据
     @GET("/rest/v1/products/{id}/details")
-    Observable<ProductDetailBean> getProductDetails(
+    Observable<ProductDetailOldBean> getProductDetails(
             @Path("id") String id);
 
     //添加购物车
@@ -479,7 +482,7 @@ public interface XlmmService {
             @Field("sid") String sid
     );
 
-    @GET("/rest/v1/carts/show_carts_num")
+    @GET("/rest/v2/carts/show_carts_num")
     Observable<CartsNumResultBean> show_carts_num(
     );
 
@@ -629,6 +632,11 @@ public interface XlmmService {
     @GET("/rest/v1/share/product")
     Observable<ShareProductBean> getProductShareInfo(
             @Query("product_id") String product_id);
+
+    @GET("/rest/v1/share/model")
+    Observable<ShareModelBean> getShareModel(
+            @Query("model_id") int model_id
+    );
 
     //get push useraccount
     @FormUrlEncoded
@@ -911,7 +919,7 @@ public interface XlmmService {
 
     @GET("/rest/v1/pmt/xlmm/{id}/new_mama_task_info")
     Observable<Response<MaMaRenwuListBean>> getMaMaRenwuListBean(
-        @Path("id")String id
+            @Path("id") String id
     );
 
     @GET("/rest/v2/mama/message/self_list")
@@ -926,4 +934,18 @@ public interface XlmmService {
             @Query("cid") String cid,
             @Query("page") int page
     );
+
+    @GET("/rest/v2/modelproducts/{id}")
+    Observable<ProductDetailBean> getProductDetail(
+            @Path("id") int id
+    );
+
+    @FormUrlEncoded
+    @POST("/rest/v2/carts")
+    Observable<ResultEntity> addToCart(
+            @Field("item_id") int item_id,
+            @Field("sku_id") int sku_id,
+            @Field("num") int num
+    );
+
 }

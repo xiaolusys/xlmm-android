@@ -8,7 +8,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -42,6 +41,11 @@ public class XlmmTitleView extends AppBarLayout {
         if (attrs != null) {
             TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.XlmmTitleView);
             name.setText(array.getString(R.styleable.XlmmTitleView_xlmm_title));
+            if (!array.getBoolean(R.styleable.XlmmTitleView_show_finish, true)) {
+                finishLayout.setVisibility(GONE);
+            }
+            setAlpha(array.getFloat(R.styleable.XlmmTitleView_alpha, 1));
+            setBackColor(array.getColor(R.styleable.XlmmTitleView_back_color, getResources().getColor(R.color.colorAccent)));
         }
         toolbar.setTitle("");
         ((AppCompatActivity) context).setSupportActionBar(toolbar);
@@ -59,9 +63,5 @@ public class XlmmTitleView extends AppBarLayout {
 
     public void setBackColor(int color) {
         layout.setBackgroundColor(color);
-    }
-
-    public void setTitleAlpha(float alpha) {
-        layout.setAlpha(alpha);
     }
 }

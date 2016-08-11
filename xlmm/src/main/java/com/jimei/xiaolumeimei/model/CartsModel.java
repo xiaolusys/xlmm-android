@@ -7,6 +7,7 @@ import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.CartsinfoBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
+import com.jimei.xiaolumeimei.entities.ResultEntity;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 import java.util.List;
 import retrofit2.Response;
@@ -106,5 +107,11 @@ public class CartsModel {
     return XlmmRetrofitClient.getService()
         .rebuy(item_id, sku_id, cart_id)
         .compose(new DefaultTransform<>());
+  }
+
+  public Observable<ResultEntity> addToCart(int item_id, int sku_id, int num){
+    return XlmmRetrofitClient.getService()
+            .addToCart(item_id,sku_id,num)
+            .compose(new DefaultTransform<>());
   }
 }

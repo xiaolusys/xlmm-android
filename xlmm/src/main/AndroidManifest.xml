@@ -84,12 +84,6 @@
             android:name=".ui.activity.user.RegisterActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
-            android:name=".ui.activity.product.TongkuanActivity"
-            android:theme="@style/AppTheme.TransparentActivity" />
-        <activity
-            android:name=".ui.activity.product.ProductDetailActvityWeb"
-            android:theme="@style/AppTheme.TransparentActivity" />
-        <activity
             android:name=".ui.activity.trade.CartActivity"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.TransparentActivity" />
@@ -425,8 +419,12 @@
         <activity
             android:name=".ui.activity.product.LadyZoneActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
-        <activity android:name=".ui.activity.product.ProductListActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
+        <activity
+            android:name=".ui.activity.product.ProductListActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
+        <activity
+            android:name=".ui.activity.product.ProductDetailActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
 
         <service
             android:name=".xlmmService.UpdateService"
