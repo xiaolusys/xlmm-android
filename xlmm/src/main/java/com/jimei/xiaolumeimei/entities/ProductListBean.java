@@ -1,398 +1,209 @@
 package com.jimei.xiaolumeimei.entities;
 
-import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 /**
- * Created by 优尼世界 on 15/12/29.
- *
- * Copyright 2015年 上海己美. All rights reserved.
+ * Created by wisdom on 16/8/11.
  */
 public class ProductListBean {
 
-  @SerializedName("count") private int mCount;
-  @SerializedName("next") private Object mNext;
-  @SerializedName("downshelf_deadline") private String mDownshelfDeadline;
-  @SerializedName("upshelf_starttime") private String mUpshelfStarttime;
-  @SerializedName("results") private List<ResultsEntity> mResults;
-
-  public String getUpshelfStarttime() {
-    return mUpshelfStarttime;
-  }
-
-  public String getDownshelfDeadline() {
-    return mDownshelfDeadline;
-  }
-
-  public int getCount() {
-    return mCount;
-  }
-
-  public void setCount(int count) {
-    this.mCount = count;
-  }
-
-  public Object getNext() {
-    return mNext;
-  }
-
-  public void setNext(Object next) {
-    this.mNext = next;
-  }
-
-  public List<ResultsEntity> getResults() {
-    return mResults;
-  }
-
-  public void setResults(List<ResultsEntity> results) {
-    this.mResults = results;
-  }
-
-  public static class ResultsEntity {
-    @SerializedName("id") private String mId;
-    @SerializedName("url") private String mUrl;
-    @SerializedName("name") private String mName;
-    @SerializedName("outer_id") private String mOuterId;
     /**
-     * cid : 22
-     * parent_cid : 8
-     * name : 套装
-     * status : normal
-     * sort_order : 100
+     * count : 77
+     * next : http://m.xiaolumeimei.com/rest/v2/modelproducts/today?page=3
+     * previous : http://m.xiaolumeimei.com/rest/v2/modelproducts/today
+     * results : [{"id":16784,"url":"http://m.xiaolumeimei.com/rest/v2/modelproducts/16784","name":"优雅气质纯色连衣裙","category_id":60,"lowest_agent_price":99.9,"lowest_std_sale_price":499,"onshelf_time":"2016-08-11T10:00:00","offshelf_time":"2016-08-13T10:00:00","is_saleout":false,"sale_state":"on","head_img":"http://image.xiaolu.so/MG_1468482988133.jpg","web_url":"http://m.xiaolumeimei.com/mall/product/details/16784","watermark_op":""},{"id":16786,"url":"http://m.xiaolumeimei.com/rest/v2/modelproducts/16786","name":"小香风修身蕾丝套装","category_id":61,"lowest_agent_price":189.9,"lowest_std_sale_price":598,"onshelf_time":"2016-08-11T10:00:00","offshelf_time":"2016-08-13T10:00:00","is_saleout":false,"sale_state":"on","head_img":"http://image.xiaolu.so/MG_1468485247952.jpg","web_url":"http://m.xiaolumeimei.com/mall/product/details/16786","watermark_op":""},{"id":17239,"url":"http://m.xiaolumeimei.com/rest/v2/modelproducts/17239","name":"性感运动字母背心","category_id":70,"lowest_agent_price":29.9,"lowest_std_sale_price":99,"onshelf_time":"2016-08-11T10:00:00","offshelf_time":"2016-08-13T10:00:00","is_saleout":false,"sale_state":"on","head_img":"http://image.xiaolu.so/MG_1468998603232.jpg","web_url":"http://m.xiaolumeimei.com/mall/product/details/17239","watermark_op":""},{"id":17241,"url":"http://m.xiaolumeimei.com/rest/v2/modelproducts/17241","name":"简约必备条纹背心裙","category_id":60,"lowest_agent_price":39.9,"lowest_std_sale_price":99,"onshelf_time":"2016-08-11T10:00:00","offshelf_time":"2016-08-13T10:00:00","is_saleout":false,"sale_state":"on","head_img":"http://image.xiaolu.so/MG_1468999293588.jpg","web_url":"http://m.xiaolumeimei.com/mall/product/details/17241","watermark_op":""},{"id":17243,"url":"http://m.xiaolumeimei.com/rest/v2/modelproducts/17243","name":"修身百搭米老鼠T恤","category_id":70,"lowest_agent_price":39.9,"lowest_std_sale_price":99,"onshelf_time":"2016-08-11T10:00:00","offshelf_time":"2016-08-13T10:00:00","is_saleout":false,"sale_state":"on","head_img":"http://image.xiaolu.so/MG_1469000707853.jpg","web_url":"http://m.xiaolumeimei.com/mall/product/details/17243","watermark_op":""},{"id":17248,"url":"http://m.xiaolumeimei.com/rest/v2/modelproducts/17248","name":"简约必备背心裙两件套","category_id":61,"lowest_agent_price":69.9,"lowest_std_sale_price":199,"onshelf_time":"2016-08-11T10:00:00","offshelf_time":"2016-08-13T10:00:00","is_saleout":false,"sale_state":"on","head_img":"http://image.xiaolu.so/MG_1468981779124.jpg","web_url":"http://m.xiaolumeimei.com/mall/product/details/17248","watermark_op":""},{"id":17253,"url":"http://m.xiaolumeimei.com/rest/v2/modelproducts/17253","name":"时尚V领条纹套装","category_id":65,"lowest_agent_price":59.9,"lowest_std_sale_price":199,"onshelf_time":"2016-08-11T10:00:00","offshelf_time":"2016-08-13T10:00:00","is_saleout":false,"sale_state":"on","head_img":"http://image.xiaolu.so/MG_1469073420996.jpg","web_url":"http://m.xiaolumeimei.com/mall/product/details/17253","watermark_op":""},{"id":17254,"url":"http://m.xiaolumeimei.com/rest/v2/modelproducts/17254","name":"韩版芒果吊带裙","category_id":64,"lowest_agent_price":59.9,"lowest_std_sale_price":199,"onshelf_time":"2016-08-11T10:00:00","offshelf_time":"2016-08-13T10:00:00","is_saleout":true,"sale_state":"on","head_img":"http://image.xiaolu.so/MG_1469074382091-.jpg","web_url":"http://m.xiaolumeimei.com/mall/product/details/17254","watermark_op":""},{"id":17262,"url":"http://m.xiaolumeimei.com/rest/v2/modelproducts/17262","name":"时尚卡通动物套装","category_id":65,"lowest_agent_price":49.9,"lowest_std_sale_price":199,"onshelf_time":"2016-08-11T10:00:00","offshelf_time":"2016-08-13T10:00:00","is_saleout":false,"sale_state":"on","head_img":"http://image.xiaolu.so/MG_1469083185770-.jpg","web_url":"http://m.xiaolumeimei.com/mall/product/details/17262","watermark_op":""},{"id":17269,"url":"http://m.xiaolumeimei.com/rest/v2/modelproducts/17269","name":"韩版挂脖吊带套装","category_id":65,"lowest_agent_price":49.9,"lowest_std_sale_price":199,"onshelf_time":"2016-08-11T10:00:00","offshelf_time":"2016-08-13T10:00:00","is_saleout":false,"sale_state":"on","head_img":"http://image.xiaolu.so/MG_1469084398422-.jpg","web_url":"http://m.xiaolumeimei.com/mall/product/details/17269","watermark_op":""}]
+     * offshelf_deadline : 2016-08-13T10:00:00
+     * onshelf_starttime : 2016-08-11T10:00:00
      */
 
-    @SerializedName("category") private CategoryEntity mCategory;
-    @SerializedName("pic_path") private String mPicPath;
-    @SerializedName("remain_num") private int mRemainNum;
-    @SerializedName("is_saleout") private boolean mIsSaleout;
-    @SerializedName("head_img") private String mHeadImg;
-    @SerializedName("is_saleopen") private boolean mIsSaleopen;
-    @SerializedName("is_newgood") private boolean mIsNewgood;
-    @SerializedName("std_sale_price") private double mStdSalePrice;
-    @SerializedName("agent_price") private double mAgentPrice;
-    @SerializedName("sale_time") private String mSaleTime;
-    @SerializedName("offshelf_time") private Object mOffshelfTime;
-    @SerializedName("memo") private String mMemo;
-    @SerializedName("lowest_price") private double mLowestPrice;
-    @SerializedName("product_lowest_price") private double mProductLowestPrice;
+    private int count;
+    private String next;
+    private String previous;
+    private String offshelf_deadline;
+    private String onshelf_starttime;
     /**
-     * id : 6811
-     * name : 秒杀 韩版撞色时尚条纹系列套装
-     * head_imgs : ["http://image.xiaolu.so/MG-1451396496306-0秒杀.png"]
-     * content_imgs : ["https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLtiakvDbuLRhgiaaXD4LnAcWQib9pascibFYl1iaMlc587ox9fqU2J5Jbq1tMbWAQte8PZ8oCLhRw0pYnQ/0?wx_fmt=png","https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLtiakvDbuLRhgiaaXD4LnAcWQUtcla1fCLlg82yUAOnibDRW04Dwag0cWibOlq4ZiaiaTmymhuD3IJibibecw/0?wx_fmt=jpeg","https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLtiakvDbuLRhgiaaXD4LnAcWQWIBdubgwcDXyLhtcSOhQhrz6rjogibZrHztQbClVcXKp9L0yetvianIw/0?wx_fmt=jpeg"]
-     * is_single_spec : false
-     * is_sale_out : true
-     * buy_limit : false
-     * per_limit : 5
+     * id : 16784
+     * url : http://m.xiaolumeimei.com/rest/v2/modelproducts/16784
+     * name : 优雅气质纯色连衣裙
+     * category_id : 60
+     * lowest_agent_price : 99.9
+     * lowest_std_sale_price : 499
+     * onshelf_time : 2016-08-11T10:00:00
+     * offshelf_time : 2016-08-13T10:00:00
+     * is_saleout : false
+     * sale_state : on
+     * head_img : http://image.xiaolu.so/MG_1468482988133.jpg
+     * web_url : http://m.xiaolumeimei.com/mall/product/details/16784
+     * watermark_op :
      */
 
-    @SerializedName("product_model") private ProductModelEntity mProductModel;
-    @SerializedName("ware_by") private int mWareBy;
-    @SerializedName("is_verify") private boolean mIsVerify;
-    @SerializedName("model_id") private int mModelId;
-    @SerializedName("web_url") private String mWebUrl;
+    private List<ResultsBean> results;
 
-    public String getWebUrl() {
-      return mWebUrl;
+    public int getCount() {
+        return count;
     }
 
-    public String getId() {
-      return mId;
+    public void setCount(int count) {
+        this.count = count;
     }
 
-    public void setId(String id) {
-      this.mId = id;
+    public String getNext() {
+        return next;
     }
 
-    public String getUrl() {
-      return mUrl;
+    public void setNext(String next) {
+        this.next = next;
     }
 
-    public void setUrl(String url) {
-      this.mUrl = url;
+    public String getPrevious() {
+        return previous;
     }
 
-    public String getName() {
-      return mName;
+    public void setPrevious(String previous) {
+        this.previous = previous;
     }
 
-    public void setName(String name) {
-      this.mName = name;
+    public String getOffshelf_deadline() {
+        return offshelf_deadline;
     }
 
-    public String getOuterId() {
-      return mOuterId;
+    public void setOffshelf_deadline(String offshelf_deadline) {
+        this.offshelf_deadline = offshelf_deadline;
     }
 
-    public void setOuterId(String outerId) {
-      this.mOuterId = outerId;
+    public String getOnshelf_starttime() {
+        return onshelf_starttime;
     }
 
-    public CategoryEntity getCategory() {
-      return mCategory;
+    public void setOnshelf_starttime(String onshelf_starttime) {
+        this.onshelf_starttime = onshelf_starttime;
     }
 
-    public void setCategory(CategoryEntity category) {
-      this.mCategory = category;
+    public List<ResultsBean> getResults() {
+        return results;
     }
 
-    public String getPicPath() {
-      return mPicPath;
+    public void setResults(List<ResultsBean> results) {
+        this.results = results;
     }
 
-    public void setPicPath(String picPath) {
-      this.mPicPath = picPath;
+    public static class ResultsBean {
+        private int id;
+        private String url;
+        private String name;
+        private int category_id;
+        private double lowest_agent_price;
+        private int lowest_std_sale_price;
+        private String onshelf_time;
+        private String offshelf_time;
+        private boolean is_saleout;
+        private String sale_state;
+        private String head_img;
+        private String web_url;
+        private String watermark_op;
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public int getCategory_id() {
+            return category_id;
+        }
+
+        public void setCategory_id(int category_id) {
+            this.category_id = category_id;
+        }
+
+        public double getLowest_agent_price() {
+            return lowest_agent_price;
+        }
+
+        public void setLowest_agent_price(double lowest_agent_price) {
+            this.lowest_agent_price = lowest_agent_price;
+        }
+
+        public int getLowest_std_sale_price() {
+            return lowest_std_sale_price;
+        }
+
+        public void setLowest_std_sale_price(int lowest_std_sale_price) {
+            this.lowest_std_sale_price = lowest_std_sale_price;
+        }
+
+        public String getOnshelf_time() {
+            return onshelf_time;
+        }
+
+        public void setOnshelf_time(String onshelf_time) {
+            this.onshelf_time = onshelf_time;
+        }
+
+        public String getOffshelf_time() {
+            return offshelf_time;
+        }
+
+        public void setOffshelf_time(String offshelf_time) {
+            this.offshelf_time = offshelf_time;
+        }
+
+        public boolean isIs_saleout() {
+            return is_saleout;
+        }
+
+        public void setIs_saleout(boolean is_saleout) {
+            this.is_saleout = is_saleout;
+        }
+
+        public String getSale_state() {
+            return sale_state;
+        }
+
+        public void setSale_state(String sale_state) {
+            this.sale_state = sale_state;
+        }
+
+        public String getHead_img() {
+            return head_img;
+        }
+
+        public void setHead_img(String head_img) {
+            this.head_img = head_img;
+        }
+
+        public String getWeb_url() {
+            return web_url;
+        }
+
+        public void setWeb_url(String web_url) {
+            this.web_url = web_url;
+        }
+
+        public String getWatermark_op() {
+            return watermark_op;
+        }
+
+        public void setWatermark_op(String watermark_op) {
+            this.watermark_op = watermark_op;
+        }
     }
-
-    public int getRemainNum() {
-      return mRemainNum;
-    }
-
-    public void setRemainNum(int remainNum) {
-      this.mRemainNum = remainNum;
-    }
-
-    public boolean isIsSaleout() {
-      return mIsSaleout;
-    }
-
-    public void setIsSaleout(boolean isSaleout) {
-      this.mIsSaleout = isSaleout;
-    }
-
-    public String getHeadImg() {
-      return mHeadImg;
-    }
-
-    public void setHeadImg(String headImg) {
-      this.mHeadImg = headImg;
-    }
-
-    public boolean isIsSaleopen() {
-      return mIsSaleopen;
-    }
-
-    public void setIsSaleopen(boolean isSaleopen) {
-      this.mIsSaleopen = isSaleopen;
-    }
-
-    public boolean isIsNewgood() {
-      return mIsNewgood;
-    }
-
-    public void setIsNewgood(boolean isNewgood) {
-      this.mIsNewgood = isNewgood;
-    }
-
-    public double getStdSalePrice() {
-      return mStdSalePrice;
-    }
-
-    public void setStdSalePrice(int stdSalePrice) {
-      this.mStdSalePrice = stdSalePrice;
-    }
-
-    public double getAgentPrice() {
-      return mAgentPrice;
-    }
-
-    public void setAgentPrice(double agentPrice) {
-      this.mAgentPrice = agentPrice;
-    }
-
-    public String getSaleTime() {
-      return mSaleTime;
-    }
-
-    public void setSaleTime(String saleTime) {
-      this.mSaleTime = saleTime;
-    }
-
-    public Object getOffshelfTime() {
-      return mOffshelfTime;
-    }
-
-    public void setOffshelfTime(Object offshelfTime) {
-      this.mOffshelfTime = offshelfTime;
-    }
-
-    public String getMemo() {
-      return mMemo;
-    }
-
-    public void setMemo(String memo) {
-      this.mMemo = memo;
-    }
-
-    public double getLowestPrice() {
-      return mLowestPrice;
-    }
-
-    public void setLowestPrice(double lowestPrice) {
-      this.mLowestPrice = lowestPrice;
-    }
-
-    public double getProductLowestPrice() {
-      return mProductLowestPrice;
-    }
-
-    public void setProductLowestPrice(double productLowestPrice) {
-      this.mProductLowestPrice = productLowestPrice;
-    }
-
-    public ProductModelEntity getProductModel() {
-      return mProductModel;
-    }
-
-    public void setProductModel(ProductModelEntity productModel) {
-      this.mProductModel = productModel;
-    }
-
-    public int getWareBy() {
-      return mWareBy;
-    }
-
-    public void setWareBy(int wareBy) {
-      this.mWareBy = wareBy;
-    }
-
-    public boolean isIsVerify() {
-      return mIsVerify;
-    }
-
-    public void setIsVerify(boolean isVerify) {
-      this.mIsVerify = isVerify;
-    }
-
-    public int getModelId() {
-      return mModelId;
-    }
-
-    public void setModelId(int modelId) {
-      this.mModelId = modelId;
-    }
-
-    public static class CategoryEntity {
-      @SerializedName("cid") private int mCid;
-      @SerializedName("parent_cid") private int mParentCid;
-      @SerializedName("name") private String mName;
-      @SerializedName("status") private String mStatus;
-      @SerializedName("sort_order") private int mSortOrder;
-
-      public int getCid() {
-        return mCid;
-      }
-
-      public void setCid(int cid) {
-        this.mCid = cid;
-      }
-
-      public int getParentCid() {
-        return mParentCid;
-      }
-
-      public void setParentCid(int parentCid) {
-        this.mParentCid = parentCid;
-      }
-
-      public String getName() {
-        return mName;
-      }
-
-      public void setName(String name) {
-        this.mName = name;
-      }
-
-      public String getStatus() {
-        return mStatus;
-      }
-
-      public void setStatus(String status) {
-        this.mStatus = status;
-      }
-
-      public int getSortOrder() {
-        return mSortOrder;
-      }
-
-      public void setSortOrder(int sortOrder) {
-        this.mSortOrder = sortOrder;
-      }
-    }
-
-    public static class ProductModelEntity {
-      @SerializedName("id") private String mId;
-      @SerializedName("name") private String mName;
-      @SerializedName("is_single_spec") private boolean mIsSingleSpec;
-      @SerializedName("is_sale_out") private boolean mIsSaleOut;
-      @SerializedName("buy_limit") private boolean mBuyLimit;
-      @SerializedName("per_limit") private int mPerLimit;
-      @SerializedName("head_imgs") private List<String> mHeadImgs;
-      @SerializedName("content_imgs") private List<String> mContentImgs;
-
-      public String getId() {
-        return mId;
-      }
-
-      public void setId(String id) {
-        this.mId = id;
-      }
-
-      public String getName() {
-        return mName;
-      }
-
-      public void setName(String name) {
-        this.mName = name;
-      }
-
-      public boolean isIsSingleSpec() {
-        return mIsSingleSpec;
-      }
-
-      public void setIsSingleSpec(boolean isSingleSpec) {
-        this.mIsSingleSpec = isSingleSpec;
-      }
-
-      public boolean isIsSaleOut() {
-        return mIsSaleOut;
-      }
-
-      public void setIsSaleOut(boolean isSaleOut) {
-        this.mIsSaleOut = isSaleOut;
-      }
-
-      public boolean isBuyLimit() {
-        return mBuyLimit;
-      }
-
-      public void setBuyLimit(boolean buyLimit) {
-        this.mBuyLimit = buyLimit;
-      }
-
-      public int getPerLimit() {
-        return mPerLimit;
-      }
-
-      public void setPerLimit(int perLimit) {
-        this.mPerLimit = perLimit;
-      }
-
-      public List<String> getHeadImgs() {
-        return mHeadImgs;
-      }
-
-      public void setHeadImgs(List<String> headImgs) {
-        this.mHeadImgs = headImgs;
-      }
-
-      public List<String> getContentImgs() {
-        return mContentImgs;
-      }
-
-      public void setContentImgs(List<String> contentImgs) {
-        this.mContentImgs = contentImgs;
-      }
-    }
-  }
 }

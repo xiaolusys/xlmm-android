@@ -19,7 +19,6 @@ import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.CartsinfoBean;
 import com.jimei.xiaolumeimei.entities.CategoryDownBean;
 import com.jimei.xiaolumeimei.entities.CategoryProductListBean;
-import com.jimei.xiaolumeimei.entities.ChildListBean;
 import com.jimei.xiaolumeimei.entities.ClickcarryBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.CollectionAllBean;
@@ -31,7 +30,6 @@ import com.jimei.xiaolumeimei.entities.CouponSelectEntity;
 import com.jimei.xiaolumeimei.entities.DrawCouponBean;
 import com.jimei.xiaolumeimei.entities.GetCouponbean;
 import com.jimei.xiaolumeimei.entities.IsGetcoupon;
-import com.jimei.xiaolumeimei.entities.LadyListBean;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.entities.LogisticCompany;
 import com.jimei.xiaolumeimei.entities.LogisticCompanyBean;
@@ -60,10 +58,9 @@ import com.jimei.xiaolumeimei.entities.PointLogBean;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.PostActivityBean;
 import com.jimei.xiaolumeimei.entities.PotentialFans;
-import com.jimei.xiaolumeimei.entities.ProductBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
-import com.jimei.xiaolumeimei.entities.ProductDetailOldBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
+import com.jimei.xiaolumeimei.entities.ProductListOldBean;
 import com.jimei.xiaolumeimei.entities.ProductListResultBean;
 import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
@@ -73,7 +70,6 @@ import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.ResultBean;
 import com.jimei.xiaolumeimei.entities.ResultEntity;
 import com.jimei.xiaolumeimei.entities.ShareModelBean;
-import com.jimei.xiaolumeimei.entities.ShareProductBean;
 import com.jimei.xiaolumeimei.entities.ShopProductBean;
 import com.jimei.xiaolumeimei.entities.StartBean;
 import com.jimei.xiaolumeimei.entities.UserAccountBean;
@@ -118,89 +114,52 @@ public interface XlmmService {
 
     //童装分页列表
     @GET("/rest/v1/products/childlist")
-    Observable<ProductListResultBean> getChildList2(
+    Observable<ProductListResultBean> getChildList(
             @Query("page") int page,
             @Query("page_size") int page_size);
 
     //童装分页列表
     @GET("/rest/v1/products/childlist")
-    Observable<ProductListResultBean> getChildList2(
+    Observable<ProductListResultBean> getChildList(
             @Query("page") int page,
             @Query("page_size") int page_size,
             @Query("order_by") String order_by);
 
     //女装分页列表
     @GET("/rest/v1/products/ladylist")
-    Observable<ProductListResultBean> getLadyList2(
+    Observable<ProductListResultBean> getLadyList(
             @Query("page") int page,
             @Query("page_size") int page_size);
 
     //女装分页列表,升价排序x
     @GET("/rest/v1/products/ladylist")
-    Observable<ProductListResultBean> getLadyList2(
-            @Query("page") int page,
-            @Query("page_size") int page_size,
-            @Query("order_by") String order_by);
-
-    //童装分页列表
-    @GET("/rest/v1/products/childlist")
-    Observable<ChildListBean> getChildList(
-            @Query("page") int page,
-            @Query("page_size") int page_size);
-
-    //童装分页列表
-    @GET("/rest/v1/products/childlist")
-    Observable<ChildListBean> getChildList(
-            @Query("page") int page,
-            @Query("page_size") int page_size,
-            @Query("order_by") String order_by);
-
-    //女装分页列表
-    @GET("/rest/v1/products/ladylist")
-    Observable<LadyListBean> getLadyList(
-            @Query("page") int page,
-            @Query("page_size") int page_size);
-
-    //女装分页列表,升价排序x
-    @GET("/rest/v1/products/ladylist")
-    Observable<LadyListBean> getLadyList(
+    Observable<ProductListResultBean> getLadyList(
             @Query("page") int page,
             @Query("page_size") int page_size,
             @Query("order_by") String order_by);
 
     //今日列表
     @GET("/rest/v2/products")
-    Observable<ProductListBean> getTodayList(
+    Observable<ProductListOldBean> getTodayList(
             @Query("page") int page,
             @Query("page_size") int page_size);
 
     //昨日分页列表
     @GET("/rest/v2/products/yesterday")
-    Observable<ProductListBean> getPreviousList(
+    Observable<ProductListOldBean> getPreviousList(
             @Query("page") int page,
             @Query("page_size") int page_size);
 
     //明日分页列表
     @GET("/rest/v2/products/tomorrow")
-    Observable<ProductListBean> getAdvanceList(
+    Observable<ProductListOldBean> getAdvanceList(
             @Query("page") int page,
             @Query("page_size") int page_size);
-
-    //同款列表
-    @GET("/rest/v1/products/modellist/{model_id}")
-    Observable<List<ProductBean>> getTongKuanList(
-            @Path("model_id") int model_id);
 
     //获取所有订单
     @GET("/rest/v2/trades")
     Observable<AllOrdersBean> getAllOdersList(
             @Query("page") String page);
-
-
-    //获得商品详情页面数据
-    @GET("/rest/v1/products/{id}/details")
-    Observable<ProductDetailOldBean> getProductDetails(
-            @Path("id") String id);
 
     //添加购物车
     @FormUrlEncoded
@@ -628,11 +587,6 @@ public interface XlmmService {
     @GET("/rest/v1/activitys/{id}")
     Observable<BrandListBean> getBrandList(@Path("id") String id);
 
-    //获得商品详情共享页面信息
-    @GET("/rest/v1/share/product")
-    Observable<ShareProductBean> getProductShareInfo(
-            @Query("product_id") String product_id);
-
     @GET("/rest/v1/share/model")
     Observable<ShareModelBean> getShareModel(
             @Query("model_id") int model_id
@@ -947,5 +901,14 @@ public interface XlmmService {
             @Field("sku_id") int sku_id,
             @Field("num") int num
     );
+
+    @GET("/rest/v2/modelproducts/today")
+    Observable<ProductListBean> getTodayProducts();
+
+    @GET("/rest/v2/modelproducts/yesterday")
+    Observable<ProductListBean> getYesterdayProducts();
+
+    @GET("/rest/v2/modelproducts/tomorrow")
+    Observable<ProductListBean> getTomorrowProducts();
 
 }

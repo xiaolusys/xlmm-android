@@ -6,7 +6,7 @@ import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CategoryDownBean;
 import com.jimei.xiaolumeimei.entities.IsGetcoupon;
 import com.jimei.xiaolumeimei.entities.PortalBean;
-import com.jimei.xiaolumeimei.entities.ProductListBean;
+import com.jimei.xiaolumeimei.entities.ProductListOldBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.VersionBean;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
@@ -46,7 +46,7 @@ public class MainModel implements MainContract.Model {
         .compose(RxSchedulers.io_main());
   }
 
-  @Override public Observable<ProductListBean> getTodayList(int page,int page_size) {
+  @Override public Observable<ProductListOldBean> getTodayList(int page, int page_size) {
     return XlmmRetrofitClient
         .getService()
         .getTodayList(page,page_size)

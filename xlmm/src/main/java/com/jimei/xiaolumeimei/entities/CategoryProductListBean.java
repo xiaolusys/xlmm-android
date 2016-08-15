@@ -16,7 +16,7 @@ public class CategoryProductListBean {
 
     private int count;
     private String next;
-    private Object previous;
+    private String previous;
     /**
      * id : 16066
      * url : http://m.xiaolumeimei.com/rest/v2/modelproducts/16066
@@ -50,11 +50,11 @@ public class CategoryProductListBean {
         this.next = next;
     }
 
-    public Object getPrevious() {
+    public String getPrevious() {
         return previous;
     }
 
-    public void setPrevious(Object previous) {
+    public void setPrevious(String previous) {
         this.previous = previous;
     }
 

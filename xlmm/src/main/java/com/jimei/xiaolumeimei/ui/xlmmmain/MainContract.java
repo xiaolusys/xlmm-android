@@ -9,7 +9,7 @@ import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CategoryDownBean;
 import com.jimei.xiaolumeimei.entities.IsGetcoupon;
 import com.jimei.xiaolumeimei.entities.PortalBean;
-import com.jimei.xiaolumeimei.entities.ProductListBean;
+import com.jimei.xiaolumeimei.entities.ProductListOldBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.VersionBean;
 
@@ -31,7 +31,7 @@ public interface MainContract {
 
     Observable<PortalBean> getPortalBean();
 
-    Observable<ProductListBean> getTodayList(int page, int page_size);
+    Observable<ProductListOldBean> getTodayList(int page, int page_size);
 
     Observable<ResponseBody> getUsercoupons(String template_id);
 

@@ -52,10 +52,6 @@ public interface MMInfoContract {
 
     void initTodatText(List<RecentCarryBean.ResultsEntity> his_refund);
 
-    void showLoading();
-
-    void hideLoading();
-
     void getMaMaRenwuListBean(MaMaRenwuListBean maMaRenwuListBean);
 
     void getMaMaRenwuListBean(MamaSelfListBean mamaSelfListBean);
