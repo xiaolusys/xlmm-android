@@ -50,9 +50,14 @@ public class XlmmConst {
     public static final int JUMP_CARTS = 13;
     public static final int JUMP_PRODUCT_DETAIL_PUSH = 14;
     public static final int JUMP_TOPIC = 15;
+    public static final int JUMP_NEW_PRODUCT_DETAIL = 16;
 
     public static final int FLAG_PRICE = 0;
     public static final int FLAG_COLOR = 1;
+
+    public static final int TYPE_YESTERDAY = 0;
+    public static final int TYPE_TODAY = 1;
+    public static final int TYPE_TOMORROW = 2;
 
     public static final int TYPE_LADY = 2;
     public static final int TYPE_CHILD = 1;

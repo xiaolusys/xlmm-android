@@ -10,17 +10,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.BrandListBean;
-import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActvityWeb;
+import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
 import com.jude.utils.JUtils;
 import com.zhy.autolayout.utils.AutoUtils;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class BrandActivityAdapter extends RecyclerView.Adapter<BrandActivityAdapter.BrandlistVH> {
 
@@ -69,9 +72,11 @@ public class BrandActivityAdapter extends RecyclerView.Adapter<BrandActivityAdap
 
       holder.cardview.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View v) {
-          Intent intent = new Intent(mContext, ProductDetailActvityWeb.class);
+//          JumpUtils.jumpToWebViewWithCookies(mContext, resultsEntity.getWebUrl(), resultsEntity.getModelId(),
+//                  ProductPopDetailActvityWeb.class);
+          Intent intent = new Intent(mContext, ProductDetailActivity.class);
           Bundle bundle = new Bundle();
-          bundle.putString("product_id", resultsEntity.getModelId() + "");
+          bundle.putInt("model_id",resultsEntity.getModelId());
           intent.putExtras(bundle);
           mContext.startActivity(intent);
           ((Activity) mContext).finish();

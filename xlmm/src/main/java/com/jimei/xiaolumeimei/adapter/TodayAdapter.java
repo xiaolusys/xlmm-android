@@ -1,6 +1,8 @@
 package com.jimei.xiaolumeimei.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,17 +10,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.entities.ProductListBean;
-import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
-import com.jimei.xiaolumeimei.utils.JumpUtils;
+import com.jimei.xiaolumeimei.entities.ProductListOldBean;
+import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.zhy.autolayout.utils.AutoUtils;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by 优尼世界 on 15/12/29.
@@ -27,7 +31,7 @@ import java.util.List;
  */
 public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.TodayVH> {
 
-  private List<ProductListBean.ResultsEntity> mList;
+  private List<ProductListOldBean.ResultsEntity> mList;
   private Fragment context;
   private Context mContext;
 
@@ -37,13 +41,13 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.TodayVH> {
     this.mContext = context;
   }
 
-  public void updateWithClear(List<ProductListBean.ResultsEntity> femallist) {
+  public void updateWithClear(List<ProductListOldBean.ResultsEntity> femallist) {
     mList.clear();
     mList.addAll(femallist);
     notifyDataSetChanged();
   }
 
-  public void update(List<ProductListBean.ResultsEntity> femallist) {
+  public void update(List<ProductListOldBean.ResultsEntity> femallist) {
 
     mList.addAll(femallist);
     notifyDataSetChanged();
@@ -58,9 +62,9 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.TodayVH> {
 
   @Override public void onBindViewHolder(final TodayVH holder, int position) {
 
-    ProductListBean.ResultsEntity products = mList.get(position);
+    ProductListOldBean.ResultsEntity products = mList.get(position);
 
-    ProductListBean.ResultsEntity.ProductModelEntity productModel = products.getProductModel();
+    ProductListOldBean.ResultsEntity.ProductModelEntity productModel = products.getProductModel();
 
     boolean isSaleopen = products.isIsSaleopen();
     try {
@@ -99,8 +103,13 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.TodayVH> {
     holder.card.setOnClickListener(v -> {
       MobclickAgent.onEvent(mContext, "ProductID");
       int modelId = mList.get(position).getModelId();
-      JumpUtils.jumpToWebViewWithCookies(mContext, mList.get(position).getWebUrl(), modelId,
-          ProductPopDetailActvityWeb.class);
+//      JumpUtils.jumpToWebViewWithCookies(mContext, mList.get(position).getWebUrl(), modelId,
+//          ProductPopDetailActvityWeb.class);
+      Intent intent = new Intent(mContext, ProductDetailActivity.class);
+      Bundle bundle = new Bundle();
+      bundle.putInt("model_id",modelId);
+      intent.putExtras(bundle);
+      mContext.startActivity(intent);
     });
   }
 

@@ -210,7 +210,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:text="11692.62"
                                 android:textSize="17sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
@@ -235,7 +234,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:text="29378.7"
                                 android:textSize="17sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
@@ -259,7 +257,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:text="10"
                                 android:textSize="17sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
@@ -381,7 +378,6 @@
                             android:layout_gravity="center"
                             android:layout_marginLeft="4dp"
                             android:layout_toRightOf="@+id/tv_visit1"
-                            android:text="0"
                             android:textColor="@color/colorAccent"
                             android:textSize="15sp" />
                     </LinearLayout>
@@ -411,7 +407,6 @@
                             android:layout_gravity="center"
                             android:layout_marginLeft="4dp"
                             android:layout_toRightOf="@+id/tv_today_order1"
-                            android:text="0"
                             android:textColor="@color/colorAccent"
                             android:textSize="15sp" />
                     </LinearLayout>
@@ -441,7 +436,6 @@
                             android:layout_gravity="center"
                             android:layout_marginLeft="4dp"
                             android:layout_toRightOf="@+id/tv_today_fund1"
-                            android:text="0"
                             android:textColor="@color/colorAccent"
                             android:textSize="15sp" />
                     </LinearLayout>

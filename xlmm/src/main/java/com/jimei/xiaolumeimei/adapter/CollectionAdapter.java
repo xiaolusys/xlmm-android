@@ -1,6 +1,8 @@
 package com.jimei.xiaolumeimei.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +15,8 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.CollectionBean;
 import com.jimei.xiaolumeimei.entities.CollectionResultBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
-import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
+import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
 import com.jimei.xiaolumeimei.ui.fragment.v1.CollectionFragment;
-import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
@@ -89,9 +90,16 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
                         JUtils.Toast("取消失败!");
                     }
                 }));
-        holder.item.setOnClickListener(v -> JumpUtils.jumpToWebViewWithCookies(
-                mContext, modelproductBean.getWeb_url(),
-                bean.getId(), ProductPopDetailActvityWeb.class));
+        holder.item.setOnClickListener(v -> {
+//                JumpUtils.jumpToWebViewWithCookies(
+//                mContext, modelproductBean.getWeb_url(),
+//                bean.getId(), ProductPopDetailActvityWeb.class)
+            Intent intent = new Intent(mContext, ProductDetailActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putInt("model_id", bean.getModelproduct().getId());
+            intent.putExtras(bundle);
+            mContext.startActivity(intent);
+        });
     }
 
     @Override

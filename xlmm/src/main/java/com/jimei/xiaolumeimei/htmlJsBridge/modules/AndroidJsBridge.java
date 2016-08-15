@@ -23,16 +23,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.PlatformActionListener;
-import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.onekeyshare.OnekeyShare;
-import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
-import cn.sharesdk.sina.weibo.SinaWeibo;
-import cn.sharesdk.tencent.qq.QQ;
-import cn.sharesdk.tencent.qzone.QZone;
-import cn.sharesdk.wechat.friends.Wechat;
-import cn.sharesdk.wechat.moments.WechatMoments;
+
 import com.google.gson.Gson;
 import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.R;
@@ -58,6 +49,17 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
+import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
+import cn.sharesdk.sina.weibo.SinaWeibo;
+import cn.sharesdk.tencent.qq.QQ;
+import cn.sharesdk.tencent.qzone.QZone;
+import cn.sharesdk.wechat.friends.Wechat;
+import cn.sharesdk.wechat.moments.WechatMoments;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -90,6 +92,7 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     JUtils.Log("CommonWebViewActivity", url);
     JUtils.Log("CommonWebViewActivity", "brook hahahahahah");
     jump_ToNativeLocation(url);
+    JUtils.Log(url);
     //jump_ToNativeLocation("");
   }
 
@@ -555,7 +558,6 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     //if (!TextUtils.isEmpty(url)) {
     //Bundle bundle = new Bundle();
     //bundle.putString("product_id", url);
-    //Intent intent = new Intent(mContext, ProductDetailActvityWeb.class);
     //intent.putExtras(bundle);
     //startActivity(intent);
     JUtils.Log(TAG, "jump_ToNativeLocation=====" + url);

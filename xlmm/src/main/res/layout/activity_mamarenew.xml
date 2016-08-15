@@ -1,123 +1,195 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    >
+    android:orientation="vertical">
 
-  <ScrollView
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      >
+    <com.jimei.xiaolumeimei.widget.XlmmTitleView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:xlmm_title="小鹿妈妈身份续费" />
 
-    <LinearLayout
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white">
+
+                <ImageView
+                    android:id="@+id/image_99"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="60px"
+                    android:layout_marginTop="50px"
+                    android:src="@drawable/ninenine_choose" />
+
+                <ImageView
+                    android:id="@+id/image_991"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="60px"
+                    android:layout_marginTop="50px"
+                    android:src="@drawable/ninenine_normal"
+                    android:visibility="invisible" />
+
+                <ImageView
+                    android:id="@+id/image_188"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="60px"
+                    android:layout_marginTop="50px"
+                    android:src="@drawable/yibaba_choose"
+                    android:visibility="invisible" />
+
+                <ImageView
+                    android:id="@+id/image_1881"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="60px"
+                    android:layout_marginTop="50px"
+                    android:src="@drawable/yibaba_normal" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginTop="50px"
+                android:background="@color/bg_grey" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:src="@drawable/mamapay_rule" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="12dp"
+                android:background="@color/bg_grey" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="8dp"
+                android:text="99元与188元会员的差别："
+                android:textColor="@color/colorAccent"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:text="99元包含半年小鹿美美大数据系统使用权；"
+                android:textColor="@color/text_color_4A"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:text="188元包含一年小鹿美美大数据系统使用权，此外188元用户附加权限每活跃一天会员期限增加一天。"
+                android:textColor="@color/text_color_4A"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="12dp"
+                android:background="@color/bg_grey" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="88px"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="我已阅读并同意"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_rule"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="小鹿妈妈服务条款"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="14sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <CheckBox
+                    android:id="@+id/cb_rule"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@color/bg_grey" />
+
+
+        </LinearLayout>
+    </ScrollView>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:orientation="vertical"
-        >
+        android:padding="12dp">
 
-      <com.jimei.xiaolumeimei.widget.XlmmTitleView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          app:xlmm_title="小鹿妈妈身份续费"
-          />
-
-      <RelativeLayout
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:background="@color/white"
-          >
-
-        <ImageView
-            android:id="@+id/image_99"
+        <TextView
+            android:id="@+id/tv_moren"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="60px"
-            android:layout_marginTop="100px"
-            android:src="@drawable/ninenine_choose"
-            />
+            android:layout_centerHorizontal="true"
+            android:textSize="24px" />
 
-        <ImageView
-            android:id="@+id/image_991"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="60px"
-            android:layout_marginTop="100px"
-            android:src="@drawable/ninenine_normal"
-            android:visibility="invisible"
-            />
+        <TextView
+            android:id="@+id/commit"
+            android:layout_width="match_parent"
+            android:layout_height="76px"
+            android:layout_below="@id/tv_moren"
+            android:layout_marginLeft="32px"
+            android:layout_marginRight="32px"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/confirm_bg"
+            android:gravity="center"
+            android:text="确认支付"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+    </RelativeLayout>
 
-        <ImageView
-            android:id="@+id/image_188"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="60px"
-            android:layout_marginTop="100px"
-            android:src="@drawable/yibaba_choose"
-            android:visibility="invisible"
-            />
-
-        <ImageView
-            android:id="@+id/image_1881"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="60px"
-            android:layout_marginTop="100px"
-            android:src="@drawable/yibaba_normal"
-            />
-      </RelativeLayout>
-
-      <View
-          android:layout_width="match_parent"
-          android:layout_height="1px"
-          android:layout_marginTop="50px"
-          android:background="#33DADADA"
-          />
-
-      <ImageView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:scaleType="centerCrop"
-          android:src="@drawable/mamapay_rule"
-          />
-
-      <View
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:background="@color/bg_grey"
-          />
-    </LinearLayout>
-  </ScrollView>
-
-  <RelativeLayout
-      android:id="@+id/confirm"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_alignParentBottom="true"
-      android:background="@color/white"
-      android:padding="12dp"
-      >
-    <TextView
-        android:id="@+id/tv_moren"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:text=""
-        android:textSize="24px"
-        />
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tv_moren"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10px"
-        android:src="@drawable/mamapay"
-        />
-  </RelativeLayout>
-</RelativeLayout>
+</LinearLayout>

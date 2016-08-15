@@ -1,6 +1,8 @@
 package com.jimei.xiaolumeimei.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,9 +12,9 @@ import android.widget.TextView;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.ProductListResultBean;
-import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
-import com.jimei.xiaolumeimei.utils.JumpUtils;
+import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
+import com.jude.utils.JUtils;
 import com.zhy.autolayout.utils.AutoUtils;
 
 import java.util.ArrayList;
@@ -45,12 +47,6 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         notifyDataSetChanged();
     }
 
-
-    public ProductListResultBean.ResultsEntity getData(int postion) {
-
-        return mList.get(postion);
-    }
-
     @Override
     public ChildListVH onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -68,7 +64,6 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     public void onBindViewHolder(final ChildListVH holder, int position) {
 
         final ProductListResultBean.ResultsEntity resultsEntity = mList.get(position);
-        //ChildListBean.ResultsEntity.CategoryEntity category = resultsEntity.getCategory();
         ProductListResultBean.ResultsEntity.ProductModelEntity productModel =
                 resultsEntity.getProductModel();
 
@@ -101,7 +96,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                 holder.childlistName.setText(productModel.getName().substring(0, 8) + "...");
             }
 
-            holder.childlistAgentPrice.setText("¥" + resultsEntity.getProductLowestPrice());
+            holder.childlistAgentPrice.setText("¥" + resultsEntity.getLowestPrice());
             holder.childlistStdsalePrice.setText("/¥" + resultsEntity.getStdSalePrice());
         } catch (Exception e) {
             e.printStackTrace();
@@ -111,9 +106,14 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         ViewUtils.loadImgToImgViewWithPlaceholder(mContext, holder.childlistImage, headImg);
         holder.card.setOnClickListener(v -> {
             int modelId = mList.get(position).getModelId();
-
-            JumpUtils.jumpToWebViewWithCookies(mContext, mList.get(position).getWebUrl(),
-                    modelId, ProductPopDetailActvityWeb.class);
+            JUtils.Log("" + mList.get(position));
+//            JumpUtils.jumpToWebViewWithCookies(mContext, mList.get(position).getWebUrl(),
+//                    modelId, ProductPopDetailActvityWeb.class);
+            Intent intent = new Intent(mContext, ProductDetailActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putInt("model_id", modelId);
+            intent.putExtras(bundle);
+            mContext.startActivity(intent);
 
         });
     }
