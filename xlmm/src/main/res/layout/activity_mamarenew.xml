@@ -90,7 +90,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="8dp"
-                android:text="99/188差别："
+                android:text="99元与188元会员的差别："
                 android:textColor="@color/colorAccent"
                 android:textSize="18sp" />
 

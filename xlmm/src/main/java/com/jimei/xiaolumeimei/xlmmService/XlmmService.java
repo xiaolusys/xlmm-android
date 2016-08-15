@@ -903,12 +903,18 @@ public interface XlmmService {
     );
 
     @GET("/rest/v2/modelproducts/today")
-    Observable<ProductListBean> getTodayProducts();
+    Observable<ProductListBean> getTodayProducts(
+            @Query("page") int page
+    );
 
     @GET("/rest/v2/modelproducts/yesterday")
-    Observable<ProductListBean> getYesterdayProducts();
+    Observable<ProductListBean> getYesterdayProducts(
+            @Query("page") int page
+    );
 
     @GET("/rest/v2/modelproducts/tomorrow")
-    Observable<ProductListBean> getTomorrowProducts();
+    Observable<ProductListBean> getTomorrowProducts(
+            @Query("page") int page
+    );
 
 }

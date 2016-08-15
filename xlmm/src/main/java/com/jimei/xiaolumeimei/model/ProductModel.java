@@ -125,21 +125,31 @@ public class ProductModel {
                 .compose(new DefaultTransform<>());
     }
 
-    public Observable<ProductListBean> getTodayProducts() {
+    public Observable<ProductListBean> getTodayProducts(int page) {
         return XlmmRetrofitClient.getService()
-                .getTodayProducts()
+                .getTodayProducts(page)
                 .compose(new DefaultTransform<>());
     }
 
-    public Observable<ProductListBean> getTomorrowProducts() {
+    public Observable<ProductListBean> getTomorrowProducts(int page) {
         return XlmmRetrofitClient.getService()
-                .getTomorrowProducts()
+                .getTomorrowProducts(page)
                 .compose(new DefaultTransform<>());
     }
 
-    public Observable<ProductListBean> getYesterdayProducts() {
+    public Observable<ProductListBean> getYesterdayProducts(int page) {
         return XlmmRetrofitClient.getService()
-                .getYesterdayProducts()
+                .getYesterdayProducts(page)
                 .compose(new DefaultTransform<>());
+    }
+
+    public Observable<ProductListBean> getProductListBean(int page, int type) {
+        if (type == XlmmConst.TYPE_YESTERDAY) {
+            return getYesterdayProducts(page);
+        } else if (type == XlmmConst.TYPE_TODAY) {
+            return getTodayProducts(page);
+        } else {
+            return getTomorrowProducts(page);
+        }
     }
 }
