@@ -211,6 +211,9 @@
             android:name=".ui.activity.xiaolumama.BoutiqueWebviewActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
+            android:name=".ui.activity.xiaolumama.MamaRuleActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
+        <activity
             android:name=".ui.activity.main.ComplainWebActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity

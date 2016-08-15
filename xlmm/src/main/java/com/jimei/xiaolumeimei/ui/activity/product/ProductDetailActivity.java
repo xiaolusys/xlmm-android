@@ -143,7 +143,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                     if (v >= 0.5) {
                         b.tvTitle.setAlpha(1);
                     } else {
-                        b.tvTitle.setAlpha(0);
+                        b.tvTitle.setAlpha(2 * v);
                     }
                 }
         );
@@ -164,7 +164,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
 
                     @Override
                     public void onError(Throwable e) {
-                        JUtils.Log("商品详情加载失败!");
+                        JUtils.Toast("商品详情加载失败!");
                         hideIndeterminateProgressDialog();
                     }
                 }));
@@ -224,10 +224,13 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
             b.collectText.setText("已收藏");
         }
         ProductDetailBean.DetailContentBean detail_content = productDetailBean.getDetail_content();
-        if (!detail_content.isIs_saleopen()) {
+        if ("will".equals(detail_content.getSale_state())) {
             b.tvAdd.setClickable(false);
             b.tvAdd.setText("即将开售");
-        } else if (detail_content.isIs_sale_out()) {
+        } else if ("off".equals(detail_content.getSale_state())) {
+            b.tvAdd.setClickable(false);
+            b.tvAdd.setText("已下架");
+        } else if ("on".equals(detail_content.getSale_state()) && detail_content.isIs_sale_out()) {
             b.tvAdd.setClickable(false);
             b.tvAdd.setText("已抢光");
         }
@@ -290,7 +293,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
             ImageView imageView = new ImageView(this);
             imageView.setLayoutParams(new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             Glide.with(this).load(head_imgs.get(i)).diskCacheStrategy(DiskCacheStrategy.ALL)
                     .centerCrop().placeholder(R.drawable.parceholder).into(imageView);
             list.add(imageView);
