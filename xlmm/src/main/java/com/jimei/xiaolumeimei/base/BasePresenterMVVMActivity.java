@@ -309,16 +309,10 @@ public abstract class BasePresenterMVVMActivity<T extends BasePresenter, E exten
   }
 
   public void showIndeterminateProgressDialog(boolean horizontal) {
-    if (loadingdialog == null) {
-      loadingdialog = XlmmLoadingDialog.create(this)
-              .setStyle(XlmmLoadingDialog.Style.SPIN_INDETERMINATE)
-              .setCancellable(!horizontal)
-              .show();
-    }else {
-      if (!loadingdialog.isShowing()) {
-        loadingdialog.show();
-      }
-    }
+    loadingdialog = XlmmLoadingDialog.create(this)
+        .setStyle(XlmmLoadingDialog.Style.SPIN_INDETERMINATE)
+        .setCancellable(!horizontal)
+        .show();
   }
 
   public void hideIndeterminateProgressDialog() {
