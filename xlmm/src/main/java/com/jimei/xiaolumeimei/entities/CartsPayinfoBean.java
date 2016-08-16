@@ -13,7 +13,7 @@ public class CartsPayinfoBean {
   @SerializedName("pay_extras") private List<payExtrasEntityApp> mPayExtras;
   @SerializedName("logistics_companys") private List<LogisticsCompanys>
       mLogisticsCompanyses;
-  @SerializedName("wallet_cash") private float mWalletCash;
+  @SerializedName("wallet_cash") private double mWalletCash;
   @SerializedName("total_payment") private double mTotalPayment;
   @SerializedName("wallet_payable") private boolean mWalletPayable;
   @SerializedName("weixin_payable") private boolean mWeixinPayable;
@@ -86,11 +86,11 @@ public class CartsPayinfoBean {
     this.mCoupon_message = mCoupon_message;
   }
 
-  public float getWalletCash() {
+  public double getWalletCash() {
     return mWalletCash;
   }
 
-  public void setWalletCash(int walletCash) {
+  public void setWalletCash(double walletCash) {
     this.mWalletCash = walletCash;
   }
 

@@ -17,7 +17,7 @@ public class ShopProductBean {
 
     private int count;
     private String next;
-    private Object previous;
+    private String previous;
     /**
      * id : 16081
      * product : 35637
@@ -52,11 +52,11 @@ public class ShopProductBean {
         this.next = next;
     }
 
-    public Object getPrevious() {
+    public String getPrevious() {
         return previous;
     }
 
-    public void setPrevious(Object previous) {
+    public void setPrevious(String previous) {
         this.previous = previous;
     }
 

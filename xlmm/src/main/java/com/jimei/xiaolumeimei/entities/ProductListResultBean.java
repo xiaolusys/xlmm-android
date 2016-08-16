@@ -12,9 +12,9 @@ public class ProductListResultBean {
     @SerializedName("count")
     private int mCount;
     @SerializedName("next")
-    private Object mNext;
+    private String mNext;
     @SerializedName("previous")
-    private Object mPrevious;
+    private String mPrevious;
     @SerializedName("results")
     private List<ResultsEntity> mResults;
 
@@ -26,19 +26,19 @@ public class ProductListResultBean {
         this.mCount = count;
     }
 
-    public Object getNext() {
+    public String getNext() {
         return mNext;
     }
 
-    public void setNext(Object next) {
+    public void setNext(String next) {
         this.mNext = next;
     }
 
-    public Object getPrevious() {
+    public String getPrevious() {
         return mPrevious;
     }
 
-    public void setPrevious(Object previous) {
+    public void setPrevious(String previous) {
         this.mPrevious = previous;
     }
 

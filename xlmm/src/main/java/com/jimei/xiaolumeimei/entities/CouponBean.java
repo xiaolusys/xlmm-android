@@ -16,9 +16,9 @@ public class CouponBean {
     @SerializedName("count")
     private int count;
     @SerializedName("next")
-    private Object next;
+    private String next;
     @SerializedName("previous")
-    private Object previous;
+    private String previous;
     /**
      * id : 115729
      * coupon_type : 9
@@ -50,19 +50,19 @@ public class CouponBean {
         this.count = count;
     }
 
-    public Object getNext() {
+    public String getNext() {
         return next;
     }
 
-    public void setNext(Object next) {
+    public void setNext(String next) {
         this.next = next;
     }
 
-    public Object getPrevious() {
+    public String getPrevious() {
         return previous;
     }
 
-    public void setPrevious(Object previous) {
+    public void setPrevious(String previous) {
         this.previous = previous;
     }
 
