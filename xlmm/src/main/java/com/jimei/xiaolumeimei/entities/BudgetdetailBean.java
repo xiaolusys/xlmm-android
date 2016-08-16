@@ -20,8 +20,8 @@ public class BudgetdetailBean {
    */
 
   @SerializedName("count") private int mCount;
-  @SerializedName("next") private Object mNext;
-  @SerializedName("previous") private Object mPrevious;
+  @SerializedName("next") private String mNext;
+  @SerializedName("previous") private String mPrevious;
   /**
    * "desc": "您通过红包收入1137.12元.",
    * budget_type : 0
@@ -37,11 +37,11 @@ public class BudgetdetailBean {
     this.mCount = count;
   }
 
-  public void setNext(Object next) {
+  public void setNext(String next) {
     this.mNext = next;
   }
 
-  public void setPrevious(Object previous) {
+  public void setPrevious(String previous) {
     this.mPrevious = previous;
   }
 
@@ -53,11 +53,11 @@ public class BudgetdetailBean {
     return mCount;
   }
 
-  public Object getNext() {
+  public String getNext() {
     return mNext;
   }
 
-  public Object getPrevious() {
+  public String getPrevious() {
     return mPrevious;
   }
 
