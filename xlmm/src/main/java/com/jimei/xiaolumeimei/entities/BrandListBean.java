@@ -20,8 +20,8 @@ public class BrandListBean {
         @SerializedName("model_id") private int modelId;
         @SerializedName("product_name") private String productName;
         @SerializedName("product_img") private String productImg;
-        @SerializedName("product_lowest_price") private int productLowestPrice;
-        @SerializedName("product_std_sale_price") private int productStdSalePrice;
+        @SerializedName("product_lowest_price") private double productLowestPrice;
+        @SerializedName("product_std_sale_price") private double productStdSalePrice;
         @SerializedName("web_url") private String webUrl;
 
         public int getId() {
@@ -64,19 +64,19 @@ public class BrandListBean {
             this.productImg = productImg;
         }
 
-        public int getProductLowestPrice() {
+        public double getProductLowestPrice() {
             return productLowestPrice;
         }
 
-        public void setProductLowestPrice(int productLowestPrice) {
+        public void setProductLowestPrice(double productLowestPrice) {
             this.productLowestPrice = productLowestPrice;
         }
 
-        public int getProductStdSalePrice() {
+        public double getProductStdSalePrice() {
             return productStdSalePrice;
         }
 
-        public void setProductStdSalePrice(int productStdSalePrice) {
+        public void setProductStdSalePrice(double productStdSalePrice) {
             this.productStdSalePrice = productStdSalePrice;
         }
 

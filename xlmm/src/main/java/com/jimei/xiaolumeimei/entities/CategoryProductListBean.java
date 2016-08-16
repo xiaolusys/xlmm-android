@@ -72,7 +72,7 @@ public class CategoryProductListBean {
         private String name;
         private int category_id;
         private double lowest_agent_price;
-        private int lowest_std_sale_price;
+        private double lowest_std_sale_price;
         private boolean is_saleout;
         private boolean is_favorite;
         private String sale_state;
@@ -120,11 +120,11 @@ public class CategoryProductListBean {
             this.lowest_agent_price = lowest_agent_price;
         }
 
-        public int getLowest_std_sale_price() {
+        public double getLowest_std_sale_price() {
             return lowest_std_sale_price;
         }
 
-        public void setLowest_std_sale_price(int lowest_std_sale_price) {
+        public void setLowest_std_sale_price(double lowest_std_sale_price) {
             this.lowest_std_sale_price = lowest_std_sale_price;
         }
 

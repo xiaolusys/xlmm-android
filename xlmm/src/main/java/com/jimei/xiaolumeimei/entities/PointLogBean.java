@@ -17,7 +17,7 @@ public class PointLogBean {
 
     private int count;
     private String next;
-    private Object previous;
+    private String previous;
     /**
      * id : 7615
      * integral_user : 1
@@ -49,11 +49,11 @@ public class PointLogBean {
         this.next = next;
     }
 
-    public Object getPrevious() {
+    public String getPrevious() {
         return previous;
     }
 
-    public void setPrevious(Object previous) {
+    public void setPrevious(String previous) {
         this.previous = previous;
     }
 

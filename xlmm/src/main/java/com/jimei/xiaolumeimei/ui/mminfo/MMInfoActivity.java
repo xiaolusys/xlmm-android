@@ -95,7 +95,6 @@ public class MMInfoActivity
   private String act_info;
 
   @Override protected void initData() {
-    showIndeterminateProgressDialog(false);
     mPresenter.getMamaUrl();
     mPresenter.getShareShopping();
     mPresenter.getMamaFortune();
@@ -531,7 +530,6 @@ public class MMInfoActivity
 
   @Override protected void onResume() {
     super.onResume();
-    initData();
     MobclickAgent.onPageStart(this.getClass().getSimpleName());
     MobclickAgent.onResume(this);
   }
