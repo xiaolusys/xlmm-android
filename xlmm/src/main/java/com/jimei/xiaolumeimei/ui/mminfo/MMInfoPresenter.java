@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.ui.mminfo;
 
 import android.graphics.Color;
+
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -11,10 +12,12 @@ import com.jimei.xiaolumeimei.entities.MaMaRenwuListBean;
 import com.jimei.xiaolumeimei.entities.MamaSelfListBean;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+
 import retrofit2.Response;
 import rx.Observer;
 
@@ -28,7 +31,6 @@ public class MMInfoPresenter extends MMInfoContract.Presenter {
   List<RecentCarryBean.ResultsEntity> show_refund = new ArrayList<>();
 
   @Override public void getShareShopping() {
-    mView.showLoading();
     mRxManager.add(mModel.getShareShopping().subscribe(mmShoppingBean -> {
       /*mRxManager.post("mmShoppingBean",mmShoppingBean);*/
       if (null != mmShoppingBean) mView.initShareInfo(mmShoppingBean);
@@ -164,9 +166,6 @@ public class MMInfoPresenter extends MMInfoContract.Presenter {
   public void getRecentCarry() {
     mRxManager.add(mModel.getRecentCarry("0", Integer.toString(MAX_RECENT_DAYS))
         .subscribe(new ServiceResponse<RecentCarryBean>() {
-          @Override public void onError(Throwable e) {
-            super.onError(e);
-          }
 
           @Override public void onNext(RecentCarryBean recentCarryBean) {
             if (null != recentCarryBean) {
@@ -186,7 +185,6 @@ public class MMInfoPresenter extends MMInfoContract.Presenter {
 
           @Override public void onCompleted() {
             super.onCompleted();
-            mView.hideLoading();
           }
         }));
   }

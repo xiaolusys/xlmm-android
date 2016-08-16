@@ -34,7 +34,7 @@
                         <android.support.v4.view.ViewPager
                             android:id="@+id/view_pager"
                             android:layout_width="match_parent"
-                            android:layout_height="480dp" />
+                            android:layout_height="820px" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -48,8 +48,10 @@
                                 android:id="@+id/name"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:singleLine="true"
                                 android:textColor="@color/text_color_4A"
-                                android:textSize="17sp" />
+                                android:textSize="16sp" />
 
                             <View
                                 android:layout_width="0dp"
@@ -164,10 +166,11 @@
                                     app:suffixMinute="分"
                                     app:suffixSecond="秒"
                                     app:suffixTextColor="@color/text_color_4A"
-                                    app:suffixTextSize="14sp"
+                                    app:suffixTextSize="12sp"
                                     app:timeBgColor="@color/white"
                                     app:timeTextColor="@color/text_color_4A"
                                     app:timeTextSize="14sp" />
+
                             </RelativeLayout>
 
 
@@ -253,7 +256,7 @@
                 android:alpha="0"
                 android:background="@color/colorAccent"
                 android:gravity="bottom|center_horizontal"
-                android:paddingBottom="20px"
+                android:paddingBottom="30px"
                 android:text="商品详情"
                 android:textColor="@color/white"
                 android:textSize="16sp" />
@@ -273,7 +276,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="15px"
+                        android:layout_marginBottom="25px"
                         android:layout_marginLeft="35px"
                         android:layout_marginRight="35px"
                         android:src="@drawable/icon_finish_detail" />
@@ -293,7 +296,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="15px"
+                        android:layout_marginBottom="25px"
                         android:layout_marginLeft="35px"
                         android:layout_marginRight="35px"
                         android:src="@drawable/icon_share_detail" />

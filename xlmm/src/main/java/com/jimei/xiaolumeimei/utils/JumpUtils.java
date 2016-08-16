@@ -11,6 +11,7 @@ import android.util.Log;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.ui.activity.product.BrandListActivity;
+import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity;
@@ -75,6 +76,14 @@ public class JumpUtils {
         //        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         //        intent.putExtra("fragment", 4);
         intent.putExtras(ladyBundle);
+        context.startActivity(intent);
+        break;
+      case XlmmConst.JUMP_NEW_PRODUCT_DETAIL:
+        int model_id = Integer.valueOf(get_jump_arg("model_id",jumpInfo.getUrl()));
+        Bundle bundle1 = new Bundle();
+        bundle1.putInt("model_id",model_id);
+        intent = new Intent(context, ProductDetailActivity.class);
+        intent.putExtras(bundle1);
         context.startActivity(intent);
         break;
       case XlmmConst.JUMP_PRODUCT_DETAIL:
@@ -192,6 +201,9 @@ public class JumpUtils {
           jumpInfo.setUrl(content[1]);
         } else if (content[1].contains("ladylist")) {
           jumpInfo.setType(XlmmConst.JUMP_PRODUCT_LADYLIST);
+          jumpInfo.setUrl(content[1]);
+        }else if (content[1].contains("model_id")) {
+          jumpInfo.setType(XlmmConst.JUMP_NEW_PRODUCT_DETAIL);
           jumpInfo.setUrl(content[1]);
         } else if (content[1].contains("modelist")) {
           jumpInfo.setType(XlmmConst.JUMP_PRODUCT_MODELLIST);

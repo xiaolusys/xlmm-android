@@ -93,14 +93,27 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
 
     @Override
     protected void initData() {
-        String[] split = address.split("，");
-        for (String s : split) {
-            if (s.contains("市")) {
-                addressTv.setText("收货地址:" + s);
-            } else if (s.contains("小鹿")) {
-                nameTv.setText("收件人:小鹿售后");
-            } else {
-                phoneTv.setText("联系电话:" + s);
+        if (address.contains("，")) {
+            String[] split = address.split("，");
+            for (String s : split) {
+                if (s.contains("市")) {
+                    addressTv.setText("收货地址:" + s);
+                } else if (s.contains("小鹿")) {
+                    nameTv.setText("收件人:小鹿售后");
+                } else {
+                    phoneTv.setText("联系电话:" + s);
+                }
+            }
+        } else if (address.contains(",")) {
+            String[] split = address.split(",");
+            for (String s : split) {
+                if (s.contains("市")) {
+                    addressTv.setText("收货地址:" + s);
+                } else if (s.contains("小鹿")) {
+                    nameTv.setText("收件人:小鹿售后");
+                } else {
+                    phoneTv.setText("联系电话:" + s);
+                }
             }
         }
         if (flag) {

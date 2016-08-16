@@ -9,15 +9,13 @@ import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import cn.iwgang.countdownview.CountdownView;
+
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.TodayAdapter;
 import com.jimei.xiaolumeimei.base.BaseFragment;
-import com.jimei.xiaolumeimei.entities.ProductListBean;
+import com.jimei.xiaolumeimei.entities.ProductListOldBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.utils.RxUtils;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
@@ -25,11 +23,16 @@ import com.jimei.xiaolumeimei.widget.loadingdialog.XlmmLoadingDialog;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
+
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import cn.iwgang.countdownview.CountdownView;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -44,7 +47,7 @@ public class TodayV2Fragment extends BaseFragment {
   @Bind(R.id.xrcy_todayv2) XRecyclerView xRecyclerView;
   int page_size = 10;
   Thread thread;
-  private List<ProductListBean.ResultsEntity> list = new ArrayList<>();
+  private List<ProductListOldBean.ResultsEntity> list = new ArrayList<>();
   private int page = 2;
   private int totalPages;//总的分页数
   private TodayAdapter mTodayAdapter;
@@ -100,11 +103,11 @@ public class TodayV2Fragment extends BaseFragment {
     ProductModel.getInstance()
         .getTodayList(1, 1)
         .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<ProductListBean>() {
-          @Override public void onNext(ProductListBean productListBean) {
-            if (null != productListBean) {
+        .subscribe(new ServiceResponse<ProductListOldBean>() {
+          @Override public void onNext(ProductListOldBean productListOldBean) {
+            if (null != productListOldBean) {
               JUtils.Log(TAG, Thread.currentThread().getName());
-              upshelfStarttime = productListBean.getUpshelfStarttime();
+              upshelfStarttime = productListOldBean.getUpshelfStarttime();
               //EventBus.getDefault().post(new v (upshelfStarttime));
             }
           }
@@ -146,24 +149,24 @@ public class TodayV2Fragment extends BaseFragment {
         .getTodayList(1, 10)
         .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
         .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<ProductListBean>() {
+        .subscribe(new ServiceResponse<ProductListOldBean>() {
           @Override public void onError(Throwable e) {
             super.onError(e);
             e.printStackTrace();
           }
 
-          @Override public void onNext(ProductListBean productListBean) {
+          @Override public void onNext(ProductListOldBean productListOldBean) {
 
             try {
 
-              if (productListBean != null) {
-                left = calcLeftTime(productListBean.getDownshelfDeadline());
+              if (productListOldBean != null) {
+                left = calcLeftTime(productListOldBean.getDownshelfDeadline());
 
-                List<ProductListBean.ResultsEntity> results = productListBean.getResults();
-                if (productListBean.getCount() % page_size == 0) {
-                  totalPages = productListBean.getCount() / page_size;
+                List<ProductListOldBean.ResultsEntity> results = productListOldBean.getResults();
+                if (productListOldBean.getCount() % page_size == 0) {
+                  totalPages = productListOldBean.getCount() / page_size;
                 } else {
-                  totalPages = productListBean.getCount() / page_size + 1;
+                  totalPages = productListOldBean.getCount() / page_size + 1;
                 }
                 list.clear();
                 list.addAll(results);
@@ -265,9 +268,9 @@ public class TodayV2Fragment extends BaseFragment {
     subscribe3 = ProductModel.getInstance()
         .getTodayList(page, page_size)
         .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<ProductListBean>() {
-          @Override public void onNext(ProductListBean productListBean) {
-            List<ProductListBean.ResultsEntity> results = productListBean.getResults();
+        .subscribe(new ServiceResponse<ProductListOldBean>() {
+          @Override public void onNext(ProductListOldBean productListOldBean) {
+            List<ProductListOldBean.ResultsEntity> results = productListOldBean.getResults();
             mTodayAdapter.update(results);
           }
 

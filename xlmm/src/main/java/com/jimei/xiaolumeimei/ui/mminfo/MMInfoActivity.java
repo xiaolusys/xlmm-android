@@ -95,6 +95,7 @@ public class MMInfoActivity
   private String act_info;
 
   @Override protected void initData() {
+    showIndeterminateProgressDialog(false);
     mPresenter.getMamaUrl();
     mPresenter.getShareShopping();
     mPresenter.getMamaFortune();
@@ -213,6 +214,7 @@ public class MMInfoActivity
     if (!TextUtils.isEmpty(fortune.getMamaFortune().getExtraInfo().getThumbnail())) {
       setUserImage(fortune);
     }
+    hideIndeterminateProgressDialog();
   }
 
   private void setUserImage(MamaFortune fortune) {
@@ -308,14 +310,6 @@ public class MMInfoActivity
     b.tvTodayOrder2.setText(Integer.toString(his_refund.get(his_refund.size() - 1).getOrderNum()));
     b.tvTodayFund2.setText(Double.toString(
         (double) (Math.round(his_refund.get(his_refund.size() - 1).getCarry() * 100)) / 100));
-  }
-
-  @Override public void showLoading() {
-    showIndeterminateProgressDialog(false);
-  }
-
-  @Override public void hideLoading() {
-    hideIndeterminateProgressDialog();
   }
 
   @Override public void getMaMaRenwuListBean(MaMaRenwuListBean maMaRenwuListBean) {
@@ -538,6 +532,7 @@ public class MMInfoActivity
 
   @Override protected void onResume() {
     super.onResume();
+    initData();
     MobclickAgent.onPageStart(this.getClass().getSimpleName());
     MobclickAgent.onResume(this);
   }

@@ -8,12 +8,21 @@ import java.util.List;
  *
  * Copyright 2015年 上海己美. All rights reserved.
  */
-public class ChildListBean {
+public class ProductListOldBean {
 
   @SerializedName("count") private int mCount;
   @SerializedName("next") private Object mNext;
-  @SerializedName("previous") private Object mPrevious;
+  @SerializedName("downshelf_deadline") private String mDownshelfDeadline;
+  @SerializedName("upshelf_starttime") private String mUpshelfStarttime;
   @SerializedName("results") private List<ResultsEntity> mResults;
+
+  public String getUpshelfStarttime() {
+    return mUpshelfStarttime;
+  }
+
+  public String getDownshelfDeadline() {
+    return mDownshelfDeadline;
+  }
 
   public int getCount() {
     return mCount;
@@ -31,14 +40,6 @@ public class ChildListBean {
     this.mNext = next;
   }
 
-  public Object getPrevious() {
-    return mPrevious;
-  }
-
-  public void setPrevious(Object previous) {
-    this.mPrevious = previous;
-  }
-
   public List<ResultsEntity> getResults() {
     return mResults;
   }
@@ -47,27 +48,17 @@ public class ChildListBean {
     this.mResults = results;
   }
 
-  @Override public String toString() {
-    return "ChildListBean{" +
-        "mCount=" + mCount +
-        ", mNext=" + mNext +
-        ", mPrevious=" + mPrevious +
-        ", mResults=" + mResults +
-        '}';
-  }
-
   public static class ResultsEntity {
-
     @SerializedName("id") private String mId;
     @SerializedName("url") private String mUrl;
     @SerializedName("name") private String mName;
     @SerializedName("outer_id") private String mOuterId;
     /**
-     * cid : 12
-     * parent_cid : 5
-     * name : 外套
+     * cid : 22
+     * parent_cid : 8
+     * name : 套装
      * status : normal
-     * sort_order : 0
+     * sort_order : 100
      */
 
     @SerializedName("category") private CategoryEntity mCategory;
@@ -85,12 +76,12 @@ public class ChildListBean {
     @SerializedName("lowest_price") private double mLowestPrice;
     @SerializedName("product_lowest_price") private double mProductLowestPrice;
     /**
-     * id : 5546
-     * name : 可爱印花连帽羽绒服
-     * head_imgs : ["http://image.xiaolu.so/MG-1451294068175-MG-1449046562015-0.png"]
-     * content_imgs : ["http://image.xiaolu.so/MG-1451296855181-MG-1449046598468-5.jpg"]
+     * id : 6811
+     * name : 秒杀 韩版撞色时尚条纹系列套装
+     * head_imgs : ["http://image.xiaolu.so/MG-1451396496306-0秒杀.png"]
+     * content_imgs : ["https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLtiakvDbuLRhgiaaXD4LnAcWQib9pascibFYl1iaMlc587ox9fqU2J5Jbq1tMbWAQte8PZ8oCLhRw0pYnQ/0?wx_fmt=png","https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLtiakvDbuLRhgiaaXD4LnAcWQUtcla1fCLlg82yUAOnibDRW04Dwag0cWibOlq4ZiaiaTmymhuD3IJibibecw/0?wx_fmt=jpeg","https://mmbiz.qlogo.cn/mmbiz/yMhOQPTKhLtiakvDbuLRhgiaaXD4LnAcWQWIBdubgwcDXyLhtcSOhQhrz6rjogibZrHztQbClVcXKp9L0yetvianIw/0?wx_fmt=jpeg"]
      * is_single_spec : false
-     * is_sale_out : false
+     * is_sale_out : true
      * buy_limit : false
      * per_limit : 5
      */
@@ -103,33 +94,6 @@ public class ChildListBean {
 
     public String getWebUrl() {
       return mWebUrl;
-    }
-
-    @Override public String toString() {
-      return "ResultsEntity{" +
-          "mId=" + mId +
-          ", mUrl='" + mUrl + '\'' +
-          ", mName='" + mName + '\'' +
-          ", mOuterId='" + mOuterId + '\'' +
-          ", mCategory=" + mCategory +
-          ", mPicPath='" + mPicPath + '\'' +
-          ", mRemainNum=" + mRemainNum +
-          ", mIsSaleout=" + mIsSaleout +
-          ", mHeadImg='" + mHeadImg + '\'' +
-          ", mIsSaleopen=" + mIsSaleopen +
-          ", mIsNewgood=" + mIsNewgood +
-          ", mStdSalePrice=" + mStdSalePrice +
-          ", mAgentPrice=" + mAgentPrice +
-          ", mSaleTime='" + mSaleTime + '\'' +
-          ", mOffshelfTime=" + mOffshelfTime +
-          ", mMemo='" + mMemo + '\'' +
-          ", mLowestPrice=" + mLowestPrice +
-          ", mProductLowestPrice=" + mProductLowestPrice +
-          ", mProductModel=" + mProductModel +
-          ", mWareBy=" + mWareBy +
-          ", mIsVerify=" + mIsVerify +
-          ", mModelId=" + mModelId +
-          '}';
     }
 
     public String getId() {
@@ -224,7 +188,7 @@ public class ChildListBean {
       return mStdSalePrice;
     }
 
-    public void setStdSalePrice(double stdSalePrice) {
+    public void setStdSalePrice(int stdSalePrice) {
       this.mStdSalePrice = stdSalePrice;
     }
 

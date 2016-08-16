@@ -118,6 +118,7 @@ public class ProductDetailBean {
          */
 
         private CategoryBean category;
+        private String sale_state;
         private boolean is_newsales;
         private String model_code;
         private String name;
@@ -129,7 +130,7 @@ public class ProductDetailBean {
         private double lowest_agent_price;
         private boolean is_flatten;
         private boolean is_sale_out;
-        private int lowest_std_sale_price;
+        private double lowest_std_sale_price;
         private List<String> head_imgs;
         private List<String> content_imgs;
         private List<String> item_marks;
@@ -230,11 +231,11 @@ public class ProductDetailBean {
             this.is_sale_out = is_sale_out;
         }
 
-        public int getLowest_std_sale_price() {
+        public double getLowest_std_sale_price() {
             return lowest_std_sale_price;
         }
 
-        public void setLowest_std_sale_price(int lowest_std_sale_price) {
+        public void setLowest_std_sale_price(double lowest_std_sale_price) {
             this.lowest_std_sale_price = lowest_std_sale_price;
         }
 
@@ -260,6 +261,14 @@ public class ProductDetailBean {
 
         public void setItem_marks(List<String> item_marks) {
             this.item_marks = item_marks;
+        }
+
+        public String getSale_state() {
+            return sale_state;
+        }
+
+        public void setSale_state(String sale_state) {
+            this.sale_state = sale_state;
         }
 
         public static class CategoryBean {
@@ -343,7 +352,7 @@ public class ProductDetailBean {
     public static class SkuInfoBean {
         private double agent_price;
         private int product_id;
-        private int std_sale_price;
+        private double std_sale_price;
         private double lowest_price;
         private String outer_id;
         private String type;
@@ -377,11 +386,11 @@ public class ProductDetailBean {
             this.product_id = product_id;
         }
 
-        public int getStd_sale_price() {
+        public double getStd_sale_price() {
             return std_sale_price;
         }
 
-        public void setStd_sale_price(int std_sale_price) {
+        public void setStd_sale_price(double std_sale_price) {
             this.std_sale_price = std_sale_price;
         }
 
@@ -437,7 +446,7 @@ public class ProductDetailBean {
             private double agent_price;
             private int sku_id;
             private String name;
-            private int std_sale_price;
+            private double std_sale_price;
             private String type;
             private int free_num;
             private boolean is_saleout;
@@ -466,11 +475,11 @@ public class ProductDetailBean {
                 this.name = name;
             }
 
-            public int getStd_sale_price() {
+            public double getStd_sale_price() {
                 return std_sale_price;
             }
 
-            public void setStd_sale_price(int std_sale_price) {
+            public void setStd_sale_price(double std_sale_price) {
                 this.std_sale_price = std_sale_price;
             }
 

@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.entities.ProductListBean;
+import com.jimei.xiaolumeimei.entities.ProductListOldBean;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.umeng.analytics.MobclickAgent;
@@ -31,7 +31,7 @@ import butterknife.ButterKnife;
  */
 public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.TodayVH> {
 
-  private List<ProductListBean.ResultsEntity> mList;
+  private List<ProductListOldBean.ResultsEntity> mList;
   private Fragment context;
   private Context mContext;
 
@@ -41,13 +41,13 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.TodayVH> {
     this.mContext = context;
   }
 
-  public void updateWithClear(List<ProductListBean.ResultsEntity> femallist) {
+  public void updateWithClear(List<ProductListOldBean.ResultsEntity> femallist) {
     mList.clear();
     mList.addAll(femallist);
     notifyDataSetChanged();
   }
 
-  public void update(List<ProductListBean.ResultsEntity> femallist) {
+  public void update(List<ProductListOldBean.ResultsEntity> femallist) {
 
     mList.addAll(femallist);
     notifyDataSetChanged();
@@ -62,9 +62,9 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.TodayVH> {
 
   @Override public void onBindViewHolder(final TodayVH holder, int position) {
 
-    ProductListBean.ResultsEntity products = mList.get(position);
+    ProductListOldBean.ResultsEntity products = mList.get(position);
 
-    ProductListBean.ResultsEntity.ProductModelEntity productModel = products.getProductModel();
+    ProductListOldBean.ResultsEntity.ProductModelEntity productModel = products.getProductModel();
 
     boolean isSaleopen = products.isIsSaleopen();
     try {

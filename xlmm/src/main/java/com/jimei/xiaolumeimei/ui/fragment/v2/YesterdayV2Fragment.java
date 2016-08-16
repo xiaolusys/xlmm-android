@@ -9,16 +9,14 @@ import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import cn.iwgang.countdownview.CountdownView;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.TodayAdapter;
 import com.jimei.xiaolumeimei.base.BaseFragment;
-import com.jimei.xiaolumeimei.entities.ProductListBean;
+import com.jimei.xiaolumeimei.entities.ProductListOldBean;
 import com.jimei.xiaolumeimei.event.TimeEvent;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
@@ -26,12 +24,18 @@ import com.jimei.xiaolumeimei.widget.loadingdialog.XlmmLoadingDialog;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
+
+import org.greenrobot.eventbus.EventBus;
+
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import org.greenrobot.eventbus.EventBus;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import cn.iwgang.countdownview.CountdownView;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -45,7 +49,7 @@ public class YesterdayV2Fragment extends BaseFragment {
     @Bind(R.id.xrcy_yesterdayv2)
     XRecyclerView xRecyclerView;
     int page_size = 10;
-    private List<ProductListBean.ResultsEntity> list = new ArrayList<>();
+    private List<ProductListOldBean.ResultsEntity> list = new ArrayList<>();
     private MaterialDialog materialDialog;
     private int page = 2;
     private int totalPages;//总的分页数
@@ -122,7 +126,7 @@ public class YesterdayV2Fragment extends BaseFragment {
         subscribe1 = ProductModel.getInstance()
                 .getPreviousList(1, 10)
                 .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<ProductListBean>() {
+                .subscribe(new ServiceResponse<ProductListOldBean>() {
                     @Override
                     public void onError(Throwable e) {
                         super.onError(e);
@@ -130,22 +134,22 @@ public class YesterdayV2Fragment extends BaseFragment {
                     }
 
                     @Override
-                    public void onNext(ProductListBean productListBean) {
+                    public void onNext(ProductListOldBean productListOldBean) {
 
                         try {
 
-                            if (productListBean != null) {
-                                List<ProductListBean.ResultsEntity> results =
-                                        productListBean.getResults();
-                                if (productListBean.getCount()%page_size==0) {
-                                    totalPages = productListBean.getCount() / page_size;
+                            if (productListOldBean != null) {
+                                List<ProductListOldBean.ResultsEntity> results =
+                                        productListOldBean.getResults();
+                                if (productListOldBean.getCount()%page_size==0) {
+                                    totalPages = productListOldBean.getCount() / page_size;
                                 }else {
-                                    totalPages = productListBean.getCount() / page_size+1;
+                                    totalPages = productListOldBean.getCount() / page_size+1;
                                 }
                                 list.clear();
                                 list.addAll(results);
                                 mPreviousAdapter.updateWithClear(list);
-                                left = calcLeftTime(productListBean.getDownshelfDeadline());
+                                left = calcLeftTime(productListOldBean.getDownshelfDeadline());
                                 initLeftTime();
                             }
                         } catch (Exception ex) {
@@ -235,11 +239,11 @@ public class YesterdayV2Fragment extends BaseFragment {
         ProductModel.getInstance()
                 .getTodayList(1, 1)
                 .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<ProductListBean>() {
+                .subscribe(new ServiceResponse<ProductListOldBean>() {
                     @Override
-                    public void onNext(ProductListBean productListBean) {
-                        if (null != productListBean) {
-                            String upshelfStarttime = productListBean.getUpshelfStarttime();
+                    public void onNext(ProductListOldBean productListOldBean) {
+                        if (null != productListOldBean) {
+                            String upshelfStarttime = productListOldBean.getUpshelfStarttime();
                             EventBus.getDefault().post(new TimeEvent(upshelfStarttime));
                         }
                     }
@@ -251,10 +255,10 @@ public class YesterdayV2Fragment extends BaseFragment {
         subscribe3 = ProductModel.getInstance()
                 .getPreviousList(page, page_size)
                 .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<ProductListBean>() {
+                .subscribe(new ServiceResponse<ProductListOldBean>() {
                     @Override
-                    public void onNext(ProductListBean productListBean) {
-                        List<ProductListBean.ResultsEntity> results = productListBean.getResults();
+                    public void onNext(ProductListOldBean productListOldBean) {
+                        List<ProductListOldBean.ResultsEntity> results = productListOldBean.getResults();
                         mPreviousAdapter.update(results);
                     }
 

@@ -14,13 +14,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import butterknife.ButterKnife;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.utils.CommonUtils;
 import com.jimei.xiaolumeimei.utils.TUtil;
 import com.jimei.xiaolumeimei.widget.loadingdialog.XlmmLoadingDialog;
 import com.zhy.autolayout.AutoLayoutActivity;
+
+import butterknife.ButterKnife;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
@@ -307,10 +309,16 @@ public abstract class BasePresenterMVVMActivity<T extends BasePresenter, E exten
   }
 
   public void showIndeterminateProgressDialog(boolean horizontal) {
-    loadingdialog = XlmmLoadingDialog.create(this)
-        .setStyle(XlmmLoadingDialog.Style.SPIN_INDETERMINATE)
-        .setCancellable(!horizontal)
-        .show();
+    if (loadingdialog == null) {
+      loadingdialog = XlmmLoadingDialog.create(this)
+              .setStyle(XlmmLoadingDialog.Style.SPIN_INDETERMINATE)
+              .setCancellable(!horizontal)
+              .show();
+    }else {
+      if (!loadingdialog.isShowing()) {
+        loadingdialog.show();
+      }
+    }
   }
 
   public void hideIndeterminateProgressDialog() {

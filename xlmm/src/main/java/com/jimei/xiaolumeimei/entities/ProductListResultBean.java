@@ -52,7 +52,7 @@ public class ProductListResultBean {
 
     @Override
     public String toString() {
-        return "ChildListBean{" +
+        return "ProductListResultBean{" +
                 "mCount=" + mCount +
                 ", mNext=" + mNext +
                 ", mPrevious=" + mPrevious +
@@ -99,7 +99,7 @@ public class ProductListResultBean {
         @SerializedName("sale_time")
         private String mSaleTime;
         @SerializedName("offshelf_time")
-        private Object mOffshelfTime;
+        private String mOffshelfTime;
         @SerializedName("memo")
         private String mMemo;
         @SerializedName("lowest_price")
@@ -272,11 +272,11 @@ public class ProductListResultBean {
             this.mSaleTime = saleTime;
         }
 
-        public Object getOffshelfTime() {
+        public String getOffshelfTime() {
             return mOffshelfTime;
         }
 
-        public void setOffshelfTime(Object offshelfTime) {
+        public void setOffshelfTime(String offshelfTime) {
             this.mOffshelfTime = offshelfTime;
         }
 
