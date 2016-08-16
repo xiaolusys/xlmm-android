@@ -114,7 +114,6 @@ public class XlmmLoadingDialog {
   public void dismiss() {
     if (mProgressDialog != null && mProgressDialog.isShowing()) {
       mProgressDialog.dismiss();
-      mProgressDialog = null;
     }
   }
 
