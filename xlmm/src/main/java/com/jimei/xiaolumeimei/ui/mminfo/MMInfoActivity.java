@@ -254,7 +254,8 @@ public class MMInfoActivity
     b.chart1.setBackgroundColor(Color.WHITE);
 
     XAxis xAxis = b.chart1.getXAxis();
-    xAxis.setEnabled(true);     //是否显示X坐标轴 及 对应的刻度竖线，默认是true
+    xAxis.setEnabled(true);     //是否显示X坐标轴 及
+    // 对应的刻度竖线，默认是true
     xAxis.setDrawAxisLine(true); //是否绘制坐标轴的线，即含有坐标的那条线，默认是true
     xAxis.setDrawGridLines(true); //是否显示X坐标轴上的刻度竖线，默认是true
     xAxis.setDrawLabels(true); //是否显示X坐标轴上的刻度，默认是true
@@ -291,8 +292,8 @@ public class MMInfoActivity
   }
 
   @Override public void setRlVisiBility() {
-    b.rlEmptyChart.setVisibility(View.VISIBLE);
-    b.rlChart.setVisibility(View.INVISIBLE);
+    //b.rlEmptyChart.setVisibility(View.VISIBLE);
+    //b.rlChart.setVisibility(View.INVISIBLE);
   }
 
   @Override public void setChartData(LineData data) {
