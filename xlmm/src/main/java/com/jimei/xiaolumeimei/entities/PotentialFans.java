@@ -9,7 +9,7 @@ public class PotentialFans {
 
   private int count;
   private String next;
-  private Object previous;
+  private String previous;
 
   private List<ResultsBean> results;
 
@@ -29,11 +29,11 @@ public class PotentialFans {
     this.next = next;
   }
 
-  public Object getPrevious() {
+  public String getPrevious() {
     return previous;
   }
 
-  public void setPrevious(Object previous) {
+  public void setPrevious(String previous) {
     this.previous = previous;
   }
 

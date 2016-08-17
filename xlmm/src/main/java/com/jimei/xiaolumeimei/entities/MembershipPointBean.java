@@ -15,8 +15,8 @@ public class MembershipPointBean {
      */
 
     private int count;
-    private Object next;
-    private Object previous;
+    private String next;
+    private String previous;
     /**
      * id : 7
      * integral_user : 33
@@ -29,11 +29,11 @@ public class MembershipPointBean {
         this.count = count;
     }
 
-    public void setNext(Object next) {
+    public void setNext(String next) {
         this.next = next;
     }
 
-    public void setPrevious(Object previous) {
+    public void setPrevious(String previous) {
         this.previous = previous;
     }
 
@@ -45,11 +45,11 @@ public class MembershipPointBean {
         return count;
     }
 
-    public Object getNext() {
+    public String getNext() {
         return next;
     }
 
-    public Object getPrevious() {
+    public String getPrevious() {
         return previous;
     }
 

@@ -19,7 +19,7 @@ public class MMVisitorsBean {
 
   @SerializedName("count") private int mCount;
   @SerializedName("next") private String mNext;
-  @SerializedName("previous") private Object mPrevious;
+  @SerializedName("previous") private String mPrevious;
   /**
    * mama_id : 5
    * visitor_nick : 匿名用户
@@ -48,11 +48,11 @@ public class MMVisitorsBean {
     mNext = next;
   }
 
-  public Object getPrevious() {
+  public String getPrevious() {
     return mPrevious;
   }
 
-  public void setPrevious(Object previous) {
+  public void setPrevious(String previous) {
     mPrevious = previous;
   }
 

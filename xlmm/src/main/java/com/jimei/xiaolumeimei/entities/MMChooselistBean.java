@@ -11,7 +11,7 @@ public class MMChooselistBean {
 
   private int count;
   private String next;
-  private Object previous;
+  private String previous;
   private List<ResultsBean> results;
 
   public int getCount() {
@@ -30,11 +30,11 @@ public class MMChooselistBean {
     this.next = next;
   }
 
-  public Object getPrevious() {
+  public String getPrevious() {
     return previous;
   }
 
-  public void setPrevious(Object previous) {
+  public void setPrevious(String previous) {
     this.previous = previous;
   }
 

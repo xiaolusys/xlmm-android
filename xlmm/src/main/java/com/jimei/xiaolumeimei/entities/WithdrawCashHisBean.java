@@ -16,7 +16,7 @@ public class WithdrawCashHisBean {
 
   private int count;
   private String next;
-  private Object previous;
+  private String previous;
   /**
    * id : 49
    * xlmm : 1
@@ -36,7 +36,7 @@ public class WithdrawCashHisBean {
     this.next = next;
   }
 
-  public void setPrevious(Object previous) {
+  public void setPrevious(String previous) {
     this.previous = previous;
   }
 
@@ -52,7 +52,7 @@ public class WithdrawCashHisBean {
     return next;
   }
 
-  public Object getPrevious() {
+  public String getPrevious() {
     return previous;
   }
 
