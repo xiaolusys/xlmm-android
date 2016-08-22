@@ -11,8 +11,11 @@ import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.MamaSelfListBean;
 import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
+import com.jimei.xiaolumeimei.entities.UserInfoBean;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import retrofit2.Response;
 import rx.Observable;
 
@@ -33,6 +36,8 @@ public interface MMInfoContract {
     Observable<Response<MaMaRenwuListBean>> getMaMaRenwuListBean(String id);
 
     Observable<Response<MamaSelfListBean>> getMaMaselfList();
+
+    Observable<UserInfoBean>  getUserInfo();
   }
 
   interface View extends BaseView {
@@ -55,6 +60,8 @@ public interface MMInfoContract {
     void getMaMaRenwuListBean(MaMaRenwuListBean maMaRenwuListBean);
 
     void getMaMaRenwuListBean(MamaSelfListBean mamaSelfListBean);
+
+    void setUdesk(UserInfoBean userInfoBean);
   }
 
   abstract class Presenter extends BasePresenter<Model, View> {
@@ -78,6 +85,8 @@ public interface MMInfoContract {
     public abstract void getMaMaRenwuListBean(String id);
 
     public abstract void getMaMaselfList();
+
+    public abstract void getUserInfo();
 
     @Override public void onStart() {
     }

@@ -1065,26 +1065,72 @@
                             android:background="#EEEEEE" />
 
                         <LinearLayout
-                            android:id="@+id/luntan"
                             android:layout_width="match_parent"
                             android:layout_height="140px"
-                            android:gravity="center"
                             android:orientation="horizontal">
 
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:src="@drawable/icon_luntan" />
+                            <LinearLayout
+                                android:id="@+id/luntan"
+                                android:layout_width="360px"
+                                android:layout_height="140px"
+                                android:orientation="horizontal">
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="20dp"
-                                android:text="小鹿论坛"
-                                android:textColor="@color/text_color_4A"
-                                android:textSize="16sp" />
+                                <RelativeLayout
+                                    android:layout_width="140px"
+                                    android:layout_height="140px">
 
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerInParent="true"
+                                        android:src="@drawable/icon_luntan" />
+                                </RelativeLayout>
+
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center_vertical"
+                                    android:text="小鹿论坛"
+                                    android:textSize="16sp" />
+
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="match_parent"
+                                android:background="#EEEEEE" />
+
+                            <LinearLayout
+                                android:id="@+id/good_week"
+                                android:layout_width="360px"
+                                android:layout_height="140px"
+                                android:orientation="horizontal">
+
+
+                                <RelativeLayout
+                                    android:layout_width="140px"
+                                    android:layout_height="140px">
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerInParent="true"
+                                        android:src="@drawable/icon_luntan" />
+                                </RelativeLayout>
+
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center_vertical"
+                                    android:text="每周激励"
+                                    android:textSize="16sp" />
+
+                            </LinearLayout>
                         </LinearLayout>
+
+
                     </LinearLayout>
                 </RelativeLayout>
 
@@ -1114,7 +1160,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
-                        android:text="恭喜小鹿妈妈获得10元收益!"
                         android:textColor="@color/white"
                         android:textSize="16sp" />
 

@@ -80,6 +80,11 @@ public class XlmmConst {
     public static final int MI_MAMA_ORDER_CARRY_BROADCAST = 999;
     public static final int MI_PRODUCT_DETAIL = 998;
 
+    public static final int TYPE_REWARD_PERSONAL = 0;
+    public static final int TYPE_REWARD_TEAM = 1;
+
+
+
 
     public static int get_reason_num(String reason) {
         int reason_num = 0;

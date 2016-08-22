@@ -23,6 +23,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BasePresenterMVVMActivity;
 import com.jimei.xiaolumeimei.data.XlmmApi;
+import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.databinding.ActivityMamainfoBinding;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.MaMaRenwuListBean;
@@ -30,14 +31,15 @@ import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.MamaSelfListBean;
 import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
+import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.event.MaMaInfoEmptyEvent;
 import com.jimei.xiaolumeimei.event.MaMaInfoEvent;
 import com.jimei.xiaolumeimei.event.WebViewEvent;
 import com.jimei.xiaolumeimei.mipush.XiaoMiMessageReceiver;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
-import com.jimei.xiaolumeimei.ui.activity.user.CustomerServiceActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.BoutiqueWebviewActivity;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.GoodWeekActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMChooseListActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMFans1Activity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMLevelExamWebViewActivity;
@@ -69,8 +71,13 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import cn.udesk.UdeskConst;
+import cn.udesk.UdeskSDKManager;
+import cn.udesk.xmpp.UdeskMessageManager;
 import rx.schedulers.Schedulers;
 
 /**
@@ -99,12 +106,14 @@ public class MMInfoActivity
   private String mamaid;
   private String act_info;
   public static XiaoMiMessageReceiver.XiaoMiPushHandler handler = null;
+  private String team_explain;
 
   public static XiaoMiMessageReceiver.XiaoMiPushHandler getHandler() {
     return handler;
   }
 
   @Override protected void initData() {
+    UdeskSDKManager.getInstance().initApiKey(this, XlmmConst.UDESK_URL, XlmmConst.UDESK_KEY);
     showIndeterminateProgressDialog(false);
     mPresenter.getMamaUrl();
     mPresenter.getShareShopping();
@@ -112,6 +121,7 @@ public class MMInfoActivity
     mPresenter.getRefund();
     mPresenter.getMaMaselfList();
     mPresenter.getMaMaRenwuListBean(mamaid);
+    mPresenter.getUserInfo();
   }
 
   @Override protected void setListener() {
@@ -139,6 +149,7 @@ public class MMInfoActivity
     b.rlIncome1.setOnClickListener(this);
     b.tvNoticesee.setOnClickListener(this);
     b.luntan.setOnClickListener(this);
+    b.goodWeek.setOnClickListener(this);
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -185,6 +196,7 @@ public class MMInfoActivity
   @Override public void initMamaUrl(MamaUrl mamaUrl) {
     mamaResult = mamaUrl.getResults().get(0).getExtra();
     act_info = mamaUrl.getResults().get(0).getExtra().getAct_info();
+    team_explain = mamaUrl.getResults().get(0).getExtra().getTeam_explain();
     Glide.with(MMInfoActivity.this)
         .load(mamaResult.getPictures().getExam_pic())
         .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -346,6 +358,17 @@ public class MMInfoActivity
     }else {
       b.imageNotice.setVisibility(View.GONE);
     }
+  }
+
+  @Override
+  public void setUdesk(UserInfoBean userInfoBean) {
+    String id = userInfoBean.getId() + "";
+    Map<String, String> info = new HashMap<>();
+    info.put(UdeskConst.UdeskUserInfo.USER_SDK_TOKEN, id);
+    info.put(UdeskConst.UdeskUserInfo.NICK_NAME, userInfoBean.getNick() + "(ID:" + id + ")");
+    info.put(UdeskConst.UdeskUserInfo.CELLPHONE, userInfoBean.getMobile());
+    UdeskSDKManager.getInstance().setUserInfo(this, id, info);
+    UdeskMessageManager.getInstance().event_OnNewMsgNotice.bind(this, "OnNewMsgNotice");
   }
 
   @Override public void onClick(View v) {
@@ -515,6 +538,7 @@ public class MMInfoActivity
         MobclickAgent.onEvent(this, "TeamRankID");
         Bundle bundleAAA = new Bundle();
         bundleAAA.putString("id", mmId + "");
+        bundleAAA.putString("url",team_explain);
         readyGo(MMTeamActivity.class, bundleAAA);
         break;
 
@@ -530,6 +554,9 @@ public class MMInfoActivity
       case R.id.luntan:
         JumpUtils.jumpToWebViewWithCookies(this, "http:/forum.xiaolumeimei.com/accounts/xlmm/login/",
                 -1, MamaLunTanActivity.class);
+        break;
+      case R.id.good_week:
+        startActivity(new Intent(this, GoodWeekActivity.class));
         break;
     }
   }
@@ -589,7 +616,7 @@ public class MMInfoActivity
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
       case R.id.kefu:
-        startActivity(new Intent(this, CustomerServiceActivity.class));
+        UdeskSDKManager.getInstance().showRobotOrConversation(this);
         break;
     }
     return super.onOptionsItemSelected(item);

@@ -12,9 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
@@ -27,6 +24,8 @@ import com.jude.utils.JUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -76,6 +75,7 @@ public class WithdrawCashHisAdapter extends XRecyclerView.Adapter<WithdrawCashHi
                 String.valueOf(Math.round(record.getValue_money() * 100) / 100) + "元");
         holder.tx_withdraw_state.setText(record.getGet_status_display());
         holder.tx_time.setText(record.getCreated().replace("T", " "));
+        holder.type.setText(record.getGet_cash_out_type_display());
 
         if (record.getGet_status_display().equals("待审核")) {
             holder.btn_cancel.setVisibility(View.VISIBLE);
@@ -129,6 +129,8 @@ public class WithdrawCashHisAdapter extends XRecyclerView.Adapter<WithdrawCashHi
         TextView tx_time;
         @Bind(R.id.btn_cancel)
         Button btn_cancel;
+        @Bind(R.id.type)
+        TextView type;
 
         public ViewHolder(View itemView) {
             super(itemView);

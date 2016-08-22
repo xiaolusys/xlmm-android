@@ -49,7 +49,7 @@ public class ProductListBeanAdapter extends RecyclerView.Adapter<ProductListBean
         notifyDataSetChanged();
     }
 
-    public void clear(){
+    public void clear() {
         mList.clear();
         notifyDataSetChanged();
     }
@@ -69,15 +69,19 @@ public class ProductListBeanAdapter extends RecyclerView.Adapter<ProductListBean
             if ("will".equals(sale_state)) {
                 holder.salenotopen.setVisibility(View.VISIBLE);
                 holder.saleout.setVisibility(View.GONE);
+                holder.saleOff.setVisibility(View.GONE);
             } else if ("off".equals(sale_state)) {
                 holder.salenotopen.setVisibility(View.GONE);
-                holder.saleout.setVisibility(View.VISIBLE);
+                holder.saleout.setVisibility(View.GONE);
+                holder.saleOff.setVisibility(View.VISIBLE);
             } else if ("on".equals(sale_state) && resultsBean.isIs_saleout()) {
                 holder.salenotopen.setVisibility(View.GONE);
                 holder.saleout.setVisibility(View.VISIBLE);
+                holder.saleOff.setVisibility(View.GONE);
             } else {
                 holder.salenotopen.setVisibility(View.GONE);
                 holder.saleout.setVisibility(View.GONE);
+                holder.saleOff.setVisibility(View.GONE);
             }
 
             if (resultsBean.getName().length() <= 9) {
@@ -124,6 +128,8 @@ public class ProductListBeanAdapter extends RecyclerView.Adapter<ProductListBean
         TextView saleout;
         @Bind(R.id.salenotopen)
         TextView salenotopen;
+        @Bind(R.id.sale_off)
+        TextView saleOff;
 
         public ChildListVH(View itemView) {
             super(itemView);

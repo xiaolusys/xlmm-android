@@ -21,6 +21,7 @@
 
     <include layout="@layout/item_saleout"/>
     <include layout="@layout/item_salenotopen"/>
+    <include layout = "@layout/item_saleoff"/>
   </RelativeLayout>
 
 
