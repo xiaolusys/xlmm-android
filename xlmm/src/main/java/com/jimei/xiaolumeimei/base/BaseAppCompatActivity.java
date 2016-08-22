@@ -29,19 +29,17 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import butterknife.ButterKnife;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.utils.CommonUtils;
 import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.widget.loadingdialog.XlmmLoadingDialog;
-import com.zhy.autolayout.AutoLayoutActivity;
 
+import butterknife.ButterKnife;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
-public abstract class BaseAppCompatActivity extends AutoLayoutActivity {
+public abstract class BaseAppCompatActivity extends BaseAutoLayoutActivity {
 
   /**
    * Log tag

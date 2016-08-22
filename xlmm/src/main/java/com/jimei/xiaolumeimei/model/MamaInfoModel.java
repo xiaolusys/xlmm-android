@@ -106,7 +106,6 @@ public class MamaInfoModel {
     return XlmmRetrofitClient.getService().getMamaLiveness(page).compose(new DefaultTransform<>());
   }
 
-  //得到妈妈活跃值
   public Observable<PotentialFans> getPotentialFans(String page) {
     return XlmmRetrofitClient.getService().getPotentialFans(page).compose(new DefaultTransform<>());
   }
@@ -137,11 +136,18 @@ public class MamaInfoModel {
         .compose(new DefaultTransform<>());
   }
 
-  public Observable<Response<List<PersonalCarryRankBean>>> getPersonalCarryRankBean() {
+  public Observable<List<PersonalCarryRankBean>> getPersonalCarryRankBean() {
 
     return XlmmRetrofitClient.getService()
         .getPersonalCarryRankBean()
         .compose(new DefaultTransform<>());
+  }
+
+  public Observable<List<PersonalCarryRankBean>> getWeekPersonalCarryRankBean() {
+
+    return XlmmRetrofitClient.getService()
+            .getWeekPersonalCarryRankBean()
+            .compose(new DefaultTransform<>());
   }
 
   public Observable<Response<PersonalCarryRankBean>> getPersonalSelfCarryRankBean() {
@@ -166,9 +172,14 @@ public class MamaInfoModel {
     return XlmmRetrofitClient.getService().getTeamMemberSelf(id).compose(new DefaultTransform<>());
   }
 
-  public Observable<Response<List<PersonalCarryRankBean>>> getTeamCarryRankBean() {
+  public Observable<List<PersonalCarryRankBean>> getTeamCarryRankBean() {
 
     return XlmmRetrofitClient.getService().getTeamCarryRankBean().compose(new DefaultTransform<>());
+  }
+
+  public Observable<List<PersonalCarryRankBean>> getWeekTeamCarryRankBean() {
+
+    return XlmmRetrofitClient.getService().getWeekTeamCarryRankBean().compose(new DefaultTransform<>());
   }
 
   public Observable<Response<MaMaRenwuListBean>> getMaMaRenwuListBean(String id) {

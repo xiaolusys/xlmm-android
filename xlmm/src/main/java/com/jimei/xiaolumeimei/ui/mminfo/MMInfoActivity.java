@@ -7,6 +7,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
@@ -31,8 +33,10 @@ import com.jimei.xiaolumeimei.entities.RecentCarryBean;
 import com.jimei.xiaolumeimei.event.MaMaInfoEmptyEvent;
 import com.jimei.xiaolumeimei.event.MaMaInfoEvent;
 import com.jimei.xiaolumeimei.event.WebViewEvent;
+import com.jimei.xiaolumeimei.mipush.XiaoMiMessageReceiver;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.CustomerServiceActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.BoutiqueWebviewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMChooseListActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMFans1Activity;
@@ -46,6 +50,7 @@ import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMcarryLogActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaDrawCashActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaDrawCouponActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaLivenessActivity;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaLunTanActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaReNewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaVisitorActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.PersonalCarryRankActivity;
@@ -93,6 +98,11 @@ public class MMInfoActivity
   private double mamaCarryValue;
   private String mamaid;
   private String act_info;
+  public static XiaoMiMessageReceiver.XiaoMiPushHandler handler = null;
+
+  public static XiaoMiMessageReceiver.XiaoMiPushHandler getHandler() {
+    return handler;
+  }
 
   @Override protected void initData() {
     showIndeterminateProgressDialog(false);
@@ -128,6 +138,7 @@ public class MMInfoActivity
     b.rlTeam.setOnClickListener(this);
     b.rlIncome1.setOnClickListener(this);
     b.tvNoticesee.setOnClickListener(this);
+    b.luntan.setOnClickListener(this);
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -152,12 +163,6 @@ public class MMInfoActivity
     b.tvMamashengyu.setText(
         event.mamaFortune.getMamaFortune().getExtraInfo().getSurplusDays() + "");
     b.tvYue.setText(event.mamaFortune.getMamaFortune().getCashValue() + "");
-    int days = event.mamaFortune.getMamaFortune().getExtraInfo().getSurplusDays();
-    if (days <= 15) {
-      b.mamaPay.setVisibility(View.VISIBLE);
-    } else {
-      b.mamaPay.setVisibility(View.INVISIBLE);
-    }
   }
 
   @Override protected int getContentViewLayoutID() {
@@ -338,6 +343,8 @@ public class MMInfoActivity
         }
       }
       b.marqueeView.startWithList(list);
+    }else {
+      b.imageNotice.setVisibility(View.GONE);
     }
   }
 
@@ -520,6 +527,10 @@ public class MMInfoActivity
         JumpUtils.jumpToWebViewWithCookies(this, mamaResult.getNotice(), -1,
             ActivityWebViewActivity.class, "信息通知");
         break;
+      case R.id.luntan:
+        JumpUtils.jumpToWebViewWithCookies(this, "http:/forum.xiaolumeimei.com/accounts/xlmm/login/",
+                -1, MamaLunTanActivity.class);
+        break;
     }
   }
 
@@ -532,12 +543,17 @@ public class MMInfoActivity
 
   @Override protected void onResume() {
     super.onResume();
+    handler = new XiaoMiMessageReceiver.XiaoMiPushHandler(this);
+    mPresenter.getMamaFortune();
+    mPresenter.getRefund();
+    mPresenter.getMaMaselfList();
     MobclickAgent.onPageStart(this.getClass().getSimpleName());
     MobclickAgent.onResume(this);
   }
 
   @Override protected void onPause() {
     super.onPause();
+    handler = null;
     MobclickAgent.onPageEnd(this.getClass().getSimpleName());
     MobclickAgent.onPause(this);
   }
@@ -556,6 +572,27 @@ public class MMInfoActivity
         Integer.toString(mPresenter.show_refund.get(e.getXIndex()).getOrderNum()));
     b.tvTodayFund2.setText(Double.toString(
         (double) (Math.round(mPresenter.show_refund.get(e.getXIndex()).getCarry() * 100)) / 100));
+  }
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.menu_kefu, menu);
+    return super.onCreateOptionsMenu(menu);
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      case R.id.kefu:
+        startActivity(new Intent(this, CustomerServiceActivity.class));
+        break;
+    }
+    return super.onOptionsItemSelected(item);
   }
 
   @Override public void onNothingSelected() {

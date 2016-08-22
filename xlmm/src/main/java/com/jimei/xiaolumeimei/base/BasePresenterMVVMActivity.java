@@ -20,7 +20,6 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.utils.CommonUtils;
 import com.jimei.xiaolumeimei.utils.TUtil;
 import com.jimei.xiaolumeimei.widget.loadingdialog.XlmmLoadingDialog;
-import com.zhy.autolayout.AutoLayoutActivity;
 
 import butterknife.ButterKnife;
 import rx.Subscription;
@@ -31,7 +30,7 @@ import rx.subscriptions.CompositeSubscription;
  * MVVM跟MVP并不互斥，还没想好好的写法，尝试demo
  */
 public abstract class BasePresenterMVVMActivity<T extends BasePresenter, E extends BaseModel, P extends ViewDataBinding>
-    extends AutoLayoutActivity {
+    extends BaseAutoLayoutActivity {
 
   /**
    * Log tag

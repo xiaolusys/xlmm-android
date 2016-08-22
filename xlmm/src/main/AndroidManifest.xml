@@ -199,12 +199,6 @@
             android:theme="@style/AppTheme.TransparentActivity"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".ui.activity.product.SizeActivity"
-            android:theme="@style/AppTheme.TransparentActivity" />
-        <activity
-            android:name=".ui.activity.product.WashingIntrductionActivity"
-            android:theme="@style/AppTheme.TransparentActivity" />
-        <activity
             android:name=".base.CommonWebViewActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
@@ -212,6 +206,9 @@
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".ui.activity.xiaolumama.MamaRuleActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
+        <activity
+            android:name=".ui.activity.xiaolumama.MamaLunTanActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".ui.activity.main.ComplainWebActivity"
@@ -295,9 +292,6 @@
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".ui.activity.xiaolumama.MMShoppingListActivity"
-            android:theme="@style/AppTheme.TransparentActivity" />
-        <activity
-            android:name=".ui.activity.xiaolumama.MMCarryLogListActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".ui.activity.xiaolumama.MMNinePicActivity"
@@ -427,6 +421,9 @@
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".ui.activity.product.ProductDetailActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
+        <activity
+            android:name=".ui.activity.user.CustomerServiceActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
 
         <service

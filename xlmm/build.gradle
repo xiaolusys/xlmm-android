@@ -71,8 +71,8 @@ android {
 
         targetSdkVersion 23
 
-        versionCode 20160816
-        versionName "1.2.4.1"
+        versionCode 20160819
+        versionName "1.2.5"
 
         multiDexEnabled = true
 
@@ -253,6 +253,7 @@ dependencies {
     compile files('libs/commons-lang3-3.4.jar')
     compile files('libs/MiPush_SDK_Client_2_2_21.jar')
     compile project(':xlmmlibrary')
+    compile project(':Udesk_Separate_UI')
     compile files('libs/MobCommons-2016.0707.1708.jar')
     compile files('libs/MobTools-2016.0707.1708.jar')
     compile files('libs/ShareSDK-Core-2.7.4.jar')

@@ -55,6 +55,7 @@ public class MMChooselistBean {
     private int remain_num;
     private int in_customer_shop;
     private int shop_product_num;
+    private int model_id;
     /**
      * agencylevel_desc : VIP1
      * agencylevel : 2
@@ -140,6 +141,14 @@ public class MMChooselistBean {
 
     public void setLevel_info(LevelInfoBean level_info) {
       this.level_info = level_info;
+    }
+
+    public int getModel_id() {
+      return model_id;
+    }
+
+    public void setModel_id(int model_id) {
+      this.model_id = model_id;
     }
 
     public static class LevelInfoBean {
