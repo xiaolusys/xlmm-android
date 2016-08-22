@@ -135,6 +135,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="23px"
         android:gravity="center"
+        android:visibility="gone"
         android:orientation="vertical">
 
         <ImageView
@@ -154,7 +155,7 @@
         android:clickable="false"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="invisible">
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/remove1"

@@ -4,9 +4,10 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import butterknife.ButterKnife;
+
 import com.jimei.xiaolumeimei.R;
-import com.zhy.autolayout.AutoLayoutActivity;
+
+import butterknife.ButterKnife;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
@@ -15,7 +16,7 @@ import rx.subscriptions.CompositeSubscription;
  * <p/>
  * Copyright 2015年 上海己美. All rights reserved.
  */
-public abstract class BaseActivity extends AutoLayoutActivity{
+public abstract class BaseActivity extends BaseAutoLayoutActivity{
 
   private CompositeSubscription mCompositeSubscription;
 

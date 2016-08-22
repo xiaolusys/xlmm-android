@@ -170,13 +170,13 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
 
     @Override
     protected void initViews() {
-        radio_99Choose = true;
-        radio_188Choose = false;
-        image991.setVisibility(View.GONE);
-        image99.setVisibility(View.VISIBLE);
-        image188.setVisibility(View.GONE);
-        image1881.setVisibility(View.VISIBLE);
-        tvMoren.setText("默认使用小鹿妈妈钱包金额抵扣" + mamaCarryValue);
+        radio_99Choose = false;
+        radio_188Choose = true;
+        image991.setVisibility(View.VISIBLE);
+        image99.setVisibility(View.GONE);
+        image188.setVisibility(View.VISIBLE);
+        image1881.setVisibility(View.GONE);
+        tvMoren.setText("默认使用小鹿妈妈钱包金额抵扣,总余额:" + mamaCarryValue);
     }
 
     @Override

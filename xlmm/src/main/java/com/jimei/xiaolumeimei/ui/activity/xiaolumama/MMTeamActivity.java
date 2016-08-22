@@ -111,7 +111,7 @@ public class MMTeamActivity extends BaseMVVMActivity<ActivityMmteamBinding>
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.menu_team, menu);
+//    getMenuInflater().inflate(R.menu.menu_team, menu);
     return super.onCreateOptionsMenu(menu);
   }
 

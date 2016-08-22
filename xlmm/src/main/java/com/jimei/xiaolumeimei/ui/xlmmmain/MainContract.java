@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.ui.xlmmmain;
 
 import android.support.v4.widget.SwipeRefreshLayout;
+
 import com.jimei.xiaolumeimei.base.BaseModel;
 import com.jimei.xiaolumeimei.base.BasePresenter;
 import com.jimei.xiaolumeimei.base.BaseView;
@@ -11,6 +12,7 @@ import com.jimei.xiaolumeimei.entities.IsGetcoupon;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.ProductListOldBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.entities.UserTopic;
 import com.jimei.xiaolumeimei.entities.VersionBean;
 
 import okhttp3.ResponseBody;
@@ -40,6 +42,8 @@ public interface MainContract {
     Observable<VersionBean> getVersion();
 
     Observable<CategoryDownBean> getCategoryDown();
+
+    Observable<UserTopic> getTopic();
   }
 
   interface View extends BaseView {
@@ -78,6 +82,8 @@ public interface MainContract {
     void downCategoryFile(CategoryDownBean categroyDownBean);
 
     void checkVersion(int versionCode, String content, String downloadUrl, boolean isAutoUpdate);
+
+    void setTopic(UserTopic userTopic);
   }
 
   abstract class Presenter extends BasePresenter<Model, View> {
@@ -105,5 +111,7 @@ public interface MainContract {
     }
 
     public abstract void getVersion();
+
+    public abstract void getTopic();
   }
 }

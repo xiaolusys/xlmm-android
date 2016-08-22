@@ -8,9 +8,6 @@ import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import butterknife.Bind;
-import cn.iwgang.countdownview.CountdownView;
-
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.NinePicAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -23,6 +20,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import butterknife.Bind;
+import cn.iwgang.countdownview.CountdownView;
 import rx.schedulers.Schedulers;
 
 /**
@@ -57,43 +56,43 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
     }
 
     private void loadData() {
+//
+//        if (calcLeftTime() > 0) {
+//            myTickCircleProgress.setVisibility(View.VISIBLE);
+//            countLeft.setVisibility(View.VISIBLE);
+//            cvLefttime.start(calcLeftTime());
+//            left.setText("热销分享即将开始...");
+//        } else {
+//            countLeft.setVisibility(View.GONE);
+        showIndeterminateProgressDialog(false);
+        MMProductModel.getInstance()
+                .getNinePic()
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ServiceResponse<List<NinePicBean>>() {
 
-        if (calcLeftTime() > 0) {
-            //myTickCircleProgress.setVisibility(View.VISIBLE);
-            countLeft.setVisibility(View.VISIBLE);
-            cvLefttime.start(calcLeftTime());
-            left.setText("热销分享即将开始...");
-        } else {
-            countLeft.setVisibility(View.GONE);
-            showIndeterminateProgressDialog(false);
-            MMProductModel.getInstance()
-                    .getNinePic()
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(new ServiceResponse<List<NinePicBean>>() {
+                    @Override
+                    public void onCompleted() {
+                        super.onCompleted();
+                        hideIndeterminateProgressDialog();
+                    }
 
-                        @Override
-                        public void onCompleted() {
-                            super.onCompleted();
-                            hideIndeterminateProgressDialog();
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onNext(List<NinePicBean> ninePicBean) {
+                        if (ninePicBean != null) {
+                            mAdapter.setDatas(ninePicBean);
+                            mAdapter.notifyDataSetChanged();
+                        } else {
+                            countLeft.setVisibility(View.VISIBLE);
                         }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            super.onError(e);
-                            e.printStackTrace();
-                        }
-
-                        @Override
-                        public void onNext(List<NinePicBean> ninePicBean) {
-                            if (ninePicBean != null) {
-                                mAdapter.setDatas(ninePicBean);
-                                mAdapter.notifyDataSetChanged();
-                            } else {
-                                countLeft.setVisibility(View.VISIBLE);
-                            }
-                        }
-                    });
-        }
+                    }
+                });
+//        }
     }
 
     private void loadDataRefresh() {
