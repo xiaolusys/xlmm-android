@@ -425,7 +425,9 @@
         <activity
             android:name=".ui.activity.user.CustomerServiceActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
-
+        <activity
+            android:name=".ui.activity.xiaolumama.TeamExplainActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
         <service
             android:name=".xlmmService.UpdateService"
             android:exported="false" />
@@ -478,6 +480,8 @@
                 <action android:name="action.retry.download" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".ui.activity.xiaolumama.GoodWeekActivity"></activity>
     </application>
 
 </manifest>

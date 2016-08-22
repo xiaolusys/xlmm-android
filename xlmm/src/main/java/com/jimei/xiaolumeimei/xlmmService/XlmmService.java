@@ -78,6 +78,7 @@ import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.UserTopic;
 import com.jimei.xiaolumeimei.entities.UserWithdrawResult;
 import com.jimei.xiaolumeimei.entities.VersionBean;
+import com.jimei.xiaolumeimei.entities.WeekTaskRewardBean;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.entities.WxPubAuthInfo;
 
@@ -928,4 +929,7 @@ public interface XlmmService {
 
     @GET("/rest/v1/push/topic")
     Observable<UserTopic> getTopic();
+
+    @GET("/rest/v2/mama/mission/weeklist")
+    Observable<WeekTaskRewardBean> getTaskReward();
 }

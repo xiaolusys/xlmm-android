@@ -66,6 +66,16 @@ public class WithdrawCashHisBean {
     private double value_money;
     private String get_status_display;
     private String status;
+
+    public String getGet_cash_out_type_display() {
+      return get_cash_out_type_display;
+    }
+
+    public void setGet_cash_out_type_display(String get_cash_out_type_display) {
+      this.get_cash_out_type_display = get_cash_out_type_display;
+    }
+
+    private String get_cash_out_type_display;
     private String created;
 
     public void setId(int id) {

@@ -86,20 +86,22 @@ public class XiaoMiMessageReceiver extends PushMessageReceiver {
         }
         Message msg = Message.obtain();
         XiaoMiPushHandler handler = null;
-        if (message.getContent().contains("mama_ordercarry_broadcast")) {
-            msg.obj = message.getContent();
+        String content = message.getContent();
+        String description = message.getDescription();
+        if (content != null && content.contains("mama_ordercarry_broadcast")) {
+            msg.obj = content;
             msg.what = XlmmConst.MI_MAMA_ORDER_CARRY_BROADCAST;
             handler = MMInfoActivity.getHandler();
-        } else if (message.getContent().contains("product_detail")) {
-            msg.obj = message.getContent();
+        } else if (content != null && content.contains("product_detail")) {
+            msg.obj = content;
             msg.what = XlmmConst.MI_PRODUCT_DETAIL;
             handler = BaseAutoLayoutActivity.getHandler();
-        } else if (message.getDescription().contains("mama_ordercarry_broadcast")) {
-            msg.obj = message.getDescription();
+        } else if (description != null && description.contains("mama_ordercarry_broadcast")) {
+            msg.obj = description;
             msg.what = XlmmConst.MI_MAMA_ORDER_CARRY_BROADCAST;
             handler = MMInfoActivity.getHandler();
-        } else if (message.getDescription().contains("product_detail")) {
-            msg.obj = message.getDescription();
+        } else if (description != null && description.contains("product_detail")) {
+            msg.obj = description;
             msg.what = XlmmConst.MI_PRODUCT_DETAIL;
             handler = BaseAutoLayoutActivity.getHandler();
         }
@@ -316,7 +318,7 @@ public class XiaoMiMessageReceiver extends PushMessageReceiver {
                     case XlmmConst.MI_MAMA_ORDER_CARRY_BROADCAST:
                         MiPushOrderCarryBean miPushOrderCarryBean = gson.fromJson(s, new TypeToken<MiPushOrderCarryBean>() {
                         }.getType());
-                        while (flag){
+                        while (flag) {
                             flag = false;
                             if (context instanceof MMInfoActivity) {
                                 MMInfoActivity activity = (MMInfoActivity) context;
@@ -331,7 +333,7 @@ public class XiaoMiMessageReceiver extends PushMessageReceiver {
                                         SystemClock.sleep(3000);
                                         activity.runOnUiThread(() -> layout.setVisibility(View.GONE));
                                     }).start();
-                                    new Thread(()->{
+                                    new Thread(() -> {
                                         SystemClock.sleep(5000);
                                         flag = true;
                                     }).start();

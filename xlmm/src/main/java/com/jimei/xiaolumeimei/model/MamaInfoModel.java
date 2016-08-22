@@ -14,6 +14,7 @@ import com.jimei.xiaolumeimei.entities.PersonalCarryRankBean;
 import com.jimei.xiaolumeimei.entities.PotentialFans;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.ResultBean;
+import com.jimei.xiaolumeimei.entities.WeekTaskRewardBean;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 import java.util.List;
@@ -185,5 +186,11 @@ public class MamaInfoModel {
   public Observable<Response<MaMaRenwuListBean>> getMaMaRenwuListBean(String id) {
     return XlmmRetrofitClient.getService().getMaMaRenwuListBean(id).
         compose(new DefaultTransform<>());
+  }
+
+  public Observable<WeekTaskRewardBean> getTaskReward(){
+    return  XlmmRetrofitClient.getService()
+            .getTaskReward()
+            .compose(new DefaultTransform<>());
   }
 }
