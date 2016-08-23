@@ -17,7 +17,7 @@ public class MamaFansBean {
 
   @SerializedName("count") private int mCount;
   @SerializedName("next") private String mNext;
-  @SerializedName("previous") private Object mPrevious;
+  @SerializedName("previous") private String mPrevious;
   /**
    * fans_nick :
    * fans_thumbnail :
@@ -43,11 +43,11 @@ public class MamaFansBean {
     mNext = next;
   }
 
-  public Object getPrevious() {
+  public String getPrevious() {
     return mPrevious;
   }
 
-  public void setPrevious(Object previous) {
+  public void setPrevious(String previous) {
     mPrevious = previous;
   }
 
@@ -64,6 +64,7 @@ public class MamaFansBean {
     @SerializedName("fans_thumbnail") private String mFansThumbnail;
     @SerializedName("fans_description") private String mFansDescription;
     @SerializedName("created") private String mCreated;
+    @SerializedName("fans_mobile") private String fans_mobile;
 
     public String getFansNick() {
       return mFansNick;
@@ -95,6 +96,14 @@ public class MamaFansBean {
 
     public void setCreated(String created) {
       mCreated = created;
+    }
+
+    public String getFans_mobile() {
+      return fans_mobile;
+    }
+
+    public void setFans_mobile(String fans_mobile) {
+      this.fans_mobile = fans_mobile;
     }
   }
 }

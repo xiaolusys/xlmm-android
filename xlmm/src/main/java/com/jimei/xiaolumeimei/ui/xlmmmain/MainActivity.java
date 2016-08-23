@@ -30,7 +30,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.base.BasePresenterActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AddressDownloadResultBean;
@@ -39,6 +38,7 @@ import com.jimei.xiaolumeimei.entities.CategoryDownBean;
 import com.jimei.xiaolumeimei.entities.IsGetcoupon;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.entities.UserTopic;
 import com.jimei.xiaolumeimei.event.LogOutEmptyEvent;
 import com.jimei.xiaolumeimei.event.SetMiPushEvent;
 import com.jimei.xiaolumeimei.event.UserChangeEvent;
@@ -61,9 +61,7 @@ import com.jimei.xiaolumeimei.ui.activity.user.WxLoginBindPhoneActivity;
 import com.jimei.xiaolumeimei.ui.fragment.v1.view.MastFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.FirstFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.GetCouponFragment;
-import com.jimei.xiaolumeimei.ui.fragment.v2.TodayV2Fragment;
-import com.jimei.xiaolumeimei.ui.fragment.v2.TomorrowV2Fragment;
-import com.jimei.xiaolumeimei.ui.fragment.v2.YesterdayV2Fragment;
+import com.jimei.xiaolumeimei.ui.fragment.v2.ProductListFragment;
 import com.jimei.xiaolumeimei.ui.mminfo.MMInfoActivity;
 import com.jimei.xiaolumeimei.utils.DisplayUtils;
 import com.jimei.xiaolumeimei.utils.FileUtils;
@@ -145,7 +143,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   SharedPreferences sharedPreferencesTime;
   private SharedPreferences sharedPreferencesMask;
   private int mask;
-  private List<BaseFragment> list = new ArrayList<>();
+  private List<ProductListFragment> list = new ArrayList<>();
   private int num;
   private BadgeView badge;
   private TextView msg1;
@@ -159,6 +157,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   private UpdateBroadReceiver mUpdateBroadReceiver;
   private double budgetCash;
   private String mamaid;
+  private boolean upadteFlag;
 
   @Override protected void onStart() {
     super.onStart();
@@ -169,6 +168,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   }
 
   @Override protected void initData() {
+    mPresenter.getTopic();
     mPresenter.getUserInfoBean();
     mPresenter.getAddressVersionAndUrl();
     mPresenter.getCategoryDown();
@@ -412,13 +412,13 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
           scrollableLayout.scrollTo(0, 0);
           switch (vp.getCurrentItem()) {
             case 0:
-              ((YesterdayV2Fragment) list.get(0)).goToTop();
+              ((ProductListFragment) list.get(0)).goToTop();
               break;
             case 1:
-              ((TodayV2Fragment) list.get(1)).goToTop();
+              ((ProductListFragment) list.get(1)).goToTop();
               break;
             case 2:
-              ((TomorrowV2Fragment) list.get(2)).goToTop();
+              ((ProductListFragment) list.get(2)).goToTop();
               break;
           }
         }
@@ -439,13 +439,13 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     try {
       switch (vp.getCurrentItem()) {
         case 0:
-          ((YesterdayV2Fragment) list.get(0)).load(swipeRefreshLayout);
+          list.get(0).load(swipeRefreshLayout);
           break;
         case 1:
-          ((TodayV2Fragment) list.get(1)).load(swipeRefreshLayout);
+          list.get(1).load(swipeRefreshLayout);
           break;
         case 2:
-          ((TomorrowV2Fragment) list.get(2)).load(swipeRefreshLayout);
+          list.get(2).load(swipeRefreshLayout);
           break;
       }
       scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(vp.getCurrentItem()));
@@ -515,10 +515,9 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     sharedPreferencesTime = getSharedPreferences("resumeTime", 0);
     mask = sharedPreferencesMask.getInt("mask", 0);
     MyFragmentAdapter adapter = new MyFragmentAdapter(getSupportFragmentManager());
-    list.add(YesterdayV2Fragment.newInstance("昨天"));
-    TodayV2Fragment.newInstance("今天");
-    list.add(TodayV2Fragment.newInstance("今天"));
-    list.add(TomorrowV2Fragment.newInstance("明天"));
+    list.add(ProductListFragment.newInstance(XlmmConst.TYPE_YESTERDAY,"昨天"));
+    list.add(ProductListFragment.newInstance(XlmmConst.TYPE_TODAY,"今天"));
+    list.add(ProductListFragment.newInstance(XlmmConst.TYPE_TOMORROW,"明天"));
     vp.setAdapter(adapter);
     vp.setOffscreenPageLimit(2);
     vp.setCurrentItem(1);
@@ -960,6 +959,8 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
             @Override public void onResponse(File response, int id) {
               JUtils.Log(TAG, response.getAbsolutePath());
               FileUtils.saveCategoryFile(getApplicationContext(), sha1);
+              FileUtils.saveCategoryImg(Environment.getExternalStorageDirectory().getAbsolutePath()
+                      + "/xlmmcategory/" + "category.json");
             }
           });
     }
@@ -1067,6 +1068,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   }
 
   @Override protected void onDestroy() {
+    upadteFlag = false;
     aDefault.unregister(this);
     UserChangeEvent stickyEvent = aDefault.getStickyEvent(UserChangeEvent.class);
     if (stickyEvent != null) {
@@ -1077,6 +1079,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
 
   @Override public void checkVersion(int versionCode, String content, String downloadUrl,
       boolean isAutoUpdate) {
+    upadteFlag = true;
     new Thread(() -> {
       try {
         Thread.sleep(500 * 10);
@@ -1113,12 +1116,22 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
             SharedPreferences updatePreferences =
                 getSharedPreferences("update", Context.MODE_PRIVATE);
             boolean update = updatePreferences.getBoolean("update", true);
-            if (update) {
+            if (update&&upadteFlag) {
               versionManager.checkVersion(MainActivity.this);
             }
           }
         }
       });
     }).start();
+  }
+
+  @Override
+  public void setTopic(UserTopic userTopic) {
+    List<String> topics = userTopic.getTopics();
+    if (topics!=null) {
+      for (int i = 0; i < topics.size(); i++) {
+        MiPushClient.subscribe(this,topics.get(i),null);
+      }
+    }
   }
 }

@@ -6,19 +6,23 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.MMTeamAdapter;
 import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
 import com.jimei.xiaolumeimei.databinding.ActivityMmteamBinding;
 import com.jimei.xiaolumeimei.entities.PersonalCarryRankBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
+import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.widget.DividerItemDecorationForFooter;
 import com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableHelper;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
+
 import java.util.List;
+
 import retrofit2.Response;
 import rx.schedulers.Schedulers;
 
@@ -29,6 +33,7 @@ public class MMTeamActivity extends BaseMVVMActivity<ActivityMmteamBinding>
     implements View.OnClickListener, ScrollableHelper.ScrollableContainer {
   private String id;
   private MMTeamAdapter mmTeamAdapter;
+  private String url;
 
   @Override protected void initView() {
     b.recyclerview.setLayoutManager(new LinearLayoutManager(this));
@@ -85,6 +90,7 @@ public class MMTeamActivity extends BaseMVVMActivity<ActivityMmteamBinding>
 
   @Override protected void getBundleExtras(Bundle extras) {
     id = extras.getString("id");
+    url = extras.getString("url");
   }
 
   @Override protected int getContentViewLayoutID() {
@@ -102,7 +108,8 @@ public class MMTeamActivity extends BaseMVVMActivity<ActivityMmteamBinding>
   @Override public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
       case R.id.action_personal:
-
+          JumpUtils.jumpToWebViewWithCookies(this,url, -1,
+                  TeamExplainActivity.class);
         break;
       default:
         break;
@@ -111,7 +118,9 @@ public class MMTeamActivity extends BaseMVVMActivity<ActivityMmteamBinding>
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.menu_team, menu);
+    if (url!=null&& !"".equals(url)) {
+      getMenuInflater().inflate(R.menu.menu_team, menu);
+    }
     return super.onCreateOptionsMenu(menu);
   }
 

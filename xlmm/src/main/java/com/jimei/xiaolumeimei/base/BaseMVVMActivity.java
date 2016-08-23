@@ -17,19 +17,20 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.utils.CommonUtils;
 import com.jimei.xiaolumeimei.widget.loadingdialog.XlmmLoadingDialog;
-import com.zhy.autolayout.AutoLayoutActivity;
+
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by itxuye on 2016/7/26.
  */
-public abstract class BaseMVVMActivity<T extends ViewDataBinding> extends AutoLayoutActivity {
+public abstract class BaseMVVMActivity<T extends ViewDataBinding> extends BaseAutoLayoutActivity {
 
   /**
    * Log tag

@@ -7,6 +7,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
@@ -21,6 +23,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BasePresenterMVVMActivity;
 import com.jimei.xiaolumeimei.data.XlmmApi;
+import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.databinding.ActivityMamainfoBinding;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.MaMaRenwuListBean;
@@ -28,12 +31,15 @@ import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.MamaSelfListBean;
 import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
+import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.event.MaMaInfoEmptyEvent;
 import com.jimei.xiaolumeimei.event.MaMaInfoEvent;
 import com.jimei.xiaolumeimei.event.WebViewEvent;
+import com.jimei.xiaolumeimei.mipush.XiaoMiMessageReceiver;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.BoutiqueWebviewActivity;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.GoodWeekActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMChooseListActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMFans1Activity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMLevelExamWebViewActivity;
@@ -46,6 +52,7 @@ import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMcarryLogActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaDrawCashActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaDrawCouponActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaLivenessActivity;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaLunTanActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaReNewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaVisitorActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.PersonalCarryRankActivity;
@@ -64,8 +71,13 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import cn.udesk.UdeskConst;
+import cn.udesk.UdeskSDKManager;
+import cn.udesk.xmpp.UdeskMessageManager;
 import rx.schedulers.Schedulers;
 
 /**
@@ -93,8 +105,15 @@ public class MMInfoActivity
   private double mamaCarryValue;
   private String mamaid;
   private String act_info;
+  public static XiaoMiMessageReceiver.XiaoMiPushHandler handler = null;
+  private String team_explain;
+
+  public static XiaoMiMessageReceiver.XiaoMiPushHandler getHandler() {
+    return handler;
+  }
 
   @Override protected void initData() {
+    UdeskSDKManager.getInstance().initApiKey(this, XlmmConst.UDESK_URL, XlmmConst.UDESK_KEY);
     showIndeterminateProgressDialog(false);
     mPresenter.getMamaUrl();
     mPresenter.getShareShopping();
@@ -102,6 +121,7 @@ public class MMInfoActivity
     mPresenter.getRefund();
     mPresenter.getMaMaselfList();
     mPresenter.getMaMaRenwuListBean(mamaid);
+    mPresenter.getUserInfo();
   }
 
   @Override protected void setListener() {
@@ -128,6 +148,8 @@ public class MMInfoActivity
     b.rlTeam.setOnClickListener(this);
     b.rlIncome1.setOnClickListener(this);
     b.tvNoticesee.setOnClickListener(this);
+    b.luntan.setOnClickListener(this);
+    b.goodWeek.setOnClickListener(this);
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -152,12 +174,6 @@ public class MMInfoActivity
     b.tvMamashengyu.setText(
         event.mamaFortune.getMamaFortune().getExtraInfo().getSurplusDays() + "");
     b.tvYue.setText(event.mamaFortune.getMamaFortune().getCashValue() + "");
-    int days = event.mamaFortune.getMamaFortune().getExtraInfo().getSurplusDays();
-    if (days <= 15) {
-      b.mamaPay.setVisibility(View.VISIBLE);
-    } else {
-      b.mamaPay.setVisibility(View.INVISIBLE);
-    }
   }
 
   @Override protected int getContentViewLayoutID() {
@@ -180,6 +196,7 @@ public class MMInfoActivity
   @Override public void initMamaUrl(MamaUrl mamaUrl) {
     mamaResult = mamaUrl.getResults().get(0).getExtra();
     act_info = mamaUrl.getResults().get(0).getExtra().getAct_info();
+    team_explain = mamaUrl.getResults().get(0).getExtra().getTeam_explain();
     Glide.with(MMInfoActivity.this)
         .load(mamaResult.getPictures().getExam_pic())
         .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -338,7 +355,20 @@ public class MMInfoActivity
         }
       }
       b.marqueeView.startWithList(list);
+    }else {
+      b.imageNotice.setVisibility(View.GONE);
     }
+  }
+
+  @Override
+  public void setUdesk(UserInfoBean userInfoBean) {
+    String id = userInfoBean.getId() + "";
+    Map<String, String> info = new HashMap<>();
+    info.put(UdeskConst.UdeskUserInfo.USER_SDK_TOKEN, id);
+    info.put(UdeskConst.UdeskUserInfo.NICK_NAME, userInfoBean.getNick() + "(ID:" + id + ")");
+    info.put(UdeskConst.UdeskUserInfo.CELLPHONE, userInfoBean.getMobile());
+    UdeskSDKManager.getInstance().setUserInfo(this, id, info);
+    UdeskMessageManager.getInstance().event_OnNewMsgNotice.bind(this, "OnNewMsgNotice");
   }
 
   @Override public void onClick(View v) {
@@ -508,6 +538,7 @@ public class MMInfoActivity
         MobclickAgent.onEvent(this, "TeamRankID");
         Bundle bundleAAA = new Bundle();
         bundleAAA.putString("id", mmId + "");
+        bundleAAA.putString("url",team_explain);
         readyGo(MMTeamActivity.class, bundleAAA);
         break;
 
@@ -519,6 +550,13 @@ public class MMInfoActivity
         MobclickAgent.onEvent(this, "XLMMNoticeID");
         JumpUtils.jumpToWebViewWithCookies(this, mamaResult.getNotice(), -1,
             ActivityWebViewActivity.class, "信息通知");
+        break;
+      case R.id.luntan:
+        JumpUtils.jumpToWebViewWithCookies(this, "http:/forum.xiaolumeimei.com/accounts/xlmm/login/",
+                -1, MamaLunTanActivity.class);
+        break;
+      case R.id.good_week:
+        startActivity(new Intent(this, GoodWeekActivity.class));
         break;
     }
   }
@@ -532,12 +570,17 @@ public class MMInfoActivity
 
   @Override protected void onResume() {
     super.onResume();
+    handler = new XiaoMiMessageReceiver.XiaoMiPushHandler(this);
+    mPresenter.getMamaFortune();
+    mPresenter.getRefund();
+    mPresenter.getMaMaselfList();
     MobclickAgent.onPageStart(this.getClass().getSimpleName());
     MobclickAgent.onResume(this);
   }
 
   @Override protected void onPause() {
     super.onPause();
+    handler = null;
     MobclickAgent.onPageEnd(this.getClass().getSimpleName());
     MobclickAgent.onPause(this);
   }
@@ -556,6 +599,27 @@ public class MMInfoActivity
         Integer.toString(mPresenter.show_refund.get(e.getXIndex()).getOrderNum()));
     b.tvTodayFund2.setText(Double.toString(
         (double) (Math.round(mPresenter.show_refund.get(e.getXIndex()).getCarry() * 100)) / 100));
+  }
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.menu_kefu, menu);
+    return super.onCreateOptionsMenu(menu);
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      case R.id.kefu:
+        UdeskSDKManager.getInstance().showRobotOrConversation(this);
+        break;
+    }
+    return super.onOptionsItemSelected(item);
   }
 
   @Override public void onNothingSelected() {

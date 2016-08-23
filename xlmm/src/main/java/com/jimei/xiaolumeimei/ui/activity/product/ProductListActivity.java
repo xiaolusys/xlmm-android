@@ -52,6 +52,8 @@ public class ProductListActivity extends BaseSwipeBackCompatActivity
     XRecyclerView xRecyclerView;
     @Bind(R.id.title)
     XlmmTitleView titleView;
+    @Bind(R.id.empty_layout)
+    LinearLayout emptyLayout;
 
 
     int page_size = 10;
@@ -410,6 +412,7 @@ public class ProductListActivity extends BaseSwipeBackCompatActivity
     public void refreshData(String cid, boolean clear) {
         xrv.setVisibility(View.VISIBLE);
         layout.setVisibility(View.GONE);
+        emptyLayout.setVisibility(View.GONE);
         xrvCategory.setVisibility(View.GONE);
         this.cid = cid;
         if (clear) {
@@ -432,6 +435,7 @@ public class ProductListActivity extends BaseSwipeBackCompatActivity
                         } else {
                             if (clear) {
                                 categoryProductAdapter.clear();
+                                emptyLayout.setVisibility(View.VISIBLE);
                             }
                         }
                         next = categoryProductListBean.getNext();

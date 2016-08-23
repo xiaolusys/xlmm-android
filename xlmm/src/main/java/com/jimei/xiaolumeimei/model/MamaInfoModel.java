@@ -14,6 +14,7 @@ import com.jimei.xiaolumeimei.entities.PersonalCarryRankBean;
 import com.jimei.xiaolumeimei.entities.PotentialFans;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.ResultBean;
+import com.jimei.xiaolumeimei.entities.WeekTaskRewardBean;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 import java.util.List;
@@ -106,7 +107,6 @@ public class MamaInfoModel {
     return XlmmRetrofitClient.getService().getMamaLiveness(page).compose(new DefaultTransform<>());
   }
 
-  //得到妈妈活跃值
   public Observable<PotentialFans> getPotentialFans(String page) {
     return XlmmRetrofitClient.getService().getPotentialFans(page).compose(new DefaultTransform<>());
   }
@@ -137,11 +137,18 @@ public class MamaInfoModel {
         .compose(new DefaultTransform<>());
   }
 
-  public Observable<Response<List<PersonalCarryRankBean>>> getPersonalCarryRankBean() {
+  public Observable<List<PersonalCarryRankBean>> getPersonalCarryRankBean() {
 
     return XlmmRetrofitClient.getService()
         .getPersonalCarryRankBean()
         .compose(new DefaultTransform<>());
+  }
+
+  public Observable<List<PersonalCarryRankBean>> getWeekPersonalCarryRankBean() {
+
+    return XlmmRetrofitClient.getService()
+            .getWeekPersonalCarryRankBean()
+            .compose(new DefaultTransform<>());
   }
 
   public Observable<Response<PersonalCarryRankBean>> getPersonalSelfCarryRankBean() {
@@ -166,13 +173,24 @@ public class MamaInfoModel {
     return XlmmRetrofitClient.getService().getTeamMemberSelf(id).compose(new DefaultTransform<>());
   }
 
-  public Observable<Response<List<PersonalCarryRankBean>>> getTeamCarryRankBean() {
+  public Observable<List<PersonalCarryRankBean>> getTeamCarryRankBean() {
 
     return XlmmRetrofitClient.getService().getTeamCarryRankBean().compose(new DefaultTransform<>());
+  }
+
+  public Observable<List<PersonalCarryRankBean>> getWeekTeamCarryRankBean() {
+
+    return XlmmRetrofitClient.getService().getWeekTeamCarryRankBean().compose(new DefaultTransform<>());
   }
 
   public Observable<Response<MaMaRenwuListBean>> getMaMaRenwuListBean(String id) {
     return XlmmRetrofitClient.getService().getMaMaRenwuListBean(id).
         compose(new DefaultTransform<>());
+  }
+
+  public Observable<WeekTaskRewardBean> getTaskReward(){
+    return  XlmmRetrofitClient.getService()
+            .getTaskReward()
+            .compose(new DefaultTransform<>());
   }
 }

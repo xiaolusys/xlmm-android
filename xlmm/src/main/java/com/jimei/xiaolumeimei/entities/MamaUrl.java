@@ -105,10 +105,12 @@ public class MamaUrl {
       private String notice;
       private String act_info;
       private String exam;
+      private String forum;
       private PicturesBean pictures;
       private String renew;
       private String fans_explain;
       private String invite;
+      private String team_explain;
 
       public String getNotice() {
         return notice;
@@ -164,6 +166,22 @@ public class MamaUrl {
 
       public void setInvite(String invite) {
         this.invite = invite;
+      }
+
+      public String getForum() {
+        return forum;
+      }
+
+      public void setForum(String forum) {
+        this.forum = forum;
+      }
+
+      public String getTeam_explain() {
+        return team_explain;
+      }
+
+      public void setTeam_explain(String team_explain) {
+        this.team_explain = team_explain;
       }
 
       public static class PicturesBean {

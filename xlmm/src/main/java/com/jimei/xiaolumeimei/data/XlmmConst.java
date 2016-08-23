@@ -68,6 +68,23 @@ public class XlmmConst {
     public static final String XIAOMI_APP_ID = "2882303761517434918";
     public static final String XIAOMI_APP_KEY = "5551743422918";
 
+    public static final String UDESK_URL = "xiaolumeimei.udesk.cn";
+    public static final String UDESK_KEY = "e7bfd4447bf206d17fb536240a9f4fbb";
+
+
+    public static final int TYPE_PERSON_RANK = 0;
+    public static final int TYPE_PERSON_WEEK_RANK = 1;
+    public static final int TYPE_TEAM_RANK = 2;
+    public static final int TYPE_TEAM_WEEK_RANK = 3;
+
+    public static final int MI_MAMA_ORDER_CARRY_BROADCAST = 999;
+    public static final int MI_PRODUCT_DETAIL = 998;
+
+    public static final int TYPE_REWARD_PERSONAL = 0;
+    public static final int TYPE_REWARD_TEAM = 1;
+
+
+
 
     public static int get_reason_num(String reason) {
         int reason_num = 0;

@@ -17,22 +17,25 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import com.afollestad.materialdialogs.MaterialDialog;
+
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.MMChooselistBean;
 import com.jimei.xiaolumeimei.entities.MMStoreBean;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
+import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 import com.zhy.autolayout.utils.AutoUtils;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -370,11 +373,8 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
 
     class MMChooseAdapter extends RecyclerView.Adapter<MMChooseAdapter.MMChooseVH> {
 
-        private final String TAG = MMChooseAdapter.class.getSimpleName();
-
         private List<MMChooselistBean.ResultsBean> mList;
         private Context mContext;
-        private MaterialDialog materialDialog;
 
         public MMChooseAdapter(Context context) {
             this.mContext = context;
@@ -419,9 +419,16 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
             String des = mmChooselistBean.getLevel_info().getNext_rebet_amount_des();
             holder.vipMoney.setText(des);
             int inCustomerShop = mmChooselistBean.getIn_customer_shop();
+            holder.imageChooselist.setOnClickListener(v -> {
+                Intent intent = new Intent(mContext, ProductDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("model_id", mmChooselistBean.getModel_id());
+                intent.putExtras(bundle);
+                mContext.startActivity(intent);
+            });
             if (0 == inCustomerShop) {
-                holder.add.setVisibility(View.VISIBLE);
-                holder.remove.setVisibility(View.INVISIBLE);
+//                holder.add.setVisibility(View.VISIBLE);
+//                holder.remove.setVisibility(View.INVISIBLE);
                 holder.add.setClickable(true);
                 holder.remove.setClickable(false);
 
@@ -468,8 +475,8 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
                     }
                 });
             } else if (1 == inCustomerShop) {
-                holder.add.setVisibility(View.INVISIBLE);
-                holder.remove.setVisibility(View.VISIBLE);
+//                holder.add.setVisibility(View.INVISIBLE);
+//                holder.remove.setVisibility(View.VISIBLE);
                 holder.add.setClickable(false);
                 holder.remove.setClickable(true);
 

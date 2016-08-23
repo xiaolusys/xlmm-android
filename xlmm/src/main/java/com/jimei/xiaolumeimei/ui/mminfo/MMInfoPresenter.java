@@ -237,4 +237,11 @@ public class MMInfoPresenter extends MMInfoContract.Presenter {
       }
     }));
   }
+
+  @Override
+  public void getUserInfo() {
+    mRxManager.add(mModel.getUserInfo().subscribe(userInfoBean -> {
+      mView.setUdesk(userInfoBean);
+    }, Throwable::printStackTrace));
+  }
 }
