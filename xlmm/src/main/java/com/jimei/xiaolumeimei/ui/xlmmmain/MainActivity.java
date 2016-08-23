@@ -269,18 +269,18 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
       case R.id.child_img:
         MobclickAgent.onEvent(MainActivity.this, "ChildID");
         Bundle childBundle = new Bundle();
-        childBundle.putInt("type",XlmmConst.TYPE_CHILD);
-        childBundle.putString("title","萌娃专区");
-//        readyGo(LadyZoneActivity.class,childBundle);
-        readyGo(ProductListActivity.class,childBundle);
+        childBundle.putInt("type", XlmmConst.TYPE_CHILD);
+        childBundle.putString("title", "萌娃专区");
+        //        readyGo(LadyZoneActivity.class,childBundle);
+        readyGo(ProductListActivity.class, childBundle);
         break;
       case R.id.lady_img:
         MobclickAgent.onEvent(MainActivity.this, "LadyID");
         Bundle ladyBundle = new Bundle();
-        ladyBundle.putInt("type",XlmmConst.TYPE_LADY);
-        ladyBundle.putString("title","时尚女装");
-//        readyGo(LadyZoneActivity.class,ladyBundle);
-        readyGo(ProductListActivity.class,ladyBundle);
+        ladyBundle.putInt("type", XlmmConst.TYPE_LADY);
+        ladyBundle.putString("title", "时尚女装");
+        //        readyGo(LadyZoneActivity.class,ladyBundle);
+        readyGo(ProductListActivity.class, ladyBundle);
         break;
       case R.id.text_yesterday:
         MobclickAgent.onEvent(this, "YesterdayID");
@@ -719,12 +719,12 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
               } else {
                 if (jump_info.getType() == XlmmConst.JUMP_PRODUCT_CHILDLIST) {
                   Bundle childBundle = new Bundle();
-                  childBundle.putInt("type",XlmmConst.TYPE_CHILD);
-                  readyGo(ProductListActivity.class,childBundle);
+                  childBundle.putInt("type", XlmmConst.TYPE_CHILD);
+                  readyGo(ProductListActivity.class, childBundle);
                 } else if (jump_info.getType() == XlmmConst.JUMP_PRODUCT_LADYLIST) {
                   Bundle ladyBundle = new Bundle();
-                  ladyBundle.putInt("type",XlmmConst.TYPE_LADY);
-                  readyGo(ProductListActivity.class,ladyBundle);
+                  ladyBundle.putInt("type", XlmmConst.TYPE_LADY);
+                  readyGo(ProductListActivity.class, ladyBundle);
                 } else {
                   JumpUtils.push_jump_proc(MainActivity.this, extra);
                 }
@@ -819,6 +819,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
                   int screenWidth = DisplayUtils.getScreenW(MainActivity.this);
                   LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(screenWidth,
                       LinearLayout.LayoutParams.WRAP_CONTENT);
+                  lp.setMargins(0, 2, 0, 2);
                   imageViewList.get(finalI).setLayoutParams(lp);
                   imageViewList.get(finalI).setMaxWidth(screenWidth);
                   imageViewList.get(finalI).setMaxHeight(screenWidth * 5);
