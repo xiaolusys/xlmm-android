@@ -51,7 +51,6 @@ public class CategoryTask extends AsyncTask<String, Integer, List<CategoryBean.C
             Gson gson = new Gson();
             List<CategoryBean> list = gson.fromJson(categoryStr, new TypeToken<List<CategoryBean>>() {
             }.getType());
-
             for (int i = 0; i < list.size(); i++) {
                 if (params[0].equals(list.get(i).getCid())) {
                     return list.get(i).getChilds();

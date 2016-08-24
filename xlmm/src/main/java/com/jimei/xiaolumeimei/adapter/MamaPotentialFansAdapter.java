@@ -14,8 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
@@ -23,8 +22,12 @@ import com.jimei.xiaolumeimei.entities.PotentialFans;
 import com.jimei.xiaolumeimei.glidemoudle.CropCircleTransformation;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jude.utils.JUtils;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class MamaPotentialFansAdapter
     extends RecyclerView.Adapter<MamaPotentialFansAdapter.ViewHolder> {
@@ -67,6 +70,7 @@ public class MamaPotentialFansAdapter
     holder.tvFans.setText(resultsEntity.getNick());
     holder.tvInfo.setText(resultsEntity.getNote());
     holder.tvTime.setText(resultsEntity.getModified().replace("T", " ").substring(6, 16));
+    holder.tvPhone.setText(resultsEntity.getMobile());
     if (TextUtils.isEmpty(resultsEntity.getHeadimgurl())) {
       Glide.with(context)
           .load(R.mipmap.ic_launcher)
@@ -90,6 +94,7 @@ public class MamaPotentialFansAdapter
     @Bind(R.id.tv_fans) TextView tvFans;
     @Bind(R.id.tv_info) TextView tvInfo;
     @Bind(R.id.tv_time) TextView tvTime;
+    @Bind(R.id.phone) TextView tvPhone;
     @Bind(R.id.llayout_fans_item) RelativeLayout llayoutFansItem;
 
     public ViewHolder(View itemView) {

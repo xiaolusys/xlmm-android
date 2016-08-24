@@ -27,6 +27,13 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.jimei.xiaolumeimei.entities.CategoryBean;
+import com.jude.utils.JUtils;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.FileCallBack;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -42,6 +49,8 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import okhttp3.Call;
 
 /**
  * 文件操作工具类
@@ -962,6 +971,65 @@ public final class FileUtils {
         sharedPreferences = context.getSharedPreferences("category", Context.MODE_PRIVATE);
         String sha1 = sharedPreferences.getString("sha", "");
         return !TextUtils.isEmpty(sha1) && (sha1.equals(sha));
+    }
+
+    public static void saveCategoryImg(String fileaddress) {
+        String categoryStr;
+        InputStream in = null;
+        try {
+            if (FileUtils.isFileExist(fileaddress)) {
+                File file = new File(fileaddress);
+                in = new FileInputStream(file);
+            }
+            byte[] arrayOfByte = new byte[in.available()];
+            in.read(arrayOfByte);
+            categoryStr = new String(arrayOfByte, "UTF-8");
+            Gson gson = new Gson();
+            List<CategoryBean> list = gson.fromJson(categoryStr, new TypeToken<List<CategoryBean>>() {
+            }.getType());
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i).getChilds() != null) {
+                    for (int j = 0; j < list.get(i).getChilds().size(); j++) {
+                        String cat_pic = list.get(i).getChilds().get(j).getCat_pic();
+                        final String cid = list.get(i).getChilds().get(j).getCid();
+                        String picAddress = Environment.getExternalStorageDirectory().getAbsolutePath()
+                                + "/xlmmcategory/" + cid + ".png";
+                        if (FileUtils.isFileExist(picAddress)) {
+                            FileUtils.DeleteFile(new File(picAddress));
+                        }
+                        new Thread(() -> {
+                            OkHttpUtils.get()
+                                    .url(cat_pic)
+                                    .build()
+                                    .execute(new FileCallBack(
+                                            Environment.getExternalStorageDirectory().getAbsolutePath() + "/xlmmcategory/",
+                                            cid + ".png") {
+                                        @Override
+                                        public void onError(Call call, Exception e, int id) {
+
+                                        }
+
+                                        @Override
+                                        public void onResponse(File response, int id) {
+
+                                        }
+                                    });
+                        }).run();
+
+                    }
+                }
+            }
+        } catch (Exception e) {
+            JUtils.Log(e.getMessage());
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    JUtils.Log(e.getMessage());
+                }
+            }
+        }
     }
 
 }

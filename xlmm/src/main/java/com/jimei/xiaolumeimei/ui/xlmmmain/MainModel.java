@@ -8,6 +8,7 @@ import com.jimei.xiaolumeimei.entities.IsGetcoupon;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.ProductListOldBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.entities.UserTopic;
 import com.jimei.xiaolumeimei.entities.VersionBean;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 import okhttp3.ResponseBody;
@@ -82,4 +83,13 @@ public class MainModel implements MainContract.Model {
             .getCategoryDown()
             .compose(RxSchedulers.io_main());
   }
+
+  @Override
+  public Observable<UserTopic> getTopic() {
+    return XlmmRetrofitClient
+            .getService()
+            .getTopic()
+            .compose(RxSchedulers.io_main());
+  }
+
 }

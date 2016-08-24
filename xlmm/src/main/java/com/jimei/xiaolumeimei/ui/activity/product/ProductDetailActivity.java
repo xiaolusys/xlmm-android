@@ -210,8 +210,8 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
         }
         new Thread(() -> {
             while (left > 0) {
-                left--;
-                SystemClock.sleep(1);
+                left = left - 1000;
+                SystemClock.sleep(1000);
                 runOnUiThread(() -> b.countView.updateShow(left));
             }
         }).start();
@@ -247,17 +247,19 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
         initAttr(productDetailBean.getComparison().getAttributes());
         initLeftTime(offshelf_time);
         initHeadImg(detail_content);
-        ViewUtils.loadImgToImgView(this, img, productDetailBean.getSku_info().get(0).getProduct_img());
-        nameTv.setText(detail_content.getName() + "/" + productDetailBean.getSku_info().get(0).getName());
-        agentTv.setText("¥" + productDetailBean.getSku_info().get(0).getSku_items().get(0).getAgent_price() + "");
-        saleTv.setText("/¥" + productDetailBean.getSku_info().get(0).getSku_items().get(0).getStd_sale_price());
+        if (productDetailBean.getSku_info().size() > 0) {
+            ViewUtils.loadImgToImgView(this, img, productDetailBean.getSku_info().get(0).getProduct_img());
+            nameTv.setText(detail_content.getName() + "/" + productDetailBean.getSku_info().get(0).getName());
+            agentTv.setText("¥" + productDetailBean.getSku_info().get(0).getSku_items().get(0).getAgent_price() + "");
+            saleTv.setText("/¥" + productDetailBean.getSku_info().get(0).getSku_items().get(0).getStd_sale_price());
+            SkuColorAdapter colorAdapter = new SkuColorAdapter(productDetailBean.getSku_info(), this);
+            colorRv.setAdapter(colorAdapter);
+            skuSizeAdapter = new SkuSizeAdapter(this);
+            sizeRv.setAdapter(skuSizeAdapter);
+            skuSizeAdapter.update(productDetailBean.getSku_info().get(0).getSku_items());
+            setSkuId(productDetailBean.getSku_info());
+        }
         hideIndeterminateProgressDialog();
-        SkuColorAdapter colorAdapter = new SkuColorAdapter(productDetailBean.getSku_info(), this);
-        colorRv.setAdapter(colorAdapter);
-        skuSizeAdapter = new SkuSizeAdapter(this);
-        sizeRv.setAdapter(skuSizeAdapter);
-        skuSizeAdapter.update(productDetailBean.getSku_info().get(0).getSku_items());
-        setSkuId(productDetailBean.getSku_info());
         if (productDetail.getSku_info().size() == 1 && productDetail.getSku_info().get(0).getSku_items().size() == 1) {
             colorLayout.setVisibility(View.GONE);
             sizeLayout.setVisibility(View.GONE);
@@ -292,7 +294,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
         for (int i = 0; i < headNum; i++) {
             ImageView imageView = new ImageView(this);
             imageView.setLayoutParams(new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             Glide.with(this).load(head_imgs.get(i)).diskCacheStrategy(DiskCacheStrategy.ALL)
                     .centerCrop().placeholder(R.drawable.parceholder).into(imageView);
@@ -393,36 +395,46 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                 }
                 break;
             case R.id.collect_layout:
-                if (collectFlag) {
-                    addSubscription(ProductModel.getInstance()
-                            .deleteCollection(model_id)
-                            .subscribeOn(Schedulers.io())
-                            .subscribe(new ServiceResponse<CollectionResultBean>() {
-                                @Override
-                                public void onNext(CollectionResultBean collectionResultBean) {
-                                    if (collectionResultBean.getCode() == 0) {
-                                        collectFlag = false;
-                                        b.collectImg.setImageResource(R.drawable.icon_collect_false);
-                                        b.collectText.setText("收藏");
-                                    }
-                                    JUtils.Toast(collectionResultBean.getInfo());
-                                }
-                            }));
+                if (!LoginUtils.checkLoginState(getApplicationContext())) {
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("login", "productdetail");
+                    bundle.putInt("id", model_id);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                    finish();
                 } else {
-                    addSubscription(ProductModel.getInstance()
-                            .addCollection(model_id)
-                            .subscribeOn(Schedulers.io())
-                            .subscribe(new ServiceResponse<CollectionResultBean>() {
-                                @Override
-                                public void onNext(CollectionResultBean collectionResultBean) {
-                                    if (collectionResultBean.getCode() == 0) {
-                                        collectFlag = true;
-                                        b.collectImg.setImageResource(R.drawable.icon_collect_true);
-                                        b.collectText.setText("已收藏");
+                    if (collectFlag) {
+                        addSubscription(ProductModel.getInstance()
+                                .deleteCollection(model_id)
+                                .subscribeOn(Schedulers.io())
+                                .subscribe(new ServiceResponse<CollectionResultBean>() {
+                                    @Override
+                                    public void onNext(CollectionResultBean collectionResultBean) {
+                                        if (collectionResultBean.getCode() == 0) {
+                                            collectFlag = false;
+                                            b.collectImg.setImageResource(R.drawable.icon_collect_false);
+                                            b.collectText.setText("收藏");
+                                        }
+                                        JUtils.Toast(collectionResultBean.getInfo());
                                     }
-                                    JUtils.Toast(collectionResultBean.getInfo());
-                                }
-                            }));
+                                }));
+                    } else {
+                        addSubscription(ProductModel.getInstance()
+                                .addCollection(model_id)
+                                .subscribeOn(Schedulers.io())
+                                .subscribe(new ServiceResponse<CollectionResultBean>() {
+                                    @Override
+                                    public void onNext(CollectionResultBean collectionResultBean) {
+                                        if (collectionResultBean.getCode() == 0) {
+                                            collectFlag = true;
+                                            b.collectImg.setImageResource(R.drawable.icon_collect_true);
+                                            b.collectText.setText("已收藏");
+                                        }
+                                        JUtils.Toast(collectionResultBean.getInfo());
+                                    }
+                                }));
+                    }
                 }
                 break;
             case R.id.plus:
@@ -494,5 +506,19 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                 paramsToShare.setTitle(text);
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(this.getClass().getSimpleName());
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+        MobclickAgent.onPause(this);
     }
 }

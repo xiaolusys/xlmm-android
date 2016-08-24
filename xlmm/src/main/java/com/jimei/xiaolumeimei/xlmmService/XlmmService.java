@@ -75,8 +75,10 @@ import com.jimei.xiaolumeimei.entities.StartBean;
 import com.jimei.xiaolumeimei.entities.UserAccountBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.entities.UserTopic;
 import com.jimei.xiaolumeimei.entities.UserWithdrawResult;
 import com.jimei.xiaolumeimei.entities.VersionBean;
+import com.jimei.xiaolumeimei.entities.WeekTaskRewardBean;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.entities.WxPubAuthInfo;
 
@@ -849,10 +851,18 @@ public interface XlmmService {
     );
 
     @GET("/rest/v2/mama/rank/carry_total_rank")
-    Observable<Response<List<PersonalCarryRankBean>>> getPersonalCarryRankBean();
+    Observable<List<PersonalCarryRankBean>> getPersonalCarryRankBean();
 
     @GET("/rest/v2/mama/teamrank/carry_total_rank")
-    Observable<Response<List<PersonalCarryRankBean>>> getTeamCarryRankBean();
+    Observable<List<PersonalCarryRankBean>> getTeamCarryRankBean();
+
+
+    @GET("/rest/v2/rank/carry_duration_rank")
+    Observable<List<PersonalCarryRankBean>> getWeekPersonalCarryRankBean();
+
+    @GET("/rest/v2/mama/teamrank/carry_duration_rank")
+    Observable<List<PersonalCarryRankBean>> getWeekTeamCarryRankBean();
+
 
     @GET("/rest/v2/mama/rank/self_rank")
     Observable<Response<PersonalCarryRankBean>> getPersonalSelfCarryRankBean();
@@ -917,4 +927,9 @@ public interface XlmmService {
             @Query("page") int page
     );
 
+    @GET("/rest/v1/push/topic")
+    Observable<UserTopic> getTopic();
+
+    @GET("/rest/v2/mama/mission/weeklist")
+    Observable<WeekTaskRewardBean> getTaskReward();
 }

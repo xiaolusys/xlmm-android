@@ -12,13 +12,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import butterknife.ButterKnife;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.utils.CommonUtils;
 import com.jimei.xiaolumeimei.utils.TUtil;
 import com.jimei.xiaolumeimei.widget.loadingdialog.XlmmLoadingDialog;
-import com.zhy.autolayout.AutoLayoutActivity;
+
+import butterknife.ButterKnife;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
@@ -26,7 +27,7 @@ import rx.subscriptions.CompositeSubscription;
  * Created by itxuye on 2016/6/24.
  */
 public abstract class BasePresenterActivity<T extends BasePresenter, E extends BaseModel>
-    extends AutoLayoutActivity {
+    extends BaseAutoLayoutActivity {
 
   /**
    * Log tag
