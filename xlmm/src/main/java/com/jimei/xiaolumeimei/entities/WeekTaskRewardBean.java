@@ -111,7 +111,7 @@ public class WeekTaskRewardBean {
         private int mama_id;
         private String year_week;
         private int finish_value;
-        private Object finish_time;
+        private String finish_time;
         private String status;
         private String status_name;
 
@@ -155,11 +155,11 @@ public class WeekTaskRewardBean {
             this.finish_value = finish_value;
         }
 
-        public Object getFinish_time() {
+        public String getFinish_time() {
             return finish_time;
         }
 
-        public void setFinish_time(Object finish_time) {
+        public void setFinish_time(String finish_time) {
             this.finish_time = finish_time;
         }
 
@@ -184,7 +184,7 @@ public class WeekTaskRewardBean {
             private String name;
             private String kpi_type;
             private int target_value;
-            private int award_amount;
+            private double award_amount;
 
             public int getId() {
                 return id;
@@ -218,11 +218,11 @@ public class WeekTaskRewardBean {
                 this.target_value = target_value;
             }
 
-            public int getAward_amount() {
+            public double getAward_amount() {
                 return award_amount;
             }
 
-            public void setAward_amount(int award_amount) {
+            public void setAward_amount(double award_amount) {
                 this.award_amount = award_amount;
             }
         }
@@ -257,7 +257,7 @@ public class WeekTaskRewardBean {
         private int mama_id;
         private String year_week;
         private int finish_value;
-        private Object finish_time;
+        private String finish_time;
         private String status;
         private String status_name;
 
@@ -301,11 +301,11 @@ public class WeekTaskRewardBean {
             this.finish_value = finish_value;
         }
 
-        public Object getFinish_time() {
+        public String getFinish_time() {
             return finish_time;
         }
 
-        public void setFinish_time(Object finish_time) {
+        public void setFinish_time(String finish_time) {
             this.finish_time = finish_time;
         }
 
@@ -342,7 +342,7 @@ public class WeekTaskRewardBean {
                         '}';
             }
 
-            private int award_amount;
+            private double award_amount;
 
             public int getId() {
                 return id;
@@ -376,11 +376,11 @@ public class WeekTaskRewardBean {
                 this.target_value = target_value;
             }
 
-            public int getAward_amount() {
+            public double getAward_amount() {
                 return award_amount;
             }
 
-            public void setAward_amount(int award_amount) {
+            public void setAward_amount(double award_amount) {
                 this.award_amount = award_amount;
             }
         }

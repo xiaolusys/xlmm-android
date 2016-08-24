@@ -11,6 +11,7 @@ import com.jimei.xiaolumeimei.entities.WeekTaskRewardBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.ui.fragment.v2.TaskRewardFragment;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jude.utils.JUtils;
 
 import java.util.ArrayList;
 
@@ -18,11 +19,10 @@ import rx.schedulers.Schedulers;
 
 
 public class GoodWeekActivity extends BaseMVVMActivity<ActivityGoodWeekBinding> {
-    private ArrayList<TaskRewardFragment> fragments;
 
     @Override
     protected void initView() {
-        fragments = new ArrayList<>();
+        ArrayList<TaskRewardFragment> fragments = new ArrayList<>();
         fragments.add(TaskRewardFragment.newInstance(XlmmConst.TYPE_REWARD_PERSONAL, "个人任务"));
         fragments.add(TaskRewardFragment.newInstance(XlmmConst.TYPE_REWARD_TEAM, "团队任务"));
 
@@ -49,11 +49,17 @@ public class GoodWeekActivity extends BaseMVVMActivity<ActivityGoodWeekBinding> 
                         fillDataToView(weekTaskRewardBean);
                         hideIndeterminateProgressDialog();
                     }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        hideIndeterminateProgressDialog();
+                        JUtils.Toast("暂时无数据!");
+                    }
                 }));
     }
 
     private void fillDataToView(WeekTaskRewardBean bean) {
-
+        b.money.setText("" + bean.getStaging_award_amount() / 100.00);
     }
 
     @Override
