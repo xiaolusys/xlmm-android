@@ -10,7 +10,7 @@
         <com.jimei.xiaolumeimei.widget.XlmmTitleView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:xlmm_title="周激励" />
+            app:xlmm_title="业绩奖励" />
 
 
         <LinearLayout
@@ -24,7 +24,7 @@
                 android:id="@+id/info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="本周可获得额外销售奖励"
+                android:text="本周可获得额外奖励"
                 android:textColor="@color/text_color_26"
                 android:textSize="14sp" />
 
@@ -48,7 +48,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:text="54"
+                    android:text="0"
                     android:textColor="@color/colorAccent"
                     android:textSize="35sp" />
             </LinearLayout>
@@ -72,9 +72,9 @@
             android:layout_width="match_parent"
             android:layout_height="60px"
             android:background="@color/bg_grey"
-            android:visibility="gone"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -97,7 +97,8 @@
             android:layout_height="60px"
             android:background="@color/white"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="0dp"
@@ -149,7 +150,8 @@
         <android.support.v4.view.ViewPager
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="@color/white" />
 
 
     </LinearLayout>

@@ -12,6 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="2"
         android:gravity="center"
+        android:singleLine="true"
+        android:ellipsize="end"
         android:textColor="@color/text_color_62"
         android:textSize="12sp" />
 
