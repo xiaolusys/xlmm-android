@@ -431,6 +431,7 @@ public class AllOrdersBean {
             private String item_id;
             private String title;
             private String sku_id;
+            private int model_id;
             private int num;
             private String outer_id;
             private double total_fee;
@@ -673,6 +674,14 @@ public class AllOrdersBean {
                     return new OrdersEntity[size];
                 }
             };
+
+            public int getModel_id() {
+                return model_id;
+            }
+
+            public void setModel_id(int model_id) {
+                this.model_id = model_id;
+            }
         }
     }
 }

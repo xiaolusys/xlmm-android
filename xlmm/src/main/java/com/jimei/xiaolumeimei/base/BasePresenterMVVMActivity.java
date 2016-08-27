@@ -64,6 +64,10 @@ public abstract class BasePresenterMVVMActivity<T extends BasePresenter, E exten
     return this.mCompositeSubscription;
   }
 
+  public void setDialogBack(int id){
+    loadingdialog.setWindowColor(getResources().getColor(id));
+  }
+
   public void addSubscription(Subscription s) {
     if (this.mCompositeSubscription == null) {
       this.mCompositeSubscription = new CompositeSubscription();
@@ -307,10 +311,10 @@ public abstract class BasePresenterMVVMActivity<T extends BasePresenter, E exten
     });
   }
 
-  public void showIndeterminateProgressDialog(boolean horizontal) {
+  public void showIndeterminateProgressDialog(boolean cancellable) {
     loadingdialog = XlmmLoadingDialog.create(this)
         .setStyle(XlmmLoadingDialog.Style.SPIN_INDETERMINATE)
-        .setCancellable(!horizontal)
+        .setCancellable(cancellable)
         .show();
   }
 

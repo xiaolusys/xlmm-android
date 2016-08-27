@@ -11,6 +11,7 @@ import android.util.Log;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.ui.activity.product.BrandListActivity;
+import com.jimei.xiaolumeimei.ui.activity.product.LadyZoneActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
@@ -93,7 +94,16 @@ public class JumpUtils {
               ProductPopDetailActvityWeb.class);
         }
         break;
-
+      case XlmmConst.JUMP_PRODUCT_CATEGORY:
+        String cid = get_jump_arg("cid",jumpInfo.getUrl());
+        Intent cidIntent = new Intent(context, LadyZoneActivity.class);
+        Bundle cidBundle = new Bundle();
+        cidBundle.putString("type",cid);
+        cidBundle.putString("title","萌娃专区");
+        cidBundle.putString("category","false");
+        cidIntent.putExtras(cidBundle);
+        context.startActivity(cidIntent);
+        break;
       case XlmmConst.JUMP_PRODUCT_DETAIL_PUSH:
         String product_idpush;
         try {
@@ -195,6 +205,9 @@ public class JumpUtils {
           jumpInfo.setUrl(content[1]);
         } else if (content[1].contains("promote_previous")) {
           jumpInfo.setType(XlmmConst.JUMP_PROMOTE_PREVIOUS);
+          jumpInfo.setUrl(content[1]);
+        }else if (content[1].contains("category")) {
+          jumpInfo.setType(XlmmConst.JUMP_PRODUCT_CATEGORY);
           jumpInfo.setUrl(content[1]);
         } else if (content[1].contains("childlist")) {
           jumpInfo.setType(XlmmConst.JUMP_PRODUCT_CHILDLIST);

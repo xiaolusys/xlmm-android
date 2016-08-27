@@ -507,7 +507,7 @@ public final class ViewUtils {
   }
 
   public static void loadImageWithOkhttp(String picpath, Activity context,
-      ImageView imageView) {
+      ImageView imageView,int size) {
     OkHttpUtils.get().url(picpath).build().execute(new BitmapCallback() {
       @Override public void onError(Call call, Exception e,int id) {
         e.printStackTrace();
@@ -518,7 +518,7 @@ public final class ViewUtils {
 
           imageView.setAdjustViewBounds(true);
 
-          int screenWidth = DisplayUtils.getScreenW(context) / 2;
+          int screenWidth = DisplayUtils.getScreenW(context) / size;
           LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(screenWidth,
               LinearLayout.LayoutParams.WRAP_CONTENT);
           //                                                        lp.width = screenWidth;

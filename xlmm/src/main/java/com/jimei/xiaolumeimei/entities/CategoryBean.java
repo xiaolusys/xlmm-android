@@ -30,7 +30,7 @@ public class CategoryBean {
      * cid : 63
      */
 
-    private List<ChildsBean> childs;
+    private List<CategoryBean> childs;
 
     public String getName() {
         return name;
@@ -72,11 +72,11 @@ public class CategoryBean {
         this.cat_pic = cat_pic;
     }
 
-    public List<ChildsBean> getChilds() {
+    public List<CategoryBean> getChilds() {
         return childs;
     }
 
-    public void setChilds(List<ChildsBean> childs) {
+    public void setChilds(List<CategoryBean> childs) {
         this.childs = childs;
     }
 
@@ -86,6 +86,7 @@ public class CategoryBean {
         private String parent_cid;
         private String name;
         private String cid;
+        private List<ChildsBean> childs;
 
         public int getGrade() {
             return grade;
@@ -125,6 +126,14 @@ public class CategoryBean {
 
         public void setCid(String cid) {
             this.cid = cid;
+        }
+
+        public List<ChildsBean> getChilds() {
+            return childs;
+        }
+
+        public void setChilds(List<ChildsBean> childs) {
+            this.childs = childs;
         }
     }
 }

@@ -51,6 +51,7 @@ public class XlmmConst {
     public static final int JUMP_PRODUCT_DETAIL_PUSH = 14;
     public static final int JUMP_TOPIC = 15;
     public static final int JUMP_NEW_PRODUCT_DETAIL = 16;
+    public static final int JUMP_PRODUCT_CATEGORY = 17;
 
     public static final int FLAG_PRICE = 0;
     public static final int FLAG_COLOR = 1;
@@ -62,6 +63,7 @@ public class XlmmConst {
     public static final int TYPE_LADY = 2;
     public static final int TYPE_CHILD = 1;
     public static final int TYPE_HEALTH = 3;
+    public static final int TYPE_BAG = 6;
 
     public static final String JUMP_PREFIX = "com.jimei.xlmm://app/v1/";
 

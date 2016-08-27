@@ -313,7 +313,7 @@ public interface XlmmService {
     //投诉建议
     @FormUrlEncoded
     @POST("/rest/v1/complain")
-    Observable<AddressResultBean> complain(
+     Observable<AddressResultBean> complain(
             @Field("com_type") String com_type,
             @Field("com_content") String com_content,
             @Field("com_title") String com_title);

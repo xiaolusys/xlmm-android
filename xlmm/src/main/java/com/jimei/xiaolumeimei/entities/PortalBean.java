@@ -125,19 +125,22 @@ public class PortalBean {
   }
 
   public static class CategorysBean {
-    @Override public String toString() {
+    @Override
+    public String toString() {
       return "CategorysBean{" +
-          "cat_link='" + cat_link + '\'' +
-          ", cat_img='" + cat_img + '\'' +
-          ", id=" + id +
-          ", name='" + name + '\'' +
-          '}';
+              "cat_link='" + cat_link + '\'' +
+              ", cat_img='" + cat_img + '\'' +
+              ", id=" + id +
+              ", name='" + name + '\'' +
+              ", app_link='" + app_link + '\'' +
+              '}';
     }
 
     private String cat_link;
     private String cat_img;
     private int id;
     private String name;
+    private String app_link;
 
     public String getCat_link() {
       return cat_link;
@@ -169,6 +172,14 @@ public class PortalBean {
 
     public void setName(String name) {
       this.name = name;
+    }
+
+    public String getApp_link() {
+      return app_link;
+    }
+
+    public void setApp_link(String app_link) {
+      this.app_link = app_link;
     }
   }
 

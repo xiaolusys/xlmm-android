@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -130,18 +131,14 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   @Bind(R.id.brand) LinearLayout brand;
   @Bind(R.id.cart_view) View cart_view;
   @Bind(R.id.post_mainactivity) LinearLayout post_activity_layout;
-  @Bind(R.id.text_yesterday) TextView textYesterday;
-  @Bind(R.id.text_today) TextView textToday;
-  @Bind(R.id.text_tomorror) TextView textTomorror;
-  @Bind(R.id.child_img) ImageView childImage;
-  @Bind(R.id.lady_img) ImageView ladyImage;
+  @Bind(R.id.category_layout) LinearLayout categoryLayout;
   @Bind(R.id.nav_view) NavigationView navigationView;
   @Bind(R.id.slider) SliderLayout mSliderLayout;
   @Bind(R.id.viewPager) ViewPager vp;
   @Bind(R.id.rv_top) RelativeLayout rvTop;
+  @Bind(R.id.tab_layout) TabLayout tabLayout;
   List<PortalBean.PostersBean> posters = new ArrayList<>();
   SharedPreferences sharedPreferencesTime;
-  private SharedPreferences sharedPreferencesMask;
   private int mask;
   private List<ProductListFragment> list = new ArrayList<>();
   private int num;
@@ -151,11 +148,9 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   private TextView msg3;
   private ImageView loginFlag;
   private View llayout;
-  private String newTime;
   private int rvTopHeight;
   private EventBus aDefault;
   private UpdateBroadReceiver mUpdateBroadReceiver;
-  private double budgetCash;
   private String mamaid;
   private boolean upadteFlag;
 
@@ -190,11 +185,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     carts.setOnClickListener(this);
     collectIv.setOnClickListener(this);
     rl_mmentry.setOnClickListener(this);
-    textYesterday.setOnClickListener(this);
-    textTomorror.setOnClickListener(this);
-    textToday.setOnClickListener(this);
-    childImage.setOnClickListener(this);
-    ladyImage.setOnClickListener(this);
     vp.addOnPageChangeListener(this);
     navigationView.setNavigationItemSelectedListener(this);
     llayout.findViewById(R.id.ll_money).setOnClickListener(this);
@@ -231,7 +221,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   }
 
   @Override public void onClick(View v) {
-    int currentNum = 0;
+//    int currentNum = 0;
     drawer.closeDrawers();
     String flag = "main";
     Intent intent = new Intent(MainActivity.this, MainActivity.class);
@@ -266,69 +256,28 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
       case R.id.imgUser:
         intent = new Intent(MainActivity.this, InformationActivity.class);
         break;
-      case R.id.child_img:
-        MobclickAgent.onEvent(MainActivity.this, "ChildID");
-        Bundle childBundle = new Bundle();
-        childBundle.putInt("type",XlmmConst.TYPE_CHILD);
-        childBundle.putString("title","萌娃专区");
-//        readyGo(LadyZoneActivity.class,childBundle);
-        readyGo(ProductListActivity.class,childBundle);
-        break;
-      case R.id.lady_img:
-        MobclickAgent.onEvent(MainActivity.this, "LadyID");
-        Bundle ladyBundle = new Bundle();
-        ladyBundle.putInt("type",XlmmConst.TYPE_LADY);
-        ladyBundle.putString("title","时尚女装");
-//        readyGo(LadyZoneActivity.class,ladyBundle);
-        readyGo(ProductListActivity.class,ladyBundle);
-        break;
-      case R.id.text_yesterday:
-        MobclickAgent.onEvent(this, "YesterdayID");
-        currentNum = 0;
-        setYesterday();
-        break;
-      case R.id.text_today:
-        MobclickAgent.onEvent(this, "TodayID");
-        currentNum = 1;
-        setToday();
-        break;
-      case R.id.text_tomorror:
-        MobclickAgent.onEvent(this, "TomorrorID");
-        currentNum = 2;
-        setTommrror();
-        break;
+//      case R.id.child_img:
+//        MobclickAgent.onEvent(MainActivity.this, "ChildID");
+//        Bundle childBundle = new Bundle();
+//        childBundle.putInt("type",XlmmConst.TYPE_CHILD);
+//        childBundle.putString("title","萌娃专区");
+////        readyGo(LadyZoneActivity.class,childBundle);
+//        readyGo(ProductListActivity.class,childBundle);
+//        break;
+//      case R.id.lady_img:
+//        MobclickAgent.onEvent(MainActivity.this, "LadyID");
+//        Bundle ladyBundle = new Bundle();
+//        ladyBundle.putInt("type",XlmmConst.TYPE_LADY);
+//        ladyBundle.putString("title","时尚女装");
+////        readyGo(LadyZoneActivity.class,ladyBundle);
+//        readyGo(ProductListActivity.class,ladyBundle);
+//        break;
     }
-    vp.setCurrentItem(currentNum);
-    scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(currentNum));
-    if (v.getId() != R.id.text_today
-        && v.getId() != R.id.text_tomorror
-        && v.getId() != R.id.text_yesterday
-        && v.getId() != R.id.lady_img
-        && v.getId() != R.id.child_img) {
       if (!(LoginUtils.checkLoginState(getApplicationContext()))) {
         login(flag);
       } else {
         startActivity(intent);
       }
-    }
-  }
-
-  private void setTommrror() {
-    textYesterday.setTextColor(Color.parseColor("#3C3C3C"));
-    textToday.setTextColor(Color.parseColor("#3C3C3C"));
-    textTomorror.setTextColor(Color.parseColor("#FAAA14"));
-  }
-
-  private void setToday() {
-    textYesterday.setTextColor(Color.parseColor("#3C3C3C"));
-    textToday.setTextColor(Color.parseColor("#FAAA14"));
-    textTomorror.setTextColor(Color.parseColor("#3C3C3C"));
-  }
-
-  private void setYesterday() {
-    textYesterday.setTextColor(Color.parseColor("#FAAA14"));
-    textToday.setTextColor(Color.parseColor("#3C3C3C"));
-    textTomorror.setTextColor(Color.parseColor("#3C3C3C"));
   }
 
   public void login(String flag) {
@@ -348,17 +297,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     } catch (Exception e) {
       e.printStackTrace();
     }
-    switch (position) {
-      case 0:
-        setYesterday();
-        break;
-      case 1:
-        setToday();
-        break;
-      case 2:
-        setTommrror();
-        break;
-    }
+    scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(position));
   }
 
   @Override public void onPageScrollStateChanged(int state) {
@@ -407,21 +346,9 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     }
     if (0 > rvTopHeight + transY) {
       rvTop.setVisibility(View.VISIBLE);
-      rvTop.setOnClickListener(new View.OnClickListener() {
-        @Override public void onClick(View v) {
-          scrollableLayout.scrollTo(0, 0);
-          switch (vp.getCurrentItem()) {
-            case 0:
-              ((ProductListFragment) list.get(0)).goToTop();
-              break;
-            case 1:
-              ((ProductListFragment) list.get(1)).goToTop();
-              break;
-            case 2:
-              ((ProductListFragment) list.get(2)).goToTop();
-              break;
-          }
-        }
+      rvTop.setOnClickListener(v -> {
+        scrollableLayout.scrollTo(0, 0);
+        list.get(vp.getCurrentItem()).goToTop();
       });
     } else {
       rvTop.setVisibility(View.GONE);
@@ -487,8 +414,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
           }
 
           @Override public void onDrawerOpened(View drawerView) {
-            //initSlideDraw(mPresenter.userInfoNewBean);
-            //initUserNewView(mPresenter.userInfoNewBean);
             invalidateOptionsMenu();
           }
         };
@@ -511,17 +436,18 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   }
 
   @Override public void initViewsForTab() {
-    sharedPreferencesMask = getSharedPreferences("maskActivity", 0);
+    SharedPreferences sharedPreferencesMask = getSharedPreferences("maskActivity", 0);
     sharedPreferencesTime = getSharedPreferences("resumeTime", 0);
     mask = sharedPreferencesMask.getInt("mask", 0);
     MyFragmentAdapter adapter = new MyFragmentAdapter(getSupportFragmentManager());
-    list.add(ProductListFragment.newInstance(XlmmConst.TYPE_YESTERDAY,"昨天"));
-    list.add(ProductListFragment.newInstance(XlmmConst.TYPE_TODAY,"今天"));
-    list.add(ProductListFragment.newInstance(XlmmConst.TYPE_TOMORROW,"明天"));
+    list.add(ProductListFragment.newInstance(XlmmConst.TYPE_YESTERDAY,"昨天热卖"));
+    list.add(ProductListFragment.newInstance(XlmmConst.TYPE_TODAY,"今天特卖"));
+    list.add(ProductListFragment.newInstance(XlmmConst.TYPE_TOMORROW,"即将上新"));
     vp.setAdapter(adapter);
-    vp.setOffscreenPageLimit(2);
+    vp.setOffscreenPageLimit(3);
     vp.setCurrentItem(1);
-    setToday();
+    tabLayout.setupWithViewPager(vp);
+    tabLayout.setTabMode(TabLayout.MODE_FIXED);
     scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(1));
   }
 
@@ -531,10 +457,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
 
   @Override public void initUserViewChange(UserInfoBean userNewBean) {
     if (null != userNewBean) {
-
-      if (null != userNewBean.getUserBudget()) {
-        budgetCash = userNewBean.getUserBudget().getBudgetCash();
-      }
       mamaid = userNewBean.getXiaolumm().getId() + "";
     } else {
       rl_mmentry.setVisibility(View.INVISIBLE);
@@ -596,7 +518,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         loginFlag.setVisibility(View.VISIBLE);
       }
       mamaid = userNewBean.getXiaolumm().getId() + "";
-      //JUtils.Log(TAG, "mamaid " + userNewBean.getXiaolumm().getId());
       if ((userNewBean.getXiaolumm() != null) && (userNewBean.getXiaolumm().getId() != 0)) {
         rl_mmentry.setVisibility(View.VISIBLE);
       } else {
@@ -737,12 +658,21 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
 
   @Override public void initCategory(PortalBean postBean) throws NullPointerException {
     JUtils.Log(TAG, "refreshCategory");
-    if (postBean.getCategorys() != null) {
-      ladyImage.setImageResource(0);
-      childImage.setImageResource(0);
-      List<PortalBean.CategorysBean> categorys = postBean.getCategorys();
-      ViewUtils.loadImageWithOkhttp(categorys.get(1).getCat_img(), MainActivity.this, ladyImage);
-      ViewUtils.loadImageWithOkhttp(categorys.get(0).getCat_img(), MainActivity.this, childImage);
+    List<PortalBean.CategorysBean> categorys = postBean.getCategorys();
+    for (int i = 0; i < categorys.size(); i++) {
+      ImageView imageView = new ImageView(this);
+      imageView.setAdjustViewBounds(true);
+      imageView.setScaleType(ImageView.ScaleType.CENTER);
+      imageView.setLayoutParams(new LinearLayout.LayoutParams(
+              LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT));
+      categoryLayout.addView(imageView);
+      final int finalI = categorys.size() - i - 1;
+      String app_link = categorys.get(finalI).getApp_link();
+      if (app_link !=null&&!"".equals(app_link)) {
+        imageView.setOnClickListener(v -> JumpUtils.push_jump_proc(
+                MainActivity.this, app_link));
+      }
+      ViewUtils.loadImageWithOkhttp(categorys.get(finalI).getCat_img(), MainActivity.this, imageView,categorys.size());
     }
   }
 
@@ -769,13 +699,10 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
           brandViews.get(i).setBrandTitle(brandPromotionEntities.get(i).getTitle());
           brandViews.get(i).setBrandListImage(brandPromotionEntities.get(i).getActImg());
           final int finalI1 = i;
-          brandViews.get(i).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-
-              if (!TextUtils.isEmpty(brandPromotionEntities.get(finalI1).getActApplink())) {
-                JumpUtils.push_jump_proc(mContext,
-                    brandPromotionEntities.get(finalI1).getActApplink());
-              }
+          brandViews.get(i).setOnClickListener(v -> {
+            if (!TextUtils.isEmpty(brandPromotionEntities.get(finalI1).getActApplink())) {
+              JumpUtils.push_jump_proc(mContext,
+                  brandPromotionEntities.get(finalI1).getActApplink());
             }
           });
         }
@@ -978,6 +905,11 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     @Override public int getCount() {
       return list == null ? 0 : list.size();
     }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+      return list.get(position).getTitle();
+    }
   }
 
   @Override public void onBackPressed() {
@@ -1086,38 +1018,34 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         e.printStackTrace();
       }
 
-      runOnUiThread(new Runnable() {
-        @Override public void run() {
-          VersionManager versionManager = new VersionManager() {
+      runOnUiThread(() -> {
+        VersionManager versionManager = new VersionManager() {
 
-            @Override public int getServerVersion() {
-              return versionCode;
-            }
+          @Override public int getServerVersion() {
+            return versionCode;
+          }
 
-            @Override public String getUpdateContent() {
-              return content;
-            }
+          @Override public String getUpdateContent() {
+            return content;
+          }
 
-            @Override public boolean showMsg() {
-              return false;
-            }
-          };
-          if (isAutoUpdate) {
-            versionManager.setPositiveListener(new View.OnClickListener() {
-              @Override public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, UpdateService.class);
-                intent.putExtra(UpdateService.EXTRAS_DOWNLOAD_URL, downloadUrl);
-                startService(intent);
-                versionManager.getDialog().dismiss();
-                JUtils.Toast("应用正在后台下载!");
-              }
-            });
-            SharedPreferences updatePreferences =
-                getSharedPreferences("update", Context.MODE_PRIVATE);
-            boolean update = updatePreferences.getBoolean("update", true);
-            if (update&&upadteFlag) {
-              versionManager.checkVersion(MainActivity.this);
-            }
+          @Override public boolean showMsg() {
+            return false;
+          }
+        };
+        if (isAutoUpdate) {
+          versionManager.setPositiveListener(v -> {
+            Intent intent = new Intent(MainActivity.this, UpdateService.class);
+            intent.putExtra(UpdateService.EXTRAS_DOWNLOAD_URL, downloadUrl);
+            startService(intent);
+            versionManager.getDialog().dismiss();
+            JUtils.Toast("应用正在后台下载!");
+          });
+          SharedPreferences updatePreferences =
+              getSharedPreferences("update", Context.MODE_PRIVATE);
+          boolean update = updatePreferences.getBoolean("update", true);
+          if (update&&upadteFlag) {
+            versionManager.checkVersion(MainActivity.this);
           }
         }
       });

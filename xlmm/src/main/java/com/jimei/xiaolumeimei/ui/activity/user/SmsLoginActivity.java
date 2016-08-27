@@ -36,7 +36,6 @@ import retrofit2.Response;
 import retrofit2.adapter.rxjava.HttpException;
 import rx.Subscriber;
 import rx.Subscription;
-import rx.functions.Action0;
 import rx.schedulers.Schedulers;
 
 /**
@@ -93,20 +92,18 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
 
         mobile = registerName.getText().toString().trim();
         if (checkMobileInput(mobile)) {
-          RxCountDown.countdown(60).doOnSubscribe(new Action0() {
-            @Override public void call() {
-              getCheckCode.setClickable(false);
-              getCheckCode.setBackgroundColor(Color.parseColor("#f3f3f4"));
+          RxCountDown.countdown(60).doOnSubscribe(() -> {
+            getCheckCode.setClickable(false);
+            getCheckCode.setBackgroundColor(Color.parseColor("#f3f3f4"));
 
-              subscribe = UserModel.getInstance()
-                  .getCodeBean(mobile, "sms_login")
-                  .subscribeOn(Schedulers.io())
-                  .subscribe(new ServiceResponse<CodeBean>() {
-                    @Override public void onNext(CodeBean codeBean) {
-                      JUtils.Toast(codeBean.getMsg());
-                    }
-                  });
-            }
+            subscribe = UserModel.getInstance()
+                .getCodeBean(mobile, "sms_login")
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ServiceResponse<CodeBean>() {
+                  @Override public void onNext(CodeBean codeBean) {
+                    JUtils.Toast(codeBean.getMsg());
+                  }
+                });
           }).unsafeSubscribe(new Subscriber<Integer>() {
             @Override public void onCompleted() {
               getCheckCode.setText("获取验证码");

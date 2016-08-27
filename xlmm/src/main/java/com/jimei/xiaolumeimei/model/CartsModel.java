@@ -59,10 +59,9 @@ public class CartsModel {
   }
 
   //获取购物车列表信息
-  public Observable<CartsPayinfoBean> getCartsPayInfoListV2(String cart_ids,
-      String device) {
+  public Observable<CartsPayinfoBean> getCartsPayInfoListV2(String cart_ids) {
     return XlmmRetrofitClient.getService()
-        .getCartsPayInfoListV2(cart_ids, device)
+        .getCartsPayInfoListV2(cart_ids, "app")
         .compose(new DefaultTransform<>());
   }
 
