@@ -61,7 +61,7 @@ import com.jimei.xiaolumeimei.ui.activity.user.WxLoginBindPhoneActivity;
 import com.jimei.xiaolumeimei.ui.fragment.v1.view.MastFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.FirstFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.GetCouponFragment;
-import com.jimei.xiaolumeimei.ui.fragment.v2.ProductListFragment;
+import com.jimei.xiaolumeimei.ui.fragment.v2.ProductListLazyFragment;
 import com.jimei.xiaolumeimei.ui.mminfo.MMInfoActivity;
 import com.jimei.xiaolumeimei.utils.DisplayUtils;
 import com.jimei.xiaolumeimei.utils.FileUtils;
@@ -71,6 +71,7 @@ import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.AutoToolbar;
 import com.jimei.xiaolumeimei.widget.BrandView;
+import com.jimei.xiaolumeimei.widget.TowImageView;
 import com.jimei.xiaolumeimei.widget.VersionManager;
 import com.jimei.xiaolumeimei.widget.badgelib.BadgeView;
 import com.jimei.xiaolumeimei.widget.banner.SliderLayout;
@@ -107,7 +108,8 @@ import retrofit2.Response;
 public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel>
     implements MainContract.View, View.OnClickListener, ViewPager.OnPageChangeListener,
     NavigationView.OnNavigationItemSelectedListener, ScrollableLayout.OnScrollListener,
-    SwipeRefreshLayout.OnRefreshListener {
+    SwipeRefreshLayout.OnRefreshListener, TowImageView.LadyImageListener,
+    TowImageView.ChildImageListener {
 
   private static final String POST_URL = "?imageMogr2/format/jpg/quality/80";
   public static String TAG = "MainActivity";
@@ -133,17 +135,19 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   @Bind(R.id.text_yesterday) TextView textYesterday;
   @Bind(R.id.text_today) TextView textToday;
   @Bind(R.id.text_tomorror) TextView textTomorror;
-  @Bind(R.id.child_img) ImageView childImage;
-  @Bind(R.id.lady_img) ImageView ladyImage;
+  //@Bind(R.id.child_img) ImageView childImage;
+  //@Bind(R.id.lady_img) ImageView ladyImage;
+  @Bind(R.id.tow_image) TowImageView towImageview;
   @Bind(R.id.nav_view) NavigationView navigationView;
   @Bind(R.id.slider) SliderLayout mSliderLayout;
   @Bind(R.id.viewPager) ViewPager vp;
   @Bind(R.id.rv_top) RelativeLayout rvTop;
+  @Bind(R.id.show_content) RelativeLayout showContent;
   List<PortalBean.PostersBean> posters = new ArrayList<>();
   SharedPreferences sharedPreferencesTime;
   private SharedPreferences sharedPreferencesMask;
   private int mask;
-  private List<ProductListFragment> list = new ArrayList<>();
+  private List<ProductListLazyFragment> list = new ArrayList<>();
   private int num;
   private BadgeView badge;
   private TextView msg1;
@@ -165,6 +169,10 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     filter.addAction(UpdateBroadReceiver.ACTION_RETRY_DOWNLOAD);
     mUpdateBroadReceiver = new UpdateBroadReceiver();
     registerReceiver(mUpdateBroadReceiver, filter);
+  }
+
+  @Override protected View getLoadingView() {
+    return showContent;
   }
 
   @Override protected void initData() {
@@ -193,8 +201,10 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     textYesterday.setOnClickListener(this);
     textTomorror.setOnClickListener(this);
     textToday.setOnClickListener(this);
-    childImage.setOnClickListener(this);
-    ladyImage.setOnClickListener(this);
+    //childImage.setOnClickListener(this);
+    //ladyImage.setOnClickListener(this);
+    towImageview.setLadyImageListener(this);
+    towImageview.setChildImageListener(this);
     vp.addOnPageChangeListener(this);
     navigationView.setNavigationItemSelectedListener(this);
     llayout.findViewById(R.id.ll_money).setOnClickListener(this);
@@ -203,6 +213,29 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     llayout.findViewById(R.id.imgUser).setOnClickListener(this);
     scrollableLayout.setOnScrollListener(this);
     swipeRefreshLayout.setOnRefreshListener(this);
+  }
+
+  @Override protected void getDataCallBack() {
+
+    mPresenter.getTopic();
+    mPresenter.getUserInfoBean();
+    mPresenter.getAddressVersionAndUrl();
+    mPresenter.getCategoryDown();
+    mPresenter.getVersion();
+    initMainView(null);
+    //list.clear();
+    //list.add(ProductListLazyFragment.newInstance(XlmmConst.TYPE_YESTERDAY, "昨天"));
+    //list.add(ProductListLazyFragment.newInstance(XlmmConst.TYPE_TODAY, "今天"));
+    //list.add(ProductListLazyFragment.newInstance(XlmmConst.TYPE_TOMORROW, "明天"));
+    //MyFragmentAdapter adapter = new MyFragmentAdapter(getSupportFragmentManager(),list);
+    //vp.setAdapter(adapter);
+    //vp.setOffscreenPageLimit(2);
+    vp.setCurrentItem(1);
+    //setToday();
+    scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(1));
+    if (LoginUtils.checkLoginState(getApplicationContext())) {
+      mPresenter.isCouPon();
+    }
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -269,18 +302,18 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
       case R.id.child_img:
         MobclickAgent.onEvent(MainActivity.this, "ChildID");
         Bundle childBundle = new Bundle();
-        childBundle.putInt("type",XlmmConst.TYPE_CHILD);
-        childBundle.putString("title","萌娃专区");
-//        readyGo(LadyZoneActivity.class,childBundle);
-        readyGo(ProductListActivity.class,childBundle);
+        childBundle.putInt("type", XlmmConst.TYPE_CHILD);
+        childBundle.putString("title", "萌娃专区");
+        //        readyGo(LadyZoneActivity.class,childBundle);
+        readyGo(ProductListActivity.class, childBundle);
         break;
       case R.id.lady_img:
         MobclickAgent.onEvent(MainActivity.this, "LadyID");
         Bundle ladyBundle = new Bundle();
-        ladyBundle.putInt("type",XlmmConst.TYPE_LADY);
-        ladyBundle.putString("title","时尚女装");
-//        readyGo(LadyZoneActivity.class,ladyBundle);
-        readyGo(ProductListActivity.class,ladyBundle);
+        ladyBundle.putInt("type", XlmmConst.TYPE_LADY);
+        ladyBundle.putString("title", "时尚女装");
+        //        readyGo(LadyZoneActivity.class,ladyBundle);
+        readyGo(ProductListActivity.class, ladyBundle);
         break;
       case R.id.text_yesterday:
         MobclickAgent.onEvent(this, "YesterdayID");
@@ -400,7 +433,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   }
 
   @Override public void onScroll(int transY, int maxY) {
-    JUtils.Log(TAG, "onScroll");
     transY = -transY;
     if (rvTopHeight == (DisplayUtils.getScreenH(this) * 2 - 16)) {
       rvTopHeight = carts.getTop();
@@ -412,13 +444,13 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
           scrollableLayout.scrollTo(0, 0);
           switch (vp.getCurrentItem()) {
             case 0:
-              ((ProductListFragment) list.get(0)).goToTop();
+              list.get(0).goToTop();
               break;
             case 1:
-              ((ProductListFragment) list.get(1)).goToTop();
+              list.get(1).goToTop();
               break;
             case 2:
-              ((ProductListFragment) list.get(2)).goToTop();
+              list.get(2).goToTop();
               break;
           }
         }
@@ -514,10 +546,10 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     sharedPreferencesMask = getSharedPreferences("maskActivity", 0);
     sharedPreferencesTime = getSharedPreferences("resumeTime", 0);
     mask = sharedPreferencesMask.getInt("mask", 0);
-    MyFragmentAdapter adapter = new MyFragmentAdapter(getSupportFragmentManager());
-    list.add(ProductListFragment.newInstance(XlmmConst.TYPE_YESTERDAY,"昨天"));
-    list.add(ProductListFragment.newInstance(XlmmConst.TYPE_TODAY,"今天"));
-    list.add(ProductListFragment.newInstance(XlmmConst.TYPE_TOMORROW,"明天"));
+    list.add(ProductListLazyFragment.newInstance(XlmmConst.TYPE_YESTERDAY, "昨天"));
+    list.add(ProductListLazyFragment.newInstance(XlmmConst.TYPE_TODAY, "今天"));
+    list.add(ProductListLazyFragment.newInstance(XlmmConst.TYPE_TOMORROW, "明天"));
+    MyFragmentAdapter adapter = new MyFragmentAdapter(getSupportFragmentManager(),list);
     vp.setAdapter(adapter);
     vp.setOffscreenPageLimit(2);
     vp.setCurrentItem(1);
@@ -718,12 +750,12 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
               } else {
                 if (jump_info.getType() == XlmmConst.JUMP_PRODUCT_CHILDLIST) {
                   Bundle childBundle = new Bundle();
-                  childBundle.putInt("type",XlmmConst.TYPE_CHILD);
-                  readyGo(ProductListActivity.class,childBundle);
+                  childBundle.putInt("type", XlmmConst.TYPE_CHILD);
+                  readyGo(ProductListActivity.class, childBundle);
                 } else if (jump_info.getType() == XlmmConst.JUMP_PRODUCT_LADYLIST) {
                   Bundle ladyBundle = new Bundle();
-                  ladyBundle.putInt("type",XlmmConst.TYPE_LADY);
-                  readyGo(ProductListActivity.class,ladyBundle);
+                  ladyBundle.putInt("type", XlmmConst.TYPE_LADY);
+                  readyGo(ProductListActivity.class, ladyBundle);
                 } else {
                   JumpUtils.push_jump_proc(MainActivity.this, extra);
                 }
@@ -738,11 +770,16 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   @Override public void initCategory(PortalBean postBean) throws NullPointerException {
     JUtils.Log(TAG, "refreshCategory");
     if (postBean.getCategorys() != null) {
-      ladyImage.setImageResource(0);
-      childImage.setImageResource(0);
+      //ladyImage.setImageResource(0);
+      //childImage.setImageResource(0);
       List<PortalBean.CategorysBean> categorys = postBean.getCategorys();
-      ViewUtils.loadImageWithOkhttp(categorys.get(1).getCat_img(), MainActivity.this, ladyImage);
-      ViewUtils.loadImageWithOkhttp(categorys.get(0).getCat_img(), MainActivity.this, childImage);
+      List<String> urls = new ArrayList<>();
+      urls.add(categorys.get(1).getCat_img());
+      urls.add(categorys.get(0).getCat_img());
+      //ViewUtils.loadImageWithOkhttp(categorys.get(1).getCat_img(), MainActivity.this, ladyImage);
+      //ViewUtils.loadImageWithOkhttp(categorys.get(0).getCat_img(), MainActivity.this, childImage);
+      towImageview.setImageBitmaps(urls);
+
     }
   }
 
@@ -818,6 +855,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
                   int screenWidth = DisplayUtils.getScreenW(MainActivity.this);
                   LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(screenWidth,
                       LinearLayout.LayoutParams.WRAP_CONTENT);
+                  lp.setMargins(0, 2, 0, 2);
                   imageViewList.get(finalI).setLayoutParams(lp);
                   imageViewList.get(finalI).setMaxWidth(screenWidth);
                   imageViewList.get(finalI).setMaxHeight(screenWidth * 5);
@@ -959,24 +997,45 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
               JUtils.Log(TAG, response.getAbsolutePath());
               FileUtils.saveCategoryFile(getApplicationContext(), sha1);
               FileUtils.saveCategoryImg(Environment.getExternalStorageDirectory().getAbsolutePath()
-                      + "/xlmmcategory/" + "category.json");
+                  + "/xlmmcategory/"
+                  + "category.json");
             }
           });
     }
   }
 
+  @Override public void onLadyClick() {
+    MobclickAgent.onEvent(MainActivity.this, "LadyID");
+    Bundle ladyBundle = new Bundle();
+    ladyBundle.putInt("type", XlmmConst.TYPE_LADY);
+    ladyBundle.putString("title", "时尚女装");
+    //        readyGo(LadyZoneActivity.class,ladyBundle);
+    readyGo(ProductListActivity.class, ladyBundle);
+  }
+
+  @Override public void onChildClick() {
+    MobclickAgent.onEvent(MainActivity.this, "ChildID");
+    Bundle childBundle = new Bundle();
+    childBundle.putInt("type", XlmmConst.TYPE_CHILD);
+    childBundle.putString("title", "萌娃专区");
+    readyGo(ProductListActivity.class, childBundle);
+  }
+
   private class MyFragmentAdapter extends FragmentPagerAdapter {
 
-    public MyFragmentAdapter(FragmentManager fm) {
+    List<ProductListLazyFragment> lists;
+
+    public MyFragmentAdapter(FragmentManager fm, List<ProductListLazyFragment> lists) {
       super(fm);
+      this.lists = lists;
     }
 
     @Override public Fragment getItem(int position) {
-      return getCount() > position ? list.get(position) : null;
+      return getCount() > position ? lists.get(position) : null;
     }
 
     @Override public int getCount() {
-      return list == null ? 0 : list.size();
+      return lists == null ? 0 : lists.size();
     }
   }
 
@@ -1115,7 +1174,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
             SharedPreferences updatePreferences =
                 getSharedPreferences("update", Context.MODE_PRIVATE);
             boolean update = updatePreferences.getBoolean("update", true);
-            if (update&&upadteFlag) {
+            if (update && upadteFlag) {
               versionManager.checkVersion(MainActivity.this);
             }
           }
@@ -1124,12 +1183,11 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     }).start();
   }
 
-  @Override
-  public void setTopic(UserTopic userTopic) {
+  @Override public void setTopic(UserTopic userTopic) {
     List<String> topics = userTopic.getTopics();
-    if (topics!=null) {
+    if (topics != null) {
       for (int i = 0; i < topics.size(); i++) {
-        MiPushClient.subscribe(this,topics.get(i),null);
+        MiPushClient.subscribe(this, topics.get(i), null);
       }
     }
   }

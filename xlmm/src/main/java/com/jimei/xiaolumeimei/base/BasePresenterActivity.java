@@ -15,6 +15,7 @@ import android.view.WindowManager;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.loading.VaryViewHelperController;
 import com.jimei.xiaolumeimei.utils.CommonUtils;
 import com.jimei.xiaolumeimei.utils.TUtil;
 import com.jimei.xiaolumeimei.widget.loadingdialog.XlmmLoadingDialog;
@@ -27,7 +28,7 @@ import rx.subscriptions.CompositeSubscription;
  * Created by itxuye on 2016/6/24.
  */
 public abstract class BasePresenterActivity<T extends BasePresenter, E extends BaseModel>
-    extends BaseAutoLayoutActivity {
+    extends BaseAutoLayoutActivity implements BaseView {
 
   /**
    * Log tag
@@ -51,6 +52,7 @@ public abstract class BasePresenterActivity<T extends BasePresenter, E extends B
   public E mModel;
   private CompositeSubscription mCompositeSubscription;
   private XlmmLoadingDialog loadingdialog;
+  VaryViewHelperController mVaryViewHelperController;
 
   public CompositeSubscription getCompositeSubscription() {
     if (this.mCompositeSubscription == null) {
@@ -108,13 +110,14 @@ public abstract class BasePresenterActivity<T extends BasePresenter, E extends B
     mScreenDensity = displayMetrics.density;
     mScreenHeight = displayMetrics.heightPixels;
     mScreenWidth = displayMetrics.widthPixels;
-
     if (getContentViewLayoutID() != 0) {
       setContentView(getContentViewLayoutID());
     } else {
       throw new IllegalArgumentException("You must return a right contentView layout resource Id");
     }
-
+    if (mVaryViewHelperController == null) {
+      mVaryViewHelperController = new VaryViewHelperController(getLoadingView());
+    }
     mPresenter = TUtil.getT(this, 0);
     mModel = TUtil.getT(this, 1);
     this.initViews();
@@ -122,6 +125,8 @@ public abstract class BasePresenterActivity<T extends BasePresenter, E extends B
     this.initData();
     setListener();
   }
+
+  protected abstract View getLoadingView();
 
   protected abstract void initData();
 
@@ -165,6 +170,36 @@ public abstract class BasePresenterActivity<T extends BasePresenter, E extends B
           break;
       }
     }
+  }
+
+  @Override public void showLoading() {
+    if (mVaryViewHelperController == null) {
+      throw new IllegalStateException("no ViewHelperController");
+    }
+    mVaryViewHelperController.showLoading();
+  }
+
+  @Override public void showNetworkError() {
+    if (mVaryViewHelperController == null) {
+      throw new IllegalStateException("no ViewHelperController");
+    }
+    mVaryViewHelperController.showNetworkError(view -> getDataCallBack());
+  }
+
+  @Override public void refreshView() {
+    if (mVaryViewHelperController == null) {
+      throw new IllegalStateException("no ViewHelperController");
+    }
+    mVaryViewHelperController.restore();
+  }
+
+  protected abstract void getDataCallBack();
+
+  @Override public void showEmpty(String msg) {
+    if (mVaryViewHelperController == null) {
+      throw new IllegalStateException("no ViewHelperController");
+    }
+    mVaryViewHelperController.showEmpty(msg);
   }
 
   @Override protected void onDestroy() {

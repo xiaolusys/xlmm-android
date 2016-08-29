@@ -630,4 +630,20 @@ public class MMInfoActivity
     super.onDestroy();
     EventBus.getDefault().unregister(this);
   }
+
+  @Override public void showNetworkError() {
+
+  }
+
+  @Override public void showEmpty(String msg) {
+
+  }
+
+  @Override public void showLoading() {
+
+  }
+
+  @Override public void refreshView() {
+
+  }
 }
