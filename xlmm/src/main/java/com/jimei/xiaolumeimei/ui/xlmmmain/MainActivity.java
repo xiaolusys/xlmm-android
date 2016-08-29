@@ -61,7 +61,7 @@ import com.jimei.xiaolumeimei.ui.activity.user.WxLoginBindPhoneActivity;
 import com.jimei.xiaolumeimei.ui.fragment.v1.view.MastFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.FirstFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.GetCouponFragment;
-import com.jimei.xiaolumeimei.ui.fragment.v2.ProductListFragment;
+import com.jimei.xiaolumeimei.ui.fragment.v2.ProductListLazyFragment;
 import com.jimei.xiaolumeimei.ui.mminfo.MMInfoActivity;
 import com.jimei.xiaolumeimei.utils.DisplayUtils;
 import com.jimei.xiaolumeimei.utils.FileUtils;
@@ -139,11 +139,12 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   @Bind(R.id.slider) SliderLayout mSliderLayout;
   @Bind(R.id.viewPager) ViewPager vp;
   @Bind(R.id.rv_top) RelativeLayout rvTop;
+  @Bind(R.id.show_content) RelativeLayout showContent;
   List<PortalBean.PostersBean> posters = new ArrayList<>();
   SharedPreferences sharedPreferencesTime;
   private SharedPreferences sharedPreferencesMask;
   private int mask;
-  private List<ProductListFragment> list = new ArrayList<>();
+  private List<ProductListLazyFragment> list = new ArrayList<>();
   private int num;
   private BadgeView badge;
   private TextView msg1;
@@ -165,6 +166,10 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     filter.addAction(UpdateBroadReceiver.ACTION_RETRY_DOWNLOAD);
     mUpdateBroadReceiver = new UpdateBroadReceiver();
     registerReceiver(mUpdateBroadReceiver, filter);
+  }
+
+  @Override protected View getLoadingView() {
+    return showContent;
   }
 
   @Override protected void initData() {
@@ -203,6 +208,29 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     llayout.findViewById(R.id.imgUser).setOnClickListener(this);
     scrollableLayout.setOnScrollListener(this);
     swipeRefreshLayout.setOnRefreshListener(this);
+  }
+
+  @Override protected void getDataCallBack() {
+
+    mPresenter.getTopic();
+    mPresenter.getUserInfoBean();
+    mPresenter.getAddressVersionAndUrl();
+    mPresenter.getCategoryDown();
+    mPresenter.getVersion();
+    initMainView(null);
+    //list.clear();
+    //list.add(ProductListLazyFragment.newInstance(XlmmConst.TYPE_YESTERDAY, "昨天"));
+    //list.add(ProductListLazyFragment.newInstance(XlmmConst.TYPE_TODAY, "今天"));
+    //list.add(ProductListLazyFragment.newInstance(XlmmConst.TYPE_TOMORROW, "明天"));
+    //MyFragmentAdapter adapter = new MyFragmentAdapter(getSupportFragmentManager(),list);
+    //vp.setAdapter(adapter);
+    //vp.setOffscreenPageLimit(2);
+    vp.setCurrentItem(1);
+    //setToday();
+    scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(1));
+    if (LoginUtils.checkLoginState(getApplicationContext())) {
+      mPresenter.isCouPon();
+    }
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -400,7 +428,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   }
 
   @Override public void onScroll(int transY, int maxY) {
-    JUtils.Log(TAG, "onScroll");
     transY = -transY;
     if (rvTopHeight == (DisplayUtils.getScreenH(this) * 2 - 16)) {
       rvTopHeight = carts.getTop();
@@ -412,13 +439,13 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
           scrollableLayout.scrollTo(0, 0);
           switch (vp.getCurrentItem()) {
             case 0:
-              ((ProductListFragment) list.get(0)).goToTop();
+              list.get(0).goToTop();
               break;
             case 1:
-              ((ProductListFragment) list.get(1)).goToTop();
+              list.get(1).goToTop();
               break;
             case 2:
-              ((ProductListFragment) list.get(2)).goToTop();
+              list.get(2).goToTop();
               break;
           }
         }
@@ -514,10 +541,10 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     sharedPreferencesMask = getSharedPreferences("maskActivity", 0);
     sharedPreferencesTime = getSharedPreferences("resumeTime", 0);
     mask = sharedPreferencesMask.getInt("mask", 0);
-    MyFragmentAdapter adapter = new MyFragmentAdapter(getSupportFragmentManager());
-    list.add(ProductListFragment.newInstance(XlmmConst.TYPE_YESTERDAY,"昨天"));
-    list.add(ProductListFragment.newInstance(XlmmConst.TYPE_TODAY,"今天"));
-    list.add(ProductListFragment.newInstance(XlmmConst.TYPE_TOMORROW,"明天"));
+    list.add(ProductListLazyFragment.newInstance(XlmmConst.TYPE_YESTERDAY, "昨天"));
+    list.add(ProductListLazyFragment.newInstance(XlmmConst.TYPE_TODAY, "今天"));
+    list.add(ProductListLazyFragment.newInstance(XlmmConst.TYPE_TOMORROW, "明天"));
+    MyFragmentAdapter adapter = new MyFragmentAdapter(getSupportFragmentManager(),list);
     vp.setAdapter(adapter);
     vp.setOffscreenPageLimit(2);
     vp.setCurrentItem(1);
@@ -960,7 +987,8 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
               JUtils.Log(TAG, response.getAbsolutePath());
               FileUtils.saveCategoryFile(getApplicationContext(), sha1);
               FileUtils.saveCategoryImg(Environment.getExternalStorageDirectory().getAbsolutePath()
-                      + "/xlmmcategory/" + "category.json");
+                  + "/xlmmcategory/"
+                  + "category.json");
             }
           });
     }
@@ -968,16 +996,19 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
 
   private class MyFragmentAdapter extends FragmentPagerAdapter {
 
-    public MyFragmentAdapter(FragmentManager fm) {
+    List<ProductListLazyFragment> lists;
+
+    public MyFragmentAdapter(FragmentManager fm, List<ProductListLazyFragment> lists) {
       super(fm);
+      this.lists = lists;
     }
 
     @Override public Fragment getItem(int position) {
-      return getCount() > position ? list.get(position) : null;
+      return getCount() > position ? lists.get(position) : null;
     }
 
     @Override public int getCount() {
-      return list == null ? 0 : list.size();
+      return lists == null ? 0 : lists.size();
     }
   }
 
@@ -1116,7 +1147,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
             SharedPreferences updatePreferences =
                 getSharedPreferences("update", Context.MODE_PRIVATE);
             boolean update = updatePreferences.getBoolean("update", true);
-            if (update&&upadteFlag) {
+            if (update && upadteFlag) {
               versionManager.checkVersion(MainActivity.this);
             }
           }
@@ -1125,12 +1156,11 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     }).start();
   }
 
-  @Override
-  public void setTopic(UserTopic userTopic) {
+  @Override public void setTopic(UserTopic userTopic) {
     List<String> topics = userTopic.getTopics();
-    if (topics!=null) {
+    if (topics != null) {
       for (int i = 0; i < topics.size(); i++) {
-        MiPushClient.subscribe(this,topics.get(i),null);
+        MiPushClient.subscribe(this, topics.get(i), null);
       }
     }
   }

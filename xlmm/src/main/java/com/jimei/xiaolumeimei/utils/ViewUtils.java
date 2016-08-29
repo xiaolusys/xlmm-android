@@ -415,7 +415,7 @@ public final class ViewUtils {
             head_img = "http://" + group+"/"
                     + URLEncoder.encode(temp[1], "utf-8")
                     + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
-            Glide.with(context).load(head_img).diskCacheStrategy(DiskCacheStrategy.ALL)
+            Glide.with(context).load(head_img).thumbnail(0.1f).diskCacheStrategy(DiskCacheStrategy.ALL)
                     .centerCrop().placeholder(R.drawable.parceholder).into(img);
           } catch (UnsupportedEncodingException e) {
             e.printStackTrace();

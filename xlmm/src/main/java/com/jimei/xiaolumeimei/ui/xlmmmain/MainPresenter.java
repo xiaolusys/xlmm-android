@@ -27,7 +27,7 @@ public class MainPresenter extends MainContract.Presenter {
     @Override
     public void getUserInfoBean() {
         mRxManager.add(mModel.getProfile()
-                .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
+                //.retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
                 .subscribe(new ServiceResponse<Response<UserInfoBean>>() {
                     @Override
                     public void onNext(Response<UserInfoBean> userInfoBeanResponse) {
@@ -112,12 +112,13 @@ public class MainPresenter extends MainContract.Presenter {
     @Override
     public void getPortalBean(SwipeRefreshLayout swipeRefreshLayout) {
         mRxManager.add(mModel.getPortalBean()
-                .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
                 .subscribe(new ServiceResponse<PortalBean>() {
                     @Override
                     public void onNext(PortalBean portalBean) {
                         if (null != portalBean) {
                             JUtils.Log("MainPresenter", portalBean.toString());
+                            mView.refreshView();
+
                             mView.initSliderLayout(portalBean);
 
                             mView.initCategory(portalBean);
@@ -140,7 +141,7 @@ public class MainPresenter extends MainContract.Presenter {
                         if (swipeRefreshLayout != null) {
                             swipeRefreshLayout.setRefreshing(false);
                         }
-
+                        mView.showNetworkError();
                         JUtils.Log("MainPresenter", "    " + e.getClass().getName());
                         JUtils.ToastLong("数据加载有误,检查网络设置，尝试下拉刷新");
                     }
