@@ -71,6 +71,7 @@ import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.AutoToolbar;
 import com.jimei.xiaolumeimei.widget.BrandView;
+import com.jimei.xiaolumeimei.widget.TowImageView;
 import com.jimei.xiaolumeimei.widget.VersionManager;
 import com.jimei.xiaolumeimei.widget.badgelib.BadgeView;
 import com.jimei.xiaolumeimei.widget.banner.SliderLayout;
@@ -107,7 +108,8 @@ import retrofit2.Response;
 public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel>
     implements MainContract.View, View.OnClickListener, ViewPager.OnPageChangeListener,
     NavigationView.OnNavigationItemSelectedListener, ScrollableLayout.OnScrollListener,
-    SwipeRefreshLayout.OnRefreshListener {
+    SwipeRefreshLayout.OnRefreshListener, TowImageView.LadyImageListener,
+    TowImageView.ChildImageListener {
 
   private static final String POST_URL = "?imageMogr2/format/jpg/quality/80";
   public static String TAG = "MainActivity";
@@ -133,8 +135,9 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   @Bind(R.id.text_yesterday) TextView textYesterday;
   @Bind(R.id.text_today) TextView textToday;
   @Bind(R.id.text_tomorror) TextView textTomorror;
-  @Bind(R.id.child_img) ImageView childImage;
-  @Bind(R.id.lady_img) ImageView ladyImage;
+  //@Bind(R.id.child_img) ImageView childImage;
+  //@Bind(R.id.lady_img) ImageView ladyImage;
+  @Bind(R.id.tow_image) TowImageView towImageview;
   @Bind(R.id.nav_view) NavigationView navigationView;
   @Bind(R.id.slider) SliderLayout mSliderLayout;
   @Bind(R.id.viewPager) ViewPager vp;
@@ -198,8 +201,10 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     textYesterday.setOnClickListener(this);
     textTomorror.setOnClickListener(this);
     textToday.setOnClickListener(this);
-    childImage.setOnClickListener(this);
-    ladyImage.setOnClickListener(this);
+    //childImage.setOnClickListener(this);
+    //ladyImage.setOnClickListener(this);
+    towImageview.setLadyImageListener(this);
+    towImageview.setChildImageListener(this);
     vp.addOnPageChangeListener(this);
     navigationView.setNavigationItemSelectedListener(this);
     llayout.findViewById(R.id.ll_money).setOnClickListener(this);
@@ -765,11 +770,16 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   @Override public void initCategory(PortalBean postBean) throws NullPointerException {
     JUtils.Log(TAG, "refreshCategory");
     if (postBean.getCategorys() != null) {
-      ladyImage.setImageResource(0);
-      childImage.setImageResource(0);
+      //ladyImage.setImageResource(0);
+      //childImage.setImageResource(0);
       List<PortalBean.CategorysBean> categorys = postBean.getCategorys();
-      ViewUtils.loadImageWithOkhttp(categorys.get(1).getCat_img(), MainActivity.this, ladyImage);
-      ViewUtils.loadImageWithOkhttp(categorys.get(0).getCat_img(), MainActivity.this, childImage);
+      List<String> urls = new ArrayList<>();
+      urls.add(categorys.get(1).getCat_img());
+      urls.add(categorys.get(0).getCat_img());
+      //ViewUtils.loadImageWithOkhttp(categorys.get(1).getCat_img(), MainActivity.this, ladyImage);
+      //ViewUtils.loadImageWithOkhttp(categorys.get(0).getCat_img(), MainActivity.this, childImage);
+      towImageview.setImageBitmaps(urls);
+
     }
   }
 
@@ -992,6 +1002,23 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
             }
           });
     }
+  }
+
+  @Override public void onLadyClick() {
+    MobclickAgent.onEvent(MainActivity.this, "LadyID");
+    Bundle ladyBundle = new Bundle();
+    ladyBundle.putInt("type", XlmmConst.TYPE_LADY);
+    ladyBundle.putString("title", "时尚女装");
+    //        readyGo(LadyZoneActivity.class,ladyBundle);
+    readyGo(ProductListActivity.class, ladyBundle);
+  }
+
+  @Override public void onChildClick() {
+    MobclickAgent.onEvent(MainActivity.this, "ChildID");
+    Bundle childBundle = new Bundle();
+    childBundle.putInt("type", XlmmConst.TYPE_CHILD);
+    childBundle.putString("title", "萌娃专区");
+    readyGo(ProductListActivity.class, childBundle);
   }
 
   private class MyFragmentAdapter extends FragmentPagerAdapter {
