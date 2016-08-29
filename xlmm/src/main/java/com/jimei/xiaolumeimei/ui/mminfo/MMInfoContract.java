@@ -10,6 +10,7 @@ import com.jimei.xiaolumeimei.entities.MaMaRenwuListBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.MamaSelfListBean;
 import com.jimei.xiaolumeimei.entities.MamaUrl;
+import com.jimei.xiaolumeimei.entities.MiPushOrderCarryBean;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 
@@ -38,6 +39,8 @@ public interface MMInfoContract {
     Observable<Response<MamaSelfListBean>> getMaMaselfList();
 
     Observable<UserInfoBean>  getUserInfo();
+
+    Observable<List<MiPushOrderCarryBean>> getLatestOrderCarry();
   }
 
   interface View extends BaseView {
@@ -62,6 +65,8 @@ public interface MMInfoContract {
     void getMaMaRenwuListBean(MamaSelfListBean mamaSelfListBean);
 
     void setUdesk(UserInfoBean userInfoBean);
+
+    void setOrderCarry(List<MiPushOrderCarryBean> list);
   }
 
   abstract class Presenter extends BasePresenter<Model, View> {
@@ -87,6 +92,8 @@ public interface MMInfoContract {
     public abstract void getMaMaselfList();
 
     public abstract void getUserInfo();
+
+    public abstract void getOrderCarry();
 
     @Override public void onStart() {
     }

@@ -258,4 +258,14 @@ public class MMInfoPresenter extends MMInfoContract.Presenter {
       mView.setUdesk(userInfoBean);
     }, Throwable::printStackTrace));
   }
+
+  @Override
+  public void getOrderCarry() {
+    mRxManager.add(
+            mModel.getLatestOrderCarry()
+            .retryWhen(new RxUtils.RetryWhenNoInternet(100,2000))
+            .subscribe(list ->{
+              mView.setOrderCarry(list);
+            },Throwable::printStackTrace));
+  }
 }

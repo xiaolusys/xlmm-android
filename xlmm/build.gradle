@@ -71,8 +71,8 @@ android {
 
         targetSdkVersion 23
 
-        versionCode 20160823
-        versionName "1.2.5"
+        versionCode 20160829
+        versionName "1.2.6"
 
         multiDexEnabled = true
 
@@ -138,6 +138,7 @@ android {
         release {
             minifyEnabled false
             debuggable false
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
             println("====== buildTypes.release ======")

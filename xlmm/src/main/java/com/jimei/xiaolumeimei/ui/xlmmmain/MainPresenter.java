@@ -140,6 +140,7 @@ public class MainPresenter extends MainContract.Presenter {
                         if (swipeRefreshLayout != null) {
                             swipeRefreshLayout.setRefreshing(false);
                         }
+                        JUtils.Log(e.getMessage());
 
                         JUtils.Log("MainPresenter", "    " + e.getClass().getName());
                         JUtils.ToastLong("数据加载有误,检查网络设置，尝试下拉刷新");

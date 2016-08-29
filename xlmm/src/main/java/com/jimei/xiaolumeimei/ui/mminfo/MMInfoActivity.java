@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -30,6 +31,7 @@ import com.jimei.xiaolumeimei.entities.MaMaRenwuListBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.MamaSelfListBean;
 import com.jimei.xiaolumeimei.entities.MamaUrl;
+import com.jimei.xiaolumeimei.entities.MiPushOrderCarryBean;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.event.MaMaInfoEmptyEvent;
@@ -74,6 +76,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import cn.udesk.UdeskConst;
 import cn.udesk.UdeskSDKManager;
@@ -106,6 +109,7 @@ public class MMInfoActivity
   private String mamaid;
   private String act_info;
   public static XiaoMiMessageReceiver.XiaoMiPushHandler handler = null;
+  private boolean alive;
 
   public static XiaoMiMessageReceiver.XiaoMiPushHandler getHandler() {
     return handler;
@@ -122,6 +126,7 @@ public class MMInfoActivity
     mPresenter.getMaMaselfList();
     mPresenter.getMaMaRenwuListBean(mamaid);
     mPresenter.getUserInfo();
+    mPresenter.getOrderCarry();
   }
 
   @Override protected void setListener() {
@@ -368,6 +373,33 @@ public class MMInfoActivity
     info.put(UdeskConst.UdeskUserInfo.CELLPHONE, userInfoBean.getMobile());
     UdeskSDKManager.getInstance().setUserInfo(this, id, info);
     UdeskMessageManager.getInstance().event_OnNewMsgNotice.bind(this, "OnNewMsgNotice");
+  }
+
+  @Override
+  public void setOrderCarry(List<MiPushOrderCarryBean> list) {
+    alive = true;
+    new Thread(() -> {
+      for (int i = 0; i < list.size()&&alive; i++) {
+        int nextInt = new Random().nextInt(5000)+6000;
+        SystemClock.sleep(nextInt);
+        final int finalI = list.size() - 1 - i;
+        runOnUiThread(()->{
+          if (alive){
+            b.miInfo.setText(list.get(finalI).getContent());
+            ViewUtils.loadImgToImgViewWithTransformCircle(MMInfoActivity.this, b.miHead, list.get(finalI).getAvatar());
+            b.miLayout.setVisibility(View.VISIBLE);
+          }
+        });
+        new Thread(() -> {
+          SystemClock.sleep(3000);
+          runOnUiThread(() -> {
+            if (alive) {
+              b.miLayout.setVisibility(View.GONE);
+            }
+          });
+        }).start();
+      }
+    }).start();
   }
 
   @Override public void onClick(View v) {
@@ -627,6 +659,7 @@ public class MMInfoActivity
 
   @Override protected void onDestroy() {
     super.onDestroy();
+    alive = false;
     EventBus.getDefault().unregister(this);
   }
 }

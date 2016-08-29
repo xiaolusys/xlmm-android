@@ -25,6 +25,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -221,7 +222,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   }
 
   @Override public void onClick(View v) {
-//    int currentNum = 0;
     drawer.closeDrawers();
     String flag = "main";
     Intent intent = new Intent(MainActivity.this, MainActivity.class);
@@ -256,22 +256,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
       case R.id.imgUser:
         intent = new Intent(MainActivity.this, InformationActivity.class);
         break;
-//      case R.id.child_img:
-//        MobclickAgent.onEvent(MainActivity.this, "ChildID");
-//        Bundle childBundle = new Bundle();
-//        childBundle.putInt("type",XlmmConst.TYPE_CHILD);
-//        childBundle.putString("title","萌娃专区");
-////        readyGo(LadyZoneActivity.class,childBundle);
-//        readyGo(ProductListActivity.class,childBundle);
-//        break;
-//      case R.id.lady_img:
-//        MobclickAgent.onEvent(MainActivity.this, "LadyID");
-//        Bundle ladyBundle = new Bundle();
-//        ladyBundle.putInt("type",XlmmConst.TYPE_LADY);
-//        ladyBundle.putString("title","时尚女装");
-////        readyGo(LadyZoneActivity.class,ladyBundle);
-//        readyGo(ProductListActivity.class,ladyBundle);
-//        break;
     }
       if (!(LoginUtils.checkLoginState(getApplicationContext()))) {
         login(flag);
@@ -658,21 +642,33 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
 
   @Override public void initCategory(PortalBean postBean) throws NullPointerException {
     JUtils.Log(TAG, "refreshCategory");
+    categoryLayout.removeAllViews();
     List<PortalBean.CategorysBean> categorys = postBean.getCategorys();
+    List<LinearLayout> layoutList = new ArrayList<>();
+    int count = 4;
     for (int i = 0; i < categorys.size(); i++) {
+      if (i%count==0) {
+        LinearLayout layout = new LinearLayout(this);
+        layout.setLayoutParams(new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        layout.setOrientation(LinearLayout.HORIZONTAL);
+        layoutList.add(layout);
+        categoryLayout.addView(layout);
+      }
       ImageView imageView = new ImageView(this);
       imageView.setAdjustViewBounds(true);
       imageView.setScaleType(ImageView.ScaleType.CENTER);
       imageView.setLayoutParams(new LinearLayout.LayoutParams(
               LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT));
-      categoryLayout.addView(imageView);
-      final int finalI = categorys.size() - i - 1;
-      String app_link = categorys.get(finalI).getApp_link();
-      if (app_link !=null&&!"".equals(app_link)) {
-        imageView.setOnClickListener(v -> JumpUtils.push_jump_proc(
-                MainActivity.this, app_link));
+      layoutList.get(i/count).addView(imageView);
+      String cat_link = categorys.get(i).getCat_link();
+      String name = categorys.get(i).getName();
+      if (cat_link !=null&&cat_link.contains(XlmmConst.JUMP_PREFIX)) {
+        imageView.setOnClickListener(v ->
+                JumpUtils.push_jump_proc(
+                MainActivity.this, cat_link, name));
       }
-      ViewUtils.loadImageWithOkhttp(categorys.get(finalI).getCat_img(), MainActivity.this, imageView,categorys.size());
+      ViewUtils.loadImageWithOkhttp(categorys.get(i).getCat_img(), MainActivity.this, imageView,count);
     }
   }
 

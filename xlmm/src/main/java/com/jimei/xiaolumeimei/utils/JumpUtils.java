@@ -21,6 +21,7 @@ import com.jimei.xiaolumeimei.ui.activity.trade.OrderDetailActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.AllCouponActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMNinePicActivity;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaLunTanActivity;
 import com.jimei.xiaolumeimei.ui.mminfo.MMInfoActivity;
 import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
 import com.jude.utils.JUtils;
@@ -36,12 +37,22 @@ import java.util.List;
 public class JumpUtils {
 
   public static final String TAG = "JumpUtils";
+  public static String title;
 
   public static void push_jump_proc(Context context, String recvContent) {
     JUtils.Log(TAG, "push_jump_proc:" + recvContent);
 
     if (TextUtils.isEmpty(recvContent)) return;
 
+    JumpInfo jumpInfo = get_jump_info(recvContent);
+    jumToProc(context, jumpInfo);
+  }
+
+  public static void push_jump_proc(Context context, String recvContent,String name) {
+    JUtils.Log(TAG, "push_jump_proc:" + recvContent);
+
+    if (TextUtils.isEmpty(recvContent)) return;
+    title = name;
     JumpInfo jumpInfo = get_jump_info(recvContent);
     jumToProc(context, jumpInfo);
   }
@@ -99,10 +110,14 @@ public class JumpUtils {
         Intent cidIntent = new Intent(context, LadyZoneActivity.class);
         Bundle cidBundle = new Bundle();
         cidBundle.putString("type",cid);
-        cidBundle.putString("title","萌娃专区");
         cidBundle.putString("category","false");
+        cidBundle.putString("title",title);
         cidIntent.putExtras(cidBundle);
         context.startActivity(cidIntent);
+        break;
+      case XlmmConst.JUMP_VIP_FORUM:
+        JumpUtils.jumpToWebViewWithCookies(context, "http://forum.xiaolumeimei.com/accounts/xlmm/login/",
+                -1, MamaLunTanActivity.class);
         break;
       case XlmmConst.JUMP_PRODUCT_DETAIL_PUSH:
         String product_idpush;
@@ -206,8 +221,11 @@ public class JumpUtils {
         } else if (content[1].contains("promote_previous")) {
           jumpInfo.setType(XlmmConst.JUMP_PROMOTE_PREVIOUS);
           jumpInfo.setUrl(content[1]);
-        }else if (content[1].contains("category")) {
+        } else if (content[1].contains("category")) {
           jumpInfo.setType(XlmmConst.JUMP_PRODUCT_CATEGORY);
+          jumpInfo.setUrl(content[1]);
+        }else if (content[1].contains("forum")) {
+          jumpInfo.setType(XlmmConst.JUMP_VIP_FORUM);
           jumpInfo.setUrl(content[1]);
         } else if (content[1].contains("childlist")) {
           jumpInfo.setType(XlmmConst.JUMP_PRODUCT_CHILDLIST);
