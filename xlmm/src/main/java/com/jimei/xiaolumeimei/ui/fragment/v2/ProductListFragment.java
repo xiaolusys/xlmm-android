@@ -26,7 +26,6 @@ import com.umeng.analytics.MobclickAgent;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import butterknife.Bind;
 import cn.iwgang.countdownview.CountdownView;
 import rx.schedulers.Schedulers;
 
@@ -35,7 +34,6 @@ import rx.schedulers.Schedulers;
  */
 public class ProductListFragment extends Fragment implements ScrollableHelper.ScrollableContainer {
 
-    @Bind(R.id.xrv)
     XRecyclerView xRecyclerView;
     private View view;
     private CountdownView countTime;

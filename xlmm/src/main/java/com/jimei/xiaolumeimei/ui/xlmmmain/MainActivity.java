@@ -136,7 +136,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   @Bind(R.id.nav_view) NavigationView navigationView;
   @Bind(R.id.slider) SliderLayout mSliderLayout;
   @Bind(R.id.viewPager) ViewPager vp;
-  @Bind(R.id.rv_top) RelativeLayout rvTop;
+  @Bind(R.id.rv_top) ImageView rvTop;
   @Bind(R.id.tab_layout) TabLayout tabLayout;
   List<PortalBean.PostersBean> posters = new ArrayList<>();
   SharedPreferences sharedPreferencesTime;
@@ -281,7 +281,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     } catch (Exception e) {
       e.printStackTrace();
     }
-    scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(position));
   }
 
   @Override public void onPageScrollStateChanged(int state) {
@@ -900,6 +899,11 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
 
     @Override public int getCount() {
       return list == null ? 0 : list.size();
+    }
+
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+      super.destroyItem(container, position, object);
     }
 
     @Override

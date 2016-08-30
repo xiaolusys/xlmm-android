@@ -113,11 +113,26 @@ public class JumpUtils {
         cidBundle.putString("category","false");
         cidBundle.putString("title",title);
         cidIntent.putExtras(cidBundle);
+        cidIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(cidIntent);
         break;
       case XlmmConst.JUMP_VIP_FORUM:
-        JumpUtils.jumpToWebViewWithCookies(context, "http://forum.xiaolumeimei.com/accounts/xlmm/login/",
-                -1, MamaLunTanActivity.class);
+//        JumpUtils.jumpToWebViewWithCookies(context, "http://forum.xiaolumeimei.com/accounts/xlmm/login/",
+//                -1, MamaLunTanActivity.class);
+        intent = new Intent(context, MamaLunTanActivity.class);
+        SharedPreferences preferences =
+                context.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+        String cookies = preferences.getString("cookiesString", "");
+        String domain = preferences.getString("cookiesDomain", "");
+        Bundle bundle = new Bundle();
+        bundle.putString("cookies", cookies);
+        bundle.putString("domain", domain);
+        bundle.putString("Cookie", preferences.getString("Cookie", ""));
+        bundle.putString("actlink", "http://forum.xiaolumeimei.com/accounts/xlmm/login/");
+        bundle.putInt("id", -1);
+        intent.putExtras(bundle);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
         break;
       case XlmmConst.JUMP_PRODUCT_DETAIL_PUSH:
         String product_idpush;
@@ -160,14 +175,14 @@ public class JumpUtils {
         SharedPreferences sharedPreferences =
             context.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
 
-        String cookies = sharedPreferences.getString("cookiesString", "");
-        String domain = sharedPreferences.getString("cookiesDomain", "");
-        Bundle bundle = new Bundle();
-        bundle.putString("cookies", cookies);
-        bundle.putString("domain", domain);
-        bundle.putString("actlink", jumpInfo.getUrl());
-        bundle.putInt("id", jumpInfo.getId());
-        intent.putExtras(bundle);
+        String cookies1 = sharedPreferences.getString("cookiesString", "");
+        String domain1 = sharedPreferences.getString("cookiesDomain", "");
+        Bundle bundle4 = new Bundle();
+        bundle4.putString("cookies", cookies1);
+        bundle4.putString("domain", domain1);
+        bundle4.putString("actlink", jumpInfo.getUrl());
+        bundle4.putInt("id", jumpInfo.getId());
+        intent.putExtras(bundle4);
         context.startActivity(intent);
         break;
       case XlmmConst.JUMP_XIAOLUMAMA:
