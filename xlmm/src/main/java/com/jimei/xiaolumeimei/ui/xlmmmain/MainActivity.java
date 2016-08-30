@@ -63,7 +63,7 @@ import com.jimei.xiaolumeimei.ui.activity.user.WxLoginBindPhoneActivity;
 import com.jimei.xiaolumeimei.ui.fragment.v1.view.MastFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.FirstFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.GetCouponFragment;
-import com.jimei.xiaolumeimei.ui.fragment.v2.ProductListFragment;
+import com.jimei.xiaolumeimei.ui.fragment.v2.ProductListLazyFragment;
 import com.jimei.xiaolumeimei.ui.mminfo.MMInfoActivity;
 import com.jimei.xiaolumeimei.utils.DisplayUtils;
 import com.jimei.xiaolumeimei.utils.FileUtils;
@@ -107,9 +107,9 @@ import retrofit2.Response;
  * Created by itxuye on 2016/7/4.
  */
 public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel>
-    implements MainContract.View, View.OnClickListener, ViewPager.OnPageChangeListener,
-    NavigationView.OnNavigationItemSelectedListener, ScrollableLayout.OnScrollListener,
-    SwipeRefreshLayout.OnRefreshListener {
+        implements MainContract.View, View.OnClickListener, ViewPager.OnPageChangeListener,
+        NavigationView.OnNavigationItemSelectedListener, ScrollableLayout.OnScrollListener,
+        SwipeRefreshLayout.OnRefreshListener {
 
   private static final String POST_URL = "?imageMogr2/format/jpg/quality/80";
   public static String TAG = "MainActivity";
@@ -138,10 +138,11 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   @Bind(R.id.viewPager) ViewPager vp;
   @Bind(R.id.rv_top) ImageView rvTop;
   @Bind(R.id.tab_layout) TabLayout tabLayout;
+  @Bind(R.id.show_content) RelativeLayout showContent;
   List<PortalBean.PostersBean> posters = new ArrayList<>();
   SharedPreferences sharedPreferencesTime;
   private int mask;
-  private List<ProductListFragment> list = new ArrayList<>();
+  private List<ProductListLazyFragment> list = new ArrayList<>();
   private int num;
   private BadgeView badge;
   private TextView msg1;
@@ -161,6 +162,11 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     filter.addAction(UpdateBroadReceiver.ACTION_RETRY_DOWNLOAD);
     mUpdateBroadReceiver = new UpdateBroadReceiver();
     registerReceiver(mUpdateBroadReceiver, filter);
+  }
+
+  @Override
+  protected View getLoadingView() {
+    return showContent;
   }
 
   @Override protected void initData() {
@@ -194,6 +200,21 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     llayout.findViewById(R.id.imgUser).setOnClickListener(this);
     scrollableLayout.setOnScrollListener(this);
     swipeRefreshLayout.setOnRefreshListener(this);
+  }
+
+  @Override
+  protected void getDataCallBack() {
+    mPresenter.getTopic();
+    mPresenter.getUserInfoBean();
+    mPresenter.getAddressVersionAndUrl();
+    mPresenter.getCategoryDown();
+    mPresenter.getVersion();
+    initMainView(null);
+    vp.setCurrentItem(1);
+    scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(1));
+    if (LoginUtils.checkLoginState(getApplicationContext())) {
+      mPresenter.isCouPon();
+    }
   }
 
   @Override protected void getBundleExtras(Bundle extras) {
@@ -257,11 +278,11 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         intent = new Intent(MainActivity.this, InformationActivity.class);
         break;
     }
-      if (!(LoginUtils.checkLoginState(getApplicationContext()))) {
-        login(flag);
-      } else {
-        startActivity(intent);
-      }
+    if (!(LoginUtils.checkLoginState(getApplicationContext()))) {
+      login(flag);
+    } else {
+      startActivity(intent);
+    }
   }
 
   public void login(String flag) {
@@ -312,7 +333,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         readyGo(AllOrdersActivity.class, bundle);
       } else if (id == R.id.nav_problem) {
         JumpUtils.jumpToWebViewWithCookies(this, "http://m.xiaolumeimei.com/mall/faq", -1,
-            CustomProblemActivity.class);
+                CustomProblemActivity.class);
       } else if (id == R.id.nav_complain) {
         readyGo(ComplainActivity.class);
       }
@@ -376,13 +397,13 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     loginFlag = (ImageView) llayout.findViewById(R.id.login_flag);
     tvNickname = (TextView) llayout.findViewById(R.id.tvNickname);
     LinearLayout nav_tobepaid =
-        (LinearLayout) navigationView.getMenu().findItem(R.id.nav_tobepaid).getActionView();
+            (LinearLayout) navigationView.getMenu().findItem(R.id.nav_tobepaid).getActionView();
     msg1 = (TextView) nav_tobepaid.findViewById(R.id.msg);
     LinearLayout nav_tobereceived =
-        (LinearLayout) navigationView.getMenu().findItem(R.id.nav_tobereceived).getActionView();
+            (LinearLayout) navigationView.getMenu().findItem(R.id.nav_tobereceived).getActionView();
     msg2 = (TextView) nav_tobereceived.findViewById(R.id.msg);
     LinearLayout nav_refund =
-        (LinearLayout) navigationView.getMenu().findItem(R.id.nav_returned).getActionView();
+            (LinearLayout) navigationView.getMenu().findItem(R.id.nav_returned).getActionView();
     msg3 = (TextView) nav_refund.findViewById(R.id.msg);
     StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent), 0);
     swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
@@ -390,16 +411,16 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
 
   @Override public void initSlide() {
     ActionBarDrawerToggle toggle =
-        new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open,
-            R.string.navigation_drawer_close) {
-          @Override public void onDrawerClosed(View drawerView) {
-            invalidateOptionsMenu();
-          }
+            new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open,
+                    R.string.navigation_drawer_close) {
+              @Override public void onDrawerClosed(View drawerView) {
+                invalidateOptionsMenu();
+              }
 
-          @Override public void onDrawerOpened(View drawerView) {
-            invalidateOptionsMenu();
-          }
-        };
+              @Override public void onDrawerOpened(View drawerView) {
+                invalidateOptionsMenu();
+              }
+            };
     drawer.addDrawerListener(toggle);
     toggle.syncState();
     toggle.setHomeAsUpIndicator(R.drawable.icon_nav);
@@ -423,9 +444,9 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     sharedPreferencesTime = getSharedPreferences("resumeTime", 0);
     mask = sharedPreferencesMask.getInt("mask", 0);
     MyFragmentAdapter adapter = new MyFragmentAdapter(getSupportFragmentManager());
-    list.add(ProductListFragment.newInstance(XlmmConst.TYPE_YESTERDAY,"昨天热卖"));
-    list.add(ProductListFragment.newInstance(XlmmConst.TYPE_TODAY,"今天特卖"));
-    list.add(ProductListFragment.newInstance(XlmmConst.TYPE_TOMORROW,"即将上新"));
+    list.add(ProductListLazyFragment.newInstance(XlmmConst.TYPE_YESTERDAY,"昨天热卖"));
+    list.add(ProductListLazyFragment.newInstance(XlmmConst.TYPE_TODAY,"今天特卖"));
+    list.add(ProductListLazyFragment.newInstance(XlmmConst.TYPE_TOMORROW,"即将上新"));
     vp.setAdapter(adapter);
     vp.setOffscreenPageLimit(3);
     vp.setCurrentItem(1);
@@ -473,7 +494,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
       tvPoint.setText(pointStr);
       if (userNewBean.getUserBudget() != null) {
         String moneyStr =
-            (float) (Math.round(userNewBean.getUserBudget().getBudgetCash() * 100)) / 100 + "";
+                (float) (Math.round(userNewBean.getUserBudget().getBudgetCash() * 100)) / 100 + "";
         tvMoney.setText(moneyStr);
       }
       String couponStr = userNewBean.getCouponNum() + "";
@@ -551,7 +572,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
       tvPoint.setText(pointStr);
       if (userInfoBean.getUserBudget() != null) {
         String moneyStr =
-            (float) (Math.round(userInfoBean.getUserBudget().getBudgetCash() * 100)) / 100 + "";
+                (float) (Math.round(userInfoBean.getUserBudget().getBudgetCash() * 100)) / 100 + "";
         tvMoney.setText(moneyStr);
       }
       String couponStr = userInfoBean.getCouponNum() + "";
@@ -579,7 +600,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   }
 
   @Override public void initMainView(SwipeRefreshLayout swipeRefreshLayout)
-      throws NullPointerException {
+          throws NullPointerException {
     mPresenter.getPortalBean(swipeRefreshLayout);
   }
 
@@ -600,7 +621,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
 
     for (String name : map.keySet()) {
       DefaultSliderView textSliderView = new DefaultSliderView(MainActivity
-          .this);
+              .this);
       // initialize a SliderLayout
       textSliderView.image(name + POST_URL).setScaleType(BaseSliderView.ScaleType.CenterInside);
       //add your extra information
@@ -618,7 +639,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
               JumpUtils.JumpInfo jump_info = JumpUtils.get_jump_info(extra);
               if (extra.startsWith("http://")) {
                 JumpUtils.jumpToWebViewWithCookies(MainActivity
-                    .this, extra, -1, ActivityWebViewActivity.class);
+                        .this, extra, -1, ActivityWebViewActivity.class);
               } else {
                 if (jump_info.getType() == XlmmConst.JUMP_PRODUCT_CHILDLIST) {
                   Bundle childBundle = new Bundle();
@@ -665,7 +686,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
       if (cat_link !=null&&cat_link.contains(XlmmConst.JUMP_PREFIX)) {
         imageView.setOnClickListener(v ->
                 JumpUtils.push_jump_proc(
-                MainActivity.this, cat_link, name));
+                        MainActivity.this, cat_link, name));
       }
       ViewUtils.loadImageWithOkhttp(categorys.get(i).getCat_img(), MainActivity.this, imageView,count);
     }
@@ -689,15 +710,15 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         for (int i = 0; i < brandPromotionEntities.size(); i++) {
           brandViews.get(i).setBrandtitleImage(brandPromotionEntities.get(i).getActLogo());
           brandViews.get(i)
-              .setBrandDesText(
-                  brandPromotionEntities.get(i).getExtras().getBrandinfo().getTailTitle());
+                  .setBrandDesText(
+                          brandPromotionEntities.get(i).getExtras().getBrandinfo().getTailTitle());
           brandViews.get(i).setBrandTitle(brandPromotionEntities.get(i).getTitle());
           brandViews.get(i).setBrandListImage(brandPromotionEntities.get(i).getActImg());
           final int finalI1 = i;
           brandViews.get(i).setOnClickListener(v -> {
             if (!TextUtils.isEmpty(brandPromotionEntities.get(finalI1).getActApplink())) {
               JumpUtils.push_jump_proc(mContext,
-                  brandPromotionEntities.get(finalI1).getActApplink());
+                      brandPromotionEntities.get(finalI1).getActApplink());
             }
           });
         }
@@ -728,81 +749,81 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
       for (int i = 0; i < postActivityBean.size(); i++) {
         final int finalI = i;
         OkHttpUtils.get()
-            .url(postActivityBean.get(i).getAct_img())
-            .build()
-            .execute(new BitmapCallback() {
-              @Override public void onError(Call call, Exception e, int id) {
-              }
+                .url(postActivityBean.get(i).getAct_img())
+                .build()
+                .execute(new BitmapCallback() {
+                  @Override public void onError(Call call, Exception e, int id) {
+                  }
 
-              @Override public void onResponse(Bitmap response, int id) {
-                if (response != null) {
-                  imageViewList.get(finalI).setAdjustViewBounds(true);
-                  int screenWidth = DisplayUtils.getScreenW(MainActivity.this);
-                  LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(screenWidth,
-                      LinearLayout.LayoutParams.WRAP_CONTENT);
-                  imageViewList.get(finalI).setLayoutParams(lp);
-                  imageViewList.get(finalI).setMaxWidth(screenWidth);
-                  imageViewList.get(finalI).setMaxHeight(screenWidth * 5);
-                  imageViewList.get(finalI).setImageBitmap(response);
-                  if (postActivityBean.get(finalI).getAct_type().equals("coupon")) {
-                    imageViewList.get(finalI).setOnClickListener(new View.OnClickListener() {
-                      @Override public void onClick(View v) {
-                        mPresenter.getUsercoupons(
-                            postActivityBean.get(finalI).getExtras().getTemplateId());
-                      }
-                    });
-                  } else {
-                    imageViewList.get(finalI).setOnClickListener(new View.OnClickListener() {
-                      @Override public void onClick(View v) {
-                        MobclickAgent.onEvent(MainActivity.this, "ActivityID");
-                        if (postActivityBean.get(finalI).isLogin_required()) {
-                          if (LoginUtils.checkLoginState(MainActivity.this) && (null
-                              != mPresenter.userInfoNewBean
-                              && (null
-                              != mPresenter.userInfoNewBean.getMobile())
-                              && !mPresenter.userInfoNewBean.getMobile().isEmpty())) {
-                            JumpUtils.jumpToWebViewWithCookies(MainActivity.this,
-                                postActivityBean.get(finalI).getAct_link(),
-                                postActivityBean.get(finalI).getId(), ActivityWebViewActivity.class,
-                                postActivityBean.get(finalI).getTitle());
-                          } else {
-                            if (!LoginUtils.checkLoginState(MainActivity.this)) {
-                              JUtils.Toast("登录并绑定手机号后才可参加活动");
-                              Bundle bundle = new Bundle();
-                              bundle.putString("login", "goactivity");
-                              bundle.putString("actlink",
-                                  postActivityBean.get(finalI).getAct_link());
-                              bundle.putInt("id", postActivityBean.get(finalI).getId());
-                              bundle.putString("title", postActivityBean.get(finalI).getTitle());
+                  @Override public void onResponse(Bitmap response, int id) {
+                    if (response != null) {
+                      imageViewList.get(finalI).setAdjustViewBounds(true);
+                      int screenWidth = DisplayUtils.getScreenW(MainActivity.this);
+                      LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(screenWidth,
+                              LinearLayout.LayoutParams.WRAP_CONTENT);
+                      imageViewList.get(finalI).setLayoutParams(lp);
+                      imageViewList.get(finalI).setMaxWidth(screenWidth);
+                      imageViewList.get(finalI).setMaxHeight(screenWidth * 5);
+                      imageViewList.get(finalI).setImageBitmap(response);
+                      if (postActivityBean.get(finalI).getAct_type().equals("coupon")) {
+                        imageViewList.get(finalI).setOnClickListener(new View.OnClickListener() {
+                          @Override public void onClick(View v) {
+                            mPresenter.getUsercoupons(
+                                    postActivityBean.get(finalI).getExtras().getTemplateId());
+                          }
+                        });
+                      } else {
+                        imageViewList.get(finalI).setOnClickListener(new View.OnClickListener() {
+                          @Override public void onClick(View v) {
+                            MobclickAgent.onEvent(MainActivity.this, "ActivityID");
+                            if (postActivityBean.get(finalI).isLogin_required()) {
+                              if (LoginUtils.checkLoginState(MainActivity.this) && (null
+                                      != mPresenter.userInfoNewBean
+                                      && (null
+                                      != mPresenter.userInfoNewBean.getMobile())
+                                      && !mPresenter.userInfoNewBean.getMobile().isEmpty())) {
+                                JumpUtils.jumpToWebViewWithCookies(MainActivity.this,
+                                        postActivityBean.get(finalI).getAct_link(),
+                                        postActivityBean.get(finalI).getId(), ActivityWebViewActivity.class,
+                                        postActivityBean.get(finalI).getTitle());
+                              } else {
+                                if (!LoginUtils.checkLoginState(MainActivity.this)) {
+                                  JUtils.Toast("登录并绑定手机号后才可参加活动");
+                                  Bundle bundle = new Bundle();
+                                  bundle.putString("login", "goactivity");
+                                  bundle.putString("actlink",
+                                          postActivityBean.get(finalI).getAct_link());
+                                  bundle.putInt("id", postActivityBean.get(finalI).getId());
+                                  bundle.putString("title", postActivityBean.get(finalI).getTitle());
 
-                              readyGo(LoginActivity.class, bundle);
-                            } else {
-                              JUtils.Toast("登录成功,前往绑定手机号后才可参加活动");
-                              if (null != mPresenter.userInfoNewBean) {
-                                Bundle bundle = new Bundle();
-                                bundle.putString("headimgurl",
-                                    mPresenter.userInfoNewBean.getThumbnail());
-                                bundle.putString("nickname", mPresenter.userInfoNewBean.getNick());
-                                readyGo(WxLoginBindPhoneActivity.class, bundle);
+                                  readyGo(LoginActivity.class, bundle);
+                                } else {
+                                  JUtils.Toast("登录成功,前往绑定手机号后才可参加活动");
+                                  if (null != mPresenter.userInfoNewBean) {
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("headimgurl",
+                                            mPresenter.userInfoNewBean.getThumbnail());
+                                    bundle.putString("nickname", mPresenter.userInfoNewBean.getNick());
+                                    readyGo(WxLoginBindPhoneActivity.class, bundle);
+                                  }
+                                }
                               }
+                            } else {
+                              JumpUtils.jumpToWebViewWithCookies(MainActivity.this,
+                                      postActivityBean.get(finalI).getAct_link(),
+                                      postActivityBean.get(finalI).getId(), ActivityWebViewActivity.class,
+                                      postActivityBean.get(finalI).getTitle());
                             }
                           }
-                        } else {
-                          JumpUtils.jumpToWebViewWithCookies(MainActivity.this,
-                              postActivityBean.get(finalI).getAct_link(),
-                              postActivityBean.get(finalI).getId(), ActivityWebViewActivity.class,
-                              postActivityBean.get(finalI).getTitle());
-                        }
+                        });
                       }
-                    });
+                    }
                   }
-                }
-              }
-            });
+                });
       }
 
       if (mask != postActivityBean.get(0).getId() && !TextUtils.isEmpty(
-          postActivityBean.get(0).getMask_link())) {
+              postActivityBean.get(0).getMask_link())) {
 
         MastFragment test = MastFragment.newInstance("mask");
         test.show(getFragmentManager(), "mask");
@@ -828,30 +849,30 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     String hash = addressDownloadResultBean.getHash();
     if (!FileUtils.isAddressFileHashSame(getApplicationContext(), hash)) {
       OkHttpUtils.get()
-          .url(downloadUrl)
-          .build()
-          .execute(new FileCallBack(
-              Environment.getExternalStorageDirectory().getAbsolutePath() + "/xlmmaddress/",
-              "areas.json") {
-            @Override public void inProgress(float progress, long total, int id) {
-              JUtils.Log(TAG, "                          " + (int) (100 * (progress / total)) + "");
-            }
+              .url(downloadUrl)
+              .build()
+              .execute(new FileCallBack(
+                      Environment.getExternalStorageDirectory().getAbsolutePath() + "/xlmmaddress/",
+                      "areas.json") {
+                @Override public void inProgress(float progress, long total, int id) {
+                  JUtils.Log(TAG, "                          " + (int) (100 * (progress / total)) + "");
+                }
 
-            @Override public void onError(Call call, Exception e, int id) {
-              if (FileUtils.isFolderExist(
-                  Environment.getExternalStorageDirectory().getAbsolutePath() + "/xlmmaddress/" +
-                      "areas.json")) {
-                FileUtils.deleteFile(
-                    Environment.getExternalStorageDirectory().getAbsolutePath() + "/xlmmaddress/" +
-                        "areas.json");
-              }
-            }
+                @Override public void onError(Call call, Exception e, int id) {
+                  if (FileUtils.isFolderExist(
+                          Environment.getExternalStorageDirectory().getAbsolutePath() + "/xlmmaddress/" +
+                                  "areas.json")) {
+                    FileUtils.deleteFile(
+                            Environment.getExternalStorageDirectory().getAbsolutePath() + "/xlmmaddress/" +
+                                    "areas.json");
+                  }
+                }
 
-            @Override public void onResponse(File response, int id) {
-              JUtils.Log(TAG, response.getAbsolutePath());
-              FileUtils.saveAddressFile(getApplicationContext(), hash);
-            }
-          });
+                @Override public void onResponse(File response, int id) {
+                  JUtils.Log(TAG, response.getAbsolutePath());
+                  FileUtils.saveAddressFile(getApplicationContext(), hash);
+                }
+              });
     }
   }
 
@@ -861,29 +882,29 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     String sha1 = categoryDownBean.getSha1();
     if (!FileUtils.isCategorySame(getApplicationContext(), sha1)) {
       OkHttpUtils.get()
-          .url(downloadUrl)
-          .build()
-          .execute(new FileCallBack(
-              Environment.getExternalStorageDirectory().getAbsolutePath() + "/xlmmcategory/",
-              "category.json") {
-            @Override public void onError(Call call, Exception e, int id) {
-              if (FileUtils.isFolderExist(
-                  Environment.getExternalStorageDirectory().getAbsolutePath()
-                      + "/xlmmcategory/"
-                      + "category.json")) {
-                FileUtils.deleteFile(Environment.getExternalStorageDirectory().getAbsolutePath()
-                    + "/xlmmcategory/"
-                    + "category.json");
-              }
-            }
+              .url(downloadUrl)
+              .build()
+              .execute(new FileCallBack(
+                      Environment.getExternalStorageDirectory().getAbsolutePath() + "/xlmmcategory/",
+                      "category.json") {
+                @Override public void onError(Call call, Exception e, int id) {
+                  if (FileUtils.isFolderExist(
+                          Environment.getExternalStorageDirectory().getAbsolutePath()
+                                  + "/xlmmcategory/"
+                                  + "category.json")) {
+                    FileUtils.deleteFile(Environment.getExternalStorageDirectory().getAbsolutePath()
+                            + "/xlmmcategory/"
+                            + "category.json");
+                  }
+                }
 
-            @Override public void onResponse(File response, int id) {
-              JUtils.Log(TAG, response.getAbsolutePath());
-              FileUtils.saveCategoryFile(getApplicationContext(), sha1);
-              FileUtils.saveCategoryImg(Environment.getExternalStorageDirectory().getAbsolutePath()
-                      + "/xlmmcategory/" + "category.json");
-            }
-          });
+                @Override public void onResponse(File response, int id) {
+                  JUtils.Log(TAG, response.getAbsolutePath());
+                  FileUtils.saveCategoryFile(getApplicationContext(), sha1);
+                  FileUtils.saveCategoryImg(Environment.getExternalStorageDirectory().getAbsolutePath()
+                          + "/xlmmcategory/" + "category.json");
+                }
+              });
     }
   }
 
@@ -1009,7 +1030,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   }
 
   @Override public void checkVersion(int versionCode, String content, String downloadUrl,
-      boolean isAutoUpdate) {
+                                     boolean isAutoUpdate) {
     upadteFlag = true;
     new Thread(() -> {
       try {
@@ -1042,7 +1063,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
             JUtils.Toast("应用正在后台下载!");
           });
           SharedPreferences updatePreferences =
-              getSharedPreferences("update", Context.MODE_PRIVATE);
+                  getSharedPreferences("update", Context.MODE_PRIVATE);
           boolean update = updatePreferences.getBoolean("update", true);
           if (update&&upadteFlag) {
             versionManager.checkVersion(MainActivity.this);
