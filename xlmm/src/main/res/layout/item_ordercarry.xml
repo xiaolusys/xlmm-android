@@ -59,7 +59,7 @@
             android:textColor="@color/colorAccent" />
 
         <TextView
-            android:id="@+id/time_display"
+            android:id="@+id/time_nick"
             android:layout_width="wrap_content"
             android:text=""
             android:layout_height="wrap_content"
@@ -67,6 +67,17 @@
             android:layout_marginLeft="20px"
             android:textSize="13sp"
             android:layout_toRightOf="@id/tv_status"
+            android:textColor="@color/b9" />
+
+        <TextView
+            android:id="@+id/time_display"
+            android:layout_width="wrap_content"
+            android:text=""
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="20px"
+            android:textSize="13sp"
+            android:layout_toRightOf="@id/time_nick"
             android:textColor="@color/b9" />
 
         <TextView

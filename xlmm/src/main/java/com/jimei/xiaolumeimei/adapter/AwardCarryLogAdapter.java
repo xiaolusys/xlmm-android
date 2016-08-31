@@ -1,5 +1,6 @@
 package com.jimei.xiaolumeimei.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,11 +24,12 @@ import java.util.List;
 public class AwardCarryLogAdapter
     extends RecyclerView.Adapter<AwardCarryLogAdapter.CarryLogListVH> {
 
-
+  private Context context;
   private List<AwardCarryBean.ResultsEntity> mList;
 
-  public AwardCarryLogAdapter() {
+  public AwardCarryLogAdapter(Context context) {
     mList = new ArrayList<>();
+    this.context = context;
   }
 
   public void updateWithClear(List<AwardCarryBean.ResultsEntity> list) {
@@ -55,8 +57,8 @@ public class AwardCarryLogAdapter
   }
 
   @Override public CarryLogListVH onCreateViewHolder(ViewGroup parent, int viewType) {
-    View v = LayoutInflater.from(parent.getContext())
-        .inflate(R.layout.item_carryloglist, parent, false);
+    View v =
+        LayoutInflater.from(parent.getContext()).inflate(R.layout.item_carryloglist, parent, false);
     return new CarryLogListVH(v);
   }
 
@@ -68,9 +70,8 @@ public class AwardCarryLogAdapter
       if (position == 0) {
         showCategory(holder);
       } else {
-        boolean theCategoryOfLastEqualsToThis = mList.get(position - 1)
-            .getmDate_field()
-            .equals(mList.get(position).getmDate_field());
+        boolean theCategoryOfLastEqualsToThis =
+            mList.get(position - 1).getmDate_field().equals(mList.get(position).getmDate_field());
         if (!theCategoryOfLastEqualsToThis) {
           showCategory(holder);
         } else {
@@ -82,13 +83,20 @@ public class AwardCarryLogAdapter
     }
 
     holder.shoptime.setText(resultsEntity.getmDate_field());
-    holder.picPath.setImageResource(R.drawable.img_jiang);
+    //holder.picPath.setImageResource(R.drawable.img_jiang);
+    if (null != resultsEntity.getContributorImg()) {
+      com.jimei.xiaolumeimei.utils.ViewUtils.loadImgToImgViewWithTransformCircle(context,
+          holder.picPath, resultsEntity.getContributorImg());
+    } else {
+      holder.picPath.setImageResource(R.drawable.img_jiang);
+    }
+
     holder.totalCash.setText(
         "总收益 " + (float) (Math.round(resultsEntity.getTodayCarry() * 100)) / 100);
 
-    holder.tichengCash.setText(
-        "+" + (float) (Math.round(resultsEntity.getCarryNum() * 100)) / 100);
+    holder.tichengCash.setText("+" + (float) (Math.round(resultsEntity.getCarryNum() * 100)) / 100);
 
+    holder.timeNick.setText(resultsEntity.getContributorNick());
     holder.timeDisplay.setText(resultsEntity.getCreated().substring(11, 16));
     holder.wxordernick.setText(resultsEntity.getmCarryDescription());
     holder.tvStatus.setText(resultsEntity.getStatusDisplay());
@@ -104,6 +112,7 @@ public class AwardCarryLogAdapter
     @Bind(R.id.total_cash) TextView totalCash;
     @Bind(R.id.category) RelativeLayout category;
     @Bind(R.id.pic_path) ImageView picPath;
+    @Bind(R.id.time_nick) TextView timeNick;
     @Bind(R.id.time_display) TextView timeDisplay;
     @Bind(R.id.wxordernick) TextView wxordernick;
     @Bind(R.id.ticheng_cash) TextView tichengCash;

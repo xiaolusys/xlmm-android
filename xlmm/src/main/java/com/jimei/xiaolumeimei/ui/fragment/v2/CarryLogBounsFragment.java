@@ -140,7 +140,7 @@ public class CarryLogBounsFragment extends BaseFragment {
     xRecyclerView.setPullRefreshEnabled(false);
     xRecyclerView.setLoadingMoreEnabled(true);
 
-    adapter = new AwardCarryLogAdapter();
+    adapter = new AwardCarryLogAdapter(activity);
     xRecyclerView.setAdapter(adapter);
 
     xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {

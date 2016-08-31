@@ -74,15 +74,15 @@ public class MMcarryLogActivity extends BaseSwipeBackCompatActivity
     tvNum.setText(carrylogMoney);
     tvHis.setText("2016.3.24号系统升级之前的收益" + hisConfirmedCashOut);
     fragments.add(CarryLogAllFragment.newInstance("全部"));
+    fragments.add(CarryLogBounsFragment.newInstance("奖金"));
     fragments.add(CarryLogCommissionFragment.newInstance("佣金"));
     fragments.add(CarryLogCashbackFragment.newInstance("返现"));
-    fragments.add(CarryLogBounsFragment.newInstance("奖金"));
 
     List<String> titles = new ArrayList<>();
     titles.add("全部");
+    titles.add("奖金");
     titles.add("佣金");
     titles.add("返现");
-    titles.add("奖金");
 
     tabs = new TabLayout.Tab[4];
     tabs[0] = tabLayout.newTab().setText(titles.get(0));
