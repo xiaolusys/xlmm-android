@@ -109,7 +109,8 @@ public class OderCarryLogAdapter
     holder.tichengCash.setText(
         "+" + (float) (Math.round(resultsEntity.getCarryNum() * 100)) / 100);
 
-    holder.timeDisplay.setText(resultsEntity.getContributorNick());
+    holder.timeNick.setText(resultsEntity.getContributorNick());
+    holder.timeDisplay.setText(resultsEntity.getCreated().substring(11, 16));
     holder.wxordernick.setText(resultsEntity.getmCarryDescription());
     holder.tvStatus.setText(resultsEntity.getStatusDisplay());
   }
@@ -123,6 +124,7 @@ public class OderCarryLogAdapter
     @Bind(R.id.total_cash) TextView totalCash;
     @Bind(R.id.category) RelativeLayout category;
     @Bind(R.id.pic_path) ImageView picPath;
+    @Bind(R.id.time_nick) TextView timeNick;
     @Bind(R.id.time_display) TextView timeDisplay;
     @Bind(R.id.wxordernick) TextView wxordernick;
     @Bind(R.id.ticheng_cash) TextView tichengCash;

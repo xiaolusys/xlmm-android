@@ -42,8 +42,8 @@
 
         <ImageView
             android:id="@+id/pic_path"
-            android:layout_width="90px"
-            android:layout_height="90px"
+            android:layout_width="110px"
+            android:layout_height="110px"
             android:src="@drawable/carrylog_image" />
 
         <TextView
@@ -57,12 +57,22 @@
             android:textSize="13sp" />
 
         <TextView
-            android:id="@+id/time_display"
+            android:id="@+id/time_nick"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="16dp"
             android:layout_toRightOf="@id/tv_status"
+            android:textColor="@color/c8c8c8"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/time_display"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="16dp"
+            android:layout_toRightOf="@id/time_nick"
             android:textColor="@color/c8c8c8"
             android:textSize="13sp" />
 

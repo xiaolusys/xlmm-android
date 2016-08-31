@@ -113,7 +113,7 @@ public class CarryLogAllAdapter
     @Bind(R.id.total_cash) TextView totalCash;
     @Bind(R.id.category) RelativeLayout category;
     @Bind(R.id.pic_path) ImageView picPath;
-    @Bind(R.id.time_display) TextView timeDisplay;
+    @Bind(R.id.time_nick) TextView timeDisplay;
     @Bind(R.id.wxordernick) TextView wxordernick;
     @Bind(R.id.ticheng_cash) TextView tichengCash;
     @Bind(R.id.content) RelativeLayout content;
