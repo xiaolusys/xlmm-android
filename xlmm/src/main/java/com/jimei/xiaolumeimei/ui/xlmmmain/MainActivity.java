@@ -63,7 +63,7 @@ import com.jimei.xiaolumeimei.ui.activity.user.WxLoginBindPhoneActivity;
 import com.jimei.xiaolumeimei.ui.fragment.v1.view.MastFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.FirstFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.GetCouponFragment;
-import com.jimei.xiaolumeimei.ui.fragment.v2.ProductListLazyFragment;
+import com.jimei.xiaolumeimei.ui.fragment.v2.ProductListFragment;
 import com.jimei.xiaolumeimei.ui.mminfo.MMInfoActivity;
 import com.jimei.xiaolumeimei.utils.DisplayUtils;
 import com.jimei.xiaolumeimei.utils.FileUtils;
@@ -142,7 +142,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
   List<PortalBean.PostersBean> posters = new ArrayList<>();
   SharedPreferences sharedPreferencesTime;
   private int mask;
-  private List<ProductListLazyFragment> list = new ArrayList<>();
+  private List<ProductListFragment> list = new ArrayList<>();
   private int num;
   private BadgeView badge;
   private TextView msg1;
@@ -444,9 +444,9 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     sharedPreferencesTime = getSharedPreferences("resumeTime", 0);
     mask = sharedPreferencesMask.getInt("mask", 0);
     MyFragmentAdapter adapter = new MyFragmentAdapter(getSupportFragmentManager());
-    list.add(ProductListLazyFragment.newInstance(XlmmConst.TYPE_YESTERDAY,"昨天热卖"));
-    list.add(ProductListLazyFragment.newInstance(XlmmConst.TYPE_TODAY,"今天特卖"));
-    list.add(ProductListLazyFragment.newInstance(XlmmConst.TYPE_TOMORROW,"即将上新"));
+    list.add(ProductListFragment.newInstance(XlmmConst.TYPE_YESTERDAY,"昨天热卖"));
+    list.add(ProductListFragment.newInstance(XlmmConst.TYPE_TODAY,"今天特卖"));
+    list.add(ProductListFragment.newInstance(XlmmConst.TYPE_TOMORROW,"即将上新"));
     vp.setAdapter(adapter);
     vp.setOffscreenPageLimit(3);
     vp.setCurrentItem(1);
@@ -665,7 +665,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     categoryLayout.removeAllViews();
     List<PortalBean.CategorysBean> categorys = postBean.getCategorys();
     List<LinearLayout> layoutList = new ArrayList<>();
-    int count = 4;
+    int count = categorys.size()>4?4:categorys.size();
     for (int i = 0; i < categorys.size(); i++) {
       if (i%count==0) {
         LinearLayout layout = new LinearLayout(this);

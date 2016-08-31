@@ -144,7 +144,7 @@ public class MainPresenter extends MainContract.Presenter {
                         JUtils.Log(e.getMessage());
                         mView.showNetworkError();
                         JUtils.Log("MainPresenter", "    " + e.getClass().getName());
-                        JUtils.ToastLong("数据加载有误,检查网络设置，尝试下拉刷新");
+                        JUtils.ToastLong("数据加载有误,检查网络设置，请重新加载");
                     }
                 }));
     }
