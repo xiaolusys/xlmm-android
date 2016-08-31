@@ -620,10 +620,9 @@ public final class ViewUtils {
           //                                                        lp.width = screenWidth;
           //                                                        lp.height = LinearLayout.LayoutParams.WRAP_CONTENT;
           imageView.setLayoutParams(lp);
-
           imageView.setMaxWidth(screenWidth);
           imageView.setMaxHeight(screenWidth * 5);
-
+          imageView.setPadding(screenWidth/6,screenWidth/10,screenWidth/6,screenWidth/10);
           //imageViewList.get(finalI).setLayoutParams(layoutParams);
           imageView.setImageBitmap(response);
 

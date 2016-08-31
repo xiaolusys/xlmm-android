@@ -111,9 +111,6 @@ public class ProductListFragment extends Fragment implements ScrollableHelper.Sc
     }
 
     private void lazyLoadData() {
-        if (isFirstLoad) {
-        } else {
-        }
         if (!isFirstLoad || !isVisible || !isInitView) {
             return;
         }
@@ -126,7 +123,6 @@ public class ProductListFragment extends Fragment implements ScrollableHelper.Sc
         if (isVisibleToUser) {
             isVisible = true;
             lazyLoadData();
-
         } else {
             isVisible = false;
         }
