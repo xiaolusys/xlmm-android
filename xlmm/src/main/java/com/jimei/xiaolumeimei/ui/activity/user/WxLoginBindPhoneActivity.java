@@ -1,5 +1,6 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.model.UserModel;
+import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.widget.CircleImageView;
 import com.jimei.xiaolumeimei.widget.ClearEditText;
@@ -148,9 +150,8 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
 
         break;
       case R.id.pass:
-
+        startActivity(new Intent(WxLoginBindPhoneActivity.this, MainActivity.class));
         finish();
-
         break;
       case R.id.getCheckCode:
 
@@ -234,6 +235,7 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
             JUtils.Log(TAG, codeBean.toString());
             int code = codeBean.getRcode();
             if (0 == code) {
+              startActivity(new Intent(WxLoginBindPhoneActivity.this, MainActivity.class));
               finish();
             } else{
               JUtils.Toast(codeBean.getMsg());

@@ -2,15 +2,16 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     >
-  <android.support.design.widget.CoordinatorLayout
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      >
 
-    <com.jcodecraeer.xrecyclerview.XRecyclerView
-        android:id="@+id/xrv"
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        />
-  </android.support.design.widget.CoordinatorLayout>
+        >
+
+        <com.jcodecraeer.xrecyclerview.XRecyclerView
+            android:id="@+id/xrv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+    </android.support.design.widget.CoordinatorLayout>
 </layout>

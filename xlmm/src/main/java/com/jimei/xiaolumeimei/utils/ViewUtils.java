@@ -42,6 +42,8 @@ import com.jimei.xiaolumeimei.glidemoudle.GlideRoundTransform;
 import com.squareup.picasso.Picasso;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
+import com.zhy.http.okhttp.request.RequestCall;
+
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.net.URLEncoder;
@@ -244,6 +246,7 @@ public final class ViewUtils {
         || picPath.contains("mmbiz.qlogo.cn")) {
       Glide.with(context)
           .load(picPath)
+              .thumbnail(0.1f)
           .diskCacheStrategy(DiskCacheStrategy.ALL)
           .centerCrop()
           .into(img);
@@ -263,6 +266,7 @@ public final class ViewUtils {
                 + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
             Glide.with(context)
                 .load(head_img)
+                    .thumbnail(0.1f)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .centerCrop()
                 .into(img);
@@ -273,6 +277,7 @@ public final class ViewUtils {
       } else {
         Glide.with(context)
             .load(picPath)
+                .thumbnail(0.1f)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .centerCrop()
             .into(img);
@@ -287,6 +292,7 @@ public final class ViewUtils {
         || picPath.contains("mmbiz.qlogo.cn")) {
       Glide.with(context)
           .load(picPath)
+              .thumbnail(0.1f)
           .diskCacheStrategy(DiskCacheStrategy.ALL)
           .centerCrop()
           .into(img);
@@ -306,6 +312,7 @@ public final class ViewUtils {
                 + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
             Glide.with(context)
                 .load(head_img)
+                    .thumbnail(0.1f)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .centerCrop()
                 .into(img);
@@ -316,6 +323,7 @@ public final class ViewUtils {
       } else {
         Glide.with(context)
             .load(picPath)
+                .thumbnail(0.1f)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .centerCrop()
             .into(img);
@@ -329,6 +337,7 @@ public final class ViewUtils {
         "7xogkj.com1.z0.glb.clouddn.com")) {
       Glide.with(context)
           .load(picPath)
+              .thumbnail(0.1f)
           .diskCacheStrategy(DiskCacheStrategy.ALL)
           .centerCrop()
           .transform(new GlideRoundTransform(context, radius))
@@ -349,6 +358,7 @@ public final class ViewUtils {
                 + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
             Glide.with(context)
                 .load(head_img)
+                    .thumbnail(0.1f)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .centerCrop()
                 .transform(new GlideRoundTransform(context, radius))
@@ -360,6 +370,7 @@ public final class ViewUtils {
       } else {
         Glide.with(context)
             .load(picPath)
+                .thumbnail(0.1f)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .centerCrop()
             .transform(new GlideRoundTransform(context, radius))
@@ -377,6 +388,7 @@ public final class ViewUtils {
         || picPath.contains("mmbiz.qlogo.cn")) {
       Glide.with(context)
           .load(picPath)
+              .thumbnail(0.1f)
           .diskCacheStrategy(DiskCacheStrategy.ALL)
           .bitmapTransform(new CropCircleTransformation(context))
           .into(img);
@@ -396,6 +408,7 @@ public final class ViewUtils {
                 + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
             Glide.with(context)
                 .load(head_img)
+                    .thumbnail(0.1f)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .bitmapTransform(new CropCircleTransformation(context))
                 .into(img);
@@ -406,6 +419,7 @@ public final class ViewUtils {
       } else {
         Glide.with(context)
             .load(picPath)
+                .thumbnail(0.1f)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .bitmapTransform(new CropCircleTransformation(context))
             .into(img);
@@ -421,6 +435,7 @@ public final class ViewUtils {
         || picPath.contains("mmbiz.qlogo.cn")) {
       Glide.with(context)
           .load(picPath)
+              .thumbnail(0.1f)
           .diskCacheStrategy(DiskCacheStrategy.ALL)
           .centerCrop()
           .into(img);
@@ -440,6 +455,7 @@ public final class ViewUtils {
                 + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
             Glide.with(context)
                 .load(head_img)
+                    .thumbnail(0.1f)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .centerCrop()
                 .placeholder(R.drawable.parceholder)
@@ -451,6 +467,7 @@ public final class ViewUtils {
       } else {
         Glide.with(context)
             .load(picPath)
+                .thumbnail(0.1f)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .centerCrop()
             .into(img);
@@ -466,6 +483,7 @@ public final class ViewUtils {
         || picPath.contains("mmbiz.qlogo.cn")) {
       Glide.with(context)
           .load(picPath)
+          .thumbnail(0.1f)
           .diskCacheStrategy(DiskCacheStrategy.ALL)
           .centerCrop()
           .into(img);
@@ -497,6 +515,7 @@ public final class ViewUtils {
       } else {
         Glide.with(context)
             .load(picPath)
+                .thumbnail(0.1f)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .centerCrop()
             .into(img);
@@ -519,13 +538,14 @@ public final class ViewUtils {
 
       Glide.with(context)
           .load(head_img)
+              .thumbnail(0.1f)
           .diskCacheStrategy(DiskCacheStrategy.ALL)
           .placeholder(R.drawable.header)
           .centerCrop()
           .into(img);
     } else {
       //if (picPath.startsWith("https://mmbiz.qlogo.cn")) {
-      Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
+      Glide.with(context).load(picPath).thumbnail(0.1f).diskCacheStrategy(DiskCacheStrategy.ALL)
           //.placeholder(R.drawable.parceholder)
           .centerCrop().into(img);
     }
@@ -569,19 +589,21 @@ public final class ViewUtils {
 
       Glide.with(context)
           .load(head_img)
+              .thumbnail(0.1f)
           .diskCacheStrategy(DiskCacheStrategy.ALL)
           .transform(new GlideRoundTransform(context))
           .centerCrop()
           .into(img);
     } else {
       //if (picPath.startsWith("https://mmbiz.qlogo.cn")) {
-      Glide.with(context).load(picPath).diskCacheStrategy(DiskCacheStrategy.ALL)
+      Glide.with(context).load(picPath).thumbnail(0.1f).diskCacheStrategy(DiskCacheStrategy.ALL)
           //.placeholder(R.drawable.parceholder)
           .centerCrop().into(img);
     }
   }
 
-  public static void loadImageWithOkhttp(String picpath, Activity context, ImageView imageView) {
+  public static void loadImageWithOkhttp(String picpath, Activity context,
+      ImageView imageView,int size) {
     OkHttpUtils.get().url(picpath).build().execute(new BitmapCallback() {
       @Override public void onError(Call call, Exception e, int id) {
         e.printStackTrace();
@@ -592,16 +614,15 @@ public final class ViewUtils {
 
           imageView.setAdjustViewBounds(true);
 
-          int screenWidth = DisplayUtils.getScreenW(context) / 2;
-          LinearLayout.LayoutParams lp =
-              new LinearLayout.LayoutParams(screenWidth, LinearLayout.LayoutParams.WRAP_CONTENT);
+          int screenWidth = DisplayUtils.getScreenW(context) / size;
+          LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(screenWidth,
+              LinearLayout.LayoutParams.WRAP_CONTENT);
           //                                                        lp.width = screenWidth;
           //                                                        lp.height = LinearLayout.LayoutParams.WRAP_CONTENT;
           imageView.setLayoutParams(lp);
-
           imageView.setMaxWidth(screenWidth);
           imageView.setMaxHeight(screenWidth * 5);
-
+          imageView.setPadding(screenWidth/6,screenWidth/10,screenWidth/6,screenWidth/10);
           //imageViewList.get(finalI).setLayoutParams(layoutParams);
           imageView.setImageBitmap(response);
 
@@ -637,6 +658,21 @@ public final class ViewUtils {
         subscriber.onCompleted();
       }
     }).subscribeOn(Schedulers.io());
+  }
+  
+  public static Bitmap getBitmapFormUrl(String url){
+    RequestCall build = OkHttpUtils.get().url(url).build();
+    build.execute(new BitmapCallback() {
+      @Override
+      public void onError(Call call, Exception e, int id) {
+        
+      }
+
+      @Override
+      public void onResponse(Bitmap response, int id) {
+      }
+    });
+    return null;
   }
 
   public static RelativeLayout.LayoutParams getLayoutParams(Bitmap bitmap, int screenWidth) {

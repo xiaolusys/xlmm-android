@@ -5,16 +5,16 @@ import android.view.View;
 
 public interface IVaryViewHelper {
 
-    public abstract View getCurrentLayout();
+    View getCurrentLayout();
 
-    public abstract void restoreView();
+    void restoreView();
 
-    public abstract void showLayout(View view);
+    void showLayout(View view);
 
-    public abstract View inflate(int layoutId);
+    View inflate(int layoutId);
 
-    public abstract Context getContext();
+    Context getContext();
 
-    public abstract View getView();
+    View getView();
 
 }

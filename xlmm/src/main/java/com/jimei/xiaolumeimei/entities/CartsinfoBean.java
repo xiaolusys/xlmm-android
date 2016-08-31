@@ -1,190 +1,218 @@
 package com.jimei.xiaolumeimei.entities;
 
-import com.google.gson.annotations.SerializedName;
-
 /**
  * Created by 优尼世界 on 2016/01/15.
- *
+ * <p>
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class CartsinfoBean {
 
-  /**
-   * status : 0
-   * sku_id : 105934
-   * title : 加绒加厚高腰仿皮裤/黑色
-   * price : 69.9
-   * buyer_nick : itxuye
-   * num : 1
-   * remain_time : 2016-01-15T11:02:06
-   * std_sale_price : 349.0
-   * total_fee : 69.9
-   * item_id : 27008
-   * pic_path : http://image.xiaolu.so/MG-1448851276930-1.png
-   * sku_name : M
-   * id : 327707
-   * buyer_id : 684126
-   */
 
-  @SerializedName("status") private String mStatus;
-  @SerializedName("sku_id") private String mSkuId;
-  @SerializedName("title") private String mTitle;
-  @SerializedName("price") private double mPrice;
-  @SerializedName("buyer_nick") private String mBuyerNick;
-  @SerializedName("num") private String mNum;
-  @SerializedName("remain_time") private String mRemaStringime;
-  @SerializedName("std_sale_price") private double mStdSalePrice;
-  @SerializedName("total_fee") private double mTotalFee;
-  @SerializedName("item_id") private String mItemId;
-  @SerializedName("pic_path") private String mPicPath;
-  @SerializedName("sku_name") private String mSkuName;
-  @SerializedName("id") private String mId;
-  @SerializedName("buyer_id") private String mBuyerId;
-  @SerializedName("item_weburl") private String mItemWeburl;
-  /**
-   * is_sale_out : false
-   */
+    /**
+     * id : 623373
+     * url : http://m.xiaolumeimei.com/rest/v1/carts/623373
+     * buyer_id : 1
+     * buyer_nick : meron@小鹿美美
+     * item_id : 64593
+     * title : 双层水晶珍珠毛衣链/古铜色款
+     * price : 139
+     * std_sale_price : 199
+     * sku_id : 242496
+     * num : 1
+     * total_fee : 139
+     * sku_name : 均码
+     * model_id : 19187
+     * pic_path : http://img.xiaolumeimei.com/MG_14720022653682.jpg
+     * created : 2016-08-24T14:46:24
+     * is_repayable : false
+     * status : 0
+     * item_weburl : http://m.xiaolumeimei.com/mall/product/details/19187
+     */
 
-  @SerializedName("is_sale_out") private boolean mIsSaleOut;
+    private int id;
+    private String url;
+    private int buyer_id;
+    private String buyer_nick;
+    private String item_id;
+    private String title;
+    private double price;
+    private double std_sale_price;
+    private String sku_id;
+    private int num;
+    private double total_fee;
+    private String sku_name;
+    private int model_id;
+    private String pic_path;
+    private String created;
+    private boolean is_repayable;
+    private int status;
+    private String item_weburl;
 
-  public String getStatus() {
-    return mStatus;
-  }
+    public int getId() {
+        return id;
+    }
 
-  public void setStatus(String status) {
-    this.mStatus = status;
-  }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-  public String getItemWeburl() {
-    return mItemWeburl;
-  }
-  public String getSkuId() {
-    return mSkuId;
-  }
-  public void setSkuId(String skuId) {
-    this.mSkuId = skuId;
-  }
+    public String getUrl() {
+        return url;
+    }
 
-  public String getTitle() {
-    return mTitle;
-  }
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
-  public void setTitle(String title) {
-    this.mTitle = title;
-  }
+    public int getBuyer_id() {
+        return buyer_id;
+    }
 
-  public double getPrice() {
-    return mPrice;
-  }
+    public void setBuyer_id(int buyer_id) {
+        this.buyer_id = buyer_id;
+    }
 
-  public void setPrice(double price) {
-    this.mPrice = price;
-  }
+    public String getBuyer_nick() {
+        return buyer_nick;
+    }
 
-  public String getBuyerNick() {
-    return mBuyerNick;
-  }
+    public void setBuyer_nick(String buyer_nick) {
+        this.buyer_nick = buyer_nick;
+    }
 
-  public void setBuyerNick(String buyerNick) {
-    this.mBuyerNick = buyerNick;
-  }
+    public String getItem_id() {
+        return item_id;
+    }
 
-  public String getNum() {
-    return mNum;
-  }
+    public void setItem_id(String item_id) {
+        this.item_id = item_id;
+    }
 
-  public void setNum(String num) {
-    this.mNum = num;
-  }
+    public String getTitle() {
+        return title;
+    }
 
-  public String getRemaStringime() {
-    return mRemaStringime;
-  }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-  public void setRemaStringime(String remaStringime) {
-    this.mRemaStringime = remaStringime;
-  }
+    public double getPrice() {
+        return price;
+    }
 
-  public double getStdSalePrice() {
-    return mStdSalePrice;
-  }
+    public void setPrice(double price) {
+        this.price = price;
+    }
 
-  public void setStdSalePrice(double stdSalePrice) {
-    this.mStdSalePrice = stdSalePrice;
-  }
+    public double getStd_sale_price() {
+        return std_sale_price;
+    }
 
-  public double getTotalFee() {
-    return mTotalFee;
-  }
+    public void setStd_sale_price(double std_sale_price) {
+        this.std_sale_price = std_sale_price;
+    }
 
-  public void setTotalFee(double totalFee) {
-    this.mTotalFee = totalFee;
-  }
+    public String getSku_id() {
+        return sku_id;
+    }
 
-  public String getItemId() {
-    return mItemId;
-  }
+    public void setSku_id(String sku_id) {
+        this.sku_id = sku_id;
+    }
 
-  public void setItemId(String itemId) {
-    this.mItemId = itemId;
-  }
+    public int getNum() {
+        return num;
+    }
 
-  public String getPicPath() {
-    return mPicPath;
-  }
+    public void setNum(int num) {
+        this.num = num;
+    }
 
-  public void setPicPath(String picPath) {
-    this.mPicPath = picPath;
-  }
+    public double getTotal_fee() {
+        return total_fee;
+    }
 
-  public String getSkuName() {
-    return mSkuName;
-  }
+    public void setTotal_fee(double total_fee) {
+        this.total_fee = total_fee;
+    }
 
-  public void setSkuName(String skuName) {
-    this.mSkuName = skuName;
-  }
+    public String getSku_name() {
+        return sku_name;
+    }
 
-  public String getId() {
-    return mId;
-  }
+    public void setSku_name(String sku_name) {
+        this.sku_name = sku_name;
+    }
 
-  public void setId(String id) {
-    this.mId = id;
-  }
+    public int getModel_id() {
+        return model_id;
+    }
 
-  public String getBuyerId() {
-    return mBuyerId;
-  }
+    public void setModel_id(int model_id) {
+        this.model_id = model_id;
+    }
 
-  public void setBuyerId(String buyerId) {
-    this.mBuyerId = buyerId;
-  }
+    public String getPic_path() {
+        return pic_path;
+    }
 
-  @Override public String toString() {
-    return "CartsinfoBean{" +
-        "mStatus='" + mStatus + '\'' +
-        ", mSkuId='" + mSkuId + '\'' +
-        ", mTitle='" + mTitle + '\'' +
-        ", mPrice=" + mPrice +
-        ", mBuyerNick='" + mBuyerNick + '\'' +
-        ", mNum='" + mNum + '\'' +
-        ", mRemaStringime='" + mRemaStringime + '\'' +
-        ", mStdSalePrice=" + mStdSalePrice +
-        ", mTotalFee=" + mTotalFee +
-        ", mItemId='" + mItemId + '\'' +
-        ", mPicPath='" + mPicPath + '\'' +
-        ", mSkuName='" + mSkuName + '\'' +
-        ", mId='" + mId + '\'' +
-        ", mBuyerId='" + mBuyerId + '\'' +
-        '}';
-  }
+    public void setPic_path(String pic_path) {
+        this.pic_path = pic_path;
+    }
 
-  public boolean isIsSaleOut() {
-    return mIsSaleOut;
-  }
+    public String getCreated() {
+        return created;
+    }
 
-  public void setIsSaleOut(boolean isSaleOut) {
-    mIsSaleOut = isSaleOut;
-  }
+    public void setCreated(String created) {
+        this.created = created;
+    }
+
+    public boolean isIs_repayable() {
+        return is_repayable;
+    }
+
+    public void setIs_repayable(boolean is_repayable) {
+        this.is_repayable = is_repayable;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public String getItem_weburl() {
+        return item_weburl;
+    }
+
+    public void setItem_weburl(String item_weburl) {
+        this.item_weburl = item_weburl;
+    }
+
+    @Override
+    public String toString() {
+        return "CartsinfoBean{" +
+                "id=" + id +
+                ", url='" + url + '\'' +
+                ", buyer_id=" + buyer_id +
+                ", buyer_nick='" + buyer_nick + '\'' +
+                ", item_id='" + item_id + '\'' +
+                ", title='" + title + '\'' +
+                ", price=" + price +
+                ", std_sale_price=" + std_sale_price +
+                ", sku_id='" + sku_id + '\'' +
+                ", num=" + num +
+                ", total_fee=" + total_fee +
+                ", sku_name='" + sku_name + '\'' +
+                ", model_id=" + model_id +
+                ", pic_path='" + pic_path + '\'' +
+                ", created='" + created + '\'' +
+                ", is_repayable=" + is_repayable +
+                ", status=" + status +
+                ", item_weburl='" + item_weburl + '\'' +
+                '}';
+    }
 }

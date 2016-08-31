@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.MaMaReNewBean;
@@ -276,13 +277,13 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
                 //new MyDialog(this).show();
                 if (radio_99Choose) {
                     if (mamaCarryValue >= 99.00) {
-                        mamaCarryValuePay(HALF);
+                        showInfo(HALF);
                     } else {
                         new MyDialog(this).show();
                     }
                 } else if (radio_188Choose) {
                     if (mamaCarryValue >= 188.00) {
-                        mamaCarryValuePay(FULL);
+                        showInfo(FULL);
                     } else {
                         new MyDialog(this).show();
                     }
@@ -307,6 +308,20 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
                 image1881.setVisibility(View.GONE);
                 break;
         }
+    }
+
+    public void showInfo(String type) {
+        new MaterialDialog.Builder(this)
+                .title("支付提示")
+                .content("是否使用妈妈账户余额抵扣支付?")
+                .positiveText("确认")
+                .positiveColorRes(R.color.colorAccent)
+                .negativeText("取消")
+                .negativeColorRes(R.color.colorAccent)
+                .onPositive((dialog, which) -> mamaCarryValuePay(type))
+                .onNegative(((dialog1, which1) -> dialog1.dismiss()))
+                .show();
+
     }
 
     @Override

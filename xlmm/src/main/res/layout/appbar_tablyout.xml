@@ -108,22 +108,14 @@
         </RelativeLayout>
     </LinearLayout>
 
-  <RelativeLayout
+  <ImageView
       android:id="@+id/rv_top"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="bottom|end"
       android:layout_margin="8dp"
-      android:background="@drawable/shape_top"
       android:visibility="invisible"
-      >
+      android:src="@drawable/go_top"/>
 
-    <ImageView
-        android:id="@+id/image_top"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:src="@drawable/go_top"
-        />
-  </RelativeLayout>
+
 </android.support.design.widget.CoordinatorLayout>

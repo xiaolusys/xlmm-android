@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -30,6 +31,7 @@ import com.jimei.xiaolumeimei.entities.MaMaRenwuListBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.MamaSelfListBean;
 import com.jimei.xiaolumeimei.entities.MamaUrl;
+import com.jimei.xiaolumeimei.entities.MiPushOrderCarryBean;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.event.MaMaInfoEmptyEvent;
@@ -74,6 +76,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import cn.udesk.UdeskConst;
 import cn.udesk.UdeskSDKManager;
@@ -106,7 +109,7 @@ public class MMInfoActivity
   private String mamaid;
   private String act_info;
   public static XiaoMiMessageReceiver.XiaoMiPushHandler handler = null;
-  private String team_explain;
+  private boolean alive;
 
   public static XiaoMiMessageReceiver.XiaoMiPushHandler getHandler() {
     return handler;
@@ -115,6 +118,7 @@ public class MMInfoActivity
   @Override protected void initData() {
     UdeskSDKManager.getInstance().initApiKey(this, XlmmConst.UDESK_URL, XlmmConst.UDESK_KEY);
     showIndeterminateProgressDialog(false);
+    setDialogBack(R.color.transparentblack70);
     mPresenter.getMamaUrl();
     mPresenter.getShareShopping();
     mPresenter.getMamaFortune();
@@ -122,6 +126,7 @@ public class MMInfoActivity
     mPresenter.getMaMaselfList();
     mPresenter.getMaMaRenwuListBean(mamaid);
     mPresenter.getUserInfo();
+    mPresenter.getOrderCarry();
   }
 
   @Override protected void setListener() {
@@ -196,7 +201,6 @@ public class MMInfoActivity
   @Override public void initMamaUrl(MamaUrl mamaUrl) {
     mamaResult = mamaUrl.getResults().get(0).getExtra();
     act_info = mamaUrl.getResults().get(0).getExtra().getAct_info();
-    team_explain = mamaUrl.getResults().get(0).getExtra().getTeam_explain();
     Glide.with(MMInfoActivity.this)
         .load(mamaResult.getPictures().getExam_pic())
         .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -371,6 +375,33 @@ public class MMInfoActivity
     UdeskMessageManager.getInstance().event_OnNewMsgNotice.bind(this, "OnNewMsgNotice");
   }
 
+  @Override
+  public void setOrderCarry(List<MiPushOrderCarryBean> list) {
+    alive = true;
+    new Thread(() -> {
+      for (int i = 0; i < list.size()&&alive; i++) {
+        int nextInt = new Random().nextInt(5000)+6000;
+        SystemClock.sleep(nextInt);
+        final int finalI = list.size() - 1 - i;
+        runOnUiThread(()->{
+          if (alive){
+            b.miInfo.setText(list.get(finalI).getContent());
+            ViewUtils.loadImgToImgViewWithTransformCircle(MMInfoActivity.this, b.miHead, list.get(finalI).getAvatar());
+            b.miLayout.setVisibility(View.VISIBLE);
+          }
+        });
+        new Thread(() -> {
+          SystemClock.sleep(3000);
+          runOnUiThread(() -> {
+            if (alive) {
+              b.miLayout.setVisibility(View.GONE);
+            }
+          });
+        }).start();
+      }
+    }).start();
+  }
+
   @Override public void onClick(View v) {
     Intent intent;
     switch (v.getId()) {
@@ -418,39 +449,41 @@ public class MMInfoActivity
         startActivity(new Intent(this, MMChooseListActivity.class));
         break;
       case R.id.rl_party:
-        MobclickAgent.onEvent(this, "XLMMUniID");
-        intent = new Intent(this, BoutiqueWebviewActivity.class);
-        sharedPreferences = getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
-        cookies = sharedPreferences.getString("cookiesString", "");
-        domain = sharedPreferences.getString("cookiesDomain", "");
+        if (mamaResult!=null) {
+          MobclickAgent.onEvent(this, "XLMMUniID");
+          intent = new Intent(this, BoutiqueWebviewActivity.class);
+          sharedPreferences = getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+          cookies = sharedPreferences.getString("cookiesString", "");
+          domain = sharedPreferences.getString("cookiesDomain", "");
 
-        Bundle bundlerl_party = new Bundle();
-        bundlerl_party.putString("cookies", cookies);
-        bundlerl_party.putString("domain", domain);
-        bundlerl_party.putString("Cookie", sharedPreferences.getString("Cookie", ""));
-        //bundlerl_party.putString("actlink", mamaResult.getAct_info());
-        bundlerl_party.putString("actlink", mamaResult.getAct_info());
-        intent.putExtras(bundlerl_party);
-        startActivity(intent);
+          Bundle bundlerl_party = new Bundle();
+          bundlerl_party.putString("cookies", cookies);
+          bundlerl_party.putString("domain", domain);
+          bundlerl_party.putString("Cookie", sharedPreferences.getString("Cookie", ""));
+          //bundlerl_party.putString("actlink", mamaResult.getAct_info());
+          bundlerl_party.putString("actlink", mamaResult.getAct_info());
+          intent.putExtras(bundlerl_party);
+          startActivity(intent);
+        }
         break;
       case R.id.rl_push:
         startActivity(new Intent(this, MMNinePicActivity.class));
         break;
       case R.id.rl_shop:
+        if (sharelink!=null&& !"".equals(sharelink)) {
+          Intent intentrl_shop = new Intent(this, MMStoreWebViewActivity.class);
+          sharedPreferences = getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+          cookies = sharedPreferences.getString("cookiesString", "");
+          domain = sharedPreferences.getString("cookiesDomain", "");
 
-        Intent intentrl_shop = new Intent(this, MMStoreWebViewActivity.class);
-        sharedPreferences = getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
-        cookies = sharedPreferences.getString("cookiesString", "");
-        domain = sharedPreferences.getString("cookiesDomain", "");
-
-        Bundle bundlerl_shop = new Bundle();
-        bundlerl_shop.putString("cookies", cookies);
-        bundlerl_shop.putString("domain", domain);
-        bundlerl_shop.putString("Cookie", sharedPreferences.getString("Cookie", ""));
-        bundlerl_shop.putString("actlink", sharelink);
-        intentrl_shop.putExtras(bundlerl_shop);
-        startActivity(intentrl_shop);
-
+          Bundle bundlerl_shop = new Bundle();
+          bundlerl_shop.putString("cookies", cookies);
+          bundlerl_shop.putString("domain", domain);
+          bundlerl_shop.putString("Cookie", sharedPreferences.getString("Cookie", ""));
+          bundlerl_shop.putString("actlink", sharelink);
+          intentrl_shop.putExtras(bundlerl_shop);
+          startActivity(intentrl_shop);
+        }
         break;
       case R.id.mama_pay:
         Bundle bundle = new Bundle();
@@ -458,36 +491,32 @@ public class MMInfoActivity
         readyGo(MamaReNewActivity.class, bundle);
         break;
       case R.id.rl_invite_1kaidian:
-
-        JumpUtils.jumpToWebViewWithCookies(this, mamaResult.getInvite(), 26,
-            MMShareCodeWebViewActivity.class, "");
-
-        /*JumpUtils.jumpToWebViewWithCookies(this, "http://www.aipai.com/", 26,
-            MMShareCodeWebViewActivity.class, "");*/
-
-        /*JumpUtils.jumpToWebViewWithCookies(this, "http://m.xiaolumeimei.com/mall/mama/invited", 26,
-            MMShareCodeWebViewActivity.class, "");*/
-
+        if (mamaResult!=null) {
+          JumpUtils.jumpToWebViewWithCookies(this, mamaResult.getInvite(), 26,
+                  MMShareCodeWebViewActivity.class, "");
+        }
         break;
       case R.id.rl_fans:
-        sharedPreferences = getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
-        SharedPreferences sharedPreferences2 =
-            XlmmApp.getmContext().getSharedPreferences("APICLIENT", Context.MODE_PRIVATE);
-        String baseUrl = "http://" + sharedPreferences2.getString("BASE_URL", "");
-        if (baseUrl.equals("http://")) {
-          baseUrl = XlmmApi.APP_BASE_URL;
+        if (mamaResult!=null) {
+          sharedPreferences = getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+          SharedPreferences sharedPreferences2 =
+                  XlmmApp.getmContext().getSharedPreferences("APICLIENT", Context.MODE_PRIVATE);
+          String baseUrl = "http://" + sharedPreferences2.getString("BASE_URL", "");
+          if (baseUrl.equals("http://")) {
+            baseUrl = XlmmApi.APP_BASE_URL;
+          }
+          String cookies = sharedPreferences.getString("cookiesString", "");
+          String actlink = mamaResult.getFans_explain();
+          String domain = sharedPreferences.getString("cookiesDomain", "");
+          String sessionid = sharedPreferences.getString("Cookie", "");
+
+          JUtils.Log(TAG, "GET cookie:" + cookies + " actlink:" + actlink + " domain:" + domain +
+                  " sessionid:" + sessionid);
+
+          EventBus.getDefault().postSticky(new WebViewEvent(cookies, domain, actlink, -1, sessionid));
+
+          startActivity(new Intent(this, MMFans1Activity.class));
         }
-        String cookies = sharedPreferences.getString("cookiesString", "");
-        String actlink = mamaResult.getFans_explain();
-        String domain = sharedPreferences.getString("cookiesDomain", "");
-        String sessionid = sharedPreferences.getString("Cookie", "");
-
-        JUtils.Log(TAG, "GET cookie:" + cookies + " actlink:" + actlink + " domain:" + domain +
-            " sessionid:" + sessionid);
-
-        EventBus.getDefault().postSticky(new WebViewEvent(cookies, domain, actlink, -1, sessionid));
-
-        startActivity(new Intent(this, MMFans1Activity.class));
         break;
       case R.id.rl_orderlist:
         Intent intent2 = new Intent(this, MMShoppingListActivity.class);
@@ -506,7 +535,6 @@ public class MMInfoActivity
       case R.id.rl_income:
         jumpTpMMCarryLogActivity();
         break;
-
       case R.id.leiji_layout:
         jumpTpMMCarryLogActivity();
         break;
@@ -527,7 +555,6 @@ public class MMInfoActivity
           startActivity(intent);
         }
         break;
-
       case R.id.imgExam:
         if (mamaFortune != null) {
           JumpUtils.jumpToWebViewWithCookies(this, mamaResult.getExam(), -1,
@@ -535,25 +562,29 @@ public class MMInfoActivity
         }
         break;
       case R.id.rl_team:
-        MobclickAgent.onEvent(this, "TeamRankID");
-        Bundle bundleAAA = new Bundle();
-        bundleAAA.putString("id", mmId + "");
-        bundleAAA.putString("url",team_explain);
-        readyGo(MMTeamActivity.class, bundleAAA);
+        if (mamaResult!=null) {
+          MobclickAgent.onEvent(this, "TeamRankID");
+          Bundle bundleAAA = new Bundle();
+          bundleAAA.putString("id", mmId + "");
+          bundleAAA.putString("url",mamaResult.getTeam_explain());
+          readyGo(MMTeamActivity.class, bundleAAA);
+        }
         break;
-
       case R.id.rl_income1:
         readyGo(PersonalCarryRankActivity.class);
         break;
-
       case R.id.tv_noticesee:
-        MobclickAgent.onEvent(this, "XLMMNoticeID");
-        JumpUtils.jumpToWebViewWithCookies(this, mamaResult.getNotice(), -1,
-            ActivityWebViewActivity.class, "信息通知");
+        if (mamaResult!=null) {
+          MobclickAgent.onEvent(this, "XLMMNoticeID");
+          JumpUtils.jumpToWebViewWithCookies(this, mamaResult.getNotice(), -1,
+                  ActivityWebViewActivity.class, "信息通知");
+        }
         break;
       case R.id.luntan:
-        JumpUtils.jumpToWebViewWithCookies(this, "http:/forum.xiaolumeimei.com/accounts/xlmm/login/",
-                -1, MamaLunTanActivity.class);
+        if (mamaResult!=null) {
+          JumpUtils.jumpToWebViewWithCookies(this, mamaResult.getForum(),
+                  -1, MamaLunTanActivity.class);
+        }
         break;
       case R.id.good_week:
         startActivity(new Intent(this, GoodWeekActivity.class));
@@ -628,22 +659,27 @@ public class MMInfoActivity
 
   @Override protected void onDestroy() {
     super.onDestroy();
+    alive = false;
     EventBus.getDefault().unregister(this);
   }
 
-  @Override public void showNetworkError() {
+  @Override
+  public void showNetworkError() {
 
   }
 
-  @Override public void showEmpty(String msg) {
+  @Override
+  public void showEmpty(String msg) {
 
   }
 
-  @Override public void showLoading() {
+  @Override
+  public void showLoading() {
 
   }
 
-  @Override public void refreshView() {
+  @Override
+  public void refreshView() {
 
   }
 }

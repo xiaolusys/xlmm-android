@@ -17,12 +17,8 @@
 package com.jimei.xiaolumeimei.base;
 
 public interface BaseView {
-
-  void showNetworkError();
-
-  void showEmpty(String msg);
-
-  void showLoading();
-
-  void refreshView();
+    void showNetworkError();
+    void showEmpty(String msg);
+    void showLoading();
+    void refreshView();
 }

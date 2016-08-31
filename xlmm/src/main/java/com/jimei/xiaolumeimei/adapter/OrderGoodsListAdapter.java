@@ -30,6 +30,7 @@ import com.jimei.xiaolumeimei.entities.LogisticCompany;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
+import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.ApplyRefundActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.ApplyReturnGoodsActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.LogisticsActivity;
@@ -132,35 +133,27 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                         && orderDetailEntity.getPackage_orders().get(i).getFinish_time() == null
                         && orderDetailEntity.getOrders().get(position).getStatus() == 2) {
                     Button btn = (Button) convertView.findViewById(R.id.btn_order_proc);
-                    btn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            new MaterialDialog.Builder(context)
-                                    .cancelable(true)
-                                    .positiveText("确认")
-                                    .positiveColorRes(R.color.colorAccent)
-                                    .callback(new MaterialDialog.ButtonCallback() {
-                                        @Override
-                                        public void onPositive(MaterialDialog dialog) {
-                                            dialog.dismiss();
-                                        }
-                                    })
-                                    .content("您的订单已经向工厂订货，暂不支持退款，请您耐心等待，在收货确认签收后申请退货，如有疑问请咨询小鹿美美公众号或客服4008235355。")
-                                    .show();
-                        }
-                    });
+                    btn.setOnClickListener(v -> new MaterialDialog.Builder(context)
+                            .cancelable(true)
+                            .positiveText("确认")
+                            .positiveColorRes(R.color.colorAccent)
+                            .callback(new MaterialDialog.ButtonCallback() {
+                                @Override
+                                public void onPositive(MaterialDialog dialog) {
+                                    dialog.dismiss();
+                                }
+                            })
+                            .content("您的订单已经向工厂订货，暂不支持退款，请您耐心等待，在收货确认签收后申请退货，如有疑问请咨询小鹿美美公众号或客服4008235355。")
+                            .show());
                 }
                 final int finalI = i;
-                convertView.findViewById(R.id.ll_item).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(context, LogisticsActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putInt("id", orderDetailEntity.getId());
-                        bundle.putSerializable("packageOrdersBean", orderDetailEntity.getPackage_orders().get(finalI));
-                        intent.putExtras(bundle);
-                        context.startActivity(intent);
-                    }
+                convertView.findViewById(R.id.ll_item).setOnClickListener(v -> {
+                    Intent intent = new Intent(context, LogisticsActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("id", orderDetailEntity.getId());
+                    bundle.putSerializable("packageOrdersBean", orderDetailEntity.getPackage_orders().get(finalI));
+                    intent.putExtras(bundle);
+                    context.startActivity(intent);
                 });
                 break;
             }
@@ -171,6 +164,16 @@ public class OrderGoodsListAdapter extends BaseAdapter {
         ((TextView) convertView.findViewById(R.id.tx_good_num)).setText("x" + data.get(position).getNum());
         ImageView img_goods = (ImageView) convertView.findViewById(R.id.img_good);
         ViewUtils.loadImgToImgView(context, img_goods, data.get(position).getPic_path());
+        img_goods.setOnClickListener(v -> {
+            int model_id = data.get(position).getModel_id();
+            if (model_id != 0) {
+                Intent intent = new Intent(context, ProductDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("model_id", model_id);
+                intent.putExtras(bundle);
+                context.startActivity(intent);
+            }
+        });
         Log.d(TAG, " img_url " + data.get(position).getPic_path());
         return convertView;
     }

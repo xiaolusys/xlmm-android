@@ -22,7 +22,7 @@ import java.util.List;
  * Created by wisdom on 16/8/8.
  */
 
-public class CategoryTask extends AsyncTask<String, Integer, List<CategoryBean.ChildsBean>> {
+public class CategoryTask extends AsyncTask<String, Integer, List<CategoryBean>> {
 
     private CategoryAdapter adapter;
     private Menu menu;
@@ -33,7 +33,7 @@ public class CategoryTask extends AsyncTask<String, Integer, List<CategoryBean.C
     }
 
     @Override
-    protected List<CategoryBean.ChildsBean> doInBackground(String... params) {
+    protected List<CategoryBean> doInBackground(String... params) {
         String categoryStr;
         InputStream in = null;
         String fileaddress = Environment.getExternalStorageDirectory().getAbsolutePath()
@@ -51,9 +51,13 @@ public class CategoryTask extends AsyncTask<String, Integer, List<CategoryBean.C
             Gson gson = new Gson();
             List<CategoryBean> list = gson.fromJson(categoryStr, new TypeToken<List<CategoryBean>>() {
             }.getType());
-            for (int i = 0; i < list.size(); i++) {
-                if (params[0].equals(list.get(i).getCid())) {
-                    return list.get(i).getChilds();
+            if ("true".equals(params[1])) {
+                return list;
+            } else {
+                for (int i = 0; i < list.size(); i++) {
+                    if (params[0].equals(list.get(i).getCid())) {
+                        return list.get(i).getChilds();
+                    }
                 }
             }
             return null;
@@ -72,7 +76,7 @@ public class CategoryTask extends AsyncTask<String, Integer, List<CategoryBean.C
     }
 
     @Override
-    protected void onPostExecute(List<CategoryBean.ChildsBean> list) {
+    protected void onPostExecute(List<CategoryBean> list) {
         if (list != null && list.size() > 0) {
             adapter.update(list);
         } else {

@@ -487,7 +487,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
         sku_id = skuItemsBean.getSku_id();
     }
 
-    class ShareContentCustom implements ShareContentCustomizeCallback {
+    public class ShareContentCustom implements ShareContentCustomizeCallback {
 
         private String text;
 
