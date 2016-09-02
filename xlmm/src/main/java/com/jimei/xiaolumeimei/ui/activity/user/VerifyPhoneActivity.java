@@ -51,7 +51,7 @@ public class VerifyPhoneActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
-    titleView.setName("请验证手机");
+    titleView.setName("设置密码");
     register_button.setText("下一步");
   }
 

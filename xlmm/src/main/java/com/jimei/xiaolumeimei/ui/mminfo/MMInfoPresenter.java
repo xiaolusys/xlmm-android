@@ -11,6 +11,7 @@ import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.jimei.xiaolumeimei.entities.MaMaRenwuListBean;
 import com.jimei.xiaolumeimei.entities.MamaSelfListBean;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
+import com.jimei.xiaolumeimei.utils.RxUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 
 import java.util.ArrayList;
@@ -31,14 +32,18 @@ public class MMInfoPresenter extends MMInfoContract.Presenter {
   List<RecentCarryBean.ResultsEntity> show_refund = new ArrayList<>();
 
   @Override public void getShareShopping() {
-    mRxManager.add(mModel.getShareShopping().subscribe(mmShoppingBean -> {
+    mRxManager.add(mModel.getShareShopping()
+            .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
+            .subscribe(mmShoppingBean -> {
       /*mRxManager.post("mmShoppingBean",mmShoppingBean);*/
       if (null != mmShoppingBean) mView.initShareInfo(mmShoppingBean);
     }, Throwable::printStackTrace));
   }
 
   @Override public void getMamaFortune() {
-    mRxManager.add(mModel.getMamaFortune().subscribe(mamaFortune -> {
+    mRxManager.add(mModel.getMamaFortune()
+            .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
+            .subscribe(mamaFortune -> {
       if (null != mamaFortune) {
         mView.initMMdata(mamaFortune);
         mView.initMMview(mamaFortune);
@@ -47,7 +52,9 @@ public class MMInfoPresenter extends MMInfoContract.Presenter {
   }
 
   @Override public void getMamaUrl() {
-    mRxManager.add(mModel.getMamaUrl().subscribe(mamaUrl -> {
+    mRxManager.add(mModel.getMamaUrl()
+            .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
+            .subscribe(mamaUrl -> {
       mView.initMamaUrl(mamaUrl);
     }, Throwable::printStackTrace));
   }
@@ -165,7 +172,8 @@ public class MMInfoPresenter extends MMInfoContract.Presenter {
 
   public void getRecentCarry() {
     mRxManager.add(mModel.getRecentCarry("0", Integer.toString(MAX_RECENT_DAYS))
-        .subscribe(new ServiceResponse<RecentCarryBean>() {
+            .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
+            .subscribe(new ServiceResponse<RecentCarryBean>() {
 
           @Override public void onNext(RecentCarryBean recentCarryBean) {
             if (null != recentCarryBean) {
@@ -203,7 +211,9 @@ public class MMInfoPresenter extends MMInfoContract.Presenter {
 
   @Override public void getMaMaRenwuListBean(String id) {
     mRxManager.add(
-        mModel.getMaMaRenwuListBean(id).subscribe(new Observer<Response<MaMaRenwuListBean>>() {
+        mModel.getMaMaRenwuListBean(id)
+                .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
+                .subscribe(new Observer<Response<MaMaRenwuListBean>>() {
           @Override public void onCompleted() {
 
           }
@@ -221,7 +231,9 @@ public class MMInfoPresenter extends MMInfoContract.Presenter {
   }
 
   @Override public void getMaMaselfList() {
-    mRxManager.add(mModel.getMaMaselfList().subscribe(new Observer<Response<MamaSelfListBean>>() {
+    mRxManager.add(mModel.getMaMaselfList()
+            .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
+            .subscribe(new Observer<Response<MamaSelfListBean>>() {
       @Override public void onCompleted() {
 
       }
@@ -240,8 +252,20 @@ public class MMInfoPresenter extends MMInfoContract.Presenter {
 
   @Override
   public void getUserInfo() {
-    mRxManager.add(mModel.getUserInfo().subscribe(userInfoBean -> {
+    mRxManager.add(mModel.getUserInfo()
+            .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
+            .subscribe(userInfoBean -> {
       mView.setUdesk(userInfoBean);
     }, Throwable::printStackTrace));
+  }
+
+  @Override
+  public void getOrderCarry() {
+    mRxManager.add(
+            mModel.getLatestOrderCarry()
+            .retryWhen(new RxUtils.RetryWhenNoInternet(100,2000))
+            .subscribe(list ->{
+              mView.setOrderCarry(list);
+            },Throwable::printStackTrace));
   }
 }

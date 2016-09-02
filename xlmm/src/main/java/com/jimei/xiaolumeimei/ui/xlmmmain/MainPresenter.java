@@ -27,7 +27,7 @@ public class MainPresenter extends MainContract.Presenter {
     @Override
     public void getUserInfoBean() {
         mRxManager.add(mModel.getProfile()
-                .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
+//                .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
                 .subscribe(new ServiceResponse<Response<UserInfoBean>>() {
                     @Override
                     public void onNext(Response<UserInfoBean> userInfoBeanResponse) {
@@ -60,7 +60,7 @@ public class MainPresenter extends MainContract.Presenter {
     @Override
     public void getUserInfoBeanChange() {
         mRxManager.add(mModel.getProfile()
-                .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
+//                .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
                 .subscribe(new ServiceResponse<Response<UserInfoBean>>() {
                     @Override
                     public void onNext(Response<UserInfoBean> userInfoBeanResponse) {
@@ -92,7 +92,7 @@ public class MainPresenter extends MainContract.Presenter {
     @Override
     public void isCouPon() {
         mRxManager.add(mModel.isCouPon()
-                .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
+//                .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
                 .subscribe(isGetcouponResponse -> {
                     if (null != isGetcouponResponse) {
                         mView.initShowCoiuponWindow(isGetcouponResponse);
@@ -103,7 +103,7 @@ public class MainPresenter extends MainContract.Presenter {
     @Override
     public void getCartsNum() {
         mRxManager.add(mModel.getCartsNum()
-                .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
+//                .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
                 .subscribe(cartsNumResultBean -> {
                     mView.iniCartsNum(cartsNumResultBean);
                 }, Throwable::printStackTrace));
@@ -112,12 +112,13 @@ public class MainPresenter extends MainContract.Presenter {
     @Override
     public void getPortalBean(SwipeRefreshLayout swipeRefreshLayout) {
         mRxManager.add(mModel.getPortalBean()
-                .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
+//                .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
                 .subscribe(new ServiceResponse<PortalBean>() {
                     @Override
                     public void onNext(PortalBean portalBean) {
                         if (null != portalBean) {
                             JUtils.Log("MainPresenter", portalBean.toString());
+                            mView.refreshView();
                             mView.initSliderLayout(portalBean);
 
                             mView.initCategory(portalBean);
@@ -140,9 +141,10 @@ public class MainPresenter extends MainContract.Presenter {
                         if (swipeRefreshLayout != null) {
                             swipeRefreshLayout.setRefreshing(false);
                         }
-
+                        JUtils.Log(e.getMessage());
+                        mView.showNetworkError();
                         JUtils.Log("MainPresenter", "    " + e.getClass().getName());
-                        JUtils.ToastLong("数据加载有误,检查网络设置，尝试下拉刷新");
+                        JUtils.ToastLong("数据加载有误,检查网络设置，请重新加载");
                     }
                 }));
     }

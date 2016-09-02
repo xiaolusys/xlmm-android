@@ -1,8 +1,13 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
 import android.view.Menu;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
+import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 /**
@@ -13,6 +18,20 @@ public class MamaLunTanActivity extends CommonWebViewActivity {
     protected void initViews() {
         super.initViews();
         webviewTitle.setText("小鹿论坛");
+        mWebView.setWebViewClient(new WebViewClient(){
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                JUtils.Toast("加载成功");
+            }
+
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                super.onReceivedError(view, request, error);
+                JUtils.Toast("加载失败");
+            }
+        });
+
     }
 
     @Override

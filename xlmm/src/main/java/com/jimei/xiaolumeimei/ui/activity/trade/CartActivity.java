@@ -22,9 +22,8 @@ import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.CartsinfoBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.model.CartsModel;
-import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
+import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
 import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
-import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.widget.ScrollLinearLayoutManager;
@@ -48,7 +47,7 @@ import rx.schedulers.Schedulers;
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class CartActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener {
-    List<String> ids = new ArrayList<>();
+    List<Integer> ids = new ArrayList<>();
     @Bind(R.id.carts_recyclerview)
     RecyclerView cartsRecyclerview;
     @Bind(R.id.cartshis_recyclerview)
@@ -307,22 +306,25 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
 
             CartsinfoBean cartsinfoBean = mList.get(holder.getAdapterPosition());
             holder.title.setText(cartsinfoBean.getTitle());
-            holder.skuName.setText("尺码:" + cartsinfoBean.getSkuName());
+            holder.skuName.setText("尺码:" + cartsinfoBean.getSku_name());
             //holder.color.setText(cartsinfoBean.get);
             holder.price1.setText("¥" + (float) (Math.round(cartsinfoBean.getPrice() * 100)) / 100);
             holder.price2.setText(
-                    "/¥" + (float) (Math.round(cartsinfoBean.getStdSalePrice() * 100)) / 100);
+                    "/¥" + (float) (Math.round(cartsinfoBean.getStd_sale_price() * 100)) / 100);
             holder.count.setText(cartsinfoBean.getNum() + "");
 
-            String headImg = cartsinfoBean.getPicPath();
+            String headImg = cartsinfoBean.getPic_path();
 
             ViewUtils.loadImgToImgView(mContext, holder.cartImage, headImg);
 
             holder.cartImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    JumpUtils.jumpToWebViewWithCookies(CartActivity.this, cartsinfoBean.getItemWeburl(), -1,
-                            ProductPopDetailActvityWeb.class);
+                    Intent intent = new Intent(mContext, ProductDetailActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("model_id",cartsinfoBean.getModel_id());
+                    intent.putExtras(bundle);
+                    mContext.startActivity(intent);
                 }
             });
             holder.add.setOnClickListener(new View.OnClickListener() {
@@ -330,7 +332,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
                 public void onClick(View v) {
                     showIndeterminateProgressDialog(false);
                     Subscription subscription = CartsModel.getInstance()
-                            .plus_product_carts(cartsinfoBean.getId())
+                            .plus_product_carts(cartsinfoBean.getId()+"")
                             .subscribeOn(Schedulers.io())
                             .subscribe(new ServiceResponse<Response<CodeBean>>() {
                                 @Override
@@ -364,10 +366,10 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
                 @Override
                 public void onClick(View v) {
                     if (mList.size() == 1) {
-                        if (Integer.parseInt(cartsinfoBean.getNum()) > 1) {
+                        if (cartsinfoBean.getNum() > 1) {
                             showIndeterminateProgressDialog(false);
                             Subscription subscription = CartsModel.getInstance()
-                                    .minus_product_carts(cartsinfoBean.getId())
+                                    .minus_product_carts(cartsinfoBean.getId()+"")
                                     .subscribeOn(Schedulers.io())
                                     .subscribe(new ServiceResponse<Response<CodeBean>>() {
                                         @Override
@@ -413,7 +415,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
                                         public void onPositive(MaterialDialog dialog) {
                                             showIndeterminateProgressDialog(false);
                                             Subscription subscription = CartsModel.getInstance()
-                                                    .delete_carts(cartsinfoBean.getId())
+                                                    .delete_carts(cartsinfoBean.getId()+"")
                                                     .subscribeOn(Schedulers.io())
                                                     .subscribe(new ServiceResponse<Response<CodeBean>>() {
                                                         @Override
@@ -470,10 +472,10 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
                                     }).show();
                         }
                     } else {
-                        if (Integer.parseInt(cartsinfoBean.getNum()) > 1) {
+                        if (cartsinfoBean.getNum() > 1) {
                             showIndeterminateProgressDialog(false);
                             Subscription subscription = CartsModel.getInstance()
-                                    .minus_product_carts(cartsinfoBean.getId())
+                                    .minus_product_carts(cartsinfoBean.getId()+"")
                                     .subscribeOn(Schedulers.io())
                                     .subscribe(new ServiceResponse<Response<CodeBean>>() {
                                         @Override
@@ -511,7 +513,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
                                 public void onPositive(MaterialDialog dialog) {
                                     showIndeterminateProgressDialog(false);
                                     Subscription subscription = CartsModel.getInstance()
-                                            .delete_carts(cartsinfoBean.getId())
+                                            .delete_carts(cartsinfoBean.getId()+"")
                                             .subscribeOn(Schedulers.io())
                                             .subscribe(new ServiceResponse<Response<CodeBean>>() {
                                                 @Override
@@ -729,18 +731,21 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
 
             CartsinfoBean cartsinfoBean = mListhis.get(holder.getAdapterPosition());
             holder.title.setText(cartsinfoBean.getTitle());
-            holder.skuName.setText("尺码:" + cartsinfoBean.getSkuName());
+            holder.skuName.setText("尺码:" + cartsinfoBean.getSku_name());
             //holder.color.setText(cartsinfoBean.get);
             holder.price1.setText("¥" + (float) (Math.round(cartsinfoBean.getPrice() * 100)) / 100);
             holder.price2.setText(
-                    "/¥" + (float) (Math.round(cartsinfoBean.getStdSalePrice() * 100)) / 100);
+                    "/¥" + (float) (Math.round(cartsinfoBean.getStd_sale_price() * 100)) / 100);
 
-            ViewUtils.loadImgToImgView(mContext, holder.cartImage, cartsinfoBean.getPicPath());
+            ViewUtils.loadImgToImgView(mContext, holder.cartImage, cartsinfoBean.getPic_path());
             holder.cartImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    JumpUtils.jumpToWebViewWithCookies(CartActivity.this, cartsinfoBean.getItemWeburl(), -1,
-                            ProductPopDetailActvityWeb.class);
+                    Intent intent = new Intent(mContext, ProductDetailActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("model_id",cartsinfoBean.getModel_id());
+                    intent.putExtras(bundle);
+                    mContext.startActivity(intent);
                 }
             });
 
@@ -749,7 +754,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
                 public void onClick(View v) {
                     MobclickAgent.onEvent(CartActivity.this, "ReAddCartsID");
                     Subscription subscribe = CartsModel.getInstance()
-                            .rebuy(cartsinfoBean.getItemId(), cartsinfoBean.getSkuId(), cartsinfoBean.getId())
+                            .rebuy(cartsinfoBean.getItem_id(), cartsinfoBean.getSku_id(), cartsinfoBean.getId()+"")
                             .subscribeOn(Schedulers.io())
                             .subscribe(new ServiceResponse<CartsHisBean>() {
                                 @Override

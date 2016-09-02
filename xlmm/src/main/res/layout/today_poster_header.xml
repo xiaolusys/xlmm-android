@@ -16,27 +16,6 @@
         android:layout_centerVertical="true"
         android:text="距本场结束" />
 
-    <!--<cn.iwgang.countdownview.CountdownView-->
-        <!--android:layout_toRightOf="@id/tv"-->
-        <!--android:id="@+id/countTime"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignTop="@+id/nvzhuangText"-->
-        <!--android:layout_marginTop="6dp"-->
-        <!--app:isShowDay="true"-->
-        <!--app:isShowHour="true"-->
-        <!--app:isShowMinute="true"-->
-        <!--app:isShowSecond="true"-->
-        <!--app:suffixDay="天"-->
-        <!--app:suffixGravity="bottom"-->
-        <!--app:suffixHour="时"-->
-        <!--app:suffixMinute="分"-->
-        <!--app:suffixSecond="秒"-->
-        <!--app:suffixTextColor="@color/colorAccent"-->
-        <!--app:suffixTextSize="12sp"-->
-        <!--app:timeTextColor="@color/colorAccent"-->
-        <!--app:timeTextSize="22sp" />-->
-
     <cn.iwgang.countdownview.CountdownView
         android:layout_toRightOf="@id/tv"
         android:id="@+id/countTime"

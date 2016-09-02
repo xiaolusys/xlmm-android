@@ -1,7 +1,9 @@
 package com.jimei.xiaolumeimei.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,19 +31,19 @@ import butterknife.ButterKnife;
 public class CategoryAdapter extends XRecyclerView.Adapter<CategoryAdapter.ViewHolder> {
 
     private Context context;
-    private List<CategoryBean.ChildsBean> mData;
+    private List<CategoryBean> mData;
 
-    public CategoryAdapter(Context context, List<CategoryBean.ChildsBean> mData) {
+    public CategoryAdapter(Context context, List<CategoryBean> mData) {
         this.context = context;
         this.mData = mData;
     }
 
-    public void update(List<CategoryBean.ChildsBean> list) {
+    public void update(List<CategoryBean> list) {
         mData.addAll(list);
         notifyDataSetChanged();
     }
 
-    public void updateWithClear(List<CategoryBean.ChildsBean> list) {
+    public void updateWithClear(List<CategoryBean> list) {
         mData.clear();
         mData.addAll(list);
         notifyDataSetChanged();
@@ -55,7 +57,7 @@ public class CategoryAdapter extends XRecyclerView.Adapter<CategoryAdapter.ViewH
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        CategoryBean.ChildsBean childsBean = mData.get(position);
+        CategoryBean childsBean = mData.get(position);
         holder.name.setText(childsBean.getName());
         String picAddress = Environment.getExternalStorageDirectory().getAbsolutePath()
                 + "/xlmmcategory/" + childsBean.getCid() + ".png";
@@ -64,7 +66,17 @@ public class CategoryAdapter extends XRecyclerView.Adapter<CategoryAdapter.ViewH
         } else {
             ViewUtils.loadImgToImgView(context, holder.img, childsBean.getCat_pic());
         }
-        if (context instanceof LadyZoneActivity) {
+        if (childsBean.getChilds() != null && childsBean.getChilds().size() > 0) {
+            holder.item.setOnClickListener(v -> {
+                Bundle bundle = new Bundle();
+                bundle.putString("type", childsBean.getCid());
+                bundle.putString("title", childsBean.getName());
+                bundle.putString("category", "false");
+                Intent intent = new Intent(context, LadyZoneActivity.class);
+                intent.putExtras(bundle);
+                context.startActivity(intent);
+            });
+        } else if (context instanceof LadyZoneActivity) {
             holder.item.setOnClickListener(v -> ((LadyZoneActivity) this.context).refreshData(childsBean.getCid(), true));
         } else if (context instanceof ProductListActivity) {
             holder.item.setOnClickListener(v -> ((ProductListActivity) this.context).refreshData(childsBean.getCid(), true));

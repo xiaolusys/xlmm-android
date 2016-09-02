@@ -148,7 +148,8 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     private String code;
     private String order_no = "";
     private int order_id = -1;
-    @Bind(R.id.jiesheng_price) TextView jiesheng_price;
+    @Bind(R.id.jiesheng_price)
+    TextView jiesheng_price;
     private int position;
 
     @Override
@@ -172,7 +173,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
     private void downLoadCartsInfo() {
         Subscription subscription = CartsModel.getInstance()
-                .getCartsPayInfoListV2(ids, "app")
+                .getCartsPayInfoListV2(ids)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<CartsPayinfoBean>() {
                     @Override
@@ -293,7 +294,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
     private void downLoadCartsInfoWithout() {
         Subscription subscription = CartsModel.getInstance()
-                .getCartsPayInfoListV2(ids, "app")
+                .getCartsPayInfoListV2(ids)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<CartsPayinfoBean>() {
                     @Override
@@ -407,8 +408,8 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                                             pay_extras);
                         } else {
                             //emptyContent.setVisibility(View.VISIBLE);
-                          JUtils.Toast("商品已过期,请重新选购");
-                          readyGo(CartActivity.class);
+                            JUtils.Toast("商品已过期,请重新选购");
+                            readyGo(CartActivity.class);
                         }
                     }
                 });
@@ -504,7 +505,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     Intent intent =
                             new Intent(CartsPayInfoActivity.this, AddressSelectActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putInt("position",position);
+                    bundle.putInt("position", position);
                     intent.putExtras(bundle);
                     startActivityForResult(intent, REQUEST_CODE_ADDRESS);
                 } else {
@@ -523,7 +524,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 if ((coupon_id != null) && (!coupon_id.isEmpty())) {
                     bundle.putString("coupon_id", coupon_id);
                 }
-                bundle.putString("cart_ids",cart_ids);
+                bundle.putString("cart_ids", cart_ids);
                 intent.putExtras(bundle);
                 startActivityForResult(intent, REQUEST_CODE_COUPONT);
                 break;
@@ -1013,7 +1014,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 isSelectAddress = true;
                 nameSelect = data.getStringExtra("name");
                 phoneSelect = data.getStringExtra("phone");
-                position = data.getIntExtra("position",0);
+                position = data.getIntExtra("position", 0);
                 addressDetailsSelect = data.getStringExtra("addressDetails");
                 addr_idSelect = data.getStringExtra("addr_id");
             } else {

@@ -87,4 +87,5 @@
         兑换现金券后会扣除妈妈钱包里的金额，兑换的优惠券可以用来购物，有效期为1个月，兑换后不能退回。
         使用现金券可以购买低于现金券金额的商品，不会找零。使用现金券购买高于现金券金额的商品，需要补差价。</string>
     <string name="open_notice">推送通知</string>
+  <string name="press_again_exit">再按一次退出</string>
 </resources>

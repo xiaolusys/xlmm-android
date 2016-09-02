@@ -33,14 +33,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.PlatformActionListener;
-import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.onekeyshare.OnekeyShare;
-import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
-import cn.sharesdk.wechat.moments.WechatMoments;
 
-import com.google.gson.JsonObject;
 import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
@@ -54,14 +47,18 @@ import com.mob.tools.utils.UIHandler;
 import com.tbruyelle.rxpermissions.RxPermissions;
 import com.umeng.analytics.MobclickAgent;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
+import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
+import cn.sharesdk.wechat.moments.WechatMoments;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -199,7 +196,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
         @Override public void onPageFinished(WebView view, String url) {
           JUtils.Log(TAG, "onPageFinished:" + url);
           CookieSyncManager.getInstance().sync();
-          if (!mWebView.getSettings().getLoadsImagesAutomatically()) {
+          if (mWebView!=null&&!mWebView.getSettings().getLoadsImagesAutomatically()) {
             mWebView.getSettings().setLoadsImagesAutomatically(true);
           }
         }

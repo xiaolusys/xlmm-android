@@ -981,8 +981,11 @@ public final class FileUtils {
                 File file = new File(fileaddress);
                 in = new FileInputStream(file);
             }
-            byte[] arrayOfByte = new byte[in.available()];
-            in.read(arrayOfByte);
+            byte[] arrayOfByte = new byte[0];
+            if (in != null) {
+                arrayOfByte = new byte[in.available()];
+                in.read(arrayOfByte);
+            }
             categoryStr = new String(arrayOfByte, "UTF-8");
             Gson gson = new Gson();
             List<CategoryBean> list = gson.fromJson(categoryStr, new TypeToken<List<CategoryBean>>() {

@@ -53,7 +53,7 @@ public class LadyZoneActivity extends BaseMVVMActivity<ActivityLadyZoneBinding> 
     int[] colorTo = {R.id.img, R.id.color, R.id.iv_bg};
     private ColorTagAdapter colorAdapter;
     private List<Map<String, Object>> colorData;
-    private int type;
+    private String type;
     private String title;
     private int page;
 
@@ -62,6 +62,7 @@ public class LadyZoneActivity extends BaseMVVMActivity<ActivityLadyZoneBinding> 
     private CategoryProductAdapter categoryProductAdapter;
     private String cid;
     private String next;
+    private String category;
 
     @Override
     protected void initListener() {
@@ -77,11 +78,11 @@ public class LadyZoneActivity extends BaseMVVMActivity<ActivityLadyZoneBinding> 
         page = 1;
         initPriceData();
         initColorData();
-        refreshData(type+"", true);
+        refreshData(type, true);
     }
 
     private void initCategory() {
-        new CategoryTask(adapter, menu).execute(type+"");
+        new CategoryTask(adapter, menu).execute(type,category);
     }
 
     private void initColorData() {
@@ -130,8 +131,9 @@ public class LadyZoneActivity extends BaseMVVMActivity<ActivityLadyZoneBinding> 
     @Override
     protected void getBundleExtras(Bundle extras) {
         if (extras != null) {
-            type = extras.getInt("type");
+            type = extras.getString("type");
             title = extras.getString("title");
+            category = extras.getString("category");
         }
     }
 
@@ -297,8 +299,10 @@ public class LadyZoneActivity extends BaseMVVMActivity<ActivityLadyZoneBinding> 
 
     public void refreshData(String cid, boolean clear) {
         this.cid = cid;
+        b.emptyLayout.setVisibility(View.GONE);
         if (clear) {
             showIndeterminateProgressDialog(false);
+            categoryProductAdapter.clear();
             page = 1;
         }
         b.xrvCategory.setVisibility(View.GONE);
@@ -310,15 +314,9 @@ public class LadyZoneActivity extends BaseMVVMActivity<ActivityLadyZoneBinding> 
                     public void onNext(CategoryProductListBean categoryProductListBean) {
                         List<CategoryProductListBean.ResultsBean> results = categoryProductListBean.getResults();
                         if (results != null && results.size() > 0) {
-                            if (clear) {
-                                categoryProductAdapter.updateWithClear(results);
-                            } else {
-                                categoryProductAdapter.update(results);
-                            }
+                            categoryProductAdapter.update(results);
                         } else {
-                            if (clear) {
-                                categoryProductAdapter.clear();
-                            }
+                            b.emptyLayout.setVisibility(View.VISIBLE);
                         }
                         next = categoryProductListBean.getNext();
                         if (next != null && !"".equals(next)) {

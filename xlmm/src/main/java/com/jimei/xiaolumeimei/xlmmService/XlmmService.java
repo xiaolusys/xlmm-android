@@ -47,6 +47,7 @@ import com.jimei.xiaolumeimei.entities.MamaLivenessBean;
 import com.jimei.xiaolumeimei.entities.MamaSelfListBean;
 import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.entities.MembershipPointBean;
+import com.jimei.xiaolumeimei.entities.MiPushOrderCarryBean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
 import com.jimei.xiaolumeimei.entities.NicknameBean;
 import com.jimei.xiaolumeimei.entities.NinePicBean;
@@ -313,7 +314,7 @@ public interface XlmmService {
     //投诉建议
     @FormUrlEncoded
     @POST("/rest/v1/complain")
-    Observable<AddressResultBean> complain(
+     Observable<AddressResultBean> complain(
             @Field("com_type") String com_type,
             @Field("com_content") String com_content,
             @Field("com_title") String com_title);
@@ -932,4 +933,7 @@ public interface XlmmService {
 
     @GET("/rest/v2/mama/mission/weeklist")
     Observable<WeekTaskRewardBean> getTaskReward();
+
+    @GET("/rest/v2/ordercarry/get_latest_order_carry")
+    Observable<List<MiPushOrderCarryBean>> getLatestOrderCarry();
 }

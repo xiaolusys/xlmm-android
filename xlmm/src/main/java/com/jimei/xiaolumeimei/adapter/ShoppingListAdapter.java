@@ -1,7 +1,6 @@
 package com.jimei.xiaolumeimei.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -136,7 +135,7 @@ public class ShoppingListAdapter
         TextView totalCash;
         @Bind(R.id.pic_path)
         ImageView picPath;
-        @Bind(R.id.time_display)
+        @Bind(R.id.time_nick)
         TextView timeDisplay;
         @Bind(R.id.get_status_display)
         TextView getStatusDisplay;

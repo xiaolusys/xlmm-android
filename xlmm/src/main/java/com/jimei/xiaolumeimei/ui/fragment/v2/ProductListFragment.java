@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
@@ -26,16 +27,16 @@ import com.umeng.analytics.MobclickAgent;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import butterknife.Bind;
 import cn.iwgang.countdownview.CountdownView;
+import rx.Subscription;
 import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by wisdom on 16/8/16.
  */
 public class ProductListFragment extends Fragment implements ScrollableHelper.ScrollableContainer {
 
-    @Bind(R.id.xrv)
     XRecyclerView xRecyclerView;
     private View view;
     private CountdownView countTime;
@@ -45,6 +46,12 @@ public class ProductListFragment extends Fragment implements ScrollableHelper.Sc
     private int page = 1;
     private String next;
     private ProductListBeanAdapter adapter;
+    private CompositeSubscription mCompositeSubscription;
+    private boolean mIsHidden = true;
+    private static final String FRAGMENT_STORE = "STORE";
+    private boolean isVisible = false;
+    private boolean isInitView = false;
+    private boolean isFirstLoad = true;
 
 
     public static ProductListFragment newInstance(int type, String title) {
@@ -59,10 +66,37 @@ public class ProductListFragment extends Fragment implements ScrollableHelper.Sc
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            mIsHidden = savedInstanceState.getBoolean(FRAGMENT_STORE);
+        }
+
+        if (restoreInstanceState()) {
+            processRestoreInstanceState(savedInstanceState);
+        }
         setRetainInstance(true);
         if (getArguments() != null) {
             type = getArguments().getInt("type");
         }
+    }
+
+    protected boolean restoreInstanceState() {
+        return true;
+    }
+
+    private void processRestoreInstanceState(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            if (isSupportHidden()) {
+                ft.hide(this);
+            } else {
+                ft.show(this);
+            }
+            ft.commit();
+        }
+    }
+
+    public boolean isSupportHidden() {
+        return mIsHidden;
     }
 
     @Nullable
@@ -71,13 +105,39 @@ public class ProductListFragment extends Fragment implements ScrollableHelper.Sc
         view = inflater.inflate(R.layout.fragment_product_list, container, false);
         xRecyclerView = (XRecyclerView) view.findViewById(R.id.xrv);
         initViews();
+        isInitView = true;
+        lazyLoadData();
         return view;
+    }
+
+    private void lazyLoadData() {
+        if (!isFirstLoad || !isVisible || !isInitView) {
+            return;
+        }
+        loadMore(page, false);
+        isFirstLoad = false;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        if (isVisibleToUser) {
+            isVisible = true;
+            lazyLoadData();
+        } else {
+            isVisible = false;
+        }
+        super.setUserVisibleHint(isVisibleToUser);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(FRAGMENT_STORE, isHidden());
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        loadMore(page, false);
     }
 
     private void initViews() {
@@ -147,7 +207,7 @@ public class ProductListFragment extends Fragment implements ScrollableHelper.Sc
     }
 
     private void loadMore(int num, boolean isClear) {
-        ProductModel.getInstance()
+        addSubscription(ProductModel.getInstance()
                 .getProductListBean(num, type)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<ProductListBean>() {
@@ -173,8 +233,7 @@ public class ProductListFragment extends Fragment implements ScrollableHelper.Sc
                     public void onError(Throwable e) {
                         JUtils.Toast("数据加载失败,请刷新重试!");
                     }
-                });
-
+                }));
     }
 
     public void load(SwipeRefreshLayout swipeRefreshLayout) {
@@ -226,6 +285,26 @@ public class ProductListFragment extends Fragment implements ScrollableHelper.Sc
             title = getArguments().getString("title");
         }
         return title;
+    }
+
+    public void addSubscription(Subscription s) {
+        if (this.mCompositeSubscription == null) {
+            this.mCompositeSubscription = new CompositeSubscription();
+        }
+        this.mCompositeSubscription.add(s);
+    }
+
+    @Override
+    public void onDestroyView() {
+        try {
+            if (this.mCompositeSubscription != null) {
+                this.mCompositeSubscription.unsubscribe();
+                this.mCompositeSubscription = null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        super.onDestroyView();
     }
 
     public void goToTop() {

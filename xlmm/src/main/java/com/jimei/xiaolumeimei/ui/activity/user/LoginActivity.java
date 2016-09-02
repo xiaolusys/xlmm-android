@@ -353,7 +353,12 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                   addSubscription(subscription1);
                                 }
                               }
-                            } else {
+                            }else if (needSetInfoBean.getCode() == 1){
+                              Intent intent = new Intent(mContext, VerifyPhoneActivity.class);
+                              JUtils.Toast(needSetInfoBean.getInfo());
+                              startActivity(intent);
+                              finish();
+                            }else if (needSetInfoBean.getCode() == 2) {
                               Intent intent = new Intent(mContext, WxLoginBindPhoneActivity.class);
                               JUtils.Toast(needSetInfoBean.getInfo());
                               startActivity(intent);

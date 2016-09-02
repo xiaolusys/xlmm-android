@@ -391,7 +391,7 @@ public class ProductListActivity extends BaseSwipeBackCompatActivity
     }
 
     private void initCategory() {
-        new CategoryTask(adapter, menu).execute(type + "");
+        new CategoryTask(adapter, menu).execute(type + "","false");
     }
 
     @Override
@@ -417,6 +417,7 @@ public class ProductListActivity extends BaseSwipeBackCompatActivity
         this.cid = cid;
         if (clear) {
             showIndeterminateProgressDialog(false);
+            categoryProductAdapter.clear();
             page = 1;
         }
         Subscription subscribe = ProductModel.getInstance()
@@ -427,16 +428,9 @@ public class ProductListActivity extends BaseSwipeBackCompatActivity
                     public void onNext(CategoryProductListBean categoryProductListBean) {
                         List<CategoryProductListBean.ResultsBean> results = categoryProductListBean.getResults();
                         if (results != null && results.size() > 0) {
-                            if (clear) {
-                                categoryProductAdapter.updateWithClear(results);
-                            } else {
-                                categoryProductAdapter.update(results);
-                            }
+                            categoryProductAdapter.update(results);
                         } else {
-                            if (clear) {
-                                categoryProductAdapter.clear();
-                                emptyLayout.setVisibility(View.VISIBLE);
-                            }
+                            emptyLayout.setVisibility(View.VISIBLE);
                         }
                         next = categoryProductListBean.getNext();
                         if (next != null && !"".equals(next)) {

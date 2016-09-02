@@ -104,11 +104,8 @@ public class AllCouponActivity extends BaseSwipeBackCompatActivity {
 
     public class MainTabAdapter extends FragmentPagerAdapter {
 
-        FragmentManager fm;
-
         public MainTabAdapter(FragmentManager fm) {
             super(fm);
-            this.fm = fm;
         }
 
         @Override
