@@ -56,15 +56,12 @@ public class OrderListAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, OrderDetailActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putInt("orderinfo", id);
-                intent.putExtras(bundle);
-                context.startActivity(intent);
-            }
+        convertView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, OrderDetailActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putInt("orderinfo", id);
+            intent.putExtras(bundle);
+            context.startActivity(intent);
         });
         OrdersEntity entity = mList.get(position);
         ViewUtils.loadImgToImgView(context, holder.img, entity.getPic_path());

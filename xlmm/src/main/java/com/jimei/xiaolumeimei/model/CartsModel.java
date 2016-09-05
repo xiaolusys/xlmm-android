@@ -1,15 +1,16 @@
 package com.jimei.xiaolumeimei.model;
 
 import com.jimei.library.rx.DefaultTransform;
-import com.jimei.xiaolumeimei.entities.AddCartsBean;
 import com.jimei.xiaolumeimei.entities.CartsHisBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
-import com.jimei.xiaolumeimei.entities.CartsinfoBean;
+import com.jimei.xiaolumeimei.entities.CartsInfoBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.ResultEntity;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
+
 import java.util.List;
+
 import retrofit2.Response;
 import rx.Observable;
 
@@ -29,23 +30,21 @@ public class CartsModel {
     return ourInstance;
   }
 
-  //添加购物车
-  public Observable<AddCartsBean> addCarts(String itemId, String skuId) {
-
-    return XlmmRetrofitClient.getService()
-        .addCarts(itemId, skuId)
-        .compose(new DefaultTransform<>());
-  }
-
   //获取购物车列表信息
-  public Observable<List<CartsinfoBean>> getCartsList() {
+  public Observable<List<CartsInfoBean>> getCartsList() {
     return XlmmRetrofitClient.getService()
         .getCartsList()
         .compose(new DefaultTransform<>());
   }
 
+  public Observable<List<CartsInfoBean>> getCartsList(int type) {
+    return XlmmRetrofitClient.getService()
+            .getCartsList(type)
+            .compose(new DefaultTransform<>());
+  }
+
   //获取历史购物车列表信息
-  public Observable<List<CartsinfoBean>> getCartsHisList() {
+  public Observable<List<CartsInfoBean>> getCartsHisList() {
     return XlmmRetrofitClient.getService()
         .getCartsHisList()
         .compose(new DefaultTransform<>());
@@ -109,8 +108,14 @@ public class CartsModel {
   }
 
   public Observable<ResultEntity> addToCart(int item_id, int sku_id, int num){
+      return XlmmRetrofitClient.getService()
+              .addToCart(item_id,sku_id,num)
+              .compose(new DefaultTransform<>());
+  }
+
+  public Observable<ResultEntity> addToCart(int item_id, int sku_id, int num,int type){
     return XlmmRetrofitClient.getService()
-            .addToCart(item_id,sku_id,num)
+            .addToCart(item_id,sku_id,num,type)
             .compose(new DefaultTransform<>());
   }
 }

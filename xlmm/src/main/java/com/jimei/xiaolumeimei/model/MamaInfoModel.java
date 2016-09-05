@@ -5,11 +5,9 @@ import com.jimei.xiaolumeimei.entities.AllowanceBean;
 import com.jimei.xiaolumeimei.entities.DrawCouponBean;
 import com.jimei.xiaolumeimei.entities.MMVisitorsBean;
 import com.jimei.xiaolumeimei.entities.MaMaReNewBean;
-import com.jimei.xiaolumeimei.entities.MaMaRenwuListBean;
 import com.jimei.xiaolumeimei.entities.MamaFansBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.MamaLivenessBean;
-import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.entities.PersonalCarryRankBean;
 import com.jimei.xiaolumeimei.entities.PotentialFans;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
@@ -17,7 +15,9 @@ import com.jimei.xiaolumeimei.entities.ResultBean;
 import com.jimei.xiaolumeimei.entities.WeekTaskRewardBean;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
+
 import java.util.List;
+
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import rx.Observable;
@@ -111,10 +111,6 @@ public class MamaInfoModel {
     return XlmmRetrofitClient.getService().getPotentialFans(page).compose(new DefaultTransform<>());
   }
 
-  public Observable<MamaUrl> getMamaUrl() {
-    return XlmmRetrofitClient.getService().getMamaUrl("1.0").compose(new DefaultTransform<>());
-  }
-
   public Observable<MaMaReNewBean> getRegisterProInfo() {
 
     return XlmmRetrofitClient.getService().getRegisterProInfo().compose(new DefaultTransform<>());
@@ -168,11 +164,6 @@ public class MamaInfoModel {
     return XlmmRetrofitClient.getService().getTeamSelfRank().compose(new DefaultTransform<>());
   }
 
-  public Observable<Response<PersonalCarryRankBean>> getTeamMemberSelf(String id) {
-
-    return XlmmRetrofitClient.getService().getTeamMemberSelf(id).compose(new DefaultTransform<>());
-  }
-
   public Observable<List<PersonalCarryRankBean>> getTeamCarryRankBean() {
 
     return XlmmRetrofitClient.getService().getTeamCarryRankBean().compose(new DefaultTransform<>());
@@ -181,11 +172,6 @@ public class MamaInfoModel {
   public Observable<List<PersonalCarryRankBean>> getWeekTeamCarryRankBean() {
 
     return XlmmRetrofitClient.getService().getWeekTeamCarryRankBean().compose(new DefaultTransform<>());
-  }
-
-  public Observable<Response<MaMaRenwuListBean>> getMaMaRenwuListBean(String id) {
-    return XlmmRetrofitClient.getService().getMaMaRenwuListBean(id).
-        compose(new DefaultTransform<>());
   }
 
   public Observable<WeekTaskRewardBean> getTaskReward(){

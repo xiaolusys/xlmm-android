@@ -41,7 +41,7 @@
         android:layout_gravity="center"
         android:layout_marginBottom="8px"
         android:layout_marginTop="16px"
-        android:background="@drawable/shape_common"
+        android:background="@drawable/btn_common_default"
         android:text="购买"
         android:textColor="@color/white"
         android:textSize="16sp" />

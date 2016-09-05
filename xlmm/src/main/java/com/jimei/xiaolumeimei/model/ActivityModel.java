@@ -6,10 +6,8 @@ import com.jimei.xiaolumeimei.entities.BrandListBean;
 import com.jimei.xiaolumeimei.entities.LogisticCompany;
 import com.jimei.xiaolumeimei.entities.PostActivityBean;
 import com.jimei.xiaolumeimei.entities.ResultBean;
-import com.jimei.xiaolumeimei.entities.StartBean;
 import com.jimei.xiaolumeimei.entities.VersionBean;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
-import com.jimei.xiaolumeimei.xlmmService.XlmmService;
 
 import java.util.List;
 
@@ -69,13 +67,6 @@ public class ActivityModel {
     public Observable<ResponseBody> getUsercoupons(String template_id) {
         return XlmmRetrofitClient.getService()
                 .getUsercoupons(template_id)
-                .compose(new DefaultTransform<>());
-    }
-
-    //获得启动页面数据
-    public Observable<StartBean> getStarsBean() {
-        return XlmmRetrofitClient.getService()
-                .getStarsBean()
                 .compose(new DefaultTransform<>());
     }
 

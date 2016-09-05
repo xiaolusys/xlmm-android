@@ -77,7 +77,7 @@
             android:layout_width="660px"
             android:layout_height="76px"
             android:layout_marginBottom="60px"
-            android:background="@drawable/shape_common"
+            android:background="@drawable/btn_common_default"
             android:gravity="center"
             android:text="保存二维码"
             android:textColor="@color/white"

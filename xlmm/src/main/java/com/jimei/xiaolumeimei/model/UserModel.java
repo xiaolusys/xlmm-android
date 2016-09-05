@@ -4,19 +4,14 @@ import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.entities.BindInfoBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
-import com.jimei.xiaolumeimei.entities.CouponBean;
 import com.jimei.xiaolumeimei.entities.CouponEntity;
 import com.jimei.xiaolumeimei.entities.CouponSelectEntity;
 import com.jimei.xiaolumeimei.entities.GetCouponbean;
-import com.jimei.xiaolumeimei.entities.IsGetcoupon;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.entities.MembershipPointBean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
 import com.jimei.xiaolumeimei.entities.NicknameBean;
 import com.jimei.xiaolumeimei.entities.PointLogBean;
-import com.jimei.xiaolumeimei.entities.RegisterBean;
-import com.jimei.xiaolumeimei.entities.SmsLoginBean;
-import com.jimei.xiaolumeimei.entities.SmsLoginUserBean;
 import com.jimei.xiaolumeimei.entities.UserAccountBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
@@ -122,14 +117,6 @@ public class UserModel {
                 .compose(new DefaultTransform<>());
     }
 
-
-    //得到用户优惠券信息
-    public Observable<CouponBean> getUnusedCouponBean(int page) {
-        return XlmmRetrofitClient.getService()
-                .getUnusedCouponBean(page)
-                .compose(new DefaultTransform<>());
-    }
-
     //微信登录
     public Observable<CodeBean> wxapp_login(String noncestr, String timestamp,
                                             String sign, String headimgurl, String nickname, String openid, String unionid) {
@@ -213,8 +200,4 @@ public class UserModel {
                 .compose(new DefaultTransform<>());
     }
 
-    public Observable<Response<IsGetcoupon>> isCouPon() {
-        return XlmmRetrofitClient.getService().isCouPon()
-                .compose(new DefaultTransform<>());
-    }
 }

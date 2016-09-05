@@ -4,7 +4,6 @@ import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
-import com.jimei.xiaolumeimei.entities.LogisticCompanyBean;
 import com.jimei.xiaolumeimei.entities.LogisticsBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.PayInfoBean;
@@ -159,12 +158,6 @@ public class TradeModel {
   public Observable<LogisticsBean> getRefundLogistic(int rid,String packetid,String company_name) {
     return XlmmRetrofitClient.getService()
             .getRefundLogistic(rid,packetid,company_name)
-            .compose(new DefaultTransform<>());
-  }
-
-  public Observable<LogisticCompanyBean> getLogisticCompany(String company_name){
-    return XlmmRetrofitClient.getService()
-            .getLogisticComPany(company_name)
             .compose(new DefaultTransform<>());
   }
 

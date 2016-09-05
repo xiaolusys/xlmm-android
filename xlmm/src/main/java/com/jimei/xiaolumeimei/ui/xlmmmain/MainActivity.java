@@ -111,7 +111,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         NavigationView.OnNavigationItemSelectedListener, ScrollableLayout.OnScrollListener,
         SwipeRefreshLayout.OnRefreshListener {
 
-  private static final String POST_URL = "?imageMogr2/format/jpg/quality/80";
+  private static final String POST_URL = "?imageMogr2/format/jpg/quality/70";
   public static String TAG = "MainActivity";
   Map<String, String> map = new HashMap<>();
   List<ImageView> imageViewList = new ArrayList<>();
@@ -643,11 +643,13 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
               } else {
                 if (jump_info.getType() == XlmmConst.JUMP_PRODUCT_CHILDLIST) {
                   Bundle childBundle = new Bundle();
-                  childBundle.putInt("type",XlmmConst.TYPE_CHILD);
+                  childBundle.putString("type",XlmmConst.TYPE_CHILD);
+                  childBundle.putString("title","萌娃专区");
                   readyGo(ProductListActivity.class,childBundle);
                 } else if (jump_info.getType() == XlmmConst.JUMP_PRODUCT_LADYLIST) {
                   Bundle ladyBundle = new Bundle();
-                  ladyBundle.putInt("type",XlmmConst.TYPE_LADY);
+                  ladyBundle.putString("type",XlmmConst.TYPE_LADY);
+                  ladyBundle.putString("title","女装专区");
                   readyGo(ProductListActivity.class,ladyBundle);
                 } else {
                   JumpUtils.push_jump_proc(MainActivity.this, extra);
@@ -743,13 +745,14 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
       for (int i = 0; i < postActivityBean.size(); i++) {
         imageView = new ImageView(MainActivity.this);
         imageView.setScaleType(ImageView.ScaleType.CENTER);
+        imageView.setPadding(0,12,0,12);
         imageViewList.add(imageView);
         post_activity_layout.addView(imageView);
       }
       for (int i = 0; i < postActivityBean.size(); i++) {
         final int finalI = i;
         OkHttpUtils.get()
-                .url(postActivityBean.get(i).getAct_img())
+                .url(postActivityBean.get(i).getAct_img()+POST_URL)
                 .build()
                 .execute(new BitmapCallback() {
                   @Override public void onError(Call call, Exception e, int id) {

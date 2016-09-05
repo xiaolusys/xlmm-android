@@ -215,6 +215,7 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
                         super.onCompleted();
                     }
                 });
+        addSubscription(subscription2);
     }
 
     @Override
@@ -239,10 +240,6 @@ public class MMChooseListActivity extends BaseSwipeBackCompatActivity
                 sortfeild = SALES;
                 getChooseListLadyorChildSort(sortfeild, category);
 
-                break;
-
-            case R.id.choose_tv:
-                startActivity(new Intent(this, HaveChoosedActivity.class));
                 break;
         }
     }

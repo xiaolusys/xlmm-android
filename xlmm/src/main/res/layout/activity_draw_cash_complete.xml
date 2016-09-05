@@ -55,7 +55,7 @@
             android:layout_width="660px"
             android:layout_height="80px"
             android:layout_marginBottom="60px"
-            android:background="@drawable/shape_common"
+            android:background="@drawable/btn_common_default"
             android:gravity="center"
             android:text="完成"
             android:textColor="@color/white"

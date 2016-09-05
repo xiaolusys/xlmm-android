@@ -24,7 +24,6 @@ import com.jimei.xiaolumeimei.swipeback.SwipeBackActivityBase;
 import com.jimei.xiaolumeimei.swipeback.SwipeBackActivityHelper;
 import com.jimei.xiaolumeimei.swipeback.SwipeBackLayout;
 import com.jimei.xiaolumeimei.swipeback.Utils;
-import com.umeng.analytics.MobclickAgent;
 
 public abstract class BaseSwipeBackCompatActivity extends BaseAppCompatActivity
     implements SwipeBackActivityBase {
@@ -35,8 +34,6 @@ public abstract class BaseSwipeBackCompatActivity extends BaseAppCompatActivity
     mHelper = new SwipeBackActivityHelper(this);
     mHelper.onActivityCreate();
   }
-
-
 
   @Override protected void onPostCreate(Bundle savedInstanceState) {
     super.onPostCreate(savedInstanceState);
@@ -73,6 +70,16 @@ public abstract class BaseSwipeBackCompatActivity extends BaseAppCompatActivity
 
   @Override protected void onStop() {
     super.onStop();
+  }
+
+  @Override
+  protected boolean toggleOverridePendingTransition() {
+    return false;
+  }
+
+  @Override
+  protected TransitionMode getOverridePendingTransitionMode() {
+    return null;
   }
 
 }

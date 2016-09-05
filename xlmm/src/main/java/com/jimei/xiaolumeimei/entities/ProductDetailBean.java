@@ -64,6 +64,8 @@ public class ProductDetailBean {
 
     private List<SkuInfoBean> sku_info;
 
+    private TeamBuyInfo teambuy_info;
+
     public int getId() {
         return id;
     }
@@ -110,6 +112,14 @@ public class ProductDetailBean {
 
     public void setSku_info(List<SkuInfoBean> sku_info) {
         this.sku_info = sku_info;
+    }
+
+    public TeamBuyInfo getTeambuy_info() {
+        return teambuy_info;
+    }
+
+    public void setTeambuy_info(TeamBuyInfo teambuy_info) {
+        this.teambuy_info = teambuy_info;
     }
 
     public static class DetailContentBean {
@@ -506,6 +516,43 @@ public class ProductDetailBean {
             public void setIs_saleout(boolean is_saleout) {
                 this.is_saleout = is_saleout;
             }
+        }
+    }
+
+    public static class TeamBuyInfo{
+
+        /**
+         * teambuy_person_num : 3
+         * teambuy : true
+         * teambuy_price : 22.2
+         */
+
+        private int teambuy_person_num;
+        private boolean teambuy;
+        private double teambuy_price;
+
+        public int getTeambuy_person_num() {
+            return teambuy_person_num;
+        }
+
+        public void setTeambuy_person_num(int teambuy_person_num) {
+            this.teambuy_person_num = teambuy_person_num;
+        }
+
+        public boolean isTeambuy() {
+            return teambuy;
+        }
+
+        public void setTeambuy(boolean teambuy) {
+            this.teambuy = teambuy;
+        }
+
+        public double getTeambuy_price() {
+            return teambuy_price;
+        }
+
+        public void setTeambuy_price(double teambuy_price) {
+            this.teambuy_price = teambuy_price;
         }
     }
 }

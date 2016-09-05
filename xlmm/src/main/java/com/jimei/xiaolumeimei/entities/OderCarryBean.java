@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.entities;
 
 import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 /**
@@ -80,185 +81,239 @@ public class OderCarryBean {
   }
 
   public static class ResultsEntity {
-    @SerializedName("mama_id") private int mMamaId;
-    @SerializedName("order_id") private String mOrderId;
-    @SerializedName("order_value") private double mOrderValue;
-    @SerializedName("carry_num") private double mCarryNum;
-    @SerializedName("carry_type") private int mCarryType;
-    @SerializedName("carry_type_name") private String mCarryTypeName;
-    @SerializedName("sku_name") private String mSkuName;
-    @SerializedName("sku_img") private String mSkuImg;
-    @SerializedName("contributor_nick") private String mContributorNick;
-    @SerializedName("contributor_img") private String mContributorImg;
-    @SerializedName("carry_description") private String mCarryDescription;
-    @SerializedName("contributor_id") private int mContributorId;
-    @SerializedName("agency_level") private int mAgencyLevel;
-    @SerializedName("carry_plan_name") private String mCarryPlanName;
-    @SerializedName("date_field") private String mDateField;
-    @SerializedName("status") private int mStatus;
-    @SerializedName("status_display") private String mStatusDisplay;
-    @SerializedName("modified") private String mModified;
-    @SerializedName("created") private String mCreated;
-    @SerializedName("today_carry") private double mTodayCarry;
 
-    public String getmCarryDescription() {
-      return mCarryDescription;
+    /**
+     * mama_id : 44
+     * order_id : xo16083157c65a8f9a742
+     * order_value : 37.9
+     * carry_value : 6.6
+     * carry_num : 6.6
+     * carry_type : 2
+     * carry_type_name : App订单额外+10%
+     * sku_name : 可爱跳跳虎连体睡衣/跳跳虎
+     * sku_img : http://img.xiaolumeimei.com/MG_1472439330933.jpg
+     * contributor_nick : 小南
+     * carry_description : APP粉丝佣金，粉丝多赚钱快！
+     * contributor_img : http://wx.qlogo.cn/mmopen/PiajxSqBRaEKEW0CsV82dPCcbmDF1Lx0xxh9ozam8qOpQ5V7ZsKiaxFAHNibWl7zXa18bDMKVXcV7611nTdAMz9rg/0
+     * contributor_id : 40476
+     * agency_level : 2
+     * carry_plan_name : 代理佣金初始计划
+     * date_field : 2016-08-31
+     * status : 1
+     * status_display : 预计收益
+     * modified : 2016-08-31T12:18:32
+     * created : 2016-08-31T12:18:23
+     * today_carry : 6.6
+     * packetid :
+     * company_code :
+     */
+
+    private int mama_id;
+    private String order_id;
+    private double order_value;
+    private double carry_value;
+    private double carry_num;
+    private int carry_type;
+    private String carry_type_name;
+    private String sku_name;
+    private String sku_img;
+    private String contributor_nick;
+    private String carry_description;
+    private String contributor_img;
+    private int contributor_id;
+    private int agency_level;
+    private String carry_plan_name;
+    private String date_field;
+    private int status;
+    private String status_display;
+    private String modified;
+    private String created;
+    private double today_carry;
+    private String packetid;
+    private String company_code;
+
+    public int getMama_id() {
+      return mama_id;
     }
 
-    public void setmCarryDescription(String mCarryDescription) {
-      this.mCarryDescription = mCarryDescription;
+    public void setMama_id(int mama_id) {
+      this.mama_id = mama_id;
     }
 
-    public int getMamaId() {
-      return mMamaId;
+    public String getOrder_id() {
+      return order_id;
     }
 
-    public void setMamaId(int mamaId) {
-      this.mMamaId = mamaId;
+    public void setOrder_id(String order_id) {
+      this.order_id = order_id;
     }
 
-    public String getOrderId() {
-      return mOrderId;
+    public double getOrder_value() {
+      return order_value;
     }
 
-    public void setOrderId(String orderId) {
-      this.mOrderId = orderId;
+    public void setOrder_value(double order_value) {
+      this.order_value = order_value;
     }
 
-    public double getOrderValue() {
-      return mOrderValue;
+    public double getCarry_value() {
+      return carry_value;
     }
 
-    public void setOrderValue(double orderValue) {
-      this.mOrderValue = orderValue;
+    public void setCarry_value(double carry_value) {
+      this.carry_value = carry_value;
     }
 
-    public double getCarryNum() {
-      return mCarryNum;
+    public double getCarry_num() {
+      return carry_num;
     }
 
-    public void setCarryNum(double carryNum) {
-      this.mCarryNum = carryNum;
+    public void setCarry_num(double carry_num) {
+      this.carry_num = carry_num;
     }
 
-    public int getCarryType() {
-      return mCarryType;
+    public int getCarry_type() {
+      return carry_type;
     }
 
-    public void setCarryType(int carryType) {
-      this.mCarryType = carryType;
+    public void setCarry_type(int carry_type) {
+      this.carry_type = carry_type;
     }
 
-    public String getCarryTypeName() {
-      return mCarryTypeName;
+    public String getCarry_type_name() {
+      return carry_type_name;
     }
 
-    public void setCarryTypeName(String carryTypeName) {
-      this.mCarryTypeName = carryTypeName;
+    public void setCarry_type_name(String carry_type_name) {
+      this.carry_type_name = carry_type_name;
     }
 
-    public String getSkuName() {
-      return mSkuName;
+    public String getSku_name() {
+      return sku_name;
     }
 
-    public void setSkuName(String skuName) {
-      this.mSkuName = skuName;
+    public void setSku_name(String sku_name) {
+      this.sku_name = sku_name;
     }
 
-    public String getSkuImg() {
-      return mSkuImg;
+    public String getSku_img() {
+      return sku_img;
     }
 
-    public void setSkuImg(String skuImg) {
-      this.mSkuImg = skuImg;
+    public void setSku_img(String sku_img) {
+      this.sku_img = sku_img;
     }
 
-    public String getContributorNick() {
-      return mContributorNick;
+    public String getContributor_nick() {
+      return contributor_nick;
     }
 
-    public void setContributorNick(String contributorNick) {
-      this.mContributorNick = contributorNick;
+    public void setContributor_nick(String contributor_nick) {
+      this.contributor_nick = contributor_nick;
     }
 
-    public String getContributorImg() {
-      return mContributorImg;
+    public String getCarry_description() {
+      return carry_description;
     }
 
-    public void setContributorImg(String contributorImg) {
-      this.mContributorImg = contributorImg;
+    public void setCarry_description(String carry_description) {
+      this.carry_description = carry_description;
     }
 
-    public int getContributorId() {
-      return mContributorId;
+    public String getContributor_img() {
+      return contributor_img;
     }
 
-    public void setContributorId(int contributorId) {
-      this.mContributorId = contributorId;
+    public void setContributor_img(String contributor_img) {
+      this.contributor_img = contributor_img;
     }
 
-    public int getAgencyLevel() {
-      return mAgencyLevel;
+    public int getContributor_id() {
+      return contributor_id;
     }
 
-    public void setAgencyLevel(int agencyLevel) {
-      this.mAgencyLevel = agencyLevel;
+    public void setContributor_id(int contributor_id) {
+      this.contributor_id = contributor_id;
     }
 
-    public String getCarryPlanName() {
-      return mCarryPlanName;
+    public int getAgency_level() {
+      return agency_level;
     }
 
-    public void setCarryPlanName(String carryPlanName) {
-      this.mCarryPlanName = carryPlanName;
+    public void setAgency_level(int agency_level) {
+      this.agency_level = agency_level;
     }
 
-    public String getDateField() {
-      return mDateField;
+    public String getCarry_plan_name() {
+      return carry_plan_name;
     }
 
-    public void setDateField(String dateField) {
-      this.mDateField = dateField;
+    public void setCarry_plan_name(String carry_plan_name) {
+      this.carry_plan_name = carry_plan_name;
+    }
+
+    public String getDate_field() {
+      return date_field;
+    }
+
+    public void setDate_field(String date_field) {
+      this.date_field = date_field;
     }
 
     public int getStatus() {
-      return mStatus;
+      return status;
     }
 
     public void setStatus(int status) {
-      this.mStatus = status;
+      this.status = status;
     }
 
-    public String getStatusDisplay() {
-      return mStatusDisplay;
+    public String getStatus_display() {
+      return status_display;
     }
 
-    public void setStatusDisplay(String statusDisplay) {
-      this.mStatusDisplay = statusDisplay;
+    public void setStatus_display(String status_display) {
+      this.status_display = status_display;
     }
 
     public String getModified() {
-      return mModified;
+      return modified;
     }
 
     public void setModified(String modified) {
-      this.mModified = modified;
+      this.modified = modified;
     }
 
     public String getCreated() {
-      return mCreated;
+      return created;
     }
 
     public void setCreated(String created) {
-      this.mCreated = created;
+      this.created = created;
     }
 
-    public double getTodayCarry() {
-      return mTodayCarry;
+    public double getToday_carry() {
+      return today_carry;
     }
 
-    public void setTodayCarry(double todayCarry) {
-      this.mTodayCarry = todayCarry;
+    public void setToday_carry(double today_carry) {
+      this.today_carry = today_carry;
+    }
+
+    public String getPacketid() {
+      return packetid;
+    }
+
+    public void setPacketid(String packetid) {
+      this.packetid = packetid;
+    }
+
+    public String getCompany_code() {
+      return company_code;
+    }
+
+    public void setCompany_code(String company_code) {
+      this.company_code = company_code;
     }
   }
 }

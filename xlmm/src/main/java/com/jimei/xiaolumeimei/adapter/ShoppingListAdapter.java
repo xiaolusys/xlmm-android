@@ -68,8 +68,8 @@ public class ShoppingListAdapter
                 showCategory(holder);
             } else {
                 boolean theCategoryOfLastEqualsToThis = mList.get(position - 1)
-                        .getDateField()
-                        .equals(mList.get(position).getDateField());
+                        .getDate_field()
+                        .equals(mList.get(position).getDate_field());
                 if (!theCategoryOfLastEqualsToThis) {
                     showCategory(holder);
                 } else {
@@ -80,8 +80,8 @@ public class ShoppingListAdapter
             e.printStackTrace();
         }
 
-        holder.shoptime.setText(resultsEntity.getDateField());
-        if (TextUtils.isEmpty(resultsEntity.getSkuImg())) {
+        holder.shoptime.setText(resultsEntity.getDate_field());
+        if (TextUtils.isEmpty(resultsEntity.getSku_img())) {
             Glide.with(mContext)
                     .load(R.mipmap.ic_launcher)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -89,25 +89,25 @@ public class ShoppingListAdapter
                     .centerCrop()
                     .into(holder.picPath);
         } else {
-            ViewUtils.loadImgToImgView(mContext, holder.picPath, resultsEntity.getSkuImg());
+            ViewUtils.loadImgToImgView(mContext, holder.picPath, resultsEntity.getSku_img());
         }
-        holder.getStatusDisplay.setText(resultsEntity.getStatusDisplay());
-        holder.wxordernick.setText(resultsEntity.getContributorNick());
+        holder.getStatusDisplay.setText(resultsEntity.getStatus_display());
+        holder.wxordernick.setText(resultsEntity.getContributor_nick());
         holder.timeDisplay.setText(resultsEntity.getCreated().substring(11, 16));
-        holder.totalMoneyTv.setText("实付" + resultsEntity.getOrderValue());
-        if (resultsEntity.getCarryType() == 2) {
+        holder.totalMoneyTv.setText("实付" + resultsEntity.getOrder_value());
+        if (resultsEntity.getCarry_type() == 2) {
             holder.flagTv.setText("APP");
             holder.flagRl.setVisibility(View.VISIBLE);
-        } else if (resultsEntity.getCarryType() == 3) {
+        } else if (resultsEntity.getCarry_type() == 3) {
             holder.flagTv.setText("下属订单");
             holder.flagRl.setVisibility(View.VISIBLE);
         } else {
             holder.flagRl.setVisibility(View.GONE);
         }
         holder.tichengCash.setText(
-                "收益" + (float) (Math.round(resultsEntity.getCarryNum() * 100)) / 100);
+                "收益" + (float) (Math.round(resultsEntity.getCarry_num() * 100)) / 100);
         holder.totalCash.setText(
-                "总收益 " + (float) (Math.round(resultsEntity.getTodayCarry() * 100)) / 100);
+                "总收益 " + (float) (Math.round(resultsEntity.getToday_carry() * 100)) / 100);
     }
 
     private void showCategory(ShoppingListVH holder) {

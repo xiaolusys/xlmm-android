@@ -921,7 +921,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     //wexin alipay already showmsg
                     MobclickAgent.onEvent(CartsPayInfoActivity.this, "PayCancelID");
                     JUtils.Toast("你已取消支付!");
-//                    startActivity(new Intent(CartsPayInfoActivity.this, CartActivity.class));
                     if (order_id != -1) {
                         Intent intent = new Intent(this, OrderDetailActivity.class);
                         Bundle bundle = new Bundle();
@@ -947,7 +946,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     EventBus.getDefault().postSticky(new UserChangeEvent());
                     MobclickAgent.onEvent(CartsPayInfoActivity.this, "PayFailID");
                     showMsg(result, errorMsg, extraMsg);
-//                    startActivity(new Intent(CartsPayInfoActivity.this, CartActivity.class));
                     finish();
                     //JUtils.Toast(result + "" + errorMsg + "" + extraMsg);
                 }

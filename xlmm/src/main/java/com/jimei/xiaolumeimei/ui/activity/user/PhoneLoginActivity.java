@@ -24,7 +24,6 @@ import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.CollectionActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
-import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
@@ -195,11 +194,7 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                         JumpUtils.jumpToWebViewWithCookies(mContext, actlink, -1,
                             CommonWebViewActivity.class);
                         finish();
-                      } else if (login.equals("prodcutweb")) {
-                        JumpUtils.jumpToWebViewWithCookies(mContext, actlink, -1,
-                            ProductPopDetailActvityWeb.class);
-                        finish();
-                      } else if (login.equals("goactivity")) {
+                      }  else if (login.equals("goactivity")) {
                         JumpUtils.jumpToWebViewWithCookies(mContext, actlink, id,
                             ActivityWebViewActivity.class,title);
                         finish();
