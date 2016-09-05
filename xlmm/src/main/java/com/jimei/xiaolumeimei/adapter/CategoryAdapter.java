@@ -1,9 +1,7 @@
 package com.jimei.xiaolumeimei.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.os.Bundle;
 import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +12,6 @@ import android.widget.TextView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
-import com.jimei.xiaolumeimei.ui.activity.product.LadyZoneActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductListActivity;
 import com.jimei.xiaolumeimei.utils.FileUtils;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
@@ -66,19 +63,7 @@ public class CategoryAdapter extends XRecyclerView.Adapter<CategoryAdapter.ViewH
         } else {
             ViewUtils.loadImgToImgView(context, holder.img, childsBean.getCat_pic());
         }
-        if (childsBean.getChilds() != null && childsBean.getChilds().size() > 0) {
-            holder.item.setOnClickListener(v -> {
-                Bundle bundle = new Bundle();
-                bundle.putString("type", childsBean.getCid());
-                bundle.putString("title", childsBean.getName());
-                bundle.putString("category", "false");
-                Intent intent = new Intent(context, LadyZoneActivity.class);
-                intent.putExtras(bundle);
-                context.startActivity(intent);
-            });
-        } else if (context instanceof LadyZoneActivity) {
-            holder.item.setOnClickListener(v -> ((LadyZoneActivity) this.context).refreshData(childsBean.getCid(), true));
-        } else if (context instanceof ProductListActivity) {
+        if (context instanceof ProductListActivity) {
             holder.item.setOnClickListener(v -> ((ProductListActivity) this.context).refreshData(childsBean.getCid(), true));
         }
     }

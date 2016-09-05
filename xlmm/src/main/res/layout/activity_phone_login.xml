@@ -74,7 +74,7 @@
         android:id="@+id/set_login_button"
         android:layout_width="656px"
         android:layout_height="90px"
-        android:background="@drawable/shape_common"
+        android:background="@drawable/btn_common_default"
         android:clickable="true"
         android:text="登录"
         android:textColor="@color/white" />

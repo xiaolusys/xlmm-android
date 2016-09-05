@@ -7,13 +7,13 @@ import com.jimei.xiaolumeimei.entities.ClickcarryBean;
 import com.jimei.xiaolumeimei.entities.MMChooselistBean;
 import com.jimei.xiaolumeimei.entities.MMHavaChooseResultBean;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
-import com.jimei.xiaolumeimei.entities.MMStoreBean;
 import com.jimei.xiaolumeimei.entities.NinePicBean;
 import com.jimei.xiaolumeimei.entities.OderCarryBean;
-import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.ShopProductBean;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
+
 import java.util.List;
+
 import rx.Observable;
 
 /**
@@ -29,13 +29,6 @@ public class MMProductModel {
 
     public static MMProductModel getInstance() {
         return ourInstance;
-    }
-
-    //得到MM店铺列表
-    public Observable<List<MMStoreBean>> getMMStoreList() {
-        return XlmmRetrofitClient.getService()
-                .getMMStoreList()
-                .compose(new DefaultTransform<>());
     }
 
     //选品女装或者童装列表排序
@@ -62,27 +55,6 @@ public class MMProductModel {
                         .compose(new DefaultTransform<>());
             }
         }
-    }
-
-    //MM上架商品到商铺
-    public Observable<ResponseResultBean> add_pro_to_shop(String product) {
-        return XlmmRetrofitClient.getService()
-                .add_pro_to_shop(product)
-                .compose(new DefaultTransform<>());
-    }
-
-    //MM下架商品
-    public Observable<ResponseResultBean> remove_pro_from_shop(String product) {
-        return XlmmRetrofitClient.getService()
-                .remove_pro_from_shop(product)
-                .compose(new DefaultTransform<>());
-    }
-
-    //MM订单历史
-    public Observable<CarryLogListBean> getCarryLogList(String page) {
-        return XlmmRetrofitClient.getService()
-                .getCarrylogList(page)
-                .compose(new DefaultTransform<>());
     }
 
     public Observable<List<NinePicBean>> getNinePic() {

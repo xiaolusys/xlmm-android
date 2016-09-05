@@ -102,7 +102,7 @@
             android:layout_height="80px"
             android:textColor="@color/white"
             android:gravity="center"
-            android:background="@drawable/shape_common"
+            android:background="@drawable/btn_common_default"
             android:text="完成"
             android:layout_marginTop="60px"/>
 

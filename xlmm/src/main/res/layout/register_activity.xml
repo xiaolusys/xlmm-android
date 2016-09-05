@@ -61,7 +61,7 @@
             android:layout_width="100px"
             android:layout_height="64px"
             android:layout_weight="0.5"
-            android:background="@drawable/shape_getcheckcode"
+            android:background="@drawable/btn_common_white"
             android:text="获取验证码"
             android:textColor="@color/colorAccent" />
     </LinearLayout>
@@ -74,7 +74,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="50px"
-        android:background="@drawable/shape_common"
+        android:background="@drawable/btn_common_default"
         android:text="@string/next"
         android:textColor="@color/white" />
 

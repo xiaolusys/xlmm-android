@@ -246,8 +246,7 @@ public final class ViewUtils {
         || picPath.contains("mmbiz.qlogo.cn")) {
       Glide.with(context)
           .load(picPath)
-              .thumbnail(0.1f)
-          .diskCacheStrategy(DiskCacheStrategy.ALL)
+          .diskCacheStrategy(DiskCacheStrategy.RESULT)
           .centerCrop()
           .into(img);
     } else {
@@ -266,8 +265,7 @@ public final class ViewUtils {
                 + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
             Glide.with(context)
                 .load(head_img)
-                    .thumbnail(0.1f)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .centerCrop()
                 .into(img);
           } catch (UnsupportedEncodingException e) {
@@ -277,8 +275,7 @@ public final class ViewUtils {
       } else {
         Glide.with(context)
             .load(picPath)
-                .thumbnail(0.1f)
-            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .diskCacheStrategy(DiskCacheStrategy.RESULT)
             .centerCrop()
             .into(img);
       }
@@ -292,8 +289,7 @@ public final class ViewUtils {
         || picPath.contains("mmbiz.qlogo.cn")) {
       Glide.with(context)
           .load(picPath)
-              .thumbnail(0.1f)
-          .diskCacheStrategy(DiskCacheStrategy.ALL)
+          .diskCacheStrategy(DiskCacheStrategy.RESULT)
           .centerCrop()
           .into(img);
     } else {
@@ -312,8 +308,7 @@ public final class ViewUtils {
                 + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
             Glide.with(context)
                 .load(head_img)
-                    .thumbnail(0.1f)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .centerCrop()
                 .into(img);
           } catch (UnsupportedEncodingException e) {
@@ -323,8 +318,7 @@ public final class ViewUtils {
       } else {
         Glide.with(context)
             .load(picPath)
-                .thumbnail(0.1f)
-            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .diskCacheStrategy(DiskCacheStrategy.RESULT)
             .centerCrop()
             .into(img);
       }
@@ -338,7 +332,7 @@ public final class ViewUtils {
       Glide.with(context)
           .load(picPath)
               .thumbnail(0.1f)
-          .diskCacheStrategy(DiskCacheStrategy.ALL)
+          .diskCacheStrategy(DiskCacheStrategy.RESULT)
           .centerCrop()
           .transform(new GlideRoundTransform(context, radius))
           .into(img);
@@ -359,7 +353,7 @@ public final class ViewUtils {
             Glide.with(context)
                 .load(head_img)
                     .thumbnail(0.1f)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .centerCrop()
                 .transform(new GlideRoundTransform(context, radius))
                 .into(img);
@@ -371,7 +365,7 @@ public final class ViewUtils {
         Glide.with(context)
             .load(picPath)
                 .thumbnail(0.1f)
-            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .diskCacheStrategy(DiskCacheStrategy.RESULT)
             .centerCrop()
             .transform(new GlideRoundTransform(context, radius))
             .into(img);
@@ -388,8 +382,7 @@ public final class ViewUtils {
         || picPath.contains("mmbiz.qlogo.cn")) {
       Glide.with(context)
           .load(picPath)
-              .thumbnail(0.1f)
-          .diskCacheStrategy(DiskCacheStrategy.ALL)
+          .diskCacheStrategy(DiskCacheStrategy.RESULT)
           .bitmapTransform(new CropCircleTransformation(context))
           .into(img);
     } else {
@@ -405,11 +398,10 @@ public final class ViewUtils {
                 + group
                 + "/"
                 + URLEncoder.encode(temp[1], "utf-8")
-                + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
+                + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/70";
             Glide.with(context)
                 .load(head_img)
-                    .thumbnail(0.1f)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .bitmapTransform(new CropCircleTransformation(context))
                 .into(img);
           } catch (UnsupportedEncodingException e) {
@@ -419,8 +411,7 @@ public final class ViewUtils {
       } else {
         Glide.with(context)
             .load(picPath)
-                .thumbnail(0.1f)
-            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .diskCacheStrategy(DiskCacheStrategy.RESULT)
             .bitmapTransform(new CropCircleTransformation(context))
             .into(img);
       }
@@ -436,7 +427,7 @@ public final class ViewUtils {
       Glide.with(context)
           .load(picPath)
               .thumbnail(0.1f)
-          .diskCacheStrategy(DiskCacheStrategy.ALL)
+          .diskCacheStrategy(DiskCacheStrategy.RESULT)
           .centerCrop()
           .into(img);
     } else {
@@ -456,7 +447,7 @@ public final class ViewUtils {
             Glide.with(context)
                 .load(head_img)
                     .thumbnail(0.1f)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .centerCrop()
                 .placeholder(R.drawable.parceholder)
                 .into(img);
@@ -468,7 +459,7 @@ public final class ViewUtils {
         Glide.with(context)
             .load(picPath)
                 .thumbnail(0.1f)
-            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .diskCacheStrategy(DiskCacheStrategy.RESULT)
             .centerCrop()
             .into(img);
       }
@@ -484,7 +475,7 @@ public final class ViewUtils {
       Glide.with(context)
           .load(picPath)
           .thumbnail(0.1f)
-          .diskCacheStrategy(DiskCacheStrategy.ALL)
+          .diskCacheStrategy(DiskCacheStrategy.RESULT)
           .centerCrop()
           .into(img);
     } else {
@@ -500,11 +491,11 @@ public final class ViewUtils {
                 + group
                 + "/"
                 + URLEncoder.encode(temp[1], "utf-8")
-                + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
+                + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/70";
             Glide.with(context)
                 .load(head_img)
                 .thumbnail(0.1f)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .centerCrop()
                 .placeholder(R.drawable.parceholder)
                 .into(img);
@@ -516,7 +507,7 @@ public final class ViewUtils {
         Glide.with(context)
             .load(picPath)
                 .thumbnail(0.1f)
-            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .diskCacheStrategy(DiskCacheStrategy.RESULT)
             .centerCrop()
             .into(img);
       }
@@ -539,13 +530,13 @@ public final class ViewUtils {
       Glide.with(context)
           .load(head_img)
               .thumbnail(0.1f)
-          .diskCacheStrategy(DiskCacheStrategy.ALL)
+          .diskCacheStrategy(DiskCacheStrategy.RESULT)
           .placeholder(R.drawable.header)
           .centerCrop()
           .into(img);
     } else {
       //if (picPath.startsWith("https://mmbiz.qlogo.cn")) {
-      Glide.with(context).load(picPath).thumbnail(0.1f).diskCacheStrategy(DiskCacheStrategy.ALL)
+      Glide.with(context).load(picPath).thumbnail(0.1f).diskCacheStrategy(DiskCacheStrategy.RESULT)
           //.placeholder(R.drawable.parceholder)
           .centerCrop().into(img);
     }
@@ -590,13 +581,13 @@ public final class ViewUtils {
       Glide.with(context)
           .load(head_img)
               .thumbnail(0.1f)
-          .diskCacheStrategy(DiskCacheStrategy.ALL)
+          .diskCacheStrategy(DiskCacheStrategy.RESULT)
           .transform(new GlideRoundTransform(context))
           .centerCrop()
           .into(img);
     } else {
       //if (picPath.startsWith("https://mmbiz.qlogo.cn")) {
-      Glide.with(context).load(picPath).thumbnail(0.1f).diskCacheStrategy(DiskCacheStrategy.ALL)
+      Glide.with(context).load(picPath).thumbnail(0.1f).diskCacheStrategy(DiskCacheStrategy.RESULT)
           //.placeholder(R.drawable.parceholder)
           .centerCrop().into(img);
     }

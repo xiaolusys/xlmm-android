@@ -67,23 +67,17 @@ public class ProductListBeanAdapter extends RecyclerView.Adapter<ProductListBean
         String sale_state = resultsBean.getSale_state();
         try {
             if ("will".equals(sale_state)) {
-                holder.salenotopen.setVisibility(View.VISIBLE);
-                holder.saleout.setVisibility(View.GONE);
-                holder.saleOff.setVisibility(View.GONE);
+                holder.saleStatus.setText("即将开售");
+                holder.saleStatus.setVisibility(View.VISIBLE);
             } else if ("off".equals(sale_state)) {
-                holder.salenotopen.setVisibility(View.GONE);
-                holder.saleout.setVisibility(View.GONE);
-                holder.saleOff.setVisibility(View.VISIBLE);
+                holder.saleStatus.setText("已下架");
+                holder.saleStatus.setVisibility(View.VISIBLE);
             } else if ("on".equals(sale_state) && resultsBean.isIs_saleout()) {
-                holder.salenotopen.setVisibility(View.GONE);
-                holder.saleout.setVisibility(View.VISIBLE);
-                holder.saleOff.setVisibility(View.GONE);
+                holder.saleStatus.setText("已抢光");
+                holder.saleStatus.setVisibility(View.VISIBLE);
             } else {
-                holder.salenotopen.setVisibility(View.GONE);
-                holder.saleout.setVisibility(View.GONE);
-                holder.saleOff.setVisibility(View.GONE);
+                holder.saleStatus.setVisibility(View.GONE);
             }
-
             if (resultsBean.getName().length() <= 9) {
                 holder.childlistName.setText(resultsBean.getName());
             } else {
@@ -124,12 +118,8 @@ public class ProductListBeanAdapter extends RecyclerView.Adapter<ProductListBean
         TextView childlistAgentPrice;
         @Bind(R.id.childlist_stdsale_price)
         TextView childlistStdsalePrice;
-        @Bind(R.id.saleout)
-        TextView saleout;
-        @Bind(R.id.salenotopen)
-        TextView salenotopen;
-        @Bind(R.id.sale_off)
-        TextView saleOff;
+        @Bind(R.id.sale_status)
+        TextView saleStatus;
 
         public ChildListVH(View itemView) {
             super(itemView);

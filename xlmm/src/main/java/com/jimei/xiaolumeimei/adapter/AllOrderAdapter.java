@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jimei.xiaolumeimei.R;
@@ -73,15 +72,12 @@ public class AllOrderAdapter extends BaseAdapter {
         } else {
             vh = (ViewHolder) convertView.getTag();
         }
-        vh.linearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, OrderDetailActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putInt("orderinfo", mList.get(position).getId());
-                intent.putExtras(bundle);
-                context.startActivity(intent);
-            }
+        vh.linearLayout.setOnClickListener(v -> {
+            Intent intent = new Intent(context, OrderDetailActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putInt("orderinfo", mList.get(position).getId());
+            intent.putExtras(bundle);
+            context.startActivity(intent);
         });
         OrderListAdapter adapter = new OrderListAdapter(context, mList.get(position).getOrders());
         adapter.setId(mList.get(position).getId());

@@ -72,8 +72,6 @@ public class BrandActivityAdapter extends RecyclerView.Adapter<BrandActivityAdap
 
       holder.cardview.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View v) {
-//          JumpUtils.jumpToWebViewWithCookies(mContext, resultsEntity.getWebUrl(), resultsEntity.getModelId(),
-//                  ProductPopDetailActvityWeb.class);
           Intent intent = new Intent(mContext, ProductDetailActivity.class);
           Bundle bundle = new Bundle();
           bundle.putInt("model_id",resultsEntity.getModelId());

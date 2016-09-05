@@ -97,8 +97,6 @@ public interface MainContract {
 
     public abstract void getPortalBean(SwipeRefreshLayout swipeRefreshLayout);
 
-    public abstract void getTodayList(int page, int page_size);
-
     public abstract void getUsercoupons(String template_id);
 
     public abstract long calcLefttowTime(long crtTime);

@@ -8,8 +8,6 @@ import com.jimei.xiaolumeimei.entities.CollectionDeleteBody;
 import com.jimei.xiaolumeimei.entities.CollectionResultBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
-import com.jimei.xiaolumeimei.entities.ProductListOldBean;
-import com.jimei.xiaolumeimei.entities.ProductListResultBean;
 import com.jimei.xiaolumeimei.entities.ShareModelBean;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 
@@ -29,58 +27,6 @@ public class ProductModel {
 
     public static ProductModel getInstance() {
         return ourInstance;
-    }
-
-
-    //得到今日数据
-    public Observable<ProductListOldBean> getTodayList(int page, int page_size) {
-
-        return XlmmRetrofitClient.getService()
-                .getTodayList(page, page_size)
-                .compose(new DefaultTransform<>());
-    }
-
-    //得到昨日分页数据
-    public Observable<ProductListOldBean> getPreviousList(int page, int page_size) {
-
-        return XlmmRetrofitClient.getService()
-                .getPreviousList(page, page_size)
-                .compose(new DefaultTransform<>());
-    }
-
-
-    //得到明日分页数据
-    public Observable<ProductListOldBean> getAdvanceList(int page, int page_size) {
-
-        return XlmmRetrofitClient.getService()
-                .getAdvanceList(page, page_size)
-                .compose(new DefaultTransform<>());
-    }
-
-    public Observable<ProductListResultBean> getProductList(int page, int page_size, int type) {
-        if (type == XlmmConst.TYPE_LADY) {
-            return XlmmRetrofitClient.getService()
-                    .getLadyList(page, page_size)
-                    .compose(new DefaultTransform<>());
-        } else {
-            return XlmmRetrofitClient.getService()
-                    .getChildList(page, page_size)
-                    .compose(new DefaultTransform<>());
-        }
-
-    }
-
-    //得到分页数据,升价排序
-    public Observable<ProductListResultBean> getProductList(int page, int page_size, String order_by, int type) {
-        if (type == XlmmConst.TYPE_LADY) {
-            return XlmmRetrofitClient.getService()
-                    .getLadyList(page, page_size, order_by)
-                    .compose(new DefaultTransform<>());
-        } else {
-            return XlmmRetrofitClient.getService()
-                    .getChildList(page, page_size, order_by)
-                    .compose(new DefaultTransform<>());
-        }
     }
 
     //得到商品详情(新)
@@ -119,9 +65,9 @@ public class ProductModel {
                 .compose(new DefaultTransform<>());
     }
 
-    public Observable<CategoryProductListBean> getCategoryProductList(String cid, int page) {
+    public Observable<CategoryProductListBean> getCategoryProductList(String cid, int page,String order_by) {
         return XlmmRetrofitClient.getService()
-                .getCategoryProductList(cid, page)
+                .getCategoryProductList(cid, page,order_by)
                 .compose(new DefaultTransform<>());
     }
 

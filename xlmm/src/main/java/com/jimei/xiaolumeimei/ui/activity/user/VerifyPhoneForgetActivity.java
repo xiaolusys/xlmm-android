@@ -119,7 +119,7 @@ public class VerifyPhoneForgetActivity extends BaseSwipeBackCompatActivity
             @Override public void onCompleted() {
               getCheckCode.setText("获取验证码");
               getCheckCode.setClickable(true);
-              getCheckCode.setBackgroundResource(R.drawable.shape_getcheckcode);
+              getCheckCode.setBackgroundResource(R.drawable.btn_common_white);
             }
 
             @Override public void onError(Throwable e) {

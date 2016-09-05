@@ -148,7 +148,7 @@
                         android:layout_below="@id/tv1"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="24dp"
-                        android:background="@drawable/shape_common"
+                        android:background="@drawable/btn_common_default"
                         android:text="随便逛逛"
                         android:textColor="@color/white" />
                 </RelativeLayout>

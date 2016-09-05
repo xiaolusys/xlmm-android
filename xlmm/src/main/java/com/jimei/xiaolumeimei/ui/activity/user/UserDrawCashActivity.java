@@ -169,33 +169,33 @@ public class UserDrawCashActivity extends BaseSwipeBackCompatActivity
             msgTv.setText("请先绑定微信后提现哦~~");
             msgTv.setTextColor(getResources().getColor(R.color.red));
             drawCashBtn.setClickable(false);
-            drawCashBtn.setBackgroundResource(R.drawable.shape_common_unclickable);
+            drawCashBtn.setBackgroundResource(R.drawable.btn_common_default_unclickable);
         } else if (money < 8.88) {
             msgTv.setText("您的余额未满8.88元，不满足提现条件");
             msgTv.setTextColor(getResources().getColor(R.color.red));
             drawCashBtn.setClickable(false);
-            drawCashBtn.setBackgroundResource(R.drawable.shape_common_unclickable);
+            drawCashBtn.setBackgroundResource(R.drawable.btn_common_default_unclickable);
         } else {
             if (drawMoney < 8.88) {
                 msgTv.setText("提现最低金额需要8.88元哦");
                 msgTv.setTextColor(getResources().getColor(R.color.red));
                 drawCashBtn.setClickable(false);
-                drawCashBtn.setBackgroundResource(R.drawable.shape_common_unclickable);
+                drawCashBtn.setBackgroundResource(R.drawable.btn_common_default_unclickable);
             } else if (drawMoney > money) {
                 msgTv.setText("提现金额超过账户可提额度");
                 msgTv.setTextColor(getResources().getColor(R.color.red));
                 drawCashBtn.setClickable(false);
-                drawCashBtn.setBackgroundResource(R.drawable.shape_common_unclickable);
+                drawCashBtn.setBackgroundResource(R.drawable.btn_common_default_unclickable);
             } else if (drawMoney > 200) {
                 msgTv.setText("提现金额超过微信红包限额");
                 msgTv.setTextColor(getResources().getColor(R.color.red));
                 drawCashBtn.setClickable(false);
-                drawCashBtn.setBackgroundResource(R.drawable.shape_common_unclickable);
+                drawCashBtn.setBackgroundResource(R.drawable.btn_common_default_unclickable);
             } else {
                 msgTv.setText("提现金额将以微信红包形式，24小时内发至你绑定的微信账户");
                 msgTv.setTextColor(Color.parseColor("#BBBBBB"));
                 drawCashBtn.setClickable(true);
-                drawCashBtn.setBackgroundResource(R.drawable.shape_common);
+                drawCashBtn.setBackgroundResource(R.drawable.btn_common_default);
             }
         }
     }
