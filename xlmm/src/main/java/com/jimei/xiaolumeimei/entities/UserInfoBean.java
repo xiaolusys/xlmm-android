@@ -354,6 +354,16 @@ public class UserInfoBean {
     private double budgetCash;
     @SerializedName("is_cash_out")
     private int isCashOut;
+    @SerializedName("cash_out_limit")
+    public double cashOutLimit;
+
+    public double getCashOutLimit() {
+      return cashOutLimit;
+    }
+
+    public void setCashOutLimit(double cashOutLimit) {
+      this.cashOutLimit = cashOutLimit;
+    }
 
     public void setBudgetCash(double budgetCash) {
       this.budgetCash = budgetCash;
@@ -376,6 +386,7 @@ public class UserInfoBean {
       return "UserBudgetEntity{" +
               "budgetCash=" + budgetCash +
               ", isCashOut=" + isCashOut +
+              ", cashOutLimit=" + cashOutLimit +
               '}';
     }
   }

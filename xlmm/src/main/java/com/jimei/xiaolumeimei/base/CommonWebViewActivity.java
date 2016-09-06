@@ -130,8 +130,20 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     if (extras != null) {
       cookies = extras.getString("cookies");
       domain = extras.getString("domain");
-      actlink = extras.getString("actlink");
-      id = extras.getInt("id");
+      // TODO: 16/9/6
+      Uri uri = getIntent().getData();
+      if (uri!=null) {
+        actlink = uri.getQueryParameter("url");
+        String id = uri.getQueryParameter("activity_id");
+        if (id!=null) {
+          this.id = Integer.valueOf(id);
+        }else {
+          this.id=-1;
+        }
+      } else {
+        actlink = extras.getString("actlink");
+        id = extras.getInt("id");
+      }
       sessionid = extras.getString("Cookie");
       JUtils.Log(TAG, "GET cookie:" + cookies + " actlink:" + actlink + " domain:" + domain +
           " sessionid:" + sessionid);
@@ -216,7 +228,8 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
         }
 
         // For Android > 5.0
-        public boolean onShowFileChooser (WebView webView, ValueCallback<Uri[]> uploadMsg, WebChromeClient.FileChooserParams fileChooserParams) {
+        public boolean onShowFileChooser (WebView webView, ValueCallback<Uri[]> uploadMsg,
+                                          WebChromeClient.FileChooserParams fileChooserParams) {
           openFileChooserImplForAndroid5(uploadMsg);
           return true;
         }

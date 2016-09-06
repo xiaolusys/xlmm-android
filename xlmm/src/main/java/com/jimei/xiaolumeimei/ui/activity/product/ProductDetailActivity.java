@@ -3,6 +3,7 @@ package com.jimei.xiaolumeimei.ui.activity.product;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -31,6 +32,7 @@ import com.jimei.xiaolumeimei.adapter.SkuColorAdapter;
 import com.jimei.xiaolumeimei.adapter.SkuSizeAdapter;
 import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
 import com.jimei.xiaolumeimei.data.XlmmApi;
+import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.databinding.ActivityProductDetailBinding;
 import com.jimei.xiaolumeimei.entities.CartsInfoBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
@@ -76,7 +78,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
     private boolean collectFlag, isAlive;
     private Dialog dialog;
     private ImageView img, plusIv, minusIv;
-    private TextView nameTv, agentTv, saleTv, numTv, commitTv;
+    private TextView nameTv, skuTv, agentTv, saleTv, numTv, commitTv;
     private RecyclerView colorRv, sizeRv;
     private int model_id, sku_id, item_id, num, current;
     private SkuSizeAdapter skuSizeAdapter;
@@ -87,6 +89,13 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
 
     @Override
     protected void initView() {
+        setStatusBar();
+        Uri uri = getIntent().getData();
+        if (uri != null) {
+            model_id = Integer.valueOf(uri.getQueryParameter("model_id"));
+        } else {
+            model_id = getIntent().getExtras().getInt("model_id");
+        }
         num = 1;
         showIndeterminateProgressDialog(false);
         WebSettings settings = b.webView.getSettings();
@@ -117,6 +126,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
     private void findById(View view) {
         img = ((ImageView) view.findViewById(R.id.img));
         nameTv = ((TextView) view.findViewById(R.id.name));
+        skuTv = ((TextView) view.findViewById(R.id.sku));
         agentTv = ((TextView) view.findViewById(R.id.agent_price));
         saleTv = ((TextView) view.findViewById(R.id.sale_price));
         plusIv = ((ImageView) view.findViewById(R.id.plus));
@@ -246,6 +256,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
             if (skuInfo.size() > 0) {
                 ViewUtils.loadImgToImgView(this, img, skuInfo.get(0).getProduct_img());
                 nameTv.setText(detailContent.getName() + "/" + skuInfo.get(0).getName());
+                skuTv.setText(skuInfo.get(0).getSku_items().get(0).getName());
                 agentTv.setText("¥" + skuInfo.get(0).getSku_items().get(0).getAgent_price() + "");
                 saleTv.setText("/¥" + skuInfo.get(0).getSku_items().get(0).getStd_sale_price());
                 SkuColorAdapter colorAdapter = new SkuColorAdapter(skuInfo, this);
@@ -257,6 +268,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
             }
             if (skuInfo.size() == 1 && skuInfo.get(0).getSku_items().size() == 1) {
                 nameTv.setText(detailContent.getName());
+                skuTv.setText(skuInfo.get(0).getSku_items().get(0).getName());
                 colorLayout.setVisibility(View.GONE);
                 sizeLayout.setVisibility(View.GONE);
             }
@@ -335,19 +347,11 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
         }
     }
 
-
     @Override
     protected void getBundleExtras(Bundle extras) {
-        String dataString = getIntent().getDataString();
-        if (dataString != null) {
-            String[] split = dataString.split("model_id=");
-            if (split[1] != null) {
-                model_id = Integer.getInteger(split[1]);
-            }
-        } else {
-            model_id = extras.getInt("model_id");
-        }
-        JUtils.Log("商品    model_id" + model_id);
+    }
+
+    private void setStatusBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -555,6 +559,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
     public void refreshSkuId(ProductDetailBean.SkuInfoBean.SkuItemsBean skuItemsBean) {
         agentTv.setText("¥" + skuItemsBean.getAgent_price());
         saleTv.setText("/¥" + skuItemsBean.getStd_sale_price());
+        skuTv.setText(skuItemsBean.getName());
         sku_id = skuItemsBean.getSku_id();
     }
 
@@ -574,7 +579,8 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
         b.tvAdd.setVisibility(View.GONE);
         b.tvAddTeam.setVisibility(View.VISIBLE);
         b.tvAddOne.setText("单人购  ¥" + skuInfo.get(0).getSku_items().get(0).getAgent_price());
-        b.tvAddTeam.setText("三人团  ¥" + teamBuyInfo.getTeambuy_price());
+        b.tvAddTeam.setText(XlmmConst.numberToWord(teamBuyInfo.getTeambuy_person_num()) +
+                "人团  ¥" + teamBuyInfo.getTeambuy_price());
     }
 
     @Override

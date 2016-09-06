@@ -79,8 +79,22 @@ public class XlmmConst {
     public static final int TYPE_REWARD_PERSONAL = 0;
     public static final int TYPE_REWARD_TEAM = 1;
 
+    public static final String[] NUMBER = {"零", "一", "二", "三", "四", "五"
+            , "六", "七", "八", "九", "十"};
 
-
+    public static String numberToWord(int num) {
+        if (num >= 0 && num <= 10) {
+            return NUMBER[num];
+        } else if (num <= 99) {
+            if (num % 10 == 0) {
+                return NUMBER[num / 10] + "十";
+            } else {
+                return NUMBER[num / 10] + "十" + NUMBER[num % 10];
+            }
+        } else {
+            return "";
+        }
+    }
 
     public static int get_reason_num(String reason) {
         int reason_num = 0;

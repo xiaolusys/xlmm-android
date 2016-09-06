@@ -40,6 +40,18 @@ public class JumpUtils {
     JUtils.Log(TAG, "push_jump_proc:" + recvContent);
 
     if (TextUtils.isEmpty(recvContent)) return;
+//    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(recvContent));
+//    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//    SharedPreferences sharedPreferences =
+//            context.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+//
+//    String cookies1 = sharedPreferences.getString("cookiesString", "");
+//    String domain1 = sharedPreferences.getString("cookiesDomain", "");
+//    Bundle bundle4 = new Bundle();
+//    bundle4.putString("cookies", cookies1);
+//    bundle4.putString("domain", domain1);
+//    intent.putExtras(bundle4);
+//    context.startActivity(intent);
 
     JumpInfo jumpInfo = get_jump_info(recvContent);
     jumToProc(context, jumpInfo);
@@ -60,13 +72,11 @@ public class JumpUtils {
       case XlmmConst.JUMP_PROMOTE_TODAY:
         intent = new Intent(context, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        //        intent.putExtra("fragment", 1);
         context.startActivity(intent);
         break;
       case XlmmConst.JUMP_PROMOTE_PREVIOUS:
         intent = new Intent(context, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        //        intent.putExtra("fragment", 2);
         context.startActivity(intent);
         break;
       case XlmmConst.JUMP_PRODUCT_CHILDLIST:

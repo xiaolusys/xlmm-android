@@ -195,6 +195,8 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
                                 ids.add(cartsInfoBeen.get(i).getId());
                             }
                             setPriceText();
+                        }else {
+                            ids.clear();
                         }
                     }
                 }));

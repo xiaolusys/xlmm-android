@@ -306,22 +306,21 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         int status = orderDetailBean.getStatus();
         if (!"退款中".equals(orderDetailBean.getStatus_display())
                 && !"退货中".equals(orderDetailBean.getStatus_display())) {
-            if (orderDetailBean.getOrder_type() == 3) {
-                ProductModel.getInstance()
-                        .getTeamBuyBean(orderDetailBean.getTid())
-                        .subscribeOn(Schedulers.io())
-                        .subscribe(new ServiceResponse<TeamBuyBean>() {
-                            @Override
-                            public void onNext(TeamBuyBean teamBuyBean) {
-                                if (teamBuyBean.getStatus() != 2) {
-                                    setStatusView(status);
+            if (status == 2 || status == 3 || status == 4 || status == 5) {
+                if (orderDetailBean.getOrder_type() == 3) {
+                    ProductModel.getInstance()
+                            .getTeamBuyBean(orderDetailBean.getTid())
+                            .subscribeOn(Schedulers.io())
+                            .subscribe(new ServiceResponse<TeamBuyBean>() {
+                                @Override
+                                public void onNext(TeamBuyBean teamBuyBean) {
+                                    if (teamBuyBean.getStatus() != 2) {
+                                        setStatusView(status);
+                                    }
+                                    teamLayout.setVisibility(View.VISIBLE);
                                 }
-                                teamLayout.setVisibility(View.VISIBLE);
-                            }
-                        });
-            } else {
-                setStatusView(status);
-                if (status == 2 || status == 3 || status == 4 || status == 5) {
+                            });
+                } else {
                     addSubscription(TradeModel.getInstance()
                             .getRedBag(tid)
                             .subscribeOn(Schedulers.io())
@@ -349,7 +348,10 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                                     }
                                 }
                             }));
+
                 }
+            } else {
+                setStatusView(status);
             }
         }
         tx_order_id.setText(orderDetailBean.getTid());
@@ -371,9 +373,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         JUtils.Log(TAG, "crt time " + orderDetailBean.getCreated());
 
         String channel = orderDetailBean.getChannel();
-        if ("".equals(channel)) {
-            relativeLayout.setVisibility(View.GONE);
-        } else if (channel.contains("budget")) {
+        if (channel.contains("budget")) {
             imageView.setImageResource(R.drawable.icon_xiaolu);
         } else if (channel.contains("alipay")) {
             imageView.setImageResource(R.drawable.alipay);
@@ -450,14 +450,10 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         try {
             int state = orderDetailBean.getStatus();
             switch (state) {
-                case XlmmConst.ORDER_STATE_WAITPAY: {
+                case XlmmConst.ORDER_STATE_WAITPAY:
                     Log.i(TAG, "wait pay lefttime show");
-
                     rlayout_order_lefttime.setVisibility(View.VISIBLE);
                     relativeLayout.setVisibility(View.GONE);
-                    LinearLayout llayout_order_lefttime =
-                            (LinearLayout) findViewById(R.id.llayout_order_lefttime);
-                    llayout_order_lefttime.setVisibility(View.VISIBLE);
                     cn.iwgang.countdownview.CountdownView cv_lefttime =
                             (cn.iwgang.countdownview.CountdownView) findViewById(R.id.cv_lefttime);
 
@@ -474,14 +470,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                         btn_proc.setClickable(false);
                         btn_proc.setImageResource(R.drawable.pay_order_not);
                     }
-
-                    ImageView btn_order_cancel = (ImageView) findViewById(R.id.btn_order_cancel);
-                    btn_order_cancel.setVisibility(View.VISIBLE);
                     break;
-                }
-                case XlmmConst.ORDER_STATE_PAYED: {
-                    break;
-                }
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@color/white"
+              android:orientation="vertical">
 
 
     <LinearLayout
@@ -16,12 +16,13 @@
 
         <ImageView
             android:id="@+id/img"
-            android:layout_width="70dp"
-            android:layout_height="70dp" />
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@color/black"/>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="140px"
+            android:layout_height="80dp"
             android:layout_marginLeft="32px"
             android:orientation="vertical">
 
@@ -33,12 +34,25 @@
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:textColor="@color/text_color_4A"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1" />
+                android:layout_weight="3"/>
+
+            <TextView
+                android:id="@+id/sku"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textColor="@color/text_color_9B"
+                android:textSize="13sp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"/>
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -49,7 +63,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/text_color_32"
-                    android:textSize="32sp" />
+                    android:textSize="32sp"/>
 
                 <TextView
                     android:id="@+id/sale_price"
@@ -58,7 +72,7 @@
                     android:layout_alignBaseline="@id/agent_price"
                     android:layout_toRightOf="@id/agent_price"
                     android:textColor="@color/text_color_9B"
-                    android:textSize="13sp" />
+                    android:textSize="13sp"/>
 
             </RelativeLayout>
 
@@ -80,14 +94,14 @@
             android:layout_marginTop="5px"
             android:gravity="center_vertical"
             android:text="颜色"
-            android:textSize="13sp" />
+            android:textSize="13sp"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_color"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="13px"
-            android:layout_marginRight="13px" />
+            android:layout_marginRight="13px"/>
 
     </LinearLayout>
 
@@ -104,14 +118,14 @@
             android:layout_marginTop="5px"
             android:gravity="center_vertical"
             android:text="尺码"
-            android:textSize="13sp" />
+            android:textSize="13sp"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_size"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="13px"
-            android:layout_marginRight="13px" />
+            android:layout_marginRight="13px"/>
 
     </LinearLayout>
 
@@ -130,7 +144,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="个数"
-            android:textSize="13sp" />
+            android:textSize="13sp"/>
 
         <ImageView
             android:id="@+id/minus"
@@ -138,7 +152,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="26px"
             android:layout_marginRight="40px"
-            android:src="@drawable/icon_minus" />
+            android:src="@drawable/icon_minus"/>
 
         <TextView
             android:id="@+id/num"
@@ -146,21 +160,21 @@
             android:layout_height="wrap_content"
             android:text="1"
             android:textColor="@color/text_color_26"
-            android:textSize="19sp" />
+            android:textSize="19sp"/>
 
         <ImageView
             android:id="@+id/plus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40px"
-            android:src="@drawable/icon_plus" />
+            android:src="@drawable/icon_plus"/>
 
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/bg_grey" />
+        android:background="@color/bg_grey"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -177,7 +191,7 @@
             android:gravity="center"
             android:text="确定"
             android:textColor="@color/white"
-            android:textSize="15sp" />
+            android:textSize="15sp"/>
 
     </RelativeLayout>
 
