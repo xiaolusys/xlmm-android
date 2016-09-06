@@ -98,9 +98,11 @@
                             android:padding="8dp">
 
                             <View
+                                android:id="@+id/start"
                                 android:layout_width="10px"
                                 android:layout_height="10px"
                                 android:layout_marginTop="10px"
+                                android:visibility="invisible"
                                 android:background="@drawable/state_on_bg"/>
 
                         </LinearLayout>

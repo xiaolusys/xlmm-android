@@ -412,7 +412,15 @@
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
             android:name=".ui.activity.product.ProductDetailActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
+            android:theme="@style/AppTheme.TransparentActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <data android:scheme="com.jimei.xlmm"
+                    android:host="app"
+                    android:path="/v1/product_detail"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.activity.user.CustomerServiceActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>

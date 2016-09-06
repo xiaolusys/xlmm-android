@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    style="@style/AppTheme.AppBarOverlay"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.jimei.xiaolumeimei.ui.activity.trade.OrderDetailActivity">
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                style="@style/AppTheme.AppBarOverlay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                tools:context="com.jimei.xiaolumeimei.ui.activity.trade.OrderDetailActivity">
 
     <com.jimei.xiaolumeimei.widget.XlmmTitleView
         android:id="@+id/title_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:xlmm_title="订单详情" />
+        app:xlmm_title="订单详情"/>
 
     <ScrollView
         android:id="@+id/scroll_view"
@@ -56,7 +56,7 @@
                             android:gravity="center"
                             android:text="订单创建"
                             android:textColor="@color/colorAccent"
-                            android:textSize="13sp" />
+                            android:textSize="13sp"/>
 
                         <TextView
                             android:id="@+id/tv_2"
@@ -65,7 +65,7 @@
                             android:gravity="center"
                             android:text="支付成功"
                             android:textColor="@color/text_color_9B"
-                            android:textSize="13sp" />
+                            android:textSize="13sp"/>
 
                         <TextView
                             android:id="@+id/tv_3"
@@ -74,7 +74,7 @@
                             android:gravity="center"
                             android:text="产品发货"
                             android:textColor="@color/text_color_9B"
-                            android:textSize="13sp" />
+                            android:textSize="13sp"/>
 
                         <TextView
                             android:id="@+id/tv_4"
@@ -83,7 +83,7 @@
                             android:gravity="center"
                             android:text="产品签收"
                             android:textColor="@color/text_color_9B"
-                            android:textSize="13sp" />
+                            android:textSize="13sp"/>
 
                         <TextView
                             android:id="@+id/tv_5"
@@ -92,7 +92,7 @@
                             android:gravity="center"
                             android:text="交易完成"
                             android:textColor="@color/text_color_9B"
-                            android:textSize="13sp" />
+                            android:textSize="13sp"/>
 
                     </LinearLayout>
 
@@ -110,65 +110,65 @@
                             android:layout_height="1dp"
                             android:layout_weight="1"
                             android:background="@color/colorAccent"
-                            android:visibility="invisible" />
+                            android:visibility="invisible"/>
 
                         <ImageView
                             android:id="@+id/iv_1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/state_in" />
+                            android:src="@drawable/state_in"/>
 
                         <ImageView
                             android:id="@+id/line_2"
                             android:layout_width="0dp"
                             android:layout_height="1dp"
                             android:layout_weight="2"
-                            android:background="@color/text_color_9B" />
+                            android:background="@color/text_color_9B"/>
 
                         <ImageView
                             android:id="@+id/iv_2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/state_oval_gray" />
+                            android:src="@drawable/state_oval_gray"/>
 
                         <ImageView
                             android:id="@+id/line_3"
                             android:layout_width="0dp"
                             android:layout_height="1dp"
                             android:layout_weight="2"
-                            android:background="@color/text_color_9B" />
+                            android:background="@color/text_color_9B"/>
 
                         <ImageView
                             android:id="@+id/iv_3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/state_oval_gray" />
+                            android:src="@drawable/state_oval_gray"/>
 
                         <ImageView
                             android:id="@+id/line_4"
                             android:layout_width="0dp"
                             android:layout_height="1dp"
                             android:layout_weight="2"
-                            android:background="@color/text_color_9B" />
+                            android:background="@color/text_color_9B"/>
 
                         <ImageView
                             android:id="@+id/iv_4"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/state_oval_gray" />
+                            android:src="@drawable/state_oval_gray"/>
 
                         <ImageView
                             android:id="@+id/line_5"
                             android:layout_width="0dp"
                             android:layout_height="1dp"
                             android:layout_weight="2"
-                            android:background="@color/text_color_9B" />
+                            android:background="@color/text_color_9B"/>
 
                         <ImageView
                             android:id="@+id/iv_5"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/state_oval_gray" />
+                            android:src="@drawable/state_oval_gray"/>
 
                         <ImageView
                             android:id="@+id/line_6"
@@ -176,7 +176,7 @@
                             android:layout_height="1dp"
                             android:layout_weight="1"
                             android:background="@color/text_color_9B"
-                            android:visibility="invisible" />
+                            android:visibility="invisible"/>
 
                     </LinearLayout>
 
@@ -184,7 +184,7 @@
                 </LinearLayout>
             </HorizontalScrollView>
 
-            <include layout="@layout/common_gap" />
+            <include layout="@layout/common_gap"/>
 
             <RelativeLayout
                 android:id="@+id/address"
@@ -202,7 +202,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/location" />
+                    android:src="@drawable/location"/>
 
                 <ImageView
                     android:id="@+id/right_flag"
@@ -210,7 +210,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/to_right_ic" />
+                    android:src="@drawable/to_right_ic"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -224,7 +224,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -236,7 +236,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginRight="15dp"
                             android:textColor="@color/text_color_62"
-                            android:textSize="14sp" />
+                            android:textSize="14sp"/>
 
                         <TextView
                             android:id="@+id/tx_custom_mobile"
@@ -246,7 +246,7 @@
                             android:ellipsize="end"
                             android:singleLine="true"
                             android:textColor="@color/text_color_62"
-                            android:textSize="14sp" />
+                            android:textSize="14sp"/>
 
                         <TextView
                             android:id="@+id/tx_custom_phone"
@@ -255,14 +255,14 @@
                             android:ellipsize="end"
                             android:singleLine="true"
                             android:textColor="@color/text_color_62"
-                            android:textSize="14sp" />
+                            android:textSize="14sp"/>
                     </LinearLayout>
 
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="3" />
+                        android:layout_weight="3"/>
 
                     <TextView
                         android:id="@+id/tx_custom_address"
@@ -270,12 +270,12 @@
                         android:layout_height="wrap_content"
                         android:text=""
                         android:textColor="@color/text_color_9B"
-                        android:textSize="13sp" />
+                        android:textSize="13sp"/>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"/>
 
                 </LinearLayout>
 
@@ -288,11 +288,11 @@
                     android:layout_toRightOf="@id/image_location"
                     android:text="填写收货地址"
                     android:textSize="14sp"
-                    android:visibility="invisible" />
+                    android:visibility="invisible"/>
 
             </RelativeLayout>
 
-            <include layout="@layout/common_gap" />
+            <include layout="@layout/common_gap"/>
 
             <LinearLayout
                 android:id="@+id/logistics_layout"
@@ -306,7 +306,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="物流配送"
-                    android:textColor="@color/text_color_62" />
+                    android:textColor="@color/text_color_62"/>
 
                 <TextView
                     android:id="@+id/logistics"
@@ -315,30 +315,30 @@
                     android:layout_weight="1"
                     android:gravity="end"
                     android:text="小鹿推荐"
-                    android:textColor="@color/text_color_62" />
+                    android:textColor="@color/text_color_62"/>
 
                 <ImageView
                     android:id="@+id/logistics_right"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="12dp"
-                    android:src="@drawable/to_right_ic" />
+                    android:src="@drawable/to_right_ic"/>
 
             </LinearLayout>
 
-            <include layout="@layout/common_gap" />
+            <include layout="@layout/common_gap"/>
 
             <ListView
                 android:id="@+id/lv_goods"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white" />
+                android:background="@color/white"/>
 
-            <include layout="@layout/common_gap" />
+            <include layout="@layout/common_gap"/>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="10dp" />
+                android:layout_height="10dp"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -351,7 +351,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:text="订单编号" />
+                    android:text="订单编号"/>
 
                 <TextView
                     android:id="@+id/tx_order_id"
@@ -360,7 +360,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
-                    android:textColor="@color/text_color_62" />
+                    android:textColor="@color/text_color_62"/>
 
             </RelativeLayout>
 
@@ -375,7 +375,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:text="下单时间" />
+                    android:text="下单时间"/>
 
                 <TextView
                     android:id="@+id/time"
@@ -384,7 +384,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
-                    android:textColor="@color/text_color_62" />
+                    android:textColor="@color/text_color_62"/>
 
             </RelativeLayout>
 
@@ -404,7 +404,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
                     android:text="支付方式"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"/>
 
                 <ImageView
                     android:id="@+id/iv_pay"
@@ -412,7 +412,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true" />
+                    android:layout_centerVertical="true"/>
 
             </RelativeLayout>
 
@@ -428,7 +428,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:text="商品金额"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"/>
 
                 <TextView
                     android:id="@+id/tx_order_totalfee"
@@ -438,7 +438,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
                     android:textColor="@color/text_color_62"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -453,7 +453,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:text="优惠金额"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"/>
 
                 <TextView
                     android:id="@+id/tx_order_discountfee"
@@ -463,7 +463,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
                     android:textColor="@color/text_color_62"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -478,7 +478,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:text="运费"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"/>
 
                 <TextView
                     android:id="@+id/tx_order_postfee"
@@ -488,13 +488,13 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
                     android:textColor="@color/text_color_62"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"/>
             </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#33DADADA" />
+                android:background="#33DADADA"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -507,7 +507,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:text="实付款"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"/>
 
                 <TextView
                     android:id="@+id/tx_order_payment"
@@ -517,20 +517,20 @@
                     android:layout_alignParentRight="true"
                     android:layout_gravity="right"
                     android:textColor="@color/colorAccent"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"/>
             </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="60dp" />
+                android:layout_marginTop="60dp"/>
 
         </LinearLayout>
 
     </ScrollView>
 
 
-    <include layout="@layout/orders_pay_lefttime" />
+    <include layout="@layout/orders_pay_lefttime"/>
 
     <LinearLayout
         android:id="@+id/red_bag"
@@ -540,13 +540,14 @@
         android:layout_gravity="bottom"
         android:background="@color/C48"
         android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:padding="30px"
         android:visibility="gone">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/red_bag_bottom" />
+            android:src="@drawable/red_bag_bottom"/>
 
         <TextView
             android:layout_width="0dp"
@@ -557,13 +558,37 @@
             android:singleLine="true"
             android:text="您获得十六个红包可以分享给好友"
             android:textColor="@color/white"
-            android:textSize="14sp" />
+            android:textSize="14sp"/>
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/red_bag_share" />
+            android:src="@drawable/red_bag_share"/>
 
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/team_buy"
+        android:layout_width="match_parent"
+        android:layout_height="115px"
+        android:visibility="gone"
+        android:background="@color/white"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="76px"
+            android:layout_marginLeft="32px"
+            android:layout_marginRight="32px"
+            android:background="@drawable/btn_common_default"
+            android:gravity="center"
+            android:text="查看拼团进展"
+            android:textColor="@color/white"
+            android:textSize="15sp"/>
+
+    </LinearLayout>
+
 
 </RelativeLayout>

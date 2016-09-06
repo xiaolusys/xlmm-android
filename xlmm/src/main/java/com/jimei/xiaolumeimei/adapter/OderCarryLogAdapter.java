@@ -1,8 +1,6 @@
 package com.jimei.xiaolumeimei.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -17,7 +15,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.OderCarryBean;
 import com.jimei.xiaolumeimei.glidemoudle.CropCircleTransformation;
-import com.jimei.xiaolumeimei.ui.activity.xiaolumama.OrderLogisticActivity;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.zhy.autolayout.utils.AutoUtils;
 
@@ -119,14 +116,6 @@ public class OderCarryLogAdapter
     holder.timeDisplay.setText(resultsEntity.getCreated().substring(11, 16));
     holder.wxordernick.setText(resultsEntity.getCarry_description());
     holder.tvStatus.setText(resultsEntity.getStatus_display());
-    holder.content.setOnClickListener(v -> {
-      Intent intent = new Intent(mContext, OrderLogisticActivity.class);
-      Bundle bundle = new Bundle();
-      bundle.putString("company_code",resultsEntity.getCompany_code());
-      bundle.putString("packetid",resultsEntity.getPacketid());
-      intent.putExtras(bundle);
-      mContext.startActivity(intent);
-    });
   }
 
   @Override public int getItemCount() {

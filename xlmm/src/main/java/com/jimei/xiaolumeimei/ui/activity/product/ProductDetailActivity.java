@@ -338,7 +338,15 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-        model_id = extras.getInt("model_id");
+        String dataString = getIntent().getDataString();
+        if (dataString != null) {
+            String[] split = dataString.split("model_id=");
+            if (split[1] != null) {
+                model_id = Integer.getInteger(split[1]);
+            }
+        } else {
+            model_id = extras.getInt("model_id");
+        }
         JUtils.Log("商品    model_id" + model_id);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
@@ -425,6 +433,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                                                             String ids = cartsinfoBeen.get(0).getId() + "";
                                                             Bundle bundle = new Bundle();
                                                             bundle.putString("ids", ids);
+                                                            bundle.putBoolean("flag", true);
                                                             Intent intent = new Intent(ProductDetailActivity.this, CartsPayInfoActivity.class);
                                                             intent.putExtras(bundle);
                                                             startActivity(intent);

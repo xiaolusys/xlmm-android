@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
 import android.os.Bundle;
+import android.view.View;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
@@ -57,6 +58,7 @@ public class OrderLogisticActivity extends BaseMVVMActivity<ActivityOrderLogisti
             addSubscription(subscribe);
         }else {
             b.tvOrderLastTime.setText("暂无物流信息");
+            b.start.setVisibility(View.VISIBLE);
         }
     }
 
@@ -71,6 +73,7 @@ public class OrderLogisticActivity extends BaseMVVMActivity<ActivityOrderLogisti
                 if (i == 0) {
                     b.tvOrderLastState.setText(data1.get(0).getContent());
                     b.tvOrderLastTime.setText(data1.get(0).getTime().replace("T", " "));
+                    b.start.setVisibility(View.VISIBLE);
                 } else {
                     b.logImageLayout.addView(new LogImageView(this));
                     LogMsgView logMsgView = new LogMsgView(this);

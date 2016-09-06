@@ -136,9 +136,9 @@ public class MainPresenter extends MainContract.Presenter {
                         if (swipeRefreshLayout != null) {
                             swipeRefreshLayout.setRefreshing(false);
                         }
-                        mView.showNetworkError();
+//                        mView.showNetworkError();
                         JUtils.Log("MainPresenter", "    " + e.getClass().getName());
-                        JUtils.ToastLong("数据加载有误,检查网络设置，请重新加载");
+                        JUtils.ToastLong("数据加载有误，请重新下拉加载");
                     }
                 }));
     }

@@ -67,6 +67,7 @@ import com.jimei.xiaolumeimei.entities.ResultBean;
 import com.jimei.xiaolumeimei.entities.ResultEntity;
 import com.jimei.xiaolumeimei.entities.ShareModelBean;
 import com.jimei.xiaolumeimei.entities.ShopProductBean;
+import com.jimei.xiaolumeimei.entities.TeamBuyBean;
 import com.jimei.xiaolumeimei.entities.UserAccountBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
@@ -129,7 +130,7 @@ public interface XlmmService {
     //获取购物车信息
     @GET("/rest/v2/carts")
     Observable<List<CartsInfoBean>> getCartsList(
-            @Query("type")int type
+            @Query("type") int type
     );
 
     //获取历史购物车信息
@@ -178,6 +179,23 @@ public interface XlmmService {
             @Field("uuid") String uuid,
             @Field("pay_extras") String pay_extras,
             @Field("logistics_company_id") String code
+    );
+
+
+    @FormUrlEncoded
+    @POST("/rest/v2/trades/shoppingcart_create")
+    Observable<PayInfoBean> shoppingcart_create_v2(
+            @Field("cart_ids") String cart_ids,
+            @Field("addr_id") String addr_id,
+            @Field("channel") String channel,
+            @Field("payment") String payment,
+            @Field("post_fee") String post_fee,
+            @Field("discount_fee") String discount_fee,
+            @Field("total_fee") String total_fee,
+            @Field("uuid") String uuid,
+            @Field("pay_extras") String pay_extras,
+            @Field("logistics_company_id") String code,
+            @Field("order_type")String type
     );
 
     //立即支付订单接口
@@ -270,7 +288,7 @@ public interface XlmmService {
     //投诉建议
     @FormUrlEncoded
     @POST("/rest/v1/complain")
-     Observable<AddressResultBean> complain(
+    Observable<AddressResultBean> complain(
             @Field("com_type") String com_type,
             @Field("com_content") String com_content,
             @Field("com_title") String com_title);
@@ -324,6 +342,7 @@ public interface XlmmService {
     Observable<CouponSelectEntity> getCouponSelectEntity(
             @Query("cart_ids") String cart_ids
     );
+
     //购物车增加一件
     @POST("/rest/v2/carts/{id}/plus_product_carts")
     Observable<Response<CodeBean>> plus_product_carts(
@@ -810,7 +829,7 @@ public interface XlmmService {
     Observable<CategoryProductListBean> getCategoryProductList(
             @Query("cid") String cid,
             @Query("page") int page,
-            @Query("order_by")String order_by
+            @Query("order_by") String order_by
     );
 
     @GET("/rest/v2/modelproducts/{id}")
@@ -832,7 +851,7 @@ public interface XlmmService {
             @Field("item_id") int item_id,
             @Field("sku_id") int sku_id,
             @Field("num") int num,
-            @Field("type")int type
+            @Field("type") int type
     );
 
     @GET("/rest/v2/modelproducts/today")
@@ -858,4 +877,9 @@ public interface XlmmService {
 
     @GET("/rest/v2/ordercarry/get_latest_order_carry")
     Observable<List<MiPushOrderCarryBean>> getLatestOrderCarry();
+
+    @GET("/rest/v2/teambuy/{tid}/team_info")
+    Observable<TeamBuyBean> getTeamBuyBean(
+            @Path("tid") String tid
+    );
 }
