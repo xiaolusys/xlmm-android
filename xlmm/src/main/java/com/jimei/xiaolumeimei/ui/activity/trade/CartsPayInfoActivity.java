@@ -534,18 +534,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 intent.putExtras(bundle);
                 startActivityForResult(intent, REQUEST_CODE_COUPONT);
                 break;
-            //case R.id.wx_layout:
-            //  isWx = true;
-            //  isAlipay = false;
-            //  wxImg.setImageResource(R.drawable.radio_bg_checked);
-            //  alipayImg.setImageResource(R.drawable.radio_bg);
-            //  break;
-            //case R.id.alipay_layout:
-            //  isAlipay = true;
-            //  isWx = false;
-            //  alipayImg.setImageResource(R.drawable.radio_bg_checked);
-            //  wxImg.setImageResource(R.drawable.radio_bg);
-            //  break;
             case R.id.tv_rule:
                 dialog.show();
                 break;

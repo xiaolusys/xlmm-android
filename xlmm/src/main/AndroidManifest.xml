@@ -200,7 +200,16 @@
             android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".base.CommonWebViewActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
+            android:theme="@style/AppTheme.TransparentActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data
+                    android:host="app"
+                    android:path="/v1/webview"
+                    android:scheme="com.jimei.xlmm"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.activity.xiaolumama.BoutiqueWebviewActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
@@ -415,10 +424,11 @@
             android:theme="@style/AppTheme.TransparentActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
-
-                <data android:scheme="com.jimei.xlmm"
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data
                     android:host="app"
-                    android:path="/v1/product_detail"/>
+                    android:path="/v1/product_detail"
+                    android:scheme="com.jimei.xlmm"/>
             </intent-filter>
         </activity>
         <activity

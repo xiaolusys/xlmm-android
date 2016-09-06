@@ -59,6 +59,7 @@ public class CartHistoryAdapter extends RecyclerView.Adapter<CartHistoryAdapter.
             bundle.putInt("model_id", cartsInfoBean.getModel_id());
             intent.putExtras(bundle);
             mActivity.startActivity(intent);
+            mActivity.finish();
         });
         holder.rebuy.setOnClickListener(v -> {
             mActivity.showIndeterminateProgressDialog(false);
