@@ -9,6 +9,7 @@ import com.jimei.xiaolumeimei.entities.CollectionResultBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.entities.ShareModelBean;
+import com.jimei.xiaolumeimei.entities.TeamBuyBean;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 
 import rx.Observable;
@@ -97,5 +98,11 @@ public class ProductModel {
         } else {
             return getTomorrowProducts(page);
         }
+    }
+
+    public Observable<TeamBuyBean> getTeamBuyBean(String tid){
+        return XlmmRetrofitClient.getService()
+                .getTeamBuyBean(tid)
+                .compose(new DefaultTransform<>());
     }
 }

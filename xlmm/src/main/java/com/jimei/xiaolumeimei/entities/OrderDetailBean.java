@@ -58,6 +58,8 @@ public class OrderDetailBean implements Serializable {
     private String pay_time;
     private Object consign_time;
     private String out_sid;
+    private int  order_type;
+    private boolean can_refund;
     /**
      * id : -2
      * code : YUNDA_QR
@@ -300,6 +302,22 @@ public class OrderDetailBean implements Serializable {
 
     public void setPackage_orders(List<PackageOrdersBean> package_orders) {
         this.package_orders = package_orders;
+    }
+
+    public int getOrder_type() {
+        return order_type;
+    }
+
+    public void setOrder_type(int order_type) {
+        this.order_type = order_type;
+    }
+
+    public boolean isCan_refund() {
+        return can_refund;
+    }
+
+    public void setCan_refund(boolean can_refund) {
+        this.can_refund = can_refund;
     }
 
     public static class LogisticsCompanyBean {

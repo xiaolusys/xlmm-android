@@ -109,14 +109,15 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
                         .subscribe(new ServiceResponse<Response<CodeBean>>() {
                             @Override
                             public void onNext(Response<CodeBean> responseBody) {
-                                if (responseBody != null) {
-                                    if (responseBody.isSuccessful()) {
+                                if (responseBody != null && responseBody.isSuccessful()) {
+                                    CodeBean body = responseBody.body();
+                                    if (body != null && body.getCode() == 0) {
                                         mActivity.setPriceText();
                                         cartsInfoBean.setNum(cartsInfoBean.getNum() - 1);
                                         holder.count.setText(cartsInfoBean.getNum() + "");
                                         notifyDataSetChanged();
                                     } else {
-                                        JUtils.Toast(responseBody.body().getInfo());
+                                        JUtils.Toast(body != null ? body.getInfo() : "操作失败");
                                     }
                                 } else {
                                     JUtils.Toast("操作未成功，请重新尝试");
@@ -135,13 +136,14 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
                                 @Override
                                 public void onNext(Response<CodeBean> responseBody) {
                                     if (null != responseBody) {
-                                        if (responseBody.isSuccessful()) {
+                                        CodeBean body = responseBody.body();
+                                        if (body != null && body.getCode() == 0) {
                                             mActivity.setPriceText();
                                             cartsInfoBean.setNum(cartsInfoBean.getNum() + 1);
                                             holder.count.setText(cartsInfoBean.getNum() + "");
                                             notifyDataSetChanged();
                                         } else {
-                                            JUtils.Toast(responseBody.body().getInfo());
+                                            JUtils.Toast(body != null ? body.getInfo() : "操作失败");
                                         }
                                     } else {
                                         JUtils.Toast("操作未成功，请重新尝试");

@@ -365,6 +365,25 @@ public class JumpUtils {
     context.startActivity(intent);
   }
 
+  public static void jumpToWebViewWithCookies(Context context, String actlink, int id,
+                                              Class<?> classname, String title,boolean share) {
+    Intent intent = new Intent(context, classname);
+    SharedPreferences sharedPreferences =
+            context.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+    String cookies = sharedPreferences.getString("cookiesString", "");
+    String domain = sharedPreferences.getString("cookiesDomain", "");
+    Bundle bundle = new Bundle();
+    bundle.putString("cookies", cookies);
+    bundle.putString("domain", domain);
+    bundle.putString("Cookie", sharedPreferences.getString("Cookie", ""));
+    bundle.putString("actlink", actlink);
+    bundle.putString("title", title);
+    bundle.putBoolean("share",share);
+    bundle.putInt("id", id);
+    intent.putExtras(bundle);
+    context.startActivity(intent);
+  }
+
   public static class JumpInfo {
     int type;
     String url;

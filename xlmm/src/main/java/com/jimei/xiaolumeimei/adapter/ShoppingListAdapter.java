@@ -1,6 +1,8 @@
 package com.jimei.xiaolumeimei.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -15,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.OderCarryBean;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.OrderLogisticActivity;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 
 import java.util.ArrayList;
@@ -108,6 +111,16 @@ public class ShoppingListAdapter
                 "收益" + (float) (Math.round(resultsEntity.getCarry_num() * 100)) / 100);
         holder.totalCash.setText(
                 "总收益 " + (float) (Math.round(resultsEntity.getToday_carry() * 100)) / 100);
+        if ("确定收益".equals(resultsEntity.getStatus_display())) {
+            holder.content.setOnClickListener(v -> {
+                Intent intent = new Intent(mContext, OrderLogisticActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("company_code",resultsEntity.getCompany_code());
+                bundle.putString("packetid",resultsEntity.getPacketid());
+                intent.putExtras(bundle);
+                mContext.startActivity(intent);
+            });
+        }
     }
 
     private void showCategory(ShoppingListVH holder) {
