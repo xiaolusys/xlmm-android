@@ -130,7 +130,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     if (extras != null) {
       cookies = extras.getString("cookies");
       domain = extras.getString("domain");
-      // TODO: 16/9/6
+      sessionid = extras.getString("Cookie");
       Uri uri = getIntent().getData();
       if (uri!=null) {
         actlink = uri.getQueryParameter("url");
@@ -144,7 +144,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
         actlink = extras.getString("actlink");
         id = extras.getInt("id");
       }
-      sessionid = extras.getString("Cookie");
       JUtils.Log(TAG, "GET cookie:" + cookies + " actlink:" + actlink + " domain:" + domain +
           " sessionid:" + sessionid);
     }

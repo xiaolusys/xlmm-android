@@ -1,5 +1,6 @@
 package com.jimei.xiaolumeimei.ui.fragment.v1;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -41,6 +42,7 @@ public class CollectionFragment extends Fragment implements View.OnClickListener
     private CollectionAdapter adapter;
     private int page;
     private String next;
+    private CollectionActivity mContext;
 
     public static CollectionFragment newInstance(String title, String type) {
         CollectionFragment fragment = new CollectionFragment();
@@ -49,6 +51,12 @@ public class CollectionFragment extends Fragment implements View.OnClickListener
         args.putString(ARG_PARAM2, type);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = ((CollectionActivity) context);
     }
 
     @Override
@@ -129,7 +137,7 @@ public class CollectionFragment extends Fragment implements View.OnClickListener
                         if (next != null && !"".equals(next)) {
                             page++;
                         }
-                        ((CollectionActivity) getActivity()).hideIndeterminateProgressDialog();
+                        mContext.hideIndeterminateProgressDialog();
                     }
 
                     @Override
@@ -141,7 +149,7 @@ public class CollectionFragment extends Fragment implements View.OnClickListener
                     public void onError(Throwable e) {
                         e.printStackTrace();
                         recyclerView.post(recyclerView::loadMoreComplete);
-                        ((CollectionActivity) getActivity()).hideIndeterminateProgressDialog();
+                        mContext.hideIndeterminateProgressDialog();
                         JUtils.Toast("数据加载有误!");
                     }
                 });

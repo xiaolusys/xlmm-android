@@ -166,6 +166,10 @@ public class UserDrawCashActivity extends BaseSwipeBackCompatActivity
                 drawMoney = Double.parseDouble(s.toString());
             }
         }
+        setBtn();
+    }
+
+    private void setBtn() {
         if (!ruleFlag) {
             msgTv.setText("请阅读个人提现条款并同意后可以提现哦");
             msgTv.setTextColor(getResources().getColor(R.color.red));
@@ -292,10 +296,10 @@ public class UserDrawCashActivity extends BaseSwipeBackCompatActivity
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (isChecked) {
             ruleFlag = true;
-            setBtnClick();
+            setBtn();
         } else {
             ruleFlag = false;
-            setBtnUnClick();
+            setBtn();
         }
     }
 }

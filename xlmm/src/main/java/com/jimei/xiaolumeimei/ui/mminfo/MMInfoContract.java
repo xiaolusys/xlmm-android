@@ -65,8 +65,6 @@ public interface MMInfoContract {
     void getMaMaRenwuListBean(MamaSelfListBean mamaSelfListBean);
 
     void setUdesk(UserInfoBean userInfoBean);
-
-    void setOrderCarry(List<MiPushOrderCarryBean> list);
   }
 
   abstract class Presenter extends BasePresenter<Model, View> {
@@ -94,6 +92,8 @@ public interface MMInfoContract {
     public abstract void getUserInfo();
 
     public abstract void getOrderCarry();
+
+    public abstract void setDestory();
 
     @Override public void onStart() {
     }
