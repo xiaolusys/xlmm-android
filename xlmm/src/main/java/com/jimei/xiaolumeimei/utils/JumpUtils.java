@@ -40,18 +40,6 @@ public class JumpUtils {
     JUtils.Log(TAG, "push_jump_proc:" + recvContent);
 
     if (TextUtils.isEmpty(recvContent)) return;
-//    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(recvContent));
-//    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//    SharedPreferences sharedPreferences =
-//            context.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
-//
-//    String cookies1 = sharedPreferences.getString("cookiesString", "");
-//    String domain1 = sharedPreferences.getString("cookiesDomain", "");
-//    Bundle bundle4 = new Bundle();
-//    bundle4.putString("cookies", cookies1);
-//    bundle4.putString("domain", domain1);
-//    intent.putExtras(bundle4);
-//    context.startActivity(intent);
 
     JumpInfo jumpInfo = get_jump_info(recvContent);
     jumToProc(context, jumpInfo);
@@ -136,7 +124,6 @@ public class JumpUtils {
             intent = new Intent(context, OrderDetailActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra("orderinfo", Integer.valueOf(trade_id));
-            intent.putExtra("source", "Main");
             Log.d(TAG, "LinearLayout transfer orderid  " + trade_id + " to OrderDetailActivity");
             context.startActivity(intent);
           } catch (NumberFormatException e) {

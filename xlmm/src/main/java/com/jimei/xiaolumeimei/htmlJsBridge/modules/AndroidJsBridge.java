@@ -89,7 +89,6 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
 
   @JavascriptInterface public void jumpToNativeLocation(String url) {
     JUtils.Log("CommonWebViewActivity", url);
-    JUtils.Log("CommonWebViewActivity", "brook hahahahahah");
     jump_ToNativeLocation(url);
     JUtils.Log(url);
     //jump_ToNativeLocation("");

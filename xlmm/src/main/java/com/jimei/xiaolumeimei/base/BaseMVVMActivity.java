@@ -290,7 +290,7 @@ public abstract class BaseMVVMActivity<T extends ViewDataBinding> extends BaseAu
   public void showIndeterminateProgressDialog(boolean cancellable) {
     loadingdialog = XlmmLoadingDialog.create(this)
         .setStyle(XlmmLoadingDialog.Style.SPIN_INDETERMINATE)
-        .setCancellable(cancellable)
+        .setCancellable(!cancellable)
         .show();
   }
 
