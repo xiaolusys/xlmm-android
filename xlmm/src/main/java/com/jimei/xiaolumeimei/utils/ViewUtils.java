@@ -34,6 +34,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
@@ -51,6 +52,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import okhttp3.Call;
 import rx.Observable;
 import rx.Subscriber;
@@ -280,6 +282,14 @@ public final class ViewUtils {
             .into(img);
       }
     }
+  }
+
+  public static void loadActivityToImgView(Context context, ImageView img, String picPath) {
+    if (null == picPath) return;
+        Glide.with(context)
+                .load(picPath+"?imageMogr2/format/jpg/quality/90")
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                .into(img);
   }
 
   public static void loadImgToImgViewWithWaterMark(Context context, ImageView img, String picPath) {
@@ -577,7 +587,6 @@ public final class ViewUtils {
           e.printStackTrace();
         }
       }
-
       Glide.with(context)
           .load(head_img)
               .thumbnail(0.1f)
@@ -650,13 +659,13 @@ public final class ViewUtils {
       }
     }).subscribeOn(Schedulers.io());
   }
-  
+
   public static Bitmap getBitmapFormUrl(String url){
     RequestCall build = OkHttpUtils.get().url(url).build();
     build.execute(new BitmapCallback() {
       @Override
       public void onError(Call call, Exception e, int id) {
-        
+
       }
 
       @Override

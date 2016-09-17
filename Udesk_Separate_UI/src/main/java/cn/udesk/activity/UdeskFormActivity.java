@@ -1,7 +1,6 @@
 package cn.udesk.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -16,7 +15,7 @@ import cn.udesk.UdeskSDKManager;
 import cn.udesk.UdeskUtil;
 import cn.udesk.widget.UdeskTitleBar;
 
-public class UdeskFormActivity extends Activity {
+public class UdeskFormActivity extends BaseActivity {
 	private WebView mwebView;
 	private UdeskTitleBar mTitlebar;
 

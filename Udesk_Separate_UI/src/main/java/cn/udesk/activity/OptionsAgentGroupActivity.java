@@ -1,6 +1,5 @@
 package cn.udesk.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -28,7 +27,7 @@ import udesk.core.UdeskHttpFacade;
 /**
  * 选择客服组
  */
-public class OptionsAgentGroupActivity extends Activity implements AdapterView.OnItemClickListener {
+public class OptionsAgentGroupActivity extends BaseActivity implements AdapterView.OnItemClickListener {
 
     private UdeskTitleBar mTitlebar;
     private TextView title;

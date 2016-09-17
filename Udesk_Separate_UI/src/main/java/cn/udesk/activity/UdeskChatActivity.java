@@ -79,7 +79,7 @@ import udesk.core.model.AgentInfo;
 import udesk.core.model.MessageInfo;
 import udesk.core.utils.UdeskUtils;
 
-public class UdeskChatActivity extends Activity implements IChatActivityView,
+public class UdeskChatActivity extends BaseActivity implements IChatActivityView,
         OnClickListener, OnTouchListener, OnLongClickListener,
         OnItemClickListener, RecordStateCallback, UdeskTimeEndCallback {
 

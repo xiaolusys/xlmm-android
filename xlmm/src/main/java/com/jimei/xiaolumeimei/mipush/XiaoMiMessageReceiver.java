@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,7 +20,6 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseAutoLayoutActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
-import com.jimei.xiaolumeimei.entities.MiPushOrderCarryBean;
 import com.jimei.xiaolumeimei.entities.MiPushProductDetailBean;
 import com.jimei.xiaolumeimei.entities.XiaoMiPushContent;
 import com.jimei.xiaolumeimei.ui.mminfo.MMInfoActivity;
@@ -316,31 +314,30 @@ public class XiaoMiMessageReceiver extends PushMessageReceiver {
                         dialog.show();
                         break;
                     case XlmmConst.MI_MAMA_ORDER_CARRY_BROADCAST:
-                        MiPushOrderCarryBean miPushOrderCarryBean = gson.fromJson(s, new TypeToken<MiPushOrderCarryBean>() {
-                        }.getType());
-                        while (flag) {
-                            flag = false;
-                            if (context instanceof MMInfoActivity) {
-                                MMInfoActivity activity = (MMInfoActivity) context;
-                                View layout = activity.findViewById(R.id.mi_layout);
-                                ImageView headImg = (ImageView) activity.findViewById(R.id.mi_head);
-                                TextView infoTv = (TextView) activity.findViewById(R.id.mi_info);
-                                if (infoTv != null && headImg != null && layout != null) {
-                                    infoTv.setText(miPushOrderCarryBean.getContent());
-                                    ViewUtils.loadImgToImgViewWithTransformCircle(this.context, headImg, miPushOrderCarryBean.getAvatar());
-                                    layout.setVisibility(View.VISIBLE);
-                                    new Thread(() -> {
-                                        SystemClock.sleep(3000);
-                                        activity.runOnUiThread(() -> layout.setVisibility(View.GONE));
-                                    }).start();
-                                    new Thread(() -> {
-                                        SystemClock.sleep(5000);
-                                        flag = true;
-                                    }).start();
-                                }
-                            }
-                        }
-
+//                        MiPushOrderCarryBean miPushOrderCarryBean = gson.fromJson(s, new TypeToken<MiPushOrderCarryBean>() {
+//                        }.getType());
+//                        while (flag) {
+//                            flag = false;
+//                            if (context instanceof MMInfoActivity) {
+//                                MMInfoActivity activity = (MMInfoActivity) context;
+//                                View layout = activity.findViewById(R.id.mi_layout);
+//                                ImageView headImg = (ImageView) activity.findViewById(R.id.mi_head);
+//                                TextView infoTv = (TextView) activity.findViewById(R.id.mi_info);
+//                                if (infoTv != null && headImg != null && layout != null) {
+//                                    infoTv.setText(miPushOrderCarryBean.getContent());
+//                                    ViewUtils.loadImgToImgViewWithTransformCircle(this.context, headImg, miPushOrderCarryBean.getAvatar());
+//                                    layout.setVisibility(View.VISIBLE);
+//                                    new Thread(() -> {
+//                                        SystemClock.sleep(3000);
+//                                        activity.runOnUiThread(() -> layout.setVisibility(View.GONE));
+//                                    }).start();
+//                                    new Thread(() -> {
+//                                        SystemClock.sleep(5000);
+//                                        flag = true;
+//                                    }).start();
+//                                }
+//                            }
+//                        }
                         break;
                 }
             }

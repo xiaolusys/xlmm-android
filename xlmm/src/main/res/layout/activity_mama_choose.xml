@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:orientation="vertical">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.jimei.xiaolumeimei.widget.XlmmTitleView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:xlmm_title="选品列表"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
         android:orientation="vertical">
-
-        <com.jimei.xiaolumeimei.widget.XlmmTitleView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:xlmm_title="选品列表"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -23,19 +24,12 @@
             android:orientation="horizontal"
             android:padding="24px">
 
-            <RelativeLayout
+            <Spinner
+                android:id="@+id/spinner"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center">
-
-                <android.support.v7.widget.AppCompatSpinner
-                    android:id="@+id/spinner_choose"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:spinnerMode="dropdown"/>
-            </RelativeLayout>
-
+                android:gravity="center"/>
 
             <TextView
                 android:id="@+id/tv_commission"
@@ -46,7 +40,7 @@
                 android:text="佣金排序"/>
 
             <TextView
-                android:id="@+id/tv_sales"
+                android:id="@+id/tv_sale"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -56,16 +50,10 @@
 
         <include layout="@layout/common_gap"/>
 
-        <FrameLayout
+        <com.jcodecraeer.xrecyclerview.XRecyclerView
+            android:id="@+id/rv_choose"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/chooselist_xey"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-
-        </FrameLayout>
+            android:layout_height="match_parent"/>
     </LinearLayout>
 
-</FrameLayout>
+</LinearLayout>

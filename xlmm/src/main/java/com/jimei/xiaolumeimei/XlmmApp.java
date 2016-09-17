@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
+
 import com.facebook.stetho.Stetho;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.mipush.XiaoMiMessageReceiver;
@@ -13,6 +14,7 @@ import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
 import com.jude.utils.JUtils;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.zhy.autolayout.config.AutoLayoutConifg;
+
 import java.util.List;
 
 //import com.squareup.leakcanary.LeakCanary;

@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.utils.CommonUtils;
 import com.jimei.xiaolumeimei.utils.TUtil;
@@ -49,7 +48,6 @@ public abstract class BasePresenterMVVMActivity<T extends BasePresenter, E exten
    */
   protected Context mContext = null;
   private SharedPreferences sharedPreferences;
-  private MaterialDialog materialDialog;
   public T mPresenter;
   public E mModel;
   public P b;
@@ -126,7 +124,8 @@ public abstract class BasePresenterMVVMActivity<T extends BasePresenter, E exten
     mPresenter = TUtil.getT(this, 0);
     mModel = TUtil.getT(this, 1);
     this.initViews();
-    if (this instanceof BaseView) mPresenter.setVM(this, mModel);
+    if (this instanceof BaseView)
+      mPresenter.setVM(this, mModel);
     this.initData();
     setListener();
   }

@@ -9,10 +9,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import butterknife.Bind;
-import rx.Subscription;
-import rx.schedulers.Schedulers;
-
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
@@ -20,6 +16,10 @@ import com.jimei.xiaolumeimei.model.UserNewModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
+
+import butterknife.Bind;
+import rx.Subscription;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by wulei on 2016/2/4.
@@ -106,7 +106,7 @@ public class MamaWithdrawCashResultActivity extends BaseSwipeBackCompatActivity
         switch (v.getId()) {
             case R.id.btn_jump:
                 JUtils.Log(TAG, "publish now");
-                startActivity(new Intent(this, MMChooseListActivity.class));
+                startActivity(new Intent(this, MamaChooseActivity.class));
                 finish();
                 break;
         }

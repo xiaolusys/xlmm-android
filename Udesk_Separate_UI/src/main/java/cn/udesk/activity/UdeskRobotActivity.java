@@ -1,7 +1,6 @@
 package cn.udesk.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,7 +19,7 @@ import cn.udesk.UdeskUtil;
 import cn.udesk.widget.UdeskTitleBar;
 import udesk.core.UdeskHttpFacade;
 
-public class UdeskRobotActivity extends Activity {
+public class UdeskRobotActivity extends BaseActivity {
 	private WebView mwebView;
 	private UdeskTitleBar mTitlebar;
 	private String h5Url = null;

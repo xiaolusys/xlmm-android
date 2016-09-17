@@ -5,8 +5,7 @@
   <color name="colorAccent">#FAAA14</color>
   <color name="colorAccentDark">#F2820D</color>
 
-
-
+  <color name="scan_bg">#7f000000</color>
 
   <color name="primary_text">#212121</color>
   <color name="secondary_text">#727272</color>

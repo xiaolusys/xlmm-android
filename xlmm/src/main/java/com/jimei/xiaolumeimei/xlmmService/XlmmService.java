@@ -16,8 +16,10 @@ import com.jimei.xiaolumeimei.entities.CartsHisBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.CartsInfoBean;
+import com.jimei.xiaolumeimei.entities.CategoryBean;
 import com.jimei.xiaolumeimei.entities.CategoryDownBean;
 import com.jimei.xiaolumeimei.entities.CategoryProductListBean;
+import com.jimei.xiaolumeimei.entities.ChooseListBean;
 import com.jimei.xiaolumeimei.entities.ClickcarryBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.CollectionAllBean;
@@ -195,7 +197,7 @@ public interface XlmmService {
             @Field("uuid") String uuid,
             @Field("pay_extras") String pay_extras,
             @Field("logistics_company_id") String code,
-            @Field("order_type")String type
+            @Field("order_type") String type
     );
 
     //立即支付订单接口
@@ -825,6 +827,10 @@ public interface XlmmService {
     @GET("/rest/v2/categorys/latest_version")
     Observable<CategoryDownBean> getCategoryDown();
 
+
+    @GET("/rest/v2/categorys")
+    Observable<List<CategoryBean>> getCategory();
+
     @GET("/rest/v2/modelproducts")
     Observable<CategoryProductListBean> getCategoryProductList(
             @Query("cid") String cid,
@@ -881,5 +887,31 @@ public interface XlmmService {
     @GET("/rest/v2/teambuy/{tid}/team_info")
     Observable<TeamBuyBean> getTeamBuyBean(
             @Path("tid") String tid
+    );
+
+    @GET("/rest/v2/modelproducts/product_choice")
+    Observable<ChooseListBean> getChooseList(
+            @Query("page") int page
+    );
+
+    @GET("/rest/v2/modelproducts/product_choice")
+    Observable<ChooseListBean> getChooseListBySort(
+            @Query("page") int page,
+            @Query("sort_field") String sort_field,
+            @Query("reverse") int reverse
+    );
+
+    @GET("/rest/v2/modelproducts/product_choice")
+    Observable<ChooseListBean> getChooseListByCid(
+            @Query("page") int page,
+            @Query("cid") String cid
+    );
+
+    @GET("/rest/v2/modelproducts/product_choice")
+    Observable<ChooseListBean> getChooseList(
+            @Query("page") int page,
+            @Query("sort_field") String sort_field,
+            @Query("cid") String cid,
+            @Query("reverse") int reverse
     );
 }
