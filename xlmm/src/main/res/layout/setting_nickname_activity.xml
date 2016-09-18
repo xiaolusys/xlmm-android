@@ -64,7 +64,7 @@
   <Button
 
       android:layout_marginTop="8dp"
-      android:background="@drawable/shape_common"
+      android:background="@drawable/btn_common_default"
       android:id="@+id/set_save_button"
       android:layout_width="669px"
       android:layout_height="wrap_content"

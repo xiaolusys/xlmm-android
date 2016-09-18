@@ -51,9 +51,11 @@ public class OrderGoodsListAdapter extends BaseAdapter {
 
     private OrderDetailBean orderDetailEntity;
     private int count;
+    private boolean can_refund;
 
-    public OrderGoodsListAdapter(Activity context, OrderDetailBean orderDetailEntity) {
+    public OrderGoodsListAdapter(Activity context, OrderDetailBean orderDetailEntity, boolean can_refund) {
         this.orderDetailEntity = orderDetailEntity;
+        this.can_refund = can_refund;
         data = new ArrayList<>();
         data.addAll(orderDetailEntity.getOrders());
         count = 0;
@@ -194,18 +196,6 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                         btn.setVisibility(View.INVISIBLE);
                         tv_order_state.setVisibility(View.VISIBLE);
                         switch (refund_state) {
-//                            case XlmmConst.REFUND_STATE_BUYER_APPLY:
-//                                tv_order_state.setText("已经申请退款");
-//                                break;
-//                            case XlmmConst.REFUND_STATE_SELLER_AGREED:
-//                                tv_order_state.setText("卖家同意退款");
-//                                break;
-//                            case XlmmConst.REFUND_STATE_BUYER_RETURNED_GOODS:
-//                                tv_order_state.setText("已经退货");
-//                                break;
-//                            case XlmmConst.REFUND_STATE_WAIT_RETURN_FEE:
-//                                tv_order_state.setText("退款中");
-//                                break;
                             case XlmmConst.REFUND_STATE_SELLER_REJECTED:
                                 tv_order_state.setText("拒绝退款");
                                 break;
@@ -229,7 +219,14 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                             }
                         });
                     } else {
-                        btn.setText("申请退款");
+                        if (state == XlmmConst.ORDER_STATE_PAYED) {
+                            btn.setText("申请退款");
+                            if (!can_refund) {
+                                btn.setVisibility(View.INVISIBLE);
+                            }
+                        } else {
+                            btn.setText("申请退货");
+                        }
                         tv_order_state.setVisibility(View.INVISIBLE);
                     }
                 }

@@ -32,7 +32,6 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.entities.CallNativeFuncBean;
 import com.jimei.xiaolumeimei.model.ActivityModel;
-import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShareCodeWebViewActivity;
 import com.jimei.xiaolumeimei.utils.CameraUtils;
@@ -90,7 +89,6 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
 
   @JavascriptInterface public void jumpToNativeLocation(String url) {
     JUtils.Log("CommonWebViewActivity", url);
-    JUtils.Log("CommonWebViewActivity", "brook hahahahahah");
     jump_ToNativeLocation(url);
     JUtils.Log(url);
     //jump_ToNativeLocation("");
@@ -582,14 +580,6 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     intent.putExtras(bundle);
     mContext.startActivity(intent);
     mContext.finish();
-  }
-
-  @JavascriptInterface public void showSkuPopup(String json) {
-    ((ProductPopDetailActvityWeb) mContext).showPop(json);
-  }
-
-  @JavascriptInterface public void jumpToNativeLogin() {
-    ((ProductPopDetailActvityWeb) mContext).jumToNativeLogin();
   }
 
   @JavascriptInterface public void callNativeBack() {

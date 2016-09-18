@@ -7,10 +7,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
@@ -25,7 +28,7 @@ import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
-public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener {
+public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     @Bind(R.id.tv_money)
     TextView moneyTv;
     @Bind(R.id.iv_wx)
@@ -48,6 +51,10 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
     ImageView iv200;
     @Bind(R.id.nick_name)
     TextView nickNameTv;
+    @Bind(R.id.tv_rule)
+    TextView tvRule;
+    @Bind(R.id.cb_rule)
+    CheckBox cbRule;
     private double cash;
     private double drawMoney = 0;
     Subscription subscribe;
@@ -62,6 +69,8 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
         iv200.setOnClickListener(this);
         textView100.setOnClickListener(this);
         textView200.setOnClickListener(this);
+        tvRule.setOnClickListener(this);
+        cbRule.setOnCheckedChangeListener(this);
     }
 
     @Override
@@ -208,6 +217,21 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
                 textView100.setTextColor(Color.parseColor("#c5c5c5"));
                 textView100.setBackgroundResource(R.drawable.text_unchecked_bg);
                 break;
+            case R.id.tv_rule:
+                new MaterialDialog.Builder(this)
+                        .title("提现提示")
+                        .content("由于微信存在提现次数限制,为了在方便妈妈提现和多次小额提现等待审核时间长之间做一个"
+                                + "平衡,我们设定提现金额为100元和200元.金额不足100元或者活跃值不足的情况下,"
+                                + "妈妈可以兑换现金券进行消费.")
+                        .positiveText("确认")
+                        .positiveColorRes(R.color.colorAccent)
+                        .callback(new MaterialDialog.ButtonCallback() {
+                            @Override
+                            public void onPositive(MaterialDialog dialog) {
+                                dialog.dismiss();
+                            }
+                        }).show();
+                break;
         }
     }
 
@@ -239,5 +263,16 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
         super.onPause();
         MobclickAgent.onPageEnd(this.getClass().getSimpleName());
         MobclickAgent.onPause(this);
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (isChecked) {
+            drawCashBtn.setClickable(true);
+            drawCashBtn.setEnabled(true);
+        } else {
+            drawCashBtn.setClickable(false);
+            drawCashBtn.setEnabled(false);
+        }
     }
 }

@@ -26,6 +26,7 @@ import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.HttpAuthHandler;
 import android.webkit.SslErrorHandler;
+import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -69,6 +70,12 @@ import rx.schedulers.Schedulers;
  */
 public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     implements PlatformActionListener, Handler.Callback {
+
+  public ValueCallback<Uri> mUploadMessage;
+  public ValueCallback<Uri[]> mUploadMessageForAndroid5;
+
+  public final static int FILECHOOSER_RESULTCODE = 1;
+  public final static int FILECHOOSER_RESULTCODE_FOR_ANDROID_5 = 2;
 
   private static final int MSG_ACTION_CCALLBACK = 2;
   private static final int WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 200;
@@ -123,9 +130,20 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     if (extras != null) {
       cookies = extras.getString("cookies");
       domain = extras.getString("domain");
-      actlink = extras.getString("actlink");
-      id = extras.getInt("id");
       sessionid = extras.getString("Cookie");
+      Uri uri = getIntent().getData();
+      if (uri!=null) {
+        actlink = uri.getQueryParameter("url");
+        String id = uri.getQueryParameter("activity_id");
+        if (id!=null) {
+          this.id = Integer.valueOf(id);
+        }else {
+          this.id=-1;
+        }
+      } else {
+        actlink = extras.getString("actlink");
+        id = extras.getInt("id");
+      }
       JUtils.Log(TAG, "GET cookie:" + cookies + " actlink:" + actlink + " domain:" + domain +
           " sessionid:" + sessionid);
     }
@@ -148,6 +166,9 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     setSupportActionBar(mToolbar);
     mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    if (getIntent().getExtras()!=null&&getIntent().getExtras().getString("title")!=null) {
+      webviewTitle.setText(getIntent().getExtras().getString("title"));
+    }
 
     try {
       if (Build.VERSION.SDK_INT >= 19) {
@@ -188,6 +209,28 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
           } else {
             mProgressBar.setVisibility(View.VISIBLE);
           }
+        }
+
+        //扩展浏览器上传文件
+        //3.0++版本
+        public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType) {
+          openFileChooserImpl(uploadMsg);
+        }
+
+        //3.0--版本
+        public void openFileChooser(ValueCallback<Uri> uploadMsg) {
+          openFileChooserImpl(uploadMsg);
+        }
+
+        public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
+          openFileChooserImpl(uploadMsg);
+        }
+
+        // For Android > 5.0
+        public boolean onShowFileChooser (WebView webView, ValueCallback<Uri[]> uploadMsg,
+                                          WebChromeClient.FileChooserParams fileChooserParams) {
+          openFileChooserImplForAndroid5(uploadMsg);
+          return true;
         }
       });
 
@@ -230,6 +273,50 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     syncCookie(this);
   }
 
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode,Intent intent) {
+    if (requestCode == FILECHOOSER_RESULTCODE) {
+      if (null == mUploadMessage)
+        return;
+      Uri result = intent == null || resultCode != RESULT_OK ? null: intent.getData();
+      mUploadMessage.onReceiveValue(result);
+      mUploadMessage = null;
+
+    } else if (requestCode == FILECHOOSER_RESULTCODE_FOR_ANDROID_5){
+      if (null == mUploadMessageForAndroid5)
+        return;
+      Uri result = (intent == null || resultCode != RESULT_OK) ? null: intent.getData();
+      if (result != null) {
+        mUploadMessageForAndroid5.onReceiveValue(new Uri[]{result});
+      } else {
+        mUploadMessageForAndroid5.onReceiveValue(new Uri[]{});
+      }
+      mUploadMessageForAndroid5 = null;
+    }
+  }
+
+
+  private void openFileChooserImpl(ValueCallback<Uri> uploadMsg) {
+    mUploadMessage = uploadMsg;
+    Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+    i.addCategory(Intent.CATEGORY_OPENABLE);
+    i.setType("image/*");
+    startActivityForResult(Intent.createChooser(i, "File Chooser"), FILECHOOSER_RESULTCODE);
+  }
+
+  private void openFileChooserImplForAndroid5(ValueCallback<Uri[]> uploadMsg) {
+    mUploadMessageForAndroid5 = uploadMsg;
+    Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
+    contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
+    contentSelectionIntent.setType("image/*");
+
+    Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
+    chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
+    chooserIntent.putExtra(Intent.EXTRA_TITLE, "Image Chooser");
+
+    startActivityForResult(chooserIntent, FILECHOOSER_RESULTCODE_FOR_ANDROID_5);
+  }
+
   @Override protected boolean toggleOverridePendingTransition() {
     return false;
   }
@@ -267,7 +354,9 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.menu_shareproduct, menu);
+    if (getIntent().getExtras()!=null&&getIntent().getExtras().getBoolean("share",true)) {
+      getMenuInflater().inflate(R.menu.menu_shareproduct, menu);
+    }
     return super.onCreateOptionsMenu(menu);
   }
 

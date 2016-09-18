@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaDrawCashActivity">
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaDrawCashActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,7 +16,7 @@
         <com.jimei.xiaolumeimei.widget.XlmmTitleView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:xlmm_title="提现" />
+            app:xlmm_title="提现"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -32,7 +32,7 @@
                 android:padding="8dp"
                 android:text="妈妈账户余额:  "
                 android:textColor="@color/text_color_62"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/tv_money"
@@ -41,17 +41,17 @@
                 android:padding="8dp"
                 android:text="0元"
                 android:textColor="@color/text_color_62"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
 
         </LinearLayout>
 
-        <include layout="@layout/common_gap" />
+        <include layout="@layout/common_gap"/>
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="58px" />
+            android:layout_height="58px"/>
 
-        <include layout="@layout/common_gap" />
+        <include layout="@layout/common_gap"/>
 
         <LinearLayout
             android:id="@+id/xl_layout"
@@ -64,32 +64,32 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="21px"
-                android:src="@drawable/wallet_icon" />
+                android:layout_marginLeft="16dp"
+                android:src="@drawable/wallet_icon"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="18px"
+                android:layout_marginLeft="10dp"
                 android:text="提现至小鹿钱包"
                 android:textColor="@color/text_color_62"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
 
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"/>
 
             <ImageView
                 android:id="@+id/iv_xl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="33px"
-                android:src="@drawable/radio_bg_checked" />
+                android:layout_marginRight="16dp"
+                android:src="@drawable/radio_bg_checked"/>
 
         </LinearLayout>
 
-        <include layout="@layout/common_gap" />
+        <include layout="@layout/common_gap"/>
 
         <LinearLayout
             android:id="@+id/wx_layout"
@@ -102,50 +102,51 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="21px"
-                android:src="@drawable/wx_wallet_icon" />
+                android:layout_marginLeft="16dp"
+                android:src="@drawable/wx_wallet_icon"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="18px"
+                android:layout_marginLeft="10dp"
                 android:text="提现至微信钱包"
                 android:textColor="@color/text_color_62"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
 
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"/>
 
             <TextView
                 android:id="@+id/nick_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="12px"
+                android:layout_marginRight="6dp"
                 android:textColor="@color/text_color_9B"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
 
             <ImageView
                 android:id="@+id/iv_wx"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="33px"
-                android:src="@drawable/radio_bg" />
+                android:layout_marginRight="16dp"
+                android:src="@drawable/radio_bg"/>
 
         </LinearLayout>
 
-        <include layout="@layout/common_gap" />
+        <include layout="@layout/common_gap"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            android:paddingLeft="24px"
-            android:paddingTop="20px"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="12dp"
             android:text="提现金额:"
             android:textColor="@color/text_color_62"
-            android:textSize="14sp" />
+            android:textSize="14sp"/>
 
 
         <LinearLayout
@@ -158,13 +159,13 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"/>
 
             <ImageView
                 android:id="@+id/iv_100"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/radio_bg_checked" />
+                android:src="@drawable/radio_bg_checked"/>
 
             <TextView
                 android:id="@+id/tv_100"
@@ -175,18 +176,18 @@
                 android:padding="8dp"
                 android:text="100.0元"
                 android:textColor="@color/colorAccent"
-                android:textSize="18sp" />
+                android:textSize="18sp"/>
 
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"/>
 
             <ImageView
                 android:id="@+id/iv_200"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/radio_bg" />
+                android:src="@drawable/radio_bg"/>
 
             <TextView
                 android:id="@+id/tv_200"
@@ -197,26 +198,71 @@
                 android:padding="8dp"
                 android:text="200.0元"
                 android:textColor="#c0c0c0"
-                android:textSize="18sp" />
+                android:textSize="18sp"/>
 
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"/>
 
         </LinearLayout>
 
-        <include layout="@layout/common_gap" />
+        <include layout="@layout/common_gap"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp"/>
+
+        <include layout="@layout/common_gap"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="88px"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="我已阅读并同意"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/tv_rule"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="妈妈提现条款"
+                android:textColor="@color/colorAccent"
+                android:textSize="14sp"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"/>
+
+            <CheckBox
+                android:id="@+id/cb_rule"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"/>
+
+        </LinearLayout>
+
+        <include layout="@layout/common_gap"/>
 
         <Button
             android:id="@+id/btn_draw_cash"
             android:layout_width="660px"
             android:layout_height="80px"
             android:layout_marginTop="34px"
-            android:background="@drawable/shape_common"
+            android:background="@drawable/confirm_bg"
             android:text="确认提现"
             android:textColor="@color/white"
-            android:textSize="15sp" />
+            android:textSize="15sp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -225,7 +271,7 @@
             android:gravity="center"
             android:text="提现金额将以微信红包形式，24小时内发至你绑定的微信账户"
             android:textColor="#BBBBBB"
-            android:textSize="12sp" />
+            android:textSize="12sp"/>
 
     </LinearLayout>
 

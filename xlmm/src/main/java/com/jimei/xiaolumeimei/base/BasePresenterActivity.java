@@ -17,8 +17,10 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.loading.VaryViewHelperController;
 import com.jimei.xiaolumeimei.utils.CommonUtils;
+import com.jimei.xiaolumeimei.utils.NetWorkUtil;
 import com.jimei.xiaolumeimei.utils.TUtil;
 import com.jimei.xiaolumeimei.widget.loadingdialog.XlmmLoadingDialog;
+import com.jude.utils.JUtils;
 
 import butterknife.ButterKnife;
 import rx.Subscription;
@@ -189,10 +191,14 @@ public abstract class BasePresenterActivity<T extends BasePresenter, E extends B
 
     @Override
     public void showNetworkError() {
-        if (mVaryViewHelperController == null) {
-            throw new IllegalStateException("no ViewHelperController");
+        if (!NetWorkUtil.isNetWorkConnected(this)) {
+            if (mVaryViewHelperController == null) {
+                throw new IllegalStateException("no ViewHelperController");
+            }
+            mVaryViewHelperController.showNetworkError(view -> getDataCallBack());
+        }else {
+            JUtils.Toast("数据加载有误,请下拉刷新!");
         }
-        mVaryViewHelperController.showNetworkError(view -> getDataCallBack());
     }
 
     @Override

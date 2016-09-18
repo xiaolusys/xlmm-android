@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -27,18 +28,23 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.adapter.CartsPayInfoAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.AddressBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.PayInfoBean;
+import com.jimei.xiaolumeimei.entities.TeamBuyBean;
 import com.jimei.xiaolumeimei.event.UserChangeEvent;
 import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.model.CartsModel;
+import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.ui.activity.user.AddNoAddressActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.AddressSelectActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.SelectCouponActivity;
+import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.widget.NestedListView;
 import com.jimei.xiaolumeimei.widget.SmoothCheckBox;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -98,8 +104,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     @Bind(R.id.tv_coupon)
     TextView tv_coupon;
     List<CartsPayinfoBean.CartListEntity> list;
-    @Bind(R.id.go_main)
-    Button goMain;
     @Bind(R.id.scb)
     SmoothCheckBox scb;
     @Bind(R.id.tv_app_discount)
@@ -151,6 +155,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     @Bind(R.id.jiesheng_price)
     TextView jiesheng_price;
     private int position;
+    private boolean mFlag;
 
     @Override
     protected void setListener() {
@@ -469,6 +474,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void getBundleExtras(Bundle extras) {
         ids = extras.getString("ids");
+        mFlag = extras.getBoolean("flag", false);
     }
 
     @Override
@@ -528,18 +534,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 intent.putExtras(bundle);
                 startActivityForResult(intent, REQUEST_CODE_COUPONT);
                 break;
-            //case R.id.wx_layout:
-            //  isWx = true;
-            //  isAlipay = false;
-            //  wxImg.setImageResource(R.drawable.radio_bg_checked);
-            //  alipayImg.setImageResource(R.drawable.radio_bg);
-            //  break;
-            //case R.id.alipay_layout:
-            //  isAlipay = true;
-            //  isWx = false;
-            //  alipayImg.setImageResource(R.drawable.radio_bg_checked);
-            //  wxImg.setImageResource(R.drawable.radio_bg);
-            //  break;
             case R.id.tv_rule:
                 dialog.show();
                 break;
@@ -836,7 +830,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         //String code = logisticCompanyList.get(position).getCode();
         Subscription subscription = TradeModel.getInstance()
                 .shoppingcart_create_v2(ids, addr_id, pay_method, paymentprice_v2, post_fee,
-                        discount_fee_price, total_fee, uuid, pay_extrasaa, code)
+                        discount_fee_price, total_fee, uuid, pay_extrasaa, code, mFlag)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<PayInfoBean>() {
 
@@ -878,12 +872,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                             } else {
                                 if (payInfoBean.getCode() == 0) {
                                     JUtils.Toast("支付成功");
-                                    Intent intent = new Intent(CartsPayInfoActivity.this, RedBagActivity.class);
-                                    Bundle bundle = new Bundle();
-                                    bundle.putString("tid", order_no);
-                                    intent.putExtras(bundle);
-                                    startActivity(intent);
-                                    finish();
+                                    successJump();
                                 } else {
                                     JUtils.Toast(payInfoBean.getInfo());
                                 }
@@ -921,7 +910,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     //wexin alipay already showmsg
                     MobclickAgent.onEvent(CartsPayInfoActivity.this, "PayCancelID");
                     JUtils.Toast("你已取消支付!");
-//                    startActivity(new Intent(CartsPayInfoActivity.this, CartActivity.class));
+
                     if (order_id != -1) {
                         Intent intent = new Intent(this, OrderDetailActivity.class);
                         Bundle bundle = new Bundle();
@@ -936,18 +925,11 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     JUtils.Toast("支付成功！");
                     //startActivity(new Intent(CartsPayInfoActivity.this, AllOrdersActivity.class));
                     //finish();
-                    MobclickAgent.onEvent(CartsPayInfoActivity.this, "PaySuccessID");
-                    Intent intent = new Intent(CartsPayInfoActivity.this, RedBagActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("tid", order_no);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                    finish();
+                    successJump();
                 } else {
                     EventBus.getDefault().postSticky(new UserChangeEvent());
                     MobclickAgent.onEvent(CartsPayInfoActivity.this, "PayFailID");
                     showMsg(result, errorMsg, extraMsg);
-//                    startActivity(new Intent(CartsPayInfoActivity.this, CartActivity.class));
                     finish();
                     //JUtils.Toast(result + "" + errorMsg + "" + extraMsg);
                 }
@@ -1020,6 +1002,48 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             } else {
                 isSelectAddress = false;
             }
+        }
+    }
+
+    private void successJump() {
+        if (mFlag) {
+            addSubscription(ProductModel.getInstance()
+                    .getTeamBuyBean(order_no)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(new ServiceResponse<TeamBuyBean>() {
+                        @Override
+                        public void onNext(TeamBuyBean teamBuyBean) {
+                            int id = teamBuyBean.getId();
+                            SharedPreferences preferences = XlmmApp.getmContext().getSharedPreferences("APICLIENT", Context.MODE_PRIVATE);
+                            String baseUrl = "http://m.xiaolumeimei.com/mall/order/spell/group/" + id+"?from_page=order_commit";
+                            if (!TextUtils.isEmpty(preferences.getString("BASE_URL", ""))) {
+                                baseUrl = "http://" + preferences.getString("BASE_URL", "") + "/mall/order/spell/group/" + id+"?from_page=order_commit";
+                            }
+                            JumpUtils.jumpToWebViewWithCookies(mContext,
+                                    baseUrl, -1, CommonWebViewActivity.class,"查看拼团详情",false);
+                            finish();
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            if (order_id != -1) {
+                                Intent intent = new Intent(CartsPayInfoActivity.this, OrderDetailActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putInt("orderinfo", order_id);
+                                bundle.putString("source", CartsPayInfoActivity.class.getSimpleName());
+                                intent.putExtras(bundle);
+                                startActivity(intent);
+                            }
+                            finish();
+                        }
+                    }));
+        } else {
+            Intent intent = new Intent(CartsPayInfoActivity.this, RedBagActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("tid", order_no);
+            intent.putExtras(bundle);
+            startActivity(intent);
+            finish();
         }
     }
 

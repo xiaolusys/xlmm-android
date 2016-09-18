@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -51,8 +52,19 @@ public class CategoryTask extends AsyncTask<String, Integer, List<CategoryBean>>
             Gson gson = new Gson();
             List<CategoryBean> list = gson.fromJson(categoryStr, new TypeToken<List<CategoryBean>>() {
             }.getType());
-            if ("true".equals(params[1])) {
-                return list;
+            if (params[0].contains(",")) {
+                List<CategoryBean> data = new ArrayList<>();
+                String[] split = params[0].split(",");
+                for (String aSplit : split) {
+                    for (int i = 0; i < list.size(); i++) {
+                        if (aSplit.equals(list.get(i).getCid())) {
+                            if (list.get(i).getChilds() != null) {
+                                data.addAll(list.get(i).getChilds());
+                            }
+                        }
+                    }
+                }
+                return data;
             } else {
                 for (int i = 0; i < list.size(); i++) {
                     if (params[0].equals(list.get(i).getCid())) {

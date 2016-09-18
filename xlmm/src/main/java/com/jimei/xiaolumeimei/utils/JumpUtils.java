@@ -11,10 +11,8 @@ import android.util.Log;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.ui.activity.product.BrandListActivity;
-import com.jimei.xiaolumeimei.ui.activity.product.LadyZoneActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductListActivity;
-import com.jimei.xiaolumeimei.ui.activity.product.ProductPopDetailActvityWeb;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.OrderDetailActivity;
@@ -26,7 +24,6 @@ import com.jimei.xiaolumeimei.ui.mminfo.MMInfoActivity;
 import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
 import com.jude.utils.JUtils;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,34 +60,30 @@ public class JumpUtils {
       case XlmmConst.JUMP_PROMOTE_TODAY:
         intent = new Intent(context, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        //        intent.putExtra("fragment", 1);
         context.startActivity(intent);
         break;
       case XlmmConst.JUMP_PROMOTE_PREVIOUS:
         intent = new Intent(context, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        //        intent.putExtra("fragment", 2);
         context.startActivity(intent);
         break;
       case XlmmConst.JUMP_PRODUCT_CHILDLIST:
         intent = new Intent(context, ProductListActivity.class);
-        //        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        //        intent.putExtra("fragment", 3);
         Bundle childBundle = new Bundle();
-        childBundle.putInt("type",XlmmConst.TYPE_CHILD);
+        childBundle.putString("type",XlmmConst.TYPE_CHILD);
+        childBundle.putString("title","萌娃专区");
         intent.putExtras(childBundle);
         context.startActivity(intent);
         break;
       case XlmmConst.JUMP_PRODUCT_LADYLIST:
         intent = new Intent(context, ProductListActivity.class);
         Bundle ladyBundle = new Bundle();
-        ladyBundle.putInt("type",XlmmConst.TYPE_LADY);
-        //        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        //        intent.putExtra("fragment", 4);
+        ladyBundle.putString("type",XlmmConst.TYPE_LADY);
+        ladyBundle.putString("title","女装专区");
         intent.putExtras(ladyBundle);
         context.startActivity(intent);
         break;
-      case XlmmConst.JUMP_NEW_PRODUCT_DETAIL:
+      case XlmmConst.JUMP_PRODUCT_DETAIL:
         int model_id = Integer.valueOf(get_jump_arg("model_id",jumpInfo.getUrl()));
         Bundle bundle1 = new Bundle();
         bundle1.putInt("model_id",model_id);
@@ -98,27 +91,17 @@ public class JumpUtils {
         intent.putExtras(bundle1);
         context.startActivity(intent);
         break;
-      case XlmmConst.JUMP_PRODUCT_DETAIL:
-        String product_id = get_jump_arg("product_id", jumpInfo.getUrl());
-        if (null != product_id) {
-          jumpToWebViewWithCookiesWithTask(context, product_id.replace("\"}", ""), -1,
-              ProductPopDetailActvityWeb.class);
-        }
-        break;
       case XlmmConst.JUMP_PRODUCT_CATEGORY:
         String cid = get_jump_arg("cid",jumpInfo.getUrl());
-        Intent cidIntent = new Intent(context, LadyZoneActivity.class);
+        intent = new Intent(context, ProductListActivity.class);
         Bundle cidBundle = new Bundle();
         cidBundle.putString("type",cid);
-        cidBundle.putString("category","false");
         cidBundle.putString("title",title);
-        cidIntent.putExtras(cidBundle);
-        cidIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(cidIntent);
+        intent.putExtras(cidBundle);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
         break;
       case XlmmConst.JUMP_VIP_FORUM:
-//        JumpUtils.jumpToWebViewWithCookies(context, "http://forum.xiaolumeimei.com/accounts/xlmm/login/",
-//                -1, MamaLunTanActivity.class);
         intent = new Intent(context, MamaLunTanActivity.class);
         SharedPreferences preferences =
                 context.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
@@ -134,21 +117,6 @@ public class JumpUtils {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
         break;
-      case XlmmConst.JUMP_PRODUCT_DETAIL_PUSH:
-        String product_idpush;
-        try {
-          product_idpush =
-              URLDecoder.decode(get_jump_arg("product_id", jumpInfo.getUrl()), "utf-8");
-          JUtils.Log(TAG, "product_idpush==" + product_idpush);
-          if (null != product_idpush) {
-            jumpToWebViewWithCookiesWithTask(context, product_idpush.replace(" ", ""), -1,
-                ProductPopDetailActvityWeb.class);
-          }
-        } catch (UnsupportedEncodingException e) {
-          e.printStackTrace();
-        }
-
-        break;
       case XlmmConst.JUMP_TRADE_DETAIL:
         String trade_id = get_jump_arg("trade_id", jumpInfo.getUrl());
         if (null != trade_id) {
@@ -156,7 +124,6 @@ public class JumpUtils {
             intent = new Intent(context, OrderDetailActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra("orderinfo", Integer.valueOf(trade_id));
-            intent.putExtra("source", "Main");
             Log.d(TAG, "LinearLayout transfer orderid  " + trade_id + " to OrderDetailActivity");
             context.startActivity(intent);
           } catch (NumberFormatException e) {
@@ -249,17 +216,10 @@ public class JumpUtils {
           jumpInfo.setType(XlmmConst.JUMP_PRODUCT_LADYLIST);
           jumpInfo.setUrl(content[1]);
         }else if (content[1].contains("model_id")) {
-          jumpInfo.setType(XlmmConst.JUMP_NEW_PRODUCT_DETAIL);
+          jumpInfo.setType(XlmmConst.JUMP_PRODUCT_DETAIL);
           jumpInfo.setUrl(content[1]);
         } else if (content[1].contains("modelist")) {
           jumpInfo.setType(XlmmConst.JUMP_PRODUCT_MODELLIST);
-          jumpInfo.setUrl(content[1]);
-        } else if (content[1].contains("product_id")) {
-          if (content[1].contains("%")) {
-            jumpInfo.setType(XlmmConst.JUMP_PRODUCT_DETAIL_PUSH);
-          } else {
-            jumpInfo.setType(XlmmConst.JUMP_PRODUCT_DETAIL);
-          }
           jumpInfo.setUrl(content[1]);
         } else if (content[1].contains("trade_id")) {
           jumpInfo.setType(XlmmConst.JUMP_TRADE_DETAIL);
@@ -273,12 +233,12 @@ public class JumpUtils {
           jumpInfo.setType(XlmmConst.JUMP_WEBVIEW);
           JUtils.Log(TAG, "&=======" + (int) ("&".charAt(0)));
           if (content[1].contains("activity_id")) {
-            String urlContent = (content[1].split("webview?"))[1];
+            String urlContent = (content[1].split("webview[?]"))[1];
             JUtils.Log(TAG, "content[1] ===" + urlContent);
 
             List<Integer> integers = new ArrayList<>();
             for (int i = 0; i < urlContent.length(); i++) {
-              if (content[1].charAt(i) == 38) {
+              if (urlContent.charAt(i) == 38) {
                 integers.add(i);
               }
             }
@@ -290,8 +250,8 @@ public class JumpUtils {
                 urlContent.length()));
             JUtils.Log(TAG,
                 "urlContent.substring(0, integer - 7)" + urlContent.substring(1, integer-7));
-            split.add(urlContent.substring(integer -6, urlContent.length()));
-            split.add(urlContent.substring(1, integer - 7));
+            split.add(urlContent.substring(integer+1, urlContent.length()));
+            split.add(urlContent.substring(0, integer));
 
             //String[] split = urlContent.split("&");
             for (int i = 0; i < split.size(); i++) {
@@ -310,19 +270,6 @@ public class JumpUtils {
           } else {
             url = content[1].substring(content[1].lastIndexOf("http"));
           }
-
-          //String url1 = content[1].substring(content[1].lastIndexOf("http"));
-          //JUtils.Log(TAG, "url1 ===" + url1);
-          //if (url1.contains("is_native")) {
-          //  String temp[] = url1.split("&is_native=");
-          //  url = temp[0];
-          //  JUtils.Log(TAG, "url====" + url);
-          //}
-          //if (content[1].contains("activity_id")) {
-          //  String idStr[] = content[1].split("activity_id=");
-          //  String s = idStr[1].split("&")[0];
-          //  id = Integer.parseInt(s);
-          //}
           try {
             jumpInfo.setUrl(URLDecoder.decode(url, "utf-8"));
             if (id != -1) {
@@ -344,16 +291,6 @@ public class JumpUtils {
           jumpInfo.setType(XlmmConst.JUMP_CARTS);
           jumpInfo.setUrl(content[1]);
         }
-        //else if (content[1].contains("brand")) {
-        //  jumpInfo.setType(XlmmConst.JUMP_TOPIC);
-        //  int id;
-        //  String idStr = ((content[1].split("brand?"))[1]).split("activity_id=")[1];
-        //  id = Integer.parseInt(idStr);
-        //  if (id != 0) {
-        //    jumpInfo.setId(id);
-        //  }
-        //  jumpInfo.setUrl(content[1]);
-        //}
       }
     } catch (ArrayIndexOutOfBoundsException e) {
       e.printStackTrace();
@@ -420,6 +357,25 @@ public class JumpUtils {
     bundle.putString("Cookie", sharedPreferences.getString("Cookie", ""));
     bundle.putString("actlink", actlink);
     bundle.putString("title", title);
+    bundle.putInt("id", id);
+    intent.putExtras(bundle);
+    context.startActivity(intent);
+  }
+
+  public static void jumpToWebViewWithCookies(Context context, String actlink, int id,
+                                              Class<?> classname, String title,boolean share) {
+    Intent intent = new Intent(context, classname);
+    SharedPreferences sharedPreferences =
+            context.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+    String cookies = sharedPreferences.getString("cookiesString", "");
+    String domain = sharedPreferences.getString("cookiesDomain", "");
+    Bundle bundle = new Bundle();
+    bundle.putString("cookies", cookies);
+    bundle.putString("domain", domain);
+    bundle.putString("Cookie", sharedPreferences.getString("Cookie", ""));
+    bundle.putString("actlink", actlink);
+    bundle.putString("title", title);
+    bundle.putBoolean("share",share);
     bundle.putInt("id", id);
     intent.putExtras(bundle);
     context.startActivity(intent);

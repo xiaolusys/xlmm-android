@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.ui.mminfo;
 
 import android.graphics.Color;
+import android.os.SystemClock;
 
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -11,13 +12,21 @@ import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.jimei.xiaolumeimei.entities.MaMaRenwuListBean;
 import com.jimei.xiaolumeimei.entities.MamaSelfListBean;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
+import com.jimei.xiaolumeimei.event.HideOrderEvent;
+import com.jimei.xiaolumeimei.event.SetOrderEvent;
+import com.jimei.xiaolumeimei.event.ShowOrderEvent;
 import com.jimei.xiaolumeimei.utils.RxUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import retrofit2.Response;
 import rx.Observer;
@@ -30,6 +39,7 @@ public class MMInfoPresenter extends MMInfoContract.Presenter {
   private static final int MAX_RECENT_DAYS = 15;
   List<RecentCarryBean.ResultsEntity> his_refund = new ArrayList<>();
   List<RecentCarryBean.ResultsEntity> show_refund = new ArrayList<>();
+  private boolean isDestory = false;
 
   @Override public void getShareShopping() {
     mRxManager.add(mModel.getShareShopping()
@@ -265,7 +275,23 @@ public class MMInfoPresenter extends MMInfoContract.Presenter {
             mModel.getLatestOrderCarry()
             .retryWhen(new RxUtils.RetryWhenNoInternet(100,2000))
             .subscribe(list ->{
-              mView.setOrderCarry(list);
+              ExecutorService service = Executors.newSingleThreadExecutor();
+              service.execute(()->{
+                for (int i = 0; i < list.size()&&!isDestory; i++) {
+                  SystemClock.sleep(new Random().nextInt(5000));
+                  if (!isDestory) EventBus.getDefault().post(new SetOrderEvent(list.get(list.size() - 1 - i)));
+                  SystemClock.sleep(1000);
+                  if (!isDestory) EventBus.getDefault().post(new ShowOrderEvent());
+                  SystemClock.sleep(3000);
+                  if (!isDestory) EventBus.getDefault().post(new HideOrderEvent());
+                  SystemClock.sleep(3000);
+                }
+              });
             },Throwable::printStackTrace));
+  }
+
+  @Override
+  public void setDestory() {
+    isDestory = true;
   }
 }

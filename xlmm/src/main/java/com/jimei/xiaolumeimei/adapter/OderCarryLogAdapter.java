@@ -9,8 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
@@ -18,8 +17,12 @@ import com.jimei.xiaolumeimei.entities.OderCarryBean;
 import com.jimei.xiaolumeimei.glidemoudle.CropCircleTransformation;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.zhy.autolayout.utils.AutoUtils;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/02/18.
@@ -77,8 +80,8 @@ public class OderCarryLogAdapter
         showCategory(holder);
       } else {
         boolean theCategoryOfLastEqualsToThis = mList.get(position - 1)
-            .getDateField()
-            .equals(mList.get(position).getDateField());
+            .getDate_field()
+            .equals(mList.get(position).getDate_field());
         if (!theCategoryOfLastEqualsToThis) {
           showCategory(holder);
         } else {
@@ -89,10 +92,10 @@ public class OderCarryLogAdapter
       e.printStackTrace();
     }
 
-    holder.shoptime.setText(resultsEntity.getDateField());
+    holder.shoptime.setText(resultsEntity.getDate_field());
     //holder.picPath.setImageResource(R.drawable.carrylog_image);
 
-    if (TextUtils.isEmpty(resultsEntity.getContributorImg())) {
+    if (TextUtils.isEmpty(resultsEntity.getContributor_img())) {
       Glide.with(mContext)
           .load(R.mipmap.ic_launcher)
           .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -100,19 +103,19 @@ public class OderCarryLogAdapter
           .into(holder.picPath);
     } else {
       ViewUtils.loadImgToImgViewWithTransformCircle(mContext, holder.picPath,
-          resultsEntity.getContributorImg());
+          resultsEntity.getContributor_img());
     }
 
     holder.totalCash.setText(
-        "总收益 " + (float) (Math.round(resultsEntity.getTodayCarry() * 100)) / 100);
+        "总收益 " + (float) (Math.round(resultsEntity.getToday_carry() * 100)) / 100);
 
     holder.tichengCash.setText(
-        "+" + (float) (Math.round(resultsEntity.getCarryNum() * 100)) / 100);
+        "+" + (float) (Math.round(resultsEntity.getCarry_num() * 100)) / 100);
 
-    holder.timeNick.setText(resultsEntity.getContributorNick());
+    holder.timeNick.setText(resultsEntity.getContributor_nick());
     holder.timeDisplay.setText(resultsEntity.getCreated().substring(11, 16));
-    holder.wxordernick.setText(resultsEntity.getmCarryDescription());
-    holder.tvStatus.setText(resultsEntity.getStatusDisplay());
+    holder.wxordernick.setText(resultsEntity.getCarry_description());
+    holder.tvStatus.setText(resultsEntity.getStatus_display());
   }
 
   @Override public int getItemCount() {

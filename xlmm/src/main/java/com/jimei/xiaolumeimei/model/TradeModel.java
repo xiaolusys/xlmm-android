@@ -4,7 +4,6 @@ import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
-import com.jimei.xiaolumeimei.entities.LogisticCompanyBean;
 import com.jimei.xiaolumeimei.entities.LogisticsBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.PayInfoBean;
@@ -53,11 +52,18 @@ public class TradeModel {
   //创建订单
   public Observable<PayInfoBean> shoppingcart_create_v2(String cart_ids, String addr_id,
       String channel, String payment, String post_fee, String discount_fee,
-      String total_fee, String uuid, String pay_extras,String code) {
-    return XlmmRetrofitClient.getService()
-        .shoppingcart_create_v2(cart_ids, addr_id, channel, payment, post_fee,
-            discount_fee, total_fee, uuid, pay_extras,code)
-        .compose(new DefaultTransform<>());
+      String total_fee, String uuid, String pay_extras,String code,boolean isteam) {
+    if (isteam) {
+      return XlmmRetrofitClient.getService()
+              .shoppingcart_create_v2(cart_ids, addr_id, channel, payment, post_fee,
+                      discount_fee, total_fee, uuid, pay_extras,code,"3")
+              .compose(new DefaultTransform<>());
+    }else {
+      return XlmmRetrofitClient.getService()
+              .shoppingcart_create_v2(cart_ids, addr_id, channel, payment, post_fee,
+                      discount_fee, total_fee, uuid, pay_extras,code)
+              .compose(new DefaultTransform<>());
+    }
   }
 
   //立即支付订单
@@ -159,12 +165,6 @@ public class TradeModel {
   public Observable<LogisticsBean> getRefundLogistic(int rid,String packetid,String company_name) {
     return XlmmRetrofitClient.getService()
             .getRefundLogistic(rid,packetid,company_name)
-            .compose(new DefaultTransform<>());
-  }
-
-  public Observable<LogisticCompanyBean> getLogisticCompany(String company_name){
-    return XlmmRetrofitClient.getService()
-            .getLogisticComPany(company_name)
             .compose(new DefaultTransform<>());
   }
 

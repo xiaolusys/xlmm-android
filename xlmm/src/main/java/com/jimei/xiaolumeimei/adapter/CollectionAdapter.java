@@ -91,9 +91,6 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
                     }
                 }));
         holder.item.setOnClickListener(v -> {
-//                JumpUtils.jumpToWebViewWithCookies(
-//                mContext, modelproductBean.getWeb_url(),
-//                bean.getId(), ProductPopDetailActvityWeb.class)
             Intent intent = new Intent(mContext, ProductDetailActivity.class);
             Bundle bundle = new Bundle();
             bundle.putInt("model_id", bean.getModelproduct().getId());

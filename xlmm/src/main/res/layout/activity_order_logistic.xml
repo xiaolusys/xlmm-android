@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.jimei.xiaolumeimei.widget.XlmmTitleView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:xlmm_title="物流信息"/>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/bg_grey"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="快递公司"/>
+
+                    <TextView
+                        android:id="@+id/tv_company"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:textColor="@color/colorAccent"/>
+
+                </LinearLayout>
+
+
+                <include layout="@layout/common_gap"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="快递单号"/>
+
+                    <TextView
+                        android:id="@+id/tv_order"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:textColor="@color/text_color_9B"/>
+
+                </LinearLayout>
+
+                <include layout="@layout/common_gap"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:background="@color/bg_grey"/>
+
+                <include layout="@layout/common_gap"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="8dp">
+
+                        <LinearLayout
+                            android:id="@+id/log_image_layout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:padding="8dp">
+
+                            <View
+                                android:id="@+id/start"
+                                android:layout_width="10px"
+                                android:layout_height="10px"
+                                android:layout_marginTop="10px"
+                                android:visibility="invisible"
+                                android:background="@drawable/state_on_bg"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/log_msg_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="8dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="120px"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tv_order_last_time"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="12px"
+                                    android:textColor="@color/colorAccent"
+                                    android:textSize="12sp"/>
+
+                                <TextView
+                                    android:id="@+id/tv_order_last_state"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="12px"
+                                    android:layout_marginTop="4dp"
+                                    android:textColor="@color/colorAccent"
+                                    android:textSize="14sp"/>
+
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <include layout="@layout/common_gap"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/grey100"/>
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</layout>

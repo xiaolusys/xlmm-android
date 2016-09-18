@@ -1,6 +1,8 @@
 package com.jimei.xiaolumeimei.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -15,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.OderCarryBean;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.OrderLogisticActivity;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 
 import java.util.ArrayList;
@@ -68,8 +71,8 @@ public class ShoppingListAdapter
                 showCategory(holder);
             } else {
                 boolean theCategoryOfLastEqualsToThis = mList.get(position - 1)
-                        .getDateField()
-                        .equals(mList.get(position).getDateField());
+                        .getDate_field()
+                        .equals(mList.get(position).getDate_field());
                 if (!theCategoryOfLastEqualsToThis) {
                     showCategory(holder);
                 } else {
@@ -80,8 +83,8 @@ public class ShoppingListAdapter
             e.printStackTrace();
         }
 
-        holder.shoptime.setText(resultsEntity.getDateField());
-        if (TextUtils.isEmpty(resultsEntity.getSkuImg())) {
+        holder.shoptime.setText(resultsEntity.getDate_field());
+        if (TextUtils.isEmpty(resultsEntity.getSku_img())) {
             Glide.with(mContext)
                     .load(R.mipmap.ic_launcher)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -89,25 +92,35 @@ public class ShoppingListAdapter
                     .centerCrop()
                     .into(holder.picPath);
         } else {
-            ViewUtils.loadImgToImgView(mContext, holder.picPath, resultsEntity.getSkuImg());
+            ViewUtils.loadImgToImgView(mContext, holder.picPath, resultsEntity.getSku_img());
         }
-        holder.getStatusDisplay.setText(resultsEntity.getStatusDisplay());
-        holder.wxordernick.setText(resultsEntity.getContributorNick());
+        holder.getStatusDisplay.setText(resultsEntity.getStatus_display());
+        holder.wxordernick.setText(resultsEntity.getContributor_nick());
         holder.timeDisplay.setText(resultsEntity.getCreated().substring(11, 16));
-        holder.totalMoneyTv.setText("实付" + resultsEntity.getOrderValue());
-        if (resultsEntity.getCarryType() == 2) {
+        holder.totalMoneyTv.setText("实付" + resultsEntity.getOrder_value());
+        if (resultsEntity.getCarry_type() == 2) {
             holder.flagTv.setText("APP");
             holder.flagRl.setVisibility(View.VISIBLE);
-        } else if (resultsEntity.getCarryType() == 3) {
+        } else if (resultsEntity.getCarry_type() == 3) {
             holder.flagTv.setText("下属订单");
             holder.flagRl.setVisibility(View.VISIBLE);
         } else {
             holder.flagRl.setVisibility(View.GONE);
         }
         holder.tichengCash.setText(
-                "收益" + (float) (Math.round(resultsEntity.getCarryNum() * 100)) / 100);
+                "收益" + (float) (Math.round(resultsEntity.getCarry_num() * 100)) / 100);
         holder.totalCash.setText(
-                "总收益 " + (float) (Math.round(resultsEntity.getTodayCarry() * 100)) / 100);
+                "总收益 " + (float) (Math.round(resultsEntity.getToday_carry() * 100)) / 100);
+        if ("确定收益".equals(resultsEntity.getStatus_display())) {
+            holder.content.setOnClickListener(v -> {
+                Intent intent = new Intent(mContext, OrderLogisticActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("company_code",resultsEntity.getCompany_code());
+                bundle.putString("packetid",resultsEntity.getPacketid());
+                intent.putExtras(bundle);
+                mContext.startActivity(intent);
+            });
+        }
     }
 
     private void showCategory(ShoppingListVH holder) {

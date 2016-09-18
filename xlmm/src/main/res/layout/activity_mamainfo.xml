@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ScrollView
-        android:id="@+id/sc"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <com.jimei.xiaolumeimei.widget.XlmmTitleView
+            android:id="@+id/app_bar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            app:elevation="0dp"
+            app:xlmm_title="妈妈中心"/>
 
-            <com.jimei.xiaolumeimei.widget.XlmmTitleView
-                android:id="@+id/app_bar_layout"
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ScrollView
+                android:id="@+id/sc"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:elevation="0dp"
-                app:xlmm_title="妈妈中心" />
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
+                android:layout_height="match_parent"
+                android:layout_below="@id/app_bar_layout">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -49,7 +49,7 @@
                                 android:layout_width="160px"
                                 android:layout_height="160px"
                                 android:scaleType="fitXY"
-                                android:src="@drawable/img_circlestar" />
+                                android:src="@drawable/img_circlestar"/>
 
                             <ImageView
                                 android:id="@+id/imgUser"
@@ -57,7 +57,7 @@
                                 android:layout_height="150px"
                                 android:layout_centerInParent="true"
                                 android:layout_margin="8px"
-                                android:clickable="true" />
+                                android:clickable="true"/>
                         </RelativeLayout>
 
                         <TextView
@@ -68,7 +68,7 @@
                             android:layout_marginTop="35px"
                             android:layout_toRightOf="@id/imgCircleStar"
                             android:text=""
-                            android:textSize="35px" />
+                            android:textSize="35px"/>
 
                         <LinearLayout
                             android:id="@+id/ll"
@@ -86,7 +86,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/white"
-                                android:textSize="28px" />
+                                android:textSize="28px"/>
                         </LinearLayout>
 
                         <RelativeLayout
@@ -104,7 +104,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
-                                android:src="@drawable/huangguan" />
+                                android:src="@drawable/huangguan"/>
 
                             <TextView
                                 android:id="@+id/tv_mamavip"
@@ -113,7 +113,7 @@
                                 android:layout_centerVertical="true"
                                 android:layout_marginLeft="4px"
                                 android:layout_toRightOf="@id/huangguan"
-                                android:textSize="28px" />
+                                android:textSize="28px"/>
                         </RelativeLayout>
 
                         <LinearLayout
@@ -131,20 +131,20 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="会员剩余期限 "
-                                android:textSize="15sp" />
+                                android:textSize="15sp"/>
 
                             <TextView
                                 android:id="@+id/tv_mamashengyu"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/white"
-                                android:textSize="17sp" />
+                                android:textSize="17sp"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text=" 天"
-                                android:textSize="15sp" />
+                                android:textSize="15sp"/>
                         </LinearLayout>
 
                         <TextView
@@ -162,7 +162,7 @@
                             android:paddingTop="1dp"
                             android:text="续费"
                             android:textColor="@color/white"
-                            android:textSize="30px" />
+                            android:textSize="30px"/>
 
 
                         <ImageView
@@ -172,7 +172,7 @@
                             android:layout_alignParentRight="true"
                             android:layout_marginRight="30px"
                             android:layout_marginTop="100px"
-                            android:clickable="true" />
+                            android:clickable="true"/>
 
                         <ImageView
                             android:id="@+id/view1"
@@ -181,7 +181,7 @@
                             android:layout_below="@id/imgCircleStar"
                             android:layout_marginTop="50px"
                             android:scaleType="fitXY"
-                            android:src="@drawable/line" />
+                            android:src="@drawable/line"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -207,7 +207,7 @@
                                     android:layout_gravity="center"
                                     android:clickable="true"
                                     android:text="账户余额(元)"
-                                    android:textSize="15sp" />
+                                    android:textSize="15sp"/>
 
                                 <TextView
                                     android:id="@+id/tv_yue"
@@ -215,7 +215,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:textSize="17sp"
-                                    android:textStyle="bold" />
+                                    android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout
@@ -231,7 +231,7 @@
                                     android:layout_gravity="center"
                                     android:clickable="true"
                                     android:text="累计收益(元)"
-                                    android:textSize="15sp" />
+                                    android:textSize="15sp"/>
 
                                 <TextView
                                     android:id="@+id/tv_leiji"
@@ -239,7 +239,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:textSize="17sp"
-                                    android:textStyle="bold" />
+                                    android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout
@@ -254,7 +254,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:text="活跃度"
-                                    android:textSize="15sp" />
+                                    android:textSize="15sp"/>
 
                                 <TextView
                                     android:id="@+id/tv_huoyue"
@@ -262,7 +262,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:textSize="17sp"
-                                    android:textStyle="bold" />
+                                    android:textStyle="bold"/>
                             </LinearLayout>
                         </LinearLayout>
                     </RelativeLayout>
@@ -293,7 +293,7 @@
                                 android:layout_alignParentLeft="true"
                                 android:layout_centerVertical="true"
                                 android:layout_marginLeft="17px"
-                                android:src="@drawable/img_left" />
+                                android:src="@drawable/img_left"/>
 
                             <ImageView
                                 android:id="@+id/img_right"
@@ -302,7 +302,7 @@
                                 android:layout_alignParentRight="true"
                                 android:layout_centerVertical="true"
                                 android:layout_marginRight="17px"
-                                android:src="@drawable/img_right" />
+                                android:src="@drawable/img_right"/>
 
                             <com.github.mikephil.charting.charts.LineChart
                                 android:id="@+id/chart1"
@@ -312,7 +312,7 @@
                                 android:layout_marginRight="40px"
                                 android:layout_toLeftOf="@id/img_right"
                                 android:layout_toRightOf="@id/img_left"
-                                android:visibility="invisible" />
+                                android:visibility="invisible"/>
 
 
                         </RelativeLayout>
@@ -328,7 +328,7 @@
                                 android:layout_width="110px"
                                 android:layout_height="90px"
                                 android:layout_centerInParent="true"
-                                android:src="@drawable/img_pig" />
+                                android:src="@drawable/img_pig"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -336,7 +336,7 @@
                                 android:layout_below="@+id/img_pig"
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginTop="8dp"
-                                android:text="本周暂无收益" />
+                                android:text="本周暂无收益"/>
                         </RelativeLayout>
                     </FrameLayout>
 
@@ -344,7 +344,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dip"
                         android:layout_below="@+id/fl_chart"
-                        android:background="@color/greytow" />
+                        android:background="@color/greytow"/>
 
                     <LinearLayout
                         android:id="@+id/rl_order"
@@ -373,7 +373,7 @@
                                 android:layout_gravity="center"
                                 android:clickable="true"
                                 android:text="访客"
-                                android:textSize="15sp" />
+                                android:textSize="15sp"/>
 
                             <TextView
                                 android:id="@+id/tv_visit2"
@@ -383,7 +383,7 @@
                                 android:layout_marginLeft="4dp"
                                 android:layout_toRightOf="@+id/tv_visit1"
                                 android:textColor="@color/colorAccent"
-                                android:textSize="15sp" />
+                                android:textSize="15sp"/>
                         </LinearLayout>
 
                         <LinearLayout
@@ -402,7 +402,7 @@
                                 android:layout_gravity="center"
                                 android:clickable="true"
                                 android:text="订单"
-                                android:textSize="15sp" />
+                                android:textSize="15sp"/>
 
                             <TextView
                                 android:id="@+id/tv_today_order2"
@@ -412,7 +412,7 @@
                                 android:layout_marginLeft="4dp"
                                 android:layout_toRightOf="@+id/tv_today_order1"
                                 android:textColor="@color/colorAccent"
-                                android:textSize="15sp" />
+                                android:textSize="15sp"/>
                         </LinearLayout>
 
                         <LinearLayout
@@ -431,7 +431,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:text="收益"
-                                android:textSize="15sp" />
+                                android:textSize="15sp"/>
 
                             <TextView
                                 android:id="@+id/tv_today_fund2"
@@ -441,7 +441,7 @@
                                 android:layout_marginLeft="4dp"
                                 android:layout_toRightOf="@+id/tv_today_fund1"
                                 android:textColor="@color/colorAccent"
-                                android:textSize="15sp" />
+                                android:textSize="15sp"/>
                         </LinearLayout>
                     </LinearLayout>
 
@@ -450,7 +450,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dip"
                         android:layout_below="@id/rl_order"
-                        android:background="@color/greytow" />
+                        android:background="@color/greytow"/>
 
                     <View
                         android:id="@+id/view_2"
@@ -458,7 +458,7 @@
                         android:layout_height="1dip"
                         android:layout_below="@id/view_11"
                         android:layout_marginTop="12dp"
-                        android:background="@color/greytow" />
+                        android:background="@color/greytow"/>
 
                     <RelativeLayout
                         android:id="@+id/ll_note"
@@ -474,7 +474,7 @@
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="8dp"
-                            android:src="@drawable/ic_notice" />
+                            android:src="@drawable/ic_notice"/>
 
                         <com.jimei.xiaolumeimei.widget.CircleImageView
                             android:id="@+id/image_notice"
@@ -485,7 +485,7 @@
                             android:layout_marginRight="6px"
                             android:layout_marginTop="2px"
                             android:src="@color/red"
-                            android:visibility="gone" />
+                            android:visibility="gone"/>
 
                         <com.jimei.xiaolumeimei.widget.marqueeview.MarqueeView
                             android:id="@+id/marqueeView"
@@ -497,7 +497,7 @@
                             app:mvAnimDuration="500"
                             app:mvGravity="left"
                             app:mvInterval="2000"
-                            app:mvTextColor="@color/colorAccent" />
+                            app:mvTextColor="@color/colorAccent"/>
 
                         <TextView
                             android:id="@+id/tv_noticesee"
@@ -507,7 +507,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginRight="8dp"
                             android:text="马上看看"
-                            android:textColor="@color/cornflowerblue" />
+                            android:textColor="@color/cornflowerblue"/>
                     </RelativeLayout>
 
                     <View
@@ -515,7 +515,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dip"
                         android:layout_below="@id/ll_note"
-                        android:background="@color/greytow" />
+                        android:background="@color/greytow"/>
 
                     <LinearLayout
                         android:id="@+id/rl_btn11"
@@ -548,7 +548,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_centerInParent="true"
-                                        android:src="@drawable/ic_order" />
+                                        android:src="@drawable/ic_order"/>
 
                                 </RelativeLayout>
 
@@ -560,7 +560,7 @@
                                     android:layout_marginTop="30px"
                                     android:layout_toRightOf="@id/layout_order"
                                     android:text="订单记录"
-                                    android:textSize="15sp" />
+                                    android:textSize="15sp"/>
 
                                 <TextView
                                     android:id="@+id/tv_order"
@@ -573,13 +573,13 @@
                                     android:layout_toRightOf="@id/layout_order"
                                     android:text="订单个数"
                                     android:textColor="@color/divider"
-                                    android:textSize="12sp" />
+                                    android:textSize="12sp"/>
                             </RelativeLayout>
 
                             <View
                                 android:layout_width="1dp"
                                 android:layout_height="match_parent"
-                                android:background="#EEEEEE" />
+                                android:background="#EEEEEE"/>
 
                             <RelativeLayout
                                 android:id="@+id/rl_income"
@@ -597,7 +597,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_centerVertical="true"
                                         android:layout_marginLeft="55px"
-                                        android:src="@drawable/ic_coin2" />
+                                        android:src="@drawable/ic_coin2"/>
 
                                 </RelativeLayout>
 
@@ -609,7 +609,7 @@
                                     android:layout_marginTop="30px"
                                     android:layout_toRightOf="@id/layout_income"
                                     android:text="收益记录"
-                                    android:textSize="15sp" />
+                                    android:textSize="15sp"/>
 
                                 <TextView
                                     android:id="@+id/tv_fund"
@@ -622,7 +622,7 @@
                                     android:layout_toRightOf="@+id/layout_income"
                                     android:text="账户余额"
                                     android:textColor="@color/divider"
-                                    android:textSize="12sp" />
+                                    android:textSize="12sp"/>
                             </RelativeLayout>
                         </LinearLayout>
                     </LinearLayout>
@@ -659,7 +659,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_centerInParent="true"
-                                        android:src="@drawable/wodejingxuan" />
+                                        android:src="@drawable/wodejingxuan"/>
 
                                 </RelativeLayout>
 
@@ -672,7 +672,7 @@
                                     android:layout_toRightOf="@id/layout_two_dimen"
                                     android:clickable="true"
                                     android:text="我的精选"
-                                    android:textSize="15sp" />
+                                    android:textSize="15sp"/>
 
                                 <TextView
                                     android:id="@+id/tv_invite_num"
@@ -685,13 +685,13 @@
                                     android:layout_toRightOf="@id/layout_two_dimen"
                                     android:text="我的店铺"
                                     android:textColor="@color/divider"
-                                    android:textSize="12sp" />
+                                    android:textSize="12sp"/>
                             </RelativeLayout>
 
                             <View
                                 android:layout_width="1dp"
                                 android:layout_height="match_parent"
-                                android:background="#EEEEEE" />
+                                android:background="#EEEEEE"/>
 
                             <RelativeLayout
                                 android:id="@+id/rl_push"
@@ -709,7 +709,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_centerInParent="true"
-                                        android:src="@drawable/meirituisong" />
+                                        android:src="@drawable/meirituisong"/>
                                 </RelativeLayout>
 
 
@@ -721,7 +721,7 @@
                                     android:layout_toRightOf="@id/layout_share"
                                     android:gravity="center"
                                     android:text="每日推送"
-                                    android:textSize="15sp" />
+                                    android:textSize="15sp"/>
 
                                 <TextView
                                     android:id="@+id/tv_fansnum"
@@ -734,14 +734,14 @@
                                     android:layout_toRightOf="@id/layout_share"
                                     android:text="精品推送"
                                     android:textColor="@color/divider"
-                                    android:textSize="12sp" />
+                                    android:textSize="12sp"/>
                             </RelativeLayout>
                         </LinearLayout>
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:background="#EEEEEE" />
+                            android:background="#EEEEEE"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -764,7 +764,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_centerInParent="true"
-                                        android:src="@drawable/invite_kaidian" />
+                                        android:src="@drawable/invite_kaidian"/>
 
                                 </RelativeLayout>
 
@@ -777,7 +777,7 @@
                                     android:layout_marginTop="30px"
                                     android:layout_toRightOf="@id/layout_order_invite_1kaidian"
                                     android:text="邀请开店"
-                                    android:textSize="15sp" />
+                                    android:textSize="15sp"/>
 
                                 <TextView
                                     android:id="@+id/tv_order_invite_1kaidian"
@@ -790,13 +790,13 @@
                                     android:layout_toRightOf="@id/layout_order_invite_1kaidian"
                                     android:text="我的邀请"
                                     android:textColor="@color/divider"
-                                    android:textSize="12sp" />
+                                    android:textSize="12sp"/>
                             </RelativeLayout>
 
                             <View
                                 android:layout_width="1dp"
                                 android:layout_height="match_parent"
-                                android:background="#EEEEEE" />
+                                android:background="#EEEEEE"/>
 
                             <RelativeLayout
                                 android:id="@+id/rl_chooselist"
@@ -813,7 +813,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_centerInParent="true"
-                                        android:src="@drawable/xuanpinshangjia" />
+                                        android:src="@drawable/xuanpinshangjia"/>
 
                                 </RelativeLayout>
 
@@ -826,7 +826,7 @@
                                     android:layout_marginTop="30px"
                                     android:layout_toRightOf="@id/layout_chooselist"
                                     android:text="选品佣金"
-                                    android:textSize="15sp" />
+                                    android:textSize="15sp"/>
 
                                 <TextView
                                     android:id="@+id/tv_chooselist"
@@ -839,7 +839,7 @@
                                     android:layout_toRightOf="@id/layout_chooselist"
                                     android:text="选择商品"
                                     android:textColor="@color/divider"
-                                    android:textSize="12sp" />
+                                    android:textSize="12sp"/>
                             </RelativeLayout>
                         </LinearLayout>
                     </LinearLayout>
@@ -876,7 +876,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_centerInParent="true"
-                                        android:src="@drawable/xiaoludaxue" />
+                                        android:src="@drawable/xiaoludaxue"/>
 
                                 </RelativeLayout>
 
@@ -889,7 +889,7 @@
                                     android:layout_toRightOf="@id/layout_two_dimen1"
                                     android:clickable="true"
                                     android:text="小鹿大学"
-                                    android:textSize="15sp" />
+                                    android:textSize="15sp"/>
 
                                 <TextView
                                     android:id="@+id/tv_invite_num1"
@@ -902,13 +902,13 @@
                                     android:layout_toRightOf="@id/layout_two_dimen1"
                                     android:text="课堂活动"
                                     android:textColor="@color/divider"
-                                    android:textSize="12sp" />
+                                    android:textSize="12sp"/>
                             </RelativeLayout>
 
                             <View
                                 android:layout_width="1dp"
                                 android:layout_height="match_parent"
-                                android:background="#EEEEEE" />
+                                android:background="#EEEEEE"/>
 
                             <RelativeLayout
                                 android:id="@+id/rl_fans"
@@ -926,7 +926,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_centerInParent="true"
-                                        android:src="@drawable/ic_fans" />
+                                        android:src="@drawable/ic_fans"/>
 
                                 </RelativeLayout>
 
@@ -938,7 +938,7 @@
                                     android:layout_toRightOf="@id/layout_share1"
                                     android:gravity="center"
                                     android:text="我的粉丝"
-                                    android:textSize="15sp" />
+                                    android:textSize="15sp"/>
 
                                 <TextView
                                     android:id="@+id/tv_fansnum1"
@@ -951,14 +951,14 @@
                                     android:layout_toRightOf="@id/layout_share1"
                                     android:text="粉丝数"
                                     android:textColor="@color/divider"
-                                    android:textSize="12sp" />
+                                    android:textSize="12sp"/>
                             </RelativeLayout>
                         </LinearLayout>
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:background="#EEEEEE" />
+                            android:background="#EEEEEE"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -981,7 +981,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_centerInParent="true"
-                                        android:src="@drawable/wodetuandui" />
+                                        android:src="@drawable/wodetuandui"/>
 
                                 </RelativeLayout>
 
@@ -994,7 +994,7 @@
                                     android:layout_marginTop="30px"
                                     android:layout_toRightOf="@id/layout_order1"
                                     android:text="我的团队"
-                                    android:textSize="15sp" />
+                                    android:textSize="15sp"/>
 
                                 <TextView
                                     android:id="@+id/tv_order1"
@@ -1007,13 +1007,13 @@
                                     android:layout_toRightOf="@+id/layout_order1"
                                     android:text="妈妈团队"
                                     android:textColor="@color/divider"
-                                    android:textSize="12sp" />
+                                    android:textSize="12sp"/>
                             </RelativeLayout>
 
                             <View
                                 android:layout_width="1dp"
                                 android:layout_height="match_parent"
-                                android:background="#EEEEEE" />
+                                android:background="#EEEEEE"/>
 
                             <RelativeLayout
                                 android:id="@+id/rl_income1"
@@ -1030,7 +1030,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_centerInParent="true"
-                                        android:src="@drawable/wodepaihang" />
+                                        android:src="@drawable/wodepaihang"/>
                                 </RelativeLayout>
 
 
@@ -1042,7 +1042,7 @@
                                     android:layout_marginTop="30px"
                                     android:layout_toRightOf="@id/layout_income1"
                                     android:text="个人排名"
-                                    android:textSize="15sp" />
+                                    android:textSize="15sp"/>
 
                                 <TextView
                                     android:id="@+id/tv_fund1"
@@ -1055,14 +1055,14 @@
                                     android:layout_toRightOf="@id/layout_income1"
                                     android:text="收益排名"
                                     android:textColor="@color/divider"
-                                    android:textSize="12sp" />
+                                    android:textSize="12sp"/>
                             </RelativeLayout>
                         </LinearLayout>
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:background="#EEEEEE" />
+                            android:background="#EEEEEE"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -1083,9 +1083,8 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_centerInParent="true"
-                                        android:src="@drawable/icon_luntan" />
+                                        android:src="@drawable/icon_luntan"/>
                                 </RelativeLayout>
-
 
 
                                 <LinearLayout
@@ -1098,7 +1097,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="30px"
                                         android:text="小鹿论坛"
-                                        android:textSize="15sp" />
+                                        android:textSize="15sp"/>
 
                                     <TextView
                                         android:layout_width="wrap_content"
@@ -1106,7 +1105,7 @@
                                         android:layout_marginTop="4dp"
                                         android:text="小鹿话题,每天新鲜"
                                         android:textColor="@color/divider"
-                                        android:textSize="12sp" />
+                                        android:textSize="12sp"/>
 
                                 </LinearLayout>
 
@@ -1115,7 +1114,7 @@
                             <View
                                 android:layout_width="1dp"
                                 android:layout_height="match_parent"
-                                android:background="#EEEEEE" />
+                                android:background="#EEEEEE"/>
 
                             <LinearLayout
                                 android:id="@+id/good_week"
@@ -1132,7 +1131,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_centerInParent="true"
-                                        android:src="@drawable/icon_reward" />
+                                        android:src="@drawable/icon_reward"/>
                                 </RelativeLayout>
 
 
@@ -1146,7 +1145,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="30px"
                                         android:text="业绩奖励"
-                                        android:textSize="15sp" />
+                                        android:textSize="15sp"/>
 
                                     <TextView
                                         android:layout_width="wrap_content"
@@ -1154,7 +1153,7 @@
                                         android:layout_marginTop="4dp"
                                         android:text="业务奖励,多多益善"
                                         android:textColor="@color/divider"
-                                        android:textSize="12sp" />
+                                        android:textSize="12sp"/>
 
                                 </LinearLayout>
 
@@ -1164,38 +1163,42 @@
 
                     </LinearLayout>
                 </RelativeLayout>
+            </ScrollView>
 
-                <LinearLayout
-                    android:id="@+id/mi_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:background="@color/colorAccentDark"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:visibility="gone">
+            <LinearLayout
+                android:id="@+id/mi_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/order_msg_bg"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:visibility="gone">
 
-                    <RelativeLayout
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:background="@drawable/mi_push_mama_ordercarry_head"
-                        android:gravity="center">
+                <RelativeLayout
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginLeft="5dp"
+                    android:background="@drawable/mi_push_mama_ordercarry_head"
+                    android:gravity="center">
 
-                        <ImageView
-                            android:id="@+id/mi_head"
-                            android:layout_width="28dp"
-                            android:layout_height="28dp" />
-                    </RelativeLayout>
+                    <ImageView
+                        android:id="@+id/mi_head"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"/>
+                </RelativeLayout>
 
-                    <TextView
-                        android:id="@+id/mi_info"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
-                        android:textColor="@color/white"
-                        android:textSize="16sp" />
+                <TextView
+                    android:id="@+id/mi_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="8dp"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"/>
 
-                </LinearLayout>
-            </FrameLayout>
-        </LinearLayout>
-    </ScrollView>
+            </LinearLayout>
+        </FrameLayout>
+    </LinearLayout>
 </layout>

@@ -18,23 +18,5 @@ public class ServiceResponse<T> implements Observer<T> {
   }
 
   @Override public void onError(Throwable e) {
-    //if (e.getCause() instanceof ServiceException) {
-    //  //JUtils.Log("Server Error:" + e.getLocalizedMessage());
-    //  onServiceError(((ServiceException) e.getCause()).getStatus(),
-    //      ((ServiceException) e.getCause()).getInfo());
-    //} else {
-    //  JUtils.Log("UnKnow Error:" + e.getLocalizedMessage());
-    //  //onServiceError(XlmmApi.CODE.NET_INVALID, "网络错误");
-    //}
-    //JUtils.Log("XLMM","ServiceResponse "+ e.getLocalizedMessage());
   }
-
-  //public void onServiceError(int status, String info) {
-  //  if (status == XlmmApi.CODE.LOGIN_INVALID) {
-  //    Context ctx = JActivityManager.getInstance().currentActivity();
-  //    ctx.startActivity(new Intent(ctx, LoginActivity.class));
-  //    return;
-  //  }
-  //  JUtils.Toast(info);
-  //}
 }
