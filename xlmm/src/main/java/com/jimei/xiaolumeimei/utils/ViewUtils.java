@@ -287,52 +287,10 @@ public final class ViewUtils {
   public static void loadActivityToImgView(Context context, ImageView img, String picPath) {
     if (null == picPath) return;
         Glide.with(context)
-                .load(picPath+"?imageMogr2/format/jpg/quality/90")
+                .load(picPath+"?imageMogr2/format/jpg")
+                .thumbnail(0.1f)
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .into(img);
-  }
-
-  public static void loadImgToImgViewWithWaterMark(Context context, ImageView img, String picPath) {
-    if (null == picPath) return;
-    if (picPath.contains("wx.qlogo.cn")
-        || picPath.contains("7xogkj.com1.z0.glb.clouddn.com")
-        || picPath.contains("mmbiz.qlogo.cn")) {
-      Glide.with(context)
-          .load(picPath)
-          .diskCacheStrategy(DiskCacheStrategy.RESULT)
-          .centerCrop()
-          .into(img);
-    } else {
-      String head_img;
-      Pattern p = Pattern.compile("(?<=//|)((\\w)+\\.)+\\w+");
-      Matcher m = p.matcher(picPath);
-      if (m.find()) {
-        String group = m.group();
-        String[] temp = picPath.split(group + "/");
-        if (temp.length > 1) {
-          try {
-            head_img = "http://"
-                + group
-                + "/"
-                + URLEncoder.encode(temp[1], "utf-8")
-                + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/80";
-            Glide.with(context)
-                .load(head_img)
-                .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                .centerCrop()
-                .into(img);
-          } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-          }
-        }
-      } else {
-        Glide.with(context)
-            .load(picPath)
-            .diskCacheStrategy(DiskCacheStrategy.RESULT)
-            .centerCrop()
-            .into(img);
-      }
-    }
   }
 
   public static void loadImgToImgView(Context context, ImageView img, String picPath, int radius) {
@@ -622,7 +580,8 @@ public final class ViewUtils {
           imageView.setLayoutParams(lp);
           imageView.setMaxWidth(screenWidth);
           imageView.setMaxHeight(screenWidth * 5);
-          imageView.setPadding(screenWidth/6,screenWidth/10,screenWidth/6,screenWidth/10);
+//          imageView.setPadding(screenWidth/6,screenWidth/10,screenWidth/6,screenWidth/10);
+          imageView.setPadding(0,screenWidth/10,0,screenWidth/10);
           //imageViewList.get(finalI).setLayoutParams(layoutParams);
           imageView.setImageBitmap(response);
 

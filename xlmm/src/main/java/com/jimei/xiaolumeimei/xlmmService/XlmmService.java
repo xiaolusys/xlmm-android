@@ -454,9 +454,9 @@ public interface XlmmService {
 
     //获取访客列表
     @GET("/rest/v2/mama/visitor")
-    Observable<MMVisitorsBean> getMamavisitor(
-            @Query("from") String from,
-            @Query("page") String page
+    Observable<MMVisitorsBean> getMamaVisitor(
+            @Query("recent") int recent,
+            @Query("page") int page
     );
 
     //创建提款单信息
@@ -704,6 +704,21 @@ public interface XlmmService {
             @Query("packetid") String packetid,
             @Query("company_name") String company_name
     );
+
+//    //获取物流信息
+//    @GET("/rest/v2/kdn")
+//    Observable<LogisticsBean> get_logistics_by_packagetid(
+//            @Query("out_sid") String out_sid,
+//            @Query("company_code") String company_code
+//    );
+//
+//    //获取退货物流信息
+//    @GET("/rest/v2/kdn")
+//    Observable<LogisticsBean> getRefundLogistic(
+//            @Query("rid") int rid,
+//            @Query("out_sid") String out_sid,
+//            @Query("logistics_company") String logistics_company
+//    );
 
     @GET("/rest/v1/portal")
     Observable<PortalBean> getPortalBean();

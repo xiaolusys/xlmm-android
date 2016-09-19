@@ -553,16 +553,8 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
   }
 
   public void jump_ToNativeLocation(String url) {
-    //if (!TextUtils.isEmpty(url)) {
-    //Bundle bundle = new Bundle();
-    //bundle.putString("product_id", url);
-    //intent.putExtras(bundle);
-    //startActivity(intent);
     JUtils.Log(TAG, "jump_ToNativeLocation=====" + url);
-    if (!TextUtils.isEmpty(url)) {
-      JumpUtils.jumToProc(mContext, JumpUtils.get_jump_info(url));
-    }
-    //}
+    JumpUtils.push_jump_proc(mContext,url);
   }
 
   public void copy(String content, Context context) {

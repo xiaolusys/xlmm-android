@@ -235,7 +235,7 @@
                 android:id="@+id/tv_good_week"
                 android:layout_width="180px"
                 android:layout_height="50px"
-                android:background="#8BCE50"
+                android:background="@drawable/btn_good_week_bg"
                 android:text="马上执行"
                 android:gravity="center"
                 android:textSize="13sp"

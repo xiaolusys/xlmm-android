@@ -23,6 +23,7 @@ import com.jimei.xiaolumeimei.base.BaseLazyFragment;
 import com.jimei.xiaolumeimei.databinding.FragmentMamaSecondBinding;
 import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.ui.mminfo.MMInfoModel;
+import com.jimei.xiaolumeimei.ui.mminfo.MamaActivity;
 import com.jimei.xiaolumeimei.utils.RxUtils;
 
 import java.util.HashMap;
@@ -59,6 +60,7 @@ public class MamaSecondFragment extends BaseLazyFragment<FragmentMamaSecondBindi
 
     @Override
     protected void initData() {
+        ((MamaActivity) mActivity).showIndeterminateProgressDialog(false);
         addSubscription(MMInfoModel.getInstance()
                 .getMamaUrl()
                 .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
@@ -73,6 +75,7 @@ public class MamaSecondFragment extends BaseLazyFragment<FragmentMamaSecondBindi
         } catch (Exception e) {
             e.printStackTrace();
         }
+        ((MamaActivity) mActivity).hideIndeterminateProgressDialog();
     }
 
     @Override
@@ -183,6 +186,10 @@ public class MamaSecondFragment extends BaseLazyFragment<FragmentMamaSecondBindi
             title = "";
         }
         return title;
+    }
+
+    public WebView getWebView(){
+        return b.webView;
     }
 
     @Override

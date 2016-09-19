@@ -67,9 +67,9 @@ public class MamaInfoModel {
     }
 
     //得到妈妈访客列表
-    public Observable<MMVisitorsBean> getMamaVisitor(String from, String page) {
+    public Observable<MMVisitorsBean> getMamaVisitor(int page) {
         return XlmmRetrofitClient.getService()
-                .getMamavisitor(from, page)
+                .getMamaVisitor(14, page)
                 .compose(new DefaultTransform<>());
     }
 
@@ -188,7 +188,7 @@ public class MamaInfoModel {
                 .compose(new DefaultTransform<>());
     }
 
-    public Observable<ChooseListBean> getChooseList(int page, String sort_field, String cid,int reverse) {
+    public Observable<ChooseListBean> getChooseList(int page, String sort_field, String cid, int reverse) {
         if ("".equals(sort_field) && "".equals(cid)) {
             return XlmmRetrofitClient.getService()
                     .getChooseList(page)
@@ -199,11 +199,11 @@ public class MamaInfoModel {
                     .compose(new DefaultTransform<>());
         } else if ("".equals(cid)) {
             return XlmmRetrofitClient.getService()
-                    .getChooseListBySort(page, sort_field,reverse)
+                    .getChooseListBySort(page, sort_field, reverse)
                     .compose(new DefaultTransform<>());
         } else {
             return XlmmRetrofitClient.getService()
-                    .getChooseList(page, sort_field, cid,reverse)
+                    .getChooseList(page, sort_field, cid, reverse)
                     .compose(new DefaultTransform<>());
         }
     }

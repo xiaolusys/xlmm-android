@@ -23,8 +23,10 @@ import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaDrawCashActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaDrawCouponActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaLivenessActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaReNewActivity;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaVisitorActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.PersonalCarryRankActivity;
 import com.jimei.xiaolumeimei.ui.mminfo.MMInfoModel;
+import com.jimei.xiaolumeimei.ui.mminfo.MamaActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.RxUtils;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
@@ -71,6 +73,7 @@ public class MamaThirdFragment extends BaseLazyFragment<FragmentMamaThirdBinding
 
     @Override
     protected void initData() {
+        ((MamaActivity) mActivity).showIndeterminateProgressDialog(false);
         addSubscription(MMInfoModel.getInstance()
                 .getMamaUrl()
                 .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
@@ -126,6 +129,7 @@ public class MamaThirdFragment extends BaseLazyFragment<FragmentMamaThirdBinding
         b.tvOrder.setText(fortune.getOrderNum() + "个");
         b.tvActive.setText(fortune.getActiveValueNum() + "点");
         b.tvFans.setText(fortune.getFansNum() + "个");
+        ((MamaActivity) mActivity).hideIndeterminateProgressDialog();
     }
 
     private void setUrl(MamaUrl mamaUrl) {
@@ -202,6 +206,7 @@ public class MamaThirdFragment extends BaseLazyFragment<FragmentMamaThirdBinding
                 startActivity(incomeIntent);
                 break;
             case R.id.ll_visit:
+                startActivity(new Intent(mActivity, MamaVisitorActivity.class));
                 break;
             case R.id.ll_order:
                 Intent orderIntent = new Intent(mActivity, MMShoppingListActivity.class);

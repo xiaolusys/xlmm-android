@@ -3,9 +3,11 @@ package com.jimei.xiaolumeimei.ui.mminfo;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.design.widget.TabLayout;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.MamaTabAdapter;
@@ -43,6 +45,7 @@ import cn.udesk.xmpp.UdeskMessageManager;
 
 public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
 
+    private List<BaseLazyFragment> fragments = new ArrayList<>();
     private boolean isDestroy = false;
 
     @Override
@@ -91,7 +94,6 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
         info.put(UdeskConst.UdeskUserInfo.CELLPHONE, userInfoBean.getMobile());
         UdeskSDKManager.getInstance().setUserInfo(this, id, info);
         UdeskMessageManager.getInstance().event_OnNewMsgNotice.bind(this, "OnNewMsgNotice");
-        List<BaseLazyFragment> fragments = new ArrayList<>();
         fragments.add(MamaFirstFragment.newInstance("我要赚钱", mamaId));
         fragments.add(MamaSecondFragment.newInstance("社交活动", mamaId));
         fragments.add(MamaThirdFragment.newInstance("我的", mamaId));
@@ -142,7 +144,10 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void setOrderCarry(SetOrderEvent event) {
         MiPushOrderCarryBean bean = event.getBean();
-        ViewUtils.loadImgToImgViewWithTransformCircle(this, b.miHead, bean.getAvatar());
+        try {
+            ViewUtils.loadImgToImgViewWithTransformCircle(this, b.miHead, bean.getAvatar());
+        } catch (Exception ignored) {
+        }
         b.miInfo.setText(bean.getContent());
     }
 
@@ -168,6 +173,20 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
         super.onPause();
         MobclickAgent.onPageEnd(this.getClass().getSimpleName());
         MobclickAgent.onPause(this);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        WebView webView = ((MamaSecondFragment) fragments.get(1)).getWebView();
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (b.viewPager.getCurrentItem() == 1 && webView.canGoBack()) {
+                webView.goBack();
+            } else {
+                finish();
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override

@@ -17,6 +17,7 @@ import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMStoreWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaChooseActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.PersonalCarryRankActivity;
 import com.jimei.xiaolumeimei.ui.mminfo.MMInfoModel;
+import com.jimei.xiaolumeimei.ui.mminfo.MamaActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.RxUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -76,6 +77,7 @@ public class MamaFirstFragment extends BaseLazyFragment<FragmentMamaFirstBinding
                                 b.tvRank.setText(bean.getRank() + "");
                             }
                         }
+                        ((MamaActivity) mActivity).hideIndeterminateProgressDialog();
                     }
                 }));
         setListener();
