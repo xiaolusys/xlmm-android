@@ -34,6 +34,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
@@ -51,6 +52,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import okhttp3.Call;
 import rx.Observable;
 import rx.Subscriber;
@@ -282,47 +284,13 @@ public final class ViewUtils {
     }
   }
 
-  public static void loadImgToImgViewWithWaterMark(Context context, ImageView img, String picPath) {
+  public static void loadActivityToImgView(Context context, ImageView img, String picPath) {
     if (null == picPath) return;
-    if (picPath.contains("wx.qlogo.cn")
-        || picPath.contains("7xogkj.com1.z0.glb.clouddn.com")
-        || picPath.contains("mmbiz.qlogo.cn")) {
-      Glide.with(context)
-          .load(picPath)
-          .diskCacheStrategy(DiskCacheStrategy.RESULT)
-          .centerCrop()
-          .into(img);
-    } else {
-      String head_img;
-      Pattern p = Pattern.compile("(?<=//|)((\\w)+\\.)+\\w+");
-      Matcher m = p.matcher(picPath);
-      if (m.find()) {
-        String group = m.group();
-        String[] temp = picPath.split(group + "/");
-        if (temp.length > 1) {
-          try {
-            head_img = "http://"
-                + group
-                + "/"
-                + URLEncoder.encode(temp[1], "utf-8")
-                + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/80";
-            Glide.with(context)
-                .load(head_img)
-                .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                .centerCrop()
-                .into(img);
-          } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-          }
-        }
-      } else {
         Glide.with(context)
-            .load(picPath)
-            .diskCacheStrategy(DiskCacheStrategy.RESULT)
-            .centerCrop()
-            .into(img);
-      }
-    }
+                .load(picPath+"?imageMogr2/format/jpg")
+                .thumbnail(0.1f)
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                .into(img);
   }
 
   public static void loadImgToImgView(Context context, ImageView img, String picPath, int radius) {
@@ -577,7 +545,6 @@ public final class ViewUtils {
           e.printStackTrace();
         }
       }
-
       Glide.with(context)
           .load(head_img)
               .thumbnail(0.1f)
@@ -613,7 +580,8 @@ public final class ViewUtils {
           imageView.setLayoutParams(lp);
           imageView.setMaxWidth(screenWidth);
           imageView.setMaxHeight(screenWidth * 5);
-          imageView.setPadding(screenWidth/6,screenWidth/10,screenWidth/6,screenWidth/10);
+//          imageView.setPadding(screenWidth/6,screenWidth/10,screenWidth/6,screenWidth/10);
+          imageView.setPadding(0,screenWidth/10,0,screenWidth/10);
           //imageViewList.get(finalI).setLayoutParams(layoutParams);
           imageView.setImageBitmap(response);
 
@@ -650,13 +618,13 @@ public final class ViewUtils {
       }
     }).subscribeOn(Schedulers.io());
   }
-  
+
   public static Bitmap getBitmapFormUrl(String url){
     RequestCall build = OkHttpUtils.get().url(url).build();
     build.execute(new BitmapCallback() {
       @Override
       public void onError(Call call, Exception e, int id) {
-        
+
       }
 
       @Override

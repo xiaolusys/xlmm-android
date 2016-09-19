@@ -2,9 +2,7 @@
 <resources>
     <!-- 分割线的颜色值 -->
     <color name="udesk_divider">#cecdcd</color>
-    
- 
-    
+
     <!-- 会话界面，圆形头像的边缘圆圈的颜色值 -->
     <color name="udesk_color_im_avatar_border">#FFEEEEEE</color>
 
@@ -55,7 +53,7 @@
        
        
     <!-- 顶部TitleBar的背景色 -->
-    <color name="udesk_titlebar_bg">#F5B123</color>
+    <color name="udesk_titlebar_bg">#FAAA14</color>
     <!-- 顶部TitleBar，中间文字的颜色 -->
     <color name="udesk_color_titlebar_text_center">#FFFFFF</color>
          <!-- 界面中分割线的颜色值 -->

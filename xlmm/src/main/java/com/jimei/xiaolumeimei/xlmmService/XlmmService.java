@@ -16,8 +16,10 @@ import com.jimei.xiaolumeimei.entities.CartsHisBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.CartsInfoBean;
+import com.jimei.xiaolumeimei.entities.CategoryBean;
 import com.jimei.xiaolumeimei.entities.CategoryDownBean;
 import com.jimei.xiaolumeimei.entities.CategoryProductListBean;
+import com.jimei.xiaolumeimei.entities.ChooseListBean;
 import com.jimei.xiaolumeimei.entities.ClickcarryBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.CollectionAllBean;
@@ -195,7 +197,7 @@ public interface XlmmService {
             @Field("uuid") String uuid,
             @Field("pay_extras") String pay_extras,
             @Field("logistics_company_id") String code,
-            @Field("order_type")String type
+            @Field("order_type") String type
     );
 
     //立即支付订单接口
@@ -452,9 +454,9 @@ public interface XlmmService {
 
     //获取访客列表
     @GET("/rest/v2/mama/visitor")
-    Observable<MMVisitorsBean> getMamavisitor(
-            @Query("from") String from,
-            @Query("page") String page
+    Observable<MMVisitorsBean> getMamaVisitor(
+            @Query("recent") int recent,
+            @Query("page") int page
     );
 
     //创建提款单信息
@@ -703,6 +705,21 @@ public interface XlmmService {
             @Query("company_name") String company_name
     );
 
+//    //获取物流信息
+//    @GET("/rest/v2/kdn")
+//    Observable<LogisticsBean> get_logistics_by_packagetid(
+//            @Query("out_sid") String out_sid,
+//            @Query("company_code") String company_code
+//    );
+//
+//    //获取退货物流信息
+//    @GET("/rest/v2/kdn")
+//    Observable<LogisticsBean> getRefundLogistic(
+//            @Query("rid") int rid,
+//            @Query("out_sid") String out_sid,
+//            @Query("logistics_company") String logistics_company
+//    );
+
     @GET("/rest/v1/portal")
     Observable<PortalBean> getPortalBean();
 
@@ -825,6 +842,10 @@ public interface XlmmService {
     @GET("/rest/v2/categorys/latest_version")
     Observable<CategoryDownBean> getCategoryDown();
 
+
+    @GET("/rest/v2/categorys")
+    Observable<List<CategoryBean>> getCategory();
+
     @GET("/rest/v2/modelproducts")
     Observable<CategoryProductListBean> getCategoryProductList(
             @Query("cid") String cid,
@@ -881,5 +902,31 @@ public interface XlmmService {
     @GET("/rest/v2/teambuy/{tid}/team_info")
     Observable<TeamBuyBean> getTeamBuyBean(
             @Path("tid") String tid
+    );
+
+    @GET("/rest/v2/modelproducts/product_choice")
+    Observable<ChooseListBean> getChooseList(
+            @Query("page") int page
+    );
+
+    @GET("/rest/v2/modelproducts/product_choice")
+    Observable<ChooseListBean> getChooseListBySort(
+            @Query("page") int page,
+            @Query("sort_field") String sort_field,
+            @Query("reverse") int reverse
+    );
+
+    @GET("/rest/v2/modelproducts/product_choice")
+    Observable<ChooseListBean> getChooseListByCid(
+            @Query("page") int page,
+            @Query("cid") String cid
+    );
+
+    @GET("/rest/v2/modelproducts/product_choice")
+    Observable<ChooseListBean> getChooseList(
+            @Query("page") int page,
+            @Query("sort_field") String sort_field,
+            @Query("cid") String cid,
+            @Query("reverse") int reverse
     );
 }

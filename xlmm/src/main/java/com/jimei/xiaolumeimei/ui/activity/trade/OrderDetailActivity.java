@@ -27,6 +27,7 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
@@ -308,7 +309,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                 && !"退货中".equals(orderDetailBean.getStatus_display())) {
             if (status == 2 || status == 3 || status == 4 || status == 5) {
                 if (orderDetailBean.getOrder_type() == 3) {
-                    ProductModel.getInstance()
+                    addSubscription(ProductModel.getInstance()
                             .getTeamBuyBean(orderDetailBean.getTid())
                             .subscribeOn(Schedulers.io())
                             .subscribe(new ServiceResponse<TeamBuyBean>() {
@@ -319,7 +320,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                                     }
                                     teamLayout.setVisibility(View.VISIBLE);
                                 }
-                            });
+                            }));
                 } else {
                     addSubscription(TradeModel.getInstance()
                             .getRedBag(tid)
@@ -539,7 +540,19 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                 break;
             case R.id.logistics_layout:
                 if ("已付款".equals(orderDetail.getStatus_display())) {
-                    dialog.show();
+                    new MaterialDialog.Builder(this)
+                            .title("提示")
+                            .content("非服装类商品是由供应商直接发货，只能尽量满足您选择的快递公司，" +
+                                    "如需确认能否满足您的快递需求，请联系客服。")
+                            .positiveText("确认")
+                            .positiveColorRes(R.color.colorAccent)
+                            .callback(new MaterialDialog.ButtonCallback() {
+                                @Override
+                                public void onPositive(MaterialDialog materialDialog) {
+                                    materialDialog.dismiss();
+                                    dialog.show();
+                                }
+                            }).show();
                 }
                 break;
             case R.id.close_iv:

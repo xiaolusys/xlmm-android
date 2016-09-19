@@ -20,7 +20,7 @@ import com.jimei.xiaolumeimei.ui.activity.user.AllCouponActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMNinePicActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaLunTanActivity;
-import com.jimei.xiaolumeimei.ui.mminfo.MMInfoActivity;
+import com.jimei.xiaolumeimei.ui.mminfo.MamaActivity;
 import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
 import com.jude.utils.JUtils;
 
@@ -153,7 +153,7 @@ public class JumpUtils {
         context.startActivity(intent);
         break;
       case XlmmConst.JUMP_XIAOLUMAMA:
-        intent = new Intent(context, MMInfoActivity.class);
+        intent = new Intent(context, MamaActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
         break;

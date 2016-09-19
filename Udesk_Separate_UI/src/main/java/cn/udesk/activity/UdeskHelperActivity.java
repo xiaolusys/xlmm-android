@@ -1,6 +1,5 @@
 package cn.udesk.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -16,8 +15,8 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import cn.udesk.R;
 import cn.udesk.JsonUtils;
+import cn.udesk.R;
 import cn.udesk.UdeskConst;
 import cn.udesk.UdeskSDKManager;
 import cn.udesk.UdeskUtil;
@@ -28,7 +27,7 @@ import udesk.core.UdeskCallBack;
 import udesk.core.UdeskHttpFacade;
 import udesk.core.model.UDHelperItem;
 
-public class UdeskHelperActivity extends Activity implements OnClickListener, AdapterView.OnItemClickListener {
+public class UdeskHelperActivity extends BaseActivity implements OnClickListener, AdapterView.OnItemClickListener {
 
     private UdeskTitleBar mTitlebar;
     private View naviToIm;

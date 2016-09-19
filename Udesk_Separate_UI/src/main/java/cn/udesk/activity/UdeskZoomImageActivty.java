@@ -1,6 +1,5 @@
 package cn.udesk.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -23,7 +22,7 @@ import java.io.InputStream;
 import cn.udesk.R;
 import cn.udesk.widget.UdeskZoomImageView;
 
-public class UdeskZoomImageActivty extends Activity implements
+public class UdeskZoomImageActivty extends BaseActivity implements
 		OnClickListener {
 
 	private UdeskZoomImageView zoomImageView;

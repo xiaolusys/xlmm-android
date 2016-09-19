@@ -1,6 +1,5 @@
 package cn.udesk.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,8 +9,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.tencent.bugly.crashreport.CrashReport;
-
 import cn.udesk.R;
 import cn.udesk.UdeskConst;
 import cn.udesk.widget.UdeskTitleBar;
@@ -20,7 +17,7 @@ import cn.udesk.widget.UdeskTitleBar;
 /**
  * Created by k on 2016/4/6.
  */
-public class UdeskWebViewUrlAcivity extends Activity{
+public class UdeskWebViewUrlAcivity extends BaseActivity{
 
     UdeskTitleBar welcome_titlebar;
     WebView mwebView;

@@ -1,6 +1,5 @@
 package cn.udesk.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -19,7 +18,7 @@ import udesk.core.UdeskCallBack;
 import udesk.core.UdeskHttpFacade;
 import udesk.core.model.UDHelperArticleContentItem;
 
-public class UdeskHelperArticleActivity extends Activity {
+public class UdeskHelperArticleActivity extends BaseActivity {
 
 	   private UdeskTitleBar  mTitlebar;
 	   private View udeskLoading;

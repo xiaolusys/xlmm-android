@@ -63,6 +63,7 @@ public class PersonalCarryRankActivity extends BaseMVVMActivity<ActivityPersonal
 
     @Override
     protected void initData() {
+        showIndeterminateProgressDialog(false);
         MamaInfoModel.getInstance()
                 .getPersonalSelfCarryRankBean()
                 .subscribeOn(Schedulers.io())
@@ -72,35 +73,40 @@ public class PersonalCarryRankActivity extends BaseMVVMActivity<ActivityPersonal
                         if (null != personalCarryRankBeanResponse) {
                             if (personalCarryRankBeanResponse.isSuccessful()) {
                                 PersonalCarryRankBean personalCarryRankBean = personalCarryRankBeanResponse.body();
-                                b.setPersonalInfo(personalCarryRankBean);
-                                if (personalCarryRankBean.getRank() == 0) {
-                                    b.tvRank.setText("");
-                                } else {
-                                    b.tvRank.setText("第" + personalCarryRankBean.getRank() + "名");
-                                }
-                                b.tvCarry.setText("收益" + personalCarryRankBean.getTotal() / 100.00 + "元");
-                                try {
-                                    if (personalCarryRankBean.getRankAdd() > 0) {
-                                        b.tvRankChange.setText("比上周上升" + personalCarryRankBean.getRankAdd() + "名");
-                                    } else {
-                                        b.tvRankChange.setText(
-                                                "本周下降" + Math.abs(personalCarryRankBean.getRankAdd()) + "名");
-                                    }
-
-                                    if (!TextUtils.isEmpty(personalCarryRankBean.getThumbnail())) {
-
-                                        ViewUtils.loadImgToImgViewWithTransformCircle(PersonalCarryRankActivity.this,
-                                                b.imgUser, personalCarryRankBean.getThumbnail());
-                                    } else {
-                                        b.imgUser.setImageResource(R.drawable.img_diamond);
-                                    }
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
+                                fillDataToView(personalCarryRankBean);
                             }
                         }
+                        hideIndeterminateProgressDialog();
                     }
                 });
+    }
+
+    private void fillDataToView(PersonalCarryRankBean personalCarryRankBean) {
+        b.setPersonalInfo(personalCarryRankBean);
+        if (personalCarryRankBean.getRank() == 0) {
+            b.tvRank.setText("");
+        } else {
+            b.tvRank.setText("第" + personalCarryRankBean.getRank() + "名");
+        }
+        b.tvCarry.setText("收益" + personalCarryRankBean.getTotal() / 100.00 + "元");
+        try {
+            if (personalCarryRankBean.getRankAdd() > 0) {
+                b.tvRankChange.setText("比上周上升" + personalCarryRankBean.getRankAdd() + "名");
+            } else {
+                b.tvRankChange.setText(
+                        "本周下降" + Math.abs(personalCarryRankBean.getRankAdd()) + "名");
+            }
+
+            if (!TextUtils.isEmpty(personalCarryRankBean.getThumbnail())) {
+
+                ViewUtils.loadImgToImgViewWithTransformCircle(PersonalCarryRankActivity.this,
+                        b.imgUser, personalCarryRankBean.getThumbnail());
+            } else {
+                b.imgUser.setImageResource(R.drawable.img_diamond);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

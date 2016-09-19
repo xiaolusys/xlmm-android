@@ -17,7 +17,7 @@ import cn.udesk.model.OptionsModel;
 import cn.udesk.model.SurveyOptionsModel;
 
 //满意度调查
-public class SurvyDialogActivity extends Activity implements OnItemClickListener, OnClickListener {
+public class SurvyDialogActivity extends BaseActivity implements OnItemClickListener, OnClickListener {
     SurveyOptionsModel surveyOptions = null;
     ListView optionsListView;
     SurvyOptionAdapter adapter;
