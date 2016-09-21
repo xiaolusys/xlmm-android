@@ -14,7 +14,6 @@
 
 
             <LinearLayout
-                android:id="@+id/ll_renew"
                 android:layout_width="match_parent"
                 android:layout_height="180px"
                 android:background="@color/white"
@@ -34,6 +33,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
+                    android:text="ID"
                     android:textColor="@color/text_color_32"
                     android:textSize="20sp"
                     android:textStyle="bold"/>
@@ -42,12 +42,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="18dp"
+                    android:layout_marginRight="5dp"
                     android:src="@drawable/icon_vip_level"/>
 
                 <TextView
                     android:id="@+id/tv_mama_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="小鹿妈妈"
                     android:textColor="@color/text_color_32"
                     android:textSize="13sp"/>
 
@@ -55,12 +57,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="18dp"
+                    android:layout_marginRight="5dp"
                     android:src="@drawable/icon_vip"/>
 
                 <TextView
                     android:id="@+id/tv_level"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="VIP"
                     android:textColor="@color/text_color_32"
                     android:textSize="13sp"/>
 
@@ -77,6 +81,7 @@
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/ll_renew"
                     android:layout_width="match_parent"
                     android:layout_height="90px"
                     android:gravity="center_vertical"
@@ -521,6 +526,7 @@
                             android:textSize="16sp"/>
 
                         <TextView
+                            android:id="@+id/tv_personal"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
@@ -570,6 +576,7 @@
                             android:textSize="16sp"/>
 
                         <TextView
+                            android:id="@+id/tv_team"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
@@ -585,7 +592,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="30dp"/>
+                android:layout_height="10dp"/>
 
         </LinearLayout>
     </ScrollView>

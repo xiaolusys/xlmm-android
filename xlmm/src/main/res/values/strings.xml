@@ -21,14 +21,9 @@
     <string name="delete">一</string>
     <string name="add">十</string>
     <string name="size">尺码表</string>
-  <string name="return_addr">\n\n
-
-    请将包裹里原发货单一并寄回或者写张纸条注
-    明您的微信昵称、联系电话和退货原因，方便
-    我们售后收到及时为您处理。
-  </string>
+    <string name="return_addr">请将包裹里原发货单一并寄回或者写张纸条注明您的微信昵称、联系电话和退货原因，方便我
+        们售后收到及时为您处理。</string>
     <string name="xidi">洗涤说明</string>
-
     <string name="loading">正在加载......</string>
     <string name="refreshing">正在刷新......</string>
     <string name="complete">刷新完成</string>
@@ -47,7 +42,6 @@
     <string name="share_2dimen_pic_name">小鹿美美群发二维码</string>
     <string name="share_2dimen_pic_tips">您的专属二维码已保存，可用微信群发200好友哦</string>
     <string name="wxpub_2dimen_pic_name">小鹿美美微信公众号二维码</string>
-
     <string name="register_success">Register push success.</string>
     <string name="register_fail">Register push fail.</string>
     <string name="recv_passthrough_message"> Receive a passthrough message. Content is \"%1$s\"</string>
@@ -74,18 +68,20 @@
     <string name="huodong">活动</string>
     <string name="rebuy">重新购买</string>
     <string name="modify_name">修改昵称</string>
-    <string name="refund_msg">退货请求提交成功，客服会在24小时完成审核，您可以通过退换货订单详情页面查询进展，审核通过后您需要在退换货界面填写退货快递单号，方便我们为你快速处理退款</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="refund_msg">退货请求提交成功，客服会在24小时完成审核，您可以通过退换货订单详情页面查询进展，审核
+        通过后您需要在退换货界面填写退货快递单号，方便我们为你快速处理退款</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="collection_title">我的收藏</string>
     <string name="collection_empty_msg_1">您还没有收藏的商品哦....</string>
     <string name="collection_empty_msg_2">赶紧把你喜欢的商品加入收藏吧~</string>
     <string name="collection_empty_btn">快去抢购</string>
-
-    <string name="draw_coupon_info">兑换说明：为了方便妈妈在金额不能提现时使用妈妈钱包金额购买商品，可以使用兑换现金券功能。
-        兑换现金券后会扣除妈妈钱包里的金额，兑换的优惠券可以用来购物，有效期为1个月，兑换后不能退回。
-        使用现金券可以购买低于现金券金额的商品，不会找零。使用现金券购买高于现金券金额的商品，需要补差价。</string>
+    <string name="draw_coupon_info">兑换说明：为了方便妈妈在金额不能提现时使用妈妈钱包金额购买商品，可以使用兑换
+        现金券功能。兑换现金券后会扣除妈妈钱包里的金额，兑换的优惠券可以用来购物，有效期为1个月，兑换后不能退回。使用
+        现金券可以购买低于现金券金额的商品，不会找零。使用现金券购买高于现金券金额的商品，需要补差价。</string>
     <string name="open_notice">推送通知</string>
     <string name="press_again_exit">再按一次退出</string>
+    <string name="buy_rule">亲爱的小鹿用户，由于特卖商品购买人数过多和供应商供货原因，可能存在极少数用户出现缺货的
+        情况。为了避免您长时间等待，一旦出现这种情况，我们在购买后1周会帮您自动退款，并补偿给您一张全场通用优惠券，另
+        订单向外贸工厂订货后无法退款，需要收货后走退货流程或者换货。质量问题退货会以现金券或小鹿余额形式补偿10元邮费，
+        给您造成不便，敬请谅解！祝您购物愉快！本条款解释权归小鹿美美特卖商城所有。</string>
 </resources>

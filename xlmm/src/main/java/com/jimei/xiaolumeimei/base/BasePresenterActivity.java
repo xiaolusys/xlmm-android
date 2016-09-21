@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.loading.VaryViewHelperController;
 import com.jimei.xiaolumeimei.utils.CommonUtils;
@@ -49,7 +48,6 @@ public abstract class BasePresenterActivity<T extends BasePresenter, E extends B
      */
     protected Context mContext = null;
     private SharedPreferences sharedPreferences;
-    private MaterialDialog materialDialog;
     public T mPresenter;
     public E mModel;
     private CompositeSubscription mCompositeSubscription;

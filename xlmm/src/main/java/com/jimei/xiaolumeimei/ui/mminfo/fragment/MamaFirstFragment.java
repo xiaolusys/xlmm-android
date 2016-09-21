@@ -6,10 +6,12 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.adapter.ActivityListAdapter;
 import com.jimei.xiaolumeimei.base.BaseLazyFragment;
 import com.jimei.xiaolumeimei.databinding.FragmentMamaFirstBinding;
-import com.jimei.xiaolumeimei.entities.PersonalCarryRankBean;
-import com.jimei.xiaolumeimei.model.MamaInfoModel;
+import com.jimei.xiaolumeimei.entities.MamaFortune;
+import com.jimei.xiaolumeimei.entities.MamaUrl;
+import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.GoodWeekActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMNinePicActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShareCodeWebViewActivity;
@@ -17,19 +19,16 @@ import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMStoreWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaChooseActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.PersonalCarryRankActivity;
 import com.jimei.xiaolumeimei.ui.mminfo.MMInfoModel;
-import com.jimei.xiaolumeimei.ui.mminfo.MamaActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.RxUtils;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 
-import retrofit2.Response;
-import rx.schedulers.Schedulers;
+import java.util.List;
 
 public class MamaFirstFragment extends BaseLazyFragment<FragmentMamaFirstBinding> implements View.OnClickListener {
     private static final String TITLE = "title";
     private static final String ID = "id";
 
-    private String id;
+    private int id;
     private String shareLink;
     private String shopLink;
 
@@ -46,7 +45,7 @@ public class MamaFirstFragment extends BaseLazyFragment<FragmentMamaFirstBinding
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            id = getArguments().getString(ID);
+            id = getArguments().getInt(ID);
         }
     }
 
@@ -55,32 +54,36 @@ public class MamaFirstFragment extends BaseLazyFragment<FragmentMamaFirstBinding
         addSubscription(MMInfoModel.getInstance()
                 .getMamaUrl()
                 .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
-                .subscribe(mamaUrl -> {
-                    shareLink = mamaUrl.getResults().get(0).getExtra().getInvite();
-                }, Throwable::printStackTrace));
+                .subscribe(this::initUrl, Throwable::printStackTrace));
         addSubscription(MMInfoModel.getInstance()
                 .getShareShopping()
                 .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
                 .subscribe(mmShoppingBean -> {
                     shopLink = mmShoppingBean.getShopInfo().getPreviewShopLink();
                 }, Throwable::printStackTrace));
-        addSubscription(MamaInfoModel.getInstance()
-                .getPersonalSelfCarryRankBean()
-                .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<Response<PersonalCarryRankBean>>() {
-                    @Override
-                    public void onNext(Response<PersonalCarryRankBean> personalCarryRankBeanResponse) {
-                        if (null != personalCarryRankBeanResponse) {
-                            if (personalCarryRankBeanResponse.isSuccessful()) {
-                                PersonalCarryRankBean bean = personalCarryRankBeanResponse.body();
-                                b.tvIncome.setText(bean.getTotal() / 100.00 + "");
-                                b.tvRank.setText(bean.getRank() + "");
-                            }
-                        }
-                        ((MamaActivity) mActivity).hideIndeterminateProgressDialog();
-                    }
-                }));
+        addSubscription(MMInfoModel.getInstance()
+                .getMamaFortune()
+                .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
+                .subscribe(this::initFortune, Throwable::printStackTrace));
         setListener();
+    }
+
+    private void initUrl(MamaUrl mamaUrl) {
+        MamaUrl.ResultsBean resultsBean = mamaUrl.getResults().get(0);
+        shareLink = resultsBean.getExtra().getInvite();
+        List<PortalBean.ActivitysBean> activities = resultsBean.getMama_activities();
+        if (activities != null && activities.size() > 0) {
+            ActivityListAdapter adapter = new ActivityListAdapter(mActivity);
+            adapter.updateWithClear(activities);
+            b.lv.setAdapter(adapter);
+        }
+    }
+
+    private void initFortune(MamaFortune mamaFortune) {
+        MamaFortune.MamaFortuneBean.ExtraFiguresBean figures = mamaFortune.getMamaFortune().getExtra_figures();
+        b.tvIncome.setText(figures.getWeek_duration_total() + "");
+        b.tvRank.setText(figures.getWeek_duration_rank() + "");
+        b.tvWeekTask.setText("本周完成任务" + (figures.getTask_percentage() * 100) + "%");
     }
 
     private void setListener() {
@@ -111,6 +114,12 @@ public class MamaFirstFragment extends BaseLazyFragment<FragmentMamaFirstBinding
             title = "";
         }
         return title;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        b.scrollView.scrollTo(0, 0);
     }
 
     @Override

@@ -38,7 +38,7 @@ public class MamaSecondFragment extends BaseLazyFragment<FragmentMamaSecondBindi
     private final static int FILECHOOSER_RESULTCODE_FOR_ANDROID_5 = 2;
     private static final String TITLE = "title";
     private static final String ID = "id";
-    private String id;
+    private int id;
     private SharedPreferences preferences;
 
     public static MamaSecondFragment newInstance(String title, int id) {
@@ -54,7 +54,7 @@ public class MamaSecondFragment extends BaseLazyFragment<FragmentMamaSecondBindi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            id = getArguments().getString(ID);
+            id = getArguments().getInt(ID);
         }
     }
 

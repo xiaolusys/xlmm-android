@@ -19,11 +19,10 @@ import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMFans1Activity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShoppingListActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMTeamActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMcarryLogActivity;
-import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaDrawCashActivity;
-import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaDrawCouponActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaLivenessActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaReNewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaVisitorActivity;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaWalletActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.PersonalCarryRankActivity;
 import com.jimei.xiaolumeimei.ui.mminfo.MMInfoModel;
 import com.jimei.xiaolumeimei.ui.mminfo.MamaActivity;
@@ -42,14 +41,12 @@ public class MamaThirdFragment extends BaseLazyFragment<FragmentMamaThirdBinding
     private static final String TITLE = "title";
     private static final String ID = "id";
 
-    private String id;
+    private int id;
     private String msgUrl;
     private String teamUrl;
     private String fansUrl;
-    private int couldCashOut;
-    private String cashOutReason;
     private double mCashValue;
-    private String carrylogMoney;
+    private String carryLogMoney;
     private String hisConfirmedCashOut;
     private int mOrderNum;
     private int mActiveValueNum;
@@ -67,26 +64,30 @@ public class MamaThirdFragment extends BaseLazyFragment<FragmentMamaThirdBinding
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            id = getArguments().getString(ID);
+            id = getArguments().getInt(ID);
         }
     }
 
     @Override
     protected void initData() {
-        ((MamaActivity) mActivity).showIndeterminateProgressDialog(false);
+        refreshFortune();
         addSubscription(MMInfoModel.getInstance()
                 .getMamaUrl()
                 .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
                 .subscribe(this::setUrl, Throwable::printStackTrace));
         addSubscription(MMInfoModel.getInstance()
-                .getMamaFortune()
-                .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
-                .subscribe(this::initFortune, Throwable::printStackTrace));
-        addSubscription(MMInfoModel.getInstance()
                 .getMaMaselfList()
                 .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
                 .subscribe(this::initTask, Throwable::printStackTrace));
         setListener();
+    }
+
+    public void refreshFortune() {
+        ((MamaActivity) mActivity).showIndeterminateProgressDialog(false);
+        addSubscription(MMInfoModel.getInstance()
+                .getMamaFortune()
+                .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
+                .subscribe(this::initFortune, Throwable::printStackTrace));
     }
 
     private void initTask(Response<MamaSelfListBean> response) {
@@ -107,13 +108,11 @@ public class MamaThirdFragment extends BaseLazyFragment<FragmentMamaThirdBinding
 
     private void initFortune(MamaFortune mamaFortune) {
         MamaFortune.MamaFortuneBean fortune = mamaFortune.getMamaFortune();
-        carrylogMoney = fortune.getCarryValue() + "";
+        carryLogMoney = fortune.getCarryValue() + "";
         mCashValue = fortune.getCashValue();
         mOrderNum = fortune.getOrderNum();
         mActiveValueNum = fortune.getActiveValueNum();
         if (fortune.getExtraInfo() != null) {
-            couldCashOut = fortune.getExtraInfo().getCouldCashOut();
-            cashOutReason = fortune.getExtraInfo().getCashoutReason();
             hisConfirmedCashOut = fortune.getExtraInfo().getHisConfirmedCashOut();
             if (fortune.getExtraInfo().getThumbnail() != null) {
                 ViewUtils.loadImgToImgView(mActivity, b.ivHead,
@@ -129,6 +128,8 @@ public class MamaThirdFragment extends BaseLazyFragment<FragmentMamaThirdBinding
         b.tvOrder.setText(fortune.getOrderNum() + "个");
         b.tvActive.setText(fortune.getActiveValueNum() + "点");
         b.tvFans.setText(fortune.getFansNum() + "个");
+        b.tvPersonal.setText(fortune.getExtra_figures().getPersonal_total_rank() + "名");
+        b.tvTeam.setText(fortune.getExtra_figures().getTeam_total_rank() + "名");
         ((MamaActivity) mActivity).hideIndeterminateProgressDialog();
     }
 
@@ -186,27 +187,21 @@ public class MamaThirdFragment extends BaseLazyFragment<FragmentMamaThirdBinding
                         ActivityWebViewActivity.class, "信息通知");
                 break;
             case R.id.ll_wallet:
-                Intent walletIntent = null;
-                if (couldCashOut == 0) {
-                    walletIntent = new Intent(mActivity, MamaDrawCouponActivity.class);
-                    walletIntent.putExtra("cash", mCashValue);
-                    walletIntent.putExtra("msg", cashOutReason);
-                } else if (couldCashOut == 1) {
-                    walletIntent = new Intent(mActivity, MamaDrawCashActivity.class);
-                    walletIntent.putExtra("cash", mCashValue);
-                }
+                Intent walletIntent = new Intent(mActivity, MamaWalletActivity.class);
+                walletIntent.putExtra("cash", mCashValue);
                 startActivity(walletIntent);
                 break;
             case R.id.ll_income:
                 Bundle incomeBundle = new Bundle();
-                incomeBundle.putString("carrylogMoney", carrylogMoney);
+                incomeBundle.putString("carrylogMoney", carryLogMoney);
                 incomeBundle.putString("hisConfirmedCashOut", hisConfirmedCashOut);
                 Intent incomeIntent = new Intent(mActivity, MMcarryLogActivity.class);
                 incomeIntent.putExtras(incomeBundle);
                 startActivity(incomeIntent);
                 break;
             case R.id.ll_visit:
-                startActivity(new Intent(mActivity, MamaVisitorActivity.class));
+                Intent visitIntent = new Intent(mActivity, MamaVisitorActivity.class);
+                startActivity(visitIntent);
                 break;
             case R.id.ll_order:
                 Intent orderIntent = new Intent(mActivity, MMShoppingListActivity.class);
@@ -232,7 +227,7 @@ public class MamaThirdFragment extends BaseLazyFragment<FragmentMamaThirdBinding
                 break;
             case R.id.ll_team:
                 Bundle teamBundle = new Bundle();
-                teamBundle.putString("id", id);
+                teamBundle.putString("id", id + "");
                 teamBundle.putString("url", teamUrl);
                 Intent teamIntent = new Intent(mActivity, MMTeamActivity.class);
                 teamIntent.putExtras(teamBundle);

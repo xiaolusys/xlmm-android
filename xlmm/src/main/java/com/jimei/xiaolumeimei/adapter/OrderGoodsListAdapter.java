@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -22,7 +23,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
@@ -135,17 +135,10 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                         && orderDetailEntity.getPackage_orders().get(i).getFinish_time() == null
                         && orderDetailEntity.getOrders().get(position).getStatus() == 2) {
                     Button btn = (Button) convertView.findViewById(R.id.btn_order_proc);
-                    btn.setOnClickListener(v -> new MaterialDialog.Builder(context)
-                            .cancelable(true)
-                            .positiveText("确认")
-                            .positiveColorRes(R.color.colorAccent)
-                            .callback(new MaterialDialog.ButtonCallback() {
-                                @Override
-                                public void onPositive(MaterialDialog dialog) {
-                                    dialog.dismiss();
-                                }
-                            })
-                            .content("您的订单已经向工厂订货，暂不支持退款，请您耐心等待，在收货确认签收后申请退货，如有疑问请咨询小鹿美美公众号或客服4008235355。")
+                    btn.setOnClickListener(v -> new AlertDialog.Builder(context)
+                            .setCancelable(true)
+                            .setMessage("您的订单已经向工厂订货，暂不支持退款，请您耐心等待，在收货确认签收后申请退货，如有疑问请咨询小鹿美美公众号或客服4008235355。")
+                            .setPositiveButton("确认", (dialog, which) -> dialog.dismiss())
                             .show());
                 }
                 final int finalI = i;

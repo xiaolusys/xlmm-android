@@ -10,9 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import com.afollestad.materialdialogs.MaterialDialog;
+
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
@@ -25,9 +23,13 @@ import com.jimei.xiaolumeimei.widget.DividerItemDecorationForFooter;
 import com.jimei.xiaolumeimei.widget.loadingdialog.XlmmLoadingDialog;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -45,7 +47,6 @@ public class MMPotentialFansFragment extends BaseFragment {
 
   private Subscription subscription1;
   private Subscription subscription2;
-  private MaterialDialog materialDialog;
   private Activity mActivity;
   private XlmmLoadingDialog loadingdialog;
 

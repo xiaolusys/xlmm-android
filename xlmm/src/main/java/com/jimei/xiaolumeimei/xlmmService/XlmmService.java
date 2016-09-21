@@ -16,6 +16,7 @@ import com.jimei.xiaolumeimei.entities.CartsHisBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.CartsInfoBean;
+import com.jimei.xiaolumeimei.entities.CashoutPolicy;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
 import com.jimei.xiaolumeimei.entities.CategoryDownBean;
 import com.jimei.xiaolumeimei.entities.CategoryProductListBean;
@@ -566,7 +567,19 @@ public interface XlmmService {
     @FormUrlEncoded
     @POST("/rest/v1/users/budget_cash_out")
     Observable<UserWithdrawResult> user_withdraw_cash(
-            @Field("cashout_amount") String amount);
+            @Field("cashout_amount") String amount,
+            @Field("verify_code") String verify_code
+    );
+
+    @POST("/rest/v2/request_cashout_verify_code")
+    Observable<ResultEntity> getVerifyCode();
+
+    @FormUrlEncoded
+    @POST("/rest/v1/pmt/cashout/noaudit_cashout")
+    Observable<ResultEntity> getNoauditCashout(
+            @Field("amount") double amount,
+            @Field("verify_code") String verify_code
+    );
 
     @GET("/rest/v1/pmt/cushop/customer_shop")
     Observable<MMShoppingBean> getShareShopping();
@@ -704,21 +717,6 @@ public interface XlmmService {
             @Query("packetid") String packetid,
             @Query("company_name") String company_name
     );
-
-//    //获取物流信息
-//    @GET("/rest/v2/kdn")
-//    Observable<LogisticsBean> get_logistics_by_packagetid(
-//            @Query("out_sid") String out_sid,
-//            @Query("company_code") String company_code
-//    );
-//
-//    //获取退货物流信息
-//    @GET("/rest/v2/kdn")
-//    Observable<LogisticsBean> getRefundLogistic(
-//            @Query("rid") int rid,
-//            @Query("out_sid") String out_sid,
-//            @Query("logistics_company") String logistics_company
-//    );
 
     @GET("/rest/v1/portal")
     Observable<PortalBean> getPortalBean();
@@ -929,4 +927,7 @@ public interface XlmmService {
             @Query("cid") String cid,
             @Query("reverse") int reverse
     );
+
+    @GET("/rest/v2/cashout_policy")
+    Observable<CashoutPolicy> getCashoutPolicy();
 }

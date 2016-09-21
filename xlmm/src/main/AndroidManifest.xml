@@ -17,8 +17,10 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="com.jimei.xiaolumeimei.permission.MIPUSH_RECEIVE"/>
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+
     <uses-feature android:name="android.hardware.camera"/>
     <uses-feature android:name="android.hardware.camera.autofocus"/>
+
     <uses-permission android:name="android.permission.FLASHLIGHT"/>
 
     <permission
@@ -359,9 +361,6 @@
             android:name=".ui.activity.user.UserDrawCashActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
-            android:name=".ui.activity.user.DrawCashCompleteActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
-        <activity
             android:name=".ui.activity.xiaolumama.MamaDrawCashActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
@@ -452,9 +451,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.user.CustomerServiceActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
-        <activity
             android:name=".ui.activity.xiaolumama.TeamExplainActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
@@ -476,6 +472,13 @@
         <activity
             android:name=".ui.activity.trade.CommonScanActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
+        <activity
+            android:name=".ui.activity.xiaolumama.MamaWalletActivity"
+            android:theme="@style/AppTheme.TransparentActivity"/>
+        <activity
+            android:name=".ui.activity.xiaolumama.MamaDrawSmallCashActivity"
+            android:theme="@style/AppTheme.TransparentActivity"/>
+
         <service
             android:name=".xlmmService.UpdateService"
             android:exported="false"/>
@@ -528,7 +531,6 @@
                 <action android:name="action.retry.download"/>
             </intent-filter>
         </receiver>
-
     </application>
 
 </manifest>

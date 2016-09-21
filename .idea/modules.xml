@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Udesk_Separate_UI/Udesk_Separate_UI.iml" filepath="$PROJECT_DIR$/Udesk_Separate_UI/Udesk_Separate_UI.iml" />
+      <module fileurl="file://$PROJECT_DIR$/UdeskSDKUI/UdeskSDKUI.iml" filepath="$PROJECT_DIR$/UdeskSDKUI/UdeskSDKUI.iml" />
       <module fileurl="file://$PROJECT_DIR$/xlmm/xlmm.iml" filepath="$PROJECT_DIR$/xlmm/xlmm.iml" />
       <module fileurl="file://$PROJECT_DIR$/xlmm-android.iml" filepath="$PROJECT_DIR$/xlmm-android.iml" />
       <module fileurl="file://$PROJECT_DIR$/xlmmlibrary/xlmmlibrary.iml" filepath="$PROJECT_DIR$/xlmmlibrary/xlmmlibrary.iml" />

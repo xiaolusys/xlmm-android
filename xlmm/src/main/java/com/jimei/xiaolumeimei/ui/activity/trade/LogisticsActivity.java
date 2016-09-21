@@ -5,8 +5,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import butterknife.Bind;
-
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.GoodsListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -23,6 +21,7 @@ import com.umeng.analytics.MobclickAgent;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -59,7 +58,8 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
             companyTv.setTextColor(getResources().getColor(R.color.colorAccent));
             String packetid = packageOrdersBean.getOut_sid();
             String company_code = packageOrdersBean.getLogistics_company().getCode();
-            if (!"".equals(packetid) && !"".equals(company_code)) {
+            if (packetid != null && company_code != null &&
+                    !"".equals(packetid) && !"".equals(company_code)) {
                 Subscription subscribe = TradeModel.getInstance()
                         .get_logistics_by_packagetid(packetid, company_code)
                         .subscribeOn(Schedulers.io())

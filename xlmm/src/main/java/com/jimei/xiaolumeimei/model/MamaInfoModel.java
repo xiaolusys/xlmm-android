@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.model;
 
 import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.entities.AllowanceBean;
+import com.jimei.xiaolumeimei.entities.CashoutPolicy;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
 import com.jimei.xiaolumeimei.entities.ChooseListBean;
 import com.jimei.xiaolumeimei.entities.DrawCouponBean;
@@ -14,6 +15,7 @@ import com.jimei.xiaolumeimei.entities.PersonalCarryRankBean;
 import com.jimei.xiaolumeimei.entities.PotentialFans;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.ResultBean;
+import com.jimei.xiaolumeimei.entities.ResultEntity;
 import com.jimei.xiaolumeimei.entities.WeekTaskRewardBean;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
@@ -63,6 +65,13 @@ public class MamaInfoModel {
     public Observable<DrawCouponBean> drawCoupon(String template_id) {
         return XlmmRetrofitClient.getService()
                 .drawCoupon(template_id, "1")
+                .compose(new DefaultTransform<>());
+    }
+
+    //妈妈小额提现
+    public Observable<ResultEntity> getNoauditCashout(double amount, String verify_code) {
+        return XlmmRetrofitClient.getService()
+                .getNoauditCashout(amount, verify_code)
                 .compose(new DefaultTransform<>());
     }
 
@@ -185,6 +194,12 @@ public class MamaInfoModel {
     public Observable<List<CategoryBean>> getCategory() {
         return XlmmRetrofitClient.getService()
                 .getCategory()
+                .compose(new DefaultTransform<>());
+    }
+
+    public Observable<CashoutPolicy> getCashoutPolicy() {
+        return XlmmRetrofitClient.getService()
+                .getCashoutPolicy()
                 .compose(new DefaultTransform<>());
     }
 
