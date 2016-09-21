@@ -66,8 +66,7 @@
             android:background="@drawable/shape_chooselist"
             android:text="取消"
             android:textColor="@color/colorAccent"
-            android:textSize="15sp"
-            android:visibility="visible" />
+            android:textSize="15sp" />
     </RelativeLayout>
 
 </LinearLayout>

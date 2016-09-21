@@ -1,7 +1,7 @@
 package com.jimei.xiaolumeimei.ui.activity.trade;
 
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.support.v7.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -27,7 +27,6 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
@@ -540,19 +539,15 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                 break;
             case R.id.logistics_layout:
                 if ("已付款".equals(orderDetail.getStatus_display())) {
-                    new MaterialDialog.Builder(this)
-                            .title("提示")
-                            .content("非服装类商品是由供应商直接发货，只能尽量满足您选择的快递公司，" +
+                    new AlertDialog.Builder(this)
+                            .setTitle("提示")
+                            .setMessage("非服装类商品是由供应商直接发货，只能尽量满足您选择的快递公司，" +
                                     "如需确认能否满足您的快递需求，请联系客服。")
-                            .positiveText("确认")
-                            .positiveColorRes(R.color.colorAccent)
-                            .callback(new MaterialDialog.ButtonCallback() {
-                                @Override
-                                public void onPositive(MaterialDialog materialDialog) {
-                                    materialDialog.dismiss();
-                                    dialog.show();
-                                }
-                            }).show();
+                            .setPositiveButton("确认", (dialog1, which) -> {
+                                dialog1.dismiss();
+                                dialog.show();
+                            })
+                            .show();
                 }
                 break;
             case R.id.close_iv:

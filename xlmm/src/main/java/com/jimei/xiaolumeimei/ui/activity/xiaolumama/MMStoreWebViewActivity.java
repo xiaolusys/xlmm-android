@@ -53,11 +53,16 @@ public class MMStoreWebViewActivity extends CommonWebViewActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         if (item.getItemId() == R.id.action_share) {
             share_shopping(title, sharelink, desc, shareimg);
         }
         return true;
+    }
+
+    @Override
+    public void sharePartyInfo() {
+        super.sharePartyInfo();
+        MobclickAgent.onEvent(this,"Shop_share");
     }
 
     @Override

@@ -12,6 +12,7 @@ import com.jimei.xiaolumeimei.entities.MembershipPointBean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
 import com.jimei.xiaolumeimei.entities.NicknameBean;
 import com.jimei.xiaolumeimei.entities.PointLogBean;
+import com.jimei.xiaolumeimei.entities.ResultEntity;
 import com.jimei.xiaolumeimei.entities.UserAccountBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
@@ -104,7 +105,7 @@ public class UserModel {
     }
 
     //获取优惠券
-    public Observable<ArrayList<CouponEntity>> getCouponList( int status) {
+    public Observable<ArrayList<CouponEntity>> getCouponList(int status) {
         return XlmmRetrofitClient.getService()
                 .getCouponList(status)
                 .compose(new DefaultTransform<>());
@@ -156,9 +157,16 @@ public class UserModel {
     }
 
     //普通用户提现
-    public Observable<UserWithdrawResult> user_withdraw_cash(String amount) {
+    public Observable<UserWithdrawResult> user_withdraw_cash(String amount, String verify_code) {
         return XlmmRetrofitClient.getService()
-                .user_withdraw_cash(amount)
+                .user_withdraw_cash(amount, verify_code)
+                .compose(new DefaultTransform<>());
+    }
+
+
+    public Observable<ResultEntity> getVerifyCode() {
+        return XlmmRetrofitClient.getService()
+                .getVerifyCode()
                 .compose(new DefaultTransform<>());
     }
 

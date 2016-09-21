@@ -3,6 +3,8 @@ package com.jimei.xiaolumeimei.ui.activity.user;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -12,9 +14,9 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.entities.ResultEntity;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.UserWithdrawResult;
 import com.jimei.xiaolumeimei.event.UserChangeEvent;
@@ -29,7 +31,6 @@ import com.umeng.analytics.MobclickAgent;
 import org.greenrobot.eventbus.EventBus;
 
 import butterknife.Bind;
-import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 public class UserDrawCashActivity extends BaseSwipeBackCompatActivity
@@ -53,11 +54,16 @@ public class UserDrawCashActivity extends BaseSwipeBackCompatActivity
     TextView tvRule;
     @Bind(R.id.cb_rule)
     CheckBox cbRule;
+    @Bind(R.id.et_code)
+    EditText codeEt;
+    @Bind(R.id.btn_code)
+    Button codeBtn;
     private double minMoney = 8.88;
     private boolean bindFlag = false;
     private boolean ruleFlag = true;
     private double money;
     private double drawMoney = 0;
+    private CountDownTimer mCountDownTimer;
 
     @Override
     protected void setListener() {
@@ -67,11 +73,12 @@ public class UserDrawCashActivity extends BaseSwipeBackCompatActivity
         bindBtn.setOnClickListener(this);
         cbRule.setOnCheckedChangeListener(this);
         tvRule.setOnClickListener(this);
+        codeBtn.setOnClickListener(this);
     }
 
     @Override
     protected void initData() {
-        Subscription subscribe = UserNewModel.getInstance()
+        addSubscription(UserNewModel.getInstance()
                 .getProfile()
                 .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<UserInfoBean>() {
@@ -91,8 +98,20 @@ public class UserDrawCashActivity extends BaseSwipeBackCompatActivity
                             nickNameTv.setText(userNewBean.getNick());
                         }
                     }
-                });
-        addSubscription(subscribe);
+                }));
+        mCountDownTimer = new CountDownTimer(60000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                codeBtn.setText(millisUntilFinished / 1000 + "秒");
+            }
+
+            @Override
+            public void onFinish() {
+                codeBtn.setClickable(true);
+                codeBtn.setEnabled(true);
+                codeBtn.setText("获取验证码");
+            }
+        };
     }
 
     @Override
@@ -219,6 +238,8 @@ public class UserDrawCashActivity extends BaseSwipeBackCompatActivity
             case R.id.btn_draw_cash:
                 if (drawMoney == 0) {
                     JUtils.Toast("提现金额不能为空,并且要大于0哦~~");
+                } else if (codeEt.getText().length() < 6) {
+                    JUtils.Toast("验证码有误");
                 } else {
                     drawCash(drawMoney);
                 }
@@ -228,25 +249,38 @@ public class UserDrawCashActivity extends BaseSwipeBackCompatActivity
                 finish();
                 break;
             case R.id.tv_rule:
-                new MaterialDialog.Builder(this)
-                        .title("提现提示")
-                        .content("默认最低提现金额为8.88元，根据推广活动会调整此最低提现金额，目前最低提现金额为"
+                new AlertDialog.Builder(this)
+                        .setTitle("提现提示")
+                        .setMessage("默认最低提现金额为8.88元，根据推广活动会调整此最低提现金额，目前最低提现金额为"
                                 + minMoney + "元。不提现时零钱可以购物消费。")
-                        .positiveText("确认")
-                        .positiveColorRes(R.color.colorAccent)
-                        .callback(new MaterialDialog.ButtonCallback() {
+                        .setPositiveButton("确认", (dialog, which) -> dialog.dismiss())
+                        .show();
+                break;
+            case R.id.btn_code:
+                codeBtn.setClickable(false);
+                codeBtn.setEnabled(false);
+                mCountDownTimer.start();
+                addSubscription(UserModel.getInstance()
+                        .getVerifyCode()
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(new ServiceResponse<ResultEntity>() {
                             @Override
-                            public void onPositive(MaterialDialog dialog) {
-                                dialog.dismiss();
+                            public void onNext(ResultEntity resultEntity) {
+                                JUtils.Toast(resultEntity.getInfo());
                             }
-                        }).show();
+
+                            @Override
+                            public void onError(Throwable e) {
+                                JUtils.Toast("获取验证码失败");
+                            }
+                        }));
                 break;
         }
     }
 
     private void drawCash(double fund) {
-        Subscription subscribe = UserModel.getInstance()
-                .user_withdraw_cash(Double.toString(fund))
+        addSubscription(UserModel.getInstance()
+                .user_withdraw_cash(Double.toString(fund), codeEt.getText().toString())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<UserWithdrawResult>() {
                     @Override
@@ -268,8 +302,7 @@ public class UserDrawCashActivity extends BaseSwipeBackCompatActivity
                                 break;
                         }
                     }
-                });
-        addSubscription(subscribe);
+                }));
     }
 
     @Override
@@ -289,6 +322,7 @@ public class UserDrawCashActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void onStop() {
         super.onStop();
+        mCountDownTimer.cancel();
         EventBus.getDefault().postSticky(new UserChangeEvent());
     }
 

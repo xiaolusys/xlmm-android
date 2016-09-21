@@ -42,4 +42,10 @@ public class MMShareCodeWebViewActivity extends CommonWebViewActivity {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void sharePartyInfo() {
+        super.sharePartyInfo();
+        MobclickAgent.onEvent(this,"VIP_share");
+    }
 }

@@ -114,6 +114,8 @@ public class WeekTaskRewardBean {
         private String finish_time;
         private String status;
         private String status_name;
+        private int target_value;
+        private double award_amount;
 
         public int getId() {
             return id;
@@ -177,6 +179,22 @@ public class WeekTaskRewardBean {
 
         public void setStatus_name(String status_name) {
             this.status_name = status_name;
+        }
+
+        public int getTarget_value() {
+            return target_value;
+        }
+
+        public void setTarget_value(int target_value) {
+            this.target_value = target_value;
+        }
+
+        public double getAward_amount() {
+            return award_amount;
+        }
+
+        public void setAward_amount(double award_amount) {
+            this.award_amount = award_amount;
         }
 
         public static class MissionBean {
@@ -260,6 +278,8 @@ public class WeekTaskRewardBean {
         private String finish_time;
         private String status;
         private String status_name;
+        private int target_value;
+        private double award_amount;
 
         public int getId() {
             return id;
@@ -323,6 +343,22 @@ public class WeekTaskRewardBean {
 
         public void setStatus_name(String status_name) {
             this.status_name = status_name;
+        }
+
+        public int getTarget_value() {
+            return target_value;
+        }
+
+        public void setTarget_value(int target_value) {
+            this.target_value = target_value;
+        }
+
+        public double getAward_amount() {
+            return award_amount;
+        }
+
+        public void setAward_amount(double award_amount) {
+            this.award_amount = award_amount;
         }
 
         public static class MissionBean {

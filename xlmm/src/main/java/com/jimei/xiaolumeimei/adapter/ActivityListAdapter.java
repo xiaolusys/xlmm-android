@@ -85,6 +85,8 @@ public class ActivityListAdapter extends BaseAdapter {
         if (bean.getAct_img() != null && !"".equals(bean.getAct_img())) {
             ViewUtils.loadActivityToImgView(mContext, holder.img, bean.getAct_img());
             holder.img.setVisibility(View.VISIBLE);
+        }else {
+            holder.img.setVisibility(View.GONE);
         }
         if (bean.isLogin_required() && !LoginUtils.checkLoginState(mContext)) {
             JUtils.Toast("登录后才可参加活动");

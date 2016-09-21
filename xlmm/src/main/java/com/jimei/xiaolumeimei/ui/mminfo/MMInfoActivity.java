@@ -79,7 +79,7 @@ import java.util.Map;
 
 import cn.udesk.UdeskConst;
 import cn.udesk.UdeskSDKManager;
-import cn.udesk.xmpp.UdeskMessageManager;
+import cn.udesk.messagemanager.UdeskMessageManager;
 import rx.schedulers.Schedulers;
 
 /**

@@ -263,12 +263,12 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
 
     @Override
     protected boolean toggleOverridePendingTransition() {
-        return true;
+        return false;
     }
 
     @Override
     protected TransitionMode getOverridePendingTransitionMode() {
-        return TransitionMode.BOTTOM;
+        return null;
     }
 
     @Override

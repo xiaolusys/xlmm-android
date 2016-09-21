@@ -4,12 +4,15 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.base.BaseAppCompatActivityForDetail;
+import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
 import com.umeng.analytics.MobclickAgent;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -18,10 +21,12 @@ import java.util.TimerTask;
  * <p>
  * Copyright 2015年 上海己美. All rights reserved.
  */
-public class SplashActivity extends BaseAppCompatActivityForDetail {
+public class SplashActivity extends AppCompatActivity {
 
     @Override
-    protected void initViews() {
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_splash);
         MobclickAgent.setDebugMode(true);
         Window window = getWindow();
         //4.4版本及以上
@@ -38,58 +43,12 @@ public class SplashActivity extends BaseAppCompatActivityForDetail {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(Color.TRANSPARENT);
         }
-//        StatusBarUtil.setTranslucent(this,0);
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                startActivity(new Intent(SplashActivity.this,
-                        com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity.class));
+                startActivity(new Intent(SplashActivity.this, MainActivity.class));
                 finish();
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         }, 2000);
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
-    }
-
-    @Override
-    protected void setListener() {
-
-    }
-
-    @Override
-    protected void initData() {
-    }
-
-    @Override
-    protected void getBundleExtras(Bundle extras) {
-
-    }
-
-    @Override
-    protected int getContentViewLayoutID() {
-        return R.layout.activity_splash;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
     }
 }

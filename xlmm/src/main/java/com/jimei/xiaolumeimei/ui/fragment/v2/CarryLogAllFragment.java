@@ -10,10 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
@@ -31,6 +27,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -46,7 +44,6 @@ public class CarryLogAllFragment extends BaseFragment {
   private int page = 2;
   private Subscription subscription1;
   private Subscription subscription2;
-  private MaterialDialog materialDialog;
   private XlmmLoadingDialog loadingdialog;
 
   public static CarryLogAllFragment newInstance(String title) {

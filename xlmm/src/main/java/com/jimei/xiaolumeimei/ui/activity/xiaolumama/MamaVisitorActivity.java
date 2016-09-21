@@ -109,7 +109,7 @@ public class MamaVisitorActivity extends BaseSwipeBackCompatActivity
     }
 
     private void loadMoreData(int page) {
-        Subscription subscribe = MamaInfoModel.getInstance()
+        addSubscription(MamaInfoModel.getInstance()
                 .getMamaVisitor(page)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<MMVisitorsBean>() {
@@ -130,8 +130,7 @@ public class MamaVisitorActivity extends BaseSwipeBackCompatActivity
                         super.onCompleted();
                         xrv.post(xrv::loadMoreComplete);
                     }
-                });
-        addSubscription(subscribe);
+                }));
     }
 
     @Override

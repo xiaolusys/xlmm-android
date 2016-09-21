@@ -1,11 +1,11 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
-import butterknife.Bind;
-import com.afollestad.materialdialogs.MaterialDialog;
+
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
@@ -20,7 +20,10 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.xiaomi.mipush.sdk.MiPushClient;
+
 import org.greenrobot.eventbus.EventBus;
+
+import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -144,46 +147,36 @@ public class InformationActivity extends BaseSwipeBackCompatActivity
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.login_out:
-                new MaterialDialog.Builder(this)
-                        .title("注销登录")
-                        .content("您确定要退出登录吗？")
-                        .positiveText("注销")
-                        .positiveColorRes(R.color.colorAccent)
-                        .negativeText("取消")
-                        .negativeColorRes(R.color.colorAccent)
-                        .callback(new MaterialDialog.ButtonCallback() {
-                            @Override
-                            public void onPositive(MaterialDialog dialog) {
-                                final String finalAccount =
-                                        LoginUtils.getUserAccount(getApplicationContext());
-                                UserModel.getInstance()
-                                        .customer_logout()
-                                        .subscribeOn(Schedulers.io())
-                                        .subscribe(new ServiceResponse<LogOutBean>() {
-                                            @Override
-                                            public void onNext(LogOutBean responseBody) {
-                                                super.onNext(responseBody);
-                                                if (responseBody.getCode() == 0) {
-                                                    EventBus.getDefault().post(new LogOutEmptyEvent());
-                                                    JUtils.Toast("退出成功");
-                                                    if ((finalAccount != null) && ((!finalAccount.isEmpty()))) {
-                                                        MiPushClient.unsetUserAccount(getApplicationContext(),
-                                                                finalAccount, null);
-                                                    }
-                                                    LoginUtils.delLoginInfo(getApplicationContext());
-                                                    finish();
+                new AlertDialog.Builder(this)
+                        .setTitle("注销登录")
+                        .setMessage("您确定要退出登录吗？")
+                        .setPositiveButton("注销", (dialog, which) -> {
+                            final String finalAccount =
+                                    LoginUtils.getUserAccount(getApplicationContext());
+                            UserModel.getInstance()
+                                    .customer_logout()
+                                    .subscribeOn(Schedulers.io())
+                                    .subscribe(new ServiceResponse<LogOutBean>() {
+                                        @Override
+                                        public void onNext(LogOutBean responseBody) {
+                                            super.onNext(responseBody);
+                                            if (responseBody.getCode() == 0) {
+                                                EventBus.getDefault().post(new LogOutEmptyEvent());
+                                                JUtils.Toast("退出成功");
+                                                if ((finalAccount != null) && ((!finalAccount.isEmpty()))) {
+                                                    MiPushClient.unsetUserAccount(getApplicationContext(),
+                                                            finalAccount, null);
                                                 }
+                                                LoginUtils.delLoginInfo(getApplicationContext());
+                                                finish();
                                             }
-                                        });
+                                        }
+                                    });
 
-                                dialog.dismiss();
-                            }
-
-                            @Override
-                            public void onNegative(MaterialDialog dialog) {
-                                dialog.dismiss();
-                            }
-                        }).show();
+                            dialog.dismiss();
+                        })
+                        .setNegativeButton("取消", (dialog, which) -> dialog.dismiss())
+                        .show();
                 break;
 
         }

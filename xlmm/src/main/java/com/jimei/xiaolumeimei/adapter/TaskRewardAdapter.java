@@ -48,16 +48,16 @@ public class TaskRewardAdapter extends RecyclerView.Adapter<TaskRewardAdapter.Ta
             if (type == XlmmConst.TYPE_REWARD_PERSONAL) {
                 WeekTaskRewardBean.PersonalMissionsBean personalData = bean.getPersonal_missions().get(position - 1);
                 holder.tv1.setText(personalData.getMission().getName());
-                holder.tv2.setText(personalData.getMission().getTarget_value() + "");
+                holder.tv2.setText(personalData.getTarget_value() + "");
                 holder.tv3.setText(personalData.getFinish_value() + "");
-                holder.tv4.setText("¥" + personalData.getMission().getAward_amount() / 100.00);
+                holder.tv4.setText("¥" + personalData.getAward_amount() / 100.00);
                 holder.tv5.setText(personalData.getStatus_name());
             } else if (type == XlmmConst.TYPE_REWARD_TEAM) {
                 WeekTaskRewardBean.GroupMissionsBean teamData = bean.getGroup_missions().get(position - 1);
                 holder.tv1.setText(teamData.getMission().getName());
-                holder.tv2.setText(teamData.getMission().getTarget_value() + "");
+                holder.tv2.setText(teamData.getTarget_value() + "");
                 holder.tv3.setText(teamData.getFinish_value() + "");
-                holder.tv4.setText("¥" + teamData.getMission().getAward_amount() / 100.00);
+                holder.tv4.setText("¥" + teamData.getAward_amount() / 100.00);
                 holder.tv5.setText(teamData.getStatus_name());
             }
         }
@@ -84,7 +84,7 @@ public class TaskRewardAdapter extends RecyclerView.Adapter<TaskRewardAdapter.Ta
         @Bind(R.id.tv5)
         TextView tv5;
 
-        public TaskRewardHolder(View itemView) {
+        TaskRewardHolder(View itemView) {
             super(itemView);
             AutoUtils.autoSize(itemView);
             ButterKnife.bind(this, itemView);

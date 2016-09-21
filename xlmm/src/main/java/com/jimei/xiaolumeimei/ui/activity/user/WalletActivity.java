@@ -182,6 +182,7 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
                             if (budgetdetailBean.getNext() == null) {
                                 Toast.makeText(WalletActivity.this, "没有更多了", Toast.LENGTH_SHORT).show();
                                 walletRcv.post(walletRcv::loadMoreComplete);
+                                walletRcv.setLoadingMoreEnabled(false);
                             }
                         }
 

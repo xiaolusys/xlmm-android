@@ -41,12 +41,12 @@ import java.util.concurrent.Executors;
 
 import cn.udesk.UdeskConst;
 import cn.udesk.UdeskSDKManager;
-import cn.udesk.xmpp.UdeskMessageManager;
 
 public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
 
     private List<BaseLazyFragment> fragments = new ArrayList<>();
     private boolean isDestroy = false;
+    private ExecutorService service;
 
     @Override
     protected void initView() {
@@ -69,7 +69,7 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
         addSubscription(MMInfoModel.getInstance()
                 .getLatestOrderCarry()
                 .subscribe(list -> {
-                    ExecutorService service = Executors.newSingleThreadExecutor();
+                    service = Executors.newSingleThreadExecutor();
                     service.execute(() -> {
                         for (int i = 0; i < list.size() && !isDestroy; i++) {
                             SystemClock.sleep(new Random().nextInt(5000));
@@ -93,7 +93,6 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
         info.put(UdeskConst.UdeskUserInfo.NICK_NAME, userInfoBean.getNick() + "(ID:" + id + ")");
         info.put(UdeskConst.UdeskUserInfo.CELLPHONE, userInfoBean.getMobile());
         UdeskSDKManager.getInstance().setUserInfo(this, id, info);
-        UdeskMessageManager.getInstance().event_OnNewMsgNotice.bind(this, "OnNewMsgNotice");
         fragments.add(MamaFirstFragment.newInstance("我要赚钱", mamaId));
         fragments.add(MamaSecondFragment.newInstance("社交活动", mamaId));
         fragments.add(MamaThirdFragment.newInstance("我的", mamaId));
@@ -164,6 +163,9 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
     @Override
     protected void onResume() {
         super.onResume();
+        if (fragments.size() == 3 && b.viewPager.getCurrentItem() == 2) {
+            ((MamaThirdFragment) fragments.get(2)).refreshFortune();
+        }
         MobclickAgent.onPageStart(this.getClass().getSimpleName());
         MobclickAgent.onResume(this);
     }
@@ -177,20 +179,25 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        WebView webView = ((MamaSecondFragment) fragments.get(1)).getWebView();
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (b.viewPager.getCurrentItem() == 1 && webView.canGoBack()) {
-                webView.goBack();
-            } else {
-                finish();
+        if (fragments.size() == 3) {
+            WebView webView = ((MamaSecondFragment) fragments.get(1)).getWebView();
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                if (b.viewPager.getCurrentItem() == 1 && webView.canGoBack()) {
+                    webView.goBack();
+                } else {
+                    finish();
+                }
+                return true;
             }
-            return true;
         }
         return super.onKeyDown(keyCode, event);
     }
 
     @Override
     protected void onDestroy() {
+        if (service != null) {
+            service.shutdownNow();
+        }
         isDestroy = true;
         super.onDestroy();
     }

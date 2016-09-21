@@ -48,13 +48,10 @@ public class XlmmTitleView extends AppBarLayout {
             setBackColor(array.getColor(R.styleable.XlmmTitleView_back_color, getResources().getColor(R.color.colorAccent)));
         }
         toolbar.setTitle("");
-        ((AppCompatActivity) context).setSupportActionBar(toolbar);
-        finishLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((AppCompatActivity) context).finish();
-            }
-        });
+        if (context instanceof AppCompatActivity) {
+            ((AppCompatActivity) context).setSupportActionBar(toolbar);
+            finishLayout.setOnClickListener(v -> ((AppCompatActivity) context).finish());
+        }
     }
 
     public void setName(String nameStr) {

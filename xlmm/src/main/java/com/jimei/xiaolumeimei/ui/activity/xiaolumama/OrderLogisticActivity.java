@@ -32,7 +32,8 @@ public class OrderLogisticActivity extends BaseMVVMActivity<ActivityOrderLogisti
 
     @Override
     protected void initData() {
-        if (!"".equals(packetid) && !"".equals(company_code)) {
+        if (packetid != null && company_code != null &&
+                !"".equals(packetid) && !"".equals(company_code)) {
             showIndeterminateProgressDialog(false);
             Subscription subscribe = TradeModel.getInstance()
                     .get_logistics_by_packagetid(packetid, company_code)
@@ -56,7 +57,7 @@ public class OrderLogisticActivity extends BaseMVVMActivity<ActivityOrderLogisti
                         }
                     });
             addSubscription(subscribe);
-        }else {
+        } else {
             b.tvOrderLastTime.setText("暂无物流信息");
             b.start.setVisibility(View.VISIBLE);
         }

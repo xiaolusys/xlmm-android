@@ -8,14 +8,11 @@ import android.widget.TextView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.BudgetdetailBean;
-import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.model.UserNewModel;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
-import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 public class MamaDrawCashDetailActivity extends BaseSwipeBackCompatActivity {
@@ -53,40 +50,32 @@ public class MamaDrawCashDetailActivity extends BaseSwipeBackCompatActivity {
 
     @Override
     protected void initData() {
-        Subscription subscribe = UserNewModel.getInstance()
+        addSubscription(UserNewModel.getInstance()
                 .budGetdetailBean("1")
                 .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<BudgetdetailBean>() {
-                    @Override
-                    public void onNext(BudgetdetailBean budgetdetailBean) {
-                        BudgetdetailBean.ResultsEntity entity = budgetdetailBean.getResults().get(0);
-                        String str = ((int) entity.getBudegetDetailCash()) + "";
-                        drawMoneyTv.setText(str);
-                        dateTv.setText(entity.getBudgetDate());
-                        dateTv1.setText(entity.getBudgetDate());
-                        dateTv2.setText(entity.getBudgetDate());
-                        dateTv3.setText(entity.getBudgetDate());
-                        if (!"".equals(account)) {
-                            accountTv.setText(account);
-                        } else {
-                            accountLayout.setVisibility(View.GONE);
-                        }
+                .subscribe(budgetDetailBean -> {
+                    BudgetdetailBean.ResultsEntity entity = budgetDetailBean.getResults().get(0);
+                    String str = ((int) entity.getBudegetDetailCash()) + "";
+                    drawMoneyTv.setText(str);
+                    dateTv.setText(entity.getBudgetDate());
+                    dateTv1.setText(entity.getBudgetDate());
+                    dateTv2.setText(entity.getBudgetDate());
+                    dateTv3.setText(entity.getBudgetDate());
+                    if (!"".equals(account)) {
+                        accountTv.setText(account);
+                    } else {
+                        accountLayout.setVisibility(View.GONE);
                     }
-                });
-        Subscription subscribe1 = MamaInfoModel.getInstance()
+                }));
+        addSubscription(MamaInfoModel.getInstance()
                 .getMamaFortune()
                 .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<MamaFortune>() {
-                    @Override
-                    public void onNext(MamaFortune mamaFortune) {
-                        String moneyText = mamaFortune.getMamaFortune().getCashValue() + "";
-                        String activityText = mamaFortune.getMamaFortune().getActiveValueNum() + "";
-                        moneyTv.setText(moneyText);
-                        activityTv.setText(activityText);
-                    }
-                });
-        addSubscription(subscribe);
-        addSubscription(subscribe1);
+                .subscribe(mamaFortune -> {
+                    String moneyText = mamaFortune.getMamaFortune().getCashValue() + "";
+                    String activityText = mamaFortune.getMamaFortune().getActiveValueNum() + "";
+                    moneyTv.setText(moneyText);
+                    activityTv.setText(activityText);
+                }));
     }
 
     @Override
