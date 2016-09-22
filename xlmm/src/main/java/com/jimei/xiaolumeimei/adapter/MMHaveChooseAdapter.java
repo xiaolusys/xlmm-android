@@ -7,10 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.MMHavaChooseResultBean;
 import com.jimei.xiaolumeimei.entities.ShopProductBean;
@@ -23,6 +19,8 @@ import com.zhy.autolayout.utils.AutoUtils;
 
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import rx.schedulers.Schedulers;
 
 /**
@@ -32,7 +30,6 @@ public class MMHaveChooseAdapter
         extends BaseAdapter<ShopProductBean.ResultsBean, MMHaveChooseAdapter.MMHaveChooseVH> {
 
     private static final String TAG = MMHaveChooseAdapter.class.getSimpleName();
-    private MaterialDialog materialDialog;
 
     public MMHaveChooseAdapter(Context context, List<ShopProductBean.ResultsBean> data) {
         super(context, data);
@@ -104,24 +101,6 @@ public class MMHaveChooseAdapter
                         }
                     }
                 });
-    }
-
-    public void showIndeterminateProgressDialog(boolean horizontal) {
-        materialDialog = new MaterialDialog.Builder(mContext)
-                //.title(R.string.progress_dialog)
-                .content(R.string.please_wait)
-                .progress(true, 0)
-                .widgetColorRes(R.color.colorAccent)
-                .progressIndeterminateStyle(horizontal)
-                .show();
-    }
-
-    public void hideIndeterminateProgressDialog() {
-        try {
-            materialDialog.dismiss();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     class MMHaveChooseVH extends RecyclerView.ViewHolder {

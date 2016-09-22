@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.utils.CommonUtils;
 import com.jimei.xiaolumeimei.widget.loadingdialog.XlmmLoadingDialog;
@@ -45,7 +44,6 @@ public abstract class   BaseAppCompatActivityForDetail extends BaseAutoLayoutAct
    */
   protected Context mContext = null;
   private SharedPreferences sharedPreferences;
-  private MaterialDialog materialDialog;
   private CompositeSubscription mCompositeSubscription;
   private XlmmLoadingDialog loadingdialog;
 

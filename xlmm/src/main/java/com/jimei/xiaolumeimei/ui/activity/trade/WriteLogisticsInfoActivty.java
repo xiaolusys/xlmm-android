@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jimei.xiaolumeimei.R;
@@ -78,6 +79,8 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
     TextView tv_order_last_time;
     @Bind(R.id.tv_order_last_state)
     TextView tv_order_last_state;
+    @Bind(R.id.rl_scan)
+    RelativeLayout scanLayout;
     private String address;
     String company;
     int goods_id;
@@ -89,6 +92,7 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
     @Override
     protected void setListener() {
         btn_commit.setOnClickListener(this);
+        scanLayout.setOnClickListener(this);
     }
 
     @Override
@@ -194,18 +198,16 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
         } else {
             titleView.setName("查询物流信息");
         }
-        et_logistics_company.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-                if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
-                    Log.d(TAG, "choose logistics commpay");
-                    Intent intent = new Intent(WriteLogisticsInfoActivty.this,
-                            ChooseLogisticsCompanyActivity.class);
+        et_logistics_company.setOnTouchListener((v, event) -> {
+            if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
+                Log.d(TAG, "choose logistics commpay");
+                Intent intent = new Intent(WriteLogisticsInfoActivty.this,
+                        ChooseLogisticsCompanyActivity.class);
 
-                    Log.d(TAG, " to ChooseLogisticsCompanyActivity");
-                    startActivityForResult(intent, 1);
-                }
-                return false;
+                Log.d(TAG, " to ChooseLogisticsCompanyActivity");
+                startActivityForResult(intent, 1);
             }
+            return false;
         });
         SpannableStringBuilder builder = new SpannableStringBuilder(reasonTv.getText().toString());
         //ForegroundColorSpan 为文字前景色，BackgroundColorSpan为文字背景色
@@ -227,7 +229,9 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-
+            case R.id.rl_scan:
+                startActivityForResult(new Intent(this,CommonScanActivity.class),2);
+                break;
             case R.id.btn_commit:
                 commit_logistics_info();
                 break;
@@ -235,14 +239,16 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         super.onActivityResult(requestCode, resultCode, data);
         if ((requestCode == 1) && (data != null)) {
-
             // data contains result
             company = data.getExtras().getString("company");
             Log.d(TAG, "onActivityResult company" + company);
             et_logistics_company.setText(company);
+        }
+        if (requestCode == 2 && data != null) {
+            String number = data.getExtras().getString("number");
+            et_logistics_number.setText(number);
         }
     }
 

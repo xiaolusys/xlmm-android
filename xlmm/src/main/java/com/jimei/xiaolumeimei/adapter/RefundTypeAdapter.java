@@ -61,18 +61,15 @@ public class RefundTypeAdapter extends BaseAdapter {
         } else {
             icon.setImageResource(R.drawable.icon_return);
         }
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                for (int i = 0; i < flag.length; i++) {
-                    if (position == i) {
-                        flag[i] = true;
-                    } else {
-                        flag[i] = false;
-                    }
+        convertView.setOnClickListener(v -> {
+            for (int i = 0; i < flag.length; i++) {
+                if (position == i) {
+                    flag[i] = true;
+                } else {
+                    flag[i] = false;
                 }
-                RefundTypeAdapter.this.notifyDataSetChanged();
             }
+            RefundTypeAdapter.this.notifyDataSetChanged();
         });
         return convertView;
     }

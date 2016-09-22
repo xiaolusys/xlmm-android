@@ -18,6 +18,11 @@
     <uses-permission android:name="com.jimei.xiaolumeimei.permission.MIPUSH_RECEIVE"/>
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
 
+    <uses-feature android:name="android.hardware.camera"/>
+    <uses-feature android:name="android.hardware.camera.autofocus"/>
+
+    <uses-permission android:name="android.permission.FLASHLIGHT"/>
+
     <permission
         android:name="com.jimei.xiaolumeimei.permission.MIPUSH_RECEIVE"
         android:protectionLevel="signature"/>
@@ -81,10 +86,6 @@
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
             android:name=".ui.activity.user.RegisterActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
-        <activity
-            android:name=".ui.activity.trade.CartsActivity"
-            android:launchMode="singleTask"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
             android:name=".ui.activity.trade.CartsPayInfoActivity"
@@ -300,9 +301,6 @@
             android:name=".ui.activity.xiaolumama.MamaVisitorActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
-            android:name=".ui.activity.xiaolumama.MMChooseListActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
-        <activity
             android:name=".ui.activity.xiaolumama.ShareAllowanceActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
@@ -361,9 +359,6 @@
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
             android:name=".ui.activity.user.UserDrawCashActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
-        <activity
-            android:name=".ui.activity.user.DrawCashCompleteActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
             android:name=".ui.activity.xiaolumama.MamaDrawCashActivity"
@@ -456,9 +451,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.user.CustomerServiceActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
-        <activity
             android:name=".ui.activity.xiaolumama.TeamExplainActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
@@ -469,6 +461,22 @@
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
             android:name=".ui.activity.trade.CartActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.TransparentActivity"/>
+        <activity
+            android:name=".ui.activity.xiaolumama.MamaChooseActivity"
+            android:theme="@style/AppTheme.TransparentActivity"/>
+        <activity
+            android:name=".ui.mminfo.MamaActivity"
+            android:theme="@style/AppTheme.TransparentActivity"/>
+        <activity
+            android:name=".ui.activity.trade.CommonScanActivity"
+            android:theme="@style/AppTheme.TransparentActivity"/>
+        <activity
+            android:name=".ui.activity.xiaolumama.MamaWalletActivity"
+            android:theme="@style/AppTheme.TransparentActivity"/>
+        <activity
+            android:name=".ui.activity.xiaolumama.MamaDrawSmallCashActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
 
         <service
@@ -523,7 +531,6 @@
                 <action android:name="action.retry.download"/>
             </intent-filter>
         </receiver>
-
     </application>
 
 </manifest>

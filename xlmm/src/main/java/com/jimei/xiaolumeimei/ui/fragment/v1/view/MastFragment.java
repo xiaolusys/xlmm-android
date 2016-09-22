@@ -16,9 +16,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.PostActivityBean;
 import com.jimei.xiaolumeimei.model.ActivityModel;
@@ -37,6 +34,8 @@ import com.zhy.http.okhttp.callback.BitmapCallback;
 import java.io.IOException;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import okhttp3.Call;
 import okhttp3.ResponseBody;
 import rx.Subscription;
@@ -122,12 +121,12 @@ public class MastFragment extends DialogFragment {
                                             .build()
                                             .execute(new BitmapCallback() {
                                                 @Override
-                                                public void onError(Call call, Exception e,int id) {
+                                                public void onError(Call call, Exception e, int id) {
                                                     e.printStackTrace();
                                                 }
 
                                                 @Override
-                                                public void onResponse(Bitmap response,int id) {
+                                                public void onResponse(Bitmap response, int id) {
                                                     if (null != response) {
                                                         JUtils.Log("Mask", "height:"
                                                                 + response.getHeight()
@@ -212,7 +211,7 @@ public class MastFragment extends DialogFragment {
                                                                                 JUtils.Toast("登录成功,前往绑定手机号后才可参加活动");
                                                                                 Intent intent = new Intent(mActivity,
                                                                                         WxLoginBindPhoneActivity.class);
-                                                                                if (null!= ((MainActivity) mActivity).mPresenter.getUserInfoNewBean()) {
+                                                                                if (null != ((MainActivity) mActivity).mPresenter.getUserInfoNewBean()) {
                                                                                     Bundle bundle = new Bundle();
                                                                                     bundle.putString("headimgurl",
                                                                                             ((MainActivity) mActivity).mPresenter.getUserInfoNewBean()

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.SystemClock;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
@@ -14,7 +15,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.afollestad.materialdialogs.MaterialDialog;
+
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.data.FilePara;
 import com.jimei.xiaolumeimei.entities.NinePicBean;
@@ -25,10 +26,15 @@ import com.jimei.xiaolumeimei.utils.FileUtils;
 import com.jimei.xiaolumeimei.widget.ninepicimagview.MultiImageView;
 import com.jude.utils.JUtils;
 import com.tbruyelle.rxpermissions.RxPermissions;
+import com.umeng.analytics.MobclickAgent;
 import com.zhy.http.okhttp.OkHttpUtils;
+
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import okhttp3.Call;
 
 /**
@@ -122,119 +128,105 @@ public class NinePicAdapter extends BaseAdapter {
         holder.contentTv.setText(mlist.get(position).getDescription());
         holder.timeTv.setText(mlist.get(position).getStartTime().replace("T", " "));
         List<String> picArry = mlist.get(position).getPicArry();
-
         if (picArry != null && picArry.size() > 0) {
             holder.multiImageView.setVisibility(View.VISIBLE);
             holder.multiImageView.setList(picArry);
             holder.multiImageView.setOnItemClickListener(
-                    new MultiImageView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(View view, int position) {
-                            // 因为单张图片时，图片实际大小是自适应的，imageLoader缓存时是按测量尺寸缓存的
-                            //ImagePagerActivity.imageSize =
-                            //    new ImageSize(view.getMeasuredWidth(), view.getMeasuredHeight());
-                            ImagePagerActivity.startImagePagerActivity(mcontext, picArry, position);
-                        }
+                    (view, position1) -> {
+                        // 因为单张图片时，图片实际大小是自适应的，imageLoader缓存时是按测量尺寸缓存的
+                        //ImagePagerActivity.imageSize =
+                        //    new ImageSize(view.getMeasuredWidth(), view.getMeasuredHeight());
+                        ImagePagerActivity.startImagePagerActivity(mcontext, picArry, position1);
                     });
         } else {
             holder.multiImageView.setVisibility(View.GONE);
         }
 
-        holder.save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        holder.save.setOnClickListener(v -> {
+            Map<String, String> map = new HashMap<>();
+            map.put("id", mlist.get(position).getId() + "");
+            map.put("title", mlist.get(position).getTitle());
+            MobclickAgent.onEvent(mcontext, "Nine_save", map);
+            assert picArry != null;
+            RxPermissions.getInstance(mcontext)
+                    .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    .subscribe(granted -> {
+                        if (granted) { // Always true pre-M
+                            // I can control the camera now
+                            downloadNinepic(picArry);
 
-                assert picArry != null;
+                            copy(mlist.get(position).getDescription(), mcontext);
 
-                RxPermissions.getInstance(mcontext)
-                        .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        .subscribe(granted -> {
-                            if (granted) { // Always true pre-M
-                                // I can control the camera now
-                                downloadNinepic(picArry);
-
-                                copy(mlist.get(position).getDescription(), mcontext);
-
-                                new MaterialDialog.Builder(mcontext).
-                                        content("文字已经复制,商品图片正在后台保存，请稍后前往分享吧").
-                                        positiveText("OK").
-                                        callback(new MaterialDialog.ButtonCallback() {
-                                            @Override
-                                            public void onPositive(MaterialDialog dialog) {
-                                                super.onPositive(dialog);
-                                                dialog.dismiss();
-                                            }
-                                        }).show();
-                            } else {
-                                // Oups permission denied
-                                JUtils.Toast("小鹿美美需要存储权限存储图片,请再次点击保存并打开权限许可.");
-                            }
-                        });
-            }
+                            new AlertDialog.Builder(mcontext)
+                                    .setMessage("文字已经复制,商品图片正在后台保存，请稍后前往分享吧")
+                                    .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                                    .show();
+                        } else {
+                            // Oups permission denied
+                            JUtils.Toast("小鹿美美需要存储权限存储图片,请再次点击保存并打开权限许可.");
+                        }
+                    });
         });
 
         return convertView;
     }
 
     private void downloadNinepic(List<String> picArry) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                JUtils.Log("NinePic", "new thread ,pic size " + picArry.size());
-                final boolean[] bflag = {true};
-                for (int i = 0; i < picArry.size(); i++) {
-                    while (!bflag[0]) SystemClock.sleep(100);
-                    JUtils.Log("NinePic", "download " + picArry.get(picArry.size() - 1 - i));
-                    if (bflag[0]) {
-                        final int finalI = i;
-                        OkHttpUtils.get()
-                                .url(picArry.get(picArry.size() - 1 - i)
-                                        + "?imageMogr2/thumbnail/580/format/jpg")
-                                .build()
-                                .execute(new FileParaCallback() {
-                                    @Override
-                                    public void onError(Call call, Exception e,int id) {
+        new Thread(() -> {
+            JUtils.Log("NinePic", "new thread ,pic size " + picArry.size());
+            final boolean[] bflag = {true};
+            for (int i = 0; i < picArry.size(); i++) {
+                while (!bflag[0]) SystemClock.sleep(100);
+                JUtils.Log("NinePic", "download " + picArry.get(picArry.size() - 1 - i));
+                if (bflag[0]) {
+                    final int finalI = i;
+                    OkHttpUtils.get()
+                            .url(picArry.get(picArry.size() - 1 - i)
+                                    + "?imageMogr2/thumbnail/580/format/jpg")
+                            .build()
+                            .execute(new FileParaCallback() {
+                                @Override
+                                public void onError(Call call, Exception e, int id) {
+                                    bflag[0] = true;
+                                }
+
+                                @Override
+                                public void onResponse(FilePara response, int id) {
+                                    if (response != null) {
                                         bflag[0] = true;
-                                    }
-
-                                    @Override
-                                    public void onResponse(FilePara response,int id) {
-                                        if (response != null) {
-                                            bflag[0] = true;
-                                            JUtils.Log("NinePic", "download " + finalI + " finished.");
-                                            try {
-                                                String pic_indicate_name =
-                                                        picArry.get(picArry.size() - 1 - finalI)
-                                                                .substring(picArry.get(picArry.size() - 1 - finalI)
-                                                                        .lastIndexOf('/'));
-                                                String newName = Environment.getExternalStorageDirectory() +
-                                                        CameraUtils.XLMM_IMG_PATH + pic_indicate_name + ".jpg";
-                                                JUtils.Log("NinePic", "newName=" + newName);
-                                                if (FileUtils.isFileExist(newName)) {
-                                                    JUtils.Log("NinePic", "newName has existed,delete");
-                                                    FileUtils.deleteFile(newName);
-                                                }
-                                                new File(response.getFilePath()).renameTo(new File(newName));
-
-                                                Uri uri = Uri.fromFile(new File(newName));
-                                                // 通知图库更新
-                                                Intent scannerIntent =
-                                                        new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
-                                                scannerIntent.setData(uri);
-                                                mcontext.sendBroadcast(scannerIntent);
-                                                if (picArry.size() - 1 == finalI) {
-                                                    JUtils.Log("NinePic", "download finished");
-                                                    JUtils.Toast("商品图片保存完成");
-                                                }
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
+                                        JUtils.Log("NinePic", "download " + finalI + " finished.");
+                                        try {
+                                            String pic_indicate_name =
+                                                    picArry.get(picArry.size() - 1 - finalI)
+                                                            .substring(picArry.get(picArry.size() - 1 - finalI)
+                                                                    .lastIndexOf('/'));
+                                            String newName = Environment.getExternalStorageDirectory() +
+                                                    CameraUtils.XLMM_IMG_PATH + pic_indicate_name + ".jpg";
+                                            JUtils.Log("NinePic", "newName=" + newName);
+                                            if (FileUtils.isFileExist(newName)) {
+                                                JUtils.Log("NinePic", "newName has existed,delete");
+                                                FileUtils.deleteFile(newName);
                                             }
+                                            new File(response.getFilePath()).renameTo(new File(newName));
+
+                                            Uri uri = Uri.fromFile(new File(newName));
+                                            // 通知图库更新
+                                            Intent scannerIntent =
+                                                    new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
+                                            scannerIntent.setData(uri);
+                                            mcontext.sendBroadcast(scannerIntent);
+                                            if (picArry.size() - 1 == finalI) {
+                                                JUtils.Log("NinePic", "download finished");
+                                                JUtils.Toast("商品图片保存完成");
+                                            }
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
                                         }
                                     }
-                                });
-                    }
-                    bflag[0] = false;
+                                }
+                            });
                 }
+                bflag[0] = false;
             }
         }).start();
     }

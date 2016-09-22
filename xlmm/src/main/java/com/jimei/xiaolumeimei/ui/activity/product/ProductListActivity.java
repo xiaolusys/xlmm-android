@@ -121,8 +121,7 @@ public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBin
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //隐藏分类功能
-//        getMenuInflater().inflate(R.menu.menu_category, menu);
+        getMenuInflater().inflate(R.menu.menu_category, menu);
         this.menu = menu;
         initCategory();
         return super.onCreateOptionsMenu(menu);

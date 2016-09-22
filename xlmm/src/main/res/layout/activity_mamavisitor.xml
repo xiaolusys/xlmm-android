@@ -1,26 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/AppTheme.AppBarOverlay"
-    android:id="@+id/llayout_allorders"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              style="@style/AppTheme.AppBarOverlay"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
-  <com.jimei.xiaolumeimei.widget.XlmmTitleView
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      app:xlmm_title="我的访客"/>
+    <com.jimei.xiaolumeimei.widget.XlmmTitleView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:xlmm_title="我的访客"/>
 
-  <FrameLayout
-      android:layout_width="fill_parent"
-      android:layout_height="fill_parent" >
-    <com.jcodecraeer.xrecyclerview.XRecyclerView
-        android:id="@+id/xrv_mamafans"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
-    </com.jcodecraeer.xrecyclerview.XRecyclerView>
+    <com.cpoopc.scrollablelayoutlib.ScrollableLayout
+        android:id="@+id/scrollable_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-  </FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:background="@color/white"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="最近两周访客记录"
+                android:textColor="#626262"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/tv_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/colorPrimary"
+                android:textSize="35sp"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#33DADADA"/>
+
+        <com.jcodecraeer.xrecyclerview.XRecyclerView
+            android:id="@+id/xrv"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@color/white"/>
+
+    </com.cpoopc.scrollablelayoutlib.ScrollableLayout>
 
 </LinearLayout>

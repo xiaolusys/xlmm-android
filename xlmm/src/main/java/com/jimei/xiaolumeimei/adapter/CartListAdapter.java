@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.adapter;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.CartsInfoBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
@@ -65,42 +65,34 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
         });
         holder.delete.setOnClickListener(v -> {
             if (cartsInfoBean.getNum() == 1) {
-                new MaterialDialog.Builder(mActivity)
-                        .title("删除商品")
-                        .content("您确定要删除吗？")
-                        .positiveText("确定")
-                        .negativeText("取消")
-                        .callback(new MaterialDialog.ButtonCallback() {
-                            @Override
-                            public void onPositive(MaterialDialog dialog) {
-                                dialog.dismiss();
-                                mActivity.showIndeterminateProgressDialog(false);
-                                mActivity.addSubscription(CartsModel.getInstance()
-                                        .delete_carts(cartsInfoBean.getId() + "")
-                                        .subscribeOn(Schedulers.io())
-                                        .subscribe(new ServiceResponse<Response<CodeBean>>() {
-                                            @Override
-                                            public void onNext(Response<CodeBean> responseBody) {
-                                                if (responseBody != null) {
-                                                    if (responseBody.isSuccessful()) {
-                                                        mActivity.addHistory(cartsInfoBean);
-                                                        mActivity.removeCartList(cartsInfoBean);
-                                                    } else {
-                                                        JUtils.Toast(responseBody.body().getInfo());
-                                                    }
+                new AlertDialog.Builder(mActivity)
+                        .setTitle("删除商品")
+                        .setMessage("您确定要删除吗？")
+                        .setPositiveButton("确定", (dialog, which) -> {
+                            dialog.dismiss();
+                            mActivity.showIndeterminateProgressDialog(false);
+                            mActivity.addSubscription(CartsModel.getInstance()
+                                    .delete_carts(cartsInfoBean.getId() + "")
+                                    .subscribeOn(Schedulers.io())
+                                    .subscribe(new ServiceResponse<Response<CodeBean>>() {
+                                        @Override
+                                        public void onNext(Response<CodeBean> responseBody) {
+                                            if (responseBody != null) {
+                                                if (responseBody.isSuccessful()) {
+                                                    mActivity.addHistory(cartsInfoBean);
+                                                    mActivity.removeCartList(cartsInfoBean);
                                                 } else {
-                                                    JUtils.Toast("操作未成功，请重新尝试");
+                                                    JUtils.Toast(responseBody.body().getInfo());
                                                 }
-                                                mActivity.hideIndeterminateProgressDialog();
+                                            } else {
+                                                JUtils.Toast("操作未成功，请重新尝试");
                                             }
-                                        }));
-                            }
-
-                            @Override
-                            public void onNegative(MaterialDialog dialog) {
-                                dialog.dismiss();
-                            }
-                        }).show();
+                                            mActivity.hideIndeterminateProgressDialog();
+                                        }
+                                    }));
+                        })
+                        .setNegativeButton("取消", (dialog, which) -> dialog.dismiss())
+                        .show();
             } else {
                 mActivity.showIndeterminateProgressDialog(false);
                 mActivity.addSubscription(CartsModel.getInstance()

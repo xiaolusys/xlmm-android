@@ -37,4 +37,10 @@ public class ActivityWebViewActivity extends CommonWebViewActivity {
         MobclickAgent.onPause(this);
     }
 
+    @Override
+    public void sharePartyInfo() {
+        super.sharePartyInfo();
+        MobclickAgent.onEvent(this,"Activity_share");
+    }
+
 }

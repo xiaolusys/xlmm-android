@@ -71,8 +71,8 @@ android {
 
         targetSdkVersion 23
 
-        versionCode 20160908
-        versionName "1.2.7"
+        versionCode 20160922
+        versionName "1.2.8"
 
         multiDexEnabled = true
 
@@ -138,7 +138,6 @@ android {
         release {
             minifyEnabled false
             debuggable false
-            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
             println("====== buildTypes.release ======")
@@ -244,7 +243,6 @@ android {
 
 
 dependencies {
-    testCompile 'junit:junit:4.12'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile files('libs/alipaySDK-20150818.jar')
     compile files('libs/libammsdk.jar')
@@ -254,7 +252,6 @@ dependencies {
     compile files('libs/commons-lang3-3.4.jar')
     compile files('libs/MiPush_SDK_Client_2_2_21.jar')
     compile project(':xlmmlibrary')
-    compile project(':Udesk_Separate_UI')
     compile files('libs/MobCommons-2016.0707.1708.jar')
     compile files('libs/MobTools-2016.0707.1708.jar')
     compile files('libs/ShareSDK-Core-2.7.4.jar')
@@ -264,6 +261,9 @@ dependencies {
     compile files('libs/ShareSDK-Wechat-2.7.4.jar')
     compile files('libs/ShareSDK-Wechat-Core-2.7.4.jar')
     compile files('libs/ShareSDK-Wechat-Moments-2.7.4.jar')
-    testCompile 'org.mockito:mockito-all:2.0.2-beta'
+    compile project(':UdeskSDKUI')
     compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-all:2.0.2-beta'
 }

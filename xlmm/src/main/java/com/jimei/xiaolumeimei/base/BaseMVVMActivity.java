@@ -18,7 +18,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.utils.CommonUtils;
@@ -49,7 +48,6 @@ public abstract class BaseMVVMActivity<T extends ViewDataBinding> extends BaseAu
    */
   protected Context mContext = null;
   private SharedPreferences sharedPreferences;
-  private MaterialDialog materialDialog;
   private CompositeSubscription mCompositeSubscription;
   private XlmmLoadingDialog loadingdialog;
   protected T b;

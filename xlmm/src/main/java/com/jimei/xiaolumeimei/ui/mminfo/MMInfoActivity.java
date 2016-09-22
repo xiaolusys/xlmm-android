@@ -42,7 +42,6 @@ import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.BoutiqueWebviewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.GoodWeekActivity;
-import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMChooseListActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMFans1Activity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMLevelExamWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMNinePicActivity;
@@ -51,6 +50,7 @@ import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShoppingListActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMStoreWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMTeamActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMcarryLogActivity;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaChooseActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaDrawCashActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaDrawCouponActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaLivenessActivity;
@@ -79,7 +79,7 @@ import java.util.Map;
 
 import cn.udesk.UdeskConst;
 import cn.udesk.UdeskSDKManager;
-import cn.udesk.xmpp.UdeskMessageManager;
+import cn.udesk.messagemanager.UdeskMessageManager;
 import rx.schedulers.Schedulers;
 
 /**
@@ -446,7 +446,7 @@ public class MMInfoActivity
                         mPresenter.his_refund.get(mPresenter.his_refund.size() - 1).getCarry() * 100)) / 100));
                 break;
             case R.id.rl_chooselist:
-                startActivity(new Intent(this, MMChooseListActivity.class));
+                startActivity(new Intent(this, MamaChooseActivity.class));
                 break;
             case R.id.rl_party:
                 if (mamaResult != null) {

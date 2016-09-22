@@ -1,18 +1,17 @@
 package com.jimei.xiaolumeimei.ui.activity.trade;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -25,7 +24,6 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
@@ -486,10 +484,11 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     protected void initViews() {
         mAdapter = new CartsPayInfoAdapter(this, list);
         payinfoListview.setAdapter(mAdapter);
-        View view = getLayoutInflater().inflate(R.layout.dialog_rule, null);
-        view.setLayoutParams(
-                new LinearLayout.LayoutParams(200, ViewGroup.LayoutParams.WRAP_CONTENT));
-        dialog = new AlertDialog.Builder(this).setView(view).create();
+        dialog = new AlertDialog.Builder(this)
+                .setTitle("购买条款")
+                .setMessage(getResources().getString(R.string.buy_rule))
+                .setPositiveButton("同意", (dialog1, which) -> dialog1.dismiss())
+                .create();
         scb.setCanClickable(true);
     }
 
@@ -967,22 +966,13 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                                     } else {
                                         isCoupon = false;
                                         tv_coupon.setText("");
-                                        new MaterialDialog.Builder(CartsPayInfoActivity.this).
-                                                content(cartsPayinfoBean.getmCoupon_message()).
-                                                positiveText("OK").
-                                                callback(new MaterialDialog.ButtonCallback() {
-                                                    @Override
-                                                    public void onPositive(MaterialDialog dialog) {
-                                                        downLoadCartsInfo();
-
-                                                        dialog.dismiss();
-                                                    }
-
-                                                    @Override
-                                                    public void onNegative(MaterialDialog dialog) {
-                                                        dialog.dismiss();
-                                                    }
-                                                }).show();
+                                        new AlertDialog.Builder(CartsPayInfoActivity.this).
+                                                setMessage(cartsPayinfoBean.getmCoupon_message()).
+                                                setPositiveButton("OK", (dialoga1, which) -> {
+                                                    downLoadCartsInfo();
+                                                    dialog.dismiss();
+                                                })
+                                                .show();
                                     }
                                 }
                             }
@@ -1015,12 +1005,12 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                         public void onNext(TeamBuyBean teamBuyBean) {
                             int id = teamBuyBean.getId();
                             SharedPreferences preferences = XlmmApp.getmContext().getSharedPreferences("APICLIENT", Context.MODE_PRIVATE);
-                            String baseUrl = "http://m.xiaolumeimei.com/mall/order/spell/group/" + id+"?from_page=order_commit";
+                            String baseUrl = "http://m.xiaolumeimei.com/mall/order/spell/group/" + id + "?from_page=order_commit";
                             if (!TextUtils.isEmpty(preferences.getString("BASE_URL", ""))) {
-                                baseUrl = "http://" + preferences.getString("BASE_URL", "") + "/mall/order/spell/group/" + id+"?from_page=order_commit";
+                                baseUrl = "http://" + preferences.getString("BASE_URL", "") + "/mall/order/spell/group/" + id + "?from_page=order_commit";
                             }
                             JumpUtils.jumpToWebViewWithCookies(mContext,
-                                    baseUrl, -1, CommonWebViewActivity.class,"查看拼团详情",false);
+                                    baseUrl, -1, CommonWebViewActivity.class, "查看拼团详情", false);
                             finish();
                         }
 

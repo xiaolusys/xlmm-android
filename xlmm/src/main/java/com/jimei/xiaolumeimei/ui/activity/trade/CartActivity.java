@@ -126,6 +126,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
                     Intent intent = new Intent(this, CartsPayInfoActivity.class);
                     intent.putExtra("ids", getIds());
                     startActivity(intent);
+                    finish();
                 } else {
                     JUtils.Toast("请至少选择一件商品哦!");
                 }

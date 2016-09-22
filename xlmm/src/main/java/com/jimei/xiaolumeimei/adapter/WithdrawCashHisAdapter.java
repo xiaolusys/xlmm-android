@@ -71,45 +71,41 @@ public class WithdrawCashHisAdapter extends XRecyclerView.Adapter<WithdrawCashHi
     public void onBindViewHolder(ViewHolder holder, int position) {
         WithdrawCashHisBean.WithdrawCashRecord record = mList.get(position);
         holder.btn_cancel.setVisibility(View.INVISIBLE);
-        holder.tx_withdraw_fund.setText(
-                String.valueOf(Math.round(record.getValue_money() * 100) / 100) + "元");
+        holder.tx_withdraw_fund.setText(record.getValue_money() + "元");
         holder.tx_withdraw_state.setText(record.getGet_status_display());
         holder.tx_time.setText(record.getCreated().replace("T", " "));
         holder.type.setText(record.getGet_cash_out_type_display());
-
         if (record.getGet_status_display().equals("待审核")) {
             holder.btn_cancel.setVisibility(View.VISIBLE);
-            holder.btn_cancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Subscription subscribe = MamaInfoModel.getInstance()
-                            .cancel_withdraw_cash(record.getId() + "")
-                            .subscribeOn(Schedulers.io())
-                            .subscribe(new ServiceResponse<ResponseResultBean>() {
-                                @Override
-                                public void onNext(ResponseResultBean resp) {
-                                    try {
-                                        JUtils.Log(TAG, "ResponseBody11=" + resp.getCode());
-                                        switch (resp.getCode()) {
-                                            case 0:
-                                                JUtils.Toast("取消成功");
-                                                holder.btn_cancel.setVisibility(View.INVISIBLE);
-                                                holder.tx_withdraw_state.setText("取消");
-                                                break;
-                                            case 1:
-                                                JUtils.Toast("取消失败");
-                                                break;
-                                            case 2:
-                                                JUtils.Toast("提现记录不存在");
-                                                break;
-                                        }
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
+            holder.btn_cancel.setOnClickListener(v -> {
+                Subscription subscribe = MamaInfoModel.getInstance()
+                        .cancel_withdraw_cash(record.getId() + "")
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(new ServiceResponse<ResponseResultBean>() {
+                            @Override
+                            public void onNext(ResponseResultBean resp) {
+                                try {
+                                    JUtils.Log(TAG, "ResponseBody11=" + resp.getCode());
+                                    switch (resp.getCode()) {
+                                        case 0:
+                                            JUtils.Toast("取消成功");
+                                            holder.btn_cancel.setVisibility(View.INVISIBLE);
+                                            holder.tx_withdraw_state.setText("取消");
+                                            record.setGet_status_display("取消");
+                                            break;
+                                        case 1:
+                                            JUtils.Toast("取消失败");
+                                            break;
+                                        case 2:
+                                            JUtils.Toast("提现记录不存在");
+                                            break;
                                     }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
-                            });
-                    ((MamaWithdrawCashHistoryActivity) context).addSubscription(subscribe);
-                }
+                            }
+                        });
+                ((MamaWithdrawCashHistoryActivity) context).addSubscription(subscribe);
             });
         }
     }

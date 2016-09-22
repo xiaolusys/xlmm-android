@@ -1,12 +1,12 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.MaMaReNewBean;
@@ -311,15 +310,14 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
     }
 
     public void showInfo(String type) {
-        new MaterialDialog.Builder(this)
-                .title("支付提示")
-                .content("是否使用妈妈账户余额抵扣支付?")
-                .positiveText("确认")
-                .positiveColorRes(R.color.colorAccent)
-                .negativeText("取消")
-                .negativeColorRes(R.color.colorAccent)
-                .onPositive((dialog, which) -> mamaCarryValuePay(type))
-                .onNegative(((dialog1, which1) -> dialog1.dismiss()))
+        new AlertDialog.Builder(this)
+                .setTitle("支付提示")
+                .setMessage("是否使用妈妈账户余额抵扣支付?")
+                .setPositiveButton("确认", (dialog, which) -> {
+                    dialog.dismiss();
+                    mamaCarryValuePay(type);
+                })
+                .setNegativeButton("取消", (dialog, which) -> dialog.dismiss())
                 .show();
 
     }

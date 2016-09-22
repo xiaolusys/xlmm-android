@@ -548,7 +548,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_centerInParent="true"
-                                        android:src="@drawable/ic_order"/>
+                                        android:src="@drawable/icon_vip_order"/>
 
                                 </RelativeLayout>
 
@@ -597,7 +597,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_centerVertical="true"
                                         android:layout_marginLeft="55px"
-                                        android:src="@drawable/ic_coin2"/>
+                                        android:src="@drawable/icon_vip_income"/>
 
                                 </RelativeLayout>
 
@@ -659,7 +659,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_centerInParent="true"
-                                        android:src="@drawable/wodejingxuan"/>
+                                        android:src="@drawable/icon_vip_share"/>
 
                                 </RelativeLayout>
 
@@ -709,7 +709,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_centerInParent="true"
-                                        android:src="@drawable/meirituisong"/>
+                                        android:src="@drawable/icon_vip_push"/>
                                 </RelativeLayout>
 
 
@@ -764,7 +764,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_centerInParent="true"
-                                        android:src="@drawable/invite_kaidian"/>
+                                        android:src="@drawable/icon_vip_shop"/>
 
                                 </RelativeLayout>
 
@@ -813,7 +813,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_centerInParent="true"
-                                        android:src="@drawable/xuanpinshangjia"/>
+                                        android:src="@drawable/icon_vip_choose"/>
 
                                 </RelativeLayout>
 
@@ -981,7 +981,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_centerInParent="true"
-                                        android:src="@drawable/wodetuandui"/>
+                                        android:src="@drawable/icon_vip_team"/>
 
                                 </RelativeLayout>
 
@@ -1030,7 +1030,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_centerInParent="true"
-                                        android:src="@drawable/wodepaihang"/>
+                                        android:src="@drawable/icon_vip_visit"/>
                                 </RelativeLayout>
 
 

@@ -42,10 +42,10 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
     compile 'io.reactivex:rxjava:1.1.0'
-    //兼容到 5.0以下的material desigh dialog效果
-    compile('com.github.afollestad.material-dialogs:commons:0.8.5.6@aar') {
-        transitive = true
-    }
+//    //兼容到 5.0以下的material desigh dialog效果
+//    compile('com.github.afollestad.material-dialogs:commons:0.8.5.6@aar') {
+//        transitive = true
+//    }
     compile 'com.github.iwgang:countdownview:1.2'
     compile 'com.jude:utils:1.1.0'
     compile 'com.zhy:okhttputils:2.6.2'

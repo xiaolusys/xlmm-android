@@ -1,10 +1,9 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
+import android.support.v7.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -13,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
@@ -218,37 +216,17 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
                 textView100.setBackgroundResource(R.drawable.text_unchecked_bg);
                 break;
             case R.id.tv_rule:
-                new MaterialDialog.Builder(this)
-                        .title("提现提示")
-                        .content("由于微信存在提现次数限制,为了在方便妈妈提现和多次小额提现等待审核时间长之间做一个"
+                new AlertDialog.Builder(this)
+                        .setTitle("提现提示")
+                        .setMessage("由于微信存在提现次数限制,为了在方便妈妈提现和多次小额提现等待审核时间长之间做一个"
                                 + "平衡,我们设定提现金额为100元和200元.金额不足100元或者活跃值不足的情况下,"
                                 + "妈妈可以兑换现金券进行消费.")
-                        .positiveText("确认")
-                        .positiveColorRes(R.color.colorAccent)
-                        .callback(new MaterialDialog.ButtonCallback() {
-                            @Override
-                            public void onPositive(MaterialDialog dialog) {
-                                dialog.dismiss();
-                            }
-                        }).show();
+                        .setPositiveButton("确认", (dialog, which) -> {
+                            dialog.dismiss();
+                        })
+                        .show();
                 break;
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_history:
-                startActivity(new Intent(this, MamaWithdrawCashHistoryActivity.class));
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_withdrawcash, menu);
-        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
