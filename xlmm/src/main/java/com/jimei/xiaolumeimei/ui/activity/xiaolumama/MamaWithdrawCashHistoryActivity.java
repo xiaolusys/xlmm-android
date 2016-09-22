@@ -3,9 +3,6 @@ package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
-import android.widget.Toast;
-
-import butterknife.Bind;
 
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -22,6 +19,7 @@ import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
+import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -122,23 +120,23 @@ public class MamaWithdrawCashHistoryActivity extends BaseSwipeBackCompatActivity
                         .subscribe(new ServiceResponse<WithdrawCashHisBean>() {
                             @Override
                             public void onNext(WithdrawCashHisBean withdrawCashHisBean) {
-                                super.onNext(withdrawCashHisBean);
                                 if (withdrawCashHisBean != null) {
                                     mHisAdapter.update(withdrawCashHisBean.getResults());
                                     if (withdrawCashHisBean.getNext() == null) {
-                                        Toast.makeText(MamaWithdrawCashHistoryActivity.this, "没有更多了", Toast.LENGTH_SHORT)
-                                                .show();
-                                        xRecyclerView.post(xRecyclerView::loadMoreComplete);
+                                        JUtils.Toast("没有更多了");
                                         xRecyclerView.setLoadingMoreEnabled(false);
                                         xRecyclerView.setRefreshing(false);
                                     }
+                                    xRecyclerView.post(xRecyclerView::loadMoreComplete);
                                 }
                             }
 
                             @Override
-                            public void onCompleted() {
-                                super.onCompleted();
+                            public void onError(Throwable e) {
+                                JUtils.Toast("没有更多了");
                                 xRecyclerView.post(xRecyclerView::loadMoreComplete);
+                                xRecyclerView.setLoadingMoreEnabled(false);
+                                xRecyclerView.setRefreshing(false);
                             }
                         });
                 addSubscription(subscribe);

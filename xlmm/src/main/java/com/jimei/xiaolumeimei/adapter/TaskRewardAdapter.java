@@ -50,14 +50,14 @@ public class TaskRewardAdapter extends RecyclerView.Adapter<TaskRewardAdapter.Ta
                 holder.tv1.setText(personalData.getMission().getName());
                 holder.tv2.setText(personalData.getTarget_value() + "");
                 holder.tv3.setText(personalData.getFinish_value() + "");
-                holder.tv4.setText("¥" + personalData.getAward_amount() / 100.00);
+                holder.tv4.setText("¥" + personalData.getAward_amount());
                 holder.tv5.setText(personalData.getStatus_name());
             } else if (type == XlmmConst.TYPE_REWARD_TEAM) {
                 WeekTaskRewardBean.GroupMissionsBean teamData = bean.getGroup_missions().get(position - 1);
                 holder.tv1.setText(teamData.getMission().getName());
                 holder.tv2.setText(teamData.getTarget_value() + "");
                 holder.tv3.setText(teamData.getFinish_value() + "");
-                holder.tv4.setText("¥" + teamData.getAward_amount() / 100.00);
+                holder.tv4.setText("¥" + teamData.getAward_amount());
                 holder.tv5.setText(teamData.getStatus_name());
             }
         }

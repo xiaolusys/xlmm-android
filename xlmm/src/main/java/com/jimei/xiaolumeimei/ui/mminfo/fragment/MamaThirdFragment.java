@@ -184,7 +184,7 @@ public class MamaThirdFragment extends BaseLazyFragment<FragmentMamaThirdBinding
                 break;
             case R.id.tv_msg:
                 JumpUtils.jumpToWebViewWithCookies(mActivity, msgUrl, -1,
-                        ActivityWebViewActivity.class, "信息通知");
+                        ActivityWebViewActivity.class, "信息通知",false);
                 break;
             case R.id.ll_wallet:
                 Intent walletIntent = new Intent(mActivity, MamaWalletActivity.class);

@@ -51,7 +51,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="小额提现"
+            android:text="快速提现"
             android:textColor="@color/text_color_62"
             android:textSize="14sp"/>
 

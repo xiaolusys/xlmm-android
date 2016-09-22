@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -34,6 +35,12 @@ public class MamaDrawCashDetailActivity extends BaseSwipeBackCompatActivity {
     TextView accountTv;
     @Bind(R.id.ll_account)
     LinearLayout accountLayout;
+    @Bind(R.id.iv_ok)
+    ImageView okImg;
+    @Bind(R.id.view_line)
+    View lineView;
+    @Bind(R.id.tv_ok)
+    TextView okTv;
     private String account;
 
 
@@ -60,7 +67,15 @@ public class MamaDrawCashDetailActivity extends BaseSwipeBackCompatActivity {
                     dateTv.setText(entity.getBudgetDate());
                     dateTv1.setText(entity.getBudgetDate());
                     dateTv2.setText(entity.getBudgetDate());
-                    dateTv3.setText(entity.getBudgetDate());
+                    if (entity.getStatus() == 0) {
+                        lineView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                        okImg.setImageDrawable(getResources().getDrawable(R.drawable.wallet_ok));
+                        okTv.setTextColor(getResources().getColor(R.color.colorAccent));
+                        dateTv3.setText(entity.getBudgetDate());
+                    } else if (entity.getStatus() == 1) {
+                        okTv.setText("已取消");
+                        dateTv3.setText(entity.getBudgetDate());
+                    }
                     if (!"".equals(account)) {
                         accountTv.setText(account);
                     } else {

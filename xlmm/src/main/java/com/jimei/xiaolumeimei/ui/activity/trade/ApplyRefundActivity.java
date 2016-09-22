@@ -1,21 +1,17 @@
 package com.jimei.xiaolumeimei.ui.activity.trade;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import butterknife.Bind;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -29,6 +25,7 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
+import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -195,25 +192,17 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
                 if (reason.equals("")) {
                     JUtils.Toast("请选择退货原因！");
                 } else {
-                    View view = LayoutInflater.from(this).inflate(R.layout.dialog_refund_layout, null);
-                    View yesView = view.findViewById(R.id.yes_btn);
-                    View noView = view.findViewById(R.id.no_btn);
-                    Dialog dialog = new Dialog(this, R.style.CustomDialog);
-                    dialog.setContentView(view);
-                    dialog.setCancelable(true);
-                    yesView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialog.dismiss();
-                            commit_apply();
-                        }
-                    });
-                    noView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialog.dismiss();
-                        }
-                    });
+                    AlertDialog dialog = new AlertDialog.Builder(this)
+                            .setCancelable(true)
+                            .setTitle("小鹿急速退款说明")
+                            .setMessage("小鹿急速退款,该款项将快速返回至小鹿账户,可通过我的零钱查询" +
+                                    ",该退款可以用于购物，也可提现。")
+                            .setPositiveButton("同意", (dialog1, which) -> {
+                                dialog1.dismiss();
+                                commit_apply();
+                            })
+                            .setNegativeButton("取消", (dialog1, which) -> dialog1.dismiss())
+                            .create();
                     if ("budget".equals(refund_channel)) {
                         dialog.show();
                     } else {
@@ -256,7 +245,7 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
                     @Override
                     public void onNext(RefundMsgBean resp) {
                         JUtils.Toast(resp.getInfo());
-                        JUtils.Log("OKHTTP","commit_apply success "+resp.getInfo());
+                        JUtils.Log("OKHTTP", "commit_apply success " + resp.getInfo());
                         Log.i(TAG, "commit_apply success " + resp.toString());
                         hideIndeterminateProgressDialog();
                         finish();

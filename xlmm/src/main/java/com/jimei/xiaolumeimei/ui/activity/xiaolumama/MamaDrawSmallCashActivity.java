@@ -1,5 +1,6 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -130,6 +131,11 @@ public class MamaDrawSmallCashActivity extends BaseSwipeBackCompatActivity imple
                             .subscribe(resultEntity -> {
                                 JUtils.Toast(resultEntity.getInfo());
                                 if (resultEntity.getCode() == 0) {
+                                    Intent intent = new Intent(MamaDrawSmallCashActivity.this, DrawCashResultActivity.class);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("account", "微信账户");
+                                    intent.putExtras(bundle);
+                                    startActivity(intent);
                                     finish();
                                 }
                             },Throwable::printStackTrace));
@@ -198,7 +204,7 @@ public class MamaDrawSmallCashActivity extends BaseSwipeBackCompatActivity imple
                 msgTv.setText("提现金额超过账户可提额度");
                 setBtnUnClick();
             } else if (drawMoney > mMax) {
-                msgTv.setText("提现金额超过小额提现限额");
+                msgTv.setText("提现金额超过快速提现限额");
                 setBtnUnClick();
             } else {
                 msgTv.setText("提现妈妈余额将以微信红包形式，24小时内发至你绑定的微信账户");
