@@ -1061,6 +1061,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         MobclickAgent.onResume(this);
         //resumeData();
         mPresenter.getCartsNum();
+        mPresenter.getUserInfoBeanChange();
         //    mPresenter.getUserInfoBean();
 
         JUtils.Log(TAG, "resume");

@@ -105,10 +105,7 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
                                                 ll_wallet_empty.setVisibility(View.INVISIBLE);
                                             }
                                         }
-                                    }
 
-                                    @Override
-                                    public void onCompleted() {
                                         hideIndeterminateProgressDialog();
                                     }
                                 });

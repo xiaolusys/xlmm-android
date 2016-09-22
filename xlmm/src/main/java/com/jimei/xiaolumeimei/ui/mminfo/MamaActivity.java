@@ -144,7 +144,7 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
     public void setOrderCarry(SetOrderEvent event) {
         MiPushOrderCarryBean bean = event.getBean();
         try {
-            ViewUtils.loadImgToImgViewWithTransformCircle(this, b.miHead, bean.getAvatar());
+            ViewUtils.loadImgToHead(this, b.miHead, bean.getAvatar());
         } catch (Exception ignored) {
         }
         b.miInfo.setText(bean.getContent());

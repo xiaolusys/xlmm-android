@@ -63,596 +63,608 @@ import rx.schedulers.Schedulers;
  */
 public final class ViewUtils {
 
-  private static final String CLASS_NAME_GRID_VIEW = "android.widget.GridView";
-  private static final String FIELD_NAME_VERTICAL_SPACING = "mVerticalSpacing";
+    private static final String CLASS_NAME_GRID_VIEW = "android.widget.GridView";
+    private static final String FIELD_NAME_VERTICAL_SPACING = "mVerticalSpacing";
 
-  /**
-   * Don't let anyone instantiate this class.
-   */
-  private ViewUtils() {
-    throw new Error("Do not need instantiate!");
-  }
-
-  /**
-   * get ListView height according to every children
-   */
-  public static int getListViewHeightBasedOnChildren(ListView view) {
-    int height = getAbsListViewHeightBasedOnChildren(view);
-    ListAdapter adapter;
-    int adapterCount;
-    if (view != null
-        && (adapter = view.getAdapter()) != null
-        && (adapterCount = adapter.getCount()) > 0) {
-      height += view.getDividerHeight() * (adapterCount - 1);
-    }
-    return height;
-  }
-
-  /**
-   * get GridView vertical spacing
-   */
-  public static int getGridViewVerticalSpacing(GridView view) {
-    // get mVerticalSpacing by android.widget.GridView
-    Class<?> demo = null;
-    int verticalSpacing = 0;
-    try {
-      demo = Class.forName(CLASS_NAME_GRID_VIEW);
-      Field field = demo.getDeclaredField(FIELD_NAME_VERTICAL_SPACING);
-      field.setAccessible(true);
-      verticalSpacing = (Integer) field.get(view);
-      return verticalSpacing;
-    } catch (Exception e) {
-      /**
-       * accept all exception, include ClassNotFoundException,
-       * NoSuchFieldException, InstantiationException,
-       * IllegalArgumentException, IllegalAccessException,
-       * NullPointException
-       */
-      e.printStackTrace();
-    }
-    return verticalSpacing;
-  }
-
-  /**
-   * get AbsListView height according to every children
-   */
-  public static int getAbsListViewHeightBasedOnChildren(AbsListView view) {
-    ListAdapter adapter;
-    if (view == null || (adapter = view.getAdapter()) == null) {
-      return 0;
+    /**
+     * Don't let anyone instantiate this class.
+     */
+    private ViewUtils() {
+        throw new Error("Do not need instantiate!");
     }
 
-    int height = 0;
-    for (int i = 0; i < adapter.getCount(); i++) {
-      View item = adapter.getView(i, null, view);
-      if (item instanceof ViewGroup) {
-        item.setLayoutParams(
-            new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-      }
-      item.measure(0, 0);
-      height += item.getMeasuredHeight();
-    }
-    height += view.getPaddingTop() + view.getPaddingBottom();
-    return height;
-  }
-
-  /**
-   * get Font height
-   */
-  public static int getFontHeight(TextView view) {
-    Paint paint = new Paint();
-    paint.setTextSize(view.getTextSize());
-    FontMetrics fm = paint.getFontMetrics();
-    return (int) (Math.ceil(fm.descent - fm.ascent));
-  }
-
-  /**
-   * set view height
-   */
-  public static void setViewHeight(View view, int height) {
-    if (view == null) {
-      return;
-    }
-
-    ViewGroup.LayoutParams params = view.getLayoutParams();
-    params.height = height;
-  }
-
-  // /**
-  // * set GistView height which is calculated by {@link #
-  // getGridViewHeightBasedOnChildren(GridView)}
-  // *
-  // * @param view
-  // * @return
-  // */
-  // public static void setGridViewHeightBasedOnChildren(GridView view) {
-  // setViewHeight(view, getGridViewHeightBasedOnChildren(view));
-  // }
-
-  /**
-   * set ListView height which is calculated by
-   * {@link # getListViewHeightBasedOnChildren(ListView)}
-   */
-  public static void setListViewHeightBasedOnChildren(ListView view) {
-    setViewHeight(view, getListViewHeightBasedOnChildren(view));
-  }
-
-  /**
-   * set AbsListView height which is calculated by
-   * {@link # getAbsListViewHeightBasedOnChildren(AbsListView)}
-   */
-  public static void setAbsListViewHeightBasedOnChildren(AbsListView view) {
-    setViewHeight(view, getAbsListViewHeightBasedOnChildren(view));
-  }
-
-  /**
-   * set SearchView OnClickListener
-   */
-  public static void setSearchViewOnClickListener(View v, OnClickListener listener) {
-    if (v instanceof ViewGroup) {
-      ViewGroup group = (ViewGroup) v;
-      int count = group.getChildCount();
-      for (int i = 0; i < count; i++) {
-        View child = group.getChildAt(i);
-        if (child instanceof LinearLayout || child instanceof RelativeLayout) {
-          setSearchViewOnClickListener(child, listener);
+    /**
+     * get ListView height according to every children
+     */
+    public static int getListViewHeightBasedOnChildren(ListView view) {
+        int height = getAbsListViewHeightBasedOnChildren(view);
+        ListAdapter adapter;
+        int adapterCount;
+        if (view != null
+                && (adapter = view.getAdapter()) != null
+                && (adapterCount = adapter.getCount()) > 0) {
+            height += view.getDividerHeight() * (adapterCount - 1);
         }
-
-        if (child instanceof TextView) {
-          TextView text = (TextView) child;
-          text.setFocusable(false);
-        }
-        child.setOnClickListener(listener);
-      }
+        return height;
     }
-  }
 
-  /**
-   * get descended views from parent.
-   *
-   * @param filter Type of views which will be returned.
-   * @param includeSubClass Whether returned list will include views which are subclass
-   * of
-   * filter or not.
-   */
-  public static <T extends View> List<T> getDescendants(ViewGroup parent, Class<T> filter,
-      boolean includeSubClass) {
-    List<T> descendedViewList = new ArrayList<T>();
-    int childCount = parent.getChildCount();
-    for (int i = 0; i < childCount; i++) {
-      View child = parent.getChildAt(i);
-      Class<? extends View> childsClass = child.getClass();
-      if ((includeSubClass && filter.isAssignableFrom(childsClass)) || (!includeSubClass
-          && childsClass == filter)) {
-        descendedViewList.add(filter.cast(child));
-      }
-      if (child instanceof ViewGroup) {
-        descendedViewList.addAll(getDescendants((ViewGroup) child, filter, includeSubClass));
-      }
-    }
-    return descendedViewList;
-  }
-
-  /**
-   * Helps determine if the app is running in a Tablet context.
-   */
-  public static boolean isTablet(Context context) {
-    return (context.getResources().getConfiguration().screenLayout
-        & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE;
-  }
-
-  public static void loadImgToImgView(Context context, ImageView img, String picPath) {
-    if (null == picPath) return;
-    if (picPath.contains("wx.qlogo.cn")
-        || picPath.contains("7xogkj.com1.z0.glb.clouddn.com")
-        || picPath.contains("mmbiz.qlogo.cn")) {
-      Glide.with(context)
-          .load(picPath)
-          .diskCacheStrategy(DiskCacheStrategy.RESULT)
-          .centerCrop()
-          .into(img);
-    } else {
-      String head_img;
-      Pattern p = Pattern.compile("(?<=//|)((\\w)+\\.)+\\w+");
-      Matcher m = p.matcher(picPath);
-      if (m.find()) {
-        String group = m.group();
-        String[] temp = picPath.split(group + "/");
-        if (temp.length > 1) {
-          try {
-            head_img = "http://"
-                + group
-                + "/"
-                + URLEncoder.encode(temp[1], "utf-8")
-                + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/80";
-            Glide.with(context)
-                .load(head_img)
-                .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                .centerCrop()
-                .into(img);
-          } catch (UnsupportedEncodingException e) {
+    /**
+     * get GridView vertical spacing
+     */
+    public static int getGridViewVerticalSpacing(GridView view) {
+        // get mVerticalSpacing by android.widget.GridView
+        Class<?> demo = null;
+        int verticalSpacing = 0;
+        try {
+            demo = Class.forName(CLASS_NAME_GRID_VIEW);
+            Field field = demo.getDeclaredField(FIELD_NAME_VERTICAL_SPACING);
+            field.setAccessible(true);
+            verticalSpacing = (Integer) field.get(view);
+            return verticalSpacing;
+        } catch (Exception e) {
+            /**
+             * accept all exception, include ClassNotFoundException,
+             * NoSuchFieldException, InstantiationException,
+             * IllegalArgumentException, IllegalAccessException,
+             * NullPointException
+             */
             e.printStackTrace();
-          }
         }
-      } else {
-        Glide.with(context)
-            .load(picPath)
-            .diskCacheStrategy(DiskCacheStrategy.RESULT)
-            .centerCrop()
-            .into(img);
-      }
+        return verticalSpacing;
     }
-  }
 
-  public static void loadActivityToImgView(Context context, ImageView img, String picPath) {
-    if (null == picPath) return;
+    /**
+     * get AbsListView height according to every children
+     */
+    public static int getAbsListViewHeightBasedOnChildren(AbsListView view) {
+        ListAdapter adapter;
+        if (view == null || (adapter = view.getAdapter()) == null) {
+            return 0;
+        }
+
+        int height = 0;
+        for (int i = 0; i < adapter.getCount(); i++) {
+            View item = adapter.getView(i, null, view);
+            if (item instanceof ViewGroup) {
+                item.setLayoutParams(
+                        new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+            }
+            item.measure(0, 0);
+            height += item.getMeasuredHeight();
+        }
+        height += view.getPaddingTop() + view.getPaddingBottom();
+        return height;
+    }
+
+    /**
+     * get Font height
+     */
+    public static int getFontHeight(TextView view) {
+        Paint paint = new Paint();
+        paint.setTextSize(view.getTextSize());
+        FontMetrics fm = paint.getFontMetrics();
+        return (int) (Math.ceil(fm.descent - fm.ascent));
+    }
+
+    /**
+     * set view height
+     */
+    public static void setViewHeight(View view, int height) {
+        if (view == null) {
+            return;
+        }
+
+        ViewGroup.LayoutParams params = view.getLayoutParams();
+        params.height = height;
+    }
+
+    // /**
+    // * set GistView height which is calculated by {@link #
+    // getGridViewHeightBasedOnChildren(GridView)}
+    // *
+    // * @param view
+    // * @return
+    // */
+    // public static void setGridViewHeightBasedOnChildren(GridView view) {
+    // setViewHeight(view, getGridViewHeightBasedOnChildren(view));
+    // }
+
+    /**
+     * set ListView height which is calculated by
+     * {@link # getListViewHeightBasedOnChildren(ListView)}
+     */
+    public static void setListViewHeightBasedOnChildren(ListView view) {
+        setViewHeight(view, getListViewHeightBasedOnChildren(view));
+    }
+
+    /**
+     * set AbsListView height which is calculated by
+     * {@link # getAbsListViewHeightBasedOnChildren(AbsListView)}
+     */
+    public static void setAbsListViewHeightBasedOnChildren(AbsListView view) {
+        setViewHeight(view, getAbsListViewHeightBasedOnChildren(view));
+    }
+
+    /**
+     * set SearchView OnClickListener
+     */
+    public static void setSearchViewOnClickListener(View v, OnClickListener listener) {
+        if (v instanceof ViewGroup) {
+            ViewGroup group = (ViewGroup) v;
+            int count = group.getChildCount();
+            for (int i = 0; i < count; i++) {
+                View child = group.getChildAt(i);
+                if (child instanceof LinearLayout || child instanceof RelativeLayout) {
+                    setSearchViewOnClickListener(child, listener);
+                }
+
+                if (child instanceof TextView) {
+                    TextView text = (TextView) child;
+                    text.setFocusable(false);
+                }
+                child.setOnClickListener(listener);
+            }
+        }
+    }
+
+    /**
+     * get descended views from parent.
+     *
+     * @param filter          Type of views which will be returned.
+     * @param includeSubClass Whether returned list will include views which are subclass
+     *                        of
+     *                        filter or not.
+     */
+    public static <T extends View> List<T> getDescendants(ViewGroup parent, Class<T> filter,
+                                                          boolean includeSubClass) {
+        List<T> descendedViewList = new ArrayList<T>();
+        int childCount = parent.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View child = parent.getChildAt(i);
+            Class<? extends View> childsClass = child.getClass();
+            if ((includeSubClass && filter.isAssignableFrom(childsClass)) || (!includeSubClass
+                    && childsClass == filter)) {
+                descendedViewList.add(filter.cast(child));
+            }
+            if (child instanceof ViewGroup) {
+                descendedViewList.addAll(getDescendants((ViewGroup) child, filter, includeSubClass));
+            }
+        }
+        return descendedViewList;
+    }
+
+    /**
+     * Helps determine if the app is running in a Tablet context.
+     */
+    public static boolean isTablet(Context context) {
+        return (context.getResources().getConfiguration().screenLayout
+                & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+    }
+
+    public static void loadImgToImgView(Context context, ImageView img, String picPath) {
+        if (null == picPath) return;
+        if (picPath.contains("wx.qlogo.cn")
+                || picPath.contains("7xogkj.com1.z0.glb.clouddn.com")
+                || picPath.contains("mmbiz.qlogo.cn")) {
+            Glide.with(context)
+                    .load(picPath)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .centerCrop()
+                    .into(img);
+        } else {
+            String head_img;
+            Pattern p = Pattern.compile("(?<=//|)((\\w)+\\.)+\\w+");
+            Matcher m = p.matcher(picPath);
+            if (m.find()) {
+                String group = m.group();
+                String[] temp = picPath.split(group + "/");
+                if (temp.length > 1) {
+                    try {
+                        head_img = "http://"
+                                + group
+                                + "/"
+                                + URLEncoder.encode(temp[1], "utf-8")
+                                + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/80";
+                        Glide.with(context)
+                                .load(head_img)
+                                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                                .centerCrop()
+                                .into(img);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else {
+                Glide.with(context)
+                        .load(picPath)
+                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                        .centerCrop()
+                        .into(img);
+            }
+        }
+    }
+
+    public static void loadActivityToImgView(Context context, ImageView img, String picPath) {
+        if (null == picPath) return;
         Glide.with(context)
-                .load(picPath+"?imageMogr2/format/jpg")
+                .load(picPath + "?imageMogr2/format/jpg")
                 .thumbnail(0.1f)
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .into(img);
-  }
+    }
 
-  public static void loadImgToImgView(Context context, ImageView img, String picPath, int radius) {
-    if (null == picPath) return;
-    if (picPath.contains("mmbiz.qlogo.cn") || picPath.contains("wx.qlogo.cn") || picPath.contains(
-        "7xogkj.com1.z0.glb.clouddn.com")) {
-      Glide.with(context)
-          .load(picPath)
-              .thumbnail(0.1f)
-          .diskCacheStrategy(DiskCacheStrategy.RESULT)
-          .centerCrop()
-          .transform(new GlideRoundTransform(context, radius))
-          .into(img);
-    } else {
-      String head_img;
-      Pattern p = Pattern.compile("(?<=//|)((\\w)+\\.)+\\w+");
-      Matcher m = p.matcher(picPath);
-      if (m.find()) {
-        String group = m.group();
-        String[] temp = picPath.split(group + "/");
-        if (temp.length > 1) {
-          try {
-            head_img = "http://"
-                + group
-                + "/"
-                + URLEncoder.encode(temp[1], "utf-8")
-                + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/80";
+    public static void loadImgToImgView(Context context, ImageView img, String picPath, int radius) {
+        if (null == picPath) return;
+        if (picPath.contains("mmbiz.qlogo.cn") || picPath.contains("wx.qlogo.cn") || picPath.contains(
+                "7xogkj.com1.z0.glb.clouddn.com")) {
             Glide.with(context)
-                .load(head_img)
+                    .load(picPath)
                     .thumbnail(0.1f)
-                .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                .centerCrop()
-                .transform(new GlideRoundTransform(context, radius))
-                .into(img);
-          } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-          }
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .centerCrop()
+                    .transform(new GlideRoundTransform(context, radius))
+                    .into(img);
+        } else {
+            String head_img;
+            Pattern p = Pattern.compile("(?<=//|)((\\w)+\\.)+\\w+");
+            Matcher m = p.matcher(picPath);
+            if (m.find()) {
+                String group = m.group();
+                String[] temp = picPath.split(group + "/");
+                if (temp.length > 1) {
+                    try {
+                        head_img = "http://"
+                                + group
+                                + "/"
+                                + URLEncoder.encode(temp[1], "utf-8")
+                                + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/80";
+                        Glide.with(context)
+                                .load(head_img)
+                                .thumbnail(0.1f)
+                                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                                .centerCrop()
+                                .transform(new GlideRoundTransform(context, radius))
+                                .into(img);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else {
+                Glide.with(context)
+                        .load(picPath)
+                        .thumbnail(0.1f)
+                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                        .centerCrop()
+                        .transform(new GlideRoundTransform(context, radius))
+                        .into(img);
+            }
         }
-      } else {
-        Glide.with(context)
-            .load(picPath)
-                .thumbnail(0.1f)
-            .diskCacheStrategy(DiskCacheStrategy.RESULT)
-            .centerCrop()
-            .transform(new GlideRoundTransform(context, radius))
-            .into(img);
-      }
     }
-  }
 
-  public static void loadImgToImgViewWithTransformCircle(Context context, ImageView img,
-      String picPath) {
-    if (null == picPath) return;
+    public static void loadImgToImgViewWithTransformCircle(Context context, ImageView img,
+                                                           String picPath) {
+        if (null == picPath) return;
 
-    if (picPath.contains("wx.qlogo.cn")
-        || picPath.contains("7xogkj.com1.z0.glb.clouddn.com")
-        || picPath.contains("mmbiz.qlogo.cn")) {
-      Glide.with(context)
-          .load(picPath)
-          .diskCacheStrategy(DiskCacheStrategy.RESULT)
-          .bitmapTransform(new CropCircleTransformation(context))
-          .into(img);
-    } else {
-      String head_img;
-      Pattern p = Pattern.compile("(?<=//|)((\\w)+\\.)+\\w+");
-      Matcher m = p.matcher(picPath);
-      if (m.find()) {
-        String group = m.group();
-        String[] temp = picPath.split(group + "/");
-        if (temp.length > 1) {
-          try {
-            head_img = "http://"
-                + group
-                + "/"
-                + URLEncoder.encode(temp[1], "utf-8")
-                + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/80";
+        if (picPath.contains("wx.qlogo.cn")
+                || picPath.contains("7xogkj.com1.z0.glb.clouddn.com")
+                || picPath.contains("mmbiz.qlogo.cn")) {
             Glide.with(context)
-                .load(head_img)
-                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .load(picPath)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .bitmapTransform(new CropCircleTransformation(context))
+                    .into(img);
+        } else {
+            String head_img;
+            Pattern p = Pattern.compile("(?<=//|)((\\w)+\\.)+\\w+");
+            Matcher m = p.matcher(picPath);
+            if (m.find()) {
+                String group = m.group();
+                String[] temp = picPath.split(group + "/");
+                if (temp.length > 1) {
+                    try {
+                        head_img = "http://"
+                                + group
+                                + "/"
+                                + URLEncoder.encode(temp[1], "utf-8")
+                                + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/80";
+                        Glide.with(context)
+                                .load(head_img)
+                                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                                .bitmapTransform(new CropCircleTransformation(context))
+                                .into(img);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else {
+                Glide.with(context)
+                        .load(picPath)
+                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                        .bitmapTransform(new CropCircleTransformation(context))
+                        .into(img);
+            }
+        }
+    }
+
+    public static void loadImgToHead(Context context, ImageView img, String picPath) {
+        Glide.with(context)
+                .load(picPath)
+                .thumbnail(0.2f)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .bitmapTransform(new CropCircleTransformation(context))
                 .into(img);
-          } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-          }
-        }
-      } else {
-        Glide.with(context)
-            .load(picPath)
-            .diskCacheStrategy(DiskCacheStrategy.RESULT)
-            .bitmapTransform(new CropCircleTransformation(context))
-            .into(img);
-      }
     }
-  }
 
-  public static void loadImgToImgViewWithPlaceholder(Context context, ImageView img,
-      String picPath) {
-    if (null == picPath) return;
-    if (picPath.contains("wx.qlogo.cn")
-        || picPath.contains("7xogkj.com1.z0.glb.clouddn.com")
-        || picPath.contains("mmbiz.qlogo.cn")) {
-      Glide.with(context)
-          .load(picPath)
-              .thumbnail(0.1f)
-          .diskCacheStrategy(DiskCacheStrategy.RESULT)
-          .centerCrop()
-          .into(img);
-    } else {
-      String head_img;
-      Pattern p = Pattern.compile("(?<=//|)((\\w)+\\.)+\\w+");
-      Matcher m = p.matcher(picPath);
-      if (m.find()) {
-        String group = m.group();
-        String[] temp = picPath.split(group + "/");
-        if (temp.length > 1) {
-          try {
-            head_img = "http://"
-                + group
-                + "/"
-                + URLEncoder.encode(temp[1], "utf-8")
-                + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/80";
+    public static void loadImgToImgViewWithPlaceholder(Context context, ImageView img,
+                                                       String picPath) {
+        if (null == picPath) return;
+        if (picPath.contains("wx.qlogo.cn")
+                || picPath.contains("7xogkj.com1.z0.glb.clouddn.com")
+                || picPath.contains("mmbiz.qlogo.cn")) {
             Glide.with(context)
-                .load(head_img)
+                    .load(picPath)
                     .thumbnail(0.1f)
-                .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                .centerCrop()
-                .placeholder(R.drawable.parceholder)
-                .into(img);
-          } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-          }
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .centerCrop()
+                    .into(img);
+        } else {
+            String head_img;
+            Pattern p = Pattern.compile("(?<=//|)((\\w)+\\.)+\\w+");
+            Matcher m = p.matcher(picPath);
+            if (m.find()) {
+                String group = m.group();
+                String[] temp = picPath.split(group + "/");
+                if (temp.length > 1) {
+                    try {
+                        head_img = "http://"
+                                + group
+                                + "/"
+                                + URLEncoder.encode(temp[1], "utf-8")
+                                + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/80";
+                        Glide.with(context)
+                                .load(head_img)
+                                .thumbnail(0.1f)
+                                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                                .centerCrop()
+                                .placeholder(R.drawable.parceholder)
+                                .into(img);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else {
+                Glide.with(context)
+                        .load(picPath)
+                        .thumbnail(0.1f)
+                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                        .centerCrop()
+                        .into(img);
+            }
         }
-      } else {
-        Glide.with(context)
-            .load(picPath)
-                .thumbnail(0.1f)
-            .diskCacheStrategy(DiskCacheStrategy.RESULT)
-            .centerCrop()
-            .into(img);
-      }
     }
-  }
 
-  public static void loadImgToImgViewWithPlaceholderFragment(Fragment context, ImageView img,
-      String picPath) {
-    if (null == picPath) return;
-    if (picPath.contains("wx.qlogo.cn")
-        || picPath.contains("7xogkj.com1.z0.glb.clouddn.com")
-        || picPath.contains("mmbiz.qlogo.cn")) {
-      Glide.with(context)
-          .load(picPath)
-          .thumbnail(0.1f)
-          .diskCacheStrategy(DiskCacheStrategy.RESULT)
-          .centerCrop()
-          .into(img);
-    } else {
-      String head_img;
-      Pattern p = Pattern.compile("(?<=//|)((\\w)+\\.)+\\w+");
-      Matcher m = p.matcher(picPath);
-      if (m.find()) {
-        String group = m.group();
-        String[] temp = picPath.split(group + "/");
-        if (temp.length > 1) {
-          try {
-            head_img = "http://"
-                + group
-                + "/"
-                + URLEncoder.encode(temp[1], "utf-8")
-                + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/70";
+    public static void loadImgToImgViewWithPlaceholderFragment(Fragment context, ImageView img,
+                                                               String picPath) {
+        if (null == picPath) return;
+        if (picPath.contains("wx.qlogo.cn")
+                || picPath.contains("7xogkj.com1.z0.glb.clouddn.com")
+                || picPath.contains("mmbiz.qlogo.cn")) {
             Glide.with(context)
-                .load(head_img)
-                .thumbnail(0.1f)
-                .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                .centerCrop()
-                .placeholder(R.drawable.parceholder)
-                .into(img);
-          } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-          }
+                    .load(picPath)
+                    .thumbnail(0.1f)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .centerCrop()
+                    .into(img);
+        } else {
+            String head_img;
+            Pattern p = Pattern.compile("(?<=//|)((\\w)+\\.)+\\w+");
+            Matcher m = p.matcher(picPath);
+            if (m.find()) {
+                String group = m.group();
+                String[] temp = picPath.split(group + "/");
+                if (temp.length > 1) {
+                    try {
+                        head_img = "http://"
+                                + group
+                                + "/"
+                                + URLEncoder.encode(temp[1], "utf-8")
+                                + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/70";
+                        Glide.with(context)
+                                .load(head_img)
+                                .thumbnail(0.1f)
+                                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                                .centerCrop()
+                                .placeholder(R.drawable.parceholder)
+                                .into(img);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else {
+                Glide.with(context)
+                        .load(picPath)
+                        .thumbnail(0.1f)
+                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                        .centerCrop()
+                        .into(img);
+            }
         }
-      } else {
-        Glide.with(context)
-            .load(picPath)
-                .thumbnail(0.1f)
-            .diskCacheStrategy(DiskCacheStrategy.RESULT)
-            .centerCrop()
-            .into(img);
-      }
     }
-  }
 
-  public static void loadImgToImgViewPost(Context context, ImageView img, String picPath) {
-    if (null == picPath) return;
-    if (picPath.startsWith("http://image.xiaolu.so")) {
-      String[] temp = picPath.split("http://image.xiaolu.so/");
-      String head_img = "";
-      if (temp.length > 1) {
-        try {
-          head_img = "http://image.xiaolu.so/" + URLEncoder.encode(temp[1], "utf-8");
-        } catch (UnsupportedEncodingException e) {
-          e.printStackTrace();
+    public static void loadImgToImgViewPost(Context context, ImageView img, String picPath) {
+        if (null == picPath) return;
+        if (picPath.startsWith("http://image.xiaolu.so")) {
+            String[] temp = picPath.split("http://image.xiaolu.so/");
+            String head_img = "";
+            if (temp.length > 1) {
+                try {
+                    head_img = "http://image.xiaolu.so/" + URLEncoder.encode(temp[1], "utf-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            Glide.with(context)
+                    .load(head_img)
+                    .thumbnail(0.1f)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .placeholder(R.drawable.header)
+                    .centerCrop()
+                    .into(img);
+        } else {
+            //if (picPath.startsWith("https://mmbiz.qlogo.cn")) {
+            Glide.with(context).load(picPath).thumbnail(0.1f).diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    //.placeholder(R.drawable.parceholder)
+                    .centerCrop().into(img);
         }
-      }
-
-      Glide.with(context)
-          .load(head_img)
-              .thumbnail(0.1f)
-          .diskCacheStrategy(DiskCacheStrategy.RESULT)
-          .placeholder(R.drawable.header)
-          .centerCrop()
-          .into(img);
-    } else {
-      //if (picPath.startsWith("https://mmbiz.qlogo.cn")) {
-      Glide.with(context).load(picPath).thumbnail(0.1f).diskCacheStrategy(DiskCacheStrategy.RESULT)
-          //.placeholder(R.drawable.parceholder)
-          .centerCrop().into(img);
     }
-  }
 
-  public static String getDecodeUrl(String path) {
-    String imagUrl = "";
+    public static String getDecodeUrl(String path) {
+        String imagUrl = "";
 
-    if (path.startsWith("http://image.xiaolu.so")) {
-      String[] temp = path.split("http://image.xiaolu.so/");
-      if (temp.length > 1) {
-        try {
-          imagUrl = "http://image.xiaolu.so/" + URLEncoder.encode(temp[1], "utf-8");
-        } catch (UnsupportedEncodingException e) {
-          e.printStackTrace();
+        if (path.startsWith("http://image.xiaolu.so")) {
+            String[] temp = path.split("http://image.xiaolu.so/");
+            if (temp.length > 1) {
+                try {
+                    imagUrl = "http://image.xiaolu.so/" + URLEncoder.encode(temp[1], "utf-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            //if (path.startsWith("https://mmbiz.qlogo.cn")) {
+            imagUrl = path;
         }
-      }
-    } else {
-      //if (path.startsWith("https://mmbiz.qlogo.cn")) {
-      imagUrl = path;
+        return imagUrl;
     }
-    return imagUrl;
-  }
 
-  public static void loadImgToImgViewWithPlaceholderTransform(Context context, ImageView img,
-      String picPath) {
-    if (null == picPath) return;
+    public static void loadImgToImgViewWithPlaceholderTransform(Context context, ImageView img,
+                                                                String picPath) {
+        if (null == picPath) return;
 
-    if (picPath.startsWith("http://image.xiaolu.so")) {
-      String[] temp = picPath.split("http://image.xiaolu.so/");
-      String head_img = "";
-      if (temp.length > 1) {
-        try {
-          head_img = "http://image.xiaolu.so/"
-              + URLEncoder.encode(temp[1], "utf-8")
-              + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
-        } catch (UnsupportedEncodingException e) {
-          e.printStackTrace();
+        if (picPath.startsWith("http://image.xiaolu.so")) {
+            String[] temp = picPath.split("http://image.xiaolu.so/");
+            String head_img = "";
+            if (temp.length > 1) {
+                try {
+                    head_img = "http://image.xiaolu.so/"
+                            + URLEncoder.encode(temp[1], "utf-8")
+                            + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+            Glide.with(context)
+                    .load(head_img)
+                    .thumbnail(0.1f)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .transform(new GlideRoundTransform(context))
+                    .centerCrop()
+                    .into(img);
+        } else {
+            //if (picPath.startsWith("https://mmbiz.qlogo.cn")) {
+            Glide.with(context).load(picPath).thumbnail(0.1f).diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    //.placeholder(R.drawable.parceholder)
+                    .centerCrop().into(img);
         }
-      }
-      Glide.with(context)
-          .load(head_img)
-              .thumbnail(0.1f)
-          .diskCacheStrategy(DiskCacheStrategy.RESULT)
-          .transform(new GlideRoundTransform(context))
-          .centerCrop()
-          .into(img);
-    } else {
-      //if (picPath.startsWith("https://mmbiz.qlogo.cn")) {
-      Glide.with(context).load(picPath).thumbnail(0.1f).diskCacheStrategy(DiskCacheStrategy.RESULT)
-          //.placeholder(R.drawable.parceholder)
-          .centerCrop().into(img);
     }
-  }
 
-  public static void loadImageWithOkhttp(String picpath, Activity context,
-      ImageView imageView,int size) {
-    OkHttpUtils.get().url(picpath).build().execute(new BitmapCallback() {
-      @Override public void onError(Call call, Exception e, int id) {
-        e.printStackTrace();
-      }
+    public static void loadImageWithOkhttp(String picpath, Activity context,
+                                           ImageView imageView, int size) {
+        OkHttpUtils.get().url(picpath).build().execute(new BitmapCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                e.printStackTrace();
+            }
 
-      @Override public void onResponse(Bitmap response, int id) {
-        if (null != response) {
+            @Override
+            public void onResponse(Bitmap response, int id) {
+                if (null != response) {
 
-          imageView.setAdjustViewBounds(true);
+                    imageView.setAdjustViewBounds(true);
 
-          int screenWidth = DisplayUtils.getScreenW(context) / size;
-          LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(screenWidth,
-              LinearLayout.LayoutParams.WRAP_CONTENT);
-          //                                                        lp.width = screenWidth;
-          //                                                        lp.height = LinearLayout.LayoutParams.WRAP_CONTENT;
-          imageView.setLayoutParams(lp);
-          imageView.setMaxWidth(screenWidth);
-          imageView.setMaxHeight(screenWidth * 5);
+                    int screenWidth = DisplayUtils.getScreenW(context) / size;
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(screenWidth,
+                            LinearLayout.LayoutParams.WRAP_CONTENT);
+                    //                                                        lp.width = screenWidth;
+                    //                                                        lp.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+                    imageView.setLayoutParams(lp);
+                    imageView.setMaxWidth(screenWidth);
+                    imageView.setMaxHeight(screenWidth * 5);
 //          imageView.setPadding(screenWidth/6,screenWidth/10,screenWidth/6,screenWidth/10);
-          imageView.setPadding(0,screenWidth/10,0,screenWidth/10);
-          //imageViewList.get(finalI).setLayoutParams(layoutParams);
-          imageView.setImageBitmap(response);
+                    imageView.setPadding(0, screenWidth / 10, 0, screenWidth / 10);
+                    //imageViewList.get(finalI).setLayoutParams(layoutParams);
+                    imageView.setImageBitmap(response);
 
-          //                  imageView.setLayoutParams(layoutParams);
-          //                  imageView.setImageBitmap(response);
-        }
-      }
-    });
-  }
-
-  public static Observable<List<Bitmap>> loadImageWithOkhttpReturnBitmaps(Context context,
-      List<String> picpath) {
-
-    return Observable.create(new Observable.OnSubscribe<List<Bitmap>>() {
-      @Override public void call(Subscriber<? super List<Bitmap>> subscriber) {
-        Bitmap bitmap1 = null;
-        Bitmap bitmap2 = null;
-        List<Bitmap> bitmaps = new ArrayList<>();
-
-        try {
-          bitmap1 = Picasso.with(context).load(picpath.get(0)).get();
-          bitmap2 = Picasso.with(context).load(picpath.get(1)).get();
-          bitmaps.add(bitmap1);
-          bitmaps.add(bitmap2);
-        } catch (Exception e) {
-          subscriber.onError(e);
-        }
-        if (bitmap1 == null || bitmap2 == null || bitmaps.size() != 2) {
-          subscriber.onError(new Exception("数据有误!!!"));
-        }
-
-        subscriber.onNext(bitmaps);
-        subscriber.onCompleted();
-      }
-    }).subscribeOn(Schedulers.io());
-  }
-
-  public static Bitmap getBitmapFormUrl(String url){
-    RequestCall build = OkHttpUtils.get().url(url).build();
-    build.execute(new BitmapCallback() {
-      @Override
-      public void onError(Call call, Exception e, int id) {
-
-      }
-
-      @Override
-      public void onResponse(Bitmap response, int id) {
-      }
-    });
-    return null;
-  }
-
-  public static RelativeLayout.LayoutParams getLayoutParams(Bitmap bitmap, int screenWidth) {
-
-    float rawWidth = bitmap.getWidth();
-    float rawHeight = bitmap.getHeight();
-
-    float width = 0;
-    float height = 0;
-
-    if (rawWidth > screenWidth) {
-      height = (rawHeight / rawWidth) * screenWidth;
-      width = screenWidth;
-    } else {
-      width = rawWidth;
-      height = rawHeight;
+                    //                  imageView.setLayoutParams(layoutParams);
+                    //                  imageView.setImageBitmap(response);
+                }
+            }
+        });
     }
 
-    RelativeLayout.LayoutParams layoutParams =
-        new RelativeLayout.LayoutParams((int) width, (int) height);
+    public static Observable<List<Bitmap>> loadImageWithOkhttpReturnBitmaps(Context context,
+                                                                            List<String> picpath) {
 
-    return layoutParams;
-  }
+        return Observable.create(new Observable.OnSubscribe<List<Bitmap>>() {
+            @Override
+            public void call(Subscriber<? super List<Bitmap>> subscriber) {
+                Bitmap bitmap1 = null;
+                Bitmap bitmap2 = null;
+                List<Bitmap> bitmaps = new ArrayList<>();
+
+                try {
+                    bitmap1 = Picasso.with(context).load(picpath.get(0)).get();
+                    bitmap2 = Picasso.with(context).load(picpath.get(1)).get();
+                    bitmaps.add(bitmap1);
+                    bitmaps.add(bitmap2);
+                } catch (Exception e) {
+                    subscriber.onError(e);
+                }
+                if (bitmap1 == null || bitmap2 == null || bitmaps.size() != 2) {
+                    subscriber.onError(new Exception("数据有误!!!"));
+                }
+
+                subscriber.onNext(bitmaps);
+                subscriber.onCompleted();
+            }
+        }).subscribeOn(Schedulers.io());
+    }
+
+    public static Bitmap getBitmapFormUrl(String url) {
+        RequestCall build = OkHttpUtils.get().url(url).build();
+        build.execute(new BitmapCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+
+            }
+
+            @Override
+            public void onResponse(Bitmap response, int id) {
+            }
+        });
+        return null;
+    }
+
+    public static RelativeLayout.LayoutParams getLayoutParams(Bitmap bitmap, int screenWidth) {
+
+        float rawWidth = bitmap.getWidth();
+        float rawHeight = bitmap.getHeight();
+
+        float width = 0;
+        float height = 0;
+
+        if (rawWidth > screenWidth) {
+            height = (rawHeight / rawWidth) * screenWidth;
+            width = screenWidth;
+        } else {
+            width = rawWidth;
+            height = rawHeight;
+        }
+
+        RelativeLayout.LayoutParams layoutParams =
+                new RelativeLayout.LayoutParams((int) width, (int) height);
+
+        return layoutParams;
+    }
 }

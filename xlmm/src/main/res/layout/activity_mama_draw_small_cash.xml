@@ -16,7 +16,7 @@
         <com.jimei.xiaolumeimei.widget.XlmmTitleView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:xlmm_title="小额提现"/>
+            app:xlmm_title="快速提现"/>
 
         <LinearLayout
             android:layout_width="match_parent"

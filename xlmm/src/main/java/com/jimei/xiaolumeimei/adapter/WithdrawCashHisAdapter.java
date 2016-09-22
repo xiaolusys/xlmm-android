@@ -71,8 +71,7 @@ public class WithdrawCashHisAdapter extends XRecyclerView.Adapter<WithdrawCashHi
     public void onBindViewHolder(ViewHolder holder, int position) {
         WithdrawCashHisBean.WithdrawCashRecord record = mList.get(position);
         holder.btn_cancel.setVisibility(View.INVISIBLE);
-        holder.tx_withdraw_fund.setText(
-                String.valueOf(Math.round(record.getValue_money() * 100) / 100) + "元");
+        holder.tx_withdraw_fund.setText(record.getValue_money() + "元");
         holder.tx_withdraw_state.setText(record.getGet_status_display());
         holder.tx_time.setText(record.getCreated().replace("T", " "));
         holder.type.setText(record.getGet_cash_out_type_display());

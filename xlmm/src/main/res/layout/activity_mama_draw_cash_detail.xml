@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaDrawCashDetailActivity">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaDrawCashDetailActivity">
 
     <com.jimei.xiaolumeimei.widget.XlmmTitleView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:xlmm_title="账单明细" />
+        app:xlmm_title="账单明细"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,7 +25,7 @@
             android:layout_marginTop="80px"
             android:text="出账余额(元)"
             android:textColor="#626262"
-            android:textSize="14sp" />
+            android:textSize="14sp"/>
 
         <TextView
             android:id="@+id/tv_money_draw"
@@ -34,7 +34,7 @@
             android:layout_marginTop="10px"
             android:text=""
             android:textColor="#F5A623"
-            android:textSize="32sp" />
+            android:textSize="32sp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -46,39 +46,41 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"/>
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/wallet_locked" />
+                android:src="@drawable/wallet_locked"/>
 
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_weight="2"
-                android:background="@color/colorAccent" />
+                android:background="@color/colorAccent"/>
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/wallet_ing" />
+                android:src="@drawable/wallet_ing"/>
 
             <View
+                android:id="@+id/view_line"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_weight="2"
-                android:background="@color/colorAccent" />
+                android:background="@color/text_color_A0"/>
 
             <ImageView
+                android:id="@+id/iv_ok"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/wallet_ok" />
+                android:src="@drawable/wallet_not"/>
 
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"/>
 
         </LinearLayout>
 
@@ -101,7 +103,7 @@
                     android:layout_marginTop="20px"
                     android:text="金额冻结"
                     android:textColor="#626262"
-                    android:textSize="13sp" />
+                    android:textSize="13sp"/>
 
                 <TextView
                     android:id="@+id/date_1"
@@ -110,7 +112,7 @@
                     android:layout_marginTop="8px"
                     android:text=""
                     android:textColor="@color/text_color_9B"
-                    android:textSize="13sp" />
+                    android:textSize="13sp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -126,7 +128,7 @@
                     android:layout_marginTop="20px"
                     android:text="系统处理中"
                     android:textColor="#626262"
-                    android:textSize="13sp" />
+                    android:textSize="13sp"/>
 
                 <TextView
                     android:id="@+id/date_2"
@@ -135,7 +137,7 @@
                     android:layout_marginTop="8px"
                     android:text=""
                     android:textColor="@color/text_color_9B"
-                    android:textSize="13sp" />
+                    android:textSize="13sp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -146,12 +148,13 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/tv_ok"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20px"
                     android:text="提现成功"
-                    android:textColor="#F5A623"
-                    android:textSize="13sp" />
+                    android:textColor="@color/text_color_A0"
+                    android:textSize="13sp"/>
 
                 <TextView
                     android:id="@+id/date_3"
@@ -160,7 +163,7 @@
                     android:layout_marginTop="8px"
                     android:text=""
                     android:textColor="@color/text_color_9B"
-                    android:textSize="13sp" />
+                    android:textSize="13sp"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -187,14 +190,14 @@
                 android:layout_height="wrap_content"
                 android:text="提现账户:   "
                 android:textColor="#626262"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/account_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_color_9B"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -208,14 +211,14 @@
                 android:layout_height="wrap_content"
                 android:text="创建时间:   "
                 android:textColor="#626262"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/tv_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_color_9B"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -230,14 +233,14 @@
                 android:layout_height="wrap_content"
                 android:text="交易单号:   "
                 android:textColor="#626262"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/tv_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_color_9B"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
 
         </LinearLayout>
 
@@ -252,14 +255,14 @@
                 android:layout_height="wrap_content"
                 android:text="剩余余额:   "
                 android:textColor="#626262"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/tv_money"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_color_9B"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
 
         </LinearLayout>
 
@@ -275,13 +278,13 @@
                 android:layout_height="wrap_content"
                 android:text="消耗活跃:   "
                 android:textColor="#626262"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_color_9B"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
 
         </LinearLayout>
 
@@ -296,14 +299,14 @@
                 android:layout_height="wrap_content"
                 android:text="剩余活跃:   "
                 android:textColor="#626262"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/tv_activity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_color_9B"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
 
         </LinearLayout>
 
