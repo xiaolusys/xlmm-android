@@ -272,6 +272,9 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                   finish();
                                 } else if (login.equals("main")) {
                                   finish();
+                                } else if (login.equals("push_jump")) {
+                                  JumpUtils.push_jump_proc(LoginActivity.this,actlink);
+                                  finish();
                                 } else if (login.equals("collect")) {
                                   Intent intent = new Intent(mContext, CollectionActivity.class);
                                   startActivity(intent);

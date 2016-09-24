@@ -664,9 +664,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         for (String name : map.keySet()) {
             DefaultSliderView textSliderView = new DefaultSliderView(MainActivity
                     .this);
-            // initialize a SliderLayout
             textSliderView.image(name + POST_URL).setScaleType(BaseSliderView.ScaleType.CenterInside);
-            //add your extra information
             textSliderView.bundle(new Bundle());
             textSliderView.getBundle().putString("extra", map.get(name));
             mSliderLayout.addSlider(textSliderView);

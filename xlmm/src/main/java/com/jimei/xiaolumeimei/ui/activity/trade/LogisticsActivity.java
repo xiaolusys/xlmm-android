@@ -14,7 +14,6 @@ import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.widget.LogImageView;
 import com.jimei.xiaolumeimei.widget.LogMsgView;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
@@ -22,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
-import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 public class LogisticsActivity extends BaseSwipeBackCompatActivity {
@@ -55,73 +53,45 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
         data = new ArrayList<>();
         if (packageOrdersBean.getLogistics_company() != null) {
             companyTv.setText(packageOrdersBean.getLogistics_company().getName());
-            companyTv.setTextColor(getResources().getColor(R.color.colorAccent));
             String packetid = packageOrdersBean.getOut_sid();
             String company_code = packageOrdersBean.getLogistics_company().getCode();
             if (packetid != null && company_code != null &&
                     !"".equals(packetid) && !"".equals(company_code)) {
-                Subscription subscribe = TradeModel.getInstance()
+                orderTv.setText(packetid);
+                addSubscription(TradeModel.getInstance()
                         .get_logistics_by_packagetid(packetid, company_code)
                         .subscribeOn(Schedulers.io())
-                        .subscribe(new ServiceResponse<LogisticsBean>() {
-
-                            @Override
-                            public void onNext(LogisticsBean logisticsBean) {
-                                fillDataToView(logisticsBean);
-                            }
-
-                            @Override
-                            public void onCompleted() {
-                                JUtils.Toast("物流信息更新成功!");
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-                                fillDataToView(null);
-                                JUtils.Toast("更新失败!");
-                            }
-                        });
-                addSubscription(subscribe);
+                        .subscribe(this::fillDataToView, throwable -> {
+                            fillDataToView(null);
+                            JUtils.Toast("暂无物流进展!");
+                        }));
             } else {
+                orderTv.setText("未揽件");
                 fillDataToView(null);
             }
         } else {
+            companyTv.setText("小鹿推荐");
+            orderTv.setText("未揽件");
             fillDataToView(null);
         }
     }
 
     private void fillDataToView(LogisticsBean logisticsBean) {
-        Subscription subscription = TradeModel.getInstance()
+        addSubscription(TradeModel.getInstance()
                 .getOrderDetailBean(id)
                 .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<OrderDetailBean>() {
-                    @Override
-                    public void onNext(OrderDetailBean orderDetailBean) {
-                        ArrayList<AllOrdersBean.ResultsEntity.OrdersEntity> orders = orderDetailBean.getOrders();
-                        for (int i = 0; i < orders.size(); i++) {
-                            if (orders.get(i).getPackage_order_id().equals(packageOrdersBean.getId())) {
-                                data.add(orders.get(i));
-                            }
-                        }
-                        mListView.setAdapter(new GoodsListAdapter(data, LogisticsActivity.this));
-                        OrderDetailActivity.setListViewHeightBasedOnChildren(mListView);
-                        hideIndeterminateProgressDialog();
-                        if (logisticsBean == null) {
-                            if (orderDetailBean.getLogistics_company() == null) {
-                                companyTv.setText("小鹿推荐");
-                            } else {
-                                companyTv.setText(orderDetailBean.getLogistics_company().getName());
-                            }
+                .subscribe(orderDetailBean -> {
+                    ArrayList<AllOrdersBean.ResultsEntity.OrdersEntity> orders = orderDetailBean.getOrders();
+                    for (int i = 0; i < orders.size(); i++) {
+                        if (orders.get(i).getPackage_order_id().equals(packageOrdersBean.getId())) {
+                            data.add(orders.get(i));
                         }
                     }
-                });
-        addSubscription(subscription);
+                    mListView.setAdapter(new GoodsListAdapter(data, LogisticsActivity.this));
+                    OrderDetailActivity.setListViewHeightBasedOnChildren(mListView);
+                    hideIndeterminateProgressDialog();
+                }));
         if (logisticsBean != null) {
-            if (logisticsBean.getOrder() != "" && logisticsBean.getOrder() != null) {
-                orderTv.setText(logisticsBean.getOrder());
-            } else {
-                orderTv.setText("未揽件");
-            }
             if ((logisticsBean.getData() != null) && (logisticsBean.getData().size() != 0)) {
                 List<LogisticsBean.Msg> data1 = logisticsBean.getData();
                 for (int i = 0; i < data1.size(); i++) {
@@ -151,7 +121,6 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
                 fillStatusView();
             }
         } else {
-            orderTv.setText("未揽件");
             fillStatusView();
         }
     }

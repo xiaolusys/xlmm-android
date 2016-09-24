@@ -54,7 +54,6 @@ andResGuard {
     ]
     sevenzip {
         artifact = 'com.tencent.mm:SevenZip:1.1.9'
-        //path = "/usr/local/bin/7za"
     }
 }
 
@@ -71,7 +70,7 @@ android {
 
         targetSdkVersion 23
 
-        versionCode 20160922
+        versionCode 20160924
         versionName "1.2.8"
 
         multiDexEnabled = true

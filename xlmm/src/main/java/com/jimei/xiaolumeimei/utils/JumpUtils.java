@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 
+import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jude.utils.JUtils;
 
 /**
@@ -19,41 +20,42 @@ public class JumpUtils {
     public static void push_jump_proc(Context context, String recvContent) {
         JUtils.Log(TAG, "push_jump_proc:" + recvContent);
         if (TextUtils.isEmpty(recvContent)) return;
-        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(recvContent)));
+        if (LoginUtils.checkLoginState(context)) {
+            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(recvContent)));
+        } else {
+            Intent intent = new Intent(context, LoginActivity.class);
+            intent.putExtra("login", "push_jump");
+            intent.putExtra("actlink", recvContent);
+            context.startActivity(intent);
+        }
     }
 
     public static void jumpToWebViewWithCookies(Context context, String actlink, int id,
                                                 Class<?> classname) {
-        Intent intent = new Intent(context, classname);
         Bundle bundle = new Bundle();
-        bundle.putString("actlink", actlink);
-        bundle.putInt("id", id);
-        setBundleWithStart(intent, context, bundle);
+        setBundleWithStart(context, bundle, classname,id,actlink);
     }
 
     public static void jumpToWebViewWithCookies(Context context, String actlink, int id,
                                                 Class<?> classname, String title) {
-        Intent intent = new Intent(context, classname);
         Bundle bundle = new Bundle();
-        bundle.putString("actlink", actlink);
         bundle.putString("title", title);
-        bundle.putInt("id", id);
-        setBundleWithStart(intent, context, bundle);
+        setBundleWithStart(context, bundle, classname,id,actlink);
     }
 
     public static void jumpToWebViewWithCookies(Context context, String actlink, int id,
                                                 Class<?> classname, String title, boolean share) {
-        Intent intent = new Intent(context, classname);
         Bundle bundle = new Bundle();
-        bundle.putString("actlink", actlink);
         bundle.putString("title", title);
         bundle.putBoolean("share", share);
-        bundle.putInt("id", id);
-        setBundleWithStart(intent, context, bundle);
+        setBundleWithStart(context, bundle, classname,id,actlink);
     }
 
 
-    private static void setBundleWithStart(Intent intent, Context context, Bundle bundle) {
+    private static void setBundleWithStart(Context context, Bundle bundle, Class<?> classname,
+                                           int id, String actlink) {
+        Intent intent = new Intent(context, classname);
+
         SharedPreferences sharedPreferences =
                 context.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
         String cookies = sharedPreferences.getString("cookiesString", "");
@@ -62,6 +64,8 @@ public class JumpUtils {
         bundle.putString("cookies", cookies);
         bundle.putString("domain", domain);
         bundle.putString("Cookie", sessionId);
+        bundle.putString("actlink", actlink);
+        bundle.putInt("id", id);
         intent.putExtras(bundle);
         context.startActivity(intent);
     }

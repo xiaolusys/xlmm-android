@@ -327,30 +327,28 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                     addSubscription(TradeModel.getInstance()
                             .getRedBag(tid)
                             .subscribeOn(Schedulers.io())
-                            .subscribe(new ServiceResponse<RedBagBean>() {
-                                @Override
-                                public void onNext(RedBagBean redBagBean) {
-                                    if (redBagBean.getCode() == 0) {
-                                        if (redBagBean.getShare_times_limit() > 0) {
-                                            redBagLayout.setVisibility(View.VISIBLE);
-                                            redBagEntity = redBagBean;
-                                            new Thread(() -> {
-                                                while (flag) {
-                                                    SystemClock.sleep(1500);
-                                                    runOnUiThread(() -> {
-                                                        if (flag && !alive) {
-                                                            redBagLayout.setVisibility(View.VISIBLE);
-                                                        }
+                            .subscribe(redBagBean -> {
+                                        if (redBagBean.getCode() == 0) {
+                                            if (redBagBean.getShare_times_limit() > 0) {
+                                                redBagLayout.setVisibility(View.VISIBLE);
+                                                redBagEntity = redBagBean;
+                                                new Thread(() -> {
+                                                    while (flag) {
+                                                        SystemClock.sleep(1500);
+                                                        runOnUiThread(() -> {
+                                                            if (flag && !alive) {
+                                                                redBagLayout.setVisibility(View.VISIBLE);
+                                                            }
 
-                                                    });
-                                                }
-                                            }).start();
-                                        } else {
-                                            redBagLayout.setVisibility(View.GONE);
+                                                        });
+                                                    }
+                                                }).start();
+                                            } else {
+                                                redBagLayout.setVisibility(View.GONE);
+                                            }
                                         }
                                     }
-                                }
-                            }));
+                            ));
 
                 }
             } else {
@@ -732,12 +730,9 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
             case MotionEvent.ACTION_MOVE:
                 redBagLayout.setVisibility(View.GONE);
                 alive = true;
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        SystemClock.sleep(1500);
-                        alive = false;
-                    }
+                new Thread(() -> {
+                    SystemClock.sleep(1500);
+                    alive = false;
                 }).start();
                 break;
         }

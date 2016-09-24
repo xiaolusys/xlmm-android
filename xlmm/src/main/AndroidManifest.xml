@@ -475,7 +475,7 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data
                     android:host="app"
-                    android:path="/v1/products"
+                    android:path="/v1/products/modelist"
                     android:scheme="com.jimei.xlmm"/>
             </intent-filter>
         </activity>

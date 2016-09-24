@@ -2,7 +2,6 @@ package com.jimei.xiaolumeimei.base;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -47,20 +46,11 @@ public abstract class BasePresenterActivity<T extends BasePresenter, E extends B
      * context
      */
     protected Context mContext = null;
-    private SharedPreferences sharedPreferences;
     public T mPresenter;
     public E mModel;
     private CompositeSubscription mCompositeSubscription;
     private XlmmLoadingDialog loadingdialog;
     VaryViewHelperController mVaryViewHelperController;
-
-    public CompositeSubscription getCompositeSubscription() {
-        if (this.mCompositeSubscription == null) {
-            this.mCompositeSubscription = new CompositeSubscription();
-        }
-
-        return this.mCompositeSubscription;
-    }
 
     public void addSubscription(Subscription s) {
         if (this.mCompositeSubscription == null) {
@@ -125,7 +115,7 @@ public abstract class BasePresenterActivity<T extends BasePresenter, E extends B
         mPresenter = TUtil.getT(this, 0);
         mModel = TUtil.getT(this, 1);
         this.initViews();
-        if (this instanceof BaseView) mPresenter.setVM(this, mModel);
+        mPresenter.setVM(this, mModel);
         this.initData();
         setListener();
     }
@@ -336,23 +326,9 @@ public abstract class BasePresenterActivity<T extends BasePresenter, E extends B
         }
     }
 
-    public boolean IsLogined() {
-
-        sharedPreferences =
-                getApplicationContext().getSharedPreferences("login_info", Context.MODE_PRIVATE);
-
-        return sharedPreferences.getBoolean("success", false);
-    }
-
     public void finishBack(Toolbar toolbar) {
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                finish();
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> finish());
     }
 
     public void showIndeterminateProgressDialog(boolean horizontal) {

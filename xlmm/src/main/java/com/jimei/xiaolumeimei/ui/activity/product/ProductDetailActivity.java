@@ -86,7 +86,6 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
     private ProductDetailBean.TeamBuyInfo teamBuyInfo;
     private List<ProductDetailBean.SkuInfoBean> skuInfo;
 
-
     @Override
     protected void initView() {
         setStatusBar();
@@ -94,10 +93,8 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
         if (uri != null) {
             if (uri.getPath().contains("product_detail")) {
                 model_id = Integer.valueOf(uri.getQueryParameter("model_id"));
-            } else if (uri.getPath().contains("products")) {
-                String url = uri.getQueryParameter("product_id");
-                String[] details = url.split("details/");
-                model_id = Integer.valueOf(details[1]);
+            } else if (uri.getPath().contains("products/modelist")) {
+                model_id = Integer.valueOf(uri.getQueryParameter("model_id"));
             }
         } else {
             model_id = getIntent().getExtras().getInt("model_id");
