@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -78,7 +79,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     public final static int FILECHOOSER_RESULTCODE_FOR_ANDROID_5 = 2;
 
     private static final int MSG_ACTION_CCALLBACK = 2;
-    private static final int WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 200;
     private static final String TAG = CommonWebViewActivity.class.getSimpleName();
     public WebView mWebView;
     protected TextView webviewTitle;
@@ -95,36 +95,30 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void setListener() {
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                JUtils.Log(TAG, "setNavigationOnClickListener finish");
-                finish();
-            }
+        mToolbar.setNavigationOnClickListener(v -> {
+            JUtils.Log(TAG, "setNavigationOnClickListener finish");
+            finish();
         });
     }
 
     @Override
     protected void initData() {
         JUtils.Log(TAG, "initData");
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                JUtils.Log(TAG, "initData--" + actlink);
+        runOnUiThread(() -> {
+            JUtils.Log(TAG, "initData--" + actlink);
 
-                try {
-                    Map<String, String> extraHeaders = new HashMap<>();
+            try {
+                Map<String, String> extraHeaders = new HashMap<>();
 
-                    extraHeaders.put("Cookie", sessionid);
+                extraHeaders.put("Cookie", sessionid);
 
-                    mWebView.loadUrl(actlink, extraHeaders);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    JUtils.Log(TAG, "loadUrl--error");
-                }
-
-                JUtils.Log(TAG, "loadUrl--end");
+                mWebView.loadUrl(actlink, extraHeaders);
+            } catch (Exception e) {
+                e.printStackTrace();
+                JUtils.Log(TAG, "loadUrl--error");
             }
+
+            JUtils.Log(TAG, "loadUrl--end");
         });
 
         get_party_share_content(id + "");
@@ -136,19 +130,8 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
             cookies = extras.getString("cookies");
             domain = extras.getString("domain");
             sessionid = extras.getString("Cookie");
-            Uri uri = getIntent().getData();
-            if (uri != null) {
-                actlink = uri.getQueryParameter("url");
-                String id = uri.getQueryParameter("activity_id");
-                if (id != null) {
-                    this.id = Integer.valueOf(id);
-                } else {
-                    this.id = -1;
-                }
-            } else {
-                actlink = extras.getString("actlink");
-                id = extras.getInt("id");
-            }
+            actlink = extras.getString("actlink");
+            id = extras.getInt("id");
             JUtils.Log(TAG, "GET cookie:" + cookies + " actlink:" + actlink + " domain:" + domain +
                     " sessionid:" + sessionid);
         }
@@ -159,12 +142,29 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
         return R.layout.activity_actwebview;
     }
 
+    @Override
+    public void getIntentUrl() {
+        Uri uri = getIntent().getData();
+        if (uri != null) {
+            SharedPreferences sharedPreferences = getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+            cookies = sharedPreferences.getString("cookiesString", "");
+            domain = sharedPreferences.getString("cookiesDomain", "");
+            sessionid = sharedPreferences.getString("Cookie", "");
+            actlink = uri.getQueryParameter("url");
+            String id = uri.getQueryParameter("activity_id");
+            if (id != null) {
+                this.id = Integer.valueOf(id);
+            } else {
+                this.id = -1;
+            }
+        }
+    }
+
     @SuppressLint("JavascriptInterface")
     @Override
     protected void initViews() {
         JUtils.Log(TAG, "initViews");
         ShareSDK.initSDK(this);
-
         webviewTitle = (TextView) findViewById(R.id.webview_title);
         ll_actwebview = (LinearLayout) findViewById(R.id.ll_actwebview);
         mProgressBar = (ProgressBar) findViewById(R.id.pb_view);
@@ -374,6 +374,16 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
             getMenuInflater().inflate(R.menu.menu_shareproduct, menu);
         }
         return super.onCreateOptionsMenu(menu);
+    }
+
+
+    public void setActlink(String actlink) {
+        this.actlink = actlink;
+    }
+
+
+    public String getActlink() {
+        return actlink;
     }
 
     @Override

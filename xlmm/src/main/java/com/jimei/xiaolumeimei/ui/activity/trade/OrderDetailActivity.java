@@ -1,14 +1,15 @@
 package com.jimei.xiaolumeimei.ui.activity.trade;
 
 import android.app.Activity;
-import android.support.v7.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -175,7 +176,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-
+        order_id = extras.getInt("orderinfo");
     }
 
     @Override
@@ -185,6 +186,10 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void initViews() {
+        Uri uri = getIntent().getData();
+        if (uri != null) {
+            order_id = Integer.valueOf(uri.getQueryParameter("trade_id"));
+        }
         View view = getLayoutInflater().inflate(R.layout.pop_layout, null);
         dialog = new Dialog(this, R.style.CustomDialog);
         dialog.setContentView(view);
@@ -217,8 +222,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     //从server端获得所有订单数据，可能要查询几次
     @Override
     protected void initData() {
-        if ((getIntent() != null) && (getIntent().getExtras() != null)) {
-            order_id = getIntent().getExtras().getInt("orderinfo");
+        if (order_id != -1) {
             showIndeterminateProgressDialog(false);
             Subscription subscription = TradeModel.getInstance()
                     .getOrderDetailBean(order_id)
@@ -232,8 +236,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                             showProcBtn(orderDetailBean);
                             fillDataToView(orderDetailBean);
                             scrollView.scrollTo(0, 0);
-                            String display = orderDetailBean.getStatus_display();
-                            if ("已付款".equals(display)) {
+                            if (orderDetailBean.isCan_change_address()) {
                                 addressLayout.setOnClickListener(OrderDetailActivity.this);
                             } else {
                                 rightImage.setVisibility(View.GONE);

@@ -16,8 +16,6 @@ import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -56,14 +54,6 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
     }
 
     private void loadData() {
-//
-//        if (calcLeftTime() > 0) {
-//            myTickCircleProgress.setVisibility(View.VISIBLE);
-//            countLeft.setVisibility(View.VISIBLE);
-//            cvLefttime.start(calcLeftTime());
-//            left.setText("热销分享即将开始...");
-//        } else {
-//            countLeft.setVisibility(View.GONE);
         showIndeterminateProgressDialog(false);
         MMProductModel.getInstance()
                 .getNinePic()
@@ -92,12 +82,9 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
                         }
                     }
                 });
-//        }
     }
 
     private void loadDataRefresh() {
-
-        //showIndeterminateProgressDialog(false);
         MMProductModel.getInstance()
                 .getNinePic()
                 .subscribeOn(Schedulers.io())
@@ -106,7 +93,6 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
                     @Override
                     public void onCompleted() {
                         super.onCompleted();
-                        //hideIndeterminateProgressDialog();
                     }
 
                     @Override
@@ -161,34 +147,14 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
 
     @Override
     public void onRefresh() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                loadDataRefresh();
-                try {
-                    mRefreshLayout.setRefreshing(false);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        new Handler().postDelayed(() -> {
+            loadDataRefresh();
+            try {
+                mRefreshLayout.setRefreshing(false);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }, 2000);
-    }
-
-    private long calcLeftTime() {
-
-        Date now = new Date();
-        Date nextDay10PM = new Date();
-        Calendar calendar = Calendar.getInstance();
-
-        calendar.setTime(nextDay10PM);
-        calendar.set(Calendar.HOUR_OF_DAY, 10);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-
-        nextDay10PM = calendar.getTime();
-
-        return nextDay10PM.getTime() - now.getTime();
     }
 
     @Override

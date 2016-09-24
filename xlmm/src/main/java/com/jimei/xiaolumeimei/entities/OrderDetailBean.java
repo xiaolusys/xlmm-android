@@ -60,6 +60,7 @@ public class OrderDetailBean implements Serializable {
     private String out_sid;
     private int  order_type;
     private boolean can_refund;
+    private boolean can_change_address;
     /**
      * id : -2
      * code : YUNDA_QR
@@ -318,6 +319,14 @@ public class OrderDetailBean implements Serializable {
 
     public void setCan_refund(boolean can_refund) {
         this.can_refund = can_refund;
+    }
+
+    public boolean isCan_change_address() {
+        return can_change_address;
+    }
+
+    public void setCan_change_address(boolean can_change_address) {
+        this.can_change_address = can_change_address;
     }
 
     public static class LogisticsCompanyBean {

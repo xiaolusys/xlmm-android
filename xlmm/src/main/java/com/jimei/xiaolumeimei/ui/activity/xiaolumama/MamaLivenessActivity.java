@@ -4,9 +4,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import butterknife.Bind;
 
 import com.cpoopc.scrollablelayoutlib.ScrollableHelper;
 import com.cpoopc.scrollablelayoutlib.ScrollableLayout;
@@ -26,6 +23,7 @@ import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
+import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -110,17 +108,10 @@ public class MamaLivenessActivity extends BaseSwipeBackCompatActivity
                                 if (livenessBean != null) {
                                     mAdapter.update(livenessBean.getResults());
                                     if (null == livenessBean.getNext()) {
-                                        Toast.makeText(MamaLivenessActivity.this, "没有更多了", Toast.LENGTH_SHORT)
-                                                .show();
-                                        lv_liveness.post(lv_liveness::loadMoreComplete);
+                                        JUtils.Toast("没有更多了");
                                         lv_liveness.setLoadingMoreEnabled(false);
                                     }
                                 }
-                            }
-
-                            @Override
-                            public void onCompleted() {
-                                super.onCompleted();
                                 lv_liveness.post(lv_liveness::loadMoreComplete);
                             }
                         });

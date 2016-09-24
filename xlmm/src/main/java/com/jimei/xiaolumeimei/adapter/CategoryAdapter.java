@@ -1,7 +1,9 @@
 package com.jimei.xiaolumeimei.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
+import com.jimei.xiaolumeimei.ui.activity.product.CategoryListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductListActivity;
 import com.jimei.xiaolumeimei.utils.FileUtils;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
@@ -46,6 +49,11 @@ public class CategoryAdapter extends XRecyclerView.Adapter<CategoryAdapter.ViewH
         notifyDataSetChanged();
     }
 
+    public void clear(){
+        mData.clear();
+        notifyDataSetChanged();
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_category, parent, false);
@@ -66,6 +74,17 @@ public class CategoryAdapter extends XRecyclerView.Adapter<CategoryAdapter.ViewH
         if (context instanceof ProductListActivity) {
             holder.item.setOnClickListener(v -> ((ProductListActivity) this.context).refreshData(childsBean.getCid(), true));
         }
+        holder.item.setOnClickListener(v -> {
+            Intent intent = new Intent(context, ProductListActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("type", childsBean.getCid());
+            bundle.putString("title", childsBean.getName());
+            intent.putExtras(bundle);
+            context.startActivity(intent);
+            if (context instanceof CategoryListActivity) {
+                ((CategoryListActivity) context).finish();
+            }
+        });
     }
 
     @Override

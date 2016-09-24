@@ -188,8 +188,11 @@ public class MamaSecondFragment extends BaseLazyFragment<FragmentMamaSecondBindi
         return title;
     }
 
-    public WebView getWebView(){
-        return b.webView;
+    public WebView getWebView() {
+        if (b != null) {
+            return b.webView;
+        }
+        return null;
     }
 
     @Override

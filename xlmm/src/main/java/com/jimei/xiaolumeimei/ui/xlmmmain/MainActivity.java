@@ -47,10 +47,8 @@ import com.jimei.xiaolumeimei.event.SetMiPushEvent;
 import com.jimei.xiaolumeimei.event.UserChangeEvent;
 import com.jimei.xiaolumeimei.event.UserInfoEmptyEvent;
 import com.jimei.xiaolumeimei.receiver.UpdateBroadReceiver;
-import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.main.ComplainActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.CollectionActivity;
-import com.jimei.xiaolumeimei.ui.activity.product.ProductListActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllOrdersActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
@@ -113,7 +111,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     private static final String POST_URL = "?imageMogr2/format/jpg/quality/70";
     public static String TAG = "MainActivity";
     Map<String, String> map = new HashMap<>();
-//    List<ImageView> imageViewList = new ArrayList<>();
+    //    List<ImageView> imageViewList = new ArrayList<>();
     TextView tvNickname;
     ImageView imgUser;
     TextView tvPoint;
@@ -143,7 +141,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     LinearLayout brand;
     @Bind(R.id.cart_view)
     View cart_view;
-//    @Bind(R.id.post_mainactivity)
+    //    @Bind(R.id.post_mainactivity)
 //    LinearLayout post_activity_layout;
     @Bind(R.id.category_layout)
     LinearLayout categoryLayout;
@@ -653,12 +651,9 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     @Override
     public void initSliderLayout(PortalBean postBean) throws NullPointerException {
         JUtils.Log(TAG, "refreshSliderLayout");
-
         posters.clear();
         map.clear();
-
         posters.addAll(postBean.getPosters());
-
         for (int i = 0; i < posters.size(); i++) {
             map.put(posters.get(i).getPic_link(), posters.get(i).getApp_link());
         }
@@ -677,34 +672,32 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
             mSliderLayout.addSlider(textSliderView);
             mSliderLayout.setDuration(3000);
             mSliderLayout.setPresetIndicator(SliderLayout.PresetIndicators.Left_Bottom);
-            textSliderView.setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
-                @Override
-                public void onSliderClick(BaseSliderView slider) {
-                    if (slider.getBundle() != null) {
-                        MobclickAgent.onEvent(MainActivity.this, "BannerID");
-                        String extra = slider.getBundle().getString("extra");
-                        if (!TextUtils.isEmpty(extra)) {
-                            JumpUtils.JumpInfo jump_info = JumpUtils.get_jump_info(extra);
-                            if (extra.startsWith("http://")) {
-                                JumpUtils.jumpToWebViewWithCookies(MainActivity
-                                        .this, extra, -1, ActivityWebViewActivity.class);
-                            } else {
-                                if (jump_info.getType() == XlmmConst.JUMP_PRODUCT_CHILDLIST) {
-                                    Bundle childBundle = new Bundle();
-                                    childBundle.putString("type", XlmmConst.TYPE_CHILD);
-                                    childBundle.putString("title", "萌娃专区");
-                                    readyGo(ProductListActivity.class, childBundle);
-                                } else if (jump_info.getType() == XlmmConst.JUMP_PRODUCT_LADYLIST) {
-                                    Bundle ladyBundle = new Bundle();
-                                    ladyBundle.putString("type", XlmmConst.TYPE_LADY);
-                                    ladyBundle.putString("title", "女装专区");
-                                    readyGo(ProductListActivity.class, ladyBundle);
-                                } else {
-                                    JumpUtils.push_jump_proc(MainActivity.this, extra);
-                                }
-                            }
-                        }
-                    }
+            textSliderView.setOnSliderClickListener(slider -> {
+                if (slider.getBundle() != null) {
+                    MobclickAgent.onEvent(MainActivity.this, "BannerID");
+                    String link = slider.getBundle().getString("extra");
+                    JumpUtils.push_jump_proc(MainActivity.this, link);
+//                    if (!TextUtils.isEmpty(extra)) {
+//                        JumpUtils.JumpInfo jump_info = JumpUtils.get_jump_info(extra);
+//                        if (extra.startsWith("http://")) {
+//                            JumpUtils.jumpToWebViewWithCookies(MainActivity
+//                                    .this, extra, -1, ActivityWebViewActivity.class);
+//                        } else {
+//                            if (jump_info.getType() == XlmmConst.JUMP_PRODUCT_CHILDLIST) {
+//                                Bundle childBundle = new Bundle();
+//                                childBundle.putString("type", XlmmConst.TYPE_CHILD);
+//                                childBundle.putString("title", "萌娃专区");
+//                                readyGo(ProductListActivity.class, childBundle);
+//                            } else if (jump_info.getType() == XlmmConst.JUMP_PRODUCT_LADYLIST) {
+//                                Bundle ladyBundle = new Bundle();
+//                                ladyBundle.putString("type", XlmmConst.TYPE_LADY);
+//                                ladyBundle.putString("title", "女装专区");
+//                                readyGo(ProductListActivity.class, ladyBundle);
+//                            } else {
+//                                JumpUtils.push_jump_proc(MainActivity.this, extra);
+//                            }
+//                        }
+//                    }
                 }
             });
         }
@@ -736,8 +729,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
             String name = categorys.get(i).getName();
             if (cat_link != null && cat_link.contains(XlmmConst.JUMP_PREFIX)) {
                 imageView.setOnClickListener(v ->
-                        JumpUtils.push_jump_proc(
-                                MainActivity.this, cat_link, name));
+                        JumpUtils.push_jump_proc(MainActivity.this, (cat_link + "&title=" + name)));
             }
             ViewUtils.loadImageWithOkhttp(categorys.get(i).getCat_img(), MainActivity.this, imageView, count);
         }
@@ -783,96 +775,9 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     @Override
     public void initPost(PortalBean postBean) throws NullPointerException {
         JUtils.Log(TAG, "refreshPost");
-//        if (post_activity_layout != null) {
-//            post_activity_layout.removeAllViews();
-//        }
-//        imageViewList.clear();
         List<PortalBean.ActivitysBean> postActivityBean = postBean.getActivitys();
         if (null != postActivityBean && postActivityBean.size() > 0) {
-//            post_activity_layout.setVisibility(View.VISIBLE);
-//
-//            ImageView imageView;
-//
-//
-//            for (int i = 0; i < postActivityBean.size(); i++) {
-//                imageView = new ImageView(MainActivity.this);
-//                imageView.setScaleType(ImageView.ScaleType.CENTER);
-//                imageView.setPadding(0, 12, 0, 12);
-//                imageViewList.add(imageView);
-//                post_activity_layout.addView(imageView);
-//            }
-//            for (int i = 0; i < postActivityBean.size(); i++) {
-//                final int finalI = i;
-//                OkHttpUtils.get()
-//                        .url(postActivityBean.get(i).getAct_img() + POST_URL)
-//                        .build()
-//                        .execute(new BitmapCallback() {
-//                            @Override
-//                            public void onError(Call call, Exception e, int id) {
-//                            }
-//
-//                            @Override
-//                            public void onResponse(Bitmap response, int id) {
-//                                if (response != null) {
-//                                    imageViewList.get(finalI).setAdjustViewBounds(true);
-//                                    int screenWidth = DisplayUtils.getScreenW(MainActivity.this);
-//                                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(screenWidth,
-//                                            LinearLayout.LayoutParams.WRAP_CONTENT);
-//                                    imageViewList.get(finalI).setLayoutParams(lp);
-//                                    imageViewList.get(finalI).setMaxWidth(screenWidth);
-//                                    imageViewList.get(finalI).setMaxHeight(screenWidth * 5);
-//                                    imageViewList.get(finalI).setImageBitmap(response);
-//                                    if (postActivityBean.get(finalI).getAct_type().equals("coupon")) {
-//                                        imageViewList.get(finalI).setOnClickListener(v -> mPresenter.getUsercoupons(
-//                                                postActivityBean.get(finalI).getExtras().getTemplateId()));
-//                                    } else {
-//                                        imageViewList.get(finalI).setOnClickListener(v -> {
-//                                            MobclickAgent.onEvent(MainActivity.this, "ActivityID");
-//                                            if (postActivityBean.get(finalI).isLogin_required()) {
-//                                                if (LoginUtils.checkLoginState(MainActivity.this) && (null
-//                                                        != mPresenter.userInfoNewBean
-//                                                        && (null
-//                                                        != mPresenter.userInfoNewBean.getMobile())
-//                                                        && !mPresenter.userInfoNewBean.getMobile().isEmpty())) {
-//                                                    JumpUtils.jumpToWebViewWithCookies(MainActivity.this,
-//                                                            postActivityBean.get(finalI).getAct_link(),
-//                                                            postActivityBean.get(finalI).getId(), ActivityWebViewActivity.class,
-//                                                            postActivityBean.get(finalI).getTitle());
-//                                                } else {
-//                                                    if (!LoginUtils.checkLoginState(MainActivity.this)) {
-//                                                        JUtils.Toast("登录并绑定手机号后才可参加活动");
-//                                                        Bundle bundle = new Bundle();
-//                                                        bundle.putString("login", "goactivity");
-//                                                        bundle.putString("actlink",
-//                                                                postActivityBean.get(finalI).getAct_link());
-//                                                        bundle.putInt("id", postActivityBean.get(finalI).getId());
-//                                                        bundle.putString("title", postActivityBean.get(finalI).getTitle());
-//
-//                                                        readyGo(LoginActivity.class, bundle);
-//                                                    } else {
-//                                                        JUtils.Toast("登录成功,前往绑定手机号后才可参加活动");
-//                                                        if (null != mPresenter.userInfoNewBean) {
-//                                                            Bundle bundle = new Bundle();
-//                                                            bundle.putString("headimgurl",
-//                                                                    mPresenter.userInfoNewBean.getThumbnail());
-//                                                            bundle.putString("nickname", mPresenter.userInfoNewBean.getNick());
-//                                                            readyGo(WxLoginBindPhoneActivity.class, bundle);
-//                                                        }
-//                                                    }
-//                                                }
-//                                            } else {
-//                                                JumpUtils.jumpToWebViewWithCookies(MainActivity.this,
-//                                                        postActivityBean.get(finalI).getAct_link(),
-//                                                        postActivityBean.get(finalI).getId(), ActivityWebViewActivity.class,
-//                                                        postActivityBean.get(finalI).getTitle());
-//                                            }
-//                                        });
-//                                    }
-//                                }
-//                            }
-//                        });
-//            }
-            if (adapter==null) {
+            if (adapter == null) {
                 adapter = new ActivityListAdapter(this);
                 activityLv.setAdapter(adapter);
             }
@@ -883,9 +788,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
                 mastFragment.show(getFragmentManager(), "mask");
             }
         }
-//        else {
-//            post_activity_layout.setVisibility(View.GONE);
-//        }
     }
 
     @Override

@@ -69,17 +69,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-
-                <data
-                    android:host="local.app"
-                    android:pathPrefix="/openwith"
-                    android:scheme="xlmm"/>
-            </intent-filter>
         </activity>
         <activity
             android:name=".ui.activity.user.LoginActivity"
@@ -126,12 +115,28 @@
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
             android:name=".ui.activity.trade.OrderDetailActivity"
-            android:label="@string/title_activity_orderdetail"
-            android:theme="@style/AppTheme.TransparentActivity"/>
+            android:theme="@style/AppTheme.TransparentActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data
+                    android:host="app"
+                    android:path="/v1/trades/details"
+                    android:scheme="com.jimei.xlmm"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.activity.trade.AllRefundsActivity"
-            android:label="@string/title_activity_refunds"
-            android:theme="@style/AppTheme.TransparentActivity"/>
+            android:theme="@style/AppTheme.TransparentActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data
+                    android:host="app"
+                    android:path="/v1/refunds"
+                    android:scheme="com.jimei.xlmm"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.activity.user.InformationActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
@@ -203,9 +208,7 @@
             android:theme="@style/AppTheme.TransparentActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
-
                 <category android:name="android.intent.category.DEFAULT"/>
-
                 <data
                     android:host="app"
                     android:path="/v1/webview"
@@ -223,9 +226,7 @@
             android:theme="@style/AppTheme.TransparentActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
-
                 <category android:name="android.intent.category.DEFAULT"/>
-
                 <data
                     android:host="app"
                     android:path="/v1/vip_forum"
@@ -248,46 +249,18 @@
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
-
-            <!-- 调用新浪原生SDK，需要注册的回调activity -->
             <intent-filter>
                 <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-        <!-- QQ客户端回调 2.6.3开始独立添加activity来处理QQ客户端的回调 -->
-        <!-- <activity -->
-        <!-- android:name="cn.sharesdk.tencent.qq.ResultReceiver" -->
-        <!-- android:launchMode="singleTask" -->
-        <!-- android:noHistory="true"> -->
-        <!-- &lt;!&ndash; -->
-        <!-- 如果集成QQ分享，或者使用QQ客户端来进行QQ空间的分享，须要在此处添加一个对ACTION_VIEW -->
-        <!-- 事件的过滤器，其中的scheme是“tencent”前缀再开发者应用的加上appId。如果此过滤器不设置， -->
-        <!-- 则分享结束以后不能得到正确的回调 -->
-        <!-- &ndash;&gt; -->
-        <!-- <intent-filter android:priority="1000" > -->
-        <!-- <data android:scheme="tencent100371282" /> -->
-        <!-- <action android:name="android.intent.action.VIEW" /> -->
-        <!-- <category android:name="android.intent.category.DEFAULT" /> -->
-        <!-- <category android:name="android.intent.category.BROWSABLE" /> -->
-        <!-- </intent-filter> -->
-        <!-- </activity> -->
-        <!-- 微信分享回调 -->
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
-
-        <!-- &lt;!&ndash; 支付宝分享回调 &ndash;&gt; -->
-        <!-- <activity -->
-        <!-- android:name=".apshare.ShareEntryActivity" -->
-        <!-- android:theme="@android:style/Theme.Translucent.NoTitleBar" -->
-        <!-- android:configChanges="keyboardHidden|orientation|screenSize" -->
-        <!-- android:exported="true"/> -->
-
         <activity
             android:name=".ui.activity.xiaolumama.MamaWithdrawCashHistoryActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
@@ -314,7 +287,16 @@
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
             android:name=".ui.activity.xiaolumama.MMNinePicActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
+            android:theme="@style/AppTheme.TransparentActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data
+                    android:host="app"
+                    android:path="/v1/vip_0day"
+                    android:scheme="com.jimei.xlmm"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.activity.xiaolumama.ImagePagerActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
@@ -407,17 +389,33 @@
             android:theme="@style/AppTheme.TransparentActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
-
                 <category android:name="android.intent.category.DEFAULT"/>
-
                 <data
-                    android:host="m.xiaolumeimei.com"
-                    android:scheme="http"/>
+                    android:host="app"
+                    android:path="/v1/products/promote_today"
+                    android:scheme="com.jimei.xlmm"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data
+                    android:host="app"
+                    android:path="/v1/products/promote_previous"
+                    android:scheme="com.jimei.xlmm"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".ui.activity.user.AllCouponActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
+            android:theme="@style/AppTheme.TransparentActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data
+                    android:host="app"
+                    android:path="/v1/usercoupons/method"
+                    android:scheme="com.jimei.xlmm"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.activity.user.SelectCouponActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
@@ -435,18 +433,49 @@
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
             android:name=".ui.activity.product.ProductListActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
+            android:theme="@style/AppTheme.TransparentActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data
+                    android:host="app"
+                    android:path="/v1/products/childlist"
+                    android:scheme="com.jimei.xlmm"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data
+                    android:host="app"
+                    android:path="/v1/products/ladylist"
+                    android:scheme="com.jimei.xlmm"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data
+                    android:host="app"
+                    android:path="/v1/products/category"
+                    android:scheme="com.jimei.xlmm"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.activity.product.ProductDetailActivity"
             android:theme="@style/AppTheme.TransparentActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
-
                 <category android:name="android.intent.category.DEFAULT"/>
-
                 <data
                     android:host="app"
                     android:path="/v1/product_detail"
+                    android:scheme="com.jimei.xlmm"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data
+                    android:host="app"
+                    android:path="/v1/products"
                     android:scheme="com.jimei.xlmm"/>
             </intent-filter>
         </activity>
@@ -462,13 +491,40 @@
         <activity
             android:name=".ui.activity.trade.CartActivity"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.TransparentActivity"/>
+            android:theme="@style/AppTheme.TransparentActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data
+                    android:host="app"
+                    android:path="/v1/shopping_cart"
+                    android:scheme="com.jimei.xlmm"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.activity.xiaolumama.MamaChooseActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
+            android:theme="@style/AppTheme.TransparentActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data
+                    android:host="app"
+                    android:path="/v1/vip_choice"
+                    android:scheme="com.jimei.xlmm"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.mminfo.MamaActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
+            android:theme="@style/AppTheme.TransparentActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data
+                    android:host="app"
+                    android:path="/v1/vip_home"
+                    android:scheme="com.jimei.xlmm"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.activity.trade.CommonScanActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
@@ -477,6 +533,9 @@
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
             android:name=".ui.activity.xiaolumama.MamaDrawSmallCashActivity"
+            android:theme="@style/AppTheme.TransparentActivity"/>
+        <activity
+            android:name=".ui.activity.product.CategoryListActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
 
         <service

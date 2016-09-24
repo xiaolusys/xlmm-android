@@ -92,7 +92,13 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
         setStatusBar();
         Uri uri = getIntent().getData();
         if (uri != null) {
-            model_id = Integer.valueOf(uri.getQueryParameter("model_id"));
+            if (uri.getPath().contains("product_detail")) {
+                model_id = Integer.valueOf(uri.getQueryParameter("model_id"));
+            } else if (uri.getPath().contains("products")) {
+                String url = uri.getQueryParameter("product_id");
+                String[] details = url.split("details/");
+                model_id = Integer.valueOf(details[1]);
+            }
         } else {
             model_id = getIntent().getExtras().getInt("model_id");
         }
