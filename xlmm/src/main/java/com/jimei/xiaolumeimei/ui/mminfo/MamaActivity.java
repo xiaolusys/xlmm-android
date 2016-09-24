@@ -181,7 +181,7 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (fragments.size() == 3) {
             WebView webView = ((MamaSecondFragment) fragments.get(1)).getWebView();
-            if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (keyCode == KeyEvent.KEYCODE_BACK && webView != null) {
                 if (b.viewPager.getCurrentItem() == 1 && webView.canGoBack()) {
                     webView.goBack();
                 } else {

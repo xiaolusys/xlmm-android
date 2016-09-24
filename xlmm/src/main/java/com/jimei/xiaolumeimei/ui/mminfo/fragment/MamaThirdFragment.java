@@ -83,7 +83,9 @@ public class MamaThirdFragment extends BaseLazyFragment<FragmentMamaThirdBinding
     }
 
     public void refreshFortune() {
-        ((MamaActivity) mActivity).showIndeterminateProgressDialog(false);
+        if (mActivity!=null) {
+            ((MamaActivity) mActivity).showIndeterminateProgressDialog(false);
+        }
         addSubscription(MMInfoModel.getInstance()
                 .getMamaFortune()
                 .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))

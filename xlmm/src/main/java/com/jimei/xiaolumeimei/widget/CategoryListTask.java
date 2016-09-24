@@ -2,12 +2,10 @@ package com.jimei.xiaolumeimei.widget;
 
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.view.View;
-import android.widget.LinearLayout;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.jimei.xiaolumeimei.adapter.CategoryAdapter;
+import com.jimei.xiaolumeimei.adapter.CategoryListAdapter;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
 import com.jimei.xiaolumeimei.utils.FileUtils;
 import com.jude.utils.JUtils;
@@ -19,21 +17,15 @@ import java.io.InputStream;
 import java.util.List;
 
 /**
- * Created by wisdom on 16/8/8.
+ * Created by wisdom on 16/9/23.
  */
 
-public class CategoryTask extends AsyncTask<String, Integer, List<CategoryBean>> {
+public class CategoryListTask extends AsyncTask<String, Integer, List<CategoryBean>> {
 
-    private CategoryAdapter adapter;
-    private LinearLayout mLinearLayout;
+    private CategoryListAdapter adapter;
 
-    public CategoryTask(CategoryAdapter adapter) {
+    public CategoryListTask(CategoryListAdapter adapter) {
         this.adapter = adapter;
-    }
-
-    public CategoryTask(CategoryAdapter adapter, LinearLayout linearLayout) {
-        this.adapter = adapter;
-        mLinearLayout = linearLayout;
     }
 
     @Override
@@ -52,16 +44,10 @@ public class CategoryTask extends AsyncTask<String, Integer, List<CategoryBean>>
             byte[] arrayOfByte = new byte[in.available()];
             in.read(arrayOfByte);
             categoryStr = new String(arrayOfByte, "UTF-8");
-            Gson gson = new Gson();
-            List<CategoryBean> list = gson.fromJson(categoryStr, new TypeToken<List<CategoryBean>>() {
+            List<CategoryBean> list = new Gson().fromJson(categoryStr, new TypeToken<List<CategoryBean>>() {
             }.getType());
-            if ("".equals(params[0])) {
-                return list.get(0).getChilds();
-            }
-            for (int i = 0; i < list.size(); i++) {
-                if (params[0].equals(list.get(i).getCid())) {
-                    return list.get(i).getChilds();
-                }
+            if (list.size() > 0) {
+                return list;
             }
             return null;
         } catch (Exception e) {
@@ -84,7 +70,6 @@ public class CategoryTask extends AsyncTask<String, Integer, List<CategoryBean>>
             adapter.updateWithClear(list);
         } else {
             adapter.clear();
-            mLinearLayout.setVisibility(View.VISIBLE);
         }
     }
 }
