@@ -20,6 +20,7 @@ import com.jimei.xiaolumeimei.utils.FileUtils;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.zhy.autolayout.utils.AutoUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -33,9 +34,9 @@ public class CategoryAdapter extends XRecyclerView.Adapter<CategoryAdapter.ViewH
     private Context context;
     private List<CategoryBean> mData;
 
-    public CategoryAdapter(Context context, List<CategoryBean> mData) {
+    public CategoryAdapter(Context context) {
         this.context = context;
-        this.mData = mData;
+        mData = new ArrayList<>();
     }
 
     public void update(List<CategoryBean> list) {
@@ -49,7 +50,7 @@ public class CategoryAdapter extends XRecyclerView.Adapter<CategoryAdapter.ViewH
         notifyDataSetChanged();
     }
 
-    public void clear(){
+    public void clear() {
         mData.clear();
         notifyDataSetChanged();
     }

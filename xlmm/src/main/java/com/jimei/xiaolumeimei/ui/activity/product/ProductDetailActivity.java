@@ -49,6 +49,7 @@ import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.utils.RxUtils;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.AttrView;
+import com.jimei.xiaolumeimei.widget.CountDownView;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.widget.TagTextView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -86,7 +87,6 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
     private ProductDetailBean.TeamBuyInfo teamBuyInfo;
     private List<ProductDetailBean.SkuInfoBean> skuInfo;
 
-
     @Override
     protected void initView() {
         setStatusBar();
@@ -94,10 +94,8 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
         if (uri != null) {
             if (uri.getPath().contains("product_detail")) {
                 model_id = Integer.valueOf(uri.getQueryParameter("model_id"));
-            } else if (uri.getPath().contains("products")) {
-                String url = uri.getQueryParameter("product_id");
-                String[] details = url.split("details/");
-                model_id = Integer.valueOf(details[1]);
+            } else if (uri.getPath().contains("products/modelist")) {
+                model_id = Integer.valueOf(uri.getQueryParameter("model_id"));
             }
         } else {
             model_id = getIntent().getExtras().getInt("model_id");
@@ -225,13 +223,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        new Thread(() -> {
-            while (left > 0) {
-                left = left - 1000;
-                runOnUiThread(() -> b.countView.updateShow(left));
-                SystemClock.sleep(1000);
-            }
-        }).start();
+        b.countView.start(left, CountDownView.TYPE_ALL);
     }
 
     private void fillDataToView(ProductDetailBean productDetailBean) {

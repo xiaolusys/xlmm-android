@@ -372,6 +372,8 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         if (getIntent().getExtras() != null && getIntent().getExtras().getBoolean("share", true)) {
             getMenuInflater().inflate(R.menu.menu_shareproduct, menu);
+        } else if (getIntent().getData() != null) {
+            getMenuInflater().inflate(R.menu.menu_shareproduct, menu);
         }
         return super.onCreateOptionsMenu(menu);
     }

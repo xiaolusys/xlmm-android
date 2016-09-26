@@ -206,6 +206,7 @@ public abstract class BaseMVVMActivity<T extends ViewDataBinding> extends BaseAu
             Resources resources = XlmmApp.getInstance().getResources();
             Snackbar snackbar = Snackbar.make(getWindow().getDecorView(), msg, Snackbar.LENGTH_SHORT);
             setSnackbarMessageTextColor(snackbar);
+
             snackbar.getView().setBackgroundColor(resources.getColor(R.color.white));
             snackbar.show();
         }

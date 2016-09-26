@@ -2,18 +2,14 @@ package com.jimei.xiaolumeimei.widget;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.utils.ViewUtils;
-import java.util.List;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 
 /**
  * Created by itxuye on 2016/8/29.
@@ -38,21 +34,6 @@ public class TowImageView extends LinearLayout {
     childImage = (ImageView) findViewById(R.id.child_img);
     setImageViewResize(ladyImage);
     setImageViewResize(childImage);
-  }
-
-  public void setImageBitmaps(List<String> urls) {
-    ViewUtils.loadImageWithOkhttpReturnBitmaps(context, urls)
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new Action1<List<Bitmap>>() {
-          @Override public void call(List<Bitmap> bitmaps) {
-            ladyImage.setImageBitmap(bitmaps.get(0));
-            childImage.setImageBitmap(bitmaps.get(1));
-          }
-        }, new Action1<Throwable>() {
-          @Override public void call(Throwable throwable) {
-            throwable.printStackTrace();
-          }
-        });
   }
 
   public void setImageViewResize(ImageView imageView) {

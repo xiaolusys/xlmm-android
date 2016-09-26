@@ -2,7 +2,6 @@ package com.jimei.xiaolumeimei.ui.fragment.v2;
 
 
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -18,6 +17,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.ProductListBeanAdapter;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
+import com.jimei.xiaolumeimei.widget.CountDownView;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableHelper;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -27,10 +27,10 @@ import com.umeng.analytics.MobclickAgent;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import cn.iwgang.countdownview.CountdownView;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
+
 
 /**
  * Created by wisdom on 16/8/16.
@@ -39,10 +39,8 @@ public class ProductListFragment extends Fragment implements ScrollableHelper.Sc
 
     XRecyclerView xRecyclerView;
     private View view;
-    private CountdownView countTime;
+    CountDownView countTime;
     private int type;
-    private Thread thread;
-    private long left;
     private int page = 1;
     private String next;
     private ProductListBeanAdapter adapter;
@@ -114,7 +112,7 @@ public class ProductListFragment extends Fragment implements ScrollableHelper.Sc
         if (!isFirstLoad || !isVisible || !isInitView) {
             return;
         }
-        loadMore(page, false);
+        loadMore(page);
         isFirstLoad = false;
     }
 
@@ -141,9 +139,8 @@ public class ProductListFragment extends Fragment implements ScrollableHelper.Sc
     }
 
     private void initViews() {
-        View head = LayoutInflater.from(getActivity()).inflate(R.layout.today_poster_header,
-                (ViewGroup) view.findViewById(R.id.head_today), false);
-        countTime = (CountdownView) head.findViewById(R.id.countTime);
+        View head = LayoutInflater.from(getActivity()).inflate(R.layout.today_poster_header, null);
+        countTime = (CountDownView) head.findViewById(R.id.count_view);
         GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
         xRecyclerView.setLayoutManager(manager);
         xRecyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
@@ -164,29 +161,13 @@ public class ProductListFragment extends Fragment implements ScrollableHelper.Sc
             @Override
             public void onLoadMore() {
                 if (next != null && !"".equals(next)) {
-                    loadMore(page, false);
+                    loadMore(page);
                 } else {
                     JUtils.Toast("已经到底啦!");
                     xRecyclerView.post(xRecyclerView::loadMoreComplete);
                 }
             }
         });
-    }
-
-    private void initLeftTime() {
-        if (thread == null) {
-            thread = new Thread(() -> {
-                while (left > 0) {
-                    left = left - 1000;
-                    SystemClock.sleep(1000);
-                    if (getActivity() != null) {
-                        getActivity().runOnUiThread(() ->
-                                countTime.updateShow(left));
-                    }
-                }
-            });
-            thread.start();
-        }
     }
 
     private long calcLeftTime(String crtTime) {
@@ -206,7 +187,7 @@ public class ProductListFragment extends Fragment implements ScrollableHelper.Sc
         return left;
     }
 
-    private void loadMore(int num, boolean isClear) {
+    private void loadMore(int num) {
         addSubscription(ProductModel.getInstance()
                 .getProductListBean(num, type)
                 .subscribeOn(Schedulers.io())
@@ -218,13 +199,9 @@ public class ProductListFragment extends Fragment implements ScrollableHelper.Sc
                             if (next != null && !"".equals(next)) {
                                 page++;
                             }
-                            left = calcLeftTime(productListBean.getOffshelf_deadline());
-                            initLeftTime();
-                            if (isClear) {
-                                adapter.updateWithClear(productListBean.getResults());
-                            } else {
-                                adapter.update(productListBean.getResults());
-                            }
+                            countTime.start(calcLeftTime(productListBean.getOffshelf_deadline())
+                                    , CountDownView.TYPE_ALL);
+                            adapter.update(productListBean.getResults());
                         }
                         xRecyclerView.post(xRecyclerView::loadMoreComplete);
                     }
@@ -249,8 +226,8 @@ public class ProductListFragment extends Fragment implements ScrollableHelper.Sc
                             if (next != null && !"".equals(next)) {
                                 page++;
                             }
-                            left = calcLeftTime(productListBean.getOffshelf_deadline());
-                            initLeftTime();
+                            countTime.start(calcLeftTime(productListBean.getOffshelf_deadline())
+                                    , CountDownView.TYPE_ALL);
                             adapter.updateWithClear(productListBean.getResults());
                             if (swipeRefreshLayout != null) {
                                 swipeRefreshLayout.setRefreshing(false);

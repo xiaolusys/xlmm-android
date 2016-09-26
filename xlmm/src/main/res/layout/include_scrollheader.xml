@@ -49,6 +49,12 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"/>
 
+    <com.jcodecraeer.xrecyclerview.XRecyclerView
+        android:id="@+id/xrv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"/>
+
     <include layout="@layout/common_gap"/>
 
     <include layout="@layout/post_layout"/>

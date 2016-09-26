@@ -177,8 +177,7 @@ public class MultiImageView extends LinearLayout {
   }
 
   private ImageView createImageView(int position, final boolean isMultiImage) {
-    String url = imagesList.get(position)
-        + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
+    String url = imagesList.get(position);
     ImageView imageView = new ColorFilterImageView(getContext());
     if (isMultiImage) {
       imageView.setScaleType(ScaleType.CENTER_CROP);
@@ -194,8 +193,6 @@ public class MultiImageView extends LinearLayout {
     imageView.setTag(position);
     imageView.setId(url.hashCode());
     imageView.setOnClickListener(mImageViewOnClickListener);
-
-    //ImageLoader.getInstance().displayImage(url, imageView);
     Picasso.with(context).load(url).into(imageView);
     return imageView;
   }

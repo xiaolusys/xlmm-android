@@ -164,7 +164,10 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                                       new Intent(mContext, CartActivity.class);
                                   startActivity(intent);
                                   finish();
-                                } else if (login.equals("product")) {
+                                } else if (login.equals("push_jump")) {
+                                  JumpUtils.push_jump_proc(SmsLoginActivity.this,actlink);
+                                  finish();
+                                }else if (login.equals("product")) {
                                   finish();
                                 } else if (login.equals("main")) {
                                   finish();

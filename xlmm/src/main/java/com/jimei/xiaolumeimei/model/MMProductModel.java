@@ -10,6 +10,7 @@ import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.NinePicBean;
 import com.jimei.xiaolumeimei.entities.OderCarryBean;
 import com.jimei.xiaolumeimei.entities.ShopProductBean;
+import com.jimei.xiaolumeimei.entities.WxQrcode;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 
 import java.util.List;
@@ -110,6 +111,12 @@ public class MMProductModel {
 
     public Observable<MMHavaChooseResultBean> removeProFromShop(String id) {
         return XlmmRetrofitClient.getService().removeProFromShop(id)
+                .compose(new DefaultTransform<>());
+    }
+
+    public Observable<WxQrcode> getWxCode() {
+        return XlmmRetrofitClient.getService()
+                .getWxCode()
                 .compose(new DefaultTransform<>());
     }
 

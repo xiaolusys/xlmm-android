@@ -274,9 +274,6 @@
             android:name=".ui.activity.xiaolumama.MamaVisitorActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
-            android:name=".ui.activity.xiaolumama.ShareAllowanceActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
-        <activity
             android:name=".ui.activity.user.WxLoginBindPhoneActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
@@ -379,9 +376,6 @@
             android:name=".ui.mminfo.MMInfoActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
-            android:name=".ui.activity.xiaolumama.MMLevelExamWebViewActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
-        <activity
             android:name=".ui.activity.xiaolumama.MamaReNewActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
@@ -475,7 +469,7 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data
                     android:host="app"
-                    android:path="/v1/products"
+                    android:path="/v1/products/modelist"
                     android:scheme="com.jimei.xlmm"/>
             </intent-filter>
         </activity>

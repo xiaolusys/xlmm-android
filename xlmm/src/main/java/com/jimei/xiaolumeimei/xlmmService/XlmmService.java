@@ -80,6 +80,7 @@ import com.jimei.xiaolumeimei.entities.VersionBean;
 import com.jimei.xiaolumeimei.entities.WeekTaskRewardBean;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.entities.WxPubAuthInfo;
+import com.jimei.xiaolumeimei.entities.WxQrcode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -930,4 +931,7 @@ public interface XlmmService {
 
     @GET("/rest/v2/cashout_policy")
     Observable<CashoutPolicy> getCashoutPolicy();
+
+    @GET("/rest/v2/qrcode/get_wxpub_qrcode")
+    Observable<WxQrcode> getWxCode();
 }

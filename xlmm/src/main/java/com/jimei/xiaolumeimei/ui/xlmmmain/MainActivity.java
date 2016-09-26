@@ -19,6 +19,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.GridLayoutManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -31,6 +32,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.ActivityListAdapter;
 import com.jimei.xiaolumeimei.base.BasePresenterActivity;
@@ -71,6 +73,7 @@ import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.AutoToolbar;
 import com.jimei.xiaolumeimei.widget.BrandView;
+import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.widget.VersionManager;
 import com.jimei.xiaolumeimei.widget.badgelib.BadgeView;
 import com.jimei.xiaolumeimei.widget.banner.SliderLayout;
@@ -143,6 +146,8 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     View cart_view;
     //    @Bind(R.id.post_mainactivity)
 //    LinearLayout post_activity_layout;
+    @Bind(R.id.xrv)
+    XRecyclerView mXRecyclerView;
     @Bind(R.id.category_layout)
     LinearLayout categoryLayout;
     @Bind(R.id.nav_view)
@@ -664,9 +669,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         for (String name : map.keySet()) {
             DefaultSliderView textSliderView = new DefaultSliderView(MainActivity
                     .this);
-            // initialize a SliderLayout
             textSliderView.image(name + POST_URL).setScaleType(BaseSliderView.ScaleType.CenterInside);
-            //add your extra information
             textSliderView.bundle(new Bundle());
             textSliderView.getBundle().putString("extra", map.get(name));
             mSliderLayout.addSlider(textSliderView);
@@ -677,27 +680,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
                     MobclickAgent.onEvent(MainActivity.this, "BannerID");
                     String link = slider.getBundle().getString("extra");
                     JumpUtils.push_jump_proc(MainActivity.this, link);
-//                    if (!TextUtils.isEmpty(extra)) {
-//                        JumpUtils.JumpInfo jump_info = JumpUtils.get_jump_info(extra);
-//                        if (extra.startsWith("http://")) {
-//                            JumpUtils.jumpToWebViewWithCookies(MainActivity
-//                                    .this, extra, -1, ActivityWebViewActivity.class);
-//                        } else {
-//                            if (jump_info.getType() == XlmmConst.JUMP_PRODUCT_CHILDLIST) {
-//                                Bundle childBundle = new Bundle();
-//                                childBundle.putString("type", XlmmConst.TYPE_CHILD);
-//                                childBundle.putString("title", "萌娃专区");
-//                                readyGo(ProductListActivity.class, childBundle);
-//                            } else if (jump_info.getType() == XlmmConst.JUMP_PRODUCT_LADYLIST) {
-//                                Bundle ladyBundle = new Bundle();
-//                                ladyBundle.putString("type", XlmmConst.TYPE_LADY);
-//                                ladyBundle.putString("title", "女装专区");
-//                                readyGo(ProductListActivity.class, ladyBundle);
-//                            } else {
-//                                JumpUtils.push_jump_proc(MainActivity.this, extra);
-//                            }
-//                        }
-//                    }
                 }
             });
         }
@@ -706,6 +688,13 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     @Override
     public void initCategory(PortalBean postBean) throws NullPointerException {
         JUtils.Log(TAG, "refreshCategory");
+        GridLayoutManager manager = new GridLayoutManager(this, 4);
+        mXRecyclerView.setLayoutManager(manager);
+        mXRecyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        mXRecyclerView.addItemDecoration(new SpaceItemDecoration(10));
+        mXRecyclerView.setPullRefreshEnabled(false);
+        mXRecyclerView.setLoadingMoreEnabled(false);
+        // TODO: 16/9/26
         categoryLayout.removeAllViews();
         List<PortalBean.CategorysBean> categorys = postBean.getCategorys();
         List<LinearLayout> layoutList = new ArrayList<>();
