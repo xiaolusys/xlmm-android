@@ -49,6 +49,7 @@ import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.utils.RxUtils;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.AttrView;
+import com.jimei.xiaolumeimei.widget.CountDownView;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.widget.TagTextView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -222,13 +223,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        new Thread(() -> {
-            while (left > 0) {
-                left = left - 1000;
-                runOnUiThread(() -> b.countView.updateShow(left));
-                SystemClock.sleep(1000);
-            }
-        }).start();
+        b.countView.start(left, CountDownView.TYPE_ALL);
     }
 
     private void fillDataToView(ProductDetailBean productDetailBean) {

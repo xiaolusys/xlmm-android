@@ -17,8 +17,6 @@ import com.jimei.xiaolumeimei.widget.CategoryListTask;
 import com.jimei.xiaolumeimei.widget.CategoryTask;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 
-import java.util.ArrayList;
-
 import butterknife.Bind;
 
 /**
@@ -56,7 +54,7 @@ public class CategoryListActivity extends BaseSwipeBackCompatActivity implements
         mXRecyclerView.addItemDecoration(new SpaceItemDecoration(10));
         mXRecyclerView.setPullRefreshEnabled(false);
         mXRecyclerView.setLoadingMoreEnabled(false);
-        adapter = new CategoryAdapter(this, new ArrayList<>());
+        adapter = new CategoryAdapter(this);
         mXRecyclerView.setAdapter(adapter);
         new CategoryTask(adapter).execute("");
     }

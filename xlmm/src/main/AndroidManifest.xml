@@ -274,9 +274,6 @@
             android:name=".ui.activity.xiaolumama.MamaVisitorActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
-            android:name=".ui.activity.xiaolumama.ShareAllowanceActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
-        <activity
             android:name=".ui.activity.user.WxLoginBindPhoneActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
@@ -377,9 +374,6 @@
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
             android:name=".ui.mminfo.MMInfoActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
-        <activity
-            android:name=".ui.activity.xiaolumama.MMLevelExamWebViewActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
             android:name=".ui.activity.xiaolumama.MamaReNewActivity"

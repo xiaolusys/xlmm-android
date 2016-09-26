@@ -180,8 +180,7 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@id/imgCircleStar"
                             android:layout_marginTop="50px"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/line"/>
+                            android:scaleType="fitXY"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"

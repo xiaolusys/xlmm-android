@@ -43,7 +43,6 @@ import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.BoutiqueWebviewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.GoodWeekActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMFans1Activity;
-import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMLevelExamWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMNinePicActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShareCodeWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShoppingListActivity;
@@ -548,7 +547,7 @@ public class MMInfoActivity
             case R.id.imgExam:
                 if (mamaFortune != null) {
                     JumpUtils.jumpToWebViewWithCookies(this, mamaResult.getExam(), -1,
-                            MMLevelExamWebViewActivity.class, "活动");
+                            ActivityWebViewActivity.class, "活动");
                 }
                 break;
             case R.id.rl_team:

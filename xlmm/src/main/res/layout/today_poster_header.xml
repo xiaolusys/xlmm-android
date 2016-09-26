@@ -1,45 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/head_today"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:gravity="center"
+              android:orientation="horizontal">
 
     <TextView
-        android:textStyle="bold"
-        android:textColor="#A0A0A0"
-        android:textSize="30px"
-        android:id="@+id/tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:text="距本场结束" />
+        android:layout_marginBottom="6dp"
+        android:layout_marginTop="6dp"
+        android:text="距本场结束"
+        android:textColor="@color/text_color_A0"
+        android:textSize="16sp"
+        android:textStyle="bold"/>
 
-    <cn.iwgang.countdownview.CountdownView
-        android:layout_toRightOf="@id/tv"
-        android:id="@+id/countTime"
+    <com.jimei.xiaolumeimei.widget.CountDownView
+        android:id="@+id/count_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        app:isShowHour="true"
-        app:isShowMinute="true"
-        app:isShowSecond="true"
-        app:isSuffixTextBold="true"
-        app:isShowMillisecond="false"
-        app:suffixGravity="center"
-        app:suffixTextColor="@color/black"
-        app:suffixTextSize="12sp"
-        app:timeTextColor="@color/black"
-        app:timeTextSize="18sp"
-        app:isTimeTextBold="true"
-        app:isHideTimeBackground="false"
-        app:timeBgColor="@color/white"
-        app:isShowTimeBgDivisionLine="false"
-        app:suffixDay="天"
-        app:suffixHour="时"
-        app:suffixMinute="分"
-        app:suffixSecond="秒"
-        />
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/text_color_4A"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
 
-</RelativeLayout>
+</LinearLayout>

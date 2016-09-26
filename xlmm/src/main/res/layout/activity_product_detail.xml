@@ -148,36 +148,13 @@
                                     android:layout_height="1dp"
                                     android:layout_weight="1"/>
 
-                                <RelativeLayout
+                                <com.jimei.xiaolumeimei.widget.CountDownView
+                                    android:id="@+id/count_view"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginRight="32px">
-
-                                    <cn.iwgang.countdownview.CountdownView
-                                        android:id="@+id/count_view"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        app:isHideTimeBackground="false"
-                                        app:isShowHour="true"
-                                        app:isShowMillisecond="false"
-                                        app:isShowMinute="true"
-                                        app:isShowSecond="true"
-                                        app:isShowTimeBgDivisionLine="false"
-                                        app:isSuffixTextBold="true"
-                                        app:isTimeTextBold="true"
-                                        app:suffixDay="天"
-                                        app:suffixGravity="center"
-                                        app:suffixHour="时"
-                                        app:suffixMinute="分"
-                                        app:suffixSecond="秒"
-                                        app:suffixTextColor="@color/text_color_4A"
-                                        app:suffixTextSize="12sp"
-                                        app:timeBgColor="@color/white"
-                                        app:timeTextColor="@color/text_color_4A"
-                                        app:timeTextSize="14sp"/>
-
-                                </RelativeLayout>
-
+                                    android:layout_marginRight="32px"
+                                    android:textColor="@color/text_color_4A"
+                                    android:textSize="16sp"/>
 
                             </LinearLayout>
 

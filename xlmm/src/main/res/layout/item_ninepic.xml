@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -10,14 +10,28 @@
         android:layout_margin="20px"
         android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/head_iv"
+        <LinearLayout
             android:layout_width="81px"
             android:layout_height="81px"
             android:layout_marginLeft="10px"
             android:layout_marginRight="20px"
-            android:background="@color/colorPrimary"/>
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:background="@color/colorPrimary">
 
+            <TextView
+                android:id="@+id/head_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="30sp"
+                android:textColor="@color/white"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="轮"
+                android:textSize="16sp"
+                android:textColor="@color/white"/>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -31,9 +45,8 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:text="分享了一个连接"
                 android:textColor="@color/colorPrimary"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/contentTv"
@@ -42,12 +55,12 @@
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp"
                 android:textColor="@color/black_overlay"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
             <!-- 不同的地方 -->
             <ViewStub
-                android:id="@+id/imageviewstub"
+                android:id="@+id/view_stub"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"/>
 
         </LinearLayout>
     </LinearLayout>
@@ -61,5 +74,5 @@
         android:layout_marginTop="6px"
         android:background="@drawable/shape_chooselist"
         android:text="保存图片"
-        android:textColor="@color/colorPrimary" />
+        android:textColor="@color/colorPrimary"/>
 </LinearLayout>
