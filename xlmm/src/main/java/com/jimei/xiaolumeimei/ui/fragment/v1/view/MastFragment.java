@@ -147,134 +147,116 @@ public class MastFragment extends DialogFragment {
                                                         edit.apply();
 
                                                         if (postActivityBean.get(0).getActType().equals("webview")) {
-                                                            maskImage.setOnClickListener(new View.OnClickListener() {
-                                                                @Override
-                                                                public void onClick(View v) {
-                                                                    //syncCookie(getActivity(), postBean.getActivity().getActLink());
-                                                                    if (postActivityBean.get(0).isLoginRequired()) {
-                                                                        if (LoginUtils.checkLoginState(mActivity)
-                                                                                && (null
-                                                                                != mActivity)
-                                                                                && (null
-                                                                                != ((MainActivity) mActivity).mPresenter.getUserInfoNewBean())
-                                                                                && (null
-                                                                                != ((MainActivity) mActivity).mPresenter.getUserInfoNewBean()
-                                                                                .getMobile())
-                                                                                && !(((MainActivity) mActivity).mPresenter.getUserInfoNewBean()
-                                                                                .getMobile()
-                                                                                .isEmpty())) {
-                                                                            dismiss();
+                                                            maskImage.setOnClickListener(v -> {
+                                                                if (postActivityBean.get(0).isLoginRequired()) {
+                                                                    if (LoginUtils.checkLoginState(mActivity)
+                                                                            && (null
+                                                                            != mActivity)
+                                                                            && (null
+                                                                            != ((MainActivity) mActivity).mPresenter.getUserInfoNewBean())
+                                                                            && (null
+                                                                            != ((MainActivity) mActivity).mPresenter.getUserInfoNewBean()
+                                                                            .getMobile())
+                                                                            && !(((MainActivity) mActivity).mPresenter.getUserInfoNewBean()
+                                                                            .getMobile()
+                                                                            .isEmpty())) {
+                                                                        dismiss();
 
-                                                                            Intent intent = new Intent(mActivity,
-                                                                                    ActivityWebViewActivity.class);
-                                                                            //sharedPreferences =
-                                                                            //    getActivity().getSharedPreferences("COOKIESxlmm",
-                                                                            //        Context.MODE_PRIVATE);
-                                                                            //String cookies = sharedPreferences.getString("Cookies", "");
-                                                                            //Bundle bundle = new Bundle();
-                                                                            //bundle.putString("cookies", cookies);
-                                                                            sharedPreferences = mActivity.getSharedPreferences(
-                                                                                    "xlmmCookiesAxiba", Context.MODE_PRIVATE);
-                                                                            cookies =
-                                                                                    sharedPreferences.getString("cookiesString",
-                                                                                            "");
-                                                                            domain =
-                                                                                    sharedPreferences.getString("cookiesDomain",
-                                                                                            "");
+                                                                        Intent intent = new Intent(mActivity,
+                                                                                ActivityWebViewActivity.class);
+                                                                        sharedPreferences = mActivity.getSharedPreferences(
+                                                                                "xlmmCookiesAxiba", Context.MODE_PRIVATE);
+                                                                        cookies =
+                                                                                sharedPreferences.getString("cookiesString",
+                                                                                        "");
+                                                                        domain =
+                                                                                sharedPreferences.getString("cookiesDomain",
+                                                                                        "");
+                                                                        Bundle bundle = new Bundle();
+                                                                        bundle.putString("cookies", cookies);
+                                                                        bundle.putString("domain", domain);
+                                                                        bundle.putString("Cookie",
+                                                                                sharedPreferences.getString("Cookie", ""));
+                                                                        bundle.putString("actlink",
+                                                                                postActivityBean.get(0).getActLink());
+                                                                        bundle.putInt("id",
+                                                                                postActivityBean.get(0).getId());
+                                                                        intent.putExtras(bundle);
+                                                                        mActivity.startActivity(intent);
+                                                                    } else {
+                                                                        if (!LoginUtils.checkLoginState(mActivity)) {
+                                                                            JUtils.Toast("登录并绑定手机号后才可参加活动");
+                                                                            Intent intent =
+                                                                                    new Intent(mActivity, LoginActivity.class);
                                                                             Bundle bundle = new Bundle();
-                                                                            bundle.putString("cookies", cookies);
-                                                                            bundle.putString("domain", domain);
-                                                                            bundle.putString("Cookie",
-                                                                                    sharedPreferences.getString("Cookie", ""));
+                                                                            bundle.putString("login", "goactivity");
                                                                             bundle.putString("actlink",
                                                                                     postActivityBean.get(0).getActLink());
                                                                             bundle.putInt("id",
                                                                                     postActivityBean.get(0).getId());
                                                                             intent.putExtras(bundle);
+                                                                            intent.putExtras(bundle);
+                                                                            intent.putExtras(bundle);
                                                                             mActivity.startActivity(intent);
                                                                         } else {
-                                                                            if (!LoginUtils.checkLoginState(mActivity)) {
-                                                                                JUtils.Toast("登录并绑定手机号后才可参加活动");
-                                                                                Intent intent =
-                                                                                        new Intent(mActivity, LoginActivity.class);
+                                                                            JUtils.Toast("登录成功,前往绑定手机号后才可参加活动");
+                                                                            Intent intent = new Intent(mActivity,
+                                                                                    WxLoginBindPhoneActivity.class);
+                                                                            if (null != ((MainActivity) mActivity).mPresenter.getUserInfoNewBean()) {
                                                                                 Bundle bundle = new Bundle();
-                                                                                bundle.putString("login", "goactivity");
-                                                                                bundle.putString("actlink",
-                                                                                        postActivityBean.get(0).getActLink());
-                                                                                bundle.putInt("id",
-                                                                                        postActivityBean.get(0).getId());
+                                                                                bundle.putString("headimgurl",
+                                                                                        ((MainActivity) mActivity).mPresenter.getUserInfoNewBean()
+                                                                                                .getThumbnail());
+                                                                                bundle.putString("nickname",
+                                                                                        ((MainActivity) mActivity).mPresenter.getUserInfoNewBean()
+                                                                                                .getNick());
                                                                                 intent.putExtras(bundle);
-                                                                                intent.putExtras(bundle);
-                                                                                intent.putExtras(bundle);
-                                                                                mActivity.startActivity(intent);
-                                                                            } else {
-                                                                                JUtils.Toast("登录成功,前往绑定手机号后才可参加活动");
-                                                                                Intent intent = new Intent(mActivity,
-                                                                                        WxLoginBindPhoneActivity.class);
-                                                                                if (null != ((MainActivity) mActivity).mPresenter.getUserInfoNewBean()) {
-                                                                                    Bundle bundle = new Bundle();
-                                                                                    bundle.putString("headimgurl",
-                                                                                            ((MainActivity) mActivity).mPresenter.getUserInfoNewBean()
-                                                                                                    .getThumbnail());
-                                                                                    bundle.putString("nickname",
-                                                                                            ((MainActivity) mActivity).mPresenter.getUserInfoNewBean()
-                                                                                                    .getNick());
-                                                                                    intent.putExtras(bundle);
-                                                                                }
-                                                                                mActivity.startActivity(intent);
                                                                             }
+                                                                            mActivity.startActivity(intent);
                                                                         }
-                                                                    } else {
-                                                                        Intent intent = new Intent(mActivity,
-                                                                                ActivityWebViewActivity.class);
-                                                                        //sharedPreferences =
-                                                                        //    getActivity().getSharedPreferences("COOKIESxlmm",
-                                                                        //        Context.MODE_PRIVATE);
-                                                                        //cookies = sharedPreferences.getString("Cookies", "");
-                                                                        sharedPreferences =
-                                                                                mActivity.getSharedPreferences("xlmmCookiesAxiba",
-                                                                                        Context.MODE_PRIVATE);
-                                                                        cookies =
-                                                                                sharedPreferences.getString("cookiesString", "");
-                                                                        domain =
-                                                                                sharedPreferences.getString("cookiesDomain", "");
-                                                                        Bundle bundle = new Bundle();
-                                                                        bundle.putInt("id", postActivityBean.get(0).getId());
-                                                                        bundle.putString("cookies", cookies);
-                                                                        bundle.putString("domain", domain);
-                                                                        bundle.putString("actlink",
-                                                                                postActivityBean.get(0).getActLink());
-                                                                        intent.putExtras(bundle);
-                                                                        mActivity.startActivity(intent);
                                                                     }
+                                                                } else {
+                                                                    Intent intent = new Intent(mActivity,
+                                                                            ActivityWebViewActivity.class);
+                                                                    sharedPreferences =
+                                                                            mActivity.getSharedPreferences("xlmmCookiesAxiba",
+                                                                                    Context.MODE_PRIVATE);
+                                                                    cookies =
+                                                                            sharedPreferences.getString("cookiesString", "");
+                                                                    domain =
+                                                                            sharedPreferences.getString("cookiesDomain", "");
+                                                                    Bundle bundle = new Bundle();
+                                                                    bundle.putInt("id", postActivityBean.get(0).getId());
+                                                                    bundle.putString("cookies", cookies);
+                                                                    bundle.putString("domain", domain);
+                                                                    bundle.putString("actlink",
+                                                                            postActivityBean.get(0).getActLink());
+                                                                    intent.putExtras(bundle);
+                                                                    mActivity.startActivity(intent);
                                                                 }
                                                             });
                                                         } else if (postActivityBean.get(0)
                                                                 .getActType()
                                                                 .equals("coupon")) {
-                                                            maskImage.setOnClickListener(new View.OnClickListener() {
-                                                                @Override
-                                                                public void onClick(View v) {
+                                                            maskImage.setOnClickListener(v ->
                                                                     subscribe2 = ActivityModel.getInstance()
-                                                                            .getUsercoupons(postActivityBean.get(0)
-                                                                                    .getExtras()
-                                                                                    .getTemplateId())
-                                                                            .subscribeOn(Schedulers.io())
-                                                                            .subscribe(new ServiceResponse<ResponseBody>() {
-                                                                                @Override
-                                                                                public void onNext(ResponseBody responseBody) {
-                                                                                    if (null != responseBody) {
-                                                                                        try {
-                                                                                            JUtils.Log("TodayListView",
-                                                                                                    responseBody.string());
-                                                                                        } catch (IOException e) {
-                                                                                            e.printStackTrace();
-                                                                                        }
-                                                                                    }
+                                                                    .getUsercoupons(postActivityBean.get(0)
+                                                                            .getExtras()
+                                                                            .getTemplateId())
+                                                                    .subscribeOn(Schedulers.io())
+                                                                    .subscribe(new ServiceResponse<ResponseBody>() {
+                                                                        @Override
+                                                                        public void onNext(ResponseBody responseBody) {
+                                                                            if (null != responseBody) {
+                                                                                try {
+                                                                                    JUtils.Log("TodayListView",
+                                                                                            responseBody.string());
+                                                                                } catch (IOException e) {
+                                                                                    e.printStackTrace();
                                                                                 }
-                                                                            });
-                                                                }
-                                                            });
+                                                                            }
+                                                                        }
+                                                                    }));
                                                         }
                                                     }
                                                 }
@@ -287,12 +269,7 @@ public class MastFragment extends DialogFragment {
                     }
                 });
 
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+        close.setOnClickListener(v -> dismiss());
     }
 
     @Override

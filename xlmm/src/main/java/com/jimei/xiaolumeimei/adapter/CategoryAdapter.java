@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,18 +12,22 @@ import android.widget.TextView;
 
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
 import com.jimei.xiaolumeimei.ui.activity.product.CategoryListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductListActivity;
 import com.jimei.xiaolumeimei.utils.FileUtils;
-import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.zhy.autolayout.utils.AutoUtils;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.FileCallBack;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import okhttp3.Call;
 
 /**
  * Created by wisdom on 16/8/3.
@@ -65,15 +68,22 @@ public class CategoryAdapter extends XRecyclerView.Adapter<CategoryAdapter.ViewH
     public void onBindViewHolder(ViewHolder holder, int position) {
         CategoryBean childsBean = mData.get(position);
         holder.name.setText(childsBean.getName());
-        String picAddress = Environment.getExternalStorageDirectory().getAbsolutePath()
-                + "/xlmmcategory/" + childsBean.getCid() + ".png";
+        String picAddress = XlmmConst.XLMM_DIR + childsBean.getCid() + ".png";
         if (FileUtils.isFileExist(picAddress)) {
             holder.img.setImageBitmap(BitmapFactory.decodeFile(picAddress));
         } else {
-            ViewUtils.loadImgToImgView(context, holder.img, childsBean.getCat_pic());
-        }
-        if (context instanceof ProductListActivity) {
-            holder.item.setOnClickListener(v -> ((ProductListActivity) this.context).refreshData(childsBean.getCid(), true));
+            OkHttpUtils.get().url(childsBean.getCat_pic()).build()
+                    .execute(new FileCallBack(XlmmConst.XLMM_DIR, childsBean.getCid() + ".png") {
+                        @Override
+                        public void onError(Call call, Exception e, int id) {
+
+                        }
+
+                        @Override
+                        public void onResponse(File response, int id) {
+                            holder.img.setImageBitmap(BitmapFactory.decodeFile(picAddress));
+                        }
+                    });
         }
         holder.item.setOnClickListener(v -> {
             Intent intent = new Intent(context, ProductListActivity.class);

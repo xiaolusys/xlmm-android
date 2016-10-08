@@ -16,10 +16,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.data.FilePara;
+import com.jimei.xiaolumeimei.entities.FilePara;
 import com.jimei.xiaolumeimei.entities.NinePicBean;
 import com.jimei.xiaolumeimei.okhttp3.FileParaCallback;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.ImagePagerActivity;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMNinePicActivity;
 import com.jimei.xiaolumeimei.utils.CameraUtils;
 import com.jimei.xiaolumeimei.utils.FileUtils;
 import com.jimei.xiaolumeimei.widget.ninepicimagview.MultiImageView;
@@ -30,9 +31,7 @@ import com.zhy.http.okhttp.OkHttpUtils;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import okhttp3.Call;
 
@@ -42,11 +41,11 @@ import okhttp3.Call;
  * Copyright 2016年 上海己美. All rights reserved.
  */
 public class NinePicAdapter extends BaseAdapter {
-    private Context mcontext;
+    private MMNinePicActivity mcontext;
     private List<NinePicBean> mList;
     private String codeLink;
 
-    public NinePicAdapter(Context mcontext) {
+    public NinePicAdapter(MMNinePicActivity mcontext) {
         this.mcontext = mcontext;
         mList = new ArrayList<>();
     }
@@ -100,29 +99,26 @@ public class NinePicAdapter extends BaseAdapter {
         if (picArry != null && picArry.size() > 0) {
             if (codeLink != null & !"".equals(codeLink)) {
                 if (picArry.size() == 9) {
-                    picArry.set(4, codeLink);
+                    picArry.set(4, "code" + codeLink);
                 } else {
-                    picArry.set(picArry.size() / 2, codeLink);
+                    picArry.set(picArry.size() / 2, "code" + codeLink);
                 }
             }
             holder.multiImageView.setVisibility(View.VISIBLE);
             holder.multiImageView.setList(picArry);
             holder.multiImageView.setOnItemClickListener(
-                    (view, position1) -> {
+                    (view) -> {
                         // 因为单张图片时，图片实际大小是自适应的，imageLoader缓存时是按测量尺寸缓存的
                         //ImagePagerActivity.imageSize =
                         //    new ImageSize(view.getMeasuredWidth(), view.getMeasuredHeight());
-                        ImagePagerActivity.startImagePagerActivity(mcontext, picArry, position1);
+                        ImagePagerActivity.startImagePagerActivity(mcontext, picArry);
                     });
         } else {
             holder.multiImageView.setVisibility(View.GONE);
         }
 
         holder.save.setOnClickListener(v -> {
-            Map<String, String> map = new HashMap<>();
-            map.put("id", mList.get(position).getId() + "");
-            map.put("title", mList.get(position).getTitle());
-            MobclickAgent.onEvent(mcontext, "Nine_save", map);
+            MobclickAgent.onEvent(mcontext, "NinePic_save");
             assert picArry != null;
             RxPermissions.getInstance(mcontext)
                     .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -153,12 +149,17 @@ public class NinePicAdapter extends BaseAdapter {
             final boolean[] bflag = {true};
             for (int i = 0; i < picArry.size(); i++) {
                 while (!bflag[0]) SystemClock.sleep(100);
-                JUtils.Log("NinePic", "download " + picArry.get(picArry.size() - 1 - i));
+                String str = picArry.get(picArry.size() - 1 - i);
+                if (!str.contains("code")) {
+                    str = str + "?imageMogr2/thumbnail/580/format/jpg";
+                }else {
+                    str = str.substring(4);
+                }
+                JUtils.Log("NinePic", "download " + str);
                 if (bflag[0]) {
                     final int finalI = i;
                     OkHttpUtils.get()
-                            .url(picArry.get(picArry.size() - 1 - i)
-                                    + "?imageMogr2/thumbnail/580/format/jpg")
+                            .url(str)
                             .build()
                             .execute(new FileParaCallback() {
                                 @Override

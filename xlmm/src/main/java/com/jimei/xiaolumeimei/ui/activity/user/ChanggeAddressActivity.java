@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.widget.SwitchCompat;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,11 +15,12 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.Bind;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.utils.FileUtils;
@@ -32,12 +32,15 @@ import com.jimei.xiaolumeimei.widget.wheelcitypicker.address.Province;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -311,12 +314,8 @@ public class ChanggeAddressActivity extends BaseSwipeBackCompatActivity
       String address;
       InputStream in = null;
       try {
-        if (FileUtils.isFileExist(Environment.getExternalStorageDirectory().getAbsolutePath()
-            + "/xlmmaddress/"
-            + "areas.json")) {
-          File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
-              + "/xlmmaddress/"
-              + "areas.json");
+        if (FileUtils.isFileExist(XlmmConst.XLMM_DIR + "areas.json")) {
+          File file = new File(XlmmConst.XLMM_DIR + "areas.json");
           in = new FileInputStream(file);
         } else {
           in = mContext.getResources().getAssets().open("areas.json");

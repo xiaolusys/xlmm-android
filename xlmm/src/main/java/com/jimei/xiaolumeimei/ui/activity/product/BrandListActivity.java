@@ -77,8 +77,8 @@ public class BrandListActivity extends BaseSwipeBackCompatActivity {
     xRecyclerView = (XRecyclerView) findViewById(R.id.childlist_recyclerView);
     xRecyclerView.setLayoutManager(new GridLayoutManager(BrandListActivity.this, 2));
     xRecyclerView.addItemDecoration(new SpaceItemDecoration(10));
-    xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-    xRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
+    xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallPulse);
+    xRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
     xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
     xRecyclerView.setLoadingMoreEnabled(false);
     xRecyclerView.setPullRefreshEnabled(false);

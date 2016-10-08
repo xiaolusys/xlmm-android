@@ -11,6 +11,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.BudgetdetailBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.model.UserNewModel;
+import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
@@ -61,27 +62,31 @@ public class MamaDrawCashDetailActivity extends BaseSwipeBackCompatActivity {
                 .budGetdetailBean("1")
                 .subscribeOn(Schedulers.io())
                 .subscribe(budgetDetailBean -> {
-                    BudgetdetailBean.ResultsEntity entity = budgetDetailBean.getResults().get(0);
-                    String str = ((int) entity.getBudegetDetailCash()) + "";
-                    drawMoneyTv.setText(str);
-                    dateTv.setText(entity.getBudgetDate());
-                    dateTv1.setText(entity.getBudgetDate());
-                    dateTv2.setText(entity.getBudgetDate());
-                    if (entity.getStatus() == 0) {
-                        lineView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-                        okImg.setImageDrawable(getResources().getDrawable(R.drawable.wallet_ok));
-                        okTv.setTextColor(getResources().getColor(R.color.colorAccent));
-                        dateTv3.setText(entity.getBudgetDate());
-                    } else if (entity.getStatus() == 1) {
-                        okTv.setText("已取消");
-                        dateTv3.setText(entity.getBudgetDate());
-                    }
-                    if (!"".equals(account)) {
-                        accountTv.setText(account);
+                    if (budgetDetailBean.getResults().size() > 0) {
+                        BudgetdetailBean.ResultsEntity entity = budgetDetailBean.getResults().get(0);
+                        String str = ((int) entity.getBudegetDetailCash()) + "";
+                        drawMoneyTv.setText(str);
+                        dateTv.setText(entity.getBudgetDate());
+                        dateTv1.setText(entity.getBudgetDate());
+                        dateTv2.setText(entity.getBudgetDate());
+                        if (entity.getStatus() == 0) {
+                            lineView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                            okImg.setImageDrawable(getResources().getDrawable(R.drawable.wallet_ok));
+                            okTv.setTextColor(getResources().getColor(R.color.colorAccent));
+                            dateTv3.setText(entity.getBudgetDate());
+                        } else if (entity.getStatus() == 1) {
+                            okTv.setText("已取消");
+                            dateTv3.setText(entity.getBudgetDate());
+                        }
+                        if (!"".equals(account)) {
+                            accountTv.setText(account);
+                        } else {
+                            accountLayout.setVisibility(View.GONE);
+                        }
                     } else {
-                        accountLayout.setVisibility(View.GONE);
+                        JUtils.Toast("查询失败!");
                     }
-                }));
+                }, e -> JUtils.Log(e.getMessage())));
         addSubscription(MamaInfoModel.getInstance()
                 .getMamaFortune()
                 .subscribeOn(Schedulers.io())
@@ -90,7 +95,7 @@ public class MamaDrawCashDetailActivity extends BaseSwipeBackCompatActivity {
                     String activityText = mamaFortune.getMamaFortune().getActiveValueNum() + "";
                     moneyTv.setText(moneyText);
                     activityTv.setText(activityText);
-                }));
+                }, e -> JUtils.Log(e.getMessage())));
     }
 
     @Override

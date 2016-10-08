@@ -10,8 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import butterknife.Bind;
-
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
@@ -29,6 +27,8 @@ import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
+
+import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -98,8 +98,8 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity {
     xrvMmvisitors.setLayoutManager(new LinearLayoutManager(this));
     xrvMmvisitors.addItemDecoration(
         new DividerItemDecorationForFooter(this, DividerItemDecoration.VERTICAL_LIST));
-    xrvMmvisitors.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-    xrvMmvisitors.setLoadingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
+    xrvMmvisitors.setRefreshProgressStyle(ProgressStyle.BallPulse);
+    xrvMmvisitors.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
     xrvMmvisitors.setArrowImageView(R.drawable.iconfont_downgrey);
     xrvMmvisitors.setPullRefreshEnabled(false);
     xrvMmvisitors.setLoadingMoreEnabled(true);

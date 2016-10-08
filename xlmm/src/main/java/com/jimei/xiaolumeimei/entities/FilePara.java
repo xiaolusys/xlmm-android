@@ -1,4 +1,4 @@
-package com.jimei.xiaolumeimei.data;
+package com.jimei.xiaolumeimei.entities;
 
 /**
  * Created by wulei on 2016/2/4.

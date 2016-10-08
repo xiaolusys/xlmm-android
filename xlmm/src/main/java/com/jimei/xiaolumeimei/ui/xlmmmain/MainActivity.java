@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
@@ -19,10 +18,13 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,9 +34,9 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.ActivityListAdapter;
+import com.jimei.xiaolumeimei.adapter.MainCategoryAdapter;
 import com.jimei.xiaolumeimei.base.BasePresenterActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AddressDownloadResultBean;
@@ -92,7 +94,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -100,7 +101,6 @@ import java.util.Map;
 
 import butterknife.Bind;
 import okhttp3.Call;
-import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 /**
@@ -108,8 +108,8 @@ import retrofit2.Response;
  */
 public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel>
         implements MainContract.View, View.OnClickListener, ViewPager.OnPageChangeListener,
-        NavigationView.OnNavigationItemSelectedListener, ScrollableLayout.OnScrollListener,
-        SwipeRefreshLayout.OnRefreshListener {
+        NavigationView.OnNavigationItemSelectedListener, ScrollableLayout.OnScrollListener
+        , SwipeRefreshLayout.OnRefreshListener {
 
     private static final String POST_URL = "?imageMogr2/format/jpg/quality/70";
     public static String TAG = "MainActivity";
@@ -146,8 +146,8 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     View cart_view;
     //    @Bind(R.id.post_mainactivity)
 //    LinearLayout post_activity_layout;
-    @Bind(R.id.xrv)
-    XRecyclerView mXRecyclerView;
+    @Bind(R.id.recycler_view)
+    RecyclerView mRecyclerView;
     @Bind(R.id.category_layout)
     LinearLayout categoryLayout;
     @Bind(R.id.nav_view)
@@ -166,7 +166,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     SharedPreferences sharedPreferencesTime;
     private int mask;
     private List<ProductListFragment> list = new ArrayList<>();
-    private int num;
     private BadgeView badge;
     private TextView msg1;
     private TextView msg2;
@@ -177,8 +176,11 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     private EventBus aDefault;
     private UpdateBroadReceiver mUpdateBroadReceiver;
     private String mamaid;
-    private boolean upadteFlag;
+    private boolean updateFlag;
     private ActivityListAdapter adapter;
+    private long firstTime;
+    private MainCategoryAdapter mMainCategoryAdapter;
+    private boolean mamaFlag = false;
 
     @Override
     protected void onStart() {
@@ -262,6 +264,11 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         initSlide();
         showBadge();
         initViewsForTab();
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 4));
+        mRecyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        mRecyclerView.addItemDecoration(new SpaceItemDecoration(15, 15, 25, 25));
+        mMainCategoryAdapter = new MainCategoryAdapter(MainActivity.this);
+        mRecyclerView.setAdapter(mMainCategoryAdapter);
     }
 
     @Override
@@ -372,6 +379,19 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
                         CustomProblemActivity.class);
             } else if (id == R.id.nav_complain) {
                 readyGo(ComplainActivity.class);
+            } else if (id == R.id.my_shop) {
+                // TODO: 16/10/8
+                if (mamaFlag) {
+                    bundle = new Bundle();
+                    bundle.putString("mamaid", mamaid);
+                    readyGo(MamaActivity.class,bundle);
+                } else {
+                    new AlertDialog.Builder(this)
+                            .setTitle("提示")
+                            .setMessage("您暂时不是小鹿妈妈,请关注\"小鹿美美\"公众号,获取更多信息哦!")
+                            .setPositiveButton("确定",(dialog, which) -> dialog.dismiss())
+                            .show();
+                }
             }
         }
         drawer.closeDrawer(GravityCompat.START);
@@ -512,7 +532,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
             rl_mmentry.setVisibility(View.INVISIBLE);
             loginFlag.setVisibility(View.GONE);
             imgUser.setImageResource(R.drawable.img_head);
-            rl_mmentry.setVisibility(View.INVISIBLE);
+            mamaFlag = false;
         }
 
         if (null != userNewBean) {
@@ -570,14 +590,16 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
             mamaid = userNewBean.getXiaolumm().getId() + "";
             if ((userNewBean.getXiaolumm() != null) && (userNewBean.getXiaolumm().getId() != 0)) {
                 rl_mmentry.setVisibility(View.VISIBLE);
+                mamaFlag = true;
             } else {
                 rl_mmentry.setVisibility(View.INVISIBLE);
+                mamaFlag = false;
             }
         } else {
             rl_mmentry.setVisibility(View.INVISIBLE);
             loginFlag.setVisibility(View.GONE);
             imgUser.setImageResource(R.drawable.img_head);
-            rl_mmentry.setVisibility(View.INVISIBLE);
+            mamaFlag = false;
         }
     }
 
@@ -667,8 +689,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         }
 
         for (String name : map.keySet()) {
-            DefaultSliderView textSliderView = new DefaultSliderView(MainActivity
-                    .this);
+            DefaultSliderView textSliderView = new DefaultSliderView(MainActivity.this);
             textSliderView.image(name + POST_URL).setScaleType(BaseSliderView.ScaleType.CenterInside);
             textSliderView.bundle(new Bundle());
             textSliderView.getBundle().putString("extra", map.get(name));
@@ -688,40 +709,35 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     @Override
     public void initCategory(PortalBean postBean) throws NullPointerException {
         JUtils.Log(TAG, "refreshCategory");
-        GridLayoutManager manager = new GridLayoutManager(this, 4);
-        mXRecyclerView.setLayoutManager(manager);
-        mXRecyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
-        mXRecyclerView.addItemDecoration(new SpaceItemDecoration(10));
-        mXRecyclerView.setPullRefreshEnabled(false);
-        mXRecyclerView.setLoadingMoreEnabled(false);
-        // TODO: 16/9/26
         categoryLayout.removeAllViews();
         List<PortalBean.CategorysBean> categorys = postBean.getCategorys();
-        List<LinearLayout> layoutList = new ArrayList<>();
-        int count = categorys.size() > 4 ? 4 : categorys.size();
-        for (int i = 0; i < categorys.size(); i++) {
-            if (i % count == 0) {
-                LinearLayout layout = new LinearLayout(this);
-                layout.setLayoutParams(new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                layout.setOrientation(LinearLayout.HORIZONTAL);
-                layoutList.add(layout);
-                categoryLayout.addView(layout);
-            }
-            ImageView imageView = new ImageView(this);
-            imageView.setAdjustViewBounds(true);
-            imageView.setScaleType(ImageView.ScaleType.CENTER);
-            imageView.setLayoutParams(new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            layoutList.get(i / count).addView(imageView);
-            String cat_link = categorys.get(i).getCat_link();
-            String name = categorys.get(i).getName();
-            if (cat_link != null && cat_link.contains(XlmmConst.JUMP_PREFIX)) {
-                imageView.setOnClickListener(v ->
-                        JumpUtils.push_jump_proc(MainActivity.this, (cat_link + "&title=" + name)));
-            }
-            ViewUtils.loadImageWithOkhttp(categorys.get(i).getCat_img(), MainActivity.this, imageView, count);
-        }
+        mMainCategoryAdapter.updateWithClear(categorys);
+//
+//        List<LinearLayout> layoutList = new ArrayList<>();
+//        int count = categorys.size() > 4 ? 4 : categorys.size();
+//        for (int i = 0; i < categorys.size(); i++) {
+//            if (i % count == 0) {
+//                LinearLayout layout = new LinearLayout(this);
+//                layout.setLayoutParams(new LinearLayout.LayoutParams(
+//                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//                layout.setOrientation(LinearLayout.HORIZONTAL);
+//                layoutList.add(layout);
+//                categoryLayout.addView(layout);
+//            }
+//            ImageView imageView = new ImageView(this);
+//            imageView.setAdjustViewBounds(true);
+//            imageView.setScaleType(ImageView.ScaleType.CENTER);
+//            imageView.setLayoutParams(new LinearLayout.LayoutParams(
+//                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+//            layoutList.get(i / count).addView(imageView);
+//            String cat_link = categorys.get(i).getCat_link();
+//            String name = categorys.get(i).getName();
+//            if (cat_link != null && cat_link.contains(XlmmConst.JUMP_PREFIX)) {
+//                imageView.setOnClickListener(v ->
+//                        JumpUtils.push_jump_proc(MainActivity.this, (cat_link + "&title=" + name)));
+//            }
+//            ViewUtils.loadImageWithOkhttp(categorys.get(i).getCat_img(), MainActivity.this, imageView, count);
+//        }
     }
 
     @Override
@@ -780,41 +796,25 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     }
 
     @Override
-    public void clickGetCounpon(ResponseBody responseBody) {
-        if (null != responseBody) {
-            try {
-                JUtils.Log("TodayListView", responseBody.string());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Override
     public void downLoaAddressFile(AddressDownloadResultBean addressDownloadResultBean) {
         JUtils.Log(TAG, addressDownloadResultBean.toString());
         String downloadUrl = addressDownloadResultBean.getDownloadUrl();
         String hash = addressDownloadResultBean.getHash();
-        if (!FileUtils.isAddressFileHashSame(getApplicationContext(), hash)) {
+        if (!FileUtils.isAddressFileHashSame(getApplicationContext(), hash) ||
+                !FileUtils.isFileExist(XlmmConst.XLMM_DIR + "areas.json")) {
             OkHttpUtils.get()
                     .url(downloadUrl)
                     .build()
-                    .execute(new FileCallBack(
-                            Environment.getExternalStorageDirectory().getAbsolutePath() + "/xlmmaddress/",
-                            "areas.json") {
+                    .execute(new FileCallBack(XlmmConst.XLMM_DIR, "areas.json") {
                         @Override
                         public void inProgress(float progress, long total, int id) {
-                            JUtils.Log(TAG, "                          " + (int) (100 * (progress / total)) + "");
+                            JUtils.Log(TAG, (int) (100 * (progress / total)) + "");
                         }
 
                         @Override
                         public void onError(Call call, Exception e, int id) {
-                            if (FileUtils.isFolderExist(
-                                    Environment.getExternalStorageDirectory().getAbsolutePath() + "/xlmmaddress/" +
-                                            "areas.json")) {
-                                FileUtils.deleteFile(
-                                        Environment.getExternalStorageDirectory().getAbsolutePath() + "/xlmmaddress/" +
-                                                "areas.json");
+                            if (FileUtils.isFolderExist(XlmmConst.XLMM_DIR + "areas.json")) {
+                                FileUtils.deleteFile(XlmmConst.XLMM_DIR + "areas.json");
                             }
                         }
 
@@ -832,22 +832,16 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         JUtils.Log(TAG, categoryDownBean.toString());
         String downloadUrl = categoryDownBean.getDownload_url();
         String sha1 = categoryDownBean.getSha1();
-        if (!FileUtils.isCategorySame(getApplicationContext(), sha1)) {
+        if (!FileUtils.isCategorySame(getApplicationContext(), sha1)
+                || !FileUtils.isFileExist(XlmmConst.CATEGORY_JSON)) {
             OkHttpUtils.get()
                     .url(downloadUrl)
                     .build()
-                    .execute(new FileCallBack(
-                            Environment.getExternalStorageDirectory().getAbsolutePath() + "/xlmmcategory/",
-                            "category.json") {
+                    .execute(new FileCallBack(XlmmConst.XLMM_DIR, "category.json") {
                         @Override
                         public void onError(Call call, Exception e, int id) {
-                            if (FileUtils.isFolderExist(
-                                    Environment.getExternalStorageDirectory().getAbsolutePath()
-                                            + "/xlmmcategory/"
-                                            + "category.json")) {
-                                FileUtils.deleteFile(Environment.getExternalStorageDirectory().getAbsolutePath()
-                                        + "/xlmmcategory/"
-                                        + "category.json");
+                            if (FileUtils.isFolderExist(XlmmConst.CATEGORY_JSON)) {
+                                FileUtils.deleteFile(XlmmConst.CATEGORY_JSON);
                             }
                         }
 
@@ -855,8 +849,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
                         public void onResponse(File response, int id) {
                             JUtils.Log(TAG, response.getAbsolutePath());
                             FileUtils.saveCategoryFile(getApplicationContext(), sha1);
-                            FileUtils.saveCategoryImg(Environment.getExternalStorageDirectory().getAbsolutePath()
-                                    + "/xlmmcategory/" + "category.json");
+                            FileUtils.saveCategoryImg(XlmmConst.CATEGORY_JSON);
                         }
                     });
         }
@@ -922,7 +915,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         rl_mmentry.setVisibility(View.INVISIBLE);
         loginFlag.setVisibility(View.GONE);
         imgUser.setImageResource(R.drawable.img_head);
-        rl_mmentry.setVisibility(View.INVISIBLE);
+        mamaFlag = false;
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
@@ -950,18 +943,15 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         super.onResume();
         MobclickAgent.onPageStart(this.getClass().getSimpleName());
         MobclickAgent.onResume(this);
-        //resumeData();
         mPresenter.getCartsNum();
         mPresenter.getUserInfoBeanChange();
-        //    mPresenter.getUserInfoBean();
-
         JUtils.Log(TAG, "resume");
     }
 
     @Override
     public void iniCartsNum(CartsNumResultBean cartsNumResultBean) {
         if (cartsNumResultBean != null) {
-            num = cartsNumResultBean.getResult();
+            int num = cartsNumResultBean.getResult();
             badge.setBadgeCount(num);
             if (mPresenter.calcLefttowTime(cartsNumResultBean.getLastCreated()) != 0) {
                 image1.setVisibility(View.INVISIBLE);
@@ -986,7 +976,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
 
     @Override
     protected void onDestroy() {
-        upadteFlag = false;
+        updateFlag = false;
         aDefault.unregister(this);
         UserChangeEvent stickyEvent = aDefault.getStickyEvent(UserChangeEvent.class);
         if (stickyEvent != null) {
@@ -998,7 +988,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     @Override
     public void checkVersion(int versionCode, String content, String downloadUrl,
                              boolean isAutoUpdate) {
-        upadteFlag = true;
+        updateFlag = true;
         new Thread(() -> {
             try {
                 Thread.sleep(500 * 10);
@@ -1035,7 +1025,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
                     SharedPreferences updatePreferences =
                             getSharedPreferences("update", Context.MODE_PRIVATE);
                     boolean update = updatePreferences.getBoolean("update", true);
-                    if (update && upadteFlag) {
+                    if (update && updateFlag) {
                         versionManager.checkVersion(MainActivity.this);
                     }
                 }
@@ -1051,5 +1041,17 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
                 MiPushClient.subscribe(this, topics.get(i), null);
             }
         }
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            long secondTime = System.currentTimeMillis();
+            if (secondTime - firstTime > 1000) {
+                firstTime = secondTime;
+                return true;
+            }
+        }
+        return super.onKeyUp(keyCode, event);
     }
 }

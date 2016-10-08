@@ -3,12 +3,10 @@ package com.jimei.xiaolumeimei.ui.activity.trade;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -17,7 +15,7 @@ import android.widget.TextView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.LogisticCompanyAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.data.LogisticsCompanyInfo;
+import com.jimei.xiaolumeimei.entities.LogisticsCompanyInfo;
 import com.jimei.xiaolumeimei.widget.SideBar;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
@@ -68,16 +66,12 @@ public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
         fillCompanyInfo();
         mCompanyAdapter = new LogisticCompanyAdapter(this, company_list);
         lv_logistics_company.setAdapter(mCompanyAdapter);
-        lv_logistics_company.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                Log.d(TAG, "onItemClick " + arg2 + " " + company_list.get(arg2).getName());
-                Intent intent = new Intent(ChooseLogisticsCompanyActivity.this,
-                        WriteLogisticsInfoActivty.class);
-                intent.putExtra("company", company_list.get(arg2).getName());
-                setResult(1, intent);
-                finish();
-            }
+        lv_logistics_company.setOnItemClickListener((arg0, arg1, arg2, arg3) -> {
+            Intent intent = new Intent(ChooseLogisticsCompanyActivity.this,
+                    WriteLogisticsInfoActivty.class);
+            intent.putExtra("company", company_list.get(arg2).getName());
+            setResult(1, intent);
+            finish();
         });
     }
 
@@ -88,15 +82,11 @@ public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
 
         //设置右侧触摸监听
         sideBar.setOnTouchingLetterChangedListener(
-                new SideBar.OnTouchingLetterChangedListener() {
-
-                    @Override
-                    public void onTouchingLetterChanged(String s) {
-                        //该字母首次出现的位置
-                        int position = mCompanyAdapter.getPositionForSection(s.charAt(0));
-                        if (position != -1) {
-                            lv_logistics_company.setSelection(position);
-                        }
+                s -> {
+                    //该字母首次出现的位置
+                    int position = mCompanyAdapter.getPositionForSection(s.charAt(0));
+                    if (position != -1) {
+                        lv_logistics_company.setSelection(position);
                     }
                 });
     }
@@ -147,25 +137,17 @@ public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
                 EditText editText = (EditText) view.findViewById(R.id.et);
                 View cancelBtn = view.findViewById(R.id.cancel);
                 View commitBtn = view.findViewById(R.id.commit);
-                cancelBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                cancelBtn.setOnClickListener(v -> dialog.dismiss());
+                commitBtn.setOnClickListener(v -> {
+                    if (editText.getText().toString().trim().length() >= 2) {
+                        Intent intent = new Intent(ChooseLogisticsCompanyActivity.this,
+                                WriteLogisticsInfoActivty.class);
+                        intent.putExtra("company", editText.getText().toString().trim());
+                        setResult(1, intent);
                         dialog.dismiss();
-                    }
-                });
-                commitBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (editText.getText().toString().trim().length() >= 2) {
-                            Intent intent = new Intent(ChooseLogisticsCompanyActivity.this,
-                                    WriteLogisticsInfoActivty.class);
-                            intent.putExtra("company", editText.getText().toString().trim());
-                            setResult(1, intent);
-                            dialog.dismiss();
-                            finish();
-                        } else {
-                            JUtils.Toast("请输入正确的快递名称");
-                        }
+                        finish();
+                    } else {
+                        JUtils.Toast("请输入正确的快递名称");
                     }
                 });
                 dialog.show();

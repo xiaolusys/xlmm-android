@@ -1,13 +1,13 @@
 package com.jimei.xiaolumeimei.widget;
 
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jimei.xiaolumeimei.adapter.CategoryAdapter;
+import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
 import com.jimei.xiaolumeimei.utils.FileUtils;
 import com.jude.utils.JUtils;
@@ -40,11 +40,9 @@ public class CategoryTask extends AsyncTask<String, Integer, List<CategoryBean>>
     protected List<CategoryBean> doInBackground(String... params) {
         String categoryStr;
         InputStream in = null;
-        String fileaddress = Environment.getExternalStorageDirectory().getAbsolutePath()
-                + "/xlmmcategory/" + "category.json";
         try {
-            if (FileUtils.isFileExist(fileaddress)) {
-                File file = new File(fileaddress);
+            if (FileUtils.isFileExist(XlmmConst.CATEGORY_JSON)) {
+                File file = new File(XlmmConst.CATEGORY_JSON);
                 in = new FileInputStream(file);
             } else {
                 return null;
@@ -84,7 +82,9 @@ public class CategoryTask extends AsyncTask<String, Integer, List<CategoryBean>>
             adapter.updateWithClear(list);
         } else {
             adapter.clear();
-            mLinearLayout.setVisibility(View.VISIBLE);
+            if (mLinearLayout!=null) {
+                mLinearLayout.setVisibility(View.VISIBLE);
+            }
         }
     }
 }

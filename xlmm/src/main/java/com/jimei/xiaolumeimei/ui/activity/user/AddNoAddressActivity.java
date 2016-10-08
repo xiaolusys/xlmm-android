@@ -12,8 +12,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jimei.xiaolumeimei.R;
@@ -22,16 +21,18 @@ import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.widget.wheelcitypicker.CityPickerDialog;
 import com.jimei.xiaolumeimei.widget.wheelcitypicker.Util;
-import com.jimei.xiaolumeimei.widget.wheelcitypicker.address.City;
-import com.jimei.xiaolumeimei.widget.wheelcitypicker.address.County;
 import com.jimei.xiaolumeimei.widget.wheelcitypicker.address.Province;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -57,7 +58,7 @@ public class AddNoAddressActivity extends BaseSwipeBackCompatActivity
     Button save;
     @Bind(R.id.address)
     TextView address;
-    private ArrayList<Province> provinces = new ArrayList<Province>();
+    private ArrayList<Province> provinces = new ArrayList<>();
     private String receiver_state;
     private String receiver_city;
     private String receiver_district;
@@ -159,17 +160,14 @@ public class AddNoAddressActivity extends BaseSwipeBackCompatActivity
 
     private void showAddressDialog() {
         new CityPickerDialog(this, provinces, null, null, null,
-            new CityPickerDialog.onCityPickedListener() {
-                @Override
-                public void onPicked(Province selectProvince, City selectCity, County selectCounty) {
+                (selectProvince, selectCity, selectCounty) -> {
 
                     receiver_state = selectProvince != null ? selectProvince.getName() : "";
                     receiver_district = selectCounty != null ? selectCounty.getName() : "";
                     receiver_city = selectCity != null ? selectCity.getName() : "";
                     city_string = receiver_state + receiver_city + receiver_district;
                     address.setText(city_string);
-                }
-            }).show();
+                }).show();
     }
 
     public boolean checkInput(String receivername, String mobile, String address1,
@@ -266,7 +264,7 @@ public class AddNoAddressActivity extends BaseSwipeBackCompatActivity
             } finally {
                 if (in != null) {
                     try {
-                        in.close();                    } catch (IOException e) {
+                        in.close();                    } catch (IOException ignored) {
                     }
                 }
             }

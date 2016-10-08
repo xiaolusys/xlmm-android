@@ -9,13 +9,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import butterknife.Bind;
-import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.onekeyshare.OnekeyShare;
-
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.data.FilePara;
+import com.jimei.xiaolumeimei.entities.FilePara;
 import com.jimei.xiaolumeimei.okhttp3.FileParaCallback;
 import com.jimei.xiaolumeimei.utils.CameraUtils;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
@@ -26,6 +22,9 @@ import com.zhy.http.okhttp.OkHttpUtils;
 
 import java.io.File;
 
+import butterknife.Bind;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
 import okhttp3.Call;
 
 /**
@@ -112,7 +111,7 @@ public class TwoDimenCodeActivity extends BaseSwipeBackCompatActivity
                         // Oups permission denied
                         JUtils.Toast("小鹿美美需要存储权限存储图片,请再次点击保存并打开权限许可.");
                     }
-                });
+                }, e -> JUtils.Log(e.getMessage()));
     }
 
     @Override

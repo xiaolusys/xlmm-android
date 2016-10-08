@@ -200,16 +200,6 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                                   startActivity(intent);
                                   finish();
                                 } else if (login.equals("h5")) {
-                                  //Intent intent = new Intent(mContext, CommonWebViewActivity.class);
-                                  ////intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                  //SharedPreferences sharedPreferences =
-                                  //        getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
-                                  //String cookies = sharedPreferences.getString("Cookie", "");
-                                  //Bundle bundle = new Bundle();
-                                  //bundle.putString("cookies", cookies);
-                                  //bundle.putString("actlink", actlink);
-                                  //intent.putExtras(bundle);
-                                  //startActivity(intent);
                                   JumpUtils.jumpToWebViewWithCookies(mContext, actlink,
                                       -1, CommonWebViewActivity.class);
                                   finish();

@@ -2,10 +2,8 @@ package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.view.View;
 import android.widget.TextView;
 
-import com.cpoopc.scrollablelayoutlib.ScrollableHelper;
 import com.cpoopc.scrollablelayoutlib.ScrollableLayout;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -17,21 +15,18 @@ import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.widget.DividerItemDecorationForFooter;
 import com.jimei.xiaolumeimei.widget.MyXRecyclerView;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
 import butterknife.Bind;
-import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 /**
  * Created by wulei on 2016/2/4.
  */
-public class MamaLivenessActivity extends BaseSwipeBackCompatActivity
-        implements View.OnClickListener {
+public class MamaLivenessActivity extends BaseSwipeBackCompatActivity {
     String TAG = "MamaLivenessActivity";
 
     @Bind(R.id.lv_liveness)
@@ -43,7 +38,6 @@ public class MamaLivenessActivity extends BaseSwipeBackCompatActivity
 
     private int page = 2;
     private MamaLivenessAdapter mAdapter;
-    private Subscription subscribe;
     int liveness = 0;
 
     @Override
@@ -52,10 +46,8 @@ public class MamaLivenessActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-
         if (null != extras) {
             liveness = extras.getInt("liveness");
-
         }
     }
 
@@ -66,9 +58,8 @@ public class MamaLivenessActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void initViews() {
-        scrollableLayout.getHelper().setCurrentScrollableContainer((ScrollableHelper.ScrollableContainer) lv_liveness);
+        scrollableLayout.getHelper().setCurrentScrollableContainer(lv_liveness);
         initRecyclerView();
-
         tv_liveness.setText(liveness + "");
     }
 
@@ -76,9 +67,7 @@ public class MamaLivenessActivity extends BaseSwipeBackCompatActivity
         lv_liveness.setLayoutManager(new LinearLayoutManager(this));
         lv_liveness.addItemDecoration(
                 new DividerItemDecorationForFooter(this, DividerItemDecoration.VERTICAL_LIST));
-        lv_liveness.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-        lv_liveness.setLoadingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
-        lv_liveness.setArrowImageView(R.drawable.iconfont_downgrey);
+        lv_liveness.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
         lv_liveness.setPullRefreshEnabled(false);
         lv_liveness.setLoadingMoreEnabled(true);
 
@@ -97,77 +86,48 @@ public class MamaLivenessActivity extends BaseSwipeBackCompatActivity
                 page++;
             }
 
-            private void loadMoreData(String page) {
-                subscribe = MamaInfoModel.getInstance()
-                        .getMamaLiveness(page)
-                        .subscribeOn(Schedulers.io())
-                        .subscribe(new ServiceResponse<MamaLivenessBean>() {
-                            @Override
-                            public void onNext(MamaLivenessBean livenessBean) {
-                                super.onNext(livenessBean);
-                                if (livenessBean != null) {
-                                    mAdapter.update(livenessBean.getResults());
-                                    if (null == livenessBean.getNext()) {
-                                        JUtils.Toast("没有更多了");
-                                        lv_liveness.setLoadingMoreEnabled(false);
-                                    }
-                                }
-                                lv_liveness.post(lv_liveness::loadMoreComplete);
-                            }
-                        });
-            }
+
         });
+    }
+
+    private void loadMoreData(String page) {
+        addSubscription(MamaInfoModel.getInstance()
+                .getMamaLiveness(page)
+                .subscribeOn(Schedulers.io())
+                .subscribe(livenessBean -> {
+                    if (livenessBean != null) {
+                        mAdapter.update(livenessBean.getResults());
+                        if (null == livenessBean.getNext()) {
+                            JUtils.Toast("没有更多了");
+                            lv_liveness.setLoadingMoreEnabled(false);
+                        }
+                    }
+                    lv_liveness.loadMoreComplete();
+                }, e -> JUtils.Log(e.getMessage())));
     }
 
     @Override
     protected void initData() {
         showIndeterminateProgressDialog(false);
-        subscribe = MamaInfoModel.getInstance()
+        addSubscription(MamaInfoModel.getInstance()
                 .getMamaLiveness("1")
                 .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<MamaLivenessBean>() {
-                    @Override
-                    public void onNext(MamaLivenessBean pointBean) {
-                        if (pointBean != null) {
-                            JUtils.Log(TAG, "MamaLivenessBean=" + pointBean.toString());
-                            List<MamaLivenessBean.ResultsEntity> results = pointBean.getResults();
+                .subscribe(pointBean -> {
+                    if (pointBean != null) {
+                        JUtils.Log(TAG, "MamaLivenessBean=" + pointBean.toString());
+                        List<MamaLivenessBean.ResultsEntity> results = pointBean.getResults();
 
-                            if (0 == results.size()) {
-                                JUtils.Log(TAG, "results.size()=0");
-                            } else {
-                                mAdapter.update(results);
-                            }
-
-                            if (null == pointBean.getNext()) {
-                                lv_liveness.setLoadingMoreEnabled(false);
-                            }
+                        if (0 == results.size()) {
+                            JUtils.Log(TAG, "results.size()=0");
+                        } else {
+                            mAdapter.update(results);
+                        }
+                        if (null == pointBean.getNext()) {
+                            lv_liveness.setLoadingMoreEnabled(false);
                         }
                     }
-
-                    @Override
-                    public void onCompleted() {
-                        super.onCompleted();
-                        hideIndeterminateProgressDialog();
-                    }
-                });
-        addSubscription(subscribe);
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-
-        }
+                    hideIndeterminateProgressDialog();
+                }, e -> JUtils.Log(e.getMessage())));
     }
 
     @Override

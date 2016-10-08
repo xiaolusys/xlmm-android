@@ -3,6 +3,7 @@ package com.jimei.xiaolumeimei.data;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Environment;
 
 /**
  * Created by wulei on 2016/1/22.
@@ -77,6 +78,11 @@ public class XlmmConst {
 
     public static final int TYPE_REWARD_PERSONAL = 0;
     public static final int TYPE_REWARD_TEAM = 1;
+
+    public static final String XLMM_DIR = Environment.getExternalStorageDirectory().getAbsolutePath()
+            + "/xlmm/";
+
+    public static final String CATEGORY_JSON = XLMM_DIR + "category.json";
 
     public static final String[] NUMBER = {"零", "一", "二", "三", "四", "五"
             , "六", "七", "八", "九", "十"};

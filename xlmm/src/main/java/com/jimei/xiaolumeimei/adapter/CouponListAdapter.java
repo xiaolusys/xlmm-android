@@ -11,14 +11,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.data.XlmmConst;
+import com.jimei.xiaolumeimei.entities.CouponEntity;
+import com.jude.utils.JUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.entities.CouponEntity;
-import com.jude.utils.JUtils;
 
 public class CouponListAdapter extends BaseAdapter {
     private static final String TAG = "CouponListAdapter";
@@ -98,10 +97,14 @@ public class CouponListAdapter extends BaseAdapter {
         holder.titleTv.setText(mList.get(position).getTitle());
         holder.tv_coupon_info.setText(mList.get(position).getPros_desc());
         String start_time = mList.get(position).getStart_time();
+        String deadline = mList.get(position).getDeadline();
+        String created = mList.get(position).getCreated();
         if (start_time != null) {
-            holder.tv_coupon_crttime.setText("期限   " + start_time.replace("T", " ") + "   至   " + mList.get(position).getDeadline().replace("T", " "));
+            holder.tv_coupon_crttime.setText("期限   " + start_time.substring(0, start_time.lastIndexOf("T"))
+                    + "   至   " + deadline.substring(0, deadline.lastIndexOf("T")));
         } else {
-            holder.tv_coupon_crttime.setText("期限   " + mList.get(position).getCreated().replace("T", " ") + "   至   " + mList.get(position).getDeadline().replace("T", " "));
+            holder.tv_coupon_crttime.setText("期限   " + created.substring(0, created.lastIndexOf("T"))
+                    + "   至   " + deadline.substring(0, deadline.lastIndexOf("T")));
         }
         JUtils.Log(TAG, "couponno= " + mList.get(position).getId() + " selected couponno=" + mSelecteCouponid);
         holder.use_fee.setText(mList.get(position).getUse_fee_des());
@@ -114,6 +117,7 @@ public class CouponListAdapter extends BaseAdapter {
         }
         return convertView;
     }
+
     class ViewHolder {
         TextView tv_coupon_value;
         TextView tv_coupon_info;
