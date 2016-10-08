@@ -6,12 +6,11 @@ import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CategoryDownBean;
 import com.jimei.xiaolumeimei.entities.IsGetcoupon;
 import com.jimei.xiaolumeimei.entities.PortalBean;
-import com.jimei.xiaolumeimei.entities.ProductListOldBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.UserTopic;
 import com.jimei.xiaolumeimei.entities.VersionBean;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
-import okhttp3.ResponseBody;
+
 import retrofit2.Response;
 import rx.Observable;
 
@@ -44,20 +43,6 @@ public class MainModel implements MainContract.Model {
     return XlmmRetrofitClient
         .getService()
         .getPortalBean()
-        .compose(RxSchedulers.io_main());
-  }
-
-  @Override public Observable<ProductListOldBean> getTodayList(int page, int page_size) {
-    return XlmmRetrofitClient
-        .getService()
-        .getTodayList(page,page_size)
-        .compose(RxSchedulers.io_main());
-  }
-
-  @Override public Observable<ResponseBody> getUsercoupons(String template_id) {
-    return XlmmRetrofitClient
-        .getService()
-        .getUsercoupons(template_id)
         .compose(RxSchedulers.io_main());
   }
 

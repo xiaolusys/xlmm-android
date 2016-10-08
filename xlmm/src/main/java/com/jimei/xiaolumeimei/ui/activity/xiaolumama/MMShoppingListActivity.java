@@ -6,8 +6,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import butterknife.Bind;
-
 import com.cpoopc.scrollablelayoutlib.ScrollableHelper;
 import com.cpoopc.scrollablelayoutlib.ScrollableLayout;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
@@ -22,6 +20,7 @@ import com.jimei.xiaolumeimei.widget.DividerItemDecorationForFooter;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
+import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -48,9 +47,7 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity implemen
 
     @Override
     protected void initData() {
-
         tvCount.setText(order);
-
         showIndeterminateProgressDialog(false);
         Subscription subscribe = MMProductModel.getInstance()
                 .getMamaAllOderCarryLogs("direct", "1")
@@ -85,7 +82,7 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity implemen
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-        order = extras.getString("order");
+        order = extras.getInt("orderNum") + "";
     }
 
     @Override
@@ -103,8 +100,8 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity implemen
         shoppinglistXry.setLayoutManager(new LinearLayoutManager(this));
         shoppinglistXry.addItemDecoration(
                 new DividerItemDecorationForFooter(this, DividerItemDecoration.VERTICAL_LIST));
-        shoppinglistXry.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-        shoppinglistXry.setLoadingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
+        shoppinglistXry.setRefreshProgressStyle(ProgressStyle.BallPulse);
+        shoppinglistXry.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
         shoppinglistXry.setArrowImageView(R.drawable.iconfont_downgrey);
         shoppinglistXry.setPullRefreshEnabled(false);
         shoppinglistXry.setLoadingMoreEnabled(true);

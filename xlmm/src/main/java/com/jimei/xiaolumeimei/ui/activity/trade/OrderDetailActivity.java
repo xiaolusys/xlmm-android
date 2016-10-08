@@ -281,9 +281,9 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                                                     dialog.dismiss();
                                                 }));
                                     });
-                                }));
+                                }, e -> JUtils.Log(e.getMessage())));
                         hideIndeterminateProgressDialog();
-                    }));
+                    }, e -> JUtils.Log(e.getMessage())));
         }
     }
 
@@ -313,7 +313,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                                     setStatusView(status);
                                 }
                                 teamLayout.setVisibility(View.VISIBLE);
-                            }));
+                            }, e -> JUtils.Log(e.getMessage())));
                 } else {
                     addSubscription(TradeModel.getInstance()
                             .getRedBag(tid)
@@ -329,7 +329,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                                         redBagLayout.setVisibility(View.GONE);
                                     }
                                 }
-                            }));
+                            }, e -> JUtils.Log(e.getMessage())));
 
                 }
             } else {
@@ -514,7 +514,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                 startActivity(intent);
                 break;
             case R.id.logistics_layout:
-                if ("已付款".equals(orderDetail.getStatus_display())) {
+                if (orderDetail != null && "已付款".equals(orderDetail.getStatus_display())) {
                     new AlertDialog.Builder(this)
                             .setTitle("提示")
                             .setMessage("非服装类商品是由供应商直接发货，只能尽量满足您选择的快递公司，" +
@@ -582,11 +582,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                         intent.putExtra(PaymentActivity.EXTRA_CHARGE,
                                 new Gson().toJson(payInfoBean.getCharge()));
                         startActivityForResult(intent, REQUEST_CODE_PAYMENT);
-                    }
-
-                    @Override
-                    public void onCompleted() {
-                        super.onCompleted();
                     }
 
                     @Override

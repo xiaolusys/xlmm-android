@@ -84,9 +84,7 @@ public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBin
         b.xrv.setLayoutManager(manager);
         b.xrv.setOverScrollMode(View.OVER_SCROLL_NEVER);
         b.xrv.addItemDecoration(new SpaceItemDecoration(10));
-        b.xrv.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-        b.xrv.setLoadingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
-        b.xrv.setArrowImageView(R.drawable.iconfont_downgrey);
+        b.xrv.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
         b.xrv.setPullRefreshEnabled(false);
         mProductListAdapter = new ProductListAdapter(new ArrayList<>(), this);
         b.xrv.setAdapter(mProductListAdapter);

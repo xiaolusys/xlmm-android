@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -13,11 +12,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.Bind;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.utils.FileUtils;
@@ -29,12 +29,15 @@ import com.jimei.xiaolumeimei.widget.wheelcitypicker.address.Province;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -203,16 +206,13 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
 
     private void showAddressDialog() {
         new CityPickerDialog(this, provinces, province, city, county,
-            new CityPickerDialog.onCityPickedListener() {
-                @Override
-                public void onPicked(Province selectProvince, City selectCity, County selectCounty) {
+                (selectProvince, selectCity, selectCounty) -> {
                     receiver_state = selectProvince != null ? selectProvince.getName() : "";
                     receiver_district = selectCounty != null ? selectCounty.getName() : "";
                     receiver_city = selectCity != null ? selectCity.getName() : "";
                     city_string = receiver_state + receiver_city + receiver_district;
                     address.setText(city_string);
-                }
-            }).show();
+                }).show();
     }
 
     @Override
@@ -257,12 +257,8 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
             String address;
             InputStream in = null;
             try {
-                if (FileUtils.isFileExist(Environment.getExternalStorageDirectory().getAbsolutePath()
-                    + "/xlmmaddress/"
-                    + "areas.json")) {
-                    File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
-                        + "/xlmmaddress/"
-                        + "areas.json");
+                if (FileUtils.isFileExist(XlmmConst.XLMM_DIR + "areas.json")) {
+                    File file = new File(XlmmConst.XLMM_DIR + "areas.json");
                     in = new FileInputStream(file);
                 } else {
                     in = mContext.getResources().getAssets().open("areas.json");

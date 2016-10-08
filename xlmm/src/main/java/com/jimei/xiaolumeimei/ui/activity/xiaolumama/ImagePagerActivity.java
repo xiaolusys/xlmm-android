@@ -7,8 +7,6 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import butterknife.Bind;
-
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.ImageAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -16,6 +14,8 @@ import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/02/29.
@@ -33,11 +33,10 @@ public class ImagePagerActivity extends BaseSwipeBackCompatActivity {
     //public static ImageSize imageSize;
     private List<View> guideViewList = new ArrayList<>();
 
-    public static void startImagePagerActivity(Context context, List<String> imgUrls,
-                                               int position) {
+    public static void startImagePagerActivity(Context context, List<String> imgUrls) {
         Intent intent = new Intent(context, ImagePagerActivity.class);
         intent.putStringArrayListExtra(INTENT_IMGURLS, new ArrayList<>(imgUrls));
-        intent.putExtra(INTENT_POSITION, position);
+        intent.putExtra(INTENT_POSITION, 0);
         context.startActivity(intent);
     }
 

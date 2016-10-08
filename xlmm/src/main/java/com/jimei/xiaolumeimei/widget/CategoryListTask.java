@@ -1,11 +1,11 @@
 package com.jimei.xiaolumeimei.widget;
 
 import android.os.AsyncTask;
-import android.os.Environment;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jimei.xiaolumeimei.adapter.CategoryListAdapter;
+import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
 import com.jimei.xiaolumeimei.utils.FileUtils;
 import com.jude.utils.JUtils;
@@ -32,11 +32,9 @@ public class CategoryListTask extends AsyncTask<String, Integer, List<CategoryBe
     protected List<CategoryBean> doInBackground(String... params) {
         String categoryStr;
         InputStream in = null;
-        String fileaddress = Environment.getExternalStorageDirectory().getAbsolutePath()
-                + "/xlmmcategory/" + "category.json";
         try {
-            if (FileUtils.isFileExist(fileaddress)) {
-                File file = new File(fileaddress);
+            if (FileUtils.isFileExist(XlmmConst.CATEGORY_JSON)) {
+                File file = new File(XlmmConst.CATEGORY_JSON);
                 in = new FileInputStream(file);
             } else {
                 return null;

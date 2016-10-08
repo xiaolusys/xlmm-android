@@ -69,17 +69,6 @@
     <attr name="suffixMillisecondLeftMargin" format="dimension" />
   </declare-styleable>
 
-
-  <declare-styleable name="TagFlowLayout">
-    <attr name="auto_select_effect" format="boolean"></attr>
-    <attr name="max_select" format="integer"></attr>
-    <attr name="gravity">
-      <enum name="left" value="-1" />
-      <enum name="center" value="0" />
-      <enum name="right" value="1" />
-    </attr>
-  </declare-styleable>
-
   <declare-styleable name="NumberPicker">
     <attr name="normalTextColor" format="color" />
     <attr name="normalTextSize" format="dimension" />
@@ -246,19 +235,6 @@
       <enum name="front" value="0"/>
       <enum name="behind" value="1"/>
     </attr>
-  </declare-styleable>
-
-  <declare-styleable name="ProgressWheel">
-    <attr name="matProg_progressIndeterminate" format="boolean" />
-    <attr name="matProg_barColor" format="color" />
-    <attr name="matProg_rimColor" format="color" />
-    <attr name="matProg_rimWidth" format="dimension" />
-    <attr name="matProg_spinSpeed" format="float" />
-    <attr name="matProg_barSpinCycleTime" format="integer" />
-    <attr name="matProg_circleRadius" format="dimension" />
-    <attr name="matProg_fillRadius" format="boolean" />
-    <attr name="matProg_barWidth" format="dimension" />
-    <attr name="matProg_linearProgress" format="boolean" />
   </declare-styleable>
 
   <declare-styleable name="SuperRecyclerView">

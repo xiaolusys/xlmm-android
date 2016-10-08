@@ -7,7 +7,9 @@ import android.widget.ListView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.NinePicAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.entities.WxQrcode;
 import com.jimei.xiaolumeimei.model.MMProductModel;
+import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
@@ -43,7 +45,12 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
         addSubscription(MMProductModel.getInstance()
                 .getWxCode()
                 .subscribeOn(Schedulers.io())
-                .subscribe(wxQrcode -> mAdapter.setCodeLink(wxQrcode.getQrcode_link())));
+                .subscribe(new ServiceResponse<WxQrcode>() {
+                    @Override
+                    public void onNext(WxQrcode wxQrcode) {
+                        mAdapter.setCodeLink(wxQrcode.getQrcode_link());
+                    }
+                }));
         addSubscription(MMProductModel.getInstance()
                 .getNinePic()
                 .subscribeOn(Schedulers.io())

@@ -5,11 +5,9 @@ import com.jimei.xiaolumeimei.entities.AwardCarryBean;
 import com.jimei.xiaolumeimei.entities.CarryLogListBean;
 import com.jimei.xiaolumeimei.entities.ClickcarryBean;
 import com.jimei.xiaolumeimei.entities.MMChooselistBean;
-import com.jimei.xiaolumeimei.entities.MMHavaChooseResultBean;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.NinePicBean;
 import com.jimei.xiaolumeimei.entities.OderCarryBean;
-import com.jimei.xiaolumeimei.entities.ShopProductBean;
 import com.jimei.xiaolumeimei.entities.WxQrcode;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 
@@ -95,22 +93,6 @@ public class MMProductModel {
     public Observable<ClickcarryBean> getMamaAllClickCarryLogs(String page) {
         return XlmmRetrofitClient.getService()
                 .getMamaAllClickCarryLogs(page)
-                .compose(new DefaultTransform<>());
-    }
-
-    public Observable<ShopProductBean> getShopProduct(String page) {
-
-        return XlmmRetrofitClient.getService().getShopProduct(page)
-                .compose(new DefaultTransform<>());
-    }
-
-    public Observable<MMHavaChooseResultBean> changeProPosition(String change_id, String target_id) {
-        return XlmmRetrofitClient.getService().changeProPosition(change_id, target_id)
-                .compose(new DefaultTransform<>());
-    }
-
-    public Observable<MMHavaChooseResultBean> removeProFromShop(String id) {
-        return XlmmRetrofitClient.getService().removeProFromShop(id)
                 .compose(new DefaultTransform<>());
     }
 

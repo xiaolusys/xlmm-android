@@ -88,8 +88,8 @@ public class CollectionFragment extends Fragment implements View.OnClickListener
         recyclerView.setLayoutManager(manager);
         recyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
         recyclerView.addItemDecoration(new SpaceItemDecoration(10));
-        recyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-        recyclerView.setLoadingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
+        recyclerView.setRefreshProgressStyle(ProgressStyle.BallPulse);
+        recyclerView.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
         recyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
         recyclerView.setPullRefreshEnabled(false);
         adapter = new CollectionAdapter(this, getActivity(), collectionList);

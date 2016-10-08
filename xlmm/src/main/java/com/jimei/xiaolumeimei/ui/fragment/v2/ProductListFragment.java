@@ -145,8 +145,8 @@ public class ProductListFragment extends Fragment implements ScrollableHelper.Sc
         xRecyclerView.setLayoutManager(manager);
         xRecyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
         xRecyclerView.addItemDecoration(new SpaceItemDecoration(10));
-        xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-        xRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
+        xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallPulse);
+        xRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
         xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
         xRecyclerView.setPullRefreshEnabled(false);
         xRecyclerView.addHeaderView(head);

@@ -105,7 +105,7 @@ public class MamaChooseActivity extends BaseSwipeBackCompatActivity implements
         mRecyclerView.setPullRefreshEnabled(false);
         mRecyclerView.addItemDecoration(
                 new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
-        mRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
+        mRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
         mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {

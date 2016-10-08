@@ -1,4 +1,5 @@
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ScrollView
         android:id="@+id/scroll_view"
@@ -20,25 +21,56 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="200px"
-                    android:gravity="center"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="本周累计收益"
-                        android:textColor="@color/text_color_26"
-                        android:textSize="13sp"/>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="200px"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/tv_income"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:textColor="@color/white"
-                        android:textSize="36sp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="本周累计收益"
+                            android:textColor="@color/text_color_26"
+                            android:textSize="13sp"/>
 
+                        <TextView
+                            android:id="@+id/tv_income"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:textColor="@color/white"
+                            android:textSize="36sp"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="200px"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="当日累计收益"
+                            android:textColor="@color/text_color_26"
+                            android:textSize="13sp"/>
+
+                        <TextView
+                            android:id="@+id/tv_day_income"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:textColor="@color/white"
+                            android:textSize="36sp"/>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -84,6 +116,109 @@
                         android:textSize="13sp"/>
                 </LinearLayout>
             </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="300px"
+                android:background="@color/white">
+
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/chart"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:background="@color/white"/>
+            </RelativeLayout>
+
+            <include layout="@layout/common_gap"/>
+
+            <LinearLayout
+                android:id="@+id/rl_order"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:padding="6dp">
+
+                <LinearLayout
+                    android:id="@+id/visit_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:text="访客"
+                        android:textColor="@color/text_color_62"
+                        android:textSize="14sp"/>
+
+                    <TextView
+                        android:id="@+id/tv_visit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/order_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:text="订单"
+                        android:textColor="@color/text_color_62"
+                        android:textSize="14sp"/>
+
+                    <TextView
+                        android:id="@+id/tv_order"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/fund_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="收益"
+                        android:textColor="@color/text_color_62"
+                        android:textSize="14sp"/>
+
+                    <TextView
+                        android:id="@+id/tv_fund"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <include layout="@layout/common_gap"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -217,6 +352,66 @@
                 android:layout_height="20px"/>
 
             <LinearLayout
+                android:id="@+id/ll_renew"
+                android:layout_width="match_parent"
+                android:layout_height="90px"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="我的会员"
+                    android:textColor="@color/text_color_26"
+                    android:textSize="15sp"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="会员剩余期限"
+                    android:textColor="@color/text_color_26"
+                    android:textSize="13sp"/>
+
+                <TextView
+                    android:id="@+id/tv_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="13sp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:text="天"
+                    android:textColor="@color/text_color_26"
+                    android:textSize="13sp"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="50px"
+                    android:background="@drawable/btn_good_week_bg"
+                    android:gravity="center"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:text="充值"
+                    android:textColor="@color/white"
+                    android:textSize="13sp"/>
+
+            </LinearLayout>
+
+            <include layout="@layout/common_gap"/>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="90px"
                 android:background="@color/white"
@@ -250,11 +445,64 @@
 
             </LinearLayout>
 
+            <include layout="@layout/common_gap"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="90px"
+                android:background="@color/white"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp">
+
+                <ImageView
+                    android:id="@+id/notice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_notice"/>
+
+                <com.jimei.xiaolumeimei.widget.CircleImageView
+                    android:id="@+id/image_notice"
+                    android:layout_width="6dp"
+                    android:layout_height="6dp"
+                    android:layout_alignRight="@id/notice"
+                    android:layout_alignTop="@id/notice"
+                    android:layout_marginRight="1dp"
+                    android:layout_marginTop="1dp"
+                    android:src="@color/red"
+                    android:visibility="invisible"/>
+
+                <TextView
+                    android:id="@+id/tv_msg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="8dp"
+                    android:text="马上看看"
+                    android:textColor="@color/cornflowerblue"
+                    android:textSize="13sp"/>
+
+                <com.jimei.xiaolumeimei.widget.marqueeview.MarqueeView
+                    android:id="@+id/marquee_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_toLeftOf="@id/tv_msg"
+                    android:layout_toRightOf="@id/notice"
+                    app:mvAnimDuration="500"
+                    app:mvGravity="left"
+                    app:mvInterval="2000"
+                    app:mvTextColor="@color/colorAccent"/>
+
+            </RelativeLayout>
+
             <com.jimei.xiaolumeimei.widget.NestedListView
                 android:id="@+id/lv"
-                android:divider="@null"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:divider="@null"/>
 
         </LinearLayout>
     </ScrollView>

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
 
 import java.util.ArrayList;
@@ -49,8 +50,13 @@ public class ImageAdapter extends PagerAdapter {
         if (view != null) {
             final ImageView imageView = (ImageView) view.findViewById(R.id.image);
             final String imgurl = datas.get(position);
-            Glide.with(context).load(imgurl)
-                    .thumbnail(0.2f).into(imageView);
+            if (imgurl.startsWith("code")) {
+                Glide.with(context).load(imgurl.substring(4))
+                        .diskCacheStrategy(DiskCacheStrategy.RESULT).thumbnail(0.2f).into(imageView);
+            } else {
+                Glide.with(context).load(imgurl + "?imageMogr2/thumbnail/350/format/jpg/quality/70")
+                        .diskCacheStrategy(DiskCacheStrategy.RESULT).thumbnail(0.2f).into(imageView);
+            }
             imageView.setOnClickListener(v -> activity.finish());
             container.addView(view, 0);
         }
