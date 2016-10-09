@@ -5,7 +5,7 @@ package com.jimei.xiaolumeimei.adapter;
  */
 
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.data.LogisticsCompanyInfo;
+import com.jimei.xiaolumeimei.entities.LogisticsCompanyInfo;
 
 import java.util.List;
 

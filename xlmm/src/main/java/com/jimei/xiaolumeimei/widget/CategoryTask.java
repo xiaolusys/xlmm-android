@@ -1,13 +1,13 @@
 package com.jimei.xiaolumeimei.widget;
 
 import android.os.AsyncTask;
-import android.os.Environment;
-import android.view.Menu;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.CategoryAdapter;
+import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
 import com.jimei.xiaolumeimei.utils.FileUtils;
 import com.jude.utils.JUtils;
@@ -16,7 +16,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,22 +25,24 @@ import java.util.List;
 public class CategoryTask extends AsyncTask<String, Integer, List<CategoryBean>> {
 
     private CategoryAdapter adapter;
-    private Menu menu;
+    private LinearLayout mLinearLayout;
 
-    public CategoryTask(CategoryAdapter adapter, Menu menu) {
+    public CategoryTask(CategoryAdapter adapter) {
         this.adapter = adapter;
-        this.menu = menu;
+    }
+
+    public CategoryTask(CategoryAdapter adapter, LinearLayout linearLayout) {
+        this.adapter = adapter;
+        mLinearLayout = linearLayout;
     }
 
     @Override
     protected List<CategoryBean> doInBackground(String... params) {
         String categoryStr;
         InputStream in = null;
-        String fileaddress = Environment.getExternalStorageDirectory().getAbsolutePath()
-                + "/xlmmcategory/" + "category.json";
         try {
-            if (FileUtils.isFileExist(fileaddress)) {
-                File file = new File(fileaddress);
+            if (FileUtils.isFileExist(XlmmConst.CATEGORY_JSON)) {
+                File file = new File(XlmmConst.CATEGORY_JSON);
                 in = new FileInputStream(file);
             } else {
                 return null;
@@ -52,24 +53,12 @@ public class CategoryTask extends AsyncTask<String, Integer, List<CategoryBean>>
             Gson gson = new Gson();
             List<CategoryBean> list = gson.fromJson(categoryStr, new TypeToken<List<CategoryBean>>() {
             }.getType());
-            if (params[0].contains(",")) {
-                List<CategoryBean> data = new ArrayList<>();
-                String[] split = params[0].split(",");
-                for (String aSplit : split) {
-                    for (int i = 0; i < list.size(); i++) {
-                        if (aSplit.equals(list.get(i).getCid())) {
-                            if (list.get(i).getChilds() != null) {
-                                data.addAll(list.get(i).getChilds());
-                            }
-                        }
-                    }
-                }
-                return data;
-            } else {
-                for (int i = 0; i < list.size(); i++) {
-                    if (params[0].equals(list.get(i).getCid())) {
-                        return list.get(i).getChilds();
-                    }
+            if ("".equals(params[0])) {
+                return list.get(0).getChilds();
+            }
+            for (int i = 0; i < list.size(); i++) {
+                if (params[0].equals(list.get(i).getCid())) {
+                    return list.get(i).getChilds();
                 }
             }
             return null;
@@ -90,9 +79,12 @@ public class CategoryTask extends AsyncTask<String, Integer, List<CategoryBean>>
     @Override
     protected void onPostExecute(List<CategoryBean> list) {
         if (list != null && list.size() > 0) {
-            adapter.update(list);
+            adapter.updateWithClear(list);
         } else {
-            menu.removeItem(R.id.category);
+            adapter.clear();
+            if (mLinearLayout!=null) {
+                mLinearLayout.setVisibility(View.VISIBLE);
+            }
         }
     }
 }

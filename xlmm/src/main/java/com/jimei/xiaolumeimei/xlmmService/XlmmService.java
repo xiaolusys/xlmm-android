@@ -13,9 +13,9 @@ import com.jimei.xiaolumeimei.entities.BrandListBean;
 import com.jimei.xiaolumeimei.entities.BudgetdetailBean;
 import com.jimei.xiaolumeimei.entities.CarryLogListBean;
 import com.jimei.xiaolumeimei.entities.CartsHisBean;
+import com.jimei.xiaolumeimei.entities.CartsInfoBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
-import com.jimei.xiaolumeimei.entities.CartsInfoBean;
 import com.jimei.xiaolumeimei.entities.CashoutPolicy;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
 import com.jimei.xiaolumeimei.entities.CategoryDownBean;
@@ -35,11 +35,9 @@ import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.entities.LogisticCompany;
 import com.jimei.xiaolumeimei.entities.LogisticsBean;
 import com.jimei.xiaolumeimei.entities.MMChooselistBean;
-import com.jimei.xiaolumeimei.entities.MMHavaChooseResultBean;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.MMVisitorsBean;
 import com.jimei.xiaolumeimei.entities.MaMaReNewBean;
-import com.jimei.xiaolumeimei.entities.MaMaRenwuListBean;
 import com.jimei.xiaolumeimei.entities.MamaFansBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.MamaLivenessBean;
@@ -60,7 +58,6 @@ import com.jimei.xiaolumeimei.entities.PostActivityBean;
 import com.jimei.xiaolumeimei.entities.PotentialFans;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
-import com.jimei.xiaolumeimei.entities.ProductListOldBean;
 import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
 import com.jimei.xiaolumeimei.entities.RedBagBean;
@@ -69,7 +66,6 @@ import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.ResultBean;
 import com.jimei.xiaolumeimei.entities.ResultEntity;
 import com.jimei.xiaolumeimei.entities.ShareModelBean;
-import com.jimei.xiaolumeimei.entities.ShopProductBean;
 import com.jimei.xiaolumeimei.entities.TeamBuyBean;
 import com.jimei.xiaolumeimei.entities.UserAccountBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
@@ -80,6 +76,7 @@ import com.jimei.xiaolumeimei.entities.VersionBean;
 import com.jimei.xiaolumeimei.entities.WeekTaskRewardBean;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.entities.WxPubAuthInfo;
+import com.jimei.xiaolumeimei.entities.WxQrcode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -112,14 +109,6 @@ public interface XlmmService {
     Observable<UserBean> login(
             @Field("username") String username,
             @Field("password") String password);
-
-
-    //今日列表
-    @GET("/rest/v2/products")
-    Observable<ProductListOldBean> getTodayList(
-            @Query("page") int page,
-            @Query("page_size") int page_size);
-
 
     //获取所有订单
     @GET("/rest/v2/trades")
@@ -617,12 +606,6 @@ public interface XlmmService {
             @Query("page") String page
     );
 
-    //获得recent days小鹿妈妈订单和收益记录
-    @GET("/rest/v2/mama/dailystats")
-    Observable<RecentCarryBean> getRecentCarry(
-            @Query("from") String from,
-            @Query("days") String day);
-
     @GET("/rest/v1/activitys")
     Observable<List<PostActivityBean>> getPostActivity(
     );
@@ -644,27 +627,6 @@ public interface XlmmService {
     @POST("/rest/v1/usercoupons")
     Observable<ResponseBody> getUsercoupons(
             @Field("template_id") String template_id
-    );
-
-    //获取已选列表
-    @GET("/rest/v1/pmt/cushoppros/shop_product")
-    Observable<ShopProductBean> getShopProduct(
-            @Query("page_size") String page
-    );
-
-    //更换位置
-    @FormUrlEncoded
-    @POST("/rest/v1/pmt/cushoppros/change_pro_position")
-    Observable<MMHavaChooseResultBean> changeProPosition(
-            @Field("change_id") String chanege_id,
-            @Field("target_id") String target_id
-    );
-
-    //移除一个选品
-    @FormUrlEncoded
-    @POST("/rest/v1/pmt/cushoppros/remove_pro_from_shop")
-    Observable<MMHavaChooseResultBean> removeProFromShop(
-            @Field("product") String id
     );
 
     //发送验证码
@@ -828,11 +790,6 @@ public interface XlmmService {
     Observable<Response<PersonalCarryRankBean>> getTeamSelfRank(
     );
 
-    @GET("/rest/v1/pmt/xlmm/{id}/new_mama_task_info")
-    Observable<Response<MaMaRenwuListBean>> getMaMaRenwuListBean(
-            @Path("id") String id
-    );
-
     @GET("/rest/v2/mama/message/self_list")
     Observable<Response<MamaSelfListBean>> getMaMaselfList(
     );
@@ -930,4 +887,12 @@ public interface XlmmService {
 
     @GET("/rest/v2/cashout_policy")
     Observable<CashoutPolicy> getCashoutPolicy();
+
+    @GET("/rest/v2/qrcode/get_wxpub_qrcode")
+    Observable<WxQrcode> getWxCode();
+
+    @GET("/rest/v2/mama/dailystats")
+    Observable<RecentCarryBean> getRecentCarry(
+            @Query("from") String from,
+            @Query("days") String days);
 }

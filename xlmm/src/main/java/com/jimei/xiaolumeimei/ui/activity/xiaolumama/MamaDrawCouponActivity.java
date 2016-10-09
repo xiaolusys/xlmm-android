@@ -11,9 +11,7 @@ import android.widget.TextView;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.entities.DrawCouponBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 
 import butterknife.Bind;
@@ -65,33 +63,30 @@ public class MamaDrawCouponActivity extends BaseSwipeBackCompatActivity implemen
         alertDialog = new AlertDialog.Builder(this)
                 .setMessage("兑换优惠券金额将直接从妈妈账户余额扣除!")
                 .setPositiveButton("确定", (dialog, which) -> {
-                    alertDialog.dismiss();
+                    dialog.dismiss();
                     MamaInfoModel.getInstance()
                             .drawCoupon(id)
                             .subscribeOn(Schedulers.io())
-                            .subscribe(new ServiceResponse<DrawCouponBean>() {
-                                @Override
-                                public void onNext(DrawCouponBean drawCouponBean) {
-                                    JUtils.Toast(drawCouponBean.getInfo());
-                                    if (drawCouponBean.getCode() == 0) {
-                                        Intent intent = new Intent(MamaDrawCouponActivity.this, DrawCouponResultActivity.class);
-                                        Bundle bundle = new Bundle();
-                                        bundle.putString("num", num + "");
-                                        intent.putExtras(bundle);
-                                        startActivity(intent);
-                                        money = money - num;
-                                        moneyTv.setText(money + "");
-                                        flag20.setVisibility(View.INVISIBLE);
-                                        flag50.setVisibility(View.INVISIBLE);
-                                        id = "";
-                                        if (money < 20) {
-                                            finish();
-                                        }
+                            .subscribe(drawCouponBean -> {
+                                JUtils.Toast(drawCouponBean.getInfo());
+                                if (drawCouponBean.getCode() == 0) {
+                                    Intent intent = new Intent(MamaDrawCouponActivity.this, DrawCouponResultActivity.class);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("num", num + "");
+                                    intent.putExtras(bundle);
+                                    startActivity(intent);
+                                    money = money - num;
+                                    moneyTv.setText(money + "");
+                                    flag20.setVisibility(View.INVISIBLE);
+                                    flag50.setVisibility(View.INVISIBLE);
+                                    id = "";
+                                    if (money < 20) {
+                                        finish();
                                     }
                                 }
                             });
                 })
-                .setNegativeButton("取消", (dialog, which) -> alertDialog.dismiss())
+                .setNegativeButton("取消", (dialog, which) -> dialog.dismiss())
                 .create();
     }
 

@@ -152,6 +152,9 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                         finish();
                       } else if (login.equals("product")) {
                         finish();
+                      } else if (login.equals("push_jump")) {
+                        JumpUtils.push_jump_proc(PhoneLoginActivity.this,actlink);
+                        finish();
                       } else if (login.equals("main")) {
                         finish();
                       } else if (login.equals("collect")){

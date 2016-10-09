@@ -36,7 +36,6 @@ public class SkuSizeAdapter extends RecyclerView.Adapter<SkuSizeAdapter.SkuSizeV
     public void updateWithClear(List<SkuItemsBean> list) {
         data.clear();
         data.addAll(list);
-        num = 0;
         notifyDataSetChanged();
     }
 
@@ -61,9 +60,9 @@ public class SkuSizeAdapter extends RecyclerView.Adapter<SkuSizeAdapter.SkuSizeV
 
             holder.rl.setBackgroundResource(R.drawable.sku_item_bg_unselect);
             holder.name.setTextColor(activity.getResources().getColor(R.color.text_color_D8));
-            if (num == position) {
-                num++;
-            }
+//            if (num == position) {
+//                num++;
+//            }
         } else {
             if (num == position) {
                 holder.rl.setBackgroundResource(R.drawable.sku_item_bg_select);

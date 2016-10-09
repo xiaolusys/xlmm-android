@@ -16,13 +16,15 @@ import com.umeng.analytics.MobclickAgent;
 public class MamaLunTanActivity extends CommonWebViewActivity {
     @Override
     protected void initViews() {
+        if (getActlink()==null||"".equals(getActlink())) {
+            setActlink("http://forum.xiaolumeimei.com/accounts/xlmm/login/");
+        }
         super.initViews();
         webviewTitle.setText("小鹿论坛");
         mWebView.setWebViewClient(new WebViewClient(){
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                JUtils.Toast("加载成功");
             }
 
             @Override

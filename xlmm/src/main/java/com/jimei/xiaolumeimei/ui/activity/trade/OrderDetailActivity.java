@@ -1,14 +1,16 @@
 package com.jimei.xiaolumeimei.ui.activity.trade;
 
 import android.app.Activity;
-import android.support.v7.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.SystemClock;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -36,17 +38,15 @@ import com.jimei.xiaolumeimei.adapter.PayAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
-import com.jimei.xiaolumeimei.entities.LogisticCompany;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.PayInfoBean;
 import com.jimei.xiaolumeimei.entities.RedBagBean;
-import com.jimei.xiaolumeimei.entities.ResultBean;
-import com.jimei.xiaolumeimei.entities.TeamBuyBean;
 import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.ui.activity.user.WaitSendAddressActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
+import com.jimei.xiaolumeimei.widget.CountDownView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.pingplusplus.android.PaymentActivity;
@@ -54,7 +54,6 @@ import com.umeng.analytics.MobclickAgent;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 import butterknife.Bind;
 import cn.sharesdk.framework.Platform;
@@ -68,13 +67,14 @@ import rx.schedulers.Schedulers;
 public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         implements View.OnClickListener, View.OnTouchListener, AdapterView.OnItemClickListener {
     private static final int REQUEST_CODE_PAYMENT = 1;
+    public static final int HAND_MSG = 6;
     String TAG = "OrderDetailActivity";
     @Bind(R.id.btn_order_proc)
     ImageView btn_proc;
     @Bind(R.id.btn_order_cancel)
     ImageView btn_order_cancel;
     @Bind(R.id.rlayout_order_lefttime)
-    RelativeLayout rlayout_order_lefttime;
+    LinearLayout rlayout_order_lefttime;
     @Bind(R.id.tx_order_id)
     TextView tx_order_id;
     @Bind(R.id.tx_custom_name)
@@ -149,7 +149,10 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     ScrollView scrollView;
     @Bind(R.id.team_buy)
     LinearLayout teamLayout;
+    @Bind(R.id.count_view)
+    CountDownView mCountDownView;
 
+    Handler mHandler;
     ListView listView;
     ListView listView2;
 
@@ -159,8 +162,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     private Dialog dialog;
     private Dialog dialog2;
     private RedBagBean redBagEntity;
-    private boolean alive = false;
-    private boolean flag = true;
+    private boolean hasRedBag = false;
 
     @Override
     protected void setListener() {
@@ -175,7 +177,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-
+        order_id = extras.getInt("orderinfo");
     }
 
     @Override
@@ -185,6 +187,10 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void initViews() {
+        Uri uri = getIntent().getData();
+        if (uri != null) {
+            order_id = Integer.valueOf(uri.getQueryParameter("trade_id"));
+        }
         View view = getLayoutInflater().inflate(R.layout.pop_layout, null);
         dialog = new Dialog(this, R.style.CustomDialog);
         dialog.setContentView(view);
@@ -214,79 +220,70 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         closeIv2.setOnClickListener(this);
     }
 
+    public void resendMsg() {
+        mHandler.removeMessages(HAND_MSG);
+        Message msg = mHandler.obtainMessage(HAND_MSG);
+        mHandler.sendMessageDelayed(msg, 1500);
+    }
+
     //从server端获得所有订单数据，可能要查询几次
     @Override
     protected void initData() {
-        if ((getIntent() != null) && (getIntent().getExtras() != null)) {
-            order_id = getIntent().getExtras().getInt("orderinfo");
+        mHandler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                switch (msg.what) {
+                    case HAND_MSG:
+                        redBagLayout.setVisibility(View.VISIBLE);
+                        break;
+                }
+            }
+        };
+        if (order_id != -1) {
             showIndeterminateProgressDialog(false);
-            Subscription subscription = TradeModel.getInstance()
+            addSubscription(TradeModel.getInstance()
                     .getOrderDetailBean(order_id)
                     .subscribeOn(Schedulers.io())
-                    .subscribe(new ServiceResponse<OrderDetailBean>() {
-
-                        @Override
-                        public void onNext(OrderDetailBean orderDetailBean) {
-                            tid = orderDetailBean.getTid();
-                            orderDetail = orderDetailBean;
-                            showProcBtn(orderDetailBean);
-                            fillDataToView(orderDetailBean);
-                            scrollView.scrollTo(0, 0);
-                            String display = orderDetailBean.getStatus_display();
-                            if ("已付款".equals(display)) {
-                                addressLayout.setOnClickListener(OrderDetailActivity.this);
-                            } else {
-                                rightImage.setVisibility(View.GONE);
-                                logisticsRightImage.setVisibility(View.GONE);
-                            }
-                            Log.i(TAG, "order_id " + order_id + " " + orderDetailBean.toString());
-
-                            Subscription subscribe = ActivityModel.getInstance()
-                                    .getLogisticCompany(order_id)
-                                    .subscribeOn(Schedulers.io())
-                                    .subscribe(new ServiceResponse<List<LogisticCompany>>() {
-                                        @Override
-                                        public void onNext(List<LogisticCompany> logisticCompanies) {
-                                            CompanyAdapter adapter = new CompanyAdapter(logisticCompanies, getApplicationContext());
-                                            listView.setAdapter(adapter);
-                                            listView.setOnItemClickListener((parent, view, position, id) -> {
-                                                String code = logisticCompanies.get(position).getCode();
-                                                ActivityModel.getInstance()
-                                                        .changeLogisticCompany(orderDetail.getUser_adress().getId(), order_id + "", code)
-                                                        .subscribeOn(Schedulers.io())
-                                                        .subscribe(new ServiceResponse<ResultBean>() {
-                                                            @Override
-                                                            public void onNext(ResultBean resultBean) {
-                                                                switch (resultBean.getCode()) {
-                                                                    case 0:
-                                                                        logisticsTv.setText(logisticCompanies.get(position).getName());
-                                                                        break;
-                                                                }
-                                                                JUtils.Toast(resultBean.getInfo());
-                                                                dialog.dismiss();
-                                                            }
-
-                                                            @Override
-                                                            public void onError(Throwable e) {
-                                                                JUtils.Toast(e.getMessage());
-                                                                dialog.dismiss();
-                                                            }
-                                                        });
-                                            });
-                                        }
+                    .subscribe(orderDetailBean -> {
+                        tid = orderDetailBean.getTid();
+                        orderDetail = orderDetailBean;
+                        showProcBtn(orderDetailBean);
+                        fillDataToView(orderDetailBean);
+                        scrollView.scrollTo(0, 0);
+                        if (orderDetailBean.isCan_change_address()) {
+                            addressLayout.setOnClickListener(OrderDetailActivity.this);
+                        } else {
+                            rightImage.setVisibility(View.GONE);
+                            logisticsRightImage.setVisibility(View.GONE);
+                        }
+                        Log.i(TAG, "order_id " + order_id + " " + orderDetailBean.toString());
+                        addSubscription(ActivityModel.getInstance()
+                                .getLogisticCompany(order_id)
+                                .subscribeOn(Schedulers.io())
+                                .subscribe(logisticCompanies -> {
+                                    CompanyAdapter adapter = new CompanyAdapter(logisticCompanies, getApplicationContext());
+                                    listView.setAdapter(adapter);
+                                    listView.setOnItemClickListener((parent, view, position, id) -> {
+                                        String code = logisticCompanies.get(position).getCode();
+                                        addSubscription(ActivityModel.getInstance()
+                                                .changeLogisticCompany(orderDetail.getUser_adress().getId(), order_id + "", code)
+                                                .subscribeOn(Schedulers.io())
+                                                .subscribe(resultBean -> {
+                                                    switch (resultBean.getCode()) {
+                                                        case 0:
+                                                            logisticsTv.setText(logisticCompanies.get(position).getName());
+                                                            break;
+                                                    }
+                                                    JUtils.Toast(resultBean.getInfo());
+                                                    dialog.dismiss();
+                                                }, e -> {
+                                                    JUtils.Toast(e.getMessage());
+                                                    dialog.dismiss();
+                                                }));
                                     });
-                            addSubscription(subscribe);
-                            hideIndeterminateProgressDialog();
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            Log.e(TAG, " error:, " + e.toString());
-                            super.onError(e);
-                        }
-                    });
-            addSubscription(subscription);
-
+                                }, e -> JUtils.Log(e.getMessage())));
+                        hideIndeterminateProgressDialog();
+                    }, e -> JUtils.Log(e.getMessage())));
         }
     }
 
@@ -311,43 +308,28 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                     addSubscription(ProductModel.getInstance()
                             .getTeamBuyBean(orderDetailBean.getTid())
                             .subscribeOn(Schedulers.io())
-                            .subscribe(new ServiceResponse<TeamBuyBean>() {
-                                @Override
-                                public void onNext(TeamBuyBean teamBuyBean) {
-                                    if (teamBuyBean.getStatus() != 2) {
-                                        setStatusView(status);
-                                    }
-                                    teamLayout.setVisibility(View.VISIBLE);
+                            .subscribe(teamBuyBean -> {
+                                if (teamBuyBean.getStatus() != 2) {
+                                    setStatusView(status);
                                 }
-                            }));
+                                teamLayout.setVisibility(View.VISIBLE);
+                            }, e -> JUtils.Log(e.getMessage())));
                 } else {
                     addSubscription(TradeModel.getInstance()
                             .getRedBag(tid)
                             .subscribeOn(Schedulers.io())
-                            .subscribe(new ServiceResponse<RedBagBean>() {
-                                @Override
-                                public void onNext(RedBagBean redBagBean) {
-                                    if (redBagBean.getCode() == 0) {
-                                        if (redBagBean.getShare_times_limit() > 0) {
-                                            redBagLayout.setVisibility(View.VISIBLE);
-                                            redBagEntity = redBagBean;
-                                            new Thread(() -> {
-                                                while (flag) {
-                                                    SystemClock.sleep(1500);
-                                                    runOnUiThread(() -> {
-                                                        if (flag && !alive) {
-                                                            redBagLayout.setVisibility(View.VISIBLE);
-                                                        }
-
-                                                    });
-                                                }
-                                            }).start();
-                                        } else {
-                                            redBagLayout.setVisibility(View.GONE);
-                                        }
+                            .subscribe(redBagBean -> {
+                                if (redBagBean.getCode() == 0) {
+                                    if (redBagBean.getShare_times_limit() > 0) {
+                                        hasRedBag = true;
+                                        redBagLayout.setVisibility(View.VISIBLE);
+                                        redBagEntity = redBagBean;
+                                    } else {
+                                        hasRedBag = false;
+                                        redBagLayout.setVisibility(View.GONE);
                                     }
                                 }
-                            }));
+                            }, e -> JUtils.Log(e.getMessage())));
 
                 }
             } else {
@@ -454,18 +436,12 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                     Log.i(TAG, "wait pay lefttime show");
                     rlayout_order_lefttime.setVisibility(View.VISIBLE);
                     relativeLayout.setVisibility(View.GONE);
-                    cn.iwgang.countdownview.CountdownView cv_lefttime =
-                            (cn.iwgang.countdownview.CountdownView) findViewById(R.id.cv_lefttime);
-
-                    if (calcLeftTime(orderDetailBean.getCreated()) > 0) {
-                        cv_lefttime.start(calcLeftTime(orderDetailBean.getCreated()));
-                        cv_lefttime.setOnCountdownEndListener(
-                                cv -> {
-                                    JUtils.Log(TAG, "timeout");
-                                    btn_proc.setClickable(false);
-                                    btn_proc.setImageResource(R.drawable.pay_order_not);
-                                });
-                    } else {
+                    mCountDownView.start(calcLeftTime(orderDetailBean.getCreated()), CountDownView.TYPE_MINUTE);
+                    mCountDownView.setOnEndListener(view -> {
+                        btn_proc.setClickable(false);
+                        btn_proc.setImageResource(R.drawable.pay_order_not);
+                    });
+                    if (calcLeftTime(orderDetailBean.getCreated()) <= 0) {
                         JUtils.Log(TAG, "left time 0");
                         btn_proc.setClickable(false);
                         btn_proc.setImageResource(R.drawable.pay_order_not);
@@ -538,7 +514,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                 startActivity(intent);
                 break;
             case R.id.logistics_layout:
-                if ("已付款".equals(orderDetail.getStatus_display())) {
+                if (orderDetail != null && "已付款".equals(orderDetail.getStatus_display())) {
                     new AlertDialog.Builder(this)
                             .setTitle("提示")
                             .setMessage("非服装类商品是由供应商直接发货，只能尽量满足您选择的快递公司，" +
@@ -606,11 +582,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                         intent.putExtra(PaymentActivity.EXTRA_CHARGE,
                                 new Gson().toJson(payInfoBean.getCharge()));
                         startActivityForResult(intent, REQUEST_CODE_PAYMENT);
-                    }
-
-                    @Override
-                    public void onCompleted() {
-                        super.onCompleted();
                     }
 
                     @Override
@@ -728,14 +699,9 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
             case MotionEvent.ACTION_SCROLL:
             case MotionEvent.ACTION_MOVE:
                 redBagLayout.setVisibility(View.GONE);
-                alive = true;
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        SystemClock.sleep(1500);
-                        alive = false;
-                    }
-                }).start();
+                if (hasRedBag) {
+                    resendMsg();
+                }
                 break;
         }
         return false;
@@ -749,9 +715,9 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    protected void onStop() {
-        flag = false;
-        super.onStop();
+    protected void onDestroy() {
+        mHandler.removeMessages(HAND_MSG);
+        super.onDestroy();
     }
 
     @Override

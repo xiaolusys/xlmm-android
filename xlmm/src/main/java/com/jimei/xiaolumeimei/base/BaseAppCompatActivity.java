@@ -88,6 +88,8 @@ public abstract class BaseAppCompatActivity extends BaseAutoLayoutActivity {
     Bundle extras = getIntent().getExtras();
     if (null != extras) {
       getBundleExtras(extras);
+    }else {
+      getIntentUrl();
     }
 
     mContext = this;
@@ -110,6 +112,10 @@ public abstract class BaseAppCompatActivity extends BaseAutoLayoutActivity {
     initViews();
     initData();
     setListener();
+  }
+
+  public void getIntentUrl() {
+
   }
 
   protected abstract void setListener();

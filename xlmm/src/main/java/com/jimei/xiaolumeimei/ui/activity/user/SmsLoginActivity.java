@@ -164,7 +164,10 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                                       new Intent(mContext, CartActivity.class);
                                   startActivity(intent);
                                   finish();
-                                } else if (login.equals("product")) {
+                                } else if (login.equals("push_jump")) {
+                                  JumpUtils.push_jump_proc(SmsLoginActivity.this,actlink);
+                                  finish();
+                                }else if (login.equals("product")) {
                                   finish();
                                 } else if (login.equals("main")) {
                                   finish();
@@ -197,16 +200,6 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                                   startActivity(intent);
                                   finish();
                                 } else if (login.equals("h5")) {
-                                  //Intent intent = new Intent(mContext, CommonWebViewActivity.class);
-                                  ////intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                  //SharedPreferences sharedPreferences =
-                                  //        getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
-                                  //String cookies = sharedPreferences.getString("Cookie", "");
-                                  //Bundle bundle = new Bundle();
-                                  //bundle.putString("cookies", cookies);
-                                  //bundle.putString("actlink", actlink);
-                                  //intent.putExtras(bundle);
-                                  //startActivity(intent);
                                   JumpUtils.jumpToWebViewWithCookies(mContext, actlink,
                                       -1, CommonWebViewActivity.class);
                                   finish();

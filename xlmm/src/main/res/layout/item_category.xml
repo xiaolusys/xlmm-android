@@ -7,7 +7,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="200px"
+        android:layout_height="180px"
         android:layout_marginTop="10px">
 
         <ImageView
@@ -15,14 +15,14 @@
             android:layout_width="150px"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            android:maxHeight="200px"
+            android:maxHeight="180px"
             android:scaleType="fitCenter" />
     </RelativeLayout>
 
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
-        android:layout_height="30px"
+        android:layout_height="50px"
         android:layout_marginBottom="10px"
         android:textColor="@color/text_color_4A"
         android:textSize="14sp" />

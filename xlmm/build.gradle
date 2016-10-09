@@ -54,7 +54,6 @@ andResGuard {
     ]
     sevenzip {
         artifact = 'com.tencent.mm:SevenZip:1.1.9'
-        //path = "/usr/local/bin/7za"
     }
 }
 
@@ -71,7 +70,7 @@ android {
 
         targetSdkVersion 23
 
-        versionCode 20160922
+        versionCode 20160924
         versionName "1.2.8"
 
         multiDexEnabled = true
@@ -244,11 +243,8 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile files('libs/alipaySDK-20150818.jar')
     compile files('libs/libammsdk.jar')
-    compile files('libs/libpingpp-2.0.6.jar')
-    compile files('libs/UPPayAssistEx.jar')
-    compile files('libs/UPPayPluginEx.jar')
+    compile files('libs/alipaySingle-20160825.jar')
     compile files('libs/commons-lang3-3.4.jar')
     compile files('libs/MiPush_SDK_Client_2_2_21.jar')
     compile project(':xlmmlibrary')
@@ -262,8 +258,12 @@ dependencies {
     compile files('libs/ShareSDK-Wechat-Core-2.7.4.jar')
     compile files('libs/ShareSDK-Wechat-Moments-2.7.4.jar')
     compile project(':UdeskSDKUI')
+    compile 'com.pingxx:pingpp-core:2.1.6'
+//    compile 'com.pingxx:pingpp-alipay:2.1.+'
+//    compile 'com.pingxx:pingpp-wxpay:2.1.+'
     compile 'com.android.support:support-v4:23.4.0'
     compile 'com.android.support:appcompat-v7:23.4.0'
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-all:2.0.2-beta'
+
 }

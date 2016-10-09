@@ -246,7 +246,6 @@
 #-libraryjars ShareSDK-Wechat-Core-2.6.6.jar
 #-libraryjars ShareSDK-Wechat-Favorite-2.6.6.jar
 #-libraryjars ShareSDK-Wechat-Moments-2.6.6.jar
-#-libraryjars UPPayPluginEx.jar
 
 
 #-------------------------------------------------------------------------

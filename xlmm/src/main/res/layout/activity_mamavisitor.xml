@@ -43,12 +43,7 @@
 
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="#33DADADA"/>
-
-        <com.jcodecraeer.xrecyclerview.XRecyclerView
+        <com.jimei.xiaolumeimei.widget.MyXRecyclerView
             android:id="@+id/xrv"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"

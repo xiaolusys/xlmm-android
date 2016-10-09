@@ -40,10 +40,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.glidemoudle.CropCircleTransformation;
 import com.jimei.xiaolumeimei.glidemoudle.GlideRoundTransform;
-import com.squareup.picasso.Picasso;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
-import com.zhy.http.okhttp.request.RequestCall;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
@@ -54,9 +52,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import okhttp3.Call;
-import rx.Observable;
-import rx.Subscriber;
-import rx.schedulers.Schedulers;
 
 /**
  * ViewUtils
@@ -491,84 +486,6 @@ public final class ViewUtils {
         }
     }
 
-    public static void loadImgToImgViewPost(Context context, ImageView img, String picPath) {
-        if (null == picPath) return;
-        if (picPath.startsWith("http://image.xiaolu.so")) {
-            String[] temp = picPath.split("http://image.xiaolu.so/");
-            String head_img = "";
-            if (temp.length > 1) {
-                try {
-                    head_img = "http://image.xiaolu.so/" + URLEncoder.encode(temp[1], "utf-8");
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            Glide.with(context)
-                    .load(head_img)
-                    .thumbnail(0.1f)
-                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                    .placeholder(R.drawable.header)
-                    .centerCrop()
-                    .into(img);
-        } else {
-            //if (picPath.startsWith("https://mmbiz.qlogo.cn")) {
-            Glide.with(context).load(picPath).thumbnail(0.1f).diskCacheStrategy(DiskCacheStrategy.RESULT)
-                    //.placeholder(R.drawable.parceholder)
-                    .centerCrop().into(img);
-        }
-    }
-
-    public static String getDecodeUrl(String path) {
-        String imagUrl = "";
-
-        if (path.startsWith("http://image.xiaolu.so")) {
-            String[] temp = path.split("http://image.xiaolu.so/");
-            if (temp.length > 1) {
-                try {
-                    imagUrl = "http://image.xiaolu.so/" + URLEncoder.encode(temp[1], "utf-8");
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-            }
-        } else {
-            //if (path.startsWith("https://mmbiz.qlogo.cn")) {
-            imagUrl = path;
-        }
-        return imagUrl;
-    }
-
-    public static void loadImgToImgViewWithPlaceholderTransform(Context context, ImageView img,
-                                                                String picPath) {
-        if (null == picPath) return;
-
-        if (picPath.startsWith("http://image.xiaolu.so")) {
-            String[] temp = picPath.split("http://image.xiaolu.so/");
-            String head_img = "";
-            if (temp.length > 1) {
-                try {
-                    head_img = "http://image.xiaolu.so/"
-                            + URLEncoder.encode(temp[1], "utf-8")
-                            + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/90";
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-            }
-            Glide.with(context)
-                    .load(head_img)
-                    .thumbnail(0.1f)
-                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                    .transform(new GlideRoundTransform(context))
-                    .centerCrop()
-                    .into(img);
-        } else {
-            //if (picPath.startsWith("https://mmbiz.qlogo.cn")) {
-            Glide.with(context).load(picPath).thumbnail(0.1f).diskCacheStrategy(DiskCacheStrategy.RESULT)
-                    //.placeholder(R.drawable.parceholder)
-                    .centerCrop().into(img);
-        }
-    }
-
     public static void loadImageWithOkhttp(String picpath, Activity context,
                                            ImageView imageView, int size) {
         OkHttpUtils.get().url(picpath).build().execute(new BitmapCallback() {
@@ -580,70 +497,20 @@ public final class ViewUtils {
             @Override
             public void onResponse(Bitmap response, int id) {
                 if (null != response) {
-
+                    int width = response.getWidth();
+                    int height = response.getHeight();
                     imageView.setAdjustViewBounds(true);
-
                     int screenWidth = DisplayUtils.getScreenW(context) / size;
-                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(screenWidth,
-                            LinearLayout.LayoutParams.WRAP_CONTENT);
-                    //                                                        lp.width = screenWidth;
-                    //                                                        lp.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+                    int value = (int) ((height * 1.0 / width) * 2 * screenWidth / 3 + screenWidth / 5);
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(screenWidth, value);
                     imageView.setLayoutParams(lp);
                     imageView.setMaxWidth(screenWidth);
-                    imageView.setMaxHeight(screenWidth * 5);
-//          imageView.setPadding(screenWidth/6,screenWidth/10,screenWidth/6,screenWidth/10);
-                    imageView.setPadding(0, screenWidth / 10, 0, screenWidth / 10);
-                    //imageViewList.get(finalI).setLayoutParams(layoutParams);
+                    imageView.setMaxHeight(value);
+                    imageView.setPadding(screenWidth / 6, screenWidth / 10, screenWidth / 6, screenWidth / 10);
                     imageView.setImageBitmap(response);
-
-                    //                  imageView.setLayoutParams(layoutParams);
-                    //                  imageView.setImageBitmap(response);
                 }
             }
         });
-    }
-
-    public static Observable<List<Bitmap>> loadImageWithOkhttpReturnBitmaps(Context context,
-                                                                            List<String> picpath) {
-
-        return Observable.create(new Observable.OnSubscribe<List<Bitmap>>() {
-            @Override
-            public void call(Subscriber<? super List<Bitmap>> subscriber) {
-                Bitmap bitmap1 = null;
-                Bitmap bitmap2 = null;
-                List<Bitmap> bitmaps = new ArrayList<>();
-
-                try {
-                    bitmap1 = Picasso.with(context).load(picpath.get(0)).get();
-                    bitmap2 = Picasso.with(context).load(picpath.get(1)).get();
-                    bitmaps.add(bitmap1);
-                    bitmaps.add(bitmap2);
-                } catch (Exception e) {
-                    subscriber.onError(e);
-                }
-                if (bitmap1 == null || bitmap2 == null || bitmaps.size() != 2) {
-                    subscriber.onError(new Exception("数据有误!!!"));
-                }
-
-                subscriber.onNext(bitmaps);
-                subscriber.onCompleted();
-            }
-        }).subscribeOn(Schedulers.io());
-    }
-
-    public static Bitmap getBitmapFormUrl(String url) {
-        RequestCall build = OkHttpUtils.get().url(url).build();
-        build.execute(new BitmapCallback() {
-            @Override
-            public void onError(Call call, Exception e, int id) {
-
-            }
-
-            @Override
-            public void onResponse(Bitmap response, int id) {
-            }
-        });
-        return null;
     }
 
     public static RelativeLayout.LayoutParams getLayoutParams(Bitmap bitmap, int screenWidth) {

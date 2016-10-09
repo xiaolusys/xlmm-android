@@ -11,38 +11,28 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseLazyFragment;
 import com.jimei.xiaolumeimei.databinding.FragmentMamaThirdBinding;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
-import com.jimei.xiaolumeimei.entities.MamaSelfListBean;
 import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.event.WebViewEvent;
-import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMFans1Activity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShoppingListActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMTeamActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMcarryLogActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaLivenessActivity;
-import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaReNewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaVisitorActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaWalletActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.PersonalCarryRankActivity;
 import com.jimei.xiaolumeimei.ui.mminfo.MMInfoModel;
 import com.jimei.xiaolumeimei.ui.mminfo.MamaActivity;
-import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.RxUtils;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 
 import org.greenrobot.eventbus.EventBus;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import retrofit2.Response;
 
 public class MamaThirdFragment extends BaseLazyFragment<FragmentMamaThirdBinding> implements View.OnClickListener {
     private static final String TITLE = "title";
     private static final String ID = "id";
 
     private int id;
-    private String msgUrl;
     private String teamUrl;
     private String fansUrl;
     private double mCashValue;
@@ -75,36 +65,18 @@ public class MamaThirdFragment extends BaseLazyFragment<FragmentMamaThirdBinding
                 .getMamaUrl()
                 .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
                 .subscribe(this::setUrl, Throwable::printStackTrace));
-        addSubscription(MMInfoModel.getInstance()
-                .getMaMaselfList()
-                .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
-                .subscribe(this::initTask, Throwable::printStackTrace));
         setListener();
     }
 
     public void refreshFortune() {
-        ((MamaActivity) mActivity).showIndeterminateProgressDialog(false);
+        if (mActivity!=null) {
+            ((MamaActivity) mActivity).showIndeterminateProgressDialog(false);
+        }
         addSubscription(MMInfoModel.getInstance()
                 .getMamaFortune()
                 .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
                 .subscribe(this::initFortune, Throwable::printStackTrace));
     }
-
-    private void initTask(Response<MamaSelfListBean> response) {
-        if (response.isSuccessful()) {
-            List<MamaSelfListBean.ResultsBean> results = response.body().getResults();
-            List<String> list = new ArrayList<>();
-            if (response.body().getUnread_cnt() > 0) {
-                for (int i = 0; i < results.size(); i++) {
-                    if (!results.get(i).isRead()) {
-                        list.add(results.get(i).getTitle());
-                    }
-                }
-                b.marqueeView.startWithList(list);
-            }
-        }
-    }
-
 
     private void initFortune(MamaFortune mamaFortune) {
         MamaFortune.MamaFortuneBean fortune = mamaFortune.getMamaFortune();
@@ -119,7 +91,6 @@ public class MamaThirdFragment extends BaseLazyFragment<FragmentMamaThirdBinding
                         fortune.getExtraInfo().getThumbnail());
             }
             b.tvLevel.setText(fortune.getExtraInfo().getAgencylevelDisplay());
-            b.tvDay.setText(fortune.getExtraInfo().getSurplusDays() + "");
         }
         b.tvId.setText("ID:" + fortune.getMamaId());
         b.tvMamaName.setText(fortune.getMamaLevelDisplay());
@@ -135,14 +106,11 @@ public class MamaThirdFragment extends BaseLazyFragment<FragmentMamaThirdBinding
 
     private void setUrl(MamaUrl mamaUrl) {
         MamaUrl.ResultsBean.ExtraBean bean = mamaUrl.getResults().get(0).getExtra();
-        msgUrl = bean.getNotice();
         teamUrl = bean.getTeam_explain();
         fansUrl = bean.getFans_explain();
     }
 
     private void setListener() {
-        b.llRenew.setOnClickListener(this);
-        b.tvMsg.setOnClickListener(this);
         b.llWallet.setOnClickListener(this);
         b.llIncome.setOnClickListener(this);
         b.llVisit.setOnClickListener(this);
@@ -177,15 +145,6 @@ public class MamaThirdFragment extends BaseLazyFragment<FragmentMamaThirdBinding
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.ll_renew:
-                Intent renewIntent = new Intent(mActivity, MamaReNewActivity.class);
-                renewIntent.putExtra("mamaCarryValue", mCashValue);
-                startActivity(renewIntent);
-                break;
-            case R.id.tv_msg:
-                JumpUtils.jumpToWebViewWithCookies(mActivity, msgUrl, -1,
-                        ActivityWebViewActivity.class, "信息通知",false);
-                break;
             case R.id.ll_wallet:
                 Intent walletIntent = new Intent(mActivity, MamaWalletActivity.class);
                 walletIntent.putExtra("cash", mCashValue);

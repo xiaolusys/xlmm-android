@@ -39,203 +39,224 @@ import rx.schedulers.Schedulers;
  * Copyright 2016年 上海己美. All rights reserved.
  */
 public class MMPotentialFansFragment extends BaseFragment {
-  @Bind(R.id.xrv_mmvisitors) XRecyclerView xrvMmvisitors;
-  private int page = 2;
-  private MamaPotentialFansAdapter mAdapter;
+    @Bind(R.id.xrv_mmvisitors)
+    XRecyclerView xrvMmvisitors;
+    private int page = 2;
+    private MamaPotentialFansAdapter mAdapter;
 
-  List<PotentialFans.ResultsBean> list = new ArrayList<>();
+    List<PotentialFans.ResultsBean> list = new ArrayList<>();
 
-  private Subscription subscription1;
-  private Subscription subscription2;
-  private Activity mActivity;
-  private XlmmLoadingDialog loadingdialog;
+    private Subscription subscription1;
+    private Subscription subscription2;
+    private Activity mActivity;
+    private XlmmLoadingDialog loadingdialog;
 
-  @Override public void onAttach(Context context) {
-    super.onAttach(context);
-    mActivity = (Activity) context;
-  }
-
-  public static MMPotentialFansFragment newInstance(String title) {
-    MMPotentialFansFragment mmFansFragment = new MMPotentialFansFragment();
-    Bundle bundle = new Bundle();
-    bundle.putString("keyword", title);
-    mmFansFragment.setArguments(bundle);
-    return mmFansFragment;
-  }
-
-  @Override public void onCreate(@Nullable Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setRetainInstance(true);
-  }
-
-  @Override public void setUserVisibleHint(boolean isVisibleToUser) {
-    super.setUserVisibleHint(isVisibleToUser);
-    if (isVisibleToUser && list.size() == 0) {
-      load();
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mActivity = (Activity) context;
     }
-  }
 
-  @Override protected View initViews(LayoutInflater inflater, ViewGroup container,
-      Bundle savedInstanceState) {
-    return null;
-  }
+    public static MMPotentialFansFragment newInstance(String title) {
+        MMPotentialFansFragment mmFansFragment = new MMPotentialFansFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("keyword", title);
+        mmFansFragment.setArguments(bundle);
+        return mmFansFragment;
+    }
 
-  @Override protected void initData() {
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
 
-  }
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && list.size() == 0) {
+            load();
+        }
+    }
 
-  @Override protected void setDefaultFragmentTitle(String title) {
+    @Override
+    protected View initViews(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return null;
+    }
 
-  }
+    @Override
+    protected void initData() {
 
-  private void load() {
-    showIndeterminateProgressDialog(false);
-    subscription1 = MamaInfoModel.getInstance()
-        .getPotentialFans("1")
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<PotentialFans>() {
-          @Override public void onCompleted() {
-            super.onCompleted();
-            hideIndeterminateProgressDialog();
-          }
+    }
 
-          @Override public void onError(Throwable e) {
-            super.onError(e);
+    @Override
+    protected void setDefaultFragmentTitle(String title) {
+
+    }
+
+    private void load() {
+        showIndeterminateProgressDialog(false);
+        subscription1 = MamaInfoModel.getInstance()
+                .getPotentialFans("1")
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ServiceResponse<PotentialFans>() {
+                    @Override
+                    public void onCompleted() {
+                        super.onCompleted();
+                        hideIndeterminateProgressDialog();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onNext(PotentialFans fansBeen) {
+                        if (fansBeen != null) {
+                            if (0 == fansBeen.getCount()) {
+                            } else {
+                                list.addAll(fansBeen.getResults());
+                                mAdapter.update(list);
+                            }
+                            if (null == fansBeen.getNext()) {
+                                xrvMmvisitors.setLoadingMoreEnabled(false);
+                            }
+                        }
+                    }
+                });
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initViews(view);
+    }
+
+    private void initViews(View view) {
+        xrvMmvisitors.setLayoutManager(new LinearLayoutManager(mActivity));
+        xrvMmvisitors.addItemDecoration(
+                new DividerItemDecorationForFooter(mActivity, DividerItemDecoration.VERTICAL_LIST));
+        xrvMmvisitors.setRefreshProgressStyle(ProgressStyle.BallPulse);
+        xrvMmvisitors.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
+        xrvMmvisitors.setArrowImageView(R.drawable.iconfont_downgrey);
+        xrvMmvisitors.setPullRefreshEnabled(false);
+        xrvMmvisitors.setLoadingMoreEnabled(true);
+        mAdapter = new MamaPotentialFansAdapter(mActivity);
+        xrvMmvisitors.setAdapter(mAdapter);
+
+        xrvMmvisitors.setLoadingListener(new XRecyclerView.LoadingListener() {
+            @Override
+            public void onRefresh() {
+
+            }
+
+            @Override
+            public void onLoadMore() {
+                loadMoreData(page + "");
+                page++;
+            }
+        });
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_mmfans, container, false);
+        ButterKnife.bind(this, view);
+        return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
+
+    private void loadMoreData(String page) {
+        subscription2 = MamaInfoModel.getInstance()
+                .getPotentialFans(page)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ServiceResponse<PotentialFans>() {
+                    @Override
+                    public void onNext(PotentialFans fansBeen) {
+                        super.onNext(fansBeen);
+                        if (fansBeen != null) {
+                            mAdapter.update(fansBeen.getResults());
+                            if (null == fansBeen.getNext()) {
+                                Toast.makeText(mActivity, "没有更多了", Toast.LENGTH_SHORT).show();
+                                xrvMmvisitors.loadMoreComplete();
+                                xrvMmvisitors.setLoadingMoreEnabled(false);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCompleted() {
+                        super.onCompleted();
+                        xrvMmvisitors.loadMoreComplete();
+
+                    }
+                });
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (subscription1 != null && subscription1.isUnsubscribed()) {
+            subscription1.unsubscribe();
+        }
+        if (subscription2 != null && subscription2.isUnsubscribed()) {
+            subscription2.unsubscribe();
+        }
+    }
+
+    public void showIndeterminateProgressDialog(boolean horizontal) {
+        loadingdialog = XlmmLoadingDialog.create(activity)
+                .setStyle(XlmmLoadingDialog.Style.SPIN_INDETERMINATE)
+                .setCancellable(!horizontal)
+                .show();
+    }
+
+    public void hideIndeterminateProgressDialog() {
+        try {
+            loadingdialog.dismiss();
+        } catch (Exception e) {
             e.printStackTrace();
-          }
-
-          @Override public void onNext(PotentialFans fansBeen) {
-            if (fansBeen != null) {
-              if (0 == fansBeen.getCount()) {
-              } else {
-                list.addAll(fansBeen.getResults());
-                mAdapter.update(list);
-              }
-              if (null == fansBeen.getNext()) {
-                xrvMmvisitors.setLoadingMoreEnabled(false);
-              }
-            }
-          }
-        });
-  }
-
-  @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-    super.onViewCreated(view, savedInstanceState);
-    initViews(view);
-  }
-
-  private void initViews(View view) {
-    xrvMmvisitors.setLayoutManager(new LinearLayoutManager(mActivity));
-    xrvMmvisitors.addItemDecoration(
-        new DividerItemDecorationForFooter(mActivity, DividerItemDecoration.VERTICAL_LIST));
-    xrvMmvisitors.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-    xrvMmvisitors.setLoadingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
-    xrvMmvisitors.setArrowImageView(R.drawable.iconfont_downgrey);
-    xrvMmvisitors.setPullRefreshEnabled(false);
-    xrvMmvisitors.setLoadingMoreEnabled(true);
-    mAdapter = new MamaPotentialFansAdapter(mActivity);
-    xrvMmvisitors.setAdapter(mAdapter);
-
-    xrvMmvisitors.setLoadingListener(new XRecyclerView.LoadingListener() {
-      @Override public void onRefresh() {
-
-      }
-
-      @Override public void onLoadMore() {
-        loadMoreData(page + "");
-        page++;
-      }
-    });
-  }
-
-  @Nullable @Override
-  public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-      @Nullable Bundle savedInstanceState) {
-    View view = inflater.inflate(R.layout.fragment_mmfans, container, false);
-    ButterKnife.bind(this, view);
-    return view;
-  }
-
-  @Override public void onDestroyView() {
-    super.onDestroyView();
-    ButterKnife.unbind(this);
-  }
-
-  private void loadMoreData(String page) {
-    subscription2 = MamaInfoModel.getInstance()
-        .getPotentialFans(page)
-        .subscribeOn(Schedulers.io())
-        .subscribe(new ServiceResponse<PotentialFans>() {
-          @Override public void onNext(PotentialFans fansBeen) {
-            super.onNext(fansBeen);
-            if (fansBeen != null) {
-              mAdapter.update(fansBeen.getResults());
-              if (null != fansBeen.getNext()) {
-              } else {
-                Toast.makeText(mActivity, "没有更多了", Toast.LENGTH_SHORT).show();
-                xrvMmvisitors.post(xrvMmvisitors::loadMoreComplete);
-              }
-            }
-          }
-
-          @Override public void onCompleted() {
-            super.onCompleted();
-            xrvMmvisitors.post(xrvMmvisitors::loadMoreComplete);
-            xrvMmvisitors.setLoadingMoreEnabled(false);
-
-          }
-        });
-  }
-
-  @Override public void onStop() {
-    super.onStop();
-    if (subscription1 != null && subscription1.isUnsubscribed()) {
-      subscription1.unsubscribe();
+        }
     }
-    if (subscription2 != null && subscription2.isUnsubscribed()) {
-      subscription2.unsubscribe();
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        try {
+            Field childFragmentManager = Fragment.class.getDeclaredField("mChildFragmentManager");
+            childFragmentManager.setAccessible(true);
+            childFragmentManager.set(this, null);
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
-  }
 
-  public void showIndeterminateProgressDialog(boolean horizontal) {
-    loadingdialog = XlmmLoadingDialog.create(activity)
-        .setStyle(XlmmLoadingDialog.Style.SPIN_INDETERMINATE)
-        .setCancellable(!horizontal)
-        .show();
-  }
-
-  public void hideIndeterminateProgressDialog() {
-    try {
-      loadingdialog.dismiss();
-    } catch (Exception e) {
-      e.printStackTrace();
+    @Override
+    public View getScrollableView() {
+        return xrvMmvisitors;
     }
-  }
 
-  @Override public void onDetach() {
-    super.onDetach();
-    try {
-      Field childFragmentManager = Fragment.class.getDeclaredField("mChildFragmentManager");
-      childFragmentManager.setAccessible(true);
-      childFragmentManager.set(this, null);
-    } catch (NoSuchFieldException e) {
-      throw new RuntimeException(e);
-    } catch (IllegalAccessException e) {
-      throw new RuntimeException(e);
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(this.getClass().getSimpleName());
     }
-  }
 
-  @Override public View getScrollableView() {
-    return xrvMmvisitors;
-  }
-
-  @Override public void onResume() {
-    super.onResume();
-    MobclickAgent.onPageStart(this.getClass().getSimpleName());
-  }
-
-  @Override public void onPause() {
-    super.onPause();
-    MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-  }
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+    }
 }

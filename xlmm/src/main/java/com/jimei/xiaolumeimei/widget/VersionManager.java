@@ -53,15 +53,12 @@ public abstract class VersionManager {
 
             okBtn.setOnClickListener(mPositiveListener);
             contentTv.setText(getUpdateContent());
-            ignoreBtn.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    SharedPreferences updatePreferences = context.getSharedPreferences("update", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = updatePreferences.edit();
-                    editor.putBoolean("update", false);
-                    editor.apply();
-                    dialog.dismiss();
-                }
+            ignoreBtn.setOnClickListener(v -> {
+                SharedPreferences updatePreferences = context.getSharedPreferences("update", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = updatePreferences.edit();
+                editor.putBoolean("update", false);
+                editor.apply();
+                dialog.dismiss();
             });
             dialog.show();
         } else {

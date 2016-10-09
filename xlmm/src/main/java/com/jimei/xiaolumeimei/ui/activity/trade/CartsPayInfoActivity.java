@@ -2,7 +2,6 @@ package com.jimei.xiaolumeimei.ui.activity.trade;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -47,7 +46,7 @@ import com.jimei.xiaolumeimei.widget.NestedListView;
 import com.jimei.xiaolumeimei.widget.SmoothCheckBox;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
-import com.pingplusplus.android.PaymentActivity;
+import com.pingplusplus.android.Pingpp;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -67,7 +66,7 @@ import rx.schedulers.Schedulers;
 public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         implements View.OnClickListener, SmoothCheckBox.OnCheckedChangeListener,
         CompoundButton.OnCheckedChangeListener {
-    private static final int REQUEST_CODE_PAYMENT = 1;
+    //    private static final int REQUEST_CODE_PAYMENT = 1;
     private static final int REQUEST_CODE_COUPONT = 2;
     private static final int REQUEST_CODE_ADDRESS = 3;
     private static final String APP_PAY = "pid:1:value:";
@@ -855,18 +854,19 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                             JUtils.Log(TAG, gson.toJson(payInfoBean.getCharge()));
                             if ((payInfoBean.getChannel() != null) && (!payInfoBean.getChannel()
                                     .equals("budget"))) {
-
                                 if (payInfoBean.getCode() > 0) {
                                     JUtils.Toast(payInfoBean.getInfo());
                                 } else {
-                                    Intent intent = new Intent();
-                                    String packageName = getPackageName();
-                                    ComponentName componentName = new ComponentName(packageName,
-                                            packageName + ".wxapi.WXPayEntryActivity");
-                                    intent.setComponent(componentName);
-                                    intent.putExtra(PaymentActivity.EXTRA_CHARGE,
-                                            gson.toJson(payInfoBean.getCharge()));
-                                    startActivityForResult(intent, REQUEST_CODE_PAYMENT);
+//                                    Intent intent = new Intent();
+//                                    String packageName = getPackageName();
+//                                    ComponentName componentName = new ComponentName(packageName,
+//                                            packageName + ".wxapi.WXPayEntryActivity");
+//                                    intent.setComponent(componentName);
+//                                    intent.putExtra(PaymentActivity.EXTRA_CHARGE,
+//                                            gson.toJson(payInfoBean.getCharge()));
+//                                    startActivitysult(intent, REQUEST_CODE_PAYMENT);
+                                    // TODO: 16/9/22
+                                    Pingpp.createPayment(CartsPayInfoActivity.this, gson.toJson(payInfoBean.getCharge()));
                                 }
                             } else {
                                 if (payInfoBean.getCode() == 0) {
@@ -888,7 +888,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //支付页面返回处理
-        if (requestCode == REQUEST_CODE_PAYMENT) {
+        if (requestCode == Pingpp.REQUEST_CODE_PAYMENT) {
             if (resultCode == Activity.RESULT_OK) {
                 String result = data.getExtras().getString("pay_result");
             /* 处理返回值
@@ -903,7 +903,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 if (result == null) {
                     return;
                 }
-
                 if (result.equals("cancel")) {
                     EventBus.getDefault().postSticky(new UserChangeEvent());
                     //wexin alipay already showmsg
@@ -929,7 +928,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     EventBus.getDefault().postSticky(new UserChangeEvent());
                     MobclickAgent.onEvent(CartsPayInfoActivity.this, "PayFailID");
                     showMsg(result, errorMsg, extraMsg);
-                    finish();
                     //JUtils.Toast(result + "" + errorMsg + "" + extraMsg);
                 }
             }
@@ -1051,12 +1049,12 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         } else if (title.equals("invalid")) {
             str = "支付失败，支付软件未安装完整！";
         }
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(CartsPayInfoActivity.this);
-        builder.setMessage(str);
-        builder.setTitle("提示");
-        builder.setPositiveButton("OK", null);
-        builder.create().show();
+        new AlertDialog.Builder(CartsPayInfoActivity.this)
+                .setMessage(str)
+                .setTitle("提示")
+                .setPositiveButton("OK", (dialog1, which) -> finish())
+                .create()
+                .show();
     }
 
     @Override

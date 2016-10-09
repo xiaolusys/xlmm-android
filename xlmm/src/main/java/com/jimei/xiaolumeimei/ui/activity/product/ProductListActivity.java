@@ -1,5 +1,7 @@
 package com.jimei.xiaolumeimei.ui.activity.product;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.Menu;
@@ -9,13 +11,12 @@ import android.view.View;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.CategoryAdapter;
 import com.jimei.xiaolumeimei.adapter.ProductListAdapter;
 import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
+import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.databinding.ActivityProductListBinding;
 import com.jimei.xiaolumeimei.entities.CategoryProductListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
-import com.jimei.xiaolumeimei.widget.CategoryTask;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
@@ -32,8 +33,6 @@ public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBin
     private String title;
     private int page;
 
-    private CategoryAdapter adapter;
-    private Menu menu;
     private ProductListAdapter mProductListAdapter;
     private String cid;
     private String next;
@@ -52,10 +51,6 @@ public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBin
         refreshData(type, true);
     }
 
-    private void initCategory() {
-        new CategoryTask(adapter, menu).execute(type);
-    }
-
     @Override
     protected void getBundleExtras(Bundle extras) {
         if (extras != null) {
@@ -71,14 +66,25 @@ public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBin
 
     @Override
     protected void initView() {
+        Uri uri = getIntent().getData();
+        if (uri != null) {
+            if (uri.getPath().contains("childlist")) {
+                type = XlmmConst.TYPE_CHILD;
+                title = "萌娃专区";
+            } else if (uri.getPath().contains("ladylist")) {
+                type = XlmmConst.TYPE_LADY;
+                title = "女装专区";
+            }else if (uri.getPath().contains("category")){
+                type = uri.getQueryParameter("cid");
+                title = uri.getQueryParameter("title");
+            }
+        }
         b.title.setName(title);
         GridLayoutManager manager = new GridLayoutManager(this, 2);
         b.xrv.setLayoutManager(manager);
         b.xrv.setOverScrollMode(View.OVER_SCROLL_NEVER);
         b.xrv.addItemDecoration(new SpaceItemDecoration(10));
-        b.xrv.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-        b.xrv.setLoadingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
-        b.xrv.setArrowImageView(R.drawable.iconfont_downgrey);
+        b.xrv.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
         b.xrv.setPullRefreshEnabled(false);
         mProductListAdapter = new ProductListAdapter(new ArrayList<>(), this);
         b.xrv.setAdapter(mProductListAdapter);
@@ -97,16 +103,6 @@ public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBin
                 }
             }
         });
-
-
-        GridLayoutManager manager2 = new GridLayoutManager(this, 3);
-        b.xrvCategory.setLayoutManager(manager2);
-        b.xrvCategory.setOverScrollMode(View.OVER_SCROLL_NEVER);
-        b.xrvCategory.addItemDecoration(new SpaceItemDecoration(10));
-        b.xrvCategory.setPullRefreshEnabled(false);
-        b.xrvCategory.setLoadingMoreEnabled(false);
-        adapter = new CategoryAdapter(this, new ArrayList<>());
-        b.xrvCategory.setAdapter(adapter);
     }
 
     @Override
@@ -122,8 +118,6 @@ public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBin
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_category, menu);
-        this.menu = menu;
-        initCategory();
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -131,11 +125,9 @@ public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBin
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.category:
-                if (b.xrvCategory.getVisibility() == View.VISIBLE) {
-                    b.xrvCategory.setVisibility(View.GONE);
-                } else {
-                    b.xrvCategory.setVisibility(View.VISIBLE);
-                }
+                Intent intent = new Intent(this, CategoryListActivity.class);
+                startActivity(intent);
+                finish();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -149,7 +141,6 @@ public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBin
             mProductListAdapter.clear();
             page = 1;
         }
-        b.xrvCategory.setVisibility(View.GONE);
         Subscription subscribe = ProductModel.getInstance()
                 .getCategoryProductList(cid, page, order_by)
                 .subscribeOn(Schedulers.io())
@@ -191,7 +182,7 @@ public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBin
                 b.sortPrice.setTextColor(getResources().getColor(R.color.text_color_4A));
                 order_by = "";
                 page = 1;
-                refreshData(cid,true);
+                refreshData(cid, true);
                 break;
             case R.id.sort_price:
                 b.sortPrice.setClickable(false);
@@ -200,7 +191,7 @@ public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBin
                 b.sortDefault.setTextColor(getResources().getColor(R.color.text_color_4A));
                 order_by = "price";
                 page = 1;
-                refreshData(cid,true);
+                refreshData(cid, true);
                 break;
             default:
                 break;

@@ -1,27 +1,18 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.NinePicAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.entities.NinePicBean;
+import com.jimei.xiaolumeimei.entities.WxQrcode;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
 import butterknife.Bind;
-import cn.iwgang.countdownview.CountdownView;
 import rx.schedulers.Schedulers;
 
 /**
@@ -36,12 +27,6 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
     ListView circleLv;
     @Bind(R.id.mRefreshLayout)
     SwipeRefreshLayout mRefreshLayout;
-    @Bind(R.id.cv_lefttime)
-    CountdownView cvLefttime;
-    @Bind(R.id.left)
-    TextView left;
-    @Bind(R.id.count_left)
-    FrameLayout countLeft;
 
     private NinePicAdapter mAdapter;
 
@@ -56,76 +41,29 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
     }
 
     private void loadData() {
-//
-//        if (calcLeftTime() > 0) {
-//            myTickCircleProgress.setVisibility(View.VISIBLE);
-//            countLeft.setVisibility(View.VISIBLE);
-//            cvLefttime.start(calcLeftTime());
-//            left.setText("热销分享即将开始...");
-//        } else {
-//            countLeft.setVisibility(View.GONE);
         showIndeterminateProgressDialog(false);
-        MMProductModel.getInstance()
+        addSubscription(MMProductModel.getInstance()
+                .getWxCode()
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ServiceResponse<WxQrcode>() {
+                    @Override
+                    public void onNext(WxQrcode wxQrcode) {
+                        mAdapter.setCodeLink(wxQrcode.getQrcode_link());
+                    }
+                }));
+        addSubscription(MMProductModel.getInstance()
                 .getNinePic()
                 .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<List<NinePicBean>>() {
-
-                    @Override
-                    public void onCompleted() {
-                        super.onCompleted();
-                        hideIndeterminateProgressDialog();
+                .subscribe(ninePicBean -> {
+                    if (ninePicBean != null) {
+                        mAdapter.update(ninePicBean);
+                        mAdapter.notifyDataSetChanged();
                     }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        super.onError(e);
-                        e.printStackTrace();
+                    if (mRefreshLayout.isRefreshing()) {
+                        mRefreshLayout.setRefreshing(false);
                     }
-
-                    @Override
-                    public void onNext(List<NinePicBean> ninePicBean) {
-                        if (ninePicBean != null) {
-                            mAdapter.setDatas(ninePicBean);
-                            mAdapter.notifyDataSetChanged();
-                        } else {
-                            countLeft.setVisibility(View.VISIBLE);
-                        }
-                    }
-                });
-//        }
-    }
-
-    private void loadDataRefresh() {
-
-        //showIndeterminateProgressDialog(false);
-        MMProductModel.getInstance()
-                .getNinePic()
-                .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<List<NinePicBean>>() {
-
-                    @Override
-                    public void onCompleted() {
-                        super.onCompleted();
-                        //hideIndeterminateProgressDialog();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        super.onError(e);
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onNext(List<NinePicBean> ninePicBean) {
-                        if (ninePicBean != null) {
-                            mAdapter.setDatas(ninePicBean);
-                            mAdapter.notifyDataSetChanged();
-                            countLeft.setVisibility(View.GONE);
-                        } else {
-                            countLeft.setVisibility(View.VISIBLE);
-                        }
-                    }
-                });
+                    hideIndeterminateProgressDialog();
+                }, Throwable::printStackTrace));
     }
 
     @Override
@@ -140,13 +78,9 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void initViews() {
-
-        mRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light, android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
-
         mAdapter = new NinePicAdapter(this);
         circleLv.setAdapter(mAdapter);
+        mRefreshLayout.setColorSchemeResources(R.color.colorAccent);
     }
 
     @Override
@@ -161,34 +95,8 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
 
     @Override
     public void onRefresh() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                loadDataRefresh();
-                try {
-                    mRefreshLayout.setRefreshing(false);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }, 2000);
-    }
-
-    private long calcLeftTime() {
-
-        Date now = new Date();
-        Date nextDay10PM = new Date();
-        Calendar calendar = Calendar.getInstance();
-
-        calendar.setTime(nextDay10PM);
-        calendar.set(Calendar.HOUR_OF_DAY, 10);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-
-        nextDay10PM = calendar.getTime();
-
-        return nextDay10PM.getTime() - now.getTime();
+        mAdapter.clear();
+        loadData();
     }
 
     @Override

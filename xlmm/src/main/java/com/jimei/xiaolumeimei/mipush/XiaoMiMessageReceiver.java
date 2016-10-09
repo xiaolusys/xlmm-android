@@ -22,7 +22,6 @@ import com.jimei.xiaolumeimei.base.BaseAutoLayoutActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.MiPushProductDetailBean;
 import com.jimei.xiaolumeimei.entities.XiaoMiPushContent;
-import com.jimei.xiaolumeimei.ui.mminfo.MMInfoActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
@@ -86,18 +85,10 @@ public class XiaoMiMessageReceiver extends PushMessageReceiver {
         XiaoMiPushHandler handler = null;
         String content = message.getContent();
         String description = message.getDescription();
-        if (content != null && content.contains("mama_ordercarry_broadcast")) {
-            msg.obj = content;
-            msg.what = XlmmConst.MI_MAMA_ORDER_CARRY_BROADCAST;
-            handler = MMInfoActivity.getHandler();
-        } else if (content != null && content.contains("product_detail")) {
+        if (content != null && content.contains("product_detail")) {
             msg.obj = content;
             msg.what = XlmmConst.MI_PRODUCT_DETAIL;
             handler = BaseAutoLayoutActivity.getHandler();
-        } else if (description != null && description.contains("mama_ordercarry_broadcast")) {
-            msg.obj = description;
-            msg.what = XlmmConst.MI_MAMA_ORDER_CARRY_BROADCAST;
-            handler = MMInfoActivity.getHandler();
         } else if (description != null && description.contains("product_detail")) {
             msg.obj = description;
             msg.what = XlmmConst.MI_PRODUCT_DETAIL;
@@ -312,32 +303,6 @@ public class XiaoMiMessageReceiver extends PushMessageReceiver {
                         dialog.setContentView(view);
                         dialog.setCancelable(true);
                         dialog.show();
-                        break;
-                    case XlmmConst.MI_MAMA_ORDER_CARRY_BROADCAST:
-//                        MiPushOrderCarryBean miPushOrderCarryBean = gson.fromJson(s, new TypeToken<MiPushOrderCarryBean>() {
-//                        }.getType());
-//                        while (flag) {
-//                            flag = false;
-//                            if (context instanceof MMInfoActivity) {
-//                                MMInfoActivity activity = (MMInfoActivity) context;
-//                                View layout = activity.findViewById(R.id.mi_layout);
-//                                ImageView headImg = (ImageView) activity.findViewById(R.id.mi_head);
-//                                TextView infoTv = (TextView) activity.findViewById(R.id.mi_info);
-//                                if (infoTv != null && headImg != null && layout != null) {
-//                                    infoTv.setText(miPushOrderCarryBean.getContent());
-//                                    ViewUtils.loadImgToImgViewWithTransformCircle(this.context, headImg, miPushOrderCarryBean.getAvatar());
-//                                    layout.setVisibility(View.VISIBLE);
-//                                    new Thread(() -> {
-//                                        SystemClock.sleep(3000);
-//                                        activity.runOnUiThread(() -> layout.setVisibility(View.GONE));
-//                                    }).start();
-//                                    new Thread(() -> {
-//                                        SystemClock.sleep(5000);
-//                                        flag = true;
-//                                    }).start();
-//                                }
-//                            }
-//                        }
                         break;
                 }
             }

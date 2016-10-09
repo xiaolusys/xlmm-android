@@ -29,6 +29,7 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
 import com.jude.utils.JUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -1000,25 +1001,20 @@ public final class FileUtils {
                         if (FileUtils.isFileExist(picAddress)) {
                             FileUtils.DeleteFile(new File(picAddress));
                         }
-                        new Thread(() -> {
-                            OkHttpUtils.get()
-                                    .url(cat_pic)
-                                    .build()
-                                    .execute(new FileCallBack(
-                                            Environment.getExternalStorageDirectory().getAbsolutePath() + "/xlmmcategory/",
-                                            cid + ".png") {
-                                        @Override
-                                        public void onError(Call call, Exception e, int id) {
+                        OkHttpUtils.get()
+                                .url(cat_pic)
+                                .build()
+                                .execute(new FileCallBack(XlmmConst.XLMM_DIR, cid + ".png") {
+                                    @Override
+                                    public void onError(Call call, Exception e, int id) {
 
-                                        }
+                                    }
 
-                                        @Override
-                                        public void onResponse(File response, int id) {
+                                    @Override
+                                    public void onResponse(File response, int id) {
 
-                                        }
-                                    });
-                        }).run();
-
+                                    }
+                                });
                     }
                 }
             }

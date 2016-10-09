@@ -143,17 +143,6 @@ public class MainPresenter extends MainContract.Presenter {
     }
 
     @Override
-    public void getUsercoupons(String template_id) {
-        mRxManager.add(mModel.getUsercoupons(template_id)
-                .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
-                .subscribe(responseBody -> {
-                    if (null != responseBody) {
-                        mView.clickGetCounpon(responseBody);
-                    }
-                }, Throwable::printStackTrace));
-    }
-
-    @Override
     public long calcLefttowTime(long crtTime) {
         long left = 0;
         Date now = new Date();

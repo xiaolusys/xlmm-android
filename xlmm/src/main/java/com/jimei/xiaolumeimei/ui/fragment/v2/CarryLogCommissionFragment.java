@@ -136,8 +136,8 @@ public class CarryLogCommissionFragment extends BaseFragment {
     xRecyclerView.addItemDecoration(
             new DividerItemDecorationForFooter(getActivity(), DividerItemDecorationForFooter.VERTICAL_LIST));
 
-    xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-    xRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
+    xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallPulse);
+    xRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
     xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
     xRecyclerView.setPullRefreshEnabled(false);
     xRecyclerView.setLoadingMoreEnabled(true);

@@ -93,8 +93,8 @@ public class MamaWithdrawCashHistoryActivity extends BaseSwipeBackCompatActivity
         xRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         xRecyclerView.addItemDecoration(
                 new DividerItemDecorationForFooter(this, DividerItemDecoration.VERTICAL_LIST));
-        xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-        xRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
+        xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallPulse);
+        xRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
         xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
         xRecyclerView.setPullRefreshEnabled(false);
         xRecyclerView.setLoadingMoreEnabled(true);

@@ -375,8 +375,7 @@
         android:layout_gravity="bottom"
         android:background="#ffffff"
         android:gravity="center"
-        android:orientation="vertical"
-        app:layout_behavior=".behavior.QuickHideBehavior">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"

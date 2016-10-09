@@ -17,14 +17,17 @@ import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.databinding.ActivityMamaBinding;
 import com.jimei.xiaolumeimei.entities.MiPushOrderCarryBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.entities.WxQrcode;
 import com.jimei.xiaolumeimei.event.HideOrderEvent;
 import com.jimei.xiaolumeimei.event.SetOrderEvent;
 import com.jimei.xiaolumeimei.event.ShowOrderEvent;
+import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.ui.mminfo.fragment.MamaFirstFragment;
 import com.jimei.xiaolumeimei.ui.mminfo.fragment.MamaSecondFragment;
 import com.jimei.xiaolumeimei.ui.mminfo.fragment.MamaThirdFragment;
 import com.jimei.xiaolumeimei.utils.RxUtils;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
+import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -41,6 +44,7 @@ import java.util.concurrent.Executors;
 
 import cn.udesk.UdeskConst;
 import cn.udesk.UdeskSDKManager;
+import rx.schedulers.Schedulers;
 
 public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
 
@@ -83,6 +87,15 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
                         }
                     });
                 }, Throwable::printStackTrace));
+        addSubscription(MMProductModel.getInstance()
+                .getWxCode()
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ServiceResponse<WxQrcode>(){
+                    @Override
+                    public void onNext(WxQrcode wxQrcode) {
+                        super.onNext(wxQrcode);
+                    }
+                }));
     }
 
     private void fillDataToView(UserInfoBean userInfoBean) {
@@ -163,8 +176,12 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
     @Override
     protected void onResume() {
         super.onResume();
-        if (fragments.size() == 3 && b.viewPager.getCurrentItem() == 2) {
-            ((MamaThirdFragment) fragments.get(2)).refreshFortune();
+        if (fragments.size() == 3) {
+            if (b.viewPager.getCurrentItem() == 2) {
+                ((MamaThirdFragment) fragments.get(2)).refreshFortune();
+            } else if (b.viewPager.getCurrentItem() == 0) {
+                ((MamaFirstFragment) fragments.get(0)).refreshNotice();
+            }
         }
         MobclickAgent.onPageStart(this.getClass().getSimpleName());
         MobclickAgent.onResume(this);
@@ -181,7 +198,7 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (fragments.size() == 3) {
             WebView webView = ((MamaSecondFragment) fragments.get(1)).getWebView();
-            if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (keyCode == KeyEvent.KEYCODE_BACK && webView != null) {
                 if (b.viewPager.getCurrentItem() == 1 && webView.canGoBack()) {
                     webView.goBack();
                 } else {
