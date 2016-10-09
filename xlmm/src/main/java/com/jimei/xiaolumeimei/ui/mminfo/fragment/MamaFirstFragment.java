@@ -119,6 +119,7 @@ public class MamaFirstFragment extends BaseLazyFragment<FragmentMamaFirstBinding
             ActivityListAdapter adapter = new ActivityListAdapter(mActivity);
             adapter.updateWithClear(activities);
             b.lv.setAdapter(adapter);
+            b.scrollView.scrollTo(0,0);
         }
     }
 
@@ -297,12 +298,6 @@ public class MamaFirstFragment extends BaseLazyFragment<FragmentMamaFirstBinding
             title = "";
         }
         return title;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        b.scrollView.scrollTo(0, 0);
     }
 
     @Override

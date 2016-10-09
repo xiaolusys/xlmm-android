@@ -525,6 +525,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
     }
 
     private void addToCart(boolean dismiss) {
+        MobclickAgent.onEvent(this,"AddCartsID");
         addSubscription(CartsModel.getInstance()
                 .addToCart(item_id, sku_id, num)
                 .subscribeOn(Schedulers.io())

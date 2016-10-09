@@ -62,6 +62,7 @@ public class MamaVisitorActivity extends BaseSwipeBackCompatActivity {
                 .getMamaVisitor(1)
                 .subscribeOn(Schedulers.io())
                 .subscribe(fansBeen -> {
+                    hideIndeterminateProgressDialog();
                     if (fansBeen != null) {
                         countTv.setText(fansBeen.getCount() + "");
                         if (fansBeen.getCount() != 0) {
@@ -72,7 +73,6 @@ public class MamaVisitorActivity extends BaseSwipeBackCompatActivity {
                             xrv.setLoadingMoreEnabled(false);
                         }
                     }
-                    hideIndeterminateProgressDialog();
                 }, e -> JUtils.Log(e.getMessage())));
     }
 

@@ -18,6 +18,7 @@ import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import com.umeng.analytics.MobclickAgent;
 import com.zhy.autolayout.utils.AutoUtils;
 
 import java.util.List;
@@ -62,6 +63,7 @@ public class CartHistoryAdapter extends RecyclerView.Adapter<CartHistoryAdapter.
             mActivity.finish();
         });
         holder.rebuy.setOnClickListener(v -> {
+            MobclickAgent.onEvent(mActivity,"ReAddCartsID");
             mActivity.showIndeterminateProgressDialog(false);
             mActivity.addSubscription(CartsModel.getInstance()
                     .rebuy(cartsInfoBean.getItem_id(),
