@@ -16,7 +16,6 @@ import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
-import com.jimei.xiaolumeimei.widget.DividerItemDecorationForFooter;
 import com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableHelper;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
@@ -39,7 +38,7 @@ public class MMTeamActivity extends BaseMVVMActivity<ActivityMmteamBinding>
     protected void initView() {
         b.recyclerview.setLayoutManager(new LinearLayoutManager(this));
         b.recyclerview.addItemDecoration(
-                new DividerItemDecoration(this, DividerItemDecorationForFooter.VERTICAL_LIST));
+                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         mmTeamAdapter = new MMTeamAdapter(this);
         b.recyclerview.setAdapter(mmTeamAdapter);
         b.scrollableLayout.getHelper().setCurrentScrollableContainer(b.recyclerview);

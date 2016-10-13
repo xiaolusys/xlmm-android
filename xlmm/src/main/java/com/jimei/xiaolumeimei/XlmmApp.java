@@ -8,7 +8,7 @@ import android.support.multidex.MultiDexApplication;
 
 import com.facebook.stetho.Stetho;
 import com.jimei.xiaolumeimei.data.XlmmConst;
-import com.jimei.xiaolumeimei.mipush.XiaoMiMessageReceiver;
+import com.jimei.xiaolumeimei.receiver.mipush.XiaoMiMessageReceiver;
 import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
 import com.jude.utils.JUtils;
 import com.xiaomi.mipush.sdk.MiPushClient;
@@ -53,7 +53,6 @@ public class XlmmApp extends MultiDexApplication {
             MiPushClient.registerPush(getApplicationContext(), XlmmConst.XIAOMI_APP_ID,
                     XlmmConst.XIAOMI_APP_KEY);
         }
-
         if (handler == null) {
             handler = new XiaoMiMessageReceiver.XiaoMiPushHandler(getApplicationContext());
         }

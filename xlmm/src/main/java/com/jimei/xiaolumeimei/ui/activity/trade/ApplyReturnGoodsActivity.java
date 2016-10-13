@@ -1,7 +1,6 @@
 package com.jimei.xiaolumeimei.ui.activity.trade;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -11,21 +10,14 @@ import android.provider.MediaStore;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import butterknife.Bind;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -40,9 +32,6 @@ import com.jimei.xiaolumeimei.utils.CameraUtils;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
-import com.qiniu.android.http.ResponseInfo;
-import com.qiniu.android.storage.UpCompletionHandler;
-import com.qiniu.android.storage.UpProgressHandler;
 import com.qiniu.android.storage.UploadManager;
 import com.qiniu.android.storage.UploadOptions;
 import com.tbruyelle.rxpermissions.RxPermissions;
@@ -50,12 +39,8 @@ import com.umeng.analytics.MobclickAgent;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.util.List;
 
-import okhttp3.ResponseBody;
-
-import org.json.JSONObject;
-
+import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -128,63 +113,52 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
         imgbtn_camera_pic.setOnClickListener(this);
         add.setOnClickListener(this);
         delete.setOnClickListener(this);
-        img_delete1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "delete pic 1");
-                tmpPic[0] = null;
-                uploadPic[0] = null;
-                if (picNum >= 1) {
-                    for (char i = 1; i < picNum; i++) {
-                        tmpPic[i - 1] = tmpPic[i];
-                        uploadPic[i - 1] = uploadPic[i];
-                    }
-                    picNum--;
+        img_delete1.setOnClickListener(v -> {
+            Log.d(TAG, "delete pic 1");
+            tmpPic[0] = null;
+            uploadPic[0] = null;
+            if (picNum >= 1) {
+                for (char i = 1; i < picNum; i++) {
+                    tmpPic[i - 1] = tmpPic[i];
+                    uploadPic[i - 1] = uploadPic[i];
                 }
-                showPic();
+                picNum--;
+            }
+            showPic();
+        });
+        img_delete2.setOnClickListener(v -> {
+            Log.d(TAG, "delete pic 2");
+            tmpPic[1] = null;
+            uploadPic[1] = null;
+            if (picNum >= 2) {
+                for (char i = 2; i < picNum; i++) {
+                    tmpPic[i - 1] = tmpPic[i];
+                    uploadPic[i - 1] = uploadPic[i];
+                }
+                picNum--;
             }
         });
-        img_delete2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "delete pic 2");
-                tmpPic[1] = null;
-                uploadPic[1] = null;
-                if (picNum >= 2) {
-                    for (char i = 2; i < picNum; i++) {
-                        tmpPic[i - 1] = tmpPic[i];
-                        uploadPic[i - 1] = uploadPic[i];
-                    }
-                    picNum--;
+        img_delete3.setOnClickListener(v -> {
+            Log.d(TAG, "delete pic 3");
+            tmpPic[2] = null;
+            uploadPic[2] = null;
+            if (picNum >= 3) {
+                for (char i = 3; i < picNum; i++) {
+                    tmpPic[i - 1] = tmpPic[i];
+                    uploadPic[i - 1] = uploadPic[i];
                 }
-            }
-        });
-        img_delete3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "delete pic 3");
-                tmpPic[2] = null;
-                uploadPic[2] = null;
-                if (picNum >= 3) {
-                    for (char i = 3; i < picNum; i++) {
-                        tmpPic[i - 1] = tmpPic[i];
-                        uploadPic[i - 1] = uploadPic[i];
-                    }
-                    picNum--;
-                }
+                picNum--;
             }
         });
 
         et_refund_info.setOnClickListener(this);
-        et_refund_reason.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-                //et_refund_reason.setInputType(InputType.TYPE_NULL); //关闭软键盘
-                if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
-                    Log.d(TAG, "choose reason");
-                    chooseReason();
-                }
-                return false;
+        et_refund_reason.setOnTouchListener((v, event) -> {
+            //et_refund_reason.setInputType(InputType.TYPE_NULL); //关闭软键盘
+            if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
+                Log.d(TAG, "choose reason");
+                chooseReason();
             }
+            return false;
         });
     }
 
@@ -357,12 +331,7 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
                             AlertDialog dialog = new AlertDialog.Builder(ApplyReturnGoodsActivity.this)
                                     .setMessage(getResources().getString(R.string.refund_msg))
                                     .setCancelable(false)
-                                    .setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            ApplyReturnGoodsActivity.this.finish();
-                                        }
-                                    })
+                                    .setPositiveButton("确认", (dialog1, which) -> ApplyReturnGoodsActivity.this.finish())
                                     .create();
                             dialog.show();
                         } else {
@@ -387,18 +356,14 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
 
     private void chooseReason() {
         new AlertDialog.Builder(this).setTitle("")
-                .setItems(slect_reason, new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-            /*
-            * ad变量用final关键字定义，因为在隐式实现的Runnable接口 的run()方法中 需要访问final变量。
-             */
-                        Log.d(TAG, "你选择的是：" + which + ": " + slect_reason[which]);
-                        reason = slect_reason[which];
-                        et_refund_reason.setText(reason);
-                        dialog.dismiss();
-                    }
+                .setItems(slect_reason, (dialog, which) -> {
+        /*
+        * ad变量用final关键字定义，因为在隐式实现的Runnable接口 的run()方法中 需要访问final变量。
+         */
+                    Log.d(TAG, "你选择的是：" + which + ": " + slect_reason[which]);
+                    reason = slect_reason[which];
+                    et_refund_reason.setText(reason);
+                    dialog.dismiss();
                 })
                 .setNegativeButton("取消", null)
                 .show();
@@ -411,22 +376,19 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
         //myAlertDialog.setMessage("选择照片模式");
 
         final String[] arrayPhotoType = new String[]{"照相机", "相册"};
-        myAlertDialog.setItems(arrayPhotoType, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                JUtils.Log(TAG, "click item " + arrayPhotoType[which]);
-                if (0 == which) {
-                    CameraUtils.pictureActionIntent =
-                            new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(CameraUtils.pictureActionIntent,
-                            CameraUtils.CAMERA_PICTURE);
-                } else if (1 == which) {
-                    CameraUtils.pictureActionIntent = new Intent(Intent.ACTION_GET_CONTENT, null);
-                    CameraUtils.pictureActionIntent.setType("image/*");
-                    CameraUtils.pictureActionIntent.putExtra("return-data", true);
-                    startActivityForResult(CameraUtils.pictureActionIntent,
-                            CameraUtils.GALLERY_PICTURE);
-                }
+        myAlertDialog.setItems(arrayPhotoType, (dialog, which) -> {
+            JUtils.Log(TAG, "click item " + arrayPhotoType[which]);
+            if (0 == which) {
+                CameraUtils.pictureActionIntent =
+                        new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(CameraUtils.pictureActionIntent,
+                        CameraUtils.CAMERA_PICTURE);
+            } else if (1 == which) {
+                CameraUtils.pictureActionIntent = new Intent(Intent.ACTION_GET_CONTENT, null);
+                CameraUtils.pictureActionIntent.setType("image/*");
+                CameraUtils.pictureActionIntent.putExtra("return-data", true);
+                startActivityForResult(CameraUtils.pictureActionIntent,
+                        CameraUtils.GALLERY_PICTURE);
             }
         });
 
@@ -602,18 +564,11 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
         //File data = file;
         String key = file.getName();
         String token = uptoken;
-        uploadManager.put(file_byte, key, token, new UpCompletionHandler() {
-            @Override
-            public void complete(String key, ResponseInfo info, JSONObject res) {
-                //  res 包含hash、key等信息，具体字段取决于上传策略的设置。
-                Log.i("qiniu",
-                        "complete key=" + key + ", " + "info =" + info + ", " + "res " + res);
-            }
-        }, new UploadOptions(null, null, false, new UpProgressHandler() {
-            public void progress(String key, double percent) {
-                Log.i("qiniu", "percent key=" + key + ": " + percent);
-            }
-        }, null));
+        uploadManager.put(file_byte, key, token, (key1, info, res) -> {
+            //  res 包含hash、key等信息，具体字段取决于上传策略的设置。
+            Log.i("qiniu",
+                    "complete key=" + key1 + ", " + "info =" + info + ", " + "res " + res);
+        }, new UploadOptions(null, null, false, (key12, percent) -> Log.i("qiniu", "percent key=" + key12 + ": " + percent), null));
     }
 
     public byte[] compressImage(Bitmap image) {

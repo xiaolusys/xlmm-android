@@ -2,21 +2,15 @@ package com.jimei.xiaolumeimei.base;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.XlmmApp;
-import com.jimei.xiaolumeimei.utils.CommonUtils;
 import com.jimei.xiaolumeimei.widget.loadingdialog.XlmmLoadingDialog;
+import com.zhy.autolayout.AutoLayoutActivity;
 
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
@@ -24,7 +18,7 @@ import rx.subscriptions.CompositeSubscription;
 /**
  * Created by itxuye on 2016/7/26.
  */
-public abstract class BaseMVVMActivity<T extends ViewDataBinding> extends BaseAutoLayoutActivity {
+public abstract class BaseMVVMActivity<T extends ViewDataBinding> extends AutoLayoutActivity {
 
     /**
      * Log tag
@@ -198,25 +192,6 @@ public abstract class BaseMVVMActivity<T extends ViewDataBinding> extends BaseAu
         startActivity(intent);
     }
 
-    /**
-     * show toast
-     */
-    protected void showToast(String msg) {
-        if (null != msg && !CommonUtils.isEmpty(msg)) {
-            Resources resources = XlmmApp.getInstance().getResources();
-            Snackbar snackbar = Snackbar.make(getWindow().getDecorView(), msg, Snackbar.LENGTH_SHORT);
-            setSnackbarMessageTextColor(snackbar);
-
-            snackbar.getView().setBackgroundColor(resources.getColor(R.color.white));
-            snackbar.show();
-        }
-    }
-
-    public void finishBack(Toolbar toolbar) {
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-        toolbar.setNavigationOnClickListener(v -> finish());
-    }
-
     public void showIndeterminateProgressDialog(boolean cancellable) {
         loadingdialog = XlmmLoadingDialog.create(this)
                 .setStyle(XlmmLoadingDialog.Style.SPIN_INDETERMINATE)
@@ -246,10 +221,5 @@ public abstract class BaseMVVMActivity<T extends ViewDataBinding> extends BaseAu
             this.mCompositeSubscription.unsubscribe();
             mCompositeSubscription = null;
         }
-    }
-
-    public void setSnackbarMessageTextColor(Snackbar snackbar) {
-        View view = snackbar.getView();
-        ((TextView) view.findViewById(R.id.snackbar_text)).setTextColor(getResources().getColor(R.color.colorAccent));
     }
 }

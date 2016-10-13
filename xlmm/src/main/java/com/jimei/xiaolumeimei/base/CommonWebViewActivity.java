@@ -104,23 +104,18 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void initData() {
         JUtils.Log(TAG, "initData");
-        runOnUiThread(() -> {
-            JUtils.Log(TAG, "initData--" + actlink);
+        JUtils.Log(TAG, "initData--" + actlink);
+        try {
+            Map<String, String> extraHeaders = new HashMap<>();
 
-            try {
-                Map<String, String> extraHeaders = new HashMap<>();
+            extraHeaders.put("Cookie", sessionid);
 
-                extraHeaders.put("Cookie", sessionid);
-
-                mWebView.loadUrl(actlink, extraHeaders);
-            } catch (Exception e) {
-                e.printStackTrace();
-                JUtils.Log(TAG, "loadUrl--error");
-            }
-
-            JUtils.Log(TAG, "loadUrl--end");
-        });
-
+            mWebView.loadUrl(actlink, extraHeaders);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JUtils.Log(TAG, "loadUrl--error");
+        }
+        JUtils.Log(TAG, "loadUrl--end");
         get_party_share_content(id + "");
     }
 
@@ -488,6 +483,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
         UIHandler.sendMessage(msg, this);
     }
 
+    @Override
     public boolean handleMessage(Message msg) {
         switch (msg.arg1) {
             case 1: {
@@ -576,7 +572,9 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
         // titleUrl是标题的网络链接，仅在人人网和QQ空间使用
         oks.setTitleUrl(partyShareInfo.getShareLink());
         // text是分享文本，所有平台都需要这个字段
-        oks.setText(partyShareInfo.getActiveDec() + partyShareInfo.getShareLink());
+        oks.setText(partyShareInfo.getActiveDec()
+//                + partyShareInfo.getShareLink()
+        );
         // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
         //oks.setImagePath(filePara.getFilePath());//确保SDcard下面存在此张图片
         //oks.setImageUrl("http://f1.sharesdk.cn/imgs/2014/02/26/owWpLZo_638x960.jpg");

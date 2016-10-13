@@ -33,10 +33,10 @@ public class ImagePagerActivity extends BaseSwipeBackCompatActivity {
     //public static ImageSize imageSize;
     private List<View> guideViewList = new ArrayList<>();
 
-    public static void startImagePagerActivity(Context context, List<String> imgUrls) {
+    public static void startImagePagerActivity(Context context, List<String> imgUrls,int position) {
         Intent intent = new Intent(context, ImagePagerActivity.class);
         intent.putStringArrayListExtra(INTENT_IMGURLS, new ArrayList<>(imgUrls));
-        intent.putExtra(INTENT_POSITION, 0);
+        intent.putExtra(INTENT_POSITION,position);
         context.startActivity(intent);
     }
 
@@ -80,7 +80,7 @@ public class ImagePagerActivity extends BaseSwipeBackCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 for (int i = 0; i < guideViewList.size(); i++) {
-                    guideViewList.get(i).setSelected(i == position ? true : false);
+                    guideViewList.get(i).setSelected(i == position);
                 }
             }
 
@@ -111,7 +111,7 @@ public class ImagePagerActivity extends BaseSwipeBackCompatActivity {
             for (int i = 0; i < imgUrls.size(); i++) {
                 View view = new View(this);
                 view.setBackgroundResource(R.drawable.selector_guide_bg);
-                view.setSelected(i == startPos ? true : false);
+                view.setSelected(i == startPos);
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                         getResources().getDimensionPixelSize(R.dimen.gudieview_width),
                         getResources().getDimensionPixelSize(R.dimen.gudieview_heigh));

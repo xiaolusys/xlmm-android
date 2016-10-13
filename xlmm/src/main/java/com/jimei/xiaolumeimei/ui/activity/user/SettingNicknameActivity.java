@@ -1,7 +1,6 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -25,7 +24,6 @@ import rx.schedulers.Schedulers;
 public class SettingNicknameActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener {
   String TAG = "SettingNicknameActivity";
-  @Bind(R.id.toolbar) Toolbar toolbar;
   @Bind(R.id.set_nick_name) EditText nameEditText;
   @Bind(R.id.set_save_button) Button save_button;
   UserInfoBean userinfo;
@@ -35,7 +33,6 @@ public class SettingNicknameActivity extends BaseSwipeBackCompatActivity
 
   @Override protected void setListener() {
     save_button.setOnClickListener(this);
-    toolbar.setOnClickListener(this);
   }
 
   @Override protected void initData() {
@@ -51,9 +48,6 @@ public class SettingNicknameActivity extends BaseSwipeBackCompatActivity
   }
 
   @Override protected void initViews() {
-    toolbar.setTitle("");
-    setSupportActionBar(toolbar);
-    finishBack(toolbar);
   }
 
   @Override protected boolean toggleOverridePendingTransition() {

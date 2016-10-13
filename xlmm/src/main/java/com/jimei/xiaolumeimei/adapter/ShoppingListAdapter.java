@@ -88,7 +88,7 @@ public class ShoppingListAdapter
             Glide.with(mContext)
                     .load(R.mipmap.ic_launcher)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    //.placeholder(R.drawable.parceholder)
+                    //.placeholder(R.drawable.place_holder)
                     .centerCrop()
                     .into(holder.picPath);
         } else {

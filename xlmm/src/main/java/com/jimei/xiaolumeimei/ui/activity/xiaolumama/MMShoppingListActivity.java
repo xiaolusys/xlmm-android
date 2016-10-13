@@ -16,7 +16,6 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.OderCarryBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
-import com.jimei.xiaolumeimei.widget.DividerItemDecorationForFooter;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
@@ -96,19 +95,14 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity implemen
     }
 
     private void initRecyclerView() {
-
         shoppinglistXry.setLayoutManager(new LinearLayoutManager(this));
         shoppinglistXry.addItemDecoration(
-                new DividerItemDecorationForFooter(this, DividerItemDecoration.VERTICAL_LIST));
-        shoppinglistXry.setRefreshProgressStyle(ProgressStyle.BallPulse);
+                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         shoppinglistXry.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
-        shoppinglistXry.setArrowImageView(R.drawable.iconfont_downgrey);
         shoppinglistXry.setPullRefreshEnabled(false);
         shoppinglistXry.setLoadingMoreEnabled(true);
-
         adapter = new ShoppingListAdapter(this);
         shoppinglistXry.setAdapter(adapter);
-
         shoppinglistXry.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {

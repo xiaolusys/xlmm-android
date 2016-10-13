@@ -20,66 +20,75 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 
-import com.jimei.xiaolumeimei.swipeback.SwipeBackActivityBase;
-import com.jimei.xiaolumeimei.swipeback.SwipeBackActivityHelper;
-import com.jimei.xiaolumeimei.swipeback.SwipeBackLayout;
-import com.jimei.xiaolumeimei.swipeback.Utils;
+import com.jimei.xiaolumeimei.widget.swipeback.SwipeBackActivityBase;
+import com.jimei.xiaolumeimei.widget.swipeback.SwipeBackActivityHelper;
+import com.jimei.xiaolumeimei.widget.swipeback.SwipeBackLayout;
+import com.jimei.xiaolumeimei.widget.swipeback.Utils;
 
 public abstract class BaseSwipeBackCompatActivity extends BaseAppCompatActivity
-    implements SwipeBackActivityBase {
-  private SwipeBackActivityHelper mHelper;
+        implements SwipeBackActivityBase {
+    private SwipeBackActivityHelper mHelper;
 
-  @Override protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    mHelper = new SwipeBackActivityHelper(this);
-    mHelper.onActivityCreate();
-  }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mHelper = new SwipeBackActivityHelper(this);
+        mHelper.onActivityCreate();
+    }
 
-  @Override protected void onPostCreate(Bundle savedInstanceState) {
-    super.onPostCreate(savedInstanceState);
-    mHelper.onPostCreate();
-  }
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mHelper.onPostCreate();
+    }
 
-  @Override public View findViewById(int id) {
-    View v = super.findViewById(id);
-    if (v == null && mHelper != null) return mHelper.findViewById(id);
-    return v;
-  }
+    @Override
+    public View findViewById(int id) {
+        View v = super.findViewById(id);
+        if (v == null && mHelper != null) return mHelper.findViewById(id);
+        return v;
+    }
 
-  @Override public SwipeBackLayout getSwipeBackLayout() {
-    return mHelper.getSwipeBackLayout();
-  }
+    @Override
+    public SwipeBackLayout getSwipeBackLayout() {
+        return mHelper.getSwipeBackLayout();
+    }
 
-  @Override public void setSwipeBackEnable(boolean enable) {
-    getSwipeBackLayout().setEnableGesture(enable);
-  }
+    @Override
+    public void setSwipeBackEnable(boolean enable) {
+        getSwipeBackLayout().setEnableGesture(enable);
+    }
 
-  @Override public void scrollToFinishActivity() {
-    Utils.convertActivityToTranslucent(this);
-    getSwipeBackLayout().scrollToFinishActivity();
-  }
+    @Override
+    public void scrollToFinishActivity() {
+        Utils.convertActivityToTranslucent(this);
+        getSwipeBackLayout().scrollToFinishActivity();
+    }
 
-  @Override protected void onResume() {
-    super.onResume();
-    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-  }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    }
 
-  @Override protected void onPause() {
-    super.onPause();
-  }
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
 
-  @Override protected void onStop() {
-    super.onStop();
-  }
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
 
-  @Override
-  protected boolean toggleOverridePendingTransition() {
-    return false;
-  }
+    @Override
+    protected boolean toggleOverridePendingTransition() {
+        return false;
+    }
 
-  @Override
-  protected TransitionMode getOverridePendingTransitionMode() {
-    return null;
-  }
+    @Override
+    protected TransitionMode getOverridePendingTransitionMode() {
+        return null;
+    }
 
 }

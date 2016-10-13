@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.model;
 
 import com.jimei.library.rx.DefaultTransform;
+import com.jimei.xiaolumeimei.base.RxSchedulers;
 import com.jimei.xiaolumeimei.entities.AwardCarryBean;
 import com.jimei.xiaolumeimei.entities.CarryLogListBean;
 import com.jimei.xiaolumeimei.entities.ClickcarryBean;
@@ -8,6 +9,8 @@ import com.jimei.xiaolumeimei.entities.MMChooselistBean;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.NinePicBean;
 import com.jimei.xiaolumeimei.entities.OderCarryBean;
+import com.jimei.xiaolumeimei.entities.PortalBean;
+import com.jimei.xiaolumeimei.entities.SaveTimeBean;
 import com.jimei.xiaolumeimei.entities.WxQrcode;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 
@@ -56,8 +59,12 @@ public class MMProductModel {
         }
     }
 
-    public Observable<List<NinePicBean>> getNinePic() {
-        return XlmmRetrofitClient.getService().getNinepic().compose(new DefaultTransform<>());
+    public Observable<List<NinePicBean>> getNinePic(int sale_category) {
+        if (sale_category == -1) {
+            return XlmmRetrofitClient.getService().getNinepic().compose(new DefaultTransform<>());
+        } else {
+            return XlmmRetrofitClient.getService().getNinepic(sale_category).compose(new DefaultTransform<>());
+        }
     }
 
     public Observable<MMShoppingBean> getShareShopping() {
@@ -100,6 +107,18 @@ public class MMProductModel {
         return XlmmRetrofitClient.getService()
                 .getWxCode()
                 .compose(new DefaultTransform<>());
+    }
+
+    public Observable<PortalBean> getPortalBean() {
+        return XlmmRetrofitClient.getService()
+                .getPortalBean()
+                .compose(RxSchedulers.io_main());
+    }
+
+    public Observable<SaveTimeBean> saveTime(int id, int save_times) {
+        return XlmmRetrofitClient.getService()
+                .saveTime(id, save_times)
+                .compose(RxSchedulers.io_main());
     }
 
 }

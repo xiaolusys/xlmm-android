@@ -63,7 +63,6 @@ public class UpdateService extends Service {
         mNotificationManager.notify(FLAG_UPDATE, mBuilder.build());
         mDownloadUrl = intent.getStringExtra(EXTRAS_DOWNLOAD_URL);
         new Thread(new DownloadRunnable()).start();
-
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -78,7 +77,6 @@ public class UpdateService extends Service {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
-
                 case DOWNLOAD_COMPLETE:
                     Intent installIntent = new Intent();
                     installIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

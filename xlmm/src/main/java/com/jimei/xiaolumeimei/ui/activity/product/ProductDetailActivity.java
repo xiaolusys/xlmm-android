@@ -323,7 +323,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             Glide.with(this).load(head_imgs.get(i) + POST_URL).diskCacheStrategy(DiskCacheStrategy.RESULT)
-                    .centerCrop().placeholder(R.drawable.parceholder).into(imageView);
+                    .centerCrop().placeholder(R.drawable.place_holder).into(imageView);
             list.add(imageView);
         }
         PagerAdapter viewPagerAdapter = new MyPagerAdapter(list);

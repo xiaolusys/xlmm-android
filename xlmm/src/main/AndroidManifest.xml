@@ -159,9 +159,6 @@
             android:name=".ui.activity.user.SettingNicknameActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
-            android:name=".ui.activity.user.SettingPasswordActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
-        <activity
             android:name=".ui.activity.user.SettingPasswordForgetActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
@@ -169,9 +166,6 @@
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
             android:name=".ui.activity.user.VerifyPhoneActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
-        <activity
-            android:name=".ui.activity.user.EditPasswordActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
             android:name=".ui.activity.user.VerifyPhoneForgetActivity"
@@ -277,9 +271,6 @@
             android:name=".ui.activity.user.WxLoginBindPhoneActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
-            android:name=".ui.activity.user.BindSettingPasswordActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
-        <activity
             android:name=".ui.activity.xiaolumama.MMShoppingListActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
@@ -335,7 +326,16 @@
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
             android:name=".ui.activity.product.BrandListActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
+            android:theme="@style/AppTheme.TransparentActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data
+                    android:host="app"
+                    android:path="/v1/brand"
+                    android:scheme="com.jimei.xlmm"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.activity.user.UserDrawCashActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
@@ -528,6 +528,9 @@
         <activity
             android:name=".ui.activity.product.CategoryListActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
+        <activity
+            android:name=".ui.activity.xiaolumama.DayPushActivity"
+            android:theme="@style/AppTheme.TransparentActivity"/>
 
         <service
             android:name=".xlmmService.UpdateService"
@@ -562,7 +565,7 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".mipush.XiaoMiMessageReceiver"
+            android:name=".receiver.mipush.XiaoMiMessageReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.xiaomi.mipush.RECEIVE_MESSAGE"/>

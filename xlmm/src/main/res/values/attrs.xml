@@ -216,15 +216,6 @@
     <attr name="isSolid" format="boolean" />
   </declare-styleable>
 
-  <declare-styleable name="TickCircleProgress">
-    <!-- 刻度条的粗细-->
-    <attr name="tickWidth" format="dimension" />
-    <!-- 刻度的颜色-->
-    <attr name="tickColor" format="color" />
-    <!-- 刻度条的高度-->
-    <attr name="tickMarkHeight" format="dimension" />
-  </declare-styleable>
-
   <declare-styleable name="SlideDetailsLayout">
     <!-- float value for indicate the moment of switch panel-->
     <attr name="percent" format="float"/>

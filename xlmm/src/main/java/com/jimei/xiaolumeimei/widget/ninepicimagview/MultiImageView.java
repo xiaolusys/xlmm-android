@@ -7,8 +7,7 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -40,7 +39,7 @@ public class MultiImageView extends LinearLayout {
         @Override
         public void onClick(View view) {
             if (mOnItemClickListener != null) {
-                mOnItemClickListener.onItemClick(view);
+                mOnItemClickListener.onItemClick(view, (Integer) view.getTag());
             }
         }
     };
@@ -201,14 +200,14 @@ public class MultiImageView extends LinearLayout {
             imageView.setMaxHeight(pxOneMaxWandH);
             imageView.setLayoutParams(onePicPara);
         }
-
+        imageView.setTag(position);
         imageView.setId(url.hashCode());
         imageView.setOnClickListener(mImageViewOnClickListener);
-        Glide.with(context).load(url).thumbnail(0.1f).diskCacheStrategy(DiskCacheStrategy.RESULT).into(imageView);
+        Picasso.with(context).load(url).into(imageView);
         return imageView;
     }
 
     public interface OnItemClickListener {
-        void onItemClick(View view);
+        void onItemClick(View view,int position);
     }
 }

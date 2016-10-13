@@ -2,23 +2,17 @@ package com.jimei.xiaolumeimei.base;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.loading.VaryViewHelperController;
-import com.jimei.xiaolumeimei.utils.CommonUtils;
-import com.jimei.xiaolumeimei.utils.NetWorkUtil;
 import com.jimei.xiaolumeimei.utils.TUtil;
 import com.jimei.xiaolumeimei.widget.loadingdialog.XlmmLoadingDialog;
 import com.jude.utils.JUtils;
+import com.zhy.autolayout.AutoLayoutActivity;
 
 import butterknife.ButterKnife;
 import rx.Subscription;
@@ -28,7 +22,7 @@ import rx.subscriptions.CompositeSubscription;
  * Created by itxuye on 2016/6/24.
  */
 public abstract class BasePresenterActivity<T extends BasePresenter, E extends BaseModel>
-        extends BaseAutoLayoutActivity implements BaseView {
+        extends AutoLayoutActivity implements BaseView {
 
     /**
      * Log tag
@@ -85,12 +79,10 @@ public abstract class BasePresenterActivity<T extends BasePresenter, E extends B
             }
         }
         super.onCreate(savedInstanceState);
-        // base setup
         Bundle extras = getIntent().getExtras();
         if (null != extras) {
             getBundleExtras(extras);
         }
-
         mContext = this;
         TAG_LOG = this.getClass().getSimpleName();
         BaseAppManager.getInstance().addActivity(this);
@@ -179,12 +171,12 @@ public abstract class BasePresenterActivity<T extends BasePresenter, E extends B
 
     @Override
     public void showNetworkError() {
-        if (!NetWorkUtil.isNetWorkConnected(this)) {
+        if (!JUtils.isNetWorkAvilable()) {
             if (mVaryViewHelperController == null) {
                 throw new IllegalStateException("no ViewHelperController");
             }
             mVaryViewHelperController.showNetworkError(view -> getDataCallBack());
-        }else {
+        } else {
             JUtils.Toast("数据加载有误,请下拉刷新!");
         }
     }
@@ -297,37 +289,6 @@ public abstract class BasePresenterActivity<T extends BasePresenter, E extends B
             intent.putExtras(bundle);
         }
         startActivityForResult(intent, requestCode);
-    }
-
-    /**
-     * show toast
-     */
-    protected void showToast(String msg) {
-        if (null != msg && !CommonUtils.isEmpty(msg)) {
-            Snackbar.make(getWindow().getDecorView(), msg, Snackbar.LENGTH_SHORT).show();
-        }
-    }
-
-    /**
-     * set status bar translucency
-     */
-    protected void setTranslucentStatus(boolean on) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            Window win = getWindow();
-            WindowManager.LayoutParams winParams = win.getAttributes();
-            final int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
-            if (on) {
-                winParams.flags |= bits;
-            } else {
-                winParams.flags &= ~bits;
-            }
-            win.setAttributes(winParams);
-        }
-    }
-
-    public void finishBack(Toolbar toolbar) {
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-        toolbar.setNavigationOnClickListener(v -> finish());
     }
 
     public void showIndeterminateProgressDialog(boolean horizontal) {

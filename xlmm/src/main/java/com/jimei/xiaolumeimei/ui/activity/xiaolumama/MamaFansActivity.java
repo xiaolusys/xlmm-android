@@ -21,7 +21,6 @@ import com.jimei.xiaolumeimei.entities.MamaFansBean;
 import com.jimei.xiaolumeimei.event.WebViewEvent;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
-import com.jimei.xiaolumeimei.widget.DividerItemDecorationForFooter;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
@@ -97,7 +96,7 @@ public class MamaFansActivity extends BaseSwipeBackCompatActivity {
   private void initRecyclerView() {
     xrvMmvisitors.setLayoutManager(new LinearLayoutManager(this));
     xrvMmvisitors.addItemDecoration(
-        new DividerItemDecorationForFooter(this, DividerItemDecoration.VERTICAL_LIST));
+        new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
     xrvMmvisitors.setRefreshProgressStyle(ProgressStyle.BallPulse);
     xrvMmvisitors.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
     xrvMmvisitors.setArrowImageView(R.drawable.iconfont_downgrey);

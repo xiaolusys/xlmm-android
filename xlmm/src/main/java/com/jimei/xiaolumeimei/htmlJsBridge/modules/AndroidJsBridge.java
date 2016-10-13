@@ -75,10 +75,8 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
 
   private ActivityBean partyShareInfo;
   private BaseSwipeBackCompatActivity mContext;
-  private Bitmap bitmap;
 
   public AndroidJsBridge(BaseSwipeBackCompatActivity context) {
-    //this.commonWebViewActivity = commonWebViewActivity;
     this.mContext = context;
   }
 
@@ -91,7 +89,6 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     JUtils.Log("CommonWebViewActivity", url);
     jump_ToNativeLocation(url);
     JUtils.Log(url);
-    //jump_ToNativeLocation("");
   }
 
   @JavascriptInterface public String getNativeMobileSNCode() {
@@ -725,12 +722,10 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
         BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ssdk_oks_logo_copy);
     String label = "二维码";
 
-    View.OnClickListener listener = new View.OnClickListener() {
-      public void onClick(View v) {
-        //if (shareProductBean.getShareLink()) {
-        //}
-        saveTwoDimenCode(mContext);
-      }
+    View.OnClickListener listener = v -> {
+      //if (shareProductBean.getShareLink()) {
+      //}
+      saveTwoDimenCode(mContext);
     };
     oks.setCustomerLogo(enableLogo, label, listener);
     // 启动分享GUI

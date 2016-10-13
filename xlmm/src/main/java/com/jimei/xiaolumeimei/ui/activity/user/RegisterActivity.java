@@ -165,12 +165,6 @@ public class RegisterActivity extends BaseSwipeBackCompatActivity
                                     if (codeBean != null) {
                                         int result = codeBean.getRcode();
                                         if (result == 0) {
-//                                            Intent intent =
-//                                                    new Intent(RegisterActivity.this, EditPasswordActivity.class);
-//                                            Bundle bundle = new Bundle();
-//                                            bundle.putString("username", mobile);
-//                                            bundle.putString("valid_code", invalid_code);
-//                                            intent.putExtras(bundle);
                                             Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                                             LoginUtils.saveLoginSuccess(true,getApplicationContext());
                                             startActivity(intent);

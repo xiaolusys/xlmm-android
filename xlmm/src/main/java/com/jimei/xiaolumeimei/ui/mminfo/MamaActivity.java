@@ -64,7 +64,7 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
 
     @Override
     protected void initData() {
-        showIndeterminateProgressDialog(false);
+        showIndeterminateProgressDialog(true);
         UdeskSDKManager.getInstance().initApiKey(this, XlmmConst.UDESK_URL, XlmmConst.UDESK_KEY);
         addSubscription(MMInfoModel.getInstance()
                 .getUserInfo()
@@ -114,7 +114,6 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
         b.viewPager.setOffscreenPageLimit(2);
         b.tabLayout.setupWithViewPager(b.viewPager);
         b.tabLayout.setTabMode(TabLayout.MODE_FIXED);
-        hideIndeterminateProgressDialog();
     }
 
 

@@ -19,7 +19,6 @@ import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.entities.MamaFansBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
-import com.jimei.xiaolumeimei.widget.DividerItemDecorationForFooter;
 import com.jimei.xiaolumeimei.widget.loadingdialog.XlmmLoadingDialog;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
@@ -138,7 +137,7 @@ public class MMFansFragment extends BaseFragment {
     private void initViews(View view) {
         xrvMmvisitors.setLayoutManager(new LinearLayoutManager(mActivity));
         xrvMmvisitors.addItemDecoration(
-                new DividerItemDecorationForFooter(mActivity, DividerItemDecoration.VERTICAL_LIST));
+                new DividerItemDecoration(mActivity, DividerItemDecoration.VERTICAL_LIST));
         xrvMmvisitors.setRefreshProgressStyle(ProgressStyle.BallPulse);
         xrvMmvisitors.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
         xrvMmvisitors.setArrowImageView(R.drawable.iconfont_downgrey);

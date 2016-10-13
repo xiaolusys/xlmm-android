@@ -17,7 +17,7 @@ import com.jimei.xiaolumeimei.adapter.ClickCarryLogAdapter;
 import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.entities.ClickcarryBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
-import com.jimei.xiaolumeimei.widget.DividerItemDecorationForFooter;
+import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.widget.loadingdialog.XlmmLoadingDialog;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
@@ -133,7 +133,7 @@ public class CarryLogCashbackFragment extends BaseFragment {
   private void initViews(View view) {
     xRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     xRecyclerView.addItemDecoration(
-            new DividerItemDecorationForFooter(getActivity(), DividerItemDecorationForFooter.VERTICAL_LIST));
+            new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
     xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallPulse);
     xRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
     xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);

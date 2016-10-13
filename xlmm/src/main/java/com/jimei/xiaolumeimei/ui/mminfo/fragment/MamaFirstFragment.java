@@ -1,8 +1,12 @@
 package com.jimei.xiaolumeimei.ui.mminfo.fragment;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.View;
 
@@ -24,8 +28,8 @@ import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.DayPushActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.GoodWeekActivity;
-import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMNinePicActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShareCodeWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShoppingListActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMStoreWebViewActivity;
@@ -35,19 +39,27 @@ import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaReNewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaVisitorActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.PersonalCarryRankActivity;
 import com.jimei.xiaolumeimei.ui.mminfo.MMInfoModel;
+import com.jimei.xiaolumeimei.ui.mminfo.MamaActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.RxUtils;
+import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.sdk.modelmsg.WXWebpageObject;
+import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import retrofit2.Response;
 
+import static android.provider.UserDictionary.Words.APP_ID;
+
 public class MamaFirstFragment extends BaseLazyFragment<FragmentMamaFirstBinding> implements View.OnClickListener, OnChartValueSelectedListener {
     private static final String TITLE = "title";
     private static final String ID = "id";
-    private static final int MAX_RECENT_DAYS = 7;
     List<RecentCarryBean.ResultsEntity> show_refund = new ArrayList<>();
     List<RecentCarryBean.ResultsEntity> his_refund = new ArrayList<>();
 
@@ -119,7 +131,7 @@ public class MamaFirstFragment extends BaseLazyFragment<FragmentMamaFirstBinding
             ActivityListAdapter adapter = new ActivityListAdapter(mActivity);
             adapter.updateWithClear(activities);
             b.lv.setAdapter(adapter);
-            b.scrollView.scrollTo(0,0);
+            b.scrollView.scrollTo(0, 0);
         }
     }
 
@@ -179,13 +191,6 @@ public class MamaFirstFragment extends BaseLazyFragment<FragmentMamaFirstBinding
             cal.add(Calendar.DAY_OF_YEAR, 1);//日期+1
             xVals.add((cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.DAY_OF_MONTH));
         }
-//        Calendar cal = Calendar.getInstance();
-//        int days;
-//        if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
-//            days = 7;
-//        } else {
-//            days = cal.get(Calendar.DAY_OF_WEEK) - 1;
-//        }
         show_refund.clear();
         ArrayList<Entry> yVals = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
@@ -196,7 +201,6 @@ public class MamaFirstFragment extends BaseLazyFragment<FragmentMamaFirstBinding
             }
             yVals.add(new Entry(val, i));
         }
-        // set data
         setData(xVals, yVals);
     }
 
@@ -263,6 +267,7 @@ public class MamaFirstFragment extends BaseLazyFragment<FragmentMamaFirstBinding
         if (fortune.getExtraInfo() != null) {
             hisConfirmedCashOut = fortune.getExtraInfo().getHisConfirmedCashOut();
         }
+        ((MamaActivity) mActivity).hideIndeterminateProgressDialog();
     }
 
     private void setListener() {
@@ -312,25 +317,31 @@ public class MamaFirstFragment extends BaseLazyFragment<FragmentMamaFirstBinding
                 startActivity(new Intent(mActivity, PersonalCarryRankActivity.class));
                 break;
             case R.id.ll_share:
-                JumpUtils.jumpToWebViewWithCookies(mActivity, shopLink, -1,
-                        MMStoreWebViewActivity.class);
+                if (shopLink != null && !"".equals(shopLink)) {
+                    JumpUtils.jumpToWebViewWithCookies(mActivity, shopLink, -1,
+                            MMStoreWebViewActivity.class);
+                }
                 break;
             case R.id.ll_push:
-                startActivity(new Intent(mActivity, MMNinePicActivity.class));
+                startActivity(new Intent(mActivity, DayPushActivity.class));
                 break;
             case R.id.ll_choose:
                 startActivity(new Intent(mActivity, MamaChooseActivity.class));
                 break;
             case R.id.ll_shop:
-                JumpUtils.jumpToWebViewWithCookies(mActivity, shareLink, 26,
-                        MMShareCodeWebViewActivity.class, "");
+                if (shareLink != null && !"".equals(shareLink)) {
+                    JumpUtils.jumpToWebViewWithCookies(mActivity, shareLink, 26,
+                            MMShareCodeWebViewActivity.class, "");
+                }
                 break;
             case R.id.tv_good_week:
                 startActivity(new Intent(mActivity, GoodWeekActivity.class));
                 break;
             case R.id.tv_msg:
-                JumpUtils.jumpToWebViewWithCookies(mActivity, msgUrl, -1,
-                        ActivityWebViewActivity.class, "信息通知", false);
+                if (msgUrl != null && !"".equals(msgUrl)) {
+                    JumpUtils.jumpToWebViewWithCookies(mActivity, msgUrl, -1,
+                            ActivityWebViewActivity.class, "信息通知", false);
+                }
                 break;
             case R.id.visit_layout:
                 startActivity(new Intent(mActivity, MamaVisitorActivity.class));
@@ -364,5 +375,55 @@ public class MamaFirstFragment extends BaseLazyFragment<FragmentMamaFirstBinding
     @Override
     public void onNothingSelected() {
 
+    }
+
+    public void sendReq(Context context, String text, Bitmap bmp) {
+        String url = "http://m.xiaolumeimei.com";//收到分享的好友点击信息会跳转到这个地址去
+        WXWebpageObject localWXWebpageObject = new WXWebpageObject();
+        localWXWebpageObject.webpageUrl = url;
+        WXMediaMessage localWXMediaMessage = new WXMediaMessage(
+                localWXWebpageObject);
+        localWXMediaMessage.title = "小鹿美美";//不能太长，否则微信会提示出错。不过博主没验证过具体能输入多长。
+        localWXMediaMessage.description = text;
+        localWXMediaMessage.thumbData = getBitmapBytes(bmp, false);
+        SendMessageToWX.Req localReq = new SendMessageToWX.Req();
+        localReq.transaction = System.currentTimeMillis() + "";
+        localReq.message = localWXMediaMessage;
+        IWXAPI api = WXAPIFactory.createWXAPI(context, APP_ID, true);
+        api.sendReq(localReq);
+    }
+
+    // 需要对图片进行处理，否则微信会在log中输出thumbData检查错误
+    private static byte[] getBitmapBytes(Bitmap bitmap, boolean paramBoolean) {
+        Bitmap localBitmap = Bitmap.createBitmap(80, 80, Bitmap.Config.RGB_565);
+        Canvas localCanvas = new Canvas(localBitmap);
+        int i;
+        int j;
+        if (bitmap.getHeight() > bitmap.getWidth()) {
+            i = bitmap.getWidth();
+            j = bitmap.getWidth();
+        } else {
+            i = bitmap.getHeight();
+            j = bitmap.getHeight();
+        }
+        while (true) {
+            localCanvas.drawBitmap(bitmap, new Rect(0, 0, i, j), new Rect(0, 0,
+                    80, 80), null);
+            if (paramBoolean)
+                bitmap.recycle();
+            ByteArrayOutputStream localByteArrayOutputStream = new ByteArrayOutputStream();
+            localBitmap.compress(Bitmap.CompressFormat.JPEG, 100,
+                    localByteArrayOutputStream);
+            localBitmap.recycle();
+            byte[] arrayOfByte = localByteArrayOutputStream.toByteArray();
+            try {
+                localByteArrayOutputStream.close();
+                return arrayOfByte;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            i = bitmap.getHeight();
+            j = bitmap.getHeight();
+        }
     }
 }

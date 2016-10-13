@@ -12,7 +12,6 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
-import com.jimei.xiaolumeimei.widget.DividerItemDecorationForFooter;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
@@ -92,7 +91,7 @@ public class MamaWithdrawCashHistoryActivity extends BaseSwipeBackCompatActivity
     private void initRecyclerView() {
         xRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         xRecyclerView.addItemDecoration(
-                new DividerItemDecorationForFooter(this, DividerItemDecoration.VERTICAL_LIST));
+                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallPulse);
         xRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
         xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);

@@ -421,7 +421,7 @@ public final class ViewUtils {
                                 .thumbnail(0.1f)
                                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                                 .centerCrop()
-                                .placeholder(R.drawable.parceholder)
+                                .placeholder(R.drawable.place_holder)
                                 .into(img);
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
@@ -469,7 +469,7 @@ public final class ViewUtils {
                                 .thumbnail(0.1f)
                                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                                 .centerCrop()
-                                .placeholder(R.drawable.parceholder)
+                                .placeholder(R.drawable.place_holder)
                                 .into(img);
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
