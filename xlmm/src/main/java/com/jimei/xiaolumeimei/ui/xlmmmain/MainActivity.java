@@ -45,10 +45,10 @@ import com.jimei.xiaolumeimei.entities.IsGetcoupon;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.UserTopic;
-import com.jimei.xiaolumeimei.event.LogOutEmptyEvent;
-import com.jimei.xiaolumeimei.event.SetMiPushEvent;
-import com.jimei.xiaolumeimei.event.UserChangeEvent;
-import com.jimei.xiaolumeimei.event.UserInfoEmptyEvent;
+import com.jimei.xiaolumeimei.entities.event.LogOutEmptyEvent;
+import com.jimei.xiaolumeimei.entities.event.SetMiPushEvent;
+import com.jimei.xiaolumeimei.entities.event.UserChangeEvent;
+import com.jimei.xiaolumeimei.entities.event.UserInfoEmptyEvent;
 import com.jimei.xiaolumeimei.receiver.UpdateBroadReceiver;
 import com.jimei.xiaolumeimei.ui.activity.main.ComplainActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.CollectionActivity;
@@ -109,11 +109,9 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         implements MainContract.View, View.OnClickListener, ViewPager.OnPageChangeListener,
         NavigationView.OnNavigationItemSelectedListener, ScrollableLayout.OnScrollListener
         , SwipeRefreshLayout.OnRefreshListener {
-
     private static final String POST_URL = "?imageMogr2/format/jpg/quality/70";
     public static String TAG = "MainActivity";
     Map<String, String> map = new HashMap<>();
-    //    List<ImageView> imageViewList = new ArrayList<>();
     TextView tvNickname;
     ImageView imgUser;
     TextView tvPoint;
@@ -242,11 +240,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     }
 
     @Override
-    protected void getBundleExtras(Bundle extras) {
-
-    }
-
-    @Override
     protected int getContentViewLayoutID() {
         return R.layout.activity_main;
     }
@@ -264,16 +257,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         mRecyclerView.addItemDecoration(new SpaceItemDecoration(15, 15, 25, 25));
         mMainCategoryAdapter = new MainCategoryAdapter(MainActivity.this);
         mRecyclerView.setAdapter(mMainCategoryAdapter);
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
     }
 
     @Override

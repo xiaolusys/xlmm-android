@@ -40,11 +40,6 @@ public class SettingPasswordForgetActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    protected void initData() {
-
-    }
-
-    @Override
     protected void getBundleExtras(Bundle extras) {
         username = extras.getString("username");
         valid_code = extras.getString("valid_code");
@@ -53,20 +48,6 @@ public class SettingPasswordForgetActivity extends BaseSwipeBackCompatActivity
     @Override
     protected int getContentViewLayoutID() {
         return R.layout.setting_password_activity;
-    }
-
-    @Override
-    protected void initViews() {
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
     }
 
     @Override

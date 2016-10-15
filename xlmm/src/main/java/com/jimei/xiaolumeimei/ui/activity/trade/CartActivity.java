@@ -1,7 +1,6 @@
 package com.jimei.xiaolumeimei.ui.activity.trade;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
@@ -79,11 +78,6 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
                         }
                     }
                 }));
-    }
-
-    @Override
-    protected void getBundleExtras(Bundle extras) {
-
     }
 
     @Override

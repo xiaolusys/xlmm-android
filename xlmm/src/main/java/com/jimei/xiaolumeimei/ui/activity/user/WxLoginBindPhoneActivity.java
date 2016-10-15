@@ -30,7 +30,6 @@ import butterknife.Bind;
 import okhttp3.Call;
 import rx.Subscriber;
 import rx.Subscription;
-import rx.functions.Action0;
 import rx.schedulers.Schedulers;
 
 /**
@@ -99,16 +98,11 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
                     .subscribe(new ServiceResponse<UserInfoBean>() {
                         @Override
                         public void onNext(UserInfoBean user) {
-                            Log.d(TAG, "getUserInfo:, " + user.toString());
-                            if ((user != null)) {
+                            if (user != null) {
+                                Log.d(TAG, "getUserInfo:, " + user.toString());
                                 headimgurl = user.getThumbnail();
                                 nickname = user.getNick();
                             }
-                        }
-
-                        @Override
-                        public void onCompleted() {
-                            super.onCompleted();
                         }
 
                         @Override
@@ -151,22 +145,19 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
             case R.id.getCheckCode:
                 mobile = registerName.getText().toString().trim();
                 if (checkMobileInput(mobile)) {
-                    RxCountDown.countdown(60).doOnSubscribe(new Action0() {
-                        @Override
-                        public void call() {
-                            getCheckCode.setClickable(false);
-                            getCheckCode.setBackgroundColor(Color.parseColor("#f3f3f4"));
+                    RxCountDown.countdown(60).doOnSubscribe(() -> {
+                        getCheckCode.setClickable(false);
+                        getCheckCode.setBackgroundColor(Color.parseColor("#f3f3f4"));
 
-                            subscribe = UserModel.getInstance()
-                                    .getCodeBean(mobile, "bind")
-                                    .subscribeOn(Schedulers.io())
-                                    .subscribe(new ServiceResponse<CodeBean>() {
-                                        @Override
-                                        public void onNext(CodeBean codeBean) {
-                                            JUtils.Toast(codeBean.getMsg());
-                                        }
-                                    });
-                        }
+                        subscribe = UserModel.getInstance()
+                                .getCodeBean(mobile, "bind")
+                                .subscribeOn(Schedulers.io())
+                                .subscribe(new ServiceResponse<CodeBean>() {
+                                    @Override
+                                    public void onNext(CodeBean codeBean) {
+                                        JUtils.Toast(codeBean.getMsg());
+                                    }
+                                });
                     }).subscribe(new Subscriber<Integer>() {
                         @Override
                         public void onCompleted() {

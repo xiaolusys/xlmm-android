@@ -23,6 +23,5 @@
             android:divider="@color/bg_grey2"
             android:dividerHeight="1px"/>
 
-
     </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

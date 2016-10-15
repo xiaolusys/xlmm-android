@@ -1,7 +1,6 @@
 package com.jimei.xiaolumeimei.ui.activity.main;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,16 +28,6 @@ public class CompanyInfoActivity extends BaseSwipeBackCompatActivity implements 
     @Override
     protected void setListener() {
         imageView.setOnClickListener(this);
-    }
-
-    @Override
-    protected void initData() {
-
-    }
-
-    @Override
-    protected void getBundleExtras(Bundle extras) {
-
     }
 
     @Override

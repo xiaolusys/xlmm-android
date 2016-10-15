@@ -68,6 +68,9 @@ public class SkuColorAdapter extends RecyclerView.Adapter<SkuColorAdapter.SkuCol
                 notifyDataSetChanged();
             });
         }
+        if (position == (data.size() - 1)) {
+            activity.refreshSku(num);
+        }
     }
 
     @Override

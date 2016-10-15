@@ -38,11 +38,6 @@ public class EditPasswordForgetActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    protected void initData() {
-
-    }
-
-    @Override
     protected void getBundleExtras(Bundle extras) {
         username = extras.getString("username");
         valid_code = extras.getString("valid_code");
@@ -54,28 +49,12 @@ public class EditPasswordForgetActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    protected void initViews() {
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.set_commit_button:
-
                 String password1 = etPassword.getText().toString().trim();
                 String password2 = etPassword2.getText().toString().trim();
                 Log.d(TAG, "password " + password1 + " " + password2);
-
                 if (checkInput(password1) && checkInput(password2)) {
                     if (checkInputSame(password1, password2)) {
                         changePassword(username, valid_code, password1, password2);
@@ -90,7 +69,6 @@ public class EditPasswordForgetActivity extends BaseSwipeBackCompatActivity
             JUtils.Toast("请输入6-16位密码");
             return false;
         }
-
         return true;
     }
 

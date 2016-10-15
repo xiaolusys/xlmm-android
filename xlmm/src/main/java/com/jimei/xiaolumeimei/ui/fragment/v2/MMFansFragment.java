@@ -39,8 +39,8 @@ import rx.schedulers.Schedulers;
  * Copyright 2016年 上海己美. All rights reserved.
  */
 public class MMFansFragment extends BaseFragment {
-    @Bind(R.id.xrv_mmvisitors)
-    XRecyclerView xrvMmvisitors;
+    @Bind(R.id.xrv_mama_fans)
+    XRecyclerView xrvMamaFans;
     private int pageNext = 2;
     private MamaFansAdapter mAdapter;
 
@@ -49,7 +49,7 @@ public class MMFansFragment extends BaseFragment {
     private Subscription subscription1;
     private Subscription subscription2;
     private Activity mActivity;
-    private XlmmLoadingDialog loadingdialog;
+    private XlmmLoadingDialog loadingDialog;
 
     @Override
     public void onAttach(Context context) {
@@ -121,7 +121,7 @@ public class MMFansFragment extends BaseFragment {
                                 mAdapter.update(list);
                             }
                             if (null == fansBeen.getNext()) {
-                                xrvMmvisitors.setLoadingMoreEnabled(false);
+                                xrvMamaFans.setLoadingMoreEnabled(false);
                             }
                         }
                     }
@@ -135,18 +135,18 @@ public class MMFansFragment extends BaseFragment {
     }
 
     private void initViews(View view) {
-        xrvMmvisitors.setLayoutManager(new LinearLayoutManager(mActivity));
-        xrvMmvisitors.addItemDecoration(
+        xrvMamaFans.setLayoutManager(new LinearLayoutManager(mActivity));
+        xrvMamaFans.addItemDecoration(
                 new DividerItemDecoration(mActivity, DividerItemDecoration.VERTICAL_LIST));
-        xrvMmvisitors.setRefreshProgressStyle(ProgressStyle.BallPulse);
-        xrvMmvisitors.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
-        xrvMmvisitors.setArrowImageView(R.drawable.iconfont_downgrey);
-        xrvMmvisitors.setPullRefreshEnabled(false);
-        xrvMmvisitors.setLoadingMoreEnabled(true);
+        xrvMamaFans.setRefreshProgressStyle(ProgressStyle.BallPulse);
+        xrvMamaFans.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
+        xrvMamaFans.setArrowImageView(R.drawable.iconfont_downgrey);
+        xrvMamaFans.setPullRefreshEnabled(false);
+        xrvMamaFans.setLoadingMoreEnabled(true);
         mAdapter = new MamaFansAdapter(mActivity);
-        xrvMmvisitors.setAdapter(mAdapter);
+        xrvMamaFans.setAdapter(mAdapter);
 
-        xrvMmvisitors.setLoadingListener(new XRecyclerView.LoadingListener() {
+        xrvMamaFans.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
 
@@ -156,7 +156,7 @@ public class MMFansFragment extends BaseFragment {
             public void onLoadMore() {
                 loadMoreData(pageNext + "");
                 pageNext++;
-                JUtils.Log("fansXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", pageNext + "");
+                JUtils.Log("fans", pageNext + "");
             }
         });
     }
@@ -188,8 +188,8 @@ public class MMFansFragment extends BaseFragment {
                             mAdapter.update(fansBeen.getResults());
                             if (null == fansBeen.getNext()) {
                                 Toast.makeText(mActivity, "没有更多了", Toast.LENGTH_SHORT).show();
-                                xrvMmvisitors.loadMoreComplete();
-                                xrvMmvisitors.setLoadingMoreEnabled(false);
+                                xrvMamaFans.loadMoreComplete();
+                                xrvMamaFans.setLoadingMoreEnabled(false);
                             }
                         }
                     }
@@ -197,7 +197,7 @@ public class MMFansFragment extends BaseFragment {
                     @Override
                     public void onCompleted() {
                         super.onCompleted();
-                        xrvMmvisitors.loadMoreComplete();
+                        xrvMamaFans.loadMoreComplete();
                     }
                 });
     }
@@ -214,7 +214,7 @@ public class MMFansFragment extends BaseFragment {
     }
 
     public void showIndeterminateProgressDialog(boolean horizontal) {
-        loadingdialog = XlmmLoadingDialog.create(activity)
+        loadingDialog = XlmmLoadingDialog.create(activity)
                 .setStyle(XlmmLoadingDialog.Style.SPIN_INDETERMINATE)
                 .setCancellable(!horizontal)
                 .show();
@@ -222,7 +222,7 @@ public class MMFansFragment extends BaseFragment {
 
     public void hideIndeterminateProgressDialog() {
         try {
-            loadingdialog.dismiss();
+            loadingDialog.dismiss();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -244,7 +244,7 @@ public class MMFansFragment extends BaseFragment {
 
     @Override
     public View getScrollableView() {
-        return xrvMmvisitors;
+        return xrvMamaFans;
     }
 
     @Override

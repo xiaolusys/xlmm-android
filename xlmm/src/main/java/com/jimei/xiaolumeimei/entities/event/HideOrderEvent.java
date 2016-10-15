@@ -1,4 +1,4 @@
-package com.jimei.xiaolumeimei.event;
+package com.jimei.xiaolumeimei.entities.event;
 
 /**
  * Created by wisdom on 16/9/7.

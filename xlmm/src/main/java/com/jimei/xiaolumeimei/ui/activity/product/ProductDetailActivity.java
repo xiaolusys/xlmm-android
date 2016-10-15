@@ -88,7 +88,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
     private List<ProductDetailBean.SkuInfoBean> skuInfo;
 
     @Override
-    protected void initView() {
+    protected void initViews() {
         setStatusBar();
         Uri uri = getIntent().getData();
         if (uri != null) {
@@ -144,7 +144,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
     }
 
     @Override
-    protected void initListener() {
+    protected void setListener() {
         b.finish.setOnClickListener(this);
         b.share.setOnClickListener(this);
         b.rlCart.setOnClickListener(this);
@@ -345,10 +345,6 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
         }
     }
 
-    @Override
-    protected void getBundleExtras(Bundle extras) {
-    }
-
     private void setStatusBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
@@ -371,16 +367,6 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
     @Override
     protected int getContentViewLayoutID() {
         return R.layout.activity_product_detail;
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
     }
 
     @Override

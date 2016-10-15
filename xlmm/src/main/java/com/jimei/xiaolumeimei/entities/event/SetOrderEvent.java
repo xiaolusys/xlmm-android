@@ -1,4 +1,4 @@
-package com.jimei.xiaolumeimei.event;
+package com.jimei.xiaolumeimei.entities.event;
 
 import com.jimei.xiaolumeimei.entities.MiPushOrderCarryBean;
 

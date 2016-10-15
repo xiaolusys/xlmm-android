@@ -39,7 +39,7 @@ import android.widget.Toast;
 import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
-import com.jimei.xiaolumeimei.htmlJsBridge.modules.AndroidJsBridge;
+import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
 import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.utils.CameraUtils;
 import com.jimei.xiaolumeimei.utils.FileUtils;
@@ -487,23 +487,27 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     public boolean handleMessage(Message msg) {
         switch (msg.arg1) {
             case 1: {
-                // 成功
-                Toast.makeText(this, "分享成功", Toast.LENGTH_SHORT).show();
-                JUtils.Log(TAG, "分享回调成功------------");
+                // 分享成功回调
+                MobclickAgent.onEvent(mContext, "share_success");
+                JUtils.Toast("分享成功");
             }
             break;
             case 2: {
-                // 失败
-                Toast.makeText(this, "分享失败", Toast.LENGTH_SHORT).show();
+                // 分享失败回调
+                HashMap<String, String> map = new HashMap<>();
+                map.put("error", msg.obj.toString());
+                MobclickAgent.onEvent(mContext, "share_failed", map);
+                MobclickAgent.onEvent(mContext, "share_failed");
+                JUtils.Toast("分享失败");
             }
             break;
             case 3: {
-                // 取消
-                Toast.makeText(this, "分享取消", Toast.LENGTH_SHORT).show();
+                // 分享取消回调
+                MobclickAgent.onEvent(mContext, "share_cancel");
+                JUtils.Toast("分享已取消");
             }
             break;
         }
-
         return false;
     }
 
@@ -604,6 +608,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
         // 启动分享GUI
         oks.setShareContentCustomizeCallback(
                 new ShareContentCustom(partyShareInfo.getActiveDec() + partyShareInfo.getShareLink()));
+        oks.setCallback(this);
         oks.show(this);
     }
 
@@ -617,34 +622,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
 
         JUtils.Log(TAG, "saveTowDimenCode : Qrcodelink=" + partyShareInfo.getShareLink());
         try {
-            //WebView webView = new WebView(this);
-            //webView.setLayoutParams(new Toolbar.LayoutParams(Toolbar.LayoutParams.MATCH_PARENT,
-            //    Toolbar.LayoutParams.MATCH_PARENT));
-            //webView.getSettings().setJavaScriptEnabled(true);
-            //
-            //webView.getSettings().setAllowFileAccess(true);
-            ////如果访问的页面中有Javascript，则webview必须设置支持Javascript
-            ////mWebView.getSettings().setUserAgentString(MyApplication.getUserAgent());
-            //webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-            //webView.getSettings().setAllowFileAccess(true);
-            //webView.getSettings().setAppCacheEnabled(true);
-            //webView.getSettings().setDomStorageEnabled(true);
-            //webView.getSettings().setDatabaseEnabled(true);
-            //webView.setDrawingCacheEnabled(true);
-            //
-            //webView.setWebChromeClient(new WebChromeClient() {
-            //  @Override public void onProgressChanged(WebView view, int newProgress) {
-            //
-            //  }
-            //});
-            //webView.setWebViewClient(new WebViewClient() {
-            //  @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            //    view.loadUrl(url);
-            //    return true;
-            //  }
-            //});
-            //
-            //webView.loadUrl(partyShareInfo.getQrcodeLink());
             bitmap = mWebView.getDrawingCache();
             JUtils.Log(TAG, "bitmap====" + bitmap.getByteCount());
             RxPermissions.getInstance(this)

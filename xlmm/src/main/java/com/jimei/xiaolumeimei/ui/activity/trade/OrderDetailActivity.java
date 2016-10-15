@@ -287,16 +287,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         }
     }
 
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
-    }
-
     private void fillDataToView(OrderDetailBean orderDetailBean) {
         PayAdapter payAdapter = new PayAdapter(orderDetailBean.getExtras().getChannels(), this);
         listView2.setAdapter(payAdapter);

@@ -1,4 +1,4 @@
-package com.jimei.xiaolumeimei.glidemoudle;
+package com.jimei.xiaolumeimei.widget.glidemoudle;
 
 import android.content.Context;
 import android.graphics.Bitmap;

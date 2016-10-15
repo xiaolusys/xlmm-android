@@ -2,7 +2,6 @@ package com.jimei.xiaolumeimei.ui.activity.user;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -35,7 +34,7 @@ public class SettingActivity extends BaseMVVMActivity<ActivitySettingBinding>
         implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     @Override
-    protected void initView() {
+    protected void initViews() {
         b.clearCache.setTitleText("清理缓存");
         b.update.setTitleText("检查更新");
         b.aboutXlmm.setTitleText("关于小鹿美美");
@@ -44,7 +43,7 @@ public class SettingActivity extends BaseMVVMActivity<ActivitySettingBinding>
     }
 
     @Override
-    protected void initListener() {
+    protected void setListener() {
         b.clearCache.setOnClickListener(this);
         b.update.setOnClickListener(this);
         b.aboutXlmm.setOnClickListener(this);
@@ -63,23 +62,8 @@ public class SettingActivity extends BaseMVVMActivity<ActivitySettingBinding>
     }
 
     @Override
-    protected void getBundleExtras(Bundle extras) {
-
-    }
-
-    @Override
     protected int getContentViewLayoutID() {
         return R.layout.activity_setting;
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
     }
 
     public void updatePref() {

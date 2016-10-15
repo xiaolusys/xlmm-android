@@ -1,8 +1,6 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.view.View;
 
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -26,8 +24,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by wulei on 2016/2/4.
  */
-public class MamaWithdrawCashHistoryActivity extends BaseSwipeBackCompatActivity
-        implements View.OnClickListener {
+public class MamaWithdrawCashHistoryActivity extends BaseSwipeBackCompatActivity {
     String TAG = "MamaWithdrawCashHistoryActivity";
 
     @Bind(R.id.xrv)
@@ -35,14 +32,6 @@ public class MamaWithdrawCashHistoryActivity extends BaseSwipeBackCompatActivity
     private int page = 2;
 
     private WithdrawCashHisAdapter mHisAdapter;
-
-    @Override
-    protected void setListener() {
-    }
-
-    @Override
-    protected void getBundleExtras(Bundle extras) {
-    }
 
     @Override
     protected int getContentViewLayoutID() {
@@ -141,20 +130,6 @@ public class MamaWithdrawCashHistoryActivity extends BaseSwipeBackCompatActivity
                 addSubscription(subscribe);
             }
         });
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
-    }
-
-    @Override
-    public void onClick(View v) {
     }
 
     @Override

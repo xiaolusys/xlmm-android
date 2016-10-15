@@ -40,11 +40,6 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity implemen
     private String order;
 
     @Override
-    protected void setListener() {
-
-    }
-
-    @Override
     protected void initData() {
         tvCount.setText(order);
         showIndeterminateProgressDialog(false);
@@ -147,16 +142,6 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity implemen
                     }
                 });
         addSubscription(subscribe);
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
     }
 
     @Override

@@ -12,6 +12,7 @@ import com.jimei.xiaolumeimei.widget.LogImageView;
 import com.jimei.xiaolumeimei.widget.LogMsgView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
@@ -21,14 +22,6 @@ import rx.schedulers.Schedulers;
 public class OrderLogisticActivity extends BaseMVVMActivity<ActivityOrderLogisticBinding> {
     private String company_code;
     private String packetid;
-
-    @Override
-    protected void initView() {
-    }
-
-    @Override
-    protected void initListener() {
-    }
 
     @Override
     protected void initData() {
@@ -99,12 +92,16 @@ public class OrderLogisticActivity extends BaseMVVMActivity<ActivityOrderLogisti
     }
 
     @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(this.getClass().getSimpleName());
+        MobclickAgent.onResume(this);
     }
 
     @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+        MobclickAgent.onPause(this);
     }
 }

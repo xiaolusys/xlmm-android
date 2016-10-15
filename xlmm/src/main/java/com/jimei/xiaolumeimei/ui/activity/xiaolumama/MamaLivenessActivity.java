@@ -40,10 +40,6 @@ public class MamaLivenessActivity extends BaseSwipeBackCompatActivity {
     int liveness = 0;
 
     @Override
-    protected void setListener() {
-    }
-
-    @Override
     protected void getBundleExtras(Bundle extras) {
         if (null != extras) {
             liveness = extras.getInt("liveness");

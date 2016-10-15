@@ -52,37 +52,12 @@ public class ComplainActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    protected void initData() {
-
-    }
-
-    @Override
-    protected void getBundleExtras(Bundle extras) {
-
-    }
-
-    @Override
     protected int getContentViewLayoutID() {
         return R.layout.complain_activity;
     }
 
     @Override
-    protected void initViews() {
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
-    }
-
-    @Override
     public void onClick(View v) {
-
         if (v.getId() == R.id.commit) {
             switch (radioGroup.getCheckedRadioButtonId()) {
                 case R.id.rb_1:

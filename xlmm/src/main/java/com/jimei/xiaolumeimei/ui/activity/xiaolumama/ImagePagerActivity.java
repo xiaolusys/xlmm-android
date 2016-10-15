@@ -2,7 +2,6 @@ package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -41,31 +40,14 @@ public class ImagePagerActivity extends BaseSwipeBackCompatActivity {
     }
 
     @Override
-    protected void setListener() {
-
-    }
-
-    @Override
-    protected void initData() {
-
-    }
-
-    @Override
-    protected void getBundleExtras(Bundle extras) {
-
-    }
-
-    @Override
     protected int getContentViewLayoutID() {
         return R.layout.activity_imagepager;
     }
 
     @Override
     protected void initViews() {
-
         int startPos = getIntent().getIntExtra(INTENT_POSITION, 0);
         ArrayList<String> imgUrls = getIntent().getStringArrayListExtra(INTENT_IMGURLS);
-
         ImageAdapter mAdapter = new ImageAdapter(this, this);
         mAdapter.setDatas(imgUrls);
         viewPager.setAdapter(mAdapter);
@@ -92,16 +74,6 @@ public class ImagePagerActivity extends BaseSwipeBackCompatActivity {
         viewPager.setCurrentItem(startPos);
 
         addGuideView(guideGroup, startPos, imgUrls);
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
     }
 
     private void addGuideView(LinearLayout guideGroup, int startPos,

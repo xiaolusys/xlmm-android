@@ -1,7 +1,6 @@
 package com.jimei.xiaolumeimei.ui.activity.product;
 
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
@@ -26,14 +25,8 @@ public class BrandListActivity extends BaseSwipeBackCompatActivity {
     @Bind(R.id.childlist_recyclerView)
     XRecyclerView xRecyclerView;
 
-
     private BrandActivityAdapter mBrandActivityAdapter;
     private String id;
-
-    @Override
-    protected void setListener() {
-
-    }
 
     @Override
     public void getIntentUrl() {
@@ -68,10 +61,6 @@ public class BrandListActivity extends BaseSwipeBackCompatActivity {
                     }
                 });
         addSubscription(subscribe);
-    }
-
-    @Override
-    protected void getBundleExtras(Bundle extras) {
     }
 
     @Override

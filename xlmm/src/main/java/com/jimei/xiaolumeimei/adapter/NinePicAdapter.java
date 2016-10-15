@@ -1,9 +1,9 @@
 package com.jimei.xiaolumeimei.adapter;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
@@ -43,12 +43,12 @@ import rx.schedulers.Schedulers;
  * Copyright 2016年 上海己美. All rights reserved.
  */
 public class NinePicAdapter extends BaseAdapter {
-    private Context mContext;
+    private Activity mContext;
     private List<NinePicBean> mList;
     private String codeLink;
     private List<Uri> mFiles;
 
-    public NinePicAdapter(Context mContext) {
+    public NinePicAdapter(Activity mContext) {
         this.mContext = mContext;
         mList = new ArrayList<>();
         mFiles = new ArrayList<>();
@@ -93,12 +93,13 @@ public class NinePicAdapter extends BaseAdapter {
         holder.headTv.setText("" + mList.get(position).getTurnsNum());
         holder.contentTv.setText(mList.get(position).getDescription());
         holder.timeTv.setText(mList.get(position).getStartTime().replace("T", " "));
+        holder.numTv.setText(mList.get(position).getSave_times() + "人已保存");
         List<String> picArray = mList.get(position).getPicArry();
         if (picArray != null && picArray.size() > 0) {
             if (codeLink != null & !"".equals(codeLink)) {
                 if (picArray.size() == 9) {
                     picArray.set(4, "code" + codeLink);
-                } else {
+                } else if (picArray.size() != 1) {
                     picArray.set(picArray.size() / 2, "code" + codeLink);
                 }
             }
@@ -127,8 +128,12 @@ public class NinePicAdapter extends BaseAdapter {
                             if (granted) {
                                 mFiles.clear();
                                 JUtils.copyToClipboard(mList.get(position).getDescription());
-                                downloadNinepic(picArray);
-                                JUtils.Toast("文字已经复制,努力分享中,请稍等几秒钟...");
+                                if (picArray.size() > 0) {
+                                    downloadNinepic(picArray);
+                                } else {
+                                    shareToWx();
+                                }
+                                JUtils.Toast("努力分享中,请稍等几秒钟...");
                             } else {
                                 JUtils.Toast("小鹿美美需要存储权限存储图片,请再次点击保存并打开权限许可.");
                             }
@@ -148,7 +153,7 @@ public class NinePicAdapter extends BaseAdapter {
                     if (i > 0) {
                         str = picArry.get(i - 1) + "code";
                     } else {
-                        str = picArry.get(i + 1) + "code";
+                        str = picArry.get(0) + "code";
                     }
                 }
                 fileName = str.substring(str.lastIndexOf("/"));
@@ -158,7 +163,7 @@ public class NinePicAdapter extends BaseAdapter {
                     Uri uri = Uri.fromFile(new File(newFileName));
                     mFiles.add(uri);
                     if (mFiles.size() == picArry.size()) {
-                        shareToWx();
+                        mContext.runOnUiThread(this::shareToWx);
                     }
                 } else {
                     if (!str.contains("code")) {
@@ -189,7 +194,7 @@ public class NinePicAdapter extends BaseAdapter {
                                                 if (finalI > 0) {
                                                     currentStr = picArry.get(finalI - 1) + "code";
                                                 } else {
-                                                    currentStr = picArry.get(finalI + 1) + "code";
+                                                    currentStr = picArry.get(0) + "code";
                                                 }
                                             }
                                             pic_indicate_name = currentStr.substring(currentStr.lastIndexOf("/"));
@@ -236,20 +241,23 @@ public class NinePicAdapter extends BaseAdapter {
 
     private void shareToWx() {
         hideLoading();
-        Intent intent = new Intent();
-        Collections.sort(mFiles);
-        ComponentName comp = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.tools.ShareToTimeLineUI");
-        intent.setComponent(comp);
-        intent.setAction(Intent.ACTION_SEND_MULTIPLE);
-        intent.setType("image/*");
+        JUtils.Toast("文字已经复制到粘贴板!");
         ArrayList<Uri> imageUris = new ArrayList<>();
+        Collections.sort(mFiles);
         for (int i1 = 0; i1 < mFiles.size(); i1++) {
             if (i1 < 9) {
                 imageUris.add(mFiles.get(i1));
             }
         }
-        intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris);
-        mContext.startActivity(intent);
+        if (imageUris.size() > 0) {
+            Intent intent = new Intent();
+            ComponentName comp = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.tools.ShareToTimeLineUI");
+            intent.setComponent(comp);
+            intent.setAction(Intent.ACTION_SEND_MULTIPLE);
+            intent.setType("image/*");
+            intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris);
+            mContext.startActivity(intent);
+        }
     }
 
     public void setCodeLink(String codeLink) {

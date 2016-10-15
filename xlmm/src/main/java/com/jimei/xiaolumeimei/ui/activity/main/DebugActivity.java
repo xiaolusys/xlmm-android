@@ -2,7 +2,6 @@ package com.jimei.xiaolumeimei.ui.activity.main;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.os.Process;
 import android.text.TextUtils;
 import android.view.View;
@@ -63,40 +62,18 @@ public class DebugActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void setListener() {
-
         btDebug.setOnClickListener(this);
         rg.setOnCheckedChangeListener(this);
     }
 
     @Override
     protected void initData() {
-
         sharedPreferences = getSharedPreferences("APICLIENT", MODE_PRIVATE);
-    }
-
-    @Override
-    protected void getBundleExtras(Bundle extras) {
-
     }
 
     @Override
     protected int getContentViewLayoutID() {
         return R.layout.activity_debug;
-    }
-
-    @Override
-    protected void initViews() {
-
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
     }
 
     @Override

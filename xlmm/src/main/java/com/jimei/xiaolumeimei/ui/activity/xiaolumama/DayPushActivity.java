@@ -1,6 +1,5 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
-import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 
@@ -31,11 +30,6 @@ public class DayPushActivity extends BaseSwipeBackCompatActivity {
     ViewPager mPager;
 
     @Override
-    protected void setListener() {
-
-    }
-
-    @Override
     protected void initData() {
         addSubscription(MMProductModel.getInstance()
                 .getWxCode()
@@ -44,8 +38,8 @@ public class DayPushActivity extends BaseSwipeBackCompatActivity {
                     @Override
                     public void onNext(WxQrcode wxQrcode) {
                         List<BaseLazyFragment> fragments = new ArrayList<>();
-                        fragments.add(PushCategoryFragment.newInstance(wxQrcode.getQrcode_link()));
                         fragments.add(NinePicFragment.newInstance(wxQrcode.getQrcode_link()));
+                        fragments.add(PushCategoryFragment.newInstance(wxQrcode.getQrcode_link()));
                         MamaTabAdapter mAdapter = new MamaTabAdapter(getSupportFragmentManager(), fragments);
                         mPager.setAdapter(mAdapter);
                         mPager.setOffscreenPageLimit(2);
@@ -55,17 +49,8 @@ public class DayPushActivity extends BaseSwipeBackCompatActivity {
     }
 
     @Override
-    protected void getBundleExtras(Bundle extras) {
-
-    }
-
-    @Override
     protected int getContentViewLayoutID() {
         return R.layout.activity_day_push;
     }
 
-    @Override
-    protected void initViews() {
-
-    }
 }

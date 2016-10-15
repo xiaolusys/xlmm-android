@@ -16,6 +16,7 @@ import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.ui.mminfo.MMInfoModel;
 import com.jimei.xiaolumeimei.utils.RxUtils;
 import com.jude.utils.JUtils;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 import rx.schedulers.Schedulers;
@@ -57,6 +58,8 @@ public class MamaWalletActivity extends BaseSwipeBackCompatActivity implements V
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onPageStart(this.getClass().getSimpleName());
+        MobclickAgent.onResume(this);
         addSubscription(MMInfoModel.getInstance()
                 .getMamaFortune()
                 .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
@@ -66,6 +69,12 @@ public class MamaWalletActivity extends BaseSwipeBackCompatActivity implements V
                 }, Throwable::printStackTrace));
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+        MobclickAgent.onPause(this);
+    }
     private void initCashoutPolicy(CashoutPolicy cashoutPolicy) {
         min = cashoutPolicy.getMin_cashout_amount();
         max = cashoutPolicy.getAudit_cashout_amount();

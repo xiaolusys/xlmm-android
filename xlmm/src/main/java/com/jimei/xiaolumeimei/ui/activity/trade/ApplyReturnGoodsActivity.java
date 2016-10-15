@@ -210,21 +210,6 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
         getQiniuToken();
     }
 
-    //从server端获得所有订单数据，可能要查询几次
-    @Override
-    protected void initData() {
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
-    }
-
     private void fillDataToView(AllOrdersBean.ResultsEntity.OrdersEntity goods) {
         if ((goods == null)) return;
 
@@ -391,29 +376,9 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
                         CameraUtils.GALLERY_PICTURE);
             }
         });
-
-    /*
-    myAlertDialog.setPositiveButton("相册", new DialogInterface.OnClickListener(){
-      public void onClick(DialogInterface arg0, int arg1)
-      {
-        CameraUtils.pictureActionIntent = new Intent(Intent.ACTION_GET_CONTENT, null);
-        CameraUtils.pictureActionIntent.setType("image/*");
-        CameraUtils.pictureActionIntent.putExtra("return-data", true);
-        startActivityForResult(CameraUtils.pictureActionIntent, CameraUtils.GALLERY_PICTURE);
-      }
-    });
-
-    myAlertDialog.setNegativeButton("照相机", new DialogInterface.OnClickListener(){
-      public void onClick(DialogInterface arg0, int arg1)
-      {
-        CameraUtils.pictureActionIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(CameraUtils.pictureActionIntent, CameraUtils.CAMERA_PICTURE);
-      }
-    });*/
         myAlertDialog.show();
     }
 
-    // After the selection of image you will retun on the main activity with bitmap image
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         File b = null;
         if (data == null) {

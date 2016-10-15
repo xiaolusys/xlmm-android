@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.support.v7.widget.SwitchCompat;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -37,7 +36,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -67,7 +65,6 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
     private String receiver_state;
     private String receiver_city;
     private String receiver_district;
-    private String receiver_address;
     private String receiver_name;
     private String receiver_mobile;
     private String city_string;
@@ -82,39 +79,8 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    protected void initData() {
-
-    }
-
-    @Override
-    protected void getBundleExtras(Bundle extras) {
-
-    }
-
-    @Override
     protected int getContentViewLayoutID() {
         return R.layout.addaddress_activity;
-    }
-
-    @Override
-    protected void initViews() {
-
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ButterKnife.bind(this);
     }
 
     @Override
@@ -131,12 +97,10 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
                 } else {
                     new InitAreaTask(this).execute(0);
                 }
-                //readAddressAndShowDialog();
                 break;
             case R.id.save:
 
                 receiver_name = name.getText().toString().trim();
-                receiver_address = address.getText().toString().trim();
                 receiver_mobile = mobile.getText().toString().trim();
                 clearaddressa = clearAddress.getText().toString().trim();
 
@@ -195,7 +159,6 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
                 }
             }
         }
-
         return false;
     }
 

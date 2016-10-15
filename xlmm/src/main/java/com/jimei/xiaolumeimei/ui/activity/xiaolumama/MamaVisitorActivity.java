@@ -1,6 +1,5 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,15 +32,6 @@ public class MamaVisitorActivity extends BaseSwipeBackCompatActivity {
     ScrollableLayout mScrollableLayout;
     private int page = 2;
     private MMVisitorsAdapter mAdapter;
-
-
-    @Override
-    protected void setListener() {
-    }
-
-    @Override
-    protected void getBundleExtras(Bundle extras) {
-    }
 
     @Override
     protected int getContentViewLayoutID() {

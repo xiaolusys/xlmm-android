@@ -1,4 +1,4 @@
-package com.jimei.xiaolumeimei.loading;
+package com.jimei.xiaolumeimei.widget.loading;
 
 import android.content.Context;
 import android.view.View;

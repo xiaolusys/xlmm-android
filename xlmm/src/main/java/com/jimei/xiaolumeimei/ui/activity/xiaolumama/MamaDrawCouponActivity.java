@@ -13,6 +13,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jude.utils.JUtils;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 import rx.schedulers.Schedulers;
@@ -41,10 +42,6 @@ public class MamaDrawCouponActivity extends BaseSwipeBackCompatActivity implemen
         relativeLayout20.setOnClickListener(this);
         relativeLayout50.setOnClickListener(this);
         button.setOnClickListener(this);
-    }
-
-    @Override
-    protected void initData() {
     }
 
     @Override
@@ -91,16 +88,6 @@ public class MamaDrawCouponActivity extends BaseSwipeBackCompatActivity implemen
     }
 
     @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rl_20:
@@ -125,5 +112,19 @@ public class MamaDrawCouponActivity extends BaseSwipeBackCompatActivity implemen
                 }
                 break;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(this.getClass().getSimpleName());
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+        MobclickAgent.onPause(this);
     }
 }

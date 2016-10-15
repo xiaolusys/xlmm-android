@@ -76,16 +76,6 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
-    }
-
-    @Override
     public void onRefresh() {
         mAdapter.clear();
         loadData();

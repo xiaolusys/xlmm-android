@@ -21,7 +21,7 @@ import rx.schedulers.Schedulers;
 public class GoodWeekActivity extends BaseMVVMActivity<ActivityGoodWeekBinding> {
 
     @Override
-    protected void initView() {
+    protected void initViews() {
         ArrayList<TaskRewardFragment> fragments = new ArrayList<>();
         fragments.add(TaskRewardFragment.newInstance(XlmmConst.TYPE_REWARD_PERSONAL, "个人任务"));
         fragments.add(TaskRewardFragment.newInstance(XlmmConst.TYPE_REWARD_TEAM, "团队任务"));
@@ -32,8 +32,9 @@ public class GoodWeekActivity extends BaseMVVMActivity<ActivityGoodWeekBinding> 
         b.tabLayout.setupWithViewPager(b.viewPager);
     }
 
+
     @Override
-    protected void initListener() {
+    protected void setListener() {
 
     }
 
@@ -72,13 +73,4 @@ public class GoodWeekActivity extends BaseMVVMActivity<ActivityGoodWeekBinding> 
         return R.layout.activity_good_week;
     }
 
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected BaseMVVMActivity.TransitionMode getOverridePendingTransitionMode() {
-        return null;
-    }
 }

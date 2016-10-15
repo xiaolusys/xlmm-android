@@ -1,6 +1,5 @@
 package com.jimei.xiaolumeimei.ui.mminfo;
 
-import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.design.widget.TabLayout;
 import android.view.KeyEvent;
@@ -18,9 +17,9 @@ import com.jimei.xiaolumeimei.databinding.ActivityMamaBinding;
 import com.jimei.xiaolumeimei.entities.MiPushOrderCarryBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.WxQrcode;
-import com.jimei.xiaolumeimei.event.HideOrderEvent;
-import com.jimei.xiaolumeimei.event.SetOrderEvent;
-import com.jimei.xiaolumeimei.event.ShowOrderEvent;
+import com.jimei.xiaolumeimei.entities.event.HideOrderEvent;
+import com.jimei.xiaolumeimei.entities.event.SetOrderEvent;
+import com.jimei.xiaolumeimei.entities.event.ShowOrderEvent;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.ui.mminfo.fragment.MamaFirstFragment;
 import com.jimei.xiaolumeimei.ui.mminfo.fragment.MamaSecondFragment;
@@ -53,14 +52,10 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
     private ExecutorService service;
 
     @Override
-    protected void initView() {
+    protected void initViews() {
         EventBus.getDefault().register(this);
     }
 
-    @Override
-    protected void initListener() {
-
-    }
 
     @Override
     protected void initData() {
@@ -90,7 +85,7 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
         addSubscription(MMProductModel.getInstance()
                 .getWxCode()
                 .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<WxQrcode>(){
+                .subscribe(new ServiceResponse<WxQrcode>() {
                     @Override
                     public void onNext(WxQrcode wxQrcode) {
                         super.onNext(wxQrcode);
@@ -116,24 +111,9 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
         b.tabLayout.setTabMode(TabLayout.MODE_FIXED);
     }
 
-
-    @Override
-    protected void getBundleExtras(Bundle extras) {
-    }
-
     @Override
     protected int getContentViewLayoutID() {
         return R.layout.activity_mama;
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
     }
 
     @Override

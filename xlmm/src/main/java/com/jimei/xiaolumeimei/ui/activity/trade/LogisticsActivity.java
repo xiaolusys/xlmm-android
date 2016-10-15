@@ -43,11 +43,6 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
     private List<AllOrdersBean.ResultsEntity.OrdersEntity> data;
 
     @Override
-    protected void setListener() {
-
-    }
-
-    @Override
     protected void initData() {
         showIndeterminateProgressDialog(false);
         data = new ArrayList<>();
@@ -202,20 +197,6 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
     @Override
     protected int getContentViewLayoutID() {
         return R.layout.activity_logistics;
-    }
-
-    @Override
-    protected void initViews() {
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
     }
 
     @Override

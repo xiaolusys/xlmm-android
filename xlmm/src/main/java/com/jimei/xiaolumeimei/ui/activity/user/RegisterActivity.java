@@ -2,7 +2,6 @@ package com.jimei.xiaolumeimei.ui.activity.user;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,7 +21,6 @@ import com.umeng.analytics.MobclickAgent;
 import butterknife.Bind;
 import rx.Subscriber;
 import rx.Subscription;
-import rx.functions.Action0;
 import rx.schedulers.Schedulers;
 
 public class RegisterActivity extends BaseSwipeBackCompatActivity
@@ -46,32 +44,8 @@ public class RegisterActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    protected void initData() {
-
-    }
-
-    @Override
-    protected void getBundleExtras(Bundle extras) {
-
-    }
-
-    @Override
     protected int getContentViewLayoutID() {
         return R.layout.register_activity;
-    }
-
-    @Override
-    protected void initViews() {
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
     }
 
     public boolean checkMobileInput(String mobile) {
@@ -113,22 +87,19 @@ public class RegisterActivity extends BaseSwipeBackCompatActivity
                 mobile = editTextMobile.getText().toString().trim();
                 if (checkMobileInput(mobile)) {
 
-                    RxCountDown.countdown(60).doOnSubscribe(new Action0() {
-                        @Override
-                        public void call() {
-                            getCheckCode.setClickable(false);
-                            getCheckCode.setBackgroundColor(Color.parseColor("#f3f3f4"));
+                    RxCountDown.countdown(60).doOnSubscribe(() -> {
+                        getCheckCode.setClickable(false);
+                        getCheckCode.setBackgroundColor(Color.parseColor("#f3f3f4"));
 
-                            subscribe = UserModel.getInstance()
-                                    .getCodeBean(mobile, "register")
-                                    .subscribeOn(Schedulers.io())
-                                    .subscribe(new ServiceResponse<CodeBean>() {
-                                        @Override
-                                        public void onNext(CodeBean codeBean) {
-                                            JUtils.Toast(codeBean.getMsg());
-                                        }
-                                    });
-                        }
+                        subscribe = UserModel.getInstance()
+                                .getCodeBean(mobile, "register")
+                                .subscribeOn(Schedulers.io())
+                                .subscribe(new ServiceResponse<CodeBean>() {
+                                    @Override
+                                    public void onNext(CodeBean codeBean) {
+                                        JUtils.Toast(codeBean.getMsg());
+                                    }
+                                });
                     }).subscribe(new Subscriber<Integer>() {
                         @Override
                         public void onCompleted() {

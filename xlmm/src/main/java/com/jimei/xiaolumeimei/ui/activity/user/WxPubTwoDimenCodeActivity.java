@@ -4,8 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.os.AsyncTask;
-import android.os.Bundle;
 import android.os.Environment;
 import android.text.Layout;
 import android.text.StaticLayout;
@@ -44,7 +42,6 @@ public class WxPubTwoDimenCodeActivity extends BaseSwipeBackCompatActivity
     WxPubAuthInfo wxPubAuthInfo;
     Bitmap bitmap;
     private Encoder mEncoder;
-    private DecodeTask mDecodeTask;
 
     @Override
     protected void setListener() {
@@ -52,17 +49,8 @@ public class WxPubTwoDimenCodeActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    protected void getBundleExtras(Bundle extras) {
-
-    }
-
-    @Override
     protected int getContentViewLayoutID() {
         return R.layout.activity_wxpub_2dimen_code;
-    }
-
-    @Override
-    protected void initViews() {
     }
 
     @Override
@@ -74,7 +62,6 @@ public class WxPubTwoDimenCodeActivity extends BaseSwipeBackCompatActivity
                 .setOutputBitmapHeight(dimension) // 生成图片高度
                 .setOutputBitmapPadding(0) // 设置为没有白边
                 .build();
-        mDecodeTask = new WxPubTwoDimenCodeActivity.DecodeTask();
         Subscription subscribe1 = UserModel.getInstance()
                 .getWxPubAuthInfo()
                 .subscribeOn(Schedulers.io())
@@ -92,8 +79,6 @@ public class WxPubTwoDimenCodeActivity extends BaseSwipeBackCompatActivity
                             img_2dimen.setImageBitmap(bitmap);
                         }
                     }
-
-
                 });
         addSubscription(subscribe1);
     }
@@ -113,8 +98,6 @@ public class WxPubTwoDimenCodeActivity extends BaseSwipeBackCompatActivity
         switch (v.getId()) {
             case R.id.btn_save:
                 JUtils.Log(TAG, "btn_save save 2 dimen code");
-                //RXDownLoadImage.saveImage2File(this, bitmap);
-
                 save_2dimencode();
 
                 if (null != wxPubAuthInfo && !TextUtils.isEmpty(wxPubAuthInfo.getAuthMsg())) {
@@ -142,7 +125,6 @@ public class WxPubTwoDimenCodeActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        //mDecodeTask.execute(wxPubAuthInfo.getAuthLink());
     }
 
     public Bitmap getNewBitMap(Bitmap bmp, String text) {
@@ -160,21 +142,6 @@ public class WxPubTwoDimenCodeActivity extends BaseSwipeBackCompatActivity
         canvas.translate(6, 410);
         sl.draw(canvas);
         return newBitmap;
-    }
-
-    private class DecodeTask extends AsyncTask<String, Void, Bitmap> {
-
-        @Override
-        protected Bitmap doInBackground(String... params) {
-            JUtils.Log(TAG, "encode");
-            return mEncoder.encode(params[0]);
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            JUtils.Log(TAG, "setImageBitmap");
-            img_2dimen.setImageBitmap(bitmap);
-        }
     }
 
     @Override

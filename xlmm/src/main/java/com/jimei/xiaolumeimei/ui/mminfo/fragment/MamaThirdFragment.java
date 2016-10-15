@@ -12,8 +12,8 @@ import com.jimei.xiaolumeimei.base.BaseLazyFragment;
 import com.jimei.xiaolumeimei.databinding.FragmentMamaThirdBinding;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.MamaUrl;
-import com.jimei.xiaolumeimei.event.WebViewEvent;
-import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMFans1Activity;
+import com.jimei.xiaolumeimei.entities.event.WebViewEvent;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMFansActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShoppingListActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMTeamActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMcarryLogActivity;
@@ -180,7 +180,7 @@ public class MamaThirdFragment extends BaseLazyFragment<FragmentMamaThirdBinding
                     String domain = sharedPreferences.getString("cookiesDomain", "");
                     String sessionId = sharedPreferences.getString("Cookie", "");
                     EventBus.getDefault().postSticky(new WebViewEvent(cookies, domain, actLink, -1, sessionId));
-                    startActivity(new Intent(mActivity, MMFans1Activity.class));
+                    startActivity(new Intent(mActivity, MMFansActivity.class));
                 }
                 break;
             case R.id.ll_personal:

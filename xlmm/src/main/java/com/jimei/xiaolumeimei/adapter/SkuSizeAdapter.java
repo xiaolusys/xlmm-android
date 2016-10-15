@@ -55,7 +55,6 @@ public class SkuSizeAdapter extends RecyclerView.Adapter<SkuSizeAdapter.SkuSizeV
     public void onBindViewHolder(SkuSizeViewHolder holder, int position) {
         SkuItemsBean skuItemsBean = data.get(position);
         holder.name.setText(skuItemsBean.getName());
-//        if (skuItemsBean.isIs_saleout()) {
         if (skuItemsBean.getFree_num() == 0) {
 
             holder.rl.setBackgroundResource(R.drawable.sku_item_bg_unselect);
