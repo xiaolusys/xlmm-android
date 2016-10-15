@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -46,10 +45,10 @@ import com.jimei.xiaolumeimei.entities.IsGetcoupon;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.UserTopic;
-import com.jimei.xiaolumeimei.event.LogOutEmptyEvent;
-import com.jimei.xiaolumeimei.event.SetMiPushEvent;
-import com.jimei.xiaolumeimei.event.UserChangeEvent;
-import com.jimei.xiaolumeimei.event.UserInfoEmptyEvent;
+import com.jimei.xiaolumeimei.entities.event.LogOutEmptyEvent;
+import com.jimei.xiaolumeimei.entities.event.SetMiPushEvent;
+import com.jimei.xiaolumeimei.entities.event.UserChangeEvent;
+import com.jimei.xiaolumeimei.entities.event.UserInfoEmptyEvent;
 import com.jimei.xiaolumeimei.receiver.UpdateBroadReceiver;
 import com.jimei.xiaolumeimei.ui.activity.main.ComplainActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.CollectionActivity;
@@ -110,11 +109,9 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         implements MainContract.View, View.OnClickListener, ViewPager.OnPageChangeListener,
         NavigationView.OnNavigationItemSelectedListener, ScrollableLayout.OnScrollListener
         , SwipeRefreshLayout.OnRefreshListener {
-
     private static final String POST_URL = "?imageMogr2/format/jpg/quality/70";
     public static String TAG = "MainActivity";
     Map<String, String> map = new HashMap<>();
-    //    List<ImageView> imageViewList = new ArrayList<>();
     TextView tvNickname;
     ImageView imgUser;
     TextView tvPoint;
@@ -144,12 +141,8 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     LinearLayout brand;
     @Bind(R.id.cart_view)
     View cart_view;
-    //    @Bind(R.id.post_mainactivity)
-//    LinearLayout post_activity_layout;
     @Bind(R.id.recycler_view)
     RecyclerView mRecyclerView;
-    @Bind(R.id.category_layout)
-    LinearLayout categoryLayout;
     @Bind(R.id.nav_view)
     NavigationView navigationView;
     @Bind(R.id.slider)
@@ -247,11 +240,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     }
 
     @Override
-    protected void getBundleExtras(Bundle extras) {
-
-    }
-
-    @Override
     protected int getContentViewLayoutID() {
         return R.layout.activity_main;
     }
@@ -269,16 +257,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         mRecyclerView.addItemDecoration(new SpaceItemDecoration(15, 15, 25, 25));
         mMainCategoryAdapter = new MainCategoryAdapter(MainActivity.this);
         mRecyclerView.setAdapter(mMainCategoryAdapter);
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
     }
 
     @Override
@@ -384,12 +362,12 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
                 if (mamaFlag) {
                     bundle = new Bundle();
                     bundle.putString("mamaid", mamaid);
-                    readyGo(MamaActivity.class,bundle);
+                    readyGo(MamaActivity.class, bundle);
                 } else {
                     new AlertDialog.Builder(this)
                             .setTitle("提示")
                             .setMessage("您暂时不是小鹿妈妈,请关注\"小鹿美美\"公众号,获取更多信息哦!")
-                            .setPositiveButton("确定",(dialog, which) -> dialog.dismiss())
+                            .setPositiveButton("确定", (dialog, which) -> dialog.dismiss())
                             .show();
                 }
             }
@@ -537,7 +515,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
 
         if (null != userNewBean) {
             tvNickname.setText(userNewBean.getNick());
-
             if (userNewBean.getWaitpayNum() > 0) {
                 msg1.setVisibility(View.VISIBLE);
                 msg1.setText(userNewBean.getWaitpayNum() + "");
@@ -709,35 +686,8 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     @Override
     public void initCategory(PortalBean postBean) throws NullPointerException {
         JUtils.Log(TAG, "refreshCategory");
-        categoryLayout.removeAllViews();
         List<PortalBean.CategorysBean> categorys = postBean.getCategorys();
         mMainCategoryAdapter.updateWithClear(categorys);
-//
-//        List<LinearLayout> layoutList = new ArrayList<>();
-//        int count = categorys.size() > 4 ? 4 : categorys.size();
-//        for (int i = 0; i < categorys.size(); i++) {
-//            if (i % count == 0) {
-//                LinearLayout layout = new LinearLayout(this);
-//                layout.setLayoutParams(new LinearLayout.LayoutParams(
-//                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-//                layout.setOrientation(LinearLayout.HORIZONTAL);
-//                layoutList.add(layout);
-//                categoryLayout.addView(layout);
-//            }
-//            ImageView imageView = new ImageView(this);
-//            imageView.setAdjustViewBounds(true);
-//            imageView.setScaleType(ImageView.ScaleType.CENTER);
-//            imageView.setLayoutParams(new LinearLayout.LayoutParams(
-//                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-//            layoutList.get(i / count).addView(imageView);
-//            String cat_link = categorys.get(i).getCat_link();
-//            String name = categorys.get(i).getName();
-//            if (cat_link != null && cat_link.contains(XlmmConst.JUMP_PREFIX)) {
-//                imageView.setOnClickListener(v ->
-//                        JumpUtils.push_jump_proc(MainActivity.this, (cat_link + "&title=" + name)));
-//            }
-//            ViewUtils.loadImageWithOkhttp(categorys.get(i).getCat_img(), MainActivity.this, imageView, count);
-//        }
     }
 
     @Override
@@ -747,7 +697,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         brandViews.clear();
         if (postBean.getPromotion_brands() != null) {
             brand.setVisibility(View.VISIBLE);
-
             List<PortalBean.PromotionBrandsBean> brandPromotionEntities = postBean.getPromotion_brands();
             if (brandPromotionEntities.size() != 0) {
                 BrandView brandView;
@@ -834,15 +783,13 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         String sha1 = categoryDownBean.getSha1();
         if (!FileUtils.isCategorySame(getApplicationContext(), sha1)
                 || !FileUtils.isFileExist(XlmmConst.CATEGORY_JSON)) {
-            OkHttpUtils.get()
-                    .url(downloadUrl)
-                    .build()
+            if (FileUtils.isFolderExist(XlmmConst.CATEGORY_JSON)) {
+                FileUtils.deleteFile(XlmmConst.CATEGORY_JSON);
+            }
+            OkHttpUtils.get().url(downloadUrl).build()
                     .execute(new FileCallBack(XlmmConst.XLMM_DIR, "category.json") {
                         @Override
                         public void onError(Call call, Exception e, int id) {
-                            if (FileUtils.isFolderExist(XlmmConst.CATEGORY_JSON)) {
-                                FileUtils.deleteFile(XlmmConst.CATEGORY_JSON);
-                            }
                         }
 
                         @Override
@@ -879,19 +826,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         @Override
         public CharSequence getPageTitle(int position) {
             return list.get(position).getTitle();
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                finishAffinity();
-            } else {
-                super.onBackPressed();
-            }
         }
     }
 
@@ -986,8 +920,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     }
 
     @Override
-    public void checkVersion(int versionCode, String content, String downloadUrl,
-                             boolean isAutoUpdate) {
+    public void checkVersion(int versionCode, String content, String downloadUrl, boolean isAutoUpdate) {
         updateFlag = true;
         new Thread(() -> {
             try {
@@ -995,38 +928,23 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
             runOnUiThread(() -> {
-                VersionManager versionManager = new VersionManager() {
-
-                    @Override
-                    public int getServerVersion() {
-                        return versionCode;
-                    }
-
-                    @Override
-                    public String getUpdateContent() {
-                        return content;
-                    }
-
-                    @Override
-                    public boolean showMsg() {
-                        return false;
-                    }
-                };
-                if (isAutoUpdate) {
-                    versionManager.setPositiveListener(v -> {
-                        Intent intent = new Intent(MainActivity.this, UpdateService.class);
-                        intent.putExtra(UpdateService.EXTRAS_DOWNLOAD_URL, downloadUrl);
-                        startService(intent);
-                        versionManager.getDialog().dismiss();
-                        JUtils.Toast("应用正在后台下载!");
-                    });
-                    SharedPreferences updatePreferences =
-                            getSharedPreferences("update", Context.MODE_PRIVATE);
-                    boolean update = updatePreferences.getBoolean("update", true);
-                    if (update && updateFlag) {
-                        versionManager.checkVersion(MainActivity.this);
+                if (updateFlag) {
+                    VersionManager versionManager = VersionManager.newInstance(versionCode, content, false);
+                    if (isAutoUpdate) {
+                        versionManager.setPositiveListener(v -> {
+                            Intent intent = new Intent(MainActivity.this, UpdateService.class);
+                            intent.putExtra(UpdateService.EXTRAS_DOWNLOAD_URL, downloadUrl);
+                            startService(intent);
+                            versionManager.getDialog().dismiss();
+                            JUtils.Toast("应用正在后台下载!");
+                        });
+                        SharedPreferences updatePreferences =
+                                getSharedPreferences("update", Context.MODE_PRIVATE);
+                        boolean update = updatePreferences.getBoolean("update", true);
+                        if (update && updateFlag) {
+                            versionManager.checkVersion(MainActivity.this);
+                        }
                     }
                 }
             });
@@ -1044,14 +962,20 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     }
 
     @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            long secondTime = System.currentTimeMillis();
-            if (secondTime - firstTime > 1000) {
-                firstTime = secondTime;
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.closeDrawer(GravityCompat.START);
                 return true;
+            } else {
+                long secondTime = System.currentTimeMillis();
+                if (secondTime - firstTime > 1000) {
+                    firstTime = secondTime;
+                    JUtils.Toast("再按一次退出程序!");
+                    return true;
+                }
             }
         }
-        return super.onKeyUp(keyCode, event);
+        return super.onKeyDown(keyCode, event);
     }
 }

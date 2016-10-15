@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jude.utils.JUtils;
 
 import java.io.File;
@@ -27,6 +26,27 @@ public abstract class VersionManager {
     private OnClickListener mPositiveListener;
     private Dialog dialog;
 
+    public static VersionManager newInstance(int versionCode, String content, boolean msgflag) {
+        VersionManager manager = new VersionManager() {
+
+            @Override
+            public int getServerVersion() {
+                return versionCode;
+            }
+
+            @Override
+            public String getUpdateContent() {
+                return content;
+            }
+
+            @Override
+            public boolean showMsg() {
+                return msgflag;
+            }
+        };
+        return manager;
+    }
+
     public abstract int getServerVersion();
 
     public abstract String getUpdateContent();
@@ -34,7 +54,7 @@ public abstract class VersionManager {
     public abstract boolean showMsg();
 
     public void checkVersion(final Context context) {
-        int localVersion = XlmmConst.getVersionCode(context);
+        int localVersion = JUtils.getAppVersionCode();
         if (getServerVersion() > localVersion) {
             if (!isWifi(context)) {
                 if (showMsg()) {

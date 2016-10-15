@@ -13,7 +13,6 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.MamaLivenessBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
-import com.jimei.xiaolumeimei.widget.DividerItemDecorationForFooter;
 import com.jimei.xiaolumeimei.widget.MyXRecyclerView;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
@@ -41,10 +40,6 @@ public class MamaLivenessActivity extends BaseSwipeBackCompatActivity {
     int liveness = 0;
 
     @Override
-    protected void setListener() {
-    }
-
-    @Override
     protected void getBundleExtras(Bundle extras) {
         if (null != extras) {
             liveness = extras.getInt("liveness");
@@ -66,7 +61,7 @@ public class MamaLivenessActivity extends BaseSwipeBackCompatActivity {
     private void initRecyclerView() {
         lv_liveness.setLayoutManager(new LinearLayoutManager(this));
         lv_liveness.addItemDecoration(
-                new DividerItemDecorationForFooter(this, DividerItemDecoration.VERTICAL_LIST));
+                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         lv_liveness.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
         lv_liveness.setPullRefreshEnabled(false);
         lv_liveness.setLoadingMoreEnabled(true);

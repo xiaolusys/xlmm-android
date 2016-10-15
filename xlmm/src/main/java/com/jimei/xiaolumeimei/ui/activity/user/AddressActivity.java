@@ -1,7 +1,6 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -12,7 +11,6 @@ import com.jimei.xiaolumeimei.adapter.AddressAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AddressBean;
 import com.jimei.xiaolumeimei.model.AddressModel;
-import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.widget.RecycleViewDivider;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
@@ -43,10 +41,6 @@ public class AddressActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    protected void initData() {
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         MobclickAgent.onPageStart(this.getClass().getSimpleName());
@@ -67,11 +61,6 @@ public class AddressActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    protected void getBundleExtras(Bundle extras) {
-
-    }
-
-    @Override
     protected int getContentViewLayoutID() {
         return R.layout.address_activity;
     }
@@ -86,16 +75,6 @@ public class AddressActivity extends BaseSwipeBackCompatActivity
         addressRecyclerView.addItemDecoration(divider);
         adapter = new AddressAdapter(this);
         addressRecyclerView.setAdapter(adapter);
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
     }
 
     @Override

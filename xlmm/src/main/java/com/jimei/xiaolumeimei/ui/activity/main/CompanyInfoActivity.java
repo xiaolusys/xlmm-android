@@ -1,15 +1,13 @@
 package com.jimei.xiaolumeimei.ui.activity.main;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.data.XlmmConst;
+import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
@@ -21,28 +19,15 @@ import butterknife.Bind;
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class CompanyInfoActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener {
-
-    @Bind(R.id.toolbar)
-    Toolbar toolbar;
     @Bind(R.id.tv_version)
     TextView tv_version;
-    @Bind(R.id.imageView2)
-    ImageView imageView2;
+    @Bind(R.id.imageView)
+    ImageView imageView;
     private int num;
 
     @Override
     protected void setListener() {
-        imageView2.setOnClickListener(this);
-    }
-
-    @Override
-    protected void initData() {
-
-    }
-
-    @Override
-    protected void getBundleExtras(Bundle extras) {
-
+        imageView.setOnClickListener(this);
     }
 
     @Override
@@ -52,30 +37,12 @@ public class CompanyInfoActivity extends BaseSwipeBackCompatActivity implements 
 
     @Override
     protected void initViews() {
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
-        finishBack(toolbar);
-        tv_version.setText(XlmmConst.getVersionName(this));
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        tv_version.setText(JUtils.getAppVersionName());
     }
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.imageView2) {
+        if (v.getId() == R.id.imageView) {
             num++;
             if (num == 8) {
                 Intent intent = new Intent(this, DebugActivity.class);

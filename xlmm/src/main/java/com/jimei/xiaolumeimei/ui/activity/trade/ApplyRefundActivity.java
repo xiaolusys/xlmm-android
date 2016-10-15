@@ -1,6 +1,5 @@
 package com.jimei.xiaolumeimei.ui.activity.trade;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MotionEventCompat;
@@ -83,15 +82,13 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
         add.setOnClickListener(this);
         delete.setOnClickListener(this);
         et_refund_info.setOnClickListener(this);
-        et_refund_reason.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-                //et_refund_reason.setInputType(InputType.TYPE_NULL); //关闭软键盘
-                if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
-                    Log.d(TAG, "choose reason");
-                    chooseReason();
-                }
-                return false;
+        et_refund_reason.setOnTouchListener((v, event) -> {
+            //et_refund_reason.setInputType(InputType.TYPE_NULL); //关闭软键盘
+            if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
+                Log.d(TAG, "choose reason");
+                chooseReason();
             }
+            return false;
         });
     }
 
@@ -141,22 +138,6 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
             intent.putExtras(bundle);
             startActivity(intent);
         }
-    }
-
-    //从server端获得所有订单数据，可能要查询几次
-    @Override
-    protected void initData() {
-
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
     }
 
     private void fillDataToView(AllOrdersBean.ResultsEntity.OrdersEntity goods) {
@@ -260,9 +241,6 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
                     public void onError(Throwable e) {
                         hideIndeterminateProgressDialog();
                         JUtils.Toast("提交失败,请重新提交");
-//                        if (e instanceof HttpException) {
-//                            JUtils.Toast(((HttpException) e).code() + "");
-//                        }
                         Log.e(TAG, " error:, " + e.toString());
                         super.onError(e);
                     }
@@ -272,18 +250,14 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
 
     private void chooseReason() {
         new AlertDialog.Builder(this).setTitle("")
-                .setItems(slect_reason, new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-            /*
-            * ad变量用final关键字定义，因为在隐式实现的Runnable接口 的run()方法中 需要访问final变量。
-             */
-                        Log.d(TAG, "你选择的是：" + which + ": " + slect_reason[which]);
-                        reason = slect_reason[which];
-                        et_refund_reason.setText(reason);
-                        dialog.dismiss();
-                    }
+                .setItems(slect_reason, (dialog, which) -> {
+        /*
+        * ad变量用final关键字定义，因为在隐式实现的Runnable接口 的run()方法中 需要访问final变量。
+         */
+                    Log.d(TAG, "你选择的是：" + which + ": " + slect_reason[which]);
+                    reason = slect_reason[which];
+                    et_refund_reason.setText(reason);
+                    dialog.dismiss();
                 })
                 .setNegativeButton("取消", null)
                 .show();

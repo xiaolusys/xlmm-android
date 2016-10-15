@@ -1,7 +1,9 @@
 package com.jimei.xiaolumeimei.adapter;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.LinearLayout;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.PortalBean;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMNinePicActivity;
 import com.jimei.xiaolumeimei.utils.FileUtils;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jude.utils.JUtils;
@@ -32,6 +35,7 @@ import okhttp3.Call;
 public class MainCategoryAdapter extends RecyclerView.Adapter<MainCategoryAdapter.ViewHolder> {
     private Activity mActivity;
     private List<PortalBean.CategorysBean> mList;
+    private String codeLink;
 
 
     public MainCategoryAdapter(Activity activity) {
@@ -54,19 +58,23 @@ public class MainCategoryAdapter extends RecyclerView.Adapter<MainCategoryAdapte
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         String dateStr = Calendar.getInstance().get(Calendar.MONTH) + "_" + Calendar.getInstance().get(Calendar.DATE);
-        String picAddress = XlmmConst.XLMM_DIR + "main/"+ mList.get(position).getName() + dateStr + ".png";
+        String picAddress = XlmmConst.XLMM_DIR + "main/" + mList.get(position).getName() + dateStr + ".png";
         if (!FileUtils.isFileExist(picAddress) && position == 0) {
             FileUtils.deleteFile(XlmmConst.XLMM_DIR + "main/");
         }
         if (FileUtils.isFileExist(picAddress)) {
             holder.img.setImageBitmap(BitmapFactory.decodeFile(picAddress));
         } else {
+            File file = new File(XlmmConst.XLMM_DIR + "main/");
+            if (!file.exists()) {
+                file.mkdirs();
+            }
             OkHttpUtils.get().url(mList.get(position).getCat_img())
                     .build()
-                    .execute(new FileCallBack(XlmmConst.XLMM_DIR+ "main/", mList.get(position).getName() + dateStr + ".png") {
+                    .execute(new FileCallBack(XlmmConst.XLMM_DIR + "main/", mList.get(position).getName() + dateStr + ".png") {
                         @Override
                         public void onError(Call call, Exception e, int id) {
-                            JUtils.Toast(e.getMessage());
+                            JUtils.Log(e.getMessage());
                         }
 
                         @Override
@@ -77,12 +85,27 @@ public class MainCategoryAdapter extends RecyclerView.Adapter<MainCategoryAdapte
         }
         String cat_link = mList.get(position).getCat_link();
         String name = mList.get(position).getName();
-        holder.layout.setOnClickListener(v -> JumpUtils.push_jump_proc(mActivity, (cat_link + "&title=" + name)));
+        if (codeLink != null && !"".equals(codeLink)) {
+            holder.layout.setOnClickListener(v -> {
+                Bundle bundle = new Bundle();
+                bundle.putString("codeLink", codeLink);
+                bundle.putInt("sale_category", mList.get(position).getId());
+                Intent intent = new Intent(mActivity, MMNinePicActivity.class);
+                intent.putExtras(bundle);
+                mActivity.startActivity(intent);
+            });
+        } else {
+            holder.layout.setOnClickListener(v -> JumpUtils.push_jump_proc(mActivity, (cat_link + "&title=" + name)));
+        }
     }
 
     @Override
     public int getItemCount() {
         return mList.size();
+    }
+
+    public void setCodeLink(String codeLink) {
+        this.codeLink = codeLink;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

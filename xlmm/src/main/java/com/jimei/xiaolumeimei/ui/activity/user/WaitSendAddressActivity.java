@@ -60,7 +60,7 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
     RelativeLayout relativeLayout;
     private String id;
 
-    private ArrayList<Province> provinces = new ArrayList<Province>();
+    private ArrayList<Province> provinces = new ArrayList<>();
     private String city_string;
     private String clearaddressa;
     private String receiver_state;
@@ -122,21 +122,11 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
     }
 
     @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.address:
                 InputMethodManager imm =
-                    (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(mobile.getWindowToken(), 0);
 
                 if (provinces.size() > 0) {
@@ -144,13 +134,11 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
                 } else {
                     new InitAreaTask(this).execute(0);
                 }
-
                 break;
             case R.id.save:
                 receiver_name = name.getText().toString().trim();
                 receiver_mobile = mobile.getText().toString().trim();
                 clearaddressa = clearAddress.getText().toString().trim();
-
                 JUtils.Log(TAG,
                         receiver_mobile + "====" + receiver_state + "====" + receiver_city + "====" +
                                 receiver_district + "====" +
@@ -175,14 +163,12 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
                             });
                     addSubscription(subscribe);
                 }
-
                 break;
         }
     }
 
     public boolean checkInput(String receivername, String mobile, String address1,
                               String address2) {
-
         if (receivername == null || receivername.trim().equals("")) {
             JUtils.Toast("请输入收货人姓名");
         } else {
@@ -200,7 +186,6 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
                 }
             }
         }
-
         return false;
     }
 
@@ -228,23 +213,23 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
         MobclickAgent.onPageEnd(this.getClass().getSimpleName());
         MobclickAgent.onPause(this);
     }
+
     private class InitAreaTask extends AsyncTask<Integer, Integer, Boolean> {
-
         Context mContext;
-
         Dialog progressDialog;
-
         public InitAreaTask(Context context) {
             mContext = context;
             progressDialog = Util.createLoadingDialog(mContext, "请稍等...", true, 0);
         }
 
-        @Override protected void onPreExecute() {
+        @Override
+        protected void onPreExecute() {
 
             progressDialog.show();
         }
 
-        @Override protected void onPostExecute(Boolean result) {
+        @Override
+        protected void onPostExecute(Boolean result) {
             progressDialog.dismiss();
             if (provinces.size() > 0) {
                 showAddressDialog();
@@ -253,7 +238,8 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
             }
         }
 
-        @Override protected Boolean doInBackground(Integer... params) {
+        @Override
+        protected Boolean doInBackground(Integer... params) {
             String address;
             InputStream in = null;
             try {

@@ -13,7 +13,6 @@ import com.jimei.xiaolumeimei.adapter.TaskRewardAdapter;
 import com.jimei.xiaolumeimei.entities.WeekTaskRewardBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
-import com.jimei.xiaolumeimei.widget.DividerItemDecorationForFooter;
 import com.jimei.xiaolumeimei.widget.MyXRecyclerView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 
@@ -58,7 +57,7 @@ public class TaskRewardFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         xrv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        xrv.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecorationForFooter.VERTICAL_LIST));
+        xrv.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
         xrv.setPullRefreshEnabled(false);
         xrv.setLoadingMoreEnabled(false);
         initData();

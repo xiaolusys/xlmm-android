@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -33,7 +32,7 @@ import com.jimei.xiaolumeimei.entities.AddressBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.PayInfoBean;
 import com.jimei.xiaolumeimei.entities.TeamBuyBean;
-import com.jimei.xiaolumeimei.event.UserChangeEvent;
+import com.jimei.xiaolumeimei.entities.event.UserChangeEvent;
 import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.ProductModel;
@@ -66,7 +65,6 @@ import rx.schedulers.Schedulers;
 public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         implements View.OnClickListener, SmoothCheckBox.OnCheckedChangeListener,
         CompoundButton.OnCheckedChangeListener {
-    //    private static final int REQUEST_CODE_PAYMENT = 1;
     private static final int REQUEST_CODE_COUPONT = 2;
     private static final int REQUEST_CODE_ADDRESS = 3;
     private static final String APP_PAY = "pid:1:value:";
@@ -158,8 +156,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     protected void setListener() {
         adress.setOnClickListener(this);
         confirm.setOnClickListener(this);
-        //wxLayout.setOnClickListener(this);
-        //alipayLayout.setOnClickListener(this);
         scb.setOnCheckedChangeListener(this);
         ruleCb.setOnCheckedChangeListener(this);
         ruleTv.setOnClickListener(this);
@@ -168,7 +164,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void initData() {
-
         list = new ArrayList<>();
         downLoadCartsInfoWithout();
     }
@@ -184,8 +179,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                             JUtils.Log(TAG, cartsPayinfoBean.toString());
                             mAdapter.updateWithClear(cartsPayinfoBean.getCartList());
                             cart_ids = cartsPayinfoBean.getCartIds();
-                            //              channel = "alipay";
-
                             logisticsCompanyses.addAll(cartsPayinfoBean.getLogisticsCompanyses());
                             for (CartsPayinfoBean.LogisticsCompanys list : logisticsCompanyses) {
                                 logisticsCompanysesString.add(list.getName());
@@ -285,7 +278,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                                             discount_fee + "    " + total_fee + "    " + uuid + "    " +
                                             pay_extras);
                         } else {
-                            //emptyContent.setVisibility(View.VISIBLE);
                             JUtils.Toast("商品已过期,请重新选购");
                             readyGo(CartActivity.class);
                         }
@@ -305,8 +297,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                             JUtils.Log(TAG, cartsPayinfoBean.toString());
                             mAdapter.updateWithClear(cartsPayinfoBean.getCartList());
                             cart_ids = cartsPayinfoBean.getCartIds();
-                            //              channel = "alipay";
-
                             logisticsCompanyses.addAll(cartsPayinfoBean.getLogisticsCompanyses());
                             for (CartsPayinfoBean.LogisticsCompanys list : logisticsCompanyses) {
                                 logisticsCompanysesString.add(list.getName());
@@ -409,7 +399,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                                             discount_fee + "    " + total_fee + "    " + uuid + "    " +
                                             pay_extras);
                         } else {
-                            //emptyContent.setVisibility(View.VISIBLE);
                             JUtils.Toast("商品已过期,请重新选购");
                             readyGo(CartActivity.class);
                         }
@@ -489,16 +478,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 .setPositiveButton("同意", (dialog1, which) -> dialog1.dismiss())
                 .create();
         scb.setCanClickable(true);
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
     }
 
     @Override
@@ -857,15 +836,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                                 if (payInfoBean.getCode() > 0) {
                                     JUtils.Toast(payInfoBean.getInfo());
                                 } else {
-//                                    Intent intent = new Intent();
-//                                    String packageName = getPackageName();
-//                                    ComponentName componentName = new ComponentName(packageName,
-//                                            packageName + ".wxapi.WXPayEntryActivity");
-//                                    intent.setComponent(componentName);
-//                                    intent.putExtra(PaymentActivity.EXTRA_CHARGE,
-//                                            gson.toJson(payInfoBean.getCharge()));
-//                                    startActivitysult(intent, REQUEST_CODE_PAYMENT);
-                                    // TODO: 16/9/22
                                     Pingpp.createPayment(CartsPayInfoActivity.this, gson.toJson(payInfoBean.getCharge()));
                                 }
                             } else {
@@ -921,14 +891,11 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 } else if (result.equals("success")) {
                     EventBus.getDefault().postSticky(new UserChangeEvent());
                     JUtils.Toast("支付成功！");
-                    //startActivity(new Intent(CartsPayInfoActivity.this, AllOrdersActivity.class));
-                    //finish();
                     successJump();
                 } else {
                     EventBus.getDefault().postSticky(new UserChangeEvent());
                     MobclickAgent.onEvent(CartsPayInfoActivity.this, "PayFailID");
                     showMsg(result, errorMsg, extraMsg);
-                    //JUtils.Toast(result + "" + errorMsg + "" + extraMsg);
                 }
             }
         }
@@ -1165,35 +1132,24 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             LinearLayout wx_layout = (LinearLayout) mView.findViewById(R.id.wx_layout);
             LinearLayout alipay_layout = (LinearLayout) mView.findViewById(R.id.alipay_layout);
             TextView textView = (TextView) mView.findViewById(R.id.total_price);
-            mView.findViewById(R.id.finish_iv).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    MyDialog.this.dismiss();
-                }
-            });
+            mView.findViewById(R.id.finish_iv).setOnClickListener(v -> MyDialog.this.dismiss());
 
             textView.setText("¥" + (double) (Math.round(paymentInfo * 100)) / 100);
 
-            alipay_layout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    alipay_layout.setClickable(false);
-                    isAlipay = true;
-                    isWx = false;
-                    xlmmPay();
-                    MyDialog.this.dismiss();
-                }
+            alipay_layout.setOnClickListener(v -> {
+                alipay_layout.setClickable(false);
+                isAlipay = true;
+                isWx = false;
+                xlmmPay();
+                MyDialog.this.dismiss();
             });
 
-            wx_layout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    wx_layout.setClickable(false);
-                    isAlipay = false;
-                    isWx = true;
-                    xlmmPay();
-                    MyDialog.this.dismiss();
-                }
+            wx_layout.setOnClickListener(v -> {
+                wx_layout.setClickable(false);
+                isAlipay = false;
+                isWx = true;
+                xlmmPay();
+                MyDialog.this.dismiss();
             });
 
             MyDialog.this.setCanceledOnTouchOutside(true);
@@ -1226,13 +1182,10 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             listView.setAdapter(new ArrayAdapter<>(CartsPayInfoActivity.this,
                     android.R.layout.simple_list_item_1, logisticsCompanysesString));
 
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    code = logisticsCompanyses.get(position).getId();
-                    tvWuliu.setText(logisticsCompanyses.get(position).getName());
-                    MyDialog1.this.dismiss();
-                }
+            listView.setOnItemClickListener((parent, view, position1, id) -> {
+                code = logisticsCompanyses.get(position1).getId();
+                tvWuliu.setText(logisticsCompanyses.get(position1).getName());
+                MyDialog1.this.dismiss();
             });
 
             MyDialog1.this.setCanceledOnTouchOutside(true);

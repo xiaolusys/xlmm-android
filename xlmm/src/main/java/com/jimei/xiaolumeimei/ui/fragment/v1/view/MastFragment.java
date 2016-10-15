@@ -24,7 +24,6 @@ import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.WxLoginBindPhoneActivity;
 import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
-import com.jimei.xiaolumeimei.widget.timecircleview.utils.DisplayUtil;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
@@ -137,8 +136,8 @@ public class MastFragment extends DialogFragment {
                                                         }
                                                         FrameLayout.LayoutParams layoutParams =
                                                                 new FrameLayout.LayoutParams(
-                                                                        DisplayUtil.dip2px(mActivity, response.getWidth()),
-                                                                        DisplayUtil.dip2px(mActivity, response.getHeight()));
+                                                                        JUtils.dip2px(response.getWidth()),
+                                                                        JUtils.dip2px(response.getHeight()));
                                                         maskImage.setLayoutParams(layoutParams);
                                                         maskImage.setImageBitmap(response);
 

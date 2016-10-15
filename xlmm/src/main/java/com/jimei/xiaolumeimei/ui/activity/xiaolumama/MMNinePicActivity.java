@@ -7,9 +7,7 @@ import android.widget.ListView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.NinePicAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.entities.WxQrcode;
 import com.jimei.xiaolumeimei.model.MMProductModel;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
@@ -29,6 +27,8 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
     SwipeRefreshLayout mRefreshLayout;
 
     private NinePicAdapter mAdapter;
+    private int mSale_category = -1;
+    private String mCodeLink;
 
     @Override
     protected void setListener() {
@@ -43,21 +43,11 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
     private void loadData() {
         showIndeterminateProgressDialog(false);
         addSubscription(MMProductModel.getInstance()
-                .getWxCode()
-                .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<WxQrcode>() {
-                    @Override
-                    public void onNext(WxQrcode wxQrcode) {
-                        mAdapter.setCodeLink(wxQrcode.getQrcode_link());
-                    }
-                }));
-        addSubscription(MMProductModel.getInstance()
-                .getNinePic()
+                .getNinePic(mSale_category)
                 .subscribeOn(Schedulers.io())
                 .subscribe(ninePicBean -> {
                     if (ninePicBean != null) {
                         mAdapter.update(ninePicBean);
-                        mAdapter.notifyDataSetChanged();
                     }
                     if (mRefreshLayout.isRefreshing()) {
                         mRefreshLayout.setRefreshing(false);
@@ -68,7 +58,8 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-
+        mSale_category = extras.getInt("sale_category", -1);
+        mCodeLink = extras.getString("codeLink");
     }
 
     @Override
@@ -79,18 +70,9 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void initViews() {
         mAdapter = new NinePicAdapter(this);
+        mAdapter.setCodeLink(mCodeLink);
         circleLv.setAdapter(mAdapter);
         mRefreshLayout.setColorSchemeResources(R.color.colorAccent);
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
     }
 
     @Override

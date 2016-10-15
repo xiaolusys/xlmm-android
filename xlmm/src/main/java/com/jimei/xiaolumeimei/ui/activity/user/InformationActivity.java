@@ -10,7 +10,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
-import com.jimei.xiaolumeimei.event.LogOutEmptyEvent;
+import com.jimei.xiaolumeimei.entities.event.LogOutEmptyEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
@@ -51,11 +51,9 @@ public class InformationActivity extends BaseSwipeBackCompatActivity
     MyPreferenceView settingView;
     @Bind(R.id.login_out)
     MyPreferenceView login_out;
-
     UserInfoBean userinfo;
     @Bind(R.id.debug)
     LinearLayout debug;
-    private int num;
 
     @Override
     protected void setListener() {
@@ -120,27 +118,8 @@ public class InformationActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    protected void getBundleExtras(Bundle extras) {
-
-    }
-
-    @Override
     protected int getContentViewLayoutID() {
         return R.layout.information_activity;
-    }
-
-    @Override
-    protected void initViews() {
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
     }
 
     @Override

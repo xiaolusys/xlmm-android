@@ -16,7 +16,6 @@ import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
-import com.jimei.xiaolumeimei.widget.DividerItemDecorationForFooter;
 import com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableHelper;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
@@ -36,17 +35,17 @@ public class MMTeamActivity extends BaseMVVMActivity<ActivityMmteamBinding>
     private String url;
 
     @Override
-    protected void initView() {
+    protected void initViews() {
         b.recyclerview.setLayoutManager(new LinearLayoutManager(this));
         b.recyclerview.addItemDecoration(
-                new DividerItemDecoration(this, DividerItemDecorationForFooter.VERTICAL_LIST));
+                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         mmTeamAdapter = new MMTeamAdapter(this);
         b.recyclerview.setAdapter(mmTeamAdapter);
         b.scrollableLayout.getHelper().setCurrentScrollableContainer(b.recyclerview);
     }
 
     @Override
-    protected void initListener() {
+    protected void setListener() {
         b.btnTeam.setOnClickListener(this);
     }
 
@@ -99,16 +98,6 @@ public class MMTeamActivity extends BaseMVVMActivity<ActivityMmteamBinding>
     @Override
     protected int getContentViewLayoutID() {
         return R.layout.activity_mmteam;
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
     }
 
     @Override

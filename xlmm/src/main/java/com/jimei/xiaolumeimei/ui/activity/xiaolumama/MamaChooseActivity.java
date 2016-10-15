@@ -1,6 +1,5 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.AdapterView;
@@ -81,11 +80,6 @@ public class MamaChooseActivity extends BaseSwipeBackCompatActivity implements
     }
 
     @Override
-    protected void getBundleExtras(Bundle extras) {
-
-    }
-
-    @Override
     protected int getContentViewLayoutID() {
         return R.layout.activity_mama_choose;
     }
@@ -155,16 +149,6 @@ public class MamaChooseActivity extends BaseSwipeBackCompatActivity implements
                         JUtils.Toast("数据加载有误!");
                     }
                 }));
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
     }
 
     @Override

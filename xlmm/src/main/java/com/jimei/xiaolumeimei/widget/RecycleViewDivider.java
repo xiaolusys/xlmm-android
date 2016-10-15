@@ -36,7 +36,6 @@ public class RecycleViewDivider extends RecyclerView.ItemDecoration {
 
     public RecycleViewDivider(int orientation) {
         this.orientation = orientation;
-
         paint = new Paint();
     }
 

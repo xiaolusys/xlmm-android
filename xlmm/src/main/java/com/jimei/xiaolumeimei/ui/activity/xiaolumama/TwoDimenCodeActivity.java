@@ -3,7 +3,6 @@ package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
@@ -48,11 +47,6 @@ public class TwoDimenCodeActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    protected void getBundleExtras(Bundle extras) {
-
-    }
-
-    @Override
     protected int getContentViewLayoutID() {
         return R.layout.activity_2dimen_code;
     }
@@ -68,8 +62,7 @@ public class TwoDimenCodeActivity extends BaseSwipeBackCompatActivity
         if (null != getIntent() && null != getIntent().getExtras()) {
             myurl = getIntent().getExtras().getString("myurl");
         }
-        if (false == myurl.equals("")) {
-            //myurl = XlmmApi.TWO_DIMEN_URL_BASE + myurl;
+        if (!"".equals(myurl)) {
             ViewUtils.loadImgToImgView(this, img_2dimen, myurl);
             JUtils.Log(TAG, "myurl " + myurl);
         }
@@ -77,16 +70,15 @@ public class TwoDimenCodeActivity extends BaseSwipeBackCompatActivity
         RxPermissions.getInstance(this)
                 .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .subscribe(granted -> {
-                    if (granted) { // Always true pre-M
-                        // I can control the camera now
+                    if (granted) {
                         OkHttpUtils.get().url(myurl).build().execute(new FileParaCallback() {
                             @Override
-                            public void onError(Call call, Exception e,int id) {
+                            public void onError(Call call, Exception e, int id) {
 
                             }
 
                             @Override
-                            public void onResponse(FilePara response,int id) {
+                            public void onResponse(FilePara response, int id) {
                                 if (response != null) {
                                     filePara = response;
                                     try {
@@ -115,22 +107,11 @@ public class TwoDimenCodeActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_share:
                 JUtils.Log(TAG, "share 2 dimen code");
                 share_2dimencode();
-                //finish();
                 break;
         }
     }

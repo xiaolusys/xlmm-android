@@ -27,6 +27,8 @@ public class NinePicBean {
   @SerializedName("start_time") private String mStartTime;
   @SerializedName("turns_num") private int mTurnsNum;
   @SerializedName("could_share") private int mCouldShare;
+  @SerializedName("save_times")private  int save_times;
+  @SerializedName("share_times")private  int share_times;
   @SerializedName("description") private String mDescription;
   @SerializedName("pic_arry") private List<String> mPicArry;
 
@@ -84,5 +86,21 @@ public class NinePicBean {
 
   public void setPicArry(List<String> picArry) {
     this.mPicArry = picArry;
+  }
+
+  public int getSave_times() {
+    return save_times;
+  }
+
+  public void setSave_times(int save_times) {
+    this.save_times = save_times;
+  }
+
+  public int getShare_times() {
+    return share_times;
+  }
+
+  public void setShare_times(int share_times) {
+    this.share_times = share_times;
   }
 }

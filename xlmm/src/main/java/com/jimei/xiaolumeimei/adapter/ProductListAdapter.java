@@ -74,12 +74,12 @@ public class ProductListAdapter extends XRecyclerView.Adapter<ProductListAdapter
             holder.saleStatus.setVisibility(View.GONE);
         }
 
-        ViewUtils.loadImgToImgViewWithPlaceholder(context, holder.childlistImage, resultsBean.getHead_img());
-        holder.childlistName.setText(resultsBean.getName());
-        holder.childlistAgentPrice.setText("¥" + resultsBean.getLowest_agent_price());
-        holder.childlistStdsalePrice.setText("/¥" + resultsBean.getLowest_std_sale_price());
+        ViewUtils.loadImgToImgViewWithPlaceholder(context, holder.image, resultsBean.getHead_img());
+        holder.name.setText(resultsBean.getName());
+        holder.agentPrice.setText("¥" + resultsBean.getLowest_agent_price());
+        holder.stdSalePrice.setText("/¥" + resultsBean.getLowest_std_sale_price());
         holder.card.setOnClickListener(v -> {
-            MobclickAgent.onEvent(context, "ProductID");
+            MobclickAgent.onEvent(context, "click_product");
             int modelId = resultsBean.getId();
             Intent intent = new Intent(context, ProductDetailActivity.class);
             Bundle bundle = new Bundle();
@@ -96,14 +96,14 @@ public class ProductListAdapter extends XRecyclerView.Adapter<ProductListAdapter
 
     public class ViewHolder extends XRecyclerView.ViewHolder {
         View card;
-        @Bind(R.id.childlist_image)
-        ImageView childlistImage;
-        @Bind(R.id.childlist_name)
-        TextView childlistName;
-        @Bind(R.id.childlist_agent_price)
-        TextView childlistAgentPrice;
-        @Bind(R.id.childlist_stdsale_price)
-        TextView childlistStdsalePrice;
+        @Bind(R.id.product_list_image)
+        ImageView image;
+        @Bind(R.id.product_list_name)
+        TextView name;
+        @Bind(R.id.product_list_agent_price)
+        TextView agentPrice;
+        @Bind(R.id.product_list_stdsale_price)
+        TextView stdSalePrice;
         @Bind(R.id.sale_status)
         TextView saleStatus;
 

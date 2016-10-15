@@ -1,6 +1,5 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,7 +12,6 @@ import com.jimei.xiaolumeimei.adapter.MMVisitorsAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
-import com.jimei.xiaolumeimei.widget.DividerItemDecorationForFooter;
 import com.jimei.xiaolumeimei.widget.MyXRecyclerView;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
@@ -35,15 +33,6 @@ public class MamaVisitorActivity extends BaseSwipeBackCompatActivity {
     private int page = 2;
     private MMVisitorsAdapter mAdapter;
 
-
-    @Override
-    protected void setListener() {
-    }
-
-    @Override
-    protected void getBundleExtras(Bundle extras) {
-    }
-
     @Override
     protected int getContentViewLayoutID() {
         return R.layout.activity_mamavisitor;
@@ -62,6 +51,7 @@ public class MamaVisitorActivity extends BaseSwipeBackCompatActivity {
                 .getMamaVisitor(1)
                 .subscribeOn(Schedulers.io())
                 .subscribe(fansBeen -> {
+                    hideIndeterminateProgressDialog();
                     if (fansBeen != null) {
                         countTv.setText(fansBeen.getCount() + "");
                         if (fansBeen.getCount() != 0) {
@@ -72,14 +62,13 @@ public class MamaVisitorActivity extends BaseSwipeBackCompatActivity {
                             xrv.setLoadingMoreEnabled(false);
                         }
                     }
-                    hideIndeterminateProgressDialog();
                 }, e -> JUtils.Log(e.getMessage())));
     }
 
     private void initRecyclerView() {
         xrv.setLayoutManager(new LinearLayoutManager(this));
         xrv.addItemDecoration(
-                new DividerItemDecorationForFooter(this, DividerItemDecoration.VERTICAL_LIST));
+                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         xrv.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
         xrv.setPullRefreshEnabled(false);
         xrv.setLoadingMoreEnabled(true);

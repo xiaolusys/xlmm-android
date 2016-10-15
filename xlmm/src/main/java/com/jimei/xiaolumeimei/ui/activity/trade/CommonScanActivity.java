@@ -13,10 +13,12 @@ import android.widget.Toast;
 import com.google.zxing.Result;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
 import com.jimei.xiaolumeimei.widget.zxing.ScanListener;
 import com.jimei.xiaolumeimei.widget.zxing.ScanManager;
 import com.jimei.xiaolumeimei.widget.zxing.decode.DecodeThread;
 import com.jimei.xiaolumeimei.widget.zxing.decode.Utils;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 
@@ -47,16 +49,6 @@ public final class CommonScanActivity extends BaseSwipeBackCompatActivity implem
     }
 
     @Override
-    protected void initData() {
-
-    }
-
-    @Override
-    protected void getBundleExtras(Bundle extras) {
-
-    }
-
-    @Override
     protected int getContentViewLayoutID() {
         return R.layout.activity_scan_code;
     }
@@ -71,12 +63,16 @@ public final class CommonScanActivity extends BaseSwipeBackCompatActivity implem
     public void onResume() {
         super.onResume();
         scanManager.onResume();
+        MobclickAgent.onPageStart(ActivityWebViewActivity.class.getSimpleName());
+        MobclickAgent.onResume(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
         scanManager.onPause();
+        MobclickAgent.onPageEnd(ActivityWebViewActivity.class.getSimpleName());
+        MobclickAgent.onPause(this);
     }
 
     @Override

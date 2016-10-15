@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -47,11 +46,6 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    protected void getBundleExtras(Bundle extras) {
-
-    }
-
-    @Override
     protected int getContentViewLayoutID() {
         return R.layout.activity_allrefunds;
     }
@@ -63,20 +57,16 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity
         mAllRefundsAdapter = new AllRefundsListAdapter(this);
 
         all_refunds_listview.setAdapter(mAllRefundsAdapter);
-        all_refunds_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d(TAG, "onItemClick " + position + " " + id);
-                int goods_id = mAllRefundsAdapter.getGoodsId(position);
-                int refund_state = mAllRefundsAdapter.getRefundStatus(position);
-                Intent intent = new Intent(AllRefundsActivity.this, RefundDetailActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putInt("goods_id", goods_id);
-                intent.putExtras(bundle);
-                Log.d(TAG, "transfer goods_id  " + goods_id + " to RefundDetailActivity");
-                startActivity(intent);
-            }
+        all_refunds_listview.setOnItemClickListener((parent, view, position, id) -> {
+            Log.d(TAG, "onItemClick " + position + " " + id);
+            int goods_id = mAllRefundsAdapter.getGoodsId(position);
+            int refund_state = mAllRefundsAdapter.getRefundStatus(position);
+            Intent intent = new Intent(AllRefundsActivity.this, RefundDetailActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putInt("goods_id", goods_id);
+            intent.putExtras(bundle);
+            Log.d(TAG, "transfer goods_id  " + goods_id + " to RefundDetailActivity");
+            startActivity(intent);
         });
 
         all_refunds_listview.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -100,11 +90,6 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity
 
         TextView tx_info = (TextView) findViewById(R.id.tx_info);
         tx_info.setText("亲，您暂时还没有退货（款）订单哦~快去看看吧！");
-    }
-
-    //从server端获得所有订单数据，可能要查询几次
-    @Override
-    protected void initData() {
     }
 
     @Override
@@ -148,16 +133,6 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity
                     }
                 });
         addSubscription(subscription);
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
     }
 
     @Override

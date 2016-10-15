@@ -52,19 +52,6 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
     private int page = 2;
 
     @Override
-    protected void setListener() {
-
-    }
-
-    @Override
-    protected void initData() {
-    }
-
-    @Override
-    protected void getBundleExtras(Bundle extras) {
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         showIndeterminateProgressDialog(false);
@@ -118,12 +105,6 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-
-    }
-
-    @Override
     protected int getContentViewLayoutID() {
         return R.layout.activity_userwallet;
     }
@@ -142,10 +123,8 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
         walletRcv.addItemDecoration(
                 new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         walletRcv.setPullRefreshEnabled(false);
-
         adapter = new UserWalletAdapter(this);
         walletRcv.setAdapter(adapter);
-
         walletRcv.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
@@ -162,7 +141,6 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
 
     private void loadMoreData(int page) {
         JUtils.Log(TAG, "load page " + page);
-
         Subscription subscribe = UserNewModel.getInstance()
                 .budGetdetailBean(Integer.toString(page))
                 .subscribeOn(Schedulers.io())
@@ -192,16 +170,6 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
                     }
                 });
         addSubscription(subscribe);
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
     }
 
     @Override

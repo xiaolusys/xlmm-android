@@ -65,6 +65,7 @@ import com.jimei.xiaolumeimei.entities.RefundMsgBean;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.ResultBean;
 import com.jimei.xiaolumeimei.entities.ResultEntity;
+import com.jimei.xiaolumeimei.entities.SaveTimeBean;
 import com.jimei.xiaolumeimei.entities.ShareModelBean;
 import com.jimei.xiaolumeimei.entities.TeamBuyBean;
 import com.jimei.xiaolumeimei.entities.UserAccountBean;
@@ -549,6 +550,11 @@ public interface XlmmService {
     @GET("/rest/v1/pmt/ninepic")
     Observable<List<NinePicBean>> getNinepic();
 
+    @GET("/rest/v1/pmt/ninepic")
+    Observable<List<NinePicBean>> getNinepic(
+            @Query("sale_category") int sale_category
+    );
+
     @GET("/rest/v1/users/get_wxpub_authinfo")
     Observable<WxPubAuthInfo> getWxPubAuthInfo();
 
@@ -895,4 +901,10 @@ public interface XlmmService {
     Observable<RecentCarryBean> getRecentCarry(
             @Query("from") String from,
             @Query("days") String days);
+
+    @PATCH("/rest/v1/pmt/ninepic/{id}")
+    Observable<SaveTimeBean> saveTime(
+            @Path("id") int id,
+            @Query("save_times") int save_times
+    );
 }

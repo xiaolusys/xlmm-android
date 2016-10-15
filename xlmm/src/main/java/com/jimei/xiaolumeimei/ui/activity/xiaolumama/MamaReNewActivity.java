@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -23,8 +22,8 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.MaMaReNewBean;
 import com.jimei.xiaolumeimei.entities.ResultBean;
-import com.jimei.xiaolumeimei.event.MaMaInfoEmptyEvent;
-import com.jimei.xiaolumeimei.event.UserChangeEvent;
+import com.jimei.xiaolumeimei.entities.event.MaMaInfoEmptyEvent;
+import com.jimei.xiaolumeimei.entities.event.UserChangeEvent;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -83,11 +82,6 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
     private double totalfee99;
     private String uuid;
     private double mamaCarryValue;
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return true;
-    }
 
     @Override
     protected void onResume() {

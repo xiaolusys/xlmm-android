@@ -44,8 +44,6 @@ import rx.schedulers.Schedulers;
 public class AddNoAddressActivity extends BaseSwipeBackCompatActivity
         implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
-    private static final String TAG = AddNoAddressActivity.class.getSimpleName();
-
     @Bind(R.id.name)
     EditText name;
     @Bind(R.id.mobile)
@@ -62,10 +60,8 @@ public class AddNoAddressActivity extends BaseSwipeBackCompatActivity
     private String receiver_state;
     private String receiver_city;
     private String receiver_district;
-    private String receiver_address;
     private String receiver_name;
     private String receiver_mobile;
-    private boolean isDefault;
     private String city_string;
     private String clearaddressa;
     private String defaulta;
@@ -78,32 +74,8 @@ public class AddNoAddressActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    protected void initData() {
-
-    }
-
-    @Override
-    protected void getBundleExtras(Bundle extras) {
-
-    }
-
-    @Override
     protected int getContentViewLayoutID() {
         return R.layout.addaddress_activity;
-    }
-
-    @Override
-    protected void initViews() {
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
     }
 
     @Override
@@ -131,7 +103,6 @@ public class AddNoAddressActivity extends BaseSwipeBackCompatActivity
             case R.id.save:
 
                 receiver_name = name.getText().toString().trim();
-                receiver_address = address.getText().toString().trim();
                 receiver_mobile = mobile.getText().toString().trim();
                 clearaddressa = clearAddress.getText().toString().trim();
 

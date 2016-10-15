@@ -864,7 +864,6 @@ public final class FileUtils {
         if (TextUtils.isEmpty(path)) {
             return true;
         }
-
         File file = new File(path);
         if (!file.exists()) {
             return true;
@@ -875,11 +874,14 @@ public final class FileUtils {
         if (!file.isDirectory()) {
             return false;
         }
-        for (File f : file.listFiles()) {
-            if (f.isFile()) {
-                f.delete();
-            } else if (f.isDirectory()) {
-                deleteFile(f.getAbsolutePath());
+        File[] files = file.listFiles();
+        if (files!=null) {
+            for (File f : files) {
+                if (f.isFile()) {
+                    f.delete();
+                } else if (f.isDirectory()) {
+                    deleteFile(f.getAbsolutePath());
+                }
             }
         }
         return file.delete();

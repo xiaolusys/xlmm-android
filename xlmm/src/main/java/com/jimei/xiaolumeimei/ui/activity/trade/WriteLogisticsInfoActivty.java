@@ -217,16 +217,6 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rl_scan:

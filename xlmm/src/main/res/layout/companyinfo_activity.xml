@@ -1,94 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <android.support.design.widget.AppBarLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center_horizontal"
+              android:orientation="vertical">
+
+    <com.jimei.xiaolumeimei.widget.XlmmTitleView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        android:id="@+id/view">
+        app:xlmm_title="关于小鹿美美"/>
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/AppTheme.PopupOverlay">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center"
-                android:text="关于小鹿美美"
-                android:textColor="@android:color/white"
-                android:textSize="16sp"/>
-
-        </android.support.v7.widget.Toolbar>
-
-    </android.support.design.widget.AppBarLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"/>
 
     <ImageView
-        android:layout_width="391px"
-        android:layout_height="473px"
-        android:src="@drawable/ic_companylogo"
-        android:layout_marginTop="321px"
-        android:layout_marginLeft="190px"
-        android:id="@+id/imageView2" />
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30px"
+        android:src="@drawable/ic_companylogo"/>
 
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="限时特卖 天天惊喜"
-        android:textSize="16dp"
         android:layout_gravity="center"
-        android:gravity="center"
-        android:id="@+id/textView4"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/imageView2"
+        android:layout_marginTop="12dp"
+        android:hint="限时特卖 天天惊喜"
+        android:textSize="16dp"/>
+
+    <TextView
+        android:id="@+id/tv_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="12dp"/>
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="V1.0.0"
-        android:gravity="center"
-        android:id="@+id/tv_version"
-        android:layout_below="@+id/textView4"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="12dp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="微信公众号:小鹿美美"
-        android:gravity="center"
         android:id="@+id/tv_wx"
-        android:layout_below="@+id/tv_version"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="12dp" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:hint="微信公众号:小鹿美美"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"/>
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="上海己美网络科技有限公司"
-        android:gravity="center"
-        android:layout_above="@+id/textView3"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_marginTop="8dp"
+        android:hint="上海己美网络科技有限公司"/>
+
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="Copyright(c)2015 上海己美. All rights reserved"
-        android:gravity="center"
-        android:layout_gravity="center"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/textView3"
         android:padding="8dp"/>
-</RelativeLayout>
+</LinearLayout>

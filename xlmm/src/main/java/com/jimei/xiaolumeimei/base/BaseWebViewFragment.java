@@ -30,20 +30,13 @@ import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.PlatformActionListener;
-import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.onekeyshare.OnekeyShare;
-import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
-import cn.sharesdk.wechat.moments.WechatMoments;
+
 import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
-import com.jimei.xiaolumeimei.event.WebViewEvent;
-import com.jimei.xiaolumeimei.htmlJsBridge.modules.AndroidJsBridge;
+import com.jimei.xiaolumeimei.entities.event.WebViewEvent;
+import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
 import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.utils.CameraUtils;
 import com.jimei.xiaolumeimei.utils.FileUtils;
@@ -52,13 +45,24 @@ import com.jude.utils.JUtils;
 import com.mob.tools.utils.UIHandler;
 import com.tbruyelle.rxpermissions.RxPermissions;
 import com.umeng.analytics.MobclickAgent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
+import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
+import cn.sharesdk.wechat.moments.WechatMoments;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
