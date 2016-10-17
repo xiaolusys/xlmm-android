@@ -30,6 +30,7 @@ public class NinePicBean {
   @SerializedName("save_times")private  int save_times;
   @SerializedName("share_times")private  int share_times;
   @SerializedName("description") private String mDescription;
+  @SerializedName("title_content") private String title_content;
   @SerializedName("pic_arry") private List<String> mPicArry;
 
   public int getId() {
@@ -102,5 +103,13 @@ public class NinePicBean {
 
   public void setShare_times(int share_times) {
     this.share_times = share_times;
+  }
+
+  public String getTitle_content() {
+    return title_content;
+  }
+
+  public void setTitle_content(String title_content) {
+    this.title_content = title_content;
   }
 }

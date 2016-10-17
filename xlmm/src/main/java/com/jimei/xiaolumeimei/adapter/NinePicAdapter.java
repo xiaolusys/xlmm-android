@@ -90,11 +90,14 @@ public class NinePicAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.headTv.setText("" + mList.get(position).getTurnsNum());
-        holder.contentTv.setText(mList.get(position).getDescription());
-        holder.timeTv.setText(mList.get(position).getStartTime().replace("T", " "));
-        holder.numTv.setText(mList.get(position).getSave_times() + "人已保存");
-        List<String> picArray = mList.get(position).getPicArry();
+        NinePicBean ninePicBean = mList.get(position);
+        String description = ninePicBean.getDescription();
+        holder.titleTv.setText(ninePicBean.getTitle_content());
+        holder.contentTv.setText(description);
+        holder.timeTv.setText(ninePicBean.getStartTime().replace("T", " "));
+        holder.likeTv.setText(ninePicBean.getSave_times() + "");
+        holder.shareTv.setText(ninePicBean.getSave_times() + "");
+        List<String> picArray = ninePicBean.getPicArry();
         if (picArray != null && picArray.size() > 0) {
             if (codeLink != null & !"".equals(codeLink)) {
                 if (picArray.size() == 9) {
@@ -114,7 +117,7 @@ public class NinePicAdapter extends BaseAdapter {
         holder.save.setOnClickListener(v -> {
             MobclickAgent.onEvent(mContext, "NinePic_save");
             MMProductModel.getInstance()
-                    .saveTime(mList.get(position).getId(), 1)
+                    .saveTime(ninePicBean.getId(), 1)
                     .subscribeOn(Schedulers.io())
                     .subscribe(saveTimeBean -> JUtils.Log("save"),
                             Throwable::printStackTrace);
@@ -127,7 +130,7 @@ public class NinePicAdapter extends BaseAdapter {
                         .subscribe(granted -> {
                             if (granted) {
                                 mFiles.clear();
-                                JUtils.copyToClipboard(mList.get(position).getDescription());
+                                JUtils.copyToClipboard(description);
                                 if (picArray.size() > 0) {
                                     downloadNinepic(picArray);
                                 } else {
@@ -267,14 +270,15 @@ public class NinePicAdapter extends BaseAdapter {
 
     class ViewHolder {
         MultiImageView multiImageView;
-        TextView timeTv, contentTv, headTv, numTv;
+        TextView timeTv, contentTv, titleTv, likeTv, shareTv;
         Button save;
 
         public ViewHolder(View itemView) {
-            headTv = (TextView) itemView.findViewById(R.id.head_tv);
             timeTv = (TextView) itemView.findViewById(R.id.time_tv);
             contentTv = (TextView) itemView.findViewById(R.id.contentTv);
-            numTv = (TextView) itemView.findViewById(R.id.num_tv);
+            titleTv = (TextView) itemView.findViewById(R.id.title_tv);
+            likeTv = (TextView) itemView.findViewById(R.id.like_tv);
+            shareTv = (TextView) itemView.findViewById(R.id.share_tv);
             save = (Button) itemView.findViewById(R.id.save);
             ViewStub linkOrImgViewStub = (ViewStub) itemView.findViewById(R.id.view_stub);
             linkOrImgViewStub.setLayoutResource(R.layout.viewstub_imgbody);

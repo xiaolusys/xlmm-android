@@ -358,7 +358,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
             } else if (id == R.id.nav_complain) {
                 readyGo(ComplainActivity.class);
             } else if (id == R.id.my_shop) {
-                // TODO: 16/10/8
                 if (mamaFlag) {
                     bundle = new Bundle();
                     bundle.putString("mamaid", mamaid);

@@ -472,7 +472,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_order_proc:
+            case R.id.btn_order_pay:
                 if (orderDetail.getStatus() == XlmmConst.ORDER_STATE_WAITPAY) {
                     JUtils.Log(TAG, "onClick paynow");
                     dialog2.show();
