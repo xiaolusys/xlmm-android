@@ -52,11 +52,6 @@ public class MamaDrawCashDetailActivity extends BaseSwipeBackCompatActivity {
     }
 
     @Override
-    protected void setListener() {
-
-    }
-
-    @Override
     protected void initData() {
         addSubscription(UserNewModel.getInstance()
                 .budGetdetailBean("1")
@@ -108,21 +103,6 @@ public class MamaDrawCashDetailActivity extends BaseSwipeBackCompatActivity {
     @Override
     protected int getContentViewLayoutID() {
         return R.layout.activity_mama_draw_cash_detail;
-    }
-
-    @Override
-    protected void initViews() {
-
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
     }
 
     @Override

@@ -12,8 +12,8 @@ import com.jimei.xiaolumeimei.base.BaseLazyFragment;
 import com.jimei.xiaolumeimei.databinding.FragmentMamaThirdBinding;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.MamaUrl;
-import com.jimei.xiaolumeimei.event.WebViewEvent;
-import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMFans1Activity;
+import com.jimei.xiaolumeimei.entities.event.WebViewEvent;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMFansActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShoppingListActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMTeamActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMcarryLogActivity;
@@ -69,8 +69,8 @@ public class MamaThirdFragment extends BaseLazyFragment<FragmentMamaThirdBinding
     }
 
     public void refreshFortune() {
-        if (mActivity!=null) {
-            ((MamaActivity) mActivity).showIndeterminateProgressDialog(false);
+        if (mActivity != null) {
+            ((MamaActivity) mActivity).showIndeterminateProgressDialog(true);
         }
         addSubscription(MMInfoModel.getInstance()
                 .getMamaFortune()
@@ -164,7 +164,7 @@ public class MamaThirdFragment extends BaseLazyFragment<FragmentMamaThirdBinding
                 break;
             case R.id.ll_order:
                 Intent orderIntent = new Intent(mActivity, MMShoppingListActivity.class);
-                orderIntent.putExtra("order", mOrderNum + "");
+                orderIntent.putExtra("orderNum", mOrderNum);
                 startActivity(orderIntent);
                 break;
             case R.id.ll_active:
@@ -173,24 +173,28 @@ public class MamaThirdFragment extends BaseLazyFragment<FragmentMamaThirdBinding
                 startActivity(activeIntent);
                 break;
             case R.id.ll_fans:
-                SharedPreferences sharedPreferences = mActivity.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
-                String cookies = sharedPreferences.getString("cookiesString", "");
-                String actLink = fansUrl;
-                String domain = sharedPreferences.getString("cookiesDomain", "");
-                String sessionId = sharedPreferences.getString("Cookie", "");
-                EventBus.getDefault().postSticky(new WebViewEvent(cookies, domain, actLink, -1, sessionId));
-                startActivity(new Intent(mActivity, MMFans1Activity.class));
+                if (fansUrl != null && !"".equals(fansUrl)) {
+                    SharedPreferences sharedPreferences = mActivity.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+                    String cookies = sharedPreferences.getString("cookiesString", "");
+                    String actLink = fansUrl;
+                    String domain = sharedPreferences.getString("cookiesDomain", "");
+                    String sessionId = sharedPreferences.getString("Cookie", "");
+                    EventBus.getDefault().postSticky(new WebViewEvent(cookies, domain, actLink, -1, sessionId));
+                    startActivity(new Intent(mActivity, MMFansActivity.class));
+                }
                 break;
             case R.id.ll_personal:
                 startActivity(new Intent(mActivity, PersonalCarryRankActivity.class));
                 break;
             case R.id.ll_team:
-                Bundle teamBundle = new Bundle();
-                teamBundle.putString("id", id + "");
-                teamBundle.putString("url", teamUrl);
-                Intent teamIntent = new Intent(mActivity, MMTeamActivity.class);
-                teamIntent.putExtras(teamBundle);
-                startActivity(teamIntent);
+                if (teamUrl != null && !"".equals(teamUrl)) {
+                    Bundle teamBundle = new Bundle();
+                    teamBundle.putString("id", id + "");
+                    teamBundle.putString("url", teamUrl);
+                    Intent teamIntent = new Intent(mActivity, MMTeamActivity.class);
+                    teamIntent.putExtras(teamBundle);
+                    startActivity(teamIntent);
+                }
                 break;
         }
     }

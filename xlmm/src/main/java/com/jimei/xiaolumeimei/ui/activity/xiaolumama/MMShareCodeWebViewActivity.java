@@ -5,6 +5,8 @@ import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONObject;
 
+import cn.sharesdk.framework.Platform;
+
 /**
  * Created by itxuye(www.itxuye.com) on 2016/03/10.
  * <p>
@@ -47,5 +49,15 @@ public class MMShareCodeWebViewActivity extends CommonWebViewActivity {
     public void sharePartyInfo() {
         super.sharePartyInfo();
         MobclickAgent.onEvent(this,"VIP_share");
+    }
+
+    @Override
+    public void onCancel(Platform platform, int action) {
+        super.onCancel(platform, action);
+    }
+
+    @Override
+    public void onError(Platform platform, int action, Throwable t) {
+        super.onError(platform, action, t);
     }
 }

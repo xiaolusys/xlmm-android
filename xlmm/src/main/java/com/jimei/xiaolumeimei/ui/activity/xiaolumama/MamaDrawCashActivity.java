@@ -103,16 +103,6 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
         moneyTv.setText(cash + "元");
     }
 
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
-    }
-
     private void toWallet(double fund) {
         if (fund == 0) {
             JUtils.Toast("请选择转账金额。");

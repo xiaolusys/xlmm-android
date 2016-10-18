@@ -19,7 +19,6 @@ import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.entities.PotentialFans;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
-import com.jimei.xiaolumeimei.widget.DividerItemDecorationForFooter;
 import com.jimei.xiaolumeimei.widget.loadingdialog.XlmmLoadingDialog;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
@@ -39,8 +38,8 @@ import rx.schedulers.Schedulers;
  * Copyright 2016年 上海己美. All rights reserved.
  */
 public class MMPotentialFansFragment extends BaseFragment {
-    @Bind(R.id.xrv_mmvisitors)
-    XRecyclerView xrvMmvisitors;
+    @Bind(R.id.xrv_mama_fans)
+    XRecyclerView xrvMamaFans;
     private int page = 2;
     private MamaPotentialFansAdapter mAdapter;
 
@@ -122,7 +121,7 @@ public class MMPotentialFansFragment extends BaseFragment {
                                 mAdapter.update(list);
                             }
                             if (null == fansBeen.getNext()) {
-                                xrvMmvisitors.setLoadingMoreEnabled(false);
+                                xrvMamaFans.setLoadingMoreEnabled(false);
                             }
                         }
                     }
@@ -132,22 +131,22 @@ public class MMPotentialFansFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initViews(view);
+        initViews();
     }
 
-    private void initViews(View view) {
-        xrvMmvisitors.setLayoutManager(new LinearLayoutManager(mActivity));
-        xrvMmvisitors.addItemDecoration(
-                new DividerItemDecorationForFooter(mActivity, DividerItemDecoration.VERTICAL_LIST));
-        xrvMmvisitors.setRefreshProgressStyle(ProgressStyle.BallPulse);
-        xrvMmvisitors.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
-        xrvMmvisitors.setArrowImageView(R.drawable.iconfont_downgrey);
-        xrvMmvisitors.setPullRefreshEnabled(false);
-        xrvMmvisitors.setLoadingMoreEnabled(true);
+    private void initViews() {
+        xrvMamaFans.setLayoutManager(new LinearLayoutManager(mActivity));
+        xrvMamaFans.addItemDecoration(
+                new DividerItemDecoration(mActivity, DividerItemDecoration.VERTICAL_LIST));
+        xrvMamaFans.setRefreshProgressStyle(ProgressStyle.BallPulse);
+        xrvMamaFans.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
+        xrvMamaFans.setArrowImageView(R.drawable.iconfont_downgrey);
+        xrvMamaFans.setPullRefreshEnabled(false);
+        xrvMamaFans.setLoadingMoreEnabled(true);
         mAdapter = new MamaPotentialFansAdapter(mActivity);
-        xrvMmvisitors.setAdapter(mAdapter);
+        xrvMamaFans.setAdapter(mAdapter);
 
-        xrvMmvisitors.setLoadingListener(new XRecyclerView.LoadingListener() {
+        xrvMamaFans.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
 
@@ -188,8 +187,8 @@ public class MMPotentialFansFragment extends BaseFragment {
                             mAdapter.update(fansBeen.getResults());
                             if (null == fansBeen.getNext()) {
                                 Toast.makeText(mActivity, "没有更多了", Toast.LENGTH_SHORT).show();
-                                xrvMmvisitors.loadMoreComplete();
-                                xrvMmvisitors.setLoadingMoreEnabled(false);
+                                xrvMamaFans.loadMoreComplete();
+                                xrvMamaFans.setLoadingMoreEnabled(false);
                             }
                         }
                     }
@@ -197,8 +196,7 @@ public class MMPotentialFansFragment extends BaseFragment {
                     @Override
                     public void onCompleted() {
                         super.onCompleted();
-                        xrvMmvisitors.loadMoreComplete();
-
+                        xrvMamaFans.loadMoreComplete();
                     }
                 });
     }
@@ -245,7 +243,7 @@ public class MMPotentialFansFragment extends BaseFragment {
 
     @Override
     public View getScrollableView() {
-        return xrvMmvisitors;
+        return xrvMamaFans;
     }
 
     @Override

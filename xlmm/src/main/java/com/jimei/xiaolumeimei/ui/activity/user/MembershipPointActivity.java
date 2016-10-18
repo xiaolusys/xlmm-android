@@ -1,7 +1,6 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
@@ -50,11 +49,6 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity
     protected void setListener() {
         btn_jump.setOnClickListener(this);
         all_points_listview.setOnScrollListener(this);
-    }
-
-    @Override
-    protected void getBundleExtras(Bundle extras) {
-
     }
 
     @Override
@@ -125,16 +119,6 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_jump:
@@ -143,11 +127,6 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity
                 finish();
                 break;
         }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
     }
 
     @Override

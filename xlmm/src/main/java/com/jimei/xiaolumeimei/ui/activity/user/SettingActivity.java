@@ -2,11 +2,12 @@ package com.jimei.xiaolumeimei.ui.activity.user;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.provider.Settings;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
@@ -33,7 +34,7 @@ public class SettingActivity extends BaseMVVMActivity<ActivitySettingBinding>
         implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     @Override
-    protected void initView() {
+    protected void initViews() {
         b.clearCache.setTitleText("清理缓存");
         b.update.setTitleText("检查更新");
         b.aboutXlmm.setTitleText("关于小鹿美美");
@@ -42,7 +43,7 @@ public class SettingActivity extends BaseMVVMActivity<ActivitySettingBinding>
     }
 
     @Override
-    protected void initListener() {
+    protected void setListener() {
         b.clearCache.setOnClickListener(this);
         b.update.setOnClickListener(this);
         b.aboutXlmm.setOnClickListener(this);
@@ -61,27 +62,12 @@ public class SettingActivity extends BaseMVVMActivity<ActivitySettingBinding>
     }
 
     @Override
-    protected void getBundleExtras(Bundle extras) {
-
-    }
-
-    @Override
     protected int getContentViewLayoutID() {
         return R.layout.activity_setting;
     }
 
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
-    }
-
     public void updatePref() {
-        b.aboutXlmm.setSummary(XlmmConst.getVersionName(SettingActivity.this));
+        b.aboutXlmm.setSummary(JUtils.getAppVersionName());
     }
 
     @Override
@@ -105,17 +91,17 @@ public class SettingActivity extends BaseMVVMActivity<ActivitySettingBinding>
             case R.id.clear_cache:
                 DataClearManager.cleanApplicationData(XlmmApp.getInstance());
                 updateCache();
-                showToast("缓存已经清理");
+                Snackbar snackbar = Snackbar.make(getWindow().getDecorView(), "缓存已清理", Snackbar.LENGTH_SHORT);
+                View view = snackbar.getView();
+                ((TextView) view.findViewById(R.id.snackbar_text)).setTextColor(getResources().getColor(R.color.colorAccent));
+                snackbar.getView().setBackgroundColor(getResources().getColor(R.color.white));
+                snackbar.show();
                 break;
             case R.id.update:
                 update();
                 break;
             case R.id.about_xlmm:
                 readyGo(CompanyInfoActivity.class);
-                break;
-
-            case R.id.open_notice_a:
-
                 break;
         }
     }
@@ -127,22 +113,8 @@ public class SettingActivity extends BaseMVVMActivity<ActivitySettingBinding>
                 .subscribe(new ServiceResponse<VersionBean>() {
                     @Override
                     public void onNext(VersionBean versionBean) {
-                        VersionManager versionManager = new VersionManager() {
-                            @Override
-                            public int getServerVersion() {
-                                return versionBean.getVersion_code();
-                            }
-
-                            @Override
-                            public String getUpdateContent() {
-                                return "最新版本:" + versionBean.getVersion() + "\n\n更新内容:\n" + versionBean.getMemo();
-                            }
-
-                            @Override
-                            public boolean showMsg() {
-                                return true;
-                            }
-                        };
+                        VersionManager versionManager = VersionManager.newInstance(versionBean.getVersion_code(),
+                                "最新版本:" + versionBean.getVersion() + "\n\n更新内容:\n" + versionBean.getMemo(), true);
                         versionManager.setPositiveListener(v -> {
                             Intent intent = new Intent(SettingActivity.this, UpdateService.class);
                             intent.putExtra(UpdateService.EXTRAS_DOWNLOAD_URL, versionBean.getDownload_link());

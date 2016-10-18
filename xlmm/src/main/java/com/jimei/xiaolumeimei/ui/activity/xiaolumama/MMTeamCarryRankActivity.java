@@ -1,6 +1,5 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
-import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 
@@ -29,7 +28,7 @@ public class MMTeamCarryRankActivity extends BaseMVVMActivity<ActivityTeamBindin
     private ArrayList<RankFragment> fragments;
 
     @Override
-    protected void initView() {
+    protected void initViews() {
         fragments = new ArrayList<>();
         fragments.add(RankFragment.newInstance(XlmmConst.TYPE_TEAM_RANK, "总排行"));
         fragments.add(RankFragment.newInstance(XlmmConst.TYPE_TEAM_WEEK_RANK, "周排行"));
@@ -42,7 +41,7 @@ public class MMTeamCarryRankActivity extends BaseMVVMActivity<ActivityTeamBindin
     }
 
     @Override
-    protected void initListener() {
+    protected void setListener() {
         b.viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -97,25 +96,9 @@ public class MMTeamCarryRankActivity extends BaseMVVMActivity<ActivityTeamBindin
     }
 
     @Override
-    protected void getBundleExtras(Bundle extras) {
-
-    }
-
-    @Override
     protected int getContentViewLayoutID() {
         return R.layout.activity_team;
     }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
-    }
-
 
     @Override
     protected void onResume() {

@@ -39,7 +39,7 @@ import android.widget.Toast;
 import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
-import com.jimei.xiaolumeimei.htmlJsBridge.modules.AndroidJsBridge;
+import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
 import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.utils.CameraUtils;
 import com.jimei.xiaolumeimei.utils.FileUtils;
@@ -104,23 +104,18 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void initData() {
         JUtils.Log(TAG, "initData");
-        runOnUiThread(() -> {
-            JUtils.Log(TAG, "initData--" + actlink);
+        JUtils.Log(TAG, "initData--" + actlink);
+        try {
+            Map<String, String> extraHeaders = new HashMap<>();
 
-            try {
-                Map<String, String> extraHeaders = new HashMap<>();
+            extraHeaders.put("Cookie", sessionid);
 
-                extraHeaders.put("Cookie", sessionid);
-
-                mWebView.loadUrl(actlink, extraHeaders);
-            } catch (Exception e) {
-                e.printStackTrace();
-                JUtils.Log(TAG, "loadUrl--error");
-            }
-
-            JUtils.Log(TAG, "loadUrl--end");
-        });
-
+            mWebView.loadUrl(actlink, extraHeaders);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JUtils.Log(TAG, "loadUrl--error");
+        }
+        JUtils.Log(TAG, "loadUrl--end");
         get_party_share_content(id + "");
     }
 
@@ -329,16 +324,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
-    }
-
-    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -488,26 +473,31 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
         UIHandler.sendMessage(msg, this);
     }
 
+    @Override
     public boolean handleMessage(Message msg) {
         switch (msg.arg1) {
             case 1: {
-                // 成功
-                Toast.makeText(this, "分享成功", Toast.LENGTH_SHORT).show();
-                JUtils.Log(TAG, "分享回调成功------------");
+                // 分享成功回调
+                MobclickAgent.onEvent(mContext, "share_success");
+                JUtils.Toast("分享成功");
             }
             break;
             case 2: {
-                // 失败
-                Toast.makeText(this, "分享失败", Toast.LENGTH_SHORT).show();
+                // 分享失败回调
+                HashMap<String, String> map = new HashMap<>();
+                map.put("error", msg.obj.toString());
+                MobclickAgent.onEvent(mContext, "share_failed", map);
+                MobclickAgent.onEvent(mContext, "share_failed");
+                JUtils.Toast("分享失败");
             }
             break;
             case 3: {
-                // 取消
-                Toast.makeText(this, "分享取消", Toast.LENGTH_SHORT).show();
+                // 分享取消回调
+                MobclickAgent.onEvent(mContext, "share_cancel");
+                JUtils.Toast("分享已取消");
             }
             break;
         }
-
         return false;
     }
 
@@ -576,7 +566,9 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
         // titleUrl是标题的网络链接，仅在人人网和QQ空间使用
         oks.setTitleUrl(partyShareInfo.getShareLink());
         // text是分享文本，所有平台都需要这个字段
-        oks.setText(partyShareInfo.getActiveDec() + partyShareInfo.getShareLink());
+        oks.setText(partyShareInfo.getActiveDec()
+//                + partyShareInfo.getShareLink()
+        );
         // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
         //oks.setImagePath(filePara.getFilePath());//确保SDcard下面存在此张图片
         //oks.setImageUrl("http://f1.sharesdk.cn/imgs/2014/02/26/owWpLZo_638x960.jpg");
@@ -606,6 +598,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
         // 启动分享GUI
         oks.setShareContentCustomizeCallback(
                 new ShareContentCustom(partyShareInfo.getActiveDec() + partyShareInfo.getShareLink()));
+        oks.setCallback(this);
         oks.show(this);
     }
 
@@ -619,34 +612,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
 
         JUtils.Log(TAG, "saveTowDimenCode : Qrcodelink=" + partyShareInfo.getShareLink());
         try {
-            //WebView webView = new WebView(this);
-            //webView.setLayoutParams(new Toolbar.LayoutParams(Toolbar.LayoutParams.MATCH_PARENT,
-            //    Toolbar.LayoutParams.MATCH_PARENT));
-            //webView.getSettings().setJavaScriptEnabled(true);
-            //
-            //webView.getSettings().setAllowFileAccess(true);
-            ////如果访问的页面中有Javascript，则webview必须设置支持Javascript
-            ////mWebView.getSettings().setUserAgentString(MyApplication.getUserAgent());
-            //webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-            //webView.getSettings().setAllowFileAccess(true);
-            //webView.getSettings().setAppCacheEnabled(true);
-            //webView.getSettings().setDomStorageEnabled(true);
-            //webView.getSettings().setDatabaseEnabled(true);
-            //webView.setDrawingCacheEnabled(true);
-            //
-            //webView.setWebChromeClient(new WebChromeClient() {
-            //  @Override public void onProgressChanged(WebView view, int newProgress) {
-            //
-            //  }
-            //});
-            //webView.setWebViewClient(new WebViewClient() {
-            //  @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            //    view.loadUrl(url);
-            //    return true;
-            //  }
-            //});
-            //
-            //webView.loadUrl(partyShareInfo.getQrcodeLink());
             bitmap = mWebView.getDrawingCache();
             JUtils.Log(TAG, "bitmap====" + bitmap.getByteCount());
             RxPermissions.getInstance(this)

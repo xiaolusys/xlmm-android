@@ -17,9 +17,11 @@ import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.databinding.ActivityProductListBinding;
 import com.jimei.xiaolumeimei.entities.CategoryProductListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
+import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +41,7 @@ public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBin
     private String order_by;
 
     @Override
-    protected void initListener() {
+    protected void setListener() {
         b.sortDefault.setOnClickListener(this);
         b.sortPrice.setOnClickListener(this);
     }
@@ -65,7 +67,7 @@ public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBin
     }
 
     @Override
-    protected void initView() {
+    protected void initViews() {
         Uri uri = getIntent().getData();
         if (uri != null) {
             if (uri.getPath().contains("childlist")) {
@@ -103,16 +105,6 @@ public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBin
                 }
             }
         });
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
     }
 
     @Override
@@ -197,5 +189,19 @@ public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBin
                 break;
         }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(ActivityWebViewActivity.class.getSimpleName());
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(ActivityWebViewActivity.class.getSimpleName());
+        MobclickAgent.onPause(this);
     }
 }

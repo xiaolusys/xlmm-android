@@ -9,26 +9,22 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import butterknife.Bind;
-
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.model.UserModel;
-import com.jimei.xiaolumeimei.ui.activity.user.UserDrawCashActivity;
 import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
+import butterknife.Bind;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
@@ -56,37 +52,12 @@ public class ComplainActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    protected void initData() {
-
-    }
-
-    @Override
-    protected void getBundleExtras(Bundle extras) {
-
-    }
-
-    @Override
     protected int getContentViewLayoutID() {
         return R.layout.complain_activity;
     }
 
     @Override
-    protected void initViews() {
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
-    }
-
-    @Override
     public void onClick(View v) {
-
         if (v.getId() == R.id.commit) {
             switch (radioGroup.getCheckedRadioButtonId()) {
                 case R.id.rb_1:
@@ -143,12 +114,6 @@ public class ComplainActivity extends BaseSwipeBackCompatActivity
         countText.setText(countStr);
     }
 
-    public void getSoftInput(View v) {
-        InputMethodManager m =
-                (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        m.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -173,12 +138,7 @@ public class ComplainActivity extends BaseSwipeBackCompatActivity
                 bundle.putString("cookies", sharedPreferences.getString("cookiesString", ""));
                 bundle.putString("domain", sharedPreferences.getString("cookiesDomain", ""));
                 bundle.putString("Cookie", sharedPreferences.getString("Cookie", ""));
-                SharedPreferences sharedPreferences2 = XlmmApp.getmContext().getSharedPreferences("APICLIENT", Context.MODE_PRIVATE);
-                String baseUrl = "http://" + sharedPreferences2.getString("BASE_URL", "");
-                if (baseUrl.equals("http://")) {
-                    baseUrl = XlmmApi.APP_BASE_URL;
-                }
-                bundle.putString("actlink", baseUrl + "/mall/complaint/history");
+                bundle.putString("actlink", XlmmApi.getAppUrl() + "/mall/complaint/history");
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;

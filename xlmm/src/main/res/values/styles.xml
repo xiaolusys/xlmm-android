@@ -64,11 +64,6 @@
         <item name="shadow_bottom">@drawable/shadow_bottom</item>
     </style>
 
-    <style name="popWindow_animation">
-        <item name="android:windowEnterAnimation">@anim/popwindow_enter</item>
-        <item name="android:windowExitAnimation">@anim/popwindow_exit</item>
-    </style>
-
     <style name="PullToRefresh" parent="TextAppearance.AppCompat">
         <item name="android:textColor">#000000</item>
     </style>
@@ -77,7 +72,6 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/indicator_corner_bg</item>
         <item name="android:paddingLeft">2dp</item>
         <item name="android:paddingRight">2dp</item>
         <item name="shape">oval</item>
@@ -234,11 +228,6 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
-    <style name="popwin_nearpenson_anim_style">
-        <item name="android:windowEnterAnimation">@anim/popupwin_nearperson_show</item>
-        <item name="android:windowExitAnimation">@anim/popupwin_nearperson_exit</item>
-    </style>
-
     <!--分割线样式-->
     <style name="lineStyle">
         <item name="android:layout_width">match_parent</item>
@@ -258,11 +247,6 @@
         <item name="android:backgroundDimEnabled">true</item>
         <!-- 设置dialog的半透明背景的灰度 -->
         <item name="android:backgroundDimAmount">0.6</item>
-    </style>
-
-    <style name="my_style">
-        <item name="android:windowEnterAnimation">@anim/shouquan_dialog_enter</item>
-        <item name="android:windowExitAnimation">@anim/shouquan_dialog_exit</item>
     </style>
 
 </resources>

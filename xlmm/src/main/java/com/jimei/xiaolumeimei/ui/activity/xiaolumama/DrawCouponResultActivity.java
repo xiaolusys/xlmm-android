@@ -24,11 +24,6 @@ public class DrawCouponResultActivity extends BaseSwipeBackCompatActivity implem
     }
 
     @Override
-    protected void initData() {
-
-    }
-
-    @Override
     protected void getBundleExtras(Bundle extras) {
         num = extras.getString("num");
     }
@@ -41,16 +36,6 @@ public class DrawCouponResultActivity extends BaseSwipeBackCompatActivity implem
     @Override
     protected void initViews() {
         msgTv.setText("恭喜您获得一张价值" + num + "元的优惠券，请及时使用哦");
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
     }
 
     @Override

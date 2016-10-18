@@ -43,10 +43,6 @@ public class AddressSelectActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    protected void initData() {
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         showIndeterminateProgressDialog(false);
@@ -97,16 +93,6 @@ public class AddressSelectActivity extends BaseSwipeBackCompatActivity
         addressRecyclerView.addItemDecoration(divider);
         adapter = new AddressSelectAdapter(this, position);
         addressRecyclerView.setAdapter(adapter);
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
     }
 
     @Override

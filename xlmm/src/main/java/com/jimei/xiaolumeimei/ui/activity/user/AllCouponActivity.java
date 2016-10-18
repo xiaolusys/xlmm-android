@@ -1,6 +1,5 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
-import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -29,21 +28,6 @@ public class AllCouponActivity extends BaseSwipeBackCompatActivity {
     ViewPager viewPager;
     ArrayList<CouponFragment> fragments = new ArrayList<>();
     List<String> titles = new ArrayList<>();
-
-    @Override
-    protected void setListener() {
-
-    }
-
-    @Override
-    protected void initData() {
-
-    }
-
-    @Override
-    protected void getBundleExtras(Bundle extras) {
-
-    }
 
     @Override
     protected int getContentViewLayoutID() {
@@ -90,16 +74,6 @@ public class AllCouponActivity extends BaseSwipeBackCompatActivity {
                     }
                 });
 
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
     }
 
     public class MainTabAdapter extends FragmentPagerAdapter {

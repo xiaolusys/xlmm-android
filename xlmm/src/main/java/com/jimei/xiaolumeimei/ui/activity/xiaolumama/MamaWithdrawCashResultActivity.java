@@ -62,10 +62,6 @@ public class MamaWithdrawCashResultActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    protected void initViews() {
-    }
-
-    @Override
     protected void initData() {
         if (Double.compare(cash, 100) == 0 && code == 0) {
             img_red_packet1.setImageResource(R.drawable.img_redpacket100_2);
@@ -89,16 +85,6 @@ public class MamaWithdrawCashResultActivity extends BaseSwipeBackCompatActivity
                     }
                 });
         addSubscription(subscribe);
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
     }
 
     @Override

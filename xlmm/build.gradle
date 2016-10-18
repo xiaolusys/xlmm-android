@@ -70,8 +70,8 @@ android {
 
         targetSdkVersion 23
 
-        versionCode 20160924
-        versionName "1.2.8"
+        versionCode 20161017
+        versionName "1.2.10"
 
         multiDexEnabled = true
 
@@ -258,12 +258,10 @@ dependencies {
     compile files('libs/ShareSDK-Wechat-Core-2.7.4.jar')
     compile files('libs/ShareSDK-Wechat-Moments-2.7.4.jar')
     compile project(':UdeskSDKUI')
+
     compile 'com.pingxx:pingpp-core:2.1.6'
-//    compile 'com.pingxx:pingpp-alipay:2.1.+'
-//    compile 'com.pingxx:pingpp-wxpay:2.1.+'
     compile 'com.android.support:support-v4:23.4.0'
     compile 'com.android.support:appcompat-v7:23.4.0'
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-all:2.0.2-beta'
-
 }

@@ -1,6 +1,5 @@
 package com.jimei.xiaolumeimei.ui.activity.trade;
 
-import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,19 +7,20 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
-import butterknife.Bind;
-
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
-import com.jimei.xiaolumeimei.event.UserChangeEvent;
+import com.jimei.xiaolumeimei.entities.event.UserChangeEvent;
 import com.jimei.xiaolumeimei.ui.fragment.v2.OrderListFragment;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.greenrobot.eventbus.EventBus;
+
+import butterknife.Bind;
 
 public class AllOrdersActivity extends BaseSwipeBackCompatActivity
         implements View.OnClickListener {
@@ -32,22 +32,8 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity
     List<OrderListFragment> fragments;
 
     @Override
-    protected void setListener() {
-    }
-
-    @Override
-    protected void getBundleExtras(Bundle extras) {
-
-    }
-
-    @Override
     protected int getContentViewLayoutID() {
         return R.layout.activity_allorders;
-    }
-
-    @Override
-    protected void initViews() {
-
     }
 
     @Override
@@ -74,16 +60,6 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
-    }
-
-    @Override
     public void onClick(View v) {
 
     }
@@ -107,7 +83,7 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity
     class MainTabAdapter extends FragmentPagerAdapter {
         private List<OrderListFragment> listFragment;
 
-        public MainTabAdapter(FragmentManager fm, List<OrderListFragment> listFragment) {
+        MainTabAdapter(FragmentManager fm, List<OrderListFragment> listFragment) {
             super(fm);
             this.listFragment = listFragment;
         }

@@ -19,7 +19,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ResultEntity;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.UserWithdrawResult;
-import com.jimei.xiaolumeimei.event.UserChangeEvent;
+import com.jimei.xiaolumeimei.entities.event.UserChangeEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.model.UserNewModel;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.DrawCashResultActivity;

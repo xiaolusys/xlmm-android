@@ -20,6 +20,7 @@ import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.model.UserNewModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 import rx.schedulers.Schedulers;
@@ -223,5 +224,19 @@ public class MamaDrawSmallCashActivity extends BaseSwipeBackCompatActivity imple
         msgTv.setTextColor(getResources().getColor(R.color.red));
         drawCashBtn.setClickable(false);
         drawCashBtn.setEnabled(false);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(this.getClass().getSimpleName());
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+        MobclickAgent.onPause(this);
     }
 }

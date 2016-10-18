@@ -16,7 +16,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseRevHolder;
 import com.jimei.xiaolumeimei.databinding.ItemCarryPersonalBinding;
 import com.jimei.xiaolumeimei.entities.PersonalCarryRankBean;
-import com.jimei.xiaolumeimei.glidemoudle.CropCircleTransformation;
+import com.jimei.xiaolumeimei.widget.glidemoudle.CropCircleTransformation;
 import java.util.ArrayList;
 import java.util.List;
 

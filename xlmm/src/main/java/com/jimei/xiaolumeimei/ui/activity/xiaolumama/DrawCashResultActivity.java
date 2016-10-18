@@ -24,11 +24,6 @@ public class DrawCashResultActivity extends BaseSwipeBackCompatActivity implemen
     }
 
     @Override
-    protected void initData() {
-
-    }
-
-    @Override
     protected void getBundleExtras(Bundle extras) {
         if (extras!=null) {
             this.extras = extras;
@@ -41,21 +36,6 @@ public class DrawCashResultActivity extends BaseSwipeBackCompatActivity implemen
     }
 
     @Override
-    protected void initViews() {
-
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.finish_btn:
@@ -63,7 +43,6 @@ public class DrawCashResultActivity extends BaseSwipeBackCompatActivity implemen
                 break;
         }
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

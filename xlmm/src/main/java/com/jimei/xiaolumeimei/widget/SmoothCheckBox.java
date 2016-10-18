@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.Checkable;
 import com.jimei.xiaolumeimei.R;
+import com.jude.utils.JUtils;
 
 /*
  * Copyright 2015, 2016 andy
@@ -112,7 +113,7 @@ public class SmoothCheckBox extends View implements Checkable {
     mUnCheckedColor =
         ta.getColor(R.styleable.SmoothCheckBox_color_unchecked, COLOR_UNCHECKED);
     mStrokeWidth = ta.getDimensionPixelSize(R.styleable.SmoothCheckBox_stroke_width,
-        CompatUtils.dp2px(getContext(), 0));
+        JUtils.dip2px(0));
     ta.recycle();
 
     mFloorUnCheckedColor = mFloorColor;

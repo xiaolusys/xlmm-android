@@ -1,7 +1,6 @@
 package com.jimei.xiaolumeimei.ui.activity.trade;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,7 +27,6 @@ import butterknife.Bind;
 public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
         implements View.OnClickListener {
     final List<LogisticsCompanyInfo> company_list = new ArrayList<LogisticsCompanyInfo>();
-    String TAG = "ChooseLogisticsCompanyActivity";
     @Bind(R.id.lv_logistics_company)
     ListView lv_logistics_company;
     @Bind(R.id.sideBar)
@@ -50,19 +48,12 @@ public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    protected void getBundleExtras(Bundle extras) {
-
-    }
-
-    @Override
     protected int getContentViewLayoutID() {
         return R.layout.activity_logistics_company;
     }
 
     @Override
     protected void initViews() {
-        //ListView all_orders_listview = (ListView) findViewById(R.id.all_orders_listview);
-
         fillCompanyInfo();
         mCompanyAdapter = new LogisticCompanyAdapter(this, company_list);
         lv_logistics_company.setAdapter(mCompanyAdapter);
@@ -89,16 +80,6 @@ public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
                         lv_logistics_company.setSelection(position);
                     }
                 });
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
     }
 
     @Override

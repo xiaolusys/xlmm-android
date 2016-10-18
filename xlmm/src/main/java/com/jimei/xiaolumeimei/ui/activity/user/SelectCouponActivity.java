@@ -12,8 +12,10 @@ import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CouponSelectEntity;
 import com.jimei.xiaolumeimei.model.UserModel;
+import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
 import com.jimei.xiaolumeimei.ui.fragment.coupon.SelectCouponFragment;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -30,11 +32,6 @@ public class SelectCouponActivity extends BaseSwipeBackCompatActivity {
     String selected_couponid;
     String cart_ids;
     List<BaseFragment> fragments = new ArrayList<>();
-
-    @Override
-    protected void setListener() {
-
-    }
 
     @Override
     protected void initData() {
@@ -74,20 +71,6 @@ public class SelectCouponActivity extends BaseSwipeBackCompatActivity {
         return R.layout.activity_select;
     }
 
-    @Override
-    protected void initViews() {
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
-    }
-
     public class SelectCouponAdapter extends FragmentPagerAdapter implements Serializable {
         FragmentManager fm;
 
@@ -110,5 +93,19 @@ public class SelectCouponActivity extends BaseSwipeBackCompatActivity {
         public CharSequence getPageTitle(int position) {
             return fragments.get(position).getTitle();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(ActivityWebViewActivity.class.getSimpleName());
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(ActivityWebViewActivity.class.getSimpleName());
+        MobclickAgent.onPause(this);
     }
 }

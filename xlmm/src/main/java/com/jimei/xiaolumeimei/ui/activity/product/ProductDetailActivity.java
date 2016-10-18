@@ -88,7 +88,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
     private List<ProductDetailBean.SkuInfoBean> skuInfo;
 
     @Override
-    protected void initView() {
+    protected void initViews() {
         setStatusBar();
         Uri uri = getIntent().getData();
         if (uri != null) {
@@ -144,7 +144,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
     }
 
     @Override
-    protected void initListener() {
+    protected void setListener() {
         b.finish.setOnClickListener(this);
         b.share.setOnClickListener(this);
         b.rlCart.setOnClickListener(this);
@@ -323,7 +323,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             Glide.with(this).load(head_imgs.get(i) + POST_URL).diskCacheStrategy(DiskCacheStrategy.RESULT)
-                    .centerCrop().placeholder(R.drawable.parceholder).into(imageView);
+                    .centerCrop().placeholder(R.drawable.place_holder).into(imageView);
             list.add(imageView);
         }
         PagerAdapter viewPagerAdapter = new MyPagerAdapter(list);
@@ -343,10 +343,6 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                 }
             }).start();
         }
-    }
-
-    @Override
-    protected void getBundleExtras(Bundle extras) {
     }
 
     private void setStatusBar() {
@@ -371,16 +367,6 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
     @Override
     protected int getContentViewLayoutID() {
         return R.layout.activity_product_detail;
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
     }
 
     @Override
@@ -525,6 +511,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
     }
 
     private void addToCart(boolean dismiss) {
+        MobclickAgent.onEvent(this,"AddCartsID");
         addSubscription(CartsModel.getInstance()
                 .addToCart(item_id, sku_id, num)
                 .subscribeOn(Schedulers.io())

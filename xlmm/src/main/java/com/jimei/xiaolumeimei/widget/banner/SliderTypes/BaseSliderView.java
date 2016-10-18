@@ -1,19 +1,18 @@
 package com.jimei.xiaolumeimei.widget.banner.SliderTypes;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
+import com.bumptech.glide.DrawableTypeRequest;
+import com.bumptech.glide.Glide;
 import com.jimei.xiaolumeimei.R;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
+
 import java.io.File;
-import java.io.IOException;
 
 public abstract class BaseSliderView {
 
@@ -183,6 +182,7 @@ public abstract class BaseSliderView {
     }
     Picasso p = (mPicasso != null) ? mPicasso : Picasso.with(mContext);
     RequestCreator rq;
+    DrawableTypeRequest<String> load = Glide.with(mContext).load(mUrl);
     if (mUrl != null) {
       rq = p.load(mUrl);
     } else if (mFile != null) {
@@ -214,6 +214,7 @@ public abstract class BaseSliderView {
 //    } catch (Exception e) {
 //      e.printStackTrace();
 //    }
+
     if (getEmpty() != 0) {
       rq.placeholder(getEmpty());
     }
@@ -221,7 +222,6 @@ public abstract class BaseSliderView {
     if (getError() != 0) {
       rq.error(getError());
     }
-
     switch (mScaleType) {
       case Fit:
         rq.fit();
@@ -233,7 +233,6 @@ public abstract class BaseSliderView {
         rq.fit().centerInside();
         break;
     }
-
     rq.into(targetImageView, new Callback() {
       @Override public void onSuccess() {
 
@@ -304,13 +303,13 @@ public abstract class BaseSliderView {
   }
 
   public interface OnSliderClickListener {
-    public void onSliderClick(BaseSliderView slider);
+    void onSliderClick(BaseSliderView slider);
   }
 
   public interface ImageLoadListener {
-    public void onStart(BaseSliderView target);
+    void onStart(BaseSliderView target);
 
-    public void onEnd(boolean result, BaseSliderView target);
+    void onEnd(boolean result, BaseSliderView target);
   }
 
   public static int dp2px(Context context, int dp) {

@@ -177,21 +177,6 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
         return R.layout.activity_refund_detail;
     }
 
-    @Override
-    protected void initViews() {
-        Log.d(TAG, "goods_id " + goods_id);
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
-    }
-
     private void fillDataToView(AllRefundsBean.ResultsEntity refundDetailBean) {
         if (refundDetailBean.isHas_good_return()) {
             switch (refundDetailBean.getStatus()) {

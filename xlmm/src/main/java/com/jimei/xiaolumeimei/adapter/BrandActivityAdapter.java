@@ -70,15 +70,13 @@ public class BrandActivityAdapter extends RecyclerView.Adapter<BrandActivityAdap
       holder.productStdSalePrice.setText("/¥" + resultsEntity.getProductStdSalePrice());
       holder.nameTv.setText(resultsEntity.getProductName());
 
-      holder.cardview.setOnClickListener(new View.OnClickListener() {
-        @Override public void onClick(View v) {
-          Intent intent = new Intent(mContext, ProductDetailActivity.class);
-          Bundle bundle = new Bundle();
-          bundle.putInt("model_id",resultsEntity.getModelId());
-          intent.putExtras(bundle);
-          mContext.startActivity(intent);
-          ((Activity) mContext).finish();
-        }
+      holder.cardview.setOnClickListener(v -> {
+        Intent intent = new Intent(mContext, ProductDetailActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt("model_id",resultsEntity.getModelId());
+        intent.putExtras(bundle);
+        mContext.startActivity(intent);
+        ((Activity) mContext).finish();
       });
     } catch (Exception e) {
       e.printStackTrace();
@@ -93,10 +91,10 @@ public class BrandActivityAdapter extends RecyclerView.Adapter<BrandActivityAdap
 
     private final View cardview;
     int id = R.layout.item_todaylist;
-    @Bind(R.id.childlist_image) ImageView brandImag;
-    @Bind(R.id.childlist_agent_price) TextView productLowestPrice;
-    @Bind(R.id.childlist_stdsale_price) TextView productStdSalePrice;
-    @Bind(R.id.childlist_name) TextView nameTv;
+    @Bind(R.id.product_list_image) ImageView brandImag;
+    @Bind(R.id.product_list_agent_price) TextView productLowestPrice;
+    @Bind(R.id.product_list_stdsale_price) TextView productStdSalePrice;
+    @Bind(R.id.product_list_name) TextView nameTv;
 
     public BrandlistVH(View itemView) {
       super(itemView);

@@ -69,8 +69,8 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     private static final int REQUEST_CODE_PAYMENT = 1;
     public static final int HAND_MSG = 6;
     String TAG = "OrderDetailActivity";
-    @Bind(R.id.btn_order_proc)
-    ImageView btn_proc;
+    @Bind(R.id.btn_order_pay)
+    ImageView btn_order_pay;
     @Bind(R.id.btn_order_cancel)
     ImageView btn_order_cancel;
     @Bind(R.id.rlayout_order_lefttime)
@@ -166,7 +166,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void setListener() {
-        btn_proc.setOnClickListener(this);
+        btn_order_pay.setOnClickListener(this);
         btn_order_cancel.setOnClickListener(this);
         logisticsLayout.setOnClickListener(this);
         redBagLayout.setOnClickListener(this);
@@ -285,16 +285,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                         hideIndeterminateProgressDialog();
                     }, e -> JUtils.Log(e.getMessage())));
         }
-    }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
     }
 
     private void fillDataToView(OrderDetailBean orderDetailBean) {
@@ -438,13 +428,18 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                     relativeLayout.setVisibility(View.GONE);
                     mCountDownView.start(calcLeftTime(orderDetailBean.getCreated()), CountDownView.TYPE_MINUTE);
                     mCountDownView.setOnEndListener(view -> {
-                        btn_proc.setClickable(false);
-                        btn_proc.setImageResource(R.drawable.pay_order_not);
+                        if (btn_order_pay == null) {
+                            btn_order_pay = (ImageView) findViewById(R.id.btn_order_pay);
+                        }
+                        assert btn_order_pay != null;
+                        btn_order_pay.setClickable(false);
+                        btn_order_pay.setImageResource(R.drawable.pay_order_not);
+
                     });
                     if (calcLeftTime(orderDetailBean.getCreated()) <= 0) {
                         JUtils.Log(TAG, "left time 0");
-                        btn_proc.setClickable(false);
-                        btn_proc.setImageResource(R.drawable.pay_order_not);
+                        btn_order_pay.setClickable(false);
+                        btn_order_pay.setImageResource(R.drawable.pay_order_not);
                     }
                     break;
             }
@@ -477,7 +472,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_order_proc:
+            case R.id.btn_order_pay:
                 if (orderDetail.getStatus() == XlmmConst.ORDER_STATE_WAITPAY) {
                     JUtils.Log(TAG, "onClick paynow");
                     dialog2.show();

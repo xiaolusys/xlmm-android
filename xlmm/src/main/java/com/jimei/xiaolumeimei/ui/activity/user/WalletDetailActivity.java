@@ -39,16 +39,6 @@ public class WalletDetailActivity extends BaseSwipeBackCompatActivity {
     private BudgetdetailBean.ResultsEntity entity;
 
     @Override
-    protected void setListener() {
-
-    }
-
-    @Override
-    protected void initData() {
-
-    }
-
-    @Override
     protected void getBundleExtras(Bundle extras) {
         entity = ((BudgetdetailBean.ResultsEntity) extras.getSerializable("entity"));
     }
@@ -75,17 +65,6 @@ public class WalletDetailActivity extends BaseSwipeBackCompatActivity {
             dateTv3.setText(entity.getBudgetDate());
         }
     }
-
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
-    }
-
 
     @Override
     protected void onResume() {

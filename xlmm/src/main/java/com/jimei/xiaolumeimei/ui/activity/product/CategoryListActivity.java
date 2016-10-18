@@ -1,6 +1,5 @@
 package com.jimei.xiaolumeimei.ui.activity.product;
 
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,9 +12,11 @@ import com.jimei.xiaolumeimei.adapter.CategoryAdapter;
 import com.jimei.xiaolumeimei.adapter.CategoryListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
+import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
 import com.jimei.xiaolumeimei.widget.CategoryListTask;
 import com.jimei.xiaolumeimei.widget.CategoryTask;
 import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 
@@ -32,10 +33,6 @@ public class CategoryListActivity extends BaseSwipeBackCompatActivity implements
     LinearLayout emptyLayout;
     private CategoryAdapter adapter;
     private CategoryListAdapter mCategoryListAdapter;
-
-    @Override
-    protected void getBundleExtras(Bundle extras) {
-    }
 
     @Override
     protected int getContentViewLayoutID() {
@@ -60,11 +57,6 @@ public class CategoryListActivity extends BaseSwipeBackCompatActivity implements
     }
 
     @Override
-    protected void initData() {
-
-    }
-
-    @Override
     protected void setListener() {
         mListView.setOnItemClickListener(this);
     }
@@ -75,6 +67,20 @@ public class CategoryListActivity extends BaseSwipeBackCompatActivity implements
         String cid = ((CategoryBean) mCategoryListAdapter.getItem(position)).getCid();
         mCategoryListAdapter.setCid(cid);
         new CategoryTask(adapter, emptyLayout).execute(cid);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(ActivityWebViewActivity.class.getSimpleName());
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(ActivityWebViewActivity.class.getSimpleName());
+        MobclickAgent.onPause(this);
     }
 
 }

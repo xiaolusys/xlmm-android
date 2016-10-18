@@ -1,13 +1,12 @@
 package com.jimei.xiaolumeimei.adapter;
 
 import android.Manifest;
-import android.content.ClipboardManager;
-import android.content.Context;
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
-import android.os.SystemClock;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
@@ -16,11 +15,12 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.FilePara;
 import com.jimei.xiaolumeimei.entities.NinePicBean;
+import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.okhttp3.FileParaCallback;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.ImagePagerActivity;
-import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMNinePicActivity;
 import com.jimei.xiaolumeimei.utils.CameraUtils;
 import com.jimei.xiaolumeimei.utils.FileUtils;
 import com.jimei.xiaolumeimei.widget.ninepicimagview.MultiImageView;
@@ -31,9 +31,11 @@ import com.zhy.http.okhttp.OkHttpUtils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import okhttp3.Call;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/02/29.
@@ -41,21 +43,17 @@ import okhttp3.Call;
  * Copyright 2016年 上海己美. All rights reserved.
  */
 public class NinePicAdapter extends BaseAdapter {
-    private MMNinePicActivity mcontext;
+    private Activity mContext;
     private List<NinePicBean> mList;
     private String codeLink;
+    private List<Uri> mFiles;
 
-    public NinePicAdapter(MMNinePicActivity mcontext) {
-        this.mcontext = mcontext;
+    public NinePicAdapter(Activity mContext) {
+        this.mContext = mContext;
         mList = new ArrayList<>();
+        mFiles = new ArrayList<>();
     }
 
-    public void copy(String content, Context context) {
-        // 得到剪贴板管理器
-        ClipboardManager cmb =
-                (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-        cmb.setText(content.trim());
-    }
 
     public void clear() {
         mList.clear();
@@ -86,77 +84,97 @@ public class NinePicAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
-            convertView = View.inflate(mcontext, R.layout.item_ninepic, null);
+            convertView = View.inflate(mContext, R.layout.item_ninepic, null);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.headTv.setText("" + mList.get(position).getTurnsNum());
-        holder.contentTv.setText(mList.get(position).getDescription());
-        holder.timeTv.setText(mList.get(position).getStartTime().replace("T", " "));
-        List<String> picArry = mList.get(position).getPicArry();
-        if (picArry != null && picArry.size() > 0) {
+        NinePicBean ninePicBean = mList.get(position);
+        String description = ninePicBean.getDescription();
+        holder.titleTv.setText(ninePicBean.getTitle_content());
+        holder.contentTv.setText(description);
+        holder.timeTv.setText(ninePicBean.getStartTime().replace("T", " "));
+        holder.likeTv.setText(ninePicBean.getSave_times() + "");
+        holder.shareTv.setText(ninePicBean.getSave_times() + "");
+        List<String> picArray = ninePicBean.getPicArry();
+        if (picArray != null && picArray.size() > 0) {
             if (codeLink != null & !"".equals(codeLink)) {
-                if (picArry.size() == 9) {
-                    picArry.set(4, "code" + codeLink);
-                } else {
-                    picArry.set(picArry.size() / 2, "code" + codeLink);
+                if (picArray.size() == 9) {
+                    picArray.set(4, "code" + codeLink);
+                } else if (picArray.size() != 1) {
+                    picArray.set(picArray.size() / 2, "code" + codeLink);
                 }
             }
             holder.multiImageView.setVisibility(View.VISIBLE);
-            holder.multiImageView.setList(picArry);
-            holder.multiImageView.setOnItemClickListener(
-                    (view) -> {
-                        // 因为单张图片时，图片实际大小是自适应的，imageLoader缓存时是按测量尺寸缓存的
-                        //ImagePagerActivity.imageSize =
-                        //    new ImageSize(view.getMeasuredWidth(), view.getMeasuredHeight());
-                        ImagePagerActivity.startImagePagerActivity(mcontext, picArry);
-                    });
+            holder.multiImageView.setList(picArray);
+            holder.multiImageView.setOnItemClickListener((view, currentPosition) -> {
+                ImagePagerActivity.startImagePagerActivity(mContext, picArray, currentPosition);
+            });
         } else {
             holder.multiImageView.setVisibility(View.GONE);
         }
-
         holder.save.setOnClickListener(v -> {
-            MobclickAgent.onEvent(mcontext, "NinePic_save");
-            assert picArry != null;
-            RxPermissions.getInstance(mcontext)
-                    .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    .subscribe(granted -> {
-                        if (granted) { // Always true pre-M
-                            // I can control the camera now
-                            downloadNinepic(picArry);
-
-                            copy(mList.get(position).getDescription(), mcontext);
-
-                            new AlertDialog.Builder(mcontext)
-                                    .setMessage("文字已经复制,商品图片正在后台保存，请稍后前往分享吧")
-                                    .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
-                                    .show();
-                        } else {
-                            // Oups permission denied
-                            JUtils.Toast("小鹿美美需要存储权限存储图片,请再次点击保存并打开权限许可.");
-                        }
-                    });
+            MobclickAgent.onEvent(mContext, "NinePic_save");
+            MMProductModel.getInstance()
+                    .saveTime(ninePicBean.getId(), 1)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(saveTimeBean -> JUtils.Log("save"),
+                            Throwable::printStackTrace);
+            if (picArray != null) {
+                if (mContext instanceof BaseSwipeBackCompatActivity) {
+                    ((BaseSwipeBackCompatActivity) mContext).showIndeterminateProgressDialog(true);
+                }
+                RxPermissions.getInstance(mContext)
+                        .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        .subscribe(granted -> {
+                            if (granted) {
+                                mFiles.clear();
+                                JUtils.copyToClipboard(description);
+                                if (picArray.size() > 0) {
+                                    downloadNinepic(picArray);
+                                } else {
+                                    shareToWx();
+                                }
+                                JUtils.Toast("努力分享中,请稍等几秒钟...");
+                            } else {
+                                JUtils.Toast("小鹿美美需要存储权限存储图片,请再次点击保存并打开权限许可.");
+                            }
+                        }, Throwable::printStackTrace);
+            }
         });
-
         return convertView;
     }
 
     private void downloadNinepic(List<String> picArry) {
         new Thread(() -> {
             JUtils.Log("NinePic", "new thread ,pic size " + picArry.size());
-            final boolean[] bflag = {true};
             for (int i = 0; i < picArry.size(); i++) {
-                while (!bflag[0]) SystemClock.sleep(100);
-                String str = picArry.get(picArry.size() - 1 - i);
-                if (!str.contains("code")) {
-                    str = str + "?imageMogr2/thumbnail/580/format/jpg";
-                }else {
-                    str = str.substring(4);
+                String str = picArry.get(i);
+                String fileName = "";
+                if (str.contains("code")) {
+                    if (i > 0) {
+                        str = picArry.get(i - 1) + "code";
+                    } else {
+                        str = picArry.get(0) + "code";
+                    }
                 }
-                JUtils.Log("NinePic", "download " + str);
-                if (bflag[0]) {
+                fileName = str.substring(str.lastIndexOf("/"));
+                String newFileName = Environment.getExternalStorageDirectory() +
+                        CameraUtils.XLMM_IMG_PATH + fileName + ".jpg";
+                if (FileUtils.isFileExist(newFileName)) {
+                    Uri uri = Uri.fromFile(new File(newFileName));
+                    mFiles.add(uri);
+                    if (mFiles.size() == picArry.size()) {
+                        mContext.runOnUiThread(this::shareToWx);
+                    }
+                } else {
+                    if (!str.contains("code")) {
+                        str = str + "?imageMogr2/thumbnail/580/format/jpg";
+                    } else {
+                        str = picArry.get(i).substring(4);
+                    }
+                    JUtils.Log("NinePic", "download " + str);
                     final int finalI = i;
                     OkHttpUtils.get()
                             .url(str)
@@ -164,19 +182,25 @@ public class NinePicAdapter extends BaseAdapter {
                             .execute(new FileParaCallback() {
                                 @Override
                                 public void onError(Call call, Exception e, int id) {
-                                    bflag[0] = true;
+                                    hideLoading();
+                                    JUtils.Toast("分享失败,请重新分享!");
                                 }
 
                                 @Override
                                 public void onResponse(FilePara response, int id) {
                                     if (response != null) {
-                                        bflag[0] = true;
                                         JUtils.Log("NinePic", "download " + finalI + " finished.");
                                         try {
-                                            String pic_indicate_name =
-                                                    picArry.get(picArry.size() - 1 - finalI)
-                                                            .substring(picArry.get(picArry.size() - 1 - finalI)
-                                                                    .lastIndexOf('/'));
+                                            String currentStr = picArry.get(finalI);
+                                            String pic_indicate_name;
+                                            if (currentStr.contains("code")) {
+                                                if (finalI > 0) {
+                                                    currentStr = picArry.get(finalI - 1) + "code";
+                                                } else {
+                                                    currentStr = picArry.get(0) + "code";
+                                                }
+                                            }
+                                            pic_indicate_name = currentStr.substring(currentStr.lastIndexOf("/"));
                                             String newName = Environment.getExternalStorageDirectory() +
                                                     CameraUtils.XLMM_IMG_PATH + pic_indicate_name + ".jpg";
                                             JUtils.Log("NinePic", "newName=" + newName);
@@ -184,28 +208,59 @@ public class NinePicAdapter extends BaseAdapter {
                                                 JUtils.Log("NinePic", "newName has existed,delete");
                                                 FileUtils.deleteFile(newName);
                                             }
-                                            new File(response.getFilePath()).renameTo(new File(newName));
-
+                                            File file = new File(response.getFilePath());
+                                            file.renameTo(new File(newName));
                                             Uri uri = Uri.fromFile(new File(newName));
+                                            mFiles.add(uri);
                                             // 通知图库更新
                                             Intent scannerIntent =
                                                     new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
                                             scannerIntent.setData(uri);
-                                            mcontext.sendBroadcast(scannerIntent);
-                                            if (picArry.size() - 1 == finalI) {
-                                                JUtils.Log("NinePic", "download finished");
-                                                JUtils.Toast("商品图片保存完成");
+                                            mContext.sendBroadcast(scannerIntent);
+                                            if (mFiles.size() == picArry.size()) {
+                                                shareToWx();
                                             }
                                         } catch (Exception e) {
+                                            hideLoading();
+                                            if (e instanceof ActivityNotFoundException) {
+                                                JUtils.Toast("您手机没有安装微信客户端,图片已保存到本地,请手动分享!");
+                                            }
                                             e.printStackTrace();
                                         }
                                     }
                                 }
                             });
                 }
-                bflag[0] = false;
+
             }
         }).start();
+    }
+
+    private void hideLoading() {
+        if (mContext instanceof BaseSwipeBackCompatActivity) {
+            ((BaseSwipeBackCompatActivity) mContext).hideIndeterminateProgressDialog();
+        }
+    }
+
+    private void shareToWx() {
+        hideLoading();
+        JUtils.Toast("文字已经复制到粘贴板!");
+        ArrayList<Uri> imageUris = new ArrayList<>();
+        Collections.sort(mFiles);
+        for (int i1 = 0; i1 < mFiles.size(); i1++) {
+            if (i1 < 9) {
+                imageUris.add(mFiles.get(i1));
+            }
+        }
+        if (imageUris.size() > 0) {
+            Intent intent = new Intent();
+            ComponentName comp = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.tools.ShareToTimeLineUI");
+            intent.setComponent(comp);
+            intent.setAction(Intent.ACTION_SEND_MULTIPLE);
+            intent.setType("image/*");
+            intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris);
+            mContext.startActivity(intent);
+        }
     }
 
     public void setCodeLink(String codeLink) {
@@ -215,13 +270,15 @@ public class NinePicAdapter extends BaseAdapter {
 
     class ViewHolder {
         MultiImageView multiImageView;
-        TextView timeTv, contentTv, headTv;
+        TextView timeTv, contentTv, titleTv, likeTv, shareTv;
         Button save;
 
         public ViewHolder(View itemView) {
-            headTv = (TextView) itemView.findViewById(R.id.head_tv);
             timeTv = (TextView) itemView.findViewById(R.id.time_tv);
             contentTv = (TextView) itemView.findViewById(R.id.contentTv);
+            titleTv = (TextView) itemView.findViewById(R.id.title_tv);
+            likeTv = (TextView) itemView.findViewById(R.id.like_tv);
+            shareTv = (TextView) itemView.findViewById(R.id.share_tv);
             save = (Button) itemView.findViewById(R.id.save);
             ViewStub linkOrImgViewStub = (ViewStub) itemView.findViewById(R.id.view_stub);
             linkOrImgViewStub.setLayoutResource(R.layout.viewstub_imgbody);
