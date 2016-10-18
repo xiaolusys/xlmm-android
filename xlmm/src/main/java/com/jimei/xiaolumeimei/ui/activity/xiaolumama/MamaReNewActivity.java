@@ -173,16 +173,6 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
         tvMoren.setText("默认使用小鹿妈妈钱包金额抵扣,总余额:" + mamaCarryValue);
     }
 
-    @Override
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    @Override
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
-    }
-
     public void mamaPay(String product_id, String sku_id, String payment, String channel, String num,
                         String post_fee, String discount_fee, String uuid, String total_fee,
                         String wallet_renew_deposit) {

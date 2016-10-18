@@ -131,8 +131,8 @@ public class MamaFirstFragment extends BaseLazyFragment<FragmentMamaFirstBinding
             ActivityListAdapter adapter = new ActivityListAdapter(mActivity);
             adapter.updateWithClear(activities);
             b.lv.setAdapter(adapter);
-            b.scrollView.scrollTo(0, 0);
         }
+        b.scrollView.scrollTo(0, 0);
     }
 
     public void refreshNotice() {

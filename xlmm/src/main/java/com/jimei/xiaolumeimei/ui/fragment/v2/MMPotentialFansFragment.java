@@ -131,10 +131,10 @@ public class MMPotentialFansFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initViews(view);
+        initViews();
     }
 
-    private void initViews(View view) {
+    private void initViews() {
         xrvMamaFans.setLayoutManager(new LinearLayoutManager(mActivity));
         xrvMamaFans.addItemDecoration(
                 new DividerItemDecoration(mActivity, DividerItemDecoration.VERTICAL_LIST));
@@ -197,7 +197,6 @@ public class MMPotentialFansFragment extends BaseFragment {
                     public void onCompleted() {
                         super.onCompleted();
                         xrvMamaFans.loadMoreComplete();
-
                     }
                 });
     }

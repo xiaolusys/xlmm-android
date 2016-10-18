@@ -61,10 +61,14 @@ public class MMProductModel {
 
     public Observable<List<NinePicBean>> getNinePic(int sale_category) {
         if (sale_category == -1) {
-            return XlmmRetrofitClient.getService().getNinepic().compose(new DefaultTransform<>());
+            return XlmmRetrofitClient.getService().getNinePic().compose(new DefaultTransform<>());
         } else {
-            return XlmmRetrofitClient.getService().getNinepic(sale_category).compose(new DefaultTransform<>());
+            return XlmmRetrofitClient.getService().getNinePic(sale_category).compose(new DefaultTransform<>());
         }
+    }
+
+    public Observable<List<NinePicBean>> getNinePicByOrdering() {
+        return XlmmRetrofitClient.getService().getNinePic("-save_times").compose(new DefaultTransform<>());
     }
 
     public Observable<MMShoppingBean> getShareShopping() {

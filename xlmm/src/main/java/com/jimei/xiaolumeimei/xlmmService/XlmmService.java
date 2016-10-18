@@ -548,11 +548,16 @@ public interface XlmmService {
     );
 
     @GET("/rest/v1/pmt/ninepic")
-    Observable<List<NinePicBean>> getNinepic();
+    Observable<List<NinePicBean>> getNinePic();
 
     @GET("/rest/v1/pmt/ninepic")
-    Observable<List<NinePicBean>> getNinepic(
+    Observable<List<NinePicBean>> getNinePic(
             @Query("sale_category") int sale_category
+    );
+
+    @GET("/rest/v1/pmt/ninepic")
+    Observable<List<NinePicBean>> getNinePic(
+            @Query("ordering") String ordering
     );
 
     @GET("/rest/v1/users/get_wxpub_authinfo")

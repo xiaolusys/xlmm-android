@@ -500,6 +500,7 @@
 
             <com.jimei.xiaolumeimei.widget.NestedListView
                 android:id="@+id/lv"
+                android:focusable="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:divider="@null"/>

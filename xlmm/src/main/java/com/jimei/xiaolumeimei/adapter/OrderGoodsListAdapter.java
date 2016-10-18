@@ -37,6 +37,7 @@ import com.jimei.xiaolumeimei.ui.activity.trade.LogisticsActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.RefundDetailActivity;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jude.utils.JUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -259,18 +260,22 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                                 RefundTypeAdapter adapter = new RefundTypeAdapter(context, choices);
                                 listView.setAdapter(adapter);
                                 sure.setOnClickListener(v12 -> {
-                                    Intent intent = new Intent(context, ApplyRefundActivity.class);
-                                    Bundle bundle = new Bundle();
-                                    bundle.putInt("id", orderDetailEntity.getId());
-                                    bundle.putInt("position", position);
-                                    bundle.putString("refund_channel", adapter.getItem(adapter.getSelect()).getRefund_channel());
-                                    bundle.putString("name", adapter.getItem(adapter.getSelect()).getName());
-                                    bundle.putString("desc", adapter.getItem(adapter.getSelect()).getDesc());
-                                    intent.putExtras(bundle);
-                                    Log.d(TAG, "transfer good  " + goods_info.getId() + " to " + "ApplyRefundActivity");
-                                    context.startActivity(intent);
-                                    dialog.dismiss();
-                                    context.finish();
+                                    if (adapter.getSelect() == -1) {
+                                        JUtils.Toast("请选择退款方式");
+                                    } else {
+                                        Intent intent = new Intent(context, ApplyRefundActivity.class);
+                                        Bundle bundle = new Bundle();
+                                        bundle.putInt("id", orderDetailEntity.getId());
+                                        bundle.putInt("position", position);
+                                        bundle.putString("refund_channel", adapter.getItem(adapter.getSelect()).getRefund_channel());
+                                        bundle.putString("name", adapter.getItem(adapter.getSelect()).getName());
+                                        bundle.putString("desc", adapter.getItem(adapter.getSelect()).getDesc());
+                                        intent.putExtras(bundle);
+                                        Log.d(TAG, "transfer good  " + goods_info.getId() + " to " + "ApplyRefundActivity");
+                                        context.startActivity(intent);
+                                        dialog.dismiss();
+                                        context.finish();
+                                    }
                                 });
                                 dialog.show();
                             } else if (choices.size() == 1) {
