@@ -469,6 +469,14 @@
                     android:path="/v1/products/modelist"
                     android:scheme="com.jimei.xlmm"/>
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data
+                    android:host="app"
+                    android:path="/v1/products/modellist"
+                    android:scheme="com.jimei.xlmm"/>
+            </intent-filter>
         </activity>
         <activity
             android:name=".ui.activity.xiaolumama.TeamExplainActivity"

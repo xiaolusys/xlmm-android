@@ -70,7 +70,6 @@ import com.jimei.xiaolumeimei.utils.DisplayUtils;
 import com.jimei.xiaolumeimei.utils.FileUtils;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
-import com.jimei.xiaolumeimei.utils.StatusBarUtil;
 import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.widget.AutoToolbar;
 import com.jimei.xiaolumeimei.widget.BrandView;
@@ -441,7 +440,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         LinearLayout nav_refund =
                 (LinearLayout) navigationView.getMenu().findItem(R.id.nav_returned).getActionView();
         msg3 = (TextView) nav_refund.findViewById(R.id.msg);
-        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent), 0);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
     }
 

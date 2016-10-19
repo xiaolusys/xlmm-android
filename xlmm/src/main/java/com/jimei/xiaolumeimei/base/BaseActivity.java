@@ -79,7 +79,6 @@ public abstract class BaseActivity extends AutoLayoutActivity {
         mScreenDensity = displayMetrics.density;
         mScreenHeight = displayMetrics.heightPixels;
         mScreenWidth = displayMetrics.widthPixels;
-        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent), 0);
     }
 
     public void getIntentUrl() {
@@ -107,6 +106,7 @@ public abstract class BaseActivity extends AutoLayoutActivity {
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
         ButterKnife.bind(this);
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent), 0);
     }
 
     @Override
