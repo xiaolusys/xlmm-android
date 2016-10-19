@@ -907,9 +907,10 @@ public interface XlmmService {
             @Query("from") String from,
             @Query("days") String days);
 
+    @FormUrlEncoded
     @PATCH("/rest/v1/pmt/ninepic/{id}")
     Observable<SaveTimeBean> saveTime(
             @Path("id") int id,
-            @Query("save_times") int save_times
+            @Field("save_times") int save_times
     );
 }
