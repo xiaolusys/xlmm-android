@@ -59,15 +59,15 @@ public class PushCategoryFragment extends BaseLazyFragment<FragmentPushCategoryB
         b.scrollableLayout.getHelper().setCurrentScrollableContainer(this);
         mNinePicAdapter = new NinePicAdapter(mActivity);
         b.lv.setAdapter(mNinePicAdapter);
-        b.recyclerView.setLayoutManager(new GridLayoutManager(mActivity, 4));
-        b.recyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
-        b.recyclerView.addItemDecoration(new SpaceItemDecoration(15, 15, 25, 25));
-        mMainCategoryAdapter = new MainCategoryAdapter(mActivity);
         if (getArguments() != null) {
             String codeLink = getArguments().getString("codeLink");
             mMainCategoryAdapter.setCodeLink(codeLink);
             mNinePicAdapter.setCodeLink(codeLink);
         }
+        b.recyclerView.setLayoutManager(new GridLayoutManager(mActivity, 4));
+        b.recyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        b.recyclerView.addItemDecoration(new SpaceItemDecoration(15, 15, 25, 25));
+        mMainCategoryAdapter = new MainCategoryAdapter(mActivity);
         b.recyclerView.setAdapter(mMainCategoryAdapter);
     }
 

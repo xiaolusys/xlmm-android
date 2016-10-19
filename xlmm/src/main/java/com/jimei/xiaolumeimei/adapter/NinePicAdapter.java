@@ -119,7 +119,7 @@ public class NinePicAdapter extends BaseAdapter {
             MMProductModel.getInstance()
                     .saveTime(ninePicBean.getId(), 1)
                     .subscribeOn(Schedulers.io())
-                    .subscribe(saveTimeBean -> JUtils.Log("save"),
+                    .subscribe(saveTimeBean -> JUtils.Log("save" + saveTimeBean.getId()),
                             Throwable::printStackTrace);
             if (picArray != null) {
                 if (mContext instanceof BaseSwipeBackCompatActivity) {

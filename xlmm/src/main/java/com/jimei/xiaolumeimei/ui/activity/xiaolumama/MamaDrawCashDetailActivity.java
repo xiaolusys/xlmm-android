@@ -44,13 +44,6 @@ public class MamaDrawCashDetailActivity extends BaseSwipeBackCompatActivity {
     TextView okTv;
     private String account;
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mama_draw_cash_detail);
-    }
-
     @Override
     protected void initData() {
         addSubscription(UserNewModel.getInstance()
