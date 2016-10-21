@@ -30,6 +30,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.jimei.library.widget.CountDownView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.adapter.CompanyAdapter;
@@ -46,7 +47,6 @@ import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.ui.activity.user.WaitSendAddressActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
-import com.jimei.xiaolumeimei.widget.CountDownView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.pingplusplus.android.PaymentActivity;
@@ -62,7 +62,6 @@ import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
 import cn.sharesdk.wechat.moments.WechatMoments;
 import okhttp3.ResponseBody;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         implements View.OnClickListener, View.OnTouchListener, AdapterView.OnItemClickListener {
@@ -185,12 +184,14 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         return R.layout.activity_order_detail;
     }
 
+
+    @Override
+    public void getIntentUrl(Uri uri) {
+        order_id = Integer.valueOf(uri.getQueryParameter("trade_id"));
+    }
+
     @Override
     protected void initViews() {
-        Uri uri = getIntent().getData();
-        if (uri != null) {
-            order_id = Integer.valueOf(uri.getQueryParameter("trade_id"));
-        }
         View view = getLayoutInflater().inflate(R.layout.pop_layout, null);
         dialog = new Dialog(this, R.style.CustomDialog);
         dialog.setContentView(view);
@@ -243,7 +244,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
             showIndeterminateProgressDialog(false);
             addSubscription(TradeModel.getInstance()
                     .getOrderDetailBean(order_id)
-                    .subscribeOn(Schedulers.io())
                     .subscribe(orderDetailBean -> {
                         tid = orderDetailBean.getTid();
                         orderDetail = orderDetailBean;
@@ -259,7 +259,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                         Log.i(TAG, "order_id " + order_id + " " + orderDetailBean.toString());
                         addSubscription(ActivityModel.getInstance()
                                 .getLogisticCompany(order_id)
-                                .subscribeOn(Schedulers.io())
                                 .subscribe(logisticCompanies -> {
                                     CompanyAdapter adapter = new CompanyAdapter(logisticCompanies, getApplicationContext());
                                     listView.setAdapter(adapter);
@@ -267,7 +266,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                                         String code = logisticCompanies.get(position).getCode();
                                         addSubscription(ActivityModel.getInstance()
                                                 .changeLogisticCompany(orderDetail.getUser_adress().getId(), order_id + "", code)
-                                                .subscribeOn(Schedulers.io())
                                                 .subscribe(resultBean -> {
                                                     switch (resultBean.getCode()) {
                                                         case 0:
@@ -297,7 +295,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                 if (orderDetailBean.getOrder_type() == 3) {
                     addSubscription(ProductModel.getInstance()
                             .getTeamBuyBean(orderDetailBean.getTid())
-                            .subscribeOn(Schedulers.io())
                             .subscribe(teamBuyBean -> {
                                 if (teamBuyBean.getStatus() != 2) {
                                     setStatusView(status);
@@ -307,7 +304,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                 } else {
                     addSubscription(TradeModel.getInstance()
                             .getRedBag(tid)
-                            .subscribeOn(Schedulers.io())
                             .subscribe(redBagBean -> {
                                 if (redBagBean.getCode() == 0) {
                                     if (redBagBean.getShare_times_limit() > 0) {
@@ -550,7 +546,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         MobclickAgent.onResume(this);
         Subscription subscription = TradeModel.getInstance()
                 .getOrderDetailBean(order_id)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<OrderDetailBean>() {
                     @Override
                     public void onNext(OrderDetailBean orderDetailBean) {
@@ -564,7 +559,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     private void payNow(String channel) {
         Subscription subscription = TradeModel.getInstance()
                 .orderPayWithChannel(order_id, channel)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<PayInfoBean>() {
                     @Override
                     public void onNext(PayInfoBean payInfoBean) {
@@ -593,7 +587,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         JUtils.Log(TAG, "cancel_order " + order_id);
         Subscription subscription = TradeModel.getInstance()
                 .delRefund(order_id)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<ResponseBody>() {
                     @Override
                     public void onNext(ResponseBody responseBody) {

@@ -8,8 +8,6 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.CommonAbsListviewBaseAdapter;
 import com.jimei.xiaolumeimei.base.CommonViewHolder;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
-import com.jimei.xiaolumeimei.utils.ViewUtils;
-import com.jude.utils.JUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

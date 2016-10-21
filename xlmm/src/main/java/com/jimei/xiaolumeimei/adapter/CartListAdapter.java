@@ -10,13 +10,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.CartsInfoBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
-import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.zhy.autolayout.utils.AutoUtils;
@@ -26,7 +26,6 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import retrofit2.Response;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by wisdom on 16/9/3.
@@ -73,7 +72,6 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
                             mActivity.showIndeterminateProgressDialog(false);
                             mActivity.addSubscription(CartsModel.getInstance()
                                     .delete_carts(cartsInfoBean.getId() + "")
-                                    .subscribeOn(Schedulers.io())
                                     .subscribe(new ServiceResponse<Response<CodeBean>>() {
                                         @Override
                                         public void onNext(Response<CodeBean> responseBody) {
@@ -97,7 +95,6 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
                 mActivity.showIndeterminateProgressDialog(false);
                 mActivity.addSubscription(CartsModel.getInstance()
                         .minus_product_carts(cartsInfoBean.getId() + "")
-                        .subscribeOn(Schedulers.io())
                         .subscribe(new ServiceResponse<Response<CodeBean>>() {
                             @Override
                             public void onNext(Response<CodeBean> responseBody) {
@@ -123,7 +120,6 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
                     mActivity.showIndeterminateProgressDialog(false);
                     mActivity.addSubscription(CartsModel.getInstance()
                             .plus_product_carts(cartsInfoBean.getId() + "")
-                            .subscribeOn(Schedulers.io())
                             .subscribe(new ServiceResponse<Response<CodeBean>>() {
                                 @Override
                                 public void onNext(Response<CodeBean> responseBody) {

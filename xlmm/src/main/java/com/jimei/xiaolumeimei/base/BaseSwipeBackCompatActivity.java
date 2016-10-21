@@ -4,10 +4,11 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 
-import com.jimei.xiaolumeimei.widget.swipeback.SwipeBackActivityBase;
-import com.jimei.xiaolumeimei.widget.swipeback.SwipeBackActivityHelper;
-import com.jimei.xiaolumeimei.widget.swipeback.SwipeBackLayout;
-import com.jimei.xiaolumeimei.widget.swipeback.Utils;
+import com.jimei.library.widget.swipeback.SwipeBackActivityBase;
+import com.jimei.library.widget.swipeback.SwipeBackActivityHelper;
+import com.jimei.library.widget.swipeback.SwipeBackLayout;
+import com.jimei.library.widget.swipeback.Utils;
+
 
 public abstract class BaseSwipeBackCompatActivity extends BaseAppCompatActivity
         implements SwipeBackActivityBase {

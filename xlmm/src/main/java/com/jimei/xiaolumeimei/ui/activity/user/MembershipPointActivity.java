@@ -27,7 +27,6 @@ import java.util.List;
 
 import butterknife.Bind;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 public class MembershipPointActivity extends BaseSwipeBackCompatActivity
         implements View.OnClickListener, ScrollableHelper.ScrollableContainer, AbsListView.OnScrollListener {
@@ -79,7 +78,6 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity
         showIndeterminateProgressDialog(false);
         Subscription subscribe = UserModel.getInstance()
                 .getMembershipPointBean()
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<MembershipPointBean>() {
                     @Override
                     public void onNext(MembershipPointBean pointBean) {
@@ -92,7 +90,6 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity
                         }
                         Subscription subscribe1 = UserModel.getInstance()
                                 .getPointLogBean("1")
-                                .subscribeOn(Schedulers.io())
                                 .subscribe(new ServiceResponse<PointLogBean>() {
                                     @Override
                                     public void onNext(PointLogBean pointLogBean) {
@@ -139,7 +136,6 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity
         if (scrollState == SCROLL_STATE_IDLE && flag) {
             Subscription subscribe1 = UserModel.getInstance()
                     .getPointLogBean(page + "")
-                    .subscribeOn(Schedulers.io())
                     .subscribe(new ServiceResponse<PointLogBean>() {
                         @Override
                         public void onNext(PointLogBean pointLogBean) {

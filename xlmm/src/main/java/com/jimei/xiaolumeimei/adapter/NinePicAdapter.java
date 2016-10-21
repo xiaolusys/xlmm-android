@@ -14,6 +14,9 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.jimei.library.utils.CameraUtils;
+import com.jimei.library.utils.FileUtils;
+import com.jimei.library.widget.ninepicimagview.MultiImageView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.FilePara;
@@ -21,9 +24,6 @@ import com.jimei.xiaolumeimei.entities.NinePicBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.okhttp3.FileParaCallback;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.ImagePagerActivity;
-import com.jimei.xiaolumeimei.utils.CameraUtils;
-import com.jimei.xiaolumeimei.utils.FileUtils;
-import com.jimei.xiaolumeimei.widget.ninepicimagview.MultiImageView;
 import com.jude.utils.JUtils;
 import com.tbruyelle.rxpermissions.RxPermissions;
 import com.umeng.analytics.MobclickAgent;
@@ -35,7 +35,6 @@ import java.util.Collections;
 import java.util.List;
 
 import okhttp3.Call;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/02/29.
@@ -118,7 +117,6 @@ public class NinePicAdapter extends BaseAdapter {
             MobclickAgent.onEvent(mContext, "NinePic_save");
             MMProductModel.getInstance()
                     .saveTime(ninePicBean.getId(), 1)
-                    .subscribeOn(Schedulers.io())
                     .subscribe(saveTimeBean -> JUtils.Log("save" + saveTimeBean.getId()),
                             Throwable::printStackTrace);
             if (picArray != null) {

@@ -7,15 +7,14 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.jimei.library.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.CategoryAdapter;
 import com.jimei.xiaolumeimei.adapter.CategoryListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
-import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
 import com.jimei.xiaolumeimei.widget.CategoryListTask;
 import com.jimei.xiaolumeimei.widget.CategoryTask;
-import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
@@ -72,14 +71,14 @@ public class CategoryListActivity extends BaseSwipeBackCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart(ActivityWebViewActivity.class.getSimpleName());
+        MobclickAgent.onPageStart(this.getClass().getSimpleName());
         MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd(ActivityWebViewActivity.class.getSimpleName());
+        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
         MobclickAgent.onPause(this);
     }
 

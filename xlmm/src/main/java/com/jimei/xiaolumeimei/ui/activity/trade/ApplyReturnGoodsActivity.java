@@ -19,6 +19,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jimei.library.utils.CameraUtils;
+import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmApi;
@@ -28,8 +30,6 @@ import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
 import com.jimei.xiaolumeimei.entities.RefundMsgBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
-import com.jimei.xiaolumeimei.utils.CameraUtils;
-import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.qiniu.android.storage.UploadManager;
@@ -42,7 +42,6 @@ import java.io.File;
 
 import butterknife.Bind;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
         implements View.OnClickListener {
@@ -186,7 +185,6 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
 
         Subscription subscribe = TradeModel.getInstance()
                 .getOrderDetailBean(id)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<OrderDetailBean>() {
                     @Override
                     public void onNext(OrderDetailBean orderDetailBean) {
@@ -306,7 +304,6 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
         Subscription subscription = TradeModel.getInstance()
                 .refund_create(goods_info.getId(), XlmmConst.get_reason_num(reason), num,
                         apply_fee, desc, proof_pic)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<RefundMsgBean>() {
                     @Override
                     public void onNext(RefundMsgBean resp) {
@@ -489,7 +486,6 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
     private void getQiniuToken() {
         Subscription subscription = TradeModel.getInstance()
                 .getQiniuToken()
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<QiniuTokenBean>() {
                     @Override
                     public void onNext(QiniuTokenBean resp) {

@@ -6,13 +6,13 @@ import android.os.Build;
 import android.text.TextUtils;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
+import com.jimei.library.utils.NetUtil;
 import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.okhttp3.PersistentCookieJar;
 import com.jimei.xiaolumeimei.okhttp3.cache.SetCookieCache;
 import com.jimei.xiaolumeimei.okhttp3.persistence.SharedPrefsCookiePersistor;
-import com.jimei.xiaolumeimei.utils.NetUtil;
 import com.jude.utils.JUtils;
 
 import java.io.File;
@@ -34,7 +34,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class XlmmRetrofitClient {
 
     private static XlmmService mService;
-    static SharedPreferences sharedPreferences;
     private static OkHttpClient mOkHttpClient;
     private static OkHttpClient.Builder builder;
 
@@ -56,32 +55,27 @@ public class XlmmRetrofitClient {
     }
 
     private static void createService() {
-
         mService = createAdapter().create(XlmmService.class);
     }
 
     private static Retrofit createAdapter() {
-
-        sharedPreferences =
-                XlmmApp.getmContext().getSharedPreferences("APICLIENT", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = XlmmApp.getmContext().getSharedPreferences("APICLIENT", Context.MODE_PRIVATE);
         if (!TextUtils.isEmpty(sharedPreferences.getString("BASE_URL", ""))) {
-
             String baseUrl = "http://" + sharedPreferences.getString("BASE_URL", "");
-
             JUtils.Log("InformationActivity", "baseurl====" + baseUrl);
             return new Retrofit.Builder().baseUrl(baseUrl)
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .client(mOkHttpClient)
                     .build();
+        } else {
+            JUtils.Log("InformationActivity", "baseurl====");
+            return new Retrofit.Builder().baseUrl(XlmmApi.APP_BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                    .client(mOkHttpClient)
+                    .build();
         }
-
-        JUtils.Log("InformationActivity", "baseurl====");
-        return new Retrofit.Builder().baseUrl(XlmmApi.APP_BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .client(mOkHttpClient)
-                .build();
     }
 
     /**
@@ -102,13 +96,13 @@ public class XlmmRetrofitClient {
                             .cache(cache)
                             .addInterceptor(chain -> {
                                 Request request = chain.request();
-//                                if (JUtils.isNetWorkAvilable()){
-                                    request = request.newBuilder()
-                                            .header("User-Agent", "Android/" + Build.VERSION.RELEASE + " xlmmApp/"
-                                                    + String.valueOf(BuildConfig.VERSION_CODE) + " Mobile/"
-                                                    + Build.MODEL + " NetType/" + NetUtil.getNetType(XlmmApp.getmContext()))
-                                            .build();
-//                                }else {
+//                                if (JUtils.isNetWorkAvilable()) {
+                                request = request.newBuilder()
+                                        .header("User-Agent", "Android/" + Build.VERSION.RELEASE + " xlmmApp/"
+                                                + String.valueOf(BuildConfig.VERSION_CODE) + " Mobile/"
+                                                + Build.MODEL + " NetType/" + NetUtil.getNetType(XlmmApp.getmContext()))
+                                        .build();
+//                                } else {
 //                                    request = request.newBuilder()
 //                                            .cacheControl(CacheControl.FORCE_CACHE)
 //                                            .header("User-Agent", "Android/" + Build.VERSION.RELEASE + " xlmmApp/"
@@ -116,6 +110,7 @@ public class XlmmRetrofitClient {
 //                                                    + Build.MODEL + " NetType/" + NetUtil.getNetType(XlmmApp.getmContext()))
 //                                            .build();
 //                                }
+//                                okhttp3.Response response = chain.proceed(request);
 //                                if (JUtils.isNetWorkAvilable()) {
 //                                    int maxAge = 60 * 60;
 //                                    response.newBuilder()

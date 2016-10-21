@@ -17,7 +17,7 @@
         android:textSize="14sp" />
 
 
-    <com.jimei.xiaolumeimei.widget.SmoothCheckBox
+    <com.jimei.library.widget.SmoothCheckBox
         android:id="@+id/scb"
         android:layout_width="40px"
         android:layout_height="40px"

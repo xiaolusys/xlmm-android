@@ -8,7 +8,6 @@ import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.entities.AllowanceBean;
 import com.jimei.xiaolumeimei.entities.AwardCarryBean;
-import com.jimei.xiaolumeimei.entities.BindInfoBean;
 import com.jimei.xiaolumeimei.entities.BrandListBean;
 import com.jimei.xiaolumeimei.entities.BudgetdetailBean;
 import com.jimei.xiaolumeimei.entities.CarryLogListBean;
@@ -292,16 +291,6 @@ public interface XlmmService {
             @Path("id") int id,
             @Body NicknameBean nickname);
 
-    //修改用户密码
-    @FormUrlEncoded
-    @POST("/rest/v1/register/change_user_pwd")
-    Observable<UserBean> changePassword(
-            @Field("username") String username,
-            @Field("valid_code") String valid_code,
-            @Field("password1") String password1,
-            @Field("password2") String password2
-    );
-
     @POST("/rest/v1/users/customer_logout")
     Observable<LogOutBean> customer_logout();
 
@@ -504,15 +493,6 @@ public interface XlmmService {
 
     @GET("/rest/v1/users/need_set_info")
     Observable<NeedSetInfoBean> need_set_info(
-    );
-
-    @FormUrlEncoded
-    @POST("/rest/v1/users/bang_mobile")
-    Observable<BindInfoBean> bang_mobile(
-            @Field("username") String username,
-            @Field("password1") String password1,
-            @Field("password2") String password2,
-            @Field("valid_code") String valid_code
     );
 
     @GET("/rest/v1/pmt/carrylog/get_clk_list")

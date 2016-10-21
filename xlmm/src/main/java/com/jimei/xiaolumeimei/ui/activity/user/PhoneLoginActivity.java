@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.jimei.library.widget.ClearEditText;
+import com.jimei.library.widget.PasswordEditText;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
@@ -27,8 +29,6 @@ import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
-import com.jimei.xiaolumeimei.widget.ClearEditText;
-import com.jimei.xiaolumeimei.widget.PasswordEditText;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
@@ -42,7 +42,6 @@ import cn.sharesdk.wechat.friends.Wechat;
 import retrofit2.Response;
 import retrofit2.adapter.rxjava.HttpException;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
         implements View.OnClickListener, TextWatcher {
@@ -121,7 +120,6 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                     editor.apply();
                     Subscription subscribe = UserModel.getInstance()
                             .passwordlogin(login_name_value, login_pass_value, null)
-                            .subscribeOn(Schedulers.io())
                             .subscribe(new ServiceResponse<CodeBean>() {
                                 @Override
                                 public void onNext(CodeBean codeBean) {
@@ -194,7 +192,6 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                                             } else if (login.equals("getCoupon")) {
                                                 UserModel.getInstance()
                                                         .getCouPon()
-                                                        .subscribeOn(Schedulers.io())
                                                         .subscribe(new ServiceResponse<Response<GetCouponbean>>() {
                                                             @Override
                                                             public void onNext(

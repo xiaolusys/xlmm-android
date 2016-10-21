@@ -14,6 +14,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.jimei.library.widget.SmoothCheckBox;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ResultEntity;
@@ -23,7 +24,6 @@ import com.jimei.xiaolumeimei.entities.event.UserChangeEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.model.UserNewModel;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.DrawCashResultActivity;
-import com.jimei.xiaolumeimei.widget.SmoothCheckBox;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
@@ -31,7 +31,6 @@ import com.umeng.analytics.MobclickAgent;
 import org.greenrobot.eventbus.EventBus;
 
 import butterknife.Bind;
-import rx.schedulers.Schedulers;
 
 public class UserDrawCashActivity extends BaseSwipeBackCompatActivity
         implements SmoothCheckBox.OnCheckedChangeListener, TextWatcher, View.OnClickListener, CompoundButton.OnCheckedChangeListener {
@@ -80,7 +79,6 @@ public class UserDrawCashActivity extends BaseSwipeBackCompatActivity
     protected void initData() {
         addSubscription(UserNewModel.getInstance()
                 .getProfile()
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<UserInfoBean>() {
                     @Override
                     public void onNext(UserInfoBean userNewBean) {
@@ -262,7 +260,6 @@ public class UserDrawCashActivity extends BaseSwipeBackCompatActivity
                 mCountDownTimer.start();
                 addSubscription(UserModel.getInstance()
                         .getVerifyCode()
-                        .subscribeOn(Schedulers.io())
                         .subscribe(new ServiceResponse<ResultEntity>() {
                             @Override
                             public void onNext(ResultEntity resultEntity) {
@@ -279,9 +276,9 @@ public class UserDrawCashActivity extends BaseSwipeBackCompatActivity
     }
 
     private void drawCash(double fund) {
+        drawCashBtn.setClickable(false);
         addSubscription(UserModel.getInstance()
                 .user_withdraw_cash(Double.toString(fund), codeEt.getText().toString())
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<UserWithdrawResult>() {
                     @Override
                     public void onNext(UserWithdrawResult resp) {
@@ -301,6 +298,12 @@ public class UserDrawCashActivity extends BaseSwipeBackCompatActivity
                                 JUtils.Toast(resp.getMessage());
                                 break;
                         }
+                        drawCashBtn.setClickable(true);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        drawCashBtn.setClickable(true);
                     }
                 }));
     }

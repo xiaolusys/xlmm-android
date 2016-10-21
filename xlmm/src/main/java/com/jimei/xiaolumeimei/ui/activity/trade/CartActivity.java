@@ -8,6 +8,8 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.jimei.library.widget.DividerItemDecoration;
+import com.jimei.library.widget.ScrollLinearLayoutManager;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.CartHistoryAdapter;
 import com.jimei.xiaolumeimei.adapter.CartListAdapter;
@@ -16,8 +18,6 @@ import com.jimei.xiaolumeimei.entities.CartsInfoBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
-import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
-import com.jimei.xiaolumeimei.widget.ScrollLinearLayoutManager;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
-import rx.schedulers.Schedulers;
 
 public class CartActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener {
     @Bind(R.id.rv_cart)
@@ -65,7 +64,6 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
         refreshCartList();
         addSubscription(CartsModel.getInstance()
                 .getCartsHisList()
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<List<CartsInfoBean>>() {
                     @Override
                     public void onNext(List<CartsInfoBean> cartsInfoBeen) {
@@ -131,7 +129,6 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
     public void setPriceText() {
         addSubscription(CartsModel.getInstance()
                 .getCartsInfoList(getIds())
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<CartsPayinfoBean>() {
                     @Override
                     public void onNext(CartsPayinfoBean cartsPayinfoBean) {
@@ -154,7 +151,6 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
         showIndeterminateProgressDialog(false);
         addSubscription(CartsModel.getInstance()
                 .getCartsList()
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<List<CartsInfoBean>>() {
                     @Override
                     public void onNext(List<CartsInfoBean> cartsInfoBeen) {
@@ -180,7 +176,6 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
     private void refreshIds() {
         addSubscription(CartsModel.getInstance()
                 .getCartsList()
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<List<CartsInfoBean>>() {
                     @Override
                     public void onNext(List<CartsInfoBean> cartsInfoBeen) {

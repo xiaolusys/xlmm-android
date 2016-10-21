@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context=".ui.activity.trade.RefundDetailActivity">
 
-    <com.jimei.xiaolumeimei.widget.XlmmTitleView
+    <com.jimei.library.widget.XlmmTitleView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:xlmm_title="退货(款)详情" />
@@ -341,7 +341,7 @@
                     android:background="@drawable/choose_img_bg"
                     android:gravity="center">
 
-                    <com.jimei.xiaolumeimei.widget.RoundCornerImageView
+                    <com.jimei.library.widget.RoundCornerImageView
                         android:id="@+id/sdv"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -523,7 +523,7 @@
                     android:background="@drawable/choose_img_bg"
                     android:gravity="center">
 
-                    <com.jimei.xiaolumeimei.widget.RoundCornerImageView
+                    <com.jimei.library.widget.RoundCornerImageView
                         android:id="@+id/round_image"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -541,7 +541,7 @@
                     android:background="@drawable/choose_img_bg"
                     android:gravity="center">
 
-                    <com.jimei.xiaolumeimei.widget.RoundCornerImageView
+                    <com.jimei.library.widget.RoundCornerImageView
                         android:id="@+id/round_image1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -559,7 +559,7 @@
                     android:background="@drawable/choose_img_bg"
                     android:gravity="center">
 
-                    <com.jimei.xiaolumeimei.widget.RoundCornerImageView
+                    <com.jimei.library.widget.RoundCornerImageView
                         android:id="@+id/round_image2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -577,7 +577,7 @@
                     android:visibility="invisible"
                     android:gravity="center">
 
-                    <com.jimei.xiaolumeimei.widget.RoundCornerImageView
+                    <com.jimei.library.widget.RoundCornerImageView
                         android:id="@+id/round_image3"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"

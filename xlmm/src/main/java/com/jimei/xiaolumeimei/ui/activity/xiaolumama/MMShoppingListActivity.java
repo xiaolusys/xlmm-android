@@ -10,18 +10,17 @@ import com.cpoopc.scrollablelayoutlib.ScrollableHelper;
 import com.cpoopc.scrollablelayoutlib.ScrollableLayout;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.jimei.library.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.ShoppingListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.OderCarryBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
-import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/02/18.
@@ -45,7 +44,6 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity implemen
         showIndeterminateProgressDialog(false);
         Subscription subscribe = MMProductModel.getInstance()
                 .getMamaAllOderCarryLogs("direct", "1")
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<OderCarryBean>() {
 
                     @Override
@@ -116,7 +114,6 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity implemen
     private void loadMoreData(String page) {
         Subscription subscribe = MMProductModel.getInstance()
                 .getMamaAllOderCarryLogs("direct", page)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<OderCarryBean>() {
                     @Override
                     public void onNext(OderCarryBean shoppingListBean) {

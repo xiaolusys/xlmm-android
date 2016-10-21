@@ -27,7 +27,6 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 public class WithdrawCashHisAdapter extends XRecyclerView.Adapter<WithdrawCashHisAdapter.ViewHolder> {
     private static final String TAG = "WithdrawCashHisAdapter";
@@ -80,7 +79,6 @@ public class WithdrawCashHisAdapter extends XRecyclerView.Adapter<WithdrawCashHi
             holder.btn_cancel.setOnClickListener(v -> {
                 Subscription subscribe = MamaInfoModel.getInstance()
                         .cancel_withdraw_cash(record.getId() + "")
-                        .subscribeOn(Schedulers.io())
                         .subscribe(new ServiceResponse<ResponseResultBean>() {
                             @Override
                             public void onNext(ResponseResultBean resp) {

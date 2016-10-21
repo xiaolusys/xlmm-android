@@ -16,14 +16,8 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.CouponListAdapter;
 import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.entities.CouponEntity;
-import com.jimei.xiaolumeimei.model.UserModel;
-import com.jimei.xiaolumeimei.ui.activity.user.SelectCouponActivity.SelectCouponAdapter;
-import com.jimei.xiaolumeimei.widget.loadingdialog.XlmmLoadingDialog;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 
 import java.util.ArrayList;
-
-import rx.schedulers.Schedulers;
 
 public class SelectCouponFragment extends BaseFragment implements AdapterView.OnItemClickListener, View.OnClickListener {
     private static final String TYPE = "type";

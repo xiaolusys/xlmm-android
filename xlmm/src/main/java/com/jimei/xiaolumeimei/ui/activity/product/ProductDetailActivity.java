@@ -26,6 +26,11 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.jimei.library.utils.ViewUtils;
+import com.jimei.library.widget.AttrView;
+import com.jimei.library.widget.CountDownView;
+import com.jimei.library.widget.SpaceItemDecoration;
+import com.jimei.library.widget.TagTextView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.MyPagerAdapter;
 import com.jimei.xiaolumeimei.adapter.SkuColorAdapter;
@@ -46,12 +51,6 @@ import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartsPayInfoActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
-import com.jimei.xiaolumeimei.utils.RxUtils;
-import com.jimei.xiaolumeimei.utils.ViewUtils;
-import com.jimei.xiaolumeimei.widget.AttrView;
-import com.jimei.xiaolumeimei.widget.CountDownView;
-import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
-import com.jimei.xiaolumeimei.widget.TagTextView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
@@ -68,7 +67,6 @@ import cn.sharesdk.framework.Platform;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
 import cn.sharesdk.wechat.moments.WechatMoments;
-import rx.schedulers.Schedulers;
 
 public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetailBinding> implements View.OnClickListener, Animation.AnimationListener {
     private static final String POST_URL = "?imageMogr2/format/jpg/quality/70";
@@ -88,18 +86,31 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
     private List<ProductDetailBean.SkuInfoBean> skuInfo;
 
     @Override
+    public void getIntentUrl(Uri uri) {
+        String path = uri.getPath();
+        switch (path) {
+            case "/v1/products/modellist":
+                model_id = Integer.valueOf(uri.getQueryParameter("model_id"));
+                break;
+            case "/v1/products/modelist":
+                model_id = Integer.valueOf(uri.getQueryParameter("model_id"));
+                break;
+            case "/v1/products":
+                String product_id = uri.getQueryParameter("product_id");
+                String[] split = product_id.split("details/");
+                model_id = Integer.valueOf(split[1]);
+                break;
+        }
+    }
+
+    @Override
+    protected void getBundleExtras(Bundle extras) {
+        model_id = extras.getInt("model_id");
+    }
+
+    @Override
     protected void initViews() {
         setStatusBar();
-        Uri uri = getIntent().getData();
-        if (uri != null) {
-            if (uri.getPath().contains("product_detail")) {
-                model_id = Integer.valueOf(uri.getQueryParameter("model_id"));
-            } else if (uri.getPath().contains("products/modelist")) {
-                model_id = Integer.valueOf(uri.getQueryParameter("model_id"));
-            }
-        } else {
-            model_id = getIntent().getExtras().getInt("model_id");
-        }
         num = 1;
         showIndeterminateProgressDialog(false);
         WebSettings settings = b.webView.getSettings();
@@ -171,8 +182,6 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
     protected void initData() {
         addSubscription(ProductModel.getInstance()
                 .getProductDetail(model_id)
-                .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<ProductDetailBean>() {
 
                     @Override
@@ -183,8 +192,6 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                 }));
         addSubscription(ProductModel.getInstance()
                 .getShareModel(model_id)
-                .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<ShareModelBean>() {
 
                     @Override
@@ -194,8 +201,6 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                 }));
         addSubscription(CartsModel.getInstance()
                 .show_carts_num()
-                .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<CartsNumResultBean>() {
 
                     @Override
@@ -406,14 +411,12 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                 } else {
                     addSubscription(CartsModel.getInstance()
                             .addToCart(item_id, sku_id, num, 3)
-                            .subscribeOn(Schedulers.io())
                             .subscribe(new ServiceResponse<ResultEntity>() {
                                 @Override
                                 public void onNext(ResultEntity resultEntity) {
                                     if (resultEntity.getCode() == 0) {
                                         CartsModel.getInstance()
                                                 .getCartsList(3)
-                                                .subscribeOn(Schedulers.io())
                                                 .subscribe(new ServiceResponse<List<CartsInfoBean>>() {
                                                     @Override
                                                     public void onNext(List<CartsInfoBean> cartsinfoBeen) {
@@ -451,7 +454,6 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                     if (collectFlag) {
                         addSubscription(ProductModel.getInstance()
                                 .deleteCollection(model_id)
-                                .subscribeOn(Schedulers.io())
                                 .subscribe(new ServiceResponse<CollectionResultBean>() {
                                     @Override
                                     public void onNext(CollectionResultBean collectionResultBean) {
@@ -466,7 +468,6 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                     } else {
                         addSubscription(ProductModel.getInstance()
                                 .addCollection(model_id)
-                                .subscribeOn(Schedulers.io())
                                 .subscribe(new ServiceResponse<CollectionResultBean>() {
                                     @Override
                                     public void onNext(CollectionResultBean collectionResultBean) {
@@ -511,10 +512,9 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
     }
 
     private void addToCart(boolean dismiss) {
-        MobclickAgent.onEvent(this,"AddCartsID");
+        MobclickAgent.onEvent(this, "AddCartsID");
         addSubscription(CartsModel.getInstance()
                 .addToCart(item_id, sku_id, num)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<ResultEntity>() {
                     @Override
                     public void onNext(ResultEntity resultEntity) {

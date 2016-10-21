@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.jimei.xiaolumeimei.widget.XlmmTitleView
+    <com.jimei.library.widget.XlmmTitleView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:xlmm_title="活跃值" />
@@ -45,7 +45,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
 
-            <com.jimei.xiaolumeimei.widget.MyXRecyclerView
+            <com.jimei.library.widget.MyXRecyclerView
                 android:id="@+id/lv_liveness"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent" />

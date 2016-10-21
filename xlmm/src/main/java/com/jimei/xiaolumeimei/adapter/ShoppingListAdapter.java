@@ -15,10 +15,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.OderCarryBean;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.OrderLogisticActivity;
-import com.jimei.xiaolumeimei.utils.ViewUtils;
 
 import java.util.ArrayList;
 import java.util.List;

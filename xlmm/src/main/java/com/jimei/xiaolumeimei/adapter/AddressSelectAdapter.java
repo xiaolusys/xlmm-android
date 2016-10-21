@@ -10,10 +10,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.jimei.library.widget.SmoothCheckBox;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.AddressBean;
 import com.jimei.xiaolumeimei.ui.activity.user.ChanggeSelectAddressActivity;
-import com.jimei.xiaolumeimei.widget.SmoothCheckBox;
 import com.zhy.autolayout.utils.AutoUtils;
 
 import java.util.ArrayList;

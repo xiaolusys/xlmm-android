@@ -5,12 +5,12 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <com.jimei.xiaolumeimei.widget.XlmmTitleView
+    <com.jimei.library.widget.XlmmTitleView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:xlmm_title="手机绑定"/>
 
-    <com.jimei.xiaolumeimei.widget.CircleImageView
+    <com.jimei.library.widget.CircleImageView
         android:id="@+id/headimage"
         android:layout_width="120dp"
         android:layout_height="120dp"
@@ -27,7 +27,7 @@
         android:layout_marginTop="8dp"
         />
 
-    <com.jimei.xiaolumeimei.widget.ClearEditText
+    <com.jimei.library.widget.ClearEditText
         android:id="@+id/register_name"
         style="@style/EditTextStyle"
         android:layout_width="match_parent"

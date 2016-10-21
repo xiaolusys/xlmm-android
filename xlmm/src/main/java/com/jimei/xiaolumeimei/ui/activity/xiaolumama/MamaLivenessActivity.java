@@ -7,20 +7,19 @@ import android.widget.TextView;
 import com.cpoopc.scrollablelayoutlib.ScrollableLayout;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.jimei.library.widget.DividerItemDecoration;
+import com.jimei.library.widget.MyXRecyclerView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.MamaLivenessAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.MamaLivenessBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
-import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
-import com.jimei.xiaolumeimei.widget.MyXRecyclerView;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
 import butterknife.Bind;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by wulei on 2016/2/4.
@@ -88,7 +87,6 @@ public class MamaLivenessActivity extends BaseSwipeBackCompatActivity {
     private void loadMoreData(String page) {
         addSubscription(MamaInfoModel.getInstance()
                 .getMamaLiveness(page)
-                .subscribeOn(Schedulers.io())
                 .subscribe(livenessBean -> {
                     if (livenessBean != null) {
                         mAdapter.update(livenessBean.getResults());
@@ -106,7 +104,6 @@ public class MamaLivenessActivity extends BaseSwipeBackCompatActivity {
         showIndeterminateProgressDialog(false);
         addSubscription(MamaInfoModel.getInstance()
                 .getMamaLiveness("1")
-                .subscribeOn(Schedulers.io())
                 .subscribe(pointBean -> {
                     if (pointBean != null) {
                         JUtils.Log(TAG, "MamaLivenessBean=" + pointBean.toString());

@@ -5,6 +5,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.jimei.library.widget.LogImageView;
+import com.jimei.library.widget.LogMsgView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.GoodsListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -12,8 +14,6 @@ import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.LogisticsBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
-import com.jimei.xiaolumeimei.widget.LogImageView;
-import com.jimei.xiaolumeimei.widget.LogMsgView;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
-import rx.schedulers.Schedulers;
 
 public class LogisticsActivity extends BaseSwipeBackCompatActivity {
     @Bind(R.id.tv_company)
@@ -55,7 +54,6 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
                 orderTv.setText(packetid);
                 addSubscription(TradeModel.getInstance()
                         .get_logistics_by_packagetid(packetid, company_code)
-                        .subscribeOn(Schedulers.io())
                         .subscribe(this::fillDataToView, throwable -> {
                             fillDataToView(null);
                             JUtils.Toast("暂无物流进展!");
@@ -74,7 +72,6 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
     private void fillDataToView(LogisticsBean logisticsBean) {
         addSubscription(TradeModel.getInstance()
                 .getOrderDetailBean(id)
-                .subscribeOn(Schedulers.io())
                 .subscribe(orderDetailBean -> {
                     ArrayList<AllOrdersBean.ResultsEntity.OrdersEntity> orders = orderDetailBean.getOrders();
                     for (int i = 0; i < orders.size(); i++) {

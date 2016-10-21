@@ -14,13 +14,12 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.jimei.xiaolumeimei.utils.ViewUtils;
+import com.jimei.library.utils.ViewUtils;
+import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 
 public class AllRefundsListAdapter extends BaseAdapter {
     private static final String TAG = "AllRefundsListAdapter";

@@ -13,21 +13,20 @@ import android.widget.Toast;
 import com.cpoopc.scrollablelayoutlib.ScrollableLayout;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.jimei.library.widget.DividerItemDecoration;
+import com.jimei.library.widget.MyXRecyclerView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.UserWalletAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.BudgetdetailBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.model.UserNewModel;
-import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
-import com.jimei.xiaolumeimei.widget.MyXRecyclerView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/02/26.
@@ -59,7 +58,6 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
         MobclickAgent.onResume(this);
         Subscription subscribe1 = UserNewModel.getInstance()
                 .budGetdetailBean("1")
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<BudgetdetailBean>() {
                     @Override
                     public void onNext(BudgetdetailBean budgetdetailBean) {
@@ -78,7 +76,6 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
                         }
                         subscribe = UserNewModel.getInstance()
                                 .getProfile()
-                                .subscribeOn(Schedulers.io())
                                 .subscribe(new ServiceResponse<UserInfoBean>() {
                                     @Override
                                     public void onNext(UserInfoBean userNewBean) {
@@ -143,7 +140,6 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
         JUtils.Log(TAG, "load page " + page);
         Subscription subscribe = UserNewModel.getInstance()
                 .budGetdetailBean(Integer.toString(page))
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<BudgetdetailBean>() {
                     @Override
                     public void onNext(BudgetdetailBean budgetdetailBean) {

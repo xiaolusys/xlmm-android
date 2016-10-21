@@ -16,7 +16,6 @@ import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
-import rx.schedulers.Schedulers;
 
 public class MamaDrawCouponActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener {
     @Bind(R.id.tv_money)
@@ -63,7 +62,6 @@ public class MamaDrawCouponActivity extends BaseSwipeBackCompatActivity implemen
                     dialog.dismiss();
                     MamaInfoModel.getInstance()
                             .drawCoupon(id)
-                            .subscribeOn(Schedulers.io())
                             .subscribe(drawCouponBean -> {
                                 JUtils.Toast(drawCouponBean.getInfo());
                                 if (drawCouponBean.getCode() == 0) {

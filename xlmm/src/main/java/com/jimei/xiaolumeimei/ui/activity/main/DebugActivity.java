@@ -23,7 +23,6 @@ import com.umeng.analytics.MobclickAgent;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
 import butterknife.Bind;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye on 16/5/9.
@@ -94,7 +93,6 @@ public class DebugActivity extends BaseSwipeBackCompatActivity
 
             UserModel.getInstance()
                     .openDebug(textPass)
-                    .subscribeOn(Schedulers.io())
                     .subscribe(new ServiceResponse<CodeBean>() {
                         @Override
                         public void onNext(CodeBean codeBean) {
@@ -109,7 +107,6 @@ public class DebugActivity extends BaseSwipeBackCompatActivity
                                                 LoginUtils.getUserAccount(getApplicationContext());
                                         UserModel.getInstance()
                                                 .customer_logout()
-                                                .subscribeOn(Schedulers.io())
                                                 .subscribe(new ServiceResponse<LogOutBean>() {
                                                     @Override
                                                     public void onNext(LogOutBean responseBody) {

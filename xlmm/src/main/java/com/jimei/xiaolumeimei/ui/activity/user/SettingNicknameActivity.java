@@ -18,7 +18,6 @@ import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 public class SettingNicknameActivity extends BaseSwipeBackCompatActivity
         implements View.OnClickListener {
@@ -86,7 +85,6 @@ public class SettingNicknameActivity extends BaseSwipeBackCompatActivity
     private void setNickname() {
         Subscription subscribe = UserModel.getInstance()
                 .setNickname(userid, nicknameBean)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<UserBean>() {
                     @Override
                     public void onNext(UserBean user) {
@@ -122,7 +120,6 @@ public class SettingNicknameActivity extends BaseSwipeBackCompatActivity
     private void getUserInfo() {
         Subscription subscribe = UserModel.getInstance()
                 .getUserInfo()
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<UserInfoBean>() {
                     @Override
                     public void onNext(UserInfoBean user) {

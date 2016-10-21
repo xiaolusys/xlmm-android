@@ -17,10 +17,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.jimei.library.utils.ViewUtils;
+import com.jimei.library.widget.glidemoudle.CropCircleTransformation;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.PotentialFans;
-import com.jimei.xiaolumeimei.widget.glidemoudle.CropCircleTransformation;
-import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jude.utils.JUtils;
 
 import java.util.ArrayList;

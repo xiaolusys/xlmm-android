@@ -33,10 +33,22 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.jimei.library.utils.DisplayUtils;
+import com.jimei.library.utils.FileUtils;
+import com.jimei.library.utils.ViewUtils;
+import com.jimei.library.widget.AutoToolbar;
+import com.jimei.library.widget.BrandView;
+import com.jimei.library.widget.SpaceItemDecoration;
+import com.jimei.library.widget.badgelib.BadgeView;
+import com.jimei.library.widget.banner.SliderLayout;
+import com.jimei.library.widget.banner.SliderTypes.BaseSliderView;
+import com.jimei.library.widget.banner.SliderTypes.DefaultSliderView;
+import com.jimei.library.widget.scrolllayout.ScrollableLayout;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.ActivityListAdapter;
 import com.jimei.xiaolumeimei.adapter.MainCategoryAdapter;
 import com.jimei.xiaolumeimei.base.BasePresenterActivity;
+import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AddressDownloadResultBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
@@ -56,7 +68,6 @@ import com.jimei.xiaolumeimei.ui.activity.trade.AllOrdersActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.AllCouponActivity;
-import com.jimei.xiaolumeimei.ui.activity.user.CustomProblemActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.InformationActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.MembershipPointActivity;
@@ -65,21 +76,10 @@ import com.jimei.xiaolumeimei.ui.fragment.v1.view.MastFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.FirstFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.GetCouponFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.ProductListFragment;
-import com.jimei.xiaolumeimei.ui.mminfo.MamaActivity;
-import com.jimei.xiaolumeimei.utils.DisplayUtils;
-import com.jimei.xiaolumeimei.utils.FileUtils;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
-import com.jimei.xiaolumeimei.utils.ViewUtils;
-import com.jimei.xiaolumeimei.widget.AutoToolbar;
-import com.jimei.xiaolumeimei.widget.BrandView;
-import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.widget.VersionManager;
-import com.jimei.xiaolumeimei.widget.badgelib.BadgeView;
-import com.jimei.xiaolumeimei.widget.banner.SliderLayout;
-import com.jimei.xiaolumeimei.widget.banner.SliderTypes.BaseSliderView;
-import com.jimei.xiaolumeimei.widget.banner.SliderTypes.DefaultSliderView;
-import com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableLayout;
 import com.jimei.xiaolumeimei.xlmmService.UpdateService;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
@@ -201,7 +201,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
             firstFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.Translucent_NoTitle);
             firstFragment.show(getFragmentManager(), "first");
         }
-
         if (LoginUtils.checkLoginState(getApplicationContext())) {
             mPresenter.isCouPon();
         }
@@ -353,7 +352,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
                 readyGo(AllOrdersActivity.class, bundle);
             } else if (id == R.id.nav_problem) {
                 JumpUtils.jumpToWebViewWithCookies(this, "http://m.xiaolumeimei.com/mall/faq", -1,
-                        CustomProblemActivity.class);
+                        CommonWebViewActivity.class, "常见问题", false);
             } else if (id == R.id.nav_complain) {
                 readyGo(ComplainActivity.class);
             } else if (id == R.id.my_shop) {
@@ -646,6 +645,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     @Override
     public void initMainView(SwipeRefreshLayout swipeRefreshLayout)
             throws NullPointerException {
+        showNetworkError();
         mPresenter.getPortalBean(swipeRefreshLayout);
     }
 

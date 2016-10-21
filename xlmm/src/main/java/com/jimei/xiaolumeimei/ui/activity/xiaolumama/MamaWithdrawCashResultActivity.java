@@ -76,7 +76,6 @@ public class MamaWithdrawCashResultActivity extends BaseSwipeBackCompatActivity
         msgTv.setText(msg);
         Subscription subscribe = UserNewModel.getInstance()
                 .getProfile()
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<UserInfoBean>() {
                     @Override
                     public void onNext(UserInfoBean userInfoBean) {

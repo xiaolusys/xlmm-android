@@ -15,8 +15,6 @@ import com.jude.utils.JUtils;
 
 import java.util.ArrayList;
 
-import rx.schedulers.Schedulers;
-
 
 public class GoodWeekActivity extends BaseMVVMActivity<ActivityGoodWeekBinding> {
 
@@ -43,7 +41,6 @@ public class GoodWeekActivity extends BaseMVVMActivity<ActivityGoodWeekBinding> 
         showIndeterminateProgressDialog(false);
         addSubscription(MamaInfoModel.getInstance()
                 .getTaskReward()
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<WeekTaskRewardBean>() {
                     @Override
                     public void onNext(WeekTaskRewardBean weekTaskRewardBean) {

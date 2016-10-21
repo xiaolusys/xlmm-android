@@ -46,7 +46,7 @@
         android:layout_height="1px"
         android:background="@color/bg_grey" />
 
-    <com.jimei.xiaolumeimei.widget.NestedListView
+    <com.jimei.library.widget.NestedListView
         android:id="@+id/lv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

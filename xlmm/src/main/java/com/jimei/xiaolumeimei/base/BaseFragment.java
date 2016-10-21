@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableHelper;
+import com.jimei.library.widget.scrolllayout.ScrollableHelper;
 import com.jude.utils.JUtils;
 
 /**

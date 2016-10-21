@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.jimei.library.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.CollectionAdapter;
 import com.jimei.xiaolumeimei.entities.CollectionAllBean;
@@ -20,14 +21,11 @@ import com.jimei.xiaolumeimei.entities.CollectionBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.ui.activity.product.CollectionActivity;
 import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
-import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import rx.schedulers.Schedulers;
 
 
 public class CollectionFragment extends Fragment implements View.OnClickListener {
@@ -120,7 +118,6 @@ public class CollectionFragment extends Fragment implements View.OnClickListener
     private void initData() {
         ProductModel.getInstance()
                 .getCollection(page, type)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<CollectionAllBean>() {
                     @Override
                     public void onNext(CollectionAllBean collectionAllBean) {

@@ -18,7 +18,6 @@ import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
-import rx.schedulers.Schedulers;
 
 public class EditPasswordForgetActivity extends BaseSwipeBackCompatActivity
         implements View.OnClickListener {
@@ -76,7 +75,6 @@ public class EditPasswordForgetActivity extends BaseSwipeBackCompatActivity
                                 String password2) {
         UserModel.getInstance()
                 .reset_password(username, password1, password2, valid_code)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<CodeBean>() {
                     @Override
                     public void onNext(CodeBean codeBean) {
@@ -87,7 +85,6 @@ public class EditPasswordForgetActivity extends BaseSwipeBackCompatActivity
                         if (codeBean.getRcode() == 0) {
                             UserModel.getInstance()
                                     .passwordlogin(username, password1, null)
-                                    .subscribeOn(Schedulers.io())
                                     .subscribe(new ServiceResponse<CodeBean>() {
                                         @Override
                                         public void onNext(CodeBean codeBean1) {

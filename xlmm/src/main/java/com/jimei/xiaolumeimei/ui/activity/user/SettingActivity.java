@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import com.jimei.library.utils.DataClearManager;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
@@ -19,7 +20,6 @@ import com.jimei.xiaolumeimei.entities.VersionBean;
 import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.CompanyInfoActivity;
-import com.jimei.xiaolumeimei.utils.DataClearManager;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.widget.VersionManager;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -109,7 +109,6 @@ public class SettingActivity extends BaseMVVMActivity<ActivitySettingBinding>
     private void update() {
         ActivityModel.getInstance()
                 .getVersion()
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<VersionBean>() {
                     @Override
                     public void onNext(VersionBean versionBean) {
@@ -165,7 +164,6 @@ public class SettingActivity extends BaseMVVMActivity<ActivitySettingBinding>
                     .getUserAccount("android", mRegId,
                             Settings.Secure.getString(XlmmApp.getmContext().getContentResolver(),
                                     Settings.Secure.ANDROID_ID))
-                    .subscribeOn(Schedulers.io())
                     .subscribe(new ServiceResponse<UserAccountBean>() {
                         @Override
                         public void onNext(UserAccountBean user) {

@@ -142,7 +142,6 @@ public class LoginUtils {
                     .getUserAccount("android", mRegId,
                             Settings.Secure.getString(XlmmApp.getmContext().getContentResolver(),
                                     Settings.Secure.ANDROID_ID))
-                    .subscribeOn(Schedulers.io())
                     .subscribe(new ServiceResponse<UserAccountBean>() {
                         @Override
                         public void onNext(UserAccountBean user) {

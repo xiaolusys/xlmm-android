@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.jimei.library.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.ProductListAdapter;
 import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
@@ -17,8 +18,6 @@ import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.databinding.ActivityProductListBinding;
 import com.jimei.xiaolumeimei.entities.CategoryProductListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
-import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
-import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
@@ -27,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBinding> implements View.OnClickListener {
 
@@ -55,10 +53,8 @@ public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBin
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-        if (extras != null) {
-            type = extras.getString("type");
-            title = extras.getString("title");
-        }
+        type = extras.getString("type");
+        title = extras.getString("title");
     }
 
     @Override
@@ -67,20 +63,21 @@ public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBin
     }
 
     @Override
-    protected void initViews() {
-        Uri uri = getIntent().getData();
-        if (uri != null) {
-            if (uri.getPath().contains("childlist")) {
-                type = XlmmConst.TYPE_CHILD;
-                title = "萌娃专区";
-            } else if (uri.getPath().contains("ladylist")) {
-                type = XlmmConst.TYPE_LADY;
-                title = "女装专区";
-            }else if (uri.getPath().contains("category")){
-                type = uri.getQueryParameter("cid");
-                title = uri.getQueryParameter("title");
-            }
+    public void getIntentUrl(Uri uri) {
+        if (uri.getPath().contains("childlist")) {
+            type = XlmmConst.TYPE_CHILD;
+            title = "萌娃专区";
+        } else if (uri.getPath().contains("ladylist")) {
+            type = XlmmConst.TYPE_LADY;
+            title = "女装专区";
+        } else if (uri.getPath().contains("category")) {
+            type = uri.getQueryParameter("cid");
+            title = uri.getQueryParameter("title");
         }
+    }
+
+    @Override
+    protected void initViews() {
         b.title.setName(title);
         GridLayoutManager manager = new GridLayoutManager(this, 2);
         b.xrv.setLayoutManager(manager);
@@ -135,7 +132,6 @@ public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBin
         }
         Subscription subscribe = ProductModel.getInstance()
                 .getCategoryProductList(cid, page, order_by)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<CategoryProductListBean>() {
                     @Override
                     public void onNext(CategoryProductListBean categoryProductListBean) {
@@ -194,14 +190,14 @@ public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBin
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart(ActivityWebViewActivity.class.getSimpleName());
+        MobclickAgent.onPageStart(this.getClass().getSimpleName());
         MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd(ActivityWebViewActivity.class.getSimpleName());
+        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
         MobclickAgent.onPause(this);
     }
 }

@@ -23,7 +23,6 @@ import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
-import rx.schedulers.Schedulers;
 
 
 public class MamaDrawSmallCashActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener, TextWatcher {
@@ -57,7 +56,6 @@ public class MamaDrawSmallCashActivity extends BaseSwipeBackCompatActivity imple
     protected void initData() {
         addSubscription(UserNewModel.getInstance()
                 .getProfile()
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<UserInfoBean>() {
                     @Override
                     public void onNext(UserInfoBean userNewBean) {
@@ -107,7 +105,6 @@ public class MamaDrawSmallCashActivity extends BaseSwipeBackCompatActivity imple
                 mCountDownTimer.start();
                 addSubscription(UserModel.getInstance()
                         .getVerifyCode()
-                        .subscribeOn(Schedulers.io())
                         .subscribe(new ServiceResponse<ResultEntity>() {
                             @Override
                             public void onNext(ResultEntity resultEntity) {
@@ -126,9 +123,9 @@ public class MamaDrawSmallCashActivity extends BaseSwipeBackCompatActivity imple
                 } else if (codeEt.getText().length() < 6) {
                     JUtils.Toast("验证码有误");
                 } else {
+                    drawCashBtn.setClickable(false);
                     addSubscription(MamaInfoModel.getInstance()
                             .getNoauditCashout(drawMoney, codeEt.getText().toString())
-                            .subscribeOn(Schedulers.io())
                             .subscribe(resultEntity -> {
                                 JUtils.Toast(resultEntity.getInfo());
                                 if (resultEntity.getCode() == 0) {
@@ -139,7 +136,10 @@ public class MamaDrawSmallCashActivity extends BaseSwipeBackCompatActivity imple
                                     startActivity(intent);
                                     finish();
                                 }
-                            },Throwable::printStackTrace));
+                            }, e -> {
+                                e.printStackTrace();
+                                drawCashBtn.setClickable(true);
+                            }));
                 }
                 break;
         }

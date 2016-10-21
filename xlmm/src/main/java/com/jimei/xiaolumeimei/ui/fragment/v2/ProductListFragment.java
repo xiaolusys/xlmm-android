@@ -13,13 +13,13 @@ import android.view.ViewGroup;
 
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.jimei.library.widget.CountDownView;
+import com.jimei.library.widget.SpaceItemDecoration;
+import com.jimei.library.widget.scrolllayout.ScrollableHelper;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.ProductListBeanAdapter;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
-import com.jimei.xiaolumeimei.widget.CountDownView;
-import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
-import com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableHelper;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
@@ -28,7 +28,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 
@@ -190,7 +189,6 @@ public class ProductListFragment extends Fragment implements ScrollableHelper.Sc
     private void loadMore(int num) {
         addSubscription(ProductModel.getInstance()
                 .getProductListBean(num, type)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<ProductListBean>() {
                     @Override
                     public void onNext(ProductListBean productListBean) {
@@ -217,7 +215,6 @@ public class ProductListFragment extends Fragment implements ScrollableHelper.Sc
         page = 1;
         ProductModel.getInstance()
                 .getProductListBean(page, type)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<ProductListBean>() {
                     @Override
                     public void onNext(ProductListBean productListBean) {

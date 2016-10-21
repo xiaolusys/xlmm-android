@@ -20,7 +20,6 @@ import cn.sharesdk.framework.Platform;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
 import cn.sharesdk.wechat.moments.WechatMoments;
-import rx.schedulers.Schedulers;
 
 public class RedBagActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener {
     @Bind(R.id.tv_num)
@@ -43,7 +42,6 @@ public class RedBagActivity extends BaseSwipeBackCompatActivity implements View.
         showIndeterminateProgressDialog(false);
         TradeModel.getInstance()
                 .getRedBag(tid)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<RedBagBean>() {
                     @Override
                     public void onNext(RedBagBean redBagBean) {
@@ -73,9 +71,7 @@ public class RedBagActivity extends BaseSwipeBackCompatActivity implements View.
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-        if (extras != null) {
-            tid = extras.getString("tid", "");
-        }
+        tid = extras.getString("tid", "");
     }
 
     @Override

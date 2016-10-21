@@ -5,18 +5,17 @@ import android.support.v7.widget.GridLayoutManager;
 
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.jimei.library.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.BrandActivityAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.BrandListBean;
 import com.jimei.xiaolumeimei.model.ActivityModel;
-import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye on 16/5/3.
@@ -29,11 +28,8 @@ public class BrandListActivity extends BaseSwipeBackCompatActivity {
     private String id;
 
     @Override
-    public void getIntentUrl() {
-        Uri uri = getIntent().getData();
-        if (uri != null) {
-            id = uri.getQueryParameter("activity_id");
-        }
+    public void getIntentUrl(Uri uri) {
+        id = uri.getQueryParameter("activity_id");
     }
 
     @Override
@@ -41,7 +37,6 @@ public class BrandListActivity extends BaseSwipeBackCompatActivity {
         showIndeterminateProgressDialog(false);
         Subscription subscribe = ActivityModel.getInstance()
                 .getBrandList(id)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<BrandListBean>() {
                     @Override
                     public void onNext(BrandListBean productListBean) {

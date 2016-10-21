@@ -56,7 +56,7 @@
             android:background="@drawable/choose_img_bg"
             android:gravity="center">
 
-            <com.jimei.xiaolumeimei.widget.RoundCornerImageView
+            <com.jimei.library.widget.RoundCornerImageView
                 android:id="@+id/pic_path"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

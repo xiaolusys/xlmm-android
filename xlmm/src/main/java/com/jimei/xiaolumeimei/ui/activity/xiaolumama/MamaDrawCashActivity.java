@@ -1,9 +1,9 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
-import android.support.v7.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -24,7 +24,6 @@ import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     @Bind(R.id.tv_money)
@@ -76,7 +75,6 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
         drawMoney = 100;
         Subscription subscribe = UserNewModel.getInstance()
                 .getProfile()
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<UserInfoBean>() {
                     @Override
                     public void onNext(UserInfoBean userNewBean) {
@@ -109,7 +107,6 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
         } else {
             subscribe = MamaInfoModel.getInstance()
                     .toWallet(fund + "")
-                    .subscribeOn(Schedulers.io())
                     .subscribe(new ServiceResponse<ResponseResultBean>() {
                         String msg = "";
                         int code = -1;
@@ -149,7 +146,6 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
             }
             subscribe = MamaInfoModel.getInstance()
                     .withdraw_cash(fund_type)
-                    .subscribeOn(Schedulers.io())
                     .subscribe(new ServiceResponse<ResponseResultBean>() {
                         @Override
                         public void onNext(ResponseResultBean resp) {

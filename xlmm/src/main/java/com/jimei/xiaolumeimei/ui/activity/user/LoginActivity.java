@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.jimei.library.utils.SHA1Utils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
@@ -27,7 +28,6 @@ import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
-import com.jimei.xiaolumeimei.utils.SHA1Utils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.mob.tools.utils.UIHandler;
@@ -47,7 +47,6 @@ import cn.sharesdk.wechat.friends.Wechat;
 import retrofit2.Response;
 import retrofit2.adapter.rxjava.HttpException;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 public class LoginActivity extends BaseSwipeBackCompatActivity
         implements View.OnClickListener, Handler.Callback {
@@ -243,7 +242,6 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
 
                 Subscription subscription = UserModel.getInstance()
                         .wxapp_login(noncestr, timestamp, sign, headimgurl, nickname, openid, unionid)
-                        .subscribeOn(Schedulers.io())
                         .subscribe(new ServiceResponse<CodeBean>() {
 
                             @Override
@@ -257,7 +255,6 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                         JUtils.Toast("登录成功");
                                         Subscription subscribe = UserModel.getInstance()
                                                 .need_set_info()
-                                                .subscribeOn(Schedulers.io())
                                                 .subscribe(new ServiceResponse<NeedSetInfoBean>() {
                                                     @Override
                                                     public void onError(Throwable e) {
@@ -332,7 +329,6 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                                                 } else if (login.equals("getCoupon")) {
                                                                     Subscription subscription1 = UserModel.getInstance()
                                                                             .getCouPon()
-                                                                            .subscribeOn(Schedulers.io())
                                                                             .subscribe(new ServiceResponse<Response<GetCouponbean>>() {
                                                                                 @Override
                                                                                 public void onNext(

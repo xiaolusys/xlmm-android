@@ -13,14 +13,14 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.jimei.library.utils.ViewUtils;
+import com.jimei.library.widget.RoundCornerImageView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean.ResultsEntity.StatusShaftBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
-import com.jimei.xiaolumeimei.utils.ViewUtils;
-import com.jimei.xiaolumeimei.widget.RoundCornerImageView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
@@ -29,7 +29,6 @@ import java.util.List;
 
 import butterknife.Bind;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 public class RefundDetailActivity extends BaseSwipeBackCompatActivity
         implements View.OnClickListener {
@@ -140,7 +139,6 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
         showIndeterminateProgressDialog(false);
         Subscription subscription = TradeModel.getInstance()
                 .getRefundDetailBean(goods_id)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<AllRefundsBean.ResultsEntity>() {
                     @Override
                     public void onNext(AllRefundsBean.ResultsEntity refundDetailBean) {

@@ -6,11 +6,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.entities.UserBean;
+import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -19,7 +18,6 @@ import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 public class SettingPasswordForgetActivity extends BaseSwipeBackCompatActivity
         implements View.OnClickListener {
@@ -30,7 +28,7 @@ public class SettingPasswordForgetActivity extends BaseSwipeBackCompatActivity
     EditText etPassword2;
     @Bind(R.id.set_commit_button)
     Button commit_button;
-    String username;
+    String mobile;
     String valid_code;
     private Subscription subscribe;
 
@@ -41,7 +39,7 @@ public class SettingPasswordForgetActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-        username = extras.getString("username");
+        mobile = extras.getString("mobile");
         valid_code = extras.getString("valid_code");
     }
 
@@ -59,7 +57,7 @@ public class SettingPasswordForgetActivity extends BaseSwipeBackCompatActivity
                 Log.d(TAG, "password " + password1 + " " + password2);
                 if (checkInput(password1) && checkInput(password2)) {
                     if (checkInputSame(password1, password2)) {
-                        changePassword(username, valid_code, password1, password2);
+                        changePassword(mobile, valid_code, password1, password2);
                     }
                 }
                 break;
@@ -74,27 +72,18 @@ public class SettingPasswordForgetActivity extends BaseSwipeBackCompatActivity
         return true;
     }
 
-    private void changePassword(String username, String valid_code, String password1,
+    private void changePassword(String mobile, String valid_code, String password1,
                                 String password2) {
         subscribe = UserModel.getInstance()
-                .changePassword(username, valid_code, password1, password2)
-                .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<UserBean>() {
+                .reset_password(mobile, password1, password2, valid_code)
+                .subscribe(new ServiceResponse<CodeBean>() {
                     @Override
-                    public void onNext(UserBean user) {
-                        Log.d(TAG, "user.getCode() "
-                                + user.getCode()
-                                + ", user.getResult() "
-                                + user.getResult());
-
-                        if (user.getCode() == 0) {
-                            Toast.makeText(mContext, "密码重置成功", Toast.LENGTH_SHORT).show();
+                    public void onNext(CodeBean bean) {
+                        JUtils.Toast(bean.getMsg());
+                        if (bean.getRcode() == 0) {
                             Intent intent = new Intent(mContext, MainActivity.class);
                             startActivity(intent);
                             finish();
-                        } else {
-
-                            Toast.makeText(mContext, "修改失败", Toast.LENGTH_SHORT).show();
                         }
                     }
 

@@ -10,7 +10,7 @@
     tools:context="com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity">
 
 
-    <com.jimei.xiaolumeimei.widget.XlmmTitleView
+    <com.jimei.library.widget.XlmmTitleView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:xlmm_title="退货退款"/>

@@ -25,17 +25,19 @@ import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.jimei.library.utils.CameraUtils;
+import com.jimei.library.utils.FileUtils;
 import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.entities.CallNativeFuncBean;
+import com.jimei.xiaolumeimei.entities.JumpBean;
 import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShareCodeWebViewActivity;
-import com.jimei.xiaolumeimei.utils.CameraUtils;
-import com.jimei.xiaolumeimei.utils.FileUtils;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
@@ -60,7 +62,6 @@ import cn.sharesdk.tencent.qzone.QZone;
 import cn.sharesdk.wechat.friends.Wechat;
 import cn.sharesdk.wechat.moments.WechatMoments;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/02/16.
@@ -87,7 +88,11 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     }
 
     @JavascriptInterface
-    public void jumpToNativeLocation(String url) {
+    public void jumpToNativeLocation(String json) {
+        Gson gson = new Gson();
+        JumpBean jumpBean = gson.fromJson(json, new TypeToken<JumpBean>() {
+        }.getType());
+        String url = jumpBean.getTarget_url();
         JUtils.Log("CommonWebViewActivity", url);
         jump_ToNativeLocation(url);
         JUtils.Log(url);
@@ -121,7 +126,6 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     public void getPromotionParams(String uform, String activity_id) {
         Subscription subscribe = ActivityModel.getInstance()
                 .get_party_share_content(activity_id)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<ActivityBean>() {
                     @Override
                     public void onNext(ActivityBean activityBean) {
@@ -283,7 +287,6 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
 
         Subscription subscribe = ActivityModel.getInstance()
                 .get_party_share_content(id)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<ActivityBean>() {
                     @Override
                     public void onNext(ActivityBean activityBean) {

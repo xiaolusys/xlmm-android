@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by wisdom on 16/10/9.
@@ -33,7 +32,6 @@ public class DayPushActivity extends BaseSwipeBackCompatActivity {
     protected void initData() {
         addSubscription(MMProductModel.getInstance()
                 .getWxCode()
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<WxQrcode>() {
                     @Override
                     public void onNext(WxQrcode wxQrcode) {

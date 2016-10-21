@@ -3,13 +3,13 @@ package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 import android.os.Bundle;
 import android.view.View;
 
+import com.jimei.library.widget.LogImageView;
+import com.jimei.library.widget.LogMsgView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
 import com.jimei.xiaolumeimei.databinding.ActivityOrderLogisticBinding;
 import com.jimei.xiaolumeimei.entities.LogisticsBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
-import com.jimei.xiaolumeimei.widget.LogImageView;
-import com.jimei.xiaolumeimei.widget.LogMsgView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
@@ -17,7 +17,6 @@ import com.umeng.analytics.MobclickAgent;
 import java.util.List;
 
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 public class OrderLogisticActivity extends BaseMVVMActivity<ActivityOrderLogisticBinding> {
     private String company_code;
@@ -30,7 +29,6 @@ public class OrderLogisticActivity extends BaseMVVMActivity<ActivityOrderLogisti
             showIndeterminateProgressDialog(false);
             Subscription subscribe = TradeModel.getInstance()
                     .get_logistics_by_packagetid(packetid, company_code)
-                    .subscribeOn(Schedulers.io())
                     .subscribe(new ServiceResponse<LogisticsBean>() {
 
                         @Override

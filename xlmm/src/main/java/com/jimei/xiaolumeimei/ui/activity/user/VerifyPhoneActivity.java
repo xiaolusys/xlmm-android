@@ -8,11 +8,11 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.jimei.library.rx.RxCountDown;
+import com.jimei.library.widget.XlmmTitleView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.model.UserModel;
-import com.jimei.xiaolumeimei.widget.XlmmTitleView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
@@ -20,7 +20,6 @@ import com.umeng.analytics.MobclickAgent;
 import butterknife.Bind;
 import rx.Subscriber;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 public class VerifyPhoneActivity extends BaseSwipeBackCompatActivity
         implements View.OnClickListener {
@@ -95,7 +94,6 @@ public class VerifyPhoneActivity extends BaseSwipeBackCompatActivity
 
                         subscribe = UserModel.getInstance()
                                 .getCodeBean(mobile, "change_pwd")
-                                .subscribeOn(Schedulers.io())
                                 .subscribe(new ServiceResponse<CodeBean>() {
                                     @Override
                                     public void onNext(CodeBean codeBean) {
@@ -132,7 +130,6 @@ public class VerifyPhoneActivity extends BaseSwipeBackCompatActivity
                 if (checkInput(mobile, invalid_code)) {
                     subscribe = UserModel.getInstance()
                             .verify_code(mobile, "change_pwd", invalid_code)
-                            .subscribeOn(Schedulers.io())
                             .subscribe(new ServiceResponse<CodeBean>() {
                                 @Override
                                 public void onNext(CodeBean codeBean) {
@@ -144,7 +141,7 @@ public class VerifyPhoneActivity extends BaseSwipeBackCompatActivity
                                             Intent intent = new Intent(VerifyPhoneActivity.this,
                                                     SettingPasswordForgetActivity.class);
                                             Bundle bundle = new Bundle();
-                                            bundle.putString("username", mobile);
+                                            bundle.putString("mobile", mobile);
                                             bundle.putString("valid_code", invalid_code);
 
                                             intent.putExtras(bundle);

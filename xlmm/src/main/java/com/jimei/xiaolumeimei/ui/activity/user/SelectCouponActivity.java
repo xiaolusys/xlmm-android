@@ -12,7 +12,6 @@ import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CouponSelectEntity;
 import com.jimei.xiaolumeimei.model.UserModel;
-import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
 import com.jimei.xiaolumeimei.ui.fragment.coupon.SelectCouponFragment;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
@@ -22,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
-import rx.schedulers.Schedulers;
 
 public class SelectCouponActivity extends BaseSwipeBackCompatActivity {
     @Bind(R.id.tab_layout)
@@ -38,7 +36,6 @@ public class SelectCouponActivity extends BaseSwipeBackCompatActivity {
         showIndeterminateProgressDialog(false);
         UserModel.getInstance()
                 .getCouponSelectEntity(cart_ids)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<CouponSelectEntity>() {
                     @Override
                     public void onNext(CouponSelectEntity couponSelectEntity) {
@@ -98,14 +95,14 @@ public class SelectCouponActivity extends BaseSwipeBackCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart(ActivityWebViewActivity.class.getSimpleName());
+        MobclickAgent.onPageStart(this.getClass().getSimpleName());
         MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd(ActivityWebViewActivity.class.getSimpleName());
+        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
         MobclickAgent.onPause(this);
     }
 }

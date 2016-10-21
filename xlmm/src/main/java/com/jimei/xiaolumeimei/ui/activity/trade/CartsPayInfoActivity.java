@@ -23,6 +23,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.jimei.library.widget.NestedListView;
+import com.jimei.library.widget.SmoothCheckBox;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.adapter.CartsPayInfoAdapter;
@@ -41,8 +43,6 @@ import com.jimei.xiaolumeimei.ui.activity.user.AddNoAddressActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.AddressSelectActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.SelectCouponActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
-import com.jimei.xiaolumeimei.widget.NestedListView;
-import com.jimei.xiaolumeimei.widget.SmoothCheckBox;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.pingplusplus.android.Pingpp;
@@ -55,7 +55,6 @@ import java.util.List;
 
 import butterknife.Bind;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by 优尼世界 on 2016/01/15.
@@ -171,7 +170,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     private void downLoadCartsInfo() {
         Subscription subscription = CartsModel.getInstance()
                 .getCartsPayInfoListV2(ids)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<CartsPayinfoBean>() {
                     @Override
                     public void onNext(CartsPayinfoBean cartsPayinfoBean) {
@@ -289,7 +287,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     private void downLoadCartsInfoWithout() {
         Subscription subscription = CartsModel.getInstance()
                 .getCartsPayInfoListV2(ids)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<CartsPayinfoBean>() {
                     @Override
                     public void onNext(CartsPayinfoBean cartsPayinfoBean) {
@@ -808,7 +805,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         Subscription subscription = TradeModel.getInstance()
                 .shoppingcart_create_v2(ids, addr_id, pay_method, paymentprice_v2, post_fee,
                         discount_fee_price, total_fee, uuid, pay_extrasaa, code, mFlag)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<PayInfoBean>() {
 
                     @Override
@@ -914,7 +910,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 JUtils.Log(TAG, "coupon_id:" + coupon_id);
                 Subscription subscription = CartsModel.getInstance()
                         .getCartsInfoList(ids, coupon_id)
-                        .subscribeOn(Schedulers.io())
                         .subscribe(new ServiceResponse<CartsPayinfoBean>() {
                             @Override
                             public void onNext(CartsPayinfoBean cartsPayinfoBean) {
@@ -964,7 +959,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         if (mFlag) {
             addSubscription(ProductModel.getInstance()
                     .getTeamBuyBean(order_no)
-                    .subscribeOn(Schedulers.io())
                     .subscribe(new ServiceResponse<TeamBuyBean>() {
                         @Override
                         public void onNext(TeamBuyBean teamBuyBean) {
@@ -1047,7 +1041,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         } else {
             Subscription subscription = AddressModel.getInstance()
                     .getAddressList()
-                    .subscribeOn(Schedulers.io())
                     .subscribe(new ServiceResponse<List<AddressBean>>() {
                         @Override
                         public void onNext(List<AddressBean> list) {

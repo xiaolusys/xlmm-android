@@ -7,23 +7,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.jimei.library.utils.ViewUtils;
+import com.jimei.library.widget.DividerItemDecoration;
+import com.jimei.library.widget.scrolllayout.ScrollableHelper;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.MMTeamAdapter;
 import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
+import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.databinding.ActivityMmteamBinding;
 import com.jimei.xiaolumeimei.entities.PersonalCarryRankBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
-import com.jimei.xiaolumeimei.utils.ViewUtils;
-import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
-import com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableHelper;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
 import retrofit2.Response;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye on 2016/7/27.
@@ -53,7 +53,6 @@ public class MMTeamActivity extends BaseMVVMActivity<ActivityMmteamBinding>
     protected void initData() {
         MamaInfoModel.getInstance()
                 .getTeamSelfRank()
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<Response<PersonalCarryRankBean>>() {
                     @Override
                     public void onNext(Response<PersonalCarryRankBean> personalCarryRankBeanResponse) {
@@ -76,7 +75,6 @@ public class MMTeamActivity extends BaseMVVMActivity<ActivityMmteamBinding>
 
         MamaInfoModel.getInstance()
                 .getTeamMembers(id)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<Response<List<PersonalCarryRankBean>>>() {
                     @Override
                     public void onNext(Response<List<PersonalCarryRankBean>> personalCarryRankBeanResponse) {
@@ -105,7 +103,7 @@ public class MMTeamActivity extends BaseMVVMActivity<ActivityMmteamBinding>
         switch (item.getItemId()) {
             case R.id.action_personal:
                 JumpUtils.jumpToWebViewWithCookies(this, url, -1,
-                        TeamExplainActivity.class);
+                        CommonWebViewActivity.class,"团队说明",false);
                 break;
             default:
                 break;

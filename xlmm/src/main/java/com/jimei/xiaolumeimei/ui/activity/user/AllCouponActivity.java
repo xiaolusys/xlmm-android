@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
-import rx.schedulers.Schedulers;
 
 public class AllCouponActivity extends BaseSwipeBackCompatActivity {
     @Bind(R.id.tab_layout)
@@ -39,7 +38,6 @@ public class AllCouponActivity extends BaseSwipeBackCompatActivity {
         showIndeterminateProgressDialog(false);
         UserModel.getInstance()
                 .getCouponList(0)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<ArrayList<CouponEntity>>() {
                     @Override
                     public void onNext(ArrayList<CouponEntity> couponEntities) {
@@ -47,7 +45,6 @@ public class AllCouponActivity extends BaseSwipeBackCompatActivity {
                         fragments.add(CouponFragment.newInstance(XlmmConst.UNUSED_COUPON,couponEntities));
                         UserModel.getInstance()
                                 .getCouponList(3)
-                                .subscribeOn(Schedulers.io())
                                 .subscribe(new ServiceResponse<ArrayList<CouponEntity>>() {
                                     @Override
                                     public void onNext(ArrayList<CouponEntity> couponEntities) {
@@ -55,7 +52,6 @@ public class AllCouponActivity extends BaseSwipeBackCompatActivity {
                                         fragments.add(CouponFragment.newInstance(XlmmConst.PAST_COUPON,couponEntities));
                                         UserModel.getInstance()
                                                 .getCouponList(1)
-                                                .subscribeOn(Schedulers.io())
                                                 .subscribe(new ServiceResponse<ArrayList<CouponEntity>>() {
                                                     @Override
                                                     public void onNext(ArrayList<CouponEntity> couponEntities) {

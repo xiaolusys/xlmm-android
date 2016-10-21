@@ -2,7 +2,6 @@ package com.jimei.xiaolumeimei.model;
 
 import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
-import com.jimei.xiaolumeimei.entities.BindInfoBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.CouponEntity;
 import com.jimei.xiaolumeimei.entities.CouponSelectEntity;
@@ -75,14 +74,6 @@ public class UserModel {
                 .compose(new DefaultTransform<>());
     }
 
-    //设置密码
-    public Observable<UserBean> changePassword(String username, String valid_code,
-                                               String password1, String password2) {
-        return XlmmRetrofitClient.getService()
-                .changePassword(username, valid_code, password1, password2)
-                .compose(new DefaultTransform<>());
-    }
-
     public Observable<LogOutBean> customer_logout() {
 
         return XlmmRetrofitClient.getService()
@@ -130,14 +121,6 @@ public class UserModel {
     public Observable<NeedSetInfoBean> need_set_info() {
         return XlmmRetrofitClient.getService()
                 .need_set_info()
-                .compose(new DefaultTransform<>());
-    }
-
-    //绑定手机
-    public Observable<BindInfoBean> bang_mobile(String username, String password1,
-                                                String password2, String valid_code) {
-        return XlmmRetrofitClient.getService()
-                .bang_mobile(username, password1, password2, valid_code)
                 .compose(new DefaultTransform<>());
     }
 

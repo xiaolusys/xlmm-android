@@ -7,13 +7,13 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.jimei.library.rx.RxCountDown;
+import com.jimei.library.widget.ClearEditText;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
-import com.jimei.xiaolumeimei.widget.ClearEditText;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
@@ -21,7 +21,6 @@ import com.umeng.analytics.MobclickAgent;
 import butterknife.Bind;
 import rx.Subscriber;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 public class RegisterActivity extends BaseSwipeBackCompatActivity
         implements View.OnClickListener {
@@ -93,7 +92,6 @@ public class RegisterActivity extends BaseSwipeBackCompatActivity
 
                         subscribe = UserModel.getInstance()
                                 .getCodeBean(mobile, "register")
-                                .subscribeOn(Schedulers.io())
                                 .subscribe(new ServiceResponse<CodeBean>() {
                                     @Override
                                     public void onNext(CodeBean codeBean) {
@@ -129,7 +127,6 @@ public class RegisterActivity extends BaseSwipeBackCompatActivity
 
                     subscribe = UserModel.getInstance()
                             .verify_code(mobile,"register", invalid_code)
-                            .subscribeOn(Schedulers.io())
                             .subscribe(new ServiceResponse<CodeBean>() {
                                 @Override
                                 public void onNext(CodeBean codeBean) {

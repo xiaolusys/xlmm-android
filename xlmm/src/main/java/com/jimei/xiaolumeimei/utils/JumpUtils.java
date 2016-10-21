@@ -55,7 +55,6 @@ public class JumpUtils {
     private static void setBundleWithStart(Context context, Bundle bundle, Class<?> classname,
                                            int id, String actlink) {
         Intent intent = new Intent(context, classname);
-
         SharedPreferences sharedPreferences =
                 context.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
         String cookies = sharedPreferences.getString("cookiesString", "");

@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.jimei.library.rx.RxCountDown;
+import com.jimei.library.widget.ClearEditText;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
@@ -23,7 +24,6 @@ import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
-import com.jimei.xiaolumeimei.widget.ClearEditText;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
@@ -35,7 +35,6 @@ import retrofit2.Response;
 import retrofit2.adapter.rxjava.HttpException;
 import rx.Subscriber;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/01/22.
@@ -85,7 +84,6 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
 
                         subscribe = UserModel.getInstance()
                                 .getCodeBean(mobile, "sms_login")
-                                .subscribeOn(Schedulers.io())
                                 .subscribe(new ServiceResponse<CodeBean>() {
                                     @Override
                                     public void onNext(CodeBean codeBean) {
@@ -123,7 +121,6 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                 if (checkInput(mobile, invalid_code)) {
                     subscribe = UserModel.getInstance()
                             .verify_code(mobile, "sms_login", invalid_code)
-                            .subscribeOn(Schedulers.io())
                             .subscribe(new ServiceResponse<CodeBean>() {
                                 @Override
                                 public void onNext(CodeBean codeBean) {
@@ -134,7 +131,6 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                                         EventBus.getDefault().post(new SetMiPushEvent());
                                         subscribe = UserModel.getInstance()
                                                 .need_set_info()
-                                                .subscribeOn(Schedulers.io())
                                                 .subscribe(new ServiceResponse<NeedSetInfoBean>() {
                                                     @Override
                                                     public void onNext(NeedSetInfoBean needSetInfoBean) {
@@ -204,7 +200,6 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                                                                 } else if (login.equals("getCoupon")) {
                                                                     UserModel.getInstance()
                                                                             .getCouPon()
-                                                                            .subscribeOn(Schedulers.io())
                                                                             .subscribe(new ServiceResponse<Response<GetCouponbean>>() {
                                                                                 @Override
                                                                                 public void onNext(

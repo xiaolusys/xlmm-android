@@ -44,7 +44,6 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
         showIndeterminateProgressDialog(false);
         addSubscription(MMProductModel.getInstance()
                 .getNinePic(mSale_category)
-                .subscribeOn(Schedulers.io())
                 .subscribe(ninePicBean -> {
                     if (ninePicBean != null) {
                         mAdapter.update(ninePicBean);

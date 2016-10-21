@@ -6,6 +6,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.jimei.library.utils.ViewUtils;
+import com.jimei.library.widget.CircleImageView;
+import com.jimei.library.widget.MyPreferenceView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
@@ -13,9 +16,6 @@ import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.event.LogOutEmptyEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
-import com.jimei.xiaolumeimei.utils.ViewUtils;
-import com.jimei.xiaolumeimei.widget.CircleImageView;
-import com.jimei.xiaolumeimei.widget.MyPreferenceView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
@@ -25,7 +25,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import butterknife.Bind;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/01/18.
@@ -85,7 +84,6 @@ public class InformationActivity extends BaseSwipeBackCompatActivity
         MobclickAgent.onResume(this);
         Subscription subscribe = UserModel.getInstance()
                 .getUserInfo()
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<UserInfoBean>() {
                     @Override
                     public void onNext(UserInfoBean user) {
@@ -134,7 +132,6 @@ public class InformationActivity extends BaseSwipeBackCompatActivity
                                     LoginUtils.getUserAccount(getApplicationContext());
                             UserModel.getInstance()
                                     .customer_logout()
-                                    .subscribeOn(Schedulers.io())
                                     .subscribe(new ServiceResponse<LogOutBean>() {
                                         @Override
                                         public void onNext(LogOutBean responseBody) {

@@ -7,17 +7,16 @@ import android.widget.Toast;
 import com.cpoopc.scrollablelayoutlib.ScrollableLayout;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.jimei.library.widget.DividerItemDecoration;
+import com.jimei.library.widget.MyXRecyclerView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.MMVisitorsAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
-import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
-import com.jimei.xiaolumeimei.widget.MyXRecyclerView;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by wulei on 2016/2/4.
@@ -49,7 +48,6 @@ public class MamaVisitorActivity extends BaseSwipeBackCompatActivity {
         showIndeterminateProgressDialog(false);
         addSubscription(MamaInfoModel.getInstance()
                 .getMamaVisitor(1)
-                .subscribeOn(Schedulers.io())
                 .subscribe(fansBeen -> {
                     hideIndeterminateProgressDialog();
                     if (fansBeen != null) {
@@ -92,7 +90,6 @@ public class MamaVisitorActivity extends BaseSwipeBackCompatActivity {
     private void loadMoreData(int page) {
         addSubscription(MamaInfoModel.getInstance()
                 .getMamaVisitor(page)
-                .subscribeOn(Schedulers.io())
                 .subscribe(fansBeen -> {
                     if (fansBeen != null) {
                         mAdapter.update(fansBeen.getResults());

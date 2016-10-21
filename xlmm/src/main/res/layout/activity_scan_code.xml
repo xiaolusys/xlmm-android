@@ -18,7 +18,7 @@
         android:layout_alignParentTop="true"
         android:background="@color/scan_bg">
 
-        <com.jimei.xiaolumeimei.widget.XlmmTitleView
+        <com.jimei.library.widget.XlmmTitleView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:xlmm_title="扫描运单号"/>

@@ -15,18 +15,17 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.github.yoojia.zxing.qrcode.Encoder;
+import com.jimei.library.utils.BitmapUtil;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.WxPubAuthInfo;
 import com.jimei.xiaolumeimei.model.UserModel;
-import com.jimei.xiaolumeimei.utils.BitmapUtil;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by wulei on 2016/2/4.
@@ -64,7 +63,6 @@ public class WxPubTwoDimenCodeActivity extends BaseSwipeBackCompatActivity
                 .build();
         Subscription subscribe1 = UserModel.getInstance()
                 .getWxPubAuthInfo()
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<WxPubAuthInfo>() {
                     @Override
                     public void onNext(WxPubAuthInfo wxpub) {

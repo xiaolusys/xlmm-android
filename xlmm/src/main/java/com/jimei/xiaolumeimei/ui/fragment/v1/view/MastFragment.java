@@ -38,7 +38,6 @@ import butterknife.ButterKnife;
 import okhttp3.Call;
 import okhttp3.ResponseBody;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/03/30.
@@ -107,7 +106,6 @@ public class MastFragment extends DialogFragment {
         }
         subscribe = ActivityModel.getInstance()
                 .getPostActivity()
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<List<PostActivityBean>>() {
                     @Override
                     public void onNext(List<PostActivityBean> postActivityBean) {
@@ -242,7 +240,6 @@ public class MastFragment extends DialogFragment {
                                                                     .getUsercoupons(postActivityBean.get(0)
                                                                             .getExtras()
                                                                             .getTemplateId())
-                                                                    .subscribeOn(Schedulers.io())
                                                                     .subscribe(new ServiceResponse<ResponseBody>() {
                                                                         @Override
                                                                         public void onNext(ResponseBody responseBody) {

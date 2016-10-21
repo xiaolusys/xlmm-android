@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -33,16 +32,16 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jimei.library.utils.CameraUtils;
+import com.jimei.library.utils.FileUtils;
+import com.jimei.library.widget.XlmmTitleView;
 import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
 import com.jimei.xiaolumeimei.model.ActivityModel;
-import com.jimei.xiaolumeimei.utils.CameraUtils;
-import com.jimei.xiaolumeimei.utils.FileUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jude.utils.JUtils;
 import com.mob.tools.utils.UIHandler;
@@ -62,7 +61,6 @@ import cn.sharesdk.onekeyshare.OnekeyShare;
 import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
 import cn.sharesdk.wechat.moments.WechatMoments;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/02/04.
@@ -81,10 +79,8 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     private static final int MSG_ACTION_CCALLBACK = 2;
     private static final String TAG = CommonWebViewActivity.class.getSimpleName();
     public WebView mWebView;
-    protected TextView webviewTitle;
     LinearLayout ll_actwebview;
     private Bitmap bitmap;
-    private Toolbar mToolbar;
     private ProgressBar mProgressBar;
     private String cookies;
     private String actlink;
@@ -92,24 +88,14 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     private String domain;
     private String sessionid;
     private int id;
-
-    @Override
-    protected void setListener() {
-        mToolbar.setNavigationOnClickListener(v -> {
-            JUtils.Log(TAG, "setNavigationOnClickListener finish");
-            finish();
-        });
-    }
+    public XlmmTitleView titleView;
 
     @Override
     protected void initData() {
-        JUtils.Log(TAG, "initData");
         JUtils.Log(TAG, "initData--" + actlink);
         try {
             Map<String, String> extraHeaders = new HashMap<>();
-
             extraHeaders.put("Cookie", sessionid);
-
             mWebView.loadUrl(actlink, extraHeaders);
         } catch (Exception e) {
             e.printStackTrace();
@@ -121,15 +107,13 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
 
     @Override
     public void getBundleExtras(Bundle extras) {
-        if (extras != null) {
-            cookies = extras.getString("cookies");
-            domain = extras.getString("domain");
-            sessionid = extras.getString("Cookie");
-            actlink = extras.getString("actlink");
-            id = extras.getInt("id");
-            JUtils.Log(TAG, "GET cookie:" + cookies + " actlink:" + actlink + " domain:" + domain +
-                    " sessionid:" + sessionid);
-        }
+        cookies = extras.getString("cookies");
+        domain = extras.getString("domain");
+        sessionid = extras.getString("Cookie");
+        actlink = extras.getString("actlink");
+        id = extras.getInt("id");
+        JUtils.Log(TAG, "GET cookie:" + cookies + " actlink:" + actlink + " domain:" + domain +
+                " sessionid:" + sessionid);
     }
 
     @Override
@@ -138,20 +122,17 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    public void getIntentUrl() {
-        Uri uri = getIntent().getData();
-        if (uri != null) {
-            SharedPreferences sharedPreferences = getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
-            cookies = sharedPreferences.getString("cookiesString", "");
-            domain = sharedPreferences.getString("cookiesDomain", "");
-            sessionid = sharedPreferences.getString("Cookie", "");
-            actlink = uri.getQueryParameter("url");
-            String id = uri.getQueryParameter("activity_id");
-            if (id != null) {
-                this.id = Integer.valueOf(id);
-            } else {
-                this.id = -1;
-            }
+    public void getIntentUrl(Uri uri) {
+        SharedPreferences sharedPreferences = getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+        cookies = sharedPreferences.getString("cookiesString", "");
+        domain = sharedPreferences.getString("cookiesDomain", "");
+        sessionid = sharedPreferences.getString("Cookie", "");
+        actlink = uri.getQueryParameter("url");
+        String id = uri.getQueryParameter("activity_id");
+        if (id != null) {
+            this.id = Integer.valueOf(id);
+        } else {
+            this.id = -1;
         }
     }
 
@@ -160,19 +141,14 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     protected void initViews() {
         JUtils.Log(TAG, "initViews");
         ShareSDK.initSDK(this);
-        webviewTitle = (TextView) findViewById(R.id.webview_title);
+        titleView = (XlmmTitleView) findViewById(R.id.title_view);
         ll_actwebview = (LinearLayout) findViewById(R.id.ll_actwebview);
         mProgressBar = (ProgressBar) findViewById(R.id.pb_view);
         mWebView = (WebView) findViewById(R.id.wb_view);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mToolbar.setTitle("");
-        setSupportActionBar(mToolbar);
-        mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if (getIntent().getExtras() != null && getIntent().getExtras().getString("title") != null) {
-            webviewTitle.setText(getIntent().getExtras().getString("title"));
+            assert titleView != null;
+            titleView.setName(getIntent().getExtras().getString("title"));
         }
-
         try {
             if (Build.VERSION.SDK_INT >= 19) {
                 mWebView.getSettings().setLoadsImagesAutomatically(true);
@@ -188,7 +164,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
                             + ";");
             mWebView.getSettings().setJavaScriptEnabled(true);
             mWebView.addJavascriptInterface(new AndroidJsBridge(this), "AndroidBridge");
-
             mWebView.getSettings().setAllowFileAccess(true);
             //如果访问的页面中有Javascript，则webview必须设置支持Javascript
             //mWebView.getSettings().setUserAgentString(MyApplication.getUserAgent());
@@ -237,7 +212,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
                     return true;
                 }
             });
-
             mWebView.setWebViewClient(new WebViewClient() {
 
                 @Override
@@ -506,7 +480,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
 
         Subscription subscribe = ActivityModel.getInstance()
                 .get_party_share_content(id)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<ActivityBean>() {
                     @Override
                     public void onNext(ActivityBean activityBean) {

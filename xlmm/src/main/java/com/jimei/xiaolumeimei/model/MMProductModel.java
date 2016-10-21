@@ -1,7 +1,6 @@
 package com.jimei.xiaolumeimei.model;
 
 import com.jimei.library.rx.DefaultTransform;
-import com.jimei.xiaolumeimei.base.RxSchedulers;
 import com.jimei.xiaolumeimei.entities.AwardCarryBean;
 import com.jimei.xiaolumeimei.entities.CarryLogListBean;
 import com.jimei.xiaolumeimei.entities.ClickcarryBean;
@@ -116,13 +115,13 @@ public class MMProductModel {
     public Observable<PortalBean> getPortalBean() {
         return XlmmRetrofitClient.getService()
                 .getPortalBean()
-                .compose(RxSchedulers.io_main());
+                .compose(new DefaultTransform<>());
     }
 
     public Observable<SaveTimeBean> saveTime(int id, int save_times) {
         return XlmmRetrofitClient.getService()
                 .saveTime(id, save_times)
-                .compose(RxSchedulers.io_main());
+                .compose(new DefaultTransform<>());
     }
 
 }

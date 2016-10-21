@@ -8,10 +8,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
-import com.jimei.xiaolumeimei.entities.PackageBean;
-import com.jimei.xiaolumeimei.utils.ViewUtils;
 
 import java.util.List;
 
