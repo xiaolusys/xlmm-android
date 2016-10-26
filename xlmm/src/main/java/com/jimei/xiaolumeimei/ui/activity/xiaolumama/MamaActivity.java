@@ -86,34 +86,6 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
                             }
                         }, e -> hideIndeterminateProgressDialog()
                         , this::hideIndeterminateProgressDialog));
-//        addSubscription(MMInfoModel.getInstance()
-//                .getUserInfo()
-//                .subscribe(this::fillDataToView, Throwable::printStackTrace));
-//        addSubscription(MMInfoModel.getInstance()
-//                .getLatestOrderCarry()
-//                .subscribe(list -> {
-//                    service = Executors.newSingleThreadExecutor();
-//                    service.execute(() -> {
-//                        for (int i = 0; i < list.size() && !isDestroy; i++) {
-//                            SystemClock.sleep(new Random().nextInt(5000));
-//                            if (!isDestroy)
-//                                EventBus.getDefault().post(new SetOrderEvent(list.get(list.size() - 1 - i)));
-//                            SystemClock.sleep(1000);
-//                            if (!isDestroy) EventBus.getDefault().post(new ShowOrderEvent());
-//                            SystemClock.sleep(3000);
-//                            if (!isDestroy) EventBus.getDefault().post(new HideOrderEvent());
-//                            SystemClock.sleep(3000);
-//                        }
-//                    });
-//                }, Throwable::printStackTrace));
-//        addSubscription(MMProductModel.getInstance()
-//                .getWxCode()
-//                .subscribe(new ServiceResponse<WxQrcode>() {
-//                    @Override
-//                    public void onNext(WxQrcode wxQrcode) {
-//                        super.onNext(wxQrcode);
-//                    }
-//                }));
     }
 
     private void fillDataToView(UserInfoBean userInfoBean) {

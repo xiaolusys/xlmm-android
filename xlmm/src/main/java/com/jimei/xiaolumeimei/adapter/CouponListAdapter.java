@@ -15,7 +15,6 @@ import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.CouponEntity;
-import com.jimei.xiaolumeimei.utils.JumpUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,9 +77,9 @@ public class CouponListAdapter extends BaseAdapter {
             holder.tv_coupon_value.setTextColor(Color.parseColor("#F05050"));
             holder.rl.setBackgroundResource(R.drawable.bg_img_coupon);
             holder.iv_right.setVisibility(View.VISIBLE);
-            if (clickable) {
-                holder.rl.setOnClickListener(v -> JumpUtils.push_jump_proc(context, "com.jimei.xlmm://app/v1/products/promote_today"));
-            }
+//            if (clickable) {
+//                holder.rl.setOnClickListener(v -> JumpUtils.push_jump_proc(context, "com.jimei.xlmm://app/v1/products/promote_today"));
+//            }
         } else if (mCouponTyp == XlmmConst.PAST_COUPON) {
             holder.tv_coupon_value.setTextColor(Color.parseColor("#B4B4B4"));
             holder.tv_coupon_info.setTextColor(Color.parseColor("#D2D2D2"));
