@@ -6,6 +6,7 @@ import android.os.Build;
 import android.text.TextUtils;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
+import com.jimei.library.utils.JUtils;
 import com.jimei.library.utils.NetUtil;
 import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.XlmmApp;
@@ -13,7 +14,6 @@ import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.okhttp3.PersistentCookieJar;
 import com.jimei.xiaolumeimei.okhttp3.cache.SetCookieCache;
 import com.jimei.xiaolumeimei.okhttp3.persistence.SharedPrefsCookiePersistor;
-import com.jude.utils.JUtils;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;

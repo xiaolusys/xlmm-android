@@ -17,7 +17,6 @@ import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.databinding.ActivityMamaBinding;
 import com.jimei.xiaolumeimei.entities.MiPushOrderCarryBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
-import com.jimei.xiaolumeimei.entities.WxQrcode;
 import com.jimei.xiaolumeimei.entities.event.HideOrderEvent;
 import com.jimei.xiaolumeimei.entities.event.SetOrderEvent;
 import com.jimei.xiaolumeimei.entities.event.ShowOrderEvent;
@@ -26,7 +25,6 @@ import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.ui.fragment.mminfo.MamaFirstFragment;
 import com.jimei.xiaolumeimei.ui.fragment.mminfo.MamaSecondFragment;
 import com.jimei.xiaolumeimei.ui.fragment.mminfo.MamaThirdFragment;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -43,6 +41,7 @@ import java.util.concurrent.Executors;
 
 import cn.udesk.UdeskConst;
 import cn.udesk.UdeskSDKManager;
+import rx.Observable;
 
 public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
 
@@ -58,36 +57,63 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
 
     @Override
     protected void initData() {
-        showIndeterminateProgressDialog(true);
         UdeskSDKManager.getInstance().initApiKey(this, XlmmConst.UDESK_URL, XlmmConst.UDESK_KEY);
-        addSubscription(MMInfoModel.getInstance()
-                .getUserInfo()
-                .subscribe(this::fillDataToView, Throwable::printStackTrace));
-        addSubscription(MMInfoModel.getInstance()
-                .getLatestOrderCarry()
-                .subscribe(list -> {
-                    service = Executors.newSingleThreadExecutor();
-                    service.execute(() -> {
-                        for (int i = 0; i < list.size() && !isDestroy; i++) {
-                            SystemClock.sleep(new Random().nextInt(5000));
-                            if (!isDestroy)
-                                EventBus.getDefault().post(new SetOrderEvent(list.get(list.size() - 1 - i)));
-                            SystemClock.sleep(1000);
-                            if (!isDestroy) EventBus.getDefault().post(new ShowOrderEvent());
-                            SystemClock.sleep(3000);
-                            if (!isDestroy) EventBus.getDefault().post(new HideOrderEvent());
-                            SystemClock.sleep(3000);
-                        }
-                    });
-                }, Throwable::printStackTrace));
-        addSubscription(MMProductModel.getInstance()
-                .getWxCode()
-                .subscribe(new ServiceResponse<WxQrcode>() {
-                    @Override
-                    public void onNext(WxQrcode wxQrcode) {
-                        super.onNext(wxQrcode);
-                    }
-                }));
+        showIndeterminateProgressDialog(true);
+        addSubscription(Observable.mergeDelayError(MMInfoModel.getInstance().getUserInfo(),
+                MMProductModel.getInstance().getWxCode(),
+                MMInfoModel.getInstance().getLatestOrderCarry())
+                .subscribe(o -> {
+                            if (o instanceof UserInfoBean) {
+                                fillDataToView((UserInfoBean) o);
+                            } else if (o instanceof List<?>) {
+                                List list = (List) o;
+                                service = Executors.newSingleThreadExecutor();
+                                service.execute(() -> {
+                                    for (int i = 0; i < list.size() && !isDestroy; i++) {
+                                        SystemClock.sleep(new Random().nextInt(5000));
+                                        if (!isDestroy)
+                                            EventBus.getDefault().post(new SetOrderEvent(
+                                                    (MiPushOrderCarryBean) list.get(list.size() - 1 - i)));
+                                        SystemClock.sleep(1000);
+                                        if (!isDestroy)
+                                            EventBus.getDefault().post(new ShowOrderEvent());
+                                        SystemClock.sleep(3000);
+                                        if (!isDestroy)
+                                            EventBus.getDefault().post(new HideOrderEvent());
+                                        SystemClock.sleep(3000);
+                                    }
+                                });
+                            }
+                        }, e -> hideIndeterminateProgressDialog()
+                        , this::hideIndeterminateProgressDialog));
+//        addSubscription(MMInfoModel.getInstance()
+//                .getUserInfo()
+//                .subscribe(this::fillDataToView, Throwable::printStackTrace));
+//        addSubscription(MMInfoModel.getInstance()
+//                .getLatestOrderCarry()
+//                .subscribe(list -> {
+//                    service = Executors.newSingleThreadExecutor();
+//                    service.execute(() -> {
+//                        for (int i = 0; i < list.size() && !isDestroy; i++) {
+//                            SystemClock.sleep(new Random().nextInt(5000));
+//                            if (!isDestroy)
+//                                EventBus.getDefault().post(new SetOrderEvent(list.get(list.size() - 1 - i)));
+//                            SystemClock.sleep(1000);
+//                            if (!isDestroy) EventBus.getDefault().post(new ShowOrderEvent());
+//                            SystemClock.sleep(3000);
+//                            if (!isDestroy) EventBus.getDefault().post(new HideOrderEvent());
+//                            SystemClock.sleep(3000);
+//                        }
+//                    });
+//                }, Throwable::printStackTrace));
+//        addSubscription(MMProductModel.getInstance()
+//                .getWxCode()
+//                .subscribe(new ServiceResponse<WxQrcode>() {
+//                    @Override
+//                    public void onNext(WxQrcode wxQrcode) {
+//                        super.onNext(wxQrcode);
+//                    }
+//                }));
     }
 
     private void fillDataToView(UserInfoBean userInfoBean) {

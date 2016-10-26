@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.jimei.library.utils.JUtils;
 import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.data.XlmmConst;
@@ -37,7 +38,6 @@ import com.jimei.xiaolumeimei.ui.activity.trade.ApplyReturnGoodsActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.LogisticsActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.RefundDetailActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 
 import java.util.ArrayList;
 import java.util.List;

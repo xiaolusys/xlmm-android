@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.jimei.library.utils.JUtils;
 import com.jimei.library.utils.ViewUtils;
 import com.jimei.library.widget.AttrView;
 import com.jimei.library.widget.CountDownView;
@@ -52,7 +53,6 @@ import com.jimei.xiaolumeimei.ui.activity.trade.CartsPayInfoActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import java.text.ParseException;
@@ -67,6 +67,7 @@ import cn.sharesdk.framework.Platform;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
 import cn.sharesdk.wechat.moments.WechatMoments;
+import rx.Observable;
 
 public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetailBinding> implements View.OnClickListener, Animation.AnimationListener {
     private static final String POST_URL = "?imageMogr2/format/jpg/quality/70";
@@ -112,12 +113,10 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
     protected void initViews() {
         setStatusBar();
         num = 1;
-        showIndeterminateProgressDialog(false);
         WebSettings settings = b.webView.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         b.webView.setWebChromeClient(new WebChromeClient());
-        b.webView.loadUrl(XlmmApi.getAppUrl() + "/mall/product/details/app/" + model_id);
         View view = getLayoutInflater().inflate(R.layout.pop_product_detail_layout, null);
         findById(view);
         dialog = new Dialog(this, R.style.CustomDialog);
@@ -180,39 +179,26 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
 
     @Override
     protected void initData() {
-        addSubscription(ProductModel.getInstance()
-                .getProductDetail(model_id)
-                .subscribe(new ServiceResponse<ProductDetailBean>() {
-
-                    @Override
-                    public void onNext(ProductDetailBean productDetailBean) {
-                        productDetail = productDetailBean;
-                        fillDataToView(productDetailBean);
-                    }
-                }));
-        addSubscription(ProductModel.getInstance()
-                .getShareModel(model_id)
-                .subscribe(new ServiceResponse<ShareModelBean>() {
-
-                    @Override
-                    public void onNext(ShareModelBean shareModelBean) {
-                        shareModel = shareModelBean;
-                    }
-                }));
-        addSubscription(CartsModel.getInstance()
-                .show_carts_num()
-                .subscribe(new ServiceResponse<CartsNumResultBean>() {
-
-                    @Override
-                    public void onNext(CartsNumResultBean cartsNumResultBean) {
-                        cart_num = cartsNumResultBean.getResult();
-                        b.tvCart.setText(cart_num + "");
-                        if (cart_num > 0) {
-                            b.tvCart.setVisibility(View.VISIBLE);
-                        }
-                    }
-                }));
-
+        showIndeterminateProgressDialog(false);
+        addSubscription(Observable.mergeDelayError(
+                ProductModel.getInstance().getProductDetail(model_id),
+                ProductModel.getInstance().getShareModel(model_id),
+                CartsModel.getInstance().show_carts_num())
+                .subscribe(o -> {
+                            if (o instanceof ProductDetailBean) {
+                                productDetail = (ProductDetailBean) o;
+                                fillDataToView((ProductDetailBean) o);
+                            } else if (o instanceof ShareModelBean) {
+                                shareModel = (ShareModelBean) o;
+                            } else if (o instanceof CartsNumResultBean) {
+                                cart_num = ((CartsNumResultBean) o).getResult();
+                                b.tvCart.setText(cart_num + "");
+                                if (cart_num > 0) {
+                                    b.tvCart.setVisibility(View.VISIBLE);
+                                }
+                            }
+                        }, Throwable::printStackTrace
+                        , this::hideIndeterminateProgressDialog));
     }
 
     private void initLeftTime(String time) {
@@ -232,6 +218,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
     }
 
     private void fillDataToView(ProductDetailBean productDetailBean) {
+        b.webView.loadUrl(XlmmApi.getAppUrl() + "/mall/product/details/app/" + model_id);
         ProductDetailBean.DetailContentBean detailContent = productDetailBean.getDetail_content();
         teamBuyInfo = productDetailBean.getTeambuy_info();
         skuInfo = productDetailBean.getSku_info();
@@ -294,7 +281,6 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
         initAttr(productDetailBean.getComparison().getAttributes());
         initLeftTime(offshelf_time);
         initHeadImg(detailContent);
-        hideIndeterminateProgressDialog();
     }
 
     private void setSkuId(List<ProductDetailBean.SkuInfoBean> sku_info) {
@@ -411,33 +397,30 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                 } else {
                     addSubscription(CartsModel.getInstance()
                             .addToCart(item_id, sku_id, num, 3)
-                            .subscribe(new ServiceResponse<ResultEntity>() {
-                                @Override
-                                public void onNext(ResultEntity resultEntity) {
-                                    if (resultEntity.getCode() == 0) {
-                                        CartsModel.getInstance()
-                                                .getCartsList(3)
-                                                .subscribe(new ServiceResponse<List<CartsInfoBean>>() {
-                                                    @Override
-                                                    public void onNext(List<CartsInfoBean> cartsinfoBeen) {
-                                                        if (cartsinfoBeen != null && cartsinfoBeen.size() > 0) {
-                                                            String ids = cartsinfoBeen.get(0).getId() + "";
-                                                            Bundle bundle = new Bundle();
-                                                            bundle.putString("ids", ids);
-                                                            bundle.putBoolean("flag", true);
-                                                            Intent intent = new Intent(ProductDetailActivity.this, CartsPayInfoActivity.class);
-                                                            intent.putExtras(bundle);
-                                                            startActivity(intent);
-                                                        } else {
-                                                            JUtils.Toast("购买失败!");
-                                                        }
+                            .subscribe(resultEntity -> {
+                                if (resultEntity.getCode() == 0) {
+                                    CartsModel.getInstance()
+                                            .getCartsList(3)
+                                            .subscribe(new ServiceResponse<List<CartsInfoBean>>() {
+                                                @Override
+                                                public void onNext(List<CartsInfoBean> cartsinfoBeen) {
+                                                    if (cartsinfoBeen != null && cartsinfoBeen.size() > 0) {
+                                                        String ids = cartsinfoBeen.get(0).getId() + "";
+                                                        Bundle bundle = new Bundle();
+                                                        bundle.putString("ids", ids);
+                                                        bundle.putBoolean("flag", true);
+                                                        Intent intent = new Intent(ProductDetailActivity.this, CartsPayInfoActivity.class);
+                                                        intent.putExtras(bundle);
+                                                        startActivity(intent);
+                                                    } else {
+                                                        JUtils.Toast("购买失败!");
                                                     }
-                                                });
-                                    } else {
-                                        JUtils.Toast(resultEntity.getInfo());
-                                    }
+                                                }
+                                            });
+                                } else {
+                                    JUtils.Toast(resultEntity.getInfo());
                                 }
-                            }));
+                            }, Throwable::printStackTrace));
                 }
                 break;
             case R.id.tv_add_one:
@@ -493,7 +476,37 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                 }
                 break;
             case R.id.commit:
-                addToCart(true);
+                if (productDetail != null) {
+                    if (productDetail.getDetail_content().is_onsale()) {
+                        // TODO: 16/10/25
+                        addSubscription(CartsModel.getInstance()
+                                .addToCart(item_id, sku_id, num, 5)
+                                .subscribe(resultEntity -> {
+                                    if (resultEntity.getCode() == 0) {
+                                        CartsModel.getInstance()
+                                                .getCartsList(5)
+                                                .subscribe(cartsinfoBeen -> {
+                                                    if (cartsinfoBeen != null && cartsinfoBeen.size() > 0) {
+                                                        String ids = cartsinfoBeen.get(0).getId() + "";
+                                                        Bundle bundle = new Bundle();
+                                                        bundle.putString("ids", ids);
+                                                        bundle.putBoolean("couponFlag", true);
+                                                        Intent intent = new Intent(ProductDetailActivity.this, CartsPayInfoActivity.class);
+                                                        intent.putExtras(bundle);
+                                                        startActivity(intent);
+                                                        dialog.dismiss();
+                                                    } else {
+                                                        JUtils.Toast("购买失败!");
+                                                    }
+                                                }, Throwable::printStackTrace);
+                                    } else {
+                                        JUtils.Toast(resultEntity.getInfo());
+                                    }
+                                }, Throwable::printStackTrace));
+                    } else {
+                        addToCart(true);
+                    }
+                }
                 break;
             default:
                 break;

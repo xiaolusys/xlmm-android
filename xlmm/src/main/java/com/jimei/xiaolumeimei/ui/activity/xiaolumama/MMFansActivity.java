@@ -47,16 +47,6 @@ public class MMFansActivity extends BaseSwipeBackCompatActivity{
         titles.add("潜在粉丝");
         titles.add("关于粉丝");
 
-
-        TabLayout.Tab[] tabs = new TabLayout.Tab[3];
-        tabs[0] = tabLayout.newTab().setText(titles.get(0));
-        tabs[1] = tabLayout.newTab().setText(titles.get(1));
-        tabs[2] = tabLayout.newTab().setText(titles.get(2));
-
-        tabLayout.addTab(tabs[0]);
-        tabLayout.addTab(tabs[1]);
-        tabLayout.addTab(tabs[2]);
-
         MainTabAdapter mAdapter = new MainTabAdapter(getSupportFragmentManager(), titles);
         viewPager.setAdapter(mAdapter);
         viewPager.setOffscreenPageLimit(3);

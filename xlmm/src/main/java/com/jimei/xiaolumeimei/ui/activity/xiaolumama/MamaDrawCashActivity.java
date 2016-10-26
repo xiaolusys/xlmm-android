@@ -12,14 +12,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.model.MMInfoModel;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
-import com.jimei.xiaolumeimei.model.UserNewModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
@@ -73,8 +73,8 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
     @Override
     protected void initData() {
         drawMoney = 100;
-        Subscription subscribe = UserNewModel.getInstance()
-                .getProfile()
+        addSubscription(MMInfoModel.getInstance()
+                .getUserInfo()
                 .subscribe(new ServiceResponse<UserInfoBean>() {
                     @Override
                     public void onNext(UserInfoBean userNewBean) {
@@ -82,8 +82,7 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
                             nickNameTv.setText(userNewBean.getNick());
                         }
                     }
-                });
-        addSubscription(subscribe);
+                }));
     }
 
     @Override

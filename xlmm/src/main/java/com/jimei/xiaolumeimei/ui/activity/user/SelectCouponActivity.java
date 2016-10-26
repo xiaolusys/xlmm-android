@@ -29,6 +29,8 @@ public class SelectCouponActivity extends BaseSwipeBackCompatActivity {
     ViewPager viewPager;
     String selected_couponid;
     String cart_ids;
+    private int goodNum;
+    private boolean couponFlag;
     List<BaseFragment> fragments = new ArrayList<>();
 
     @Override
@@ -40,7 +42,11 @@ public class SelectCouponActivity extends BaseSwipeBackCompatActivity {
                     @Override
                     public void onNext(CouponSelectEntity couponSelectEntity) {
                         SelectCouponAdapter mAdapter = new SelectCouponAdapter(getSupportFragmentManager());
-                        fragments.add(SelectCouponFragment.newInstance(0, "可用优惠券", selected_couponid, couponSelectEntity.getUsable_coupon()));
+                        if (couponFlag && goodNum > 1) {
+                            fragments.add(SelectCouponFragment.newInstance(0, "可用优惠券", selected_couponid, couponSelectEntity.getUsable_coupon(), goodNum));
+                        } else {
+                            fragments.add(SelectCouponFragment.newInstance(0, "可用优惠券", selected_couponid, couponSelectEntity.getUsable_coupon()));
+                        }
                         fragments.add(SelectCouponFragment.newInstance(1, "不可用优惠券", "", couponSelectEntity.getDisable_coupon()));
                         viewPager.setAdapter(mAdapter);
                         viewPager.setOffscreenPageLimit(2);
@@ -61,6 +67,8 @@ public class SelectCouponActivity extends BaseSwipeBackCompatActivity {
     protected void getBundleExtras(Bundle extras) {
         selected_couponid = extras.getString("coupon_id", "");
         cart_ids = extras.getString("cart_ids", "");
+        goodNum = extras.getInt("goodNum", 1);
+        couponFlag = extras.getBoolean("couponFlag", false);
     }
 
     @Override

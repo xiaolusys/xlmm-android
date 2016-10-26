@@ -3,9 +3,9 @@ package com.jimei.xiaolumeimei.base;
 import android.os.Bundle;
 import android.view.View;
 
+import com.jimei.library.utils.JUtils;
 import com.jimei.library.utils.TUtil;
 import com.jimei.library.widget.loading.VaryViewHelperController;
-import com.jude.utils.JUtils;
 
 /**
  * Created by itxuye on 2016/6/24.

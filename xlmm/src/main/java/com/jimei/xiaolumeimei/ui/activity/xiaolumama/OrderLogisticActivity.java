@@ -3,6 +3,7 @@ package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 import android.os.Bundle;
 import android.view.View;
 
+import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.LogImageView;
 import com.jimei.library.widget.LogMsgView;
 import com.jimei.xiaolumeimei.R;
@@ -10,13 +11,9 @@ import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
 import com.jimei.xiaolumeimei.databinding.ActivityOrderLogisticBinding;
 import com.jimei.xiaolumeimei.entities.LogisticsBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
-
-import rx.Subscription;
 
 public class OrderLogisticActivity extends BaseMVVMActivity<ActivityOrderLogisticBinding> {
     private String company_code;
@@ -27,31 +24,19 @@ public class OrderLogisticActivity extends BaseMVVMActivity<ActivityOrderLogisti
         if (packetid != null && company_code != null &&
                 !"".equals(packetid) && !"".equals(company_code)) {
             showIndeterminateProgressDialog(false);
-            Subscription subscribe = TradeModel.getInstance()
+            addSubscription(TradeModel.getInstance()
                     .get_logistics_by_packagetid(packetid, company_code)
-                    .subscribe(new ServiceResponse<LogisticsBean>() {
-
-                        @Override
-                        public void onNext(LogisticsBean logisticsBean) {
-                            fillDataToView(logisticsBean);
-                        }
-
-                        @Override
-                        public void onCompleted() {
-                            JUtils.Toast("物流信息更新成功!");
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            JUtils.Toast("更新失败!");
-                            hideIndeterminateProgressDialog();
-                        }
-                    });
-            addSubscription(subscribe);
+                    .subscribe(this::fillDataToView,
+                            e -> {
+                                JUtils.Toast("更新失败!");
+                                hideIndeterminateProgressDialog();
+                            }
+                    ));
         } else {
             b.tvOrderLastTime.setText("暂无物流信息");
             b.start.setVisibility(View.VISIBLE);
         }
+
     }
 
     private void fillDataToView(LogisticsBean logisticsBean) {
@@ -76,6 +61,7 @@ public class OrderLogisticActivity extends BaseMVVMActivity<ActivityOrderLogisti
             }
         }
         hideIndeterminateProgressDialog();
+        JUtils.Toast("物流信息更新成功!");
     }
 
     @Override

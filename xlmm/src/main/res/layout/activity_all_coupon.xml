@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.jimei.xiaolumeimei.ui.activity.user.AllCouponActivity">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="com.jimei.xiaolumeimei.ui.activity.user.AllCouponActivity">
 
     <com.jimei.library.widget.XlmmTitleView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:xlmm_title="优惠券" />
+        app:xlmm_title="优惠券"/>
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tab_layout"
@@ -18,14 +18,15 @@
         android:layout_height="40dp"
         android:layout_gravity="bottom"
         android:background="@color/white"
+        app:tabTextAppearance="@style/MyTabLayoutTextAppearance"
         app:tabIndicatorColor="@color/colorPrimary"
         app:tabSelectedTextColor="@color/colorPrimaryDark"
-        app:tabTextColor="@color/black_overlay" />
+        app:tabTextColor="@color/black_overlay"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white" />
+        android:background="@color/white"/>
 
 </LinearLayout>

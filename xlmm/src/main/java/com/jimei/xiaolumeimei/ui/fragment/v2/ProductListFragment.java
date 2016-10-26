@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.CountDownView;
 import com.jimei.library.widget.SpaceItemDecoration;
 import com.jimei.library.widget.scrolllayout.ScrollableHelper;
@@ -21,7 +22,6 @@ import com.jimei.xiaolumeimei.adapter.ProductListBeanAdapter;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import java.text.SimpleDateFormat;

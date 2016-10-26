@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
 import android.os.Bundle;
 
+import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.TaskRewardPagerAdapter;
 import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
@@ -11,7 +12,6 @@ import com.jimei.xiaolumeimei.entities.WeekTaskRewardBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.ui.fragment.v2.TaskRewardFragment;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 
 import java.util.ArrayList;
 

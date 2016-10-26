@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.LogImageView;
 import com.jimei.library.widget.LogMsgView;
 import com.jimei.library.widget.XlmmTitleView;
@@ -23,7 +24,6 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.LogisticsBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import java.text.DateFormat;
@@ -208,7 +208,7 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
         SpannableStringBuilder builder = new SpannableStringBuilder(reasonTv.getText().toString());
         //ForegroundColorSpan 为文字前景色，BackgroundColorSpan为文字背景色
         ForegroundColorSpan colorSpan = new ForegroundColorSpan(getResources().getColor(R.color.colorAccent));
-        builder.setSpan(colorSpan, 20, reasonTv.getText().toString().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        builder.setSpan(colorSpan, 20,35, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         reasonTv.setText(builder);
     }
 

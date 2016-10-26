@@ -20,6 +20,7 @@ import rx.Observable;
  * Copyright 2016年 上海己美. All rights reserved.
  */
 public class ActivityModel {
+
     private static ActivityModel ourInstance = new ActivityModel();
 
     private ActivityModel() {
@@ -50,14 +51,15 @@ public class ActivityModel {
     }
 
     //物流列表
-    public Observable<List<LogisticCompany>> getLogisticCompany( int referal_trade_id) {
+    public Observable<List<LogisticCompany>> getLogisticCompany(int referal_trade_id) {
         return XlmmRetrofitClient.getService()
                 .getLogisticCompany(referal_trade_id)
                 .compose(new DefaultTransform<>());
     }
 
     //修改物流
-    public Observable<ResultBean> changeLogisticCompany(int address_id, String referal_trade_id, String logistic_company_code) {
+    public Observable<ResultBean> changeLogisticCompany(int address_id, String referal_trade_id,
+                                                        String logistic_company_code) {
         return XlmmRetrofitClient.getService()
                 .changeLogisticCompany(address_id, referal_trade_id, logistic_company_code)
                 .compose(new DefaultTransform<>());
@@ -70,7 +72,7 @@ public class ActivityModel {
                 .compose(new DefaultTransform<>());
     }
 
-    public Observable<VersionBean> getVersion(){
+    public Observable<VersionBean> getVersion() {
         return XlmmRetrofitClient.getService()
                 .getVersion()
                 .compose(new DefaultTransform<>());

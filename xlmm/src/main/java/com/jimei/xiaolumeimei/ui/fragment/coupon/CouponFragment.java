@@ -56,6 +56,8 @@ public class CouponFragment extends BaseFragment {
             msgTv.setText("您暂时没有已过期优惠券哦～");
         } else if (type == XlmmConst.USED_COUPON) {
             msgTv.setText("您暂时没有已使用优惠券哦～");
+        } else if (type == XlmmConst.GOOD_COUPON) {
+            msgTv.setText("您暂时没有精品优惠券哦～");
         }
         if (couponEntities.size() > 0) {
             emptyView.setVisibility(View.GONE);

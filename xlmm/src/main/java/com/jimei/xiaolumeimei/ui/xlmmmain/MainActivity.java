@@ -35,6 +35,7 @@ import android.widget.TextView;
 
 import com.jimei.library.utils.DisplayUtils;
 import com.jimei.library.utils.FileUtils;
+import com.jimei.library.utils.JUtils;
 import com.jimei.library.utils.ViewUtils;
 import com.jimei.library.widget.AutoToolbar;
 import com.jimei.library.widget.BrandView;
@@ -72,16 +73,15 @@ import com.jimei.xiaolumeimei.ui.activity.user.InformationActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.MembershipPointActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.WalletActivity;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaActivity;
 import com.jimei.xiaolumeimei.ui.fragment.v1.view.MastFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.FirstFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.GetCouponFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.ProductListFragment;
-import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.widget.VersionManager;
 import com.jimei.xiaolumeimei.xlmmService.UpdateService;
-import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -971,7 +971,15 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
                     JUtils.Toast("再按一次退出程序!");
                     return true;
                 }
+//                else {
+//                    Intent intent = new Intent();
+//                    intent.setAction(Intent.ACTION_MAIN);
+//                    intent.addCategory(Intent.CATEGORY_HOME);
+//                    startActivity(intent);
+//                    return true;
+//                }
             }
+
         }
         return super.onKeyDown(keyCode, event);
     }

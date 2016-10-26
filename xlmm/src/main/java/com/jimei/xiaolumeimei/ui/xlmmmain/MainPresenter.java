@@ -2,12 +2,12 @@ package com.jimei.xiaolumeimei.ui.xlmmmain;
 
 import android.support.v4.widget.SwipeRefreshLayout;
 
+import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 
 import java.util.Date;
 

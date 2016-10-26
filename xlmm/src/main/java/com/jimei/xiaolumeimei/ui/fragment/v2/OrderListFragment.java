@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.loadingdialog.XlmmLoadingDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.AllOrderAdapter;
@@ -19,7 +20,6 @@ import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import java.lang.reflect.Field;

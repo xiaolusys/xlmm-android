@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.jimei.library.utils.CameraUtils;
 import com.jimei.library.utils.FileUtils;
+import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.ninepicimagview.MultiImageView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -24,7 +25,6 @@ import com.jimei.xiaolumeimei.entities.NinePicBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.okhttp3.FileParaCallback;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.ImagePagerActivity;
-import com.jude.utils.JUtils;
 import com.tbruyelle.rxpermissions.RxPermissions;
 import com.umeng.analytics.MobclickAgent;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -220,9 +220,6 @@ public class NinePicAdapter extends BaseAdapter {
                                             }
                                         } catch (Exception e) {
                                             hideLoading();
-                                            if (e instanceof ActivityNotFoundException) {
-                                                JUtils.Toast("您手机没有安装微信客户端,图片已保存到本地,请手动分享!");
-                                            }
                                             e.printStackTrace();
                                         }
                                     }
@@ -250,14 +247,20 @@ public class NinePicAdapter extends BaseAdapter {
                 imageUris.add(mFiles.get(i1));
             }
         }
-        if (imageUris.size() > 0) {
-            Intent intent = new Intent();
-            ComponentName comp = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.tools.ShareToTimeLineUI");
-            intent.setComponent(comp);
-            intent.setAction(Intent.ACTION_SEND_MULTIPLE);
-            intent.setType("image/*");
-            intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris);
-            mContext.startActivity(intent);
+        try {
+            if (imageUris.size() > 0) {
+                Intent intent = new Intent();
+                ComponentName comp = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.tools.ShareToTimeLineUI");
+                intent.setComponent(comp);
+                intent.setAction(Intent.ACTION_SEND_MULTIPLE);
+                intent.setType("image/*");
+                intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris);
+                mContext.startActivity(intent);
+            }
+        } catch (Exception e) {
+            if (e instanceof ActivityNotFoundException) {
+                JUtils.Toast("您手机没有安装微信客户端,图片已保存到本地,请手动分享!");
+            }
         }
     }
 

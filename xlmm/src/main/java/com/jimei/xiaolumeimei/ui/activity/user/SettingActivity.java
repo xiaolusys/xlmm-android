@@ -10,6 +10,7 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.jimei.library.utils.DataClearManager;
+import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
@@ -24,11 +25,8 @@ import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.widget.VersionManager;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jimei.xiaolumeimei.xlmmService.UpdateService;
-import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.xiaomi.mipush.sdk.MiPushClient;
-
-import rx.schedulers.Schedulers;
 
 public class SettingActivity extends BaseMVVMActivity<ActivitySettingBinding>
         implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {

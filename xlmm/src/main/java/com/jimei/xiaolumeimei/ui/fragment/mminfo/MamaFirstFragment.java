@@ -23,23 +23,24 @@ import com.jimei.xiaolumeimei.adapter.ActivityListAdapter;
 import com.jimei.xiaolumeimei.base.BaseLazyFragment;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.databinding.FragmentMamaFirstBinding;
+import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.MamaSelfListBean;
 import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
+import com.jimei.xiaolumeimei.model.MMInfoModel;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.DayPushActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.GoodWeekActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShareCodeWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShoppingListActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMStoreWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMcarryLogActivity;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaChooseActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaReNewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaVisitorActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.PersonalCarryRankActivity;
-import com.jimei.xiaolumeimei.model.MMInfoModel;
-import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
@@ -52,7 +53,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import retrofit2.Response;
+import rx.Observable;
 
 import static android.provider.UserDictionary.Words.APP_ID;
 
@@ -90,30 +91,29 @@ public class MamaFirstFragment extends BaseLazyFragment<FragmentMamaFirstBinding
 
     @Override
     protected void initData() {
-        addSubscription(MMInfoModel.getInstance()
-                .getMamaUrl()
-                .subscribe(this::initUrl, Throwable::printStackTrace));
-        addSubscription(MMInfoModel.getInstance()
-                .getShareShopping()
-                .subscribe(mmShoppingBean -> {
-                    shopLink = mmShoppingBean.getShopInfo().getPreviewShopLink();
-                }, Throwable::printStackTrace));
-        addSubscription(MMInfoModel.getInstance()
-                .getMamaFortune()
-                .subscribe(this::initFortune, Throwable::printStackTrace));
-        addSubscription(MMInfoModel.getInstance()
-                .getRecentCarry("0", "7")
-                .subscribe(recentCarryBean -> {
-                    if (null != recentCarryBean) {
-                        his_refund.clear();
-                        his_refund.addAll(recentCarryBean.getResults());
-                        if ((his_refund.size() > 0)) {
-                            setDataOfThisWeek();
-                            initTodatText(his_refund);
+        MMInfoModel mmInfoModel = MMInfoModel.getInstance();
+        addSubscription(Observable.mergeDelayError(mmInfoModel.getMamaUrl(), mmInfoModel.getShareShopping(),
+                mmInfoModel.getMamaFortune(), mmInfoModel.getRecentCarry("0", "7"), mmInfoModel.getMaMaselfList())
+                .subscribe(o -> {
+                    if (o != null) {
+                        if (o instanceof MamaUrl) {
+                            initUrl((MamaUrl) o);
+                        } else if (o instanceof MMShoppingBean) {
+                            shopLink = ((MMShoppingBean) o).getShopInfo().getPreviewShopLink();
+                        } else if (o instanceof MamaFortune) {
+                            initFortune((MamaFortune) o);
+                        } else if (o instanceof RecentCarryBean) {
+                            his_refund.clear();
+                            his_refund.addAll(((RecentCarryBean) o).getResults());
+                            if ((his_refund.size() > 0)) {
+                                setDataOfThisWeek();
+                                initTodatText(his_refund);
+                            }
+                        } else if (o instanceof MamaSelfListBean) {
+                            initTask((MamaSelfListBean) o);
                         }
                     }
-                }, Throwable::printStackTrace));
-        refreshNotice();
+                }, Throwable::printStackTrace, () -> b.scrollView.scrollTo(0, 0)));
         setListener();
     }
 
@@ -226,24 +226,22 @@ public class MamaFirstFragment extends BaseLazyFragment<FragmentMamaFirstBinding
         setChartData(data);
     }
 
-    private void initTask(Response<MamaSelfListBean> response) {
-        if (response.isSuccessful()) {
-            int unread_cnt = response.body().getUnread_cnt();
-            if (unread_cnt > 0) {
-                b.imageNotice.setVisibility(View.VISIBLE);
-            } else {
-                b.imageNotice.setVisibility(View.GONE);
-            }
-            List<MamaSelfListBean.ResultsBean> results = response.body().getResults();
-            List<String> list = new ArrayList<>();
-            if (unread_cnt > 0) {
-                for (int i = 0; i < results.size(); i++) {
-                    if (!results.get(i).isRead()) {
-                        list.add(results.get(i).getTitle());
-                    }
+    private void initTask(MamaSelfListBean bean) {
+        int unread_cnt = bean.getUnread_cnt();
+        if (unread_cnt > 0) {
+            b.imageNotice.setVisibility(View.VISIBLE);
+        } else {
+            b.imageNotice.setVisibility(View.GONE);
+        }
+        List<MamaSelfListBean.ResultsBean> results = bean.getResults();
+        List<String> list = new ArrayList<>();
+        if (unread_cnt > 0) {
+            for (int i = 0; i < results.size(); i++) {
+                if (!results.get(i).isRead()) {
+                    list.add(results.get(i).getTitle());
                 }
-                b.marqueeView.startWithList(list);
             }
+            b.marqueeView.startWithList(list);
         }
     }
 

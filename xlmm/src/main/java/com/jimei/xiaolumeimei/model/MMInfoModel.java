@@ -12,13 +12,13 @@ import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 
 import java.util.List;
 
-import retrofit2.Response;
 import rx.Observable;
 
 /**
  * Created by itxuye on 2016/6/24.
  */
 public class MMInfoModel {
+
     private static MMInfoModel ourInstance = new MMInfoModel();
 
     private MMInfoModel() {
@@ -29,11 +29,15 @@ public class MMInfoModel {
     }
 
     public Observable<MMShoppingBean> getShareShopping() {
-        return XlmmRetrofitClient.getService().getShareShopping().compose(new DefaultTransform<>());
+        return XlmmRetrofitClient.getService()
+                .getShareShopping()
+                .compose(new DefaultTransform<>());
     }
 
     public Observable<MamaFortune> getMamaFortune() {
-        return XlmmRetrofitClient.getService().getMamaFortune().compose(new DefaultTransform<>());
+        return XlmmRetrofitClient.getService()
+                .getMamaFortune()
+                .compose(new DefaultTransform<>());
     }
 
     //test
@@ -43,7 +47,7 @@ public class MMInfoModel {
                 .compose(new DefaultTransform<>());
     }
 
-    public Observable<Response<MamaSelfListBean>> getMaMaselfList() {
+    public Observable<MamaSelfListBean> getMaMaselfList() {
         return XlmmRetrofitClient.getService()
                 .getMaMaselfList()
                 .compose(new DefaultTransform<>());

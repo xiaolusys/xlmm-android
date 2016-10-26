@@ -30,6 +30,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.CountDownView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
@@ -48,7 +49,6 @@ import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.ui.activity.user.WaitSendAddressActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import com.pingplusplus.android.PaymentActivity;
 import com.umeng.analytics.MobclickAgent;
 
@@ -92,6 +92,8 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     TextView tx_order_postfee;
     @Bind(R.id.tx_order_payment)
     TextView tx_order_payment;
+    @Bind(R.id.tx_order_payment2)
+    TextView tx_order_payment2;
     @Bind(R.id.address)
     RelativeLayout addressLayout;
     @Bind(R.id.right_flag)
@@ -316,7 +318,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                                     }
                                 }
                             }, e -> JUtils.Log(e.getMessage())));
-
                 }
             } else {
                 setStatusView(status);
@@ -333,7 +334,8 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         tx_order_totalfee.setText("¥" + orderDetailBean.getTotal_fee());
         tx_order_discountfee.setText("-¥" + orderDetailBean.getDiscount_fee());
         tx_order_postfee.setText("¥" + orderDetailBean.getPost_fee());
-        tx_order_payment.setText("¥" + orderDetailBean.getPayment());
+        tx_order_payment.setText("¥" + orderDetailBean.getPay_cash());
+        tx_order_payment2.setText("¥" + (orderDetailBean.getPayment() - orderDetailBean.getPay_cash()));
         timeText.setText(orderDetailBean.getCreated().replace("T", " "));
         if (orderDetailBean.getLogistics_company() != null) {
             logisticsTv.setText(orderDetailBean.getLogistics_company().getName());

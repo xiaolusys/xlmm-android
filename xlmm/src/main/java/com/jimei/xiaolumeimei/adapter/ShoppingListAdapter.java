@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.jimei.library.utils.JUtils;
 import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.OderCarryBean;
@@ -35,6 +36,7 @@ public class ShoppingListAdapter
         extends RecyclerView.Adapter<ShoppingListAdapter.ShoppingListVH> {
 
 
+    private static final java.lang.String TAG = ShoppingListAdapter.class.getSimpleName();
     private List<OderCarryBean.ResultsEntity> mList;
     private Context mContext;
 
@@ -115,11 +117,13 @@ public class ShoppingListAdapter
             holder.content.setOnClickListener(v -> {
                 Intent intent = new Intent(mContext, OrderLogisticActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString("company_code",resultsEntity.getCompany_code());
-                bundle.putString("packetid",resultsEntity.getPacketid());
+                bundle.putString("company_code", resultsEntity.getCompany_code());
+                bundle.putString("packetid", resultsEntity.getPacketid());
                 intent.putExtras(bundle);
                 mContext.startActivity(intent);
             });
+        } else {
+            holder.content.setOnClickListener(v -> JUtils.Log(TAG, "onClick"));
         }
     }
 

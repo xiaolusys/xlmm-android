@@ -16,9 +16,10 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.Checkable;
-import com.jimei.library.R;
 
-import com.jude.utils.JUtils;
+import com.jimei.library.R;
+import com.jimei.library.utils.JUtils;
+
 
 /*
  * Copyright 2015, 2016 andy

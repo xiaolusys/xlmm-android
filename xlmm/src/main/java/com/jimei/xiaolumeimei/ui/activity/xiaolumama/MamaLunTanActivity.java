@@ -6,8 +6,8 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
-import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 /**

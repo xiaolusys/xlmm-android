@@ -11,10 +11,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.CouponEntity;
-import com.jude.utils.JUtils;
+import com.jimei.xiaolumeimei.utils.JumpUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +26,12 @@ public class CouponListAdapter extends BaseAdapter {
     private List<CouponEntity> mList;
     private int mCouponTyp;
     private String mSelecteCouponid;
+    private boolean clickable;
 
     public CouponListAdapter(Context context) {
         mList = new ArrayList<>();
         this.context = context;
+        clickable = true;
     }
 
     public void updateWithClear(List<CouponEntity> list) {
@@ -71,9 +74,13 @@ public class CouponListAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        if (mCouponTyp == XlmmConst.UNUSED_COUPON) {
+        if (mCouponTyp == XlmmConst.UNUSED_COUPON || mCouponTyp == XlmmConst.GOOD_COUPON) {
             holder.tv_coupon_value.setTextColor(Color.parseColor("#F05050"));
             holder.rl.setBackgroundResource(R.drawable.bg_img_coupon);
+            holder.iv_right.setVisibility(View.VISIBLE);
+            if (clickable) {
+                holder.rl.setOnClickListener(v -> JumpUtils.push_jump_proc(context, "com.jimei.xlmm://app/v1/products/promote_today"));
+            }
         } else if (mCouponTyp == XlmmConst.PAST_COUPON) {
             holder.tv_coupon_value.setTextColor(Color.parseColor("#B4B4B4"));
             holder.tv_coupon_info.setTextColor(Color.parseColor("#D2D2D2"));
@@ -81,12 +88,15 @@ public class CouponListAdapter extends BaseAdapter {
             holder.titleTv.setTextColor(Color.parseColor("#D2D2D2"));
             holder.use_fee.setTextColor(Color.parseColor("#D2D2D2"));
             holder.rl.setBackgroundResource(R.drawable.bg_img_pastcoupon);
+            holder.iv_right.setVisibility(View.GONE);
         } else if (mCouponTyp == XlmmConst.USED_COUPON) {
-            holder.tv_coupon_value.setTextColor(Color.parseColor("#646464"));
+            holder.tv_coupon_value.setTextColor(context.getResources().getColor(R.color.text_color_62));
             holder.rl.setBackgroundResource(R.drawable.bg_img_usedcoupon);
-        } else if (mCouponTyp == 3) {
+            holder.iv_right.setVisibility(View.GONE);
+        } else {
             holder.tv_coupon_value.setTextColor(Color.parseColor("#646464"));
             holder.rl.setBackgroundResource(R.drawable.bg_img_dcoupon);
+            holder.iv_right.setVisibility(View.GONE);
         }
         double coupon_value = mList.get(position).getCoupon_value();
         if (Math.round(coupon_value * 100) % 100 == 0) {
@@ -94,21 +104,20 @@ public class CouponListAdapter extends BaseAdapter {
         } else {
             holder.tv_coupon_value.setText("￥" + coupon_value);
         }
-        holder.titleTv.setText(mList.get(position).getTitle());
-        holder.tv_coupon_info.setText(mList.get(position).getPros_desc());
+        holder.tv_coupon_info.setText(mList.get(position).getTitle());
+        holder.titleTv.setText(mList.get(position).getPros_desc());
         String start_time = mList.get(position).getStart_time();
         String deadline = mList.get(position).getDeadline();
         String created = mList.get(position).getCreated();
         if (start_time != null) {
-            holder.tv_coupon_crttime.setText("期限   " + start_time.substring(0, start_time.lastIndexOf("T"))
-                    + "   至   " + deadline.substring(0, deadline.lastIndexOf("T")));
+            holder.tv_coupon_crttime.setText("期限  " + start_time.replaceAll("T", " ")
+                    + "  至  " + deadline.replaceAll("T", " "));
         } else {
-            holder.tv_coupon_crttime.setText("期限   " + created.substring(0, created.lastIndexOf("T"))
-                    + "   至   " + deadline.substring(0, deadline.lastIndexOf("T")));
+            holder.tv_coupon_crttime.setText("期限  " + created.replaceAll("T", " ")
+                    + "  至  " + deadline.replaceAll("T", " "));
         }
         JUtils.Log(TAG, "couponno= " + mList.get(position).getId() + " selected couponno=" + mSelecteCouponid);
         holder.use_fee.setText(mList.get(position).getUse_fee_des());
-
         if ((mSelecteCouponid != null) && (!mSelecteCouponid.isEmpty())
                 && mSelecteCouponid.equals(Integer.toString(mList.get(position).getId()))) {
             holder.img_selected.setVisibility(View.VISIBLE);
@@ -118,11 +127,15 @@ public class CouponListAdapter extends BaseAdapter {
         return convertView;
     }
 
+    public void setClickable(boolean clickable) {
+        this.clickable = clickable;
+    }
+
     class ViewHolder {
         TextView tv_coupon_value;
         TextView tv_coupon_info;
         TextView tv_coupon_crttime;
-        ImageView img_selected;
+        ImageView img_selected, iv_right;
         TextView use_fee;
         TextView titleTv;
         RelativeLayout rl;
@@ -132,6 +145,7 @@ public class CouponListAdapter extends BaseAdapter {
             tv_coupon_info = (TextView) itemView.findViewById(R.id.tv_coupon_info);
             tv_coupon_crttime = (TextView) itemView.findViewById(R.id.tv_coupon_crttime);
             img_selected = (ImageView) itemView.findViewById(R.id.img_selected);
+            iv_right = (ImageView) itemView.findViewById(R.id.iv_right);
             use_fee = (TextView) itemView.findViewById(R.id.use_fee);
             titleTv = (TextView) itemView.findViewById(R.id.title);
             rl = (RelativeLayout) itemView.findViewById(R.id.rl);

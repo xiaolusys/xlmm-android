@@ -23,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.NestedListView;
 import com.jimei.library.widget.SmoothCheckBox;
 import com.jimei.xiaolumeimei.R;
@@ -44,7 +45,6 @@ import com.jimei.xiaolumeimei.ui.activity.user.AddressSelectActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.SelectCouponActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import com.pingplusplus.android.Pingpp;
 import com.umeng.analytics.MobclickAgent;
 
@@ -125,6 +125,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     private String coupon_id;
     private boolean isCoupon;
     private double coupon_price;
+    private int goodNum;
     private boolean isHaveAddress;
     private boolean isSelectAddress;
     private String nameSelect;
@@ -140,8 +141,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     private double yue;
     private double appcut;
     private AlertDialog dialog;
-    private List<CartsPayinfoBean.LogisticsCompanys> logisticsCompanyses =
-            new ArrayList<>();
+    private List<CartsPayinfoBean.LogisticsCompanys> logisticsCompanyses = new ArrayList<>();
     private List<String> logisticsCompanysesString = new ArrayList<>();
     private String code;
     private String order_no = "";
@@ -149,7 +149,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     @Bind(R.id.jiesheng_price)
     TextView jiesheng_price;
     private int position;
-    private boolean mFlag;
+    private boolean mFlag, couponFlag;
 
     @Override
     protected void setListener() {
@@ -176,6 +176,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                         if (cartsPayinfoBean != null) {
                             JUtils.Log(TAG, cartsPayinfoBean.toString());
                             mAdapter.updateWithClear(cartsPayinfoBean.getCartList());
+                            goodNum = cartsPayinfoBean.getCartList().get(0).getNum();
                             cart_ids = cartsPayinfoBean.getCartIds();
                             logisticsCompanyses.addAll(cartsPayinfoBean.getLogisticsCompanyses());
                             for (CartsPayinfoBean.LogisticsCompanys list : logisticsCompanyses) {
@@ -271,9 +272,9 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
                             JUtils.Log(TAG, "discount_fee" + discount_fee);
                             JUtils.Log(TAG,
-                                    "downLoadCartsInfo:" + cart_ids + "    " + addr_id + "    " + "    " +
-                                            payment + "    " + post_fee + "    " +
-                                            discount_fee + "    " + total_fee + "    " + uuid + "    " +
+                                    "downLoadCartsInfo:" + cart_ids + "  " + addr_id + "  " + "  " +
+                                            payment + "  " + post_fee + "  " +
+                                            discount_fee + "  " + total_fee + "  " + uuid + "  " +
                                             pay_extras);
                         } else {
                             JUtils.Toast("商品已过期,请重新选购");
@@ -293,6 +294,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                         if (cartsPayinfoBean != null) {
                             JUtils.Log(TAG, cartsPayinfoBean.toString());
                             mAdapter.updateWithClear(cartsPayinfoBean.getCartList());
+                            goodNum = cartsPayinfoBean.getCartList().get(0).getNum();
                             cart_ids = cartsPayinfoBean.getCartIds();
                             logisticsCompanyses.addAll(cartsPayinfoBean.getLogisticsCompanyses());
                             for (CartsPayinfoBean.LogisticsCompanys list : logisticsCompanyses) {
@@ -458,6 +460,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     protected void getBundleExtras(Bundle extras) {
         ids = extras.getString("ids");
         mFlag = extras.getBoolean("flag", false);
+        couponFlag = extras.getBoolean("couponFlag", false);
     }
 
     @Override
@@ -504,6 +507,10 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 if ((coupon_id != null) && (!coupon_id.isEmpty())) {
                     bundle.putString("coupon_id", coupon_id);
                 }
+                if (goodNum > 1) {
+                    bundle.putInt("goodNum", goodNum);
+                }
+                bundle.putBoolean("couponFlag", couponFlag);
                 bundle.putString("cart_ids", cart_ids);
                 intent.putExtras(bundle);
                 startActivityForResult(intent, REQUEST_CODE_COUPONT);
@@ -899,48 +906,24 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             if (resultCode == Activity.RESULT_OK) {
                 coupon_id = data.getStringExtra("coupon_id");
                 coupon_price = data.getDoubleExtra("coupon_price", 0);
+                int coupon_num = data.getIntExtra("coupon_num", 1);
                 JUtils.Log("CartsPayinfo", "优惠券返回  " + coupon_price);
-                tv_coupon.setText(coupon_price + "元优惠券");
-                if (coupon_price == 0) {
-                    downLoadCartsInfo();
-                    calcAllPrice();
-                    isCoupon = false;
-                    return;
+                if (coupon_num > 1) {
+                    tv_coupon.setText(coupon_price / coupon_num + "元优惠券x" + coupon_num);
+                } else {
+                    tv_coupon.setText(coupon_price + "元优惠券");
                 }
-                JUtils.Log(TAG, "coupon_id:" + coupon_id);
-                Subscription subscription = CartsModel.getInstance()
-                        .getCartsInfoList(ids, coupon_id)
-                        .subscribe(new ServiceResponse<CartsPayinfoBean>() {
-                            @Override
-                            public void onNext(CartsPayinfoBean cartsPayinfoBean) {
-                                if (cartsPayinfoBean != null) {
-                                    if (TextUtils.isEmpty(cartsPayinfoBean.getmCoupon_message())) {
-                                        if ((coupon_id == null) || coupon_id.isEmpty() || (0
-                                                == Double.compare(coupon_price, 0))) {
-                                            isCoupon = false;
-                                            tv_coupon.setText("");
-                                        } else {
-                                            isCoupon = true;
-                                            calcAllPrice();
-                                        }
-                                    } else {
-                                        isCoupon = false;
-                                        tv_coupon.setText("");
-                                        new AlertDialog.Builder(CartsPayInfoActivity.this).
-                                                setMessage(cartsPayinfoBean.getmCoupon_message()).
-                                                setPositiveButton("OK", (dialoga1, which) -> {
-                                                    downLoadCartsInfo();
-                                                    dialog.dismiss();
-                                                })
-                                                .show();
-                                    }
-                                }
-                            }
-                        });
-                addSubscription(subscription);
+                if (coupon_id == null || coupon_id.isEmpty() || coupon_price == 0) {
+                    downLoadCartsInfo();
+                    isCoupon = false;
+                    tv_coupon.setText("");
+                    coupon_price = 0;
+                } else {
+                    isCoupon = true;
+                }
+                calcAllPrice();
             }
         }
-
         if (requestCode == REQUEST_CODE_ADDRESS) {
             if (resultCode == Activity.RESULT_OK) {
                 isSelectAddress = true;
@@ -1039,7 +1022,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
             addr_id = addr_idSelect;
         } else {
-            Subscription subscription = AddressModel.getInstance()
+            addSubscription(AddressModel.getInstance()
                     .getAddressList()
                     .subscribe(new ServiceResponse<List<AddressBean>>() {
                         @Override
@@ -1086,8 +1069,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                             addressDetails.setVisibility(View.INVISIBLE);
                             isHaveAddress = false;
                         }
-                    });
-            addSubscription(subscription);
+                    }));
         }
     }
 
@@ -1119,9 +1101,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         }
 
         private void setDialog() {
-            View mView =
-                    LayoutInflater.from(getContext()).inflate(R.layout.pop_wxoralipay, null);
-
+            View mView = LayoutInflater.from(getContext()).inflate(R.layout.pop_wxoralipay, null);
             LinearLayout wx_layout = (LinearLayout) mView.findViewById(R.id.wx_layout);
             LinearLayout alipay_layout = (LinearLayout) mView.findViewById(R.id.alipay_layout);
             TextView textView = (TextView) mView.findViewById(R.id.total_price);

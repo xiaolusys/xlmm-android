@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -25,17 +26,21 @@ import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.HttpAuthHandler;
+import android.webkit.JsPromptResult;
+import android.webkit.JsResult;
 import android.webkit.SslErrorHandler;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.jimei.library.utils.CameraUtils;
 import com.jimei.library.utils.FileUtils;
+import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.XlmmTitleView;
 import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.R;
@@ -43,7 +48,6 @@ import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
 import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import com.mob.tools.utils.UIHandler;
 import com.tbruyelle.rxpermissions.RxPermissions;
 import com.umeng.analytics.MobclickAgent;
@@ -188,6 +192,90 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
                     } else {
                         mProgressBar.setVisibility(View.VISIBLE);
                     }
+                }
+
+                /**
+                 * 覆盖默认的window.alert展示界面，避免title里显示为“：来自file:////”
+                 */
+                public boolean onJsAlert(WebView view, String url, String message,
+                                         JsResult result) {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+
+                    builder.setTitle("提示")
+                            .setMessage(message)
+                            .setPositiveButton("确定", null);
+
+                    // 不需要绑定按键事件
+                    // 屏蔽keycode等于84之类的按键
+                    builder.setOnKeyListener((dialog, keyCode, event) -> {
+                        Log.v("onJsAlert", "keyCode==" + keyCode + "event=" + event);
+                        return true;
+                    });
+                    // 禁止响应按back键的事件
+                    builder.setCancelable(false);
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                    result.confirm();// 因为没有绑定事件，需要强行confirm,否则页面会变黑显示不了内容。
+                    return true;
+                    // return super.onJsAlert(view, url, message, result);
+                }
+
+                public boolean onJsBeforeUnload(WebView view, String url,
+                                                String message, JsResult result) {
+                    return super.onJsBeforeUnload(view, url, message, result);
+                }
+
+                /**
+                 * 覆盖默认的window.confirm展示界面，避免title里显示为“：来自file:////”
+                 */
+                public boolean onJsConfirm(WebView view, String url, String message,
+                                           final JsResult result) {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                    builder.setTitle("提示")
+                            .setMessage(message)
+                            .setPositiveButton("确定", (dialog, which) -> result.confirm())
+                            .setNeutralButton("取消", (dialog, which) -> result.cancel());
+                    builder.setOnCancelListener(dialog -> result.cancel());
+
+                    // 屏蔽keycode等于84之类的按键，避免按键后导致对话框消息而页面无法再弹出对话框的问题
+                    builder.setOnKeyListener((dialog, keyCode, event) -> {
+                        Log.v("onJsConfirm", "keyCode==" + keyCode + "event=" + event);
+                        return true;
+                    });
+                    // 禁止响应按back键的事件
+                    // builder.setCancelable(false);
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                    return true;
+                    // return super.onJsConfirm(view, url, message, result);
+                }
+
+                /**
+                 * 覆盖默认的window.prompt展示界面，避免title里显示为“：来自file:////”
+                 * window.prompt('请输入您的域名地址', '618119.com');
+                 */
+                public boolean onJsPrompt(WebView view, String url, String message,
+                                          String defaultValue, final JsPromptResult result) {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                    builder.setTitle("提示").setMessage(message);
+                    final EditText et = new EditText(view.getContext());
+                    et.setSingleLine();
+                    et.setText(defaultValue);
+                    builder.setView(et)
+                            .setPositiveButton("确定", (dialog, which) -> result.confirm(et.getText().toString()))
+                            .setNeutralButton("取消", (dialog, which) -> result.cancel());
+                    // 屏蔽keycode等于84之类的按键，避免按键后导致对话框消息而页面无法再弹出对话框的问题
+                    builder.setOnKeyListener((dialog, keyCode, event) -> {
+                        Log.v("onJsPrompt", "keyCode==" + keyCode + "event=" + event);
+                        return true;
+                    });
+                    // 禁止响应按back键的事件
+                    // builder.setCancelable(false);
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                    return true;
+                    // return super.onJsPrompt(view, url, message, defaultValue,
+                    // result);
                 }
 
                 //扩展浏览器上传文件

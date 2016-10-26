@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import com.jimei.library.utils.CameraUtils;
 import com.jimei.library.utils.FileUtils;
+import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
@@ -41,7 +42,6 @@ import com.jimei.xiaolumeimei.entities.event.WebViewEvent;
 import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
 import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import com.mob.tools.utils.UIHandler;
 import com.tbruyelle.rxpermissions.RxPermissions;
 import com.umeng.analytics.MobclickAgent;

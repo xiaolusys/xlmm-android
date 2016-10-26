@@ -1,6 +1,7 @@
 package com.jimei.library.rx;
 
-import com.jude.utils.JUtils;
+
+import com.jimei.library.utils.JUtils;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;

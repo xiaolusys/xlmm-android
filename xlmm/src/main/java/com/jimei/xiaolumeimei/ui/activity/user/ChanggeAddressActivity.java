@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jimei.library.utils.FileUtils;
+import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.wheelcitypicker.CityPickerDialog;
 import com.jimei.library.widget.wheelcitypicker.Util;
 import com.jimei.library.widget.wheelcitypicker.address.City;
@@ -30,7 +31,6 @@ import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import java.io.File;

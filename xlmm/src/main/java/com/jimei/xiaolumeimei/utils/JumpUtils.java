@@ -7,8 +7,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 
+import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
-import com.jude.utils.JUtils;
 
 /**
  * Created by wulei on 3/12/16.

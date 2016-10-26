@@ -86,7 +86,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="为了提高你的退货退款效率,请注意一下事项"
+                        android:text="为了提高你的退货退款效率,请注意以下事项"
                         android:textColor="@color/text_color_62"
                         android:textSize="14sp"/>
 
@@ -95,7 +95,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10px"
-                        android:text="1.填写退货单or小纸条一并寄回写明您的微信昵称,联系电话,退换货原因"
+                        android:text="1.填写退货单or小纸条一并寄回写明您的微信昵称,联系电话,退换货原因,请务必在退货申请里填写退货物流信息，以方便我们最快给您退款"
                         android:textColor="@color/text_color_62"
                         android:textSize="14sp"/>
 
@@ -111,7 +111,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10px"
-                        android:text="3.请先支付邮费,仓库拒收到付件.到货验收后,货款和运费将分开退还至你相应的账户"
+                        android:text="3.质量问题退货请事先拍照并联系在线客服，客服审核通过后会包邮退，但请您先支付邮费，仓库拒收到付件，到货验收后，货款和邮费将分开退还至您相应的账户"
                         android:textColor="@color/text_color_62"
                         android:textSize="14sp"/>
 

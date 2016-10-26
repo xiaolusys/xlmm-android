@@ -2,7 +2,7 @@ package com.jimei.library.rx;
 
 import android.util.Log;
 
-import com.jude.utils.JUtils;
+import com.jimei.library.utils.JUtils;
 
 import java.util.concurrent.TimeUnit;
 

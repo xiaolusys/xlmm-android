@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
+import rx.Observable;
 
 public class AllCouponActivity extends BaseSwipeBackCompatActivity {
     @Bind(R.id.tab_layout)
@@ -36,40 +37,41 @@ public class AllCouponActivity extends BaseSwipeBackCompatActivity {
     @Override
     protected void initViews() {
         showIndeterminateProgressDialog(false);
-        UserModel.getInstance()
-                .getCouponList(0)
+        addSubscription(Observable.concat(UserModel.getInstance().getCouponList(0), UserModel.getInstance().getCouponList(0, 8),
+                UserModel.getInstance().getCouponList(3), UserModel.getInstance().getCouponList(1))
                 .subscribe(new ServiceResponse<ArrayList<CouponEntity>>() {
                     @Override
                     public void onNext(ArrayList<CouponEntity> couponEntities) {
-                        titles.add("未使用(" + couponEntities.size() + ")");
-                        fragments.add(CouponFragment.newInstance(XlmmConst.UNUSED_COUPON,couponEntities));
-                        UserModel.getInstance()
-                                .getCouponList(3)
-                                .subscribe(new ServiceResponse<ArrayList<CouponEntity>>() {
-                                    @Override
-                                    public void onNext(ArrayList<CouponEntity> couponEntities) {
-                                        titles.add("已过期(" + couponEntities.size() + ")");
-                                        fragments.add(CouponFragment.newInstance(XlmmConst.PAST_COUPON,couponEntities));
-                                        UserModel.getInstance()
-                                                .getCouponList(1)
-                                                .subscribe(new ServiceResponse<ArrayList<CouponEntity>>() {
-                                                    @Override
-                                                    public void onNext(ArrayList<CouponEntity> couponEntities) {
-                                                        titles.add("已使用(" + couponEntities.size() + ")");
-                                                        fragments.add(CouponFragment.newInstance(XlmmConst.USED_COUPON,couponEntities));
-                                                        MainTabAdapter mAdapter = new MainTabAdapter(getSupportFragmentManager());
-                                                        viewPager.setAdapter(mAdapter);
-                                                        viewPager.setOffscreenPageLimit(3);
-                                                        tabLayout.setupWithViewPager(viewPager);
-                                                        tabLayout.setTabMode(TabLayout.MODE_FIXED);
-                                                        hideIndeterminateProgressDialog();
-                                                    }
-                                                });
-                                    }
-                                });
+                        if (titles.size() == 0) {
+                            titles.add("未使用(" + couponEntities.size() + ")");
+                            fragments.add(CouponFragment.newInstance(XlmmConst.UNUSED_COUPON, couponEntities));
+                        } else if (titles.size() == 1) {
+                            titles.add("精品券(" + couponEntities.size() + ")");
+                            fragments.add(CouponFragment.newInstance(XlmmConst.GOOD_COUPON, couponEntities));
+                        } else if (titles.size() == 2) {
+                            titles.add("已过期(" + couponEntities.size() + ")");
+                            fragments.add(CouponFragment.newInstance(XlmmConst.PAST_COUPON, couponEntities));
+                        } else if (titles.size() == 3) {
+                            titles.add("已使用(" + couponEntities.size() + ")");
+                            fragments.add(CouponFragment.newInstance(XlmmConst.USED_COUPON, couponEntities));
+                        }
                     }
-                });
 
+                    @Override
+                    public void onCompleted() {
+                        MainTabAdapter mAdapter = new MainTabAdapter(getSupportFragmentManager());
+                        viewPager.setAdapter(mAdapter);
+                        viewPager.setOffscreenPageLimit(3);
+                        tabLayout.setupWithViewPager(viewPager);
+                        tabLayout.setTabMode(TabLayout.MODE_FIXED);
+                        hideIndeterminateProgressDialog();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        hideIndeterminateProgressDialog();
+                    }
+                }));
     }
 
     public class MainTabAdapter extends FragmentPagerAdapter {
