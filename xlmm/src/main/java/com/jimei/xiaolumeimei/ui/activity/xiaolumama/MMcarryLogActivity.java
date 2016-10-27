@@ -154,20 +154,20 @@ public class MMcarryLogActivity extends BaseSwipeBackCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_personal:
-                MobclickAgent.onEvent(this, "PersonalRankID");
-                readyGo(PersonalCarryRankActivity.class);
-                break;
-            default:
-                break;
-        }
+//        switch (item.getItemId()) {
+//            case R.id.action_personal:
+//                MobclickAgent.onEvent(this, "PersonalRankID");
+//                readyGo(PersonalCarryRankActivity.class);
+//                break;
+//            default:
+//                break;
+//        }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_personal, menu);
+//        getMenuInflater().inflate(R.menu.menu_personal, menu);
         return super.onCreateOptionsMenu(menu);
     }
 }

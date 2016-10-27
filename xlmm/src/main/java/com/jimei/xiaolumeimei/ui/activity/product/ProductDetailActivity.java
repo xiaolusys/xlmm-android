@@ -185,20 +185,22 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                 ProductModel.getInstance().getShareModel(model_id),
                 CartsModel.getInstance().show_carts_num())
                 .subscribe(o -> {
-                            if (o instanceof ProductDetailBean) {
-                                productDetail = (ProductDetailBean) o;
-                                fillDataToView((ProductDetailBean) o);
-                            } else if (o instanceof ShareModelBean) {
-                                shareModel = (ShareModelBean) o;
-                            } else if (o instanceof CartsNumResultBean) {
-                                cart_num = ((CartsNumResultBean) o).getResult();
-                                b.tvCart.setText(cart_num + "");
-                                if (cart_num > 0) {
-                                    b.tvCart.setVisibility(View.VISIBLE);
-                                }
-                            }
-                        }, Throwable::printStackTrace
-                        , this::hideIndeterminateProgressDialog));
+                    if (o instanceof ProductDetailBean) {
+                        productDetail = (ProductDetailBean) o;
+                        fillDataToView((ProductDetailBean) o);
+                    } else if (o instanceof ShareModelBean) {
+                        shareModel = (ShareModelBean) o;
+                    } else if (o instanceof CartsNumResultBean) {
+                        cart_num = ((CartsNumResultBean) o).getResult();
+                        b.tvCart.setText(cart_num + "");
+                        if (cart_num > 0) {
+                            b.tvCart.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }, e -> {
+                    e.printStackTrace();
+                    hideIndeterminateProgressDialog();
+                }, this::hideIndeterminateProgressDialog));
     }
 
     private void initLeftTime(String time) {

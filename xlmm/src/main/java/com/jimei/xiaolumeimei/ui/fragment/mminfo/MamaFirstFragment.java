@@ -40,7 +40,6 @@ import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaChooseActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaReNewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaVisitorActivity;
-import com.jimei.xiaolumeimei.ui.activity.xiaolumama.PersonalCarryRankActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
@@ -306,7 +305,7 @@ public class MamaFirstFragment extends BaseLazyFragment<FragmentMamaFirstBinding
                 startActivity(renewIntent);
                 break;
             case R.id.ll_rank:
-                startActivity(new Intent(mActivity, PersonalCarryRankActivity.class));
+//                startActivity(new Intent(mActivity, PersonalCarryRankActivity.class));
                 break;
             case R.id.ll_share:
                 if (shopLink != null && !"".equals(shopLink)) {
