@@ -8,13 +8,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+
+import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.AwardCarryBean;
 import com.zhy.autolayout.utils.AutoUtils;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/02/18.
@@ -85,7 +89,7 @@ public class AwardCarryLogAdapter
     holder.shoptime.setText(resultsEntity.getmDate_field());
     //holder.picPath.setImageResource(R.drawable.img_jiang);
     if (null != resultsEntity.getContributorImg()) {
-      com.jimei.xiaolumeimei.utils.ViewUtils.loadImgToImgViewWithTransformCircle(context,
+          ViewUtils.loadImgToImgViewWithTransformCircle(context,
           holder.picPath, resultsEntity.getContributorImg());
     } else {
       holder.picPath.setImageResource(R.drawable.img_jiang);

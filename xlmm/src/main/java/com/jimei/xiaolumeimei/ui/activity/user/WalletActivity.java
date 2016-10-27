@@ -13,21 +13,20 @@ import android.widget.Toast;
 import com.cpoopc.scrollablelayoutlib.ScrollableLayout;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.jimei.library.utils.JUtils;
+import com.jimei.library.widget.DividerItemDecoration;
+import com.jimei.library.widget.MyXRecyclerView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.UserWalletAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.entities.BudgetdetailBean;
+import com.jimei.xiaolumeimei.entities.BudgetDetailBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
-import com.jimei.xiaolumeimei.model.UserNewModel;
-import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
-import com.jimei.xiaolumeimei.widget.MyXRecyclerView;
+import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/02/26.
@@ -57,12 +56,11 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
         showIndeterminateProgressDialog(false);
         MobclickAgent.onPageStart(this.getClass().getSimpleName());
         MobclickAgent.onResume(this);
-        Subscription subscribe1 = UserNewModel.getInstance()
-                .budGetdetailBean("1")
-                .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<BudgetdetailBean>() {
+        addSubscription(UserModel.getInstance()
+                .budGetDetailBean("1")
+                .subscribe(new ServiceResponse<BudgetDetailBean>() {
                     @Override
-                    public void onNext(BudgetdetailBean budgetdetailBean) {
+                    public void onNext(BudgetDetailBean budgetdetailBean) {
                         if ((budgetdetailBean != null)
                                 && (budgetdetailBean.getResults() != null)
                                 && (budgetdetailBean.getResults().size() > 0)) {
@@ -76,9 +74,8 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
                             walletRcv.setVisibility(View.INVISIBLE);
                             ll_wallet_empty.setVisibility(View.VISIBLE);
                         }
-                        subscribe = UserNewModel.getInstance()
-                                .getProfile()
-                                .subscribeOn(Schedulers.io())
+                        addSubscription(UserModel.getInstance()
+                                .getUserInfo()
                                 .subscribe(new ServiceResponse<UserInfoBean>() {
                                     @Override
                                     public void onNext(UserInfoBean userNewBean) {
@@ -95,13 +92,9 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
 
                                         hideIndeterminateProgressDialog();
                                     }
-                                });
-                        addSubscription(subscribe);
+                                }));
                     }
-
-                });
-
-        addSubscription(subscribe1);
+                }));
     }
 
     @Override
@@ -141,35 +134,26 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
 
     private void loadMoreData(int page) {
         JUtils.Log(TAG, "load page " + page);
-        Subscription subscribe = UserNewModel.getInstance()
-                .budGetdetailBean(Integer.toString(page))
-                .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<BudgetdetailBean>() {
-                    @Override
-                    public void onNext(BudgetdetailBean budgetdetailBean) {
-
-                        if ((budgetdetailBean != null)
-                                && (budgetdetailBean.getResults() != null)
-                                && (budgetdetailBean.getResults().size() > 0)) {
-                            walletRcv.setVisibility(View.VISIBLE);
-                            ll_wallet_empty.setVisibility(View.INVISIBLE);
-                            adapter.update(budgetdetailBean.getResults());
-                            if (budgetdetailBean.getNext() == null) {
-                                Toast.makeText(WalletActivity.this, "没有更多了", Toast.LENGTH_SHORT).show();
-                                walletRcv.post(walletRcv::loadMoreComplete);
-                                walletRcv.setLoadingMoreEnabled(false);
+        addSubscription(UserModel.getInstance()
+                .budGetDetailBean(Integer.toString(page))
+                .subscribe(budgetDetailBean -> {
+                            if ((budgetDetailBean != null)
+                                    && (budgetDetailBean.getResults() != null)
+                                    && (budgetDetailBean.getResults().size() > 0)) {
+                                walletRcv.setVisibility(View.VISIBLE);
+                                ll_wallet_empty.setVisibility(View.INVISIBLE);
+                                adapter.update(budgetDetailBean.getResults());
+                                if (budgetDetailBean.getNext() == null) {
+                                    Toast.makeText(WalletActivity.this, "没有更多了", Toast.LENGTH_SHORT).show();
+                                    walletRcv.post(walletRcv::loadMoreComplete);
+                                    walletRcv.setLoadingMoreEnabled(false);
+                                }
                             }
+
+                        }, e -> {
+                            walletRcv.post(walletRcv::loadMoreComplete);
                         }
-
-                    }
-
-                    @Override
-                    public void onCompleted() {
-                        super.onCompleted();
-                        walletRcv.post(walletRcv::loadMoreComplete);
-                    }
-                });
-        addSubscription(subscribe);
+                ));
     }
 
     @Override

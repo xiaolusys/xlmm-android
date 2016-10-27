@@ -6,7 +6,7 @@
     android:background="@color/c8c8c8"
     android:orientation="vertical">
 
-    <com.jimei.xiaolumeimei.widget.XlmmTitleView
+    <com.jimei.library.widget.XlmmTitleView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:xlmm_title="订单记录" />

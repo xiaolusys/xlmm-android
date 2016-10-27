@@ -13,15 +13,15 @@ import android.widget.Toast;
 
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.jimei.library.utils.JUtils;
+import com.jimei.library.widget.DividerItemDecoration;
+import com.jimei.library.widget.loadingdialog.XlmmLoadingDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.MamaFansAdapter;
 import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.entities.MamaFansBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
-import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
-import com.jimei.xiaolumeimei.widget.loadingdialog.XlmmLoadingDialog;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import java.lang.reflect.Field;
@@ -31,7 +31,6 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/03/11.
@@ -99,7 +98,6 @@ public class MMFansFragment extends BaseFragment {
         showIndeterminateProgressDialog(false);
         subscription1 = MamaInfoModel.getInstance()
                 .getMamaFans("1")
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<MamaFansBean>() {
                     @Override
                     public void onCompleted() {
@@ -179,7 +177,6 @@ public class MMFansFragment extends BaseFragment {
     private void loadMoreData(String page) {
         subscription2 = MamaInfoModel.getInstance()
                 .getMamaFans(page)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<MamaFansBean>() {
                     @Override
                     public void onNext(MamaFansBean fansBeen) {

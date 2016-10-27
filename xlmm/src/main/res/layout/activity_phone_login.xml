@@ -8,14 +8,14 @@
     android:orientation="vertical"
     tools:context="com.jimei.xiaolumeimei.ui.activity.user.PhoneLoginActivity">
 
-    <com.jimei.xiaolumeimei.widget.XlmmTitleView
+    <com.jimei.library.widget.XlmmTitleView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:xlmm_title="手机号登录" />
 
     <include layout="@layout/common_gap" />
 
-    <com.jimei.xiaolumeimei.widget.ClearEditText
+    <com.jimei.library.widget.ClearEditText
         android:id="@+id/set_login_name"
         style="@style/EditTextStyle"
         android:layout_width="match_parent"
@@ -28,7 +28,7 @@
 
     <include layout="@layout/common_gap" />
 
-    <com.jimei.xiaolumeimei.widget.PasswordEditText
+    <com.jimei.library.widget.PasswordEditText
         android:id="@+id/set_login_password"
         style="@style/EditTextStyle"
         android:layout_width="match_parent"

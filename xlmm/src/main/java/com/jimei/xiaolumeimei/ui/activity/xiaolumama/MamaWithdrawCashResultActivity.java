@@ -9,17 +9,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
-import com.jimei.xiaolumeimei.model.UserNewModel;
+import com.jimei.xiaolumeimei.model.MMInfoModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
-import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by wulei on 2016/2/4.
@@ -74,17 +72,15 @@ public class MamaWithdrawCashResultActivity extends BaseSwipeBackCompatActivity
         }
         JUtils.Toast(msg);
         msgTv.setText(msg);
-        Subscription subscribe = UserNewModel.getInstance()
-                .getProfile()
-                .subscribeOn(Schedulers.io())
+        addSubscription(MMInfoModel.getInstance()
+                .getUserInfo()
                 .subscribe(new ServiceResponse<UserInfoBean>() {
                     @Override
                     public void onNext(UserInfoBean userInfoBean) {
                         nickName = userInfoBean.getNick();
                         nickNameTv.setText("微信账号:" + nickName);
                     }
-                });
-        addSubscription(subscribe);
+                }));
     }
 
     @Override

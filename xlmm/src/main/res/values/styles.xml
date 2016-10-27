@@ -13,6 +13,11 @@
         <item name="alertDialogTheme">@style/Theme.AppCompat.Light.Dialog.Alert.Self</item>
     </style>
 
+
+    <style name="MyTabLayoutTextAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textSize">14sp</item>
+    </style>
+
     <style name="Theme.AppCompat.Light.Dialog.Alert.Self"
            parent="@style/Theme.AppCompat.Light.Dialog.Alert">
         <!--修改AlertDialog按钮的颜色-->

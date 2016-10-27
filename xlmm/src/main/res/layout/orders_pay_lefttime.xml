@@ -25,7 +25,7 @@
             android:text="付款剩余时间"
             android:textSize="12sp"/>
 
-        <com.jimei.xiaolumeimei.widget.CountDownView
+        <com.jimei.library.widget.CountDownView
             android:id="@+id/count_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

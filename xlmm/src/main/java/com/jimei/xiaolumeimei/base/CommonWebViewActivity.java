@@ -16,7 +16,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -26,25 +26,28 @@ import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.HttpAuthHandler;
+import android.webkit.JsPromptResult;
+import android.webkit.JsResult;
 import android.webkit.SslErrorHandler;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jimei.library.utils.CameraUtils;
+import com.jimei.library.utils.FileUtils;
+import com.jimei.library.utils.JUtils;
+import com.jimei.library.widget.XlmmTitleView;
 import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
 import com.jimei.xiaolumeimei.model.ActivityModel;
-import com.jimei.xiaolumeimei.utils.CameraUtils;
-import com.jimei.xiaolumeimei.utils.FileUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import com.mob.tools.utils.UIHandler;
 import com.tbruyelle.rxpermissions.RxPermissions;
 import com.umeng.analytics.MobclickAgent;
@@ -62,7 +65,6 @@ import cn.sharesdk.onekeyshare.OnekeyShare;
 import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
 import cn.sharesdk.wechat.moments.WechatMoments;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/02/04.
@@ -81,10 +83,8 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     private static final int MSG_ACTION_CCALLBACK = 2;
     private static final String TAG = CommonWebViewActivity.class.getSimpleName();
     public WebView mWebView;
-    protected TextView webviewTitle;
     LinearLayout ll_actwebview;
     private Bitmap bitmap;
-    private Toolbar mToolbar;
     private ProgressBar mProgressBar;
     private String cookies;
     private String actlink;
@@ -92,24 +92,14 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     private String domain;
     private String sessionid;
     private int id;
-
-    @Override
-    protected void setListener() {
-        mToolbar.setNavigationOnClickListener(v -> {
-            JUtils.Log(TAG, "setNavigationOnClickListener finish");
-            finish();
-        });
-    }
+    public XlmmTitleView titleView;
 
     @Override
     protected void initData() {
-        JUtils.Log(TAG, "initData");
         JUtils.Log(TAG, "initData--" + actlink);
         try {
             Map<String, String> extraHeaders = new HashMap<>();
-
             extraHeaders.put("Cookie", sessionid);
-
             mWebView.loadUrl(actlink, extraHeaders);
         } catch (Exception e) {
             e.printStackTrace();
@@ -121,15 +111,13 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
 
     @Override
     public void getBundleExtras(Bundle extras) {
-        if (extras != null) {
-            cookies = extras.getString("cookies");
-            domain = extras.getString("domain");
-            sessionid = extras.getString("Cookie");
-            actlink = extras.getString("actlink");
-            id = extras.getInt("id");
-            JUtils.Log(TAG, "GET cookie:" + cookies + " actlink:" + actlink + " domain:" + domain +
-                    " sessionid:" + sessionid);
-        }
+        cookies = extras.getString("cookies");
+        domain = extras.getString("domain");
+        sessionid = extras.getString("Cookie");
+        actlink = extras.getString("actlink");
+        id = extras.getInt("id");
+        JUtils.Log(TAG, "GET cookie:" + cookies + " actlink:" + actlink + " domain:" + domain +
+                " sessionid:" + sessionid);
     }
 
     @Override
@@ -138,20 +126,17 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    public void getIntentUrl() {
-        Uri uri = getIntent().getData();
-        if (uri != null) {
-            SharedPreferences sharedPreferences = getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
-            cookies = sharedPreferences.getString("cookiesString", "");
-            domain = sharedPreferences.getString("cookiesDomain", "");
-            sessionid = sharedPreferences.getString("Cookie", "");
-            actlink = uri.getQueryParameter("url");
-            String id = uri.getQueryParameter("activity_id");
-            if (id != null) {
-                this.id = Integer.valueOf(id);
-            } else {
-                this.id = -1;
-            }
+    public void getIntentUrl(Uri uri) {
+        SharedPreferences sharedPreferences = getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+        cookies = sharedPreferences.getString("cookiesString", "");
+        domain = sharedPreferences.getString("cookiesDomain", "");
+        sessionid = sharedPreferences.getString("Cookie", "");
+        actlink = uri.getQueryParameter("url");
+        String id = uri.getQueryParameter("activity_id");
+        if (id != null) {
+            this.id = Integer.valueOf(id);
+        } else {
+            this.id = -1;
         }
     }
 
@@ -160,19 +145,14 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     protected void initViews() {
         JUtils.Log(TAG, "initViews");
         ShareSDK.initSDK(this);
-        webviewTitle = (TextView) findViewById(R.id.webview_title);
+        titleView = (XlmmTitleView) findViewById(R.id.title_view);
         ll_actwebview = (LinearLayout) findViewById(R.id.ll_actwebview);
         mProgressBar = (ProgressBar) findViewById(R.id.pb_view);
         mWebView = (WebView) findViewById(R.id.wb_view);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mToolbar.setTitle("");
-        setSupportActionBar(mToolbar);
-        mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if (getIntent().getExtras() != null && getIntent().getExtras().getString("title") != null) {
-            webviewTitle.setText(getIntent().getExtras().getString("title"));
+            assert titleView != null;
+            titleView.setName(getIntent().getExtras().getString("title"));
         }
-
         try {
             if (Build.VERSION.SDK_INT >= 19) {
                 mWebView.getSettings().setLoadsImagesAutomatically(true);
@@ -188,7 +168,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
                             + ";");
             mWebView.getSettings().setJavaScriptEnabled(true);
             mWebView.addJavascriptInterface(new AndroidJsBridge(this), "AndroidBridge");
-
             mWebView.getSettings().setAllowFileAccess(true);
             //如果访问的页面中有Javascript，则webview必须设置支持Javascript
             //mWebView.getSettings().setUserAgentString(MyApplication.getUserAgent());
@@ -215,6 +194,90 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
                     }
                 }
 
+                /**
+                 * 覆盖默认的window.alert展示界面，避免title里显示为“：来自file:////”
+                 */
+                public boolean onJsAlert(WebView view, String url, String message,
+                                         JsResult result) {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+
+                    builder.setTitle("提示")
+                            .setMessage(message)
+                            .setPositiveButton("确定", null);
+
+                    // 不需要绑定按键事件
+                    // 屏蔽keycode等于84之类的按键
+                    builder.setOnKeyListener((dialog, keyCode, event) -> {
+                        Log.v("onJsAlert", "keyCode==" + keyCode + "event=" + event);
+                        return true;
+                    });
+                    // 禁止响应按back键的事件
+                    builder.setCancelable(false);
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                    result.confirm();// 因为没有绑定事件，需要强行confirm,否则页面会变黑显示不了内容。
+                    return true;
+                    // return super.onJsAlert(view, url, message, result);
+                }
+
+                public boolean onJsBeforeUnload(WebView view, String url,
+                                                String message, JsResult result) {
+                    return super.onJsBeforeUnload(view, url, message, result);
+                }
+
+                /**
+                 * 覆盖默认的window.confirm展示界面，避免title里显示为“：来自file:////”
+                 */
+                public boolean onJsConfirm(WebView view, String url, String message,
+                                           final JsResult result) {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                    builder.setTitle("提示")
+                            .setMessage(message)
+                            .setPositiveButton("确定", (dialog, which) -> result.confirm())
+                            .setNeutralButton("取消", (dialog, which) -> result.cancel());
+                    builder.setOnCancelListener(dialog -> result.cancel());
+
+                    // 屏蔽keycode等于84之类的按键，避免按键后导致对话框消息而页面无法再弹出对话框的问题
+                    builder.setOnKeyListener((dialog, keyCode, event) -> {
+                        Log.v("onJsConfirm", "keyCode==" + keyCode + "event=" + event);
+                        return true;
+                    });
+                    // 禁止响应按back键的事件
+                    // builder.setCancelable(false);
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                    return true;
+                    // return super.onJsConfirm(view, url, message, result);
+                }
+
+                /**
+                 * 覆盖默认的window.prompt展示界面，避免title里显示为“：来自file:////”
+                 * window.prompt('请输入您的域名地址', '618119.com');
+                 */
+                public boolean onJsPrompt(WebView view, String url, String message,
+                                          String defaultValue, final JsPromptResult result) {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                    builder.setTitle("提示").setMessage(message);
+                    final EditText et = new EditText(view.getContext());
+                    et.setSingleLine();
+                    et.setText(defaultValue);
+                    builder.setView(et)
+                            .setPositiveButton("确定", (dialog, which) -> result.confirm(et.getText().toString()))
+                            .setNeutralButton("取消", (dialog, which) -> result.cancel());
+                    // 屏蔽keycode等于84之类的按键，避免按键后导致对话框消息而页面无法再弹出对话框的问题
+                    builder.setOnKeyListener((dialog, keyCode, event) -> {
+                        Log.v("onJsPrompt", "keyCode==" + keyCode + "event=" + event);
+                        return true;
+                    });
+                    // 禁止响应按back键的事件
+                    // builder.setCancelable(false);
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                    return true;
+                    // return super.onJsPrompt(view, url, message, defaultValue,
+                    // result);
+                }
+
                 //扩展浏览器上传文件
                 //3.0++版本
                 public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType) {
@@ -237,7 +300,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
                     return true;
                 }
             });
-
             mWebView.setWebViewClient(new WebViewClient() {
 
                 @Override
@@ -506,7 +568,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
 
         Subscription subscribe = ActivityModel.getInstance()
                 .get_party_share_content(id)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<ActivityBean>() {
                     @Override
                     public void onNext(ActivityBean activityBean) {

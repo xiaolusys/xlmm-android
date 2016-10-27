@@ -9,8 +9,6 @@ import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
-import rx.schedulers.Schedulers;
-
 /**
  * Created by itxuye(www.itxuye.com) on 2016/03/10.
  * <p>
@@ -23,7 +21,7 @@ public class MMStoreWebViewActivity extends CommonWebViewActivity {
     @Override
     protected void initViews() {
         super.initViews();
-        webviewTitle.setText("我的店铺");
+        titleView.setName("我的店铺");
     }
 
     @Override
@@ -31,7 +29,6 @@ public class MMStoreWebViewActivity extends CommonWebViewActivity {
         super.initData();
         MMProductModel.getInstance()
                 .getShareShopping()
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<MMShoppingBean>() {
 
                     @Override

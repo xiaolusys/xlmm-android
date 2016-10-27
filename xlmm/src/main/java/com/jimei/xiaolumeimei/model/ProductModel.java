@@ -32,7 +32,6 @@ public class ProductModel {
 
     //得到商品详情(新)
     public Observable<ProductDetailBean> getProductDetail(int id) {
-
         return XlmmRetrofitClient.getService()
                 .getProductDetail(id)
                 .compose(new DefaultTransform<>());
@@ -66,9 +65,9 @@ public class ProductModel {
                 .compose(new DefaultTransform<>());
     }
 
-    public Observable<CategoryProductListBean> getCategoryProductList(String cid, int page,String order_by) {
+    public Observable<CategoryProductListBean> getCategoryProductList(String cid, int page, String order_by) {
         return XlmmRetrofitClient.getService()
-                .getCategoryProductList(cid, page,order_by)
+                .getCategoryProductList(cid, page, order_by)
                 .compose(new DefaultTransform<>());
     }
 
@@ -100,7 +99,7 @@ public class ProductModel {
         }
     }
 
-    public Observable<TeamBuyBean> getTeamBuyBean(String tid){
+    public Observable<TeamBuyBean> getTeamBuyBean(String tid) {
         return XlmmRetrofitClient.getService()
                 .getTeamBuyBean(tid)
                 .compose(new DefaultTransform<>());

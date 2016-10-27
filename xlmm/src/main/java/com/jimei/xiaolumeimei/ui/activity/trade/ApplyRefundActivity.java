@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jimei.library.utils.JUtils;
+import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
@@ -19,14 +21,11 @@ import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.RefundMsgBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
-import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
         implements View.OnClickListener {
@@ -111,7 +110,6 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
         showIndeterminateProgressDialog(false);
         Subscription subscribe = TradeModel.getInstance()
                 .getOrderDetailBean(id)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<OrderDetailBean>() {
                     @Override
                     public void onNext(OrderDetailBean orderDetailBean) {
@@ -221,7 +219,6 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
         Subscription subscription = TradeModel.getInstance()
                 .refund_create(goods_info.getId(), XlmmConst.get_reason_num(reason), num,
                         apply_fee, desc, proof_pic, refund_channel)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<RefundMsgBean>() {
                     @Override
                     public void onNext(RefundMsgBean resp) {

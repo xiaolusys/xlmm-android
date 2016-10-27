@@ -58,6 +58,7 @@
     <!-- textview 超链接的颜色 -->
     <color name="textlinkcolor">#ffffff</color>
     <color name="udesk_loginDialog_background">#a0000000</color>
+    <color name="udesk_loading_bg">#00000000</color>
 
     <!-- 界面中分割线的颜色值 -->
     <color name="udesk_color_line1">#FAFBFC</color>

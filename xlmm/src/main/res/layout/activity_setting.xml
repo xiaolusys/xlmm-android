@@ -9,7 +9,7 @@
       android:orientation="vertical"
       tools:context="com.jimei.xiaolumeimei.ui.activity.user.SettingActivity"
       >
-    <com.jimei.xiaolumeimei.widget.XlmmTitleView
+    <com.jimei.library.widget.XlmmTitleView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:xlmm_title="设置"
@@ -19,12 +19,12 @@
     <!--android:background="@color/ECECEC"-->
     <!--android:layout_width="match_parent"-->
     <!--android:layout_height="match_parent"/>-->
-    <com.jimei.xiaolumeimei.widget.MyPreferenceView
+    <com.jimei.library.widget.MyPreferenceView
         android:id="@+id/clear_cache"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
-    <com.jimei.xiaolumeimei.widget.MyPreferenceView
+    <com.jimei.library.widget.MyPreferenceView
         android:id="@+id/update"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -88,7 +88,7 @@
         android:background="#CCCCCC" />
 
 
-    <com.jimei.xiaolumeimei.widget.MyPreferenceView
+    <com.jimei.library.widget.MyPreferenceView
         android:id="@+id/about_xlmm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

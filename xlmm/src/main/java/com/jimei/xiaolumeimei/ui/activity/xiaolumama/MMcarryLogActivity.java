@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.jimei.library.widget.scrolllayout.ScrollableLayout;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -17,7 +18,6 @@ import com.jimei.xiaolumeimei.ui.fragment.v2.CarryLogAllFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.CarryLogBounsFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.CarryLogCashbackFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.CarryLogCommissionFragment;
-import com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableLayout;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
@@ -154,20 +154,20 @@ public class MMcarryLogActivity extends BaseSwipeBackCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_personal:
-                MobclickAgent.onEvent(this, "PersonalRankID");
-                readyGo(PersonalCarryRankActivity.class);
-                break;
-            default:
-                break;
-        }
+//        switch (item.getItemId()) {
+//            case R.id.action_personal:
+//                MobclickAgent.onEvent(this, "PersonalRankID");
+//                readyGo(PersonalCarryRankActivity.class);
+//                break;
+//            default:
+//                break;
+//        }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_personal, menu);
+//        getMenuInflater().inflate(R.menu.menu_personal, menu);
         return super.onCreateOptionsMenu(menu);
     }
 }

@@ -14,13 +14,13 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <com.jimei.xiaolumeimei.widget.banner.SliderLayout
+        <com.jimei.library.widget.banner.SliderLayout
             android:id="@+id/slider"
             android:layout_width="match_parent"
             android:layout_height="280px"
             app:auto_cycle="true"/>
 
-        <com.jimei.xiaolumeimei.widget.banner.Indicators.PagerIndicator
+        <com.jimei.library.widget.banner.Indicators.PagerIndicator
             android:id="@+id/pi_header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

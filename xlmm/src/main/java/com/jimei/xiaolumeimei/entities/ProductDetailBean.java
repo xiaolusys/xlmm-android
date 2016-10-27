@@ -135,6 +135,7 @@ public class ProductDetailBean {
         private String sale_time;
         private String watermark_op;
         private String offshelf_time;
+        private boolean is_onsale;
         private boolean is_recommend;
         private boolean is_saleopen;
         private double lowest_agent_price;
@@ -279,6 +280,14 @@ public class ProductDetailBean {
 
         public void setSale_state(String sale_state) {
             this.sale_state = sale_state;
+        }
+
+        public boolean is_onsale() {
+            return is_onsale;
+        }
+
+        public void setIs_onsale(boolean is_onsale) {
+            this.is_onsale = is_onsale;
         }
 
         public static class CategoryBean {

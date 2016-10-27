@@ -6,12 +6,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 
+import com.jimei.library.widget.RecycleViewDivider;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.AddressAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AddressBean;
 import com.jimei.xiaolumeimei.model.AddressModel;
-import com.jimei.xiaolumeimei.widget.RecycleViewDivider;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
@@ -19,7 +19,6 @@ import java.util.List;
 
 import butterknife.Bind;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/01/18.
@@ -47,7 +46,6 @@ public class AddressActivity extends BaseSwipeBackCompatActivity
         MobclickAgent.onResume(this);
         Subscription subscribe = AddressModel.getInstance()
                 .getAddressList()
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<List<AddressBean>>() {
                     @Override
                     public void onNext(List<AddressBean> list) {

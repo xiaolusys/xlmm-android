@@ -9,22 +9,21 @@ import android.widget.TextView;
 
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.jimei.library.utils.JUtils;
+import com.jimei.library.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.ChooseListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
 import com.jimei.xiaolumeimei.entities.ChooseListBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
-import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
-import rx.schedulers.Schedulers;
 
 
 public class MamaChooseActivity extends BaseSwipeBackCompatActivity implements
@@ -66,7 +65,6 @@ public class MamaChooseActivity extends BaseSwipeBackCompatActivity implements
         page = 1;
         addSubscription(MamaInfoModel.getInstance()
                 .getCategory()
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<List<CategoryBean>>() {
                     @Override
                     public void onNext(List<CategoryBean> categoryBeanList) {
@@ -122,7 +120,6 @@ public class MamaChooseActivity extends BaseSwipeBackCompatActivity implements
         showIndeterminateProgressDialog(false);
         addSubscription(MamaInfoModel.getInstance()
                 .getChooseList(page, sort_field, cid, reverse)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<ChooseListBean>() {
                     @Override
                     public void onNext(ChooseListBean chooseListBean) {

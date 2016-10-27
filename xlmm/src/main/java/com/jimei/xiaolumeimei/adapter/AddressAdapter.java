@@ -96,7 +96,6 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                 .setPositiveButton("确定", (dialog, which) -> {
                                     AddressModel.getInstance()
                                             .delete_address(addressBean.getId())
-                                            .subscribeOn(Schedulers.io())
                                             .subscribe(new ServiceResponse<AddressResultBean>() {
                                                 @Override
                                                 public void onNext(AddressResultBean addressResultBean) {
@@ -138,7 +137,6 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         .setPositiveButton("确定", (dialog, which) -> {
                             AddressModel.getInstance()
                                     .delete_address(addressBean.getId())
-                                    .subscribeOn(Schedulers.io())
                                     .subscribe(new ServiceResponse<AddressResultBean>() {
                                         @Override
                                         public void onNext(AddressResultBean addressResultBean) {

@@ -18,19 +18,19 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.jimei.library.utils.FileUtils;
+import com.jimei.library.utils.JUtils;
+import com.jimei.library.widget.wheelcitypicker.CityPickerDialog;
+import com.jimei.library.widget.wheelcitypicker.Util;
+import com.jimei.library.widget.wheelcitypicker.address.City;
+import com.jimei.library.widget.wheelcitypicker.address.County;
+import com.jimei.library.widget.wheelcitypicker.address.Province;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.model.AddressModel;
-import com.jimei.xiaolumeimei.utils.FileUtils;
-import com.jimei.xiaolumeimei.widget.wheelcitypicker.CityPickerDialog;
-import com.jimei.xiaolumeimei.widget.wheelcitypicker.Util;
-import com.jimei.xiaolumeimei.widget.wheelcitypicker.address.City;
-import com.jimei.xiaolumeimei.widget.wheelcitypicker.address.County;
-import com.jimei.xiaolumeimei.widget.wheelcitypicker.address.Province;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import java.io.File;
@@ -42,7 +42,6 @@ import java.util.List;
 
 import butterknife.Bind;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/01/29.
@@ -148,7 +147,6 @@ public class ChanggeAddressActivity extends BaseSwipeBackCompatActivity
                     Subscription subscribe = AddressModel.getInstance()
                             .update_address(id, receiver_state, receiver_city, receiver_district, clearaddressa,
                                     receiver_name, receiver_mobile, defalut)
-                            .subscribeOn(Schedulers.io())
                             .subscribe(new ServiceResponse<AddressResultBean>() {
                                 @Override
                                 public void onNext(AddressResultBean addressResultBean) {
@@ -190,7 +188,6 @@ public class ChanggeAddressActivity extends BaseSwipeBackCompatActivity
             case R.id.action_delete:
                 Subscription subscribe = AddressModel.getInstance()
                         .delete_address(id)
-                        .subscribeOn(Schedulers.io())
                         .subscribe(new ServiceResponse<AddressResultBean>() {
                             @Override
                             public void onNext(AddressResultBean addressResultBean) {

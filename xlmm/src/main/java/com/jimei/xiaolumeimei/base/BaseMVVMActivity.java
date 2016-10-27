@@ -6,10 +6,11 @@ import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.view.View;
 
-import com.jimei.xiaolumeimei.widget.swipeback.SwipeBackActivityBase;
-import com.jimei.xiaolumeimei.widget.swipeback.SwipeBackActivityHelper;
-import com.jimei.xiaolumeimei.widget.swipeback.SwipeBackLayout;
-import com.jimei.xiaolumeimei.widget.swipeback.Utils;
+import com.jimei.library.widget.swipeback.SwipeBackActivityBase;
+import com.jimei.library.widget.swipeback.SwipeBackActivityHelper;
+import com.jimei.library.widget.swipeback.SwipeBackLayout;
+import com.jimei.library.widget.swipeback.Utils;
+
 
 /**
  * Created by itxuye on 2016/7/26.

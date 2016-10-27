@@ -2,7 +2,7 @@ package com.jimei.xiaolumeimei.model;
 
 import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
-import com.jimei.xiaolumeimei.entities.BindInfoBean;
+import com.jimei.xiaolumeimei.entities.BudgetDetailBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.CouponEntity;
 import com.jimei.xiaolumeimei.entities.CouponSelectEntity;
@@ -33,7 +33,6 @@ import rx.Observable;
 public class UserModel {
 
     private static UserModel ourInstance = new UserModel();
-
 
     private UserModel() {
     }
@@ -75,16 +74,7 @@ public class UserModel {
                 .compose(new DefaultTransform<>());
     }
 
-    //设置密码
-    public Observable<UserBean> changePassword(String username, String valid_code,
-                                               String password1, String password2) {
-        return XlmmRetrofitClient.getService()
-                .changePassword(username, valid_code, password1, password2)
-                .compose(new DefaultTransform<>());
-    }
-
     public Observable<LogOutBean> customer_logout() {
-
         return XlmmRetrofitClient.getService()
                 .customer_logout()
                 .compose(new DefaultTransform<>());
@@ -111,6 +101,13 @@ public class UserModel {
                 .compose(new DefaultTransform<>());
     }
 
+    //获取优惠券
+    public Observable<ArrayList<CouponEntity>> getCouponList(int status, int coupon_type) {
+        return XlmmRetrofitClient.getService()
+                .getCouponList(status, coupon_type)
+                .compose(new DefaultTransform<>());
+    }
+
     //购物车选择优惠券
     public Observable<CouponSelectEntity> getCouponSelectEntity(String cart_ids) {
         return XlmmRetrofitClient.getService()
@@ -119,8 +116,8 @@ public class UserModel {
     }
 
     //微信登录
-    public Observable<CodeBean> wxapp_login(String noncestr, String timestamp,
-                                            String sign, String headimgurl, String nickname, String openid, String unionid) {
+    public Observable<CodeBean> wxapp_login(String noncestr, String timestamp, String sign,
+                                            String headimgurl, String nickname, String openid, String unionid) {
         return XlmmRetrofitClient.getService()
                 .wxapp_login(noncestr, timestamp, sign, headimgurl, nickname, openid, unionid, "android")
                 .compose(new DefaultTransform<>());
@@ -133,17 +130,8 @@ public class UserModel {
                 .compose(new DefaultTransform<>());
     }
 
-    //绑定手机
-    public Observable<BindInfoBean> bang_mobile(String username, String password1,
-                                                String password2, String valid_code) {
-        return XlmmRetrofitClient.getService()
-                .bang_mobile(username, password1, password2, valid_code)
-                .compose(new DefaultTransform<>());
-    }
-
     //get push useraccount
-    public Observable<UserAccountBean> getUserAccount(String platform, String regid,
-                                                      String device_id) {
+    public Observable<UserAccountBean> getUserAccount(String platform, String regid, String device_id) {
         return XlmmRetrofitClient.getService()
                 .getUserAccount(platform, regid, device_id)
                 .compose(new DefaultTransform<>());
@@ -199,12 +187,21 @@ public class UserModel {
     }
 
     public Observable<CodeBean> openDebug(String debug_secret) {
-        return XlmmRetrofitClient.getService().openDebug(debug_secret)
+        return XlmmRetrofitClient.getService()
+                .openDebug(debug_secret)
                 .compose(new DefaultTransform<>());
     }
 
     public Observable<Response<GetCouponbean>> getCouPon() {
-        return XlmmRetrofitClient.getService().getCouPon()
+        return XlmmRetrofitClient.getService()
+                .getCouPon()
+                .compose(new DefaultTransform<>());
+    }
+
+    //得到用户信息
+    public Observable<BudgetDetailBean> budGetDetailBean(String page) {
+        return XlmmRetrofitClient.getService()
+                .budGetDetailBean(page)
                 .compose(new DefaultTransform<>());
     }
 

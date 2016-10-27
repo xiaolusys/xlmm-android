@@ -9,8 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableHelper;
-import com.jude.utils.JUtils;
+import com.jimei.library.utils.JUtils;
+import com.jimei.library.widget.scrolllayout.ScrollableHelper;
 
 /**
  * Created by itxuye on 16/04/23

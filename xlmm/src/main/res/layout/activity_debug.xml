@@ -85,6 +85,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
+        <RadioButton
+            android:id="@+id/bo"
+            android:text="warden.xiaolumm.com"
+            android:buttonTint="@color/colorAccent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
     </RadioGroup>
 
 

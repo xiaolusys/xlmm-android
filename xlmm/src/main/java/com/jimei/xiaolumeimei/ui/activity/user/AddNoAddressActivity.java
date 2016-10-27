@@ -15,15 +15,15 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.jimei.library.utils.JUtils;
+import com.jimei.library.widget.wheelcitypicker.CityPickerDialog;
+import com.jimei.library.widget.wheelcitypicker.Util;
+import com.jimei.library.widget.wheelcitypicker.address.Province;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.model.AddressModel;
-import com.jimei.xiaolumeimei.widget.wheelcitypicker.CityPickerDialog;
-import com.jimei.xiaolumeimei.widget.wheelcitypicker.Util;
-import com.jimei.xiaolumeimei.widget.wheelcitypicker.address.Province;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import java.io.IOException;
@@ -34,7 +34,6 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/01/19.
@@ -110,7 +109,6 @@ public class AddNoAddressActivity extends BaseSwipeBackCompatActivity
                     Subscription subscribe = AddressModel.getInstance()
                             .create_address(receiver_state, receiver_city, receiver_district,
                                     clearaddressa, receiver_name, receiver_mobile, defaulta)
-                            .subscribeOn(Schedulers.io())
                             .subscribe(new ServiceResponse<AddressResultBean>() {
                                 @Override
                                 public void onNext(AddressResultBean addressResultBean) {

@@ -7,7 +7,7 @@
               android:orientation="vertical"
               tools:context="com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaDrawCashDetailActivity">
 
-    <com.jimei.xiaolumeimei.widget.XlmmTitleView
+    <com.jimei.library.widget.XlmmTitleView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:xlmm_title="账单明细"/>

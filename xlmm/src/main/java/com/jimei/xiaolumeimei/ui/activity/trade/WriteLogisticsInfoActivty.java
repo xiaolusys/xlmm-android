@@ -15,15 +15,15 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.jimei.library.utils.JUtils;
+import com.jimei.library.widget.LogImageView;
+import com.jimei.library.widget.LogMsgView;
+import com.jimei.library.widget.XlmmTitleView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.LogisticsBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
-import com.jimei.xiaolumeimei.widget.LogImageView;
-import com.jimei.xiaolumeimei.widget.LogMsgView;
-import com.jimei.xiaolumeimei.widget.XlmmTitleView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import java.text.DateFormat;
@@ -33,7 +33,6 @@ import java.util.Date;
 import butterknife.Bind;
 import okhttp3.ResponseBody;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/01/22.
@@ -123,7 +122,6 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
         if (flag) {
             Subscription subscribe = TradeModel.getInstance()
                     .getRefundLogistic(rid, packetid, company_name)
-                    .subscribeOn(Schedulers.io())
                     .subscribe(new ServiceResponse<LogisticsBean>() {
                         @Override
                         public void onNext(LogisticsBean logisticsBean) {
@@ -176,14 +174,12 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-        if (extras != null) {
-            goods_id = extras.getInt("goods_id");
-            address = extras.getString("address");
-            flag = extras.getBoolean("flag");
-            company_name = extras.getString("company_name", "");
-            packetid = extras.getString("packetid", "");
-            rid = extras.getInt("rid");
-        }
+        goods_id = extras.getInt("goods_id");
+        address = extras.getString("address");
+        flag = extras.getBoolean("flag");
+        company_name = extras.getString("company_name", "");
+        packetid = extras.getString("packetid", "");
+        rid = extras.getInt("rid");
     }
 
     @Override
@@ -212,7 +208,7 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
         SpannableStringBuilder builder = new SpannableStringBuilder(reasonTv.getText().toString());
         //ForegroundColorSpan 为文字前景色，BackgroundColorSpan为文字背景色
         ForegroundColorSpan colorSpan = new ForegroundColorSpan(getResources().getColor(R.color.colorAccent));
-        builder.setSpan(colorSpan, 20, reasonTv.getText().toString().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        builder.setSpan(colorSpan, 20,35, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         reasonTv.setText(builder);
     }
 
@@ -220,7 +216,7 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rl_scan:
-                startActivityForResult(new Intent(this,CommonScanActivity.class),2);
+                startActivityForResult(new Intent(this, CommonScanActivity.class), 2);
                 break;
             case R.id.btn_commit:
                 commit_logistics_info();
@@ -260,7 +256,6 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
         Subscription subscription = TradeModel.getInstance()
                 .commit_logistics_info(goods_id, company,
                         et_logistics_number.getText().toString().trim())
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<ResponseBody>() {
                     @Override
                     public void onNext(ResponseBody resp) {

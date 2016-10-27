@@ -11,12 +11,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.jimei.library.utils.FileUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
 import com.jimei.xiaolumeimei.ui.activity.product.CategoryListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductListActivity;
-import com.jimei.xiaolumeimei.utils.FileUtils;
 import com.zhy.autolayout.utils.AutoUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.FileCallBack;

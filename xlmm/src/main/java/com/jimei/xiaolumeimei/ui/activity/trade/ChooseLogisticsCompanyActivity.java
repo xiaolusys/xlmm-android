@@ -11,12 +11,12 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.jimei.library.utils.JUtils;
+import com.jimei.library.widget.SideBar;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.LogisticCompanyAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.LogisticsCompanyInfo;
-import com.jimei.xiaolumeimei.widget.SideBar;
-import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;

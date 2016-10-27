@@ -8,15 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.jimei.library.widget.DividerItemDecoration;
+import com.jimei.library.widget.MyXRecyclerView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.TaskRewardAdapter;
 import com.jimei.xiaolumeimei.entities.WeekTaskRewardBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
-import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
-import com.jimei.xiaolumeimei.widget.MyXRecyclerView;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-
-import rx.schedulers.Schedulers;
 
 /**
  * Created by wisdom on 16/8/22.
@@ -66,7 +64,6 @@ public class TaskRewardFragment extends Fragment {
     private void initData() {
         MamaInfoModel.getInstance()
                 .getTaskReward()
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<WeekTaskRewardBean>() {
                     @Override
                     public void onNext(WeekTaskRewardBean weekTaskRewardBean) {

@@ -9,14 +9,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
-import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
-import rx.schedulers.Schedulers;
 
 public class MamaDrawCouponActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener {
     @Bind(R.id.tv_money)
@@ -63,7 +62,6 @@ public class MamaDrawCouponActivity extends BaseSwipeBackCompatActivity implemen
                     dialog.dismiss();
                     MamaInfoModel.getInstance()
                             .drawCoupon(id)
-                            .subscribeOn(Schedulers.io())
                             .subscribe(drawCouponBean -> {
                                 JUtils.Toast(drawCouponBean.getInfo());
                                 if (drawCouponBean.getCode() == 0) {

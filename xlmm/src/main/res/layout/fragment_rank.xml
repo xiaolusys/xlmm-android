@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     tools:context="com.jimei.xiaolumeimei.ui.fragment.v2.RankFragment">
 
-    <com.jimei.xiaolumeimei.widget.MyXRecyclerView
+    <com.jimei.library.widget.MyXRecyclerView
         android:id="@+id/xrv"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

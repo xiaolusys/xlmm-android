@@ -9,20 +9,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.jimei.library.widget.DividerItemDecoration;
+import com.jimei.library.widget.MyXRecyclerView;
+import com.jimei.library.widget.scrolllayout.ScrollableHelper;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.PersonalCarryRankAdapter;
 import com.jimei.xiaolumeimei.adapter.TeamCarryRankAdapter;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.PersonalCarryRankBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
-import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
-import com.jimei.xiaolumeimei.widget.MyXRecyclerView;
-import com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableHelper;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 
 import java.util.List;
-
-import rx.schedulers.Schedulers;
 
 public class RankFragment extends Fragment implements ScrollableHelper.ScrollableContainer {
     private static final String TYPE = "type";
@@ -85,7 +83,6 @@ public class RankFragment extends Fragment implements ScrollableHelper.Scrollabl
             case XlmmConst.TYPE_PERSON_RANK:
                 MamaInfoModel.getInstance()
                         .getPersonalCarryRankBean()
-                        .subscribeOn(Schedulers.io())
                         .subscribe(new ServiceResponse<List<PersonalCarryRankBean>>() {
                             @Override
                             public void onNext(List<PersonalCarryRankBean> personalCarryRankBeanResponse) {
@@ -98,7 +95,6 @@ public class RankFragment extends Fragment implements ScrollableHelper.Scrollabl
             case XlmmConst.TYPE_PERSON_WEEK_RANK:
                 MamaInfoModel.getInstance()
                         .getWeekPersonalCarryRankBean()
-                        .subscribeOn(Schedulers.io())
                         .subscribe(new ServiceResponse<List<PersonalCarryRankBean>>() {
                             @Override
                             public void onNext(List<PersonalCarryRankBean> personalCarryRankBeanResponse) {
@@ -111,7 +107,6 @@ public class RankFragment extends Fragment implements ScrollableHelper.Scrollabl
             case XlmmConst.TYPE_TEAM_RANK:
                 MamaInfoModel.getInstance()
                         .getTeamCarryRankBean()
-                        .subscribeOn(Schedulers.io())
                         .subscribe(new ServiceResponse<List<PersonalCarryRankBean>>() {
                             @Override
                             public void onNext(List<PersonalCarryRankBean> personalCarryRankBeanResponse) {
@@ -124,7 +119,6 @@ public class RankFragment extends Fragment implements ScrollableHelper.Scrollabl
             case XlmmConst.TYPE_TEAM_WEEK_RANK:
                 MamaInfoModel.getInstance()
                         .getWeekTeamCarryRankBean()
-                        .subscribeOn(Schedulers.io())
                         .subscribe(new ServiceResponse<List<PersonalCarryRankBean>>() {
                             @Override
                             public void onNext(List<PersonalCarryRankBean> personalCarryRankBeanResponse) {

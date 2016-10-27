@@ -4,21 +4,20 @@ import android.support.v7.widget.LinearLayoutManager;
 
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.jimei.library.utils.JUtils;
+import com.jimei.library.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.WithdrawCashHisAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
-import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
 import butterknife.Bind;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 
 /**
@@ -48,7 +47,6 @@ public class MamaWithdrawCashHistoryActivity extends BaseSwipeBackCompatActivity
         showIndeterminateProgressDialog(false);
         Subscription subscribe = MamaInfoModel.getInstance()
                 .getWithdrawCashHis("1")
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<WithdrawCashHisBean>() {
                     @Override
                     public void onError(Throwable e) {
@@ -104,7 +102,6 @@ public class MamaWithdrawCashHistoryActivity extends BaseSwipeBackCompatActivity
                 JUtils.Log(TAG, "第" + page);
                 Subscription subscribe = MamaInfoModel.getInstance()
                         .getWithdrawCashHis(page)
-                        .subscribeOn(Schedulers.io())
                         .subscribe(new ServiceResponse<WithdrawCashHisBean>() {
                             @Override
                             public void onNext(WithdrawCashHisBean withdrawCashHisBean) {

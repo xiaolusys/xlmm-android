@@ -8,11 +8,6 @@
 
 package cn.sharesdk.onekeyshare;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
@@ -22,14 +17,20 @@ import android.os.Handler.Callback;
 import android.os.Message;
 import android.text.TextUtils;
 import android.widget.Toast;
+
+import com.mob.tools.utils.R;
+import com.mob.tools.utils.UIHandler;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import cn.sharesdk.framework.CustomPlatform;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.Platform.ShareParams;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
-
-import com.mob.tools.utils.R;
-import com.mob.tools.utils.UIHandler;
 
 /** 快捷分享的主题样式的实现父类 */
 public abstract class OnekeyShareThemeImpl implements PlatformActionListener, Callback {
@@ -105,7 +106,7 @@ public abstract class OnekeyShareThemeImpl implements PlatformActionListener, Ca
 		String name = platform.getName();
 		if ("Wechat".equals(name) || "WechatMoments".equals(name)
 				|| "WechatFavorite".equals(name) || "ShortMessage".equals(name)
-				|| "Email".equals(name) || "GooglePlus".equals(name)
+				|| "Email".equals(name) || "Qzone".equals(name)
 				|| "QQ".equals(name) || "Pinterest".equals(name)
 				|| "Instagram".equals(name) || "Yixin".equals(name)
 				|| "YixinMoments".equals(name) || "QZone".equals(name)
@@ -114,7 +115,8 @@ public abstract class OnekeyShareThemeImpl implements PlatformActionListener, Ca
 				|| "Bluetooth".equals(name) || "WhatsApp".equals(name)
 				|| "BaiduTieba".equals(name) || "Laiwang".equals(name)
 				|| "LaiwangMoments".equals(name) || "Alipay".equals(name)
-				|| "FacebookMessenger".equals(name)
+				|| "AlipayMoments".equals(name)|| "FacebookMessenger".equals(name)
+				|| "GooglePlus".equals(name)
 				) {
 			return true;
 		} else if ("Evernote".equals(name)) {
@@ -175,7 +177,7 @@ public abstract class OnekeyShareThemeImpl implements PlatformActionListener, Ca
 	final boolean formateShareData(Platform plat) {
 		String name = plat.getName();
 
-		boolean isAlipay = "Alipay".equals(name);
+		boolean isAlipay = "Alipay".equals(name) || "AlipayMoments".equals(name);
 		if (isAlipay && !plat.isClientValid()) {
 			toast("ssdk_alipay_client_inavailable");
 			return false;
@@ -213,6 +215,11 @@ public abstract class OnekeyShareThemeImpl implements PlatformActionListener, Ca
 
 		if ("Instagram".equals(name) && !plat.isClientValid()) {
 			toast("ssdk_instagram_client_inavailable");
+			return false;
+		}
+
+		if ("QZone".equals(name) && !plat.isClientValid()) {
+			toast("ssdk_qq_client_inavailable");
 			return false;
 		}
 
