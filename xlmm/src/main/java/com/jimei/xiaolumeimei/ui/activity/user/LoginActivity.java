@@ -386,11 +386,14 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
             @Override
             public void onError(Platform platform, int i, Throwable throwable) {
                 removeWX(wechat);
+                JUtils.Toast("授权登录失败!");
+                hideIndeterminateProgressDialog();
             }
 
             @Override
             public void onCancel(Platform platform, int i) {
                 removeWX(wechat);
+                JUtils.Toast("取消授权登录!");
                 hideIndeterminateProgressDialog();
             }
         });
@@ -400,26 +403,16 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
 
     public boolean handleMessage(Message msg) {
         switch (msg.what) {
-            case MSG_USERID_FOUND: {
-//                                JUtils.Toast(getResources().getString(R.string.userid_found));
-            }
-            break;
-            case MSG_LOGIN: {
-                //                JUtils.Toast(getResources().getString(R.string.logining));
-            }
-            break;
-            case MSG_AUTH_CANCEL: {
-                //                JUtils.Toast(getResources().getString(R.string.auth_cancel));
-            }
-            break;
-            case MSG_AUTH_ERROR: {
-                //                JUtils.Toast(getResources().getString(R.string.auth_error));
-            }
-            break;
-            case MSG_AUTH_COMPLETE: {
-                //                JUtils.Toast(getResources().getString(R.string.auth_complete));
-            }
-            break;
+            case MSG_USERID_FOUND:
+                break;
+            case MSG_LOGIN:
+                break;
+            case MSG_AUTH_CANCEL:
+                break;
+            case MSG_AUTH_ERROR:
+                break;
+            case MSG_AUTH_COMPLETE:
+                break;
         }
         return false;
     }
