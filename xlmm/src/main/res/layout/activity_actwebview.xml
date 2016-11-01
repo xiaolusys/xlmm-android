@@ -1,24 +1,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:id="@+id/ll_actwebview"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:background="@color/white"
               android:fitsSystemWindows="true"
               android:orientation="vertical">
 
     <com.jimei.library.widget.XlmmTitleView
         android:id="@+id/title_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        app:elevation="0dp"/>
 
     <ProgressBar
         android:id="@+id/pb_view"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
-        android:layout_height="16dp"
-        android:layout_marginTop="-7dp"
-        android:background="@color/white"
-        android:indeterminateDrawable="@color/colorPrimary"
-        android:max="100"/>
+        android:layout_height="2dp"
+        android:max="100"
+        android:progressDrawable="@drawable/progress_bar_color"/>
 
     <WebView
         android:id="@+id/wb_view"

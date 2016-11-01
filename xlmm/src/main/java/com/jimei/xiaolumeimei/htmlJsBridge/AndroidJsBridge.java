@@ -42,6 +42,7 @@ import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShareCodeWebViewActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.mob.tools.utils.UIHandler;
+import com.pingplusplus.android.Pingpp;
 import com.tbruyelle.rxpermissions.RxPermissions;
 import com.umeng.analytics.MobclickAgent;
 
@@ -425,7 +426,7 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
      * @param containerWidth  截屏宽度，也就放置WebView的宽度
      * @param containerHeight 截屏高度，也就放置WebView的高度
      * @param baseUrl         Base Url
-     * @param context         activity context
+     * @param context         mActivity context
      */
     public Bitmap catchWebScreenshot(final WebView w, final int containerWidth,
                                      final int containerHeight, final String baseUrl, final Context context) {
@@ -589,6 +590,11 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
                 }
             }
         }
+    }
+
+    @JavascriptInterface
+    public void callNativePurchase(String charge) {
+        Pingpp.createPayment(mContext, charge);
     }
 
     private void shareToSina(CallNativeFuncBean callNativeFuncBean) {

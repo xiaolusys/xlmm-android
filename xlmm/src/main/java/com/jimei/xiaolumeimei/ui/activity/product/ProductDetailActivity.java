@@ -480,7 +480,6 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
             case R.id.commit:
                 if (productDetail != null) {
                     if (productDetail.getDetail_content().is_onsale()) {
-                        // TODO: 16/10/25
                         addSubscription(CartsModel.getInstance()
                                 .addToCart(item_id, sku_id, num, 5)
                                 .subscribe(resultEntity -> {

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -26,7 +27,6 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -173,6 +173,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     private long firstTime;
     private MainCategoryAdapter mMainCategoryAdapter;
     private boolean mamaFlag = false;
+    private String mJumpUrl;
 
     @Override
     protected void onStart() {
@@ -235,6 +236,11 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         if (LoginUtils.checkLoginState(getApplicationContext())) {
             mPresenter.isCouPon();
         }
+    }
+
+    @Override
+    protected void getBundleExtras(Bundle extras) {
+        mJumpUrl = extras.getString("jumpUrl", "");
     }
 
     @Override
@@ -816,11 +822,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         }
 
         @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            super.destroyItem(container, position, object);
-        }
-
-        @Override
         public CharSequence getPageTitle(int position) {
             return list.get(position).getTitle();
         }
@@ -877,6 +878,18 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         mPresenter.getCartsNum();
         mPresenter.getUserInfoBeanChange();
         JUtils.Log(TAG, "resume");
+        if (mJumpUrl != null && !mJumpUrl.equals("")) {
+            String url = mJumpUrl;
+            mJumpUrl = null;
+            if (LoginUtils.checkLoginState(this)) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+            } else {
+                Intent intent = new Intent(this, LoginActivity.class);
+                intent.putExtra("login", "push_jump");
+                intent.putExtra("actlink", url);
+                startActivity(intent);
+            }
+        }
     }
 
     @Override
@@ -913,6 +926,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         if (stickyEvent != null) {
             aDefault.removeStickyEvent(stickyEvent);
         }
+        mPresenter.onDestroy();
         super.onDestroy();
     }
 
@@ -971,15 +985,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
                     JUtils.Toast("再按一次退出程序!");
                     return true;
                 }
-//                else {
-//                    Intent intent = new Intent();
-//                    intent.setAction(Intent.ACTION_MAIN);
-//                    intent.addCategory(Intent.CATEGORY_HOME);
-//                    startActivity(intent);
-//                    return true;
-//                }
             }
-
         }
         return super.onKeyDown(keyCode, event);
     }

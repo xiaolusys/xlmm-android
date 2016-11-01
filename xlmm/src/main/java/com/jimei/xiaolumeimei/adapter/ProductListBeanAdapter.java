@@ -1,7 +1,9 @@
 package com.jimei.xiaolumeimei.adapter;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
@@ -65,30 +67,21 @@ public class ProductListBeanAdapter extends RecyclerView.Adapter<ProductListBean
     public void onBindViewHolder(final ChildListVH holder, int position) {
         ProductListBean.ResultsBean resultsBean = mList.get(position);
         String sale_state = resultsBean.getSale_state();
-        try {
-            if ("will".equals(sale_state)) {
-                holder.saleStatus.setText("即将开售");
-                holder.saleStatus.setVisibility(View.VISIBLE);
-            } else if ("off".equals(sale_state)) {
-                holder.saleStatus.setText("已下架");
-                holder.saleStatus.setVisibility(View.VISIBLE);
-            } else if ("on".equals(sale_state) && resultsBean.isIs_saleout()) {
-                holder.saleStatus.setText("已抢光");
-                holder.saleStatus.setVisibility(View.VISIBLE);
-            } else {
-                holder.saleStatus.setVisibility(View.GONE);
-            }
-            if (resultsBean.getName().length() <= 9) {
-                holder.name.setText(resultsBean.getName());
-            } else {
-                holder.name.setText(resultsBean.getName().substring(0, 8) + "...");
-            }
-
-            holder.agentPrice.setText("¥" + resultsBean.getLowest_agent_price());
-            holder.stdSalePrice.setText("/¥" + resultsBean.getLowest_std_sale_price());
-        } catch (Exception e) {
-            e.printStackTrace();
+        if ("will".equals(sale_state)) {
+            holder.saleStatus.setText("即将开售");
+            holder.saleStatus.setVisibility(View.VISIBLE);
+        } else if ("off".equals(sale_state)) {
+            holder.saleStatus.setText("已下架");
+            holder.saleStatus.setVisibility(View.VISIBLE);
+        } else if ("on".equals(sale_state) && resultsBean.isIs_saleout()) {
+            holder.saleStatus.setText("已抢光");
+            holder.saleStatus.setVisibility(View.VISIBLE);
+        } else {
+            holder.saleStatus.setVisibility(View.GONE);
         }
+        holder.name.setText(resultsBean.getName());
+        holder.agentPrice.setText("¥" + resultsBean.getLowest_agent_price());
+        holder.stdSalePrice.setText("/¥" + resultsBean.getLowest_std_sale_price());
         ViewUtils.loadImgToImgViewWithPlaceholderFragment(context,
                 holder.image, resultsBean.getHead_img());
         holder.card.setOnClickListener(v -> {
@@ -98,7 +91,12 @@ public class ProductListBeanAdapter extends RecyclerView.Adapter<ProductListBean
             Bundle bundle = new Bundle();
             bundle.putInt("model_id", modelId);
             intent.putExtras(bundle);
-            mContext.startActivity(intent);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(context.getActivity(), holder.image, "wisdom");
+                context.startActivity(intent, options.toBundle());
+            } else {
+                context.startActivity(intent);
+            }
         });
     }
 

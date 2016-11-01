@@ -10,13 +10,21 @@ import com.jimei.library.widget.swipeback.SwipeBackLayout;
 import com.jimei.library.widget.swipeback.Utils;
 
 
-public abstract class BaseSwipeBackCompatActivity extends BaseAppCompatActivity
+public abstract class BaseSwipeBackCompatActivity extends BaseActivity
         implements SwipeBackActivityBase {
     private SwipeBackActivityHelper mHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getContentViewLayoutID() != 0) {
+            setContentView(getContentViewLayoutID());
+        } else {
+            throw new IllegalArgumentException("You must return a right contentView layout resource Id");
+        }
+        initViews();
+        initData();
+        setListener();
         mHelper = new SwipeBackActivityHelper(this);
         mHelper.onActivityCreate();
     }

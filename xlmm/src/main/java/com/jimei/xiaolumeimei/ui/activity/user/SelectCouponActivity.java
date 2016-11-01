@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CouponSelectEntity;
 import com.jimei.xiaolumeimei.model.UserModel;
@@ -31,7 +30,7 @@ public class SelectCouponActivity extends BaseSwipeBackCompatActivity {
     String cart_ids;
     private int goodNum;
     private boolean couponFlag;
-    List<BaseFragment> fragments = new ArrayList<>();
+    List<SelectCouponFragment> fragments = new ArrayList<>();
 
     @Override
     protected void initData() {

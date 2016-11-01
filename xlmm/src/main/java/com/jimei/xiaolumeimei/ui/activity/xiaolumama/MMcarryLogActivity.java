@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.jimei.library.widget.scrolllayout.ScrollableLayout;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.base.BaseFragment;
+import com.jimei.xiaolumeimei.base.BaseLazyFragment;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.ui.fragment.v2.CarryLogAllFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.CarryLogBounsFragment;
@@ -44,7 +44,7 @@ public class MMcarryLogActivity extends BaseSwipeBackCompatActivity
     TextView tvHis;
     @Bind(R.id.scrollable_layout)
     ScrollableLayout scrollableLayout;
-    List<BaseFragment> fragments = new ArrayList<>();
+    List<BaseLazyFragment> fragments = new ArrayList<>();
     private String carrylogMoney;
     private TabLayout.Tab[] tabs;
     private String hisConfirmedCashOut;

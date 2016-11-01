@@ -1,32 +1,34 @@
 package com.jimei.xiaolumeimei.ui.fragment.coupon;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.CouponListAdapter;
-import com.jimei.xiaolumeimei.base.BaseFragment;
+import com.jimei.xiaolumeimei.base.BaseLazyFragment;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.CouponEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CouponFragment extends BaseFragment {
+import butterknife.Bind;
+
+public class CouponFragment extends BaseLazyFragment {
 
     private static final String TYPE = "type";
 
-    private ListView listView;
+    @Bind(R.id.lv)
+    ListView listView;
     private int type;
     private CouponListAdapter adapter;
-    private View emptyView;
+    @Bind(R.id.empty_ll)
+    View emptyView;
     private List<CouponEntity> couponEntities;
-    private TextView msgTv;
+    @Bind(R.id.msg)
+    TextView msgTv;
 
     public static CouponFragment newInstance(int type, ArrayList<CouponEntity> couponEntities) {
         CouponFragment fragment = new CouponFragment();
@@ -35,18 +37,6 @@ public class CouponFragment extends BaseFragment {
         args.putSerializable("entity", couponEntities);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        if (getArguments() != null) {
-            type = getArguments().getInt(TYPE);
-            couponEntities = ((List<CouponEntity>) getArguments().getSerializable("entity"));
-            adapter = new CouponListAdapter(getContext());
-            listView.setAdapter(adapter);
-            loadMoreData();
-        }
     }
 
     private void loadMoreData() {
@@ -68,30 +58,25 @@ public class CouponFragment extends BaseFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_coupon, container, false);
-        listView = ((ListView) view.findViewById(R.id.lv));
-        emptyView = view.findViewById(R.id.empty_ll);
-        msgTv = ((TextView) view.findViewById(R.id.msg));
-        return view;
-    }
-
-    @Override
-    protected View initViews(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return null;
-    }
-
-    @Override
     protected void initData() {
+        if (getArguments() != null) {
+            type = getArguments().getInt(TYPE);
+            couponEntities = ((List<CouponEntity>) getArguments().getSerializable("entity"));
+            adapter = new CouponListAdapter(getContext());
+            listView.setAdapter(adapter);
+            loadMoreData();
+        }
+    }
+
+    @Override
+    protected void initViews() {
 
     }
 
     @Override
-    protected void setDefaultFragmentTitle(String title) {
-
+    protected int getContentViewId() {
+        return R.layout.fragment_coupon;
     }
-
 
     @Override
     public View getScrollableView() {

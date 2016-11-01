@@ -36,7 +36,7 @@ public class SettingActivity extends BaseMVVMActivity<ActivitySettingBinding>
         b.clearCache.setTitleText("清理缓存");
         b.update.setTitleText("检查更新");
         b.aboutXlmm.setTitleText("关于小鹿美美");
-        b.tvTitle.setText("推送通知");
+        b.tvPush.setText("推送通知");
         updateCache();
     }
 

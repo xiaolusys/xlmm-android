@@ -2,7 +2,6 @@ package com.jimei.xiaolumeimei.ui.activity.trade;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -49,7 +48,7 @@ import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.ui.activity.user.WaitSendAddressActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.pingplusplus.android.PaymentActivity;
+import com.pingplusplus.android.Pingpp;
 import com.umeng.analytics.MobclickAgent;
 
 import java.text.SimpleDateFormat;
@@ -65,7 +64,6 @@ import rx.Subscription;
 
 public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         implements View.OnClickListener, View.OnTouchListener, AdapterView.OnItemClickListener {
-    private static final int REQUEST_CODE_PAYMENT = 1;
     public static final int HAND_MSG = 6;
     String TAG = "OrderDetailActivity";
     @Bind(R.id.btn_order_pay)
@@ -564,15 +562,15 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                 .subscribe(new ServiceResponse<PayInfoBean>() {
                     @Override
                     public void onNext(PayInfoBean payInfoBean) {
-                        super.onNext(payInfoBean);
-                        Intent intent = new Intent();
-                        String packageName = getPackageName();
-                        ComponentName componentName = new ComponentName(packageName,
-                                packageName + ".wxapi.WXPayEntryActivity");
-                        intent.setComponent(componentName);
-                        intent.putExtra(PaymentActivity.EXTRA_CHARGE,
-                                new Gson().toJson(payInfoBean.getCharge()));
-                        startActivityForResult(intent, REQUEST_CODE_PAYMENT);
+//                        Intent intent = new Intent();
+//                        String packageName = getPackageName();
+//                        ComponentName componentName = new ComponentName(packageName,
+//                                packageName + ".wxapi.WXPayEntryActivity");
+//                        intent.setComponent(componentName);
+//                        intent.putExtra(PaymentActivity.EXTRA_CHARGE,
+//                                new Gson().toJson(payInfoBean.getCharge()));
+//                        startActivityForResult(intent, REQUEST_CODE_PAYMENT);
+                        Pingpp.createPayment(OrderDetailActivity.this, new Gson().toJson(payInfoBean.getCharge()));
                     }
 
                     @Override
@@ -617,7 +615,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //支付页面返回处理
-        if (requestCode == REQUEST_CODE_PAYMENT) {
+        if (requestCode == Pingpp.REQUEST_CODE_PAYMENT) {
             if (resultCode == Activity.RESULT_OK) {
                 String result = data.getExtras().getString("pay_result");
                 String errorMsg = data.getExtras().getString("error_msg"); // 错误信息

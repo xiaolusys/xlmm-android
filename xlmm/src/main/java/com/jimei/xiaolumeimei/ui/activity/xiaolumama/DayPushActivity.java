@@ -5,7 +5,7 @@ import android.support.v4.view.ViewPager;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.MamaTabAdapter;
-import com.jimei.xiaolumeimei.base.BaseLazyFragment;
+import com.jimei.xiaolumeimei.base.BaseBindingFragment;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.WxQrcode;
 import com.jimei.xiaolumeimei.model.MMProductModel;
@@ -35,7 +35,7 @@ public class DayPushActivity extends BaseSwipeBackCompatActivity {
                 .subscribe(new ServiceResponse<WxQrcode>() {
                     @Override
                     public void onNext(WxQrcode wxQrcode) {
-                        List<BaseLazyFragment> fragments = new ArrayList<>();
+                        List<BaseBindingFragment> fragments = new ArrayList<>();
                         fragments.add(NinePicFragment.newInstance(wxQrcode.getQrcode_link()));
                         fragments.add(PushCategoryFragment.newInstance(wxQrcode.getQrcode_link()));
                         MamaTabAdapter mAdapter = new MamaTabAdapter(getSupportFragmentManager(), fragments);

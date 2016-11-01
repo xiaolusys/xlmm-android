@@ -17,7 +17,7 @@ import com.jimei.xiaolumeimei.adapter.ProductListAdapter;
 import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.databinding.ActivityProductListBinding;
-import com.jimei.xiaolumeimei.entities.CategoryProductListBean;
+import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.umeng.analytics.MobclickAgent;
 
@@ -82,7 +82,7 @@ public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBin
         b.xrv.addItemDecoration(new SpaceItemDecoration(10));
         b.xrv.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
         b.xrv.setPullRefreshEnabled(false);
-        mProductListAdapter = new ProductListAdapter(new ArrayList<>(), this);
+        mProductListAdapter = new ProductListAdapter(this);
         b.xrv.setAdapter(mProductListAdapter);
         b.xrv.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
@@ -130,7 +130,7 @@ public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBin
         addSubscription(ProductModel.getInstance()
                 .getCategoryProductList(cid, page, order_by)
                 .subscribe(bean -> {
-                            List<CategoryProductListBean.ResultsBean> results = bean.getResults();
+                            List<ProductListBean.ResultsBean> results = bean.getResults();
                             if (results != null && results.size() > 0) {
                                 mProductListAdapter.update(results);
                             } else {

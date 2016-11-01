@@ -6,11 +6,11 @@ import android.support.v4.widget.SwipeRefreshLayout;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.NinePicAdapter;
-import com.jimei.xiaolumeimei.base.BaseLazyFragment;
+import com.jimei.xiaolumeimei.base.BaseBindingFragment;
 import com.jimei.xiaolumeimei.databinding.FragmentNinePicBinding;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 
-public class NinePicFragment extends BaseLazyFragment<FragmentNinePicBinding> implements SwipeRefreshLayout.OnRefreshListener {
+public class NinePicFragment extends BaseBindingFragment<FragmentNinePicBinding> implements SwipeRefreshLayout.OnRefreshListener {
 
 
     private NinePicAdapter mNinePicAdapter;

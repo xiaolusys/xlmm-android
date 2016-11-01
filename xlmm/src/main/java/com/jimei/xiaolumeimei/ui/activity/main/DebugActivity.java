@@ -52,8 +52,6 @@ public class DebugActivity extends BaseSwipeBackCompatActivity
     RadioButton lin;
     @Bind(R.id.lei)
     RadioButton lei;
-    @Bind(R.id.enjun)
-    RadioButton enjun;
     @Bind(R.id.shawn)
     RadioButton shawn;
     @Bind(R.id.bo)
@@ -161,9 +159,6 @@ public class DebugActivity extends BaseSwipeBackCompatActivity
                 break;
             case R.id.lei:
                 editDebug.setText(lei.getText().toString().trim());
-                break;
-            case R.id.enjun:
-                editDebug.setText(enjun.getText().toString().trim());
                 break;
             case R.id.shawn:
                 editDebug.setText(shawn.getText().toString().trim());

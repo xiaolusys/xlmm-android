@@ -2,7 +2,6 @@ package com.jimei.xiaolumeimei.model;
 
 import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.data.XlmmConst;
-import com.jimei.xiaolumeimei.entities.CategoryProductListBean;
 import com.jimei.xiaolumeimei.entities.CollectionAllBean;
 import com.jimei.xiaolumeimei.entities.CollectionDeleteBody;
 import com.jimei.xiaolumeimei.entities.CollectionResultBean;
@@ -65,7 +64,7 @@ public class ProductModel {
                 .compose(new DefaultTransform<>());
     }
 
-    public Observable<CategoryProductListBean> getCategoryProductList(String cid, int page, String order_by) {
+    public Observable<ProductListBean> getCategoryProductList(String cid, int page, String order_by) {
         return XlmmRetrofitClient.getService()
                 .getCategoryProductList(cid, page, order_by)
                 .compose(new DefaultTransform<>());

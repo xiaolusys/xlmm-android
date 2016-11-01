@@ -218,7 +218,7 @@ public class PortalBean {
     private String end_time;
     private int order_val;
     /**
-     * html : {"apply":"/activity/post/index.html"}
+     * html : {"apply":"/mActivity/post/index.html"}
      * data : {}
      */
 
@@ -357,7 +357,7 @@ public class PortalBean {
 
     public static class ExtrasBean {
       /**
-       * apply : /activity/post/index.html
+       * apply : /mActivity/post/index.html
        */
 
       private HtmlBean html;

@@ -56,7 +56,6 @@ public class SkuSizeAdapter extends RecyclerView.Adapter<SkuSizeAdapter.SkuSizeV
         SkuItemsBean skuItemsBean = data.get(position);
         holder.name.setText(skuItemsBean.getName());
         if (skuItemsBean.getFree_num() == 0) {
-
             holder.rl.setBackgroundResource(R.drawable.sku_item_bg_unselect);
             holder.name.setTextColor(activity.getResources().getColor(R.color.text_color_D8));
 //            if (num == position) {

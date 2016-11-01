@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.base;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
@@ -49,6 +50,7 @@ import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
 import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.mob.tools.utils.UIHandler;
+import com.pingplusplus.android.Pingpp;
 import com.tbruyelle.rxpermissions.RxPermissions;
 import com.umeng.analytics.MobclickAgent;
 
@@ -360,7 +362,43 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
                 mUploadMessageForAndroid5.onReceiveValue(new Uri[]{});
             }
             mUploadMessageForAndroid5 = null;
+        }else if (requestCode == Pingpp.REQUEST_CODE_PAYMENT) {
+            if (resultCode == Activity.RESULT_OK) {
+                String result = intent.getExtras().getString("pay_result");
+                String errorMsg = intent.getExtras().getString("error_msg"); // 错误信息
+                String extraMsg = intent.getExtras().getString("extra_msg"); // 错误信息
+                if (result.equals("cancel")) {
+                    //wexin alipay already showmsg
+                    JUtils.Toast("已取消支付!");
+                } else if (result.equals("success")) {
+                    JUtils.Toast("支付成功！");
+                } else {
+                    showMsg(result, errorMsg, extraMsg);
+                }
+            }
         }
+    }
+
+    public void showMsg(String title, String msg1, String msg2) {
+        String str = title;
+        if (null != msg1 && msg1.length() != 0) {
+            str += "\n" + msg1;
+        }
+        if (null != msg2 && msg2.length() != 0) {
+            str += "\n" + msg2;
+        }
+        JUtils.Log(TAG, "charge result" + str);
+        if (title.equals("fail")) {
+            str = "支付失败，请重试！";
+        } else if (title.equals("invalid")) {
+            str = "支付失败，支付软件未安装完整！";
+        }
+        new AlertDialog.Builder(this)
+                .setMessage(str)
+                .setTitle("提示")
+                .setPositiveButton("OK", (dialog1, which) -> dialog1.dismiss())
+                .create()
+                .show();
     }
 
 
