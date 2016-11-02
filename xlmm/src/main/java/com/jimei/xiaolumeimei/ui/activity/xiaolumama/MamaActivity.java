@@ -153,8 +153,6 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
         if (fragments.size() == 3) {
             if (b.viewPager.getCurrentItem() == 2) {
                 ((MamaThirdFragment) fragments.get(2)).refreshFortune();
-            } else if (b.viewPager.getCurrentItem() == 0) {
-                ((MamaFirstFragment) fragments.get(0)).refreshNotice();
             }
         }
         MobclickAgent.onPageStart(this.getClass().getSimpleName());

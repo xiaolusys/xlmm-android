@@ -1,6 +1,8 @@
 package com.jimei.xiaolumeimei.ui.fragment.v2;
 
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,7 +20,7 @@ import com.jimei.library.widget.CountDownView;
 import com.jimei.library.widget.SpaceItemDecoration;
 import com.jimei.library.widget.scrolllayout.ScrollableHelper;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.ProductListBeanAdapter;
+import com.jimei.xiaolumeimei.adapter.ProductListAdapter;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -42,7 +44,8 @@ public class ProductListFragment extends Fragment implements ScrollableHelper.Sc
     private int type;
     private int page = 1;
     private String next;
-    private ProductListBeanAdapter adapter;
+    private Activity mActivity;
+    private ProductListAdapter adapter;
     private CompositeSubscription mCompositeSubscription;
     private boolean mIsHidden = true;
     private static final String FRAGMENT_STORE = "STORE";
@@ -50,6 +53,11 @@ public class ProductListFragment extends Fragment implements ScrollableHelper.Sc
     private boolean isInitView = false;
     private boolean isFirstLoad = true;
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mActivity = (Activity) context;
+    }
 
     public static ProductListFragment newInstance(int type, String title) {
         Bundle args = new Bundle();
@@ -149,7 +157,7 @@ public class ProductListFragment extends Fragment implements ScrollableHelper.Sc
         xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
         xRecyclerView.setPullRefreshEnabled(false);
         xRecyclerView.addHeaderView(head);
-        adapter = new ProductListBeanAdapter(getContext(), this);
+        adapter = new ProductListAdapter(mActivity);
         xRecyclerView.setAdapter(adapter);
         xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override

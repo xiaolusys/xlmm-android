@@ -191,6 +191,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
 
     @Override
     protected void initData() {
+        showIndeterminateProgressDialog(false);
         mPresenter.getTopic();
         mPresenter.getUserInfoBean();
         mPresenter.getAddressVersionAndUrl();

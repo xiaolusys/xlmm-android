@@ -36,6 +36,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.entities.CallNativeFuncBean;
 import com.jimei.xiaolumeimei.entities.JumpBean;
+import com.jimei.xiaolumeimei.entities.PayInfoBean;
 import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShareCodeWebViewActivity;
@@ -77,6 +78,7 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
 
     private ActivityBean partyShareInfo;
     private BaseSwipeBackCompatActivity mContext;
+    private String mTid;
 
     public AndroidJsBridge(BaseSwipeBackCompatActivity context) {
         this.mContext = context;
@@ -594,7 +596,16 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
 
     @JavascriptInterface
     public void callNativePurchase(String charge) {
-        Pingpp.createPayment(mContext, charge);
+        try {
+            PayInfoBean payInfoBean = new Gson().fromJson(charge, PayInfoBean.class);
+            if (payInfoBean.getTrade()!=null) {
+                mTid = payInfoBean.getTrade().getTid();
+            }
+            Pingpp.createPayment(mContext, new Gson().toJson(payInfoBean.getCharge()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void shareToSina(CallNativeFuncBean callNativeFuncBean) {
@@ -720,6 +731,10 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     @JavascriptInterface
     public String appVersion() {
         return String.valueOf(BuildConfig.VERSION_CODE);
+    }
+
+    public String getTid() {
+        return mTid;
     }
 
     class ShareContentCustom implements ShareContentCustomizeCallback {

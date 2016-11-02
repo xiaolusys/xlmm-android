@@ -128,6 +128,7 @@ public class MainPresenter extends MainContract.Presenter {
                         if (swipeRefreshLayout != null) {
                             swipeRefreshLayout.setRefreshing(false);
                         }
+                        ((MainActivity) mView).hideIndeterminateProgressDialog();
                     }
 
                     @Override
@@ -137,6 +138,7 @@ public class MainPresenter extends MainContract.Presenter {
                         }
                         JUtils.Toast("数据加载有误,请下拉刷新!");
                         JUtils.Log("MainPresenter", "    " + e.getClass().getName());
+                        ((MainActivity) mView).hideIndeterminateProgressDialog();
                     }
                 }));
     }

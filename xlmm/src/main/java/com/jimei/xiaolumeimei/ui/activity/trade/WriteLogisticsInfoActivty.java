@@ -161,9 +161,12 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
 
                         @Override
                         public void onError(Throwable e) {
-                            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                            logistic_name.setText(df.format(new Date()));
-                            logistic_num.setText("暂时无法查询物流信息,请稍后再试");
+//                            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//                            logistic_name.setText(df.format(new Date()));
+//                            logistic_num.setText("暂时无法查询物流信息,请稍后再试");
+                            JUtils.Toast("暂时无法查询物流信息,请稍后再试");
+                            logistic_name.setText("物流公司: " + company_name);
+                            logistic_num.setText("物流单号: " + packetid);
                             msgLayout.setVisibility(View.GONE);
                             logisticLayout.setVisibility(View.VISIBLE);
                         }
@@ -208,7 +211,7 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
         SpannableStringBuilder builder = new SpannableStringBuilder(reasonTv.getText().toString());
         //ForegroundColorSpan 为文字前景色，BackgroundColorSpan为文字背景色
         ForegroundColorSpan colorSpan = new ForegroundColorSpan(getResources().getColor(R.color.colorAccent));
-        builder.setSpan(colorSpan, 20,35, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        builder.setSpan(colorSpan, 20, 35, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         reasonTv.setText(builder);
     }
 

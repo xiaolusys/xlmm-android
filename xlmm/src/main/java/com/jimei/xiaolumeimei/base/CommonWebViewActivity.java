@@ -48,6 +48,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
 import com.jimei.xiaolumeimei.model.ActivityModel;
+import com.jimei.xiaolumeimei.ui.activity.trade.RedBagActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.mob.tools.utils.UIHandler;
 import com.pingplusplus.android.Pingpp;
@@ -95,6 +96,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     private String sessionid;
     private int id;
     public XlmmTitleView titleView;
+    private AndroidJsBridge mAndroidJsBridge;
 
     @Override
     protected void initData() {
@@ -169,7 +171,8 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
                             + BuildConfig.VERSION_NAME
                             + ";");
             mWebView.getSettings().setJavaScriptEnabled(true);
-            mWebView.addJavascriptInterface(new AndroidJsBridge(this), "AndroidBridge");
+            mAndroidJsBridge = new AndroidJsBridge(this);
+            mWebView.addJavascriptInterface(mAndroidJsBridge, "AndroidBridge");
             mWebView.getSettings().setAllowFileAccess(true);
             //如果访问的页面中有Javascript，则webview必须设置支持Javascript
             //mWebView.getSettings().setUserAgentString(MyApplication.getUserAgent());
@@ -362,7 +365,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
                 mUploadMessageForAndroid5.onReceiveValue(new Uri[]{});
             }
             mUploadMessageForAndroid5 = null;
-        }else if (requestCode == Pingpp.REQUEST_CODE_PAYMENT) {
+        } else if (requestCode == Pingpp.REQUEST_CODE_PAYMENT) {
             if (resultCode == Activity.RESULT_OK) {
                 String result = intent.getExtras().getString("pay_result");
                 String errorMsg = intent.getExtras().getString("error_msg"); // 错误信息
@@ -372,11 +375,21 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
                     JUtils.Toast("已取消支付!");
                 } else if (result.equals("success")) {
                     JUtils.Toast("支付成功！");
+                    successJump(mAndroidJsBridge.getTid());
                 } else {
                     showMsg(result, errorMsg, extraMsg);
                 }
             }
         }
+    }
+
+    private void successJump(String tid) {
+        Intent intent = new Intent(this, RedBagActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("tid", tid);
+        intent.putExtras(bundle);
+        startActivity(intent);
+        finish();
     }
 
     public void showMsg(String title, String msg1, String msg2) {

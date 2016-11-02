@@ -74,7 +74,9 @@ public class MainCategoryAdapter extends RecyclerView.Adapter<MainCategoryAdapte
                     .execute(new FileCallBack(XlmmConst.XLMM_DIR + "main/", mList.get(position).getName() + dateStr + ".png") {
                         @Override
                         public void onError(Call call, Exception e, int id) {
-                            JUtils.Log(e.getClass().getSimpleName());
+                            if (e != null && e.getMessage() != null) {
+                                JUtils.Log(e.getMessage());
+                            }
                         }
 
                         @Override
