@@ -9,6 +9,7 @@ import android.text.TextUtils;
 
 import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
+import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
 
 /**
  * Created by wulei on 3/12/16.
@@ -30,17 +31,26 @@ public class JumpUtils {
         }
     }
 
+    public static void jumpWithNewTask(Context context, String recvContent) {
+        JUtils.Log(TAG, "push_jump_proc:" + recvContent);
+        if (TextUtils.isEmpty(recvContent)) return;
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("jumpUrl", recvContent);
+        context.startActivity(intent);
+    }
+
     public static void jumpToWebViewWithCookies(Context context, String actlink, int id,
                                                 Class<?> classname) {
         Bundle bundle = new Bundle();
-        setBundleWithStart(context, bundle, classname,id,actlink);
+        setBundleWithStart(context, bundle, classname, id, actlink);
     }
 
     public static void jumpToWebViewWithCookies(Context context, String actlink, int id,
                                                 Class<?> classname, String title) {
         Bundle bundle = new Bundle();
         bundle.putString("title", title);
-        setBundleWithStart(context, bundle, classname,id,actlink);
+        setBundleWithStart(context, bundle, classname, id, actlink);
     }
 
     public static void jumpToWebViewWithCookies(Context context, String actlink, int id,
@@ -48,7 +58,7 @@ public class JumpUtils {
         Bundle bundle = new Bundle();
         bundle.putString("title", title);
         bundle.putBoolean("share", share);
-        setBundleWithStart(context, bundle, classname,id,actlink);
+        setBundleWithStart(context, bundle, classname, id, actlink);
     }
 
 

@@ -9,7 +9,7 @@ import android.view.View;
 
 import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.base.BaseLazyFragment;
+import com.jimei.xiaolumeimei.base.BaseBindingFragment;
 import com.jimei.xiaolumeimei.databinding.FragmentMamaThirdBinding;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.MamaUrl;
@@ -27,7 +27,7 @@ import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
-public class MamaThirdFragment extends BaseLazyFragment<FragmentMamaThirdBinding> implements View.OnClickListener {
+public class MamaThirdFragment extends BaseBindingFragment<FragmentMamaThirdBinding> implements View.OnClickListener {
     private static final String TITLE = "title";
     private static final String ID = "id";
 

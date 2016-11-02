@@ -3,141 +3,130 @@ package com.jimei.xiaolumeimei.base;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.support.v4.app.FragmentTransaction;
 
-import com.jimei.library.utils.JUtils;
-import com.jimei.library.widget.scrolllayout.ScrollableHelper;
+import com.jimei.library.widget.loadingdialog.XlmmLoadingDialog;
+
+import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
 
 /**
- * Created by itxuye on 16/04/23
- * <p/>
- * Copyright 2016年 上海己美. All rights reserved.
+ * Created by wisdom on 16/11/1.
  */
 
-//fragment的懒加载方式
-public abstract class BaseFragment extends Fragment
-        implements ScrollableHelper.ScrollableContainer {
-    /**
-     * Fragment title
-     */
-    public String fragmentTitle;
-    /**
-     * 是否可见状态
-     */
-    private boolean isVisible;
-    /**
-     * 标志位，View已经初始化完成。
-     */
-    private boolean isPrepared;
-    /**
-     * 是否第一次加载
-     */
+public abstract class BaseFragment extends Fragment {
+    public Activity mActivity;
+    private CompositeSubscription mCompositeSubscription;
+    private boolean mIsHidden = true;
+    private static final String FRAGMENT_STORE = "STORE";
+    private boolean isVisible = false;
+    public boolean isInitView = false;
     private boolean isFirstLoad = true;
-
-    public Activity activity;
+    private XlmmLoadingDialog loadingdialog;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        activity = (Activity) context;
+        mActivity = (Activity) context;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // 若 viewpager 不设置 setOffscreenPageLimit 或设置数量不够
-        // 销毁的Fragment onCreateView 每次都会执行(但实体类没有从内存销毁)
-        // 导致initData反复执行,所以这里注释掉
-        // isFirstLoad = true;
-
-        JUtils.Log("Today", "onCreateView");
-        View view = initViews(inflater, container, savedInstanceState);
-        isPrepared = true;
-        lazyLoad();
-        return view;
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            mIsHidden = savedInstanceState.getBoolean(FRAGMENT_STORE);
+        }
+        if (restoreInstanceState()) {
+            processRestoreInstanceState(savedInstanceState);
+        }
     }
 
-    /**
-     * 如果是与ViewPager一起使用，调用的是setUserVisibleHint
-     *
-     * @param isVisibleToUser 是否显示出来了
-     */
+    private void processRestoreInstanceState(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            if (isSupportHidden()) {
+                ft.hide(this);
+            } else {
+                ft.show(this);
+            }
+            ft.commit();
+        }
+    }
+
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
+        if (isVisibleToUser) {
+            isVisible = true;
+            lazyLoadData();
+        } else {
+            isVisible = false;
+        }
         super.setUserVisibleHint(isVisibleToUser);
-        JUtils.Log("Today", "setUserVisibleHint");
-        if (getUserVisibleHint()) {
-            isVisible = true;
-            onVisible();
-        } else {
-            isVisible = false;
-            onInvisible();
-        }
     }
 
-    /**
-     * 如果是通过FragmentTransaction的show和hide的方法来控制显示，调用的是onHiddenChanged.
-     * 若是初始就show的Fragment 为了触发该事件 需要先hide再show
-     */
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        JUtils.Log("Today", "onHiddenChanged");
-        super.onHiddenChanged(hidden);
-        if (!hidden) {
-            isVisible = true;
-            onVisible();
-        } else {
-            isVisible = false;
-            onInvisible();
-        }
+    public boolean isSupportHidden() {
+        return mIsHidden;
     }
 
-    protected void onVisible() {
-        JUtils.Log("Today", "onVisible");
-        lazyLoad();
+    protected boolean restoreInstanceState() {
+        return true;
     }
 
-    protected void onInvisible() {
-        JUtils.Log("Today", "onInvisible");
-    }
-
-    /**
-     * 要实现延迟加载Fragment内容,需要在 onCreateView
-     * isPrepared = true;
-     */
-    protected void lazyLoad() {
-        JUtils.Log("Today", "lazyLoad");
-        if (!isPrepared || !isVisible || !isFirstLoad) {
+    public void lazyLoadData() {
+        if (!isFirstLoad || !isVisible || !isInitView) {
             return;
         }
-        isFirstLoad = false;
         initData();
+        isFirstLoad = false;
     }
-
-    protected abstract View initViews(LayoutInflater inflater, ViewGroup container,
-                                      Bundle savedInstanceState);
 
     protected abstract void initData();
 
-    public String getTitle() {
-        if (null == fragmentTitle) {
-            setDefaultFragmentTitle(null);
+    protected abstract void initViews();
+
+    protected abstract int getContentViewId();
+
+    public void addSubscription(Subscription s) {
+        if (this.mCompositeSubscription == null) {
+            this.mCompositeSubscription = new CompositeSubscription();
         }
-        return TextUtils.isEmpty(fragmentTitle) ? "" : fragmentTitle;
+        this.mCompositeSubscription.add(s);
     }
 
-    public void setTitle(String title) {
-        fragmentTitle = title;
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(FRAGMENT_STORE, isHidden());
     }
 
-    /**
-     * 设置fragment的Title直接调用 {@link BaseFragment#setTitle(String)},若不显示该title 可以不做处理
-     *
-     * @param title 一般用于显示在TabLayout的标题
-     */
-    protected abstract void setDefaultFragmentTitle(String title);
+
+    @Override
+    public void onDestroyView() {
+        try {
+            if (this.mCompositeSubscription != null) {
+                this.mCompositeSubscription.unsubscribe();
+                this.mCompositeSubscription = null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        super.onDestroyView();
+    }
+
+    public void showIndeterminateProgressDialog(boolean horizontal) {
+        loadingdialog = XlmmLoadingDialog.create(mActivity)
+                .setStyle(XlmmLoadingDialog.Style.SPIN_INDETERMINATE)
+                .setCancellable(!horizontal)
+                .show();
+    }
+
+    public void hideIndeterminateProgressDialog() {
+        try {
+            loadingdialog.dismiss();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

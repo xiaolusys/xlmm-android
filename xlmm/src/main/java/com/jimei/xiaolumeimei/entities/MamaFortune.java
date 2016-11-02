@@ -84,6 +84,8 @@ public class MamaFortune {
         private int todayVisitorNum;
         @SerializedName("modified")
         private String modified;
+        @SerializedName("current_dp_turns_num")
+        private int current_dp_turns_num;
         @SerializedName("created")
         private String created;
         @SerializedName("extra_info")
@@ -248,6 +250,14 @@ public class MamaFortune {
 
         public void setExtra_figures(ExtraFiguresBean extra_figures) {
             this.extra_figures = extra_figures;
+        }
+
+        public int getCurrent_dp_turns_num() {
+            return current_dp_turns_num;
+        }
+
+        public void setCurrent_dp_turns_num(int current_dp_turns_num) {
+            this.current_dp_turns_num = current_dp_turns_num;
         }
 
         public static class ExtraInfoBean {

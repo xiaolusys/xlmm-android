@@ -37,7 +37,7 @@
 
       <TextView
           android:text="推送通知"
-          android:id="@+id/tv_title"
+          android:id="@+id/tv_push"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginLeft="24dp"

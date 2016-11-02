@@ -18,5 +18,6 @@ package com.jimei.library.widget.loadingdialog;
 
 public interface Determinate {
     void setMax(int max);
+
     void setProgress(int progress);
 }

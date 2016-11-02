@@ -3,11 +3,10 @@ package com.jimei.xiaolumeimei.ui.fragment.mminfo;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
+import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 
 import com.github.mikephil.charting.animation.Easing;
@@ -18,9 +17,12 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.jimei.library.utils.DateUtils;
+import com.jimei.library.utils.JUtils;
+import com.jimei.library.widget.badgelib.BadgeView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.ActivityListAdapter;
-import com.jimei.xiaolumeimei.base.BaseLazyFragment;
+import com.jimei.xiaolumeimei.base.BaseBindingFragment;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.databinding.FragmentMamaFirstBinding;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
@@ -41,28 +43,20 @@ import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaChooseActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaReNewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaVisitorActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
-import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
-import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
-import com.tencent.mm.sdk.modelmsg.WXWebpageObject;
-import com.tencent.mm.sdk.openapi.IWXAPI;
-import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import rx.Observable;
 
-import static android.provider.UserDictionary.Words.APP_ID;
-
-public class MamaFirstFragment extends BaseLazyFragment<FragmentMamaFirstBinding> implements View.OnClickListener, OnChartValueSelectedListener {
+public class MamaFirstFragment extends BaseBindingFragment<FragmentMamaFirstBinding> implements View.OnClickListener, OnChartValueSelectedListener {
     private static final String TITLE = "title";
     private static final String ID = "id";
     List<RecentCarryBean.ResultsEntity> show_refund = new ArrayList<>();
     List<RecentCarryBean.ResultsEntity> his_refund = new ArrayList<>();
 
-    private int id;
     private String shareLink;
     private String shopLink;
     private String msgUrl;
@@ -70,6 +64,8 @@ public class MamaFirstFragment extends BaseLazyFragment<FragmentMamaFirstBinding
     private int orderNum;
     private String carryLogMoney;
     private String hisConfirmedCashOut;
+    private BadgeView mBadgeView;
+    private int mCurrent_dp_turns_num;
 
     public static MamaFirstFragment newInstance(String title, int id) {
         MamaFirstFragment fragment = new MamaFirstFragment();
@@ -78,14 +74,6 @@ public class MamaFirstFragment extends BaseLazyFragment<FragmentMamaFirstBinding
         args.putInt(ID, id);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            id = getArguments().getInt(ID);
-        }
     }
 
     @Override
@@ -129,13 +117,6 @@ public class MamaFirstFragment extends BaseLazyFragment<FragmentMamaFirstBinding
         b.scrollView.scrollTo(0, 0);
     }
 
-    public void refreshNotice() {
-        addSubscription(MMInfoModel.getInstance()
-                .getMaMaselfList()
-                .subscribe(this::initTask, Throwable::printStackTrace));
-    }
-
-
     public void init_chart() {
         //mChart.setOnChartGestureListener(this);
         b.chart.setOnChartValueSelectedListener(this);
@@ -154,10 +135,10 @@ public class MamaFirstFragment extends BaseLazyFragment<FragmentMamaFirstBinding
         xAxis.setDrawAxisLine(true); //是否绘制坐标轴的线，即含有坐标的那条线，默认是true
         xAxis.setDrawGridLines(true); //是否显示X坐标轴上的刻度竖线，默认是true
         xAxis.setDrawLabels(true); //是否显示X坐标轴上的刻度，默认是true
-        xAxis.setTextColor(Color.parseColor("#F5B123")); //X轴上的刻度的颜色
+        xAxis.setTextColor(getResources().getColor(R.color.colorAccent)); //X轴上的刻度的颜色
         xAxis.setTextSize(9f); //X轴上的刻度的字的大小 单位dp
         //      xAxis.setTypeface(Typeface tf); //X轴上的刻度的字体
-        xAxis.setGridColor(Color.parseColor("#F5B123")); //X轴上的刻度竖线的颜色
+        xAxis.setGridColor(getResources().getColor(R.color.colorAccent)); //X轴上的刻度竖线的颜色
         xAxis.setGridLineWidth(1); //X轴上的刻度竖线的宽 float类型
         xAxis.enableGridDashedLine(3, 8, 0); //虚线表示X轴上的刻度竖线(float lineLength, float spaceLength, float phase)三个参数，1.线长，2.虚线间距，3.虚线开始坐标
         b.chart.getLegend().setEnabled(false);
@@ -207,14 +188,14 @@ public class MamaFirstFragment extends BaseLazyFragment<FragmentMamaFirstBinding
     public void setData(ArrayList<String> xVals, ArrayList<Entry> yVals) {
         // create a dataset and give it a type
         LineDataSet set1 = new LineDataSet(yVals, "");
-        set1.setColor(Color.parseColor("#F5B123"));
-        set1.setCircleColor(Color.parseColor("#F5B123"));
+        set1.setColor(getResources().getColor(R.color.colorAccent));
+        set1.setCircleColor(getResources().getColor(R.color.colorAccent));
         set1.setLineWidth(1f);
         set1.setCircleRadius(2f);
         set1.setDrawCircleHole(false);
         set1.setValueTextSize(9f);
         set1.setHighlightLineWidth(1.75f); // 线宽
-        set1.setHighLightColor(Color.parseColor("#F5B123")); // 高亮的线的颜色
+        set1.setHighLightColor(getResources().getColor(R.color.colorAccent)); // 高亮的线的颜色
         set1.setDrawHorizontalHighlightIndicator(false);
         set1.setDrawValues(true);
         set1.setValueFormatter((value, entry, dataSetIndex, viewPortHandler) -> "");
@@ -259,6 +240,34 @@ public class MamaFirstFragment extends BaseLazyFragment<FragmentMamaFirstBinding
             hisConfirmedCashOut = fortune.getExtraInfo().getHisConfirmedCashOut();
         }
         ((MamaActivity) mActivity).hideIndeterminateProgressDialog();
+        SharedPreferences preferences = mActivity.getSharedPreferences("push_num", Context.MODE_PRIVATE);
+        String time = preferences.getString("time", "");
+        int num = preferences.getInt("num", 0);
+        mBadgeView = new BadgeView(mActivity);
+        mBadgeView.setTextSizeOff(7);
+        mBadgeView.setBackground(6, Color.parseColor("#FF3840"));
+        mBadgeView.setGravity(Gravity.END | Gravity.TOP);
+        mBadgeView.setPadding(JUtils.dip2px(4), JUtils.dip2px(1), JUtils.dip2px(4), JUtils.dip2px(1));
+        mBadgeView.setTargetView(b.viewPush);
+        mCurrent_dp_turns_num = fortune.getCurrent_dp_turns_num();
+        try {
+            String str = DateUtils.dateToString(new Date(), DateUtils.yyyyMMDD);
+            if (time.equals(str)) {
+                if (fortune.getCurrent_dp_turns_num() > num) {
+                    mBadgeView.setBadgeCount((mCurrent_dp_turns_num - num));
+                } else {
+                    mBadgeView.setVisibility(View.GONE);
+                }
+            } else {
+                if (fortune.getCurrent_dp_turns_num() > 0) {
+                    mBadgeView.setBadgeCount(mCurrent_dp_turns_num);
+                } else {
+                    mBadgeView.setVisibility(View.GONE);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void setListener() {
@@ -314,6 +323,18 @@ public class MamaFirstFragment extends BaseLazyFragment<FragmentMamaFirstBinding
                 }
                 break;
             case R.id.ll_push:
+                SharedPreferences preferences = mActivity.getSharedPreferences("push_num", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                String str = null;
+                try {
+                    str = DateUtils.dateToString(new Date(), DateUtils.yyyyMMDD);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                editor.putString("time", str);
+                editor.putInt("num", mCurrent_dp_turns_num);
+                editor.apply();
+                mBadgeView.setVisibility(View.GONE);
                 startActivity(new Intent(mActivity, DayPushActivity.class));
                 break;
             case R.id.ll_choose:
@@ -330,6 +351,7 @@ public class MamaFirstFragment extends BaseLazyFragment<FragmentMamaFirstBinding
                 break;
             case R.id.tv_msg:
                 if (msgUrl != null && !"".equals(msgUrl)) {
+                    b.imageNotice.setVisibility(View.GONE);
                     JumpUtils.jumpToWebViewWithCookies(mActivity, msgUrl, -1,
                             CommonWebViewActivity.class, "信息通知", false);
                 }
@@ -366,55 +388,5 @@ public class MamaFirstFragment extends BaseLazyFragment<FragmentMamaFirstBinding
     @Override
     public void onNothingSelected() {
 
-    }
-
-    public void sendReq(Context context, String text, Bitmap bmp) {
-        String url = "http://m.xiaolumeimei.com";//收到分享的好友点击信息会跳转到这个地址去
-        WXWebpageObject localWXWebpageObject = new WXWebpageObject();
-        localWXWebpageObject.webpageUrl = url;
-        WXMediaMessage localWXMediaMessage = new WXMediaMessage(
-                localWXWebpageObject);
-        localWXMediaMessage.title = "小鹿美美";//不能太长，否则微信会提示出错。不过博主没验证过具体能输入多长。
-        localWXMediaMessage.description = text;
-        localWXMediaMessage.thumbData = getBitmapBytes(bmp, false);
-        SendMessageToWX.Req localReq = new SendMessageToWX.Req();
-        localReq.transaction = System.currentTimeMillis() + "";
-        localReq.message = localWXMediaMessage;
-        IWXAPI api = WXAPIFactory.createWXAPI(context, APP_ID, true);
-        api.sendReq(localReq);
-    }
-
-    // 需要对图片进行处理，否则微信会在log中输出thumbData检查错误
-    private static byte[] getBitmapBytes(Bitmap bitmap, boolean paramBoolean) {
-        Bitmap localBitmap = Bitmap.createBitmap(80, 80, Bitmap.Config.RGB_565);
-        Canvas localCanvas = new Canvas(localBitmap);
-        int i;
-        int j;
-        if (bitmap.getHeight() > bitmap.getWidth()) {
-            i = bitmap.getWidth();
-            j = bitmap.getWidth();
-        } else {
-            i = bitmap.getHeight();
-            j = bitmap.getHeight();
-        }
-        while (true) {
-            localCanvas.drawBitmap(bitmap, new Rect(0, 0, i, j), new Rect(0, 0,
-                    80, 80), null);
-            if (paramBoolean)
-                bitmap.recycle();
-            ByteArrayOutputStream localByteArrayOutputStream = new ByteArrayOutputStream();
-            localBitmap.compress(Bitmap.CompressFormat.JPEG, 100,
-                    localByteArrayOutputStream);
-            localBitmap.recycle();
-            byte[] arrayOfByte = localByteArrayOutputStream.toByteArray();
-            try {
-                localByteArrayOutputStream.close();
-                return arrayOfByte;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            i = bitmap.getHeight();
-            j = bitmap.getHeight();
-        }
     }
 }

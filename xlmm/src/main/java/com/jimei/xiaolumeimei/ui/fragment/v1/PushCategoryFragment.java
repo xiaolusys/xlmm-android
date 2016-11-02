@@ -9,7 +9,7 @@ import com.jimei.library.widget.scrolllayout.ScrollableHelper;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.MainCategoryAdapter;
 import com.jimei.xiaolumeimei.adapter.NinePicAdapter;
-import com.jimei.xiaolumeimei.base.BaseLazyFragment;
+import com.jimei.xiaolumeimei.base.BaseBindingFragment;
 import com.jimei.xiaolumeimei.databinding.FragmentPushCategoryBinding;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
@@ -20,7 +20,7 @@ import java.util.List;
  * Created by wisdom on 16/10/9.
  */
 
-public class PushCategoryFragment extends BaseLazyFragment<FragmentPushCategoryBinding> implements ScrollableHelper.ScrollableContainer {
+public class PushCategoryFragment extends BaseBindingFragment<FragmentPushCategoryBinding> implements ScrollableHelper.ScrollableContainer {
 
     private MainCategoryAdapter mMainCategoryAdapter;
     private NinePicAdapter mNinePicAdapter;

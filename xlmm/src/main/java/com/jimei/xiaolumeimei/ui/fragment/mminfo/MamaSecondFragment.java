@@ -19,7 +19,7 @@ import android.webkit.WebViewClient;
 
 import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.base.BaseLazyFragment;
+import com.jimei.xiaolumeimei.base.BaseBindingFragment;
 import com.jimei.xiaolumeimei.databinding.FragmentMamaSecondBinding;
 import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.model.MMInfoModel;
@@ -28,7 +28,7 @@ import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaActivity;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MamaSecondFragment extends BaseLazyFragment<FragmentMamaSecondBinding> {
+public class MamaSecondFragment extends BaseBindingFragment<FragmentMamaSecondBinding> {
 
     public ValueCallback<Uri> mUploadMessage;
     public ValueCallback<Uri[]> mUploadMessageForAndroid5;

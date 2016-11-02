@@ -17,7 +17,6 @@ import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.CashoutPolicy;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
 import com.jimei.xiaolumeimei.entities.CategoryDownBean;
-import com.jimei.xiaolumeimei.entities.CategoryProductListBean;
 import com.jimei.xiaolumeimei.entities.ChooseListBean;
 import com.jimei.xiaolumeimei.entities.ClickcarryBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
@@ -690,7 +689,7 @@ public interface XlmmService {
     Observable<List<CategoryBean>> getCategory();
 
     @GET("/rest/v2/modelproducts")
-    Observable<CategoryProductListBean> getCategoryProductList(
+    Observable<ProductListBean> getCategoryProductList(
             @Query("cid") String cid,
             @Query("page") int page,
             @Query("order_by") String order_by);

@@ -3,48 +3,38 @@ package com.jimei.xiaolumeimei.ui.fragment.v2;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.DividerItemDecoration;
-import com.jimei.library.widget.loadingdialog.XlmmLoadingDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.AwardCarryLogAdapter;
-import com.jimei.xiaolumeimei.base.BaseFragment;
+import com.jimei.xiaolumeimei.base.BaseLazyFragment;
 import com.jimei.xiaolumeimei.entities.AwardCarryBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
-import rx.Subscription;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/03/11.
  * <p>
  * Copyright 2016年 上海己美. All rights reserved.
  */
-public class CarryLogBounsFragment extends BaseFragment {
+public class CarryLogBounsFragment extends BaseLazyFragment {
     List<AwardCarryBean.ResultsEntity> list = new ArrayList<>();
     @Bind(R.id.carrylogall_xry)
     XRecyclerView xRecyclerView;
     private AwardCarryLogAdapter adapter;
     private int page = 2;
-    private Subscription subscription1;
-    private Subscription subscription2;
-    private XlmmLoadingDialog loadingdialog;
 
     public static CarryLogBounsFragment newInstance(String title) {
         CarryLogBounsFragment carryLogAllFragment = new CarryLogBounsFragment();
@@ -53,22 +43,6 @@ public class CarryLogBounsFragment extends BaseFragment {
         carryLogAllFragment.setArguments(bundle);
         return carryLogAllFragment;
     }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        try {
-            Field childFragmentManager =
-                    Fragment.class.getDeclaredField("mChildFragmentManager");
-            childFragmentManager.setAccessible(true);
-            childFragmentManager.set(this, null);
-        } catch (NoSuchFieldException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,31 +50,9 @@ public class CarryLogBounsFragment extends BaseFragment {
     }
 
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && list.size() == 0) {
-            load();
-        }
-    }
-
-    @Override
-    protected View initViews(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return null;
-    }
-
-    @Override
     protected void initData() {
-
-    }
-
-    @Override
-    protected void setDefaultFragmentTitle(String title) {
-
-    }
-
-    private void load() {
         showIndeterminateProgressDialog(false);
-        subscription1 = MMProductModel.getInstance()
+        addSubscription(MMProductModel.getInstance()
                 .getMamaAllAwardCarryLogs("1")
                 .subscribe(new ServiceResponse<AwardCarryBean>() {
 
@@ -127,16 +79,11 @@ public class CarryLogBounsFragment extends BaseFragment {
                             JUtils.Log("carrylog", carryLogListBean.toString());
                         }
                     }
-                });
+                }));
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        initViews(view);
-    }
-
-    private void initViews(View view) {
+    protected void initViews() {
         xRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         xRecyclerView.addItemDecoration(
                 new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
@@ -146,7 +93,7 @@ public class CarryLogBounsFragment extends BaseFragment {
         xRecyclerView.setPullRefreshEnabled(false);
         xRecyclerView.setLoadingMoreEnabled(true);
 
-        adapter = new AwardCarryLogAdapter(activity);
+        adapter = new AwardCarryLogAdapter(mActivity);
         xRecyclerView.setAdapter(adapter);
 
         xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
@@ -163,24 +110,14 @@ public class CarryLogBounsFragment extends BaseFragment {
         });
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_carrylogall, container, false);
-        ButterKnife.bind(this, view);
-        return view;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
+    protected int getContentViewId() {
+        return R.layout.fragment_carrylogall;
     }
 
     private void loadMoreData(String page, Context context) {
 
-        subscription2 = MMProductModel.getInstance()
+        addSubscription(MMProductModel.getInstance()
                 .getMamaAllAwardCarryLogs(page)
                 .subscribe(new ServiceResponse<AwardCarryBean>() {
                     @Override
@@ -207,33 +144,7 @@ public class CarryLogBounsFragment extends BaseFragment {
                             e.printStackTrace();
                         }
                     }
-                });
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (subscription1 != null && subscription1.isUnsubscribed()) {
-            subscription1.unsubscribe();
-        }
-        if (subscription2 != null && subscription2.isUnsubscribed()) {
-            subscription2.unsubscribe();
-        }
-    }
-
-    public void showIndeterminateProgressDialog(boolean horizontal) {
-        loadingdialog = XlmmLoadingDialog.create(activity)
-                .setStyle(XlmmLoadingDialog.Style.SPIN_INDETERMINATE)
-                .setCancellable(!horizontal)
-                .show();
-    }
-
-    public void hideIndeterminateProgressDialog() {
-        try {
-            loadingdialog.dismiss();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+                }));
     }
 
     @Override

@@ -10,7 +10,7 @@ import com.jimei.library.widget.loading.VaryViewHelperController;
 /**
  * Created by itxuye on 2016/6/24.
  */
-public abstract class BasePresenterActivity<T extends BasePresenter, E extends BaseModel>
+public abstract class BasePresenterActivity<T extends BasePresenter, E>
         extends BaseActivity implements BaseView {
     public T mPresenter;
     public E mModel;

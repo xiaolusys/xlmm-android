@@ -11,7 +11,7 @@ import android.webkit.WebView;
 import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.MamaTabAdapter;
-import com.jimei.xiaolumeimei.base.BaseLazyFragment;
+import com.jimei.xiaolumeimei.base.BaseBindingFragment;
 import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.databinding.ActivityMamaBinding;
@@ -45,7 +45,7 @@ import rx.Observable;
 
 public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
 
-    private List<BaseLazyFragment> fragments = new ArrayList<>();
+    private List<BaseBindingFragment> fragments = new ArrayList<>();
     private boolean isDestroy = false;
     private ExecutorService service;
 
@@ -153,8 +153,6 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
         if (fragments.size() == 3) {
             if (b.viewPager.getCurrentItem() == 2) {
                 ((MamaThirdFragment) fragments.get(2)).refreshFortune();
-            } else if (b.viewPager.getCurrentItem() == 0) {
-                ((MamaFirstFragment) fragments.get(0)).refreshNotice();
             }
         }
         MobclickAgent.onPageStart(this.getClass().getSimpleName());

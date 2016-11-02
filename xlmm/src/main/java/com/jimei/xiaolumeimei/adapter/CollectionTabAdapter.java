@@ -4,7 +4,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v1.CollectionFragment;
 
 import java.util.List;
